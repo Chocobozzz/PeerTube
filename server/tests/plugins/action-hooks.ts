@@ -7,7 +7,7 @@ import { setAccessTokensToServers } from '../../../shared/extra-utils'
 
 const expect = chai.expect
 
-describe('Test plugin filter hooks', function () {
+describe('Test plugin action hooks', function () {
   let server: ServerInfo
 
   before(async function () {
@@ -18,7 +18,7 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should execute ', async function () {
-
+    // empty
   })
 
   after(async function () {

@@ -13,7 +13,9 @@ async function installNpmPlugin (npmName: string, version?: string) {
   let toInstall = npmName
   if (version) toInstall += `@${version}`
 
-  await execYarn('add ' + toInstall)
+  const { stdout } = await execYarn('add ' + toInstall)
+
+  logger.debug('Added a yarn package.', { yarnStdout: stdout })
 }
 
 async function installNpmPluginFromDisk (path: string) {
@@ -46,7 +48,7 @@ async function execYarn (command: string) {
       await outputJSON(pluginPackageJSON, {})
     }
 
-    await execShell(`yarn ${command}`, { cwd: pluginDirectory })
+    return execShell(`yarn ${command}`, { cwd: pluginDirectory })
   } catch (result) {
     logger.error('Cannot exec yarn.', { command, err: result.err, stderr: result.stderr })
 

@@ -65,9 +65,9 @@ async function pluginsListCLI () {
   const { url, username, password } = await getServerCredentials(program)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
-  let type: PluginType
-  if (program['onlyThemes']) type = PluginType.THEME
-  if (program['onlyPlugins']) type = PluginType.PLUGIN
+  let pluginType: PluginType
+  if (program['onlyThemes']) pluginType = PluginType.THEME
+  if (program['onlyPlugins']) pluginType = PluginType.PLUGIN
 
   const res = await listPlugins({
     url,
@@ -75,7 +75,7 @@ async function pluginsListCLI () {
     start: 0,
     count: 100,
     sort: 'name',
-    type
+    pluginType
   })
   const plugins: PeerTubePlugin[] = res.body.data
 

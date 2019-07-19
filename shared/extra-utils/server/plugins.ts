@@ -1,5 +1,10 @@
-import { makeGetRequest, makePostBodyRequest } from '../requests/requests'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { PluginType } from '../../models/plugins/plugin.type'
+import { PeertubePluginIndexList } from '../../models/plugins/peertube-plugin-index-list.model'
+import { readJSON, writeJSON } from 'fs-extra'
+import { ServerInfo } from './servers'
+import { root } from '../miscs/miscs'
+import { join } from 'path'
 
 function listPlugins (parameters: {
   url: string,
@@ -7,10 +12,11 @@ function listPlugins (parameters: {
   start?: number,
   count?: number,
   sort?: string,
-  type?: PluginType,
+  pluginType?: PluginType,
+  uninstalled?: boolean,
   expectedStatus?: number
 }) {
-  const { url, accessToken, start, count, sort, type, expectedStatus = 200 } = parameters
+  const { url, accessToken, start, count, sort, pluginType, uninstalled, expectedStatus = 200 } = parameters
   const path = '/api/v1/plugins'
 
   return makeGetRequest({
@@ -21,8 +27,41 @@ function listPlugins (parameters: {
       start,
       count,
       sort,
-      type
+      pluginType,
+      uninstalled
     },
+    statusCodeExpected: expectedStatus
+  })
+}
+
+function listAvailablePlugins (parameters: {
+  url: string,
+  accessToken: string,
+  start?: number,
+  count?: number,
+  sort?: string,
+  pluginType?: PluginType,
+  currentPeerTubeEngine?: string,
+  search?: string
+  expectedStatus?: number
+}) {
+  const { url, accessToken, start, count, sort, pluginType, search, currentPeerTubeEngine, expectedStatus = 200 } = parameters
+  const path = '/api/v1/plugins/available'
+
+  const query: PeertubePluginIndexList = {
+    start,
+    count,
+    sort,
+    pluginType,
+    currentPeerTubeEngine,
+    search
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    token: accessToken,
+    query,
     statusCodeExpected: expectedStatus
   })
 }
@@ -44,19 +83,21 @@ function getPlugin (parameters: {
   })
 }
 
-function getPluginSettings (parameters: {
+function updatePluginSettings (parameters: {
   url: string,
   accessToken: string,
   npmName: string,
+  settings: any,
   expectedStatus?: number
 }) {
-  const { url, accessToken, npmName, expectedStatus = 200 } = parameters
+  const { url, accessToken, npmName, settings, expectedStatus = 204 } = parameters
   const path = '/api/v1/plugins/' + npmName + '/settings'
 
-  return makeGetRequest({
+  return makePutBodyRequest({
     url,
     path,
     token: accessToken,
+    fields: { settings },
     statusCodeExpected: expectedStatus
   })
 }
@@ -134,12 +175,43 @@ function uninstallPlugin (parameters: {
   })
 }
 
+function getPluginsCSS (url: string) {
+  const path = '/plugins/global.css'
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: 200
+  })
+}
+
+function getPackageJSONPath (server: ServerInfo, npmName: string) {
+  return join(root(), 'test' + server.internalServerNumber, 'plugins', 'node_modules', npmName, 'package.json')
+}
+
+function updatePluginPackageJSON (server: ServerInfo, npmName: string, json: any) {
+  const path = getPackageJSONPath(server, npmName)
+
+  return writeJSON(path, json)
+}
+
+function getPluginPackageJSON (server: ServerInfo, npmName: string) {
+  const path = getPackageJSONPath(server, npmName)
+
+  return readJSON(path)
+}
+
 export {
   listPlugins,
+  listAvailablePlugins,
   installPlugin,
+  getPluginsCSS,
   updatePlugin,
   getPlugin,
   uninstallPlugin,
-  getPluginSettings,
-  getPluginRegisteredSettings
+  updatePluginSettings,
+  getPluginRegisteredSettings,
+  getPackageJSONPath,
+  updatePluginPackageJSON,
+  getPluginPackageJSON
 }

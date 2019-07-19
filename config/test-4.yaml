@@ -21,6 +21,7 @@ storage:
   torrents: 'test4/torrents/'
   captions: 'test4/captions/'
   cache: 'test4/cache/'
+  plugins: 'test4/plugins/'
 
 admin:
   email: 'admin4@example.com'

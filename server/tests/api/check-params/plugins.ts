@@ -152,7 +152,8 @@ describe('Test server plugins API validators', function () {
     const path = '/api/v1/plugins/available'
     const baseQuery = {
       search: 'super search',
-      pluginType: PluginType.PLUGIN
+      pluginType: PluginType.PLUGIN,
+      currentPeerTubeEngine: '1.2.3'
     }
 
     it('Should fail with an invalid token', async function () {
@@ -189,6 +190,17 @@ describe('Test server plugins API validators', function () {
 
     it('Should fail with an invalid plugin type', async function () {
       const query = immutableAssign(baseQuery, { pluginType: 5 })
+
+      await makeGetRequest({
+        url: server.url,
+        path,
+        token: server.accessToken,
+        query
+      })
+    })
+
+    it('Should fail with an invalid current peertube engine', async function () {
+      const query = immutableAssign(baseQuery, { currentPeerTubeEngine: '1.0' })
 
       await makeGetRequest({
         url: server.url,
