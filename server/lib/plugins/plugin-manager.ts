@@ -8,7 +8,7 @@ import { createReadStream, createWriteStream } from 'fs'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
-import { outputFile } from 'fs-extra'
+import { outputFile, readJSON } from 'fs-extra'
 import { RegisterSettingOptions } from '../../../shared/models/plugins/register-setting.model'
 import { RegisterHookOptions } from '../../../shared/models/plugins/register-hook.model'
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
@@ -174,7 +174,7 @@ export class PluginManager implements ServerHook {
       const pluginType = PluginModel.getTypeFromNpmName(npmName)
       const pluginName = PluginModel.normalizePluginName(npmName)
 
-      const packageJSON = this.getPackageJSON(pluginName, pluginType)
+      const packageJSON = await this.getPackageJSON(pluginName, pluginType)
       if (!isPackageJSONValid(packageJSON, pluginType)) {
         throw new Error('PackageJSON is invalid.')
       }
@@ -251,7 +251,7 @@ export class PluginManager implements ServerHook {
 
     logger.info('Registering plugin or theme %s.', npmName)
 
-    const packageJSON = this.getPackageJSON(plugin.name, plugin.type)
+    const packageJSON = await this.getPackageJSON(plugin.name, plugin.type)
     const pluginPath = this.getPluginPath(plugin.name, plugin.type)
 
     if (!isPackageJSONValid(packageJSON, plugin.type)) {
@@ -286,7 +286,10 @@ export class PluginManager implements ServerHook {
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJson) {
     const npmName = PluginModel.buildNpmName(plugin.name, plugin.type)
 
-    const library: PluginLibrary = require(join(pluginPath, packageJSON.library))
+    // Delete cache if needed
+    const modulePath = join(pluginPath, packageJSON.library)
+    delete require.cache[modulePath]
+    const library: PluginLibrary = require(modulePath)
 
     if (!isLibraryCodeValid(library)) {
       throw new Error('Library code is not valid (miss register or unregister function)')
@@ -350,7 +353,7 @@ export class PluginManager implements ServerHook {
   private getPackageJSON (pluginName: string, pluginType: PluginType) {
     const pluginPath = join(this.getPluginPath(pluginName, pluginType), 'package.json')
 
-    return require(pluginPath) as PluginPackageJson
+    return readJSON(pluginPath) as Promise<PluginPackageJson>
   }
 
   private getPluginPath (pluginName: string, pluginType: PluginType) {

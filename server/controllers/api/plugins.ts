@@ -25,6 +25,7 @@ import { ManagePlugin } from '../../../shared/models/plugins/manage-plugin.model
 import { logger } from '../../helpers/logger'
 import { listAvailablePluginsFromIndex } from '../../lib/plugins/plugin-index'
 import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
+import { RegisteredSettings } from '../../../shared/models/plugins/register-setting.model'
 
 const pluginRouter = express.Router()
 
@@ -103,9 +104,11 @@ export {
 
 async function listPlugins (req: express.Request, res: express.Response) {
   const pluginType = req.query.pluginType
+  const uninstalled = req.query.uninstalled
 
   const resultList = await PluginModel.listForApi({
     pluginType,
+    uninstalled,
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort
@@ -161,9 +164,9 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
 function getPluginRegisteredSettings (req: express.Request, res: express.Response) {
   const settings = PluginManager.Instance.getRegisteredSettings(req.params.npmName)
 
-  return res.json({
-    settings
-  })
+  const json: RegisteredSettings = { settings }
+
+  return res.json(json)
 }
 
 async function updatePluginSettings (req: express.Request, res: express.Response) {

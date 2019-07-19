@@ -127,6 +127,9 @@ const listAvailablePluginsValidator = [
   query('pluginType')
     .optional()
     .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
+  query('currentPeerTubeEngine')
+    .optional()
+    .custom(isPluginVersionValid).withMessage('Should have a valid current peertube engine'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking enabledPluginValidator parameters', { parameters: req.query })

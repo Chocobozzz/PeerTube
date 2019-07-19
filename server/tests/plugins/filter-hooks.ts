@@ -18,7 +18,7 @@ describe('Test plugin filter hooks', function () {
   })
 
   it('Should execute ', async function () {
-
+    // empty
   })
 
   after(async function () {

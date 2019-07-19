@@ -4,3 +4,7 @@ export interface RegisterSettingOptions {
   type: 'input'
   default?: string
 }
+
+export interface RegisteredSettings {
+  settings: RegisterSettingOptions[]
+}

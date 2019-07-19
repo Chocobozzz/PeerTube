@@ -21,7 +21,7 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
     sort,
     pluginType,
     search,
-    currentPeerTubeEngine: PEERTUBE_VERSION
+    currentPeerTubeEngine: options.currentPeerTubeEngine || PEERTUBE_VERSION
   }
 
   const uri = CONFIG.PLUGINS.INDEX.URL + '/api/v1/plugins'

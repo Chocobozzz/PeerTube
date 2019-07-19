@@ -1,5 +1,6 @@
 import { QueryTypes, Sequelize } from 'sequelize'
 import { ServerInfo } from '../server/servers'
+import { PluginType } from '../../models/plugins/plugin.type'
 
 let sequelizes: { [ id: number ]: Sequelize } = {}
 
@@ -72,10 +73,19 @@ async function closeAllSequelize (servers: ServerInfo[]) {
   }
 }
 
+function setPluginVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "plugin" SET "version" = '${newVersion}' WHERE "name" = '${pluginName}'`, options)
+}
+
 export {
   setVideoField,
   setPlaylistField,
   setActorField,
   countVideoViewsOf,
+  setPluginVersion,
   closeAllSequelize
 }
