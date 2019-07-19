@@ -8,25 +8,30 @@ function getHookType (hookName: string) {
   return HookType.STATIC
 }
 
-async function internalRunHook (handler: Function, hookType: HookType, param: any, onError: (err: Error) => void) {
-  let result = param
-
+async function internalRunHook <T>(handler: Function, hookType: HookType, result: T, params: any, onError: (err: Error) => void) {
   try {
-    const p = handler(result)
+    if (hookType === HookType.FILTER) {
+      const p = handler(result, params)
 
-    switch (hookType) {
-      case HookType.FILTER:
-        if (isPromise(p)) result = await p
-        else result = p
-        break
+      if (isPromise(p)) result = await p
+      else result = p
 
-      case HookType.STATIC:
-        if (isPromise(p)) await p
-        break
+      return result
+    }
 
-      case HookType.ACTION:
-        if (isCatchable(p)) p.catch(err => onError(err))
-        break
+    // Action/static hooks do not have result value
+    const p = handler(params)
+
+    if (hookType === HookType.STATIC) {
+      if (isPromise(p)) await p
+
+      return undefined
+    }
+
+    if (hookType === HookType.ACTION) {
+      if (isCatchable(p)) p.catch(err => onError(err))
+
+      return undefined
     }
   } catch (err) {
     onError(err)

@@ -1472,7 +1472,12 @@ export class VideoModel extends Model<VideoModel> {
       .findOne(options)
   }
 
-  static loadForGetAPI (id: number | string, t?: Transaction, userId?: number) {
+  static loadForGetAPI (parameters: {
+    id: number | string,
+    t?: Transaction,
+    userId?: number
+  }) {
+    const { id, t, userId } = parameters
     const where = buildWhereIdOrUUID(id)
 
     const options = {

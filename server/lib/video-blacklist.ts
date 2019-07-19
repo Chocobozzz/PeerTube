@@ -9,8 +9,9 @@ import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
 import { Hooks } from './plugins/hooks'
 
 async function autoBlacklistVideoIfNeeded (video: VideoModel, user?: UserModel, transaction?: Transaction) {
-  const doAutoBlacklist = await Hooks.wrapPromise(
-    autoBlacklistNeeded({ video, user }),
+  const doAutoBlacklist = await Hooks.wrapPromiseFun(
+    autoBlacklistNeeded,
+    { video, user },
     'filter:video.auto-blacklist.result'
   )
 

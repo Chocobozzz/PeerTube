@@ -436,8 +436,9 @@ async function getVideo (req: express.Request, res: express.Response) {
   // We need more attributes
   const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
 
-  const video = await Hooks.wrapPromise(
-    VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId),
+  const video = await Hooks.wrapPromiseFun(
+    VideoModel.loadForGetAPI,
+    { id: res.locals.video.id, userId },
     'filter:api.video.get.result'
   )
 
@@ -502,8 +503,9 @@ async function listVideos (req: express.Request, res: express.Response) {
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined
   }, 'filter:api.videos.list.params')
 
-  const resultList = await Hooks.wrapPromise(
-    VideoModel.listForApi(apiOptions),
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    apiOptions,
     'filter:api.videos.list.result'
   )
 

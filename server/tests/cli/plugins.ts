@@ -6,13 +6,13 @@ import {
   execCLI,
   flushAndRunServer,
   getConfig,
-  getEnvCli, killallServers,
+  getEnvCli,
+  getPluginTestPath,
+  killallServers,
   reRunServer,
-  root,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../shared/extra-utils'
-import { join } from 'path'
 import { ServerConfig } from '../../../shared/models/server'
 import { expect } from 'chai'
 
@@ -29,7 +29,7 @@ describe('Test plugin scripts', function () {
   it('Should install a plugin from stateless CLI', async function () {
     this.timeout(60000)
 
-    const packagePath = join(root(), 'server', 'tests', 'fixtures', 'peertube-plugin-test')
+    const packagePath = getPluginTestPath()
 
     const env = getEnvCli(server)
     await execCLI(`${env} npm run plugin:install -- --plugin-path ${packagePath}`)

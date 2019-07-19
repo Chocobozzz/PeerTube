@@ -444,8 +444,9 @@ async function isVideoAccepted (req: express.Request, res: express.Response, vid
     videoFile,
     user: res.locals.oauth.token.User
   }
-  const acceptedResult = await Hooks.wrapObject(
-    isLocalVideoAccepted(acceptParameters),
+  const acceptedResult = await Hooks.wrapFun(
+    isLocalVideoAccepted,
+    acceptParameters,
     'filter:api.video.upload.accept.result'
   )
 
