@@ -208,7 +208,7 @@ function getAccountVideoRate (rateType: VideoRateType) {
 
 async function videoController (req: express.Request, res: express.Response) {
   // We need more attributes
-  const video = await VideoModel.loadForGetAPI(res.locals.video.id)
+  const video = await VideoModel.loadForGetAPI({ id: res.locals.video.id })
 
   if (video.url.startsWith(WEBSERVER.URL) === false) return res.redirect(video.url)
 

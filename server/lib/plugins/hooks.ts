@@ -3,16 +3,25 @@ import { PluginManager } from './plugin-manager'
 import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
 
+type PromiseFunction <U, T> = (params: U) => Promise<T> | Bluebird<T>
+type RawFunction <U, T> = (params: U) => T
+
 // Helpers to run hooks
 const Hooks = {
-  wrapObject: <T, U extends ServerFilterHookName>(obj: T, hookName: U) => {
-    return PluginManager.Instance.runHook(hookName, obj) as Promise<T>
+  wrapObject: <T, U extends ServerFilterHookName>(result: T, hookName: U) => {
+    return PluginManager.Instance.runHook(hookName, result) as Promise<T>
   },
 
-  wrapPromise: async <T, U extends ServerFilterHookName>(fun: Promise<T> | Bluebird<T>, hookName: U) => {
-    const result = await fun
+  wrapPromiseFun: async <U, T, V extends ServerFilterHookName>(fun: PromiseFunction<U, T>, params: U, hookName: V) => {
+    const result = await fun(params)
 
-    return PluginManager.Instance.runHook(hookName, result)
+    return PluginManager.Instance.runHook(hookName, result, params)
+  },
+
+  wrapFun: async <U, T, V extends ServerFilterHookName>(fun: RawFunction<U, T>, params: U, hookName: V) => {
+    const result = fun(params)
+
+    return PluginManager.Instance.runHook(hookName, result, params)
   },
 
   runAction: <T, U extends ServerActionHookName>(hookName: U, params?: T) => {

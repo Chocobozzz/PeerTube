@@ -171,7 +171,8 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
         thumbnails: `test${server.internalServerNumber}/thumbnails/`,
         torrents: `test${server.internalServerNumber}/torrents/`,
         captions: `test${server.internalServerNumber}/captions/`,
-        cache: `test${server.internalServerNumber}/cache/`
+        cache: `test${server.internalServerNumber}/cache/`,
+        plugins: `test${server.internalServerNumber}/plugins/`
       },
       admin: {
         email: `admin${server.internalServerNumber}@example.com`

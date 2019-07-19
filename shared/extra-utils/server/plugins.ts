@@ -201,6 +201,10 @@ function getPluginPackageJSON (server: ServerInfo, npmName: string) {
   return readJSON(path)
 }
 
+function getPluginTestPath (suffix = '') {
+  return join(root(), 'server', 'tests', 'fixtures', 'peertube-plugin-test' + suffix)
+}
+
 export {
   listPlugins,
   listAvailablePlugins,
@@ -213,5 +217,6 @@ export {
   getPluginRegisteredSettings,
   getPackageJSONPath,
   updatePluginPackageJSON,
-  getPluginPackageJSON
+  getPluginPackageJSON,
+  getPluginTestPath
 }

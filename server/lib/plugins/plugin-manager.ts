@@ -98,15 +98,15 @@ export class PluginManager implements ServerHook {
 
   // ###################### Hooks ######################
 
-  async runHook (hookName: ServerHookName, param?: any) {
-    let result = param
-
-    if (!this.hooks[hookName]) return result
+  async runHook <T> (hookName: ServerHookName, result?: T, params?: any): Promise<T> {
+    if (!this.hooks[hookName]) return Promise.resolve(result)
 
     const hookType = getHookType(hookName)
 
     for (const hook of this.hooks[hookName]) {
-      result = await internalRunHook(hook.handler, hookType, param, err => {
+      logger.debug('Running hook %s of plugin %s.', hookName, hook.npmName)
+
+      result = await internalRunHook(hook.handler, hookType, result, params, err => {
         logger.error('Cannot run hook %s of plugin %s.', hookName, hook.pluginName, { err })
       })
     }
