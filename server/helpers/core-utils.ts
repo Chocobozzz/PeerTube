@@ -4,7 +4,7 @@
 */
 
 import { createHash, HexBase64Latin1Encoding, pseudoRandomBytes } from 'crypto'
-import { isAbsolute, join } from 'path'
+import { basename, isAbsolute, join, resolve } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
 import { truncate } from 'lodash'
@@ -136,16 +136,16 @@ function getAppNumber () {
   return process.env.NODE_APP_INSTANCE
 }
 
+let rootPath: string
 function root () {
+  if (rootPath) return rootPath
+
   // We are in /helpers/utils.js
-  const paths = [ __dirname, '..', '..' ]
+  rootPath = join(__dirname, '..', '..')
 
-  // We are under /dist directory
-  if (process.mainModule && process.mainModule.filename.endsWith('_mocha') === false) {
-    paths.push('..')
-  }
+  if (basename(rootPath) === 'dist') rootPath = resolve(rootPath, '..')
 
-  return join.apply(null, paths)
+  return rootPath
 }
 
 // Thanks: https://stackoverflow.com/a/12034334

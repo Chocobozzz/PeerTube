@@ -5,12 +5,12 @@ import { CONFIG } from '../../initializers/config'
 import { outputJSON, pathExists } from 'fs-extra'
 import { join } from 'path'
 
-async function installNpmPlugin (name: string, version?: string) {
+async function installNpmPlugin (npmName: string, version?: string) {
   // Security check
-  checkNpmPluginNameOrThrow(name)
+  checkNpmPluginNameOrThrow(npmName)
   if (version) checkPluginVersionOrThrow(version)
 
-  let toInstall = name
+  let toInstall = npmName
   if (version) toInstall += `@${version}`
 
   await execYarn('add ' + toInstall)

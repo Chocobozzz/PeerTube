@@ -14,7 +14,8 @@ if [ "$1" = "misc" ]; then
     mocha --timeout 5000 --exit --require ts-node/register --bail server/tests/client.ts \
         server/tests/feeds/index.ts \
         server/tests/misc-endpoints.ts \
-        server/tests/helpers/index.ts
+        server/tests/helpers/index.ts \
+        server/tests/plugins/index.ts
 elif [ "$1" = "cli" ]; then
     npm run build:server
     CC=gcc-4.9 CXX=g++-4.9 npm run setup:cli

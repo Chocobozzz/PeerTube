@@ -75,6 +75,7 @@ You can access it as `peertube` via an alias in your `.bashrc` like `alias peert
     import-videos|import  import a video from a streaming platform
     watch|w               watch a video in the terminal ✩°｡⋆
     repl                  initiate a REPL to access internals
+    plugins|p [action]    manag instance plugins
     help [cmd]            display help for [cmd]
 ```
 
@@ -100,6 +101,15 @@ And now that your video is online, you can watch it from the confort of your ter
 
 ```bash
 $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10
+```
+
+To list, install, uninstall dynamically plugins/themes of an instance:
+
+```bash
+$ peertube plugins list
+$ peertube plugins install --path /local/plugin/path
+$ peertube plugins install --npm-name peertube-plugin-myplugin
+$ peertube plugins uninstall --npm-name peertube-plugin-myplugin
 ```
 
 #### peertube-import-videos.js
@@ -231,6 +241,30 @@ To reset a user password from CLI, run:
 
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
+```
+
+
+### plugin install/uninstall
+
+The difference with `peertube plugins` CLI is that these scripts can be used even if PeerTube is not running.
+If PeerTube is running, you need to restart it for the changes to take effect (whereas with `peertube plugins` CLI, plugins/themes are dynamically loaded on the server).
+
+To install a plugin or a theme from the disk:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:install -- --plugin-path /local/plugin/path
+```
+
+From NPM:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:install -- --npm-name peertube-plugin-myplugin
+```
+
+To uninstall a plugin or a theme:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```
 
 ### REPL ([Read Eval Print Loop](https://nodejs.org/docs/latest-v8.x/api/repl.html))

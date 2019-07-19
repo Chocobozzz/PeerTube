@@ -18,7 +18,7 @@ import {
   getUsersList,
   getUsersListPaginationAndSort,
   getVideoChannel,
-  getVideosList,
+  getVideosList, installPlugin,
   login,
   makePutBodyRequest,
   rateVideo,
@@ -57,6 +57,8 @@ describe('Test users', function () {
     server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
+
+    await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-theme-background-red' })
   })
 
   describe('OAuth client', function () {
@@ -550,6 +552,21 @@ describe('Test users', function () {
       expect(user.id).to.be.a('number')
       expect(user.account.displayName).to.equal('new display name')
       expect(user.account.description).to.equal('my super description updated')
+    })
+
+    it('Should be able to update my theme', async function () {
+      for (const theme of [ 'background-red', 'default', 'instance-default' ]) {
+        await updateMyUser({
+          url: server.url,
+          accessToken: accessTokenUser,
+          theme
+        })
+
+        const res = await getMyUserInformation(server.url, accessTokenUser)
+        const body: User = res.body
+
+        expect(body.theme).to.equal(theme)
+      }
     })
   })
 

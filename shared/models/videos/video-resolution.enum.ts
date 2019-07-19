@@ -18,30 +18,35 @@ export enum VideoResolution {
  */
 function getBaseBitrate (resolution: VideoResolution) {
   switch (resolution) {
-  case VideoResolution.H_240P:
-    // quality according to Google Live Encoder: 300 - 700 Kbps
-    // Quality according to YouTube Video Info: 186 Kbps
-    return 250 * 1000
-  case VideoResolution.H_360P:
-    // quality according to Google Live Encoder: 400 - 1,000 Kbps
-    // Quality according to YouTube Video Info: 480 Kbps
-    return 500 * 1000
-  case VideoResolution.H_480P:
-    // quality according to Google Live Encoder: 500 - 2,000 Kbps
-    // Quality according to YouTube Video Info: 879 Kbps
-    return 900 * 1000
-  case VideoResolution.H_720P:
-    // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
-    // Quality according to YouTube Video Info: 1752 Kbps
-    return 1750 * 1000
-  case VideoResolution.H_1080P:
-    // quality according to Google Live Encoder: 3000 - 6000 Kbps
-    // Quality according to YouTube Video Info: 3277 Kbps
-    return 3300 * 1000
-  case VideoResolution.H_4K: // fallthrough
-  default:
-    // quality according to Google Live Encoder: 13000 - 34000 Kbps
-    return 15000 * 1000
+    case VideoResolution.H_240P:
+      // quality according to Google Live Encoder: 300 - 700 Kbps
+      // Quality according to YouTube Video Info: 186 Kbps
+      return 250 * 1000
+
+    case VideoResolution.H_360P:
+      // quality according to Google Live Encoder: 400 - 1,000 Kbps
+      // Quality according to YouTube Video Info: 480 Kbps
+      return 500 * 1000
+
+    case VideoResolution.H_480P:
+      // quality according to Google Live Encoder: 500 - 2,000 Kbps
+      // Quality according to YouTube Video Info: 879 Kbps
+      return 900 * 1000
+
+    case VideoResolution.H_720P:
+      // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
+      // Quality according to YouTube Video Info: 1752 Kbps
+      return 1750 * 1000
+
+    case VideoResolution.H_1080P:
+      // quality according to Google Live Encoder: 3000 - 6000 Kbps
+      // Quality according to YouTube Video Info: 3277 Kbps
+      return 3300 * 1000
+
+    case VideoResolution.H_4K: // fallthrough
+    default:
+      // quality according to Google Live Encoder: 13000 - 34000 Kbps
+      return 15000 * 1000
   }
 }
 

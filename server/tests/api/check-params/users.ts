@@ -387,13 +387,24 @@ describe('Test users API validators', function () {
       }
     })
 
+    it('Should fail with an invalid theme', async function () {
+      const fields = { theme: 'invalid' }
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
+    it('Should fail with an unknown theme', async function () {
+      const fields = { theme: 'peertube-theme-unknown' }
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should succeed to change password with the correct params', async function () {
       const fields = {
         currentPassword: 'my super password',
         password: 'my super password',
         nsfwPolicy: 'blur',
         autoPlayVideo: false,
-        email: 'super_email@example.com'
+        email: 'super_email@example.com',
+        theme: 'default'
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
