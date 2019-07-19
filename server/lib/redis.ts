@@ -5,6 +5,7 @@ import { generateRandomString } from '../helpers/utils'
 import {
   CONTACT_FORM_LIFETIME,
   USER_EMAIL_VERIFY_LIFETIME,
+  USER_PASSWORD_RESET_LIFETIME,
   VIDEO_VIEW_LIFETIME,
   WEBSERVER
 } from '../initializers/constants'
@@ -67,7 +68,6 @@ class Redis {
   async setResetPasswordVerificationString (userId: number) {
     const generatedString = await generateRandomString(32)
 
-    const USER_PASSWORD_RESET_LIFETIME = CONFIG.USER.USER_PASSWORD_RESET_LIFETIME * 60000
     await this.setValue(this.generateResetPasswordKey(userId), generatedString, USER_PASSWORD_RESET_LIFETIME)
 
     return generatedString
