@@ -268,7 +268,13 @@ async function addVideo (req: express.Request, res: express.Response) {
       }, { transaction: t })
     }
 
-    const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded(video, res.locals.oauth.token.User, t)
+    const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded({
+      video,
+      user: res.locals.oauth.token.User,
+      isRemote: false,
+      isNew: true,
+      transaction: t
+    })
     if (!videoWasAutoBlacklisted) await federateVideoIfNeeded(video, true, t)
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
@@ -336,16 +342,16 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const sequelizeOptions = { transaction: t }
       const oldVideoChannel = videoInstance.VideoChannel
 
-      if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
-      if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
-      if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
-      if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
-      if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-      if (videoInfoToUpdate.waitTranscoding !== undefined) videoInstance.set('waitTranscoding', videoInfoToUpdate.waitTranscoding)
-      if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
-      if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
-      if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
-      if (videoInfoToUpdate.downloadEnabled !== undefined) videoInstance.set('downloadEnabled', videoInfoToUpdate.downloadEnabled)
+      if (videoInfoToUpdate.name !== undefined) videoInstance.name = videoInfoToUpdate.name
+      if (videoInfoToUpdate.category !== undefined) videoInstance.category = videoInfoToUpdate.category
+      if (videoInfoToUpdate.licence !== undefined) videoInstance.licence = videoInfoToUpdate.licence
+      if (videoInfoToUpdate.language !== undefined) videoInstance.language = videoInfoToUpdate.language
+      if (videoInfoToUpdate.nsfw !== undefined) videoInstance.nsfw = videoInfoToUpdate.nsfw
+      if (videoInfoToUpdate.waitTranscoding !== undefined) videoInstance.waitTranscoding = videoInfoToUpdate.waitTranscoding
+      if (videoInfoToUpdate.support !== undefined) videoInstance.support = videoInfoToUpdate.support
+      if (videoInfoToUpdate.description !== undefined) videoInstance.description = videoInfoToUpdate.description
+      if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.commentsEnabled = videoInfoToUpdate.commentsEnabled
+      if (videoInfoToUpdate.downloadEnabled !== undefined) videoInstance.downloadEnabled = videoInfoToUpdate.downloadEnabled
 
       if (videoInfoToUpdate.originallyPublishedAt !== undefined && videoInfoToUpdate.originallyPublishedAt !== null) {
         videoInstance.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
@@ -397,6 +403,14 @@ async function updateVideo (req: express.Request, res: express.Response) {
       } else if (videoInfoToUpdate.scheduleUpdate === null) {
         await ScheduleVideoUpdateModel.deleteByVideoId(videoInstanceUpdated.id, t)
       }
+
+      await autoBlacklistVideoIfNeeded({
+        video: videoInstanceUpdated,
+        user: res.locals.oauth.token.User,
+        isRemote: false,
+        isNew: false,
+        transaction: t
+      })
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
 

@@ -110,7 +110,7 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
     const apiOptions = await Hooks.wrapObject({
       videoId: video.id,
       threadId: res.locals.videoCommentThread.id,
-      user: user
+      user
     }, 'filter:api.video-thread-comments.list.params')
 
     resultList = await Hooks.wrapPromiseFun(

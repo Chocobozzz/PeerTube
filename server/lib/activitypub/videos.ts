@@ -224,11 +224,11 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
   if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
   const channelActor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
-  const video = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
+  const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
 
-  await syncVideoExternalAttributes(video, fetchedVideo, syncParam)
+  await syncVideoExternalAttributes(videoCreated, fetchedVideo, syncParam)
 
-  return { video, created: true }
+  return { video: videoCreated, created: true, autoBlacklisted }
 }
 
 async function updateVideoFromAP (options: {
@@ -354,7 +354,13 @@ async function updateVideoFromAP (options: {
       }
     })
 
-    const autoBlacklisted = await autoBlacklistVideoIfNeeded(video, undefined, undefined)
+    const autoBlacklisted = await autoBlacklistVideoIfNeeded({
+      video,
+      user: undefined,
+      isRemote: true,
+      isNew: false,
+      transaction: undefined
+    })
 
     if (autoBlacklisted) Notifier.Instance.notifyOnVideoAutoBlacklist(video)
     else if (!wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideo(video) // Notify our users?
@@ -467,7 +473,7 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     thumbnailModel = await promiseThumbnail
   }
 
-  const videoCreated: VideoModel = await sequelizeTypescript.transaction(async t => {
+  const { autoBlacklisted, videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoCreated = await video.save(sequelizeOptions)
@@ -506,9 +512,17 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     })
     await Promise.all(videoCaptionsPromises)
 
+    const autoBlacklisted = await autoBlacklistVideoIfNeeded({
+      video,
+      user: undefined,
+      isRemote: true,
+      isNew: true,
+      transaction: t
+    })
+
     logger.info('Remote video with uuid %s inserted.', videoObject.uuid)
 
-    return videoCreated
+    return { autoBlacklisted, videoCreated }
   })
 
   if (waitThumbnail === false) {
@@ -519,7 +533,7 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     })
   }
 
-  return videoCreated
+  return { autoBlacklisted, videoCreated }
 }
 
 async function videoActivityObjectToDBAttributes (
