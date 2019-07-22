@@ -125,6 +125,13 @@ export class PluginManager implements ServerHook {
       try {
         await this.registerPluginOrTheme(plugin)
       } catch (err) {
+        // Try to unregister the plugin
+        try {
+          await this.unregister(PluginModel.buildNpmName(plugin.name, plugin.type))
+        } catch {
+          // we don't care if we cannot unregister it
+        }
+
         logger.error('Cannot register plugin %s, skipping.', plugin.name, { err })
       }
     }

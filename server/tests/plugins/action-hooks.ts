@@ -43,7 +43,7 @@ describe('Test plugin action hooks', function () {
       path: getPluginTestPath()
     })
 
-    await killallServers([ servers[0] ])
+    killallServers([ servers[0] ])
 
     await reRunServer(servers[0])
   })
