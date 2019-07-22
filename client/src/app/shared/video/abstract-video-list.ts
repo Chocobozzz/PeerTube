@@ -13,6 +13,7 @@ import { Notifier, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
+import { ResultList } from '@shared/models'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -73,7 +74,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   private groupedDateLabels: { [id in GroupDate]: string }
   private groupedDates: { [id: number]: GroupDate } = {}
 
-  abstract getVideosObservable (page: number): Observable<{ videos: Video[], totalVideos: number }>
+  abstract getVideosObservable (page: number): Observable<ResultList<Video>>
 
   abstract generateSyndicationList (): void
 
@@ -138,12 +139,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
 
   loadMoreVideos () {
-    const observable = this.getVideosObservable(this.pagination.currentPage)
-
-    observable.subscribe(
-      ({ videos, totalVideos }) => {
-        this.pagination.totalItems = totalVideos
-        this.videos = this.videos.concat(videos)
+    this.getVideosObservable(this.pagination.currentPage).subscribe(
+      ({ data, total }) => {
+        this.pagination.totalItems = total
+        this.videos = this.videos.concat(data)
 
         if (this.groupByDate) this.buildGroupedDateLabels()
 

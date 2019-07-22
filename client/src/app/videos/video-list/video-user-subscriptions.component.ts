@@ -9,6 +9,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 import { Notifier, ServerService } from '@app/core'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
@@ -29,7 +30,8 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private hooks: HooksService
   ) {
     super()
 
@@ -46,8 +48,18 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
+    const params = {
+      videoPagination: newPagination,
+      sort: this.sort
+    }
 
-    return this.videoService.getUserSubscriptionVideos(newPagination, this.sort)
+    return this.hooks.wrapObsFun(
+      this.videoService.getUserSubscriptionVideos.bind(this.videoService),
+      params,
+      'common',
+      'filter:api.videos.list.user-subscriptions.params',
+      'filter:api.videos.list.user-subscriptions.result'
+    )
   }
 
   generateSyndicationList () {

@@ -30,5 +30,5 @@ export type ServerActionHookName =
 export type ServerHookName = ServerFilterHookName | ServerActionHookName
 
 export interface ServerHook {
-  runHook (hookName: ServerHookName, params?: any)
+  runHook <T> (hookName: ServerHookName, result?: T, params?: any): Promise<T>
 }

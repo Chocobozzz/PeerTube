@@ -33,6 +33,7 @@ import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import { PluginService } from '@app/core/plugins/plugin.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-video-watch',
@@ -93,6 +94,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
     private hotkeysService: HotkeysService,
+    private hooks: HooksService,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -131,7 +133,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.theaterEnabled = getStoredTheater()
 
-    this.pluginService.runHook('action:video-watch.loaded')
+    this.hooks.runAction('action:video-watch.init')
   }
 
   ngOnDestroy () {
@@ -246,9 +248,17 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     if (this.player) this.player.pause()
 
+    const videoObs = this.hooks.wrapObsFun(
+      this.videoService.getVideo.bind(this.videoService),
+      { videoId },
+      'video-watch',
+      'filter:api.video-watch.video.get.params',
+      'filter:api.video-watch.video.get.result'
+    )
+
     // Video did change
     forkJoin(
-      this.videoService.getVideo(videoId),
+      videoObs,
       this.videoCaptionService.listCaptions(videoId)
     )
       .pipe(
@@ -486,6 +496,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.setOpenGraphTags()
     this.checkUserRating()
+
+    this.hooks.runAction('action:video-watch.video.loaded')
   }
 
   private setRating (nextRating: UserVideoRateType) {

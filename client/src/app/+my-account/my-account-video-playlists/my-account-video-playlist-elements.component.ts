@@ -131,9 +131,9 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   private loadElements () {
     this.videoService.getPlaylistVideos(this.videoPlaylistId, this.pagination)
-        .subscribe(({ totalVideos, videos }) => {
-          this.videos = this.videos.concat(videos)
-          this.pagination.totalItems = totalVideos
+        .subscribe(({ total, data }) => {
+          this.videos = this.videos.concat(data)
+          this.pagination.totalItems = total
         })
   }
 

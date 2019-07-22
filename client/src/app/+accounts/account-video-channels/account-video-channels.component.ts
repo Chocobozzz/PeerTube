@@ -68,7 +68,7 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
         switchMap(res => from(res.data)),
         concatMap(videoChannel => {
           return this.videoService.getVideoChannelVideos(videoChannel, this.videosPagination, this.videosSort)
-            .pipe(map(data => ({ videoChannel, videos: data.videos })))
+            .pipe(map(data => ({ videoChannel, videos: data.data })))
         })
       )
       .subscribe(({ videoChannel, videos }) => {

@@ -12,6 +12,7 @@ import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Syndication } from '@app/shared/video/syndication.model'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-video-comments',
@@ -45,7 +46,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
-    private i18n: I18n
+    private i18n: I18n,
+    private hooks: HooksService
   ) {}
 
   ngOnInit () {
@@ -73,8 +75,20 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   viewReplies (commentId: number, highlightThread = false) {
     this.threadLoading[commentId] = true
 
-    this.videoCommentService.getVideoThreadComments(this.video.id, commentId)
-      .subscribe(
+    const params = {
+      videoId: this.video.id,
+      threadId: commentId
+    }
+
+    const obs = this.hooks.wrapObsFun(
+      this.videoCommentService.getVideoThreadComments.bind(this.videoCommentService),
+      params,
+      'video-watch',
+      'filter:api.video-watch.video-thread-replies.list.params',
+      'filter:api.video-watch.video-thread-replies.list.result'
+    )
+
+    obs.subscribe(
         res => {
           this.threadComments[commentId] = res
           this.threadLoading[commentId] = false
@@ -91,16 +105,29 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       )
   }
 
-  loadMoreComments () {
-    this.videoCommentService.getVideoCommentThreads(this.video.id, this.componentPagination, this.sort)
-      .subscribe(
-        res => {
-          this.comments = this.comments.concat(res.comments)
-          this.componentPagination.totalItems = res.totalComments
-        },
+  loadMoreThreads () {
+    const params = {
+      videoId: this.video.id,
+      componentPagination: this.componentPagination,
+      sort: this.sort
+    }
 
-        err => this.notifier.error(err.message)
-      )
+    const obs = this.hooks.wrapObsFun(
+      this.videoCommentService.getVideoCommentThreads.bind(this.videoCommentService),
+      params,
+      'video-watch',
+      'filter:api.video-watch.video-threads.list.params',
+      'filter:api.video-watch.video-threads.list.result'
+    )
+
+    obs.subscribe(
+      res => {
+        this.comments = this.comments.concat(res.comments)
+        this.componentPagination.totalItems = res.totalComments
+      },
+
+      err => this.notifier.error(err.message)
+    )
   }
 
   onCommentThreadCreated (comment: VideoComment) {
@@ -169,7 +196,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.componentPagination.currentPage++
 
     if (hasMoreItems(this.componentPagination)) {
-      this.loadMoreComments()
+      this.loadMoreThreads()
     }
   }
 
@@ -197,7 +224,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
 
-      this.loadMoreComments()
+      this.loadMoreThreads()
     }
   }
 
