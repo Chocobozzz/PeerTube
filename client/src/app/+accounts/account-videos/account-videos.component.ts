@@ -69,8 +69,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     return this.videoService
                .getAccountVideos(this.account, newPagination, this.sort)
                .pipe(
-                 tap(({ totalVideos }) => {
-                   this.titlePage = this.i18n('Published {{totalVideos}} videos', { totalVideos })
+                 tap(({ total }) => {
+                   this.titlePage = this.i18n('Published {{total}} videos', { total })
                  })
                )
   }

@@ -10,6 +10,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
 import { ViewportScroller } from '@angular/common'
 import { PluginService } from '@app/core/plugins/plugin.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-app',
@@ -33,7 +34,8 @@ export class AppComponent implements OnInit {
     private redirectService: RedirectService,
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private hooks: HooksService
   ) { }
 
   get serverVersion () {
@@ -206,7 +208,7 @@ export class AppComponent implements OnInit {
 
     await this.pluginService.loadPluginsByScope('common')
 
-    this.pluginService.runHook('action:application.loaded')
+    this.hooks.runAction('action:application.init')
   }
 
   private initHotkeys () {

@@ -1,11 +1,12 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { ClientScript } from '../plugins/plugin-package-json.model'
+import { PluginClientScope } from '../plugins/plugin-scope.type'
 
 export interface ServerConfigPlugin {
   name: string
   version: string
   description: string
-  clientScripts: { [name: string]: ClientScript }
+  clientScripts: { [name in PluginClientScope]: ClientScript }
 }
 
 export interface ServerConfigTheme extends ServerConfigPlugin {

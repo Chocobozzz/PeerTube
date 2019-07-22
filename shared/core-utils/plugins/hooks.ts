@@ -29,7 +29,7 @@ async function internalRunHook <T> (handler: Function, hookType: HookType, resul
     }
 
     if (hookType === HookType.ACTION) {
-      if (isCatchable(p)) p.catch(err => onError(err))
+      if (isCatchable(p)) p.catch((err: any) => onError(err))
 
       return undefined
     }

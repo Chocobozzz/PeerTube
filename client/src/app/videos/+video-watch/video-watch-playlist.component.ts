@@ -66,11 +66,11 @@ export class VideoWatchPlaylistComponent {
 
   loadPlaylistElements (playlist: VideoPlaylist, redirectToFirst = false) {
     this.videoService.getPlaylistVideos(playlist.uuid, this.playlistPagination)
-        .subscribe(({ totalVideos, videos }) => {
-          this.playlistVideos = this.playlistVideos.concat(videos)
-          this.playlistPagination.totalItems = totalVideos
+        .subscribe(({ total, data }) => {
+          this.playlistVideos = this.playlistVideos.concat(data)
+          this.playlistPagination.totalItems = total
 
-          if (totalVideos === 0) {
+          if (total === 0) {
             this.noPlaylistVideos = true
             return
           }

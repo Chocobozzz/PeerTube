@@ -18,7 +18,7 @@ export class VideoUpdateResolver implements Resolve<any> {
   resolve (route: ActivatedRouteSnapshot) {
     const uuid: string = route.params[ 'uuid' ]
 
-    return this.videoService.getVideo(uuid)
+    return this.videoService.getVideo({ videoId: uuid })
                .pipe(
                  switchMap(video => {
                    return forkJoin([

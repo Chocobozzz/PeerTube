@@ -3,11 +3,13 @@ import { Router } from '@angular/router'
 import { ServerConfigPlugin } from '@shared/models'
 import { ServerService } from '@app/core/server/server.service'
 import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
-import { PluginScope } from '@shared/models/plugins/plugin-scope.type'
 import { environment } from '../../../environments/environment'
 import { RegisterHookOptions } from '@shared/models/plugins/register-hook.model'
 import { ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
+import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
+import { ClientHook, ClientHookName } from '@shared/models/plugins/client-hook.model'
+import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
 
 interface HookStructValue extends RegisterHookOptions {
   plugin: ServerConfigPlugin
@@ -21,14 +23,18 @@ type PluginInfo = {
 }
 
 @Injectable()
-export class PluginService {
-  pluginsLoaded = new ReplaySubject<boolean>(1)
+export class PluginService implements ClientHook {
+  pluginsBuilt = new ReplaySubject<boolean>(1)
+
+  pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
+    common: new ReplaySubject<boolean>(1),
+    'video-watch': new ReplaySubject<boolean>(1)
+  }
 
   private plugins: ServerConfigPlugin[] = []
   private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
-  private loadedPlugins: { [ name: string ]: boolean } = {}
   private loadedScripts: { [ script: string ]: boolean } = {}
-  private loadedScopes: PluginScope[] = []
+  private loadedScopes: PluginClientScope[] = []
 
   private hooks: { [ name: string ]: HookStructValue[] } = {}
 
@@ -45,12 +51,18 @@ export class PluginService {
 
         this.buildScopeStruct()
 
-        this.pluginsLoaded.next(true)
+        this.pluginsBuilt.next(true)
       })
   }
 
-  ensurePluginsAreLoaded () {
-    return this.pluginsLoaded.asObservable()
+  ensurePluginsAreBuilt () {
+    return this.pluginsBuilt.asObservable()
+               .pipe(first(), shareReplay())
+               .toPromise()
+  }
+
+  ensurePluginsAreLoaded (scope: PluginClientScope) {
+    return this.pluginsLoaded[scope].asObservable()
                .pipe(first(), shareReplay())
                .toPromise()
   }
@@ -90,9 +102,9 @@ export class PluginService {
     }
   }
 
-  async loadPluginsByScope (scope: PluginScope, isReload = false) {
+  async loadPluginsByScope (scope: PluginClientScope, isReload = false) {
     try {
-      await this.ensurePluginsAreLoaded()
+      await this.ensurePluginsAreBuilt()
 
       if (!isReload) this.loadedScopes.push(scope)
 
@@ -111,32 +123,24 @@ export class PluginService {
       }
 
       await Promise.all(promises)
+
+      this.pluginsLoaded[scope].next(true)
     } catch (err) {
       console.error('Cannot load plugins by scope %s.', scope, err)
     }
   }
 
-  async runHook (hookName: string, param?: any) {
-    let result = param
+  async runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
+    if (!this.hooks[hookName]) return Promise.resolve(result)
 
-    if (!this.hooks[hookName]) return result
-
-    const wait = hookName.startsWith('static:')
+    const hookType = getHookType(hookName)
 
     for (const hook of this.hooks[hookName]) {
-      try {
-        const p = hook.handler(param)
+      console.log('Running hook %s of plugin %s.', hookName, hook.plugin.name)
 
-        if (wait) {
-          result = await p
-        } else if (p.catch) {
-          p.catch((err: Error) => {
-            console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.plugin, hook.clientScript, err)
-          })
-        }
-      } catch (err) {
-        console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.plugin, hook.clientScript, err)
-      }
+      result = await internalRunHook(hook.handler, hookType, result, params, err => {
+        console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.clientScript.script, hook.plugin.name, err)
+      })
     }
 
     return result

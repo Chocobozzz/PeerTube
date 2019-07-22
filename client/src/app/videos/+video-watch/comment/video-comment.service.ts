@@ -48,11 +48,13 @@ export class VideoCommentService {
                )
   }
 
-  getVideoCommentThreads (
+  getVideoCommentThreads (parameters: {
     videoId: number | string,
     componentPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ comments: VideoComment[], totalComments: number}> {
+  }): Observable<{ comments: VideoComment[], totalComments: number}> {
+    const { videoId, componentPagination, sort } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
     let params = new HttpParams()
@@ -67,7 +69,11 @@ export class VideoCommentService {
                )
   }
 
-  getVideoThreadComments (videoId: number | string, threadId: number): Observable<VideoCommentThreadTree> {
+  getVideoThreadComments (parameters: {
+    videoId: number | string,
+    threadId: number
+  }): Observable<VideoCommentThreadTree> {
+    const { videoId, threadId } = parameters
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
 
     return this.authHttp

@@ -23,13 +23,14 @@ export class SearchService {
     private videoService: VideoService
   ) {}
 
-  searchVideos (
+  searchVideos (parameters: {
     search: string,
     componentPagination: ComponentPagination,
     advancedSearch: AdvancedSearch
-  ): Observable<{ videos: Video[], totalVideos: number }> {
-    const url = SearchService.BASE_SEARCH_URL + 'videos'
+  }): Observable<ResultList<Video>> {
+    const { search, componentPagination, advancedSearch } = parameters
 
+    const url = SearchService.BASE_SEARCH_URL + 'videos'
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
     let params = new HttpParams()
@@ -48,12 +49,13 @@ export class SearchService {
                )
   }
 
-  searchVideoChannels (
+  searchVideoChannels (parameters: {
     search: string,
     componentPagination: ComponentPagination
-  ): Observable<{ data: VideoChannel[], total: number }> {
-    const url = SearchService.BASE_SEARCH_URL + 'video-channels'
+  }): Observable<ResultList<VideoChannel>> {
+    const { search, componentPagination } = parameters
 
+    const url = SearchService.BASE_SEARCH_URL + 'video-channels'
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
     let params = new HttpParams()

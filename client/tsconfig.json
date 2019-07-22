@@ -12,6 +12,7 @@
     "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors":true,
     "alwaysStrict": true,
+    "strictBindCallApply": true,
     "target": "es5",
     "typeRoots": [
       "node_modules/@types"

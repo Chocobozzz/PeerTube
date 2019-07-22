@@ -8,6 +8,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { Notifier, ServerService } from '@app/core'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-videos-recently-added',
@@ -29,7 +30,8 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private hooks: HooksService
   ) {
     super()
 
@@ -48,14 +50,20 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
-
-    return this.videoService.getVideos({
+    const params = {
       videoPagination: newPagination,
       sort: this.sort,
-      filter: undefined,
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf
-    })
+    }
+
+    return this.hooks.wrapObsFun(
+      this.videoService.getVideos.bind(this.videoService),
+      params,
+      'common',
+      'filter:api.videos.list.recently-added.params',
+      'filter:api.videos.list.recently-added.result'
+    )
   }
 
   generateSyndicationList () {

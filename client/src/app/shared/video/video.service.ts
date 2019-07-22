@@ -41,7 +41,7 @@ export interface VideosProvider {
     filter?: VideoFilter,
     categoryOneOf?: number,
     languageOneOf?: string[]
-  }): Observable<{ videos: Video[], totalVideos: number }>
+  }): Observable<ResultList<Video>>
 }
 
 @Injectable()
@@ -65,11 +65,11 @@ export class VideoService implements VideosProvider {
     return VideoService.BASE_VIDEO_URL + uuid + '/watching'
   }
 
-  getVideo (uuid: string): Observable<VideoDetails> {
+  getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.localeObservable
                .pipe(
                  switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
+                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + options.videoId)
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -123,7 +123,7 @@ export class VideoService implements VideosProvider {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number }> {
+  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -141,7 +141,7 @@ export class VideoService implements VideosProvider {
     account: Account,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -159,7 +159,7 @@ export class VideoService implements VideosProvider {
     videoChannel: VideoChannel,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -176,7 +176,7 @@ export class VideoService implements VideosProvider {
   getPlaylistVideos (
     videoPlaylistId: number | string,
     videoPagination: ComponentPagination
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -190,10 +190,11 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getUserSubscriptionVideos (
+  getUserSubscriptionVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  }): Observable<ResultList<Video>> {
+    const { videoPagination, sort } = parameters
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -213,7 +214,7 @@ export class VideoService implements VideosProvider {
     filter?: VideoFilter,
     categoryOneOf?: number,
     languageOneOf?: string[]
-  }): Observable<{ videos: Video[], totalVideos: number }> {
+  }): Observable<ResultList<Video>> {
     const { videoPagination, sort, filter, categoryOneOf, languageOneOf } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
@@ -344,7 +345,7 @@ export class VideoService implements VideosProvider {
                      videos.push(new Video(videoJson, translations))
                    }
 
-                   return { videos, totalVideos }
+                   return { total: totalVideos, data: videos }
                  })
                )
   }
