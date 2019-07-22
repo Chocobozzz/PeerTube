@@ -28,6 +28,7 @@ export class PluginService implements ClientHook {
 
   pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
     common: new ReplaySubject<boolean>(1),
+    search: new ReplaySubject<boolean>(1),
     'video-watch': new ReplaySubject<boolean>(1)
   }
 
@@ -109,7 +110,11 @@ export class PluginService implements ClientHook {
       if (!isReload) this.loadedScopes.push(scope)
 
       const toLoad = this.scopes[ scope ]
-      if (!Array.isArray(toLoad)) return
+      if (!Array.isArray(toLoad)) {
+        this.pluginsLoaded[scope].next(true)
+
+        return
+      }
 
       const promises: Promise<any>[] = []
       for (const pluginInfo of toLoad) {

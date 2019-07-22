@@ -122,8 +122,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
     obs.subscribe(
       res => {
-        this.comments = this.comments.concat(res.comments)
-        this.componentPagination.totalItems = res.totalComments
+        this.comments = this.comments.concat(res.data)
+        this.componentPagination.totalItems = res.total
       },
 
       err => this.notifier.error(err.message)

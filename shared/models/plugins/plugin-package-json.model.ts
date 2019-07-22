@@ -1,6 +1,8 @@
+import { PluginClientScope } from './plugin-client-scope.type'
+
 export type ClientScript = {
   script: string,
-  scopes: string[]
+  scopes: PluginClientScope[]
 }
 
 export type PluginPackageJson = {

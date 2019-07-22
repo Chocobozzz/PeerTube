@@ -1,1 +1,1 @@
-export type PluginClientScope = 'common' | 'video-watch'
+export type PluginClientScope = 'common' | 'video-watch' | 'search'
