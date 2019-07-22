@@ -103,7 +103,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit () {
-    await this.pluginService.loadPluginsByScope('video-watch')
+    this.pluginService.loadPluginsByScope('video-watch')
 
     this.configSub = this.serverService.configLoaded
         .subscribe(() => {
