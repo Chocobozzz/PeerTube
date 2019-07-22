@@ -9,7 +9,7 @@ type RawFunction <U, T> = (params: U) => T
 // Helpers to run hooks
 const Hooks = {
   wrapObject: <T, U extends ServerFilterHookName>(result: T, hookName: U) => {
-    return PluginManager.Instance.runHook(hookName, result) as Promise<T>
+    return PluginManager.Instance.runHook(hookName, result)
   },
 
   wrapPromiseFun: async <U, T, V extends ServerFilterHookName>(fun: PromiseFunction<U, T>, params: U, hookName: V) => {
