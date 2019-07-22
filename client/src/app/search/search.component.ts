@@ -79,6 +79,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
       err => this.notifier.error(err.text)
     )
+
+    this.hooks.runAction('action:search.init')
   }
 
   ngOnDestroy () {

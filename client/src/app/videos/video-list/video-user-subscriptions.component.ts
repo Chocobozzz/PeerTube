@@ -57,8 +57,8 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
       this.videoService.getUserSubscriptionVideos.bind(this.videoService),
       params,
       'common',
-      'filter:api.videos.list.user-subscriptions.params',
-      'filter:api.videos.list.user-subscriptions.result'
+      'filter:api.user-subscriptions-videos.videos.list.params',
+      'filter:api.user-subscriptions-videos.videos.list.result'
     )
   }
 

@@ -61,8 +61,8 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
       this.videoService.getVideos.bind(this.videoService),
       params,
       'common',
-      'filter:api.videos.list.recently-added.params',
-      'filter:api.videos.list.recently-added.result'
+      'filter:api.recently-added-videos.videos.list.params',
+      'filter:api.recently-added-videos.videos.list.result'
     )
   }
 

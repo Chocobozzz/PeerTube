@@ -13,7 +13,7 @@ import { RegisterSettingOptions } from '../../../shared/models/plugins/register-
 import { RegisterHookOptions } from '../../../shared/models/plugins/register-hook.model'
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
 import { PluginStorageManager } from '../../../shared/models/plugins/plugin-storage-manager.model'
-import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
+import { ServerHook, ServerHookName, serverHookObject } from '../../../shared/models/plugins/server-hook.model'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
 import { RegisterOptions } from '../../typings/plugins/register-options.model'
 import { PluginLibrary } from '../../typings/plugins'
@@ -388,6 +388,11 @@ export class PluginManager implements ServerHook {
 
   private getRegisterHelpers (npmName: string, plugin: PluginModel): RegisterOptions {
     const registerHook = (options: RegisterHookOptions) => {
+      if (serverHookObject[options.target] !== true) {
+        logger.warn('Unknown hook %s of plugin %s. Skipping.', options.target, npmName)
+        return
+      }
+
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
       this.hooks[options.target].push({
