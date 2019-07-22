@@ -471,7 +471,7 @@ let PRIVATE_RSA_KEY_SIZE = 2048
 // Password encryption
 const BCRYPT_SALT_SIZE = 10
 
-const USER_PASSWORD_RESET_LIFETIME = 60000 * 5 // 5 minutes
+const USER_PASSWORD_RESET_LIFETIME = 60000 * 60 // 60 minutes
 
 const USER_EMAIL_VERIFY_LIFETIME = 60000 * 60 // 60 minutes
 
