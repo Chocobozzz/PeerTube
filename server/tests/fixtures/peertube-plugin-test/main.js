@@ -26,7 +26,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.videos.list.result',
-    handler: obj => ({ data: obj.data, total: obj.total + 1 })
+    handler: obj => addToTotal(obj)
   })
 
   registerHook({
@@ -41,10 +41,49 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   registerHook({
     target: 'filter:api.video.upload.accept.result',
     handler: ({ accepted }, { videoBody }) => {
-      if (accepted !== false) return { accepted: true }
+      if (!accepted) return { accepted: false }
       if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word '}
 
       return { accepted: true }
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.video-thread.create.accept.result',
+    handler: ({ accepted }, { commentBody }) => checkCommentBadWord(accepted, commentBody)
+  })
+
+  registerHook({
+    target: 'filter:api.video-comment-reply.create.accept.result',
+    handler: ({ accepted }, { commentBody }) => checkCommentBadWord(accepted, commentBody)
+  })
+
+  registerHook({
+    target: 'filter:api.video-threads.list.params',
+    handler: obj => addToCount(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.video-threads.list.result',
+    handler: obj => addToTotal(obj)
+  })
+
+  registerHook({
+    target: 'filter:api.video-thread-comments.list.result',
+    handler: obj => {
+      obj.data.forEach(c => c.text += ' <3')
+
+      return obj
+    }
+  })
+
+  registerHook({
+    target: 'filter:video.auto-blacklist.result',
+    handler: (blacklisted, { video }) => {
+      if (blacklisted) return true
+      if (video.name.includes('please blacklist me')) return true
+
+      return false
     }
   })
 }
@@ -62,4 +101,18 @@ module.exports = {
 
 function addToCount (obj) {
   return Object.assign({}, obj, { count: obj.count + 1 })
+}
+
+function addToTotal (result) {
+  return {
+    data: result.data,
+    total: result.total + 1
+  }
+}
+
+function checkCommentBadWord (accepted, commentBody) {
+  if (!accepted) return { accepted: false }
+  if (commentBody.text.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word '}
+
+  return { accepted: true }
 }

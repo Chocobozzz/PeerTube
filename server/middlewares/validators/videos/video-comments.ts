@@ -210,13 +210,15 @@ async function isVideoCommentAccepted (req: express.Request, res: express.Respon
   if (isReply) {
     const acceptReplyParameters = Object.assign(acceptParameters, { parentComment: res.locals.videoComment })
 
-    acceptedResult = await Hooks.wrapObject(
-      isLocalVideoCommentReplyAccepted(acceptReplyParameters),
+    acceptedResult = await Hooks.wrapFun(
+      isLocalVideoCommentReplyAccepted,
+      acceptReplyParameters,
       'filter:api.video-comment-reply.create.accept.result'
     )
   } else {
-    acceptedResult = await Hooks.wrapObject(
-      isLocalVideoThreadAccepted(acceptParameters),
+    acceptedResult = await Hooks.wrapFun(
+      isLocalVideoThreadAccepted,
+      acceptParameters,
       'filter:api.video-thread.create.accept.result'
     )
   }

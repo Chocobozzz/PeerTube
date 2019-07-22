@@ -7,11 +7,11 @@ export type ServerFilterHookName =
   'filter:api.video-thread.create.accept.result' |
   'filter:api.video-comment-reply.create.accept.result' |
 
-  'filter:api.video-thread-comments.list.params' |
-  'filter:api.video-thread-comments.list.result' |
-
   'filter:api.video-threads.list.params' |
   'filter:api.video-threads.list.result' |
+
+  'filter:api.video-thread-comments.list.params' |
+  'filter:api.video-thread-comments.list.result' |
 
   'filter:video.auto-blacklist.result'
 
