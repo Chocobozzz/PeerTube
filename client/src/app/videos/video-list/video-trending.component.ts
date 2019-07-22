@@ -74,8 +74,8 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
       this.videoService.getVideos.bind(this.videoService),
       params,
       'common',
-      'filter:api.videos.list.trending.params',
-      'filter:api.videos.list.trending.result'
+      'filter:api.trending-videos.videos.list.params',
+      'filter:api.trending-videos.videos.list.result'
     )
   }
 

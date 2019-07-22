@@ -8,7 +8,7 @@ import { RegisterHookOptions } from '@shared/models/plugins/register-hook.model'
 import { ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
-import { ClientHook, ClientHookName } from '@shared/models/plugins/client-hook.model'
+import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plugins/client-hook.model'
 import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
 
 interface HookStructValue extends RegisterHookOptions {
@@ -155,6 +155,11 @@ export class PluginService implements ClientHook {
     const { plugin, clientScript } = pluginInfo
 
     const registerHook = (options: RegisterHookOptions) => {
+      if (clientHookObject[options.target] !== true) {
+        console.error('Unknown hook %s of plugin %s. Skipping.', options.target, plugin.name)
+        return
+      }
+
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
       this.hooks[options.target].push({

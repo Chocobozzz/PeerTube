@@ -69,8 +69,8 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
       this.videoService.getVideos.bind(this.videoService),
       params,
       'common',
-      'filter:api.videos.list.local.params',
-      'filter:api.videos.list.local.result'
+      'filter:api.local-videos.videos.list.params',
+      'filter:api.local-videos.videos.list.result'
     )
   }
 

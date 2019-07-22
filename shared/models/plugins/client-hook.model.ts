@@ -1,38 +1,48 @@
-export type ClientFilterHookName =
-  'filter:api.videos.list.trending.params' |
-  'filter:api.videos.list.trending.result' |
+// Data from API hooks: {hookType}:api.{location}.{elementType}.{actionType}.{target}
 
-  'filter:api.videos.list.local.params' |
-  'filter:api.videos.list.local.result' |
+export const clientFilterHookObject = {
+  'filter:api.trending-videos.videos.list.params': true,
+  'filter:api.trending-videos.videos.list.result': true,
 
-  'filter:api.videos.list.recently-added.params' |
-  'filter:api.videos.list.recently-added.result' |
+  'filter:api.local-videos.videos.list.params': true,
+  'filter:api.local-videos.videos.list.result': true,
 
-  'filter:api.videos.list.user-subscriptions.params' |
-  'filter:api.videos.list.user-subscriptions.result' |
+  'filter:api.recently-added-videos.videos.list.params': true,
+  'filter:api.recently-added-videos.videos.list.result': true,
 
-  'filter:api.video-watch.video.get.params' |
-  'filter:api.video-watch.video.get.result' |
+  'filter:api.user-subscriptions-videos.videos.list.params': true,
+  'filter:api.user-subscriptions-videos.videos.list.result': true,
 
-  'filter:api.video-watch.video-threads.list.params' |
-  'filter:api.video-watch.video-threads.list.result' |
+  'filter:api.video-watch.video.get.params': true,
+  'filter:api.video-watch.video.get.result': true,
 
-  'filter:api.video-watch.video-thread-replies.list.params' |
-  'filter:api.video-watch.video-thread-replies.list.result' |
+  'filter:api.video-watch.video-threads.list.params': true,
+  'filter:api.video-watch.video-threads.list.result': true,
 
-  'filter:api.search.videos.list.params' |
-  'filter:api.search.videos.list.result' |
-  'filter:api.search.video-channels.list.params' |
-  'filter:api.search.video-channels.list.result'
+  'filter:api.video-watch.video-thread-replies.list.params': true,
+  'filter:api.video-watch.video-thread-replies.list.result': true,
 
-export type ClientActionHookName =
-  'action:application.init' |
+  'filter:api.search.videos.list.params': true,
+  'filter:api.search.videos.list.result': true,
+  'filter:api.search.video-channels.list.params': true,
+  'filter:api.search.video-channels.list.result': true
+}
 
-  'action:video-watch.init' |
+export type ClientFilterHookName = keyof typeof clientFilterHookObject
 
-  'action:video-watch.video.loaded'
+export const clientActionHookObject = {
+  'action:application.init': true,
 
-export type ClientHookName = ClientActionHookName | ClientFilterHookName
+  'action:video-watch.init': true,
+  'action:video-watch.video.loaded': true,
+
+  'action:search.init': true
+}
+
+export type ClientActionHookName = keyof typeof clientActionHookObject
+
+export const clientHookObject = Object.assign({}, clientFilterHookObject, clientActionHookObject)
+export type ClientHookName = keyof typeof clientHookObject
 
 export interface ClientHook {
   runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T>
