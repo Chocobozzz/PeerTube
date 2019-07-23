@@ -53,8 +53,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
-    this.pluginService.loadPluginsByScope('search')
-
     this.subActivatedRoute = this.route.queryParams.subscribe(
       queryParams => {
         const querySearch = queryParams['search']
@@ -80,7 +78,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       err => this.notifier.error(err.text)
     )
 
-    this.hooks.runAction('action:search.init')
+    this.hooks.runAction('action:search.init', 'search')
   }
 
   ngOnDestroy () {

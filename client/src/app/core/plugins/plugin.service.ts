@@ -36,6 +36,7 @@ export class PluginService implements ClientHook {
   private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
   private loadedScripts: { [ script: string ]: boolean } = {}
   private loadedScopes: PluginClientScope[] = []
+  private loadingScopes: { [id in PluginClientScope]?: boolean } = {}
 
   private hooks: { [ name: string ]: HookStructValue[] } = {}
 
@@ -63,6 +64,8 @@ export class PluginService implements ClientHook {
   }
 
   ensurePluginsAreLoaded (scope: PluginClientScope) {
+    this.loadPluginsByScope(scope)
+
     return this.pluginsLoaded[scope].asObservable()
                .pipe(first(), shareReplay())
                .toPromise()
@@ -104,6 +107,11 @@ export class PluginService implements ClientHook {
   }
 
   async loadPluginsByScope (scope: PluginClientScope, isReload = false) {
+    if (this.loadingScopes[scope]) return
+    if (!isReload && this.loadedScopes.includes(scope)) return
+
+    this.loadingScopes[scope] = true
+
     try {
       await this.ensurePluginsAreBuilt()
 
@@ -111,6 +119,7 @@ export class PluginService implements ClientHook {
 
       const toLoad = this.scopes[ scope ]
       if (!Array.isArray(toLoad)) {
+        this.loadingScopes[scope] = false
         this.pluginsLoaded[scope].next(true)
 
         return
@@ -130,6 +139,7 @@ export class PluginService implements ClientHook {
       await Promise.all(promises)
 
       this.pluginsLoaded[scope].next(true)
+      this.loadingScopes[scope] = false
     } catch (err) {
       console.error('Cannot load plugins by scope %s.', scope, err)
     }
