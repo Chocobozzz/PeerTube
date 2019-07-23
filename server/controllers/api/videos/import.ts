@@ -245,7 +245,14 @@ function insertIntoDB (parameters: {
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
-    await autoBlacklistVideoIfNeeded({ video, user, isRemote: false, isNew: true, transaction: t })
+    await autoBlacklistVideoIfNeeded({
+      video,
+      user,
+      notify: false,
+      isRemote: false,
+      isNew: true,
+      transaction: t
+    })
 
     // Set tags to the video
     if (tags) {

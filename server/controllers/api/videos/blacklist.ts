@@ -115,6 +115,7 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
     const videoBlacklistType = videoBlacklist.type
 
     await videoBlacklist.destroy({ transaction: t })
+    video.VideoBlacklist = undefined
 
     // Re federate the video
     if (unfederated === true) {
@@ -131,7 +132,7 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
 
     // Delete on object so new video notifications will send
     delete video.VideoBlacklist
-    Notifier.Instance.notifyOnNewVideo(video)
+    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
   }
 
   logger.info('Video %s removed from blacklist.', res.locals.video.uuid)

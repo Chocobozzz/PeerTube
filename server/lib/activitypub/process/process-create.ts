@@ -48,9 +48,9 @@ export {
 async function processCreateVideo (activity: ActivityCreate) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const { video, created, autoBlacklisted } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
+  const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
 
-  if (created && !autoBlacklisted) Notifier.Instance.notifyOnNewVideo(video)
+  if (created) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
   return video
 }

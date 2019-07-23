@@ -58,8 +58,12 @@ import { Hooks } from '../plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
-  // If the video is not private and is published, we federate it
-  if (video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED) {
+  if (
+    // Check this is not a blacklisted video, or unfederated blacklisted video
+    (video.isBlacklisted() === false || (isNewVideo === false && video.VideoBlacklist.unfederated === false)) &&
+    // Check the video is public/unlisted and published
+    video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED
+  ) {
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {
       video.VideoCaptions = await video.$get('VideoCaptions', {
@@ -354,7 +358,7 @@ async function updateVideoFromAP (options: {
       }
     })
 
-    const autoBlacklisted = await autoBlacklistVideoIfNeeded({
+    await autoBlacklistVideoIfNeeded({
       video,
       user: undefined,
       isRemote: true,
@@ -362,8 +366,7 @@ async function updateVideoFromAP (options: {
       transaction: undefined
     })
 
-    if (autoBlacklisted) Notifier.Instance.notifyOnVideoAutoBlacklist(video)
-    else if (!wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideo(video) // Notify our users?
+    if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(video) // Notify our users?
 
     logger.info('Remote video with uuid %s updated', videoObject.uuid)
   } catch (err) {

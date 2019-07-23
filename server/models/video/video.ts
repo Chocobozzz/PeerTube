@@ -1715,6 +1715,10 @@ export class VideoModel extends Model<VideoModel> {
     return VIDEO_STATES[ id ] || 'Unknown'
   }
 
+  isBlacklisted () {
+    return !!this.VideoBlacklist
+  }
+
   getOriginalFile () {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 

@@ -112,7 +112,7 @@ async function publishNewResolutionIfNeeded (video: VideoModel, payload?: NewRes
   })
 
   if (videoPublished) {
-    Notifier.Instance.notifyOnNewVideo(videoDatabase)
+    Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
     Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
   }
 
@@ -172,7 +172,7 @@ async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: Optim
     return { videoDatabase, videoPublished }
   })
 
-  if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideo(videoDatabase)
+  if (payload.isNewVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoDatabase)
   if (videoPublished) Notifier.Instance.notifyOnVideoPublishedAfterTranscoding(videoDatabase)
 
   const hlsPayload = Object.assign({}, payload, { resolution: videoDatabase.getOriginalFile().resolution })

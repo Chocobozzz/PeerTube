@@ -75,7 +75,7 @@ describe('Test optimize old videos', function () {
   })
 
   it('Should run optimize script', async function () {
-    this.timeout(120000)
+    this.timeout(200000)
 
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run optimize-old-videos`)
