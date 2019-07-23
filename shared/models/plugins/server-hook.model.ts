@@ -1,3 +1,5 @@
+// {hookType}:{api?}.{location}.{subLocation?}.{actionType}.{target}
+
 export const serverFilterHookObject = {
   'filter:api.videos.list.params': true,
   'filter:api.videos.list.result': true,

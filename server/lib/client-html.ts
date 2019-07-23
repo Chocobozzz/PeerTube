@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../initializers/constants'
+import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER } from '../initializers/constants'
 import { join } from 'path'
-import { escapeHTML } from '../helpers/core-utils'
+import { escapeHTML, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
 import * as validator from 'validator'
 import { VideoPrivacy } from '../../shared/models/videos'
@@ -92,7 +92,7 @@ export class ClientHtml {
     let html = buffer.toString()
 
     html = ClientHtml.addCustomCSS(html)
-    html = ClientHtml.addPluginCSS(html)
+    html = await ClientHtml.addAsyncPluginCSS(html)
 
     ClientHtml.htmlCache[ path ] = html
 
@@ -144,8 +144,12 @@ export class ClientHtml {
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
   }
 
-  private static addPluginCSS (htmlStringPage: string) {
-    const linkTag = `<link rel="stylesheet" href="/plugins/global.css" />`
+  private static async addAsyncPluginCSS (htmlStringPage: string) {
+    const globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
+    if (!globalCSSContent) return htmlStringPage
+
+    const fileHash = sha256(globalCSSContent)
+    const linkTag = `<link rel="stylesheet" href="/plugins/global.css?hash=${fileHash}" />`
 
     return htmlStringPage.replace('</head>', linkTag + '</head>')
   }

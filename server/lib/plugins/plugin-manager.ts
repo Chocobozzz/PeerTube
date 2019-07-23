@@ -17,6 +17,7 @@ import { ServerHook, ServerHookName, serverHookObject } from '../../../shared/mo
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
 import { RegisterOptions } from '../../typings/plugins/register-options.model'
 import { PluginLibrary } from '../../typings/plugins'
+import { ClientHtml } from '../client-html'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -323,6 +324,8 @@ export class PluginManager implements ServerHook {
     for (const cssPath of cssRelativePaths) {
       await this.concatFiles(join(pluginPath, cssPath), PLUGIN_GLOBAL_CSS_PATH)
     }
+
+    ClientHtml.invalidCache()
   }
 
   private concatFiles (input: string, output: string) {
