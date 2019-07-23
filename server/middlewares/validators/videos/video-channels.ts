@@ -2,8 +2,6 @@ import * as express from 'express'
 import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../../shared'
 import {
-  doesLocalVideoChannelNameExist,
-  doesVideoChannelNameWithHostExist,
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelSupportValid
@@ -15,6 +13,7 @@ import { areValidationErrors } from '../utils'
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { isBooleanValid } from '../../../helpers/custom-validators/misc'
+import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),

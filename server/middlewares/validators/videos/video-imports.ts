@@ -6,9 +6,10 @@ import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
 import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { doesVideoChannelOfAccountExist, isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')

@@ -13,12 +13,12 @@ import {
   isUserNSFWPolicyValid,
   isUserPasswordValid,
   isUserRoleValid,
-  isUserUsernameValid, isUserVideoLanguages,
+  isUserUsernameValid,
+  isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid
 } from '../../helpers/custom-validators/users'
-import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
 import { Redis } from '../../lib/redis'
@@ -30,6 +30,7 @@ import { isVideoChannelNameValid } from '../../helpers/custom-validators/video-c
 import { UserRegister } from '../../../shared/models/users/user-register.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
+import { doesVideoExist } from '../../helpers/middlewares'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
