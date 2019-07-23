@@ -22,9 +22,9 @@ class Notifier {
 
   private constructor () {}
 
-  notifyOnNewVideo (video: VideoModel): void {
+  notifyOnNewVideoIfNeeded (video: VideoModel): void {
     // Only notify on public and published videos which are not blacklisted
-    if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED || video.VideoBlacklist) return
+    if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED || video.isBlacklisted()) return
 
     this.notifySubscribersOfNewVideo(video)
       .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))

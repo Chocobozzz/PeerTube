@@ -7,15 +7,17 @@ import { VideoModel } from '../models/video/video'
 import { logger } from '../helpers/logger'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
 import { Hooks } from './plugins/hooks'
+import { Notifier } from './notifier'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: VideoModel,
   user?: UserModel,
   isRemote: boolean,
   isNew: boolean,
+  notify?: boolean,
   transaction?: Transaction
 }) {
-  const { video, user, isRemote, isNew, transaction } = parameters
+  const { video, user, isRemote, isNew, notify = true, transaction } = parameters
   const doAutoBlacklist = await Hooks.wrapPromiseFun(
     autoBlacklistNeeded,
     { video, user, isRemote, isNew },
@@ -37,8 +39,9 @@ async function autoBlacklistVideoIfNeeded (parameters: {
     defaults: videoBlacklistToCreate,
     transaction
   })
-
   video.VideoBlacklist = videoBlacklist
+
+  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(video)
 
   logger.info('Video %s auto-blacklisted.', video.uuid)
 

@@ -1,9 +1,7 @@
-import * as express from 'express'
 import 'express-validator'
 import 'multer'
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { VideoChannelModel } from '../../models/video/video-channel'
 import { exists } from './misc'
 
 const VIDEO_CHANNELS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_CHANNELS
@@ -25,18 +23,5 @@ function isVideoChannelSupportValid (value: string) {
 export {
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
-  isVideoChannelSupportValid,
-}
-
-function processVideoChannelExist (videoChannel: VideoChannelModel, res: express.Response) {
-  if (!videoChannel) {
-    res.status(404)
-       .json({ error: 'Video channel not found' })
-       .end()
-
-    return false
-  }
-
-  res.locals.videoChannel = videoChannel
-  return true
+  isVideoChannelSupportValid
 }

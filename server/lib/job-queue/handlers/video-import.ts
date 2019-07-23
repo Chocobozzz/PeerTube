@@ -199,10 +199,10 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
     Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
 
-    if (videoImportUpdated.Video.VideoBlacklist) {
+    if (videoImportUpdated.Video.isBlacklisted()) {
       Notifier.Instance.notifyOnVideoAutoBlacklist(videoImportUpdated.Video)
     } else {
-      Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
+      Notifier.Instance.notifyOnNewVideoIfNeeded(videoImportUpdated.Video)
     }
 
     // Create transcoding jobs?

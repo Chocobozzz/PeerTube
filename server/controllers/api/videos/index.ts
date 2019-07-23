@@ -235,7 +235,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   // Create the torrent file
   await video.createTorrentAndSetInfoHash(videoFile)
 
-  const { videoCreated, videoWasAutoBlacklisted } = await sequelizeTypescript.transaction(async t => {
+  const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     const videoCreated = await video.save(sequelizeOptions)
@@ -268,23 +268,22 @@ async function addVideo (req: express.Request, res: express.Response) {
       }, { transaction: t })
     }
 
-    const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded({
+    await autoBlacklistVideoIfNeeded({
       video,
       user: res.locals.oauth.token.User,
       isRemote: false,
       isNew: true,
       transaction: t
     })
-    if (!videoWasAutoBlacklisted) await federateVideoIfNeeded(video, true, t)
+    await federateVideoIfNeeded(video, true, t)
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
-    return { videoCreated, videoWasAutoBlacklisted }
+    return { videoCreated }
   })
 
-  if (videoWasAutoBlacklisted) Notifier.Instance.notifyOnVideoAutoBlacklist(videoCreated)
-  else Notifier.Instance.notifyOnNewVideo(videoCreated)
+  Notifier.Instance.notifyOnNewVideoIfNeeded(videoCreated)
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now
@@ -413,11 +412,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       })
 
       const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
-
-      // Don't send update if the video was unfederated
-      if (!videoInstanceUpdated.VideoBlacklist || videoInstanceUpdated.VideoBlacklist.unfederated === false) {
-        await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
-      }
+      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
 
       auditLogger.update(
         getAuditIdFromRes(res),
@@ -430,7 +425,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
     })
 
     if (wasUnlistedVideo || wasPrivateVideo) {
-      Notifier.Instance.notifyOnNewVideo(videoInstanceUpdated)
+      Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
     }
 
     Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated })

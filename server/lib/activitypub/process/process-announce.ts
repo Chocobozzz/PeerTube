@@ -63,5 +63,5 @@ async function processVideoShare (actorAnnouncer: ActorModel, activity: Activity
     return undefined
   })
 
-  if (videoCreated) Notifier.Instance.notifyOnNewVideo(video)
+  if (videoCreated) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 }
