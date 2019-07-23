@@ -56,7 +56,7 @@ async function autoBlacklistNeeded (parameters: {
   // Already blacklisted
   if (video.VideoBlacklist) return false
   if (!CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED || !user) return false
-  if (isRemote || isNew) return false
+  if (isRemote || isNew === false) return false
 
   if (user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST)) return false
 
