@@ -5,6 +5,12 @@ import { RegisteredPlugin } from '../lib/plugins/plugin-manager'
 import { servePluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
 import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
+import { isTestInstance } from '../helpers/core-utils'
+
+const sendFileOptions = {
+  maxAge: '30 days',
+  immutable: !isTestInstance()
+}
 
 const pluginsRouter = express.Router()
 
@@ -46,7 +52,12 @@ export {
 // ---------------------------------------------------------------------------
 
 function servePluginGlobalCSS (req: express.Request, res: express.Response) {
-  return res.sendFile(PLUGIN_GLOBAL_CSS_PATH)
+  // Only cache requests that have a ?hash=... query param
+  const globalCSSOptions = req.query.hash
+    ? sendFileOptions
+    : {}
+
+  return res.sendFile(PLUGIN_GLOBAL_CSS_PATH, globalCSSOptions)
 }
 
 function servePluginStaticDirectory (req: express.Request, res: express.Response) {
@@ -61,7 +72,7 @@ function servePluginStaticDirectory (req: express.Request, res: express.Response
   }
 
   const filepath = file.join('/')
-  return res.sendFile(join(plugin.path, staticPath, filepath))
+  return res.sendFile(join(plugin.path, staticPath, filepath), sendFileOptions)
 }
 
 function servePluginClientScripts (req: express.Request, res: express.Response) {
@@ -73,7 +84,7 @@ function servePluginClientScripts (req: express.Request, res: express.Response) 
     return res.sendStatus(404)
   }
 
-  return res.sendFile(join(plugin.path, staticEndpoint))
+  return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
 }
 
 function serveThemeCSSDirectory (req: express.Request, res: express.Response) {
@@ -84,5 +95,5 @@ function serveThemeCSSDirectory (req: express.Request, res: express.Response) {
     return res.sendStatus(404)
   }
 
-  return res.sendFile(join(plugin.path, staticEndpoint))
+  return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
 }

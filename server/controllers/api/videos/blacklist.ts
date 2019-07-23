@@ -100,13 +100,13 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
   return res.type('json').status(204).end()
 }
 
-async function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listBlacklist (req: express.Request, res: express.Response) {
   const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.type)
 
-  return res.json(getFormattedObjects<VideoBlacklist, VideoBlacklistModel>(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function removeVideoFromBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist
   const video = res.locals.video
 
