@@ -12,12 +12,15 @@ import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
+import { logger } from '../helpers/logger'
 
 export class ClientHtml {
 
   private static htmlCache: { [ path: string ]: string } = {}
 
   static invalidCache () {
+    logger.info('Cleaning HTML cache.')
+
     ClientHtml.htmlCache = {}
   }
 
@@ -146,7 +149,7 @@ export class ClientHtml {
 
   private static async addAsyncPluginCSS (htmlStringPage: string) {
     const globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
-    if (!globalCSSContent) return htmlStringPage
+    if (globalCSSContent.byteLength === 0) return htmlStringPage
 
     const fileHash = sha256(globalCSSContent)
     const linkTag = `<link rel="stylesheet" href="/plugins/global.css?hash=${fileHash}" />`

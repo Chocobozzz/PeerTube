@@ -1,9 +1,9 @@
 import { body, param } from 'express-validator/check'
 import * as express from 'express'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { areValidationErrors } from '../utils'
 import { logger } from '../../../helpers/logger'
+import { doesVideoExist } from '../../../helpers/middlewares'
 
 const videoWatchingValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),

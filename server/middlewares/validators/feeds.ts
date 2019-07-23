@@ -1,12 +1,16 @@
 import * as express from 'express'
 import { param, query } from 'express-validator/check'
-import { doesAccountIdExist, doesAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isValidRSSFeed } from '../../helpers/custom-validators/feeds'
-import { doesVideoChannelIdExist, doesVideoChannelNameWithHostExist } from '../../helpers/custom-validators/video-channels'
-import { doesVideoExist } from '../../helpers/custom-validators/videos'
+import { doesVideoExist } from '../../helpers/middlewares/videos'
+import {
+  doesAccountIdExist,
+  doesAccountNameWithHostExist,
+  doesVideoChannelIdExist,
+  doesVideoChannelNameWithHostExist
+} from '../../helpers/middlewares'
 
 const videoFeedsValidator = [
   param('format').optional().custom(isValidRSSFeed).withMessage('Should have a valid format (rss, atom, json)'),

@@ -317,6 +317,8 @@ export class PluginManager implements ServerHook {
   // ###################### CSS ######################
 
   private resetCSSGlobalFile () {
+    ClientHtml.invalidCache()
+
     return outputFile(PLUGIN_GLOBAL_CSS_PATH, '')
   }
 

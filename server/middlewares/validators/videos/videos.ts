@@ -13,9 +13,6 @@ import {
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
 import {
-  checkUserCanManageVideo,
-  doesVideoChannelOfAccountExist,
-  doesVideoExist,
   isScheduleVideoUpdatePrivacyValid,
   isVideoCategoryValid,
   isVideoDescriptionValid,
@@ -33,7 +30,7 @@ import {
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { authenticate, authenticatePromiseIfNeeded } from '../../oauth'
+import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { VideoModel } from '../../../models/video/video'
@@ -46,6 +43,7 @@ import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
+import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '../../../helpers/middlewares'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')

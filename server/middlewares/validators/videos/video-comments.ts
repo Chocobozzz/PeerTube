@@ -3,7 +3,6 @@ import { body, param } from 'express-validator/check'
 import { UserRight } from '../../../../shared'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments'
-import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { VideoModel } from '../../../models/video/video'
@@ -11,6 +10,7 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { areValidationErrors } from '../utils'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { isLocalVideoThreadAccepted, isLocalVideoCommentReplyAccepted, AcceptResult } from '../../../lib/moderation'
+import { doesVideoExist } from '../../../helpers/middlewares'
 
 const listVideoCommentThreadsValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),

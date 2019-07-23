@@ -4,11 +4,10 @@ import { UserRight, VideoPlaylistCreate, VideoPlaylistUpdate } from '../../../..
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
-import { doesVideoExist, isVideoImage } from '../../../helpers/custom-validators/videos'
+import { isVideoImage } from '../../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { isArrayOf, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntArray, toValueOrNull } from '../../../helpers/custom-validators/misc'
 import {
-  doesVideoPlaylistExist,
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
   isVideoPlaylistPrivacyValid,
@@ -17,11 +16,11 @@ import {
 } from '../../../helpers/custom-validators/video-playlists'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { doesVideoChannelIdExist } from '../../../helpers/custom-validators/video-channels'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
+import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist } from '../../../helpers/middlewares'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
