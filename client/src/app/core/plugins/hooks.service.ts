@@ -37,8 +37,9 @@ export class HooksService {
     return this.pluginService.runHook(hookName, result, params)
   }
 
-  runAction<T, U extends ClientActionHookName> (hookName: U, params?: T) {
-    this.pluginService.runHook(hookName, params)
-                 .catch((err: any) => console.error('Fatal hook error.', { err }))
+  runAction<T, U extends ClientActionHookName> (hookName: U, scope: PluginClientScope, params?: T) {
+    this.pluginService.ensurePluginsAreLoaded(scope)
+        .then(() => this.pluginService.runHook(hookName, params))
+        .catch((err: any) => console.error('Fatal hook error.', { err }))
   }
 }

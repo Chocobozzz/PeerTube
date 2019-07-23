@@ -103,8 +103,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit () {
-    this.pluginService.loadPluginsByScope('video-watch')
-
     this.configSub = this.serverService.configLoaded
         .subscribe(() => {
           if (
@@ -133,7 +131,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.theaterEnabled = getStoredTheater()
 
-    this.hooks.runAction('action:video-watch.init')
+    this.hooks.runAction('action:video-watch.init', 'video-watch')
   }
 
   ngOnDestroy () {
@@ -497,7 +495,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setOpenGraphTags()
     this.checkUserRating()
 
-    this.hooks.runAction('action:video-watch.video.loaded')
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch')
   }
 
   private setRating (nextRating: UserVideoRateType) {

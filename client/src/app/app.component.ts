@@ -206,9 +206,7 @@ export class AppComponent implements OnInit {
   private async loadPlugins () {
     this.pluginService.initializePlugins()
 
-    await this.pluginService.loadPluginsByScope('common')
-
-    this.hooks.runAction('action:application.init')
+    this.hooks.runAction('action:application.init', 'common')
   }
 
   private initHotkeys () {
