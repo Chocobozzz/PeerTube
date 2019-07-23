@@ -1,5 +1,31 @@
 # Plugins & Themes
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Concepts](#concepts)
+  - [Hooks](#hooks)
+  - [Static files](#static-files)
+  - [CSS](#css)
+  - [Server helpers (only for plugins)](#server-helpers-only-for-plugins)
+    - [Settings](#settings)
+    - [Storage](#storage)
+  - [Publishing](#publishing)
+- [Write a plugin/theme](#write-a-plugintheme)
+  - [Clone the quickstart repository](#clone-the-quickstart-repository)
+  - [Configure your repository](#configure-your-repository)
+  - [Update README](#update-readme)
+  - [Update package.json](#update-packagejson)
+  - [Write code](#write-code)
+  - [Test your plugin/theme](#test-your-plugintheme)
+  - [Publish](#publish)
+- [Tips](#tips)
+  - [Compatibility with PeerTube](#compatibility-with-peertube)
+  - [Spam/moderation plugin](#spammoderation-plugin)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Concepts
 
 Themes are exactly the same than plugins, except that:
@@ -19,7 +45,7 @@ Example:
 
 ```js
 // This register function is called by PeerTube, and **must** return a promise
-async function register ({ registerHook }) {
+async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
   registerHook({
     target: 'action:application.listening',
     handler: () => displayHelloWorld()
@@ -87,7 +113,7 @@ registerSetting({
 const adminName = await settingsManager.getSetting('admin-name')
 ```
 
-##### Storage
+#### Storage
 
 Plugins can store/load JSON data, that PeerTube will store in its database (so don't put files in there).
 
@@ -234,4 +260,42 @@ $ npm publish
 
 Every time you want to publish another version of your plugin/theme, just update the `version` key from the `package.json`
 and republish it on NPM. Remember that the PeerTube index will take into account your new plugin/theme version after ~24 hours.
+
+
+## Tips
+
+### Compatibility with PeerTube
+
+Unfortunately, we don't have enough resources to provide hook compatibility between minor releases of PeerTube (for example between `1.2.x` and `1.3.x`).
+So please:
+  * Don't make assumptions and check every parameter you want to use. For example:
+
+```js
+registerHook({
+  target: 'filter:api.video.get.result',
+  handler: video => {
+    // We check the parameter exists and the name field exists too, to avoid exceptions
+    if (video && video.name) video.name += ' <3'
+
+    return video
+  }
+})
+```
+  * Don't try to require parent PeerTube modules, only use `peertubeHelpers`. If you need another helper or a specific, please [create an issue](https://github.com/Chocobozzz/PeerTube/issues/new)
+  * Don't use PeerTube dependencies. Use your own :) 
+
+If your plugin is broken with a new PeerTube release, update your code and the `peertubeEngine` `package.json` field.
+This way, older PeerTube versions will still use your old plugin, and new PeerTube versions will use your updated plugin. 
+
+### Spam/moderation plugin
+
+If you want to create an antispam/moderation plugin, you could use the following hooks:
+ * `filter:api.video.upload.accept.result`: to accept or not local uploads
+ * `filter:api.video-thread.create.accept.result`: to accept or not local thread
+ * `filter:api.video-comment-reply.create.accept.result`: to accept or not local replies
+ * `filter:api.video-threads.list.result`: to change/hide the text of threads
+ * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies
+ * `filter:video.auto-blacklist.result`: to automatically blacklist local or remote videos
+ 
+
 
