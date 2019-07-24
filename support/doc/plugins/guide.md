@@ -264,7 +264,7 @@ and republish it on NPM. Remember that the PeerTube index will take into account
 
 ## Plugin & Theme hooks/helpers API
 
-See the dedicated documentation: https://docs.joinpeertube.org/#/api-plugins
+See the dedicated documentation: whttps://docs.joinpeertube.org/#/api-plugins
 
 
 ## Tips
