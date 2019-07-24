@@ -7,7 +7,7 @@
   margin-bottom: 30px;
 
   p-selectButton {
-    /deep/ {
+    ::ng-deep {
       .ui-button-text {
         font-size: 15px;
       }

@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-my-small-loader /deep/ .root {
+my-small-loader ::ng-deep .root {
   display: inline-block;
   margin: 0 3px 0 0;
   width: 20px;

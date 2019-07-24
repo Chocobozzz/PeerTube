@@ -33,7 +33,7 @@
   .more-icon {
     width: 21px;
 
-    /deep/ {
+    ::ng-deep {
       @include apply-svg-color(var(--mainForegroundColor));
     }
   }

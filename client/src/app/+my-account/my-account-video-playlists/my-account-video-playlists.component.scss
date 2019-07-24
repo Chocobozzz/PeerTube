@@ -5,7 +5,7 @@
   @include create-button;
 }
 
-/deep/ .action-button {
+::ng-deep .action-button {
   &.action-button-delete {
     margin-right: 10px;
   }
@@ -17,7 +17,7 @@
   .miniature-wrapper {
     flex-grow: 1;
 
-    /deep/ .miniature {
+    ::ng-deep .miniature {
       display: flex;
 
       .miniature-info {

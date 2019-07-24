@@ -54,7 +54,7 @@
 }
 
 @mixin apply-svg-color ($color) {
-  /deep/ svg {
+  ::ng-deep svg {
     path[fill="#000000"],
     g[fill="#000000"],
     rect[fill="#000000"],

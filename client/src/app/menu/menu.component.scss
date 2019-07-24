@@ -82,7 +82,7 @@ menu {
           border: none;
         }
 
-        /deep/ {
+        ::ng-deep {
           @include apply-svg-color(var(--menuForegroundColor));
         }
       }

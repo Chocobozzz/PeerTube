@@ -95,7 +95,7 @@ $play-overlay-width: 18px;
 }
 
 @mixin thumbnail-size-component ($width, $height) {
-  /deep/ .video-thumbnail {
+  ::ng-deep .video-thumbnail {
     width: $width;
     height: $height;
   }
@@ -110,7 +110,7 @@ $play-overlay-width: 18px;
 @mixin video-miniature-small-screen {
   text-align: center;
 
-  /deep/ .video-miniature {
+  ::ng-deep .video-miniature {
     padding-right: 0;
     height: auto;
     width: 100%;

@@ -15,7 +15,7 @@
   }
 }
 
-/deep/ {
+::ng-deep {
   .help-popover {
     max-width: 300px;
 

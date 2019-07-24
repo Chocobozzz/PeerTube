@@ -70,7 +70,7 @@ button {
   my-loader {
     margin-bottom: 20px;
 
-    /deep/ .loader div {
+    ::ng-deep .loader div {
       border-color: var(--mainColor) transparent transparent transparent;
     }
 
