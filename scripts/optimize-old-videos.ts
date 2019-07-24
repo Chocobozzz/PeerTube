@@ -61,7 +61,7 @@ async function run () {
         if (originalDuration === newDuration) {
           console.log('Finished optimizing %s', basename(currentFile))
           await remove(backupFile)
-          return
+          continue
         }
 
         console.log('Failed to optimize %s, restoring original', basename(currentFile))
