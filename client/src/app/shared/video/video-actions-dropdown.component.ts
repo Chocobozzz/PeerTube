@@ -29,12 +29,12 @@ export type VideoActionsDisplayType = {
   styleUrls: [ './video-actions-dropdown.component.scss' ]
 })
 export class VideoActionsDropdownComponent implements OnChanges {
-  @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown
-  @ViewChild('playlistAdd') playlistAdd: VideoAddToPlaylistComponent
+  @ViewChild('playlistDropdown', { static: false }) playlistDropdown: NgbDropdown
+  @ViewChild('playlistAdd', { static: false }) playlistAdd: VideoAddToPlaylistComponent
 
-  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
-  @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
-  @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
+  @ViewChild('videoDownloadModal', { static: false }) videoDownloadModal: VideoDownloadComponent
+  @ViewChild('videoReportModal', { static: false }) videoReportModal: VideoReportComponent
+  @ViewChild('videoBlacklistModal', { static: false }) videoBlacklistModal: VideoBlacklistComponent
 
   @Input() video: Video | VideoDetails
 

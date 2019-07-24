@@ -18,7 +18,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 export class MyAccountAcceptOwnershipComponent extends FormReactive implements OnInit {
   @Output() accepted = new EventEmitter<void>()
 
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
   videoChangeOwnership: VideoChangeOwnership | undefined = undefined
 

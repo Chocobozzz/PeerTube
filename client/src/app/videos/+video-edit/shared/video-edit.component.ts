@@ -29,7 +29,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
   @Input() waitTranscodingEnabled = true
 
-  @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
+  @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY

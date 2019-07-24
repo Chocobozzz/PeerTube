@@ -20,7 +20,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
   styleUrls: ['./video-comments.component.scss']
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef
+  @ViewChild('commentHighlightBlock', { static: false }) commentHighlightBlock: ElementRef
   @Input() video: VideoDetails
   @Input() user: User
 

@@ -10,7 +10,7 @@ import { Notifier } from '@app/core'
   styleUrls: [ './video-download.component.scss' ]
 })
 export class VideoDownloadComponent {
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
   downloadType: 'direct' | 'torrent' = 'torrent'
   resolutionId: number | string = -1

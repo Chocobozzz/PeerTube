@@ -14,7 +14,7 @@ import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent extends RestTable implements OnInit {
-  @ViewChild('userBanModal') userBanModal: UserBanModalComponent
+  @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
   users: User[] = []
   totalRecords = 0

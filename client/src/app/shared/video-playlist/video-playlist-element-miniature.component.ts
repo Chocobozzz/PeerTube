@@ -17,7 +17,7 @@ import { secondsToTime } from '../../../assets/player/utils'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoPlaylistElementMiniatureComponent {
-  @ViewChild('moreDropdown') moreDropdown: NgbDropdown
+  @ViewChild('moreDropdown', { static: false }) moreDropdown: NgbDropdown
 
   @Input() playlist: VideoPlaylist
   @Input() video: Video

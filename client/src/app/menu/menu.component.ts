@@ -11,7 +11,7 @@ import { HotkeysService } from 'angular2-hotkeys'
   styleUrls: [ './menu.component.scss' ]
 })
 export class MenuComponent implements OnInit {
-  @ViewChild('languageChooserModal') languageChooserModal: LanguageChooserComponent
+  @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
 
   user: User
   isLoggedIn: boolean

@@ -27,7 +27,7 @@
       <ngb-tab i18n-title title="QR-Code" id="qrcode">
         <ng-template ngbTabContent>
           <div class="tab-content">
-            <ngx-qrcode qrc-element-type="url" [qrc-value]="getVideoUrl()" qrc-errorCorrectionLevel="Q"></ngx-qrcode>
+            <qrcode [qrdata]="getVideoUrl()" size="256" level="Q"></qrcode>
           </div>
         </ng-template>
       </ngb-tab>

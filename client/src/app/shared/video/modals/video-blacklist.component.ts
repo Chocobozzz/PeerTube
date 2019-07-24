@@ -16,7 +16,7 @@ import { FormReactive, VideoBlacklistValidatorsService } from '@app/shared/forms
 export class VideoBlacklistComponent extends FormReactive implements OnInit {
   @Input() video: VideoDetails = null
 
-  @ViewChild('modal') modal: NgbModal
+  @ViewChild('modal', { static: true }) modal: NgbModal
 
   @Output() videoBlacklisted = new EventEmitter()
 

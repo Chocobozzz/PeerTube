@@ -43,10 +43,10 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
-  @ViewChild('videoWatchPlaylist') videoWatchPlaylist: VideoWatchPlaylistComponent
-  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
-  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
+  @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
+  @ViewChild('videoShareModal', { static: false }) videoShareModal: VideoShareComponent
+  @ViewChild('videoSupportModal', { static: false }) videoSupportModal: VideoSupportComponent
+  @ViewChild('subscribeButton', { static: false }) subscribeButton: SubscribeButtonComponent
 
   player: any
   playerElement: HTMLVideoElement

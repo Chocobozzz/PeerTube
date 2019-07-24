@@ -14,7 +14,7 @@ import { User } from '../../../../../shared'
   styleUrls: [ './user-ban-modal.component.scss' ]
 })
 export class UserBanModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal') modal: NgbModal
+  @ViewChild('modal', { static: true }) modal: NgbModal
   @Output() userBanned = new EventEmitter<User | User[]>()
 
   private usersToBan: User | User[]

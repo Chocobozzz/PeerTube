@@ -13,7 +13,7 @@ import { VideoOwnershipService } from '@app/shared/video-ownership'
   styleUrls: [ './video-change-ownership.component.scss' ]
 })
 export class VideoChangeOwnershipComponent extends FormReactive implements OnInit {
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
   usernamePropositions: string[]
 

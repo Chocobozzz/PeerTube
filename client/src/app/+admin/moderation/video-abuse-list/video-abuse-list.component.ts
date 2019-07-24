@@ -17,7 +17,7 @@ import { MarkdownService } from '@app/shared/renderer'
   styleUrls: [ '../moderation.component.scss']
 })
 export class VideoAbuseListComponent extends RestTable implements OnInit {
-  @ViewChild('moderationCommentModal') moderationCommentModal: ModerationCommentModalComponent
+  @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
 
   videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
   totalRecords = 0

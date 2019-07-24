@@ -17,7 +17,7 @@ import { VideoAbuseService } from '@app/shared/video-abuse'
 export class VideoReportComponent extends FormReactive implements OnInit {
   @Input() video: VideoDetails = null
 
-  @ViewChild('modal') modal: NgbModal
+  @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
 

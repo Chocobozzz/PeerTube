@@ -30,7 +30,7 @@ type Customizations = {
   styleUrls: [ './video-share.component.scss' ]
 })
 export class VideoShareComponent {
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
   @Input() video: VideoDetails = null
   @Input() videoCaptions: VideoCaption[] = []

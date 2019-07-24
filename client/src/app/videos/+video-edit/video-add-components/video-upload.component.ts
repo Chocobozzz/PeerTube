@@ -27,7 +27,7 @@ import { scrollToTop } from '@app/shared/misc/utils'
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
-  @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
+  @ViewChild('videofileInput', { static: false }) videofileInput: ElementRef<HTMLInputElement>
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY

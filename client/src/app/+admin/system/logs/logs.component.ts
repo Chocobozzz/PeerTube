@@ -10,7 +10,7 @@ import { LogLevel } from '@shared/models/server/log-level.type'
   styleUrls: [ './logs.component.scss' ]
 })
 export class LogsComponent implements OnInit {
-  @ViewChild('logsElement') logsElement: ElementRef<HTMLElement>
+  @ViewChild('logsElement', { static: true }) logsElement: ElementRef<HTMLElement>
 
   loading = false
 

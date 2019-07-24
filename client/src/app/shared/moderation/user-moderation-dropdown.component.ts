@@ -13,7 +13,7 @@ import { BlocklistService } from '@app/shared/blocklist'
   templateUrl: './user-moderation-dropdown.component.html'
 })
 export class UserModerationDropdownComponent implements OnChanges {
-  @ViewChild('userBanModal') userBanModal: UserBanModalComponent
+  @ViewChild('userBanModal', { static: false }) userBanModal: UserBanModalComponent
 
   @Input() user: User
   @Input() account: Account
