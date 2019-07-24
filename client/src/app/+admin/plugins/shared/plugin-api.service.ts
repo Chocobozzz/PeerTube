@@ -10,8 +10,8 @@ import { ResultList } from '@shared/models'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ManagePlugin } from '@shared/models/plugins/manage-plugin.model'
 import { InstallOrUpdatePlugin } from '@shared/models/plugins/install-plugin.model'
-import { RegisterSettingOptions } from '@shared/models/plugins/register-setting.model'
 import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
+import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
 
 @Injectable()
 export class PluginApiService {
@@ -88,7 +88,7 @@ export class PluginApiService {
   getPluginRegisteredSettings (pluginName: string, pluginType: PluginType) {
     const path = PluginApiService.BASE_APPLICATION_URL + '/' + this.nameToNpmName(pluginName, pluginType) + '/registered-settings'
 
-    return this.authHttp.get<{ settings: RegisterSettingOptions[] }>(path)
+    return this.authHttp.get<{ settings: RegisterServerSettingOptions[] }>(path)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 

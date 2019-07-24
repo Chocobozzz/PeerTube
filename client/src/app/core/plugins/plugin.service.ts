@@ -4,14 +4,14 @@ import { ServerConfigPlugin } from '@shared/models'
 import { ServerService } from '@app/core/server/server.service'
 import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
 import { environment } from '../../../environments/environment'
-import { RegisterHookOptions } from '@shared/models/plugins/register-hook.model'
 import { ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plugins/client-hook.model'
 import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
+import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
 
-interface HookStructValue extends RegisterHookOptions {
+interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
   clientScript: ClientScript
 }
@@ -164,7 +164,7 @@ export class PluginService implements ClientHook {
   private loadPlugin (pluginInfo: PluginInfo) {
     const { plugin, clientScript } = pluginInfo
 
-    const registerHook = (options: RegisterHookOptions) => {
+    const registerHook = (options: RegisterClientHookOptions) => {
       if (clientHookObject[options.target] !== true) {
         console.error('Unknown hook %s of plugin %s. Skipping.', options.target, plugin.name)
         return

@@ -23,10 +23,10 @@ import {
 import { PluginType } from '../../../../shared/models/plugins/plugin.type'
 import { PeerTubePluginIndex } from '../../../../shared/models/plugins/peertube-plugin-index.model'
 import { ServerConfig } from '../../../../shared/models/server'
-import { RegisteredSettings } from '../../../../shared/models/plugins/register-setting.model'
 import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugin.model'
 import { User } from '../../../../shared/models/users'
 import { PluginPackageJson } from '../../../../shared/models/plugins/plugin-package-json.model'
+import { RegisteredServerSettings } from '../../../../shared/models/plugins/register-server-setting.model'
 
 const expect = chai.expect
 
@@ -217,7 +217,7 @@ describe('Test plugins', function () {
       npmName: 'peertube-plugin-hello-world'
     })
 
-    const settings = (res.body as RegisteredSettings).settings
+    const settings = (res.body as RegisteredServerSettings).settings
 
     expect(settings).to.have.length.at.least(1)
 

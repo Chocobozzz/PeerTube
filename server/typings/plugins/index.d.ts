@@ -1,2 +1,2 @@
-export * from './register-options.model'
+export * from './register-server-option.model'
 export * from './plugin-library.model'

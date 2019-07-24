@@ -1,7 +1,7 @@
-import { RegisterOptions } from './register-options.model'
+import { RegisterServerOptions } from './register-server-option.model'
 
 export interface PluginLibrary {
-  register: (options: RegisterOptions) => Promise<any>
+  register: (options: RegisterServerOptions) => Promise<any>
 
   unregister: () => Promise<any>
 }

@@ -9,15 +9,15 @@ import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 import { outputFile, readJSON } from 'fs-extra'
-import { RegisterSettingOptions } from '../../../shared/models/plugins/register-setting.model'
-import { RegisterHookOptions } from '../../../shared/models/plugins/register-hook.model'
 import { PluginSettingsManager } from '../../../shared/models/plugins/plugin-settings-manager.model'
 import { PluginStorageManager } from '../../../shared/models/plugins/plugin-storage-manager.model'
 import { ServerHook, ServerHookName, serverHookObject } from '../../../shared/models/plugins/server-hook.model'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
-import { RegisterOptions } from '../../typings/plugins/register-options.model'
+import { RegisterServerOptions } from '../../typings/plugins/register-server-option.model'
 import { PluginLibrary } from '../../typings/plugins'
 import { ClientHtml } from '../client-html'
+import { RegisterServerHookOptions } from '../../../shared/models/plugins/register-server-hook.model'
+import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -51,7 +51,7 @@ export class PluginManager implements ServerHook {
   private static instance: PluginManager
 
   private registeredPlugins: { [ name: string ]: RegisteredPlugin } = {}
-  private settings: { [ name: string ]: RegisterSettingOptions[] } = {}
+  private settings: { [ name: string ]: RegisterServerSettingOptions[] } = {}
   private hooks: { [ name: string ]: HookInformationValue[] } = {}
 
   private constructor () {
@@ -391,8 +391,8 @@ export class PluginManager implements ServerHook {
 
   // ###################### Generate register helpers ######################
 
-  private getRegisterHelpers (npmName: string, plugin: PluginModel): RegisterOptions {
-    const registerHook = (options: RegisterHookOptions) => {
+  private getRegisterHelpers (npmName: string, plugin: PluginModel): RegisterServerOptions {
+    const registerHook = (options: RegisterServerHookOptions) => {
       if (serverHookObject[options.target] !== true) {
         logger.warn('Unknown hook %s of plugin %s. Skipping.', options.target, npmName)
         return
@@ -408,7 +408,7 @@ export class PluginManager implements ServerHook {
       })
     }
 
-    const registerSetting = (options: RegisterSettingOptions) => {
+    const registerSetting = (options: RegisterServerSettingOptions) => {
       if (!this.settings[npmName]) this.settings[npmName] = []
 
       this.settings[npmName].push(options)

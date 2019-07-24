@@ -6,8 +6,8 @@ import { Notifier } from '@app/core'
 import { ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { RegisterSettingOptions } from '@shared/models/plugins/register-setting.model'
 import { BuildFormArgument, FormReactive, FormValidatorService } from '@app/shared'
+import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
 
 @Component({
   selector: 'my-plugin-show-installed',
@@ -16,7 +16,7 @@ import { BuildFormArgument, FormReactive, FormValidatorService } from '@app/shar
 })
 export class PluginShowInstalledComponent extends FormReactive implements OnInit, OnDestroy {
   plugin: PeerTubePlugin
-  registeredSettings: RegisterSettingOptions[] = []
+  registeredSettings: RegisterServerSettingOptions[] = []
   pluginTypeLabel: string
 
   private sub: Subscription
