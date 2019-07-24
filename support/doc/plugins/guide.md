@@ -262,6 +262,11 @@ Every time you want to publish another version of your plugin/theme, just update
 and republish it on NPM. Remember that the PeerTube index will take into account your new plugin/theme version after ~24 hours.
 
 
+## Plugin & Theme hooks/helpers API
+
+See the dedicated documentation: https://docs.joinpeertube.org/#/api-plugins
+
+
 ## Tips
 
 ### Compatibility with PeerTube

@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { ServerConfigPlugin } from '@shared/models'
 import { ServerService } from '@app/core/server/server.service'
 import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
+import { ClientScript as ClientScriptModule } from '../../../types/client-script.model'
 import { environment } from '../../../environments/environment'
 import { ReplaySubject } from 'rxjs'
 import { first, shareReplay } from 'rxjs/operators'
@@ -186,7 +187,7 @@ export class PluginService implements ClientHook {
     console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
     return import(/* webpackIgnore: true */ clientScript.script)
-      .then(script => script.register({ registerHook, peertubeHelpers }))
+      .then((script: ClientScriptModule) => script.register({ registerHook, peertubeHelpers }))
       .then(() => this.sortHooksByPriority())
   }
 

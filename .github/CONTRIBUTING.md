@@ -7,8 +7,9 @@ Interested in contributing? Awesome!
   * [Translate](#translate)
   * [Give your feedback](#give-your-feedback)
   * [Write documentation](#write-documentation)
-  * [Develop](#develop)
   * [Improve the website](#improve-the-website)
+  * [Develop](#develop)
+  * [Write a plugin or a theme](#plugins--themes)
 
 ## Translate
 
@@ -199,3 +200,7 @@ $ npm run mocha -- --exit --require ts-node/register/type-check --bail server/te
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
+
+## Plugins & Themes
+
+See the dedicated documentation: https://docs.joinpeertube.org/#/contribute-plugins
