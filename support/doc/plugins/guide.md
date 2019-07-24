@@ -297,5 +297,3 @@ If you want to create an antispam/moderation plugin, you could use the following
  * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies
  * `filter:video.auto-blacklist.result`: to automatically blacklist local or remote videos
  
-
-
