@@ -8,6 +8,7 @@ export const I18N_LOCALES = {
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',
   'eo': 'Esperanto',
+  'el-GR': 'ελληνικά',
   'de-DE': 'Deutsch',
   'it-IT': 'Italiano',
   'nl-NL': 'Nederlands',
