@@ -652,7 +652,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</source>
-        <target>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} άλλο {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</target>
+        <target>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
