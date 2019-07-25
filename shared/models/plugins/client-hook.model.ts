@@ -49,7 +49,10 @@ export const clientActionHookObject = {
   'action:video-watch.video.loaded': true,
 
   // Fired when the search page is being initialized
-  'action:search.init': true
+  'action:search.init': true,
+
+  // Fired every time Angular URL changes
+  'action:router.navigation-end': true
 }
 
 export type ClientActionHookName = keyof typeof clientActionHookObject

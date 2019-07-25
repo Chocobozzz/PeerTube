@@ -5,5 +5,7 @@ export type RegisterClientOptions = {
 
   peertubeHelpers: {
     getBaseStaticRoute: () => string
+
+    getSettings: () => Promise<{ [ name: string ]: string }>
   }
 }

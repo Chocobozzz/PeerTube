@@ -6,11 +6,15 @@ import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
 import { ClientScript as ClientScriptModule } from '../../../types/client-script.model'
 import { environment } from '../../../environments/environment'
 import { ReplaySubject } from 'rxjs'
-import { first, shareReplay } from 'rxjs/operators'
+import { catchError, first, map, shareReplay } from 'rxjs/operators'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plugins/client-hook.model'
 import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
 import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
+import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
+import { HttpClient } from '@angular/common/http'
+import { RestExtractor } from '@app/shared/rest'
+import { PluginType } from '@shared/models/plugins/plugin.type'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -20,11 +24,14 @@ interface HookStructValue extends RegisterClientHookOptions {
 type PluginInfo = {
   plugin: ServerConfigPlugin
   clientScript: ClientScript
+  pluginType: PluginType
   isTheme: boolean
 }
 
 @Injectable()
 export class PluginService implements ClientHook {
+  private static BASE_PLUGIN_URL = environment.apiUrl + '/api/v1/plugins'
+
   pluginsBuilt = new ReplaySubject<boolean>(1)
 
   pluginsLoaded: { [ scope in PluginClientScope ]: ReplaySubject<boolean> } = {
@@ -43,7 +50,9 @@ export class PluginService implements ClientHook {
 
   constructor (
     private router: Router,
-    private server: ServerService
+    private server: ServerService,
+    private authHttp: HttpClient,
+    private restExtractor: RestExtractor
   ) {
   }
 
@@ -87,6 +96,7 @@ export class PluginService implements ClientHook {
             script: environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/client-scripts/${clientScript.script}`,
             scopes: clientScript.scopes
           },
+          pluginType: isTheme ? PluginType.THEME : PluginType.PLUGIN,
           isTheme
         })
 
@@ -162,6 +172,20 @@ export class PluginService implements ClientHook {
     return result
   }
 
+  nameToNpmName (name: string, type: PluginType) {
+    const prefix = type === PluginType.PLUGIN
+      ? 'peertube-plugin-'
+      : 'peertube-theme-'
+
+    return prefix + name
+  }
+
+  pluginTypeFromNpmName (npmName: string) {
+    return npmName.startsWith('peertube-plugin-')
+      ? PluginType.PLUGIN
+      : PluginType.THEME
+  }
+
   private loadPlugin (pluginInfo: PluginInfo) {
     const { plugin, clientScript } = pluginInfo
 
@@ -189,6 +213,7 @@ export class PluginService implements ClientHook {
     return import(/* webpackIgnore: true */ clientScript.script)
       .then((script: ClientScriptModule) => script.register({ registerHook, peertubeHelpers }))
       .then(() => this.sortHooksByPriority())
+      .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
   }
 
   private buildScopeStruct () {
@@ -212,6 +237,18 @@ export class PluginService implements ClientHook {
       getBaseStaticRoute: () => {
         const pathPrefix = this.getPluginPathPrefix(pluginInfo.isTheme)
         return environment.apiUrl + `${pathPrefix}/${plugin.name}/${plugin.version}/static`
+      },
+
+      getSettings: () => {
+        const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
+        const path = PluginService.BASE_PLUGIN_URL + '/' + npmName
+
+        return this.authHttp.get<PeerTubePlugin>(path)
+                   .pipe(
+                     map(p => p.settings),
+                     catchError(res => this.restExtractor.handleError(res))
+                   )
+                   .toPromise()
       }
     }
   }

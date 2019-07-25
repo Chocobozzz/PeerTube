@@ -7,6 +7,7 @@ import { ConfirmService, Notifier } from '@app/core'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ActivatedRoute, Router } from '@angular/router'
 import { compareSemVer } from '@shared/core-utils/miscs/miscs'
+import { PluginService } from '@app/core/plugins/plugin.service'
 
 @Component({
   selector: 'my-plugin-list-installed',
@@ -34,13 +35,14 @@ export class PluginListInstalledComponent implements OnInit {
 
   constructor (
     private i18n: I18n,
-    private pluginService: PluginApiService,
+    private pluginService: PluginService,
+    private pluginApiService: PluginApiService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.pluginTypeOptions = this.pluginService.getPluginTypeOptions()
+    this.pluginTypeOptions = this.pluginApiService.getPluginTypeOptions()
   }
 
   ngOnInit () {
@@ -60,7 +62,7 @@ export class PluginListInstalledComponent implements OnInit {
   }
 
   loadMorePlugins () {
-    this.pluginService.getPlugins(this.pluginType, this.pagination, this.sort)
+    this.pluginApiService.getPlugins(this.pluginType, this.pagination, this.sort)
         .subscribe(
           res => {
             this.plugins = this.plugins.concat(res.data)
@@ -106,7 +108,7 @@ export class PluginListInstalledComponent implements OnInit {
     )
     if (res === false) return
 
-    this.pluginService.uninstall(plugin.name, plugin.type)
+    this.pluginApiService.uninstall(plugin.name, plugin.type)
       .subscribe(
         () => {
           this.notifier.success(this.i18n('{{pluginName}} uninstalled.', { pluginName: plugin.name }))
@@ -125,7 +127,7 @@ export class PluginListInstalledComponent implements OnInit {
 
     this.updating[updatingKey] = true
 
-    this.pluginService.update(plugin.name, plugin.type)
+    this.pluginApiService.update(plugin.name, plugin.type)
         .pipe()
         .subscribe(
           res => {

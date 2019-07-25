@@ -12,16 +12,18 @@ import { ManagePlugin } from '@shared/models/plugins/manage-plugin.model'
 import { InstallOrUpdatePlugin } from '@shared/models/plugins/install-plugin.model'
 import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
 import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
+import { PluginService } from '@app/core/plugins/plugin.service'
 
 @Injectable()
 export class PluginApiService {
-  private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/plugins'
+  private static BASE_PLUGIN_URL = environment.apiUrl + '/api/v1/plugins'
 
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
-    private i18n: I18n
+    private i18n: I18n,
+    private pluginService: PluginService
   ) { }
 
   getPluginTypeOptions () {
@@ -56,7 +58,7 @@ export class PluginApiService {
     params = this.restService.addRestGetParams(params, pagination, sort)
     params = params.append('pluginType', pluginType.toString())
 
-    return this.authHttp.get<ResultList<PeerTubePlugin>>(PluginApiService.BASE_APPLICATION_URL, { params })
+    return this.authHttp.get<ResultList<PeerTubePlugin>>(PluginApiService.BASE_PLUGIN_URL, { params })
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
@@ -74,26 +76,28 @@ export class PluginApiService {
 
     if (search) params = params.append('search', search)
 
-    return this.authHttp.get<ResultList<PeerTubePluginIndex>>(PluginApiService.BASE_APPLICATION_URL + '/available', { params })
+    return this.authHttp.get<ResultList<PeerTubePluginIndex>>(PluginApiService.BASE_PLUGIN_URL + '/available', { params })
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPlugin (npmName: string) {
-    const path = PluginApiService.BASE_APPLICATION_URL + '/' + npmName
+    const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName
 
     return this.authHttp.get<PeerTubePlugin>(path)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   getPluginRegisteredSettings (pluginName: string, pluginType: PluginType) {
-    const path = PluginApiService.BASE_APPLICATION_URL + '/' + this.nameToNpmName(pluginName, pluginType) + '/registered-settings'
+    const npmName = this.pluginService.nameToNpmName(pluginName, pluginType)
+    const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/registered-settings'
 
     return this.authHttp.get<{ settings: RegisterServerSettingOptions[] }>(path)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   updatePluginSettings (pluginName: string, pluginType: PluginType, settings: any) {
-    const path = PluginApiService.BASE_APPLICATION_URL + '/' + this.nameToNpmName(pluginName, pluginType) + '/settings'
+    const npmName = this.pluginService.nameToNpmName(pluginName, pluginType)
+    const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/settings'
 
     return this.authHttp.put(path, { settings })
                .pipe(catchError(res => this.restExtractor.handleError(res)))
@@ -101,19 +105,19 @@ export class PluginApiService {
 
   uninstall (pluginName: string, pluginType: PluginType) {
     const body: ManagePlugin = {
-      npmName: this.nameToNpmName(pluginName, pluginType)
+      npmName: this.pluginService.nameToNpmName(pluginName, pluginType)
     }
 
-    return this.authHttp.post(PluginApiService.BASE_APPLICATION_URL + '/uninstall', body)
+    return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/uninstall', body)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
   update (pluginName: string, pluginType: PluginType) {
     const body: ManagePlugin = {
-      npmName: this.nameToNpmName(pluginName, pluginType)
+      npmName: this.pluginService.nameToNpmName(pluginName, pluginType)
     }
 
-    return this.authHttp.post(PluginApiService.BASE_APPLICATION_URL + '/update', body)
+    return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/update', body)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
   }
 
@@ -122,21 +126,7 @@ export class PluginApiService {
       npmName
     }
 
-    return this.authHttp.post(PluginApiService.BASE_APPLICATION_URL + '/install', body)
+    return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/install', body)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
-  }
-
-  nameToNpmName (name: string, type: PluginType) {
-    const prefix = type === PluginType.PLUGIN
-      ? 'peertube-plugin-'
-      : 'peertube-theme-'
-
-    return prefix + name
-  }
-
-  pluginTypeFromNpmName (npmName: string) {
-    return npmName.startsWith('peertube-plugin-')
-      ? PluginType.PLUGIN
-      : PluginType.THEME
   }
 }

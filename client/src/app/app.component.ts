@@ -162,6 +162,10 @@ export class AppComponent implements OnInit {
       filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
     ).subscribe(() => this.redirectService.redirectToHomepage(true))
 
+    navigationEndEvent.subscribe(e => {
+      this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
+    })
+
     eventsObs.pipe(
       filter((e: Event): e is GuardsCheckStart => e instanceof GuardsCheckStart),
       filter(() => this.screenService.isInSmallView())

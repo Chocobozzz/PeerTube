@@ -151,6 +151,7 @@ export class PluginManager implements ServerHook {
     }
 
     delete this.registeredPlugins[plugin.npmName]
+    delete this.settings[plugin.npmName]
 
     if (plugin.type === PluginType.PLUGIN) {
       await plugin.unregister()
