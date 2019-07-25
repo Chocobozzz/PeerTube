@@ -145,10 +145,10 @@ program
 program.on('--help', function () {
   console.log('  Examples:')
   console.log()
-  console.log('    $ peertube add -u peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
-  console.log('    $ peertube add -u peertube.cpy.re -U root')
+  console.log('    $ peertube add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
+  console.log('    $ peertube add -u https://peertube.cpy.re -U root')
   console.log('    $ peertube list')
-  console.log('    $ peertube del peertube.cpy.re')
+  console.log('    $ peertube del https://peertube.cpy.re')
   console.log()
 })
 
