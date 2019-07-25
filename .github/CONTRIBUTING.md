@@ -58,7 +58,7 @@ First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead
 
 Make sure that you have followed
 [the steps](/support/doc/dependencies.md)
-to install the dependencies.
+to install the dependencies. You'll need to install **NodeJS 10**.
 
 Fork the github repository,
 and then clone the sources and install node modules:
