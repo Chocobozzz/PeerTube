@@ -20,8 +20,14 @@
     "secure": false,
     "ws": true
   },
-  "/": {
-    "target": "http://localhost:3000/client",
-    "secure": false
+  "/!(client)**": {
+    "target": "http://localhost:3000/client/index.html",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/!(client)**/**": {
+    "target": "http://localhost:3000/client/index.html",
+    "secure": false,
+    "logLevel": "debug"
   }
 }
