@@ -25,7 +25,7 @@ import { PluginsComponent } from '@app/+admin/plugins/plugins.component'
 import { PluginListInstalledComponent } from '@app/+admin/plugins/plugin-list-installed/plugin-list-installed.component'
 import { PluginSearchComponent } from '@app/+admin/plugins/plugin-search/plugin-search.component'
 import { PluginShowInstalledComponent } from '@app/+admin/plugins/plugin-show-installed/plugin-show-installed.component'
-import { SelectButtonModule } from 'primeng/primeng'
+import { SelectButtonModule } from 'primeng/selectbutton'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 
 @NgModule({

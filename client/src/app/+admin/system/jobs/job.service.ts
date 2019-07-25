@@ -1,7 +1,7 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
 import { ResultList } from '../../../../../../shared'
 import { JobState } from '../../../../../../shared/models'

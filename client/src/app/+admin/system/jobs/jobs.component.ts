@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { Notifier } from '@app/core'
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/api'
 import { Job } from '../../../../../../shared/index'
 import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'

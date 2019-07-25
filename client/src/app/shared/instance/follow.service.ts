@@ -1,11 +1,11 @@
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { SortMeta } from 'primeng/primeng'
 import { Observable } from 'rxjs'
 import { ActorFollow, ResultList } from '@shared/index'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
+import { SortMeta } from 'primeng/api'
 
 @Injectable()
 export class FollowService {

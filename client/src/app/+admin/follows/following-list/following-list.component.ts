@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/api'
 import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
 import { ConfirmService } from '../../../core/confirm/confirm.service'
 import { RestPagination, RestTable } from '../../../shared'

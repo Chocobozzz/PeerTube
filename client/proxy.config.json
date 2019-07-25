@@ -19,5 +19,9 @@
     "target": "ws://localhost:9000",
     "secure": false,
     "ws": true
+  },
+  "/": {
+    "target": "http://localhost:3000/client",
+    "secure": false
   }
 }

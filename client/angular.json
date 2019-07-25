@@ -72,6 +72,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
+            "baseHref": "/",
+            "deployUrl": "client/",
             "browserTarget": "PeerTube:build"
           },
           "configurations": {

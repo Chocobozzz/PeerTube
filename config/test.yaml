@@ -87,3 +87,7 @@ import:
 
 instance:
   default_nsfw_policy: 'display'
+
+plugins:
+  index:
+    check_latest_versions_interval: '10 minutes'
