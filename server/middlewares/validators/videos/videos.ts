@@ -349,7 +349,7 @@ function getCommonVideoEditAttributes () {
       .custom(isDateValid).withMessage('Should have a valid schedule update date'),
     body('scheduleUpdate.privacy')
       .optional()
-      .customSanitizer(toValueOrNull)
+      .customSanitizer(toIntOrNull)
       .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
   ] as (ValidationChain | express.Handler)[]
 }

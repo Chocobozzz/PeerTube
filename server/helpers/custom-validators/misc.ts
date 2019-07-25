@@ -1,7 +1,6 @@
 import 'multer'
 import * as validator from 'validator'
 import { sep } from 'path'
-import toBoolean = require('validator/lib/toBoolean')
 
 function exists (value: any) {
   return value !== undefined && value !== null
@@ -52,7 +51,7 @@ function toIntOrNull (value: string) {
   if (v === null || v === undefined) return v
   if (typeof v === 'number') return v
 
-  return validator.toInt(v)
+  return validator.toInt('' + v)
 }
 
 function toBooleanOrNull (value: any) {
@@ -61,7 +60,7 @@ function toBooleanOrNull (value: any) {
   if (v === null || v === undefined) return v
   if (typeof v === 'boolean') return v
 
-  return toBoolean(v)
+  return validator.toBoolean('' + v)
 }
 
 function toValueOrNull (value: string) {

@@ -98,15 +98,11 @@ function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } |
 }
 
 function isVideoPrivacyValid (value: number) {
-  return validator.isInt(value + '') && VIDEO_PRIVACIES[ value ] !== undefined
+  return VIDEO_PRIVACIES[ value ] !== undefined
 }
 
 function isScheduleVideoUpdatePrivacyValid (value: number) {
-  return validator.isInt(value + '') &&
-    (
-      value === VideoPrivacy.UNLISTED ||
-      value === VideoPrivacy.PUBLIC
-    )
+  return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC
 }
 
 function isVideoOriginallyPublishedAtValid (value: string | null) {
