@@ -5,6 +5,7 @@ $FontPathSourceSansPro: '~npm-font-source-sans-pro/fonts';
   font-weight: 400;
   font-style: normal;
   font-stretch: normal;
+  font-display: swap;
   src: url('#{$FontPathSourceSansPro}/WOFF2/TTF/SourceSansPro-Regular.ttf.woff2') format('woff2'),
 }
 
@@ -13,6 +14,7 @@ $FontPathSourceSansPro: '~npm-font-source-sans-pro/fonts';
   font-weight: 400;
   font-style: italic;
   font-stretch: normal;
+  font-display: swap;
   src: url('#{$FontPathSourceSansPro}/WOFF2/TTF/SourceSansPro-It.ttf.woff2') format('woff2'),
 }
 
@@ -21,6 +23,7 @@ $FontPathSourceSansPro: '~npm-font-source-sans-pro/fonts';
   font-weight: 600;
   font-style: normal;
   font-stretch: normal;
+  font-display: swap;
   src: url('#{$FontPathSourceSansPro}/WOFF2/TTF/SourceSansPro-Semibold.ttf.woff2') format('woff2'),
 }
 
@@ -29,6 +32,7 @@ $FontPathSourceSansPro: '~npm-font-source-sans-pro/fonts';
   font-weight: 600;
   font-style: italic;
   font-stretch: normal;
+  font-display: swap;
   src: url('#{$FontPathSourceSansPro}/WOFF2/TTF/SourceSansPro-SemiboldIt.ttf.woff2') format('woff2'),
 }
 
@@ -37,5 +41,6 @@ $FontPathSourceSansPro: '~npm-font-source-sans-pro/fonts';
   font-weight: 700;
   font-style: normal;
   font-stretch: normal;
+  font-display: swap;
   src: url('#{$FontPathSourceSansPro}/WOFF2/TTF/SourceSansPro-Bold.ttf.woff2') format('woff2'),
 }
