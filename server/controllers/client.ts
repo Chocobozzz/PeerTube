@@ -48,7 +48,26 @@ for (const staticClientFile of staticClientFiles) {
 clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
 clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
 
-clientsRouter.use('/client/locales/:locale/:file.json', function (req, res) {
+clientsRouter.use('/client/locales/:locale/:file.json', serveServerTranslations)
+
+// 404 for static files not found
+clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
+  res.sendStatus(404)
+})
+
+// Always serve index client page (the client is a single page application, let it handle routing)
+// Try to provide the right language index.html
+clientsRouter.use('/(:language)?', asyncMiddleware(serveIndexHTML))
+
+// ---------------------------------------------------------------------------
+
+export {
+  clientsRouter
+}
+
+// ---------------------------------------------------------------------------
+
+async function serveServerTranslations (req: express.Request, res: express.Response) {
   const locale = req.params.locale
   const file = req.params.file
 
@@ -59,16 +78,9 @@ clientsRouter.use('/client/locales/:locale/:file.json', function (req, res) {
   }
 
   return res.sendStatus(404)
-})
+}
 
-// 404 for static files not found
-clientsRouter.use('/client/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  res.sendStatus(404)
-})
-
-// Always serve index client page (the client is a single page application, let it handle routing)
-// Try to provide the right language index.html
-clientsRouter.use('/(:language)?', async function (req, res) {
+async function serveIndexHTML (req: express.Request, res: express.Response) {
   if (req.accepts(ACCEPT_HEADERS) === 'html') {
     try {
       await generateHTMLPage(req, res, req.params.language)
@@ -79,15 +91,7 @@ clientsRouter.use('/(:language)?', async function (req, res) {
   }
 
   return res.status(404).end()
-})
-
-// ---------------------------------------------------------------------------
-
-export {
-  clientsRouter
 }
-
-// ---------------------------------------------------------------------------
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
   const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)
