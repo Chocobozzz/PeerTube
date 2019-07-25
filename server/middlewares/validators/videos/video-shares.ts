@@ -1,6 +1,5 @@
 import * as express from 'express'
-import 'express-validator'
-import { param } from 'express-validator/check'
+import { param } from 'express-validator'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { VideoShareModel } from '../../../models/video/video-share'

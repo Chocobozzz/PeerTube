@@ -1,6 +1,5 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param, query, ValidationChain } from 'express-validator/check'
+import { body, param, query, ValidationChain } from 'express-validator'
 import { UserRight, VideoChangeOwnershipStatus, VideoPrivacy } from '../../../../shared'
 import {
   isBooleanValid,
@@ -9,6 +8,7 @@ import {
   isIdValid,
   isUUIDValid,
   toArray,
+  toBooleanOrNull,
   toIntOrNull,
   toValueOrNull
 } from '../../../helpers/custom-validators/misc'
@@ -53,7 +53,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
     ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('channelId')
-    .toInt()
+    .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -101,7 +101,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
     .custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('channelId')
     .optional()
-    .toInt()
+    .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -307,15 +307,15 @@ function getCommonVideoEditAttributes () {
       .custom(isVideoLanguageValid).withMessage('Should have a valid language'),
     body('nsfw')
       .optional()
-      .toBoolean()
+      .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have a valid NSFW attribute'),
     body('waitTranscoding')
       .optional()
-      .toBoolean()
+      .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have a valid wait transcoding attribute'),
     body('privacy')
       .optional()
-      .toInt()
+      .customSanitizer(toValueOrNull)
       .custom(isVideoPrivacyValid).withMessage('Should have correct video privacy'),
     body('description')
       .optional()
@@ -331,16 +331,16 @@ function getCommonVideoEditAttributes () {
       .custom(isVideoTagsValid).withMessage('Should have correct tags'),
     body('commentsEnabled')
       .optional()
-      .toBoolean()
+      .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have comments enabled boolean'),
     body('downloadEnabled')
       .optional()
-      .toBoolean()
+      .customSanitizer(toBooleanOrNull)
       .custom(isBooleanValid).withMessage('Should have downloading enabled boolean'),
     body('originallyPublishedAt')
-        .optional()
-        .customSanitizer(toValueOrNull)
-        .custom(isVideoOriginallyPublishedAtValid).withMessage('Should have a valid original publication date'),
+      .optional()
+      .customSanitizer(toValueOrNull)
+      .custom(isVideoOriginallyPublishedAtValid).withMessage('Should have a valid original publication date'),
     body('scheduleUpdate')
       .optional()
       .customSanitizer(toValueOrNull),
@@ -349,7 +349,7 @@ function getCommonVideoEditAttributes () {
       .custom(isDateValid).withMessage('Should have a valid schedule update date'),
     body('scheduleUpdate.privacy')
       .optional()
-      .toInt()
+      .customSanitizer(toValueOrNull)
       .custom(isScheduleVideoUpdatePrivacyValid).withMessage('Should have correct schedule update privacy')
   ] as (ValidationChain | express.Handler)[]
 }

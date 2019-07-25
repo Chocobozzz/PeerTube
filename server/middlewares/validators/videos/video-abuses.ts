@@ -1,6 +1,5 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'

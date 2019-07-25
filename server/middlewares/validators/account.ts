@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { param } from 'express-validator/check'
+import { param } from 'express-validator'
 import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'

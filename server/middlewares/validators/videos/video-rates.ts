@@ -1,6 +1,5 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param, query } from 'express-validator/check'
+import { body, param, query } from 'express-validator'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
 import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'

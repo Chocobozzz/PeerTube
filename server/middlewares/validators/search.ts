@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { areValidationErrors } from './utils'
 import { logger } from '../../helpers/logger'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { isDateValid } from '../../helpers/custom-validators/misc'
 
 const videosSearchValidator = [

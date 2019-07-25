@@ -39,7 +39,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
 
     const scrollObservable = fromEvent(this.container || window, 'scroll')
       .pipe(
-        startWith(null),
+        startWith(null as string), // FIXME: typings
         throttleTime(200, undefined, throttleOptions),
         map(() => this.getScrollInfo()),
         distinctUntilChanged((o1, o2) => o1.current === o2.current),

@@ -1,7 +1,5 @@
 import * as validator from 'validator'
-import 'express-validator'
-
-import { isArray, exists } from './misc'
+import { exists, isArray } from './misc'
 import { isTestInstance } from '../core-utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 

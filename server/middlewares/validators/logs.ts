@@ -2,7 +2,7 @@ import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isDateValid } from '../../helpers/custom-validators/misc'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { isValidLogLevel } from '../../helpers/custom-validators/logs'
 
 const getLogsValidator = [

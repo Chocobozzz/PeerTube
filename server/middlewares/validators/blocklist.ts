@@ -1,4 +1,4 @@
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'

@@ -1,6 +1,6 @@
 import * as express from 'express'
-import { body } from 'express-validator/check'
-import { isIdValid } from '../../../helpers/custom-validators/misc'
+import { body } from 'express-validator'
+import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { getCommonVideoEditAttributes } from './videos'
@@ -13,7 +13,7 @@ import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
-    .toInt()
+    .customSanitizer(toIntOrNull)
     .custom(isIdValid).withMessage('Should have correct video channel id'),
   body('targetUrl')
     .optional()

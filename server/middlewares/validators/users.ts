@@ -1,9 +1,8 @@
 import * as Bluebird from 'bluebird'
 import * as express from 'express'
-import 'express-validator'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { omit } from 'lodash'
-import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toIntOrNull } from '../../helpers/custom-validators/misc'
 import {
   isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
@@ -358,7 +357,7 @@ const usersVerifyEmailValidator = [
     .not().isEmpty().withMessage('Should have a valid verification string'),
   body('isPendingEmail')
     .optional()
-    .toBoolean(),
+    .customSanitizer(toIntOrNull),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersVerifyEmail parameters', { parameters: req.params })

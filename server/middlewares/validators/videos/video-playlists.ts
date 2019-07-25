@@ -1,12 +1,20 @@
 import * as express from 'express'
-import { body, param, query, ValidationChain } from 'express-validator/check'
+import { body, param, query, ValidationChain } from 'express-validator'
 import { UserRight, VideoPlaylistCreate, VideoPlaylistUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
 import { isVideoImage } from '../../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { isArrayOf, isIdOrUUIDValid, isIdValid, isUUIDValid, toIntArray, toValueOrNull } from '../../../helpers/custom-validators/misc'
+import {
+  isArrayOf,
+  isIdOrUUIDValid,
+  isIdValid,
+  isUUIDValid,
+  toIntArray,
+  toIntOrNull,
+  toValueOrNull
+} from '../../../helpers/custom-validators/misc'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -374,12 +382,11 @@ function getCommonPlaylistEditAttributes () {
       .custom(isVideoPlaylistDescriptionValid).withMessage('Should have a valid description'),
     body('privacy')
       .optional()
-      .toInt()
+      .customSanitizer(toIntOrNull)
       .custom(isVideoPlaylistPrivacyValid).withMessage('Should have correct playlist privacy'),
     body('videoChannelId')
       .optional()
-      .customSanitizer(toValueOrNull)
-      .toInt()
+      .customSanitizer(toIntOrNull)
   ] as (ValidationChain | express.Handler)[]
 }
 

@@ -255,10 +255,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     )
 
     // Video did change
-    forkJoin(
+    forkJoin([
       videoObs,
       this.videoCaptionService.listCaptions(videoId)
-    )
+    ])
       .pipe(
         // If 401, the video is private or blacklisted so redirect to 404
         catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))

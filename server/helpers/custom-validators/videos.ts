@@ -1,9 +1,6 @@
-import { Response } from 'express'
-import 'express-validator'
 import { values } from 'lodash'
-import 'multer'
 import * as validator from 'validator'
-import { UserRight, VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
+import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,
   MIMETYPES,
@@ -13,9 +10,7 @@ import {
   VIDEO_RATE_TYPES,
   VIDEO_STATES
 } from '../../initializers/constants'
-import { VideoModel } from '../../models/video/video'
 import { exists, isArray, isDateValid, isFileValid } from './misc'
-import { UserModel } from '../../models/account/user'
 import * as magnetUtil from 'magnet-uri'
 
 const VIDEOS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEOS

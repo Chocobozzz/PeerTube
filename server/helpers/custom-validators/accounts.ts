@@ -1,4 +1,3 @@
-import 'express-validator'
 import { isUserDescriptionValid, isUserUsernameValid } from './users'
 import { exists } from './misc'
 

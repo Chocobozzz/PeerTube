@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { join } from 'path'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'

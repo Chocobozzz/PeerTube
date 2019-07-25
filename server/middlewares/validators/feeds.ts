@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { param, query } from 'express-validator/check'
+import { param, query } from 'express-validator'
 import { isIdOrUUIDValid, isIdValid } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'

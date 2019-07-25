@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 

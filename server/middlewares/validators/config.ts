@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body } from 'express-validator/check'
+import { body } from 'express-validator'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'

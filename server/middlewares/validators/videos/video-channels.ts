@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { UserRight } from '../../../../shared'
 import {
   isVideoChannelDescriptionValid,

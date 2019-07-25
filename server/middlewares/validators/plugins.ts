@@ -1,10 +1,10 @@
 import * as express from 'express'
-import { body, param, query } from 'express-validator/check'
+import { body, param, query } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { isBooleanValid, isSafePath } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isSafePath, toBooleanOrNull } from '../../helpers/custom-validators/misc'
 import { PluginModel } from '../../models/server/plugin'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
@@ -39,7 +39,7 @@ const listPluginsValidator = [
     .custom(isPluginTypeValid).withMessage('Should have a valid plugin type'),
   query('uninstalled')
     .optional()
-    .toBoolean()
+    .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid uninstalled attribute'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

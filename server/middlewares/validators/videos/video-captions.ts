@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { areValidationErrors } from '../utils'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
