@@ -13,6 +13,8 @@ function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderIt
 
   if (field.toLowerCase() === 'match') { // Search
     finalField = Sequelize.col('similarity')
+  } else if (field === 'videoQuotaUsed') { // Users list
+    finalField = Sequelize.col('videoQuotaUsed')
   } else {
     finalField = field
   }

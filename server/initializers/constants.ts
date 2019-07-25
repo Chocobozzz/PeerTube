@@ -39,7 +39,7 @@ const WEBSERVER = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'id', 'username', 'createdAt' ],
+  USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt' ],
   USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
