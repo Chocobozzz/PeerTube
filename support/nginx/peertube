@@ -13,10 +13,22 @@ server {
   location / { return 301 https://$host$request_uri; }
 }
 
+# Expires map
+map $sent_http_content_type $expires {
+    default                    30d;
+    text/html                  epoch;
+    text/css                   max;
+    application/javascript     2h;
+    ~image/                    max;
+    application/font-woff2     max;
+}
+
 server {
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
   server_name peertube.example.com;
+
+  expires $expires;
 
   # For example with certbot (you need a certificate to run https)
   ssl_certificate      /etc/letsencrypt/live/peertube.example.com/fullchain.pem;
