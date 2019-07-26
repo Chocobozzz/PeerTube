@@ -30,6 +30,7 @@
 - [Tips](#tips)
   - [Compatibility with PeerTube](#compatibility-with-peertube)
   - [Spam/moderation plugin](#spammoderation-plugin)
+  - [Other plugin examples](#other-plugin-examples)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -323,6 +324,15 @@ If you want to translate strings of your plugin (like labels of your registered 
 The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/i18n/i18n.ts).
 You **must** use the complete locales (`fr-FR` instead of `fr`).
 
+Translation files are just objects, with the english sentence as the key and the translation as the value.
+`fr.json` could contain for example:
+
+```json
+{
+  "Hello world": "Hello le monde"
+}
+```
+
 ### Test your plugin/theme
 
 You'll need to have a local PeerTube instance:
@@ -410,3 +420,6 @@ If you want to create an antispam/moderation plugin, you could use the following
  * `filter:api.video-thread-comments.list.result`: to change/hide the text of replies
  * `filter:video.auto-blacklist.result`: to automatically blacklist local or remote videos
  
+### Other plugin examples
+
+You can take a look to "official" PeerTube plugins if you want to take inspiration from them: https://framagit.org/framasoft/peertube/official-plugins
