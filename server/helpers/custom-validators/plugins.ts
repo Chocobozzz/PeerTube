@@ -44,7 +44,7 @@ function isPluginHomepage (value: string) {
   return isUrlValid(value)
 }
 
-function isStaticDirectoriesValid (staticDirs: any) {
+function areStaticDirectoriesValid (staticDirs: any) {
   if (!exists(staticDirs) || typeof staticDirs !== 'object') return false
 
   for (const key of Object.keys(staticDirs)) {
@@ -54,14 +54,24 @@ function isStaticDirectoriesValid (staticDirs: any) {
   return true
 }
 
-function isClientScriptsValid (clientScripts: any[]) {
+function areClientScriptsValid (clientScripts: any[]) {
   return isArray(clientScripts) &&
     clientScripts.every(c => {
       return isSafePath(c.script) && isArray(c.scopes)
     })
 }
 
-function isCSSPathsValid (css: any[]) {
+function areTranslationPathsValid (translations: any) {
+  if (!exists(translations) || typeof translations !== 'object') return false
+
+  for (const key of Object.keys(translations)) {
+    if (!isSafePath(translations[key])) return false
+  }
+
+  return true
+}
+
+function areCSSPathsValid (css: any[]) {
   return isArray(css) && css.every(c => isSafePath(c))
 }
 
@@ -77,9 +87,10 @@ function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginT
     exists(packageJSON.author) &&
     isUrlValid(packageJSON.bugs) &&
     (pluginType === PluginType.THEME || isSafePath(packageJSON.library)) &&
-    isStaticDirectoriesValid(packageJSON.staticDirs) &&
-    isCSSPathsValid(packageJSON.css) &&
-    isClientScriptsValid(packageJSON.clientScripts)
+    areStaticDirectoriesValid(packageJSON.staticDirs) &&
+    areCSSPathsValid(packageJSON.css) &&
+    areClientScriptsValid(packageJSON.clientScripts) &&
+    areTranslationPathsValid(packageJSON.translations)
 }
 
 function isLibraryCodeValid (library: any) {

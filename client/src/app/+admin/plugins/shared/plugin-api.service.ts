@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/operators'
+import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { environment } from '../../../../environments/environment'
@@ -6,13 +6,14 @@ import { RestExtractor, RestService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { ResultList } from '@shared/models'
+import { peertubeTranslate, ResultList } from '@shared/models'
 import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ManagePlugin } from '@shared/models/plugins/manage-plugin.model'
 import { InstallOrUpdatePlugin } from '@shared/models/plugins/install-plugin.model'
 import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
 import { RegisteredServerSettings, RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
 import { PluginService } from '@app/core/plugins/plugin.service'
+import { Observable } from 'rxjs'
 
 @Injectable()
 export class PluginApiService {
@@ -92,7 +93,10 @@ export class PluginApiService {
     const path = PluginApiService.BASE_PLUGIN_URL + '/' + npmName + '/registered-settings'
 
     return this.authHttp.get<RegisteredServerSettings>(path)
-               .pipe(catchError(res => this.restExtractor.handleError(res)))
+               .pipe(
+                 switchMap(res => this.translateSettingsLabel(npmName, res)),
+                 catchError(res => this.restExtractor.handleError(res))
+               )
   }
 
   updatePluginSettings (pluginName: string, pluginType: PluginType, settings: any) {
@@ -128,5 +132,20 @@ export class PluginApiService {
 
     return this.authHttp.post(PluginApiService.BASE_PLUGIN_URL + '/install', body)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
+  }
+
+  private translateSettingsLabel (npmName: string, res: RegisteredServerSettings): Observable<RegisteredServerSettings> {
+    return this.pluginService.translationsObservable
+      .pipe(
+        map(allTranslations => allTranslations[npmName]),
+        map(translations => {
+          const registeredSettings = res.registeredSettings
+                                        .map(r => {
+                                          return Object.assign({}, r, { label: peertubeTranslate(r.label, translations) })
+                                        })
+
+          return { registeredSettings }
+        })
+      )
   }
 }

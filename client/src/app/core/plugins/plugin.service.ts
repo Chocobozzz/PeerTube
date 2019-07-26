@@ -1,11 +1,11 @@
-import { Injectable, NgZone } from '@angular/core'
+import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
 import { Router } from '@angular/router'
-import { ServerConfigPlugin } from '@shared/models'
+import { getCompleteLocale, isDefaultLocale, peertubeTranslate, ServerConfigPlugin } from '@shared/models'
 import { ServerService } from '@app/core/server/server.service'
 import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
 import { ClientScript as ClientScriptModule } from '../../../types/client-script.model'
 import { environment } from '../../../environments/environment'
-import { ReplaySubject } from 'rxjs'
+import { Observable, of, ReplaySubject } from 'rxjs'
 import { catchError, first, map, shareReplay } from 'rxjs/operators'
 import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plugins/client-hook.model'
@@ -15,6 +15,9 @@ import { HttpClient } from '@angular/common/http'
 import { RestExtractor } from '@app/shared/rest'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 import { PublicServerSetting } from '@shared/models/plugins/public-server.setting'
+import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { RegisterClientHelpers } from '../../../types/register-client-option.model'
+import { PluginTranslation } from '@shared/models/plugins/plugin-translation.model'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -30,7 +33,8 @@ type PluginInfo = {
 
 @Injectable()
 export class PluginService implements ClientHook {
-  private static BASE_PLUGIN_URL = environment.apiUrl + '/api/v1/plugins'
+  private static BASE_PLUGIN_API_URL = environment.apiUrl + '/api/v1/plugins'
+  private static BASE_PLUGIN_URL = environment.apiUrl + '/plugins'
 
   pluginsBuilt = new ReplaySubject<boolean>(1)
 
@@ -39,6 +43,8 @@ export class PluginService implements ClientHook {
     search: new ReplaySubject<boolean>(1),
     'video-watch': new ReplaySubject<boolean>(1)
   }
+
+  translationsObservable: Observable<PluginTranslation>
 
   private plugins: ServerConfigPlugin[] = []
   private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
@@ -53,8 +59,10 @@ export class PluginService implements ClientHook {
     private server: ServerService,
     private zone: NgZone,
     private authHttp: HttpClient,
-    private restExtractor: RestExtractor
+    private restExtractor: RestExtractor,
+    @Inject(LOCALE_ID) private localeId: string
   ) {
+    this.loadTranslations()
   }
 
   initializePlugins () {
@@ -235,8 +243,9 @@ export class PluginService implements ClientHook {
     }
   }
 
-  private buildPeerTubeHelpers (pluginInfo: PluginInfo) {
+  private buildPeerTubeHelpers (pluginInfo: PluginInfo): RegisterClientHelpers {
     const { plugin } = pluginInfo
+    const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
 
     return {
       getBaseStaticRoute: () => {
@@ -245,8 +254,7 @@ export class PluginService implements ClientHook {
       },
 
       getSettings: () => {
-        const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
-        const path = PluginService.BASE_PLUGIN_URL + '/' + npmName + '/public-settings'
+        const path = PluginService.BASE_PLUGIN_API_URL + '/' + npmName + '/public-settings'
 
         return this.authHttp.get<PublicServerSetting>(path)
                    .pipe(
@@ -254,8 +262,26 @@ export class PluginService implements ClientHook {
                      catchError(res => this.restExtractor.handleError(res))
                    )
                    .toPromise()
+      },
+
+      translate: (value: string) => {
+        return this.translationsObservable
+            .pipe(map(allTranslations => allTranslations[npmName]))
+            .pipe(map(translations => peertubeTranslate(value, translations)))
+            .toPromise()
       }
     }
+  }
+
+  private loadTranslations () {
+    const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
+
+    // Default locale, nothing to translate
+    if (isDefaultLocale(completeLocale)) this.translationsObservable = of({}).pipe(shareReplay())
+
+    this.translationsObservable = this.authHttp
+        .get<PluginTranslation>(PluginService.BASE_PLUGIN_URL + '/translations/' + completeLocale + '.json')
+        .pipe(shareReplay())
   }
 
   private getPluginPathPrefix (isTheme: boolean) {

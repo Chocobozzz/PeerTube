@@ -3,9 +3,13 @@ import { RegisterClientHookOptions } from '@shared/models/plugins/register-clien
 export type RegisterClientOptions = {
   registerHook: (options: RegisterClientHookOptions) => void
 
-  peertubeHelpers: {
-    getBaseStaticRoute: () => string
+  peertubeHelpers: RegisterClientHelpers
+}
 
-    getSettings: () => Promise<{ [ name: string ]: string }>
-  }
+export type RegisterClientHelpers = {
+  getBaseStaticRoute: () => string
+
+  getSettings: () => Promise<{ [ name: string ]: string }>
+
+  translate: (toTranslate: string) => Promise<string>
 }

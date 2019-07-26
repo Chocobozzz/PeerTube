@@ -31,7 +31,6 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 export interface VideosProvider {

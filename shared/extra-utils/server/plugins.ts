@@ -134,6 +134,21 @@ function getPublicSettings (parameters: {
   })
 }
 
+function getPluginTranslations (parameters: {
+  url: string,
+  locale: string,
+  expectedStatus?: number
+}) {
+  const { url, locale, expectedStatus = 200 } = parameters
+  const path = '/plugins/translations/' + locale + '.json'
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: expectedStatus
+  })
+}
+
 function installPlugin (parameters: {
   url: string,
   accessToken: string,
@@ -224,6 +239,7 @@ export {
   listPlugins,
   listAvailablePlugins,
   installPlugin,
+  getPluginTranslations,
   getPluginsCSS,
   updatePlugin,
   getPlugin,

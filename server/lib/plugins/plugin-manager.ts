@@ -3,7 +3,11 @@ import { logger } from '../../helpers/logger'
 import { basename, join } from 'path'
 import { CONFIG } from '../../initializers/config'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
-import { ClientScript, PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
+import {
+  ClientScript,
+  PluginPackageJson,
+  PluginTranslationPaths as PackagePluginTranslations
+} from '../../../shared/models/plugins/plugin-package-json.model'
 import { createReadStream, createWriteStream } from 'fs'
 import { PLUGIN_GLOBAL_CSS_PATH, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
@@ -21,6 +25,7 @@ import { RegisterServerSettingOptions } from '../../../shared/models/plugins/reg
 import { PluginVideoLanguageManager } from '../../../shared/models/plugins/plugin-video-language-manager.model'
 import { PluginVideoCategoryManager } from '../../../shared/models/plugins/plugin-video-category-manager.model'
 import { PluginVideoLicenceManager } from '../../../shared/models/plugins/plugin-video-licence-manager.model'
+import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -60,6 +65,10 @@ type UpdatedVideoConstant = {
   }
 }
 
+type PluginLocalesTranslations = {
+  [ locale: string ]: PluginTranslation
+}
+
 export class PluginManager implements ServerHook {
 
   private static instance: PluginManager
@@ -67,6 +76,7 @@ export class PluginManager implements ServerHook {
   private registeredPlugins: { [ name: string ]: RegisteredPlugin } = {}
   private settings: { [ name: string ]: RegisterServerSettingOptions[] } = {}
   private hooks: { [ name: string ]: HookInformationValue[] } = {}
+  private translations: PluginLocalesTranslations = {}
 
   private updatedVideoConstants: UpdatedVideoConstant = {
     language: {},
@@ -115,6 +125,10 @@ export class PluginManager implements ServerHook {
 
   getRegisteredSettings (npmName: string) {
     return this.settings[npmName] || []
+  }
+
+  getTranslations (locale: string) {
+    return this.translations[locale] || {}
   }
 
   // ###################### Hooks ######################
@@ -172,6 +186,8 @@ export class PluginManager implements ServerHook {
 
     delete this.registeredPlugins[plugin.npmName]
     delete this.settings[plugin.npmName]
+
+    this.deleteTranslations(plugin.npmName)
 
     if (plugin.type === PluginType.PLUGIN) {
       await plugin.unregister()
@@ -312,6 +328,8 @@ export class PluginManager implements ServerHook {
       css: packageJSON.css,
       unregister: library ? library.unregister : undefined
     }
+
+    await this.addTranslations(plugin, npmName, packageJSON.translations)
   }
 
   private async registerPlugin (plugin: PluginModel, pluginPath: string, packageJSON: PluginPackageJson) {
@@ -335,6 +353,28 @@ export class PluginManager implements ServerHook {
     await this.addCSSToGlobalFile(pluginPath, packageJSON.css)
 
     return library
+  }
+
+  // ###################### Translations ######################
+
+  private async addTranslations (plugin: PluginModel, npmName: string, translationPaths: PackagePluginTranslations) {
+    for (const locale of Object.keys(translationPaths)) {
+      const path = translationPaths[locale]
+      const json = await readJSON(join(this.getPluginPath(plugin.name, plugin.type), path))
+
+      if (!this.translations[locale]) this.translations[locale] = {}
+      this.translations[locale][npmName] = json
+
+      logger.info('Added locale %s of plugin %s.', locale, npmName)
+    }
+  }
+
+  private deleteTranslations (npmName: string) {
+    for (const locale of Object.keys(this.translations)) {
+      delete this.translations[locale][npmName]
+
+      logger.info('Deleted locale %s of plugin %s.', locale, npmName)
+    }
   }
 
   // ###################### CSS ######################
@@ -455,7 +495,7 @@ export class PluginManager implements ServerHook {
       deleteLanguage: (key: string) => this.deleteConstant({ npmName, type: 'language', obj: VIDEO_LANGUAGES, key })
     }
 
-    const videoCategoryManager: PluginVideoCategoryManager= {
+    const videoCategoryManager: PluginVideoCategoryManager = {
       addCategory: (key: number, label: string) => this.addConstant({ npmName, type: 'category', obj: VIDEO_CATEGORIES, key, label }),
 
       deleteCategory: (key: number) => this.deleteConstant({ npmName, type: 'category', obj: VIDEO_CATEGORIES, key })

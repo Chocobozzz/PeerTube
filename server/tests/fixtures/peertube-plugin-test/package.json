@@ -15,5 +15,8 @@
   "library": "./main.js",
   "staticDirs": {},
   "css": [],
-  "clientScripts": []
+  "clientScripts": [],
+  "translations": {
+    "fr-FR": "./languages/fr.json"
+  }
 }
