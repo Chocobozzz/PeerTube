@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { Router } from '@angular/router'
 import { ServerConfigPlugin } from '@shared/models'
 import { ServerService } from '@app/core/server/server.service'
@@ -11,7 +11,6 @@ import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
 import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plugins/client-hook.model'
 import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
 import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
-import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { HttpClient } from '@angular/common/http'
 import { RestExtractor } from '@app/shared/rest'
 import { PluginType } from '@shared/models/plugins/plugin.type'
@@ -52,6 +51,7 @@ export class PluginService implements ClientHook {
   constructor (
     private router: Router,
     private server: ServerService,
+    private zone: NgZone,
     private authHttp: HttpClient,
     private restExtractor: RestExtractor
   ) {
@@ -157,20 +157,22 @@ export class PluginService implements ClientHook {
     }
   }
 
-  async runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
-    if (!this.hooks[hookName]) return Promise.resolve(result)
+  runHook <T> (hookName: ClientHookName, result?: T, params?: any): Promise<T> {
+    return this.zone.runOutsideAngular(async () => {
+      if (!this.hooks[ hookName ]) return result
 
-    const hookType = getHookType(hookName)
+      const hookType = getHookType(hookName)
 
-    for (const hook of this.hooks[hookName]) {
-      console.log('Running hook %s of plugin %s.', hookName, hook.plugin.name)
+      for (const hook of this.hooks[ hookName ]) {
+        console.log('Running hook %s of plugin %s.', hookName, hook.plugin.name)
 
-      result = await internalRunHook(hook.handler, hookType, result, params, err => {
-        console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.clientScript.script, hook.plugin.name, err)
-      })
-    }
+        result = await internalRunHook(hook.handler, hookType, result, params, err => {
+          console.error('Cannot run hook %s of script %s of plugin %s.', hookName, hook.clientScript.script, hook.plugin.name, err)
+        })
+      }
 
-    return result
+      return result
+    })
   }
 
   nameToNpmName (name: string, type: PluginType) {
@@ -211,10 +213,12 @@ export class PluginService implements ClientHook {
 
     console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
-    return import(/* webpackIgnore: true */ clientScript.script)
-      .then((script: ClientScriptModule) => script.register({ registerHook, peertubeHelpers }))
-      .then(() => this.sortHooksByPriority())
-      .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
+    return this.zone.runOutsideAngular(() => {
+      return import(/* webpackIgnore: true */ clientScript.script)
+        .then((script: ClientScriptModule) => script.register({ registerHook, peertubeHelpers }))
+        .then(() => this.sortHooksByPriority())
+        .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
+    })
   }
 
   private buildScopeStruct () {
