@@ -66,7 +66,7 @@ export class PluginShowInstalledComponent extends FormReactive implements OnInit
     this.pluginService.getPlugin(npmName)
         .pipe(switchMap(plugin => {
           return this.pluginService.getPluginRegisteredSettings(plugin.name, plugin.type)
-            .pipe(map(data => ({ plugin, registeredSettings: data.settings })))
+            .pipe(map(data => ({ plugin, registeredSettings: data.registeredSettings })))
         }))
         .subscribe(
           ({ plugin, registeredSettings }) => {

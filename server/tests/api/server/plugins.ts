@@ -18,7 +18,7 @@ import {
   setPluginVersion, uninstallPlugin,
   updateCustomSubConfig, updateMyUser, updatePluginPackageJSON, updatePlugin,
   updatePluginSettings,
-  wait
+  wait, getPublicSettings
 } from '../../../../shared/extra-utils'
 import { PluginType } from '../../../../shared/models/plugins/plugin.type'
 import { PeerTubePluginIndex } from '../../../../shared/models/plugins/peertube-plugin-index.model'
@@ -27,6 +27,7 @@ import { PeerTubePlugin } from '../../../../shared/models/plugins/peertube-plugi
 import { User } from '../../../../shared/models/users'
 import { PluginPackageJson } from '../../../../shared/models/plugins/plugin-package-json.model'
 import { RegisteredServerSettings } from '../../../../shared/models/plugins/register-server-setting.model'
+import { PublicServerSetting } from '../../../../shared/models/plugins/public-server.setting'
 
 const expect = chai.expect
 
@@ -217,12 +218,22 @@ describe('Test plugins', function () {
       npmName: 'peertube-plugin-hello-world'
     })
 
-    const settings = (res.body as RegisteredServerSettings).settings
+    const registeredSettings = (res.body as RegisteredServerSettings).registeredSettings
 
-    expect(settings).to.have.length.at.least(1)
+    expect(registeredSettings).to.have.length.at.least(1)
 
-    const adminNameSettings = settings.find(s => s.name === 'admin-name')
+    const adminNameSettings = registeredSettings.find(s => s.name === 'admin-name')
     expect(adminNameSettings).to.not.be.undefined
+  })
+
+  it('Should get public settings', async function () {
+    const res = await getPublicSettings({ url: server.url, npmName: 'peertube-plugin-hello-world' })
+
+    const publicSettings = (res.body as PublicServerSetting).publicSettings
+
+    expect(Object.keys(publicSettings)).to.have.lengthOf(1)
+    expect(Object.keys(publicSettings)).to.deep.equal([ 'user-name' ])
+    expect(publicSettings['user-name']).to.be.null
   })
 
   it('Should update the settings', async function () {

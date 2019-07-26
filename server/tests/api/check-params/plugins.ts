@@ -281,7 +281,7 @@ describe('Test server plugins API validators', function () {
     })
   })
 
-  describe('When getting a plugin or the registered settings', function () {
+  describe('When getting a plugin or the registered settings or public settings', function () {
     const path = '/api/v1/plugins/'
 
     it('Should fail with an invalid token', async function () {
@@ -307,7 +307,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an invalid npm name', async function () {
-      for (const suffix of [ 'toto', 'toto/registered-settings' ]) {
+      for (const suffix of [ 'toto', 'toto/registered-settings', 'toto/public-settings' ]) {
         await makeGetRequest({
           url: server.url,
           path: path + suffix,
@@ -316,7 +316,7 @@ describe('Test server plugins API validators', function () {
         })
       }
 
-      for (const suffix of [ 'peertube-plugin-TOTO', 'peertube-plugin-TOTO/registered-settings' ]) {
+      for (const suffix of [ 'peertube-plugin-TOTO', 'peertube-plugin-TOTO/registered-settings', 'peertube-plugin-TOTO/public-settings' ]) {
         await makeGetRequest({
           url: server.url,
           path: path + suffix,
@@ -327,7 +327,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should fail with an unknown plugin', async function () {
-      for (const suffix of [ 'peertube-plugin-toto', 'peertube-plugin-toto/registered-settings' ]) {
+      for (const suffix of [ 'peertube-plugin-toto', 'peertube-plugin-toto/registered-settings', 'peertube-plugin-toto/public-settings' ]) {
         await makeGetRequest({
           url: server.url,
           path: path + suffix,
@@ -338,7 +338,7 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      for (const suffix of [ npmPlugin, `${npmPlugin}/registered-settings` ]) {
+      for (const suffix of [ npmPlugin, `${npmPlugin}/registered-settings`, `${npmPlugin}/public-settings` ]) {
         await makeGetRequest({
           url: server.url,
           path: path + suffix,

@@ -26,6 +26,7 @@ import { logger } from '../../helpers/logger'
 import { listAvailablePluginsFromIndex } from '../../lib/plugins/plugin-index'
 import { PeertubePluginIndexList } from '../../../shared/models/plugins/peertube-plugin-index-list.model'
 import { RegisteredServerSettings } from '../../../shared/models/plugins/register-server-setting.model'
+import { PublicServerSetting } from '../../../shared/models/plugins/public-server.setting'
 
 const pluginRouter = express.Router()
 
@@ -51,18 +52,16 @@ pluginRouter.get('/',
   asyncMiddleware(listPlugins)
 )
 
-pluginRouter.get('/:npmName',
-  authenticate,
-  ensureUserHasRight(UserRight.MANAGE_PLUGINS),
-  asyncMiddleware(existingPluginValidator),
-  getPlugin
-)
-
 pluginRouter.get('/:npmName/registered-settings',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_PLUGINS),
   asyncMiddleware(existingPluginValidator),
   getPluginRegisteredSettings
+)
+
+pluginRouter.get('/:npmName/public-settings',
+  asyncMiddleware(existingPluginValidator),
+  getPublicPluginSettings
 )
 
 pluginRouter.put('/:npmName/settings',
@@ -71,6 +70,13 @@ pluginRouter.put('/:npmName/settings',
   updatePluginSettingsValidator,
   asyncMiddleware(existingPluginValidator),
   asyncMiddleware(updatePluginSettings)
+)
+
+pluginRouter.get('/:npmName',
+  authenticate,
+  ensureUserHasRight(UserRight.MANAGE_PLUGINS),
+  asyncMiddleware(existingPluginValidator),
+  getPlugin
 )
 
 pluginRouter.post('/install',
@@ -161,10 +167,20 @@ async function uninstallPlugin (req: express.Request, res: express.Response) {
   return res.sendStatus(204)
 }
 
-function getPluginRegisteredSettings (req: express.Request, res: express.Response) {
-  const settings = PluginManager.Instance.getRegisteredSettings(req.params.npmName)
+function getPublicPluginSettings (req: express.Request, res: express.Response) {
+  const plugin = res.locals.plugin
+  const registeredSettings = PluginManager.Instance.getRegisteredSettings(req.params.npmName)
+  const publicSettings = plugin.getPublicSettings(registeredSettings)
 
-  const json: RegisteredServerSettings = { settings }
+  const json: PublicServerSetting = { publicSettings }
+
+  return res.json(json)
+}
+
+function getPluginRegisteredSettings (req: express.Request, res: express.Response) {
+  const registeredSettings = PluginManager.Instance.getRegisteredSettings(req.params.npmName)
+
+  const json: RegisteredServerSettings = { registeredSettings }
 
   return res.json(json)
 }

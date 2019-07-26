@@ -119,6 +119,21 @@ function getPluginRegisteredSettings (parameters: {
   })
 }
 
+function getPublicSettings (parameters: {
+  url: string,
+  npmName: string,
+  expectedStatus?: number
+}) {
+  const { url, npmName, expectedStatus = 200 } = parameters
+  const path = '/api/v1/plugins/' + npmName + '/public-settings'
+
+  return makeGetRequest({
+    url,
+    path,
+    statusCodeExpected: expectedStatus
+  })
+}
+
 function installPlugin (parameters: {
   url: string,
   accessToken: string,
@@ -218,5 +233,6 @@ export {
   getPackageJSONPath,
   updatePluginPackageJSON,
   getPluginPackageJSON,
-  getPluginTestPath
+  getPluginTestPath,
+  getPublicSettings
 }

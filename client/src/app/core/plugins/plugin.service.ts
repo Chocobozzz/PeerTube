@@ -15,6 +15,7 @@ import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { HttpClient } from '@angular/common/http'
 import { RestExtractor } from '@app/shared/rest'
 import { PluginType } from '@shared/models/plugins/plugin.type'
+import { PublicServerSetting } from '@shared/models/plugins/public-server.setting'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -241,11 +242,11 @@ export class PluginService implements ClientHook {
 
       getSettings: () => {
         const npmName = this.nameToNpmName(pluginInfo.plugin.name, pluginInfo.pluginType)
-        const path = PluginService.BASE_PLUGIN_URL + '/' + npmName
+        const path = PluginService.BASE_PLUGIN_URL + '/' + npmName + '/public-settings'
 
-        return this.authHttp.get<PeerTubePlugin>(path)
+        return this.authHttp.get<PublicServerSetting>(path)
                    .pipe(
-                     map(p => p.settings),
+                     map(p => p.publicSettings),
                      catchError(res => this.restExtractor.handleError(res))
                    )
                    .toPromise()

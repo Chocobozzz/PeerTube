@@ -10,7 +10,7 @@ import {
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
 import { FindAndCountOptions, json } from 'sequelize'
-import { PeerTubePluginIndex } from '../../../shared/models/plugins/peertube-plugin-index.model'
+import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
 
 @DefaultScope(() => ({
   attributes: {
@@ -236,6 +236,19 @@ export class PluginModel extends Model<PluginModel> {
     if (type === PluginType.THEME) return 'peertube-theme-' + name
 
     return 'peertube-plugin-' + name
+  }
+
+  getPublicSettings (registeredSettings: RegisterServerSettingOptions[]) {
+    const result: { [ name: string ]: string } = {}
+    const settings = this.settings || {}
+
+    for (const r of registeredSettings) {
+      if (r.private !== false) continue
+
+      result[r.name] = settings[r.name] || r.default || null
+    }
+
+    return result
   }
 
   toFormattedJSON (): PeerTubePlugin {
