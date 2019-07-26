@@ -11,6 +11,11 @@
   - [Server helpers (only for plugins)](#server-helpers-only-for-plugins)
     - [Settings](#settings)
     - [Storage](#storage)
+    - [Update video constants](#update-video-constants)
+  - [Client helpers (themes & plugins)](#client-helpers-themes--plugins)
+  - [Plugin static route](#plugin-static-route)
+    - [Translate](#translate)
+    - [Get public settings](#get-public-settings)
   - [Publishing](#publishing)
 - [Write a plugin/theme](#write-a-plugintheme)
   - [Clone the quickstart repository](#clone-the-quickstart-repository)
@@ -18,8 +23,10 @@
   - [Update README](#update-readme)
   - [Update package.json](#update-packagejson)
   - [Write code](#write-code)
+  - [Add translations](#add-translations)
   - [Test your plugin/theme](#test-your-plugintheme)
   - [Publish](#publish)
+- [Plugin & Theme hooks/helpers API](#plugin--theme-hookshelpers-api)
 - [Tips](#tips)
   - [Compatibility with PeerTube](#compatibility-with-peertube)
   - [Spam/moderation plugin](#spammoderation-plugin)
@@ -40,18 +47,6 @@ A plugin registers functions in JavaScript to execute when PeerTube (server and 
  For example to replace words in video comments, or change the videos list behaviour
  * `action`: used to do something after a certain trigger. For example to send a hook every time a video is published
  * `static`: same than `action` but PeerTube waits their execution
- 
-Example:
-
-```js
-// This register function is called by PeerTube, and **must** return a promise
-async function register ({ registerHook, registerSetting, settingsManager, storageManager, peertubeHelpers }) {
-  registerHook({
-    target: 'action:application.listening',
-    handler: () => displayHelloWorld()
-  })
-}
-```
 
 On server side, these hooks are registered by the `library` file defined in `package.json`.
 
@@ -60,6 +55,27 @@ On server side, these hooks are registered by the `library` file defined in `pac
   ...,
   "library": "./main.js",
   ...,
+}
+```
+
+And `main.js` defines a `register` function:
+
+Example:
+
+```js
+async function register ({
+  registerHook,
+  registerSetting,
+  settingsManager,
+  storageManager,
+  videoCategoryManager,
+  videoLicenceManager,
+  videoLanguageManager
+}) {
+  registerHook({
+    target: 'action:application.listening',
+    handler: () => displayHelloWorld()
+  })
 }
 ```
 
@@ -84,6 +100,17 @@ All client scripts have scopes so PeerTube client only loads scripts it needs:
 }
 ```
 
+And these scripts also define a `register` function:
+
+```js
+function register ({ registerHook, peertubeHelpers }) {
+  registerHook({
+    target: 'action:application.init',
+    handler: () => onApplicationInit(peertubeHelpers)
+  })
+}
+```
+
 ### Static files
 
 Plugins can declare static directories that PeerTube will serve (images for example) 
@@ -93,6 +120,17 @@ or `/themes/{theme-name}/{theme-version}/static/` routes.
 ### CSS
 
 Plugins can declare CSS files that PeerTube will automatically inject in the client.
+If you need to override existing style, you can use the `#custom-css` selector:
+
+```
+body#custom-css {
+  color: red;
+}
+
+#custom-css .header {
+  background-color: red;
+}
+```
 
 ### Server helpers (only for plugins)
 
@@ -123,6 +161,58 @@ Example:
 const value = await storageManager.getData('mykey')
 await storageManager.storeData('mykey', { subkey: 'value' })
 ```
+
+#### Update video constants
+
+You can add/delete video categories, licences or languages using the appropriate managers:
+
+```js
+videoLanguageManager.addLanguage('al_bhed', 'Al Bhed')
+videoLanguageManager.deleteLanguage('fr')
+
+videoCategoryManager.addCategory(42, 'Best category')
+videoCategoryManager.deleteCategory(1) // Music
+
+videoLicenceManager.addLicence(42, 'Best licence')
+videoLicenceManager.deleteLicence(7) // Public domain
+```
+
+### Client helpers (themes & plugins)
+
+### Plugin static route
+
+To get your plugin static route:
+
+```js
+const baseStaticUrl = peertubeHelpers.getBaseStaticRoute()
+const imageUrl = baseStaticUrl + '/images/chocobo.png'
+```
+
+#### Translate
+
+You can translate some strings of your plugin (PeerTube will use your `translations` object of your `package.json` file):
+
+```js
+peertubeHelpers.translate('User name')
+   .then(translation => console.log('Translated User name by ' + translation))
+```
+
+#### Get public settings
+
+To get your public plugin settings:
+
+```js
+peertubeHelpers.getSettings()
+  .then(s => {
+    if (!s || !s['site-id'] || !s['url']) {
+      console.error('Matomo settings are not set.')
+      return
+    }
+    
+    // ...
+  })
+``` 
+
 
 ### Publishing
 
@@ -214,6 +304,24 @@ Now you can register hooks or settings, write CSS and add static directories to 
 **Caution:** It's up to you to check the code you write will be compatible with the PeerTube NodeJS version, 
 and will be supported by web browsers.
 If you want to write modern JavaScript, please use a transpiler like [Babel](https://babeljs.io/).
+
+### Add translations
+
+If you want to translate strings of your plugin (like labels of your registered settings), create a file and add it to `package.json`:
+
+```json
+{
+  ...,
+  "translations": {
+    "fr-FR": "./languages/fr.json",
+    "pt-BR": "./languages/pt-BR.json"
+  },
+  ...
+}
+```
+
+The key should be one of the locales defined in [i18n.ts](https://github.com/Chocobozzz/PeerTube/blob/develop/shared/models/i18n/i18n.ts).
+You **must** use the complete locales (`fr-FR` instead of `fr`).
 
 ### Test your plugin/theme
 
