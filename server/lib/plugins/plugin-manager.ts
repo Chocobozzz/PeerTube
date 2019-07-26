@@ -5,7 +5,7 @@ import { CONFIG } from '../../initializers/config'
 import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
 import { ClientScript, PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'
 import { createReadStream, createWriteStream } from 'fs'
-import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
+import { PLUGIN_GLOBAL_CSS_PATH, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 import { outputFile, readJSON } from 'fs-extra'
@@ -18,6 +18,9 @@ import { PluginLibrary } from '../../typings/plugins'
 import { ClientHtml } from '../client-html'
 import { RegisterServerHookOptions } from '../../../shared/models/plugins/register-server-hook.model'
 import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
+import { PluginVideoLanguageManager } from '../../../shared/models/plugins/plugin-video-language-manager.model'
+import { PluginVideoCategoryManager } from '../../../shared/models/plugins/plugin-video-category-manager.model'
+import { PluginVideoLicenceManager } from '../../../shared/models/plugins/plugin-video-licence-manager.model'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -46,6 +49,17 @@ export interface HookInformationValue {
   priority: number
 }
 
+type AlterableVideoConstant = 'language' | 'licence' | 'category'
+type VideoConstant = { [ key in number | string ]: string }
+type UpdatedVideoConstant = {
+  [ name in AlterableVideoConstant ]: {
+    [ npmName: string ]: {
+      added: { key: number | string, label: string }[],
+      deleted: { key: number | string, label: string }[]
+    }
+  }
+}
+
 export class PluginManager implements ServerHook {
 
   private static instance: PluginManager
@@ -53,6 +67,12 @@ export class PluginManager implements ServerHook {
   private registeredPlugins: { [ name: string ]: RegisteredPlugin } = {}
   private settings: { [ name: string ]: RegisterServerSettingOptions[] } = {}
   private hooks: { [ name: string ]: HookInformationValue[] } = {}
+
+  private updatedVideoConstants: UpdatedVideoConstant = {
+    language: {},
+    licence: {},
+    category: {}
+  }
 
   private constructor () {
   }
@@ -160,6 +180,8 @@ export class PluginManager implements ServerHook {
       for (const key of Object.keys(this.hooks)) {
         this.hooks[key] = this.hooks[key].filter(h => h.pluginName !== npmName)
       }
+
+      this.reinitVideoConstants(plugin.npmName)
 
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
@@ -427,6 +449,24 @@ export class PluginManager implements ServerHook {
       storeData: (key: string, data: any) => PluginModel.storeData(plugin.name, plugin.type, key, data)
     }
 
+    const videoLanguageManager: PluginVideoLanguageManager = {
+      addLanguage: (key: string, label: string) => this.addConstant({ npmName, type: 'language', obj: VIDEO_LANGUAGES, key, label }),
+
+      deleteLanguage: (key: string) => this.deleteConstant({ npmName, type: 'language', obj: VIDEO_LANGUAGES, key })
+    }
+
+    const videoCategoryManager: PluginVideoCategoryManager= {
+      addCategory: (key: number, label: string) => this.addConstant({ npmName, type: 'category', obj: VIDEO_CATEGORIES, key, label }),
+
+      deleteCategory: (key: number) => this.deleteConstant({ npmName, type: 'category', obj: VIDEO_CATEGORIES, key })
+    }
+
+    const videoLicenceManager: PluginVideoLicenceManager = {
+      addLicence: (key: number, label: string) => this.addConstant({ npmName, type: 'licence', obj: VIDEO_LICENCES, key, label }),
+
+      deleteLicence: (key: number) => this.deleteConstant({ npmName, type: 'licence', obj: VIDEO_LICENCES, key })
+    }
+
     const peertubeHelpers = {
       logger
     }
@@ -436,7 +476,87 @@ export class PluginManager implements ServerHook {
       registerSetting,
       settingsManager,
       storageManager,
+      videoLanguageManager,
+      videoCategoryManager,
+      videoLicenceManager,
       peertubeHelpers
+    }
+  }
+
+  private addConstant <T extends string | number> (parameters: {
+    npmName: string,
+    type: AlterableVideoConstant,
+    obj: VideoConstant,
+    key: T,
+    label: string
+  }) {
+    const { npmName, type, obj, key, label } = parameters
+
+    if (obj[key]) {
+      logger.warn('Cannot add %s %s by plugin %s: key already exists.', type, npmName, key)
+      return false
+    }
+
+    if (!this.updatedVideoConstants[type][npmName]) {
+      this.updatedVideoConstants[type][npmName] = {
+        added: [],
+        deleted: []
+      }
+    }
+
+    this.updatedVideoConstants[type][npmName].added.push({ key, label })
+    obj[key] = label
+
+    return true
+  }
+
+  private deleteConstant <T extends string | number> (parameters: {
+    npmName: string,
+    type: AlterableVideoConstant,
+    obj: VideoConstant,
+    key: T
+  }) {
+    const { npmName, type, obj, key } = parameters
+
+    if (!obj[key]) {
+      logger.warn('Cannot delete %s %s by plugin %s: key does not exist.', type, npmName, key)
+      return false
+    }
+
+    if (!this.updatedVideoConstants[type][npmName]) {
+      this.updatedVideoConstants[type][npmName] = {
+        added: [],
+        deleted: []
+      }
+    }
+
+    this.updatedVideoConstants[type][npmName].deleted.push({ key, label: obj[key] })
+    delete obj[key]
+
+    return true
+  }
+
+  private reinitVideoConstants (npmName: string) {
+    const hash = {
+      language: VIDEO_LANGUAGES,
+      licence: VIDEO_LICENCES,
+      category: VIDEO_CATEGORIES
+    }
+    const types: AlterableVideoConstant[] = [ 'language', 'licence', 'category' ]
+
+    for (const type of types) {
+      const updatedConstants = this.updatedVideoConstants[type][npmName]
+      if (!updatedConstants) continue
+
+      for (const added of updatedConstants.added) {
+        delete hash[type][added.key]
+      }
+
+      for (const deleted of updatedConstants.deleted) {
+        hash[type][deleted.key] = deleted.label
+      }
+
+      delete this.updatedVideoConstants[type][npmName]
     }
   }
 
