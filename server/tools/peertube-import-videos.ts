@@ -2,6 +2,7 @@
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import * as program from 'commander'
+import * as moment from 'moment'
 import { join } from 'path'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
@@ -26,13 +27,16 @@ const processOptions = {
 let command = program
   .name('import-videos')
 
+const DATE_FORMAT = 'YYYY-MM-DD';
+
 command = buildCommonVideoOptions(command)
 
 command
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
-  .option('-t, --target-url <targetUrl>', 'Video target URL')
+  .option('--target-url <targetUrl>', 'Video target URL')
+  .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
@@ -107,6 +111,13 @@ function processVideo (parameters: {
 
     const videoInfo = await fetchObject(youtubeInfo)
     if (program[ 'verbose' ]) console.log('Fetched object.', videoInfo)
+    if (program[ 'since' ]) {
+      if (buildOriginallyPublishedAt(videoInfo).getTime() < program[ 'since' ].getTime()) {
+        console.log('Video "%s" has been published before "%s", don\'t upload it.\n',
+          videoInfo.title, moment(program[ 'since' ]).format(DATE_FORMAT));
+        return res();
+      }
+    }
 
     const result = await searchVideoWithSort(url, videoInfo.title, '-match')
 
@@ -341,4 +352,13 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
     console.error('Cannot authenticate. Please check your username/password.')
     process.exit(-1)
   }
+}
+
+function parseDate (dateAsStr: string): Date {
+  const date = moment(dateAsStr, DATE_FORMAT, true);
+  if (!date.isValid()) {
+    console.error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
+    process.exit(-1);
+  }
+  return date.toDate();
 }
