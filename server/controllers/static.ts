@@ -68,13 +68,13 @@ staticRouter.use(
 const thumbnailsPhysicalPath = CONFIG.STORAGE.THUMBNAILS_DIR
 staticRouter.use(
   STATIC_PATHS.THUMBNAILS,
-  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE, fallthrough: false }) // 404 if the file does not exist
+  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
 )
 
 const avatarsPhysicalPath = CONFIG.STORAGE.AVATARS_DIR
 staticRouter.use(
   STATIC_PATHS.AVATARS,
-  express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE, fallthrough: false }) // 404 if the file does not exist
+  express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
 )
 
 // We don't have video previews, fetch them from the origin instance

@@ -500,7 +500,10 @@ const STATIC_DOWNLOAD_PATHS = {
 }
 
 // Cache control
-let STATIC_MAX_AGE = '2h'
+let STATIC_MAX_AGE = {
+  SERVER: '2h',
+  CLIENT: '30d'
+}
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
@@ -604,7 +607,7 @@ if (isTestInstance() === true) {
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
 
-  STATIC_MAX_AGE = '0'
+  STATIC_MAX_AGE.SERVER = '0'
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds

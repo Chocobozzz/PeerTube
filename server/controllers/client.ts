@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
-import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers/constants'
+import { ACCEPT_HEADERS, STATIC_MAX_AGE, STATIC_PATHS } from '../initializers/constants'
 import { asyncMiddleware, embedCSP } from '../middlewares'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
 import { ClientHtml } from '../lib/client-html'
@@ -10,7 +10,6 @@ import { logger } from '../helpers/logger'
 const clientsRouter = express.Router()
 
 const distPath = join(root(), 'client', 'dist')
-const assetsImagesPath = join(root(), 'client', 'dist', 'assets', 'images')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
@@ -42,13 +41,14 @@ const staticClientFiles = [
 ]
 for (const staticClientFile of staticClientFiles) {
   const path = join(root(), 'client', 'dist', staticClientFile)
-  clientsRouter.use('/' + staticClientFile, express.static(path, { maxAge: STATIC_MAX_AGE }))
+
+  clientsRouter.get('/' + staticClientFile, (req: express.Request, res: express.Response) => {
+    res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
+  })
 }
 
-clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
-clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
-
 clientsRouter.use('/client/locales/:locale/:file.json', serveServerTranslations)
+clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.CLIENT }))
 
 // 404 for static files not found
 clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
@@ -74,7 +74,9 @@ async function serveServerTranslations (req: express.Request, res: express.Respo
   if (is18nLocale(locale) && LOCALE_FILES.indexOf(file) !== -1) {
     const completeLocale = getCompleteLocale(locale)
     const completeFileLocale = buildFileLocale(completeLocale)
-    return res.sendFile(join(__dirname, `../../../client/dist/locale/${file}_${completeFileLocale}.json`))
+
+    const path = join(__dirname, `../../../client/dist/locale/${file}_${completeFileLocale}.json`)
+    return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   }
 
   return res.sendStatus(404)
