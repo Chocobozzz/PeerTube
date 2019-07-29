@@ -22,7 +22,7 @@ export class InstanceFeaturesTableComponent implements OnInit {
   }
 
   get dailyUserVideoQuota () {
-    return this.serverService.getConfig().user.videoQuotaDaily
+    return Math.min(this.initialUserVideoQuota, this.serverService.getConfig().user.videoQuotaDaily)
   }
 
   ngOnInit () {
