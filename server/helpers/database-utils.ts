@@ -2,6 +2,7 @@ import * as retry from 'async/retry'
 import * as Bluebird from 'bluebird'
 import { Model } from 'sequelize-typescript'
 import { logger } from './logger'
+import { Transaction } from 'sequelize'
 
 function retryTransactionWrapper <T, A, B, C> (
   functionToRetry: (arg1: A, arg2: B, arg3: C) => Promise<T> | Bluebird<T>,
@@ -72,11 +73,18 @@ function resetSequelizeInstance (instance: Model<any>, savedFields: object) {
   })
 }
 
+function afterCommitIfTransaction (t: Transaction, fn: Function) {
+  if (t) return t.afterCommit(() => fn())
+
+  return fn()
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   resetSequelizeInstance,
   retryTransactionWrapper,
   transactionRetryer,
-  updateInstanceWithAnother
+  updateInstanceWithAnother,
+  afterCommitIfTransaction
 }

@@ -40,7 +40,7 @@ describe('Test emails', function () {
   let emailPort: number
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(50000)
 
     emailPort = await MockSmtpServer.Instance.collectEmails(emails)
 

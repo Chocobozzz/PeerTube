@@ -60,17 +60,19 @@
     "postinstall": "test -n \"$NOCLIENT\" || (cd client && yarn install --pure-lockfile)",
     "tsc": "tsc",
     "commander": "commander",
-    "lint": "npm run travis -- lint",
+    "lint": "npm run ci -- lint",
     "ng": "ng",
     "nodemon": "nodemon",
     "ts-node": "ts-node",
     "tslint": "tslint",
     "concurrently": "concurrently",
+    "mocha-parallel-tests": "mocha-parallel-tests",
     "sasslint": "sass-lint --verbose --no-exit",
     "sasslint:fix": "sass-lint-auto-fix -c .sass-lint.yml --verbose",
     "mocha": "mocha",
-    "travis": "scripty",
+    "ci": "scripty",
     "release": "scripty",
+    "nightly": "scripty",
     "client-report": "scripty"
   },
   "husky": {
@@ -93,7 +95,7 @@
     ]
   },
   "resolutions": {
-    "@types/bluebird": "3.5.21"
+    "@types/bluebird": "3.5.27"
   },
   "dependencies": {
     "apicache": "^1.4.0",
@@ -206,7 +208,7 @@
     "maildev": "^1.0.0-rc3",
     "marked-man": "^0.6.0",
     "mocha": "^6.0.0",
-    "mocha-parallel-tests": "^2.1.0",
+    "mocha-parallel-tests": "^2.2.1",
     "nodemon": "^1.18.6",
     "sass-lint": "^1.12.1",
     "source-map-support": "^0.5.0",

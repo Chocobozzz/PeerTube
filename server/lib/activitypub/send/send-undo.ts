@@ -37,7 +37,7 @@ async function sendUndoFollow (actorFollow: ActorFollowModel, t: Transaction) {
   const followActivity = buildFollowActivity(followUrl, me, following)
   const undoActivity = undoActivityData(undoUrl, me, followActivity)
 
-  return unicastTo(undoActivity, me, following.inboxUrl)
+  t.afterCommit(() => unicastTo(undoActivity, me, following.inboxUrl))
 }
 
 async function sendUndoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {

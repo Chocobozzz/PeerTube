@@ -87,7 +87,7 @@ describe('Test ActivityPub fetcher', function () {
   })
 
   after(async function () {
-    this.timeout(10000)
+    this.timeout(20000)
 
     await cleanupTests(servers)
 

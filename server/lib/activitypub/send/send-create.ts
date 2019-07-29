@@ -11,6 +11,7 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { getServerActor } from '../../../helpers/utils'
+import * as Bluebird from 'bluebird'
 
 async function sendCreateVideo (video: VideoModel, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
@@ -82,7 +83,7 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
-  await broadcastToActors(createActivity, byActor, parentsCommentActors, actorsException)
+  await broadcastToActors(createActivity, byActor, parentsCommentActors, t, actorsException)
 
   // Broadcast to our followers
   await broadcastToFollowers(createActivity, byActor, [ byActor ], t)
@@ -91,7 +92,7 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
   if (isOrigin) return broadcastToFollowers(createActivity, byActor, actorsInvolvedInComment, t, actorsException)
 
   // Send to origin
-  return unicastTo(createActivity, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
+  t.afterCommit(() => unicastTo(createActivity, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl))
 }
 
 function buildCreateActivity (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityCreate {

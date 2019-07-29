@@ -782,7 +782,7 @@ describe('Test users notifications', function () {
     it('Should not send a notification before the video is published', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 100000)
+      let updateAt = new Date(new Date().getTime() + 1000000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -1074,7 +1074,7 @@ describe('Test users notifications', function () {
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 100000)
+      let updateAt = new Date(new Date().getTime() + 1000000)
 
       const name = 'video with auto-blacklist and future schedule ' + uuidv4()
 

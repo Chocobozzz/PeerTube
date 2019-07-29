@@ -85,7 +85,7 @@ describe('Test video update scheduler', function () {
   })
 
   it('Should wait some seconds and have the video in public privacy', async function () {
-    this.timeout(20000)
+    this.timeout(50000)
 
     await wait(15000)
     await waitJobs(servers)

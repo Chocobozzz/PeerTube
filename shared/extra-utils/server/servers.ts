@@ -79,8 +79,8 @@ function flushTests (serverNumber?: number) {
   return new Promise<void>((res, rej) => {
     const suffix = serverNumber ? ` -- ${serverNumber}` : ''
 
-    return exec('npm run clean:server:test' + suffix, err => {
-      if (err) return rej(err)
+    return exec('npm run clean:server:test' + suffix, (err, _stdout, stderr) => {
+      if (err || stderr) return rej(err || new Error(stderr))
 
       return res()
     })

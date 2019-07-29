@@ -5,7 +5,7 @@ set -eu
 recreateDB () {
   dbname="peertube_test$1"
 
-  dropdb --if-exists "$dbname"
+  dropdb --if-exists "$dbname" 2>&1
 
   createdb -O peertube "$dbname"
   psql -c "CREATE EXTENSION pg_trgm;" "$dbname" &
@@ -18,10 +18,15 @@ removeFiles () {
 
 dropRedis () {
   port=$((9000+$1))
+  host="localhost"
 
-  redis-cli KEYS "bull-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
-  redis-cli KEYS "redis-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
-  redis-cli KEYS "*redis-localhost:$port-" | grep -v empty | xargs --no-run-if-empty redis-cli DEL
+  if [ ! -z ${GITLAB_CI+x} ]; then
+    host="redis"
+  fi
+
+  redis-cli -h "$host" KEYS "bull-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "redis-localhost:$port*" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
+  redis-cli -h "$host" KEYS "*redis-localhost:$port-" | grep -v empty | xargs --no-run-if-empty redis-cli -h "$host" DEL
 }
 
 seq=$(seq 1 6)

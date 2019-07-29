@@ -26,7 +26,9 @@ async function sendUpdateVideo (video: VideoModel, t: Transaction, overrodeByAct
   const url = getUpdateActivityPubUrl(video.url, video.updatedAt.toISOString())
 
   // Needed to build the AP object
-  if (!video.VideoCaptions) video.VideoCaptions = await video.$get('VideoCaptions') as VideoCaptionModel[]
+  if (!video.VideoCaptions) {
+    video.VideoCaptions = await video.$get('VideoCaptions', { transaction: t }) as VideoCaptionModel[]
+  }
 
   const videoObject = video.toActivityPubObject()
   const audience = getAudience(byActor, video.privacy === VideoPrivacy.PUBLIC)

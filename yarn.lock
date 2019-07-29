@@ -54,7 +54,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/bluebird@*", "@types/bluebird@3.5.21":
+"@types/bluebird@*", "@types/bluebird@3.5.27":
+  version "3.5.27"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.27.tgz#61eb4d75dc6bfbce51cf49ee9bbebe941b2cb5d0"
+  integrity sha512-6BmYWSBea18+tSjjSC3QIyV93ZKAeNWGM7R6aYt1ryTZXrlHF+QLV0G2yV0viEGVyRkyQsWfMoJ0k/YghBX5sQ==
+
+"@types/bluebird@3.5.21":
   version "3.5.21"
   resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.21.tgz#567615589cc913e84a28ecf9edb031732bdf2634"
   integrity sha512-6UNEwyw+6SGMC/WMI0ld0PS4st7Qq51qgguFrFizOSpGvZiqe9iswztFSdZvwJBEhLOy2JaxNE6VC7yMAlbfyQ==
@@ -4678,7 +4683,7 @@ mkdirp@0.5.1, mkdirp@0.x.x, mkdirp@^0.5.0, mkdirp@^0.5.1, mkdirp@~0.5.1:
   dependencies:
     minimist "0.0.8"
 
-mocha-parallel-tests@^2.1.0:
+mocha-parallel-tests@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/mocha-parallel-tests/-/mocha-parallel-tests-2.2.1.tgz#616b316c9f20c956a6ce18cd38d45e7db3045b99"
   integrity sha512-9t0NtQ2V/KrNKaUj08RVZp0dqJxeRMTGvC7JA5Daw/LA8GOP+4P7NxRgU0e2sM0JRWYxSakXtpE+MEVGX1ifuw==

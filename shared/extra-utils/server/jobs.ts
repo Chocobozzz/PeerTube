@@ -2,6 +2,7 @@ import * as request from 'supertest'
 import { Job, JobState } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
+import { inspect } from 'util'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {
   const path = '/api/v1/jobs/' + state
@@ -49,7 +50,9 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
           .then(res => res.body.data)
           .then((jobs: Job[]) => jobs.filter(j => j.type !== 'videos-views'))
           .then(jobs => {
-            if (jobs.length !== 0) pendingRequests = true
+            if (jobs.length !== 0) {
+              pendingRequests = true
+            }
           })
         tasks.push(p)
       }

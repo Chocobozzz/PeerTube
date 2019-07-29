@@ -20,6 +20,9 @@ database:
   hostname: 'localhost'
   port: 5432
 
+redis:
+  hostname: 'localhost'
+
 smtp:
   hostname: null
   port: 1025

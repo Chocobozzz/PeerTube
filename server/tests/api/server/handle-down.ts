@@ -109,7 +109,7 @@ describe('Test handle downs', function () {
   })
 
   it('Should remove followers that are often down', async function () {
-    this.timeout(60000)
+    this.timeout(240000)
 
     // Server 2 and 3 follow server 1
     await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)

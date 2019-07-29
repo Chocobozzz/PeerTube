@@ -7,6 +7,7 @@ import { JobQueue } from '../../job-queue'
 import { VideoModel } from '../../../models/video/video'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 import { getServerActor } from '../../../helpers/utils'
+import { afterCommitIfTransaction } from '../../../helpers/database-utils'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: ActorModel,
@@ -20,7 +21,9 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
     const audience = getRemoteVideoAudience(options.video, actorsInvolvedInVideo)
     const activity = activityBuilder(audience)
 
-    return unicastTo(activity, options.byActor, options.video.VideoChannel.Account.Actor.sharedInboxUrl)
+    return afterCommitIfTransaction(options.transaction, () => {
+      return unicastTo(activity, options.byActor, options.video.VideoChannel.Account.Actor.sharedInboxUrl)
+    })
   }
 
   // Send to followers
@@ -28,6 +31,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
   const activity = activityBuilder(audience)
 
   const actorsException = [ options.byActor ]
+
   return broadcastToFollowers(activity, options.byActor, actorsInvolvedInVideo, options.transaction, actorsException)
 }
 
@@ -76,7 +80,7 @@ async function forwardActivity (
     uris,
     body: activity
   }
-  return JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
+  return afterCommitIfTransaction(t, () => JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload }))
 }
 
 async function broadcastToFollowers (
@@ -87,20 +91,22 @@ async function broadcastToFollowers (
   actorsException: ActorModel[] = []
 ) {
   const uris = await computeFollowerUris(toFollowersOf, actorsException, t)
-  return broadcastTo(uris, data, byActor)
+
+  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor))
 }
 
 async function broadcastToActors (
   data: any,
   byActor: ActorModel,
   toActors: ActorModel[],
+  t?: Transaction,
   actorsException: ActorModel[] = []
 ) {
   const uris = await computeUris(toActors, actorsException)
-  return broadcastTo(uris, data, byActor)
+  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor))
 }
 
-async function broadcastTo (uris: string[], data: any, byActor: ActorModel) {
+function broadcastTo (uris: string[], data: any, byActor: ActorModel) {
   if (uris.length === 0) return undefined
 
   logger.debug('Creating broadcast job.', { uris })
@@ -114,7 +120,7 @@ async function broadcastTo (uris: string[], data: any, byActor: ActorModel) {
   return JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
 }
 
-async function unicastTo (data: any, byActor: ActorModel, toActorUrl: string) {
+function unicastTo (data: any, byActor: ActorModel, toActorUrl: string) {
   logger.debug('Creating unicast job.', { uri: toActorUrl })
 
   const payload = {
@@ -123,7 +129,7 @@ async function unicastTo (data: any, byActor: ActorModel, toActorUrl: string) {
     body: data
   }
 
-  return JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
+  JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
 }
 
 // ---------------------------------------------------------------------------

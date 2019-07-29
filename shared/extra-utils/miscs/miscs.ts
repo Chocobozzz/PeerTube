@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-expression */
 
 import * as chai from 'chai'
-import { basename, isAbsolute, join, resolve } from 'path'
+import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
-import { pathExists, readFile } from 'fs-extra'
+import { ensureDir, pathExists, readFile } from 'fs-extra'
 import * as ffmpeg from 'fluent-ffmpeg'
 
 const expect = chai.expect
@@ -59,18 +59,20 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   expect(data.length).to.be.below(maxLength)
 }
 
-function buildAbsoluteFixturePath (path: string, customTravisPath = false) {
+function buildAbsoluteFixturePath (path: string, customCIPath = false) {
   if (isAbsolute(path)) {
     return path
   }
 
-  if (customTravisPath && process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
+  if (customCIPath && process.env.GITLAB_CI) return join(root(), 'cached-fixtures', path)
 
   return join(root(), 'server', 'tests', 'fixtures', path)
 }
 
 async function generateHighBitrateVideo () {
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)
+
+  await ensureDir(dirname(tempFixturePath))
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {

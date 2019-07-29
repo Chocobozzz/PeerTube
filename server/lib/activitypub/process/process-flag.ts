@@ -31,7 +31,7 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: flag.object })
 
-  return sequelizeTypescript.transaction(async t => {
+  const videoAbuse = await sequelizeTypescript.transaction(async t => {
     const videoAbuseData = {
       reporterAccountId: account.id,
       reason: flag.content,
@@ -42,8 +42,10 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
     const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t })
     videoAbuseInstance.Video = video
 
-    Notifier.Instance.notifyOnNewVideoAbuse(videoAbuseInstance)
-
     logger.info('Remote abuse for video uuid %s created', flag.object)
+
+    return videoAbuseInstance
   })
+
+  Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
 }

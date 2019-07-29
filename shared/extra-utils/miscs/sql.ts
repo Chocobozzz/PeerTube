@@ -1,6 +1,5 @@
 import { QueryTypes, Sequelize } from 'sequelize'
 import { ServerInfo } from '../server/servers'
-import { PluginType } from '../../models/plugins/plugin.type'
 
 let sequelizes: { [ id: number ]: Sequelize } = {}
 
@@ -10,7 +9,7 @@ function getSequelize (internalServerNumber: number) {
   const dbname = 'peertube_test' + internalServerNumber
   const username = 'peertube'
   const password = 'peertube'
-  const host = 'localhost'
+  const host = process.env.GITLAB_CI ? 'postgres' : 'localhost'
   const port = 5432
 
   const seq = new Sequelize(dbname, username, password, {
