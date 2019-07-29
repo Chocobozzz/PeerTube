@@ -121,7 +121,7 @@ function buildCommonVideoOptions (command: Command) {
     .option('-w, --wait-transcoding', 'Wait transcoding before publishing the video')
 }
 
-async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any) {
+async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
   const defaultBooleanAttributes = {
     nsfw: false,
     commentsEnabled: true,
@@ -147,7 +147,9 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
     licence: command[ 'licence' ] || defaultAttributes.licence || undefined,
     language: command[ 'language' ] || defaultAttributes.language || undefined,
     privacy: command[ 'privacy' ] || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
-    support: command[ 'support' ] || defaultAttributes.support || undefined
+    support: command[ 'support' ] || defaultAttributes.support || undefined,
+    description: command[ 'videoDescription' ] || defaultAttributes.description || undefined,
+    tags: command[ 'tags' ] || defaultAttributes.tags || undefined
   }
 
   Object.assign(videoAttributes, booleanAttributes)

@@ -46,11 +46,7 @@ async function run (url: string, username: string, password: string) {
 
   console.log('Uploading %s video...', program[ 'videoName' ])
 
-  const defaultAttributes = {
-    tags: command[ 'tags' ],
-    description: command[ 'videoDescription' ]
-  }
-  const videoAttributes = await buildVideoAttributesFromCommander(url, program, defaultAttributes)
+  const videoAttributes = await buildVideoAttributesFromCommander(url, program)
 
   Object.assign(videoAttributes, {
     fixture: program[ 'file' ],
