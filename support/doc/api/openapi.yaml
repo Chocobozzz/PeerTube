@@ -96,6 +96,7 @@ x-tagGroups:
     tags:
       - Accounts
       - User
+      - My User
   - name: Videos
     tags:
       - Video
@@ -489,6 +490,20 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUser'
         required: true
+  /users/register:
+    post:
+      summary: Register a user
+      tags:
+        - User
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterUser'
+        required: true
   /users/me:
     get:
       summary: Get current user information
@@ -496,7 +511,7 @@ paths:
         - OAuth2:
           - user
       tags:
-        - User
+        - My User
       responses:
         '200':
           description: successful operation
@@ -512,7 +527,7 @@ paths:
         - OAuth2:
           - user
       tags:
-        - User
+        - My User
       responses:
         '204':
           description: Successful operation
@@ -522,6 +537,25 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateMe'
         required: true
+  /users/me/videos/imports:
+    get:
+      summary: Get video imports of current user
+      security:
+        - OAuth2:
+            - user
+      tags:
+        - My User
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoImport'
   /users/me/video-quota-used:
     get:
       summary: Get current user used quota
@@ -529,7 +563,7 @@ paths:
         - OAuth2:
           - user
       tags:
-        - User
+        - My User
       responses:
         '200':
           description: successful operation
@@ -543,7 +577,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - User
+        - My User
       parameters:
         - name: videoId
           in: path
@@ -565,7 +599,7 @@ paths:
         - OAuth2:
           - user
       tags:
-        - User
+        - My User
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -584,7 +618,7 @@ paths:
         - OAuth2:
             - user
       tags:
-        - User
+        - My User
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -598,7 +632,7 @@ paths:
         - OAuth2:
             - user
       tags:
-        - User
+        - My User
       responses:
         '200':
           description: successful operation
@@ -609,7 +643,7 @@ paths:
         - OAuth2:
             - user
       tags:
-        - User
+        - My User
       parameters:
         - $ref: '#/components/parameters/subscriptionsUris'
       responses:
@@ -626,7 +660,7 @@ paths:
         - OAuth2:
           - user
       tags:
-        - User
+        - My User
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -645,7 +679,7 @@ paths:
         - OAuth2:
             - user
       tags:
-        - User
+        - My User
       parameters:
         - $ref: '#/components/parameters/subscriptionHandle'
       responses:
@@ -661,33 +695,19 @@ paths:
         - OAuth2:
             - user
       tags:
-        - User
+        - My User
       parameters:
         - $ref: '#/components/parameters/subscriptionHandle'
       responses:
         '200':
           description: successful operation
-  /users/register:
-    post:
-      summary: Register a user
-      tags:
-        - User
-      responses:
-        '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/RegisterUser'
-        required: true
   /users/me/avatar/pick:
     post:
       summary: Update current user avatar
       security:
         - OAuth2: []
       tags:
-        - User
+        - My User
       responses:
         '200':
           description: successful operation
@@ -2045,6 +2065,42 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/VideoStreamingPlaylists'
+    VideoImportStateConstant:
+      properties:
+        id:
+          type: integer
+          enum:
+            - 1
+            - 2
+            - 3
+          description: 'The video import state (Pending = 1, Success = 2, Failed = 3)'
+        label:
+          type: string
+    VideoImport:
+      properties:
+        id:
+          type: number
+        targetUrl:
+          type: string
+        magnetUri:
+          type: string
+        torrentName:
+          type: string
+        state:
+          type: object
+          properties:
+            id:
+              $ref: '#/components/schemas/VideoImportStateConstant'
+            label:
+              type: string
+        error:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        video:
+          $ref: '#/components/schemas/Video'
     VideoAbuse:
       properties:
         id:
