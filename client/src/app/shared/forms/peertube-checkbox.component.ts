@@ -19,6 +19,7 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor {
   @Input() labelText: string
   @Input() labelHtml: string
   @Input() helpHtml: string
+  @Input() helpPlacement = 'top'
   @Input() disabled = false
 
   // FIXME: https://github.com/angular/angular/issues/10816#issuecomment-307567836
