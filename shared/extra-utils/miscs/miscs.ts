@@ -64,7 +64,11 @@ function buildAbsoluteFixturePath (path: string, customCIPath = false) {
     return path
   }
 
-  if (customCIPath && process.env.GITLAB_CI) return join(root(), 'cached-fixtures', path)
+  if (customCIPath) {
+    if (process.env.GITLAB_CI) return join(root(), 'cached-fixtures', path)
+
+    if (process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
+  }
 
   return join(root(), 'server', 'tests', 'fixtures', path)
 }
