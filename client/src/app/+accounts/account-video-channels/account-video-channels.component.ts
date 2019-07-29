@@ -89,4 +89,8 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
     this.loadMoreChannels()
   }
+
+  getVideoChannelLink (videoChannel: VideoChannel) {
+    return [ '/video-channels', videoChannel.nameWithHost ]
+  }
 }

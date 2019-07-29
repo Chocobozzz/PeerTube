@@ -5,7 +5,7 @@
   <div class="channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true">
     <div class="section channel" *ngFor="let videoChannel of videoChannels">
       <div class="section-title">
-        <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]" i18n-title title="See this video channel">
+        <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
           <img [src]="videoChannel.avatarUrl" alt="Avatar" />
 
           <div>{{ videoChannel.displayName }}</div>
@@ -20,6 +20,10 @@
 
         <my-video-miniature *ngFor="let video of getVideosOf(videoChannel)" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>
       </div>
+
+      <a class="show-more" i18n [routerLink]="getVideoChannelLink(videoChannel)">
+        Show this channel
+      </a>
     </div>
   </div>
 </div>

@@ -9,7 +9,7 @@ $more-margin-right: 10px;
   width: $video-miniature-width;
   display: inline-flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: $video-miniature-margin-bottom;
   height: 195px;
   vertical-align: top;
 

@@ -142,10 +142,13 @@ $play-overlay-width: 18px;
 @mixin miniature-rows {
   max-height: 540px; // 2 rows max
   overflow: hidden;
-  padding-top: 10px;
 
   &:first-child {
     padding-top: 30px;
+
+    .section-title {
+      border-top: none !important;
+    }
   }
 
   my-video-miniature {
@@ -155,9 +158,11 @@ $play-overlay-width: 18px;
   .section-title {
     font-size: 24px;
     font-weight: $font-semibold;
-    margin-bottom: 30px;
+    padding-top: 15px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid $separator-border-color;
 
     a {
       &:hover, &:focus:not(.focus-visible), &:active {
@@ -192,6 +197,17 @@ $play-overlay-width: 18px;
         top: 2px;
       }
     }
+  }
+
+  .show-more {
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: $grey-foreground-color;
+    margin-bottom: 10px;
+    font-weight: $font-semibold;
   }
 
   @media screen and (max-width: $mobile-view) {
