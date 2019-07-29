@@ -734,7 +734,7 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
   /videos/categories:
     get:
-      summary: Get list of video licences known by the server
+      summary: Get list of video categories known by the server
       tags:
         - Video
       responses:
