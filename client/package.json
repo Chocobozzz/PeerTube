@@ -125,6 +125,7 @@
     "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-dock": "^2.0.2",
     "videojs-hotkeys": "^0.2.21",
+    "videostream": "~3.1",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.0.8",
     "webtorrent": "^0.105.1",

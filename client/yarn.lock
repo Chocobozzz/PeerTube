@@ -5779,7 +5779,7 @@ move-concurrently@^1.0.1:
     rimraf "^2.5.4"
     run-queue "^1.0.3"
 
-mp4-box-encoding@^1.3.0:
+mp4-box-encoding@^1.1.0, mp4-box-encoding@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/mp4-box-encoding/-/mp4-box-encoding-1.3.0.tgz#2a6f750947ff68c3a498fd76cd6424c53d995d48"
   integrity sha512-U4pMLpjT/UzB8d36dxj6Mf1bG9xypEvgbuRIa1fztRXNKKTCAtRxsnFZhNOd7YDFOKtjBgssYGvo4H/Q3ZY1MA==
@@ -5787,6 +5787,17 @@ mp4-box-encoding@^1.3.0:
     buffer-alloc "^1.2.0"
     buffer-from "^1.1.0"
     uint64be "^2.0.2"
+
+mp4-stream@^2.0.0:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/mp4-stream/-/mp4-stream-2.0.3.tgz#30acee07709d323f8dcd87a07b3ce9c3c4bfb364"
+  integrity sha512-5NzgI0+bGakoZEwnIYINXqB3mnewkt3Y7jcvkXsTubnCNUSdM8cpP0Vemxf6FLg0qUN8fydTgNMVAc3QU8B92g==
+  dependencies:
+    buffer-alloc "^1.1.0"
+    inherits "^2.0.1"
+    mp4-box-encoding "^1.1.0"
+    next-event "^1.0.0"
+    readable-stream "^2.0.3"
 
 mp4-stream@^3.0.0:
   version "3.0.0"
@@ -5834,6 +5845,14 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
+
+multistream@^2.0.2:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/multistream/-/multistream-2.1.1.tgz#629d3a29bd76623489980d04519a2c365948148c"
+  integrity sha512-xasv76hl6nr1dEy3lPvy7Ej7K/Lx3O/FCvwge8PeVJpciPPoNCbaANcNiBug3IpdvTveZUcAV0DJzdnUDMesNQ==
+  dependencies:
+    inherits "^2.0.1"
+    readable-stream "^2.0.5"
 
 multistream@^3.0.0:
   version "3.0.0"
@@ -7257,7 +7276,7 @@ read-pkg@^2.0.0:
     normalize-package-data "^2.3.2"
     path-type "^2.0.0"
 
-"readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.4, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.4, readable-stream@^2.3.6, readable-stream@~2.3.6:
+"readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.3, readable-stream@^2.0.4, readable-stream@^2.0.5, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.4, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.6"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.6.tgz#b11c27d88b8ff1fbe070643cf94b0c79ae1b0aaf"
   integrity sha512-tQtKA9WIAhBF3+VLAseyMqZeBjW0AHJoxOtYqSUZNJxauErmLbVm2FW1y+J/YA9dUrAC39ITejlZWhVIwawkKw==
@@ -9248,6 +9267,19 @@ videostream@^3.2.0:
     mediasource "^2.2.2"
     mp4-box-encoding "^1.3.0"
     mp4-stream "^3.0.0"
+    pump "^3.0.0"
+    range-slice-stream "^2.0.0"
+
+videostream@~3.1:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/videostream/-/videostream-3.1.0.tgz#a265ea9bb94462604c3a480920ed0fae1e1fe5b9"
+  integrity sha512-xCIjdqCyYnFxUAYs52GxheAAPO9V+hTQKs/yBUUGFK94db+kJ28B2hvDCnXACEnhX4hf9Cq7G3bVS+fOMpvXKw==
+  dependencies:
+    binary-search "^1.3.4"
+    mediasource "^2.2.2"
+    mp4-box-encoding "^1.3.0"
+    mp4-stream "^2.0.0"
+    multistream "^2.0.2"
     pump "^3.0.0"
     range-slice-stream "^2.0.0"
 
