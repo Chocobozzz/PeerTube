@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.plugin {
+  margin: 15px 0;
+}
+
 .first-row {
   margin-bottom: 10px;
 

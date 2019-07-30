@@ -161,7 +161,7 @@ plugins:
   # This is an unmoderated plugin index, so only install plugins you trust
   index:
     enabled: true
-    check_latest_versions_interval: '1 day' # How often you want to check new plugins/themes versions
+    check_latest_versions_interval: '12 hours' # How often you want to check new plugins/themes versions
     url: 'https://packages.joinpeertube.org'
 
 
