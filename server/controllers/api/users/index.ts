@@ -31,7 +31,8 @@ import {
   usersAskSendVerifyEmailValidator,
   usersBlockingValidator,
   usersResetPasswordValidator,
-  usersVerifyEmailValidator
+  usersVerifyEmailValidator,
+  ensureCanManageUser
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
@@ -97,12 +98,14 @@ usersRouter.post('/:id/block',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersBlockingValidator),
+  ensureCanManageUser,
   asyncMiddleware(blockUser)
 )
 usersRouter.post('/:id/unblock',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersBlockingValidator),
+  ensureCanManageUser,
   asyncMiddleware(unblockUser)
 )
 
@@ -132,6 +135,7 @@ usersRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersUpdateValidator),
+  ensureCanManageUser,
   asyncMiddleware(updateUser)
 )
 
@@ -139,6 +143,7 @@ usersRouter.delete('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_USERS),
   asyncMiddleware(usersRemoveValidator),
+  ensureCanManageUser,
   asyncMiddleware(removeUser)
 )
 
