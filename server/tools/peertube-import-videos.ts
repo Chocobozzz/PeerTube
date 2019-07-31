@@ -2,7 +2,6 @@
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import * as program from 'commander'
-import * as moment from 'moment'
 import { join } from 'path'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
@@ -27,8 +26,6 @@ const processOptions = {
 let command = program
   .name('import-videos')
 
-const DATE_FORMAT = 'YYYY-MM-DD';
-
 command = buildCommonVideoOptions(command)
 
 command
@@ -37,6 +34,7 @@ command
   .option('-p, --password <token>', 'Password')
   .option('--target-url <targetUrl>', 'Video target URL')
   .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
+  .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
@@ -111,10 +109,18 @@ function processVideo (parameters: {
 
     const videoInfo = await fetchObject(youtubeInfo)
     if (program[ 'verbose' ]) console.log('Fetched object.', videoInfo)
+
     if (program[ 'since' ]) {
       if (buildOriginallyPublishedAt(videoInfo).getTime() < program[ 'since' ].getTime()) {
         console.log('Video "%s" has been published before "%s", don\'t upload it.\n',
-          videoInfo.title, moment(program[ 'since' ]).format(DATE_FORMAT));
+          videoInfo.title, formatDate(program[ 'since' ]));
+        return res();
+      }
+    }
+    if (program[ 'until' ]) {
+      if (buildOriginallyPublishedAt(videoInfo).getTime() > program[ 'until' ].getTime()) {
+        console.log('Video "%s" has been published after "%s", don\'t upload it.\n',
+          videoInfo.title, formatDate(program[ 'until' ]));
         return res();
       }
     }
@@ -355,10 +361,18 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
 }
 
 function parseDate (dateAsStr: string): Date {
-  const date = moment(dateAsStr, DATE_FORMAT, true);
-  if (!date.isValid()) {
+  if (!/\d{4}-\d{2}-\d{2}/.test(dateAsStr)) {
+    console.error(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
+    process.exit(-1);
+  }
+  const date = new Date(dateAsStr);
+  if (isNaN(date.getTime())) {
     console.error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
     process.exit(-1);
   }
-  return date.toDate();
+  return date;
+}
+
+function formatDate (date: Date): string {
+  return date.toISOString().split('T')[0];
 }
