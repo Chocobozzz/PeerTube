@@ -37,6 +37,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
   displayOptions = false
 
+  private playlistElementId: number
+
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
@@ -96,6 +98,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
               startTimestamp: existingPlaylist ? existingPlaylist.startTimestamp : undefined,
               stopTimestamp: existingPlaylist ? existingPlaylist.stopTimestamp : undefined
             })
+
+            this.playlistElementId = existingPlaylist ? existingPlaylist.playlistElementId : undefined
           }
 
           this.cd.markForCheck()
@@ -177,7 +181,9 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
 
   private removeVideoFromPlaylist (playlist: PlaylistSummary) {
-    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, this.video.id)
+    if (!this.playlistElementId) return
+
+    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, this.playlistElementId)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Video removed from {{name}}', { name: playlist.displayName }))

@@ -86,6 +86,7 @@ export class PeertubePlayerManager {
 
   private static videojsLocaleCache: { [ path: string ]: any } = {}
   private static playerElementClassName: string
+  private static onPlayerChange: (player: any) => void
 
   static getServerTranslations (serverUrl: string, locale: string) {
     const path = PeertubePlayerManager.getLocalePath(serverUrl, locale)
@@ -100,9 +101,10 @@ export class PeertubePlayerManager {
       })
   }
 
-  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
+  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: any) => void) {
     let p2pMediaLoader: any
 
+    this.onPlayerChange = onPlayerChange
     this.playerElementClassName = options.common.playerElement.className
 
     if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
@@ -171,6 +173,8 @@ export class PeertubePlayerManager {
       const player = this
 
       self.addContextMenu(mode, player, options.common.embedUrl)
+
+      PeertubePlayerManager.onPlayerChange(player)
     })
   }
 

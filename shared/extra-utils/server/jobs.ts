@@ -2,7 +2,6 @@ import * as request from 'supertest'
 import { Job, JobState } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
-import { inspect } from 'util'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {
   const path = '/api/v1/jobs/' + state
@@ -37,11 +36,10 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
-  let pendingRequests = false
+  let pendingRequests: boolean
 
   function tasksBuilder () {
     const tasks: Promise<any>[] = []
-    pendingRequests = false
 
     // Check if each server has pending request
     for (const server of servers) {
@@ -62,6 +60,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   }
 
   do {
+    pendingRequests = false
     await Promise.all(tasksBuilder())
 
     // Retry, in case of new jobs were created

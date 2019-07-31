@@ -67,7 +67,6 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
 
   @BelongsTo(() => ServerModel, {
     foreignKey: {
-      name: 'targetServerId',
       allowNull: false
     },
     onDelete: 'CASCADE'

@@ -4,14 +4,13 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
-import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
 import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
@@ -32,7 +31,6 @@ import { join } from 'path'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getVideoPlaylistActivityPubUrl, getVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
 import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
-import { VideoModel } from '../../models/video/video'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
 import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
@@ -88,7 +86,6 @@ videoPlaylistRouter.get('/:playlistId/videos',
   paginationValidator,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
   asyncMiddleware(getVideoPlaylistVideos)
 )
 
@@ -104,13 +101,13 @@ videoPlaylistRouter.post('/:playlistId/videos/reorder',
   asyncRetryTransactionMiddleware(reorderVideosPlaylist)
 )
 
-videoPlaylistRouter.put('/:playlistId/videos/:videoId',
+videoPlaylistRouter.put('/:playlistId/videos/:playlistElementId',
   authenticate,
   asyncMiddleware(videoPlaylistsUpdateOrRemoveVideoValidator),
   asyncRetryTransactionMiddleware(updateVideoPlaylistElement)
 )
 
-videoPlaylistRouter.delete('/:playlistId/videos/:videoId',
+videoPlaylistRouter.delete('/:playlistId/videos/:playlistElementId',
   authenticate,
   asyncMiddleware(videoPlaylistsUpdateOrRemoveVideoValidator),
   asyncRetryTransactionMiddleware(removeVideoFromPlaylist)
@@ -426,26 +423,20 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
 async function getVideoPlaylistVideos (req: express.Request, res: express.Response) {
   const videoPlaylistInstance = res.locals.videoPlaylist
-  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
+  const server = await getServerActor()
 
-  const resultList = await VideoModel.listForApi({
-    followerActorId,
+  const resultList = await VideoPlaylistElementModel.listForApi({
     start: req.query.start,
     count: req.query.count,
-    sort: 'VideoPlaylistElements.position',
-    includeLocalVideos: true,
-    categoryOneOf: req.query.categoryOneOf,
-    licenceOneOf: req.query.licenceOneOf,
-    languageOneOf: req.query.languageOneOf,
-    tagsOneOf: req.query.tagsOneOf,
-    tagsAllOf: req.query.tagsAllOf,
-    filter: req.query.filter,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
-    withFiles: false,
     videoPlaylistId: videoPlaylistInstance.id,
-    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
+    serverAccount: server.Account,
+    user
   })
 
-  const additionalAttributes = { playlistInfo: true }
-  return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
+  const options = {
+    displayNSFW: buildNSFWFilter(res, req.query.nsfw),
+    accountId: user ? user.Account.id : undefined
+  }
+  return res.json(getFormattedObjects(resultList.data, resultList.total, options))
 }

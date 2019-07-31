@@ -1,7 +1,7 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
 import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
-import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
@@ -71,7 +71,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
         required: true,
         include: [
           {
-            model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] }),
+            model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
             required: true
           },
           {

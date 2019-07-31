@@ -24,7 +24,7 @@ import {
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/account'
+import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -58,6 +58,11 @@ type AvailableForListOptions = {
   actorId: number
 }
 
+export type SummaryOptions = {
+  withAccount?: boolean // Default: false
+  withAccountBlockerIds?: number[]
+}
+
 @DefaultScope(() => ({
   include: [
     {
@@ -67,7 +72,7 @@ type AvailableForListOptions = {
   ]
 }))
 @Scopes(() => ({
-  [ScopeNames.SUMMARY]: (withAccount = false) => {
+  [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const base: FindOptions = {
       attributes: [ 'name', 'description', 'id', 'actorId' ],
       include: [
@@ -90,9 +95,11 @@ type AvailableForListOptions = {
       ]
     }
 
-    if (withAccount === true) {
+    if (options.withAccount === true) {
       base.include.push({
-        model: AccountModel.scope(AccountModelScopeNames.SUMMARY),
+        model: AccountModel.scope({
+          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
+        }),
         required: true
       })
     }

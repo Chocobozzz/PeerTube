@@ -27,10 +27,17 @@ import { UserModel } from './user'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { Op, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
+import { AccountBlocklistModel } from './account-blocklist'
+import { ServerBlocklistModel } from '../server/server-blocklist'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
+}
+
+export type SummaryOptions = {
+  whereActor?: WhereOptions
+  withAccountBlockerIds?: number[]
 }
 
 @DefaultScope(() => ({
@@ -42,8 +49,16 @@ export enum ScopeNames {
   ]
 }))
 @Scopes(() => ({
-  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions) => {
-    return {
+  [ ScopeNames.SUMMARY ]: (options: SummaryOptions = {}) => {
+    const whereActor = options.whereActor || undefined
+
+    const serverInclude: IncludeOptions = {
+      attributes: [ 'host' ],
+      model: ServerModel.unscoped(),
+      required: false
+    }
+
+    const query: FindOptions = {
       attributes: [ 'id', 'name' ],
       include: [
         {
@@ -52,11 +67,8 @@ export enum ScopeNames {
           required: true,
           where: whereActor,
           include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
+            serverInclude,
+
             {
               model: AvatarModel.unscoped(),
               required: false
@@ -65,6 +77,35 @@ export enum ScopeNames {
         }
       ]
     }
+
+    if (options.withAccountBlockerIds) {
+      query.include.push({
+        attributes: [ 'id' ],
+        model: AccountBlocklistModel.unscoped(),
+        as: 'BlockedAccounts',
+        required: false,
+        where: {
+          accountId: {
+            [Op.in]: options.withAccountBlockerIds
+          }
+        }
+      })
+
+      serverInclude.include = [
+        {
+          attributes: [ 'id' ],
+          model: ServerBlocklistModel.unscoped(),
+          required: false,
+          where: {
+            accountId: {
+              [Op.in]: options.withAccountBlockerIds
+            }
+          }
+        }
+      ]
+    }
+
+    return query
   }
 }))
 @Table({
@@ -162,6 +203,16 @@ export class AccountModel extends Model<AccountModel> {
     hooks: true
   })
   VideoComments: VideoCommentModel[]
+
+  @HasMany(() => AccountBlocklistModel, {
+    foreignKey: {
+      name: 'targetAccountId',
+      allowNull: false
+    },
+    as: 'BlockedAccounts',
+    onDelete: 'CASCADE'
+  })
+  BlockedAccounts: AccountBlocklistModel[]
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
@@ -342,5 +393,9 @@ export class AccountModel extends Model<AccountModel> {
 
   getDisplayName () {
     return this.name
+  }
+
+  isBlocked () {
+    return this.BlockedAccounts && this.BlockedAccounts.length !== 0
   }
 }

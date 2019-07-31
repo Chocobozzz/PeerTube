@@ -18,10 +18,13 @@
       <div *ngIf="getVideosOf(videoChannel)" class="videos">
         <div class="no-results" i18n *ngIf="getVideosOf(videoChannel).length === 0">This channel does not have videos.</div>
 
-        <my-video-miniature *ngFor="let video of getVideosOf(videoChannel)" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>
+        <my-video-miniature
+          *ngFor="let video of getVideosOf(videoChannel)"
+          [video]="video" [user]="user" [displayVideoActions]="true"
+        ></my-video-miniature>
       </div>
 
-      <a class="show-more" i18n [routerLink]="getVideoChannelLink(videoChannel)">
+      <a *ngIf="getVideosOf(videoChannel).length !== 0" class="show-more" i18n [routerLink]="getVideoChannelLink(videoChannel)">
         Show this channel
       </a>
     </div>

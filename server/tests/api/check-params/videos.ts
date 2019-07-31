@@ -62,7 +62,7 @@ describe('Test videos API validator', function () {
     }
   })
 
-  describe('When listing a video', function () {
+  describe('When listing videos', function () {
     it('Should fail with a bad start pagination', async function () {
       await checkBadStartPagination(server.url, path)
     })

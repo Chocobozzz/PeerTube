@@ -2,6 +2,8 @@ import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, Updat
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
+import { AccountBlocklistModel } from '../account/account-blocklist'
+import { ServerBlocklistModel } from './server-blocklist'
 
 @Table({
   tableName: 'server',
@@ -40,6 +42,14 @@ export class ServerModel extends Model<ServerModel> {
   })
   Actors: ActorModel[]
 
+  @HasMany(() => ServerBlocklistModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'CASCADE'
+  })
+  BlockedByAccounts: ServerBlocklistModel[]
+
   static loadByHost (host: string) {
     const query = {
       where: {
@@ -48,6 +58,10 @@ export class ServerModel extends Model<ServerModel> {
     }
 
     return ServerModel.findOne(query)
+  }
+
+  isBlocked () {
+    return this.BlockedByAccounts && this.BlockedByAccounts.length !== 0
   }
 
   toFormattedJSON () {
