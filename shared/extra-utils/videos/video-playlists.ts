@@ -196,11 +196,11 @@ function updateVideoPlaylistElement (options: {
   url: string,
   token: string,
   playlistId: number | string,
-  videoId: number | string,
+  playlistElementId: number | string,
   elementAttrs: VideoPlaylistElementUpdate,
   expectedStatus?: number
 }) {
-  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.playlistElementId
 
   return makePutBodyRequest({
     url: options.url,
@@ -215,10 +215,10 @@ function removeVideoFromPlaylist (options: {
   url: string,
   token: string,
   playlistId: number | string,
-  videoId: number | string,
+  playlistElementId: number,
   expectedStatus?: number
 }) {
-  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.playlistElementId
 
   return makeDeleteRequest({
     url: options.url,

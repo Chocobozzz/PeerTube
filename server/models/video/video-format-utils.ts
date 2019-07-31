@@ -26,7 +26,6 @@ export type VideoFormattingJSONOptions = {
     waitTranscoding?: boolean,
     scheduledUpdate?: boolean,
     blacklistInfo?: boolean
-    playlistInfo?: boolean
   }
 }
 function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormattingJSONOptions): Video {
@@ -97,17 +96,6 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
     if (options.additionalAttributes.blacklistInfo === true) {
       videoObject.blacklisted = !!video.VideoBlacklist
       videoObject.blacklistedReason = video.VideoBlacklist ? video.VideoBlacklist.reason : null
-    }
-
-    if (options.additionalAttributes.playlistInfo === true) {
-      // We filtered on a specific videoId/videoPlaylistId, that is unique
-      const playlistElement = video.VideoPlaylistElements[0]
-
-      videoObject.playlistElement = {
-        position: playlistElement.position,
-        startTimestamp: playlistElement.startTimestamp,
-        stopTimestamp: playlistElement.stopTimestamp
-      }
     }
   }
 

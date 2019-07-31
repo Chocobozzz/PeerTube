@@ -43,6 +43,9 @@ class SettingsMenuItem extends MenuItem {
     player.ready(() => {
       // Voodoo magic for IOS
       setTimeout(() => {
+        // Player was destroyed
+        if (!this.player_) return
+
         this.build()
 
         // Update on rate change

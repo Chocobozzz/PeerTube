@@ -1922,6 +1922,9 @@ components:
           type: number
         stopTimestamp:
           type: number
+        video:
+          nullable: true
+          $ref: '#/components/schemas/Video'
     VideoFile:
       properties:
         magnetUri:
@@ -2029,9 +2032,6 @@ components:
           properties:
             currentTime:
               type: number
-        playlistElement:
-          nullable: true
-          $ref: '#/components/schemas/PlaylistElement'
     VideoDetails:
       allOf:
         - $ref: '#/components/schemas/Video'

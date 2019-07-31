@@ -9,7 +9,7 @@ import { ActorModel } from '../activitypub/actor'
 import { getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { AccountVideoRate } from '../../../shared'
-import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from '../video/video-channel'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
 
 /*
   Account rates per video.
@@ -109,7 +109,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
           required: true,
           include: [
             {
-              model: VideoChannelModel.scope({ method: [VideoChannelScopeNames.SUMMARY, true] }),
+              model: VideoChannelModel.scope({ method: [VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
               required: true
             }
           ]

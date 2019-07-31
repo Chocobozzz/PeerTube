@@ -3,15 +3,13 @@ import { Notifier, ServerService } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { Video } from '@app/shared/video/video.model'
-import { Subject, Subscription } from 'rxjs'
+import { Subscription } from 'rxjs'
 import { ActivatedRoute } from '@angular/router'
-import { VideoService } from '@app/shared/video/video.service'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { CdkDragDrop, CdkDragMove } from '@angular/cdk/drag-drop'
-import { throttleTime } from 'rxjs/operators'
+import { CdkDragDrop } from '@angular/cdk/drag-drop'
+import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 
 @Component({
   selector: 'my-account-video-playlist-elements',
@@ -19,7 +17,7 @@ import { throttleTime } from 'rxjs/operators'
   styleUrls: [ './my-account-video-playlist-elements.component.scss' ]
 })
 export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestroy {
-  videos: Video[] = []
+  playlistElements: VideoPlaylistElement[] = []
   playlist: VideoPlaylist
 
   pagination: ComponentPagination = {
@@ -30,7 +28,6 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   private videoPlaylistId: string | number
   private paramsSub: Subscription
-  private dragMoveSubject = new Subject<number>()
 
   constructor (
     private authService: AuthService,
@@ -39,7 +36,6 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
     private confirmService: ConfirmService,
     private route: ActivatedRoute,
     private i18n: I18n,
-    private videoService: VideoService,
     private videoPlaylistService: VideoPlaylistService
   ) {}
 
@@ -50,10 +46,6 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
       this.loadPlaylistInfo()
     })
-
-    this.dragMoveSubject.asObservable()
-      .pipe(throttleTime(200))
-      .subscribe(y => this.checkScroll(y))
   }
 
   ngOnDestroy () {
@@ -66,8 +58,8 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
     if (previousIndex === newIndex) return
 
-    const oldPosition = this.videos[previousIndex].playlistElement.position
-    let insertAfter = this.videos[newIndex].playlistElement.position
+    const oldPosition = this.playlistElements[previousIndex].position
+    let insertAfter = this.playlistElements[newIndex].position
 
     if (oldPosition > insertAfter) insertAfter--
 
@@ -78,42 +70,16 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
         err => this.notifier.error(err.message)
       )
 
-    const video = this.videos[previousIndex]
+    const element = this.playlistElements[previousIndex]
 
-    this.videos.splice(previousIndex, 1)
-    this.videos.splice(newIndex, 0, video)
+    this.playlistElements.splice(previousIndex, 1)
+    this.playlistElements.splice(newIndex, 0, element)
 
     this.reorderClientPositions()
   }
 
-  onDragMove (event: CdkDragMove<any>) {
-    this.dragMoveSubject.next(event.pointerPosition.y)
-  }
-
-  checkScroll (pointerY: number) {
-    // FIXME: Uncomment when https://github.com/angular/material2/issues/14098 is fixed
-    // FIXME: Remove when https://github.com/angular/material2/issues/13588 is implemented
-    // if (pointerY < 150) {
-    //   window.scrollBy({
-    //     left: 0,
-    //     top: -20,
-    //     behavior: 'smooth'
-    //   })
-    //
-    //   return
-    // }
-    //
-    // if (window.innerHeight - pointerY <= 50) {
-    //   window.scrollBy({
-    //     left: 0,
-    //     top: 20,
-    //     behavior: 'smooth'
-    //   })
-    // }
-  }
-
-  onElementRemoved (video: Video) {
-    this.videos = this.videos.filter(v => v.id !== video.id)
+  onElementRemoved (element: VideoPlaylistElement) {
+    this.playlistElements = this.playlistElements.filter(v => v.id !== element.id)
     this.reorderClientPositions()
   }
 
@@ -125,14 +91,14 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
     this.loadElements()
   }
 
-  trackByFn (index: number, elem: Video) {
+  trackByFn (index: number, elem: VideoPlaylistElement) {
     return elem.id
   }
 
   private loadElements () {
-    this.videoService.getPlaylistVideos(this.videoPlaylistId, this.pagination)
+    this.videoPlaylistService.getPlaylistVideos(this.videoPlaylistId, this.pagination)
         .subscribe(({ total, data }) => {
-          this.videos = this.videos.concat(data)
+          this.playlistElements = this.playlistElements.concat(data)
           this.pagination.totalItems = total
         })
   }
@@ -147,8 +113,8 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
   private reorderClientPositions () {
     let i = 1
 
-    for (const video of this.videos) {
-      video.playlistElement.position = i
+    for (const element of this.playlistElements) {
+      element.position = i
       i++
     }
   }

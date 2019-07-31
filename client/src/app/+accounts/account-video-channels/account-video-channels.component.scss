@@ -23,6 +23,11 @@
       height: 50px;
     }
   }
+
+  my-video-miniature ::ng-deep my-video-actions-dropdown > my-action-dropdown {
+    // Fix our overflow
+    position: absolute;
+  }
 }
 
 

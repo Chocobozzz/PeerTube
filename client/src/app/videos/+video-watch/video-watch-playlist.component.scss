@@ -53,6 +53,11 @@
       my-video-thumbnail {
         @include thumbnail-size-component(90px, 50px);
       }
+
+      .fake-thumbnail {
+        width: 90px;
+        height: 50px;
+      }
     }
   }
 }

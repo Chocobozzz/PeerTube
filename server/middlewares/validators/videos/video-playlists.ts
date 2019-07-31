@@ -207,8 +207,8 @@ const videoPlaylistsAddVideoValidator = [
 const videoPlaylistsUpdateOrRemoveVideoValidator = [
   param('playlistId')
     .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
-  param('videoId')
-    .custom(isIdOrUUIDValid).withMessage('Should have an video id/uuid'),
+  param('playlistElementId')
+    .custom(isIdValid).withMessage('Should have an element id/uuid'),
   body('startTimestamp')
     .optional()
     .custom(isVideoPlaylistTimestampValid).withMessage('Should have a valid start timestamp'),
@@ -222,12 +222,10 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
     if (areValidationErrors(req, res)) return
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
-    if (!await doesVideoExist(req.params.videoId, res, 'id')) return
 
     const videoPlaylist = res.locals.videoPlaylist
-    const video = res.locals.video
 
-    const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndVideo(videoPlaylist.id, video.id)
+    const videoPlaylistElement = await VideoPlaylistElementModel.loadById(req.params.playlistElementId)
     if (!videoPlaylistElement) {
       res.status(404)
          .json({ error: 'Video playlist element not found' })

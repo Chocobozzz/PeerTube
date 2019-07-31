@@ -91,7 +91,7 @@ import {
 } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
-import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 import { VideoCommentModel } from './video-comment'
 import { VideoFileModel } from './video-file'
 import { VideoShareModel } from './video-share'
@@ -190,26 +190,29 @@ export enum ScopeNames {
   WITH_FILES = 'WITH_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
+  WITH_BLOCKLIST = 'WITH_BLOCKLIST',
   WITH_USER_HISTORY = 'WITH_USER_HISTORY',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
   WITH_USER_ID = 'WITH_USER_ID',
   WITH_THUMBNAILS = 'WITH_THUMBNAILS'
 }
 
-type ForAPIOptions = {
-  ids: number[]
+export type ForAPIOptions = {
+  ids?: number[]
 
   videoPlaylistId?: number
 
   withFiles?: boolean
+
+  withAccountBlockerIds?: number[]
 }
 
-type AvailableForListIDsOptions = {
+export type AvailableForListIDsOptions = {
   serverAccountId: number
   followerActorId: number
   includeLocalVideos: boolean
 
-  withoutId?: boolean
+  attributesType?: 'none' | 'id' | 'all'
 
   filter?: VideoFilter
   categoryOneOf?: number[]
@@ -236,14 +239,16 @@ type AvailableForListIDsOptions = {
 @Scopes(() => ({
   [ ScopeNames.FOR_API ]: (options: ForAPIOptions) => {
     const query: FindOptions = {
-      where: {
-        id: {
-          [ Op.in ]: options.ids // FIXME: sequelize ANY seems broken
-        }
-      },
       include: [
         {
-          model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, true ] }),
+          model: VideoChannelModel.scope({
+            method: [
+              VideoChannelScopeNames.SUMMARY, {
+                withAccount: true,
+                withAccountBlockerIds: options.withAccountBlockerIds
+              } as SummaryOptions
+            ]
+          }),
           required: true
         },
         {
@@ -252,6 +257,14 @@ type AvailableForListIDsOptions = {
           required: false
         }
       ]
+    }
+
+    if (options.ids) {
+      query.where = {
+        id: {
+          [ Op.in ]: options.ids // FIXME: sequelize ANY seems broken
+        }
+      }
     }
 
     if (options.withFiles === true) {
@@ -278,9 +291,13 @@ type AvailableForListIDsOptions = {
 
     const query: FindOptions = {
       raw: true,
-      attributes: options.withoutId === true ? [] : [ 'id' ],
       include: []
     }
+
+    const attributesType = options.attributesType || 'id'
+
+    if (attributesType === 'id') query.attributes = [ 'id' ]
+    else if (attributesType === 'none') query.attributes = [ ]
 
     whereAnd.push({
       id: {
@@ -290,17 +307,19 @@ type AvailableForListIDsOptions = {
       }
     })
 
-    whereAnd.push({
-      channelId: {
-        [ Op.notIn ]: Sequelize.literal(
-          '(' +
-            'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
-              buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
-            ')' +
-          ')'
-        )
-      }
-    })
+    if (options.serverAccountId) {
+      whereAnd.push({
+        channelId: {
+          [ Op.notIn ]: Sequelize.literal(
+            '(' +
+              'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
+                buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
+              ')' +
+            ')'
+          )
+        }
+      })
+    }
 
     // Only list public/published videos
     if (!options.filter || options.filter !== 'all-local') {
@@ -527,6 +546,9 @@ type AvailableForListIDsOptions = {
     }
 
     return query
+  },
+  [ScopeNames.WITH_BLOCKLIST]: {
+
   },
   [ ScopeNames.WITH_THUMBNAILS ]: {
     include: [
@@ -845,9 +867,9 @@ export class VideoModel extends Model<VideoModel> {
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
       name: 'videoId',
-      allowNull: false
+      allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'set null'
   })
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
@@ -1586,7 +1608,7 @@ export class VideoModel extends Model<VideoModel> {
       serverAccountId: serverActor.Account.id,
       followerActorId,
       includeLocalVideos: true,
-      withoutId: true // Don't break aggregation
+      attributesType: 'none' // Don't break aggregation
     }
 
     const query: FindOptions = {
@@ -1717,6 +1739,11 @@ export class VideoModel extends Model<VideoModel> {
 
   isBlacklisted () {
     return !!this.VideoBlacklist
+  }
+
+  isBlocked () {
+    return (this.VideoChannel.Account.Actor.Server && this.VideoChannel.Account.Actor.Server.isBlocked()) ||
+      this.VideoChannel.Account.isBlocked()
   }
 
   getOriginalFile () {
