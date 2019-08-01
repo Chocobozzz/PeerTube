@@ -2,7 +2,7 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  
+**Table of Contents**
 
 - [Remote Tools](#remote-tools)
   - [Dependencies](#dependencies)
@@ -114,7 +114,7 @@ $ peertube plugins uninstall --npm-name peertube-plugin-myplugin
 
 #### peertube-import-videos.js
 
-You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
+You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.
 Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
@@ -141,6 +141,19 @@ Already downloaded videos will not be uploaded twice, so you can run and re-run 
 
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
+**NB**: If you want to synchronize a Youtube channel to your PeerTube instance (ensure you have the agreement from the author),
+you can add a [crontab rule](https://help.ubuntu.com/community/CronHowto) (or an equivalent of your OS) and insert
+these rules (ensure to customize them to your needs):
+
+```
+# Update youtube-dl every day at midnight
+0 0 * * * /usr/bin/npm rebuild youtube-dl --prefix /PATH/TO/PEERTUBE/
+
+# Synchronize the YT channel every sunday at 22:00 all the videos published since last monday included
+0 22 * * 0 /usr/bin/node /PATH/TO/PEERTUBE/dist/server/tools/peertube-import-videos.js -u '__PEERTUBE_URL__' -U '__USER__' --password '__PASSWORD__' --target-url 'https://www.youtube.com/channel/___CHANNEL__' --since $(date --date="-6 days" +%Y-%m-%d)
+```
+
+Also you may want to subscribe to the PeerTube channel in order to manually check the synchronization is successful.
 
 #### peertube-upload.js
 
@@ -195,7 +208,7 @@ Or to transcode to a specific resolution:
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
-   
+
 ### create-import-video-file-job.js
 
 You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video. PeerTube needs to be running.
