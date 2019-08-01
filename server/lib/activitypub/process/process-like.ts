@@ -34,18 +34,19 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
     const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, url)
     if (existingRate && existingRate.type === 'like') return
 
-    await AccountVideoRateModel.create({
-      type: 'like' as 'like',
-      videoId: video.id,
-      accountId: byAccount.id,
-      url
-    }, { transaction: t })
-
-    await video.increment('likes', { transaction: t })
-
     if (existingRate && existingRate.type === 'dislike') {
       await video.decrement('dislikes', { transaction: t })
     }
+
+    await video.increment('likes', { transaction: t })
+
+    const rate = existingRate || new AccountVideoRateModel()
+    rate.type = 'like'
+    rate.videoId = video.id
+    rate.accountId = byAccount.id
+    rate.url = url
+
+    await rate.save({ transaction: t })
 
     if (video.isOwned()) {
       // Don't resend the activity to the sender
