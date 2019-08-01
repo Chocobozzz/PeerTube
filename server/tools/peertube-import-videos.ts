@@ -32,7 +32,9 @@ command
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
-  .option('-t, --target-url <targetUrl>', 'Video target URL')
+  .option('--target-url <targetUrl>', 'Video target URL')
+  .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
+  .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
@@ -107,6 +109,21 @@ function processVideo (parameters: {
 
     const videoInfo = await fetchObject(youtubeInfo)
     if (program[ 'verbose' ]) console.log('Fetched object.', videoInfo)
+
+    if (program[ 'since' ]) {
+      if (buildOriginallyPublishedAt(videoInfo).getTime() < program[ 'since' ].getTime()) {
+        console.log('Video "%s" has been published before "%s", don\'t upload it.\n',
+          videoInfo.title, formatDate(program[ 'since' ]));
+        return res();
+      }
+    }
+    if (program[ 'until' ]) {
+      if (buildOriginallyPublishedAt(videoInfo).getTime() > program[ 'until' ].getTime()) {
+        console.log('Video "%s" has been published after "%s", don\'t upload it.\n',
+          videoInfo.title, formatDate(program[ 'until' ]));
+        return res();
+      }
+    }
 
     const result = await searchVideoWithSort(url, videoInfo.title, '-match')
 
@@ -341,4 +358,21 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
     console.error('Cannot authenticate. Please check your username/password.')
     process.exit(-1)
   }
+}
+
+function parseDate (dateAsStr: string): Date {
+  if (!/\d{4}-\d{2}-\d{2}/.test(dateAsStr)) {
+    console.error(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
+    process.exit(-1);
+  }
+  const date = new Date(dateAsStr);
+  if (isNaN(date.getTime())) {
+    console.error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
+    process.exit(-1);
+  }
+  return date;
+}
+
+function formatDate (date: Date): string {
+  return date.toISOString().split('T')[0];
 }
