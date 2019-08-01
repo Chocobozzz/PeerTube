@@ -59,9 +59,8 @@ async function processUndoLike (byActor: ActorModel, activity: ActivityUndo) {
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    let rate = await AccountVideoRateModel.loadByUrl(likeActivity.id, t)
-    if (!rate) rate = await AccountVideoRateModel.load(byActor.Account.id, video.id, t)
-    if (!rate) throw new Error(`Unknown rate by account ${byActor.Account.id} for video ${video.id}.`)
+    const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, likeActivity.id, t)
+    if (!rate || rate.type !== 'like') throw new Error(`Unknown like by account ${byActor.Account.id} for video ${video.id}.`)
 
     await rate.destroy({ transaction: t })
     await video.decrement('likes', { transaction: t })
@@ -85,9 +84,8 @@ async function processUndoDislike (byActor: ActorModel, activity: ActivityUndo) 
   return sequelizeTypescript.transaction(async t => {
     if (!byActor.Account) throw new Error('Unknown account ' + byActor.url)
 
-    let rate = await AccountVideoRateModel.loadByUrl(dislike.id, t)
-    if (!rate) rate = await AccountVideoRateModel.load(byActor.Account.id, video.id, t)
-    if (!rate) throw new Error(`Unknown rate by account ${byActor.Account.id} for video ${video.id}.`)
+    const rate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byActor.Account.id, video.id, dislike.id, t)
+    if (!rate || rate.type !== 'dislike') throw new Error(`Unknown dislike by account ${byActor.Account.id} for video ${video.id}.`)
 
     await rate.destroy({ transaction: t })
     await video.decrement('dislikes', { transaction: t })

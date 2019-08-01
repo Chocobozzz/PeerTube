@@ -36,7 +36,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { UserRight, VideoPrivacy, VideoState } from '../../../shared'
+import { UserRight, VideoPrivacy, VideoResolution, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
@@ -1751,6 +1751,12 @@ export class VideoModel extends Model<VideoModel> {
 
     // The original file is the file that have the higher resolution
     return maxBy(this.VideoFiles, file => file.resolution)
+  }
+
+  getFile (resolution: VideoResolution) {
+    if (Array.isArray(this.VideoFiles) === false) return undefined
+
+    return this.VideoFiles.find(f => f.resolution === resolution)
   }
 
   async addAndSaveThumbnail (thumbnail: ThumbnailModel, transaction: Transaction) {

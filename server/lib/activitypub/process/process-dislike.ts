@@ -43,6 +43,10 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
 
     await video.increment('dislikes', { transaction: t })
 
+    if (existingRate && existingRate.type === 'like') {
+      await video.decrement('likes', { transaction: t })
+    }
+
     if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
