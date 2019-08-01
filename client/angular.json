@@ -15,7 +15,7 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -47,10 +47,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
                   "maximumError": "5mb"
                 },
                 {
@@ -130,8 +127,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "tsconfig.app.json"
             ],
             "exclude": [
               "**/node_modules/**"

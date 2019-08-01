@@ -14,6 +14,18 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsButton extends Button {
+  playerComponent = videojs.Player
+  dialog: any
+  dialogEl: any
+  menu: any
+  panel: any
+  panelChild: any
+
+  addSettingsItemHandler: Function
+  disposeSettingsItemHandler: Function
+  playerClickHandler: Function
+  userInactiveHandler: Function
+
   constructor (player: videojs.Player, options: any) {
     super(player, options)
 
