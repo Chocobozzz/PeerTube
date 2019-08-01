@@ -344,6 +344,7 @@ describe('Test video playlists', function () {
   })
 
   describe('List playlists', function () {
+
     it('Should correctly list the playlists', async function () {
       this.timeout(30000)
 

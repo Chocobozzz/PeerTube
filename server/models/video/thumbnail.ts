@@ -44,6 +44,10 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   @Column
   fileUrl: string
 
+  @AllowNull(true)
+  @Column
+  automaticallyGenerated: boolean
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
@@ -88,7 +92,7 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   }
 
   @AfterDestroy
-  static removeFilesAndSendDelete (instance: ThumbnailModel) {
+  static removeFiles (instance: ThumbnailModel) {
     logger.info('Removing %s file %s.', ThumbnailModel.types[instance.type].label, instance.filename)
 
     // Don't block the transaction

@@ -105,6 +105,9 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', playlistObject.id, { err })
     }
+  } else if (refreshedPlaylist.hasThumbnail()) {
+    await refreshedPlaylist.Thumbnail.destroy()
+    refreshedPlaylist.Thumbnail = null
   }
 
   return resetVideoPlaylistElements(accItems, refreshedPlaylist)

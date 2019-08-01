@@ -265,7 +265,6 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
   @HasOne(() => ThumbnailModel, {
-
     foreignKey: {
       name: 'videoPlaylistId',
       allowNull: true
@@ -432,6 +431,10 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   hasThumbnail () {
     return !!this.Thumbnail
+  }
+
+  hasGeneratedThumbnail () {
+    return this.hasThumbnail() && this.Thumbnail.automaticallyGenerated === true
   }
 
   generateThumbnailName () {

@@ -63,24 +63,26 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
     if (oldPosition > insertAfter) insertAfter--
 
-    this.videoPlaylistService.reorderPlaylist(this.playlist.id, oldPosition, insertAfter)
-      .subscribe(
-        () => { /* nothing to do */ },
-
-        err => this.notifier.error(err.message)
-      )
-
     const element = this.playlistElements[previousIndex]
 
     this.playlistElements.splice(previousIndex, 1)
     this.playlistElements.splice(newIndex, 0, element)
 
-    this.reorderClientPositions()
+    this.videoPlaylistService.reorderPlaylist(this.playlist.id, oldPosition, insertAfter)
+      .subscribe(
+        () => {
+          this.reorderClientPositions()
+        },
+
+        err => this.notifier.error(err.message)
+      )
   }
 
   onElementRemoved (element: VideoPlaylistElement) {
+    const oldFirst = this.findFirst()
+
     this.playlistElements = this.playlistElements.filter(v => v.id !== element.id)
-    this.reorderClientPositions()
+    this.reorderClientPositions(oldFirst)
   }
 
   onNearOfBottom () {
@@ -110,12 +112,25 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
       })
   }
 
-  private reorderClientPositions () {
+  private reorderClientPositions (first?: VideoPlaylistElement) {
+    if (this.playlistElements.length === 0) return
+
+    const oldFirst = first || this.findFirst()
     let i = 1
 
     for (const element of this.playlistElements) {
       element.position = i
       i++
     }
+
+    // Reload playlist thumbnail if the first element changed
+    const newFirst = this.findFirst()
+    if (oldFirst && newFirst && oldFirst.id !== newFirst.id) {
+      this.playlist.refreshThumbnail()
+    }
+  }
+
+  private findFirst () {
+    return this.playlistElements.find(e => e.position === 1)
   }
 }

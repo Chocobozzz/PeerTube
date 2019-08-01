@@ -207,7 +207,7 @@ async function processThumbnail (req: express.Request, video: VideoModel) {
   if (thumbnailField) {
     const thumbnailPhysicalFile = thumbnailField[ 0 ]
 
-    return createVideoMiniatureFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.MINIATURE)
+    return createVideoMiniatureFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.MINIATURE, false)
   }
 
   return undefined
@@ -218,7 +218,7 @@ async function processPreview (req: express.Request, video: VideoModel) {
   if (previewField) {
     const previewPhysicalFile = previewField[0]
 
-    return createVideoMiniatureFromExisting(previewPhysicalFile.path, video, ThumbnailType.PREVIEW)
+    return createVideoMiniatureFromExisting(previewPhysicalFile.path, video, ThumbnailType.PREVIEW, false)
   }
 
   return undefined

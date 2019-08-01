@@ -12,12 +12,18 @@ import { VideoPlaylistModel } from '../models/video/video-playlist'
 
 type ImageSize = { height: number, width: number }
 
-function createPlaylistMiniatureFromExisting (inputPath: string, playlist: VideoPlaylistModel, keepOriginal = false, size?: ImageSize) {
+function createPlaylistMiniatureFromExisting (
+  inputPath: string,
+  playlist: VideoPlaylistModel,
+  automaticallyGenerated: boolean,
+  keepOriginal = false,
+  size?: ImageSize
+) {
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
   const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height }, keepOriginal)
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
 }
 
 function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: VideoPlaylistModel, size?: ImageSize) {
@@ -35,11 +41,17 @@ function createVideoMiniatureFromUrl (fileUrl: string, video: VideoModel, type: 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function createVideoMiniatureFromExisting (inputPath: string, video: VideoModel, type: ThumbnailType, size?: ImageSize) {
+function createVideoMiniatureFromExisting (
+  inputPath: string,
+  video: VideoModel,
+  type: ThumbnailType,
+  automaticallyGenerated: boolean,
+  size?: ImageSize
+) {
   const { filename, outputPath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
   const thumbnailCreator = () => processImage(inputPath, outputPath, { width, height })
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
 }
 
 function generateVideoMiniature (video: VideoModel, videoFile: VideoFileModel, type: ThumbnailType) {
@@ -50,7 +62,7 @@ function generateVideoMiniature (video: VideoModel, videoFile: VideoFileModel, t
     ? () => processImage(ASSETS_PATH.DEFAULT_AUDIO_BACKGROUND, outputPath, { width, height }, true)
     : () => generateImageFromVideoFile(input, basePath, filename, { height, width })
 
-  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail })
+  return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated: true, existingThumbnail })
 }
 
 function createPlaceholderThumbnail (fileUrl: string, video: VideoModel, type: ThumbnailType, size: ImageSize) {
@@ -134,10 +146,11 @@ async function createThumbnailFromFunction (parameters: {
   height: number,
   width: number,
   type: ThumbnailType,
+  automaticallyGenerated?: boolean,
   fileUrl?: string,
   existingThumbnail?: ThumbnailModel
 }) {
-  const { thumbnailCreator, filename, width, height, type, existingThumbnail, fileUrl = null } = parameters
+  const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
 
   const thumbnail = existingThumbnail ? existingThumbnail : new ThumbnailModel()
 
@@ -146,6 +159,7 @@ async function createThumbnailFromFunction (parameters: {
   thumbnail.width = width
   thumbnail.type = type
   thumbnail.fileUrl = fileUrl
+  thumbnail.automaticallyGenerated = automaticallyGenerated
 
   await thumbnailCreator()
 

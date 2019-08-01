@@ -218,6 +218,24 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
       })
   }
 
+  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number) {
+    const query = {
+      order: getSort('position'),
+      where: {
+        videoPlaylistId
+      },
+      include: [
+        {
+          model: VideoModel.scope(VideoScopeNames.WITH_THUMBNAILS),
+          required: true
+        }
+      ]
+    }
+
+    return VideoPlaylistElementModel
+      .findOne(query)
+  }
+
   static getNextPositionOf (videoPlaylistId: number, transaction?: Transaction) {
     const query: AggregateOptions<number> = {
       where: {
