@@ -29,20 +29,21 @@ async function processDislike (activity: ActivityCreate | ActivityDislike, byAct
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: dislikeObject })
 
   return sequelizeTypescript.transaction(async t => {
-    const rate = {
+    const url = getVideoDislikeActivityPubUrl(byActor, video)
+
+    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, url)
+    if (existingRate && existingRate.type === 'dislike') return
+
+    await AccountVideoRateModel.create({
       type: 'dislike' as 'dislike',
       videoId: video.id,
-      accountId: byAccount.id
-    }
+      accountId: byAccount.id,
+      url
+    }, { transaction: t })
 
-    const [ , created ] = await AccountVideoRateModel.findOrCreate({
-      where: rate,
-      defaults: Object.assign({}, rate, { url: getVideoDislikeActivityPubUrl(byActor, video) }),
-      transaction: t
-    })
-    if (created === true) await video.increment('dislikes', { transaction: t })
+    await video.increment('dislikes', { transaction: t })
 
-    if (video.isOwned() && created === true) {
+    if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 

@@ -54,7 +54,7 @@ async function addVideoComment (videoInstance: VideoModel, commentUrl: string) {
   })
 
   if (sanitizeAndCheckVideoCommentObject(body) === false) {
-    logger.debug('Remote video comment JSON is not valid.', { body })
+    logger.debug('Remote video comment JSON %s is not valid.', commentUrl, { body })
     return { created: false }
   }
 

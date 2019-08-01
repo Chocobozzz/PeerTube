@@ -379,7 +379,8 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.field('licence', attributes.licence.toString())
   }
 
-  for (let i = 0; i < attributes.tags.length; i++) {
+  const tags = attributes.tags || []
+  for (let i = 0; i < tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])
   }
 

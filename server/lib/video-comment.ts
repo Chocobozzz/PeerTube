@@ -27,10 +27,10 @@ async function createVideoComment (obj: {
     inReplyToCommentId,
     videoId: obj.video.id,
     accountId: obj.account.id,
-    url: 'fake url'
-  }, { transaction: t, validate: false } as any) // FIXME: sequelize typings
+    url: new Date().toISOString()
+  }, { transaction: t, validate: false })
 
-  comment.set('url', getVideoCommentActivityPubUrl(obj.video, comment))
+  comment.url = getVideoCommentActivityPubUrl(obj.video, comment)
 
   const savedComment = await comment.save({ transaction: t })
   savedComment.InReplyToVideoComment = obj.inReplyToComment

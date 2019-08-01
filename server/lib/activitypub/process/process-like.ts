@@ -29,19 +29,21 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoUrl })
 
   return sequelizeTypescript.transaction(async t => {
-    const rate = {
+    const url = getVideoLikeActivityPubUrl(byActor, video)
+
+    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, url)
+    if (existingRate && existingRate.type === 'like') return
+
+    await AccountVideoRateModel.create({
       type: 'like' as 'like',
       videoId: video.id,
-      accountId: byAccount.id
-    }
-    const [ , created ] = await AccountVideoRateModel.findOrCreate({
-      where: rate,
-      defaults: Object.assign({}, rate, { url: getVideoLikeActivityPubUrl(byActor, video) }),
-      transaction: t
-    })
-    if (created === true) await video.increment('likes', { transaction: t })
+      accountId: byAccount.id,
+      url
+    }, { transaction: t })
 
-    if (video.isOwned() && created === true) {
+    await video.increment('likes', { transaction: t })
+
+    if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 

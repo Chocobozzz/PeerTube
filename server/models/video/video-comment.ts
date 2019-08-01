@@ -472,7 +472,24 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
           [Op.lt]: beforeUpdatedAt
         },
         videoId
-      }
+      },
+      include: [
+        {
+          required: true,
+          model: AccountModel.unscoped(),
+          include: [
+            {
+              required: true,
+              model: ActorModel.unscoped(),
+              where: {
+                serverId: {
+                  [Op.ne]: null
+                }
+              }
+            }
+          ]
+        }
+      ]
     }
 
     return VideoCommentModel.destroy(query)

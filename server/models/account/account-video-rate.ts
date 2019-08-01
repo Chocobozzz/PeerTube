@@ -89,6 +89,25 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findOne(options)
   }
 
+  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, transaction?: Transaction) {
+    const options: FindOptions = {
+      where: {
+        [ Op.or]: [
+          {
+            accountId,
+            videoId
+          },
+          {
+            url
+          }
+        ]
+      }
+    }
+    if (transaction) options.transaction = transaction
+
+    return AccountVideoRateModel.findOne(options)
+  }
+
   static listByAccountForApi (options: {
     start: number,
     count: number,
@@ -202,6 +221,23 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
           videoId,
           type
         },
+        include: [
+          {
+            model: AccountModel.unscoped(),
+            required: true,
+            include: [
+              {
+                model: ActorModel.unscoped(),
+                required: true,
+                where: {
+                  serverId: {
+                    [Op.ne]: null
+                  }
+                }
+              }
+            ]
+          }
+        ],
         transaction: t
       }
 
