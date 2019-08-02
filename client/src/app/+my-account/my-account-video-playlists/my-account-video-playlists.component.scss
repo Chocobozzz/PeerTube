@@ -48,4 +48,16 @@
       margin-top: 10px;
     }
   }
+
+  my-video-playlist-miniature ::ng-deep .miniature {
+    flex-direction: column;
+
+    .miniature-info {
+      margin-left: 0 !important;
+    }
+
+    .miniature-name {
+      max-width: $video-thumbnail-width;
+    }
+  }
 }
