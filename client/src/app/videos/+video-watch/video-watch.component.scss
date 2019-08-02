@@ -82,7 +82,8 @@ $player-factor: 1.7; // 16/9
   }
 
   ::ng-deep .video-js {
-    width: getPlayerWidth(66vh);
+    width: 100%;
+    max-width: getPlayerWidth(66vh);
     height: 66vh;
 
     // VideoJS create an inner video player
