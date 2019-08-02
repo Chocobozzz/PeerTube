@@ -109,8 +109,10 @@ $more-margin-right: 10px;
 
     .video-bottom {
       .video-miniature-information {
-        width: auto;
-        min-width: 500px;
+        @media screen and (min-width: $small-view) {
+          width: auto;
+          min-width: 500px;
+        }
 
         .video-miniature-name {
           @include ellipsis-multiline(1.3em, 2);
