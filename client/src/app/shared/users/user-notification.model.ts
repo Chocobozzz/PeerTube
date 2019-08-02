@@ -148,6 +148,7 @@ export class UserNotification implements UserNotificationServer {
           break
       }
     } catch (err) {
+      this.type = null
       console.error(err)
     }
   }

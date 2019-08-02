@@ -113,6 +113,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     ])
   }
 
+  static removeFollowsOf (actorId: number, t?: Transaction) {
+    const query = {
+      where: {
+        [Op.or]: [
+          {
+            actorId
+          },
+          {
+            targetActorId: actorId
+          }
+        ]
+      },
+      transaction: t
+    }
+
+    return ActorFollowModel.destroy(query)
+  }
+
   // Remove actor follows with a score of 0 (too many requests where they were unreachable)
   static async removeBadActorFollows () {
     const actorFollows = await ActorFollowModel.listBadActorFollows()

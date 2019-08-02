@@ -30,6 +30,7 @@ import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
+import { ActorFollowModel } from '../activitypub/actor-follow'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -220,6 +221,7 @@ export class AccountModel extends Model<AccountModel> {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
     }
 
+    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
     if (instance.isOwned()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
