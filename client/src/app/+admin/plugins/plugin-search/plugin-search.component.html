@@ -29,7 +29,7 @@
   No results.
 </div>
 
-<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true">
+<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()">
   <div class="card plugin" *ngFor="let plugin of plugins">
     <div class="card-body">
       <div class="first-row">

@@ -4,7 +4,7 @@ import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
-import { from, Subscription } from 'rxjs'
+import { from, Subject, Subscription } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { Video } from '@app/shared/video/video.model'
 import { AuthService } from '@app/core'
@@ -32,6 +32,8 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
     itemsPerPage: 12
   }
   videosSort: VideoSortField = '-publishedAt'
+
+  onChannelDataSubject = new Subject<any>()
 
   private accountSub: Subscription
 
@@ -75,6 +77,8 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
         this.videoChannels.push(videoChannel)
 
         this.videos[videoChannel.id] = videos
+
+        this.onChannelDataSubject.next([ videoChannel ])
       })
   }
 

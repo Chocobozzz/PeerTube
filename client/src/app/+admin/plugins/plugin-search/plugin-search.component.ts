@@ -36,6 +36,8 @@ export class PluginSearchComponent implements OnInit {
   installing: { [name: string]: boolean } = {}
   pluginInstalled = false
 
+  onDataSubject = new Subject<any[]>()
+
   private searchSubject = new Subject<string>()
 
   constructor (
@@ -90,6 +92,8 @@ export class PluginSearchComponent implements OnInit {
 
             this.plugins = this.plugins.concat(res.data)
             this.pagination.totalItems = res.total
+
+            this.onDataSubject.next(res.data)
           },
 
           err => {

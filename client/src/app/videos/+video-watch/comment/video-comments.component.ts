@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination, hasMoreItems } from '../../../shared/rest/component-pagination.model'
@@ -37,6 +37,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   threadLoading: { [ id: number ]: boolean } = {}
 
   syndicationItems: Syndication[] = []
+
+  onDataSubject = new Subject<any[]>()
 
   private sub: Subscription
 
@@ -124,6 +126,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       res => {
         this.comments = this.comments.concat(res.data)
         this.componentPagination.totalItems = res.total
+
+        this.onDataSubject.next(res.data)
       },
 
       err => this.notifier.error(err.message)

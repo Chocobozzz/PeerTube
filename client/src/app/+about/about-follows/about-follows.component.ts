@@ -4,6 +4,7 @@ import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pa
 import { Notifier } from '@app/core'
 import { RestService } from '@app/shared'
 import { SortMeta } from 'primeng/api'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-about-follows',
@@ -17,13 +18,13 @@ export class AboutFollowsComponent implements OnInit {
 
   followersPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 40,
+    itemsPerPage: 20,
     totalItems: null
   }
 
   followingsPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 40,
+    itemsPerPage: 20,
     totalItems: null
   }
 
@@ -31,6 +32,8 @@ export class AboutFollowsComponent implements OnInit {
     field: 'createdAt',
     order: -1
   }
+
+  onDataSubject = new Subject<any[]>()
 
   constructor (
     private restService: RestService,
@@ -78,6 +81,8 @@ export class AboutFollowsComponent implements OnInit {
             this.followers = this.followers.concat(newFollowers)
 
             this.followersPagination.totalItems = resultList.total
+
+            this.onDataSubject.next(newFollowers)
           },
 
           err => this.notifier.error(err.message)
@@ -94,6 +99,8 @@ export class AboutFollowsComponent implements OnInit {
             this.followings = this.followings.concat(newFollowings)
 
             this.followingsPagination.totalItems = resultList.total
+
+            this.onDataSubject.next(newFollowings)
           },
 
           err => this.notifier.error(err.message)

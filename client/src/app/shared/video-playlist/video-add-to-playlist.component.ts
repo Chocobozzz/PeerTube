@@ -83,7 +83,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   load () {
     forkJoin([
-      this.videoPlaylistService.listAccountPlaylists(this.user.account, '-updatedAt'),
+      this.videoPlaylistService.listAccountPlaylists(this.user.account, undefined,'-updatedAt'),
       this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
     ])
       .subscribe(

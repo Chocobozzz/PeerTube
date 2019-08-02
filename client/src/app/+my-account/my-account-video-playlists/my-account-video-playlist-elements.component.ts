@@ -3,7 +3,7 @@ import { Notifier, ServerService } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { ActivatedRoute } from '@angular/router'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
@@ -22,9 +22,11 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 30,
+    itemsPerPage: 10,
     totalItems: null
   }
+
+  onDataSubject = new Subject<any[]>()
 
   private videoPlaylistId: string | number
   private paramsSub: Subscription
@@ -102,6 +104,8 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
         .subscribe(({ total, data }) => {
           this.playlistElements = this.playlistElements.concat(data)
           this.pagination.totalItems = total
+
+          this.onDataSubject.next(data)
         })
   }
 

@@ -8,6 +8,7 @@ import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
 import { ActivatedRoute, Router } from '@angular/router'
 import { compareSemVer } from '@shared/core-utils/miscs/miscs'
 import { PluginService } from '@app/core/plugins/plugin.service'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-plugin-list-installed',
@@ -32,6 +33,8 @@ export class PluginListInstalledComponent implements OnInit {
   updating: { [name: string]: boolean } = {}
 
   PluginType = PluginType
+
+  onDataSubject = new Subject<any[]>()
 
   constructor (
     private i18n: I18n,
@@ -67,6 +70,8 @@ export class PluginListInstalledComponent implements OnInit {
           res => {
             this.plugins = this.plugins.concat(res.data)
             this.pagination.totalItems = res.total
+
+            this.onDataSubject.next(res.data)
           },
 
           err => this.notifier.error(err.message)

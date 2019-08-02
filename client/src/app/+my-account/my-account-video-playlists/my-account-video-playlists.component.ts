@@ -9,6 +9,7 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylistType } from '@shared/models'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-account-video-playlists',
@@ -20,9 +21,11 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
 
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10,
+    itemsPerPage: 5,
     totalItems: null
   }
+
+  onDataSubject = new Subject<any[]>()
 
   private user: User
 
@@ -78,11 +81,15 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
   }
 
   private loadVideoPlaylists () {
+    const playlistsObservable = this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt')
+
     this.authService.userInformationLoaded
-        .pipe(flatMap(() => this.videoPlaylistService.listAccountPlaylists(this.user.account, '-updatedAt')))
+        .pipe(flatMap(() => playlistsObservable))
         .subscribe(res => {
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
+
+          this.onDataSubject.next(res.data)
         })
   }
 }

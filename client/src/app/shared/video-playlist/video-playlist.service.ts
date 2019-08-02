@@ -45,21 +45,28 @@ export class VideoPlaylistService {
     )
   }
 
-  listChannelPlaylists (videoChannel: VideoChannel): Observable<ResultList<VideoPlaylist>> {
+  listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPagination): Observable<ResultList<VideoPlaylist>> {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
+    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
-    return this.authHttp.get<ResultList<VideoPlaylist>>(url)
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
                .pipe(
                  switchMap(res => this.extractPlaylists(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  listAccountPlaylists (account: Account, sort: string): Observable<ResultList<VideoPlaylist>> {
+  listAccountPlaylists (account: Account, componentPagination: ComponentPagination, sort: string): Observable<ResultList<VideoPlaylist>> {
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
+    const pagination = componentPagination
+      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      : undefined
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, undefined, sort)
+    params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
                .pipe(

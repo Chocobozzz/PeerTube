@@ -1,7 +1,7 @@
 import { debounceTime, first, tap } from 'rxjs/operators'
 import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { fromEvent, Observable, of, Subscription } from 'rxjs'
+import { fromEvent, Observable, of, Subject, Subscription } from 'rxjs'
 import { AuthService } from '../../core/auth'
 import { ComponentPagination } from '../rest/component-pagination.model'
 import { VideoSortField } from './sort-field.type'
@@ -58,6 +58,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     state: false,
     blacklistInfo: false
   }
+
+  onDataSubject = new Subject<any[]>()
 
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
@@ -147,6 +149,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
         if (this.groupByDate) this.buildGroupedDateLabels()
 
         this.onMoreVideos()
+
+        this.onDataSubject.next(data)
       },
 
       error => this.notifier.error(error.message)
