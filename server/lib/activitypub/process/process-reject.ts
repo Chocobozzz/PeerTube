@@ -2,8 +2,10 @@ import { ActivityReject } from '../../../../shared/models/activitypub/activity'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processRejectActivity (activity: ActivityReject, targetActor: ActorModel, inboxActor?: ActorModel) {
+async function processRejectActivity (options: APProcessorOptions<ActivityReject>) {
+  const { byActor: targetActor, inboxActor } = options
   if (inboxActor === undefined) throw new Error('Need to reject on explicit inbox.')
 
   return processReject(inboxActor, targetActor)

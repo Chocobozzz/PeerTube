@@ -8,9 +8,14 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { VideoModel } from '../../../models/video/video'
 import { logger } from '../../../helpers/logger'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processAnnounceActivity (activity: ActivityAnnounce, actorAnnouncer: ActorModel) {
-  return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity)
+async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
+  const { activity, byActor: actorAnnouncer } = options
+  // Only notify if it is not from a fetcher job
+  const notify = options.fromFetch !== true
+
+  return retryTransactionWrapper(processVideoShare, actorAnnouncer, activity, notify)
 }
 
 // ---------------------------------------------------------------------------
@@ -21,7 +26,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce) {
+async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce, notify: boolean) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
 
   let video: VideoModel
@@ -63,5 +68,5 @@ async function processVideoShare (actorAnnouncer: ActorModel, activity: Activity
     return undefined
   })
 
-  if (videoCreated) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (videoCreated && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 }

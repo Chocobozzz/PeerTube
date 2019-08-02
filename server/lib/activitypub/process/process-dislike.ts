@@ -7,8 +7,10 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getVideoDislikeActivityPubUrl } from '../url'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processDislikeActivity (activity: ActivityCreate | ActivityDislike, byActor: ActorModel) {
+async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
+  const { activity, byActor } = options
   return retryTransactionWrapper(processDislike, activity, byActor)
 }
 

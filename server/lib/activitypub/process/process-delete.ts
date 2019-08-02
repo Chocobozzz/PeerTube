@@ -9,8 +9,11 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processDeleteActivity (activity: ActivityDelete, byActor: ActorModel) {
+async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
+  const { activity, byActor } = options
+
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
 
   if (activity.actor === objectUrl) {

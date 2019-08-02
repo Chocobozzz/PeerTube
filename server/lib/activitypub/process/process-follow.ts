@@ -9,8 +9,10 @@ import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processFollowActivity (activity: ActivityFollow, byActor: ActorModel) {
+async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
+  const { activity, byActor } = options
   const activityObject = getAPId(activity.object)
 
   return retryTransactionWrapper(processFollow, byActor, activityObject)

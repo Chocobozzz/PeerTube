@@ -12,17 +12,22 @@ import { Notifier } from '../../notifier'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { VideoModel } from '../../../models/video/video'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processCreateActivity (activity: ActivityCreate, byActor: ActorModel) {
+async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
+  const { activity, byActor } = options
+
+  // Only notify if it is not from a fetcher job
+  const notify = options.fromFetch !== true
   const activityObject = activity.object
   const activityType = activityObject.type
 
   if (activityType === 'Video') {
-    return processCreateVideo(activity)
+    return processCreateVideo(activity, notify)
   }
 
   if (activityType === 'Note') {
-    return retryTransactionWrapper(processCreateVideoComment, activity, byActor)
+    return retryTransactionWrapper(processCreateVideoComment, activity, byActor, notify)
   }
 
   if (activityType === 'CacheFile') {
@@ -45,12 +50,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateVideo (activity: ActivityCreate) {
+async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
   const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
 
-  if (created) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
   return video
 }
@@ -71,7 +76,7 @@ async function processCreateCacheFile (activity: ActivityCreate, byActor: ActorM
   }
 }
 
-async function processCreateVideoComment (activity: ActivityCreate, byActor: ActorModel) {
+async function processCreateVideoComment (activity: ActivityCreate, byActor: ActorModel, notify: boolean) {
   const commentObject = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 
@@ -99,7 +104,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
     await forwardVideoRelatedActivity(activity, undefined, exceptions, video)
   }
 
-  if (created === true) Notifier.Instance.notifyOnNewComment(comment)
+  if (created && notify) Notifier.Instance.notifyOnNewComment(comment)
 }
 
 async function processCreatePlaylist (activity: ActivityCreate, byActor: ActorModel) {

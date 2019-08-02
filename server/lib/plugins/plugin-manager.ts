@@ -408,9 +408,7 @@ export class PluginManager implements ServerHook {
   private async regeneratePluginGlobalCSS () {
     await this.resetCSSGlobalFile()
 
-    for (const key of Object.keys(this.getRegisteredPlugins())) {
-      const plugin = this.registeredPlugins[key]
-
+    for (const plugin of this.getRegisteredPlugins()) {
       await this.addCSSToGlobalFile(plugin.path, plugin.css)
     }
   }

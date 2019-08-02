@@ -8,8 +8,10 @@ import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processFlagActivity (activity: ActivityCreate | ActivityFlag, byActor: ActorModel) {
+async function processFlagActivity (options: APProcessorOptions<ActivityCreate | ActivityFlag>) {
+  const { activity, byActor } = options
   return retryTransactionWrapper(processCreateVideoAbuse, activity, byActor)
 }
 

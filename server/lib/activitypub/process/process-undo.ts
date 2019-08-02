@@ -10,8 +10,10 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processUndoActivity (activity: ActivityUndo, byActor: ActorModel) {
+async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
+  const { activity, byActor } = options
   const activityToUndo = activity.object
 
   if (activityToUndo.type === 'Like') {

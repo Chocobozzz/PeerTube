@@ -7,8 +7,10 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { getVideoLikeActivityPubUrl } from '../url'
 import { getAPId } from '../../../helpers/activitypub'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processLikeActivity (activity: ActivityLike, byActor: ActorModel) {
+async function processLikeActivity (options: APProcessorOptions<ActivityLike>) {
+  const { activity, byActor } = options
   return retryTransactionWrapper(processLikeVideo, byActor, activity)
 }
 

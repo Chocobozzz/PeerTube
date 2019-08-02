@@ -14,8 +14,11 @@ import { createOrUpdateCacheFile } from '../cache-file'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 
-async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorModel) {
+async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
+  const { activity, byActor } = options
+
   const objectType = activity.object.type
 
   if (objectType === 'Video') {
