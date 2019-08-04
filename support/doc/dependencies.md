@@ -93,10 +93,17 @@ Later when you invoke any node command, please prefix them with `CC=/opt/rh/devt
 $ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
 
-Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+Initialize the PostgreSQL database:
 ```
-$ sudo service redis start
-$ sudo service postgresql start
+$ sudo postgresql-setup initdb
+```
+
+Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
+```
+$ sudo systemctl enable redis
+$ sudo systemctl enable postgresql
+$ sudo systemctl start redis
+$ sudo systemctl start postgresql
 ```
 
 ## Fedora
