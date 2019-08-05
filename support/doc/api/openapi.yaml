@@ -1062,6 +1062,10 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
+                originallyPublishedAt:
+                  description: Date when the content was originally published
+                  type: string
+                  format: date-time
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
               required:
