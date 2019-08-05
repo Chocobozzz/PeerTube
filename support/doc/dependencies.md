@@ -79,7 +79,7 @@ $ sudo systemctl start redis postgresql
 $ sudo yum update
 $ sudo yum install epel-release centos-release-scl
 $ sudo yum update
-$ sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make redis git devtoolset-7
+$ sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git devtoolset-7
 ```
 
   5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-7.
@@ -93,10 +93,17 @@ Later when you invoke any node command, please prefix them with `CC=/opt/rh/devt
 $ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
 
-Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+Initialize the PostgreSQL database:
 ```
-$ sudo service redis start
-$ sudo service postgresql start
+$ sudo postgresql-setup initdb
+```
+
+Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
+```
+$ sudo systemctl enable redis
+$ sudo systemctl enable postgresql
+$ sudo systemctl start redis
+$ sudo systemctl start postgresql
 ```
 
 ## Fedora
