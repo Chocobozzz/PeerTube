@@ -41,7 +41,7 @@ export class ClientHtml {
 
     const [ html, video ] = await Promise.all([
       ClientHtml.getIndexHTML(req, res),
-      VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+      VideoModel.load(videoId)
     ])
 
     // Let Angular application handle errors
