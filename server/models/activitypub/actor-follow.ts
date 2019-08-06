@@ -486,7 +486,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     const me = await getServerActor()
     const serverIdsString = createSafeIn(ActorFollowModel, serverIds)
 
-    const query = `UPDATE "actorFollow" SET "score" = "score" + ${value} ` +
+    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
         'SELECT "actorFollow"."id" FROM "actorFollow" ' +
         'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
