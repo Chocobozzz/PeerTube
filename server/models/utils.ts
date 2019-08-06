@@ -1,7 +1,7 @@
 import { Model, Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
-import { OrderItem } from 'sequelize/types'
+import { OrderItem, literal } from 'sequelize'
 
 type SortType = { sortModel: any, sortValue: string }
 
@@ -129,16 +129,30 @@ function parseAggregateResult (result: any) {
   return total
 }
 
-const createSafeIn = (model: typeof Model, stringArr: string[]) => {
-  return stringArr.map(t => model.sequelize.escape(t))
+const createSafeIn = (model: typeof Model, stringArr: (string | number)[]) => {
+  return stringArr.map(t => model.sequelize.escape('' + t))
                   .join(', ')
+}
+
+function buildLocalAccountIdsIn () {
+  return literal(
+    '(SELECT "account"."id" FROM "account" INNER JOIN "actor" ON "actor"."id" = "account"."actorId" AND "actor"."serverId" IS NULL)'
+  )
+}
+
+function buildLocalActorIdsIn () {
+  return literal(
+    '(SELECT "actor"."id" FROM "actor" WHERE "actor"."serverId" IS NULL)'
+  )
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   buildBlockedAccountSQL,
+  buildLocalActorIdsIn,
   SortType,
+  buildLocalAccountIdsIn,
   getSort,
   getVideoSort,
   getSortOnModel,

@@ -4,7 +4,7 @@ import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { addVideoComment, resolveThread } from '../video-comments'
+import { resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { createOrUpdateCacheFile } from '../cache-file'
@@ -13,6 +13,7 @@ import { PlaylistObject } from '../../../../shared/models/activitypub/objects/pl
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { VideoModel } from '../../../models/video/video'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -83,9 +84,13 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
   let video: VideoModel
+  let created: boolean
+  let comment: VideoCommentModel
   try {
-    const resolveThreadResult = await resolveThread(commentObject.inReplyTo)
+    const resolveThreadResult = await resolveThread({ url: commentObject.id, isVideo: false })
     video = resolveThreadResult.video
+    created = resolveThreadResult.commentCreated
+    comment = resolveThreadResult.comment
   } catch (err) {
     logger.debug(
       'Cannot process video comment because we could not resolve thread %s. Maybe it was not a video thread, so skip it.',
@@ -94,8 +99,6 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
     )
     return
   }
-
-  const { comment, created } = await addVideoComment(video, commentObject.id)
 
   if (video.isOwned() && created === true) {
     // Don't resend the activity to the sender

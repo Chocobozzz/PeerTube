@@ -6,7 +6,7 @@ import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constan
 import { VideoModel } from '../video/video'
 import { AccountModel } from './account'
 import { ActorModel } from '../activitypub/actor'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { AccountVideoRate } from '../../../shared'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
@@ -219,25 +219,11 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
             [Op.lt]: beforeUpdatedAt
           },
           videoId,
-          type
-        },
-        include: [
-          {
-            model: AccountModel.unscoped(),
-            required: true,
-            include: [
-              {
-                model: ActorModel.unscoped(),
-                required: true,
-                where: {
-                  serverId: {
-                    [Op.ne]: null
-                  }
-                }
-              }
-            ]
+          type,
+          accountId: {
+            [Op.notIn]: buildLocalAccountIdsIn()
           }
-        ],
+        },
         transaction: t
       }
 

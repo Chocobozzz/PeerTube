@@ -2,7 +2,7 @@ import { isTestInstance } from '../../helpers/core-utils'
 import { logger } from '../../helpers/logger'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { AbstractScheduler } from './abstract-scheduler'
-import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
+import { ACTOR_FOLLOW_SCORE, SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { ActorFollowScoreCache } from '../files-cache'
 
 export class ActorFollowScheduler extends AbstractScheduler {
@@ -22,13 +22,20 @@ export class ActorFollowScheduler extends AbstractScheduler {
   }
 
   private async processPendingScores () {
-    const pendingScores = ActorFollowScoreCache.Instance.getPendingFollowsScoreCopy()
+    const pendingScores = ActorFollowScoreCache.Instance.getPendingFollowsScore()
+    const badServerIds = ActorFollowScoreCache.Instance.getBadFollowingServerIds()
+    const goodServerIds = ActorFollowScoreCache.Instance.getGoodFollowingServerIds()
 
     ActorFollowScoreCache.Instance.clearPendingFollowsScore()
+    ActorFollowScoreCache.Instance.clearBadFollowingServerIds()
+    ActorFollowScoreCache.Instance.clearGoodFollowingServerIds()
 
     for (const inbox of Object.keys(pendingScores)) {
-      await ActorFollowModel.updateFollowScore(inbox, pendingScores[inbox])
+      await ActorFollowModel.updateScore(inbox, pendingScores[inbox])
     }
+
+    await ActorFollowModel.updateScoreByFollowingServers(badServerIds, ACTOR_FOLLOW_SCORE.PENALTY)
+    await ActorFollowModel.updateScoreByFollowingServers(goodServerIds, ACTOR_FOLLOW_SCORE.BONUS)
   }
 
   private async removeBadActorFollows () {

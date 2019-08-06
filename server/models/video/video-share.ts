@@ -4,7 +4,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid } from '../utils'
+import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { Op, Transaction } from 'sequelize'
@@ -207,19 +207,11 @@ export class VideoShareModel extends Model<VideoShareModel> {
         updatedAt: {
           [Op.lt]: beforeUpdatedAt
         },
-        videoId
-      },
-      include: [
-        {
-          model: ActorModel.unscoped(),
-          required: true,
-          where: {
-            serverId: {
-              [ Op.ne ]: null
-            }
-          }
+        videoId,
+        actorId: {
+          [Op.notIn]: buildLocalActorIdsIn()
         }
-      ]
+      }
     }
 
     return VideoShareModel.destroy(query)

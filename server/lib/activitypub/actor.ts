@@ -254,14 +254,14 @@ async function refreshActorIfNeeded (
       await actor.save({ transaction: t })
 
       if (actor.Account) {
-        actor.Account.set('name', result.name)
-        actor.Account.set('description', result.summary)
+        actor.Account.name = result.name
+        actor.Account.description = result.summary
 
         await actor.Account.save({ transaction: t })
       } else if (actor.VideoChannel) {
-        actor.VideoChannel.set('name', result.name)
-        actor.VideoChannel.set('description', result.summary)
-        actor.VideoChannel.set('support', result.support)
+        actor.VideoChannel.name = result.name
+        actor.VideoChannel.description = result.summary
+        actor.VideoChannel.support = result.support
 
         await actor.VideoChannel.save({ transaction: t })
       }

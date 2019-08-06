@@ -56,6 +56,7 @@ import { join } from 'path'
 import { FilteredModelAttributes } from '../../typings/sequelize'
 import { Hooks } from '../plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
+import { ActorFollowScoreCache } from '../files-cache'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   if (
@@ -182,7 +183,7 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
   }
 
   if (syncParam.comments === true) {
-    const handler = items => addVideoComments(items, video)
+    const handler = items => addVideoComments(items)
     const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
 
     await crawlCollectionPage<string>(fetchedVideo.comments, handler, cleaner)
@@ -421,9 +422,13 @@ async function refreshVideoIfNeeded (options: {
     await retryTransactionWrapper(updateVideoFromAP, updateOptions)
     await syncVideoExternalAttributes(video, videoObject, options.syncParam)
 
+    ActorFollowScoreCache.Instance.addGoodServerId(video.VideoChannel.Actor.serverId)
+
     return video
   } catch (err) {
     logger.warn('Cannot refresh video %s.', options.video.url, { err })
+
+    ActorFollowScoreCache.Instance.addBadServerId(video.VideoChannel.Actor.serverId)
 
     // Don't refresh in loop
     await video.setAsRefreshed()
@@ -500,7 +505,7 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
 
     const videoStreamingPlaylists = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject, videoFiles)
     const playlistPromises = videoStreamingPlaylists.map(p => VideoStreamingPlaylistModel.create(p, { transaction: t }))
-    await Promise.all(playlistPromises)
+    const streamingPlaylists = await Promise.all(playlistPromises)
 
     // Process tags
     const tags = videoObject.tag
@@ -513,7 +518,12 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
     })
-    await Promise.all(videoCaptionsPromises)
+    const captions = await Promise.all(videoCaptionsPromises)
+
+    video.VideoFiles = videoFiles
+    video.VideoStreamingPlaylists = streamingPlaylists
+    video.Tags = tagInstances
+    video.VideoCaptions = captions
 
     const autoBlacklisted = await autoBlacklistVideoIfNeeded({
       video,

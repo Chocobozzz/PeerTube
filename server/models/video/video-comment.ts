@@ -22,7 +22,7 @@ import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { getServerActor } from '../../helpers/utils'
@@ -30,7 +30,7 @@ import { UserModel } from '../account/user'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { regexpCapture } from '../../helpers/regexp'
 import { uniq } from 'lodash'
-import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
+import { FindOptions, literal, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -281,16 +281,22 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Transaction) {
+  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction) {
     const query: FindOptions = {
       where: {
         url
-      }
+      },
+      include: [
+        {
+          attributes: [ 'id', 'url' ],
+          model: VideoModel.unscoped()
+        }
+      ]
     }
 
     if (t !== undefined) query.transaction = t
 
-    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_VIDEO ]).findOne(query)
+    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
   static async listThreadsForApi (parameters: {
@@ -471,25 +477,11 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         updatedAt: {
           [Op.lt]: beforeUpdatedAt
         },
-        videoId
-      },
-      include: [
-        {
-          required: true,
-          model: AccountModel.unscoped(),
-          include: [
-            {
-              required: true,
-              model: ActorModel.unscoped(),
-              where: {
-                serverId: {
-                  [Op.ne]: null
-                }
-              }
-            }
-          ]
+        videoId,
+        accountId: {
+          [Op.notIn]: buildLocalAccountIdsIn()
         }
-      ]
+      }
     }
 
     return VideoCommentModel.destroy(query)

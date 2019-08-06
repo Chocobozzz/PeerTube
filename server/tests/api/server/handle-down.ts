@@ -19,8 +19,9 @@ import {
   setAccessTokensToServers,
   unfollow,
   updateVideo,
-  uploadVideo,
-  wait
+  uploadVideo, uploadVideoAndGetId,
+  wait,
+  setActorFollowScores, closeAllSequelize
 } from '../../../../shared/extra-utils'
 import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
 import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -42,6 +43,8 @@ describe('Test handle downs', function () {
   let missedVideo1: Video
   let missedVideo2: Video
   let unlistedVideo: Video
+
+  let videoIdsServer1: number[] = []
 
   const videoAttributes = {
     name: 'my super name for server 1',
@@ -299,7 +302,54 @@ describe('Test handle downs', function () {
     }
   })
 
+  it('Should upload many videos on server 1', async function () {
+    this.timeout(120000)
+
+    for (let i = 0; i < 10; i++) {
+      const uuid = (await uploadVideoAndGetId({ server: servers[ 0 ], videoName: 'video ' + i })).uuid
+      videoIdsServer1.push(uuid)
+    }
+
+    await waitJobs(servers)
+
+    for (const id of videoIdsServer1) {
+      await getVideo(servers[ 1 ].url, id)
+    }
+
+    await waitJobs(servers)
+    await setActorFollowScores(servers[1].internalServerNumber, 20)
+
+    // Wait video expiration
+    await wait(11000)
+
+    // Refresh video -> score + 10 = 30
+    await getVideo(servers[1].url, videoIdsServer1[0])
+
+    await waitJobs(servers)
+  })
+
+  it('Should remove followings that are down', async function () {
+    this.timeout(120000)
+
+    killallServers([ servers[0] ])
+
+    // Wait video expiration
+    await wait(11000)
+
+    for (let i = 0; i < 3; i++) {
+      await getVideo(servers[1].url, videoIdsServer1[i])
+      await wait(1000)
+      await waitJobs([ servers[1] ])
+    }
+
+    for (const id of videoIdsServer1) {
+      await getVideo(servers[1].url, id, 403)
+    }
+  })
+
   after(async function () {
+    await closeAllSequelize([ servers[1] ])
+
     await cleanupTests(servers)
   })
 })

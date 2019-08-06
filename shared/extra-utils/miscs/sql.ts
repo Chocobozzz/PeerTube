@@ -80,11 +80,20 @@ function setPluginVersion (internalServerNumber: number, pluginName: string, new
   return seq.query(`UPDATE "plugin" SET "version" = '${newVersion}' WHERE "name" = '${pluginName}'`, options)
 }
 
+function setActorFollowScores (internalServerNumber: number, newScore: number) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "actorFollow" SET "score" = ${newScore}`, options)
+}
+
 export {
   setVideoField,
   setPlaylistField,
   setActorField,
   countVideoViewsOf,
   setPluginVersion,
+  setActorFollowScores,
   closeAllSequelize
 }

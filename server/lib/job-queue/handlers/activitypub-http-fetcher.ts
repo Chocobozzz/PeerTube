@@ -37,7 +37,7 @@ async function processActivityPubHttpFetcher (job: Bull.Job) {
     'video-likes': items => createRates(items, video, 'like'),
     'video-dislikes': items => createRates(items, video, 'dislike'),
     'video-shares': items => addVideoShares(items, video),
-    'video-comments': items => addVideoComments(items, video),
+    'video-comments': items => addVideoComments(items),
     'account-playlists': items => createAccountPlaylists(items, account)
   }
 
