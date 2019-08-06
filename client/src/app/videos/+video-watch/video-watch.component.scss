@@ -36,6 +36,7 @@ $player-factor: 1.7; // 16/9
 
       height: $height;
       width: 100%;
+      max-width: initial;
     }
 
     my-video-watch-playlist ::ng-deep .playlist {
