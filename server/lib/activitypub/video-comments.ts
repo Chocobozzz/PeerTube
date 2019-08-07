@@ -141,7 +141,7 @@ async function resolveParentComment (params: ResolveThreadParams) {
     throw new Error(`Comment url ${url} host is different from the AP object id ${body.id}`)
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(actorUrl)
+  const actor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
   const comment = new VideoCommentModel({
     url: body.id,
     text: body.content,
