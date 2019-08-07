@@ -122,6 +122,8 @@ class SettingsButton extends Button {
   }
 
   showDialog () {
+    this.player_.peertube().onMenuOpen()
+
     this.menu.el_.style.opacity = '1'
     this.dialog.show()
 
@@ -129,6 +131,8 @@ class SettingsButton extends Button {
   }
 
   hideDialog () {
+    this.player_.peertube().onMenuClosed()
+
     this.dialog.hide()
     this.setDialogSize(this.getComponentSize(this.menu))
     this.menu.el_.style.opacity = '1'
