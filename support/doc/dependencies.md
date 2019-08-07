@@ -26,7 +26,7 @@
 
   3. Install certbot (choose instructions for nginx and your distribution) :
      [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-  4. Install NodeJS 8.x:
+  4. Install NodeJS 10.x:
      [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
   5. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
      [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
@@ -66,7 +66,7 @@ $ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-  1. Install NodeJS 8.x:
+  1. Install NodeJS 10.x:
      [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
   2. Install yarn:
      [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -121,7 +121,7 @@ su my-peertube-user
 ```
 2. (Optional) Install certbot (choose instructions for nginx and your distribution) :
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-3. Install NodeJS 8.x:
+3. Install NodeJS 10.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 4. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -155,7 +155,7 @@ sudo systemctl start redis.service
 ```
 8. Firewall
 
-By default, you cannot acces your server via public IP. To do so, you must configure firewall:
+By default, you cannot access your server via public IP. To do so, you must configure firewall:
 ```
 # Ports used by peertube dev setup
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp

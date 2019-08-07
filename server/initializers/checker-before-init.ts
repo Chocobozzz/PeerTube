@@ -1,5 +1,6 @@
 import * as config from 'config'
 import { promisify0 } from '../helpers/core-utils'
+import { logger } from '../helpers/logger'
 
 // ONLY USE CORE MODULES IN THIS FILE!
 
@@ -109,10 +110,23 @@ async function checkFFmpegEncoders (): Promise<Map<string, boolean>> {
   return supportedOptionalEncoders
 }
 
+function checkNodeVersion () {
+  const v = process.version
+  const majorString = v.split('.')[0].replace('v', '')
+  const major = parseInt(majorString, 10)
+
+  logger.debug('Checking NodeJS version %s.', v)
+
+  if (major < 10) {
+    logger.warn('Your NodeJS version %s is deprecated. Please use Node 10.', v)
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   checkFFmpeg,
   checkFFmpegEncoders,
-  checkMissedConfig
+  checkMissedConfig,
+  checkNodeVersion
 }

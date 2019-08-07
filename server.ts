@@ -26,7 +26,7 @@ process.title = 'peertube'
 const app = express()
 
 // ----------- Core checker -----------
-import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-before-init'
+import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initializers/checker-before-init'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
 import { CONFIG } from './server/initializers/config'
@@ -44,6 +44,8 @@ checkFFmpeg(CONFIG)
     logger.error('Error in ffmpeg check.', { err })
     process.exit(-1)
   })
+
+checkNodeVersion()
 
 import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
 
