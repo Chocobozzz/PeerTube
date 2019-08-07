@@ -27,6 +27,10 @@ import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../.
 import { AccountModel } from '../../../models/account/account'
 import { Notifier } from '../../../lib/notifier'
 import { Hooks } from '../../../lib/plugins/hooks'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoModel } from '../../../models/video/video'
+import { sendDeleteVideoComment } from '../../../lib/activitypub/send'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -179,6 +183,10 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
 
   await sequelizeTypescript.transaction(async t => {
     await videoCommentInstance.destroy({ transaction: t })
+
+    if (videoCommentInstance.isOwned() || videoCommentInstance.Video.isOwned()) {
+      await sendDeleteVideoComment(videoCommentInstance, t)
+    }
   })
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))

@@ -106,6 +106,10 @@ enum ScopeNames {
             required: true,
             include: [
               {
+                model: ActorModel,
+                required: true
+              },
+              {
                 model: AccountModel,
                 required: true,
                 include: [
@@ -208,41 +212,6 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   })
   Account: AccountModel
 
-  @BeforeDestroy
-  static async sendDeleteIfOwned (instance: VideoCommentModel, options) {
-    if (!instance.Account || !instance.Account.Actor) {
-      instance.Account = await instance.$get('Account', {
-        include: [ ActorModel ],
-        transaction: options.transaction
-      }) as AccountModel
-    }
-
-    if (!instance.Video) {
-      instance.Video = await instance.$get('Video', {
-        include: [
-          {
-            model: VideoChannelModel,
-            include: [
-              {
-                model: AccountModel,
-                include: [
-                  {
-                    model: ActorModel
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        transaction: options.transaction
-      }) as VideoModel
-    }
-
-    if (instance.isOwned()) {
-      await sendDeleteVideoComment(instance, options.transaction)
-    }
-  }
-
   static loadById (id: number, t?: Transaction) {
     const query: FindOptions = {
       where: {
@@ -269,7 +238,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, t?: Transaction) {
+  static loadByUrlAndPopulateAccountAndVideo (url: string, t?: Transaction) {
     const query: FindOptions = {
       where: {
         url
@@ -278,7 +247,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
     if (t !== undefined) query.transaction = t
 
-    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
+    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
   static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction) {

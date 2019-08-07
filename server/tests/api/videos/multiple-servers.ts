@@ -500,20 +500,18 @@ describe('Test multiple servers', function () {
     it('Should view multiple videos on owned servers', async function () {
       this.timeout(30000)
 
-      const tasks: Promise<any>[] = []
       await viewVideo(servers[2].url, localVideosServer3[0])
-      await viewVideo(servers[2].url, localVideosServer3[0])
+      await wait(1000)
+
       await viewVideo(servers[2].url, localVideosServer3[0])
       await viewVideo(servers[2].url, localVideosServer3[1])
 
-      await Promise.all(tasks)
-      await waitJobs(servers)
+      await wait(1000)
 
-      await viewVideo(servers[2].url, localVideosServer3[0])
-
-      await waitJobs(servers)
-
-      await viewVideo(servers[2].url, localVideosServer3[0])
+      await Promise.all([
+        viewVideo(servers[2].url, localVideosServer3[0]),
+        viewVideo(servers[2].url, localVideosServer3[0])
+      ])
 
       await waitJobs(servers)
 
@@ -894,14 +892,14 @@ describe('Test multiple servers', function () {
     it('Should delete the thread comments', async function () {
       this.timeout(10000)
 
-      const res1 = await getVideoCommentThreads(servers[0].url, videoUUID, 0, 5)
-      const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
-      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
+      const res = await getVideoCommentThreads(servers[ 0 ].url, videoUUID, 0, 5)
+      const threadId = res.body.data.find(c => c.text === 'my super first comment').id
+      await deleteVideoComment(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, threadId)
 
       await waitJobs(servers)
     })
 
-    it('Should have the thread comments deleted on other servers too', async function () {
+    it('Should have the threads deleted on other servers too', async function () {
       for (const server of servers) {
         const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
 
@@ -919,6 +917,23 @@ describe('Test multiple servers', function () {
           expect(dateIsValid(comment.createdAt as string)).to.be.true
           expect(dateIsValid(comment.updatedAt as string)).to.be.true
         }
+      }
+    })
+
+    it('Should delete a remote thread by the origin server', async function () {
+      const res = await getVideoCommentThreads(servers[ 0 ].url, videoUUID, 0, 5)
+      const threadId = res.body.data.find(c => c.text === 'my super second comment').id
+      await deleteVideoComment(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, threadId)
+
+      await waitJobs(servers)
+    })
+
+    it('Should have the threads deleted on other servers too', async function () {
+      for (const server of servers) {
+        const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+
+        expect(res.body.total).to.equal(0)
+        expect(res.body.data).to.have.lengthOf(0)
       }
     })
 

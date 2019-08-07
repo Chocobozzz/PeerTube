@@ -48,7 +48,10 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
   const isVideoOrigin = videoComment.Video.isOwned()
 
   const url = getDeleteActivityPubUrl(videoComment.url)
-  const byActor = videoComment.Account.Actor
+  const byActor = videoComment.isOwned()
+    ? videoComment.Account.Actor
+    : videoComment.Video.VideoChannel.Account.Actor
+
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, t)
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, t)

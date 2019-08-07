@@ -34,7 +34,7 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
   }
 
   {
-    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(objectUrl)
+    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(objectUrl)
     if (videoCommentInstance) {
       return retryTransactionWrapper(processDeleteVideoComment, byActor, videoCommentInstance, activity)
     }
@@ -121,8 +121,8 @@ function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoComm
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {
-    if (videoComment.Account.id !== byActor.Account.id) {
-      throw new Error('Account ' + byActor.url + ' does not own video comment ' + videoComment.url)
+    if (byActor.Account.id !== videoComment.Account.id && byActor.Account.id !== videoComment.Video.VideoChannel.accountId) {
+      throw new Error(`Account ${byActor.url} does not own video comment ${videoComment.url} or video ${videoComment.Video.url}`)
     }
 
     await videoComment.destroy({ transaction: t })
