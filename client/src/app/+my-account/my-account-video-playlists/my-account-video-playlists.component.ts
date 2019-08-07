@@ -81,10 +81,10 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
   }
 
   private loadVideoPlaylists () {
-    const playlistsObservable = this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt')
-
     this.authService.userInformationLoaded
-        .pipe(flatMap(() => playlistsObservable))
+        .pipe(flatMap(() => {
+          return this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt')
+        }))
         .subscribe(res => {
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
