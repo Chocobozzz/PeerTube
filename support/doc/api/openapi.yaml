@@ -1100,7 +1100,7 @@ paths:
               "Authorization:Bearer $token"
   /videos/imports:
     post:
-      summary: Import a torrent or magnetURI or HTTP ressource (if enabled by the instance administrator)
+      summary: Import a torrent or magnetURI or HTTP resource (if enabled by the instance administrator)
       security:
         - OAuth2: []
       tags:
@@ -1428,7 +1428,7 @@ paths:
         - name: rating
           in: query
           required: false
-          description: Optionaly filter which ratings to retrieve
+          description: Optionally filter which ratings to retrieve
           schema:
             type: string
             enum:
