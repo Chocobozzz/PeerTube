@@ -195,7 +195,7 @@ async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
   return undefined
 }
 
-async function addFetchOutboxJob (actor: ActorModel) {
+async function addFetchOutboxJob (actor: Pick<ActorModel, 'id' | 'outboxUrl'>) {
   // Don't fetch ourselves
   const serverActor = await getServerActor()
   if (serverActor.id === actor.id) {

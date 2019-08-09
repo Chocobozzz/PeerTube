@@ -3,7 +3,6 @@ import { VideoCommentObject } from '../../../../shared/models/activitypub/object
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { resolveThread } from '../video-comments'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
@@ -14,6 +13,7 @@ import { createOrUpdateVideoPlaylist } from '../playlist'
 import { VideoModel } from '../../../models/video/video'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 import { VideoCommentModel } from '../../../models/video/video-comment'
+import { SignatureActorModel } from '../../../typings/models'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -61,7 +61,7 @@ async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
   return video
 }
 
-async function processCreateCacheFile (activity: ActivityCreate, byActor: ActorModel) {
+async function processCreateCacheFile (activity: ActivityCreate, byActor: SignatureActorModel) {
   const cacheFile = activity.object as CacheFileObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
@@ -77,7 +77,7 @@ async function processCreateCacheFile (activity: ActivityCreate, byActor: ActorM
   }
 }
 
-async function processCreateVideoComment (activity: ActivityCreate, byActor: ActorModel, notify: boolean) {
+async function processCreateVideoComment (activity: ActivityCreate, byActor: SignatureActorModel, notify: boolean) {
   const commentObject = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 
@@ -110,7 +110,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Act
   if (created && notify) Notifier.Instance.notifyOnNewComment(comment)
 }
 
-async function processCreatePlaylist (activity: ActivityCreate, byActor: ActorModel) {
+async function processCreatePlaylist (activity: ActivityCreate, byActor: SignatureActorModel) {
   const playlistObject = activity.object as PlaylistObject
   const byAccount = byActor.Account
 

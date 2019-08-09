@@ -10,6 +10,8 @@ import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
+import { ActorFollowModelLight } from '../../../typings/models/actor-follow'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options
@@ -26,7 +28,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processFollow (actor: ActorModel, targetActorURL: string) {
+async function processFollow (byActor: SignatureActorModel, targetActorURL: string) {
   const { actorFollow, created, isFollowingInstance } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
@@ -39,30 +41,30 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-      await sendReject(actor, targetActor)
+      await sendReject(byActor, targetActor)
 
       return { actorFollow: undefined }
     }
 
     const [ actorFollow, created ] = await ActorFollowModel.findOrCreate({
       where: {
-        actorId: actor.id,
+        actorId: byActor.id,
         targetActorId: targetActor.id
       },
       defaults: {
-        actorId: actor.id,
+        actorId: byActor.id,
         targetActorId: targetActor.id,
         state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL ? 'pending' : 'accepted'
       },
       transaction: t
-    })
+    }) as [ ActorFollowModelLight, boolean ]
 
     if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
       actorFollow.state = 'accepted'
       await actorFollow.save({ transaction: t })
     }
 
-    actorFollow.ActorFollower = actor
+    actorFollow.ActorFollower = byActor
     actorFollow.ActorFollowing = targetActor
 
     // Target sends to actor he accepted the follow request
@@ -79,5 +81,5 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     else Notifier.Instance.notifyOfNewUserFollow(actorFollow)
   }
 
-  logger.info('Actor %s is followed by actor %s.', targetActorURL, actor.url)
+  logger.info('Actor %s is followed by actor %s.', targetActorURL, byActor.url)
 }

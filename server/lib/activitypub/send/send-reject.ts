@@ -4,8 +4,9 @@ import { getActorFollowActivityPubUrl, getActorFollowRejectActivityPubUrl } from
 import { unicastTo } from './utils'
 import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
+import { SignatureActorModel } from '../../../typings/models'
 
-async function sendReject (follower: ActorModel, following: ActorModel) {
+async function sendReject (follower: SignatureActorModel, following: ActorModel) {
   if (!follower.serverId) { // This should never happen
     logger.warn('Do not sending reject to local follower.')
     return

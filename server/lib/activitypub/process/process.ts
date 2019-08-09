@@ -16,6 +16,7 @@ import { processDislikeActivity } from './process-dislike'
 import { processFlagActivity } from './process-flag'
 import { processViewActivity } from './process-view'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
@@ -35,7 +36,7 @@ const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Act
 async function processActivities (
   activities: Activity[],
   options: {
-    signatureActor?: ActorModel
+    signatureActor?: SignatureActorModel
     inboxActor?: ActorModel
     outboxUrl?: string
     fromFetch?: boolean
@@ -43,7 +44,7 @@ async function processActivities (
 ) {
   const { outboxUrl, signatureActor, inboxActor, fromFetch = false } = options
 
-  const actorsCache: { [ url: string ]: ActorModel } = {}
+  const actorsCache: { [ url: string ]: SignatureActorModel } = {}
 
   for (const activity of activities) {
     if (!signatureActor && [ 'Create', 'Announce', 'Like' ].includes(activity.type) === false) {

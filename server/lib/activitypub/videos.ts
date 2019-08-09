@@ -27,7 +27,6 @@ import {
 import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
-import { VideoChannelModel } from '../../models/video/video-channel'
 import { VideoFileModel } from '../../models/video/video-file'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { addVideoComments } from './video-comments'
@@ -54,9 +53,9 @@ import { ThumbnailModel } from '../../models/video/thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { join } from 'path'
 import { FilteredModelAttributes } from '../../typings/sequelize'
-import { Hooks } from '../plugins/hooks'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
 import { ActorFollowScoreCache } from '../files-cache'
+import { AccountModelIdActor, VideoChannelModelId, VideoChannelModelIdActor } from '../../typings/models'
 
 async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   if (
@@ -239,8 +238,8 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 async function updateVideoFromAP (options: {
   video: VideoModel,
   videoObject: VideoTorrentObject,
-  account: AccountModel,
-  channel: VideoChannelModel,
+  account: AccountModelIdActor,
+  channel: VideoChannelModelIdActor,
   overrideTo?: string[]
 }) {
   const { video, videoObject, account, channel, overrideTo } = options
@@ -550,7 +549,7 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
 }
 
 async function videoActivityObjectToDBAttributes (
-  videoChannel: VideoChannelModel,
+  videoChannel: VideoChannelModelId,
   videoObject: VideoTorrentObject,
   to: string[] = []
 ) {

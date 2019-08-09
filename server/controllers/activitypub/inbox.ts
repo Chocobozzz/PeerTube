@@ -7,6 +7,7 @@ import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChann
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
 import { queue } from 'async'
 import { ActorModel } from '../../models/activitypub/actor'
+import { SignatureActorModel } from '../../typings/models'
 
 const inboxRouter = express.Router()
 
@@ -40,7 +41,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-const inboxQueue = queue<{ activities: Activity[], signatureActor?: ActorModel, inboxActor?: ActorModel }, Error>((task, cb) => {
+const inboxQueue = queue<{ activities: Activity[], signatureActor?: SignatureActorModel, inboxActor?: ActorModel }, Error>((task, cb) => {
   const options = { signatureActor: task.signatureActor, inboxActor: task.inboxActor }
 
   processActivities(task.activities, options)

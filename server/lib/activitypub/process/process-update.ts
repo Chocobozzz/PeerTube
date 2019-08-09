@@ -15,6 +15,7 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -52,7 +53,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
+async function processUpdateVideo (actor: SignatureActorModel, activity: ActivityUpdate) {
   const videoObject = activity.object as VideoTorrentObject
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
@@ -73,7 +74,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
   return updateVideoFromAP(updateOptions)
 }
 
-async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUpdate) {
+async function processUpdateCacheFile (byActor: SignatureActorModel, activity: ActivityUpdate) {
   const cacheFileObject = activity.object as CacheFileObject
 
   if (!isCacheFileObjectValid(cacheFileObject)) {
@@ -147,7 +148,7 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
   }
 }
 
-async function processUpdatePlaylist (byActor: ActorModel, activity: ActivityUpdate) {
+async function processUpdatePlaylist (byActor: SignatureActorModel, activity: ActivityUpdate) {
   const playlistObject = activity.object as PlaylistObject
   const byAccount = byActor.Account
 

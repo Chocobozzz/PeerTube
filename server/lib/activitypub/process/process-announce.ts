@@ -1,7 +1,6 @@
 import { ActivityAnnounce } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
@@ -9,6 +8,7 @@ import { Notifier } from '../../notifier'
 import { VideoModel } from '../../../models/video/video'
 import { logger } from '../../../helpers/logger'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
 async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
   const { activity, byActor: actorAnnouncer } = options
@@ -26,7 +26,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processVideoShare (actorAnnouncer: ActorModel, activity: ActivityAnnounce, notify: boolean) {
+async function processVideoShare (actorAnnouncer: SignatureActorModel, activity: ActivityAnnounce, notify: boolean) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
 
   let video: VideoModel

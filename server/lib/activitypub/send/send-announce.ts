@@ -1,13 +1,18 @@
 import { Transaction } from 'sequelize'
 import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/activitypub'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { VideoShareModel } from '../../../models/video/video-share'
 import { broadcastToFollowers } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
 import { logger } from '../../../helpers/logger'
+import { ActorModelOnly } from '../../../typings/models'
+import { VideoShareModelOnly } from '../../../typings/models/video-share'
 
-async function buildAnnounceWithVideoAudience (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+async function buildAnnounceWithVideoAudience (
+  byActor: ActorModelOnly,
+  videoShare: VideoShareModelOnly,
+  video: VideoModel,
+  t: Transaction
+) {
   const announcedObject = video.url
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, t)
@@ -18,7 +23,7 @@ async function buildAnnounceWithVideoAudience (byActor: ActorModel, videoShare: 
   return { activity, actorsInvolvedInVideo }
 }
 
-async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareModel, video: VideoModel, t: Transaction) {
+async function sendVideoAnnounce (byActor: ActorModelOnly, videoShare: VideoShareModelOnly, video: VideoModel, t: Transaction) {
   const { activity, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, t)
 
   logger.info('Creating job to send announce %s.', videoShare.url)
@@ -27,7 +32,7 @@ async function sendVideoAnnounce (byActor: ActorModel, videoShare: VideoShareMod
   return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
-function buildAnnounceActivity (url: string, byActor: ActorModel, object: string, audience?: ActivityAudience): ActivityAnnounce {
+function buildAnnounceActivity (url: string, byActor: ActorModelOnly, object: string, audience?: ActivityAudience): ActivityAnnounce {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify({

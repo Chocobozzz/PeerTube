@@ -3,11 +3,11 @@ import { DislikeObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getVideoDislikeActivityPubUrl } from '../url'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
   const { activity, byActor } = options
@@ -22,7 +22,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processDislike (activity: ActivityCreate | ActivityDislike, byActor: ActorModel) {
+async function processDislike (activity: ActivityCreate | ActivityDislike, byActor: SignatureActorModel) {
   const dislikeObject = activity.type === 'Dislike' ? activity.object : (activity.object as DislikeObject).object
   const byAccount = byActor.Account
 

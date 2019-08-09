@@ -10,6 +10,7 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
 async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
   const { activity, byActor } = options
@@ -117,7 +118,7 @@ async function processDeleteVideoChannel (videoChannelToRemove: VideoChannelMode
   logger.info('Remote video channel %s removed.', videoChannelToRemove.Actor.url)
 }
 
-function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
+function processDeleteVideoComment (byActor: SignatureActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {

@@ -1,8 +1,8 @@
 import { ActivityReject } from '../../../../shared/models/activitypub/activity'
 import { sequelizeTypescript } from '../../../initializers'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { ActorModelOnly } from '../../../typings/models'
 
 async function processRejectActivity (options: APProcessorOptions<ActivityReject>) {
   const { byActor: targetActor, inboxActor } = options
@@ -19,7 +19,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processReject (follower: ActorModel, targetActor: ActorModel) {
+async function processReject (follower: ActorModelOnly, targetActor: ActorModelOnly) {
   return sequelizeTypescript.transaction(async t => {
     const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, targetActor.id, t)
 
