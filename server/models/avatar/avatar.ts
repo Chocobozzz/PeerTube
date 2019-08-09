@@ -24,7 +24,7 @@ export class AvatarModel extends Model<AvatarModel> {
   filename: string
 
   @AllowNull(true)
-  @Is('AvatarFileUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'fileUrl'))
+  @Is('AvatarFileUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'fileUrl', true))
   @Column
   fileUrl: string
 
