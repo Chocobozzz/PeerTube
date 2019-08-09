@@ -513,7 +513,7 @@ export class ActorModel extends Model<ActorModel> {
   getAvatarUrl () {
     if (!this.avatarId) return undefined
 
-    return WEBSERVER.URL + this.Avatar.getWebserverPath()
+    return WEBSERVER.URL + this.Avatar.getStaticPath()
   }
 
   isOutdated () {

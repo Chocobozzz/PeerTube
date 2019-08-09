@@ -410,7 +410,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
         id: this.ActorFollow.ActorFollower.Account.id,
         displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
         name: this.ActorFollow.ActorFollower.preferredUsername,
-        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getWebserverPath() } : undefined,
+        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getStaticPath() } : undefined,
         host: this.ActorFollow.ActorFollower.getHost()
       },
       following: {
@@ -446,7 +446,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
 
   private formatActor (accountOrChannel: AccountModel | VideoChannelModel) {
     const avatar = accountOrChannel.Actor.Avatar
-      ? { path: accountOrChannel.Actor.Avatar.getWebserverPath() }
+      ? { path: accountOrChannel.Actor.Avatar.getStaticPath() }
       : undefined
 
     return {

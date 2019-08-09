@@ -4,13 +4,15 @@ import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { OAuthTokenModel } from '../models/oauth/oauth-token'
-import { CACHE } from '../initializers/constants'
+import { LRU_CACHE } from '../initializers/constants'
 import { Transaction } from 'sequelize'
 import { CONFIG } from '../initializers/config'
+import * as LRUCache from 'lru-cache'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
-let accessTokenCache: { [ accessToken: string ]: OAuthTokenModel } = {}
-let userHavingToken: { [ userId: number ]: string } = {}
+
+const accessTokenCache = new LRUCache<string, OAuthTokenModel>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
+const userHavingToken = new LRUCache<number, string>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
 
 // ---------------------------------------------------------------------------
 
@@ -21,18 +23,20 @@ function deleteUserToken (userId: number, t?: Transaction) {
 }
 
 function clearCacheByUserId (userId: number) {
-  const token = userHavingToken[userId]
+  const token = userHavingToken.get(userId)
+
   if (token !== undefined) {
-    accessTokenCache[ token ] = undefined
-    userHavingToken[ userId ] = undefined
+    accessTokenCache.del(token)
+    userHavingToken.del(userId)
   }
 }
 
 function clearCacheByToken (token: string) {
-  const tokenModel = accessTokenCache[ token ]
+  const tokenModel = accessTokenCache.get(token)
+
   if (tokenModel !== undefined) {
-    userHavingToken[tokenModel.userId] = undefined
-    accessTokenCache[ token ] = undefined
+    userHavingToken.del(tokenModel.userId)
+    accessTokenCache.del(token)
   }
 }
 
@@ -41,19 +45,13 @@ function getAccessToken (bearerToken: string) {
 
   if (!bearerToken) return Bluebird.resolve(undefined)
 
-  if (accessTokenCache[bearerToken] !== undefined) return Bluebird.resolve(accessTokenCache[bearerToken])
+  if (accessTokenCache.has(bearerToken)) return Bluebird.resolve(accessTokenCache.get(bearerToken))
 
   return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
     .then(tokenModel => {
       if (tokenModel) {
-        // Reinit our cache
-        if (Object.keys(accessTokenCache).length > CACHE.USER_TOKENS.MAX_SIZE) {
-          accessTokenCache = {}
-          userHavingToken = {}
-        }
-
-        accessTokenCache[ bearerToken ] = tokenModel
-        userHavingToken[ tokenModel.userId ] = tokenModel.accessToken
+        accessTokenCache.set(bearerToken, tokenModel)
+        userHavingToken.set(tokenModel.userId, tokenModel.accessToken)
       }
 
       return tokenModel

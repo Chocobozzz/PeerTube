@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 415
+const LAST_MIGRATION_VERSION = 420
 
 // ---------------------------------------------------------------------------
 
@@ -498,6 +498,11 @@ const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
   VIDEOS: '/download/videos/'
 }
+const LAZY_STATIC_PATHS = {
+  AVATARS: '/lazy-static/avatars/',
+  PREVIEWS: '/static/previews/',
+  VIDEO_CAPTIONS: '/static/video-captions/'
+}
 
 // Cache control
 let STATIC_MAX_AGE = {
@@ -536,9 +541,12 @@ const FILES_CACHE = {
   }
 }
 
-const CACHE = {
+const LRU_CACHE = {
   USER_TOKENS: {
-    MAX_SIZE: 10000
+    MAX_SIZE: 1000
+  },
+  AVATAR_STATIC: {
+    MAX_SIZE: 500
   }
 }
 
@@ -547,6 +555,10 @@ const HLS_REDUNDANCY_DIRECTORY = join(CONFIG.STORAGE.REDUNDANCY_DIR, 'hls')
 
 const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4 // 4 hours
+}
+
+const QUEUE_CONCURRENCY = {
+  AVATAR_PROCESS_IMAGE: 3
 }
 
 const REDUNDANCY = {
@@ -649,6 +661,7 @@ export {
   WEBSERVER,
   API_VERSION,
   PEERTUBE_VERSION,
+  LAZY_STATIC_PATHS,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   AVATARS_SIZE,
@@ -695,11 +708,12 @@ export {
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
   VIDEO_STATES,
+  QUEUE_CONCURRENCY,
   VIDEO_RATE_TYPES,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   VIDEO_ABUSE_STATES,
-  CACHE,
+  LRU_CACHE,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   MEMOIZE_TTL,

@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { fetchAvatarIfExists, updateActorAvatarInstance, updateActorInstance } from '../actor'
+import { getAvatarInfoIfExists, updateActorAvatarInstance, updateActorInstance } from '../actor'
 import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
@@ -105,7 +105,7 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
   let accountOrChannelFieldsSave: object
 
   // Fetch icon?
-  const avatarName = await fetchAvatarIfExists(actorAttributesToUpdate)
+  const avatarInfo = await getAvatarInfoIfExists(actorAttributesToUpdate)
 
   try {
     await sequelizeTypescript.transaction(async t => {
@@ -118,8 +118,10 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
 
       await updateActorInstance(actor, actorAttributesToUpdate)
 
-      if (avatarName !== undefined) {
-        await updateActorAvatarInstance(actor, avatarName, t)
+      if (avatarInfo !== undefined) {
+        const avatarOptions = Object.assign({}, avatarInfo, { onDisk: false })
+
+        await updateActorAvatarInstance(actor, avatarOptions, t)
       }
 
       await actor.save({ transaction: t })

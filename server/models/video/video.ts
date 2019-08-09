@@ -63,6 +63,7 @@ import {
   CONSTRAINTS_FIELDS,
   HLS_REDUNDANCY_DIRECTORY,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
+  LAZY_STATIC_PATHS,
   REMOTE_SCHEME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_PATHS,
@@ -1856,7 +1857,7 @@ export class VideoModel extends Model<VideoModel> {
     if (!preview) return null
 
     // We use a local cache, so specify our cache endpoint instead of potential remote URL
-    return join(STATIC_PATHS.PREVIEWS, preview.filename)
+    return join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename)
   }
 
   toFormattedJSON (options?: VideoFormattingJSONOptions): Video {

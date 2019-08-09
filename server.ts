@@ -97,6 +97,7 @@ import {
   clientsRouter,
   feedsRouter,
   staticRouter,
+  lazyStaticRouter,
   servicesRouter,
   pluginsRouter,
   webfingerRouter,
@@ -192,6 +193,7 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', lazyStaticRouter)
 
 // Client files, last valid routes!
 if (cli.client) app.use('/', clientsRouter)

@@ -16,7 +16,7 @@ import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
-import { STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers/constants'
+import { LAZY_STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers/constants'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
@@ -163,7 +163,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
   }
 
   getCaptionStaticPath () {
-    return join(STATIC_PATHS.VIDEO_CAPTIONS, this.getCaptionName())
+    return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.getCaptionName())
   }
 
   getCaptionName () {
