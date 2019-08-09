@@ -97,6 +97,7 @@ my-video-thumbnail,
     margin-left: auto;
     cursor: pointer;
     opacity: 0;
+    min-width: 24px;
 
     &.show {
       opacity: 1;
