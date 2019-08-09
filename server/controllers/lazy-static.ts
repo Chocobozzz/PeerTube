@@ -49,7 +49,12 @@ async function getAvatar (req: express.Request, res: express.Response) {
 
     logger.info('Lazy serve remote avatar image %s.', avatar.fileUrl)
 
-    await pushAvatarProcessInQueue({ filename: avatar.filename, fileUrl: avatar.fileUrl })
+    try {
+      await pushAvatarProcessInQueue({ filename: avatar.filename, fileUrl: avatar.fileUrl })
+    } catch (err) {
+      logger.warn('Cannot process remote avatar %s.', avatar.fileUrl, { err })
+      return res.sendStatus(404)
+    }
 
     avatar.onDisk = true
     avatar.save()

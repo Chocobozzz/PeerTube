@@ -44,6 +44,10 @@ function root () {
   return root
 }
 
+function buildServerDirectory (internalServerNumber: number, directory: string) {
+  return join(root(), 'test' + internalServerNumber, directory)
+}
+
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
   const res = await request(url)
     .get(imagePath)
@@ -105,6 +109,7 @@ async function generateHighBitrateVideo () {
 export {
   dateIsValid,
   wait,
+  buildServerDirectory,
   webtorrentAdd,
   immutableAssign,
   testImage,

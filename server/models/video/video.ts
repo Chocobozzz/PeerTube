@@ -119,6 +119,7 @@ import { CONFIG } from '../../initializers/config'
 import { ThumbnailModel } from './thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { createTorrentPromise } from '../../helpers/webtorrent'
+import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -1422,15 +1423,23 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
   }
 
-  static loadWithFiles (id: number, t?: Transaction, logging?: boolean) {
+  static loadWithFiles (id: number | string, t?: Transaction, logging?: boolean) {
+    const where = buildWhereIdOrUUID(id)
+
+    const query = {
+      where,
+      transaction: t,
+      logging
+    }
+
     return VideoModel.scope([
       ScopeNames.WITH_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
       ScopeNames.WITH_THUMBNAILS
-    ]).findByPk(id, { transaction: t, logging })
+    ]).findOne(query)
   }
 
-  static loadByUUIDWithFile (uuid: string) {
+  static loadByUUID (uuid: string) {
     const options = {
       where: {
         uuid
@@ -1754,7 +1763,7 @@ export class VideoModel extends Model<VideoModel> {
     return maxBy(this.VideoFiles, file => file.resolution)
   }
 
-  getFile (resolution: VideoResolution) {
+  getFile (resolution: number) {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
     return this.VideoFiles.find(f => f.resolution === resolution)
@@ -1891,6 +1900,12 @@ export class VideoModel extends Model<VideoModel> {
 
   getDescriptionAPIPath () {
     return `/api/${API_VERSION}/videos/${this.uuid}/description`
+  }
+
+  getHLSPlaylist () {
+    if (!this.VideoStreamingPlaylists) return undefined
+
+    return this.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
   }
 
   removeFile (videoFile: VideoFileModel, isRedundancy = false) {

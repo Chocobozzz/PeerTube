@@ -100,6 +100,16 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
             .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
   }
 
+  static loadByName (filename: string) {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return ThumbnailModel.findOne(query)
+  }
+
   static generateDefaultPreviewName (videoUUID: string) {
     return videoUUID + '.jpg'
   }

@@ -19,7 +19,7 @@ import {
 import * as validator from 'validator'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, loadLanguages, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
-import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
+import { dateIsValid, webtorrentAdd, buildServerDirectory } from '../miscs/miscs'
 
 loadLanguages()
 
@@ -308,10 +308,8 @@ async function checkVideoFilesWereRemoved (
     join('redundancy', 'hls')
   ]
 ) {
-  const testDirectory = 'test' + serverNumber
-
   for (const directory of directories) {
-    const directoryPath = join(root(), testDirectory, directory)
+    const directoryPath = buildServerDirectory(serverNumber, directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
