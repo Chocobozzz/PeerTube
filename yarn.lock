@@ -6416,17 +6416,17 @@ sequelize-pool@^2.3.0:
   resolved "https://registry.yarnpkg.com/sequelize-pool/-/sequelize-pool-2.3.0.tgz#64f1fe8744228172c474f530604b6133be64993d"
   integrity sha512-Ibz08vnXvkZ8LJTiUOxRcj1Ckdn7qafNZ2t59jYHMX1VIebTAOYefWdRYFt6z6+hy52WGthAHAoLc9hvk3onqA==
 
-sequelize-typescript@1.0.0-beta.2:
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-1.0.0-beta.2.tgz#fd9ae47ecf8b159e32e19c1298426cc9773cebd8"
-  integrity sha512-Iu67kF/RunoeBQBsU5llViJkxAHBVmeS9DBP+eC63hkEwxeDGZgxOkodyW5v5k3h2DJ0MBO+clRURXoDb+/OHg==
+sequelize-typescript@^1.0.0-beta.4:
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/sequelize-typescript/-/sequelize-typescript-1.0.0-beta.4.tgz#7cd0800b5b0d48254299d7f845232e56bcaf6bcd"
+  integrity sha512-aCtLX2Y453r+DEGMSgfyXrAibyCT1JYNOdNZ3g+banGgH0SqLHlBX4ZnFci5MC/2kxPMqXEAmlVdhecXG2szSQ==
   dependencies:
     glob "7.1.2"
 
-sequelize@5.10.2:
-  version "5.10.2"
-  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.10.2.tgz#60146fcc40e6306c21867400276f7fe4fbb2855b"
-  integrity sha512-A7QTOuT/tqPChkT6TW7ujHO0hbngctBIHU9BoGuFkzMN7cMkzkxpGJdztOl3rxe9EQnQFRbUOHbvUvPBZI4CPA==
+sequelize@5.13.1:
+  version "5.13.1"
+  resolved "https://registry.yarnpkg.com/sequelize/-/sequelize-5.13.1.tgz#599db5c96de7da5020aead758e59b875fba3fc96"
+  integrity sha512-IE3xosPfLbUA1Ltp2lHzz76YwDnZZeqdUhNq0YXNQo/74uAOvSN6MvLJzSrqqgZ0tP5F0//0ittBvBrkOIBmsQ==
   dependencies:
     bluebird "^3.5.0"
     cls-bluebird "^2.1.0"
