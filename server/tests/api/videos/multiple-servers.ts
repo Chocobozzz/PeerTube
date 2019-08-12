@@ -508,10 +508,8 @@ describe('Test multiple servers', function () {
 
       await wait(1000)
 
-      await Promise.all([
-        viewVideo(servers[2].url, localVideosServer3[0]),
-        viewVideo(servers[2].url, localVideosServer3[0])
-      ])
+      await viewVideo(servers[2].url, localVideosServer3[0])
+      await viewVideo(servers[2].url, localVideosServer3[0])
 
       await waitJobs(servers)
 

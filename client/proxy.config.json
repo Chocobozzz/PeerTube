@@ -15,6 +15,10 @@
     "target": "http://localhost:9000",
     "secure": false
   },
+  "/lazy-static": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
   "/socket.io": {
     "target": "ws://localhost:9000",
     "secure": false,

@@ -325,23 +325,45 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
+    const redundancyInclude = {
+      attributes: [],
+      model: VideoRedundancyModel,
+      required: true,
+      where: {
+        actorId: actor.id,
+        strategy
+      }
+    }
 
-    const query: FindOptions = {
+    const queryFiles: FindOptions = {
+      include: [ redundancyInclude ]
+    }
+
+    const queryStreamingPlaylists: FindOptions = {
       include: [
         {
           attributes: [],
-          model: VideoRedundancyModel,
+          model: VideoModel.unscoped(),
           required: true,
-          where: {
-            actorId: actor.id,
-            strategy
-          }
+          include: [
+            {
+              attributes: [],
+              model: VideoStreamingPlaylistModel.unscoped(),
+              include: [
+                redundancyInclude
+              ]
+            }
+          ]
         }
       ]
     }
 
-    return VideoFileModel.aggregate('size', 'SUM', query)
-      .then(result => parseAggregateResult(result))
+    return Promise.all([
+      VideoFileModel.aggregate('size', 'SUM', queryFiles),
+      VideoFileModel.aggregate('size', 'SUM', queryStreamingPlaylists)
+    ]).then(([ r1, r2 ]) => {
+      return parseAggregateResult(r1) + parseAggregateResult(r2)
+    })
   }
 
   static async listLocalExpired () {
