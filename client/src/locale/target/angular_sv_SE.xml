@@ -200,13 +200,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target>
+        <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target>
+        <context-group name="null">
           <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.toast.close-aria">
+        <source>Close</source>
+        <target>Stäng</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
@@ -904,7 +915,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="b4f8ab29acafa8172b27571fd682d482c1ff7798">
-        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</source><target>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</target><context-group name="null">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</source>
+        <target>(tillägg: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max-storlek: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</target>
+        <context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
@@ -2313,6 +2326,17 @@ Konfiguration</target>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4cad4cde2db81e1b14ebb84196af33c3d23f7322">
+        <source>
+      Plugins/Themes
+    </source>
+        <target>
+      Insticksprogram och teman
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c">
         <source>
       System
@@ -2592,6 +2616,13 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="df84781eeb873f037ee688789bde034be9b49074">
+        <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Videokvot <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
         <source>(banned)</source>
         <target>(blockerad)</target>
@@ -2813,11 +2844,111 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d204665b42241ca94ecad49df699cc60df43a7b5">
+        <source>Plugins/Themes</source>
+        <target>Insticksprogram och teman</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86288c2ac6b43ed195f0bc8bce825a3ab8151b71">
+        <source>Installed</source>
+        <target>Installerad</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
         <source>Search</source>
         <target>Sök</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cb86e649ad2e5cfc86efb2d28c06b1d959f8aa6">
+        <source>Homepage</source>
+        <target>Hemsida</target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4962915f14d9b61bdd1b96b81c27e3f9d8910768">
+        <source>Go to the plugin homepage</source>
+        <target>Gå till insticksprogrammets hemsida</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716">
+        <source>Settings</source>
+        <target>Inställningar</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d">
+        <source>Uninstall</source>
+        <target>Avinstallera</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fcef699ec12dbd6fcf9881d527af2fd775ccfdc7">
+        <source>
+  To load your new installed plugins or themes, refresh the page.
+</source>
+        <target>
+  Uppdatera sidan för att ladda dina nyinstallerade insticksprogram och teman.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fc026bb4b317bf3a6159c364818202f5bb95a4e">
+        <source>Popular</source>
+        <target>Populär</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005">
+        <source>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </source>
+        <target>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {…} other {…}}"/> för ”<x id="INTERPOLATION_1" equiv-text="{{ search }}"/>”
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
+        <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
+        <target>{VAR_PLURAL, plural, =1 {resultat} other {resultat} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207">
+        <source>
+  No results.
+</source>
+        <target>
+  Inga resultat.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407">
+        <source>
+    This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.
+  </source>
+        <target>
+    Detta <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> har inga inställningar.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
@@ -2988,6 +3119,27 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <target>Visa</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522">
+        <source>Theme</source>
+        <target>Tema</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bb52a3e9e31d9dec02faeadb44935de49e3a33d">
+        <source>Global theme</source>
+        <target>Globalt tema</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
+        <source>default</source>
+        <target>standard</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
@@ -3359,6 +3511,13 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88a7dfa6fac89d61c28552598a23ba4ce9abe8ca">
+        <source>Interface</source>
+        <target>Gränssnitt</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
         <source>Danger zone</source>
         <target>Riskzon</target>
@@ -3491,6 +3650,20 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <target>Byt e-postadress</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808">
+        <source>instance default</source>
+        <target>instansen standard</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d">
+        <source>peertube default</source>
+        <target>peertubes standard</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf">
@@ -4495,6 +4668,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4">
+        <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
+        <target>Publicerade <x id="INTERPOLATION" equiv-text="{{total}}"/> videor</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="056a9a97eb47882159d3cf5bd8a9fc2cfe9371bf">
         <source>Username copied</source>
         <target>Användarnamn kopierat</target>
@@ -4859,6 +5039,111 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523">
+        <source>You don't have plugins installed yet.</source>
+        <target>Du har  inga insticksprogram installerade än.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f">
+        <source>You don't have themes installed yet.</source>
+        <target>Du har  inga teman installerade än.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9">
+        <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
+        <target>Uppdatera till <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702">
+        <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Vill du verkligen avinstallera <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61136b14ca13f166ecc9ee7b05bb6fe865f10144">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> avinstallerad.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d352fa8f51305c18ab8f882b37c4fdaab6f2371b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uppdaterad.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d">
+        <source>The plugin index is not available. Please retry later.</source>
+        <target>Listan över insticksprogram är inte tillgänglig. Försök gärna igen senare.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0">
+        <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
+        <target>Installera enbart insticksprogram eller teman du litar på, då de kan exekvera vilken kod som helst på din instans.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Installera <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installerad.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12">
+        <source>Settings updated.</source>
+        <target>Inställningar uppdaterade.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50">
+        <source>Plugins</source>
+        <target>Insticksprogram</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf">
+        <source>Themes</source>
+        <target>Teman</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e72b0e32070d4a69221ef64d793fe7d61381a819">
+        <source>plugin</source>
+        <target>insticksprogram</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f6f5bc1d9e83b758dd60bc6dc7aad7d2cb7f600">
+        <source>theme</source>
+        <target>tema</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f">
         <source>Last week</source>
         <target>Förra veckan</target>
@@ -5121,6 +5406,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
         <source>Your account is deleted.</source>
         <target>Ditt konto har tagits bort.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="59f77c7dc03357ef1d7a334df06dfc7f31c9a165">
+        <source>Interface settings updated.</source>
+        <target>Gränssnittsinställningar uppdaterade.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

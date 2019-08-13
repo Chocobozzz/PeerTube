@@ -14,6 +14,7 @@ export const I18N_LOCALES = {
   'nl-NL': 'Nederlands',
   'es-ES': 'Español',
   'oc': 'Occitan',
+  'gd': 'Gàidhlig',
   'zh-Hant-TW': '繁體中文（台灣）',
   'pt-BR': 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',

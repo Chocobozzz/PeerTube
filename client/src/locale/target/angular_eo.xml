@@ -209,6 +209,13 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.toast.close-aria">
+        <source>Close</source>
+        <target>Fermi</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
         <target>Vi ne havas sciigojn.</target>
@@ -1186,6 +1193,13 @@
           <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db">
+        <source>Discover</source>
+        <target>Esplori</target>
+        <context-group name="null">
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
         <source>Trending</source>
         <target>Furoraj</target>
@@ -1877,6 +1891,17 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7fde07b8ce27190ea8da456ac16af384528a9210">
+        <source>
+              The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+            </source>
+        <target>
+              La URL ne estas sekurigita (per HTTPS), kaj tial la enkorpigita filmo ne funkcios sur retpaĝoj kun HTTPS (foliumiloj blokas nesekurigitajn HTTP-petojn por retpaĝoj kun HTTPS).
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
         <source>Embed</source>
         <target>Enkorpigi</target>
@@ -2284,6 +2309,17 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4cad4cde2db81e1b14ebb84196af33c3d23f7322">
+        <source>
+      Plugins/Themes
+    </source>
+        <target>
+      Kromprogramoj/Haŭtoj
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c">
@@ -2773,11 +2809,60 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d204665b42241ca94ecad49df699cc60df43a7b5">
+        <source>Plugins/Themes</source>
+        <target>Kromprogramoj/Haŭtoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86288c2ac6b43ed195f0bc8bce825a3ab8151b71">
+        <source>Installed</source>
+        <target>Instalitaj</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
         <source>Search</source>
         <target>Serĉi</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cb86e649ad2e5cfc86efb2d28c06b1d959f8aa6">
+        <source>Homepage</source>
+        <target>Hejmpaĝo</target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4962915f14d9b61bdd1b96b81c27e3f9d8910768">
+        <source>Go to the plugin homepage</source>
+        <target>Iri al hejmpaĝo de la kromprogramo</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716">
+        <source>Settings</source>
+        <target>Agordoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d">
+        <source>Uninstall</source>
+        <target>Malinstali</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fc026bb4b317bf3a6159c364818202f5bb95a4e">
+        <source>Popular</source>
+        <target>Popularaj</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
@@ -2948,6 +3033,27 @@
         <target>Montri</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522">
+        <source>Theme</source>
+        <target>Haŭto</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bb52a3e9e31d9dec02faeadb44935de49e3a33d">
+        <source>Global theme</source>
+        <target>Ĉiea haŭto</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
+        <source>default</source>
+        <target>implicita</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
@@ -3178,6 +3284,13 @@
           <context context-type="linenumber">315</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6221e8fc0bcfc87cbb03621bca82a6e4e188b75a">
+        <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> enabled</source>
+        <target>Distingumo <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> ŝaltiĝis</target>
+        <context-group name="null">
+          <context context-type="linenumber">330</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e9fb2d7685ae280026fe6463731170b067e419d5">
         <source>
           Cache
@@ -3312,6 +3425,13 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88a7dfa6fac89d61c28552598a23ba4ce9abe8ca">
+        <source>Interface</source>
+        <target>Fasado</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
         <source>Danger zone</source>
         <target>Danĝera areo</target>
@@ -3437,6 +3557,20 @@
         <target>Ŝanĝi retpoŝtadreson</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808">
+        <source>instance default</source>
+        <target>implicita de nodo</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d">
+        <source>peertube default</source>
+        <target>implicita de Peertube</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf">
@@ -4314,6 +4448,19 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b">
+        <source>
+      A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology.
+    </source>
+        <target>
+      Al kanalo oni alŝutas siajn filmojn. Havo de kelkaj kanaloj helpas organizi kaj apartigi vian enhavon..<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      Ekzemple, vi povus decidi krei unu kanalon por publikigado de viaj pianaj koncertoj, kaj alian por publikigado de filmoj, kie vi priparolas ekologion.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="79b3619b36af71e5c70394a3a7b31545e32d83f0">
         <source>Channel display name</source>
         <target>Vidiga nomo de kanalo</target>
@@ -4417,6 +4564,13 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
       <trans-unit id="37b56526e384f843a15323dc730b484a97b4c968">
         <source>No description</source>
         <target>Neniu priskribo</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4">
+        <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
+        <target>Publikigis <x id="INTERPOLATION" equiv-text="{{total}}"/> filmojn</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4781,6 +4935,97 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
       <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
         <target>Filmo <x id="INTERPOLATION" equiv-text="{{name}}"/> forigita de la fortenlisto.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523">
+        <source>You don't have plugins installed yet.</source>
+        <target>Vi ankoraŭ ne instalis kromprogramojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f">
+        <source>You don't have themes installed yet.</source>
+        <target>Vi ankoraŭ ne instalis haŭtojn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9">
+        <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
+        <target>Ĝisdatigi al versio <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702">
+        <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Ĉu vi certe volas malinstali kromprogramon <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d">
+        <source>The plugin index is not available. Please retry later.</source>
+        <target>Indekso de kromprogramoj ne atingeblas. Bonvolu reprovi poste.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0">
+        <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
+        <target>Bonvolu instali nur kromprogramojn aŭ haŭtojn, kiujn vi fidas, ĉar ili povas ruli ĉian kodon sur via nodo.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Instali kromprogramon <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> instaliĝis.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12">
+        <source>Settings updated.</source>
+        <target>Agordoj ĝisdatiĝis.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50">
+        <source>Plugins</source>
+        <target>Kromprogramoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf">
+        <source>Themes</source>
+        <target>Haŭtoj</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e72b0e32070d4a69221ef64d793fe7d61381a819">
+        <source>plugin</source>
+        <target>kromprogramo</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f6f5bc1d9e83b758dd60bc6dc7aad7d2cb7f600">
+        <source>theme</source>
+        <target>haŭto</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -6630,7 +6875,7 @@ Kiam vi alŝutos filmon al tiu ĉi kanalo, la kampo pri subteno memfare enhavos 
       </trans-unit>
       <trans-unit id="a0fdb831d4557925dbaa4f8aff7e5035f7506411">
         <source>Transcode your videos in multiple resolutions</source>
-        <target>Transkodi viajn filmojn en plurajn distingojn</target>
+        <target>Transkodi viajn filmojn en plurajn distingumojn</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
