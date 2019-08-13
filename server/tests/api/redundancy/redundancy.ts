@@ -66,7 +66,7 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy, additional
           immutableAssign({
             min_lifetime: '1 hour',
             strategy: strategy,
-            size: '200KB'
+            size: '400KB'
           }, additionalParams)
         ]
       }
@@ -224,8 +224,8 @@ async function checkStatsWith2Webseed (strategy: VideoRedundancyStrategy) {
   const stat = data.videosRedundancy[0]
 
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(204800)
-  expect(stat.totalUsed).to.be.at.least(1).and.below(204801)
+  expect(stat.totalSize).to.equal(409600)
+  expect(stat.totalUsed).to.be.at.least(1).and.below(409601)
   expect(stat.totalVideoFiles).to.equal(4)
   expect(stat.totalVideos).to.equal(1)
 }
@@ -238,7 +238,7 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategy) {
 
   const stat = data.videosRedundancy[0]
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(204800)
+  expect(stat.totalSize).to.equal(409600)
   expect(stat.totalUsed).to.equal(0)
   expect(stat.totalVideoFiles).to.equal(0)
   expect(stat.totalVideos).to.equal(0)

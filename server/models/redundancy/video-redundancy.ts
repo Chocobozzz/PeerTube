@@ -237,6 +237,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async getVideoSample (p: Bluebird<VideoModel[]>) {
     const rows = await p
+    if (rows.length === 0) return undefined
+
     const ids = rows.map(r => r.id)
     const id = sample(ids)
 
@@ -347,6 +349,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
           required: true,
           include: [
             {
+              required: true,
               attributes: [],
               model: VideoStreamingPlaylistModel.unscoped(),
               include: [
