@@ -2907,7 +2907,7 @@ Het ziet ernaar uit dat je op een server bent zonder HTTPS. Op je webserver moet
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target>{VAR_PLURAL, plural, =1 {result} anderer {results} }</target>
+        <target>{VAR_PLURAL, plural, =1 {result} other {results} }</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>

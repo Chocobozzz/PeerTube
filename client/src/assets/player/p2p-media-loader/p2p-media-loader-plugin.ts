@@ -57,6 +57,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     initVideoJsContribHlsJsPlayer(player)
 
     this.startTime = timeToInt(options.startTime)
+    console.log(this.startTime)
 
     player.src({
       type: options.type,
@@ -98,9 +99,24 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.runStats()
 
     this.hlsjs.on('hlsLevelLoaded', () => {
-      if (this.startTime) this.player.currentTime(this.startTime)
+      console.log('hello1')
+      if (this.startTime) {
+        this.player.currentTime(this.startTime)
+      }
 
       this.hlsjs.off('hlsLevelLoaded', this)
+    })
+
+    this.hlsjs.on('hlsFragParsed', () => {
+      console.log('hello2')
+    })
+
+    this.hlsjs.on('hlsFragBuffered', () => {
+      console.log('hello 3')
+    })
+
+    this.player.one('loadedmetadata', () => {
+      console.log('hello 4')
     })
   }
 
