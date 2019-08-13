@@ -98,25 +98,10 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.runStats()
 
-    this.hlsjs.on('hlsLevelLoaded', () => {
-      console.log('hello1')
+    this.player.one('canplay', () => {
       if (this.startTime) {
         this.player.currentTime(this.startTime)
       }
-
-      this.hlsjs.off('hlsLevelLoaded', this)
-    })
-
-    this.hlsjs.on('hlsFragParsed', () => {
-      console.log('hello2')
-    })
-
-    this.hlsjs.on('hlsFragBuffered', () => {
-      console.log('hello 3')
-    })
-
-    this.player.one('loadedmetadata', () => {
-      console.log('hello 4')
     })
   }
 
