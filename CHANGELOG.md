@@ -8,6 +8,8 @@
  * **Important:** Updated nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
    * Fix long server responses on dual stack servers: https://github.com/Chocobozzz/PeerTube/commit/fd2ddcae8ff4eb10bf7168ac3c8801f06b37627f
    * Improve images HTTP cache: https://github.com/Chocobozzz/PeerTube/commit/c928e1364fbdff87f27fd982710b95426a250491
+ * **Important:** With the new theme system, we removed the dark mode button. Your administrator have to install [the dark theme](https://framagit.org/framasoft/peertube/official-plugins/tree/master/peertube-theme-dark)
+ from their admin panel, and then users can choose this theme in their settings 
  * Changed the playlist REST API to fix various issues. See https://github.com/Chocobozzz/PeerTube/pull/1998 for more information
  * Removed magnet URI support in download modal since most of the BitTorrent clients do not understand the `xs` parameter
  * Renamed `Overview` page to `Discover`
