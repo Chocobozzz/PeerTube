@@ -530,7 +530,7 @@ paths:
         - My User
       responses:
         '204':
-          description: Successful operation
+          description: successful operation
       requestBody:
         content:
           application/json:
@@ -818,12 +818,8 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
-        '200':
+        '204':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Video'
       requestBody:
         content:
           multipart/form-data:
@@ -872,6 +868,10 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
+                originallyPublishedAt:
+                  description: Date when the content was originally published
+                  type: string
+                  format: date-time
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
     get:
