@@ -239,7 +239,7 @@ export class PeerTubeEmbed {
 
       const config: ServerConfig = await configResponse.json()
       const description = config.tracker.enabled && this.warningTitle
-        ? '<span class="text">' + this.player.localize('Uses P2P, others may know your IP is downloading this video.') + '</span>'
+        ? '<span class="text">' + this.player.localize('Watching this video may reveal your IP address to others.') + '</span>'
         : undefined
 
       this.player.dock({
