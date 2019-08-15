@@ -20,11 +20,6 @@
   .vjs-dock-description {
     font-size: 11px;
 
-    .text::before, .text::after {
-      display: inline-block;
-      content: '\1F308';
-    }
-
     .text::before {
       margin-right: 4px;
     }
