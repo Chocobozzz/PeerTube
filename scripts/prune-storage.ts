@@ -9,6 +9,7 @@ import * as Bluebird from 'bluebird'
 import { getUUIDFromFilename } from '../server/helpers/utils'
 import { ThumbnailModel } from '../server/models/video/thumbnail'
 import { AvatarModel } from '../server/models/avatar/avatar'
+import { uniq, values } from 'lodash'
 
 run()
   .then(() => process.exit(0))
@@ -18,6 +19,13 @@ run()
   })
 
 async function run () {
+  const dirs = values(CONFIG.STORAGE)
+
+  if (uniq(dirs).length !== dirs.length) {
+    console.error('Cannot prune storage because you put multiple storage keys in the same directory.')
+    process.exit(0)
+  }
+
   await initDatabaseModels(true)
 
   let toDelete: string[] = []
