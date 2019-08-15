@@ -10,6 +10,7 @@ import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
+import { MActorFollowActorsDefault } from '@server/typings/models'
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
@@ -65,7 +66,7 @@ const getFollowerValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    let follow: ActorFollowModel
+    let follow: MActorFollowActorsDefault
     try {
       const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
       const actor = await ActorModel.loadByUrl(actorUrl)

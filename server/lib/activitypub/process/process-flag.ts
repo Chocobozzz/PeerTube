@@ -8,7 +8,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature, MVideoAbuseVideo } from '../../../typings/models'
 
 async function processFlagActivity (options: APProcessorOptions<ActivityCreate | ActivityFlag>) {
   const { activity, byActor } = options
@@ -23,7 +23,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag, byActor: SignatureActorModel) {
+async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag, byActor: MActorSignature) {
   const flag = activity.type === 'Flag' ? activity : (activity.object as VideoAbuseObject)
 
   logger.debug('Reporting remote abuse for video %s.', getAPId(flag.object))
@@ -41,7 +41,7 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
       state: VideoAbuseState.PENDING
     }
 
-    const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t })
+    const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t }) as MVideoAbuseVideo
     videoAbuseInstance.Video = video
 
     logger.info('Remote abuse for video uuid %s created', flag.object)

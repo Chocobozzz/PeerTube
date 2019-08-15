@@ -54,6 +54,8 @@ import { VideoImportModel } from '../video/video-import'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
+import * as Bluebird from 'bluebird'
+import { MUserChannel, MUserDefault, MUserId, MUserWithNotificationSetting } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -303,7 +305,7 @@ export class UserModel extends Model<UserModel> {
       })
   }
 
-  static listWithRight (right: UserRight) {
+  static listWithRight (right: UserRight): Bluebird<MUserDefault[]> {
     const roles = Object.keys(USER_ROLE_LABELS)
       .map(k => parseInt(k, 10) as UserRole)
       .filter(role => hasUserRight(role, right))
@@ -319,7 +321,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static listUserSubscribersOf (actorId: number) {
+  static listUserSubscribersOf (actorId: number): Bluebird<MUserWithNotificationSetting[]> {
     const query = {
       include: [
         {
@@ -358,7 +360,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.unscoped().findAll(query)
   }
 
-  static listByUsernames (usernames: string[]) {
+  static listByUsernames (usernames: string[]): Bluebird<MUserDefault[]> {
     const query = {
       where: {
         username: usernames
@@ -368,11 +370,11 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static loadById (id: number) {
+  static loadById (id: number): Bluebird<MUserDefault> {
     return UserModel.findByPk(id)
   }
 
-  static loadByUsername (username: string) {
+  static loadByUsername (username: string): Bluebird<MUserDefault> {
     const query = {
       where: {
         username: { [ Op.iLike ]: username }
@@ -382,7 +384,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameAndPopulateChannels (username: string) {
+  static loadByUsernameAndPopulateChannels (username: string): Bluebird<MUserChannel> {
     const query = {
       where: {
         username: { [ Op.iLike ]: username }
@@ -392,7 +394,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.scope(ScopeNames.WITH_VIDEO_CHANNEL).findOne(query)
   }
 
-  static loadByEmail (email: string) {
+  static loadByEmail (email: string): Bluebird<MUserDefault> {
     const query = {
       where: {
         email
@@ -402,7 +404,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameOrEmail (username: string, email?: string) {
+  static loadByUsernameOrEmail (username: string, email?: string): Bluebird<MUserDefault> {
     if (!email) email = username
 
     const query = {
@@ -414,7 +416,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByVideoId (videoId: number) {
+  static loadByVideoId (videoId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -445,7 +447,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByVideoImportId (videoImportId: number) {
+  static loadByVideoImportId (videoImportId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -462,7 +464,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByChannelActorId (videoChannelActorId: number) {
+  static loadByChannelActorId (videoChannelActorId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -486,7 +488,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByAccountActorId (accountActorId: number) {
+  static loadByAccountActorId (accountActorId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -503,7 +505,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static getOriginalVideoFileTotalFromUser (user: UserModel) {
+  static getOriginalVideoFileTotalFromUser (user: MUserId) {
     // Don't use sequelize because we need to use a sub query
     const query = UserModel.generateUserQuotaBaseSQL()
 
@@ -511,7 +513,7 @@ export class UserModel extends Model<UserModel> {
   }
 
   // Returns cumulative size of all video files uploaded in the last 24 hours.
-  static getOriginalVideoFileTotalDailyFromUser (user: UserModel) {
+  static getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
     // Don't use sequelize because we need to use a sub query
     const query = UserModel.generateUserQuotaBaseSQL('"video"."createdAt" > now() - interval \'24 hours\'')
 

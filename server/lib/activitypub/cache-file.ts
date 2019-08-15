@@ -1,10 +1,10 @@
 import { CacheFileObject } from '../../../shared/index'
-import { VideoModel } from '../../models/video/video'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { Transaction } from 'sequelize'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
+import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/typings/models'
 
-function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }) {
+function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId) {
 
   if (cacheFileObject.url.mediaType === 'application/x-mpegURL') {
     const url = cacheFileObject.url
@@ -39,7 +39,7 @@ function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject
   }
 }
 
-async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }, t: Transaction) {
+async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
   const redundancyModel = await VideoRedundancyModel.loadByUrl(cacheFileObject.id, t)
 
   if (!redundancyModel) {
@@ -49,7 +49,7 @@ async function createOrUpdateCacheFile (cacheFileObject: CacheFileObject, video:
   }
 }
 
-function createCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, byActor: { id?: number }, t: Transaction) {
+function createCacheFile (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId, t: Transaction) {
   const attributes = cacheFileActivityObjectToDBAttributes(cacheFileObject, video, byActor)
 
   return VideoRedundancyModel.create(attributes, { transaction: t })
@@ -57,9 +57,9 @@ function createCacheFile (cacheFileObject: CacheFileObject, video: VideoModel, b
 
 function updateCacheFile (
   cacheFileObject: CacheFileObject,
-  redundancyModel: VideoRedundancyModel,
-  video: VideoModel,
-  byActor: { id?: number },
+  redundancyModel: MVideoRedundancy,
+  video: MVideoWithAllFiles,
+  byActor: MActorId,
   t: Transaction
 ) {
   if (redundancyModel.actorId !== byActor.id) {

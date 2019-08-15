@@ -3,7 +3,8 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt, DataType,
+  CreatedAt,
+  DataType,
   Default,
   DefaultScope,
   ForeignKey,
@@ -31,6 +32,8 @@ import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequ
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { ActorFollowModel } from '../activitypub/actor-follow'
+import { MAccountActor, MAccountDefault } from '../../typings/models'
+import * as Bluebird from 'bluebird'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -229,11 +232,11 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number, transaction?: Transaction) {
+  static load (id: number, transaction?: Transaction): Bluebird<MAccountDefault> {
     return AccountModel.findByPk(id, { transaction })
   }
 
-  static loadByNameWithHost (nameWithHost: string) {
+  static loadByNameWithHost (nameWithHost: string): Bluebird<MAccountDefault> {
     const [ accountName, host ] = nameWithHost.split('@')
 
     if (!host || host === WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
@@ -241,7 +244,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.loadByNameAndHost(accountName, host)
   }
 
-  static loadLocalByName (name: string) {
+  static loadLocalByName (name: string): Bluebird<MAccountDefault> {
     const query = {
       where: {
         [ Op.or ]: [
@@ -271,7 +274,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByNameAndHost (name: string, host: string) {
+  static loadByNameAndHost (name: string, host: string): Bluebird<MAccountDefault> {
     const query = {
       include: [
         {
@@ -296,7 +299,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MAccountDefault> {
     const query = {
       include: [
         {
@@ -329,7 +332,7 @@ export class AccountModel extends Model<AccountModel> {
       })
   }
 
-  static listLocalsForSitemap (sort: string) {
+  static listLocalsForSitemap (sort: string): Bluebird<MAccountActor[]> {
     const query = {
       attributes: [ ],
       offset: 0,

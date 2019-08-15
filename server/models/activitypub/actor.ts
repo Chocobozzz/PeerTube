@@ -36,6 +36,8 @@ import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
 import { VideoModel } from '../video/video'
+import { MActor, MActorAccountChannelId, MActorFull } from '../../typings/models'
+import * as Bluebird from 'bluebird'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -252,11 +254,15 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
-  static load (id: number) {
+  static load (id: number): Bluebird<MActor> {
     return ActorModel.unscoped().findByPk(id)
   }
 
-  static loadAccountActorByVideoId (videoId: number, transaction: Sequelize.Transaction) {
+  static loadFull (id: number): Bluebird<MActorFull> {
+    return ActorModel.scope(ScopeNames.FULL).findByPk(id)
+  }
+
+  static loadFromAccountByVideoId (videoId: number, transaction: Sequelize.Transaction): Bluebird<MActor> {
     const query = {
       include: [
         {
@@ -300,7 +306,7 @@ export class ActorModel extends Model<ActorModel> {
       .then(a => !!a)
   }
 
-  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
+  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction): Bluebird<MActorFull[]> {
     const query = {
       where: {
         followersUrl: {
@@ -313,7 +319,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction) {
+  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername,
@@ -325,7 +331,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByNameAndHost (preferredUsername: string, host: string) {
+  static loadByNameAndHost (preferredUsername: string, host: string): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername
@@ -344,7 +350,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrl (url: string, transaction?: Sequelize.Transaction): Bluebird<MActorAccountChannelId> {
     const query = {
       where: {
         url
@@ -367,7 +373,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         url

@@ -3,6 +3,8 @@ import { AccountModel } from './account'
 import { getSort } from '../utils'
 import { AccountBlock } from '../../../shared/models/blocklist'
 import { Op } from 'sequelize'
+import * as Bluebird from 'bluebird'
+import { MAccountBlocklist, MAccountBlocklistAccounts } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS'
@@ -103,7 +105,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
                                 })
   }
 
-  static loadByAccountAndTarget (accountId: number, targetAccountId: number) {
+  static loadByAccountAndTarget (accountId: number, targetAccountId: number): Bluebird<MAccountBlocklist> {
     const query = {
       where: {
         accountId,
@@ -126,7 +128,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
 
     return AccountBlocklistModel
       .scope([ ScopeNames.WITH_ACCOUNTS ])
-      .findAndCountAll(query)
+      .findAndCountAll<MAccountBlocklistAccounts>(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })

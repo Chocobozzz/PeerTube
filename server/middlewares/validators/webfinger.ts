@@ -18,6 +18,7 @@ const webfingerValidator = [
     const nameWithHost = getHostWithPort(req.query.resource.substr(5))
     const [ name ] = nameWithHost.split('@')
 
+    // FIXME: we don't need the full actor
     const actor = await ActorModel.loadLocalByName(name)
     if (!actor) {
       return res.status(404)
@@ -25,7 +26,7 @@ const webfingerValidator = [
         .end()
     }
 
-    res.locals.actor = actor
+    res.locals.actorFull = actor
     return next()
   }
 ]

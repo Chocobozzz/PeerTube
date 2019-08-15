@@ -1,19 +1,23 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityCreate } from '../../../../shared/models/activitypub'
 import { VideoPrivacy } from '../../../../shared/models/videos'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { getServerActor } from '../../../helpers/utils'
-import * as Bluebird from 'bluebird'
+import {
+  MActorLight,
+  MCommentOwnerVideo,
+  MVideoAccountLight,
+  MVideoAP,
+  MVideoPlaylistFull,
+  MVideoRedundancyFileVideo,
+  MVideoRedundancyStreamingPlaylistVideo
+} from '../../../typings/models'
 
-async function sendCreateVideo (video: VideoModel, t: Transaction) {
+async function sendCreateVideo (video: MVideoAP, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
   logger.info('Creating job to send video creation of %s.', video.url)
@@ -27,7 +31,11 @@ async function sendCreateVideo (video: VideoModel, t: Transaction) {
   return broadcastToFollowers(createActivity, byActor, [ byActor ], t)
 }
 
-async function sendCreateCacheFile (byActor: ActorModel, video: VideoModel, fileRedundancy: VideoRedundancyModel) {
+async function sendCreateCacheFile (
+  byActor: MActorLight,
+  video: MVideoAccountLight,
+  fileRedundancy: MVideoRedundancyStreamingPlaylistVideo | MVideoRedundancyFileVideo
+) {
   logger.info('Creating job to send file cache of %s.', fileRedundancy.url)
 
   return sendVideoRelatedCreateActivity({
@@ -38,7 +46,7 @@ async function sendCreateCacheFile (byActor: ActorModel, video: VideoModel, file
   })
 }
 
-async function sendCreateVideoPlaylist (playlist: VideoPlaylistModel, t: Transaction) {
+async function sendCreateVideoPlaylist (playlist: MVideoPlaylistFull, t: Transaction) {
   if (playlist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
 
   logger.info('Creating job to send create video playlist of %s.', playlist.url)
@@ -57,7 +65,7 @@ async function sendCreateVideoPlaylist (playlist: VideoPlaylistModel, t: Transac
   return broadcastToFollowers(createActivity, byActor, toFollowersOf, t)
 }
 
-async function sendCreateVideoComment (comment: VideoCommentModel, t: Transaction) {
+async function sendCreateVideoComment (comment: MCommentOwnerVideo, t: Transaction) {
   logger.info('Creating job to send comment %s.', comment.url)
 
   const isOrigin = comment.Video.isOwned()
@@ -95,7 +103,7 @@ async function sendCreateVideoComment (comment: VideoCommentModel, t: Transactio
   t.afterCommit(() => unicastTo(createActivity, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl))
 }
 
-function buildCreateActivity (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityCreate {
+function buildCreateActivity (url: string, byActor: MActorLight, object: any, audience?: ActivityAudience): ActivityCreate {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(
@@ -122,8 +130,8 @@ export {
 // ---------------------------------------------------------------------------
 
 async function sendVideoRelatedCreateActivity (options: {
-  byActor: ActorModel,
-  video: VideoModel,
+  byActor: MActorLight,
+  video: MVideoAccountLight,
   url: string,
   object: any,
   transaction?: Transaction

@@ -136,7 +136,7 @@ async function updateVideoChannelAvatar (req: express.Request, res: express.Resp
 async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelInfo: VideoChannelCreate = req.body
 
-  const videoChannelCreated: VideoChannelModel = await sequelizeTypescript.transaction(async t => {
+  const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
     const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     return createVideoChannel(videoChannelInfo, account, t)

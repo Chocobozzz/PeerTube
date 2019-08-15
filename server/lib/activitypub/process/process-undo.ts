@@ -11,7 +11,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature } from '../../../typings/models'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   const { activity, byActor } = options
@@ -54,7 +54,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUndoLike (byActor: SignatureActorModel, activity: ActivityUndo) {
+async function processUndoLike (byActor: MActorSignature, activity: ActivityUndo) {
   const likeActivity = activity.object as ActivityLike
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: likeActivity.object })
@@ -77,7 +77,7 @@ async function processUndoLike (byActor: SignatureActorModel, activity: Activity
   })
 }
 
-async function processUndoDislike (byActor: SignatureActorModel, activity: ActivityUndo) {
+async function processUndoDislike (byActor: MActorSignature, activity: ActivityUndo) {
   const dislike = activity.object.type === 'Dislike'
     ? activity.object
     : activity.object.object as DislikeObject
@@ -102,7 +102,7 @@ async function processUndoDislike (byActor: SignatureActorModel, activity: Activ
   })
 }
 
-async function processUndoCacheFile (byActor: SignatureActorModel, activity: ActivityUndo) {
+async function processUndoCacheFile (byActor: MActorSignature, activity: ActivityUndo) {
   const cacheFileObject = activity.object.object as CacheFileObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFileObject.object })
@@ -127,7 +127,7 @@ async function processUndoCacheFile (byActor: SignatureActorModel, activity: Act
   })
 }
 
-function processUndoFollow (follower: SignatureActorModel, followActivity: ActivityFollow) {
+function processUndoFollow (follower: MActorSignature, followActivity: ActivityFollow) {
   return sequelizeTypescript.transaction(async t => {
     const following = await ActorModel.loadByUrlAndPopulateAccountAndChannel(followActivity.object, t)
     const actorFollow = await ActorFollowModel.loadByActorAndTarget(follower.id, following.id, t)
@@ -140,7 +140,7 @@ function processUndoFollow (follower: SignatureActorModel, followActivity: Activ
   })
 }
 
-function processUndoAnnounce (byActor: SignatureActorModel, announceActivity: ActivityAnnounce) {
+function processUndoAnnounce (byActor: MActorSignature, announceActivity: ActivityAnnounce) {
   return sequelizeTypescript.transaction(async t => {
     const share = await VideoShareModel.loadByUrl(announceActivity.id, t)
     if (!share) throw new Error(`Unknown video share ${announceActivity.id}.`)

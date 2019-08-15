@@ -10,6 +10,8 @@ import { buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { AccountVideoRate } from '../../../shared'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
+import * as Bluebird from 'bluebird'
+import { MAccountVideoRate, MAccountVideoRateAccountUrl, MAccountVideoRateAccountVideo } from '@server/typings/models/video/video-rate'
 
 /*
   Account rates per video.
@@ -77,7 +79,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   })
   Account: AccountModel
 
-  static load (accountId: number, videoId: number, transaction?: Transaction) {
+  static load (accountId: number, videoId: number, transaction?: Transaction): Bluebird<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
         accountId,
@@ -89,7 +91,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findOne(options)
   }
 
-  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, transaction?: Transaction) {
+  static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, t?: Transaction): Bluebird<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
         [ Op.or]: [
@@ -103,7 +105,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
         ]
       }
     }
-    if (transaction) options.transaction = transaction
+    if (t) options.transaction = t
 
     return AccountVideoRateModel.findOne(options)
   }
@@ -140,7 +142,12 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     return AccountVideoRateModel.findAndCountAll(query)
   }
 
-  static loadLocalAndPopulateVideo (rateType: VideoRateType, accountName: string, videoId: number, transaction?: Transaction) {
+  static loadLocalAndPopulateVideo (
+    rateType: VideoRateType,
+    accountName: string,
+    videoId: number,
+    t?: Transaction
+  ): Bluebird<MAccountVideoRateAccountVideo> {
     const options: FindOptions = {
       where: {
         videoId,
@@ -152,7 +159,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
           required: true,
           include: [
             {
-              attributes: [ 'id', 'url', 'preferredUsername' ],
+              attributes: [ 'id', 'url', 'followersUrl', 'preferredUsername' ],
               model: ActorModel.unscoped(),
               required: true,
               where: {
@@ -167,7 +174,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
         }
       ]
     }
-    if (transaction) options.transaction = transaction
+    if (t) options.transaction = t
 
     return AccountVideoRateModel.findOne(options)
   }
@@ -208,7 +215,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
       ]
     }
 
-    return AccountVideoRateModel.findAndCountAll(query)
+    return AccountVideoRateModel.findAndCountAll<MAccountVideoRateAccountUrl>(query)
   }
 
   static cleanOldRatesOf (videoId: number, type: VideoRateType, beforeUpdatedAt: Date) {

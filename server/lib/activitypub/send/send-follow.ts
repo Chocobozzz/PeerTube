@@ -4,9 +4,9 @@ import { getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { logger } from '../../../helpers/logger'
 import { Transaction } from 'sequelize'
-import { ActorModelOnly } from '../../../typings/models'
+import { MActor, MActorFollowActors } from '../../../typings/models'
 
-function sendFollow (actorFollow: ActorFollowModel, t: Transaction) {
+function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
 
@@ -21,7 +21,7 @@ function sendFollow (actorFollow: ActorFollowModel, t: Transaction) {
   t.afterCommit(() => unicastTo(data, me, following.inboxUrl))
 }
 
-function buildFollowActivity (url: string, byActor: ActorModelOnly, targetActor: ActorModelOnly): ActivityFollow {
+function buildFollowActivity (url: string, byActor: MActor, targetActor: MActor): ActivityFollow {
   return {
     type: 'Follow',
     id: url,

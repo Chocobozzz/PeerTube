@@ -43,6 +43,14 @@ import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-
 import { ThumbnailModel } from './thumbnail'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
+import * as Bluebird from 'bluebird'
+import {
+  MVideoPlaylistAccountThumbnail,
+  MVideoPlaylistFull,
+  MVideoPlaylistFullSummary,
+  MVideoPlaylistIdWithElements
+} from '../../typings/models/video/video-playlist'
+import { MThumbnail } from '../../typings/models/video/thumbnail'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -332,7 +340,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
                              })
   }
 
-  static listPlaylistIdsOf (accountId: number, videoIds: number[]) {
+  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Bluebird<MVideoPlaylistIdWithElements[]> {
     const query = {
       attributes: [ 'id' ],
       where: {
@@ -368,7 +376,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction) {
+  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFullSummary> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -381,7 +389,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadWithAccountAndChannel (id: number | string, transaction: Transaction) {
+  static loadWithAccountAndChannel (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFull> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -394,7 +402,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string) {
+  static loadByUrlAndPopulateAccount (url: string): Bluebird<MVideoPlaylistAccountThumbnail> {
     const query = {
       where: {
         url
@@ -423,7 +431,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
   }
 
-  async setAndSaveThumbnail (thumbnail: ThumbnailModel, t: Transaction) {
+  async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
     thumbnail.videoPlaylistId = this.id
 
     this.Thumbnail = await thumbnail.save({ transaction: t })

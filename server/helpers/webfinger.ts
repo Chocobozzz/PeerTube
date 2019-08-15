@@ -4,6 +4,7 @@ import { ActorModel } from '../models/activitypub/actor'
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators/activitypub/misc'
 import { WEBSERVER } from '../initializers/constants'
+import { MActorFull } from '../typings/models'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,
@@ -17,7 +18,7 @@ async function loadActorUrlOrGetFromWebfinger (uriArg: string) {
   const uri = uriArg.startsWith('@') ? uriArg.slice(1) : uriArg
 
   const [ name, host ] = uri.split('@')
-  let actor: ActorModel
+  let actor: MActorFull
 
   if (!host || host === WEBSERVER.HOST) {
     actor = await ActorModel.loadLocalByName(name)

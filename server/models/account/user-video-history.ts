@@ -1,7 +1,8 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoModel } from '../video/video'
 import { UserModel } from './user'
-import { Transaction, Op, DestroyOptions } from 'sequelize'
+import { DestroyOptions, Op, Transaction } from 'sequelize'
+import { MUserAccountId, MUserId } from '@server/typings/models'
 
 @Table({
   tableName: 'userVideoHistory',
@@ -54,7 +55,7 @@ export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
   })
   User: UserModel
 
-  static listForApi (user: UserModel, start: number, count: number) {
+  static listForApi (user: MUserAccountId, start: number, count: number) {
     return VideoModel.listForApi({
       start,
       count,
@@ -67,7 +68,7 @@ export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
     })
   }
 
-  static removeUserHistoryBefore (user: UserModel, beforeDate: string, t: Transaction) {
+  static removeUserHistoryBefore (user: MUserId, beforeDate: string, t: Transaction) {
     const query: DestroyOptions = {
       where: {
         userId: user.id

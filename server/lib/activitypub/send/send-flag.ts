@@ -1,14 +1,13 @@
-import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
-import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { getVideoAbuseActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { logger } from '../../../helpers/logger'
 import { ActivityAudience, ActivityFlag } from '../../../../shared/models/activitypub'
 import { audiencify, getAudience } from '../audience'
 import { Transaction } from 'sequelize'
+import { MActor, MVideoFullLight } from '../../../typings/models'
+import { MVideoAbuseVideo } from '../../../typings/models/video'
 
-async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel, t: Transaction) {
+async function sendVideoAbuse (byActor: MActor, videoAbuse: MVideoAbuseVideo, video: MVideoFullLight, t: Transaction) {
   if (!video.VideoChannel.Account.Actor.serverId) return // Local user
 
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
@@ -22,7 +21,7 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
   t.afterCommit(() => unicastTo(flagActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl))
 }
 
-function buildFlagActivity (url: string, byActor: ActorModel, videoAbuse: VideoAbuseModel, audience: ActivityAudience): ActivityFlag {
+function buildFlagActivity (url: string, byActor: MActor, videoAbuse: MVideoAbuseVideo, audience: ActivityAudience): ActivityFlag {
   if (!audience) audience = getAudience(byActor)
 
   const activity = Object.assign(

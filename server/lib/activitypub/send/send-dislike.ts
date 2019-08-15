@@ -1,13 +1,12 @@
 import { Transaction } from 'sequelize'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { getVideoDislikeActivityPubUrl } from '../url'
 import { logger } from '../../../helpers/logger'
 import { ActivityAudience, ActivityDislike } from '../../../../shared/models/activitypub'
 import { sendVideoRelatedActivity } from './utils'
 import { audiencify, getAudience } from '../audience'
+import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../typings/models'
 
-async function sendDislike (byActor: ActorModel, video: VideoModel, t: Transaction) {
+async function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to dislike %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
@@ -19,7 +18,7 @@ async function sendDislike (byActor: ActorModel, video: VideoModel, t: Transacti
   return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction: t })
 }
 
-function buildDislikeActivity (url: string, byActor: ActorModel, video: VideoModel, audience?: ActivityAudience): ActivityDislike {
+function buildDislikeActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityDislike {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(

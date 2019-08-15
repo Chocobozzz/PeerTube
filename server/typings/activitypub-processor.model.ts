@@ -1,10 +1,9 @@
 import { Activity } from '../../shared/models/activitypub'
-import { ActorModel } from '../models/activitypub/actor'
-import { SignatureActorModel } from './models'
+import { MActorDefault, MActorSignature } from './models'
 
 export type APProcessorOptions<T extends Activity> = {
   activity: T
-  byActor: SignatureActorModel
-  inboxActor?: ActorModel
+  byActor: MActorSignature
+  inboxActor?: MActorDefault
   fromFetch?: boolean
 }

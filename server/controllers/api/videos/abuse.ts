@@ -21,6 +21,7 @@ import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
 import { Notifier } from '../../../lib/notifier'
 import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
+import { MVideoAbuseAccountVideo } from '../../../typings/models/video'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -94,10 +95,10 @@ async function deleteVideoAbuse (req: express.Request, res: express.Response) {
 }
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   const body: VideoAbuseCreate = req.body
 
-  const videoAbuse: VideoAbuseModel = await sequelizeTypescript.transaction(async t => {
+  const videoAbuse = await sequelizeTypescript.transaction(async t => {
     const reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     const abuseToCreate = {
@@ -107,7 +108,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
       state: VideoAbuseState.PENDING
     }
 
-    const videoAbuseInstance = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
+    const videoAbuseInstance: MVideoAbuseAccountVideo = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
     videoAbuseInstance.Video = videoInstance
     videoAbuseInstance.Account = reporterAccount
 

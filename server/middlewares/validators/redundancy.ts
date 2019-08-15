@@ -24,7 +24,7 @@ const videoFileRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
+    const video = res.locals.videoAll
     const videoFile = video.VideoFiles.find(f => {
       return f.resolution === req.params.resolution && (!req.params.fps || f.fps === req.params.fps)
     })
@@ -50,7 +50,7 @@ const videoPlaylistRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
+    const video = res.locals.videoAll
     const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p === req.params.streamingPlaylistType)
 
     if (!videoStreamingPlaylist) return res.status(404).json({ error: 'Video playlist not found.' })

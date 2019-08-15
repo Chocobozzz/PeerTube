@@ -15,7 +15,6 @@ import { VideoImportModel } from '../../../models/video/video-import'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
 import { join } from 'path'
 import { isArray } from '../../../helpers/custom-validators/misc'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
@@ -25,8 +24,14 @@ import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
-import { ThumbnailModel } from '../../../models/video/thumbnail'
-import { UserModel } from '../../../models/account/user'
+import {
+  MChannelActorAccountDefault,
+  MThumbnail,
+  MUser,
+  MVideoThumbnailAccountDefault,
+  MVideoWithBlacklistLight
+} from '@server/typings/models'
+import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -225,28 +230,28 @@ async function processPreview (req: express.Request, video: VideoModel) {
 }
 
 function insertIntoDB (parameters: {
-  video: VideoModel,
-  thumbnailModel: ThumbnailModel,
-  previewModel: ThumbnailModel,
-  videoChannel: VideoChannelModel,
+  video: MVideoThumbnailAccountDefault,
+  thumbnailModel: MThumbnail,
+  previewModel: MThumbnail,
+  videoChannel: MChannelActorAccountDefault,
   tags: string[],
-  videoImportAttributes: Partial<VideoImportModel>,
-  user: UserModel
-}): Bluebird<VideoImportModel> {
+  videoImportAttributes: Partial<MVideoImport>,
+  user: MUser
+}): Bluebird<MVideoImportVideo> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
 
   return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     // Save video object in database
-    const videoCreated = await video.save(sequelizeOptions)
+    const videoCreated = await video.save(sequelizeOptions) as (MVideoThumbnailAccountDefault & MVideoWithBlacklistLight)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     await autoBlacklistVideoIfNeeded({
-      video,
+      video: videoCreated,
       user,
       notify: false,
       isRemote: false,
@@ -259,16 +264,13 @@ function insertIntoDB (parameters: {
       const tagInstances = await TagModel.findOrCreateTags(tags, t)
 
       await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
-      videoCreated.Tags = tagInstances
-    } else {
-      videoCreated.Tags = []
     }
 
     // Create video import object in database
     const videoImport = await VideoImportModel.create(
       Object.assign({ videoId: videoCreated.id }, videoImportAttributes),
       sequelizeOptions
-    )
+    ) as MVideoImportVideo
     videoImport.Video = videoCreated
 
     return videoImport

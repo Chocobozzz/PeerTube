@@ -1,6 +1,4 @@
 import { Transaction } from 'sequelize'
-import { AccountModel } from '../../models/account/account'
-import { VideoModel } from '../../models/video/video'
 import { sendLike, sendUndoDislike, sendUndoLike } from './send'
 import { VideoRateType } from '../../../shared/models/videos'
 import * as Bluebird from 'bluebird'
@@ -10,11 +8,11 @@ import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { doRequest } from '../../helpers/requests'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { ActorModel } from '../../models/activitypub/actor'
 import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from './url'
 import { sendDislike } from './send/send-dislike'
+import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../typings/models'
 
-async function createRates (ratesUrl: string[], video: VideoModel, rate: VideoRateType) {
+async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
   let rateCounts = 0
 
   await Bluebird.map(ratesUrl, async rateUrl => {
@@ -64,11 +62,13 @@ async function createRates (ratesUrl: string[], video: VideoModel, rate: VideoRa
   return
 }
 
-async function sendVideoRateChange (account: AccountModel,
-                              video: VideoModel,
-                              likes: number,
-                              dislikes: number,
-                              t: Transaction) {
+async function sendVideoRateChange (
+  account: MAccountActor,
+  video: MVideoAccountLight,
+  likes: number,
+  dislikes: number,
+  t: Transaction
+) {
   const actor = account.Actor
 
   // Keep the order: first we undo and then we create
@@ -84,8 +84,10 @@ async function sendVideoRateChange (account: AccountModel,
   if (dislikes > 0) await sendDislike(actor, video, t)
 }
 
-function getRateUrl (rateType: VideoRateType, actor: ActorModel, video: VideoModel) {
-  return rateType === 'like' ? getVideoLikeActivityPubUrl(actor, video) : getVideoDislikeActivityPubUrl(actor, video)
+function getRateUrl (rateType: VideoRateType, actor: MActorUrl, video: MVideoId) {
+  return rateType === 'like'
+    ? getVideoLikeActivityPubUrl(actor, video)
+    : getVideoDislikeActivityPubUrl(actor, video)
 }
 
 export {

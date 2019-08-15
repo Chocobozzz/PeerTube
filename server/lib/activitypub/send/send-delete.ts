@@ -1,17 +1,17 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityDelete } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getDeleteActivityPubUrl } from '../url'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { getServerActor } from '../../../helpers/utils'
+import { MCommentOwnerVideoReply, MVideoAccountLight, MVideoPlaylistFullSummary } from '../../../typings/models/video'
+import { MActorUrl } from '../../../typings/models'
 
-async function sendDeleteVideo (video: VideoModel, transaction: Transaction) {
+async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)
 
   const byActor = video.VideoChannel.Account.Actor
@@ -42,7 +42,7 @@ async function sendDeleteActor (byActor: ActorModel, t: Transaction) {
   return broadcastToFollowers(activity, byActor, actorsInvolved, t)
 }
 
-async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Transaction) {
+async function sendDeleteVideoComment (videoComment: MCommentOwnerVideoReply, t: Transaction) {
   logger.info('Creating job to send delete of comment %s.', videoComment.url)
 
   const isVideoOrigin = videoComment.Video.isOwned()
@@ -74,7 +74,7 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
   t.afterCommit(() => unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl))
 }
 
-async function sendDeleteVideoPlaylist (videoPlaylist: VideoPlaylistModel, t: Transaction) {
+async function sendDeleteVideoPlaylist (videoPlaylist: MVideoPlaylistFullSummary, t: Transaction) {
   logger.info('Creating job to send delete of playlist %s.', videoPlaylist.url)
 
   const byActor = videoPlaylist.OwnerAccount.Actor
@@ -101,7 +101,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildDeleteActivity (url: string, object: string, byActor: ActorModel, audience?: ActivityAudience): ActivityDelete {
+function buildDeleteActivity (url: string, object: string, byActor: MActorUrl, audience?: ActivityAudience): ActivityDelete {
   const activity = {
     type: 'Delete' as 'Delete',
     id: url,

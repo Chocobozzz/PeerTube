@@ -6,6 +6,7 @@ import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg
 import { copy, stat } from 'fs-extra'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { extname } from 'path'
+import { MVideoFile, MVideoWithFile } from '@server/typings/models'
 
 export type VideoFileImportPayload = {
   videoUUID: string,
@@ -37,7 +38,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function updateVideoFile (video: VideoModel, inputFilePath: string) {
+async function updateVideoFile (video: MVideoWithFile, inputFilePath: string) {
   const { videoFileResolution } = await getVideoFileResolution(inputFilePath)
   const { size } = await stat(inputFilePath)
   const fps = await getVideoFileFPS(inputFilePath)
@@ -48,7 +49,7 @@ async function updateVideoFile (video: VideoModel, inputFilePath: string) {
     size,
     fps,
     videoId: video.id
-  })
+  }) as MVideoFile
 
   const currentVideoFile = video.VideoFiles.find(videoFile => videoFile.resolution === updatedVideoFile.resolution)
 
@@ -60,9 +61,9 @@ async function updateVideoFile (video: VideoModel, inputFilePath: string) {
     video.VideoFiles = video.VideoFiles.filter(f => f !== currentVideoFile)
 
     // Update the database
-    currentVideoFile.set('extname', updatedVideoFile.extname)
-    currentVideoFile.set('size', updatedVideoFile.size)
-    currentVideoFile.set('fps', updatedVideoFile.fps)
+    currentVideoFile.extname = updatedVideoFile.extname
+    currentVideoFile.size = updatedVideoFile.size
+    currentVideoFile.fps = updatedVideoFile.fps
 
     updatedVideoFile = currentVideoFile
   }

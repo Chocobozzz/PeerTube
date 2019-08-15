@@ -3,7 +3,7 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { Redis } from '../../redis'
 import { ActivityCreate, ActivityView, ViewObject } from '../../../../shared/models/activitypub'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature } from '../../../typings/models'
 
 async function processViewActivity (options: APProcessorOptions<ActivityCreate | ActivityView>) {
   const { activity, byActor } = options
@@ -18,11 +18,11 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateView (activity: ActivityView | ActivityCreate, byActor: SignatureActorModel) {
+async function processCreateView (activity: ActivityView | ActivityCreate, byActor: MActorSignature) {
   const videoObject = activity.type === 'View' ? activity.object : (activity.object as ViewObject).object
 
   const options = {
-    videoObject: videoObject,
+    videoObject,
     fetchType: 'only-video' as 'only-video'
   }
   const { video } = await getOrCreateVideoAndAccountAndChannel(options)

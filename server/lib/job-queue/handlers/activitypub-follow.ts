@@ -10,6 +10,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { MActorFollowFull, MActorFull } from '../../../typings/models'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
@@ -23,13 +24,13 @@ async function processActivityPubFollow (job: Bull.Job) {
 
   logger.info('Processing ActivityPub follow in job %d.', job.id)
 
-  let targetActor: ActorModel
+  let targetActor: MActorFull
   if (!host || host === WEBSERVER.HOST) {
     targetActor = await ActorModel.loadLocalByName(payload.name)
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
     const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
-    targetActor = await getOrCreateActorAndServerAndModel(actorUrl)
+    targetActor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
   }
 
   const fromActor = await ActorModel.load(payload.followerActorId)
@@ -44,7 +45,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function follow (fromActor: ActorModel, targetActor: ActorModel) {
+async function follow (fromActor: MActorFull, targetActor: MActorFull) {
   if (fromActor.id === targetActor.id) {
     throw new Error('Follower is the same than target actor.')
   }
@@ -53,7 +54,7 @@ async function follow (fromActor: ActorModel, targetActor: ActorModel) {
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
   const actorFollow = await sequelizeTypescript.transaction(async t => {
-    const [ actorFollow ] = await ActorFollowModel.findOrCreate({
+    const [ actorFollow ] = await ActorFollowModel.findOrCreate<MActorFollowFull>({
       where: {
         actorId: fromActor.id,
         targetActorId: targetActor.id

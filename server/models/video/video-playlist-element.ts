@@ -25,6 +25,9 @@ import { UserModel } from '../account/user'
 import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/models/videos/playlist/video-playlist-element.model'
 import { AccountModel } from '../account/account'
 import { VideoPrivacy } from '../../../shared/models/videos'
+import * as Bluebird from 'bluebird'
+import { MVideoPlaylistAP, MVideoPlaylistElement, MVideoPlaylistVideoThumbnail } from '@server/typings/models/video/video-playlist-element'
+import { MUserAccountId } from '@server/typings/models'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -116,7 +119,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     count: number,
     videoPlaylistId: number,
     serverAccount: AccountModel,
-    user?: UserModel
+    user?: MUserAccountId
   }) {
     const accountIds = [ options.serverAccount.id ]
     const videoScope: (ScopeOptions | string)[] = [
@@ -162,7 +165,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     ]).then(([ total, data ]) => ({ total, data }))
   }
 
-  static loadByPlaylistAndVideo (videoPlaylistId: number, videoId: number) {
+  static loadByPlaylistAndVideo (videoPlaylistId: number, videoId: number): Bluebird<MVideoPlaylistElement> {
     const query = {
       where: {
         videoPlaylistId,
@@ -173,11 +176,11 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findOne(query)
   }
 
-  static loadById (playlistElementId: number) {
+  static loadById (playlistElementId: number): Bluebird<MVideoPlaylistElement> {
     return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 
-  static loadByPlaylistAndVideoForAP (playlistId: number | string, videoId: number | string) {
+  static loadByPlaylistAndVideoForAP (playlistId: number | string, videoId: number | string): Bluebird<MVideoPlaylistAP> {
     const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
     const videoWhere = validator.isUUID('' + videoId) ? { uuid: videoId } : { id: videoId }
 
@@ -218,7 +221,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
       })
   }
 
-  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number) {
+  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number): Bluebird<MVideoPlaylistVideoThumbnail> {
     const query = {
       order: getSort('position'),
       where: {

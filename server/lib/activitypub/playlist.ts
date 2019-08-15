@@ -1,7 +1,6 @@
 import { PlaylistObject } from '../../../shared/models/activitypub/objects/playlist-object'
 import { crawlCollectionPage } from './crawl'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { AccountModel } from '../../models/account/account'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { logger } from '../../helpers/logger'
@@ -13,14 +12,14 @@ import { PlaylistElementObject } from '../../../shared/models/activitypub/object
 import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import { isPlaylistElementObjectValid, isPlaylistObjectValid } from '../../helpers/custom-validators/activitypub/playlist'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
-import { VideoModel } from '../../models/video/video'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { sequelizeTypescript } from '../../initializers/database'
 import { createPlaylistMiniatureFromUrl } from '../thumbnail'
 import { FilteredModelAttributes } from '../../typings/sequelize'
-import { AccountModelId } from '../../typings/models'
+import { MAccountDefault, MAccountId, MVideoId } from '../../typings/models'
+import { MVideoPlaylist, MVideoPlaylistId, MVideoPlaylistOwner } from '../../typings/models/video/video-playlist'
 
-function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: AccountModelId, to: string[]) {
+function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPlaylistPrivacy.PUBLIC : VideoPlaylistPrivacy.UNLISTED
 
   return {
@@ -36,7 +35,7 @@ function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount
   }
 }
 
-function playlistElementObjectToDBAttributes (elementObject: PlaylistElementObject, videoPlaylist: VideoPlaylistModel, video: VideoModel) {
+function playlistElementObjectToDBAttributes (elementObject: PlaylistElementObject, videoPlaylist: MVideoPlaylistId, video: MVideoId) {
   return {
     position: elementObject.position,
     url: elementObject.id,
@@ -47,7 +46,7 @@ function playlistElementObjectToDBAttributes (elementObject: PlaylistElementObje
   }
 }
 
-async function createAccountPlaylists (playlistUrls: string[], account: AccountModel) {
+async function createAccountPlaylists (playlistUrls: string[], account: MAccountDefault) {
   await Bluebird.map(playlistUrls, async playlistUrl => {
     try {
       const exists = await VideoPlaylistModel.doesPlaylistExist(playlistUrl)
@@ -75,7 +74,7 @@ async function createAccountPlaylists (playlistUrls: string[], account: AccountM
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAccount: AccountModelId, to: string[]) {
+async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
   const playlistAttributes = playlistObjectToDBAttributes(playlistObject, byAccount, to)
 
   if (isArray(playlistObject.attributedTo) && playlistObject.attributedTo.length === 1) {
@@ -88,7 +87,7 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     }
   }
 
-  const [ playlist ] = await VideoPlaylistModel.upsert<VideoPlaylistModel>(playlistAttributes, { returning: true })
+  const [ playlist ] = await VideoPlaylistModel.upsert<MVideoPlaylist>(playlistAttributes, { returning: true })
 
   let accItems: string[] = []
   await crawlCollectionPage<string>(playlistObject.id, items => {
@@ -114,7 +113,7 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
   return resetVideoPlaylistElements(accItems, refreshedPlaylist)
 }
 
-async function refreshVideoPlaylistIfNeeded (videoPlaylist: VideoPlaylistModel): Promise<VideoPlaylistModel> {
+async function refreshVideoPlaylistIfNeeded (videoPlaylist: MVideoPlaylistOwner): Promise<MVideoPlaylistOwner> {
   if (!videoPlaylist.isOutdated()) return videoPlaylist
 
   try {
@@ -157,7 +156,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function resetVideoPlaylistElements (elementUrls: string[], playlist: VideoPlaylistModel) {
+async function resetVideoPlaylistElements (elementUrls: string[], playlist: MVideoPlaylist) {
   const elementsToCreate: FilteredModelAttributes<VideoPlaylistElementModel>[] = []
 
   await Bluebird.map(elementUrls, async elementUrl => {

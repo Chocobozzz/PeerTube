@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { VideoBlacklist, UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../../../shared'
+import { UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import {
@@ -11,15 +11,16 @@ import {
   setBlacklistSort,
   setDefaultPagination,
   videosBlacklistAddValidator,
+  videosBlacklistFiltersValidator,
   videosBlacklistRemoveValidator,
-  videosBlacklistUpdateValidator,
-  videosBlacklistFiltersValidator
+  videosBlacklistUpdateValidator
 } from '../../../middlewares'
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
 import { Notifier } from '../../../lib/notifier'
 import { sendDeleteVideo } from '../../../lib/activitypub/send'
 import { federateVideoIfNeeded } from '../../../lib/activitypub'
+import { MVideoBlacklistVideo } from '@server/typings/models'
 
 const blacklistRouter = express.Router()
 
@@ -64,7 +65,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function addVideoToBlacklist (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   const body: VideoBlacklistCreate = req.body
 
   const toCreate = {
@@ -74,7 +75,7 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response)
     type: VideoBlacklistType.MANUAL
   }
 
-  const blacklist = await VideoBlacklistModel.create(toCreate)
+  const blacklist: MVideoBlacklistVideo = await VideoBlacklistModel.create(toCreate)
   blacklist.Video = videoInstance
 
   if (body.unfederate === true) {
@@ -83,7 +84,7 @@ async function addVideoToBlacklist (req: express.Request, res: express.Response)
 
   Notifier.Instance.notifyOnVideoBlacklist(blacklist)
 
-  logger.info('Video %s blacklisted.', res.locals.video.uuid)
+  logger.info('Video %s blacklisted.', videoInstance.uuid)
 
   return res.type('json').status(204).end()
 }
@@ -108,7 +109,7 @@ async function listBlacklist (req: express.Request, res: express.Response) {
 
 async function removeVideoFromBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist
-  const video = res.locals.video
+  const video = res.locals.videoAll
 
   const videoBlacklistType = await sequelizeTypescript.transaction(async t => {
     const unfederated = videoBlacklist.unfederated
@@ -135,7 +136,7 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
     Notifier.Instance.notifyOnNewVideoIfNeeded(video)
   }
 
-  logger.info('Video %s removed from blacklist.', res.locals.video.uuid)
+  logger.info('Video %s removed from blacklist.', video.uuid)
 
   return res.type('json').status(204).end()
 }

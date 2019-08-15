@@ -21,6 +21,8 @@ import { join } from 'path'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
+import * as Bluebird from 'bluebird'
+import { MVideoCaptionVideo } from '@server/typings/models'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
@@ -30,7 +32,7 @@ export enum ScopeNames {
   [ScopeNames.WITH_VIDEO_UUID_AND_REMOTE]: {
     include: [
       {
-        attributes: [ 'uuid', 'remote' ],
+        attributes: [ 'id', 'uuid', 'remote' ],
         model: VideoModel.unscoped(),
         required: true
       }
@@ -93,7 +95,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return undefined
   }
 
-  static loadByVideoIdAndLanguage (videoId: string | number, language: string) {
+  static loadByVideoIdAndLanguage (videoId: string | number, language: string): Bluebird<MVideoCaptionVideo> {
     const videoInclude = {
       model: VideoModel.unscoped(),
       attributes: [ 'id', 'remote', 'uuid' ],
@@ -122,7 +124,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
       .then(([ caption ]) => caption)
   }
 
-  static listVideoCaptions (videoId: number) {
+  static listVideoCaptions (videoId: number): Bluebird<MVideoCaptionVideo[]> {
     const query = {
       order: [ [ 'language', 'ASC' ] ] as OrderItem[],
       where: {

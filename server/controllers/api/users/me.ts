@@ -147,7 +147,7 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
 }
 
 async function getUserVideoRating (req: express.Request, res: express.Response) {
-  const videoId = res.locals.video.id
+  const videoId = res.locals.videoId.id
   const accountId = +res.locals.oauth.token.User.Account.id
 
   const ratingObj = await AccountVideoRateModel.load(accountId, videoId, null)
