@@ -11,3 +11,9 @@ $slider-bg-color: lighten($primary-background-color, 33%);
 $progress-margin: 10px;
 
 $assets-path: '../../assets/' !default;
+
+body {
+  --embedForegroundColor: #{$primary-foreground-color};
+
+  --embedBigPlayBackgroundColor: #{$primary-background-color};
+}

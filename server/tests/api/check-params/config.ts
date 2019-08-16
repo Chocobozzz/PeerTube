@@ -27,6 +27,9 @@ describe('Test config API validators', function () {
         css: 'body { background-color: red; }'
       }
     },
+    theme: {
+      default: 'default'
+    },
     services: {
       twitter: {
         username: '@MySuperUsername',
@@ -59,13 +62,15 @@ describe('Test config API validators', function () {
     transcoding: {
       enabled: true,
       allowAdditionalExtensions: true,
+      allowAudioFiles: true,
       threads: 1,
       resolutions: {
         '240p': false,
         '360p': true,
         '480p': true,
         '720p': false,
-        '1080p': false
+        '1080p': false,
+        '2160p': false
       },
       hls: {
         enabled: false

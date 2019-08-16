@@ -1,8 +1,9 @@
 import * as express from 'express'
-import { param } from 'express-validator/check'
-import { isAccountNameValid, doesAccountNameWithHostExist, doesLocalAccountNameExist } from '../../helpers/custom-validators/accounts'
+import { param } from 'express-validator'
+import { isAccountNameValid } from '../../helpers/custom-validators/accounts'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
+import { doesAccountNameWithHostExist, doesLocalAccountNameExist } from '../../helpers/middlewares'
 
 const localAccountValidator = [
   param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),

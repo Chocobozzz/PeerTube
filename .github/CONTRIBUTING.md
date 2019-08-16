@@ -7,10 +7,9 @@ Interested in contributing? Awesome!
   * [Translate](#translate)
   * [Give your feedback](#give-your-feedback)
   * [Write documentation](#write-documentation)
-  * [Develop](#develop)
   * [Improve the website](#improve-the-website)
-  * [Troubleshooting](#troubleshooting)
-  * [Tutorials](#tutorials)
+  * [Develop](#develop)
+  * [Write a plugin or a theme](#plugins--themes)
 
 ## Translate
 
@@ -59,12 +58,14 @@ First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead
 
 Make sure that you have followed
 [the steps](/support/doc/dependencies.md)
-to install the dependencies.
+to install the dependencies. You'll need to install **NodeJS 10**.
 
-Then clone the sources and install node modules:
+Fork the github repository,
+and then clone the sources and install node modules:
 
 ```
 $ git clone https://github.com/Chocobozzz/PeerTube
+$ git remote add me git@github.com:YOUR_GITHUB_USERNAME/PeerTube.git
 $ cd PeerTube
 $ yarn install --pure-lockfile
 ```
@@ -72,6 +73,12 @@ $ yarn install --pure-lockfile
 Note that development is done on the `develop` branch. If you want to hack on
 Peertube, you should switch to that branch. Also note that you have to repeat
 the `yarn install --pure-lockfile` command.
+
+When you create a new branch you should also tell to use your repo for upload
+not default one. To do just do:
+```
+$ git push --set-upstream me <your branch name>
+```
 
 Then, create a postgres database and user with the values set in the
 `config/default.yaml` file. For instance, if you do not change the values
@@ -101,7 +108,7 @@ You can get a complete PeerTube development setup with Gitpod, a free one-click 
 
 ### Server side
 
-You can find a documentation of the server code/architecture [here](/support/doc/development/server/code.md).
+You can find a documentation of the server code/architecture [here](https://docs.joinpeertube.org/#/contribute-architecture?id=server-code).
 
 To develop on the server-side:
 
@@ -115,8 +122,8 @@ restart.
 
 ### Client side
 
-You can find a documentation of the server code/architecture
-[here](/support/doc/development/client/code.md).
+You can find a documentation of the client code/architecture
+[here](https://docs.joinpeertube.org/#/contribute-architecture?id=client-code).
 
 
 To develop on the client side:
@@ -175,13 +182,13 @@ Then, we can create the databases (if they don't already exist):
 
 ```
 $ sudo -u postgres createuser you_username --createdb --superuser
-$ createdb -O peertube peertube_test{1,2,3,4,5,6}
+$ npm run clean:server:test
 ```
 
 Build the application and run the unit/integration tests:
 
 ```
-$ npm run build
+$ npm run build -- --light
 $ npm test
 ```
 
@@ -194,10 +201,6 @@ $ npm run mocha -- --exit --require ts-node/register/type-check --bail server/te
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
 
-### Troubleshooting
+## Plugins & Themes
 
-Please check out the issues and [list of common errors](https://docs.joinpeertube.org/lang/en/devdocs/troubleshooting.html).
-
-### Tutorials
-
-Please check out the related section in the [development documentation](https://docs.joinpeertube.org/lang/en/devdocs/index.html#tutorials). Contribute tutorials at [framagit.org/framasoft/peertube/documentation](https://framagit.org/framasoft/peertube/documentation).
+See the dedicated documentation: https://docs.joinpeertube.org/#/contribute-plugins

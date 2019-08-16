@@ -12,7 +12,7 @@ export class UserValidatorsService {
   readonly USER_VIDEO_QUOTA: BuildFormValidator
   readonly USER_VIDEO_QUOTA_DAILY: BuildFormValidator
   readonly USER_ROLE: BuildFormValidator
-  readonly USER_DISPLAY_NAME: BuildFormValidator
+  readonly USER_DISPLAY_NAME_REQUIRED: BuildFormValidator
   readonly USER_DESCRIPTION: BuildFormValidator
   readonly USER_TERMS: BuildFormValidator
 
@@ -85,18 +85,7 @@ export class UserValidatorsService {
       }
     }
 
-    this.USER_DISPLAY_NAME = {
-      VALIDATORS: [
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(50)
-      ],
-      MESSAGES: {
-        'required': this.i18n('Display name is required.'),
-        'minlength': this.i18n('Display name must be at least 1 character long.'),
-        'maxlength': this.i18n('Display name cannot be more than 50 characters long.')
-      }
-    }
+    this.USER_DISPLAY_NAME_REQUIRED = this.getDisplayName(true)
 
     this.USER_DESCRIPTION = {
       VALIDATORS: [
@@ -128,5 +117,23 @@ export class UserValidatorsService {
         'maxlength': this.i18n('Ban reason cannot be more than 250 characters long.')
       }
     }
+  }
+
+  private getDisplayName (required: boolean) {
+    const control = {
+      VALIDATORS: [
+        Validators.minLength(1),
+        Validators.maxLength(120)
+      ],
+      MESSAGES: {
+        'required': this.i18n('Display name is required.'),
+        'minlength': this.i18n('Display name must be at least 1 character long.'),
+        'maxlength': this.i18n('Display name cannot be more than 50 characters long.')
+      }
+    }
+
+    if (required) control.VALIDATORS.push(Validators.required)
+
+    return control
   }
 }

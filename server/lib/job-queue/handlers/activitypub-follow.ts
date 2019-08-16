@@ -69,7 +69,7 @@ async function follow (fromActor: ActorModel, targetActor: ActorModel) {
     actorFollow.ActorFollower = fromActor
 
     // Send a notification to remote server if our follow is not already accepted
-    if (actorFollow.state !== 'accepted') await sendFollow(actorFollow)
+    if (actorFollow.state !== 'accepted') sendFollow(actorFollow, t)
 
     return actorFollow
   })

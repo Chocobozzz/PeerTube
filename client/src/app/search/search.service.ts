@@ -5,7 +5,7 @@ import { Observable } from 'rxjs'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { RestExtractor, RestService } from '@app/shared'
-import { environment } from 'environments/environment'
+import { environment } from '../../environments/environment'
 import { ResultList, Video as VideoServerModel, VideoChannel as VideoChannelServerModel } from '../../../../shared'
 import { Video } from '@app/shared/video/video.model'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
@@ -23,13 +23,14 @@ export class SearchService {
     private videoService: VideoService
   ) {}
 
-  searchVideos (
+  searchVideos (parameters: {
     search: string,
     componentPagination: ComponentPagination,
     advancedSearch: AdvancedSearch
-  ): Observable<{ videos: Video[], totalVideos: number }> {
-    const url = SearchService.BASE_SEARCH_URL + 'videos'
+  }): Observable<ResultList<Video>> {
+    const { search, componentPagination, advancedSearch } = parameters
 
+    const url = SearchService.BASE_SEARCH_URL + 'videos'
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
     let params = new HttpParams()
@@ -48,12 +49,13 @@ export class SearchService {
                )
   }
 
-  searchVideoChannels (
+  searchVideoChannels (parameters: {
     search: string,
     componentPagination: ComponentPagination
-  ): Observable<{ data: VideoChannel[], total: number }> {
-    const url = SearchService.BASE_SEARCH_URL + 'video-channels'
+  }): Observable<ResultList<VideoChannel>> {
+    const { search, componentPagination } = parameters
 
+    const url = SearchService.BASE_SEARCH_URL + 'video-channels'
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
     let params = new HttpParams()

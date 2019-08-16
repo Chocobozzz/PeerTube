@@ -45,7 +45,7 @@ export class OverviewService {
           of(object.videos)
             .pipe(
               switchMap(videos => this.videosService.extractVideos({ total: 0, data: videos })),
-              map(result => result.videos),
+              map(result => result.data),
               tap(videos => {
                 videosOverviewResult[key].push(immutableAssign(object, { videos }))
               })

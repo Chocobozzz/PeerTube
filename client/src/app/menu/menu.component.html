@@ -63,7 +63,7 @@
 
         <a routerLink="/videos/overview" routerLinkActive="active">
           <my-global-icon iconName="globe"></my-global-icon>
-          <ng-container i18n>Overview</ng-container>
+          <ng-container i18n>Discover</ng-container>
         </a>
 
         <a routerLink="/videos/trending" routerLinkActive="active">
@@ -101,11 +101,9 @@
       <span class="language">
         <span tabindex="0" (keyup.enter)="openLanguageChooser()" (click)="openLanguageChooser()" i18n-title title="Change the language" class="icon icon-language"></span>
       </span>
+
       <span class="shortcuts">
         <span tabindex="0" (keyup.enter)="openHotkeysCheatSheet()" (click)="openHotkeysCheatSheet()" i18n-title title="Show keyboard shortcuts" class="icon icon-shortcuts"></span>
-      </span>
-      <span class="color-palette">
-        <span tabindex="0" (keyup.enter)="toggleDarkTheme()" (click)="toggleDarkTheme()" i18n-title title="Toggle dark interface" class="icon icon-moonsun"></span>
       </span>
     </div>
   </menu>

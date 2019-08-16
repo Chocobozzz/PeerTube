@@ -1,10 +1,10 @@
 import { join } from 'path'
-import { JobType, VideoRateType, VideoState } from '../../shared/models'
+import { JobType, VideoRateType, VideoResolution, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl } from '../helpers/core-utils'
+import { isTestInstance, sanitizeHost, sanitizeUrl, root, parseDurationToMs } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
@@ -14,12 +14,12 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 380
+const LAST_MIGRATION_VERSION = 420
 
 // ---------------------------------------------------------------------------
 
-// API version
 const API_VERSION = 'v1'
+const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
   COUNT: {
@@ -39,7 +39,7 @@ const WEBSERVER = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'id', 'username', 'createdAt' ],
+  USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt' ],
   USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
@@ -62,7 +62,11 @@ const SORTABLE_COLUMNS = {
 
   USER_NOTIFICATIONS: [ 'createdAt' ],
 
-  VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ]
+  VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ],
+
+  PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
+
+  AVAILABLE_PLUGINS: [ 'npmName', 'popularity' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -163,13 +167,14 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldJobs: 60000 * 60, // 1 hour
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
+  checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24 // 1 day
 }
 
 // ---------------------------------------------------------------------------
 
-let CONSTRAINTS_FIELDS = {
+const CONSTRAINTS_FIELDS = {
   USERS: {
     NAME: { min: 1, max: 120 }, // Length
     DESCRIPTION: { min: 3, max: 1000 }, // Length
@@ -177,6 +182,7 @@ let CONSTRAINTS_FIELDS = {
     PASSWORD: { min: 6, max: 255 }, // Length
     VIDEO_QUOTA: { min: -1 },
     VIDEO_QUOTA_DAILY: { min: -1 },
+    VIDEO_LANGUAGES: { max: 500 }, // Array length
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
   VIDEO_ABUSES: {
@@ -228,7 +234,7 @@ let CONSTRAINTS_FIELDS = {
         max: 2 * 1024 * 1024 // 2MB
       }
     },
-    EXTNAME: buildVideosExtname(),
+    EXTNAME: [] as string[],
     INFO_HASH: { min: 40, max: 40 }, // Length, info hash is 20 bytes length but we represent it in hexadecimal so 20 * 2
     DURATION: { min: 0 }, // Number
     TAGS: { min: 0, max: 5 }, // Number of total tags
@@ -276,17 +282,10 @@ let CONSTRAINTS_FIELDS = {
   CONTACT_FORM: {
     FROM_NAME: { min: 1, max: 120 }, // Length
     BODY: { min: 3, max: 5000 } // Length
-  }
-}
-
-const RATES_LIMIT = {
-  LOGIN: {
-    WINDOW_MS: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
-    MAX: CONFIG.RATES_LIMIT.LOGIN.MAX
   },
-  ASK_SEND_EMAIL: {
-    WINDOW_MS: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
-    MAX: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
+  PLUGINS: {
+    NAME: { min: 1, max: 214 }, // Length
+    DESCRIPTION: { min: 1, max: 20000 } // Length
   }
 }
 
@@ -299,6 +298,8 @@ const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MAX: 60,
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
 }
+
+const DEFAULT_AUDIO_RESOLUTION = VideoResolution.H_480P
 
 const VIDEO_RATE_TYPES: { [ id: string ]: VideoRateType } = {
   LIKE: 'like',
@@ -380,8 +381,18 @@ const VIDEO_PLAYLIST_TYPES = {
 }
 
 const MIMETYPES = {
+  AUDIO: {
+    MIMETYPE_EXT: {
+      'audio/mpeg': '.mp3',
+      'audio/mp3': '.mp3',
+      'application/ogg': '.ogg',
+      'audio/ogg': '.ogg',
+      'audio/flac': '.flac'
+    },
+    EXT_MIMETYPE: null as { [ id: string ]: string }
+  },
   VIDEO: {
-    MIMETYPE_EXT: buildVideoMimetypeExt(),
+    MIMETYPE_EXT: null as { [ id: string ]: string },
     EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   IMAGE: {
@@ -403,7 +414,7 @@ const MIMETYPES = {
     }
   }
 }
-MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
+MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
 
 // ---------------------------------------------------------------------------
 
@@ -429,7 +440,7 @@ const ACTIVITY_PUB = {
   COLLECTION_ITEMS_PER_PAGE: 10,
   FETCH_PAGE_LIMIT: 100,
   URL_MIME_TYPES: {
-    VIDEO: Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT),
+    VIDEO: [] as string[],
     TORRENT: [ 'application/x-bittorrent' ],
     MAGNET: [ 'application/x-bittorrent;x-scheme-handler/magnet' ]
   },
@@ -487,9 +498,17 @@ const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
   VIDEOS: '/download/videos/'
 }
+const LAZY_STATIC_PATHS = {
+  AVATARS: '/lazy-static/avatars/',
+  PREVIEWS: '/static/previews/',
+  VIDEO_CAPTIONS: '/static/video-captions/'
+}
 
 // Cache control
-let STATIC_MAX_AGE = '2h'
+let STATIC_MAX_AGE = {
+  SERVER: '2h',
+  CLIENT: '30d'
+}
 
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
@@ -497,8 +516,8 @@ const THUMBNAILS_SIZE = {
   height: 122
 }
 const PREVIEWS_SIZE = {
-  width: 560,
-  height: 315
+  width: 850,
+  height: 480
 }
 const AVATARS_SIZE = {
   width: 120,
@@ -522,9 +541,12 @@ const FILES_CACHE = {
   }
 }
 
-const CACHE = {
+const LRU_CACHE = {
   USER_TOKENS: {
-    MAX_SIZE: 10000
+    MAX_SIZE: 1000
+  },
+  AVATAR_STATIC: {
+    MAX_SIZE: 500
   }
 }
 
@@ -535,6 +557,10 @@ const MEMOIZE_TTL = {
   OVERVIEWS_SAMPLE: 1000 * 3600 * 4 // 4 hours
 }
 
+const QUEUE_CONCURRENCY = {
+  AVATAR_PROCESS_IMAGE: 3
+}
+
 const REDUNDANCY = {
   VIDEOS: {
     RANDOMIZED_FACTOR: 5
@@ -542,6 +568,10 @@ const REDUNDANCY = {
 }
 
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
+
+const ASSETS_PATH = {
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'server', 'assets', 'default-audio-background.jpg')
+}
 
 // ---------------------------------------------------------------------------
 
@@ -572,6 +602,14 @@ const P2P_MEDIA_LOADER_PEER_VERSION = 2
 
 // ---------------------------------------------------------------------------
 
+const PLUGIN_GLOBAL_CSS_FILE_NAME = 'plugins-global.css'
+const PLUGIN_GLOBAL_CSS_PATH = join(CONFIG.STORAGE.TMP_DIR, PLUGIN_GLOBAL_CSS_FILE_NAME)
+
+const DEFAULT_THEME_NAME = 'default'
+const DEFAULT_USER_THEME_NAME = 'instance-default'
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   PRIVATE_RSA_KEY_SIZE = 1024
@@ -581,7 +619,7 @@ if (isTestInstance() === true) {
   REMOTE_SCHEME.HTTP = 'http'
   REMOTE_SCHEME.WS = 'ws'
 
-  STATIC_MAX_AGE = '0'
+  STATIC_MAX_AGE.SERVER = '0'
 
   ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE = 2
   ACTIVITY_PUB.ACTOR_REFRESH_INTERVAL = 10 * 1000 // 10 seconds
@@ -607,11 +645,10 @@ if (isTestInstance() === true) {
   FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
   MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
   ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0ms'
-
-  RATES_LIMIT.LOGIN.MAX = 20
 }
 
 updateWebserverUrls()
+updateWebserverConfig()
 
 registerConfigChangedHandler(() => {
   updateWebserverUrls()
@@ -623,6 +660,8 @@ registerConfigChangedHandler(() => {
 export {
   WEBSERVER,
   API_VERSION,
+  PEERTUBE_VERSION,
+  LAZY_STATIC_PATHS,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   AVATARS_SIZE,
@@ -644,13 +683,17 @@ export {
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
+  DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,
+  PLUGIN_GLOBAL_CSS_FILE_NAME,
+  PLUGIN_GLOBAL_CSS_PATH,
   PRIVATE_RSA_KEY_SIZE,
   ROUTE_CACHE_LIFETIME,
   SORTABLE_COLUMNS,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
   FEEDS,
   JOB_TTL,
+  DEFAULT_THEME_NAME,
   NSFW_POLICY_TYPES,
   STATIC_MAX_AGE,
   STATIC_PATHS,
@@ -665,11 +708,12 @@ export {
   VIDEO_PRIVACIES,
   VIDEO_LICENCES,
   VIDEO_STATES,
+  QUEUE_CONCURRENCY,
   VIDEO_RATE_TYPES,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   VIDEO_ABUSE_STATES,
-  CACHE,
+  LRU_CACHE,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
   MEMOIZE_TTL,
@@ -678,15 +722,16 @@ export {
   SCHEDULER_INTERVALS_MS,
   REPEAT_JOBS,
   STATIC_DOWNLOAD_PATHS,
-  RATES_LIMIT,
   MIMETYPES,
   CRAWL_REQUEST_CONCURRENCY,
+  DEFAULT_AUDIO_RESOLUTION,
   JOB_COMPLETED_LIFETIME,
   HTTP_SIGNATURE,
   VIDEO_IMPORT_STATES,
   VIDEO_VIEW_LIFETIME,
   CONTACT_FORM_LIFETIME,
   VIDEO_PLAYLIST_PRIVACIES,
+  ASSETS_PATH,
   loadLanguages,
   buildLanguages
 }
@@ -700,15 +745,21 @@ function buildVideoMimetypeExt () {
     'video/mp4': '.mp4'
   }
 
-  if (CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
-    Object.assign(data, {
-      'video/quicktime': '.mov',
-      'video/x-msvideo': '.avi',
-      'video/x-flv': '.flv',
-      'video/x-matroska': '.mkv',
-      'application/octet-stream': '.mkv',
-      'video/avi': '.avi'
-    })
+  if (CONFIG.TRANSCODING.ENABLED) {
+    if (CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS) {
+      Object.assign(data, {
+        'video/quicktime': '.mov',
+        'video/x-msvideo': '.avi',
+        'video/x-flv': '.flv',
+        'video/x-matroska': '.mkv',
+        'application/octet-stream': '.mkv',
+        'video/avi': '.avi'
+      })
+    }
+
+    if (CONFIG.TRANSCODING.ALLOW_AUDIO_FILES) {
+      Object.assign(data, MIMETYPES.AUDIO.MIMETYPE_EXT)
+    }
   }
 
   return data
@@ -724,16 +775,15 @@ function updateWebserverUrls () {
 }
 
 function updateWebserverConfig () {
-  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = buildVideosExtname()
-
   MIMETYPES.VIDEO.MIMETYPE_EXT = buildVideoMimetypeExt()
   MIMETYPES.VIDEO.EXT_MIMETYPE = invert(MIMETYPES.VIDEO.MIMETYPE_EXT)
+  ACTIVITY_PUB.URL_MIME_TYPES.VIDEO = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
+
+  CONSTRAINTS_FIELDS.VIDEOS.EXTNAME = buildVideosExtname()
 }
 
 function buildVideosExtname () {
-  return CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS
-    ? [ '.mp4', '.ogv', '.webm', '.mkv', '.mov', '.avi', '.flv' ]
-    : [ '.mp4', '.ogv', '.webm' ]
+  return Object.keys(MIMETYPES.VIDEO.EXT_MIMETYPE)
 }
 
 function loadLanguages () {

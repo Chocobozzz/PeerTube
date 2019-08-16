@@ -4,14 +4,13 @@ import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
-  commonVideosFiltersValidator,
   optionalAuthenticate,
   paginationValidator,
   setDefaultPagination,
   setDefaultSort
 } from '../../middlewares'
 import { videoPlaylistsSortValidator } from '../../middlewares/validators'
-import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles } from '../../helpers/express-utils'
 import { MIMETYPES, VIDEO_PLAYLIST_PRIVACIES } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { resetSequelizeInstance } from '../../helpers/database-utils'
@@ -32,7 +31,6 @@ import { join } from 'path'
 import { sendCreateVideoPlaylist, sendDeleteVideoPlaylist, sendUpdateVideoPlaylist } from '../../lib/activitypub/send'
 import { getVideoPlaylistActivityPubUrl, getVideoPlaylistElementActivityPubUrl } from '../../lib/activitypub/url'
 import { VideoPlaylistUpdate } from '../../../shared/models/videos/playlist/video-playlist-update.model'
-import { VideoModel } from '../../models/video/video'
 import { VideoPlaylistElementModel } from '../../models/video/video-playlist-element'
 import { VideoPlaylistElementCreate } from '../../../shared/models/videos/playlist/video-playlist-element-create.model'
 import { VideoPlaylistElementUpdate } from '../../../shared/models/videos/playlist/video-playlist-element-update.model'
@@ -42,6 +40,7 @@ import { JobQueue } from '../../lib/job-queue'
 import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
 import { createPlaylistMiniatureFromExisting } from '../../lib/thumbnail'
+import { VideoModel } from '../../models/video/video'
 
 const reqThumbnailFile = createReqFiles([ 'thumbnailfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { thumbnailfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -88,7 +87,6 @@ videoPlaylistRouter.get('/:playlistId/videos',
   paginationValidator,
   setDefaultPagination,
   optionalAuthenticate,
-  commonVideosFiltersValidator,
   asyncMiddleware(getVideoPlaylistVideos)
 )
 
@@ -104,13 +102,13 @@ videoPlaylistRouter.post('/:playlistId/videos/reorder',
   asyncRetryTransactionMiddleware(reorderVideosPlaylist)
 )
 
-videoPlaylistRouter.put('/:playlistId/videos/:videoId',
+videoPlaylistRouter.put('/:playlistId/videos/:playlistElementId',
   authenticate,
   asyncMiddleware(videoPlaylistsUpdateOrRemoveVideoValidator),
   asyncRetryTransactionMiddleware(updateVideoPlaylistElement)
 )
 
-videoPlaylistRouter.delete('/:playlistId/videos/:videoId',
+videoPlaylistRouter.delete('/:playlistId/videos/:playlistElementId',
   authenticate,
   asyncMiddleware(videoPlaylistsUpdateOrRemoveVideoValidator),
   asyncRetryTransactionMiddleware(removeVideoFromPlaylist)
@@ -174,13 +172,16 @@ async function addVideoPlaylist (req: express.Request, res: express.Response) {
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylist)
+    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylist, false)
     : undefined
 
   const videoPlaylistCreated: VideoPlaylistModel = await sequelizeTypescript.transaction(async t => {
     const videoPlaylistCreated = await videoPlaylist.save({ transaction: t })
 
-    if (thumbnailModel) await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
+    if (thumbnailModel) {
+      thumbnailModel.automaticallyGenerated = false
+      await videoPlaylistCreated.setAndSaveThumbnail(thumbnailModel, t)
+    }
 
     // We need more attributes for the federation
     videoPlaylistCreated.OwnerAccount = await AccountModel.load(user.Account.id, t)
@@ -203,11 +204,13 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
   const videoPlaylistInstance = res.locals.videoPlaylist
   const videoPlaylistFieldsSave = videoPlaylistInstance.toJSON()
   const videoPlaylistInfoToUpdate = req.body as VideoPlaylistUpdate
+
   const wasPrivatePlaylist = videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE
+  const wasNotPrivatePlaylist = videoPlaylistInstance.privacy !== VideoPlaylistPrivacy.PRIVATE
 
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylistInstance)
+    ? await createPlaylistMiniatureFromExisting(thumbnailField[0].path, videoPlaylistInstance, false)
     : undefined
 
   try {
@@ -232,11 +235,18 @@ async function updateVideoPlaylist (req: express.Request, res: express.Response)
 
       if (videoPlaylistInfoToUpdate.privacy !== undefined) {
         videoPlaylistInstance.privacy = parseInt(videoPlaylistInfoToUpdate.privacy.toString(), 10)
+
+        if (wasNotPrivatePlaylist === true && videoPlaylistInstance.privacy === VideoPlaylistPrivacy.PRIVATE) {
+          await sendDeleteVideoPlaylist(videoPlaylistInstance, t)
+        }
       }
 
       const playlistUpdated = await videoPlaylistInstance.save(sequelizeOptions)
 
-      if (thumbnailModel) await playlistUpdated.setAndSaveThumbnail(thumbnailModel, t)
+      if (thumbnailModel) {
+        thumbnailModel.automaticallyGenerated = false
+        await playlistUpdated.setAndSaveThumbnail(thumbnailModel, t)
+      }
 
       const isNewPlaylist = wasPrivatePlaylist && playlistUpdated.privacy !== VideoPlaylistPrivacy.PRIVATE
 
@@ -298,22 +308,16 @@ async function addVideoInPlaylist (req: express.Request, res: express.Response) 
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
 
-    await sendUpdateVideoPlaylist(videoPlaylist, t)
-
     return playlistElement
   })
 
   // If the user did not set a thumbnail, automatically take the video thumbnail
-  if (videoPlaylist.hasThumbnail() === false) {
-    logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
-
-    const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getMiniature().filename)
-    const thumbnailModel = await createPlaylistMiniatureFromExisting(inputPath, videoPlaylist, true)
-
-    thumbnailModel.videoPlaylistId = videoPlaylist.id
-
-    await thumbnailModel.save()
+  if (videoPlaylist.hasThumbnail() === false || (videoPlaylist.hasGeneratedThumbnail() && playlistElement.position === 1)) {
+    await generateThumbnailForPlaylist(videoPlaylist, video)
   }
+
+  sendUpdateVideoPlaylist(videoPlaylist, undefined)
+    .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
   logger.info('Video added in playlist %s at position %d.', videoPlaylist.uuid, playlistElement.position)
 
@@ -362,10 +366,16 @@ async function removeVideoFromPlaylist (req: express.Request, res: express.Respo
     videoPlaylist.changed('updatedAt', true)
     await videoPlaylist.save({ transaction: t })
 
-    await sendUpdateVideoPlaylist(videoPlaylist, t)
-
     logger.info('Video playlist element %d of playlist %s deleted.', videoPlaylistElement.position, videoPlaylist.uuid)
   })
+
+  // Do we need to regenerate the default thumbnail?
+  if (positionToDelete === 1 && videoPlaylist.hasGeneratedThumbnail()) {
+    await regeneratePlaylistThumbnail(videoPlaylist)
+  }
+
+  sendUpdateVideoPlaylist(videoPlaylist, undefined)
+    .catch(err => logger.error('Cannot send video playlist update.', { err }))
 
   return res.type('json').status(204).end()
 }
@@ -410,8 +420,13 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
     await sendUpdateVideoPlaylist(videoPlaylist, t)
   })
 
+  // The first element changed
+  if ((start === 1 || insertAfter === 0) && videoPlaylist.hasGeneratedThumbnail()) {
+    await regeneratePlaylistThumbnail(videoPlaylist)
+  }
+
   logger.info(
-    'Reordered playlist %s (inserted after %d elements %d - %d).',
+    'Reordered playlist %s (inserted after position %d elements %d - %d).',
     videoPlaylist.uuid, insertAfter, start, start + reorderLength - 1
   )
 
@@ -420,26 +435,39 @@ async function reorderVideosPlaylist (req: express.Request, res: express.Respons
 
 async function getVideoPlaylistVideos (req: express.Request, res: express.Response) {
   const videoPlaylistInstance = res.locals.videoPlaylist
-  const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
+  const server = await getServerActor()
 
-  const resultList = await VideoModel.listForApi({
-    followerActorId,
+  const resultList = await VideoPlaylistElementModel.listForApi({
     start: req.query.start,
     count: req.query.count,
-    sort: 'VideoPlaylistElements.position',
-    includeLocalVideos: true,
-    categoryOneOf: req.query.categoryOneOf,
-    licenceOneOf: req.query.licenceOneOf,
-    languageOneOf: req.query.languageOneOf,
-    tagsOneOf: req.query.tagsOneOf,
-    tagsAllOf: req.query.tagsAllOf,
-    filter: req.query.filter,
-    nsfw: buildNSFWFilter(res, req.query.nsfw),
-    withFiles: false,
     videoPlaylistId: videoPlaylistInstance.id,
-    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
+    serverAccount: server.Account,
+    user
   })
 
-  const additionalAttributes = { playlistInfo: true }
-  return res.json(getFormattedObjects(resultList.data, resultList.total, { additionalAttributes }))
+  const options = {
+    displayNSFW: buildNSFWFilter(res, req.query.nsfw),
+    accountId: user ? user.Account.id : undefined
+  }
+  return res.json(getFormattedObjects(resultList.data, resultList.total, options))
+}
+
+async function regeneratePlaylistThumbnail (videoPlaylist: VideoPlaylistModel) {
+  await videoPlaylist.Thumbnail.destroy()
+  videoPlaylist.Thumbnail = null
+
+  const firstElement = await VideoPlaylistElementModel.loadFirstElementWithVideoThumbnail(videoPlaylist.id)
+  if (firstElement) await generateThumbnailForPlaylist(videoPlaylist, firstElement.Video)
+}
+
+async function generateThumbnailForPlaylist (videoPlaylist: VideoPlaylistModel, video: VideoModel) {
+  logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
+
+  const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getMiniature().filename)
+  const thumbnailModel = await createPlaylistMiniatureFromExisting(inputPath, videoPlaylist, true, true)
+
+  thumbnailModel.videoPlaylistId = videoPlaylist.id
+
+  videoPlaylist.Thumbnail = await thumbnailModel.save()
 }

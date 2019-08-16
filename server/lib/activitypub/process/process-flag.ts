@@ -3,13 +3,15 @@ import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
-async function processFlagActivity (activity: ActivityCreate | ActivityFlag, byActor: ActorModel) {
+async function processFlagActivity (options: APProcessorOptions<ActivityCreate | ActivityFlag>) {
+  const { activity, byActor } = options
   return retryTransactionWrapper(processCreateVideoAbuse, activity, byActor)
 }
 
@@ -21,17 +23,17 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag, byActor: ActorModel) {
+async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag, byActor: SignatureActorModel) {
   const flag = activity.type === 'Flag' ? activity : (activity.object as VideoAbuseObject)
 
   logger.debug('Reporting remote abuse for video %s.', getAPId(flag.object))
 
   const account = byActor.Account
-  if (!account) throw new Error('Cannot create dislike with the non account actor ' + byActor.url)
+  if (!account) throw new Error('Cannot create video abuse with the non account actor ' + byActor.url)
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: flag.object })
 
-  return sequelizeTypescript.transaction(async t => {
+  const videoAbuse = await sequelizeTypescript.transaction(async t => {
     const videoAbuseData = {
       reporterAccountId: account.id,
       reason: flag.content,
@@ -42,8 +44,10 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
     const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t })
     videoAbuseInstance.Video = video
 
-    Notifier.Instance.notifyOnNewVideoAbuse(videoAbuseInstance)
-
     logger.info('Remote abuse for video uuid %s created', flag.object)
+
+    return videoAbuseInstance
   })
+
+  Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
 }

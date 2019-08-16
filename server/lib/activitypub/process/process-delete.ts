@@ -9,8 +9,12 @@ import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
-async function processDeleteActivity (activity: ActivityDelete, byActor: ActorModel) {
+async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
+  const { activity, byActor } = options
+
   const objectUrl = typeof activity.object === 'string' ? activity.object : activity.object.id
 
   if (activity.actor === objectUrl) {
@@ -31,7 +35,7 @@ async function processDeleteActivity (activity: ActivityDelete, byActor: ActorMo
   }
 
   {
-    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccount(objectUrl)
+    const videoCommentInstance = await VideoCommentModel.loadByUrlAndPopulateAccountAndVideo(objectUrl)
     if (videoCommentInstance) {
       return retryTransactionWrapper(processDeleteVideoComment, byActor, videoCommentInstance, activity)
     }
@@ -95,31 +99,31 @@ async function processDeleteVideoPlaylist (actor: ActorModel, playlistToDelete: 
 }
 
 async function processDeleteAccount (accountToRemove: AccountModel) {
-  logger.debug('Removing remote account "%s".', accountToRemove.Actor.uuid)
+  logger.debug('Removing remote account "%s".', accountToRemove.Actor.url)
 
   await sequelizeTypescript.transaction(async t => {
     await accountToRemove.destroy({ transaction: t })
   })
 
-  logger.info('Remote account with uuid %s removed.', accountToRemove.Actor.uuid)
+  logger.info('Remote account %s removed.', accountToRemove.Actor.url)
 }
 
 async function processDeleteVideoChannel (videoChannelToRemove: VideoChannelModel) {
-  logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.uuid)
+  logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.url)
 
   await sequelizeTypescript.transaction(async t => {
     await videoChannelToRemove.destroy({ transaction: t })
   })
 
-  logger.info('Remote video channel with uuid %s removed.', videoChannelToRemove.Actor.uuid)
+  logger.info('Remote video channel %s removed.', videoChannelToRemove.Actor.url)
 }
 
-function processDeleteVideoComment (byActor: ActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
+function processDeleteVideoComment (byActor: SignatureActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {
-    if (videoComment.Account.id !== byActor.Account.id) {
-      throw new Error('Account ' + byActor.url + ' does not own video comment ' + videoComment.url)
+    if (byActor.Account.id !== videoComment.Account.id && byActor.Account.id !== videoComment.Video.VideoChannel.accountId) {
+      throw new Error(`Account ${byActor.url} does not own video comment ${videoComment.url} or video ${videoComment.Video.url}`)
     }
 
     await videoComment.destroy({ transaction: t })

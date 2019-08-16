@@ -13,7 +13,7 @@
 
 <div class="no-history" i18n *ngIf="pagination.totalItems === 0">You don't have videos history yet.</div>
 
-<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" class="videos">
+<div myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()" class="videos">
   <div class="video" *ngFor="let video of videos">
     <my-video-miniature
       [video]="video" [displayAsRow]="true"

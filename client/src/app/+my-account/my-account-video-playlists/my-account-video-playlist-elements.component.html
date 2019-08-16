@@ -12,12 +12,12 @@
 
     <div
       class="videos" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()"
-      cdkDropList (cdkDropListDropped)="drop($event)"
+      cdkDropList (cdkDropListDropped)="drop($event)" [dataObservable]="onDataSubject.asObservable()"
     >
-      <div class="video" *ngFor="let video of videos; trackBy: trackByFn" cdkDrag (cdkDragMoved)="onDragMove($event)">
+      <div class="video" *ngFor="let playlistElement of playlistElements; trackBy: trackByFn" cdkDrag>
         <my-video-playlist-element-miniature
-          [video]="video" [playlist]="playlist" [owned]="true" (elementRemoved)="onElementRemoved($event)"
-          [position]="video.playlistElement.position"
+          [playlistElement]="playlistElement" [playlist]="playlist" [owned]="true" (elementRemoved)="onElementRemoved($event)"
+          [position]="playlistElement.position"
         >
         </my-video-playlist-element-miniature>
       </div>

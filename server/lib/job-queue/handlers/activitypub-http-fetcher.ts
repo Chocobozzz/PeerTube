@@ -33,11 +33,11 @@ async function processActivityPubHttpFetcher (job: Bull.Job) {
   if (payload.accountId) account = await AccountModel.load(payload.accountId)
 
   const fetcherType: { [ id in FetchType ]: (items: any[]) => Promise<any> } = {
-    'activity': items => processActivities(items, { outboxUrl: payload.uri }),
+    'activity': items => processActivities(items, { outboxUrl: payload.uri, fromFetch: true }),
     'video-likes': items => createRates(items, video, 'like'),
     'video-dislikes': items => createRates(items, video, 'dislike'),
     'video-shares': items => addVideoShares(items, video),
-    'video-comments': items => addVideoComments(items, video),
+    'video-comments': items => addVideoComments(items),
     'account-playlists': items => createAccountPlaylists(items, account)
   }
 

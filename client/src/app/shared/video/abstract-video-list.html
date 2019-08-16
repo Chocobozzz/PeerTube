@@ -6,7 +6,7 @@
       </div>
     </div>
 
-    <my-feed [syndicationItems]="syndicationItems"></my-feed>
+    <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
       <my-peertube-checkbox
@@ -19,14 +19,20 @@
 
   <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
   <div
-    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true"
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()"
     class="videos"
   >
-    <my-video-miniature
-      *ngFor="let video of videos; trackBy: videoById" [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
-      [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
-      (videoBlacklisted)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
-    >
-    </my-video-miniature>
+    <ng-container *ngFor="let video of videos; trackBy: videoById;">
+      <div class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
+        {{ getCurrentGroupedDateLabel(video) }}
+      </div>
+
+      <my-video-miniature
+        [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
+        [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
+        (videoBlacklisted)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
+      >
+      </my-video-miniature>
+    </ng-container>
   </div>
 </div>

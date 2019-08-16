@@ -9,6 +9,8 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuButton')
 class ResolutionMenuButton extends MenuButton {
   label: HTMLElement
+  labelEl_: any
+  player: Player
 
   constructor (player: Player, options: any) {
     super(player, options)

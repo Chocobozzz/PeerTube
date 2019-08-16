@@ -3,6 +3,7 @@
 import 'mocha'
 
 import {
+  cleanupTests,
   closeAllSequelize,
   createUser,
   doubleFollow,
@@ -48,8 +49,16 @@ describe('Test ActivityPub fetcher', function () {
     const badVideoUUID = res.body.video.uuid
     await uploadVideo(servers[0].url, userAccessToken, { name: 'video user' })
 
-    await setActorField(1, 'http://localhost:9001/accounts/user1', 'url', 'http://localhost:9002/accounts/user1')
-    await setVideoField(1, badVideoUUID, 'url', 'http://localhost:9003/videos/watch/' + badVideoUUID)
+    {
+      const to = 'http://localhost:' + servers[0].port + '/accounts/user1'
+      const value = 'http://localhost:' + servers[1].port + '/accounts/user1'
+      await setActorField(servers[0].internalServerNumber, to, 'url', value)
+    }
+
+    {
+      const value = 'http://localhost:' + servers[2].port + '/videos/watch/' + badVideoUUID
+      await setVideoField(servers[0].internalServerNumber, badVideoUUID, 'url', value)
+    }
   })
 
   it('Should add only the video with a valid actor URL', async function () {
@@ -78,7 +87,9 @@ describe('Test ActivityPub fetcher', function () {
   })
 
   after(async function () {
-    killallServers(servers)
+    this.timeout(20000)
+
+    await cleanupTests(servers)
 
     await closeAllSequelize(servers)
   })

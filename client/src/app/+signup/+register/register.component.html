@@ -1,0 +1,47 @@
+<div class="margin-content">
+
+  <div i18n class="title-page title-page-single">
+    Create an account
+  </div>
+
+  <my-signup-success *ngIf="signupDone" [message]="success"></my-signup-success>
+  <div *ngIf="info" class="alert alert-info">{{ info }}</div>
+
+  <div class="wrapper" *ngIf="!signupDone">
+    <div>
+      <my-custom-stepper linear *ngIf="!signupDone">
+        <cdk-step [stepControl]="formStepUser" i18n-label label="User information">
+          <my-register-step-user (formBuilt)="onUserFormBuilt($event)"></my-register-step-user>
+
+          <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid">Next</button>
+        </cdk-step>
+
+        <cdk-step [stepControl]="formStepChannel" i18n-label label="Channel information">
+          <my-register-step-channel (formBuilt)="onChannelFormBuilt($event)" [username]="getUsername()"></my-register-step-channel>
+
+          <button i18n cdkStepperNext (click)="signup()"
+                  [disabled]="!formStepChannel || !formStepChannel.valid || hasSameChannelAndAccountNames()"
+          >
+            Create my account
+          </button>
+        </cdk-step>
+
+        <cdk-step i18n-label label="Done" editable="false">
+          <div *ngIf="!signupDone && !error" class="done-loader">
+            <my-loader [loading]="true"></my-loader>
+
+            <div i18n>PeerTube is creating your account...</div>
+          </div>
+
+          <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+        </cdk-step>
+      </my-custom-stepper>
+    </div>
+
+    <div>
+      <label i18n>Features found on this instance</label>
+      <my-instance-features-table></my-instance-features-table>
+    </div>
+  </div>
+
+</div>

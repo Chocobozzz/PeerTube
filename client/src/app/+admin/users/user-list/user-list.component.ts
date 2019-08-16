@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { ConfirmService, ServerService } from '../../../core'
 import { RestPagination, RestTable, UserService } from '../../../shared'
@@ -14,7 +14,7 @@ import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
   styleUrls: [ './user-list.component.scss' ]
 })
 export class UserListComponent extends RestTable implements OnInit {
-  @ViewChild('userBanModal') userBanModal: UserBanModalComponent
+  @ViewChild('userBanModal', { static: true }) userBanModal: UserBanModalComponent
 
   users: User[] = []
   totalRecords = 0
@@ -30,9 +30,14 @@ export class UserListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private serverService: ServerService,
     private userService: UserService,
+    private auth: AuthService,
     private i18n: I18n
   ) {
     super()
+  }
+
+  get authUser () {
+    return this.auth.getUser()
   }
 
   get requiresEmailVerification () {
@@ -45,22 +50,26 @@ export class UserListComponent extends RestTable implements OnInit {
     this.bulkUserActions = [
       {
         label: this.i18n('Delete'),
-        handler: users => this.removeUsers(users)
+        handler: users => this.removeUsers(users),
+        isDisplayed: users => users.every(u => this.authUser.canManage(u))
       },
       {
         label: this.i18n('Ban'),
         handler: users => this.openBanUserModal(users),
-        isDisplayed: users => users.every(u => u.blocked === false)
+        isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === false)
       },
       {
         label: this.i18n('Unban'),
         handler: users => this.unbanUsers(users),
-        isDisplayed: users => users.every(u => u.blocked === true)
+        isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === true)
       },
       {
         label: this.i18n('Set Email as Verified'),
         handler: users => this.setEmailsAsVerified(users),
-        isDisplayed: users => this.requiresEmailVerification && users.every(u => !u.blocked && u.emailVerified === false)
+        isDisplayed: users => {
+          return this.requiresEmailVerification &&
+            users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified === false)
+        }
       }
     ]
   }

@@ -26,7 +26,7 @@
 
   3. Install certbot (choose instructions for nginx and your distribution) :
      [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-  4. Install NodeJS 8.x (current LTS):
+  4. Install NodeJS 10.x:
      [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
   5. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):
      [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
@@ -56,7 +56,7 @@ $ sudo systemctl start redis postgresql
   1. Run:
 
 ```
-$ sudo pacman -S nodejs yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
+$ sudo pacman -S nodejs-lts-dubnium yarn ffmpeg postgresql openssl redis git wget unzip python2 base-devel npm nginx
 ```
 
 Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
@@ -66,7 +66,7 @@ $ sudo systemctl start redis postgresql
 
 ## CentOS 7
 
-  1. Install NodeJS 8.x (current LTS):
+  1. Install NodeJS 10.x:
      [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
   2. Install yarn:
      [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -79,7 +79,7 @@ $ sudo systemctl start redis postgresql
 $ sudo yum update
 $ sudo yum install epel-release centos-release-scl
 $ sudo yum update
-$ sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make redis git devtoolset-7
+$ sudo yum install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git devtoolset-7
 ```
 
   5. You need to use a more up to date version of G++ in order to run the yarn install command, hence the installation of devtoolset-7.
@@ -93,10 +93,17 @@ Later when you invoke any node command, please prefix them with `CC=/opt/rh/devt
 $ sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
 
-Now that dependencies are installed, before running PeerTube you should start PostgreSQL and Redis:
+Initialize the PostgreSQL database:
 ```
-$ sudo service redis start
-$ sudo service postgresql start
+$ sudo postgresql-setup initdb
+```
+
+Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:
+```
+$ sudo systemctl enable redis
+$ sudo systemctl enable postgresql
+$ sudo systemctl start redis
+$ sudo systemctl start postgresql
 ```
 
 ## Fedora
@@ -114,7 +121,7 @@ su my-peertube-user
 ```
 2. (Optional) Install certbot (choose instructions for nginx and your distribution) :
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-3. Install NodeJS 8.x (current LTS):
+3. Install NodeJS 10.x:
 [https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
 4. Install yarn:
 [https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
@@ -148,7 +155,7 @@ sudo systemctl start redis.service
 ```
 8. Firewall
 
-By default, you cannot acces your server via public IP. To do so, you must configure firewall:
+By default, you cannot access your server via public IP. To do so, you must configure firewall:
 ```
 # Ports used by peertube dev setup
 sudo firewall-cmd --permanent --zone=public --add-port=3000/tcp
@@ -230,11 +237,19 @@ dev-vcs/git
 app-arch/unzip
 dev-lang/python:2.7
 www-servers/nginx
-media-libs/vips[jpeg,png,exif]
 
 # Optionnal, client for Let’s Encrypt:
 # app-crypt/certbot
 # app-crypt/certbot-nginx
+```
+
+* If you are on a "stable" Gentoo you need to accept the testing keyword ~amd64 yarn:
+```
+mkdir -p /etc/portage/package.keywords
+cat << EOF >> /etc/portage/package.keywords/peertube
+# required by yarn (argument) for PeerTube
+sys-apps/yarn ~amd64
+EOF
 ```
 
 * Compile the peertube set:
@@ -250,9 +265,9 @@ emerge --config postgresql
 * (For OpenRC) Enable and then start the services (replace with the correct PostgreSQL slot):
 ```
 rc-update add redis
-rc-update add postgresql-10
+rc-update add postgresql-11
 rc-service redis start
-rc-service postgresql-10 start
+rc-service postgresql-11 start
 ```
    
 ## Other distributions

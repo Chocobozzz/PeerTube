@@ -5,7 +5,7 @@ $border-width: 3px;
 $border-type: solid;
 $border-color: #EAEAEA;
 
-/deep/ .root-tabset.video-add-tabset {
+::ng-deep .root-tabset.video-add-tabset {
   &.hide-nav > .nav {
     display: none !important;
   }

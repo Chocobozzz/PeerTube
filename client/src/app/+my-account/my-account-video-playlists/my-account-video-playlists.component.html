@@ -5,7 +5,7 @@
   </a>
 </div>
 
-<div class="video-playlists" myInfiniteScroller (nearOfBottom)="onNearOfBottom()">
+<div class="video-playlists" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">
     <div class="miniature-wrapper">
       <my-video-playlist-miniature [playlist]="playlist" [toManage]="true" [displayChannel]="true" [displayDescription]="true" [displayPrivacy]="true"

@@ -1,11 +1,32 @@
-<div *ngIf="account" class="row">
-  <a
-    *ngFor="let videoChannel of videoChannels" [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]"
-    class="video-channel" i18n-title title="See this video channel"
-  >
-    <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+<div class="margin-content">
 
-    <div class="video-channel-display-name">{{ videoChannel.displayName }}</div>
-    <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
-  </a>
+  <div class="no-results" i18n *ngIf="channelPagination.totalItems === 0">This account does not have channels.</div>
+
+  <div class="channels" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onChannelDataSubject.asObservable()">
+    <div class="section channel" *ngFor="let videoChannel of videoChannels">
+      <div class="section-title">
+        <a [routerLink]="getVideoChannelLink(videoChannel)" i18n-title title="See this video channel">
+          <img [src]="videoChannel.avatarUrl" alt="Avatar" />
+
+          <div>{{ videoChannel.displayName }}</div>
+          <div i18n class="followers">{{ videoChannel.followersCount }} subscribers</div>
+        </a>
+
+        <my-subscribe-button [videoChannel]="videoChannel"></my-subscribe-button>
+      </div>
+
+      <div *ngIf="getVideosOf(videoChannel)" class="videos">
+        <div class="no-results" i18n *ngIf="getVideosOf(videoChannel).length === 0">This channel does not have videos.</div>
+
+        <my-video-miniature
+          *ngFor="let video of getVideosOf(videoChannel)"
+          [video]="video" [user]="user" [displayVideoActions]="true"
+        ></my-video-miniature>
+      </div>
+
+      <a *ngIf="getVideosOf(videoChannel).length !== 0" class="show-more" i18n [routerLink]="getVideoChannelLink(videoChannel)">
+        Show this channel
+      </a>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as OAuthServer from 'express-oauth-server'
-import 'express-validator'
 import { OAUTH_LIFETIME } from '../initializers/constants'
 import { logger } from '../helpers/logger'
 import { Socket } from 'socket.io'

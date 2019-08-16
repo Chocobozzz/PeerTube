@@ -14,6 +14,7 @@
   font-size: inherit;
   padding: 15px 5px 15px 10px;
   border-bottom: 1px solid $separator-border-color;
+  word-break: break-word;
 
   &.unread {
     background-color: rgba(0, 0, 0, 0.05);

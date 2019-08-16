@@ -16,8 +16,8 @@ import { Router } from '@angular/router'
 })
 
 export class LoginComponent extends FormReactive implements OnInit {
-  @ViewChild('emailInput') input: ElementRef
-  @ViewChild('forgotPasswordModal') forgotPasswordModal: ElementRef
+  @ViewChild('emailInput', { static: true }) input: ElementRef
+  @ViewChild('forgotPasswordModal', { static: true }) forgotPasswordModal: ElementRef
 
   error: string = null
   forgotPasswordEmail = ''

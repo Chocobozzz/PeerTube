@@ -1,0 +1,41 @@
+@import '_variables';
+@import '_mixins';
+
+.plugin {
+  margin: 15px 0;
+}
+
+.first-row {
+  margin-bottom: 10px;
+
+  .plugin-name {
+    font-size: 16px;
+    margin-right: 10px;
+    font-weight: $font-semibold;
+  }
+
+  .plugin-version {
+    opacity: 0.6;
+  }
+}
+
+.second-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .description {
+    opacity: 0.8
+  }
+
+  .buttons {
+    > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
+}
+
+.action-button {
+  @include peertube-button-link;
+  @include button-with-icon(21px, 0, -2px);
+}

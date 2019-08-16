@@ -1,9 +1,6 @@
 import './embed.scss'
 
-import * as Channel from 'jschannel'
-
 import { peertubeTranslate, ResultList, ServerConfig, VideoDetails } from '../../../../shared'
-import { PeerTubeResolution } from '../player/definitions'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 import {
@@ -13,133 +10,9 @@ import {
   PlayerMode
 } from '../../assets/player/peertube-player-manager'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
+import { PeerTubeEmbedApi } from './embed-api'
 
-/**
- * Embed API exposes control of the embed player to the outside world via
- * JSChannels and window.postMessage
- */
-class PeerTubeEmbedApi {
-  private channel: Channel.MessagingChannel
-  private isReady = false
-  private resolutions: PeerTubeResolution[] = null
-
-  constructor (private embed: PeerTubeEmbed) {
-  }
-
-  initialize () {
-    this.constructChannel()
-    this.setupStateTracking()
-
-    // We're ready!
-
-    this.notifyReady()
-  }
-
-  private get element () {
-    return this.embed.videoElement
-  }
-
-  private constructChannel () {
-    const channel = Channel.build({ window: window.parent, origin: '*', scope: this.embed.scope })
-
-    channel.bind('play', (txn, params) => this.embed.player.play())
-    channel.bind('pause', (txn, params) => this.embed.player.pause())
-    channel.bind('seek', (txn, time) => this.embed.player.currentTime(time))
-    channel.bind('setVolume', (txn, value) => this.embed.player.volume(value))
-    channel.bind('getVolume', (txn, value) => this.embed.player.volume())
-    channel.bind('isReady', (txn, params) => this.isReady)
-    channel.bind('setResolution', (txn, resolutionId) => this.setResolution(resolutionId))
-    channel.bind('getResolutions', (txn, params) => this.resolutions)
-    channel.bind('setPlaybackRate', (txn, playbackRate) => this.embed.player.playbackRate(playbackRate))
-    channel.bind('getPlaybackRate', (txn, params) => this.embed.player.playbackRate())
-    channel.bind('getPlaybackRates', (txn, params) => this.embed.playerOptions.playbackRates)
-
-    this.channel = channel
-  }
-
-  private setResolution (resolutionId: number) {
-    if (resolutionId === -1 && this.embed.player.webtorrent().isAutoResolutionForbidden()) return
-
-    // Auto resolution
-    if (resolutionId === -1) {
-      this.embed.player.webtorrent().enableAutoResolution()
-      return
-    }
-
-    this.embed.player.webtorrent().disableAutoResolution()
-    this.embed.player.webtorrent().updateResolution(resolutionId)
-  }
-
-  /**
-   * Let the host know that we're ready to go!
-   */
-  private notifyReady () {
-    this.isReady = true
-    this.channel.notify({ method: 'ready', params: true })
-  }
-
-  private setupStateTracking () {
-    let currentState: 'playing' | 'paused' | 'unstarted' = 'unstarted'
-
-    setInterval(() => {
-      const position = this.element.currentTime
-      const volume = this.element.volume
-
-      this.channel.notify({
-        method: 'playbackStatusUpdate',
-        params: {
-          position,
-          volume,
-          playbackState: currentState
-        }
-      })
-    }, 500)
-
-    this.element.addEventListener('play', ev => {
-      currentState = 'playing'
-      this.channel.notify({ method: 'playbackStatusChange', params: 'playing' })
-    })
-
-    this.element.addEventListener('pause', ev => {
-      currentState = 'paused'
-      this.channel.notify({ method: 'playbackStatusChange', params: 'paused' })
-    })
-
-    // PeerTube specific capabilities
-
-    if (this.embed.player.webtorrent) {
-      this.embed.player.webtorrent().on('autoResolutionUpdate', () => this.loadWebTorrentResolutions())
-      this.embed.player.webtorrent().on('videoFileUpdate', () => this.loadWebTorrentResolutions())
-    }
-  }
-
-  private loadWebTorrentResolutions () {
-    const resolutions = []
-    const currentResolutionId = this.embed.player.webtorrent().getCurrentResolutionId()
-
-    for (const videoFile of this.embed.player.webtorrent().videoFiles) {
-      let label = videoFile.resolution.label
-      if (videoFile.fps && videoFile.fps >= 50) {
-        label += videoFile.fps
-      }
-
-      resolutions.push({
-        id: videoFile.resolution.id,
-        label,
-        src: videoFile.magnetUri,
-        active: videoFile.resolution.id === currentResolutionId
-      })
-    }
-
-    this.resolutions = resolutions
-    this.channel.notify({
-      method: 'resolutionUpdate',
-      params: this.resolutions
-    })
-  }
-}
-
-class PeerTubeEmbed {
+export class PeerTubeEmbed {
   videoElement: HTMLVideoElement
   player: any
   playerOptions: any
@@ -152,6 +25,12 @@ class PeerTubeEmbed {
   enableApi = false
   startTime: number | string = 0
   stopTime: number | string
+
+  title: boolean
+  warningTitle: boolean
+  bigPlayBackgroundColor: string
+  foregroundColor: string
+
   mode: PlayerMode
   scope = 'peertube'
 
@@ -245,12 +124,17 @@ class PeerTubeEmbed {
       this.controls = this.getParamToggle(params, 'controls', true)
       this.muted = this.getParamToggle(params, 'muted', false)
       this.loop = this.getParamToggle(params, 'loop', false)
+      this.title = this.getParamToggle(params, 'title', true)
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
+      this.warningTitle = this.getParamToggle(params, 'warningTitle', true)
 
       this.scope = this.getParamString(params, 'scope', this.scope)
       this.subtitle = this.getParamString(params, 'subtitle')
       this.startTime = this.getParamString(params, 'start')
       this.stopTime = this.getParamString(params, 'stop')
+
+      this.bigPlayBackgroundColor = this.getParamString(params, 'bigPlayBackgroundColor')
+      this.foregroundColor = this.getParamString(params, 'foregroundColor')
 
       this.mode = this.getParamString(params, 'mode') === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
     } catch (err) {
@@ -276,15 +160,7 @@ class PeerTubeEmbed {
     }
 
     const videoInfo: VideoDetails = await videoResponse.json()
-    let videoCaptions: VideoJSCaption[] = []
-    if (captionsResponse.ok) {
-      const { data } = (await captionsResponse.json()) as ResultList<VideoCaption>
-      videoCaptions = data.map(c => ({
-        label: peertubeTranslate(c.language.label, serverTranslations),
-        language: c.language.id,
-        src: window.location.origin + c.captionPath
-      }))
-    }
+    const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
 
     this.loadParams()
 
@@ -336,23 +212,14 @@ class PeerTubeEmbed {
       })
     }
 
-    this.player = await PeertubePlayerManager.initialize(this.mode, options)
-
+    this.player = await PeertubePlayerManager.initialize(this.mode, options, player => this.player = player)
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 
     window[ 'videojsPlayer' ] = this.player
 
-    if (this.controls) {
-      const config: ServerConfig = await configResponse.json()
-      const description = config.tracker.enabled
-        ? '<span class="text">' + this.player.localize('Uses P2P, others may know your IP is downloading this video.') + '</span>'
-        : undefined
+    this.buildCSS()
 
-      this.player.dock({
-        title: videoInfo.name,
-        description
-      })
-    }
+    await this.buildDock(videoInfo, configResponse)
 
     this.initializeApi()
   }
@@ -364,6 +231,48 @@ class PeerTubeEmbed {
       this.displayError('This video is not available because the remote instance is not responding.', translations)
       return
     }
+  }
+
+  private async buildDock (videoInfo: VideoDetails, configResponse: Response) {
+    if (this.controls) {
+      const title = this.title ? videoInfo.name : undefined
+
+      const config: ServerConfig = await configResponse.json()
+      const description = config.tracker.enabled && this.warningTitle
+        ? '<span class="text">' + this.player.localize('Watching this video may reveal your IP address to others.') + '</span>'
+        : undefined
+
+      this.player.dock({
+        title,
+        description
+      })
+    }
+  }
+
+  private buildCSS () {
+    const body = document.getElementById('custom-css')
+
+    if (this.bigPlayBackgroundColor) {
+      body.style.setProperty('--embedBigPlayBackgroundColor', this.bigPlayBackgroundColor)
+    }
+
+    if (this.foregroundColor) {
+      body.style.setProperty('--embedForegroundColor', this.foregroundColor)
+    }
+  }
+
+  private async buildCaptions (serverTranslations: any, captionsResponse: Response): Promise<VideoJSCaption[]> {
+    if (captionsResponse.ok) {
+      const { data } = (await captionsResponse.json()) as ResultList<VideoCaption>
+
+      return data.map(c => ({
+        label: peertubeTranslate(c.language.label, serverTranslations),
+        language: c.language.id,
+        src: window.location.origin + c.captionPath
+      }))
+    }
+
+    return []
   }
 }
 

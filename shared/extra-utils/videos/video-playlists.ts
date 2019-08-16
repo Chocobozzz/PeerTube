@@ -196,11 +196,11 @@ function updateVideoPlaylistElement (options: {
   url: string,
   token: string,
   playlistId: number | string,
-  videoId: number | string,
+  playlistElementId: number | string,
   elementAttrs: VideoPlaylistElementUpdate,
   expectedStatus?: number
 }) {
-  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.playlistElementId
 
   return makePutBodyRequest({
     url: options.url,
@@ -215,10 +215,10 @@ function removeVideoFromPlaylist (options: {
   url: string,
   token: string,
   playlistId: number | string,
-  videoId: number | string,
+  playlistElementId: number,
   expectedStatus?: number
 }) {
-  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.videoId
+  const path = '/api/v1/video-playlists/' + options.playlistId + '/videos/' + options.playlistElementId
 
   return makeDeleteRequest({
     url: options.url,
@@ -252,10 +252,10 @@ function reorderVideosPlaylist (options: {
 
 async function checkPlaylistFilesWereRemoved (
   playlistUUID: string,
-  serverNumber: number,
+  internalServerNumber: number,
   directories = [ 'thumbnails' ]
 ) {
-  const testDirectory = 'test' + serverNumber
+  const testDirectory = 'test' + internalServerNumber
 
   for (const directory of directories) {
     const directoryPath = join(root(), testDirectory, directory)

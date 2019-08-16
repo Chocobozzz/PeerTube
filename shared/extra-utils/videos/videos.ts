@@ -19,7 +19,7 @@ import {
 import * as validator from 'validator'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, loadLanguages, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
-import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
+import { dateIsValid, webtorrentAdd, buildServerDirectory } from '../miscs/miscs'
 
 loadLanguages()
 
@@ -308,10 +308,8 @@ async function checkVideoFilesWereRemoved (
     join('redundancy', 'hls')
   ]
 ) {
-  const testDirectory = 'test' + serverNumber
-
   for (const directory of directories) {
-    const directoryPath = join(root(), testDirectory, directory)
+    const directoryPath = buildServerDirectory(serverNumber, directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
@@ -362,6 +360,10 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
               .field('privacy', attributes.privacy.toString())
               .field('channelId', attributes.channelId)
 
+  if (attributes.support !== undefined) {
+    req.field('support', attributes.support)
+  }
+
   if (attributes.description !== undefined) {
     req.field('description', attributes.description)
   }
@@ -375,7 +377,8 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.field('licence', attributes.licence.toString())
   }
 
-  for (let i = 0; i < attributes.tags.length; i++) {
+  const tags = attributes.tags || []
+  for (let i = 0; i < tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])
   }
 
@@ -524,7 +527,6 @@ async function completeVideoCheck (
   expect(video.nsfw).to.equal(attributes.nsfw)
   expect(video.description).to.equal(attributes.description)
   expect(video.account.id).to.be.a('number')
-  expect(video.account.uuid).to.be.a('string')
   expect(video.account.host).to.equal(attributes.account.host)
   expect(video.account.name).to.equal(attributes.account.name)
   expect(video.channel.displayName).to.equal(attributes.channel.displayName)
@@ -568,8 +570,8 @@ async function completeVideoCheck (
     expect(file).not.to.be.undefined
 
     let extension = extname(attributes.fixture)
-    // Transcoding enabled on server 2, extension will always be .mp4
-    if (attributes.account.host === 'localhost:9002') extension = '.mp4'
+    // Transcoding enabled: extension will always be .mp4
+    if (attributes.files.length > 1) extension = '.mp4'
 
     const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)

@@ -1,12 +1,5 @@
 import * as program from 'commander'
-
-import {
-  getClient,
-  serverLogin,
-  Server,
-  Client,
-  User
-} from '../../shared/extra-utils'
+import { getClient, Server, serverLogin } from '../../shared/extra-utils'
 
 program
   .option('-u, --url <url>', 'Server url')
@@ -22,6 +15,7 @@ if (
   if (!program['url']) console.error('--url field is required.')
   if (!program['username']) console.error('--username field is required.')
   if (!program['password']) console.error('--password field is required.')
+
   process.exit(-1)
 }
 
@@ -32,11 +26,11 @@ getClient(program.url)
       user: {
         username: program['username'],
         password: program['password']
-      } as User,
+      },
       client: {
-        id: res.body.client_id as string,
-        secret: res.body.client_secret as string
-      } as Client
+        id: res.body.client_id,
+        secret: res.body.client_secret
+      }
     } as Server
 
     return serverLogin(server)

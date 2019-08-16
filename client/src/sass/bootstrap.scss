@@ -1,0 +1,138 @@
+$icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
+@import '_bootstrap';
+
+@import '_variables';
+@import '_mixins';
+
+// Thanks https://gist.github.com/alexandrevicenzi/680147013e902a4eaa5d
+.glyphicon-refresh-animate {
+  animation: spin .7s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: scale(1) rotate(0deg);}
+  to { transform: scale(1) rotate(360deg);}
+}
+
+.dropdown-menu {
+  border-radius: 3px;
+  box-shadow: 0 3px 6px;
+  font-size: 15px;
+
+  .dropdown-item {
+    padding: 3px 15px;
+
+    &:active {
+      color: #000 !important;
+    }
+  }
+
+  button {
+    @include disable-default-a-behaviour;
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+    color: #000 !important;
+  }
+}
+
+.modal {
+  .modal-content {
+    background-color: var(--mainBackgroundColor);
+  }
+
+  .modal-header {
+    border-bottom: none;
+    margin-bottom: 5px;
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: $font-semibold;
+    }
+
+    my-global-icon {
+      @include icon(24px);
+
+      position: relative;
+      top: 3px;
+      float: right;
+
+      margin: 0;
+      padding: 0;
+      opacity: 1;
+    }
+  }
+
+  .inputs {
+    margin-bottom: 0;
+    text-align: right;
+
+    .action-button-cancel {
+      @include peertube-button;
+      @include grey-button;
+
+      display: inline-block;
+      margin-right: 10px;
+    }
+
+    .action-button-submit {
+      @include peertube-button;
+      @include orange-button;
+    }
+  }
+}
+
+// Nav customizations
+.nav .nav-link {
+  display: flex !important;
+  align-items: center;
+  height: 30px !important;
+  padding: 10px 15px !important;
+}
+
+.nav.nav-pills {
+  font-size: 16px !important;
+
+  .nav-link.active {
+    font-weight: $font-semibold !important;
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: var(--mainForegroundColor);
+  }
+}
+
+ngb-tabset.bootstrap {
+
+  .nav-link {
+    &, & a {
+      @include disable-default-a-behaviour;
+
+      color: var(--mainForegroundColor) !important;
+    }
+  }
+
+  .nav-pills .nav-link.active {
+    color: #000 !important;
+  }
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--mainBackgroundColor) !important;
+  border-bottom: none;
+}
+
+.collapse-transition {
+  // Animation when we show/hide the filters
+  transition: max-height 0.3s;
+  display: block !important;
+  overflow: hidden !important;
+  max-height: 0;
+
+  &.show {
+    max-height: 1500px;
+  }
+}

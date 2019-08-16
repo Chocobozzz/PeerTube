@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core'
 import { ConfirmService, Notifier } from '@app/core'
-import { SortMeta } from 'primeng/primeng'
+import { SortMeta } from 'primeng/api'
 import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
 import { RestPagination, RestTable } from '../../../shared'
-import { FollowService } from '../shared'
+import { FollowService } from '@app/shared/instance/follow.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({

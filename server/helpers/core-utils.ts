@@ -3,14 +3,12 @@
   Useful to avoid circular dependencies.
 */
 
-import * as bcrypt from 'bcrypt'
-import * as createTorrent from 'create-torrent'
 import { createHash, HexBase64Latin1Encoding, pseudoRandomBytes } from 'crypto'
-import { isAbsolute, join } from 'path'
+import { basename, isAbsolute, join, resolve } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
 import { truncate } from 'lodash'
-import { exec } from 'child_process'
+import { exec, ExecOptions } from 'child_process'
 
 const objectConverter = (oldObject: any, keyConverter: (e: string) => string, valueConverter: (e: any) => any) => {
   if (!oldObject || typeof oldObject !== 'object') {
@@ -134,16 +132,20 @@ function isProdInstance () {
   return process.env.NODE_ENV === 'production'
 }
 
+function getAppNumber () {
+  return process.env.NODE_APP_INSTANCE
+}
+
+let rootPath: string
 function root () {
+  if (rootPath) return rootPath
+
   // We are in /helpers/utils.js
-  const paths = [ __dirname, '..', '..' ]
+  rootPath = join(__dirname, '..', '..')
 
-  // We are under /dist directory
-  if (process.mainModule && process.mainModule.filename.endsWith('.ts') === false) {
-    paths.push('..')
-  }
+  if (basename(rootPath) === 'dist') rootPath = resolve(rootPath, '..')
 
-  return join.apply(null, paths)
+  return rootPath
 }
 
 // Thanks: https://stackoverflow.com/a/12034334
@@ -200,6 +202,16 @@ function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') 
   return createHash('sha1').update(str).digest(encoding)
 }
 
+function execShell (command: string, options?: ExecOptions) {
+  return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
+    exec(command, options, (err, stdout, stderr) => {
+      if (err) return rej({ err, stdout, stderr })
+
+      return res({ stdout, stderr })
+    })
+  })
+}
+
 function promisify0<A> (func: (cb: (err: any, result: A) => void) => void): () => Promise<A> {
   return function promisified (): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -244,10 +256,6 @@ function promisify2WithVoid<T, U> (func: (arg1: T, arg2: U, cb: (err: any) => vo
 const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
-const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
-const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
-const bcryptHashPromise = promisify2<any, string | number, string>(bcrypt.hash)
-const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 const execPromise2 = promisify2<string, any, string>(exec)
 const execPromise = promisify1<string, string>(exec)
 
@@ -256,6 +264,7 @@ const execPromise = promisify1<string, string>(exec)
 export {
   isTestInstance,
   isProdInstance,
+  getAppNumber,
 
   objectConverter,
   root,
@@ -264,6 +273,7 @@ export {
   sanitizeUrl,
   sanitizeHost,
   buildPath,
+  execShell,
   peertubeTruncate,
 
   sha256,
@@ -271,14 +281,11 @@ export {
 
   promisify0,
   promisify1,
+  promisify2,
 
   pseudoRandomBytesPromise,
   createPrivateKey,
   getPublicKey,
-  bcryptComparePromise,
-  bcryptGenSaltPromise,
-  bcryptHashPromise,
-  createTorrentPromise,
   execPromise2,
   execPromise
 }

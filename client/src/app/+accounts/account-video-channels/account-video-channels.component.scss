@@ -1,30 +1,33 @@
 @import '_variables';
 @import '_mixins';
+@import '_miniature';
 
-.row {
-  justify-content: center;
+.margin-content {
+  @include adapt-margin-content-width;
 }
 
-a.video-channel {
-  @include disable-default-a-behaviour;
+.section {
+  @include miniature-rows;
 
-  display: inline-block;
-  text-align: center;
-  color: var(--mainForegroundColor);
-  margin: 10px 30px;
+  overflow: visible; // For the subscribe dropdown
+  padding-top: 0 !important;
 
-  img {
-    @include avatar(80px);
-
-    margin-bottom: 10px;
+  .section-title {
+    align-items: center;
   }
 
-  .video-channel-display-name {
-    font-size: 20px;
-    font-weight: $font-bold;
+  .videos {
+    overflow: hidden;
+
+    .no-results {
+      height: 50px;
+    }
   }
 
-  .video-channel-followers {
-    font-size: 15px;
+  my-video-miniature ::ng-deep my-video-actions-dropdown > my-action-dropdown {
+    // Fix our overflow
+    position: absolute;
   }
 }
+
+

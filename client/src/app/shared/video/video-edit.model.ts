@@ -85,6 +85,11 @@ export class VideoEdit implements VideoUpdate {
       const originallyPublishedAt = new Date(values['originallyPublishedAt'])
       this.originallyPublishedAt = originallyPublishedAt.toISOString()
     }
+
+    // Use the same file than the preview for the thumbnail
+    if (this.previewfile) {
+      this.thumbnailfile = this.previewfile
+    }
   }
 
   toFormPatch () {

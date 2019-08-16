@@ -2,9 +2,21 @@
 @import '_mixins';
 @import '_miniature';
 
-my-video-thumbnail {
-  @include thumbnail-size-component(130px, 72px);
+$thumbnail-width: 130px;
+$thumbnail-height: 72px;
 
+my-video-thumbnail {
+  @include thumbnail-size-component($thumbnail-width, $thumbnail-height);
+}
+
+.fake-thumbnail {
+  width: $thumbnail-width;
+  height: $thumbnail-height;
+  background-color: #ececec;
+}
+
+my-video-thumbnail,
+.fake-thumbnail {
   display: flex; // Avoids an issue with line-height that adds space below the element
   margin-right: 10px;
 }
@@ -31,6 +43,7 @@ my-video-thumbnail {
   a {
     @include disable-default-a-behaviour;
 
+    color: var(--mainForegroundColor);
     display: flex;
     min-width: 0;
     align-items: center;
@@ -58,20 +71,11 @@ my-video-thumbnail {
       min-width: 0;
 
       a {
-        color: var(--mainForegroundColor);
         width: auto;
 
         &:hover {
           text-decoration: underline !important;
         }
-      }
-
-      .video-info-name {
-        font-size: 18px;
-        font-weight: $font-semibold;
-        display: inline-block;
-
-        @include ellipsis;
       }
 
       .video-info-account, .video-info-timestamp {
@@ -80,11 +84,20 @@ my-video-thumbnail {
     }
   }
 
+  .video-info-name {
+    font-size: 18px;
+    font-weight: $font-semibold;
+    display: inline-block;
+
+    @include ellipsis;
+  }
+
   .more {
     justify-self: flex-end;
     margin-left: auto;
     cursor: pointer;
     opacity: 0;
+    min-width: 24px;
 
     &.show {
       opacity: 1;

@@ -11,12 +11,12 @@
   }
 }
 
-/deep/ .dropdown-toggle::after {
+::ng-deep .dropdown-toggle::after {
   position: relative;
   top: 2px;
 }
 
-/deep/ .dropdown-menu {
+::ng-deep .dropdown-menu {
   margin-top: 0 !important;
 }
 

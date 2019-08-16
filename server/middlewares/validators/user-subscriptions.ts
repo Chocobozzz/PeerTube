@@ -1,6 +1,5 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param, query } from 'express-validator/check'
+import { body, param, query } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'

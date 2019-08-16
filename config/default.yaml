@@ -10,10 +10,18 @@ webserver:
   port: 9000
 
 rates_limit:
+  api:
+    # 50 attempts in 10 seconds
+    window: 10 seconds
+    max: 50
   login:
     # 15 attempts in 5 min
     window: 5 minutes
     max: 15
+  signup:
+    # 2 attempts in 5 min (only succeeded attempts are taken into account)
+    window: 5 minutes
+    max: 2
   ask_send_email:
     # 3 attempts in 5 min
     window: 5 minutes
@@ -53,6 +61,12 @@ smtp:
   ca_file: null # Used for self signed certificates
   from_address: 'admin@example.com'
 
+email:
+  body:
+    signature: "PeerTube"
+  object:
+    prefix: "[PeerTube]"
+
 # From the project root directory
 storage:
   tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
@@ -66,9 +80,12 @@ storage:
   torrents: 'storage/torrents/'
   captions: 'storage/captions/'
   cache: 'storage/cache/'
+  plugins: 'storage/plugins/'
 
 log:
   level: 'info' # debug/info/warning/error
+  rotation:
+    enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
 
 search:
   # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
@@ -138,6 +155,14 @@ views:
     remote:
       max_age: -1
 
+plugins:
+  # The website PeerTube will ask for available PeerTube plugins and themes
+  # This is an unmoderated plugin index, so only install plugins/themes you trust
+  index:
+    enabled: true
+    check_latest_versions_interval: '12 hours' # How often you want to check new plugins/themes versions
+    url: 'https://packages.joinpeertube.org'
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache
@@ -174,6 +199,8 @@ transcoding:
   enabled: true
   # Allow your users to upload .mkv, .mov, .avi, .flv videos
   allow_additional_extensions: true
+  # If a user uploads an audio file, PeerTube will create a video by merging the preview file and the audio file
+  allow_audio_files: true
   threads: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
     240p: false
@@ -181,6 +208,7 @@ transcoding:
     480p: false
     720p: false
     1080p: false
+    2160p: false
   # /!\ EXPERIMENTAL /!\
   # /!\ Requires ffmpeg >= 4
   # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
@@ -244,3 +272,6 @@ followers:
     enabled: true
     # Whether or not an administrator must manually validate a new follower
     manual_approval: false
+
+theme:
+  default: 'default'

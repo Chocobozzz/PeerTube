@@ -30,7 +30,7 @@ export class MyAccountProfileComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      'display-name': this.userValidatorsService.USER_DISPLAY_NAME,
+      'display-name': this.userValidatorsService.USER_DISPLAY_NAME_REQUIRED,
       description: this.userValidatorsService.USER_DESCRIPTION
     })
 

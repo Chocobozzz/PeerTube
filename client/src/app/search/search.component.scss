@@ -35,18 +35,6 @@
         }
       }
     }
-
-    .results-filter {
-      // Animation when we show/hide the filters
-      transition: max-height 0.3s;
-      display: block !important;
-      overflow: hidden !important;
-      max-height: 0;
-
-      &.show {
-        max-height: 1500px;
-      }
-    }
   }
 
   .entry {
@@ -127,7 +115,7 @@
         my-video-thumbnail {
           margin-right: 0 !important;
 
-          /deep/ .video-thumbnail {
+          ::ng-deep .video-thumbnail {
             width: 100%;
             height: auto;
 

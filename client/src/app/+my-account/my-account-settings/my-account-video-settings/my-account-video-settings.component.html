@@ -16,6 +16,21 @@
   </div>
 
   <div class="form-group">
+    <label i18n for="videoLanguages">Only display videos in the following languages</label>
+    <my-help i18n-customHtml
+             customHtml="In Recently added, Trending, Local and Search pages"
+    ></my-help>
+
+    <div>
+      <p-multiSelect
+        [options]="languageItems" formControlName="videoLanguages" showToggleAll="true"
+        [defaultLabel]="getDefaultVideoLanguageLabel()" [selectedItemsLabel]="getSelectedVideoLanguageLabel()"
+        emptyFilterMessage="No results found" i18n-emptyFilterMessage
+      ></p-multiSelect>
+    </div>
+  </div>
+
+  <div class="form-group">
     <my-peertube-checkbox
       inputName="webTorrentEnabled" formControlName="webTorrentEnabled"
       i18n-labelText labelText="Use WebTorrent to exchange parts of the video with others"

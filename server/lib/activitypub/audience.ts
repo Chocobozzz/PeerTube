@@ -5,6 +5,7 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoShareModel } from '../../models/video/video-share'
+import { ActorModelOnly } from '../../typings/models'
 
 function getRemoteVideoAudience (video: VideoModel, actorsInvolvedInVideo: ActorModel[]): ActivityAudience {
   return {
@@ -60,7 +61,7 @@ async function getActorsInvolvedInVideo (video: VideoModel, t: Transaction) {
   return actors
 }
 
-function getAudience (actorSender: ActorModel, isPublic = true) {
+function getAudience (actorSender: ActorModelOnly, isPublic = true) {
   return buildAudience([ actorSender.followersUrl ], isPublic)
 }
 

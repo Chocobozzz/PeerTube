@@ -234,9 +234,12 @@ class WebTorrentPlugin extends Plugin {
 
     const oldTorrent = this.torrent
     const torrentOptions = {
-      store: (chunkLength: number, storeOpts: any) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
-        max: 100
-      })
+      // Don't use arrow function: it breaks webtorrent (that uses `new` keyword)
+      store: function (chunkLength: number, storeOpts: any) {
+        return new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+          max: 100
+        })
+      }
     }
 
     this.torrent = this.webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {

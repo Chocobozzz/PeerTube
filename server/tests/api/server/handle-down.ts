@@ -19,8 +19,9 @@ import {
   setAccessTokensToServers,
   unfollow,
   updateVideo,
-  uploadVideo,
-  wait
+  uploadVideo, uploadVideoAndGetId,
+  wait,
+  setActorFollowScores, closeAllSequelize
 } from '../../../../shared/extra-utils'
 import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
 import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -43,6 +44,8 @@ describe('Test handle downs', function () {
   let missedVideo2: Video
   let unlistedVideo: Video
 
+  let videoIdsServer1: number[] = []
+
   const videoAttributes = {
     name: 'my super name for server 1',
     category: 5,
@@ -60,54 +63,56 @@ describe('Test handle downs', function () {
     privacy: VideoPrivacy.UNLISTED
   })
 
-  const checkAttributes = {
-    name: 'my super name for server 1',
-    category: 5,
-    licence: 4,
-    language: 'ja',
-    nsfw: true,
-    description: 'my super description for server 1',
-    support: 'my super support text for server 1',
-    account: {
-      name: 'root',
-      host: 'localhost:9001'
-    },
-    isLocal: false,
-    duration: 10,
-    tags: [ 'tag1p1', 'tag2p1' ],
-    privacy: VideoPrivacy.PUBLIC,
-    commentsEnabled: true,
-    downloadEnabled: true,
-    channel: {
-      name: 'root_channel',
-      displayName: 'Main root channel',
-      description: '',
-      isLocal: false
-    },
-    fixture: 'video_short1.webm',
-    files: [
-      {
-        resolution: 720,
-        size: 572456
-      }
-    ]
-  }
-
-  const unlistedCheckAttributes = immutableAssign(checkAttributes, {
-    privacy: VideoPrivacy.UNLISTED
-  })
+  let checkAttributes: any
+  let unlistedCheckAttributes: any
 
   before(async function () {
     this.timeout(30000)
 
     servers = await flushAndRunMultipleServers(3)
 
+    checkAttributes = {
+      name: 'my super name for server 1',
+      category: 5,
+      licence: 4,
+      language: 'ja',
+      nsfw: true,
+      description: 'my super description for server 1',
+      support: 'my super support text for server 1',
+      account: {
+        name: 'root',
+        host: 'localhost:' + servers[0].port
+      },
+      isLocal: false,
+      duration: 10,
+      tags: [ 'tag1p1', 'tag2p1' ],
+      privacy: VideoPrivacy.PUBLIC,
+      commentsEnabled: true,
+      downloadEnabled: true,
+      channel: {
+        name: 'root_channel',
+        displayName: 'Main root channel',
+        description: '',
+        isLocal: false
+      },
+      fixture: 'video_short1.webm',
+      files: [
+        {
+          resolution: 720,
+          size: 572456
+        }
+      ]
+    }
+    unlistedCheckAttributes = immutableAssign(checkAttributes, {
+      privacy: VideoPrivacy.UNLISTED
+    })
+
     // Get the access tokens
     await setAccessTokensToServers(servers)
   })
 
   it('Should remove followers that are often down', async function () {
-    this.timeout(60000)
+    this.timeout(240000)
 
     // Server 2 and 3 follow server 1
     await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
@@ -172,7 +177,7 @@ describe('Test handle downs', function () {
     const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 2, 'createdAt')
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
-    expect(res.body.data[0].follower.host).to.equal('localhost:9003')
+    expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
   })
 
   it('Should not have pending/processing jobs anymore', async function () {
@@ -297,7 +302,54 @@ describe('Test handle downs', function () {
     }
   })
 
+  it('Should upload many videos on server 1', async function () {
+    this.timeout(120000)
+
+    for (let i = 0; i < 10; i++) {
+      const uuid = (await uploadVideoAndGetId({ server: servers[ 0 ], videoName: 'video ' + i })).uuid
+      videoIdsServer1.push(uuid)
+    }
+
+    await waitJobs(servers)
+
+    for (const id of videoIdsServer1) {
+      await getVideo(servers[ 1 ].url, id)
+    }
+
+    await waitJobs(servers)
+    await setActorFollowScores(servers[1].internalServerNumber, 20)
+
+    // Wait video expiration
+    await wait(11000)
+
+    // Refresh video -> score + 10 = 30
+    await getVideo(servers[1].url, videoIdsServer1[0])
+
+    await waitJobs(servers)
+  })
+
+  it('Should remove followings that are down', async function () {
+    this.timeout(120000)
+
+    killallServers([ servers[0] ])
+
+    // Wait video expiration
+    await wait(11000)
+
+    for (let i = 0; i < 3; i++) {
+      await getVideo(servers[1].url, videoIdsServer1[i])
+      await wait(1000)
+      await waitJobs([ servers[1] ])
+    }
+
+    for (const id of videoIdsServer1) {
+      await getVideo(servers[1].url, id, 403)
+    }
+  })
+
   after(async function () {
+    await closeAllSequelize([ servers[1] ])
+
     await cleanupTests(servers)
   })
 })

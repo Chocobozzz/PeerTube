@@ -1,7 +1,7 @@
 @import '_variables';
 @import '_mixins';
 
-/deep/ {
+::ng-deep {
   .popover-notifications.popover {
     max-width: none;
 
@@ -99,7 +99,7 @@
 }
 
 @media screen and (max-width: $mobile-view) {
-  /deep/ {
+  ::ng-deep {
     .popover-notifications.popover .popover-body {
       width: 400px;
     }

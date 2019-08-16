@@ -5,13 +5,12 @@ import 'mocha'
 import {
   checkDirectoryIsEmpty,
   checkSegmentHash,
-  checkTmpIsEmpty, cleanupTests,
+  checkTmpIsEmpty,
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   getPlaylist,
   getVideo,
-  killallServers,
   removeVideo,
   ServerInfo,
   setAccessTokensToServers,
@@ -22,12 +21,11 @@ import {
 import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { join } from 'path'
+import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
 
 const expect = chai.expect
 
-async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
-  const resolutions = [ 240, 360, 480, 720 ]
-
+async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, resolutions = [ 240, 360, 480, 720 ]) {
   for (const server of servers) {
     const res = await getVideo(server.url, videoUUID)
     const videoDetails: VideoDetails = res.body
@@ -42,16 +40,15 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
 
       const masterPlaylist = res2.text
 
-      expect(masterPlaylist).to.contain('#EXT-X-STREAM-INF:BANDWIDTH=55472,RESOLUTION=640x360,FRAME-RATE=25')
-
       for (const resolution of resolutions) {
+        expect(masterPlaylist).to.match(new RegExp('#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',FRAME-RATE=\\d+'))
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
       }
     }
 
     {
       for (const resolution of resolutions) {
-        const res2 = await getPlaylist(`http://localhost:9001/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
+        const res2 = await getPlaylist(`http://localhost:${servers[0].port}/static/streaming-playlists/hls/${videoUUID}/${resolution}.m3u8`)
 
         const subPlaylist = res2.text
         expect(subPlaylist).to.contain(`${videoUUID}-${resolution}-fragmented.mp4`)
@@ -59,7 +56,7 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
     }
 
     {
-      const baseUrl = 'http://localhost:9001/static/streaming-playlists/hls'
+      const baseUrl = 'http://localhost:' + servers[0].port + '/static/streaming-playlists/hls'
 
       for (const resolution of resolutions) {
         await checkSegmentHash(baseUrl, baseUrl, videoUUID, resolution, hlsPlaylist)
@@ -71,11 +68,21 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string) {
 describe('Test HLS videos', function () {
   let servers: ServerInfo[] = []
   let videoUUID = ''
+  let videoAudioUUID = ''
 
   before(async function () {
     this.timeout(120000)
 
-    servers = await flushAndRunMultipleServers(2, { transcoding: { enabled: true, hls: { enabled: true } } })
+    const configOverride = {
+      transcoding: {
+        enabled: true,
+        allow_audio_files: true,
+        hls: {
+          enabled: true
+        }
+      }
+    }
+    servers = await flushAndRunMultipleServers(2, configOverride)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -87,17 +94,28 @@ describe('Test HLS videos', function () {
   it('Should upload a video and transcode it to HLS', async function () {
     this.timeout(120000)
 
-    {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video 1', fixture: 'video_short.webm' })
-      videoUUID = res.body.video.uuid
-    }
+    const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video 1', fixture: 'video_short.webm' })
+    videoUUID = res.body.video.uuid
 
     await waitJobs(servers)
 
     await checkHlsPlaylist(servers, videoUUID)
   })
 
+  it('Should upload an audio file and transcode it to HLS', async function () {
+    this.timeout(120000)
+
+    const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video audio', fixture: 'sample.ogg' })
+    videoAudioUUID = res.body.video.uuid
+
+    await waitJobs(servers)
+
+    await checkHlsPlaylist(servers, videoAudioUUID, [ DEFAULT_AUDIO_RESOLUTION ])
+  })
+
   it('Should update the video', async function () {
+    this.timeout(10000)
+
     await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video 1 updated' })
 
     await waitJobs(servers)
@@ -105,13 +123,17 @@ describe('Test HLS videos', function () {
     await checkHlsPlaylist(servers, videoUUID)
   })
 
-  it('Should delete the video', async function () {
+  it('Should delete videos', async function () {
+    this.timeout(10000)
+
     await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
+    await removeVideo(servers[0].url, servers[0].accessToken, videoAudioUUID)
 
     await waitJobs(servers)
 
     for (const server of servers) {
       await getVideo(server.url, videoUUID, 404)
+      await getVideo(server.url, videoAudioUUID, 404)
     }
   })
 

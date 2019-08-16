@@ -1,11 +1,12 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { logger } from '../../../helpers/logger'
+import { Transaction } from 'sequelize'
+import { ActorModelOnly } from '../../../typings/models'
 
-function sendFollow (actorFollow: ActorFollowModel) {
+function sendFollow (actorFollow: ActorFollowModel, t: Transaction) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
 
@@ -17,10 +18,10 @@ function sendFollow (actorFollow: ActorFollowModel) {
   const url = getActorFollowActivityPubUrl(me, following)
   const data = buildFollowActivity(url, me, following)
 
-  return unicastTo(data, me, following.inboxUrl)
+  t.afterCommit(() => unicastTo(data, me, following.inboxUrl))
 }
 
-function buildFollowActivity (url: string, byActor: ActorModel, targetActor: ActorModel): ActivityFollow {
+function buildFollowActivity (url: string, byActor: ActorModelOnly, targetActor: ActorModelOnly): ActivityFollow {
   return {
     type: 'Follow',
     id: url,

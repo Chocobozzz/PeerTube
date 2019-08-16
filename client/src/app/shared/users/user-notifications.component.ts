@@ -4,6 +4,7 @@ import { UserNotificationType } from '../../../../../shared'
 import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
 import { Notifier } from '@app/core'
 import { UserNotification } from '@app/shared/users/user-notification.model'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-user-notifications',
@@ -23,6 +24,8 @@ export class UserNotificationsComponent implements OnInit {
   UserNotificationType = UserNotificationType
 
   componentPagination: ComponentPagination
+
+  onDataSubject = new Subject<any[]>()
 
   constructor (
     private userNotificationService: UserNotificationService,
@@ -47,6 +50,8 @@ export class UserNotificationsComponent implements OnInit {
             this.componentPagination.totalItems = result.total
 
             this.notificationsLoaded.emit()
+
+            this.onDataSubject.next(result.data)
           },
 
           err => this.notifier.error(err.message)

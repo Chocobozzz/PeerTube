@@ -27,13 +27,13 @@ describe('Test services', function () {
   })
 
   it('Should have a valid oEmbed response', async function () {
-    const oembedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+    const oembedUrl = 'http://localhost:' + server.port + '/videos/watch/' + server.video.uuid
 
     const res = await getOEmbed(server.url, oembedUrl)
     const expectedHtml = '<iframe width="560" height="315" sandbox="allow-same-origin allow-scripts" ' +
-                         `src="http://localhost:9001/videos/embed/${server.video.uuid}" ` +
+                         `src="http://localhost:${server.port}/videos/embed/${server.video.uuid}" ` +
                          'frameborder="0" allowfullscreen></iframe>'
-    const expectedThumbnailUrl = 'http://localhost:9001/static/previews/' + server.video.uuid + '.jpg'
+    const expectedThumbnailUrl = 'http://localhost:' + server.port + '/static/previews/' + server.video.uuid + '.jpg'
 
     expect(res.body.html).to.equal(expectedHtml)
     expect(res.body.title).to.equal(server.video.name)
@@ -41,19 +41,19 @@ describe('Test services', function () {
     expect(res.body.width).to.equal(560)
     expect(res.body.height).to.equal(315)
     expect(res.body.thumbnail_url).to.equal(expectedThumbnailUrl)
-    expect(res.body.thumbnail_width).to.equal(560)
-    expect(res.body.thumbnail_height).to.equal(315)
+    expect(res.body.thumbnail_width).to.equal(850)
+    expect(res.body.thumbnail_height).to.equal(480)
   })
 
   it('Should have a valid oEmbed response with small max height query', async function () {
-    const oembedUrl = 'http://localhost:9001/videos/watch/' + server.video.uuid
+    const oembedUrl = 'http://localhost:' + server.port + '/videos/watch/' + server.video.uuid
     const format = 'json'
     const maxHeight = 50
     const maxWidth = 50
 
     const res = await getOEmbed(server.url, oembedUrl, format, maxHeight, maxWidth)
     const expectedHtml = '<iframe width="50" height="50" sandbox="allow-same-origin allow-scripts" ' +
-                         `src="http://localhost:9001/videos/embed/${server.video.uuid}" ` +
+                         `src="http://localhost:${server.port}/videos/embed/${server.video.uuid}" ` +
                          'frameborder="0" allowfullscreen></iframe>'
 
     expect(res.body.html).to.equal(expectedHtml)

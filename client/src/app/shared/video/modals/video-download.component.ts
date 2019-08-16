@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Notifier } from '@app/core'
 
@@ -10,12 +10,13 @@ import { Notifier } from '@app/core'
   styleUrls: [ './video-download.component.scss' ]
 })
 export class VideoDownloadComponent {
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
-  downloadType: 'direct' | 'torrent' | 'magnet' = 'torrent'
+  downloadType: 'direct' | 'torrent' = 'torrent'
   resolutionId: number | string = -1
 
   video: VideoDetails
+  activeModal: NgbActiveModal
 
   constructor (
     private notifier: Notifier,
@@ -26,9 +27,7 @@ export class VideoDownloadComponent {
   show (video: VideoDetails) {
     this.video = video
 
-    const m = this.modalService.open(this.modal)
-    m.result.then(() => this.onClose())
-     .catch(() => this.onClose())
+    this.activeModal = this.modalService.open(this.modal)
 
     this.resolutionId = this.video.files[0].resolution.id
   }
@@ -39,6 +38,7 @@ export class VideoDownloadComponent {
 
   download () {
     window.location.assign(this.getLink())
+    this.activeModal.close()
   }
 
   getLink () {
@@ -57,9 +57,6 @@ export class VideoDownloadComponent {
 
       case 'torrent':
         return file.torrentDownloadUrl
-
-      case 'magnet':
-        return file.magnetUri
     }
   }
 

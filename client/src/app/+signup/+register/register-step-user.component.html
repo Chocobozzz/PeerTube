@@ -1,0 +1,73 @@
+<form role="form" [formGroup]="form">
+
+  <div class="form-group">
+    <label for="displayName" i18n>Display name</label>
+
+    <div class="input-group">
+      <input
+        type="text" id="displayName" placeholder="John Doe"
+        formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+      >
+    </div>
+
+    <div *ngIf="formErrors.displayName" class="form-error">
+      {{ formErrors.displayName }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="username" i18n>Username</label>
+
+    <div class="input-group">
+      <input
+        type="text" id="username" i18n-placeholder placeholder="Example: jane_doe"
+        formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+      >
+      <div class="input-group-append">
+        <span class="input-group-text">@{{ instanceHost }}</span>
+      </div>
+    </div>
+
+    <div class="name-information" i18n>
+      The username is a unique identifier of your account on this instance. It's like an address mail, so other people can find you.
+    </div>
+
+    <div *ngIf="formErrors.username" class="form-error">
+      {{ formErrors.username }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="email" i18n>Email</label>
+    <input
+      type="text" id="email" i18n-placeholder placeholder="Email"
+      formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
+    >
+    <div *ngIf="formErrors.email" class="form-error">
+      {{ formErrors.email }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password" i18n>Password</label>
+    <input
+      type="password" id="password" i18n-placeholder placeholder="Password"
+      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+    >
+    <div *ngIf="formErrors.password" class="form-error">
+      {{ formErrors.password }}
+    </div>
+  </div>
+
+  <div class="form-group form-group-terms">
+    <my-peertube-checkbox
+      inputName="terms" formControlName="terms"
+      i18n-labelHtml
+      labelHtml="I am at least 16 years old and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
+    ></my-peertube-checkbox>
+
+    <div *ngIf="formErrors.terms" class="form-error">
+      {{ formErrors.terms }}
+    </div>
+  </div>
+</form>

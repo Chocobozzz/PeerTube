@@ -50,7 +50,7 @@
       @include peertube-word-wrap;
 
       // Mentions
-      /deep/ a {
+      ::ng-deep a {
 
         &:not(.linkified-url) {
           @include disable-default-a-behaviour;

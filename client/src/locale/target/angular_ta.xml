@@ -7,7 +7,7 @@
         <source>Close</source>
         <target>மூடு</target>
         <context-group name="null">
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.previous">
@@ -112,14 +112,14 @@
         <source>Minutes</source>
         <target>நிமிடங்கள்</target>
         <context-group name="null">
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds">
         <source>Seconds</source>
         <target>நொடிகள்</target>
         <context-group name="null">
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
@@ -140,14 +140,14 @@
         <source>Delete</source>
         <target>அழித்திடு</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
         <target>தொகு</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f">
@@ -177,7 +177,7 @@
         <source>Cancel</source>
         <target>ரத்து செய்</target>
         <context-group name="null">
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
@@ -209,7 +209,7 @@
         <source>Password</source>
         <target>கடவுச்சொல்</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -230,7 +230,7 @@
         <source>Email</source>
         <target>மின்னஞ்சல்</target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529">
@@ -252,13 +252,6 @@
         <target>கடவுச்சொல் உறுதிசெய்யப்பட்டது</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
-        <source>Example: jane_doe</source>
-        <target>உதாரணம்: மாரி_முத்து</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -300,7 +293,7 @@
         <source>Search...</source>
         <target>தேடு...</target>
         <context-group name="null">
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b3972c3e9485218508a95f7a4ce7758e3f09ced">
@@ -328,91 +321,21 @@
         <source>Category</source>
         <target>பிரிவு</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>உரிமம்</target>
         <context-group name="null">
-          <context context-type="linenumber">198</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>மொழி</target>
         <context-group name="null">
-          <context context-type="linenumber">207</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
-        <source>PeerTube</source>
-        <target>PeerTube</target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
-        <source>What are the consequences?</source>
-        <target>பின்விளைவுகள் என்ன?</target>
-        <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
-        <source>How does PeerTube compare with YouTube?</source>
-        <target>PeerTube-ஐ Youtube-உடன் எப்படு ஒப்பிடுவது?</target>
-        <context-group name="null">
-          <context context-type="linenumber">67</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
-        <source>Name</source>
-        <target>பெயர்</target>
-        <context-group name="null">
-          <context context-type="linenumber">12</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e">
-        <source>Display</source>
-        <target>காண்பி</target>
-        <context-group name="null">
-          <context context-type="linenumber">13</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
-        <source>Users</source>
-        <target>பயணர்கள்</target>
-        <context-group name="null">
-          <context context-type="linenumber">116</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="99cb827741e93125476a0f5b676372d85d15b5fc">
-        <source>Twitter</source>
-        <target>Twitter</target>
-        <context-group name="null">
-          <context context-type="linenumber">231</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
-        <source>Your Twitter username</source>
-        <target>உங்கள் Twitter பயணர்பெயர்</target>
-        <context-group name="null">
-          <context context-type="linenumber">237</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
-        <source>Services</source>
-        <target>சேவைகள்</target>
-        <context-group name="null">
-          <context context-type="linenumber">229</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
-        <source>JavaScript</source>
-        <target>JavaScript</target>
-        <context-group name="null">
-          <context context-type="linenumber">347</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -422,6 +345,27 @@
         <target>
       பயணர்கள்
     </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f995df052a1dfc675c2a21926420a707d9601936">
+        <source>Following</source>
+        <target>பின்பற்றுபவை</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
+        <source>Follow</source>
+        <target>பின்பற்று</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
+        <source>Followers</source>
+        <target>பின்பற்றுபவர்கள்</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -447,27 +391,6 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f995df052a1dfc675c2a21926420a707d9601936">
-        <source>Following</source>
-        <target>பின்பற்றுபவை</target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
-        <source>Follow</source>
-        <target>பின்பற்று</target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
-        <source>Followers</source>
-        <target>பின்பற்றுபவர்கள்</target>
-        <context-group name="null">
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a">
         <source>john</source>
         <target>john</target>
@@ -487,6 +410,83 @@
         <target>பயணர்கள் பட்டியல்</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
+        <source>Name</source>
+        <target>பெயர்</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e">
+        <source>Display</source>
+        <target>காண்பி</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
+        <source>Users</source>
+        <target>பயணர்கள்</target>
+        <context-group name="null">
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99cb827741e93125476a0f5b676372d85d15b5fc">
+        <source>Twitter</source>
+        <target>Twitter</target>
+        <context-group name="null">
+          <context context-type="linenumber">248</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
+        <source>Your Twitter username</source>
+        <target>உங்கள் Twitter பயணர்பெயர்</target>
+        <context-group name="null">
+          <context context-type="linenumber">254</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
+        <source>Services</source>
+        <target>சேவைகள்</target>
+        <context-group name="null">
+          <context context-type="linenumber">246</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
+        <source>JavaScript</source>
+        <target>JavaScript</target>
+        <context-group name="null">
+          <context context-type="linenumber">372</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
+        <source>PeerTube</source>
+        <target>PeerTube</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
+        <source>What are the consequences?</source>
+        <target>பின்விளைவுகள் என்ன?</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
+        <source>How does PeerTube compare with YouTube?</source>
+        <target>PeerTube-ஐ Youtube-உடன் எப்படு ஒப்பிடுவது?</target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
+        <source>Example: jane_doe</source>
+        <target>உதாரணம்: மாரி_முத்து</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
     </body>

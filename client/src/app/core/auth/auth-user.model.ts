@@ -139,6 +139,15 @@ export class AuthUser extends User {
     return hasUserRight(this.role, right)
   }
 
+  canManage (user: ServerUserModel) {
+    const myRole = this.role
+
+    if (myRole === UserRole.ADMINISTRATOR) return true
+
+    // I'm a moderator: I can only manage users
+    return user.role === UserRole.USER
+  }
+
   save () {
     peertubeLocalStorage.setItem(AuthUser.KEYS.ID, this.id.toString())
     peertubeLocalStorage.setItem(AuthUser.KEYS.USERNAME, this.username)

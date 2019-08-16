@@ -199,16 +199,17 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
 
     Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
 
-    if (videoImportUpdated.Video.VideoBlacklist) {
+    if (videoImportUpdated.Video.isBlacklisted()) {
       Notifier.Instance.notifyOnVideoAutoBlacklist(videoImportUpdated.Video)
     } else {
-      Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
+      Notifier.Instance.notifyOnNewVideoIfNeeded(videoImportUpdated.Video)
     }
 
     // Create transcoding jobs?
     if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {
       // Put uuid because we don't have id auto incremented for now
       const dataInput = {
+        type: 'optimize' as 'optimize',
         videoUUID: videoImportUpdated.Video.uuid,
         isNewVideo: true
       }

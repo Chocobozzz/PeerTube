@@ -106,6 +106,9 @@ transcoding:
     1080:
       __name: "PEERTUBE_TRANSCODING_1080P"
       __format: "json"
+    2160:
+      __name: "PEERTUBE_TRANSCODING_2160P"
+      __format: "json"
 
 instance:
   name: "PEERTUBE_INSTANCE_NAME"

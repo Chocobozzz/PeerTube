@@ -27,10 +27,18 @@ import { UserModel } from './user'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { Op, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
+import { AccountBlocklistModel } from './account-blocklist'
+import { ServerBlocklistModel } from '../server/server-blocklist'
+import { ActorFollowModel } from '../activitypub/actor-follow'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
+}
+
+export type SummaryOptions = {
+  whereActor?: WhereOptions
+  withAccountBlockerIds?: number[]
 }
 
 @DefaultScope(() => ({
@@ -42,21 +50,26 @@ export enum ScopeNames {
   ]
 }))
 @Scopes(() => ({
-  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions) => {
-    return {
+  [ ScopeNames.SUMMARY ]: (options: SummaryOptions = {}) => {
+    const whereActor = options.whereActor || undefined
+
+    const serverInclude: IncludeOptions = {
+      attributes: [ 'host' ],
+      model: ServerModel.unscoped(),
+      required: false
+    }
+
+    const query: FindOptions = {
       attributes: [ 'id', 'name' ],
       include: [
         {
-          attributes: [ 'id', 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
           where: whereActor,
           include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
+            serverInclude,
+
             {
               model: AvatarModel.unscoped(),
               required: false
@@ -65,6 +78,35 @@ export enum ScopeNames {
         }
       ]
     }
+
+    if (options.withAccountBlockerIds) {
+      query.include.push({
+        attributes: [ 'id' ],
+        model: AccountBlocklistModel.unscoped(),
+        as: 'BlockedAccounts',
+        required: false,
+        where: {
+          accountId: {
+            [Op.in]: options.withAccountBlockerIds
+          }
+        }
+      })
+
+      serverInclude.include = [
+        {
+          attributes: [ 'id' ],
+          model: ServerBlocklistModel.unscoped(),
+          required: false,
+          where: {
+            accountId: {
+              [Op.in]: options.withAccountBlockerIds
+            }
+          }
+        }
+      ]
+    }
+
+    return query
   }
 }))
 @Table({
@@ -163,12 +205,23 @@ export class AccountModel extends Model<AccountModel> {
   })
   VideoComments: VideoCommentModel[]
 
+  @HasMany(() => AccountBlocklistModel, {
+    foreignKey: {
+      name: 'targetAccountId',
+      allowNull: false
+    },
+    as: 'BlockedAccounts',
+    onDelete: 'CASCADE'
+  })
+  BlockedAccounts: AccountBlocklistModel[]
+
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
     if (!instance.Actor) {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
     }
 
+    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
     if (instance.isOwned()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
@@ -178,22 +231,6 @@ export class AccountModel extends Model<AccountModel> {
 
   static load (id: number, transaction?: Transaction) {
     return AccountModel.findByPk(id, { transaction })
-  }
-
-  static loadByUUID (uuid: string) {
-    const query = {
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            uuid
-          }
-        }
-      ]
-    }
-
-    return AccountModel.findOne(query)
   }
 
   static loadByNameWithHost (nameWithHost: string) {
@@ -332,7 +369,6 @@ export class AccountModel extends Model<AccountModel> {
 
     return {
       id: this.id,
-      uuid: actor.uuid,
       name: actor.name,
       displayName: this.getDisplayName(),
       url: actor.url,
@@ -359,5 +395,9 @@ export class AccountModel extends Model<AccountModel> {
 
   getDisplayName () {
     return this.name
+  }
+
+  isBlocked () {
+    return this.BlockedAccounts && this.BlockedAccounts.length !== 0
   }
 }

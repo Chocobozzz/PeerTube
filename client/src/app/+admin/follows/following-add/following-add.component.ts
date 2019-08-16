@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { Notifier } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { validateHost } from '../../../shared'
-import { FollowService } from '../shared'
+import { FollowService } from '@app/shared/instance/follow.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({

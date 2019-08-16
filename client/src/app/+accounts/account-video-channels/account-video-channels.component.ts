@@ -3,9 +3,14 @@ import { ActivatedRoute } from '@angular/router'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { flatMap, map, tap } from 'rxjs/operators'
-import { Subscription } from 'rxjs'
+import { concatMap, map, switchMap, tap } from 'rxjs/operators'
+import { from, Subject, Subscription } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { Video } from '@app/shared/video/video.model'
+import { AuthService } from '@app/core'
+import { VideoService } from '@app/shared/video/video.service'
+import { VideoSortField } from '@app/shared/video/sort-field.type'
+import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -15,27 +20,81 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
   account: Account
   videoChannels: VideoChannel[] = []
+  videos: { [id: number]: Video[] } = {}
+
+  channelPagination: ComponentPagination = {
+    currentPage: 1,
+    itemsPerPage: 2
+  }
+
+  videosPagination: ComponentPagination = {
+    currentPage: 1,
+    itemsPerPage: 12
+  }
+  videosSort: VideoSortField = '-publishedAt'
+
+  onChannelDataSubject = new Subject<any>()
 
   private accountSub: Subscription
 
   constructor (
-    protected route: ActivatedRoute,
+    private route: ActivatedRoute,
+    private authService: AuthService,
     private accountService: AccountService,
-    private videoChannelService: VideoChannelService
+    private videoChannelService: VideoChannelService,
+    private videoService: VideoService
   ) { }
+
+  get user () {
+    return this.authService.getUser()
+  }
 
   ngOnInit () {
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
-        .pipe(
-          tap(account => this.account = account),
-          flatMap(account => this.videoChannelService.listAccountVideoChannels(account)),
-          map(res => res.data)
-        )
-        .subscribe(videoChannels => this.videoChannels = videoChannels)
+        .subscribe(account => {
+          this.account = account
+
+          this.loadMoreChannels()
+        })
   }
 
   ngOnDestroy () {
     if (this.accountSub) this.accountSub.unsubscribe()
+  }
+
+  loadMoreChannels () {
+    this.videoChannelService.listAccountVideoChannels(this.account, this.channelPagination)
+      .pipe(
+        tap(res => this.channelPagination.totalItems = res.total),
+        switchMap(res => from(res.data)),
+        concatMap(videoChannel => {
+          return this.videoService.getVideoChannelVideos(videoChannel, this.videosPagination, this.videosSort)
+            .pipe(map(data => ({ videoChannel, videos: data.data })))
+        })
+      )
+      .subscribe(({ videoChannel, videos }) => {
+        this.videoChannels.push(videoChannel)
+
+        this.videos[videoChannel.id] = videos
+
+        this.onChannelDataSubject.next([ videoChannel ])
+      })
+  }
+
+  getVideosOf (videoChannel: VideoChannel) {
+    return this.videos[ videoChannel.id ]
+  }
+
+  onNearOfBottom () {
+    if (!hasMoreItems(this.channelPagination)) return
+
+    this.channelPagination.currentPage += 1
+
+    this.loadMoreChannels()
+  }
+
+  getVideoChannelLink (videoChannel: VideoChannel) {
+    return [ '/video-channels', videoChannel.nameWithHost ]
   }
 }

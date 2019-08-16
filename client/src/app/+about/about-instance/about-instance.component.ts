@@ -11,7 +11,7 @@ import { MarkdownService } from '@app/shared/renderer'
   styleUrls: [ './about-instance.component.scss' ]
 })
 export class AboutInstanceComponent implements OnInit {
-  @ViewChild('contactAdminModal') contactAdminModal: ContactAdminModalComponent
+  @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
   descriptionHTML = ''

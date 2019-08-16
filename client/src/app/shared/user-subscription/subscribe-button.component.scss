@@ -61,7 +61,7 @@
     padding-left: 1rem;
   }
 
-  /deep/ form {
+  ::ng-deep form {
     padding: 0.25rem 1rem;
   }
 

@@ -57,6 +57,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     initVideoJsContribHlsJsPlayer(player)
 
     this.startTime = timeToInt(options.startTime)
+    console.log(this.startTime)
 
     player.src({
       type: options.type,
@@ -97,10 +98,10 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     this.runStats()
 
-    this.hlsjs.on('hlsLevelLoaded', () => {
-      if (this.startTime) this.player.currentTime(this.startTime)
-
-      this.hlsjs.off('hlsLevelLoaded', this)
+    this.player.one('canplay', () => {
+      if (this.startTime) {
+        this.player.currentTime(this.startTime)
+      }
     })
   }
 

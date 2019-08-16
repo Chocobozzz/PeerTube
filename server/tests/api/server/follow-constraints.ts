@@ -3,16 +3,16 @@
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
   doubleFollow,
+  flushAndRunMultipleServers,
   getAccountVideos,
   getVideo,
   getVideoChannelVideos,
   getVideoWithToken,
-  flushAndRunMultipleServers,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo, cleanupTests
+  uploadVideo
 } from '../../../../shared/extra-utils'
 import { unfollow } from '../../../../shared/extra-utils/server/follows'
 import { userLogin } from '../../../../shared/extra-utils/users/login'
@@ -66,28 +66,30 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:9001', 0, 5)
+        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:' + servers[0].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:9002', 0, 5)
+        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:' + servers[1].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, undefined, 'root_channel@localhost:9001', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[0].port
+        const res = await getVideoChannelVideos(servers[0].url, undefined, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list remote channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, undefined, 'root_channel@localhost:9002', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[1].port
+        const res = await getVideoChannelVideos(servers[0].url, undefined, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
@@ -104,28 +106,30 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:9001', 0, 5)
+        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:' + servers[0].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:9002', 0, 5)
+        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:' + servers[1].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, 'root_channel@localhost:9001', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[0].port
+        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list remote channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, 'root_channel@localhost:9002', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[1].port
+        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
@@ -152,28 +156,30 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:9001', 0, 5)
+        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:' + servers[0].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should not list remote account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:9002', 0, 5)
+        const res = await getAccountVideos(servers[0].url, undefined, 'root@localhost:' + servers[1].port, 0, 5)
 
         expect(res.body.total).to.equal(0)
         expect(res.body.data).to.have.lengthOf(0)
       })
 
       it('Should list local channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, undefined, 'root_channel@localhost:9001', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[0].port
+        const res = await getVideoChannelVideos(servers[0].url, undefined, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should not list remote channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, undefined, 'root_channel@localhost:9002', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[1].port
+        const res = await getVideoChannelVideos(servers[0].url, undefined, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(0)
         expect(res.body.data).to.have.lengthOf(0)
@@ -190,28 +196,30 @@ describe('Test follow constraints', function () {
       })
 
       it('Should list local account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:9001', 0, 5)
+        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:' + servers[0].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list remote account videos', async function () {
-        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:9002', 0, 5)
+        const res = await getAccountVideos(servers[0].url, userAccessToken, 'root@localhost:' + servers[1].port, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list local channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, 'root_channel@localhost:9001', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[0].port
+        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
       })
 
       it('Should list remote channel videos', async function () {
-        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, 'root_channel@localhost:9002', 0, 5)
+        const videoChannelName = 'root_channel@localhost:' + servers[1].port
+        const res = await getVideoChannelVideos(servers[0].url, userAccessToken, videoChannelName, 0, 5)
 
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)

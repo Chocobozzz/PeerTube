@@ -13,14 +13,18 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { VideoModel } from './video'
+import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
 import { getSort, throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import * as validator from 'validator'
-import { AggregateOptions, Op, Sequelize, Transaction } from 'sequelize'
+import { AggregateOptions, Op, ScopeOptions, Sequelize, Transaction } from 'sequelize'
+import { UserModel } from '../account/user'
+import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/models/videos/playlist/video-playlist-element.model'
+import { AccountModel } from '../account/account'
+import { VideoPrivacy } from '../../../shared/models/videos'
 
 @Table({
   tableName: 'videoPlaylistElement',
@@ -90,9 +94,9 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
-    onDelete: 'CASCADE'
+    onDelete: 'set null'
   })
   Video: VideoModel
 
@@ -107,6 +111,57 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.destroy(query)
   }
 
+  static listForApi (options: {
+    start: number,
+    count: number,
+    videoPlaylistId: number,
+    serverAccount: AccountModel,
+    user?: UserModel
+  }) {
+    const accountIds = [ options.serverAccount.id ]
+    const videoScope: (ScopeOptions | string)[] = [
+      VideoScopeNames.WITH_BLACKLISTED
+    ]
+
+    if (options.user) {
+      accountIds.push(options.user.Account.id)
+      videoScope.push({ method: [ VideoScopeNames.WITH_USER_HISTORY, options.user.id ] })
+    }
+
+    const forApiOptions: ForAPIOptions = { withAccountBlockerIds: accountIds }
+    videoScope.push({
+      method: [
+        VideoScopeNames.FOR_API, forApiOptions
+      ]
+    })
+
+    const findQuery = {
+      offset: options.start,
+      limit: options.count,
+      order: getSort('position'),
+      where: {
+        videoPlaylistId: options.videoPlaylistId
+      },
+      include: [
+        {
+          model: VideoModel.scope(videoScope),
+          required: false
+        }
+      ]
+    }
+
+    const countQuery = {
+      where: {
+        videoPlaylistId: options.videoPlaylistId
+      }
+    }
+
+    return Promise.all([
+      VideoPlaylistElementModel.count(countQuery),
+      VideoPlaylistElementModel.findAll(findQuery)
+    ]).then(([ total, data ]) => ({ total, data }))
+  }
+
   static loadByPlaylistAndVideo (videoPlaylistId: number, videoId: number) {
     const query = {
       where: {
@@ -116,6 +171,10 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     }
 
     return VideoPlaylistElementModel.findOne(query)
+  }
+
+  static loadById (playlistElementId: number) {
+    return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 
   static loadByPlaylistAndVideoForAP (playlistId: number | string, videoId: number | string) {
@@ -157,6 +216,24 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
       .then(({ rows, count }) => {
         return { total: count, data: rows.map(e => e.url) }
       })
+  }
+
+  static loadFirstElementWithVideoThumbnail (videoPlaylistId: number) {
+    const query = {
+      order: getSort('position'),
+      where: {
+        videoPlaylistId
+      },
+      include: [
+        {
+          model: VideoModel.scope(VideoScopeNames.WITH_THUMBNAILS),
+          required: true
+        }
+      ]
+    }
+
+    return VideoPlaylistElementModel
+      .findOne(query)
   }
 
   static getNextPositionOf (videoPlaylistId: number, transaction?: Transaction) {
@@ -211,6 +288,42 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     }
 
     return VideoPlaylistElementModel.increment({ position: by }, query)
+  }
+
+  getType (displayNSFW?: boolean, accountId?: number) {
+    const video = this.Video
+
+    if (!video) return VideoPlaylistElementType.DELETED
+
+    // Owned video, don't filter it
+    if (accountId && video.VideoChannel.Account.id === accountId) return VideoPlaylistElementType.REGULAR
+
+    if (video.privacy === VideoPrivacy.PRIVATE) return VideoPlaylistElementType.PRIVATE
+
+    if (video.isBlacklisted() || video.isBlocked()) return VideoPlaylistElementType.UNAVAILABLE
+    if (video.nsfw === true && displayNSFW === false) return VideoPlaylistElementType.UNAVAILABLE
+
+    return VideoPlaylistElementType.REGULAR
+  }
+
+  getVideoElement (displayNSFW?: boolean, accountId?: number) {
+    if (!this.Video) return null
+    if (this.getType(displayNSFW, accountId) !== VideoPlaylistElementType.REGULAR) return null
+
+    return this.Video.toFormattedJSON()
+  }
+
+  toFormattedJSON (options: { displayNSFW?: boolean, accountId?: number } = {}): VideoPlaylistElement {
+    return {
+      id: this.id,
+      position: this.position,
+      startTimestamp: this.startTimestamp,
+      stopTimestamp: this.stopTimestamp,
+
+      type: this.getType(options.displayNSFW, options.accountId),
+
+      video: this.getVideoElement(options.displayNSFW, options.accountId)
+    }
   }
 
   toActivityPubObject (): PlaylistElementObject {

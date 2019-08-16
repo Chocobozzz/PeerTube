@@ -17,11 +17,12 @@ import {
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
-  getVideosList,
+  getVideoChannel,
+  getVideosList, installPlugin,
   login,
   makePutBodyRequest,
   rateVideo,
-  registerUser,
+  registerUserWithChannel,
   removeUser,
   removeVideo,
   ServerInfo,
@@ -56,6 +57,8 @@ describe('Test users', function () {
     server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
+
+    await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-theme-background-red' })
   })
 
   describe('OAuth client', function () {
@@ -114,6 +117,17 @@ describe('Test users', function () {
       const res = await login(server.url, server.client, server.user, 200)
 
       accessToken = res.body.access_token
+    })
+
+    it('Should be able to login with an insensitive username', async function () {
+      const user = { username: 'RoOt', password: server.user.password }
+      const res = await login(server.url, server.client, user, 200)
+
+      const user2 = { username: 'rOoT', password: server.user.password }
+      const res2 = await login(server.url, server.client, user2, 200)
+
+      const user3 = { username: 'ROOt', password: server.user.password }
+      const res3 = await login(server.url, server.client, user3, 200)
     })
   })
 
@@ -316,7 +330,7 @@ describe('Test users', function () {
 
       const rootUser = users[ 1 ]
       expect(rootUser.username).to.equal('root')
-      expect(rootUser.email).to.equal('admin1@example.com')
+      expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
       userId = user.id
@@ -334,7 +348,7 @@ describe('Test users', function () {
 
       const user = users[ 0 ]
       expect(user.username).to.equal('root')
-      expect(user.email).to.equal('admin1@example.com')
+      expect(user.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.roleLabel).to.equal('Administrator')
       expect(user.nsfwPolicy).to.equal('display')
     })
@@ -379,7 +393,7 @@ describe('Test users', function () {
       expect(users.length).to.equal(2)
 
       expect(users[ 0 ].username).to.equal('root')
-      expect(users[ 0 ].email).to.equal('admin1@example.com')
+      expect(users[ 0 ].email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(users[ 0 ].nsfwPolicy).to.equal('display')
 
       expect(users[ 1 ].username).to.equal('user_1')
@@ -467,10 +481,11 @@ describe('Test users', function () {
       expect(user.autoPlayVideo).to.be.false
     })
 
-    it('Should be able to change the email display attribute', async function () {
+    it('Should be able to change the email attribute', async function () {
       await updateMyUser({
         url: server.url,
         accessToken: accessTokenUser,
+        currentPassword: 'new password',
         email: 'updated@example.com'
       })
 
@@ -537,6 +552,21 @@ describe('Test users', function () {
       expect(user.id).to.be.a('number')
       expect(user.account.displayName).to.equal('new display name')
       expect(user.account.description).to.equal('my super description updated')
+    })
+
+    it('Should be able to update my theme', async function () {
+      for (const theme of [ 'background-red', 'default', 'instance-default' ]) {
+        await updateMyUser({
+          url: server.url,
+          accessToken: accessTokenUser,
+          theme
+        })
+
+        const res = await getMyUserInformation(server.url, accessTokenUser)
+        const body: User = res.body
+
+        expect(body.theme).to.equal(theme)
+      }
     })
   })
 
@@ -617,7 +647,10 @@ describe('Test users', function () {
 
   describe('Registering a new user', function () {
     it('Should register a new user', async function () {
-      await registerUser(server.url, 'user_15', 'my super password')
+      const user = { displayName: 'super user 15', username: 'user_15', password: 'my super password' }
+      const channel = { name: 'my_user_15_channel', displayName: 'my channel rocks' }
+
+      await registerUserWithChannel({ url: server.url, user, channel })
     })
 
     it('Should be able to login with this registered user', async function () {
@@ -629,11 +662,24 @@ describe('Test users', function () {
       accessToken = await userLogin(server, user15)
     })
 
+    it('Should have the correct display name', async function () {
+      const res = await getMyUserInformation(server.url, accessToken)
+      const user: User = res.body
+
+      expect(user.account.displayName).to.equal('super user 15')
+    })
+
     it('Should have the correct video quota', async function () {
       const res = await getMyUserInformation(server.url, accessToken)
       const user = res.body
 
       expect(user.videoQuota).to.equal(5 * 1024 * 1024)
+    })
+
+    it('Should have created the channel', async function () {
+      const res = await getVideoChannel(server.url, 'my_user_15_channel')
+
+      expect(res.body.displayName).to.equal('my channel rocks')
     })
 
     it('Should remove me', async function () {

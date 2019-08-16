@@ -1,14 +1,14 @@
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import * as express from 'express'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
-import { doesAccountNameWithHostExist } from '../../helpers/custom-validators/accounts'
 import { AccountBlocklistModel } from '../../models/account/account-blocklist'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerBlocklistModel } from '../../models/server/server-blocklist'
 import { ServerModel } from '../../models/server/server'
 import { getServerActor } from '../../helpers/utils'
 import { WEBSERVER } from '../../initializers/constants'
+import { doesAccountNameWithHostExist } from '../../helpers/middlewares'
 
 const blockAccountValidator = [
   body('accountName').exists().withMessage('Should have an account name with host'),

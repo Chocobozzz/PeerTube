@@ -24,33 +24,19 @@
   }
 }
 
+.date-title {
+  font-size: 16px;
+  font-weight: $font-semibold;
+  margin-bottom: 20px;
+  margin-top: -10px;
+  padding-top: 20px;
+
+  &:not(:first-child) {
+    border-top: 1px solid $separator-border-color;
+  }
+}
+
 .margin-content {
-  width: $video-miniature-width * 6;
-  margin: auto !important;
-
-  @media screen and (max-width: 1800px) {
-    width: $video-miniature-width * 5;
-  }
-
-  @media screen and (max-width: 1800px - $video-miniature-width) {
-    width: $video-miniature-width * 4;
-  }
-
-  @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
-    width: $video-miniature-width * 3;
-  }
-
-  @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
-    width: $video-miniature-width * 2;
-  }
-
-  @media screen and (max-width: 500px) {
-    width: auto;
-    margin: 0 !important;
-
-    .videos {
-      @include video-miniature-small-screen;
-    }
-  }
+  @include adapt-margin-content-width;
 }
 

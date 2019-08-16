@@ -13,7 +13,7 @@ import { BlocklistService } from '@app/shared/blocklist'
   templateUrl: './user-moderation-dropdown.component.html'
 })
 export class UserModerationDropdownComponent implements OnChanges {
-  @ViewChild('userBanModal') userBanModal: UserBanModalComponent
+  @ViewChild('userBanModal', { static: false }) userBanModal: UserBanModalComponent
 
   @Input() user: User
   @Input() account: Account
@@ -33,6 +33,7 @@ export class UserModerationDropdownComponent implements OnChanges {
     private serverService: ServerService,
     private userService: UserService,
     private blocklistService: BlocklistService,
+    private auth: AuthService,
     private i18n: I18n
   ) { }
 
@@ -230,7 +231,7 @@ export class UserModerationDropdownComponent implements OnChanges {
 
       if (this.user && authUser.id === this.user.id) return
 
-      if (this.user && authUser.hasRight(UserRight.MANAGE_USERS)) {
+      if (this.user && authUser.hasRight(UserRight.MANAGE_USERS) && authUser.canManage(this.user)) {
         this.userActions.push([
           {
             label: this.i18n('Edit'),

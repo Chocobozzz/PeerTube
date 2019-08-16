@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/video/video.model'
-import { VideoPlaylistElementUpdate } from '@shared/models'
+import { VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { ActivatedRoute } from '@angular/router'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -9,6 +9,7 @@ import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { secondsToTime } from '../../../assets/player/utils'
+import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 
 @Component({
   selector: 'my-video-playlist-element-miniature',
@@ -17,17 +18,17 @@ import { secondsToTime } from '../../../assets/player/utils'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VideoPlaylistElementMiniatureComponent {
-  @ViewChild('moreDropdown') moreDropdown: NgbDropdown
+  @ViewChild('moreDropdown', { static: false }) moreDropdown: NgbDropdown
 
   @Input() playlist: VideoPlaylist
-  @Input() video: Video
+  @Input() playlistElement: VideoPlaylistElement
   @Input() owned = false
   @Input() playing = false
   @Input() rowLink = false
   @Input() accountLink = true
-  @Input() position: number
+  @Input() position: number // Keep this property because we're in the OnPush change detection strategy
 
-  @Output() elementRemoved = new EventEmitter<Video>()
+  @Output() elementRemoved = new EventEmitter<VideoPlaylistElement>()
 
   displayTimestampOptions = false
 
@@ -50,6 +51,18 @@ export class VideoPlaylistElementMiniatureComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
+  isUnavailable (e: VideoPlaylistElement) {
+    return e.type === VideoPlaylistElementType.UNAVAILABLE
+  }
+
+  isPrivate (e: VideoPlaylistElement) {
+    return e.type === VideoPlaylistElementType.PRIVATE
+  }
+
+  isDeleted (e: VideoPlaylistElement) {
+    return e.type === VideoPlaylistElementType.DELETED
+  }
+
   buildRouterLink () {
     if (!this.playlist) return null
 
@@ -57,12 +70,12 @@ export class VideoPlaylistElementMiniatureComponent {
   }
 
   buildRouterQuery () {
-    if (!this.video) return {}
+    if (!this.playlistElement || !this.playlistElement.video) return {}
 
     return {
-      videoId: this.video.uuid,
-      start: this.video.playlistElement.startTimestamp,
-      stop: this.video.playlistElement.stopTimestamp
+      videoId: this.playlistElement.video.uuid,
+      start: this.playlistElement.startTimestamp,
+      stop: this.playlistElement.stopTimestamp
     }
   }
 
@@ -70,13 +83,13 @@ export class VideoPlaylistElementMiniatureComponent {
     return video.isVideoNSFWForUser(this.authService.getUser(), this.serverService.getConfig())
   }
 
-  removeFromPlaylist (video: Video) {
-    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, video.id)
+  removeFromPlaylist (playlistElement: VideoPlaylistElement) {
+    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Video removed from {{name}}', { name: this.playlist.displayName }))
 
-            this.elementRemoved.emit(this.video)
+            this.elementRemoved.emit(playlistElement)
           },
 
           err => this.notifier.error(err.message)
@@ -85,19 +98,19 @@ export class VideoPlaylistElementMiniatureComponent {
     this.moreDropdown.close()
   }
 
-  updateTimestamps (video: Video) {
+  updateTimestamps (playlistElement: VideoPlaylistElement) {
     const body: VideoPlaylistElementUpdate = {}
 
     body.startTimestamp = this.timestampOptions.startTimestampEnabled ? this.timestampOptions.startTimestamp : null
     body.stopTimestamp = this.timestampOptions.stopTimestampEnabled ? this.timestampOptions.stopTimestamp : null
 
-    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, video.id, body)
+    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Timestamps updated'))
 
-            video.playlistElement.startTimestamp = body.startTimestamp
-            video.playlistElement.stopTimestamp = body.stopTimestamp
+            playlistElement.startTimestamp = body.startTimestamp
+            playlistElement.stopTimestamp = body.stopTimestamp
 
             this.cdr.detectChanges()
           },
@@ -108,9 +121,9 @@ export class VideoPlaylistElementMiniatureComponent {
     this.moreDropdown.close()
   }
 
-  formatTimestamp (video: Video) {
-    const start = video.playlistElement.startTimestamp
-    const stop = video.playlistElement.stopTimestamp
+  formatTimestamp (playlistElement: VideoPlaylistElement) {
+    const start = playlistElement.startTimestamp
+    const stop = playlistElement.stopTimestamp
 
     const startFormatted = secondsToTime(start, true, ':')
     const stopFormatted = secondsToTime(stop, true, ':')
@@ -127,7 +140,7 @@ export class VideoPlaylistElementMiniatureComponent {
     this.displayTimestampOptions = false
   }
 
-  toggleDisplayTimestampsOptions (event: Event, video: Video) {
+  toggleDisplayTimestampsOptions (event: Event, playlistElement: VideoPlaylistElement) {
     event.preventDefault()
 
     this.displayTimestampOptions = !this.displayTimestampOptions
@@ -137,17 +150,17 @@ export class VideoPlaylistElementMiniatureComponent {
         startTimestampEnabled: false,
         stopTimestampEnabled: false,
         startTimestamp: 0,
-        stopTimestamp: video.duration
+        stopTimestamp: playlistElement.video.duration
       }
 
-      if (video.playlistElement.startTimestamp) {
+      if (playlistElement.startTimestamp) {
         this.timestampOptions.startTimestampEnabled = true
-        this.timestampOptions.startTimestamp = video.playlistElement.startTimestamp
+        this.timestampOptions.startTimestamp = playlistElement.startTimestamp
       }
 
-      if (video.playlistElement.stopTimestamp) {
+      if (playlistElement.stopTimestamp) {
         this.timestampOptions.stopTimestampEnabled = true
-        this.timestampOptions.stopTimestamp = video.playlistElement.stopTimestamp
+        this.timestampOptions.stopTimestamp = playlistElement.stopTimestamp
       }
     }
 

@@ -37,7 +37,7 @@
   }
 
   my-video-playlist-element-miniature {
-    /deep/ {
+    ::ng-deep {
       .video {
         .position {
           margin-right: 0;
@@ -52,6 +52,11 @@
 
       my-video-thumbnail {
         @include thumbnail-size-component(90px, 50px);
+      }
+
+      .fake-thumbnail {
+        width: 90px;
+        height: 50px;
       }
     }
   }

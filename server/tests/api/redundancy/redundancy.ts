@@ -66,7 +66,7 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy, additional
           immutableAssign({
             min_lifetime: '1 hour',
             strategy: strategy,
-            size: '200KB'
+            size: '400KB'
           }, additionalParams)
         ]
       }
@@ -100,7 +100,7 @@ async function check1WebSeed (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2UUID
 
   const webseeds = [
-    'http://localhost:9002/static/webseed/' + videoUUID
+    `http://localhost:${servers[ 1 ].port}/static/webseed/${videoUUID}`
   ]
 
   for (const server of servers) {
@@ -118,8 +118,8 @@ async function check2Webseeds (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2UUID
 
   const webseeds = [
-    'http://localhost:9001/static/redundancy/' + videoUUID,
-    'http://localhost:9002/static/webseed/' + videoUUID
+    `http://localhost:${servers[ 0 ].port}/static/redundancy/${videoUUID}`,
+    `http://localhost:${servers[ 1 ].port}/static/webseed/${videoUUID}`
   ]
 
   for (const server of servers) {
@@ -145,7 +145,12 @@ async function check2Webseeds (videoUUID?: string) {
     }
   }
 
-  for (const directory of [ 'test1/redundancy', 'test2/videos' ]) {
+  const directories = [
+    'test' + servers[0].internalServerNumber + '/redundancy',
+    'test' + servers[1].internalServerNumber + '/videos'
+  ]
+
+  for (const directory of directories) {
     const files = await readdir(join(root(), directory))
     expect(files).to.have.length.at.least(4)
 
@@ -194,7 +199,12 @@ async function check1PlaylistRedundancies (videoUUID?: string) {
     await checkSegmentHash(baseUrlPlaylist, baseUrlSegment, videoUUID, resolution, hlsPlaylist)
   }
 
-  for (const directory of [ 'test1/redundancy/hls', 'test2/streaming-playlists/hls' ]) {
+  const directories = [
+    'test' + servers[0].internalServerNumber + '/redundancy/hls',
+    'test' + servers[1].internalServerNumber + '/streaming-playlists/hls'
+  ]
+
+  for (const directory of directories) {
     const files = await readdir(join(root(), directory, videoUUID))
     expect(files).to.have.length.at.least(4)
 
@@ -214,8 +224,8 @@ async function checkStatsWith2Webseed (strategy: VideoRedundancyStrategy) {
   const stat = data.videosRedundancy[0]
 
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(204800)
-  expect(stat.totalUsed).to.be.at.least(1).and.below(204801)
+  expect(stat.totalSize).to.equal(409600)
+  expect(stat.totalUsed).to.be.at.least(1).and.below(409601)
   expect(stat.totalVideoFiles).to.equal(4)
   expect(stat.totalVideos).to.equal(1)
 }
@@ -228,7 +238,7 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategy) {
 
   const stat = data.videosRedundancy[0]
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(204800)
+  expect(stat.totalSize).to.equal(409600)
   expect(stat.totalUsed).to.equal(0)
   expect(stat.totalVideoFiles).to.equal(0)
   expect(stat.totalVideos).to.equal(0)
@@ -239,8 +249,8 @@ async function enableRedundancyOnServer1 () {
 
   const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
   const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === 'localhost:9002')
-  const server3 = follows.find(f => f.following.host === 'localhost:9003')
+  const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
+  const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -254,8 +264,8 @@ async function disableRedundancyOnServer1 () {
 
   const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
   const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === 'localhost:9002')
-  const server3 = follows.find(f => f.following.host === 'localhost:9003')
+  const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
+  const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -475,12 +485,12 @@ describe('Test videos redundancy', function () {
       await wait(10000)
 
       try {
-        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A9001')
+        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
       } catch {
         // Maybe a server deleted a redundancy in the scheduler
         await wait(2000)
 
-        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A9001')
+        await checkContains(servers, 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
       }
     })
 
@@ -491,7 +501,7 @@ describe('Test videos redundancy', function () {
 
       await wait(15000)
 
-      await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2Flocalhost%3A9001')
+      await checkNotContains([ servers[1], servers[2] ], 'http%3A%2F%2Flocalhost%3A' + servers[0].port)
     })
 
     after(async function () {

@@ -39,7 +39,19 @@ export type P2PMediaLoaderOptions = {
   videoFiles: VideoFile[]
 }
 
-export type CommonOptions = {
+export interface CustomizationOptions {
+  startTime: number | string
+  stopTime: number | string
+
+  controls?: boolean
+  muted?: boolean
+  loop?: boolean
+  subtitle?: string
+
+  peertubeLink: boolean
+}
+
+export interface CommonOptions extends CustomizationOptions {
   playerElement: HTMLVideoElement
   onPlayerElementChange: (element: HTMLVideoElement) => void
 
@@ -48,21 +60,14 @@ export type CommonOptions = {
   enableHotkeys: boolean
   inactivityTimeout: number
   poster: string
-  startTime: number | string
-  stopTime: number | string
 
   theaterMode: boolean
   captions: boolean
-  peertubeLink: boolean
 
   videoViewUrl: string
   embedUrl: string
 
   language?: string
-  controls?: boolean
-  muted?: boolean
-  loop?: boolean
-  subtitle?: string
 
   videoCaptions: VideoJSCaption[]
 
@@ -81,6 +86,7 @@ export class PeertubePlayerManager {
 
   private static videojsLocaleCache: { [ path: string ]: any } = {}
   private static playerElementClassName: string
+  private static onPlayerChange: (player: any) => void
 
   static getServerTranslations (serverUrl: string, locale: string) {
     const path = PeertubePlayerManager.getLocalePath(serverUrl, locale)
@@ -95,9 +101,10 @@ export class PeertubePlayerManager {
       })
   }
 
-  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
+  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: any) => void) {
     let p2pMediaLoader: any
 
+    this.onPlayerChange = onPlayerChange
     this.playerElementClassName = options.common.playerElement.className
 
     if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
@@ -117,8 +124,17 @@ export class PeertubePlayerManager {
       videojs(options.common.playerElement, videojsOptions, function (this: any) {
         const player = this
 
-        player.tech_.one('error', () => self.maybeFallbackToWebTorrent(mode, player, options))
-        player.one('error', () => self.maybeFallbackToWebTorrent(mode, player, options))
+        let alreadyFallback = false
+
+        player.tech_.one('error', () => {
+          if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
+          alreadyFallback = true
+        })
+
+        player.one('error', () => {
+          if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
+          alreadyFallback = true
+        })
 
         self.addContextMenu(mode, player, options.common.embedUrl)
 
@@ -157,6 +173,8 @@ export class PeertubePlayerManager {
       const player = this
 
       self.addContextMenu(mode, player, options.common.embedUrl)
+
+      PeertubePlayerManager.onPlayerChange(player)
     })
   }
 
@@ -432,7 +450,7 @@ export class PeertubePlayerManager {
         label: player.localize('Copy the video URL at the current time'),
         listener: function () {
           const player = this as videojs.Player
-          copyToClipboard(buildVideoLink(player.currentTime()))
+          copyToClipboard(buildVideoLink({ startTime: player.currentTime() }))
         }
       },
       {

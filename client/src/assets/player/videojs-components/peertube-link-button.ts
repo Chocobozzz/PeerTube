@@ -16,7 +16,7 @@ class PeerTubeLinkButton extends Button {
   }
 
   updateHref () {
-    this.el().setAttribute('href', buildVideoLink(this.player().currentTime()))
+    this.el().setAttribute('href', buildVideoLink({ startTime: this.player().currentTime() }))
   }
 
   handleClick () {

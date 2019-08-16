@@ -33,7 +33,7 @@ import {
   WEBSERVER
 } from '../../initializers/constants'
 import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
-import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
+import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { join } from 'path'
 import { VideoPlaylistElementModel } from './video-playlist-element'
@@ -115,7 +115,7 @@ type AvailableForListOptions = {
   [ ScopeNames.AVAILABLE_FOR_LIST ]: (options: AvailableForListOptions) => {
     // Only list local playlists OR playlists that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
-    const actorWhere = {
+    const whereActor = {
       [ Op.or ]: [
         {
           serverId: null
@@ -159,7 +159,7 @@ type AvailableForListOptions = {
     }
 
     const accountScope = {
-      method: [ AccountScopeNames.SUMMARY, actorWhere ]
+      method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
     }
 
     return {
@@ -265,7 +265,6 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
   @HasOne(() => ThumbnailModel, {
-
     foreignKey: {
       name: 'videoPlaylistId',
       allowNull: true
@@ -341,7 +340,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       },
       include: [
         {
-          attributes: [ 'videoId', 'startTimestamp', 'stopTimestamp' ],
+          attributes: [ 'id', 'videoId', 'startTimestamp', 'stopTimestamp' ],
           model: VideoPlaylistElementModel.unscoped(),
           where: {
             videoId: {
@@ -432,6 +431,10 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   hasThumbnail () {
     return !!this.Thumbnail
+  }
+
+  hasGeneratedThumbnail () {
+    return this.hasThumbnail() && this.Thumbnail.automaticallyGenerated === true
   }
 
   generateThumbnailName () {

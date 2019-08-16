@@ -1,13 +1,13 @@
 import * as express from 'express'
 import { areValidationErrors } from '../utils'
-import { checkUserCanManageVideo, doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { doesVideoCaptionExist, isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
+import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
+import { checkUserCanManageVideo, doesVideoCaptionExist, doesVideoExist } from '../../../helpers/middlewares'
 
 const addVideoCaptionValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),

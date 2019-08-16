@@ -1,19 +1,36 @@
 import { join } from 'path'
-import { AfterDestroy, AllowNull, Column, CreatedAt, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AfterDestroy, AllowNull, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
-import { STATIC_PATHS } from '../../initializers/constants'
+import { LAZY_STATIC_PATHS } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
+import { throwIfNotValid } from '../utils'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 
 @Table({
-  tableName: 'avatar'
+  tableName: 'avatar',
+  indexes: [
+    {
+      fields: [ 'filename' ],
+      unique: true
+    }
+  ]
 })
 export class AvatarModel extends Model<AvatarModel> {
 
   @AllowNull(false)
   @Column
   filename: string
+
+  @AllowNull(true)
+  @Is('AvatarFileUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'fileUrl', true))
+  @Column
+  fileUrl: string
+
+  @AllowNull(false)
+  @Column
+  onDisk: boolean
 
   @CreatedAt
   createdAt: Date
@@ -30,16 +47,30 @@ export class AvatarModel extends Model<AvatarModel> {
       .catch(err => logger.error('Cannot remove avatar file %s.', instance.filename, err))
   }
 
+  static loadByName (filename: string) {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return AvatarModel.findOne(query)
+  }
+
   toFormattedJSON (): Avatar {
     return {
-      path: this.getWebserverPath(),
+      path: this.getStaticPath(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
     }
   }
 
-  getWebserverPath () {
-    return join(STATIC_PATHS.AVATARS, this.filename)
+  getStaticPath () {
+    return join(LAZY_STATIC_PATHS.AVATARS, this.filename)
+  }
+
+  getPath () {
+    return join(CONFIG.STORAGE.AVATARS_DIR, this.filename)
   }
 
   removeAvatar () {

@@ -1,9 +1,20 @@
 @import 'variables';
 @import 'mixins';
 
-.first-step-block .form-group-channel {
-  margin-bottom: 20px;
-  margin-top: 35px;
+.first-step-block {
+
+  .form-group-channel {
+    margin-bottom: 20px;
+    margin-top: 35px;
+  }
+
+  .audio-image-info {
+    margin-bottom: 10px;
+  }
+
+  .audio-preview {
+    margin: 30px 0;
+  }
 }
 
 .upload-progress-cancel {
@@ -14,7 +25,7 @@
   p-progressBar {
     flex-grow: 1;
 
-    /deep/ .ui-progressbar {
+    ::ng-deep .ui-progressbar {
       font-size: 15px !important;
       height: 30px !important;
       border-radius: 3px !important;
@@ -34,7 +45,7 @@
     }
 
     &.processing {
-      /deep/ .ui-progressbar-label {
+      ::ng-deep .ui-progressbar-label {
         // Same color as background to hide "100%"
         color: rgba(11, 204, 41, 0.16) !important;
 

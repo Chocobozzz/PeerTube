@@ -8,14 +8,16 @@ import {
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
-  flushTests, generateHighBitrateVideo,
+  generateHighBitrateVideo,
   getEnvCli,
   getVideo,
   getVideosList,
-  killallServers, root,
+  root,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo, viewVideo, wait
+  uploadVideo,
+  viewVideo,
+  wait
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../helpers/ffmpeg-utils'
@@ -73,7 +75,7 @@ describe('Test optimize old videos', function () {
   })
 
   it('Should run optimize script', async function () {
-    this.timeout(120000)
+    this.timeout(200000)
 
     const env = getEnvCli(servers[0])
     await execCLI(`${env} npm run optimize-old-videos`)
@@ -102,7 +104,7 @@ describe('Test optimize old videos', function () {
 
         expect(file.size).to.be.below(5000000)
 
-        const path = join(root(), 'test1', 'videos', video.uuid + '-' + file.resolution.id + '.mp4')
+        const path = join(root(), 'test' + servers[0].internalServerNumber, 'videos', video.uuid + '-' + file.resolution.id + '.mp4')
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
         const resolution = await getVideoFileResolution(path)

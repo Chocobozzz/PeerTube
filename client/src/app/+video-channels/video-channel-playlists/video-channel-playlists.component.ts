@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ConfirmService } from '../../core/confirm'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { Notifier } from '@app/core'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 @Component({
@@ -21,6 +21,8 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
     itemsPerPage: 20,
     totalItems: null
   }
+
+  onDataSubject = new Subject<any[]>()
 
   private videoChannelSub: Subscription
   private videoChannel: VideoChannel
@@ -46,18 +48,19 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
   }
 
   onNearOfBottom () {
-    // Last page
-    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
+    if (!hasMoreItems(this.pagination)) return
 
     this.pagination.currentPage += 1
     this.loadVideoPlaylists()
   }
 
   private loadVideoPlaylists () {
-    this.videoPlaylistService.listChannelPlaylists(this.videoChannel)
+    this.videoPlaylistService.listChannelPlaylists(this.videoChannel, this.pagination)
         .subscribe(res => {
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
+
+          this.onDataSubject.next(res.data)
         })
   }
 }

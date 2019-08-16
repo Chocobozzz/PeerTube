@@ -1,8 +1,16 @@
 import 'multer'
 import * as validator from 'validator'
+import { sep } from 'path'
 
 function exists (value: any) {
   return value !== undefined && value !== null
+}
+
+function isSafePath (p: string) {
+  return exists(p) &&
+    (p + '').split(sep).every(part => {
+      return [ '..' ].includes(part) === false
+    })
 }
 
 function isArray (value: any) {
@@ -38,9 +46,21 @@ function isBooleanValid (value: any) {
 }
 
 function toIntOrNull (value: string) {
-  if (value === 'null') return null
+  const v = toValueOrNull(value)
 
-  return validator.toInt(value)
+  if (v === null || v === undefined) return v
+  if (typeof v === 'number') return v
+
+  return validator.toInt('' + v)
+}
+
+function toBooleanOrNull (value: any) {
+  const v = toValueOrNull(value)
+
+  if (v === null || v === undefined) return v
+  if (typeof v === 'boolean') return v
+
+  return validator.toBoolean('' + v)
 }
 
 function toValueOrNull (value: string) {
@@ -97,10 +117,12 @@ export {
   isNotEmptyIntArray,
   isArray,
   isIdValid,
+  isSafePath,
   isUUIDValid,
   isIdOrUUIDValid,
   isDateValid,
   toValueOrNull,
+  toBooleanOrNull,
   isBooleanValid,
   toIntOrNull,
   toArray,

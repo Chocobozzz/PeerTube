@@ -7,13 +7,11 @@ import {
   Column,
   CreatedAt,
   DataType,
-  Default,
   DefaultScope,
   ForeignKey,
   HasMany,
   HasOne,
   Is,
-  IsUUID,
   Model,
   Scopes,
   Table,
@@ -120,10 +118,6 @@ export const unusedActorAttributesForAPI = [
       fields: [ 'avatarId' ]
     },
     {
-      fields: [ 'uuid' ],
-      unique: true
-    },
-    {
       fields: [ 'followersUrl' ]
     }
   ]
@@ -133,12 +127,6 @@ export class ActorModel extends Model<ActorModel> {
   @AllowNull(false)
   @Column(DataType.ENUM(...values(ACTIVITY_PUB_ACTOR_TYPES)))
   type: ActivityPubActorType
-
-  @AllowNull(false)
-  @Default(DataType.UUIDV4)
-  @IsUUID(4)
-  @Column(DataType.UUID)
-  uuid: string
 
   @AllowNull(false)
   @Is('ActorPreferredUsername', value => throwIfNotValid(value, isActorPreferredUsernameValid, 'actor preferred username'))
@@ -408,7 +396,6 @@ export class ActorModel extends Model<ActorModel> {
     return {
       id: this.id,
       url: this.url,
-      uuid: this.uuid,
       name: this.preferredUsername,
       host: this.getHost(),
       hostRedundancyAllowed: this.getRedundancyAllowed(),
@@ -454,7 +441,6 @@ export class ActorModel extends Model<ActorModel> {
       endpoints: {
         sharedInbox: this.sharedInboxUrl
       },
-      uuid: this.uuid,
       publicKey: {
         id: this.getPublicKeyUrl(),
         owner: this.url,
@@ -527,7 +513,7 @@ export class ActorModel extends Model<ActorModel> {
   getAvatarUrl () {
     if (!this.avatarId) return undefined
 
-    return WEBSERVER.URL + this.Avatar.getWebserverPath()
+    return WEBSERVER.URL + this.Avatar.getStaticPath()
   }
 
   isOutdated () {

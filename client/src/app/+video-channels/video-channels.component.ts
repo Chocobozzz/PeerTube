@@ -15,7 +15,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './video-channels.component.scss' ]
 })
 export class VideoChannelsComponent implements OnInit, OnDestroy {
-  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
+  @ViewChild('subscribeButton', { static: false }) subscribeButton: SubscribeButtonComponent
 
   videoChannel: VideoChannel
   hotkeys: Hotkey[]

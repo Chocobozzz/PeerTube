@@ -36,7 +36,8 @@ function normalizeComment (comment: any) {
   if (!comment) return
 
   if (typeof comment.url !== 'string') {
-    comment.url = comment.url.href || comment.url.url
+    if (typeof comment.url === 'object') comment.url = comment.url.href || comment.url.url
+    else comment.url = comment.id
   }
 
   return

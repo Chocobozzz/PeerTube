@@ -85,6 +85,23 @@
         </ng-container>
 
 
+        <div i18n class="inner-form-title">Theme</div>
+
+        <ng-container formGroupName="theme">
+          <div class="form-group">
+            <label i18n for="themeDefault">Global theme</label>
+
+            <div class="peertube-select-container">
+              <select formControlName="default" id="themeDefault">
+                <option i18n value="default">default</option>
+
+                <option *ngFor="let theme of availableThemes" [value]="theme">{{ theme }}</option>
+              </select>
+            </div>
+          </div>
+        </ng-container>
+
+
         <div i18n class="inner-form-title">Signup</div>
 
         <ng-container formGroupName="signup">
@@ -287,6 +304,14 @@
             </div>
 
             <div class="form-group">
+              <my-peertube-checkbox
+                inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
+                i18n-labelText labelText="Allow audio files upload"
+                i18n-helpHtml helpHtml="Allow your users to upload audio files that will be merged with the preview file on upload"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
               <label i18n for="transcodingThreads">Transcoding threads</label>
               <div class="peertube-select-container">
                 <select id="transcodingThreads" formControlName="threads">
@@ -301,8 +326,8 @@
             <ng-container formGroupName="resolutions">
               <div class="form-group" *ngFor="let resolution of resolutions">
                 <my-peertube-checkbox
-                  [inputName]="getResolutionKey(resolution)" [formControlName]="resolution"
-                  i18n-labelText labelText="Resolution {{resolution}} enabled"
+                  [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                  i18n-labelText labelText="Resolution {{resolution.label}} enabled"
                 ></my-peertube-checkbox>
               </div>
             </ng-container>

@@ -100,13 +100,13 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
   return res.type('json').status(204).end()
 }
 
-async function listBlacklist (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function listBlacklist (req: express.Request, res: express.Response) {
   const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.type)
 
-  return res.json(getFormattedObjects<VideoBlacklist, VideoBlacklistModel>(resultList.data, resultList.total))
+  return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
-async function removeVideoFromBlacklistController (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function removeVideoFromBlacklistController (req: express.Request, res: express.Response) {
   const videoBlacklist = res.locals.videoBlacklist
   const video = res.locals.video
 
@@ -115,6 +115,7 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
     const videoBlacklistType = videoBlacklist.type
 
     await videoBlacklist.destroy({ transaction: t })
+    video.VideoBlacklist = undefined
 
     // Re federate the video
     if (unfederated === true) {
@@ -131,7 +132,7 @@ async function removeVideoFromBlacklistController (req: express.Request, res: ex
 
     // Delete on object so new video notifications will send
     delete video.VideoBlacklist
-    Notifier.Instance.notifyOnNewVideo(video)
+    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
   }
 
   logger.info('Video %s removed from blacklist.', res.locals.video.uuid)

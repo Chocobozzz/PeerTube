@@ -1,1 +1,1 @@
-export * from './user-notifications'
+import './user-notifications'

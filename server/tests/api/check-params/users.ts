@@ -3,9 +3,10 @@
 import { omit } from 'lodash'
 import 'mocha'
 import { join } from 'path'
-import { UserRole, VideoImport, VideoImportState } from '../../../../shared'
+import { User, UserRole, VideoImport, VideoImportState } from '../../../../shared'
 
 import {
+  addVideoChannel,
   blockUser,
   cleanupTests,
   createUser,
@@ -43,35 +44,79 @@ describe('Test users API validators', function () {
   const path = '/api/v1/users/'
   let userId: number
   let rootId: number
+  let moderatorId: number
   let videoId: number
   let server: ServerInfo
   let serverWithRegistrationDisabled: ServerInfo
   let userAccessToken = ''
+  let moderatorAccessToken = ''
   let channelId: number
-  const user = {
-    username: 'user1',
-    password: 'my super password'
-  }
 
   // ---------------------------------------------------------------
 
   before(async function () {
     this.timeout(30000)
 
-    server = await flushAndRunServer(1)
-    serverWithRegistrationDisabled = await flushAndRunServer(2)
+    {
+      const res = await Promise.all([
+        flushAndRunServer(1, { signup: { limit: 7 } }),
+        flushAndRunServer(2)
+      ])
 
-    await setAccessTokensToServers([ server ])
+      server = res[0]
+      serverWithRegistrationDisabled = res[1]
 
-    const videoQuota = 42000000
-    await createUser({
-      url: server.url,
-      accessToken: server.accessToken,
-      username: user.username,
-      password: user.password,
-      videoQuota: videoQuota
-    })
-    userAccessToken = await userLogin(server, user)
+      await setAccessTokensToServers([ server ])
+    }
+
+    {
+      const user = {
+        username: 'user1',
+        password: 'my super password'
+      }
+
+      const videoQuota = 42000000
+      await createUser({
+        url: server.url,
+        accessToken: server.accessToken,
+        username: user.username,
+        password: user.password,
+        videoQuota: videoQuota
+      })
+      userAccessToken = await userLogin(server, user)
+    }
+
+    {
+      const moderator = {
+        username: 'moderator1',
+        password: 'super password'
+      }
+
+      await createUser({
+        url: server.url,
+        accessToken: server.accessToken,
+        username: moderator.username,
+        password: moderator.password,
+        role: UserRole.MODERATOR
+      })
+
+      moderatorAccessToken = await userLogin(server, moderator)
+    }
+
+    {
+      const moderator = {
+        username: 'moderator2',
+        password: 'super password'
+      }
+
+      await createUser({
+        url: server.url,
+        accessToken: server.accessToken,
+        username: moderator.username,
+        password: moderator.password,
+        role: UserRole.MODERATOR
+      })
+    }
 
     {
       const res = await getMyUserInformation(server.url, server.accessToken)
@@ -81,6 +126,15 @@ describe('Test users API validators', function () {
     {
       const res = await uploadVideo(server.url, server.accessToken, {})
       videoId = res.body.video.id
+    }
+
+    {
+      const res = await getUsersList(server.url, server.accessToken)
+      const users: User[] = res.body.data
+
+      userId = users.find(u => u.username === 'user1').id
+      rootId = users.find(u => u.username === 'root').id
+      moderatorId = users.find(u => u.username === 'moderator2').id
     }
   })
 
@@ -250,6 +304,32 @@ describe('Test users API validators', function () {
       })
     })
 
+    it('Should fail to create a moderator or an admin with a moderator', async function () {
+      for (const role of [ UserRole.MODERATOR, UserRole.ADMINISTRATOR ]) {
+        const fields = immutableAssign(baseCorrectParams, { role })
+
+        await makePostBodyRequest({
+          url: server.url,
+          path,
+          token: moderatorAccessToken,
+          fields,
+          statusCodeExpected: 403
+        })
+      }
+    })
+
+    it('Should succeed to create a user with a moderator', async function () {
+      const fields = immutableAssign(baseCorrectParams, { username: 'a4656', email: 'a4656@example.com', role: UserRole.USER })
+
+      await makePostBodyRequest({
+        url: server.url,
+        path,
+        token: moderatorAccessToken,
+        fields,
+        statusCodeExpected: 200
+      })
+    })
+
     it('Should succeed with the correct params', async function () {
       await makePostBodyRequest({
         url: server.url,
@@ -363,13 +443,47 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid videoLanguages attribute', async function () {
+      {
+        const fields = {
+          videoLanguages: 'toto'
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      }
+
+      {
+        const languages = []
+        for (let i = 0; i < 1000; i++) {
+          languages.push('fr')
+        }
+
+        const fields = {
+          videoLanguages: languages
+        }
+
+        await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+      }
+    })
+
+    it('Should fail with an invalid theme', async function () {
+      const fields = { theme: 'invalid' }
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
+    it('Should fail with an unknown theme', async function () {
+      const fields = { theme: 'peertube-theme-unknown' }
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should succeed to change password with the correct params', async function () {
       const fields = {
         currentPassword: 'my super password',
         password: 'my super password',
         nsfwPolicy: 'blur',
         autoPlayVideo: false,
-        email: 'super_email@example.com'
+        email: 'super_email@example.com',
+        theme: 'default'
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
@@ -378,8 +492,7 @@ describe('Test users API validators', function () {
     it('Should succeed without password change with the correct params', async function () {
       const fields = {
         nsfwPolicy: 'blur',
-        autoPlayVideo: false,
-        email: 'super_email@example.com'
+        autoPlayVideo: false
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
@@ -434,11 +547,6 @@ describe('Test users API validators', function () {
   })
 
   describe('When getting a user', function () {
-    before(async function () {
-      const res = await getUsersList(server.url, server.accessToken)
-
-      userId = res.body.data[1].id
-    })
 
     it('Should fail with an non authenticated user', async function () {
       await makeGetRequest({ url: server.url, path: path + userId, token: 'super token', statusCodeExpected: 401 })
@@ -454,13 +562,6 @@ describe('Test users API validators', function () {
   })
 
   describe('When updating a user', function () {
-
-    before(async function () {
-      const res = await getUsersList(server.url, server.accessToken)
-
-      userId = res.body.data[1].id
-      rootId = res.body.data[2].id
-    })
 
     it('Should fail with an invalid email attribute', async function () {
       const fields = {
@@ -531,7 +632,35 @@ describe('Test users API validators', function () {
     it('Should fail with invalid admin flags', async function () {
       const fields = { adminFlags: 'toto' }
 
-      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+      await makePutBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail to update an admin with a moderator', async function () {
+      const fields = {
+        videoQuota: 42
+      }
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + moderatorId,
+        token: moderatorAccessToken,
+        fields,
+        statusCodeExpected: 403
+      })
+    })
+
+    it('Should succeed to update a user with a moderator', async function () {
+      const fields = {
+        videoQuota: 42
+      }
+
+      await makePutBodyRequest({
+        url: server.url,
+        path: path + userId,
+        token: moderatorAccessToken,
+        fields,
+        statusCodeExpected: 204
+      })
     })
 
     it('Should succeed with the correct params', async function () {
@@ -630,6 +759,17 @@ describe('Test users API validators', function () {
       await blockUser(server.url, userId, userAccessToken, 403)
       await unblockUser(server.url, userId, userAccessToken, 403)
     })
+
+    it('Should fail on a moderator with a moderator', async function () {
+      await removeUser(server.url, moderatorId, moderatorAccessToken, 403)
+      await blockUser(server.url, moderatorId, moderatorAccessToken, 403)
+      await unblockUser(server.url, moderatorId, moderatorAccessToken, 403)
+    })
+
+    it('Should succeed on a user with a moderator', async function () {
+      await blockUser(server.url, userId, moderatorAccessToken)
+      await unblockUser(server.url, userId, moderatorAccessToken)
+    })
   })
 
   describe('When deleting our account', function () {
@@ -638,10 +778,11 @@ describe('Test users API validators', function () {
     })
   })
 
-  describe('When register a new user', function () {
+  describe('When registering a new user', function () {
     const registrationPath = path + '/register'
     const baseCorrectParams = {
       username: 'user3',
+      displayName: 'super user',
       email: 'test3@example.com',
       password: 'my super password'
     }
@@ -724,12 +865,48 @@ describe('Test users API validators', function () {
       })
     })
 
+    it('Should fail with a bad display name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { displayName: 'a'.repeat(150) })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad channel name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: '[]azf', displayName: 'toto' } })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a bad channel display name', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'toto', displayName: '' } })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with a channel name that is the same than user username', async function () {
+      const source = { username: 'super_user', channel: { name: 'super_user', displayName: 'display name' } }
+      const fields = immutableAssign(baseCorrectParams, source)
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an existing channel', async function () {
+      const videoChannelAttributesArg = { name: 'existing_channel', displayName: 'hello', description: 'super description' }
+      await addVideoChannel(server.url, server.accessToken, videoChannelAttributesArg)
+
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'existing_channel', displayName: 'toto' } })
+
+      await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields, statusCodeExpected: 409 })
+    })
+
     it('Should succeed with the correct params', async function () {
+      const fields = immutableAssign(baseCorrectParams, { channel: { name: 'super_channel', displayName: 'toto' } })
+
       await makePostBodyRequest({
         url: server.url,
         path: registrationPath,
         token: server.accessToken,
-        fields: baseCorrectParams,
+        fields: fields,
         statusCodeExpected: 204
       })
     })

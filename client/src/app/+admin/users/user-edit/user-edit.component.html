@@ -41,7 +41,7 @@
     <label i18n for="role">Role</label>
     <div class="peertube-select-container">
       <select id="role" formControlName="role">
-        <option *ngFor="let role of roles" [value]="role.value">
+        <option *ngFor="let role of getRoles()" [value]="role.value">
           {{ role.label }}
         </option>
       </select>

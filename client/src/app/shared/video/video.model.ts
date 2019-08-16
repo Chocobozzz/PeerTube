@@ -1,5 +1,5 @@
 import { User } from '../'
-import { PlaylistElement, UserRight, Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
+import { UserRight, Video as VideoServerModel, VideoPrivacy, VideoState } from '../../../../../shared'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { VideoConstant } from '../../../../../shared/models/videos/video-constant.model'
 import { durationToString, getAbsoluteAPIUrl } from '../misc/utils'
@@ -48,11 +48,8 @@ export class Video implements VideoServerModel {
   blacklisted?: boolean
   blacklistedReason?: string
 
-  playlistElement?: PlaylistElement
-
   account: {
     id: number
-    uuid: string
     name: string
     displayName: string
     url: string
@@ -62,7 +59,6 @@ export class Video implements VideoServerModel {
 
   channel: {
     id: number
-    uuid: string
     name: string
     displayName: string
     url: string
@@ -128,8 +124,6 @@ export class Video implements VideoServerModel {
     this.blacklistedReason = hash.blacklistedReason
 
     this.userHistory = hash.userHistory
-
-    this.playlistElement = hash.playlistElement
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {

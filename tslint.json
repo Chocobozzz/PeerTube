@@ -5,7 +5,13 @@
     "no-inferrable-types": true,
     "eofline": true,
     "indent": [true, "spaces"],
-    "ter-indent": [true, 2],
+    "ter-indent": [
+      true,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
     "max-line-length": [true, 140],
     "no-unused-variable": false, // Memory issues
     "no-floating-promises": false

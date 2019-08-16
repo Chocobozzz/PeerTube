@@ -7,7 +7,7 @@
         <source>Close</source>
         <target>Закрити</target>
         <context-group name="null">
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.previous">
@@ -131,62 +131,51 @@
         <source>Decrement hours</source>
         <target>Зменшення годин</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes">
         <source>Increment minutes</source><target>Increment minutes</target><context-group name="null">
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes">
         <source>Minutes</source>
         <target>Хвилини</target>
         <context-group name="null">
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes">
         <source>Decrement minutes</source><target>Decrement minutes</target><context-group name="null">
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds">
         <source>Increment seconds</source><target>Increment seconds</target><context-group name="null">
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds">
         <source>Seconds</source>
         <target>Секунди</target>
         <context-group name="null">
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds">
         <source>Decrement seconds</source><target>Decrement seconds</target><context-group name="null">
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source>PM</source>
-        <target>Вечору</target>
-        <context-group name="null">
-          <context context-type="linenumber">68</context>
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target><context-group name="null">
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source>AM</source>
-        <target>Ранку</target>
-        <context-group name="null">
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
-        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <target>(розширення: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, максимальний розмір: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
@@ -403,28 +392,28 @@
         <source>Unlisted</source>
         <target>Не вказано</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ddd8a4986d2d1717a274a5a0fbed04988a819e69">
         <source>Private</source>
         <target>Приватний</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
         <source>Delete</source>
         <target>Видалити</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
         <target>Редагувати</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -508,7 +497,7 @@
         <source>Video quota</source>
         <target>Квота відео</target>
         <context-group name="null">
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
@@ -542,7 +531,7 @@
         <source>Cancel</source>
         <target>Скасувати</target>
         <context-group name="null">
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
@@ -567,7 +556,7 @@
         <source>Request new verification email.</source>
         <target>Запросити нове підтвердження електронною поштою.</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e08a77594f3d89311cdf6da5090044270909c194">
@@ -617,7 +606,7 @@
         <source>Password</source>
         <target>Пароль</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
     </body>

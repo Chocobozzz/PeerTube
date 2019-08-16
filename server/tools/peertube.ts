@@ -18,13 +18,10 @@ program
   .command('get-access-token', 'get a peertube access token', { noHelp: true }).alias('token')
   .command('watch', 'watch a video in the terminal ✩°｡⋆').alias('w')
   .command('repl', 'initiate a REPL to access internals')
+  .command('plugins [action]', 'manage instance plugins/themes').alias('p')
 
 /* Not Yet Implemented */
 program
-  .command('plugins [action]',
-           'manage plugins on a local instance',
-           { noHelp: true } as program.CommandOptions
-          ).alias('p')
   .command('diagnostic [action]',
            'like couple therapy, but for your instance',
            { noHelp: true } as program.CommandOptions
@@ -63,9 +60,10 @@ if (!process.argv.slice(2).length) {
 
 getSettings()
   .then(settings => {
-    const state = (settings.default === undefined || settings.default === -1) ?
-      'no instance selected, commands will require explicit arguments' :
-      ('instance ' + settings.remotes[settings.default] + ' selected')
+    const state = (settings.default === undefined || settings.default === -1)
+      ? 'no instance selected, commands will require explicit arguments'
+      : 'instance ' + settings.remotes[settings.default] + ' selected'
+
     program
       .on('--help', function () {
         console.log()

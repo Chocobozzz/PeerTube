@@ -12,6 +12,22 @@ const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuIte
 const component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsMenuItem extends MenuItem {
+  settingsButton: any
+  dialog: any
+  mainMenu: any
+  panel: any
+  panelChild: any
+  panelChildEl: any
+  size: any
+  menuToLoad: string
+  subMenu: any
+
+  submenuClickHandler: Function
+  transitionEndHandler: Function
+
+  settingsSubMenuTitleEl_: any
+  settingsSubMenuValueEl_: any
+  settingsSubMenuEl_: any
 
   constructor (player: videojs.Player, options: any, entry: string, menuButton: VideoJSComponentInterface) {
     super(player, options)
@@ -43,6 +59,9 @@ class SettingsMenuItem extends MenuItem {
     player.ready(() => {
       // Voodoo magic for IOS
       setTimeout(() => {
+        // Player was destroyed
+        if (!this.player_) return
+
         this.build()
 
         // Update on rate change

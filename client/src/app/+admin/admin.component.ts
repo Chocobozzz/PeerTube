@@ -28,6 +28,10 @@ export class AdminComponent {
     return this.auth.getUser().hasRight(UserRight.MANAGE_CONFIGURATION)
   }
 
+  hasPluginsRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_PLUGINS)
+  }
+
   hasLogsRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_LOGS)
   }

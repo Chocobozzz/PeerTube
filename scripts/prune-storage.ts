@@ -3,9 +3,13 @@ import { join } from 'path'
 import { CONFIG } from '../server/initializers/config'
 import { VideoModel } from '../server/models/video/video'
 import { initDatabaseModels } from '../server/initializers'
-import { remove, readdir } from 'fs-extra'
+import { readdir, remove } from 'fs-extra'
 import { VideoRedundancyModel } from '../server/models/redundancy/video-redundancy'
+import * as Bluebird from 'bluebird'
 import { getUUIDFromFilename } from '../server/helpers/utils'
+import { ThumbnailModel } from '../server/models/video/thumbnail'
+import { AvatarModel } from '../server/models/avatar/avatar'
+import { uniq, values } from 'lodash'
 
 run()
   .then(() => process.exit(0))
@@ -15,27 +19,28 @@ run()
   })
 
 async function run () {
+  const dirs = values(CONFIG.STORAGE)
+
+  if (uniq(dirs).length !== dirs.length) {
+    console.error('Cannot prune storage because you put multiple storage keys in the same directory.')
+    process.exit(0)
+  }
+
   await initDatabaseModels(true)
 
-  const storageOnlyOwnedToPrune = [
-    CONFIG.STORAGE.VIDEOS_DIR,
-    CONFIG.STORAGE.TORRENTS_DIR,
-    CONFIG.STORAGE.REDUNDANCY_DIR
-  ]
-
-  const storageForAllToPrune = [
-    CONFIG.STORAGE.PREVIEWS_DIR,
-    CONFIG.STORAGE.THUMBNAILS_DIR
-  ]
-
   let toDelete: string[] = []
-  for (const directory of storageOnlyOwnedToPrune) {
-    toDelete = toDelete.concat(await pruneDirectory(directory, true))
-  }
 
-  for (const directory of storageForAllToPrune) {
-    toDelete = toDelete.concat(await pruneDirectory(directory, false))
-  }
+  toDelete = toDelete.concat(
+    await pruneDirectory(CONFIG.STORAGE.VIDEOS_DIR, doesVideoExist(true)),
+    await pruneDirectory(CONFIG.STORAGE.TORRENTS_DIR, doesVideoExist(true)),
+
+    await pruneDirectory(CONFIG.STORAGE.REDUNDANCY_DIR, doesRedundancyExist),
+
+    await pruneDirectory(CONFIG.STORAGE.PREVIEWS_DIR, doesThumbnailExist(true)),
+    await pruneDirectory(CONFIG.STORAGE.THUMBNAILS_DIR, doesThumbnailExist(false)),
+
+    await pruneDirectory(CONFIG.STORAGE.AVATARS_DIR, doesAvatarExist)
+  )
 
   const tmpFiles = await readdir(CONFIG.STORAGE.TMP_DIR)
   toDelete = toDelete.concat(tmpFiles.map(t => join(CONFIG.STORAGE.TMP_DIR, t)))
@@ -61,30 +66,79 @@ async function run () {
   }
 }
 
-async function pruneDirectory (directory: string, onlyOwned = false) {
+type ExistFun = (file: string) => Promise<boolean>
+async function pruneDirectory (directory: string, existFun: ExistFun) {
   const files = await readdir(directory)
 
   const toDelete: string[] = []
-  for (const file of files) {
-    const uuid = getUUIDFromFilename(file)
-    let video: VideoModel
-    let localRedundancy: boolean
-
-    if (uuid) {
-      video = await VideoModel.loadByUUIDWithFile(uuid)
-      localRedundancy = await VideoRedundancyModel.isLocalByVideoUUIDExists(uuid)
-    }
-
-    if (
-      !uuid ||
-      !video ||
-      (onlyOwned === true && (video.isOwned() === false && localRedundancy === false))
-    ) {
+  await Bluebird.map(files, async file => {
+    if (await existFun(file) !== true) {
       toDelete.push(join(directory, file))
     }
-  }
+  }, { concurrency: 20 })
 
   return toDelete
+}
+
+function doesVideoExist (keepOnlyOwned: boolean) {
+  return async (file: string) => {
+    const uuid = getUUIDFromFilename(file)
+    const video = await VideoModel.loadByUUID(uuid)
+
+    return video && (keepOnlyOwned === false || video.isOwned())
+  }
+}
+
+function doesThumbnailExist (keepOnlyOwned: boolean) {
+  return async (file: string) => {
+    const thumbnail = await ThumbnailModel.loadByName(file)
+    if (!thumbnail) return false
+
+    if (keepOnlyOwned) {
+      const video = await VideoModel.load(thumbnail.videoId)
+      if (video.isOwned() === false) return false
+    }
+
+    return true
+  }
+}
+
+async function doesAvatarExist (file: string) {
+  const avatar = await AvatarModel.loadByName(file)
+
+  return !!avatar
+}
+
+async function doesRedundancyExist (file: string) {
+  const uuid = getUUIDFromFilename(file)
+  const video = await VideoModel.loadWithFiles(uuid)
+
+  if (!video) return false
+
+  const isPlaylist = file.includes('.') === false
+
+  if (isPlaylist) {
+    const p = video.getHLSPlaylist()
+    if (!p) return false
+
+    const redundancy = await VideoRedundancyModel.loadLocalByStreamingPlaylistId(p.id)
+    return !!redundancy
+  }
+
+  const resolution = parseInt(file.split('-')[5], 10)
+  if (isNaN(resolution)) {
+    console.error('Cannot prune %s because we cannot guess guess the resolution.', file)
+    return true
+  }
+
+  const videoFile = video.getFile(resolution)
+  if (!videoFile) {
+    console.error('Cannot find file of video %s - %d', video.url, resolution)
+    return true
+  }
+
+  const redundancy = await VideoRedundancyModel.loadLocalByFileId(videoFile.id)
+  return !!redundancy
 }
 
 async function askConfirmation () {

@@ -105,7 +105,10 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   private async extendsRedundancy (redundancyModel: VideoRedundancyModel) {
     const redundancy = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
     // Redundancy strategy disabled, remove our redundancy instead of extending expiration
-    if (!redundancy) await removeVideoRedundancy(redundancyModel)
+    if (!redundancy) {
+      await removeVideoRedundancy(redundancyModel)
+      return
+    }
 
     await this.extendsExpirationOf(redundancyModel, redundancy.minLifetime)
   }
@@ -269,7 +272,10 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   private getTotalFileSizes (files: VideoFileModel[], playlists: VideoStreamingPlaylistModel[]) {
     const fileReducer = (previous: number, current: VideoFileModel) => previous + current.size
 
-    return files.reduce(fileReducer, 0) * playlists.length
+    const totalSize = files.reduce(fileReducer, 0)
+    if (playlists.length === 0) return totalSize
+
+    return totalSize * playlists.length
   }
 
   private async loadAndRefreshVideo (videoUrl: string) {

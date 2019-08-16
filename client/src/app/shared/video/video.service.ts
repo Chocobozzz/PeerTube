@@ -31,16 +31,15 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 export interface VideosProvider {
-  getVideos (
+  getVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField,
     filter?: VideoFilter,
-    categoryOneOf?: number
-  ): Observable<{ videos: Video[], totalVideos: number }>
+    categoryOneOf?: number,
+    languageOneOf?: string[]
+  }): Observable<ResultList<Video>>
 }
 
 @Injectable()
@@ -64,11 +63,11 @@ export class VideoService implements VideosProvider {
     return VideoService.BASE_VIDEO_URL + uuid + '/watching'
   }
 
-  getVideo (uuid: string): Observable<VideoDetails> {
+  getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.localeObservable
                .pipe(
                  switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
+                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + options.videoId)
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -122,7 +121,7 @@ export class VideoService implements VideosProvider {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number }> {
+  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -140,7 +139,7 @@ export class VideoService implements VideosProvider {
     account: Account,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -158,7 +157,7 @@ export class VideoService implements VideosProvider {
     videoChannel: VideoChannel,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -172,27 +171,11 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getPlaylistVideos (
-    videoPlaylistId: number | string,
-    videoPagination: ComponentPagination
-  ): Observable<{ videos: Video[], totalVideos: number }> {
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-
-    let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination)
-
-    return this.authHttp
-               .get<ResultList<Video>>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos', { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  getUserSubscriptionVideos (
+  getUserSubscriptionVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  }): Observable<ResultList<Video>> {
+    const { videoPagination, sort } = parameters
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -206,12 +189,15 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getVideos (
+  getVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField,
     filter?: VideoFilter,
-    categoryOneOf?: number
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+    categoryOneOf?: number,
+    languageOneOf?: string[]
+  }): Observable<ResultList<Video>> {
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -223,6 +209,12 @@ export class VideoService implements VideosProvider {
 
     if (categoryOneOf) {
       params = params.set('categoryOneOf', categoryOneOf + '')
+    }
+
+    if (languageOneOf) {
+      for (const l of languageOneOf) {
+        params = params.append('languageOneOf[]', l)
+      }
     }
 
     return this.authHttp
@@ -334,7 +326,7 @@ export class VideoService implements VideosProvider {
                      videos.push(new Video(videoJson, translations))
                    }
 
-                   return { videos, totalVideos }
+                   return { total: totalVideos, data: videos }
                  })
                )
   }

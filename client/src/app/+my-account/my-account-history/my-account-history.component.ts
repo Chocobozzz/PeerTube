@@ -27,6 +27,7 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
   videosHistoryEnabled: boolean
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -34,7 +35,6 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
     protected userService: UserService,
     protected notifier: Notifier,
     protected screenService: ScreenService,
-    protected i18n: I18n,
     private confirmService: ConfirmService,
     private videoService: VideoService,
     private userHistoryService: UserHistoryService

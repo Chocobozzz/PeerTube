@@ -8,6 +8,7 @@ import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../../..
 import { flushAndRunMultipleServers } from '../../../../shared/extra-utils/server/servers'
 import { uploadVideo } from '../../../../shared/extra-utils/videos/videos'
 import { dateIsValid } from '../../../../shared/extra-utils/miscs/miscs'
+import { Job } from '../../../../shared/models/server'
 
 const expect = chai.expect
 
@@ -26,7 +27,7 @@ describe('Test jobs', function () {
   })
 
   it('Should create some jobs', async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video1' })
     await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video2' })
@@ -50,7 +51,7 @@ describe('Test jobs', function () {
     if (job.type === 'videos-views') job = res.body.data[1]
 
     expect(job.state).to.equal('completed')
-    expect(job.type).to.equal('activitypub-follow')
+    expect(job.type.startsWith('activitypub-')).to.be.true
     expect(dateIsValid(job.createdAt)).to.be.true
     expect(dateIsValid(job.processedOn)).to.be.true
     expect(dateIsValid(job.finishedOn)).to.be.true

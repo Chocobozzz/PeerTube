@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core'
 export class InstanceValidatorsService {
   readonly FROM_EMAIL: BuildFormValidator
   readonly FROM_NAME: BuildFormValidator
+  readonly SUBJECT: BuildFormValidator
   readonly BODY: BuildFormValidator
 
   constructor (private i18n: I18n) {
@@ -29,6 +30,19 @@ export class InstanceValidatorsService {
         'required': this.i18n('Your name is required.'),
         'minlength': this.i18n('Your name must be at least 1 character long.'),
         'maxlength': this.i18n('Your name cannot be more than 120 characters long.')
+      }
+    }
+
+    this.SUBJECT = {
+      VALIDATORS: [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(120)
+      ],
+      MESSAGES: {
+        'required': this.i18n('A subject is required.'),
+        'minlength': this.i18n('The subject must be at least 1 character long.'),
+        'maxlength': this.i18n('The subject cannot be more than 120 characters long.')
       }
     }
 

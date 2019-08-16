@@ -6,6 +6,7 @@ import { Player } from 'video.js'
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class PeerTubeLoadProgressBar extends Component {
+  partEls_: any[]
 
   constructor (player: Player, options: any) {
     super(player, options)

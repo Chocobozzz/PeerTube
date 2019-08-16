@@ -54,7 +54,7 @@
 }
 
 @mixin apply-svg-color ($color) {
-  /deep/ svg {
+  ::ng-deep svg {
     path[fill="#000000"],
     g[fill="#000000"],
     rect[fill="#000000"],
@@ -224,6 +224,20 @@
   cursor: pointer;
 }
 
+@mixin select-arrow-down {
+  top: 50%;
+  right: calc(0% + 15px);
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border: 5px solid rgba(0, 0, 0, 0);
+  border-top-color: #000;
+  margin-top: -2px;
+  z-index: 100;
+}
+
 @mixin peertube-select-container ($width) {
   padding: 0;
   margin: 0;
@@ -235,22 +249,20 @@
   position: relative;
   font-size: 15px;
 
+  &.disabled {
+    background-color: #E5E5E5;
+
+    select {
+      cursor: default;
+    }
+  }
+
   @media screen and (max-width: $width) {
     width: 100%;
   }
 
   &:after {
-    top: 50%;
-    right: calc(0% + 15px);
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border: 5px solid rgba(0, 0, 0, 0);
-    border-top-color: #000;
-    margin-top: -2px;
-    z-index: 100;
+    @include select-arrow-down;
   }
 
   select {
@@ -279,16 +291,6 @@
     option {
       color: #000;
     }
-  }
-}
-
-@mixin peertube-select-disabled-container ($width) {
-  @include peertube-select-container($width);
-
-  background-color: #E5E5E5;
-
-  select {
-    cursor: default;
   }
 }
 
@@ -331,7 +333,12 @@
 }
 
 @mixin peertube-checkbox ($border-width) {
-  display: none;
+  opacity: 0;
+  position: absolute;
+
+  &:focus + span {
+    outline: 1px solid #1e5180;
+  }
 
   & + span {
     position: relative;

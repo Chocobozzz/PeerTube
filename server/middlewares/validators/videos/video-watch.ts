@@ -1,14 +1,14 @@
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import * as express from 'express'
-import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../../helpers/custom-validators/videos'
+import { isIdOrUUIDValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import { areValidationErrors } from '../utils'
 import { logger } from '../../../helpers/logger'
+import { doesVideoExist } from '../../../helpers/middlewares'
 
 const videoWatchingValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
   body('currentTime')
-    .toInt()
+    .customSanitizer(toIntOrNull)
     .isInt().withMessage('Should have correct current time'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

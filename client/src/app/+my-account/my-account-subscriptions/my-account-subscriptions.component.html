@@ -1,6 +1,6 @@
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">You don't have any subscriptions yet.</div>
 
-<div class="video-channels" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()">
+<div class="video-channels" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let videoChannel of videoChannels" class="video-channel">
     <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
       <img [src]="videoChannel.avatarUrl" alt="Avatar" />

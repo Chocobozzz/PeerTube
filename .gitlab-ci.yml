@@ -1,0 +1,100 @@
+image: chocobozzz/peertube-ci:10
+
+stages:
+  - build-and-lint
+  - test
+  - nightly
+
+before_script:
+  - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
+  - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
+  - if [[ $CI_JOB_STAGE == "test" ]]; then psql -c "create user peertube with password 'peertube';"; fi
+  - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
+
+cache:
+  key: yarn
+  paths:
+    - .yarn-cache
+    - cached-fixtures
+
+###
+## Jobs templates
+#
+#.build-and-lint: &build-and-lint
+#  stage: build-and-lint
+#
+#.tests: &tests
+#  stage: test
+#  dependencies:
+#    - build-server
+#  services:
+#    - name: postgres:9.6
+#      alias: postgres
+#    - name: redis:latest
+#      alias: redis
+#  variables:
+#    PGHOST: postgres
+#    PGUSER: postgres
+#    REDIS_HOST: redis
+#  artifacts:
+#    expire_in: 1 day
+#    paths:
+#      - test*/logs
+#    when: always
+#
+####
+### Build and lint
+##
+#build-server:
+#  <<: *build-and-lint
+#  artifacts:
+#    expire_in: 5h
+#    paths:
+#      - dist/
+#  script:
+#    - npm run build:server
+#
+#lint:
+#  <<: *build-and-lint
+#  script:
+#    - yarn install --pure-lockfile --cache-folder .yarn-cache
+#    - npm run ci -- "lint"
+#
+####
+### Tests
+#
+#test-misc:
+#  <<: *tests
+#  script:
+#    - yarn install --pure-lockfile --cache-folder .yarn-cache
+#    - npm run ci -- "misc"
+#
+#test-cli:
+#  <<: *tests
+#  retry:
+#    max: 1
+#  script:
+#    - npm run ci -- "cli"
+#
+#api:
+#  <<: *tests
+#  parallel: 4
+#  retry:
+#    max: 1
+#  script:
+#    - NODE_PENDING_JOB_WAIT=1000 npm run ci -- api-$CI_NODE_INDEX
+
+build-nightly:
+  stage: nightly
+  only:
+    - schedules
+  script:
+    - yarn install --pure-lockfile --cache-folder .yarn-cache
+    - npm run nightly
+    - mkdir "${HOME}/.ssh"
+    - chmod 700 "${HOME}/.ssh"
+    - if [ ! -z ${DEPLOYEMENT_KNOWN_HOSTS+x} ]; then echo -e "${DEPLOYEMENT_KNOWN_HOSTS}" > ${HOME}/.ssh/known_hosts; fi
+    - eval `ssh-agent -s`
+    - if [ ! -z ${DEPLOYEMENT_KEY+x} ]; then ssh-add <(echo "${DEPLOYEMENT_KEY}"); fi
+    - if [ ! -z ${DEPLOYEMENT_KEY+x} ]; then scp ./peertube-nightly-* ${DEPLOYEMENT_USER}@${DEPLOYEMENT_HOST}:../../web/nightly; fi
+

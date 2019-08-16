@@ -1,8 +1,8 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, WEBSERVER } from '../initializers/constants'
+import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER } from '../initializers/constants'
 import { join } from 'path'
-import { escapeHTML } from '../helpers/core-utils'
+import { escapeHTML, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
 import * as validator from 'validator'
 import { VideoPrivacy } from '../../shared/models/videos'
@@ -12,12 +12,15 @@ import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
+import { logger } from '../helpers/logger'
 
 export class ClientHtml {
 
   private static htmlCache: { [ path: string ]: string } = {}
 
   static invalidCache () {
+    logger.info('Cleaning HTML cache.')
+
     ClientHtml.htmlCache = {}
   }
 
@@ -38,7 +41,7 @@ export class ClientHtml {
 
     const [ html, video ] = await Promise.all([
       ClientHtml.getIndexHTML(req, res),
-      VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
+      VideoModel.load(videoId)
     ])
 
     // Let Angular application handle errors
@@ -92,6 +95,7 @@ export class ClientHtml {
     let html = buffer.toString()
 
     html = ClientHtml.addCustomCSS(html)
+    html = await ClientHtml.addAsyncPluginCSS(html)
 
     ClientHtml.htmlCache[ path ] = html
 
@@ -138,9 +142,19 @@ export class ClientHtml {
   }
 
   private static addCustomCSS (htmlStringPage: string) {
-    const styleTag = '<style class="custom-css-style">' + CONFIG.INSTANCE.CUSTOMIZATIONS.CSS + '</style>'
+    const styleTag = `<style class="custom-css-style">${CONFIG.INSTANCE.CUSTOMIZATIONS.CSS}</style>`
 
     return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.CUSTOM_CSS, styleTag)
+  }
+
+  private static async addAsyncPluginCSS (htmlStringPage: string) {
+    const globalCSSContent = await readFile(PLUGIN_GLOBAL_CSS_PATH)
+    if (globalCSSContent.byteLength === 0) return htmlStringPage
+
+    const fileHash = sha256(globalCSSContent)
+    const linkTag = `<link rel="stylesheet" href="/plugins/global.css?hash=${fileHash}" />`
+
+    return htmlStringPage.replace('</head>', linkTag + '</head>')
   }
 
   private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {

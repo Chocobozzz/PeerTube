@@ -7,18 +7,18 @@ import {
   askResetPassword,
   askSendVerifyEmail,
   blockUser,
-  createUser, removeVideoFromBlacklist,
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  removeVideoFromBlacklist,
   reportVideoAbuse,
   resetPassword,
-  flushAndRunServer,
+  ServerInfo,
+  setAccessTokensToServers,
   unblockUser,
   uploadVideo,
   userLogin,
-  verifyEmail,
-  flushTests,
-  killallServers,
-  ServerInfo,
-  setAccessTokensToServers, cleanupTests
+  verifyEmail
 } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -37,15 +37,17 @@ describe('Test emails', function () {
     username: 'user_1',
     password: 'super_password'
   }
+  let emailPort: number
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(50000)
 
-    await MockSmtpServer.Instance.collectEmails(emails)
+    emailPort = await MockSmtpServer.Instance.collectEmails(emails)
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost'
+        hostname: 'localhost',
+        port: emailPort
       }
     }
     server = await flushAndRunServer(1, overrideConfig)
@@ -87,7 +89,7 @@ describe('Test emails', function () {
 
       const email = emails[0]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('password')
@@ -132,9 +134,9 @@ describe('Test emails', function () {
 
       const email = emails[1]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
-      expect(email['to'][0]['address']).equal('admin1@example.com')
+      expect(email['to'][0]['address']).equal('admin' + server.internalServerNumber + '@example.com')
       expect(email['subject']).contains('abuse')
       expect(email['text']).contains(videoUUID)
     })
@@ -153,7 +155,7 @@ describe('Test emails', function () {
 
       const email = emails[2]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blocked')
@@ -171,7 +173,7 @@ describe('Test emails', function () {
 
       const email = emails[3]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblocked')
@@ -191,7 +193,7 @@ describe('Test emails', function () {
 
       const email = emails[4]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' blacklisted')
@@ -209,7 +211,7 @@ describe('Test emails', function () {
 
       const email = emails[5]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains(' unblacklisted')
@@ -229,7 +231,7 @@ describe('Test emails', function () {
 
       const email = emails[6]
 
-      expect(email['from'][0]['name']).equal('localhost:9001')
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
       expect(email['to'][0]['address']).equal('user_1@example.com')
       expect(email['subject']).contains('Verify')
@@ -248,7 +250,7 @@ describe('Test emails', function () {
     })
 
     it('Should not verify the email with an invalid verification string', async function () {
-      await verifyEmail(server.url, userId, verificationString + 'b', 403)
+      await verifyEmail(server.url, userId, verificationString + 'b', false, 403)
     })
 
     it('Should verify the email', async function () {

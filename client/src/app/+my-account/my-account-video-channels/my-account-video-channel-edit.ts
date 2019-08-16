@@ -11,4 +11,9 @@ export abstract class MyAccountVideoChannelEdit extends FormReactive {
 
   // FIXME: We need this method so angular does not complain in the child template
   onAvatarChange (formData: FormData) { /* empty */ }
+
+  // Should be implemented by the child
+  isBulkUpdateVideosDisplayed () {
+    return false
+  }
 }

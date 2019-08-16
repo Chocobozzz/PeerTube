@@ -1,10 +1,12 @@
 import * as request from 'supertest'
 import { makePostBodyRequest, makePutBodyRequest, updateAvatarRequest } from '../requests/requests'
-
-import { UserRole } from '../../index'
 import { NSFWPolicyType } from '../../models/videos/nsfw-policy.type'
-import { ServerInfo, userLogin } from '..'
 import { UserAdminFlag } from '../../models/users/user-flag.model'
+import { UserRegister } from '../../models/users/user-register.model'
+import { UserRole } from '../../models/users/user-role'
+import { ServerInfo } from '../server/servers'
+import { userLogin } from './login'
+import { UserUpdateMe } from '../../models/users'
 
 type CreateUserArgs = { url: string,
   accessToken: string,
@@ -68,6 +70,31 @@ function registerUser (url: string, username: string, password: string, specialS
           .set('Accept', 'application/json')
           .send(body)
           .expect(specialStatus)
+}
+
+function registerUserWithChannel (options: {
+  url: string,
+  user: { username: string, password: string, displayName?: string },
+  channel: { name: string, displayName: string }
+}) {
+  const path = '/api/v1/users/register'
+  const body: UserRegister = {
+    username: options.user.username,
+    password: options.user.password,
+    email: options.user.username + '@example.com',
+    channel: options.channel
+  }
+
+  if (options.user.displayName) {
+    Object.assign(body, { displayName: options.user.displayName })
+  }
+
+  return makePostBodyRequest({
+    url: options.url,
+    path,
+    fields: body,
+    statusCodeExpected: 204
+  })
 }
 
 function getMyUserInformation (url: string, accessToken: string, specialStatus = 200) {
@@ -138,12 +165,16 @@ function getUsersList (url: string, accessToken: string) {
 function getUsersListPaginationAndSort (url: string, accessToken: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/users'
 
+  const query = {
+    start,
+    count,
+    sort,
+    search
+  }
+
   return request(url)
           .get(path)
-          .query({ start })
-          .query({ count })
-          .query({ sort })
-          .query({ search })
+          .query(query)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + accessToken)
           .expect(200)
@@ -194,19 +225,21 @@ function updateMyUser (options: {
   displayName?: string
   description?: string
   videosHistoryEnabled?: boolean
+  theme?: string
 }) {
   const path = '/api/v1/users/me'
 
-  const toSend = {}
-  if (options.currentPassword !== undefined && options.currentPassword !== null) toSend['currentPassword'] = options.currentPassword
-  if (options.newPassword !== undefined && options.newPassword !== null) toSend['password'] = options.newPassword
-  if (options.nsfwPolicy !== undefined && options.nsfwPolicy !== null) toSend['nsfwPolicy'] = options.nsfwPolicy
-  if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend['autoPlayVideo'] = options.autoPlayVideo
-  if (options.email !== undefined && options.email !== null) toSend['email'] = options.email
-  if (options.description !== undefined && options.description !== null) toSend['description'] = options.description
-  if (options.displayName !== undefined && options.displayName !== null) toSend['displayName'] = options.displayName
+  const toSend: UserUpdateMe = {}
+  if (options.currentPassword !== undefined && options.currentPassword !== null) toSend.currentPassword = options.currentPassword
+  if (options.newPassword !== undefined && options.newPassword !== null) toSend.password = options.newPassword
+  if (options.nsfwPolicy !== undefined && options.nsfwPolicy !== null) toSend.nsfwPolicy = options.nsfwPolicy
+  if (options.autoPlayVideo !== undefined && options.autoPlayVideo !== null) toSend.autoPlayVideo = options.autoPlayVideo
+  if (options.email !== undefined && options.email !== null) toSend.email = options.email
+  if (options.description !== undefined && options.description !== null) toSend.description = options.description
+  if (options.displayName !== undefined && options.displayName !== null) toSend.displayName = options.displayName
+  if (options.theme !== undefined && options.theme !== null) toSend.theme = options.theme
   if (options.videosHistoryEnabled !== undefined && options.videosHistoryEnabled !== null) {
-    toSend['videosHistoryEnabled'] = options.videosHistoryEnabled
+    toSend.videosHistoryEnabled = options.videosHistoryEnabled
   }
 
   return makePutBodyRequest({
@@ -293,13 +326,16 @@ function askSendVerifyEmail (url: string, email: string) {
   })
 }
 
-function verifyEmail (url: string, userId: number, verificationString: string, statusCodeExpected = 204) {
+function verifyEmail (url: string, userId: number, verificationString: string, isPendingEmail = false, statusCodeExpected = 204) {
   const path = '/api/v1/users/' + userId + '/verify-email'
 
   return makePostBodyRequest({
     url,
     path,
-    fields: { verificationString },
+    fields: {
+      verificationString,
+      isPendingEmail
+    },
     statusCodeExpected
   })
 }
@@ -312,6 +348,7 @@ export {
   getMyUserInformation,
   getMyUserVideoRating,
   deleteMe,
+  registerUserWithChannel,
   getMyUserVideoQuotaUsed,
   getUsersList,
   getUsersListPaginationAndSort,

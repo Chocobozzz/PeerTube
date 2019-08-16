@@ -42,7 +42,14 @@ export class RedirectService {
   }
 
   redirectToPreviousRoute () {
-    if (this.previousUrl) return this.router.navigateByUrl(this.previousUrl)
+    const exceptions = [
+      '/verify-account'
+    ]
+
+    if (this.previousUrl) {
+      const isException = exceptions.find(e => this.previousUrl.startsWith(e))
+      if (!isException) return this.router.navigateByUrl(this.previousUrl)
+    }
 
     return this.redirectToHomepage()
   }

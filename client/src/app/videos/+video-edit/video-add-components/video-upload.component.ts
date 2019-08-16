@@ -27,7 +27,7 @@ import { scrollToTop } from '@app/shared/misc/utils'
 export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
-  @ViewChild('videofileInput') videofileInput: ElementRef<HTMLInputElement>
+  @ViewChild('videofileInput', { static: false }) videofileInput: ElementRef<HTMLInputElement>
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
@@ -35,8 +35,10 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   userVideoQuotaUsed = 0
   userVideoQuotaUsedDaily = 0
 
+  isUploadingAudioFile = false
   isUploadingVideo = false
   isUpdatingVideo = false
+
   videoUploaded = false
   videoUploadObservable: Subscription = null
   videoUploadPercents = 0
@@ -44,7 +46,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     id: 0,
     uuid: ''
   }
+
   waitTranscodingEnabled = true
+  previewfileUpload: File
 
   error: string
 
@@ -100,6 +104,17 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
   }
 
+  getVideoFile () {
+    return this.videofileInput.nativeElement.files[0]
+  }
+
+  getAudioUploadLabel () {
+    const videofile = this.getVideoFile()
+    if (!videofile) return this.i18n('Upload')
+
+    return this.i18n('Upload {{videofileName}}', { videofileName: videofile.name })
+  }
+
   fileChange () {
     this.uploadFirstStep()
   }
@@ -114,38 +129,15 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     }
   }
 
-  uploadFirstStep () {
-    const videofile = this.videofileInput.nativeElement.files[0]
+  uploadFirstStep (clickedOnButton = false) {
+    const videofile = this.getVideoFile()
     if (!videofile) return
 
-    // Check global user quota
-    const bytePipes = new BytesPipe()
-    const videoQuota = this.authService.getUser().videoQuota
-    if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
-      const msg = this.i18n(
-        'Your video quota is exceeded with this video (video size: {{videoSize}}, used: {{videoQuotaUsed}}, quota: {{videoQuota}})',
-        {
-          videoSize: bytePipes.transform(videofile.size, 0),
-          videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
-          videoQuota: bytePipes.transform(videoQuota, 0)
-        }
-      )
-      this.notifier.error(msg)
-      return
-    }
+    if (!this.checkGlobalUserQuota(videofile)) return
+    if (!this.checkDailyUserQuota(videofile)) return
 
-    // Check daily user quota
-    const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
-    if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
-      const msg = this.i18n(
-        'Your daily video quota is exceeded with this video (video size: {{videoSize}}, used: {{quotaUsedDaily}}, quota: {{quotaDaily}})',
-        {
-          videoSize: bytePipes.transform(videofile.size, 0),
-          quotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
-          quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
-        }
-      )
-      this.notifier.error(msg)
+    if (clickedOnButton === false && this.isAudioFile(videofile.name)) {
+      this.isUploadingAudioFile = true
       return
     }
 
@@ -180,6 +172,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     formData.append('channelId', '' + channelId)
     formData.append('videofile', videofile)
 
+    if (this.previewfileUpload) {
+      formData.append('previewfile', this.previewfileUpload)
+      formData.append('thumbnailfile', this.previewfileUpload)
+    }
+
     this.isUploadingVideo = true
     this.firstStepDone.emit(name)
 
@@ -187,10 +184,9 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
       name,
       privacy,
       nsfw,
-      channelId
+      channelId,
+      previewfile: this.previewfileUpload
     })
-
-    this.explainedVideoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
 
     this.videoUploadObservable = this.videoService.uploadVideo(formData).subscribe(
       event => {
@@ -250,5 +246,53 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
             console.error(err)
           }
         )
+  }
+
+  private checkGlobalUserQuota (videofile: File) {
+    const bytePipes = new BytesPipe()
+
+    // Check global user quota
+    const videoQuota = this.authService.getUser().videoQuota
+    if (videoQuota !== -1 && (this.userVideoQuotaUsed + videofile.size) > videoQuota) {
+      const msg = this.i18n(
+        'Your video quota is exceeded with this video (video size: {{videoSize}}, used: {{videoQuotaUsed}}, quota: {{videoQuota}})',
+        {
+          videoSize: bytePipes.transform(videofile.size, 0),
+          videoQuotaUsed: bytePipes.transform(this.userVideoQuotaUsed, 0),
+          videoQuota: bytePipes.transform(videoQuota, 0)
+        }
+      )
+      this.notifier.error(msg)
+
+      return false
+    }
+
+    return true
+  }
+
+  private checkDailyUserQuota (videofile: File) {
+    const bytePipes = new BytesPipe()
+
+    // Check daily user quota
+    const videoQuotaDaily = this.authService.getUser().videoQuotaDaily
+    if (videoQuotaDaily !== -1 && (this.userVideoQuotaUsedDaily + videofile.size) > videoQuotaDaily) {
+      const msg = this.i18n(
+        'Your daily video quota is exceeded with this video (video size: {{videoSize}}, used: {{quotaUsedDaily}}, quota: {{quotaDaily}})',
+        {
+          videoSize: bytePipes.transform(videofile.size, 0),
+          quotaUsedDaily: bytePipes.transform(this.userVideoQuotaUsedDaily, 0),
+          quotaDaily: bytePipes.transform(videoQuotaDaily, 0)
+        }
+      )
+      this.notifier.error(msg)
+
+      return false
+    }
+
+    return true
+  }
+
+  private isAudioFile (filename: string) {
+    return filename.endsWith('.mp3') || filename.endsWith('.flac') || filename.endsWith('.ogg')
   }
 }

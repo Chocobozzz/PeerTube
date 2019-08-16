@@ -32,6 +32,7 @@ async function run () {
 
   for (const video of localVideos) {
     currentVideoId = video.id
+
     for (const file of video.VideoFiles) {
       currentFile = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(file))
 
@@ -44,22 +45,29 @@ async function run () {
       const maxBitrate = getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)
       const isMaxBitrateExceeded = videoBitrate > maxBitrate
       if (isMaxBitrateExceeded) {
-        console.log('Optimizing video file %s with bitrate %s kbps (max: %s kbps)',
-          basename(currentFile), videoBitrate / 1000, maxBitrate / 1000)
+        console.log(
+          'Optimizing video file %s with bitrate %s kbps (max: %s kbps)',
+          basename(currentFile), videoBitrate / 1000, maxBitrate / 1000
+        )
+
         const backupFile = `${currentFile}_backup`
         await copy(currentFile, backupFile)
+
         await optimizeVideofile(video, file)
+
         const originalDuration = await getDurationFromVideoFile(backupFile)
         const newDuration = await getDurationFromVideoFile(currentFile)
+
         if (originalDuration === newDuration) {
           console.log('Finished optimizing %s', basename(currentFile))
           await remove(backupFile)
-        } else {
-          console.log('Failed to optimize %s, restoring original', basename(currentFile))
-          move(backupFile, currentFile, { overwrite: true })
-          await video.createTorrentAndSetInfoHash(file)
-          await file.save()
+          continue
         }
+
+        console.log('Failed to optimize %s, restoring original', basename(currentFile))
+        await move(backupFile, currentFile, { overwrite: true })
+        await video.createTorrentAndSetInfoHash(file)
+        await file.save()
       }
     }
   }

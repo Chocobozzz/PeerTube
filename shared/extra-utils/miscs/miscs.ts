@@ -1,14 +1,14 @@
 /* tslint:disable:no-unused-expression */
 
 import * as chai from 'chai'
-import { isAbsolute, join } from 'path'
+import { basename, dirname, isAbsolute, join, resolve } from 'path'
 import * as request from 'supertest'
 import * as WebTorrent from 'webtorrent'
-import { pathExists, readFile } from 'fs-extra'
+import { ensureDir, pathExists, readFile } from 'fs-extra'
 import * as ffmpeg from 'fluent-ffmpeg'
 
 const expect = chai.expect
-let webtorrent = new WebTorrent()
+let webtorrent: WebTorrent.Instance
 
 function immutableAssign <T, U> (target: T, source: U) {
   return Object.assign<{}, T, U>({}, target, source)
@@ -27,6 +27,9 @@ function wait (milliseconds: number) {
 }
 
 function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
+  const WebTorrent = require('webtorrent')
+
+  if (!webtorrent) webtorrent = new WebTorrent()
   if (refreshWebTorrent === true) webtorrent = new WebTorrent()
 
   return new Promise<WebTorrent.Torrent>(res => webtorrent.add(torrent, res))
@@ -34,7 +37,15 @@ function webtorrentAdd (torrent: string, refreshWebTorrent = false) {
 
 function root () {
   // We are in /miscs
-  return join(__dirname, '..', '..', '..')
+  let root = join(__dirname, '..', '..', '..')
+
+  if (basename(root) === 'dist') root = resolve(root, '..')
+
+  return root
+}
+
+function buildServerDirectory (internalServerNumber: number, directory: string) {
+  return join(root(), 'test' + internalServerNumber, directory)
 }
 
 async function testImage (url: string, imageName: string, imagePath: string, extension = '.jpg') {
@@ -52,18 +63,24 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   expect(data.length).to.be.below(maxLength)
 }
 
-function buildAbsoluteFixturePath (path: string, customTravisPath = false) {
+function buildAbsoluteFixturePath (path: string, customCIPath = false) {
   if (isAbsolute(path)) {
     return path
   }
 
-  if (customTravisPath && process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
+  if (customCIPath) {
+    if (process.env.GITLAB_CI) return join(root(), 'cached-fixtures', path)
+
+    if (process.env.TRAVIS) return join(process.env.HOME, 'fixtures', path)
+  }
 
   return join(root(), 'server', 'tests', 'fixtures', path)
 }
 
 async function generateHighBitrateVideo () {
   const tempFixturePath = buildAbsoluteFixturePath('video_high_bitrate_1080p.mp4', true)
+
+  await ensureDir(dirname(tempFixturePath))
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {
@@ -92,6 +109,7 @@ async function generateHighBitrateVideo () {
 export {
   dateIsValid,
   wait,
+  buildServerDirectory,
   webtorrentAdd,
   immutableAssign,
   testImage,

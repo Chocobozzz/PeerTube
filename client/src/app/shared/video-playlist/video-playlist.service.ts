@@ -18,6 +18,9 @@ import { Account } from '@app/shared/account/account.model'
 import { RestService } from '@app/shared/rest'
 import { VideoExistInPlaylist } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
 import { VideoPlaylistReorder } from '@shared/models/videos/playlist/video-playlist-reorder.model'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { VideoPlaylistElement as ServerVideoPlaylistElement } from '@shared/models/videos/playlist/video-playlist-element.model'
+import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 
 @Injectable()
 export class VideoPlaylistService {
@@ -42,21 +45,28 @@ export class VideoPlaylistService {
     )
   }
 
-  listChannelPlaylists (videoChannel: VideoChannel): Observable<ResultList<VideoPlaylist>> {
+  listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPagination): Observable<ResultList<VideoPlaylist>> {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
+    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
-    return this.authHttp.get<ResultList<VideoPlaylist>>(url)
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
                .pipe(
                  switchMap(res => this.extractPlaylists(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  listAccountPlaylists (account: Account, sort: string): Observable<ResultList<VideoPlaylist>> {
+  listAccountPlaylists (account: Account, componentPagination: ComponentPagination, sort: string): Observable<ResultList<VideoPlaylist>> {
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
+    const pagination = componentPagination
+      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      : undefined
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, undefined, sort)
+    params = this.restService.addRestGetParams(params, pagination, sort)
 
     return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
                .pipe(
@@ -110,16 +120,16 @@ export class VideoPlaylistService {
                )
   }
 
-  updateVideoOfPlaylist (playlistId: number, videoId: number, body: VideoPlaylistElementUpdate) {
-    return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + videoId, body)
+  updateVideoOfPlaylist (playlistId: number, playlistElementId: number, body: VideoPlaylistElementUpdate) {
+    return this.authHttp.put(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId, body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  removeVideoFromPlaylist (playlistId: number, videoId: number) {
-    return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + videoId)
+  removeVideoFromPlaylist (playlistId: number, playlistElementId: number) {
+    return this.authHttp.delete(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/' + playlistElementId)
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
@@ -135,6 +145,24 @@ export class VideoPlaylistService {
     return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos/reorder', body)
                .pipe(
                  map(this.restExtractor.extractDataBool),
+                 catchError(err => this.restExtractor.handleError(err))
+               )
+  }
+
+  getPlaylistVideos (
+    videoPlaylistId: number | string,
+    componentPagination: ComponentPagination
+  ): Observable<ResultList<VideoPlaylistElement>> {
+    const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos'
+    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    return this.authHttp
+               .get<ResultList<ServerVideoPlaylistElement>>(path, { params })
+               .pipe(
+                 switchMap(res => this.extractVideoPlaylistElements(res)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
@@ -165,6 +193,23 @@ export class VideoPlaylistService {
   extractPlaylist (playlist: VideoPlaylistServerModel) {
     return this.serverService.localeObservable
                .pipe(map(translations => new VideoPlaylist(playlist, translations)))
+  }
+
+  extractVideoPlaylistElements (result: ResultList<ServerVideoPlaylistElement>) {
+    return this.serverService.localeObservable
+               .pipe(
+                 map(translations => {
+                   const elementsJson = result.data
+                   const total = result.total
+                   const elements: VideoPlaylistElement[] = []
+
+                   for (const elementJson of elementsJson) {
+                     elements.push(new VideoPlaylistElement(elementJson, translations))
+                   }
+
+                   return { total, data: elements }
+                 })
+               )
   }
 
   private doVideosExistInPlaylist (videoIds: number[]): Observable<VideoExistInPlaylist> {

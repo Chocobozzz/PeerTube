@@ -1,4 +1,4 @@
-import { browser, by, element } from 'protractor'
+import { browser, by, element, ElementFinder, ExpectedConditions } from 'protractor'
 
 export class VideoWatchPage {
   async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
@@ -42,6 +42,10 @@ export class VideoWatchPage {
       .getText()
       .then((t: string) => t.split(':')[1])
       .then(seconds => parseInt(seconds, 10))
+  }
+
+  getVideoName () {
+    return this.getVideoNameElement().getText()
   }
 
   async playAndPauseVideo (isAutoplay: boolean, isMobileDevice: boolean) {
@@ -100,5 +104,52 @@ export class VideoWatchPage {
 
   async goOnP2PMediaLoaderEmbed () {
     return browser.get('https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50?mode=p2p-media-loader')
+  }
+
+  async clickOnUpdate () {
+    const dropdown = element(by.css('my-video-actions-dropdown .action-button'))
+    await dropdown.click()
+
+    const items: ElementFinder[] = await element.all(by.css('my-video-actions-dropdown .dropdown-menu .dropdown-item'))
+
+    for (const item of items) {
+      const href = await item.getAttribute('href')
+
+      if (href && href.includes('/update/')) {
+        await item.click()
+        return
+      }
+    }
+  }
+
+  async clickOnSave () {
+    return element(by.css('.action-button-save')).click()
+  }
+
+  async createPlaylist (name: string) {
+    await element(by.css('.new-playlist-button')).click()
+
+    await element(by.css('#displayName')).sendKeys(name)
+
+    return element(by.css('.new-playlist-block input[type=submit]')).click()
+  }
+
+  async saveToPlaylist (name: string) {
+    return element.all(by.css('my-video-add-to-playlist .playlist'))
+                  .filter(p => p.getText().then(t => t === name))
+                  .click()
+  }
+
+  waitUntilVideoName (name: string, maxTime: number) {
+    const elem = this.getVideoNameElement()
+
+    return browser.wait(ExpectedConditions.textToBePresentInElement(elem, name), maxTime)
+  }
+
+  private getVideoNameElement () {
+    // We have 2 video info name block, pick the first that is not empty
+    return element.all(by.css('.video-bottom .video-info-name'))
+                  .filter(e => e.getText().then(t => !!t))
+                  .first()
   }
 }

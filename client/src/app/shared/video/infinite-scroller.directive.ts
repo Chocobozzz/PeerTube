@@ -1,14 +1,15 @@
-import { distinct, distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
-import { Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
-import { fromEvent, Subscription } from 'rxjs'
+import { distinctUntilChanged, filter, map, share, startWith, tap, throttleTime } from 'rxjs/operators'
+import { AfterContentChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
+import { fromEvent, Observable, Subscription } from 'rxjs'
 
 @Directive({
   selector: '[myInfiniteScroller]'
 })
-export class InfiniteScrollerDirective implements OnInit, OnDestroy {
+export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterContentChecked {
   @Input() percentLimit = 70
   @Input() autoInit = false
   @Input() onItself = false
+  @Input() dataObservable: Observable<any[]>
 
   @Output() nearOfBottom = new EventEmitter<void>()
 
@@ -17,8 +18,20 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   private scrollDownSub: Subscription
   private container: HTMLElement
 
+  private checkScroll = false
+
   constructor (private el: ElementRef) {
     this.decimalLimit = this.percentLimit / 100
+  }
+
+  ngAfterContentChecked () {
+    if (this.checkScroll) {
+      this.checkScroll = false
+
+      console.log('Checking if the initial state has a scroll.')
+
+      if (this.hasScroll() === false) this.nearOfBottom.emit()
+    }
   }
 
   ngOnInit () {
@@ -30,16 +43,17 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
   }
 
   initialize () {
-    if (this.onItself) {
-      this.container = this.el.nativeElement
-    }
+    this.container = this.onItself
+      ? this.el.nativeElement
+      : document.documentElement
 
     // Emit the last value
     const throttleOptions = { leading: true, trailing: true }
 
-    const scrollObservable = fromEvent(this.container || window, 'scroll')
+    const scrollableElement = this.onItself ? this.container : window
+    const scrollObservable = fromEvent(scrollableElement, 'scroll')
       .pipe(
-        startWith(null),
+        startWith(null as string), // FIXME: typings
         throttleTime(200, undefined, throttleOptions),
         map(() => this.getScrollInfo()),
         distinctUntilChanged((o1, o2) => o1.current === o2.current),
@@ -49,23 +63,34 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy {
     // Scroll Down
     this.scrollDownSub = scrollObservable
       .pipe(
-        // Check we scroll down
-        filter(({ current }) => {
-          const res = this.lastCurrentBottom < current
-
-          this.lastCurrentBottom = current
-          return res
-        }),
-        filter(({ current, maximumScroll }) => maximumScroll <= 0 || (current / maximumScroll) > this.decimalLimit)
+        filter(({ current }) => this.isScrollingDown(current)),
+        filter(({ current, maximumScroll }) => (current / maximumScroll) > this.decimalLimit)
       )
       .subscribe(() => this.nearOfBottom.emit())
+
+    if (this.dataObservable) {
+      this.dataObservable
+          .pipe(filter(d => d.length !== 0))
+          .subscribe(() => this.checkScroll = true)
+    }
   }
 
   private getScrollInfo () {
-    if (this.container) {
-      return { current: this.container.scrollTop, maximumScroll: this.container.scrollHeight }
-    }
+    return { current: this.container.scrollTop, maximumScroll: this.getMaximumScroll() }
+  }
 
-    return { current: window.scrollY, maximumScroll: document.body.clientHeight - window.innerHeight }
+  private getMaximumScroll () {
+    return this.container.scrollHeight - window.innerHeight
+  }
+
+  private hasScroll () {
+    return this.getMaximumScroll() > 0
+  }
+
+  private isScrollingDown (current: number) {
+    const result = this.lastCurrentBottom < current
+
+    this.lastCurrentBottom = current
+    return result
   }
 }

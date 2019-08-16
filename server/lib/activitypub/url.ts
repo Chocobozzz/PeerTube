@@ -1,12 +1,12 @@
 import { WEBSERVER } from '../../initializers/constants'
-import { ActorModel } from '../../models/activitypub/actor'
-import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
 import { VideoAbuseModel } from '../../models/video/video-abuse'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { VideoFileModel } from '../../models/video/video-file'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
+import { ActorModelOnly, ActorModelUrl } from '../../typings/models'
+import { ActorFollowModelLight } from '../../typings/models/actor-follow'
 
 function getVideoActivityPubUrl (video: VideoModel) {
   return WEBSERVER.URL + '/videos/watch/' + video.uuid
@@ -46,15 +46,15 @@ function getVideoAbuseActivityPubUrl (videoAbuse: VideoAbuseModel) {
   return WEBSERVER.URL + '/admin/video-abuses/' + videoAbuse.id
 }
 
-function getVideoViewActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+function getVideoViewActivityPubUrl (byActor: ActorModelUrl, video: VideoModel) {
   return byActor.url + '/views/videos/' + video.id + '/' + new Date().toISOString()
 }
 
-function getVideoLikeActivityPubUrl (byActor: ActorModel, video: VideoModel | { id: number }) {
+function getVideoLikeActivityPubUrl (byActor: ActorModelUrl, video: VideoModel | { id: number }) {
   return byActor.url + '/likes/' + video.id
 }
 
-function getVideoDislikeActivityPubUrl (byActor: ActorModel, video: VideoModel | { id: number }) {
+function getVideoDislikeActivityPubUrl (byActor: ActorModelUrl, video: VideoModel | { id: number }) {
   return byActor.url + '/dislikes/' + video.id
 }
 
@@ -74,22 +74,22 @@ function getVideoDislikesActivityPubUrl (video: VideoModel) {
   return video.url + '/dislikes'
 }
 
-function getActorFollowActivityPubUrl (follower: ActorModel, following: ActorModel) {
+function getActorFollowActivityPubUrl (follower: ActorModelOnly, following: ActorModelOnly) {
   return follower.url + '/follows/' + following.id
 }
 
-function getActorFollowAcceptActivityPubUrl (actorFollow: ActorFollowModel) {
+function getActorFollowAcceptActivityPubUrl (actorFollow: ActorFollowModelLight) {
   const follower = actorFollow.ActorFollower
   const me = actorFollow.ActorFollowing
 
   return follower.url + '/accepts/follows/' + me.id
 }
 
-function getActorFollowRejectActivityPubUrl (follower: ActorModel, following: ActorModel) {
+function getActorFollowRejectActivityPubUrl (follower: ActorModelOnly, following: ActorModelOnly) {
   return follower.url + '/rejects/follows/' + following.id
 }
 
-function getVideoAnnounceActivityPubUrl (byActor: ActorModel, video: VideoModel) {
+function getVideoAnnounceActivityPubUrl (byActor: ActorModelOnly, video: VideoModel) {
   return video.url + '/announces/' + byActor.id
 }
 

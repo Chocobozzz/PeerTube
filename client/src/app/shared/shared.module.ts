@@ -53,7 +53,14 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
 import { VideoImportService } from '@app/shared/video-import/video-import.service'
 import { ActionDropdownComponent } from '@app/shared/buttons/action-dropdown.component'
-import { NgbDropdownModule, NgbModalModule, NgbPopoverModule, NgbTabsetModule, NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
+import {
+  NgbCollapseModule,
+  NgbDropdownModule,
+  NgbModalModule,
+  NgbPopoverModule,
+  NgbTabsetModule,
+  NgbTooltipModule
+} from '@ng-bootstrap/ng-bootstrap'
 import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
 import { OverviewService } from '@app/shared/overview'
@@ -69,7 +76,7 @@ import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/sha
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
 import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { ImageUploadComponent } from '@app/shared/images/image-upload.component'
+import { PreviewUploadComponent } from '@app/shared/images/preview-upload.component'
 import { GlobalIconComponent } from '@app/shared/images/global-icon.component'
 import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
 import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
@@ -85,6 +92,7 @@ import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklis
 import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.component'
 import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
 import { ClipboardModule } from 'ngx-clipboard'
+import { FollowService } from '@app/shared/instance/follow.service'
 
 @NgModule({
   imports: [
@@ -99,6 +107,7 @@ import { ClipboardModule } from 'ngx-clipboard'
     NgbPopoverModule,
     NgbTabsetModule,
     NgbTooltipModule,
+    NgbCollapseModule,
 
     ClipboardModule,
 
@@ -154,7 +163,7 @@ import { ClipboardModule } from 'ngx-clipboard'
     ConfirmComponent,
 
     GlobalIconComponent,
-    ImageUploadComponent
+    PreviewUploadComponent
   ],
 
   exports: [
@@ -169,6 +178,7 @@ import { ClipboardModule } from 'ngx-clipboard'
     NgbPopoverModule,
     NgbTabsetModule,
     NgbTooltipModule,
+    NgbCollapseModule,
 
     ClipboardModule,
 
@@ -218,7 +228,7 @@ import { ClipboardModule } from 'ngx-clipboard'
     ConfirmComponent,
 
     GlobalIconComponent,
-    ImageUploadComponent,
+    PreviewUploadComponent,
 
     NumberFormatterPipe,
     ObjectLengthPipe,
@@ -270,6 +280,8 @@ import { ClipboardModule } from 'ngx-clipboard'
     ScreenService,
 
     UserNotificationService,
+
+    FollowService,
 
     I18n
   ]

@@ -6,8 +6,9 @@ import { unicastTo } from './utils'
 import { logger } from '../../../helpers/logger'
 import { ActivityAudience, ActivityFlag } from '../../../../shared/models/activitypub'
 import { audiencify, getAudience } from '../audience'
+import { Transaction } from 'sequelize'
 
-async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel) {
+async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel, video: VideoModel, t: Transaction) {
   if (!video.VideoChannel.Account.Actor.serverId) return // Local user
 
   const url = getVideoAbuseActivityPubUrl(videoAbuse)
@@ -18,7 +19,7 @@ async function sendVideoAbuse (byActor: ActorModel, videoAbuse: VideoAbuseModel,
   const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
   const flagActivity = buildFlagActivity(url, byActor, videoAbuse, audience)
 
-  return unicastTo(flagActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl)
+  t.afterCommit(() => unicastTo(flagActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl))
 }
 
 function buildFlagActivity (url: string, byActor: ActorModel, videoAbuse: VideoAbuseModel, audience: ActivityAudience): ActivityFlag {

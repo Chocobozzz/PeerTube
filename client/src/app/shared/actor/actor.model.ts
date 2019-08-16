@@ -4,7 +4,6 @@ import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 
 export abstract class Actor implements ActorServer {
   id: number
-  uuid: string
   url: string
   name: string
   host: string
@@ -24,18 +23,17 @@ export abstract class Actor implements ActorServer {
     return window.location.origin + '/client/assets/images/default-avatar.png'
   }
 
-  static CREATE_BY_STRING (accountName: string, host: string) {
+  static CREATE_BY_STRING (accountName: string, host: string, forceHostname = false) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
     const thisHost = new URL(absoluteAPIUrl).host
 
-    if (host.trim() === thisHost) return accountName
+    if (host.trim() === thisHost && !forceHostname) return accountName
 
     return accountName + '@' + host
   }
 
   protected constructor (hash: ActorServer) {
     this.id = hash.id
-    this.uuid = hash.uuid
     this.url = hash.url
     this.name = hash.name
     this.host = hash.host

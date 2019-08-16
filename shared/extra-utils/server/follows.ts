@@ -1,17 +1,21 @@
 import * as request from 'supertest'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
-import { makeGetRequest, makePostBodyRequest } from '..'
+import { makePostBodyRequest } from '../requests/requests'
 
 function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/server/followers'
 
+  const query = {
+    start,
+    count,
+    sort,
+    search
+  }
+
   return request(url)
     .get(path)
-    .query({ start })
-    .query({ count })
-    .query({ sort })
-    .query({ search })
+    .query(query)
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)
@@ -42,12 +46,16 @@ function rejectFollower (url: string, token: string, follower: string, statusCod
 function getFollowingListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
   const path = '/api/v1/server/following'
 
+  const query = {
+    start,
+    count,
+    sort,
+    search
+  }
+
   return request(url)
     .get(path)
-    .query({ start })
-    .query({ count })
-    .query({ sort })
-    .query({ search })
+    .query(query)
     .set('Accept', 'application/json')
     .expect(200)
     .expect('Content-Type', /json/)

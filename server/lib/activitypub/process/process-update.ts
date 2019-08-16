@@ -6,7 +6,7 @@ import { sequelizeTypescript } from '../../../initializers'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'
-import { fetchAvatarIfExists, updateActorAvatarInstance, updateActorInstance } from '../actor'
+import { getAvatarInfoIfExists, updateActorAvatarInstance, updateActorInstance } from '../actor'
 import { getOrCreateVideoAndAccountAndChannel, getOrCreateVideoChannelFromVideoObject, updateVideoFromAP } from '../videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../../helpers/custom-validators/activitypub/videos'
 import { isCacheFileObjectValid } from '../../../helpers/custom-validators/activitypub/cache-file'
@@ -14,8 +14,12 @@ import { createOrUpdateCacheFile } from '../cache-file'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
-async function processUpdateActivity (activity: ActivityUpdate, byActor: ActorModel) {
+async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
+  const { activity, byActor } = options
+
   const objectType = activity.object.type
 
   if (objectType === 'Video') {
@@ -49,7 +53,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) {
+async function processUpdateVideo (actor: SignatureActorModel, activity: ActivityUpdate) {
   const videoObject = activity.object as VideoTorrentObject
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
@@ -70,7 +74,7 @@ async function processUpdateVideo (actor: ActorModel, activity: ActivityUpdate) 
   return updateVideoFromAP(updateOptions)
 }
 
-async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUpdate) {
+async function processUpdateCacheFile (byActor: SignatureActorModel, activity: ActivityUpdate) {
   const cacheFileObject = activity.object as CacheFileObject
 
   if (!isCacheFileObjectValid(cacheFileObject)) {
@@ -95,13 +99,13 @@ async function processUpdateCacheFile (byActor: ActorModel, activity: ActivityUp
 async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) {
   const actorAttributesToUpdate = activity.object as ActivityPubActor
 
-  logger.debug('Updating remote account "%s".', actorAttributesToUpdate.uuid)
+  logger.debug('Updating remote account "%s".', actorAttributesToUpdate.url)
   let accountOrChannelInstance: AccountModel | VideoChannelModel
   let actorFieldsSave: object
   let accountOrChannelFieldsSave: object
 
   // Fetch icon?
-  const avatarName = await fetchAvatarIfExists(actorAttributesToUpdate)
+  const avatarInfo = await getAvatarInfoIfExists(actorAttributesToUpdate)
 
   try {
     await sequelizeTypescript.transaction(async t => {
@@ -114,8 +118,10 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
 
       await updateActorInstance(actor, actorAttributesToUpdate)
 
-      if (avatarName !== undefined) {
-        await updateActorAvatarInstance(actor, avatarName, t)
+      if (avatarInfo !== undefined) {
+        const avatarOptions = Object.assign({}, avatarInfo, { onDisk: false })
+
+        await updateActorAvatarInstance(actor, avatarOptions, t)
       }
 
       await actor.save({ transaction: t })
@@ -128,7 +134,7 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
       await accountOrChannelInstance.save({ transaction: t })
     })
 
-    logger.info('Remote account with uuid %s updated', actorAttributesToUpdate.uuid)
+    logger.info('Remote account %s updated', actorAttributesToUpdate.url)
   } catch (err) {
     if (actor !== undefined && actorFieldsSave !== undefined) {
       resetSequelizeInstance(actor, actorFieldsSave)
@@ -144,7 +150,7 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
   }
 }
 
-async function processUpdatePlaylist (byActor: ActorModel, activity: ActivityUpdate) {
+async function processUpdatePlaylist (byActor: SignatureActorModel, activity: ActivityUpdate) {
   const playlistObject = activity.object as PlaylistObject
   const byAccount = byActor.Account
 

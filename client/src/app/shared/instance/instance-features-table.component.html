@@ -22,7 +22,7 @@
         <ng-container *ngIf="initialUserVideoQuota !== -1">
           {{ initialUserVideoQuota | bytes: 0 }} <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
 
-          <my-help helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
+          <my-help tooltipPlacement="auto" helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
         </ng-container>
 
         <ng-container i18n *ngIf="initialUserVideoQuota === -1">

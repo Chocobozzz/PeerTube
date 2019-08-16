@@ -14,7 +14,6 @@ import { CanComponentDeactivateResult } from '@app/shared/guards/can-deactivate-
 export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []
-  explainedVideoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCaptions: VideoCaptionEdit[] = []
 
   firstStepPrivacyId = 0

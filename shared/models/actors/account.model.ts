@@ -10,7 +10,6 @@ export interface Account extends Actor {
 
 export interface AccountSummary {
   id: number
-  uuid: string
   name: string
   displayName: string
   url: string

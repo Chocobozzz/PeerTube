@@ -1,0 +1,25 @@
+<section class="container">
+  <header>
+    <ng-container *ngFor="let step of steps; let i = index; let isLast = last;">
+      <div
+        class="step-info" [ngClass]="{ active: selectedIndex === i, completed: isCompleted(step) }"
+        (click)="onClick(i)"
+      >
+        <div class="step-index">
+          <ng-container *ngIf="!isCompleted(step)">{{ i + 1 }}</ng-container>
+          <my-global-icon *ngIf="isCompleted(step)" iconName="tick"></my-global-icon>
+        </div>
+
+        <div class="step-label">{{ step.label }}</div>
+      </div>
+
+      <!-- Do no display if this is the last child -->
+      <div *ngIf="!isLast" class="connector"></div>
+    </ng-container>
+  </header>
+
+  <div [style.display]="selected ? 'block' : 'none'">
+    <ng-container [ngTemplateOutlet]="selected.content"></ng-container>
+  </div>
+
+</section>

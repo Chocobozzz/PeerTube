@@ -4,24 +4,25 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
-import { audio, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { audio, canDoQuickTranscode, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import {
-  buildAbsoluteFixturePath, cleanupTests,
+  buildAbsoluteFixturePath,
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
   getMyVideos,
   getVideo,
   getVideosList,
-  killallServers,
+  makeGetRequest,
   root,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
+  waitJobs,
   webtorrentAdd
 } from '../../../../shared/extra-utils'
-import { extname, join } from 'path'
-import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { join } from 'path'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
 
 const expect = chai.expect
@@ -121,7 +122,7 @@ describe('Test video transcoding', function () {
 
       expect(videoDetails.files).to.have.lengthOf(4)
 
-      const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
       const probe = await audio.get(path)
 
       if (probe.audioStream) {
@@ -152,7 +153,7 @@ describe('Test video transcoding', function () {
       const videoDetails: VideoDetails = res2.body
 
       expect(videoDetails.files).to.have.lengthOf(4)
-      const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
       const probe = await audio.get(path)
       expect(probe).to.not.have.property('audioStream')
     }
@@ -179,7 +180,7 @@ describe('Test video transcoding', function () {
       expect(videoDetails.files).to.have.lengthOf(4)
       const fixturePath = buildAbsoluteFixturePath(videoAttributes.fixture)
       const fixtureVideoProbe = await audio.get(fixturePath)
-      const path = join(root(), 'test2', 'videos', video.uuid + '-240.mp4')
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
       const videoProbe = await audio.get(path)
       if (videoProbe.audioStream && fixtureVideoProbe.audioStream) {
         const toOmit = [ 'max_bit_rate', 'duration', 'duration_ts', 'nb_frames', 'start_time', 'start_pts' ]
@@ -216,13 +217,13 @@ describe('Test video transcoding', function () {
       expect(videoDetails.files[ 3 ].fps).to.be.below(31)
 
       for (const resolution of [ '240', '360', '480' ]) {
-        const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+        const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-' + resolution + '.mp4')
         const fps = await getVideoFileFPS(path)
 
         expect(fps).to.be.below(31)
       }
 
-      const path = join(root(), 'test2', 'videos', video.uuid + '-720.mp4')
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-720.mp4')
       const fps = await getVideoFileFPS(path)
 
       expect(fps).to.be.above(58).and.below(62)
@@ -310,7 +311,7 @@ describe('Test video transcoding', function () {
       const video = res.body.data.find(v => v.name === videoAttributes.name)
 
       for (const resolution of ['240', '360', '480', '720', '1080']) {
-        const path = join(root(), 'test2', 'videos', video.uuid + '-' + resolution + '.mp4')
+        const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-' + resolution + '.mp4')
         const bitrate = await getVideoFileBitrate(path)
         const fps = await getVideoFileFPS(path)
         const resolution2 = await getVideoFileResolution(path)
@@ -323,6 +324,15 @@ describe('Test video transcoding', function () {
 
   it('Should accept and transcode additional extensions', async function () {
     this.timeout(300000)
+
+    let tempFixturePath: string
+
+    {
+      tempFixturePath = await generateHighBitrateVideo()
+
+      const bitrate = await getVideoFileBitrate(tempFixturePath)
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
+    }
 
     for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
       const videoAttributes = {
@@ -346,6 +356,63 @@ describe('Test video transcoding', function () {
         const magnetUri = videoDetails.files[ 0 ].magnetUri
         expect(magnetUri).to.contain('.mp4')
       }
+    }
+  })
+
+  it('Should correctly detect if quick transcode is possible', async function () {
+    this.timeout(10000)
+
+    expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.mp4'))).to.be.true
+    expect(await canDoQuickTranscode(buildAbsoluteFixturePath('video_short.webm'))).to.be.false
+  })
+
+  it('Should merge an audio file with the preview file', async function () {
+    this.timeout(60000)
+
+    const videoAttributesArg = { name: 'audio_with_preview', previewfile: 'preview.jpg', fixture: 'sample.ogg' }
+    await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributesArg)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === 'audio_with_preview')
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails: VideoDetails = res2.body
+
+      expect(videoDetails.files).to.have.lengthOf(1)
+
+      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: 200 })
+
+      const magnetUri = videoDetails.files[ 0 ].magnetUri
+      expect(magnetUri).to.contain('.mp4')
+    }
+  })
+
+  it('Should upload an audio file and choose a default background image', async function () {
+    this.timeout(60000)
+
+    const videoAttributesArg = { name: 'audio_without_preview', fixture: 'sample.ogg' }
+    await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, videoAttributesArg)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === 'audio_without_preview')
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails = res2.body
+
+      expect(videoDetails.files).to.have.lengthOf(1)
+
+      await makeGetRequest({ url: server.url, path: videoDetails.thumbnailPath, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path: videoDetails.previewPath, statusCodeExpected: 200 })
+
+      const magnetUri = videoDetails.files[ 0 ].magnetUri
+      expect(magnetUri).to.contain('.mp4')
     }
   })
 

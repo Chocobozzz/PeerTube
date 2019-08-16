@@ -118,6 +118,7 @@
               inputName="nsfw" formControlName="nsfw"
               i18n-labelText labelText="This video contains mature or explicit content"
               i18n-helpHtml helpHtml="Some instances do not list videos containing mature or explicit content by default."
+              helpPlacement="bottom-right"
             ></my-peertube-checkbox>
 
             <my-peertube-checkbox
@@ -125,6 +126,7 @@
               inputName="waitTranscoding" formControlName="waitTranscoding"
               i18n-labelText labelText="Wait transcoding before publishing the video"
               i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
+              helpPlacement="bottom-right"
             ></my-peertube-checkbox>
 
           </div>
@@ -187,18 +189,14 @@
       <ng-template ngbTabContent>
         <div class="row advanced-settings">
           <div class="col-md-12 col-xl-8">
-            <div class="form-group">
-              <my-image-upload
-                i18n-inputLabel inputLabel="Upload thumbnail" inputName="thumbnailfile" formControlName="thumbnailfile"
-                previewWidth="200px" previewHeight="110px"
-              ></my-image-upload>
-            </div>
 
             <div class="form-group">
-              <my-image-upload
-                i18n-inputLabel inputLabel="Upload preview" inputName="previewfile" formControlName="previewfile"
+              <label i18n for="previewfile">Video preview</label>
+
+              <my-preview-upload
+                i18n-inputLabel inputLabel="Edit" inputName="previewfile" formControlName="previewfile"
                 previewWidth="360px" previewHeight="200px"
-              ></my-image-upload>
+              ></my-preview-upload>
             </div>
 
             <div class="form-group">

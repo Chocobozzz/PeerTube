@@ -10,6 +10,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { UserRight } from '../../../../../shared/models/users'
 import { Notifier, ServerService } from '@app/core'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-videos-local',
@@ -21,15 +22,18 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
+  useUserVideoLanguagePreferences = true
+
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
     protected screenService: ScreenService,
-    private i18n: I18n,
-    private videoService: VideoService
+    private videoService: VideoService,
+    private hooks: HooksService
   ) {
     super()
 
@@ -53,8 +57,21 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
 
   getVideosObservable (page: number) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
+    const params = {
+      videoPagination: newPagination,
+      sort: this.sort,
+      filter: this.filter,
+      categoryOneOf: this.categoryOneOf,
+      languageOneOf: this.languageOneOf
+    }
 
-    return this.videoService.getVideos(newPagination, this.sort, this.filter, this.categoryOneOf)
+    return this.hooks.wrapObsFun(
+      this.videoService.getVideos.bind(this.videoService),
+      params,
+      'common',
+      'filter:api.local-videos.videos.list.params',
+      'filter:api.local-videos.videos.list.result'
+    )
   }
 
   generateSyndicationList () {

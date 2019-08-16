@@ -28,6 +28,7 @@ import { VideoImportModel } from '../../../models/video/video-import'
 import { AccountModel } from '../../../models/account/account'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { sendVerifyUserEmail } from '../../../lib/user'
 
 const auditLogger = auditLoggerFactory('users-me')
 
@@ -171,16 +172,27 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
 async function updateMe (req: express.Request, res: express.Response) {
   const body: UserUpdateMe = req.body
+  let sendVerificationEmail = false
 
   const user = res.locals.oauth.token.user
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON({}))
 
   if (body.password !== undefined) user.password = body.password
-  if (body.email !== undefined) user.email = body.email
   if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
   if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
   if (body.videosHistoryEnabled !== undefined) user.videosHistoryEnabled = body.videosHistoryEnabled
+  if (body.videoLanguages !== undefined) user.videoLanguages = body.videoLanguages
+  if (body.theme !== undefined) user.theme = body.theme
+
+  if (body.email !== undefined) {
+    if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
+      user.pendingEmail = body.email
+      sendVerificationEmail = true
+    } else {
+      user.email = body.email
+    }
+  }
 
   await sequelizeTypescript.transaction(async t => {
     const userAccount = await AccountModel.load(user.Account.id)
@@ -195,6 +207,10 @@ async function updateMe (req: express.Request, res: express.Response) {
 
     auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})), oldUserAuditView)
   })
+
+  if (sendVerificationEmail === true) {
+    await sendVerifyUserEmail(user, true)
+  }
 
   return res.sendStatus(204)
 }

@@ -74,7 +74,18 @@ function createReqFiles (
     },
 
     filename: async (req, file, cb) => {
-      const extension = mimeTypes[ file.mimetype ] || extname(file.originalname)
+      let extension: string
+      const fileExtension = extname(file.originalname)
+      const extensionFromMimetype = mimeTypes[ file.mimetype ]
+
+      // Take the file extension if we don't understand the mime type
+      // We have the OGG/OGV exception too because firefox sends a bad mime type when sending an OGG file
+      if (fileExtension === '.ogg' || fileExtension === '.ogv' || !extensionFromMimetype) {
+        extension = fileExtension
+      } else {
+        extension = extensionFromMimetype
+      }
+
       let randomString = ''
 
       try {

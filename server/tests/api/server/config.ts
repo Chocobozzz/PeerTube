@@ -11,17 +11,17 @@ import {
   getAbout,
   getConfig,
   getCustomConfig,
-  killallServers,
+  killallServers, parallelTests,
   registerUser,
-  reRunServer,
+  reRunServer, ServerInfo,
   setAccessTokensToServers,
-  updateCustomConfig
+  updateCustomConfig, uploadVideo
 } from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
 
 const expect = chai.expect
 
-function checkInitialConfig (data: CustomConfig) {
+function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
   expect(data.instance.shortDescription).to.equal(
     'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
@@ -45,19 +45,21 @@ function checkInitialConfig (data: CustomConfig) {
   expect(data.signup.limit).to.equal(4)
   expect(data.signup.requiresEmailVerification).to.be.false
 
-  expect(data.admin.email).to.equal('admin1@example.com')
+  expect(data.admin.email).to.equal('admin' + server.internalServerNumber + '@example.com')
   expect(data.contactForm.enabled).to.be.true
 
   expect(data.user.videoQuota).to.equal(5242880)
   expect(data.user.videoQuotaDaily).to.equal(-1)
   expect(data.transcoding.enabled).to.be.false
   expect(data.transcoding.allowAdditionalExtensions).to.be.false
+  expect(data.transcoding.allowAudioFiles).to.be.false
   expect(data.transcoding.threads).to.equal(2)
   expect(data.transcoding.resolutions['240p']).to.be.true
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.true
   expect(data.transcoding.resolutions['1080p']).to.be.true
+  expect(data.transcoding.resolutions['2160p']).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
 
   expect(data.import.videos.http.enabled).to.be.true
@@ -89,7 +91,11 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.signup.limit).to.equal(5)
   expect(data.signup.requiresEmailVerification).to.be.false
 
-  expect(data.admin.email).to.equal('superadmin1@example.com')
+  // We override admin email in parallel tests, so skip this exception
+  if (parallelTests() === false) {
+    expect(data.admin.email).to.equal('superadmin1@example.com')
+  }
+
   expect(data.contactForm.enabled).to.be.false
 
   expect(data.user.videoQuota).to.equal(5242881)
@@ -98,11 +104,13 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.enabled).to.be.true
   expect(data.transcoding.threads).to.equal(1)
   expect(data.transcoding.allowAdditionalExtensions).to.be.true
+  expect(data.transcoding.allowAudioFiles).to.be.true
   expect(data.transcoding.resolutions['240p']).to.be.false
   expect(data.transcoding.resolutions['360p']).to.be.true
   expect(data.transcoding.resolutions['480p']).to.be.true
   expect(data.transcoding.resolutions['720p']).to.be.false
   expect(data.transcoding.resolutions['1080p']).to.be.false
+  expect(data.transcoding.resolutions['2160p']).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
 
   expect(data.import.videos.http.enabled).to.be.false
@@ -118,6 +126,7 @@ describe('Test config', function () {
 
   before(async function () {
     this.timeout(30000)
+
     server = await flushAndRunServer(1)
     await setAccessTokensToServers([ server ])
   })
@@ -153,6 +162,9 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.webm')
     expect(data.video.file.extensions).to.contain('.ogv')
 
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 400)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 400)
+
     expect(data.contactForm.enabled).to.be.true
   })
 
@@ -160,7 +172,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body as CustomConfig
 
-    checkInitialConfig(data)
+    checkInitialConfig(server, data)
   })
 
   it('Should update the customized configuration', async function () {
@@ -177,6 +189,9 @@ describe('Test config', function () {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
         }
+      },
+      theme: {
+        default: 'default'
       },
       services: {
         twitter: {
@@ -210,13 +225,15 @@ describe('Test config', function () {
       transcoding: {
         enabled: true,
         allowAdditionalExtensions: true,
+        allowAudioFiles: true,
         threads: 1,
         resolutions: {
           '240p': false,
           '360p': true,
           '480p': true,
           '720p': false,
-          '1080p': false
+          '1080p': false,
+          '2160p': false
         },
         hls: {
           enabled: false
@@ -264,6 +281,12 @@ describe('Test config', function () {
     expect(data.video.file.extensions).to.contain('.ogv')
     expect(data.video.file.extensions).to.contain('.flv')
     expect(data.video.file.extensions).to.contain('.mkv')
+    expect(data.video.file.extensions).to.contain('.mp3')
+    expect(data.video.file.extensions).to.contain('.ogg')
+    expect(data.video.file.extensions).to.contain('.flac')
+
+    await uploadVideo(server.url, server.accessToken, { fixture: 'video_short.mkv' }, 200)
+    await uploadVideo(server.url, server.accessToken, { fixture: 'sample.ogg' }, 200)
   })
 
   it('Should have the configuration updated after a restart', async function () {
@@ -297,7 +320,7 @@ describe('Test config', function () {
     const res = await getCustomConfig(server.url, server.accessToken)
     const data = res.body
 
-    checkInitialConfig(data)
+    checkInitialConfig(server, data)
   })
 
   after(async function () {

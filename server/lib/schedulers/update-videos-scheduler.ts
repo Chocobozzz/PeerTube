@@ -57,7 +57,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
     })
 
     for (const v of publishedVideos) {
-      Notifier.Instance.notifyOnNewVideo(v)
+      Notifier.Instance.notifyOnNewVideoIfNeeded(v)
       Notifier.Instance.notifyOnVideoPublishedAfterScheduledUpdate(v)
     }
   }

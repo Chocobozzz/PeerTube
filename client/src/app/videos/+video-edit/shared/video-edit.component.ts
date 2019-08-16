@@ -13,6 +13,7 @@ import { VideoCaptionAddModalComponent } from '@app/videos/+video-edit/shared/vi
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { removeElementFromArray } from '@app/shared/misc/utils'
 import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
+import { VideoService } from '@app/shared/video/video.service'
 
 @Component({
   selector: 'my-video-edit',
@@ -23,17 +24,17 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   @Input() form: FormGroup
   @Input() formErrors: { [ id: string ]: string } = {}
   @Input() validationMessages: FormReactiveValidationMessages = {}
-  @Input() videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   @Input() userVideoChannels: { id: number, label: string, support: string }[] = []
   @Input() schedulePublicationPossible = true
   @Input() videoCaptions: (VideoCaptionEdit & { captionPath?: string })[] = []
   @Input() waitTranscodingEnabled = true
 
-  @ViewChild('videoCaptionAddModal') videoCaptionAddModal: VideoCaptionAddModalComponent
+  @ViewChild('videoCaptionAddModal', { static: true }) videoCaptionAddModal: VideoCaptionAddModalComponent
 
   // So that it can be accessed in the template
   readonly SPECIAL_SCHEDULED_PRIVACY = VideoEdit.SPECIAL_SCHEDULED_PRIVACY
 
+  videoPrivacies: VideoConstant<VideoPrivacy>[] = []
   videoCategories: VideoConstant<number>[] = []
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoConstant<string>[] = []
@@ -58,6 +59,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     private formValidatorService: FormValidatorService,
     private videoValidatorsService: VideoValidatorsService,
     private videoCaptionService: VideoCaptionService,
+    private videoService: VideoService,
     private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
@@ -100,7 +102,6 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       language: this.videoValidatorsService.VIDEO_LANGUAGE,
       description: this.videoValidatorsService.VIDEO_DESCRIPTION,
       tags: null,
-      thumbnailfile: null,
       previewfile: null,
       support: this.videoValidatorsService.VIDEO_SUPPORT,
       schedulePublicationAt: this.videoValidatorsService.VIDEO_SCHEDULE_PUBLICATION_AT,
@@ -132,6 +133,9 @@ export class VideoEditComponent implements OnInit, OnDestroy {
     this.videoCategories = this.serverService.getVideoCategories()
     this.videoLicences = this.serverService.getVideoLicences()
     this.videoLanguages = this.serverService.getVideoLanguages()
+
+    const privacies = this.serverService.getVideoPrivacies()
+    this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
 

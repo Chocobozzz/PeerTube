@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { cleanupTests, getVideo, uploadVideo, userLogin, viewVideo, wait } from '../../../../shared/extra-utils'
+import { cleanupTests, getVideo, registerUser, uploadVideo, userLogin, viewVideo, wait } from '../../../../shared/extra-utils'
 import { flushAndRunServer, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 
 const expect = chai.expect
@@ -13,7 +13,27 @@ describe('Test application behind a reverse proxy', function () {
 
   before(async function () {
     this.timeout(30000)
-    server = await flushAndRunServer(1)
+
+    const config = {
+      rates_limit: {
+        api: {
+          max: 50,
+          window: 5000
+        },
+        signup: {
+          max: 3,
+          window: 5000
+        },
+        login: {
+          max: 20
+        }
+      },
+      signup: {
+        limit: 20
+      }
+    }
+
+    server = await flushAndRunServer(1, config)
     await setAccessTokensToServers([ server ])
 
     const { body } = await uploadVideo(server.url, server.accessToken, {})
@@ -80,6 +100,39 @@ describe('Test application behind a reverse proxy', function () {
     }
 
     await userLogin(server, user, 429)
+  })
+
+  it('Should rate limit signup', async function () {
+    for (let i = 0; i < 3; i++) {
+      await registerUser(server.url, 'test' + i, 'password')
+    }
+
+    await registerUser(server.url, 'test42', 'password', 429)
+  })
+
+  it('Should not rate limit failed signup', async function () {
+    this.timeout(30000)
+
+    await wait(7000)
+
+    for (let i = 0; i < 3; i++) {
+      await registerUser(server.url, 'test' + i, 'password', 409)
+    }
+
+    await registerUser(server.url, 'test43', 'password', 204)
+
+  })
+
+  it('Should rate limit API calls', async function () {
+    this.timeout(30000)
+
+    await wait(7000)
+
+    for (let i = 0; i < 50; i++) {
+      await getVideo(server.url, videoId)
+    }
+
+    await getVideo(server.url, videoId, 429)
   })
 
   after(async function () {

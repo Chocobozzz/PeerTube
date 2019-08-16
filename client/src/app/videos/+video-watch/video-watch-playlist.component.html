@@ -16,10 +16,10 @@
     </div>
   </div>
 
-  <div *ngFor="let playlistVideo of playlistVideos">
+  <div *ngFor="let playlistElement of playlistElements">
     <my-video-playlist-element-miniature
-      [video]="playlistVideo" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
-      [playing]="currentPlaylistPosition === playlistVideo.playlistElement.position" [accountLink]="false" [position]="playlistVideo.playlistElement.position"
+      [playlistElement]="playlistElement" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
+      [playing]="currentPlaylistPosition === playlistElement.position" [accountLink]="false" [position]="playlistElement.position"
     ></my-video-playlist-element-miniature>
   </div>
 </div>

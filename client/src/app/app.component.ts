@@ -9,6 +9,8 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
 import { ViewportScroller } from '@angular/common'
+import { PluginService } from '@app/core/plugins/plugin.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-app',
@@ -27,11 +29,13 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private serverService: ServerService,
+    private pluginService: PluginService,
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService,
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private hooks: HooksService
   ) { }
 
   get serverVersion () {
@@ -68,6 +72,9 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoLicences()
     this.serverService.loadVideoPrivacies()
     this.serverService.loadVideoPlaylistPrivacies()
+
+    this.loadPlugins()
+    this.themeService.initialize()
 
     // Do not display menu on small screens
     if (this.screenService.isInSmallView()) {
@@ -155,6 +162,10 @@ export class AppComponent implements OnInit {
       filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
     ).subscribe(() => this.redirectService.redirectToHomepage(true))
 
+    navigationEndEvent.subscribe(e => {
+      this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
+    })
+
     eventsObs.pipe(
       filter((e: Event): e is GuardsCheckStart => e instanceof GuardsCheckStart),
       filter(() => this.screenService.isInSmallView())
@@ -196,6 +207,12 @@ export class AppComponent implements OnInit {
         })
   }
 
+  private async loadPlugins () {
+    this.pluginService.initializePlugins()
+
+    this.hooks.runAction('action:application.init', 'common')
+  }
+
   private initHotkeys () {
     this.hotkeysService.add([
       new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
@@ -225,11 +242,7 @@ export class AppComponent implements OnInit {
       new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, undefined, this.i18n('Go to the videos upload page')),
-      new Hotkey('shift+t', (event: KeyboardEvent): boolean => {
-        this.themeService.toggleDarkTheme()
-        return false
-      }, undefined, this.i18n('Toggle Dark theme'))
+      }, undefined, this.i18n('Go to the videos upload page'))
     ])
   }
 }

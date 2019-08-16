@@ -8,7 +8,6 @@ import { cleanupTests, completeVideoCheck } from '../../../../shared/extra-utils
 import {
   flushAndRunMultipleServers,
   getVideosList,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -89,8 +88,8 @@ describe('Test follows', function () {
     res = await getFollowingListPaginationAndSort(servers[0].url, 1, 1, 'createdAt')
     follows = follows.concat(res.body.data)
 
-    const server2Follow = follows.find(f => f.following.host === 'localhost:9002')
-    const server3Follow = follows.find(f => f.following.host === 'localhost:9003')
+    const server2Follow = follows.find(f => f.following.host === 'localhost:' + servers[1].port)
+    const server3Follow = follows.find(f => f.following.host === 'localhost:' + servers[2].port)
 
     expect(server2Follow).to.not.be.undefined
     expect(server3Follow).to.not.be.undefined
@@ -100,12 +99,12 @@ describe('Test follows', function () {
 
   it('Should search followings on server 1', async function () {
     {
-      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', ':9002')
+      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', ':' + servers[1].port)
       const follows = res.body.data
 
       expect(res.body.total).to.equal(1)
       expect(follows.length).to.equal(1)
-      expect(follows[ 0 ].following.host).to.equal('localhost:9002')
+      expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[1].port)
     }
 
     {
@@ -136,18 +135,18 @@ describe('Test follows', function () {
       expect(res.body.total).to.equal(1)
       expect(follows).to.be.an('array')
       expect(follows.length).to.equal(1)
-      expect(follows[0].follower.host).to.equal('localhost:9001')
+      expect(follows[0].follower.host).to.equal('localhost:' + servers[0].port)
     }
   })
 
   it('Should search followers on server 2', async function () {
     {
-      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', '9001')
+      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', servers[0].port + '')
       const follows = res.body.data
 
       expect(res.body.total).to.equal(1)
       expect(follows.length).to.equal(1)
-      expect(follows[ 0 ].following.host).to.equal('localhost:9003')
+      expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[2].port)
     }
 
     {
@@ -169,16 +168,16 @@ describe('Test follows', function () {
   })
 
   it('Should have the correct follows counts', async function () {
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 2)
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:9003', 1, 0)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[0].port, 0, 2)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[1].port, 1, 0)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[2].port, 1, 0)
 
     // Server 2 and 3 does not know server 1 follow another server (there was not a refresh)
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[0].port, 0, 1)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[1].port, 1, 0)
 
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 1)
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 1, 0)
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[0].port, 0, 1)
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[2].port, 1, 0)
   })
 
   it('Should unfollow server 3 on server 1', async function () {
@@ -197,7 +196,7 @@ describe('Test follows', function () {
     expect(follows).to.be.an('array')
     expect(follows.length).to.equal(1)
 
-    expect(follows[0].following.host).to.equal('localhost:9002')
+    expect(follows[0].following.host).to.equal('localhost:' + servers[1].port)
   })
 
   it('Should not have server 1 as follower on server 3 anymore', async function () {
@@ -210,14 +209,14 @@ describe('Test follows', function () {
   })
 
   it('Should have the correct follows counts 2', async function () {
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 1)
-    await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[0].port, 0, 1)
+    await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[1].port, 1, 0)
 
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
-    await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[0].port, 0, 1)
+    await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[1].port, 1, 0)
 
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 0)
-    await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 0, 0)
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[0].port, 0, 0)
+    await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[2].port, 0, 0)
   })
 
   it('Should upload a video on server 2 and 3 and propagate only the video of server 2', async function () {
@@ -310,15 +309,15 @@ describe('Test follows', function () {
     })
 
     it('Should have the correct follows counts 3', async function () {
-      await expectAccountFollows(servers[0].url, 'peertube@localhost:9001', 0, 2)
-      await expectAccountFollows(servers[0].url, 'peertube@localhost:9002', 1, 0)
-      await expectAccountFollows(servers[0].url, 'peertube@localhost:9003', 1, 0)
+      await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[0].port, 0, 2)
+      await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[1].port, 1, 0)
+      await expectAccountFollows(servers[0].url, 'peertube@localhost:' + servers[2].port, 1, 0)
 
-      await expectAccountFollows(servers[1].url, 'peertube@localhost:9001', 0, 1)
-      await expectAccountFollows(servers[1].url, 'peertube@localhost:9002', 1, 0)
+      await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[0].port, 0, 1)
+      await expectAccountFollows(servers[1].url, 'peertube@localhost:' + servers[1].port, 1, 0)
 
-      await expectAccountFollows(servers[2].url, 'peertube@localhost:9001', 0, 2)
-      await expectAccountFollows(servers[2].url, 'peertube@localhost:9003', 1, 0)
+      await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[0].port, 0, 2)
+      await expectAccountFollows(servers[2].url, 'peertube@localhost:' + servers[2].port, 1, 0)
     })
 
     it('Should have propagated videos', async function () {
@@ -344,7 +343,7 @@ describe('Test follows', function () {
         support: 'my super support text',
         account: {
           name: 'root',
-          host: 'localhost:9003'
+          host: 'localhost:' + servers[2].port
         },
         isLocal,
         commentsEnabled: true,
@@ -384,7 +383,7 @@ describe('Test follows', function () {
       expect(comment.videoId).to.equal(video4.id)
       expect(comment.id).to.equal(comment.threadId)
       expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:9003')
+      expect(comment.account.host).to.equal('localhost:' + servers[2].port)
       expect(comment.totalReplies).to.equal(3)
       expect(dateIsValid(comment.createdAt as string)).to.be.true
       expect(dateIsValid(comment.updatedAt as string)).to.be.true

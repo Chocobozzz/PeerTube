@@ -1,8 +1,8 @@
 import { VideoPlaylistPrivacy } from './video-playlist-privacy.model'
 
 export interface VideoPlaylistUpdate {
-  displayName: string
-  privacy: VideoPlaylistPrivacy
+  displayName?: string
+  privacy?: VideoPlaylistPrivacy
 
   description?: string
   videoChannelId?: number

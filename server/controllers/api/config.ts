@@ -4,7 +4,7 @@ import { ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
 import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
-import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '../../initializers/constants'
 import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
 import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 import { ClientHtml } from '../../lib/client-html'
@@ -15,8 +15,9 @@ import { Emailer } from '../../lib/emailer'
 import { isNumeric } from 'validator'
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
+import { PluginManager } from '../../lib/plugins/plugin-manager'
+import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 
-const packageJSON = require('../../../../package.json')
 const configRouter = express.Router()
 
 const auditLogger = auditLoggerFactory('config')
@@ -44,15 +45,13 @@ configRouter.delete('/custom',
 )
 
 let serverCommit: string
+
 async function getConfig (req: express.Request, res: express.Response) {
   const allowed = await isSignupAllowed()
   const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
+  const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 
   if (serverCommit === undefined) serverCommit = await getServerCommit()
-
-  const enabledResolutions = Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-   .filter(key => CONFIG.TRANSCODING.ENABLED === CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
-   .map(r => parseInt(r, 10))
 
   const json: ServerConfig = {
     instance: {
@@ -66,13 +65,20 @@ async function getConfig (req: express.Request, res: express.Response) {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
     },
+    plugin: {
+      registered: getRegisteredPlugins()
+    },
+    theme: {
+      registered: getRegisteredThemes(),
+      default: defaultTheme
+    },
     email: {
       enabled: Emailer.isEnabled()
     },
     contactForm: {
       enabled: CONFIG.CONTACT_FORM.ENABLED
     },
-    serverVersion: packageJSON.version,
+    serverVersion: PEERTUBE_VERSION,
     serverCommit,
     signup: {
       allowed,
@@ -83,7 +89,7 @@ async function getConfig (req: express.Request, res: express.Response) {
       hls: {
         enabled: CONFIG.TRANSCODING.HLS.ENABLED
       },
-      enabledResolutions
+      enabledResolutions: getEnabledResolutions()
     },
     import: {
       videos: {
@@ -223,6 +229,9 @@ function customConfig (): CustomConfig {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
       }
     },
+    theme: {
+      default: CONFIG.THEME.DEFAULT
+    },
     services: {
       twitter: {
         username: CONFIG.SERVICES.TWITTER.USERNAME,
@@ -255,13 +264,15 @@ function customConfig (): CustomConfig {
     transcoding: {
       enabled: CONFIG.TRANSCODING.ENABLED,
       allowAdditionalExtensions: CONFIG.TRANSCODING.ALLOW_ADDITIONAL_EXTENSIONS,
+      allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
         '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
         '360p': CONFIG.TRANSCODING.RESOLUTIONS[ '360p' ],
         '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
         '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
-        '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ]
+        '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ],
+        '2160p': CONFIG.TRANSCODING.RESOLUTIONS[ '2160p' ]
       },
       hls: {
         enabled: CONFIG.TRANSCODING.HLS.ENABLED
@@ -310,3 +321,29 @@ function convertCustomConfigBody (body: CustomConfig) {
   return objectConverter(body, keyConverter, valueConverter)
 }
 
+function getRegisteredThemes () {
+  return PluginManager.Instance.getRegisteredThemes()
+                      .map(t => ({
+                        name: t.name,
+                        version: t.version,
+                        description: t.description,
+                        css: t.css,
+                        clientScripts: t.clientScripts
+                      }))
+}
+
+function getEnabledResolutions () {
+  return Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
+               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[ key ] === true)
+               .map(r => parseInt(r, 10))
+}
+
+function getRegisteredPlugins () {
+  return PluginManager.Instance.getRegisteredPlugins()
+                      .map(p => ({
+                        name: p.name,
+                        version: p.version,
+                        description: p.description,
+                        clientScripts: p.clientScripts
+                      }))
+}

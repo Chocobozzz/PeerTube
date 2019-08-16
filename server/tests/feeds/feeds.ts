@@ -7,13 +7,13 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
-  getJSONfeed, getMyUserInformation,
+  getJSONfeed,
+  getMyUserInformation,
   getXMLfeed,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo, userLogin
+  uploadVideo,
+  userLogin
 } from '../../../shared/extra-utils'
 import * as libxmljs from 'libxmljs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
@@ -28,10 +28,10 @@ const expect = chai.expect
 describe('Test syndication feeds', () => {
   let servers: ServerInfo[] = []
   let userAccessToken: string
-  let rootAccountUUID: string
-  let rootChannelUUID: string
-  let userAccountUUID: string
-  let userChannelUUID: string
+  let rootAccountId: number
+  let rootChannelId: number
+  let userAccountId: number
+  let userChannelId: number
 
   before(async function () {
     this.timeout(120000)
@@ -45,8 +45,8 @@ describe('Test syndication feeds', () => {
     {
       const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
       const user: User = res.body
-      rootAccountUUID = user.account.uuid
-      rootChannelUUID = user.videoChannels[0].uuid
+      rootAccountId = user.account.id
+      rootChannelId = user.videoChannels[0].id
     }
 
     {
@@ -56,8 +56,8 @@ describe('Test syndication feeds', () => {
 
       const res = await getMyUserInformation(servers[0].url, userAccessToken)
       const user: User = res.body
-      userAccountUUID = user.account.uuid
-      userChannelUUID = user.videoChannels[0].uuid
+      userAccountId = user.account.id
+      userChannelId = user.videoChannels[0].id
     }
 
     {
@@ -127,70 +127,70 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should filter by account', async function () {
-      for (const server of servers) {
-        {
-          const json = await getJSONfeed(server.url, 'videos', { accountId: rootAccountUUID })
-          const jsonObj = JSON.parse(json.text)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[ 0 ].title).to.equal('my super name for server 1')
-          expect(jsonObj.items[ 0 ].author.name).to.equal('root')
-        }
-
-        {
-          const json = await getJSONfeed(server.url, 'videos', { accountId: userAccountUUID })
-          const jsonObj = JSON.parse(json.text)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[ 0 ].title).to.equal('user video')
-          expect(jsonObj.items[ 0 ].author.name).to.equal('john')
-        }
-      }
-
       {
-        const json = await getJSONfeed(servers[0].url, 'videos', { accountName: 'root' })
+        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: rootAccountId })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[ 0 ].title).to.equal('my super name for server 1')
+        expect(jsonObj.items[ 0 ].author.name).to.equal('root')
       }
 
       {
-        const json = await getJSONfeed(servers[0].url, 'videos', { accountName: 'john' })
+        const json = await getJSONfeed(servers[0].url, 'videos', { accountId: userAccountId })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[ 0 ].title).to.equal('user video')
+        expect(jsonObj.items[ 0 ].author.name).to.equal('john')
+      }
+
+      for (const server of servers) {
+        {
+          const json = await getJSONfeed(server.url, 'videos', { accountName: 'root@localhost:' + servers[0].port })
+          const jsonObj = JSON.parse(json.text)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[ 0 ].title).to.equal('my super name for server 1')
+        }
+
+        {
+          const json = await getJSONfeed(server.url, 'videos', { accountName: 'john@localhost:' + servers[0].port })
+          const jsonObj = JSON.parse(json.text)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[ 0 ].title).to.equal('user video')
+        }
       }
     })
 
     it('Should filter by video channel', async function () {
-      for (const server of servers) {
-        {
-          const json = await getJSONfeed(server.url, 'videos', { videoChannelId: rootChannelUUID })
-          const jsonObj = JSON.parse(json.text)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[ 0 ].title).to.equal('my super name for server 1')
-          expect(jsonObj.items[ 0 ].author.name).to.equal('root')
-        }
-
-        {
-          const json = await getJSONfeed(server.url, 'videos', { videoChannelId: userChannelUUID })
-          const jsonObj = JSON.parse(json.text)
-          expect(jsonObj.items.length).to.be.equal(1)
-          expect(jsonObj.items[ 0 ].title).to.equal('user video')
-          expect(jsonObj.items[ 0 ].author.name).to.equal('john')
-        }
-      }
-
       {
-        const json = await getJSONfeed(servers[0].url, 'videos', { videoChannelName: 'root_channel' })
+        const json = await getJSONfeed(servers[0].url, 'videos', { videoChannelId: rootChannelId })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[ 0 ].title).to.equal('my super name for server 1')
+        expect(jsonObj.items[ 0 ].author.name).to.equal('root')
       }
 
       {
-        const json = await getJSONfeed(servers[0].url, 'videos', { videoChannelName: 'john_channel' })
+        const json = await getJSONfeed(servers[0].url, 'videos', { videoChannelId: userChannelId })
         const jsonObj = JSON.parse(json.text)
         expect(jsonObj.items.length).to.be.equal(1)
         expect(jsonObj.items[ 0 ].title).to.equal('user video')
+        expect(jsonObj.items[ 0 ].author.name).to.equal('john')
+      }
+
+      for (const server of servers) {
+        {
+          const json = await getJSONfeed(server.url, 'videos', { videoChannelName: 'root_channel@localhost:' + servers[0].port })
+          const jsonObj = JSON.parse(json.text)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[ 0 ].title).to.equal('my super name for server 1')
+        }
+
+        {
+          const json = await getJSONfeed(server.url, 'videos', { videoChannelName: 'john_channel@localhost:' + servers[0].port })
+          const jsonObj = JSON.parse(json.text)
+          expect(jsonObj.items.length).to.be.equal(1)
+          expect(jsonObj.items[ 0 ].title).to.equal('user video')
+        }
       }
     })
   })

@@ -113,15 +113,15 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
-      await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance)
+      await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance, t)
     }
-
-    Notifier.Instance.notifyOnNewVideoAbuse(videoAbuseInstance)
 
     auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseInstance.toFormattedJSON()))
 
     return videoAbuseInstance
   })
+
+  Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
 
   logger.info('Abuse report for video %s created.', videoInstance.name)
 

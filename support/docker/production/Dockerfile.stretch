@@ -1,4 +1,4 @@
-FROM node:8-stretch
+FROM node:10-stretch
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
@@ -7,8 +7,8 @@ ARG NPM_RUN_BUILD_OPTS
 
 RUN set -ex; \
     if ! command -v gpg > /dev/null; then \
-      apt-get update; \
-      apt-get install -y --no-install-recommends \
+      apt update; \
+      apt install -y --no-install-recommends \
         gnupg \
         dirmngr \
       ; \
@@ -16,8 +16,8 @@ RUN set -ex; \
 fi
 
 # Install dependencies
-RUN apt-get update \
-    && apt-get -y install ffmpeg \
+RUN apt update \
+    && apt -y install ffmpeg \
     && rm /var/lib/apt/lists/* -fR
 
 # Add peertube user
@@ -26,8 +26,8 @@ RUN groupadd -r peertube \
 
 # grab gosu for easy step-down from root
 RUN set -eux; \
-	apt-get update; \
-	apt-get install -y gosu; \
+	apt update; \
+	apt install -y gosu; \
 	rm -rf /var/lib/apt/lists/*; \
 	gosu nobody true
 

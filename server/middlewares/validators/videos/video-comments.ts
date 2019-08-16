@@ -1,14 +1,16 @@
 import * as express from 'express'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { UserRight } from '../../../../shared'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments'
-import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { UserModel } from '../../../models/account/user'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { areValidationErrors } from '../utils'
+import { Hooks } from '../../../lib/plugins/hooks'
+import { isLocalVideoThreadAccepted, isLocalVideoCommentReplyAccepted, AcceptResult } from '../../../lib/moderation'
+import { doesVideoExist } from '../../../helpers/middlewares'
 
 const listVideoCommentThreadsValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -48,6 +50,7 @@ const addVideoCommentThreadValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
     if (!isVideoCommentsEnabled(res.locals.video, res)) return
+    if (!await isVideoCommentAccepted(req, res, false)) return
 
     return next()
   }
@@ -65,6 +68,7 @@ const addVideoCommentReplyValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return
     if (!isVideoCommentsEnabled(res.locals.video, res)) return
     if (!await doesVideoCommentExist(req.params.commentId, res.locals.video, res)) return
+    if (!await isVideoCommentAccepted(req, res, true)) return
 
     return next()
   }
@@ -188,6 +192,42 @@ function checkUserCanDeleteVideoComment (user: UserModel, videoComment: VideoCom
     res.status(403)
       .json({ error: 'Cannot remove video comment of another user' })
       .end()
+    return false
+  }
+
+  return true
+}
+
+async function isVideoCommentAccepted (req: express.Request, res: express.Response, isReply: boolean) {
+  const acceptParameters = {
+    video: res.locals.video,
+    commentBody: req.body,
+    user: res.locals.oauth.token.User
+  }
+
+  let acceptedResult: AcceptResult
+
+  if (isReply) {
+    const acceptReplyParameters = Object.assign(acceptParameters, { parentComment: res.locals.videoComment })
+
+    acceptedResult = await Hooks.wrapFun(
+      isLocalVideoCommentReplyAccepted,
+      acceptReplyParameters,
+      'filter:api.video-comment-reply.create.accept.result'
+    )
+  } else {
+    acceptedResult = await Hooks.wrapFun(
+      isLocalVideoThreadAccepted,
+      acceptParameters,
+      'filter:api.video-thread.create.accept.result'
+    )
+  }
+
+  if (!acceptedResult || acceptedResult.accepted !== true) {
+    logger.info('Refused local comment.', { acceptedResult, acceptParameters })
+    res.status(403)
+              .json({ error: acceptedResult.errorMessage || 'Refused local comment' })
+
     return false
   }
 

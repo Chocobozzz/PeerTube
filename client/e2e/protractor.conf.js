@@ -18,25 +18,30 @@ exports.config = {
   multiCapabilities: [
     {
       browserName: 'Chrome',
-      name: 'Latest Chrome Desktop'
+      name: 'Latest Chrome Desktop',
+      resolution: '1280x1024'
     },
     {
       browserName: 'Safari',
       version: '11.1',
-      name: 'Safari Desktop'
+      name: 'Safari Desktop',
+      resolution: '1280x1024'
     },
     {
       browserName: 'Firefox',
       version: '60', // ESR,
-      name: 'Firefox ESR Desktop'
+      name: 'Firefox ESR Desktop',
+      resolution: '1280x1024'
     },
     {
       browserName: 'Firefox',
-      name: 'Latest Firefox Desktop'
+      name: 'Latest Firefox Desktop',
+      resolution: '1280x1024'
     },
     {
       browserName: 'Edge',
-      name: 'Latest Edge Desktop'
+      name: 'Latest Edge Desktop',
+      resolution: '1280x1024'
     },
     {
       browserName: 'Chrome',

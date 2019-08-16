@@ -28,13 +28,22 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
   let i = 0
   let nextLink = firstBody.first
   while (nextLink && i < limit) {
-    // Don't crawl ourselves
-    const remoteHost = parse(nextLink).host
-    if (remoteHost === WEBSERVER.HOST) continue
+    let body: any
 
-    options.uri = nextLink
+    if (typeof nextLink === 'string') {
+      // Don't crawl ourselves
+      const remoteHost = parse(nextLink).host
+      if (remoteHost === WEBSERVER.HOST) continue
 
-    const { body } = await doRequest<ActivityPubOrderedCollection<T>>(options)
+      options.uri = nextLink
+
+      const res = await doRequest<ActivityPubOrderedCollection<T>>(options)
+      body = res.body
+    } else {
+      // nextLink is already the object we want
+      body = nextLink
+    }
+
     nextLink = body.next
     i++
 

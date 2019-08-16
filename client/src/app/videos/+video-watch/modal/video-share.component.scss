@@ -1,5 +1,9 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
+@import '_mixins';
+@import '_variables';
+
+.peertube-select-container {
+  @include peertube-select-container(200px);
+}
 
 .action-button-cancel {
   margin-right: 0 !important;
@@ -9,13 +13,65 @@
   text-align: center;
 }
 
-.start-at {
+.tab-content {
+  margin-top: 30px;
   display: flex;
   justify-content: center;
-  margin-top: 10px;
   align-items: center;
+  flex-direction: column;
+}
 
-  my-timestamp-input {
-    margin-left: 10px;
+.alert {
+  margin-top: 20px;
+}
+
+input.readonly {
+  font-size: 15px;
+}
+
+.filters {
+  margin-top: 30px;
+  padding-top: 30px;
+  border-top: 1px solid $separator-border-color;
+
+  .advanced-filters-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    font-size: 16px;
+    font-weight: $font-semibold;
+    cursor: pointer;
+
+    .glyphicon {
+      margin-right: 5px;
+    }
+  }
+
+  .form-group {
+    margin-bottom: 0;
+    height: 34px;
+    display: flex;
+    align-items: center;
+  }
+
+  .video-caption-block {
+    display: flex;
+    align-items: center;
+
+    .peertube-select-container {
+      margin-left: 10px;
+    }
+  }
+
+  .start-at,
+  .stop-at {
+    width: 300px;
+    display: flex;
+    align-items: center;
+
+    my-timestamp-input {
+      margin-left: 10px;
+    }
   }
 }

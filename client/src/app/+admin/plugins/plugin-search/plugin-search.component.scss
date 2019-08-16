@@ -1,0 +1,29 @@
+@import '_variables';
+@import '_mixins';
+
+.search-bar {
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
+
+  input {
+    @include peertube-input-text(60%);
+    height: 35px;
+  }
+}
+
+.result-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 15px;
+
+  my-global-icon {
+    margin-right: 5px;
+  }
+}
+
+.badge {
+  font-size: 13px;
+  font-weight: $font-semibold;
+  margin-left: 5px;
+}

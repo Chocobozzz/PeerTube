@@ -29,6 +29,7 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
   private accountSub: Subscription
 
   constructor (
+    protected i18n: I18n,
     protected router: Router,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
@@ -36,13 +37,10 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected notifier: Notifier,
     protected confirmService: ConfirmService,
     protected screenService: ScreenService,
-    private i18n: I18n,
     private accountService: AccountService,
     private videoService: VideoService
   ) {
     super()
-
-    this.titlePage = this.i18n('Published videos')
   }
 
   ngOnInit () {
@@ -71,8 +69,8 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     return this.videoService
                .getAccountVideos(this.account, newPagination, this.sort)
                .pipe(
-                 tap(({ totalVideos }) => {
-                   this.titlePage = this.i18n('Published {{totalVideos}} videos', { totalVideos })
+                 tap(({ total }) => {
+                   this.titlePage = this.i18n('Published {{total}} videos', { total })
                  })
                )
   }

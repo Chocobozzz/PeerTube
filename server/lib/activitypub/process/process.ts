@@ -15,8 +15,10 @@ import { getOrCreateActorAndServerAndModel } from '../actor'
 import { processDislikeActivity } from './process-dislike'
 import { processFlagActivity } from './process-flag'
 import { processViewActivity } from './process-view'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
-const processActivity: { [ P in ActivityType ]: (activity: Activity, byActor: ActorModel, inboxActor?: ActorModel) => Promise<any> } = {
+const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
   Update: processUpdateActivity,
   Delete: processDeleteActivity,
@@ -34,14 +36,18 @@ const processActivity: { [ P in ActivityType ]: (activity: Activity, byActor: Ac
 async function processActivities (
   activities: Activity[],
   options: {
-    signatureActor?: ActorModel
+    signatureActor?: SignatureActorModel
     inboxActor?: ActorModel
     outboxUrl?: string
-  } = {}) {
-  const actorsCache: { [ url: string ]: ActorModel } = {}
+    fromFetch?: boolean
+  } = {}
+) {
+  const { outboxUrl, signatureActor, inboxActor, fromFetch = false } = options
+
+  const actorsCache: { [ url: string ]: SignatureActorModel } = {}
 
   for (const activity of activities) {
-    if (!options.signatureActor && [ 'Create', 'Announce', 'Like' ].includes(activity.type) === false) {
+    if (!signatureActor && [ 'Create', 'Announce', 'Like' ].includes(activity.type) === false) {
       logger.error('Cannot process activity %s (type: %s) without the actor signature.', activity.id, activity.type)
       continue
     }
@@ -49,17 +55,17 @@ async function processActivities (
     const actorUrl = getAPId(activity.actor)
 
     // When we fetch remote data, we don't have signature
-    if (options.signatureActor && actorUrl !== options.signatureActor.url) {
-      logger.warn('Signature mismatch between %s and %s, skipping.', actorUrl, options.signatureActor.url)
+    if (signatureActor && actorUrl !== signatureActor.url) {
+      logger.warn('Signature mismatch between %s and %s, skipping.', actorUrl, signatureActor.url)
       continue
     }
 
-    if (options.outboxUrl && checkUrlsSameHost(options.outboxUrl, actorUrl) !== true) {
-      logger.warn('Host mismatch between outbox URL %s and actor URL %s, skipping.', options.outboxUrl, actorUrl)
+    if (outboxUrl && checkUrlsSameHost(outboxUrl, actorUrl) !== true) {
+      logger.warn('Host mismatch between outbox URL %s and actor URL %s, skipping.', outboxUrl, actorUrl)
       continue
     }
 
-    const byActor = options.signatureActor || actorsCache[actorUrl] || await getOrCreateActorAndServerAndModel(actorUrl)
+    const byActor = signatureActor || actorsCache[actorUrl] || await getOrCreateActorAndServerAndModel(actorUrl)
     actorsCache[actorUrl] = byActor
 
     const activityProcessor = processActivity[activity.type]
@@ -69,7 +75,7 @@ async function processActivities (
     }
 
     try {
-      await activityProcessor(activity, byActor, options.inboxActor)
+      await activityProcessor({ activity, byActor, inboxActor: inboxActor, fromFetch })
     } catch (err) {
       logger.warn('Cannot process activity %s.', activity.type, { err })
     }

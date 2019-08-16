@@ -45,8 +45,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <br />
 
-  <a href="https://travis-ci.org/Chocobozzz/PeerTube">
-    <img src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=develop" alt="Build Status" />
+  <a href="https://framagit.org/framasoft/peertube/PeerTube/commits/develop">
+    <img alt="pipeline status" src="https://framagit.org/framasoft/peertube/PeerTube/badges/develop/pipeline.svg" />
   </a>
 
   <a href="https://david-dm.org/Chocobozzz/PeerTube">
@@ -115,7 +115,7 @@ Be it as a user or an instance administrator, you can decide what your experienc
 
 <h3 align="right">Communities that help each other</h3>
 <p align="right">
-In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances">redundancy guide</a>).
+In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/#/contribute-architecture?id=redundancy-between-instances">redundancy guide</a>).
 </p>
 <p align="right">
 Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
@@ -147,13 +147,13 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
   * nginx
   * **PostgreSQL >= 9.6**
   * **Redis >= 2.8.18**
-  * **NodeJS >= 8.x**
+  * **NodeJS >= 10.x**
   * **yarn >= 1.x**
   * **FFmpeg >= 3.x**
 
-See the [production guide](/support/doc/production.md), which is the recommended way.
+See the [production guide](/support/doc/production.md), which is the recommended way to install or upgrade PeerTube. For hardware requirements, see [Should I have a big server to run PeerTube?](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) in the FAQ.
 
-See the [community packages](https://docs.joinpeertube.org/lang/en/docs/install.html), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
+See the [community packages](https://docs.joinpeertube.org/#/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
 
 :book: Documentation
 ----------------------------------------------------------------
@@ -162,13 +162,13 @@ If you have a question, please try to find the answer in the [FAQ](/FAQ.md) firs
 
 ### User documentation
 
-See the [user documentation](https://docs.joinpeertube.org/lang/en/userdocs/).
+See the [user documentation](https://docs.joinpeertube.org/#/use-setup-account).
 
 ### Admin documentation
 
 See [how to create your own instance](#package-create-your-own-instance).
 
-See the more general [admin documentation](https://docs.joinpeertube.org/lang/en/docs/).
+See the more general [admin documentation](https://docs.joinpeertube.org/#/admin-following-instances).
 
 #### Tools
 
@@ -178,13 +178,13 @@ See the more general [admin documentation](https://docs.joinpeertube.org/lang/en
 
 ### Technical documentation
 
-See the [architecture blueprint](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html) for a more detailed explanation of the architectural choices.
+See the [architecture blueprint](https://docs.joinpeertube.org/#/contribute-architecture) for a more detailed explanation of the architectural choices.
 
 See our REST API documentation:
   * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
-  * Spec explorer: [docs.joinpeertube.org/api.html](http://docs.joinpeertube.org/api.html)
+  * Spec explorer: [docs.joinpeertube.org/#/api-rest-reference.html](https://docs.joinpeertube.org/#/api-rest-reference.html)
 
-See our [ActivityPub documentation](https://docs.joinpeertube.org/lang/en/devdocs/federation.html).
+See our [ActivityPub documentation](https://docs.joinpeertube.org/#/api-activitypub).
 
 :heart: Supports of our crowdfunding
 ----------------------------------------------------------------

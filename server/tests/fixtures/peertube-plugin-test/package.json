@@ -1,0 +1,22 @@
+{
+  "name": "peertube-plugin-test",
+  "version": "0.0.1",
+  "description": "Plugin test",
+  "engine": {
+    "peertube": ">=1.3.0"
+  },
+  "keywords": [
+    "peertube",
+    "plugin"
+  ],
+  "homepage": "https://github.com/Chocobozzz/PeerTube",
+  "author": "Chocobozzz",
+  "bugs": "https://github.com/Chocobozzz/PeerTube/issues",
+  "library": "./main.js",
+  "staticDirs": {},
+  "css": [],
+  "clientScripts": [],
+  "translations": {
+    "fr-FR": "./languages/fr.json"
+  }
+}

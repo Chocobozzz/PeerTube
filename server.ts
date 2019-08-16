@@ -1,4 +1,6 @@
 // FIXME: https://github.com/nodejs/node/pull/16853
+import { PluginManager } from './server/lib/plugins/plugin-manager'
+
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
@@ -24,12 +26,12 @@ process.title = 'peertube'
 const app = express()
 
 // ----------- Core checker -----------
-import { checkMissedConfig, checkFFmpeg } from './server/initializers/checker-before-init'
+import { checkMissedConfig, checkFFmpeg, checkNodeVersion } from './server/initializers/checker-before-init'
 
 // Do not use barrels because we don't want to load all modules here (we need to initialize database first)
-import { logger } from './server/helpers/logger'
-import { API_VERSION, FILES_CACHE, WEBSERVER, loadLanguages } from './server/initializers/constants'
 import { CONFIG } from './server/initializers/config'
+import { API_VERSION, FILES_CACHE, WEBSERVER, loadLanguages } from './server/initializers/constants'
+import { logger } from './server/helpers/logger'
 
 const missed = checkMissedConfig()
 if (missed.length !== 0) {
@@ -42,6 +44,8 @@ checkFFmpeg(CONFIG)
     logger.error('Error in ffmpeg check.', { err })
     process.exit(-1)
   })
+
+checkNodeVersion()
 
 import { checkConfig, checkActivityPubUrls } from './server/initializers/checker-after-init'
 
@@ -93,7 +97,9 @@ import {
   clientsRouter,
   feedsRouter,
   staticRouter,
+  lazyStaticRouter,
   servicesRouter,
+  pluginsRouter,
   webfingerRouter,
   trackerRouter,
   createWebsocketTrackerServer, botsRouter
@@ -110,11 +116,14 @@ import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-hi
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
+import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
+import { Hooks } from './server/lib/plugins/hooks'
 
 // ----------- Command line -----------
 
 cli
   .option('--no-client', 'Start PeerTube without client interface')
+  .option('--no-plugins', 'Start PeerTube without plugins/themes enabled')
   .parse(process.argv)
 
 // ----------- App -----------
@@ -173,6 +182,9 @@ app.use(apiRoute, apiRouter)
 // Services (oembed...)
 app.use('/services', servicesRouter)
 
+// Plugins & themes
+app.use('/', pluginsRouter)
+
 app.use('/', activityPubRouter)
 app.use('/', feedsRouter)
 app.use('/', webfingerRouter)
@@ -181,6 +193,7 @@ app.use('/', botsRouter)
 
 // Static files
 app.use('/', staticRouter)
+app.use('/', lazyStaticRouter)
 
 // Client files, last valid routes!
 if (cli.client) app.use('/', clientsRouter)
@@ -244,6 +257,7 @@ async function startApplication () {
   VideosRedundancyScheduler.Instance.enable()
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
+  PluginsCheckScheduler.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()
@@ -253,10 +267,14 @@ async function startApplication () {
   updateStreamingPlaylistsInfohashesIfNeeded()
     .catch(err => logger.error('Cannot update streaming playlist infohashes.', { err }))
 
+  if (cli.plugins) await PluginManager.Instance.registerPluginsAndThemes()
+
   // Make server listening
   server.listen(port, hostname, () => {
     logger.info('Server listening on %s:%d', hostname, port)
     logger.info('Web server: %s', WEBSERVER.URL)
+
+    Hooks.runAction('action:application.listening')
   })
 
   process.on('exit', () => {

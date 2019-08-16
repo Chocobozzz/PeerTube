@@ -95,7 +95,7 @@ $play-overlay-width: 18px;
 }
 
 @mixin thumbnail-size-component ($width, $height) {
-  /deep/ .video-thumbnail {
+  ::ng-deep .video-thumbnail {
     width: $width;
     height: $height;
   }
@@ -110,7 +110,7 @@ $play-overlay-width: 18px;
 @mixin video-miniature-small-screen {
   text-align: center;
 
-  /deep/ .video-miniature {
+  ::ng-deep .video-miniature {
     padding-right: 0;
     height: auto;
     width: 100%;
@@ -135,6 +135,119 @@ $play-overlay-width: 18px;
         width: 100%;
         height: 100%;
       }
+    }
+  }
+}
+
+@mixin miniature-rows {
+  max-height: 540px; // 2 rows max
+  overflow: hidden;
+
+  &:first-child {
+    padding-top: 30px;
+
+    .section-title {
+      border-top: none !important;
+    }
+  }
+
+  my-video-miniature {
+    text-align: left;
+  }
+
+  .section-title {
+    font-size: 24px;
+    font-weight: $font-semibold;
+    padding-top: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid $separator-border-color;
+
+    a {
+      &:hover, &:focus:not(.focus-visible), &:active {
+        text-decoration: none;
+        outline: none;
+      }
+
+      color: var(--mainForegroundColor);
+    }
+  }
+
+  &.channel {
+    .section-title {
+      a {
+        display: flex;
+        width: fit-content;
+        align-items: center;
+
+        img {
+          @include avatar(28px);
+
+          margin-right: 8px;
+        }
+      }
+
+      .followers {
+        color: $grey-foreground-color;
+        font-weight: normal;
+        font-size: 14px;
+        margin-left: 10px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
+
+  .show-more {
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: $grey-foreground-color;
+    margin-bottom: 10px;
+    font-weight: $font-semibold;
+  }
+
+  @media screen and (max-width: $mobile-view) {
+    max-height: initial;
+    overflow: initial;
+
+    @include video-miniature-small-screen;
+
+    .section-title {
+      font-size: 17px;
+    }
+  }
+}
+
+@mixin adapt-margin-content-width {
+  width: $video-miniature-width * 6;
+  margin: auto !important;
+
+  @media screen and (max-width: 1800px) {
+    width: $video-miniature-width * 5;
+  }
+
+  @media screen and (max-width: 1800px - $video-miniature-width) {
+    width: $video-miniature-width * 4;
+  }
+
+  @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
+    width: $video-miniature-width * 3;
+  }
+
+  @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
+    width: $video-miniature-width * 2;
+  }
+
+  @media screen and (max-width: 500px) {
+    width: auto;
+    margin: 0 !important;
+
+    .videos {
+      @include video-miniature-small-screen;
     }
   }
 }

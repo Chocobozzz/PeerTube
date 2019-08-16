@@ -1,8 +1,7 @@
-import 'express-validator'
 import * as validator from 'validator'
 import { UserRole } from '../../../shared'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
-import { exists, isBooleanValid, isFileValid } from './misc'
+import { exists, isArray, isBooleanValid, isFileValid } from './misc'
 import { values } from 'lodash'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
@@ -54,6 +53,10 @@ function isUserAutoPlayVideoValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserVideoLanguages (value: any) {
+  return value === null || (isArray(value) && value.length < CONSTRAINTS_FIELDS.USERS.VIDEO_LANGUAGES.max)
+}
+
 function isUserAdminFlagsValid (value: any) {
   return exists(value) && validator.isInt('' + value)
 }
@@ -84,6 +87,7 @@ export {
   isUserVideosHistoryEnabledValid,
   isUserBlockedValid,
   isUserPasswordValid,
+  isUserVideoLanguages,
   isUserBlockedReasonValid,
   isUserRoleValid,
   isUserVideoQuotaValid,

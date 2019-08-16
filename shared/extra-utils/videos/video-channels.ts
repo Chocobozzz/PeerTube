@@ -1,8 +1,10 @@
 import * as request from 'supertest'
-import { VideoChannelCreate, VideoChannelUpdate } from '../../models/videos'
-import { updateAvatarRequest } from '../requests/requests'
-import { getMyUserInformation, ServerInfo } from '..'
-import { User } from '../..'
+import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
+import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
+import { makeGetRequest, updateAvatarRequest } from '../requests/requests'
+import { ServerInfo } from '../server/servers'
+import { User } from '../../models/users/user.model'
+import { getMyUserInformation } from '../users/users'
 
 function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
   const path = '/api/v1/video-channels'
@@ -19,14 +21,28 @@ function getVideoChannelsList (url: string, start: number, count: number, sort?:
             .expect('Content-Type', /json/)
 }
 
-function getAccountVideoChannelsList (url: string, accountName: string, specialStatus = 200) {
+function getAccountVideoChannelsList (parameters: {
+  url: string,
+  accountName: string,
+  start?: number,
+  count?: number,
+  sort?: string,
+  specialStatus?: number
+}) {
+  const { url, accountName, start, count, sort = 'createdAt', specialStatus = 200 } = parameters
+
   const path = '/api/v1/accounts/' + accountName + '/video-channels'
 
-  return request(url)
-    .get(path)
-    .set('Accept', 'application/json')
-    .expect(specialStatus)
-    .expect('Content-Type', /json/)
+  return makeGetRequest({
+    url,
+    path,
+    query: {
+      start,
+      count,
+      sort
+    },
+    statusCodeExpected: specialStatus
+  })
 }
 
 function addVideoChannel (
@@ -60,12 +76,13 @@ function updateVideoChannel (
   attributes: VideoChannelUpdate,
   expectedStatus = 204
 ) {
-  const body = {}
+  const body: any = {}
   const path = '/api/v1/video-channels/' + channelName
 
-  if (attributes.displayName) body['displayName'] = attributes.displayName
-  if (attributes.description) body['description'] = attributes.description
-  if (attributes.support) body['support'] = attributes.support
+  if (attributes.displayName) body.displayName = attributes.displayName
+  if (attributes.description) body.description = attributes.description
+  if (attributes.support) body.support = attributes.support
+  if (attributes.bulkVideosSupportUpdate) body.bulkVideosSupportUpdate = attributes.bulkVideosSupportUpdate
 
   return request(url)
     .put(path)

@@ -10,7 +10,6 @@ import { logger } from '../helpers/logger'
 const clientsRouter = express.Router()
 
 const distPath = join(root(), 'client', 'dist')
-const assetsImagesPath = join(root(), 'client', 'dist', 'assets', 'images')
 const embedPath = join(distPath, 'standalone', 'videos', 'embed.html')
 const testEmbedPath = join(distPath, 'standalone', 'videos', 'test-embed.html')
 
@@ -42,33 +41,48 @@ const staticClientFiles = [
 ]
 for (const staticClientFile of staticClientFiles) {
   const path = join(root(), 'client', 'dist', staticClientFile)
-  clientsRouter.use('/' + staticClientFile, express.static(path, { maxAge: STATIC_MAX_AGE }))
+
+  clientsRouter.get('/' + staticClientFile, (req: express.Request, res: express.Response) => {
+    res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
+  })
 }
 
-clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE }))
-clientsRouter.use('/client/assets/images', express.static(assetsImagesPath, { maxAge: STATIC_MAX_AGE }))
+clientsRouter.use('/client/locales/:locale/:file.json', serveServerTranslations)
+clientsRouter.use('/client', express.static(distPath, { maxAge: STATIC_MAX_AGE.CLIENT }))
 
-clientsRouter.use('/client/locales/:locale/:file.json', function (req, res) {
+// 404 for static files not found
+clientsRouter.use('/client/*', (req: express.Request, res: express.Response) => {
+  res.sendStatus(404)
+})
+
+// Always serve index client page (the client is a single page application, let it handle routing)
+// Try to provide the right language index.html
+clientsRouter.use('/(:language)?', asyncMiddleware(serveIndexHTML))
+
+// ---------------------------------------------------------------------------
+
+export {
+  clientsRouter
+}
+
+// ---------------------------------------------------------------------------
+
+async function serveServerTranslations (req: express.Request, res: express.Response) {
   const locale = req.params.locale
   const file = req.params.file
 
   if (is18nLocale(locale) && LOCALE_FILES.indexOf(file) !== -1) {
     const completeLocale = getCompleteLocale(locale)
     const completeFileLocale = buildFileLocale(completeLocale)
-    return res.sendFile(join(__dirname, `../../../client/dist/locale/${file}_${completeFileLocale}.json`))
+
+    const path = join(__dirname, `../../../client/dist/locale/${file}_${completeFileLocale}.json`)
+    return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   }
 
   return res.sendStatus(404)
-})
+}
 
-// 404 for static files not found
-clientsRouter.use('/client/*', (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  res.sendStatus(404)
-})
-
-// Always serve index client page (the client is a single page application, let it handle routing)
-// Try to provide the right language index.html
-clientsRouter.use('/(:language)?', async function (req, res) {
+async function serveIndexHTML (req: express.Request, res: express.Response) {
   if (req.accepts(ACCEPT_HEADERS) === 'html') {
     try {
       await generateHTMLPage(req, res, req.params.language)
@@ -79,15 +93,7 @@ clientsRouter.use('/(:language)?', async function (req, res) {
   }
 
   return res.status(404).end()
-})
-
-// ---------------------------------------------------------------------------
-
-export {
-  clientsRouter
 }
-
-// ---------------------------------------------------------------------------
 
 async function generateHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
   const html = await ClientHtml.getDefaultHTMLPage(req, res, paramLang)

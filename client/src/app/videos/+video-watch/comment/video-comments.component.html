@@ -21,6 +21,7 @@
       myInfiniteScroller
       [autoInit]="true"
       (nearOfBottom)="onNearOfBottom()"
+      [dataObservable]="onDataSubject.asObservable()"
     >
       <div #commentHighlightBlock id="highlighted-comment">
         <my-video-comment

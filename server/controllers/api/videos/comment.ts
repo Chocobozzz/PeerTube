@@ -26,6 +26,11 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { AccountModel } from '../../../models/account/account'
 import { Notifier } from '../../../lib/notifier'
+import { Hooks } from '../../../lib/plugins/hooks'
+import { ActorModel } from '../../../models/activitypub/actor'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoModel } from '../../../models/video/video'
+import { sendDeleteVideoComment } from '../../../lib/activitypub/send'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -76,7 +81,19 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   let resultList: ResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
-    resultList = await VideoCommentModel.listThreadsForApi(video.id, req.query.start, req.query.count, req.query.sort, user)
+    const apiOptions = await Hooks.wrapObject({
+      videoId: video.id,
+      start: req.query.start,
+      count: req.query.count,
+      sort: req.query.sort,
+      user: user
+    }, 'filter:api.video-threads.list.params')
+
+    resultList = await Hooks.wrapPromiseFun(
+      VideoCommentModel.listThreadsForApi,
+      apiOptions,
+      'filter:api.video-threads.list.result'
+    )
   } else {
     resultList = {
       total: 0,
@@ -94,7 +111,17 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   let resultList: ResultList<VideoCommentModel>
 
   if (video.commentsEnabled === true) {
-    resultList = await VideoCommentModel.listThreadCommentsForApi(video.id, res.locals.videoCommentThread.id, user)
+    const apiOptions = await Hooks.wrapObject({
+      videoId: video.id,
+      threadId: res.locals.videoCommentThread.id,
+      user
+    }, 'filter:api.video-thread-comments.list.params')
+
+    resultList = await Hooks.wrapPromiseFun(
+      VideoCommentModel.listThreadCommentsForApi,
+      apiOptions,
+      'filter:api.video-thread-comments.list.result'
+    )
   } else {
     resultList = {
       total: 0,
@@ -122,6 +149,8 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
   Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
+  Hooks.runAction('action:api.video-thread.created', { comment })
+
   return res.json({
     comment: comment.toFormattedJSON()
   }).end()
@@ -144,6 +173,8 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
   Notifier.Instance.notifyOnNewComment(comment)
   auditLogger.create(getAuditIdFromRes(res), new CommentAuditView(comment.toFormattedJSON()))
 
+  Hooks.runAction('action:api.video-comment-reply.created', { comment })
+
   return res.json({ comment: comment.toFormattedJSON() }).end()
 }
 
@@ -152,13 +183,16 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
 
   await sequelizeTypescript.transaction(async t => {
     await videoCommentInstance.destroy({ transaction: t })
+
+    if (videoCommentInstance.isOwned() || videoCommentInstance.Video.isOwned()) {
+      await sendDeleteVideoComment(videoCommentInstance, t)
+    }
   })
 
-  auditLogger.delete(
-    getAuditIdFromRes(res),
-    new CommentAuditView(videoCommentInstance.toFormattedJSON())
-  )
+  auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
   logger.info('Video comment %d deleted.', videoCommentInstance.id)
+
+  Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstance })
 
   return res.type('json').status(204).end()
 }

@@ -21,6 +21,7 @@ storage:
   torrents: 'test2/torrents/'
   captions: 'test2/captions/'
   cache: 'test2/cache/'
+  plugins: 'test2/plugins/'
 
 admin:
   email: 'admin2@example.com'
@@ -31,3 +32,4 @@ signup:
 transcoding:
   enabled: true
   allow_additional_extensions: true
+  allow_audio_files: true

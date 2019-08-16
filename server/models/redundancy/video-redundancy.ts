@@ -237,6 +237,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async getVideoSample (p: Bluebird<VideoModel[]>) {
     const rows = await p
+    if (rows.length === 0) return undefined
+
     const ids = rows.map(r => r.id)
     const id = sample(ids)
 
@@ -325,23 +327,46 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
+    const redundancyInclude = {
+      attributes: [],
+      model: VideoRedundancyModel,
+      required: true,
+      where: {
+        actorId: actor.id,
+        strategy
+      }
+    }
 
-    const query: FindOptions = {
+    const queryFiles: FindOptions = {
+      include: [ redundancyInclude ]
+    }
+
+    const queryStreamingPlaylists: FindOptions = {
       include: [
         {
           attributes: [],
-          model: VideoRedundancyModel,
+          model: VideoModel.unscoped(),
           required: true,
-          where: {
-            actorId: actor.id,
-            strategy
-          }
+          include: [
+            {
+              required: true,
+              attributes: [],
+              model: VideoStreamingPlaylistModel.unscoped(),
+              include: [
+                redundancyInclude
+              ]
+            }
+          ]
         }
       ]
     }
 
-    return VideoFileModel.aggregate('size', 'SUM', query)
-      .then(result => parseAggregateResult(result))
+    return Promise.all([
+      VideoFileModel.aggregate('size', 'SUM', queryFiles),
+      VideoFileModel.aggregate('size', 'SUM', queryStreamingPlaylists)
+    ]).then(([ r1, r2 ]) => {
+      return parseAggregateResult(r1) + parseAggregateResult(r2)
+    })
   }
 
   static async listLocalExpired () {

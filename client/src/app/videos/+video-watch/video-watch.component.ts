@@ -6,7 +6,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { Notifier, ServerService } from '@app/core'
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, Observable, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
@@ -20,6 +20,7 @@ import { environment } from '../../../environments/environment'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { MarkdownService } from '@app/shared/renderer'
 import {
+  CustomizationOptions,
   P2PMediaLoaderOptions,
   PeertubePlayerManager,
   PeertubePlayerManagerOptions,
@@ -28,8 +29,11 @@ import {
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { Video } from '@app/shared/video/video.model'
-import { isWebRTCDisabled } from '../../../assets/player/utils'
+import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
+import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
+import { PluginService } from '@app/core/plugins/plugin.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-video-watch',
@@ -39,17 +43,19 @@ import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watc
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
-  @ViewChild('videoWatchPlaylist') videoWatchPlaylist: VideoWatchPlaylistComponent
-  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
-  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
-  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
+  @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
+  @ViewChild('videoShareModal', { static: false }) videoShareModal: VideoShareComponent
+  @ViewChild('videoSupportModal', { static: false }) videoSupportModal: VideoSupportComponent
+  @ViewChild('subscribeButton', { static: false }) subscribeButton: SubscribeButtonComponent
 
   player: any
   playerElement: HTMLVideoElement
   theaterEnabled = false
   userRating: UserVideoRateType = null
-  video: VideoDetails = null
   descriptionLoading = false
+
+  video: VideoDetails = null
+  videoCaptions: VideoCaption[] = []
 
   playlist: VideoPlaylist = null
 
@@ -81,12 +87,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private serverService: ServerService,
     private restExtractor: RestExtractor,
     private notifier: Notifier,
+    private pluginService: PluginService,
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
     private videoCaptionService: VideoCaptionService,
     private i18n: I18n,
     private hotkeysService: HotkeysService,
+    private hooks: HooksService,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -94,7 +102,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.getUser()
   }
 
-  ngOnInit () {
+  async ngOnInit () {
     this.configSub = this.serverService.configLoaded
         .subscribe(() => {
           if (
@@ -120,6 +128,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     })
 
     this.initHotkeys()
+
+    this.theaterEnabled = getStoredTheater()
+
+    this.hooks.runAction('action:video-watch.init', 'video-watch')
   }
 
   ngOnDestroy () {
@@ -135,22 +147,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   setLike () {
     if (this.isUserLoggedIn() === false) return
-    if (this.userRating === 'like') {
-      // Already liked this video
-      this.setRating('none')
-    } else {
-      this.setRating('like')
-    }
+
+    // Already liked this video
+    if (this.userRating === 'like') this.setRating('none')
+    else this.setRating('like')
   }
 
   setDislike () {
     if (this.isUserLoggedIn() === false) return
-    if (this.userRating === 'dislike') {
-      // Already disliked this video
-      this.setRating('none')
-    } else {
-      this.setRating('dislike')
-    }
+
+    // Already disliked this video
+    if (this.userRating === 'dislike') this.setRating('none')
+    else this.setRating('dislike')
   }
 
   showMoreDescription () {
@@ -238,23 +246,39 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     if (this.player) this.player.pause()
 
-    // Video did change
-    forkJoin(
-      this.videoService.getVideo(videoId),
-      this.videoCaptionService.listCaptions(videoId)
+    const videoObs = this.hooks.wrapObsFun(
+      this.videoService.getVideo.bind(this.videoService),
+      { videoId },
+      'video-watch',
+      'filter:api.video-watch.video.get.params',
+      'filter:api.video-watch.video.get.result'
     )
+
+    // Video did change
+    forkJoin([
+      videoObs,
+      this.videoCaptionService.listCaptions(videoId)
+    ])
       .pipe(
         // If 401, the video is private or blacklisted so redirect to 404
         catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))
       )
       .subscribe(([ video, captionsResult ]) => {
         const queryParams = this.route.snapshot.queryParams
-        const startTime = queryParams.start
-        const stopTime = queryParams.stop
-        const subtitle = queryParams.subtitle
-        const playerMode = queryParams.mode
 
-        this.onVideoFetched(video, captionsResult.data, { startTime, stopTime, subtitle, playerMode })
+        const urlOptions = {
+          startTime: queryParams.start,
+          stopTime: queryParams.stop,
+
+          muted: queryParams.muted,
+          loop: queryParams.loop,
+          subtitle: queryParams.subtitle,
+
+          playerMode: queryParams.mode,
+          peertubeLink: false
+        }
+
+        this.onVideoFetched(video, captionsResult.data, urlOptions)
             .catch(err => this.handleError(err))
       })
   }
@@ -279,6 +303,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private updateVideoDescription (description: string) {
     this.video.description = description
     this.setVideoDescriptionHTML()
+      .catch(err => console.error(err))
   }
 
   private async setVideoDescriptionHTML () {
@@ -327,9 +352,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private async onVideoFetched (
     video: VideoDetails,
     videoCaptions: VideoCaption[],
-    urlOptions: { startTime?: number, stopTime?: number, subtitle?: string, playerMode?: string }
+    urlOptions: CustomizationOptions & { playerMode: PlayerMode }
   ) {
     this.video = video
+    this.videoCaptions = videoCaptions
 
     // Re init attributes
     this.descriptionLoading = false
@@ -339,7 +365,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoWatchPlaylist.updatePlaylistIndex(video)
 
-    let startTime = urlOptions.startTime || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
+    let startTime = timeToInt(urlOptions.startTime) || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
     // If we are at the end of the video, reset the timer
     if (this.video.duration - startTime <= 1) startTime = 0
 
@@ -378,19 +404,25 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         enableHotkeys: true,
         inactivityTimeout: 2500,
         poster: this.video.previewUrl,
+
         startTime,
         stopTime: urlOptions.stopTime,
+        controls: urlOptions.controls,
+        muted: urlOptions.muted,
+        loop: urlOptions.loop,
+        subtitle: urlOptions.subtitle,
+
+        peertubeLink: urlOptions.peertubeLink,
 
         theaterMode: true,
         captions: videoCaptions.length !== 0,
-        peertubeLink: false,
 
-        videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE ? this.videoService.getVideoViewUrl(this.video.uuid) : null,
+        videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE
+          ? this.videoService.getVideoViewUrl(this.video.uuid)
+          : null,
         embedUrl: this.video.embedUrl,
 
         language: this.localeId,
-
-        subtitle: urlOptions.subtitle,
 
         userWatching: this.user && this.user.videosHistoryEnabled === true ? {
           url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),
@@ -432,8 +464,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
 
     this.zone.runOutsideAngular(async () => {
-      this.player = await PeertubePlayerManager.initialize(mode, options)
-      this.theaterEnabled = this.player.theaterEnabled
+      this.player = await PeertubePlayerManager.initialize(mode, options, player => this.player = player)
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 
@@ -463,23 +494,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.setOpenGraphTags()
     this.checkUserRating()
+
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch')
   }
 
   private setRating (nextRating: UserVideoRateType) {
-    let method
-    switch (nextRating) {
-      case 'like':
-        method = this.videoService.setVideoLike
-        break
-      case 'dislike':
-        method = this.videoService.setVideoDislike
-        break
-      case 'none':
-        method = this.videoService.unsetVideoLike
-        break
+    const ratingMethods: { [id in UserVideoRateType]: (id: number) => Observable<any> } = {
+      like: this.videoService.setVideoLike,
+      dislike: this.videoService.setVideoDislike,
+      none: this.videoService.unsetVideoLike
     }
 
-    method.call(this.videoService, this.video.id)
+    ratingMethods[nextRating].call(this.videoService, this.video.id)
           .subscribe(
             () => {
               // Update the video like attribute
@@ -545,25 +571,29 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private flushPlayer () {
     // Remove player if it exists
     if (this.player) {
-      this.player.dispose()
-      this.player = undefined
+      try {
+        this.player.dispose()
+        this.player = undefined
+      } catch (err) {
+        console.error('Cannot dispose player.', err)
+      }
     }
   }
 
   private initHotkeys () {
     this.hotkeys = [
-      new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
+      new Hotkey('shift+l', () => {
         this.setLike()
         return false
       }, undefined, this.i18n('Like the video')),
-      new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
+
+      new Hotkey('shift+d', () => {
         this.setDislike()
         return false
       }, undefined, this.i18n('Dislike the video')),
-      new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
-        this.subscribeButton.subscribed ?
-          this.subscribeButton.unsubscribe() :
-          this.subscribeButton.subscribe()
+
+      new Hotkey('shift+s', () => {
+        this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
         return false
       }, undefined, this.i18n('Subscribe to the account'))
     ]

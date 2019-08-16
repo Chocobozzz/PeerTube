@@ -1,0 +1,61 @@
+<div class="toggle-plugin-type">
+  <p-selectButton [options]="pluginTypeOptions" [(ngModel)]="pluginType" (ngModelChange)="reloadPlugins()"></p-selectButton>
+</div>
+
+<div class="search-bar">
+  <input type="text" (input)="onSearchChange($event.target.value)" i18n-placeholder placeholder="Search..."/>
+</div>
+
+<div class="alert alert-info" i18n *ngIf="pluginInstalled">
+  To load your new installed plugins or themes, refresh the page.
+</div>
+
+<div class="result-title" *ngIf="!isSearching">
+  <ng-container *ngIf="!search">
+    <my-global-icon iconName="trending"></my-global-icon>
+    <ng-container i18n>Popular</ng-container>
+  </ng-container>
+
+  <ng-container *ngIf="!!search">
+    <my-global-icon iconName="search"></my-global-icon>
+
+    <ng-container i18n>
+      {{ pagination.totalItems }} {pagination.totalItems, plural, =1 {result} other {results}} for "{{ search }}"
+      </ng-container>
+  </ng-container>
+</div>
+
+<div class="no-results" i18n *ngIf="pagination.totalItems === 0">
+  No results.
+</div>
+
+<div class="plugins" myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()">
+  <div class="card plugin" *ngFor="let plugin of plugins">
+    <div class="card-body">
+      <div class="first-row">
+        <span class="plugin-name">{{ plugin.name }}</span>
+
+        <span class="plugin-version">{{ plugin.latestVersion }}</span>
+
+        <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
+      </div>
+
+      <div class="second-row">
+        <div class="description">{{ plugin.description }}</div>
+
+        <div class="buttons">
+          <a class="action-button action-button-edit grey-button" target="_blank" rel="noopener noreferrer"
+             [href]="plugin.homepage" i18n-title title="Go to the plugin homepage"
+          >
+            <my-global-icon iconName="go"></my-global-icon>
+            <span i18n class="button-label">Homepage</span>
+          </a>
+
+          <my-button class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)" [loading]="isInstalling(plugin)"
+                     label="Install" icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
+          ></my-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

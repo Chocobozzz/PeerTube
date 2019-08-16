@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { Notifier, ServerService } from '@app/core'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -8,7 +8,6 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserService } from '@app/shared'
-import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
 @Component({
   selector: 'my-user-create',
@@ -22,6 +21,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     protected serverService: ServerService,
     protected formValidatorService: FormValidatorService,
     protected configService: ConfigService,
+    protected auth: AuthService,
     private userValidatorsService: UserValidatorsService,
     private router: Router,
     private notifier: Notifier,

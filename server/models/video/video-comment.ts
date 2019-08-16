@@ -22,7 +22,7 @@ import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { getServerActor } from '../../helpers/utils'
@@ -30,7 +30,7 @@ import { UserModel } from '../account/user'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { regexpCapture } from '../../helpers/regexp'
 import { uniq } from 'lodash'
-import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
+import { FindOptions, literal, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -105,6 +105,10 @@ enum ScopeNames {
             model: VideoChannelModel.unscoped(),
             required: true,
             include: [
+              {
+                model: ActorModel,
+                required: true
+              },
               {
                 model: AccountModel,
                 required: true,
@@ -208,41 +212,6 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   })
   Account: AccountModel
 
-  @BeforeDestroy
-  static async sendDeleteIfOwned (instance: VideoCommentModel, options) {
-    if (!instance.Account || !instance.Account.Actor) {
-      instance.Account = await instance.$get('Account', {
-        include: [ ActorModel ],
-        transaction: options.transaction
-      }) as AccountModel
-    }
-
-    if (!instance.Video) {
-      instance.Video = await instance.$get('Video', {
-        include: [
-          {
-            model: VideoChannelModel,
-            include: [
-              {
-                model: AccountModel,
-                include: [
-                  {
-                    model: ActorModel
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        transaction: options.transaction
-      }) as VideoModel
-    }
-
-    if (instance.isOwned()) {
-      await sendDeleteVideoComment(instance, options.transaction)
-    }
-  }
-
   static loadById (id: number, t?: Transaction) {
     const query: FindOptions = {
       where: {
@@ -269,7 +238,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, t?: Transaction) {
+  static loadByUrlAndPopulateAccountAndVideo (url: string, t?: Transaction) {
     const query: FindOptions = {
       where: {
         url
@@ -278,22 +247,36 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
     if (t !== undefined) query.transaction = t
 
-    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
+    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Transaction) {
+  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction) {
     const query: FindOptions = {
       where: {
         url
-      }
+      },
+      include: [
+        {
+          attributes: [ 'id', 'url' ],
+          model: VideoModel.unscoped()
+        }
+      ]
     }
 
     if (t !== undefined) query.transaction = t
 
-    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_VIDEO ]).findOne(query)
+    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
-  static async listThreadsForApi (videoId: number, start: number, count: number, sort: string, user?: UserModel) {
+  static async listThreadsForApi (parameters: {
+    videoId: number,
+    start: number,
+    count: number,
+    sort: string,
+    user?: UserModel
+  }) {
+    const { videoId, start, count, sort, user } = parameters
+
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
     const userAccountId = user ? user.Account.id : undefined
@@ -328,7 +311,13 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static async listThreadCommentsForApi (videoId: number, threadId: number, user?: UserModel) {
+  static async listThreadCommentsForApi (parameters: {
+    videoId: number,
+    threadId: number,
+    user?: UserModel
+  }) {
+    const { videoId, threadId, user } = parameters
+
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
     const userAccountId = user ? user.Account.id : undefined
@@ -457,7 +446,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         updatedAt: {
           [Op.lt]: beforeUpdatedAt
         },
-        videoId
+        videoId,
+        accountId: {
+          [Op.notIn]: buildLocalAccountIdsIn()
+        }
       }
     }
 

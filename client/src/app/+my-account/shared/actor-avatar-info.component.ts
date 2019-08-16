@@ -10,7 +10,7 @@ import { Notifier } from '@app/core'
   styleUrls: [ './actor-avatar-info.component.scss' ]
 })
 export class ActorAvatarInfoComponent {
-  @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
+  @ViewChild('avatarfileInput', { static: false }) avatarfileInput: ElementRef<HTMLInputElement>
 
   @Input() actor: VideoChannel | Account
 

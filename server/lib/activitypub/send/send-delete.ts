@@ -48,7 +48,10 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
   const isVideoOrigin = videoComment.Video.isOwned()
 
   const url = getDeleteActivityPubUrl(videoComment.url)
-  const byActor = videoComment.Account.Actor
+  const byActor = videoComment.isOwned()
+    ? videoComment.Account.Actor
+    : videoComment.Video.VideoChannel.Account.Actor
+
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, t)
 
   const actorsInvolvedInComment = await getActorsInvolvedInVideo(videoComment.Video, t)
@@ -59,7 +62,7 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
 
   // This was a reply, send it to the parent actors
   const actorsException = [ byActor ]
-  await broadcastToActors(activity, byActor, threadParentComments.map(c => c.Account.Actor), actorsException)
+  await broadcastToActors(activity, byActor, threadParentComments.map(c => c.Account.Actor), t, actorsException)
 
   // Broadcast to our followers
   await broadcastToFollowers(activity, byActor, [ byActor ], t)
@@ -68,7 +71,7 @@ async function sendDeleteVideoComment (videoComment: VideoCommentModel, t: Trans
   if (isVideoOrigin) return broadcastToFollowers(activity, byActor, actorsInvolvedInComment, t, actorsException)
 
   // Send to origin
-  return unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl)
+  t.afterCommit(() => unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl))
 }
 
 async function sendDeleteVideoPlaylist (videoPlaylist: VideoPlaylistModel, t: Transaction) {

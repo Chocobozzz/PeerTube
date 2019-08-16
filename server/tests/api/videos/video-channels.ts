@@ -2,12 +2,12 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, Video } from '../../../../shared/index'
+import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
 import {
   cleanupTests,
   createUser,
   doubleFollow,
-  flushAndRunMultipleServers,
+  flushAndRunMultipleServers, getVideo,
   getVideoChannelVideos,
   testImage,
   updateVideo,
@@ -18,12 +18,10 @@ import {
 import {
   addVideoChannel,
   deleteVideoChannel,
-  flushTests,
   getAccountVideoChannelsList,
   getMyUserInformation,
   getVideoChannel,
   getVideoChannelsList,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   updateVideoChannel
@@ -35,13 +33,12 @@ const expect = chai.expect
 describe('Test video channels', function () {
   let servers: ServerInfo[]
   let userInfo: User
-  let accountUUID: string
   let firstVideoChannelId: number
   let secondVideoChannelId: number
   let videoUUID: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     servers = await flushAndRunMultipleServers(2)
 
@@ -51,7 +48,6 @@ describe('Test video channels', function () {
     {
       const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
       const user: User = res.body
-      accountUUID = user.account.uuid
 
       firstVideoChannelId = user.videoChannels[0].id
     }
@@ -83,7 +79,8 @@ describe('Test video channels', function () {
 
     // The channel is 1 is propagated to servers 2
     {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'my video name', channelId: secondVideoChannelId })
+      const videoAttributesArg = { name: 'my video name', channelId: secondVideoChannelId, support: 'video support field' }
+      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributesArg)
       videoUUID = res.body.video.uuid
     }
 
@@ -108,7 +105,11 @@ describe('Test video channels', function () {
   })
 
   it('Should have two video channels when getting account channels on server 1', async function () {
-    const res = await getAccountVideoChannelsList(servers[0].url, userInfo.account.name + '@' + userInfo.account.host)
+    const res = await getAccountVideoChannelsList({
+      url: servers[ 0 ].url,
+      accountName: userInfo.account.name + '@' + userInfo.account.host
+    })
+
     expect(res.body.total).to.equal(2)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(2)
@@ -123,8 +124,62 @@ describe('Test video channels', function () {
     expect(videoChannels[1].support).to.equal('super video channel support text')
   })
 
+  it('Should paginate and sort account channels', async function () {
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[ 0 ].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        start: 0,
+        count: 1,
+        sort: 'createdAt'
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      expect(videoChannel.name).to.equal('root_channel')
+    }
+
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[ 0 ].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        start: 0,
+        count: 1,
+        sort: '-createdAt'
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      expect(videoChannel.name).to.equal('second_video_channel')
+    }
+
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[ 0 ].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        start: 1,
+        count: 1,
+        sort: '-createdAt'
+      })
+
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(1)
+
+      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      expect(videoChannel.name).to.equal('root_channel')
+    }
+  })
+
   it('Should have one video channel when getting account channels on server 2', async function () {
-    const res = await getAccountVideoChannelsList(servers[1].url, userInfo.account.name + '@' + userInfo.account.host)
+    const res = await getAccountVideoChannelsList({
+      url: servers[ 1 ].url,
+      accountName: userInfo.account.name + '@' + userInfo.account.host
+    })
+
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
@@ -147,12 +202,12 @@ describe('Test video channels', function () {
   })
 
   it('Should update video channel', async function () {
-    this.timeout(5000)
+    this.timeout(15000)
 
     const videoChannelAttributes = {
       displayName: 'video channel updated',
       description: 'video channel description updated',
-      support: 'video channel support text updated'
+      support: 'support updated'
     }
 
     await updateVideoChannel(servers[0].url, servers[0].accessToken, 'second_video_channel', videoChannelAttributes)
@@ -170,7 +225,36 @@ describe('Test video channels', function () {
       expect(res.body.data[0].name).to.equal('second_video_channel')
       expect(res.body.data[0].displayName).to.equal('video channel updated')
       expect(res.body.data[0].description).to.equal('video channel description updated')
-      expect(res.body.data[0].support).to.equal('video channel support text updated')
+      expect(res.body.data[0].support).to.equal('support updated')
+    }
+  })
+
+  it('Should not have updated the video support field', async function () {
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const video: VideoDetails = res.body
+
+      expect(video.support).to.equal('video support field')
+    }
+  })
+
+  it('Should update the channel support field and update videos too', async function () {
+    this.timeout(35000)
+
+    const videoChannelAttributes = {
+      support: 'video channel support text updated',
+      bulkVideosSupportUpdate: true
+    }
+
+    await updateVideoChannel(servers[0].url, servers[0].accessToken, 'second_video_channel', videoChannelAttributes)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideo(server.url, videoUUID)
+      const video: VideoDetails = res.body
+
+      expect(video.support).to.equal(videoChannelAttributes.support)
     }
   })
 
@@ -213,7 +297,7 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const channelURI = 'second_video_channel@localhost:9001'
+      const channelURI = 'second_video_channel@localhost:' + servers[0].port
       const res1 = await getVideoChannelVideos(server.url, server.accessToken, channelURI, 0, 5)
       expect(res1.body.total).to.equal(1)
       expect(res1.body.data).to.be.an('array')
@@ -234,11 +318,11 @@ describe('Test video channels', function () {
     this.timeout(10000)
 
     for (const server of servers) {
-      const secondChannelURI = 'second_video_channel@localhost:9001'
+      const secondChannelURI = 'second_video_channel@localhost:' + servers[0].port
       const res1 = await getVideoChannelVideos(server.url, server.accessToken, secondChannelURI, 0, 5)
       expect(res1.body.total).to.equal(0)
 
-      const channelURI = 'root_channel@localhost:9001'
+      const channelURI = 'root_channel@localhost:' + servers[0].port
       const res2 = await getVideoChannelVideos(server.url, server.accessToken, channelURI, 0, 5)
       expect(res2.body.total).to.equal(1)
 

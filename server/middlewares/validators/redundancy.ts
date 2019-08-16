@@ -1,13 +1,12 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param } from 'express-validator/check'
-import { exists, isBooleanValid, isIdOrUUIDValid, toIntOrNull } from '../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../helpers/custom-validators/videos'
+import { body, param } from 'express-validator'
+import { exists, isBooleanValid, isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerModel } from '../../models/server/server'
+import { doesVideoExist } from '../../helpers/middlewares'
 
 const videoFileRedundancyGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
@@ -68,7 +67,7 @@ const videoPlaylistRedundancyGetValidator = [
 const updateServerRedundancyValidator = [
   param('host').custom(isHostValid).withMessage('Should have a valid host'),
   body('redundancyAllowed')
-    .toBoolean()
+    .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed attribute'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

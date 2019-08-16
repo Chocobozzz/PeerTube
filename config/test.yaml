@@ -5,9 +5,23 @@ listen:
 webserver:
   https: false
 
+rates_limit:
+  signup:
+    window: 10 minutes
+    max: 50
+  login:
+    window: 5 minutes
+    max: 20
+  api:
+    window: 10 seconds
+    max: 500
+
 database:
   hostname: 'localhost'
   port: 5432
+
+redis:
+  hostname: 'localhost'
 
 smtp:
   hostname: null
@@ -55,6 +69,7 @@ signup:
 transcoding:
   enabled: true
   allow_additional_extensions: false
+  allow_audio_files: false
   threads: 2
   resolutions:
     240p: true
@@ -62,6 +77,7 @@ transcoding:
     480p: true
     720p: true
     1080p: true
+    2160p: true
   hls:
     enabled: true
 
@@ -74,3 +90,7 @@ import:
 
 instance:
   default_nsfw_policy: 'display'
+
+plugins:
+  index:
+    check_latest_versions_interval: '10 minutes'

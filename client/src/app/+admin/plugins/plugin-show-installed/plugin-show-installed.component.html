@@ -1,0 +1,26 @@
+<ng-container *ngIf="plugin">
+
+  <h2>
+    <ng-container>{{ pluginTypeLabel }}</ng-container>
+    {{ plugin.name }}
+  </h2>
+
+  <form *ngIf="hasRegisteredSettings()" role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+    <div class="form-group" *ngFor="let setting of registeredSettings">
+      <label [attr.for]="setting.name">{{ setting.label }}</label>
+
+      <input *ngIf="setting.type === 'input'" type="text" [id]="setting.name" [formControlName]="setting.name" />
+
+      <div *ngIf="formErrors[setting.name]" class="form-error">
+        {{ formErrors[setting.name] }}
+      </div>
+    </div>
+
+    <input type="submit" i18n value="Update plugin settings" [disabled]="!form.valid">
+  </form>
+
+  <div *ngIf="!hasRegisteredSettings()" i18n class="no-settings">
+    This {{ pluginTypeLabel }} does not have settings.
+  </div>
+
+</ng-container>

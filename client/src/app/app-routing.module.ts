@@ -8,27 +8,31 @@ import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 const routes: Routes = [
   {
     path: 'admin',
-    loadChildren: './+admin/admin.module#AdminModule'
+    loadChildren: () => import('./+admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: 'my-account',
-    loadChildren: './+my-account/my-account.module#MyAccountModule'
+    loadChildren: () => import('./+my-account/my-account.module').then(m => m.MyAccountModule)
   },
   {
     path: 'verify-account',
-    loadChildren: './+verify-account/verify-account.module#VerifyAccountModule'
+    loadChildren: () => import('./+signup/+verify-account/verify-account.module').then(m => m.VerifyAccountModule)
   },
   {
     path: 'accounts',
-    loadChildren: './+accounts/accounts.module#AccountsModule'
+    loadChildren: () => import('./+accounts/accounts.module').then(m => m.AccountsModule)
   },
   {
     path: 'video-channels',
-    loadChildren: './+video-channels/video-channels.module#VideoChannelsModule'
+    loadChildren: () => import('./+video-channels/video-channels.module').then(m => m.VideoChannelsModule)
   },
   {
     path: 'about',
-    loadChildren: './+about/about.module#AboutModule'
+    loadChildren: () => import('./+about/about.module').then(m => m.AboutModule)
+  },
+  {
+    path: 'signup',
+    loadChildren: () => import('./+signup/+register/register.module').then(m => m.RegisterModule)
   },
   {
     path: '',
@@ -36,7 +40,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    loadChildren: './+page-not-found/page-not-found.module#PageNotFoundModule'
+    loadChildren: () => import('./+page-not-found/page-not-found.module').then(m => m.PageNotFoundModule)
   }
 ]
 

@@ -1,7 +1,7 @@
-import { Sequelize } from 'sequelize-typescript'
+import { Model, Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
-import { OrderItem } from 'sequelize'
 import { Col } from 'sequelize/types/lib/utils'
+import { OrderItem, literal } from 'sequelize'
 
 type SortType = { sortModel: any, sortValue: string }
 
@@ -13,6 +13,8 @@ function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderIt
 
   if (field.toLowerCase() === 'match') { // Search
     finalField = Sequelize.col('similarity')
+  } else if (field === 'videoQuotaUsed') { // Users list
+    finalField = Sequelize.col('videoQuotaUsed')
   } else {
     finalField = field
   }
@@ -127,11 +129,30 @@ function parseAggregateResult (result: any) {
   return total
 }
 
+const createSafeIn = (model: typeof Model, stringArr: (string | number)[]) => {
+  return stringArr.map(t => model.sequelize.escape('' + t))
+                  .join(', ')
+}
+
+function buildLocalAccountIdsIn () {
+  return literal(
+    '(SELECT "account"."id" FROM "account" INNER JOIN "actor" ON "actor"."id" = "account"."actorId" AND "actor"."serverId" IS NULL)'
+  )
+}
+
+function buildLocalActorIdsIn () {
+  return literal(
+    '(SELECT "actor"."id" FROM "actor" WHERE "actor"."serverId" IS NULL)'
+  )
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   buildBlockedAccountSQL,
+  buildLocalActorIdsIn,
   SortType,
+  buildLocalAccountIdsIn,
   getSort,
   getVideoSort,
   getSortOnModel,
@@ -141,7 +162,8 @@ export {
   buildTrigramSearchIndex,
   buildWhereIdOrUUID,
   isOutdated,
-  parseAggregateResult
+  parseAggregateResult,
+  createSafeIn
 }
 
 // ---------------------------------------------------------------------------

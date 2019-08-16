@@ -7,6 +7,7 @@ import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/oper
 import { Subscription } from 'rxjs'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { User, UserRight } from '../../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -25,7 +26,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private notifier: Notifier,
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
-    private authService: AuthService
+    private authService: AuthService,
+    private i18n: I18n
   ) {}
 
   ngOnInit () {
@@ -54,6 +56,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   onUserDeleted () {
     this.redirectService.redirectToHomepage()
+  }
+
+  activateCopiedMessage () {
+    this.notifier.success(this.i18n('Username copied'))
   }
 
   private getUserIfNeeded (account: Account) {

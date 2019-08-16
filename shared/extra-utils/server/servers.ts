@@ -3,7 +3,7 @@
 import { ChildProcess, exec, fork } from 'child_process'
 import { join } from 'path'
 import { root, wait } from '../miscs/miscs'
-import { copy, readdir, readFile, remove } from 'fs-extra'
+import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
 import { existsSync } from 'fs'
 import { expect } from 'chai'
 import { VideoChannel } from '../../models/videos'
@@ -79,8 +79,8 @@ function flushTests (serverNumber?: number) {
   return new Promise<void>((res, rej) => {
     const suffix = serverNumber ? ` -- ${serverNumber}` : ''
 
-    return exec('npm run clean:server:test' + suffix, err => {
-      if (err) return rej(err)
+    return exec('npm run clean:server:test' + suffix, (err, _stdout, stderr) => {
+      if (err || stderr) return rej(err || new Error(stderr))
 
       return res()
     })
@@ -171,7 +171,8 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
         thumbnails: `test${server.internalServerNumber}/thumbnails/`,
         torrents: `test${server.internalServerNumber}/torrents/`,
         captions: `test${server.internalServerNumber}/captions/`,
-        cache: `test${server.internalServerNumber}/cache/`
+        cache: `test${server.internalServerNumber}/cache/`,
+        plugins: `test${server.internalServerNumber}/plugins/`
       },
       admin: {
         email: `admin${server.internalServerNumber}@example.com`
@@ -241,20 +242,22 @@ async function reRunServer (server: ServerInfo, configOverride?: any) {
   return server
 }
 
-async function checkTmpIsEmpty (server: ServerInfo) {
-  return checkDirectoryIsEmpty(server, 'tmp')
+function checkTmpIsEmpty (server: ServerInfo) {
+  return checkDirectoryIsEmpty(server, 'tmp', [ 'plugins-global.css' ])
 }
 
-async function checkDirectoryIsEmpty (server: ServerInfo, directory: string) {
-  const testDirectory = 'test' + server.serverNumber
+async function checkDirectoryIsEmpty (server: ServerInfo, directory: string, exceptions: string[] = []) {
+  const testDirectory = 'test' + server.internalServerNumber
 
   const directoryPath = join(root(), testDirectory, directory)
 
-  const directoryExists = existsSync(directoryPath)
+  const directoryExists = await pathExists(directoryPath)
   expect(directoryExists).to.be.true
 
   const files = await readdir(directoryPath)
-  expect(files).to.have.lengthOf(0)
+  const filtered = files.filter(f => exceptions.includes(f) === false)
+
+  expect(filtered).to.have.lengthOf(0)
 }
 
 function killallServers (servers: ServerInfo[]) {
@@ -284,7 +287,7 @@ function cleanupTests (servers: ServerInfo[]) {
 }
 
 async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
-  const logfile = join(root(), 'test' + server.serverNumber, 'logs/peertube.log')
+  const logfile = join(root(), 'test' + server.internalServerNumber, 'logs/peertube.log')
 
   while (true) {
     const buf = await readFile(logfile)

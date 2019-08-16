@@ -1,0 +1,36 @@
+<div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+<div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+<div i18n class="current-email">
+  Your current email is <span class="email">{{ user.email }}</span>
+</div>
+
+<div i18n class="pending-email" *ngIf="user.pendingEmail">
+  <span class="email">{{ user.pendingEmail }}</span> is awaiting email verification
+</div>
+
+<form role="form" class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form">
+
+  <div class="form-group">
+    <label i18n for="new-email">New email</label>
+    <input
+      type="email" id="new-email" i18n-placeholder placeholder="Your new email"
+      formControlName="new-email" [ngClass]="{ 'input-error': formErrors['new-email'] }"
+    >
+    <div *ngIf="formErrors['new-email']" class="form-error">
+      {{ formErrors['new-email'] }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input
+      type="password" id="password" i18n-placeholder placeholder="Your password"
+      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+    >
+    <div *ngIf="formErrors['password']" class="form-error">
+      {{ formErrors['password'] }}
+    </div>
+  </div>
+
+  <input type="submit" i18n-value value="Change email" [disabled]="!form.valid">
+</form>

@@ -24,7 +24,7 @@ import {
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/account'
+import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -58,6 +58,11 @@ type AvailableForListOptions = {
   actorId: number
 }
 
+export type SummaryOptions = {
+  withAccount?: boolean // Default: false
+  withAccountBlockerIds?: number[]
+}
+
 @DefaultScope(() => ({
   include: [
     {
@@ -67,12 +72,12 @@ type AvailableForListOptions = {
   ]
 }))
 @Scopes(() => ({
-  [ScopeNames.SUMMARY]: (withAccount = false) => {
+  [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const base: FindOptions = {
       attributes: [ 'name', 'description', 'id', 'actorId' ],
       include: [
         {
-          attributes: [ 'uuid', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
           include: [
@@ -90,9 +95,11 @@ type AvailableForListOptions = {
       ]
     }
 
-    if (withAccount === true) {
+    if (options.withAccount === true) {
       base.include.push({
-        model: AccountModel.scope(AccountModelScopeNames.SUMMARY),
+        model: AccountModel.scope({
+          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
+        }),
         required: true
       })
     }
@@ -334,14 +341,21 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static listByAccount (accountId: number) {
+  static listByAccount (options: {
+    accountId: number,
+    start: number,
+    count: number,
+    sort: string
+  }) {
     const query = {
-      order: getSort('createdAt'),
+      offset: options.start,
+      limit: options.count,
+      order: getSort(options.sort),
       include: [
         {
           model: AccountModel,
           where: {
-            id: accountId
+            id: options.accountId
           },
           required: true
         }
@@ -378,24 +392,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
-  }
-
-  static loadByUUIDAndPopulateAccount (uuid: string) {
-    const query = {
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            uuid
-          }
-        }
-      ]
-    }
-
-    return VideoChannelModel
-      .scope([ ScopeNames.WITH_ACCOUNT ])
-      .findOne(query)
   }
 
   static loadByUrlAndPopulateAccount (url: string) {
@@ -503,7 +499,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     return {
       id: this.id,
-      uuid: actor.uuid,
       name: actor.name,
       displayName: this.getDisplayName(),
       url: actor.url,

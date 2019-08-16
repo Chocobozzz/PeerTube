@@ -23,7 +23,7 @@ import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { getSort } from '../utils'
+import { createSafeIn, getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
@@ -111,6 +111,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ActorModel.incrementFollows(instance.actorId, 'followingCount',-1),
       ActorModel.incrementFollows(instance.targetActorId, 'followersCount', -1)
     ])
+  }
+
+  static removeFollowsOf (actorId: number, t?: Transaction) {
+    const query = {
+      where: {
+        [Op.or]: [
+          {
+            actorId
+          },
+          {
+            targetActorId: actorId
+          }
+        ]
+      },
+      transaction: t
+    }
+
+    return ActorFollowModel.destroy(query)
   }
 
   // Remove actor follows with a score of 0 (too many requests where they were unreachable)
@@ -446,12 +464,34 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
   }
 
-  static updateFollowScore (inboxUrl: string, value: number, t?: Transaction) {
+  static updateScore (inboxUrl: string, value: number, t?: Transaction) {
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
         'SELECT "actorFollow"."id" FROM "actorFollow" ' +
         'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
         `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+      ')'
+
+    const options = {
+      type: QueryTypes.BULKUPDATE,
+      transaction: t
+    }
+
+    return ActorFollowModel.sequelize.query(query, options)
+  }
+
+  static async updateScoreByFollowingServers (serverIds: number[], value: number, t?: Transaction) {
+    if (serverIds.length === 0) return
+
+    const me = await getServerActor()
+    const serverIdsString = createSafeIn(ActorFollowModel, serverIds)
+
+    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
+      'WHERE id IN (' +
+        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
+        `WHERE "actorFollow"."actorId" = ${me.Account.actorId} ` + // I'm the follower
+        `AND "actor"."serverId" IN (${serverIdsString})` + // Criteria on followings
       ')'
 
     const options = {

@@ -2,7 +2,7 @@ import { catchError, map, tap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { Observable, ReplaySubject } from 'rxjs'
 import { RestExtractor } from '../rest/rest-extractor.service'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { VideoChannel as VideoChannelServer, VideoChannelCreate, VideoChannelUpdate } from '../../../../../shared/models/videos'
 import { AccountService } from '../account/account.service'
 import { ResultList } from '../../../../../shared'
@@ -10,6 +10,8 @@ import { VideoChannel } from './video-channel.model'
 import { environment } from '../../../environments/environment'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { RestService } from '@app/shared/rest'
 
 @Injectable()
 export class VideoChannelService {
@@ -29,6 +31,7 @@ export class VideoChannelService {
 
   constructor (
     private authHttp: HttpClient,
+    private restService: RestService,
     private restExtractor: RestExtractor
   ) { }
 
@@ -41,8 +44,16 @@ export class VideoChannelService {
                )
   }
 
-  listAccountVideoChannels (account: Account): Observable<ResultList<VideoChannel>> {
-    return this.authHttp.get<ResultList<VideoChannelServer>>(AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels')
+  listAccountVideoChannels (account: Account, componentPagination?: ComponentPagination): Observable<ResultList<VideoChannel>> {
+    const pagination = componentPagination
+      ? this.restService.componentPaginationToRestPagination(componentPagination)
+      : { start: 0, count: 20 }
+
+    let params = new HttpParams()
+    params = this.restService.addRestGetParams(params, pagination)
+
+    const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels'
+    return this.authHttp.get<ResultList<VideoChannelServer>>(url, { params })
                .pipe(
                  map(res => VideoChannelService.extractVideoChannels(res)),
                  catchError(err => this.restExtractor.handleError(err))

@@ -195,6 +195,27 @@ Run:
 $ sudo service peertube start
 ```
 
+### OpenRC
+
+If your OS uses OpenRC, copy the service script:
+
+```
+$ sudo cp /var/www/peertube/peertube-latest/support/init.d/peertube /etc/init.d/
+```
+
+If you want to start PeerTube on boot:
+
+```
+$ sudo rc-update add peertube default
+```
+
+Run and print last logs:
+
+```
+$ sudo /etc/init.d/peertube start
+$ tail -f /var/log/peertube/peertube.log
+```
+
 ### Administrator
 
 The administrator password is automatically generated and can be found in the
@@ -203,6 +224,9 @@ logs. You can set another password with:
 ```
 $ cd /var/www/peertube/peertube-latest && NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u root
 ```
+
+Alternatively you can set the environment variable `PT_INITIAL_ROOT_PASSWORD`,
+to your own administrator password, although it must be 6 characters or more.
 
 ### What now?
 

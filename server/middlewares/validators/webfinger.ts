@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
 import { logger } from '../../helpers/logger'
 import { ActorModel } from '../../models/activitypub/actor'

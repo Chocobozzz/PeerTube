@@ -13,7 +13,7 @@ import { InstanceService } from '@app/shared/instance/instance.service'
   styleUrls: [ './contact-admin-modal.component.scss' ]
 })
 export class ContactAdminModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal') modal: NgbModal
+  @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string
 
@@ -39,6 +39,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
     this.buildForm({
       fromName: this.instanceValidatorsService.FROM_NAME,
       fromEmail: this.instanceValidatorsService.FROM_EMAIL,
+      subject: this.instanceValidatorsService.SUBJECT,
       body: this.instanceValidatorsService.BODY
     })
   }
@@ -58,9 +59,10 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   sendForm () {
     const fromName = this.form.value['fromName']
     const fromEmail = this.form.value[ 'fromEmail' ]
+    const subject = this.form.value[ 'subject' ]
     const body = this.form.value[ 'body' ]
 
-    this.instanceService.contactAdministrator(fromEmail, fromName, body)
+    this.instanceService.contactAdministrator(fromEmail, fromName, subject, body)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Your message has been sent.'))

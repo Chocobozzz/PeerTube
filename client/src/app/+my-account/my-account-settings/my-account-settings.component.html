@@ -7,14 +7,20 @@
 <div i18n class="account-title">Profile</div>
 <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
 
-<div i18n class="account-title" id="notifications">Notifications</div>
+<div i18n class="account-title">Video settings</div>
+<my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>
+
+<div i18n class="account-title">Notifications</div>
 <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
+
+<div i18n class="account-title">Interface</div>
+<my-account-interface-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-interface-settings>
 
 <div i18n class="account-title">Password</div>
 <my-account-change-password></my-account-change-password>
 
-<div i18n class="account-title">Video settings</div>
-<my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>
+<div i18n class="account-title">Email</div>
+<my-account-change-email></my-account-change-email>
 
 <div i18n class="account-title">Danger zone</div>
 <my-account-danger-zone [user]="user"></my-account-danger-zone>

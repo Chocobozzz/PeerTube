@@ -20,6 +20,9 @@ import { VideoAbuseModel } from '../models/video/video-abuse'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { VideoCaptionModel } from '../models/video/video-caption'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
+import { RegisteredPlugin } from '../lib/plugins/plugin-manager'
+import { PluginModel } from '../models/server/plugin'
+import { SignatureActorModel } from './models'
 
 declare module 'express' {
 
@@ -73,10 +76,14 @@ declare module 'express' {
       }
 
       signature?: {
-        actor: ActorModel
+        actor: SignatureActorModel
       }
 
       authenticated?: boolean
+
+      registeredPlugin?: RegisteredPlugin
+
+      plugin?: PluginModel
     }
   }
 }

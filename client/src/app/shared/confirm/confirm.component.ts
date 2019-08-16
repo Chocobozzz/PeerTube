@@ -10,7 +10,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
   styleUrls: [ './confirm.component.scss' ]
 })
 export class ConfirmComponent implements OnInit {
-  @ViewChild('confirmModal') confirmModal: ElementRef
+  @ViewChild('confirmModal', { static: true }) confirmModal: ElementRef
 
   title = ''
   message = ''

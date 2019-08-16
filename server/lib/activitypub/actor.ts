@@ -5,14 +5,14 @@ import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { isActorObjectValid, normalizeActor } from '../../helpers/custom-validators/activitypub/actor'
+import { sanitizeAndCheckActorObject } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { retryTransactionWrapper, updateInstanceWithAnother } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
-import { doRequest, downloadImage } from '../../helpers/requests'
+import { doRequest } from '../../helpers/requests'
 import { getUrlFromWebfinger } from '../../helpers/webfinger'
-import { AVATARS_SIZE, MIMETYPES, WEBSERVER } from '../../initializers/constants'
+import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
 import { AccountModel } from '../../models/account/account'
 import { ActorModel } from '../../models/activitypub/actor'
 import { AvatarModel } from '../../models/avatar/avatar'
@@ -21,7 +21,6 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../job-queue'
 import { getServerActor } from '../../helpers/utils'
 import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
-import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
@@ -33,7 +32,7 @@ function setAsyncActorKeys (actor: ActorModel) {
       return actor.save()
     })
     .catch(err => {
-      logger.error('Cannot set public/private keys of actor %d.', actor.uuid, { err })
+      logger.error('Cannot set public/private keys of actor %d.', actor.url, { err })
       return actor
     })
 }
@@ -128,39 +127,40 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   const followersCount = await fetchActorTotalItems(attributes.followers)
   const followingCount = await fetchActorTotalItems(attributes.following)
 
-  actorInstance.set('type', attributes.type)
-  actorInstance.set('uuid', attributes.uuid)
-  actorInstance.set('preferredUsername', attributes.preferredUsername)
-  actorInstance.set('url', attributes.id)
-  actorInstance.set('publicKey', attributes.publicKey.publicKeyPem)
-  actorInstance.set('followersCount', followersCount)
-  actorInstance.set('followingCount', followingCount)
-  actorInstance.set('inboxUrl', attributes.inbox)
-  actorInstance.set('outboxUrl', attributes.outbox)
-  actorInstance.set('sharedInboxUrl', attributes.endpoints.sharedInbox)
-  actorInstance.set('followersUrl', attributes.followers)
-  actorInstance.set('followingUrl', attributes.following)
+  actorInstance.type = attributes.type
+  actorInstance.preferredUsername = attributes.preferredUsername
+  actorInstance.url = attributes.id
+  actorInstance.publicKey = attributes.publicKey.publicKeyPem
+  actorInstance.followersCount = followersCount
+  actorInstance.followingCount = followingCount
+  actorInstance.inboxUrl = attributes.inbox
+  actorInstance.outboxUrl = attributes.outbox
+  actorInstance.sharedInboxUrl = attributes.endpoints.sharedInbox
+  actorInstance.followersUrl = attributes.followers
+  actorInstance.followingUrl = attributes.following
 }
 
-async function updateActorAvatarInstance (actorInstance: ActorModel, avatarName: string, t: Transaction) {
-  if (avatarName !== undefined) {
-    if (actorInstance.avatarId) {
+async function updateActorAvatarInstance (actor: ActorModel, info: { name: string, onDisk: boolean, fileUrl: string }, t: Transaction) {
+  if (info.name !== undefined) {
+    if (actor.avatarId) {
       try {
-        await actorInstance.Avatar.destroy({ transaction: t })
+        await actor.Avatar.destroy({ transaction: t })
       } catch (err) {
-        logger.error('Cannot remove old avatar of actor %s.', actorInstance.url, { err })
+        logger.error('Cannot remove old avatar of actor %s.', actor.url, { err })
       }
     }
 
     const avatar = await AvatarModel.create({
-      filename: avatarName
+      filename: info.name,
+      onDisk: info.onDisk,
+      fileUrl: info.fileUrl
     }, { transaction: t })
 
-    actorInstance.set('avatarId', avatar.id)
-    actorInstance.Avatar = avatar
+    actor.avatarId = avatar.id
+    actor.Avatar = avatar
   }
 
-  return actorInstance
+  return actor
 }
 
 async function fetchActorTotalItems (url: string) {
@@ -180,23 +180,23 @@ async function fetchActorTotalItems (url: string) {
   }
 }
 
-async function fetchAvatarIfExists (actorJSON: ActivityPubActor) {
+async function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
   if (
     actorJSON.icon && actorJSON.icon.type === 'Image' && MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
     isActivityPubUrlValid(actorJSON.icon.url)
   ) {
     const extension = MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType]
 
-    const avatarName = uuidv4() + extension
-    await downloadImage(actorJSON.icon.url, CONFIG.STORAGE.AVATARS_DIR, avatarName, AVATARS_SIZE)
-
-    return avatarName
+    return {
+      name: uuidv4() + extension,
+      fileUrl: actorJSON.icon.url
+    }
   }
 
   return undefined
 }
 
-async function addFetchOutboxJob (actor: ActorModel) {
+async function addFetchOutboxJob (actor: Pick<ActorModel, 'id' | 'outboxUrl'>) {
   // Don't fetch ourselves
   const serverActor = await getServerActor()
   if (serverActor.id === actor.id) {
@@ -246,8 +246,14 @@ async function refreshActorIfNeeded (
     return sequelizeTypescript.transaction(async t => {
       updateInstanceWithAnother(actor, result.actor)
 
-      if (result.avatarName !== undefined) {
-        await updateActorAvatarInstance(actor, result.avatarName, t)
+      if (result.avatar !== undefined) {
+        const avatarInfo = {
+          name: result.avatar.name,
+          fileUrl: result.avatar.fileUrl,
+          onDisk: false
+        }
+
+        await updateActorAvatarInstance(actor, avatarInfo, t)
       }
 
       // Force update
@@ -255,14 +261,14 @@ async function refreshActorIfNeeded (
       await actor.save({ transaction: t })
 
       if (actor.Account) {
-        actor.Account.set('name', result.name)
-        actor.Account.set('description', result.summary)
+        actor.Account.name = result.name
+        actor.Account.description = result.summary
 
         await actor.Account.save({ transaction: t })
       } else if (actor.VideoChannel) {
-        actor.VideoChannel.set('name', result.name)
-        actor.VideoChannel.set('description', result.summary)
-        actor.VideoChannel.set('support', result.support)
+        actor.VideoChannel.name = result.name
+        actor.VideoChannel.description = result.summary
+        actor.VideoChannel.support = result.support
 
         await actor.VideoChannel.save({ transaction: t })
       }
@@ -280,7 +286,7 @@ export {
   buildActorInstance,
   setAsyncActorKeys,
   fetchActorTotalItems,
-  fetchAvatarIfExists,
+  getAvatarInfoIfExists,
   updateActorInstance,
   refreshActorIfNeeded,
   updateActorAvatarInstance,
@@ -315,14 +321,17 @@ function saveActorAndServerAndModelIfNotExist (
     const [ server ] = await ServerModel.findOrCreate(serverOptions)
 
     // Save our new account in database
-    actor.set('serverId', server.id)
+    actor.serverId = server.id
 
     // Avatar?
-    if (result.avatarName) {
+    if (result.avatar) {
       const avatar = await AvatarModel.create({
-        filename: result.avatarName
+        filename: result.avatar.name,
+        fileUrl: result.avatar.fileUrl,
+        onDisk: false
       }, { transaction: t })
-      actor.set('avatarId', avatar.id)
+
+      actor.avatarId = avatar.id
     }
 
     // Force the actor creation, sometimes Sequelize skips the save() when it thinks the instance already exists
@@ -356,7 +365,10 @@ type FetchRemoteActorResult = {
   summary: string
   support?: string
   playlists?: string
-  avatarName?: string
+  avatar?: {
+    name: string,
+    fileUrl: string
+  }
   attributedTo: ActivityPubAttributedTo[]
 }
 async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: number, result: FetchRemoteActorResult }> {
@@ -370,10 +382,9 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
   logger.info('Fetching remote actor %s.', actorUrl)
 
   const requestResult = await doRequest<ActivityPubActor>(options)
-  normalizeActor(requestResult.body)
-
   const actorJSON = requestResult.body
-  if (isActorObjectValid(actorJSON) === false) {
+
+  if (sanitizeAndCheckActorObject(actorJSON) === false) {
     logger.debug('Remote actor JSON is not valid.', { actorJSON })
     return { result: undefined, statusCode: requestResult.response.statusCode }
   }
@@ -388,7 +399,6 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
   const actor = new ActorModel({
     type: actorJSON.type,
-    uuid: actorJSON.uuid,
     preferredUsername: actorJSON.preferredUsername,
     url: actorJSON.id,
     publicKey: actorJSON.publicKey.publicKeyPem,
@@ -402,7 +412,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
     followingUrl: actorJSON.following
   })
 
-  const avatarName = await fetchAvatarIfExists(actorJSON)
+  const avatarInfo = await getAvatarInfoIfExists(actorJSON)
 
   const name = actorJSON.name || actorJSON.preferredUsername
   return {
@@ -410,7 +420,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
     result: {
       actor,
       name,
-      avatarName,
+      avatar: avatarInfo,
       summary: actorJSON.summary,
       support: actorJSON.support,
       playlists: actorJSON.playlists,

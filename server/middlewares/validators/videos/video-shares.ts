@@ -1,11 +1,10 @@
 import * as express from 'express'
-import 'express-validator'
-import { param } from 'express-validator/check'
+import { param } from 'express-validator'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { areValidationErrors } from '../utils'
+import { doesVideoExist } from '../../../helpers/middlewares'
 
 const videosShareValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),

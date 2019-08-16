@@ -7,7 +7,7 @@
         <source>Close</source>
         <target>Kapat</target>
         <context-group name="null">
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.carousel.previous">
@@ -140,84 +140,73 @@
         <source>Decrement hours</source>
         <target>Azalma saatleri</target>
         <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes">
         <source>Increment minutes</source>
         <target>Artış dakikaları</target>
         <context-group name="null">
-          <context context-type="linenumber">29</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM">
         <source>MM</source>
         <target>MM</target>
         <context-group name="null">
-          <context context-type="linenumber">32</context>
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes">
         <source>Minutes</source>
         <target>Dakika</target>
         <context-group name="null">
-          <context context-type="linenumber">34</context>
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes">
         <source>Decrement minutes</source>
         <target>Azalma dakikaları</target>
         <context-group name="null">
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds">
         <source>Increment seconds</source>
         <target>Artış saniyeleri</target>
         <context-group name="null">
-          <context context-type="linenumber">49</context>
+          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.SS">
         <source>SS</source>
         <target>SS</target>
         <context-group name="null">
-          <context context-type="linenumber">52</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.seconds">
         <source>Seconds</source>
         <target>Saniye</target>
         <context-group name="null">
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds">
         <source>Decrement seconds</source>
         <target>Azalma saniyeleri</target>
         <context-group name="null">
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source>PM</source>
-        <target>ÖS</target>
-        <context-group name="null">
-          <context context-type="linenumber">68</context>
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target><context-group name="null">
+          <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source>AM</source>
-        <target>ÖÖ</target>
-        <context-group name="null">
-          <context context-type="linenumber">69</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1d19634967b06f93fd7f20c0663742f8254e6d46">
-        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</source>
-        <target>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, en yüksek boyut: <x id="INTERPOLATION_1" equiv-text="{{ maxFileSize | bytes }}"/>)</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+          <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
@@ -460,21 +449,21 @@
         <source>Start at</source>
         <target>Başlangıç konumu</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">61</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d20563f7e338a1d09eb756054564ccf7c6a30ef">
         <source>Stop at</source>
         <target>Bitiş konumu</target>
         <context-group name="null">
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9">
         <source>Display name</source>
         <target>Görünen ad</target>
         <context-group name="null">
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795">
@@ -502,21 +491,21 @@
         <source>Download</source>
         <target>İndir</target>
         <context-group name="null">
-          <context context-type="linenumber">48</context>
+          <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
         <source>Unlisted</source>
         <target>Listelenmemiş</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ddd8a4986d2d1717a274a5a0fbed04988a819e69">
         <source>Private</source>
         <target>Özel</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6aec8cb024acc333218d72f279caa8ea623bb628">
@@ -544,21 +533,21 @@
         <source>Save</source>
         <target>Kaydet</target>
         <context-group name="null">
-          <context context-type="linenumber">117</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
         <source>Delete</source>
         <target>Sil</target>
         <context-group name="null">
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c">
         <source>Edit</source>
         <target>Düzenle</target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
@@ -618,7 +607,7 @@
         <source>Video quota</source>
         <target>Video kotası</target>
         <context-group name="null">
-          <context context-type="linenumber">42</context>
+          <context context-type="linenumber">56</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -650,7 +639,7 @@
         <source>Password</source>
         <target>Şifre</target>
         <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">54</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -658,20 +647,6 @@
         <target>Oturum aç</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
-        <source>Username</source>
-        <target>Kullanıcı adı</target>
-        <context-group name="null">
-          <context context-type="linenumber">8</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
-        <source>Features found on this instance</source>
-        <target>Bu örnekte bulunan özellikler</target>
-        <context-group name="null">
-          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
@@ -690,13 +665,6 @@
         <target>Dili değiştir</target>
         <context-group name="null">
           <context context-type="linenumber">102</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e95ae009d0bdb45fcc656e8b65248cf7396080d5">
-        <source>Overview</source>
-        <target>Genel bakış</target>
-        <context-group name="null">
-          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
@@ -731,14 +699,14 @@
         <source>Show keyboard shortcuts</source>
         <target>Klavye kısayollarını göster</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
         <source>Search...</source>
         <target>Ara...</target>
         <context-group name="null">
-          <context context-type="linenumber">2</context>
+          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b3972c3e9485218508a95f7a4ce7758e3f09ced">
@@ -752,47 +720,139 @@
         <source>Category</source>
         <target>Kategori</target>
         <context-group name="null">
-          <context context-type="linenumber">189</context>
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2290d09f4f113351baa9152ca8ad14cd03a11ba6">
+      <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
+        <source>Privacy</source>
+        <target>Gizlilik</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
+        <source>Enable video comments</source>
+        <target>Video yorumlarını etkinleştir</target>
+        <context-group name="null">
+          <context context-type="linenumber">230</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0">
+        <source>Enable download</source>
+        <target>İndirmeyi etkinleştir</target>
+        <context-group name="null">
+          <context context-type="linenumber">235</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
         <source>
-      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ object.category.label }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        Other videos
     </source>
         <target>
-      <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ object.category.label }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        Diğer videolar
     </target>
         <context-group name="null">
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
+      <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
+        <source>Share</source>
+        <target>Paylaş</target>
+        <context-group name="null">
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99686034581579c92a971f4eeebd2c072c812e2d">
         <source>
-  About PeerTube
-</source>
+              Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
+            </source>
         <target>
-  PeerTube Hakkında
-</target>
+              <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> yayınlandı - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme
+            </target>
         <context-group name="null">
-          <context context-type="linenumber">1</context>
+          <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
-        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>PeerTube, doğrudan web tarayıcısında P2P (WebTorrent) kullanan bir federasyon (ActivityPub) video akışı platformudur.</target>
-        <context-group name="null">
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
+      <trans-unit id="3da5360f8314aa95973aa52629c9f635363c5a36">
         <source>
-    It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+                Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
+              </source>
+        <target>
+                <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> yayınlandı - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
+        <source>Show more</source>
+        <target>Daha fazlasını göster</target>
+        <context-group name="null">
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
+        <source>Show less</source>
+        <target>Daha azını göster</target>
+        <context-group name="null">
+          <context context-type="linenumber">147</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7">
+        <source>
+      Comments
+    </source>
+        <target>
+      Yorumlar
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
+        <source>No comments.</source>
+        <target>Yorum yok.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
+        <source>
+    Comments are disabled.
   </source>
         <target>
-    <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 lisansı<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> altında, ücretsiz ve açık kaynaklı bir yazılımdır.
+    Yorumlar kapalı.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
+        <source>Username</source>
+        <target>Kullanıcı adı</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
+        <source>Daily video quota</source>
+        <target>Günlük video kotası</target>
+        <context-group name="null">
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca">
+        <source>Show</source>
+        <target>Göster</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
+        <source>Search</source>
+        <target>Ara</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3fae5a310387c065757fde11f22689b45a7b6f2d">
@@ -827,21 +887,7 @@
         <source>User default video quota</source>
         <target>Kullanıcı varsayılan video kotası</target>
         <context-group name="null">
-          <context context-type="linenumber">120</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
-        <source>Daily video quota</source>
-        <target>Günlük video kotası</target>
-        <context-group name="null">
-          <context context-type="linenumber">72</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca">
-        <source>Show</source>
-        <target>Göster</target>
-        <context-group name="null">
-          <context context-type="linenumber">10</context>
+          <context context-type="linenumber">137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -858,108 +904,40 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
-        <source>Privacy</source>
-        <target>Gizlilik</target>
-        <context-group name="null">
-          <context context-type="linenumber">179</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
-        <source>Enable video comments</source>
-        <target>Video yorumlarını etkinleştir</target>
-        <context-group name="null">
-          <context context-type="linenumber">234</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0">
-        <source>Enable download</source>
-        <target>İndirmeyi etkinleştir</target>
-        <context-group name="null">
-          <context context-type="linenumber">239</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
-        <source>Share</source>
-        <target>Paylaş</target>
-        <context-group name="null">
-          <context context-type="linenumber">108</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="99686034581579c92a971f4eeebd2c072c812e2d">
+      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
         <source>
-              Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
-            </source>
+  About PeerTube
+</source>
         <target>
-              <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> yayınlandı - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme
-            </target>
+  PeerTube Hakkında
+</target>
         <context-group name="null">
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3da5360f8314aa95973aa52629c9f635363c5a36">
+      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
+        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
+        <target>PeerTube, doğrudan web tarayıcısında P2P (WebTorrent) kullanan bir federasyon (ActivityPub) video akışı platformudur.</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
         <source>
-                Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
-              </source>
-        <target>
-                <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> yayınlandı - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme
-              </target>
-        <context-group name="null">
-          <context context-type="linenumber">78</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
-        <source>Show more</source>
-        <target>Daha fazlasını göster</target>
-        <context-group name="null">
-          <context context-type="linenumber">166</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
-        <source>Show less</source>
-        <target>Daha azını göster</target>
-        <context-group name="null">
-          <context context-type="linenumber">172</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
-        <source>
-        Other videos
-    </source>
-        <target>
-        Diğer videolar
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7">
-        <source>
-      Comments
-    </source>
-        <target>
-      Yorumlar
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
-        <source>No comments.</source>
-        <target>Yorum yok.</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
-        <source>
-    Comments are disabled.
+    It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </source>
         <target>
-    Yorumlar kapalı.
+    <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 lisansı<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> altında, ücretsiz ve açık kaynaklı bir yazılımdır.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
+        <source>Features found on this instance</source>
+        <target>Bu örnekte bulunan özellikler</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="14c3050a9da4c1bc49d555c45d5660804d08e83b">
@@ -1000,13 +978,6 @@
       <trans-unit id="b7641aed03492978b4ec6843b1e53f30464294d9">
         <source>Views</source>
         <target>Görüntülemeler</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
-        <source>Search</source>
-        <target>Ara</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

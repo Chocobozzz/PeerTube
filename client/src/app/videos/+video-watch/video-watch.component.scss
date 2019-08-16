@@ -31,14 +31,15 @@ $player-factor: 1.7; // 16/9
       width: 100%;
     }
 
-    /deep/ .video-js {
+    ::ng-deep .video-js {
       $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 
       height: $height;
       width: 100%;
+      max-width: initial;
     }
 
-    my-video-watch-playlist /deep/ .playlist {
+    my-video-watch-playlist ::ng-deep .playlist {
       @include playlist-below-player;
     }
   }
@@ -81,8 +82,9 @@ $player-factor: 1.7; // 16/9
     }
   }
 
-  /deep/ .video-js {
-    width: getPlayerWidth(66vh);
+  ::ng-deep .video-js {
+    width: 100%;
+    max-width: getPlayerWidth(66vh);
     height: 66vh;
 
     // VideoJS create an inner video player
@@ -94,7 +96,7 @@ $player-factor: 1.7; // 16/9
 
   @media screen and (max-width: 600px) {
     .remote-server-down,
-    /deep/ .video-js {
+    ::ng-deep .video-js {
       width: 100vw;
       height: getPlayerHeight(100vw)
     }
@@ -344,9 +346,10 @@ $player-factor: 1.7; // 16/9
     }
   }
 
-  /deep/ .other-videos {
+  ::ng-deep .other-videos {
     padding-left: 15px;
     flex-basis: $other-videos-width;
+    min-width: $other-videos-width;
 
     .title-page {
       margin-top: 0 !important;
@@ -455,7 +458,7 @@ my-video-comments {
     flex-direction: column;
     justify-content: center;
 
-    my-video-watch-playlist /deep/ .playlist {
+    my-video-watch-playlist ::ng-deep .playlist {
       @include playlist-below-player;
     }
   }
@@ -463,10 +466,10 @@ my-video-comments {
   .video-bottom {
     flex-direction: column;
 
-    /deep/ .other-videos {
+    ::ng-deep .other-videos {
       padding-left: 0 !important;
 
-      /deep/ .video-miniature  {
+      ::ng-deep .video-miniature  {
         flex-direction: row;
         width: auto;
       }
@@ -491,7 +494,7 @@ my-video-comments {
     }
   }
 
-  /deep/ .other-videos .video-miniature  {
+  ::ng-deep .other-videos .video-miniature  {
     flex-direction: column;
   }
 

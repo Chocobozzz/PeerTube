@@ -1,0 +1,54 @@
+<form role="form" [formGroup]="form">
+
+  <div class="channel-explanations">
+    <p i18n>
+      A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<br />
+      For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology.
+    </p>
+
+    <p>
+      Other users can decide to subscribe any channel they want, to be notified when you publish a new video.
+    </p>
+  </div>
+
+  <div class="form-group">
+    <label for="displayName" i18n>Channel display name</label>
+
+    <div class="input-group">
+      <input
+        type="text" id="displayName"
+        formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
+      >
+    </div>
+
+    <div *ngIf="formErrors.displayName" class="form-error">
+      {{ formErrors.displayName }}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="name" i18n>Channel name</label>
+
+    <div class="input-group">
+      <input
+        type="text" id="name" i18n-placeholder placeholder="Example: my_super_channel"
+        formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
+      >
+      <div class="input-group-append">
+        <span class="input-group-text">@{{ instanceHost }}</span>
+      </div>
+    </div>
+
+    <div class="name-information" i18n>
+      The channel name is a unique identifier of your channel on this instance. It's like an address mail, so other people can find your channel.
+    </div>
+
+    <div *ngIf="formErrors.name" class="form-error">
+      {{ formErrors.name }}
+    </div>
+
+    <div *ngIf="isSameThanUsername()" class="form-error" i18n>
+      Channel name cannot be the same than your account name. You can click on the first step to update your account name.
+    </div>
+  </div>
+</form>

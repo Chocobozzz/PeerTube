@@ -18,8 +18,9 @@ import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/vid
 import { sequelizeTypescript } from '../../initializers/database'
 import { createPlaylistMiniatureFromUrl } from '../thumbnail'
 import { FilteredModelAttributes } from '../../typings/sequelize'
+import { AccountModelId } from '../../typings/models'
 
-function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: AccountModel, to: string[]) {
+function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: AccountModelId, to: string[]) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPlaylistPrivacy.PUBLIC : VideoPlaylistPrivacy.UNLISTED
 
   return {
@@ -74,7 +75,7 @@ async function createAccountPlaylists (playlistUrls: string[], account: AccountM
   }, { concurrency: CRAWL_REQUEST_CONCURRENCY })
 }
 
-async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAccount: AccountModel, to: string[]) {
+async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAccount: AccountModelId, to: string[]) {
   const playlistAttributes = playlistObjectToDBAttributes(playlistObject, byAccount, to)
 
   if (isArray(playlistObject.attributedTo) && playlistObject.attributedTo.length === 1) {
@@ -105,6 +106,9 @@ async function createOrUpdateVideoPlaylist (playlistObject: PlaylistObject, byAc
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', playlistObject.id, { err })
     }
+  } else if (refreshedPlaylist.hasThumbnail()) {
+    await refreshedPlaylist.Thumbnail.destroy()
+    refreshedPlaylist.Thumbnail = null
   }
 
   return resetVideoPlaylistElements(accItems, refreshedPlaylist)

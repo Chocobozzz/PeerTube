@@ -1,6 +1,4 @@
 import * as validator from 'validator'
-import 'express-validator'
-
 import { isArray } from './misc'
 
 function isNumberArray (value: any) {

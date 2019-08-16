@@ -26,6 +26,27 @@
         </select>
       </div>
     </div>
+
+    <ng-container *ngIf="isUploadingAudioFile">
+      <div  class="form-group audio-preview">
+        <label i18n for="previewfileUpload">Video background image</label>
+
+        <div i18n class="audio-image-info">
+          Image that will be merged with your audio file.
+          <br />
+          The chosen image will be definitive and cannot be modified.
+        </div>
+
+        <my-preview-upload
+          i18n-inputLabel inputLabel="Edit" inputName="previewfileUpload" [(ngModel)]="previewfileUpload"
+          previewWidth="360px" previewHeight="200px"
+        ></my-preview-upload>
+      </div>
+
+      <div class="form-group upload-audio-button">
+        <my-button className="orange-button" i18n-label [label]="getAudioUploadLabel()" icon="upload" (click)="uploadFirstStep(true)"></my-button>
+      </div>
+    </ng-container>
   </div>
 </div>
 
@@ -50,7 +71,7 @@
 <form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
-    [validationMessages]="validationMessages" [videoPrivacies]="explainedVideoPrivacies" [userVideoChannels]="userVideoChannels"
+    [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"
     [waitTranscodingEnabled]="waitTranscodingEnabled"
   ></my-video-edit>
 

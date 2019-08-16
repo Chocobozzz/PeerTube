@@ -3,7 +3,6 @@ import { Component, HostListener, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { Notifier } from '@app/core'
-import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
 import { ServerService } from '../../core'
 import { FormReactive } from '../../shared'
 import { VideoEdit } from '../../shared/video/video-edit.model'
@@ -13,6 +12,7 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { VideoDetails } from '@app/shared/video/video-details.model'
+import { VideoPrivacy } from '@shared/models'
 
 @Component({
   selector: 'my-videos-update',
@@ -23,8 +23,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   video: VideoEdit
 
   isUpdatingVideo = false
-  videoPrivacies: VideoConstant<VideoPrivacy>[] = []
-  explainedVideoPrivacies: VideoConstant<VideoPrivacy>[] = []
   userVideoChannels: { id: number, label: string, support: string }[] = []
   schedulePublicationPossible = false
   videoCaptions: VideoCaptionEdit[] = []
@@ -49,9 +47,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({})
 
-    this.serverService.videoPrivaciesLoaded
-        .subscribe(() => this.videoPrivacies = this.serverService.getVideoPrivacies())
-
     this.route.data
         .pipe(map(data => data.videoData))
         .subscribe(({ video, videoChannels, videoCaptions }) => {
@@ -59,14 +54,7 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
           this.userVideoChannels = videoChannels
           this.videoCaptions = videoCaptions
 
-          // We cannot set private a video that was not private
-          if (this.video.privacy !== VideoPrivacy.PRIVATE) {
-            this.videoPrivacies = this.videoPrivacies.filter(p => p.id !== VideoPrivacy.PRIVATE)
-          } else { // We can schedule video publication only if it it is private
-            this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
-          }
-
-          this.explainedVideoPrivacies = this.videoService.explainedPrivacyLabels(this.videoPrivacies)
+          this.schedulePublicationPossible = this.video.privacy === VideoPrivacy.PRIVATE
 
           const videoFiles = (video as VideoDetails).files
           if (videoFiles.length > 1) { // Already transcoded

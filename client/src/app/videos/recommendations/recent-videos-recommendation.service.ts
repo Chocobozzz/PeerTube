@@ -32,21 +32,25 @@ export class RecentVideosRecommendationService implements RecommendationService 
 
   private fetchPage (page: number, recommendation: RecommendationInfo): Observable<Video[]> {
     const pagination = { currentPage: page, itemsPerPage: this.pageSize + 1 }
-    const defaultSubscription = this.videos.getVideos(pagination, '-createdAt')
-                                    .pipe(map(v => v.videos))
+    const defaultSubscription = this.videos.getVideos({ videoPagination: pagination, sort: '-createdAt' })
+                                    .pipe(map(v => v.data))
 
     if (!recommendation.tags || recommendation.tags.length === 0) return defaultSubscription
 
-    return this.searchService.searchVideos('',
-      pagination,
-      new AdvancedSearch({ tagsOneOf: recommendation.tags.join(','), sort: '-createdAt' })
-    ).pipe(
-      map(v => v.videos),
-      switchMap(videos => {
-        if (videos.length <= 1) return defaultSubscription
+    const params = {
+      search: '',
+      componentPagination: pagination,
+      advancedSearch: new AdvancedSearch({ tagsOneOf: recommendation.tags.join(','), sort: '-createdAt' })
+    }
 
-        return of(videos)
-      })
-    )
+    return this.searchService.searchVideos(params)
+               .pipe(
+                 map(v => v.data),
+                 switchMap(videos => {
+                   if (videos.length <= 1) return defaultSubscription
+
+                   return of(videos)
+                 })
+               )
   }
 }

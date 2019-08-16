@@ -31,6 +31,7 @@ import {
   isUserPasswordValid,
   isUserRoleValid,
   isUserUsernameValid,
+  isUserVideoLanguages,
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid,
@@ -43,7 +44,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
-import { NSFW_POLICY_TYPES } from '../../initializers/constants'
+import { DEFAULT_THEME_NAME, DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { clearCacheByUserId } from '../../lib/oauth-model'
 import { UserNotificationSettingModel } from './user-notification-setting'
 import { VideoModel } from '../video/video'
@@ -51,6 +52,8 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { VideoImportModel } from '../video/video-import'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
+import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -114,6 +117,11 @@ export class UserModel extends Model<UserModel> {
   email: string
 
   @AllowNull(true)
+  @IsEmail
+  @Column(DataType.STRING(400))
+  pendingEmail: string
+
+  @AllowNull(true)
   @Default(null)
   @Is('UserEmailVerified', value => throwIfNotValid(value, isUserEmailVerifiedValid, 'email verified boolean', true))
   @Column
@@ -141,6 +149,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
+
+  @AllowNull(true)
+  @Default(null)
+  @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
+  @Column(DataType.ARRAY(DataType.STRING))
+  videoLanguages: string[]
 
   @AllowNull(false)
   @Default(UserAdminFlag.NONE)
@@ -174,6 +188,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
   @Column(DataType.BIGINT)
   videoQuotaDaily: number
+
+  @AllowNull(false)
+  @Default(DEFAULT_THEME_NAME)
+  @Is('UserTheme', value => throwIfNotValid(value, isThemeNameValid, 'theme'))
+  @Column
+  theme: string
 
   @CreatedAt
   createdAt: Date
@@ -355,7 +375,7 @@ export class UserModel extends Model<UserModel> {
   static loadByUsername (username: string) {
     const query = {
       where: {
-        username
+        username: { [ Op.iLike ]: username }
       }
     }
 
@@ -365,7 +385,7 @@ export class UserModel extends Model<UserModel> {
   static loadByUsernameAndPopulateChannels (username: string) {
     const query = {
       where: {
-        username
+        username: { [ Op.iLike ]: username }
       }
     }
 
@@ -387,7 +407,7 @@ export class UserModel extends Model<UserModel> {
 
     const query = {
       where: {
-        [ Op.or ]: [ { username }, { email } ]
+        [ Op.or ]: [ { username: { [ Op.iLike ]: username } }, { email } ]
       }
     }
 
@@ -540,12 +560,15 @@ export class UserModel extends Model<UserModel> {
       id: this.id,
       username: this.username,
       email: this.email,
+      pendingEmail: this.pendingEmail,
       emailVerified: this.emailVerified,
       nsfwPolicy: this.nsfwPolicy,
       webTorrentEnabled: this.webTorrentEnabled,
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      videoLanguages: this.videoLanguages,
       role: this.role,
+      theme: getThemeOrDefault(this.theme, DEFAULT_USER_THEME_NAME),
       roleLabel: USER_ROLE_LABELS[ this.role ],
       videoQuota: this.videoQuota,
       videoQuotaDaily: this.videoQuotaDaily,

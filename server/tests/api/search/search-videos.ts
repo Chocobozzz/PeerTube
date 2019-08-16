@@ -4,21 +4,20 @@ import * as chai from 'chai'
 import 'mocha'
 import {
   advancedVideosSearch,
-  flushTests,
-  killallServers,
+  cleanupTests,
   flushAndRunServer,
+  immutableAssign,
   searchVideo,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  wait,
-  immutableAssign,
-  cleanupTests
+  wait
 } from '../../../../shared/extra-utils'
+import { createVideoCaption } from '../../../../shared/extra-utils/videos/video-captions'
 
 const expect = chai.expect
 
-describe('Test a videos search', function () {
+describe('Test videos search', function () {
   let server: ServerInfo = null
   let startDate: string
 
@@ -43,8 +42,29 @@ describe('Test a videos search', function () {
       const attributes2 = immutableAssign(attributes1, { name: attributes1.name + ' - 2', fixture: 'video_short.mp4' })
       await uploadVideo(server.url, server.accessToken, attributes2)
 
-      const attributes3 = immutableAssign(attributes1, { name: attributes1.name + ' - 3', language: 'en' })
-      await uploadVideo(server.url, server.accessToken, attributes3)
+      {
+        const attributes3 = immutableAssign(attributes1, { name: attributes1.name + ' - 3', language: undefined })
+        const res = await uploadVideo(server.url, server.accessToken, attributes3)
+        const videoId = res.body.video.id
+
+        await createVideoCaption({
+          url: server.url,
+          accessToken: server.accessToken,
+          language: 'en',
+          videoId,
+          fixture: 'subtitle-good2.vtt',
+          mimeType: 'application/octet-stream'
+        })
+
+        await createVideoCaption({
+          url: server.url,
+          accessToken: server.accessToken,
+          language: 'aa',
+          videoId,
+          fixture: 'subtitle-good2.vtt',
+          mimeType: 'application/octet-stream'
+        })
+      }
 
       const attributes4 = immutableAssign(attributes1, { name: attributes1.name + ' - 4', language: 'pl', nsfw: true })
       await uploadVideo(server.url, server.accessToken, attributes4)
@@ -53,7 +73,7 @@ describe('Test a videos search', function () {
 
       startDate = new Date().toISOString()
 
-      const attributes5 = immutableAssign(attributes1, { name: attributes1.name + ' - 5', licence: 2 })
+      const attributes5 = immutableAssign(attributes1, { name: attributes1.name + ' - 5', licence: 2, language: undefined })
       await uploadVideo(server.url, server.accessToken, attributes5)
 
       const attributes6 = immutableAssign(attributes1, { name: attributes1.name + ' - 6', tags: [ 't1', 't2 '] })
@@ -243,13 +263,26 @@ describe('Test a videos search', function () {
       search: '1111 2222 3333',
       languageOneOf: [ 'pl', 'en' ]
     }
-    const res1 = await advancedVideosSearch(server.url, query)
-    expect(res1.body.total).to.equal(2)
-    expect(res1.body.data[0].name).to.equal('1111 2222 3333 - 3')
-    expect(res1.body.data[1].name).to.equal('1111 2222 3333 - 4')
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { languageOneOf: [ 'eo' ] }))
-    expect(res2.body.total).to.equal(0)
+    {
+      const res = await advancedVideosSearch(server.url, query)
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data[ 0 ].name).to.equal('1111 2222 3333 - 3')
+      expect(res.body.data[ 1 ].name).to.equal('1111 2222 3333 - 4')
+    }
+
+    {
+      const res = await advancedVideosSearch(server.url, immutableAssign(query, { languageOneOf: [ 'pl', 'en', '_unknown' ] }))
+      expect(res.body.total).to.equal(3)
+      expect(res.body.data[ 0 ].name).to.equal('1111 2222 3333 - 3')
+      expect(res.body.data[ 1 ].name).to.equal('1111 2222 3333 - 4')
+      expect(res.body.data[ 2 ].name).to.equal('1111 2222 3333 - 5')
+    }
+
+    {
+      const res = await advancedVideosSearch(server.url, immutableAssign(query, { languageOneOf: [ 'eo' ] }))
+      expect(res.body.total).to.equal(0)
+    }
   })
 
   it('Should search by start date', async function () {

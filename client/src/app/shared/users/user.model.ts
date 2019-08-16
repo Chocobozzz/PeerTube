@@ -8,6 +8,7 @@ export class User implements UserServerModel {
   id: number
   username: string
   email: string
+  pendingEmail: string | null
   emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
 
@@ -17,12 +18,15 @@ export class User implements UserServerModel {
   webTorrentEnabled: boolean
   autoPlayVideo: boolean
   videosHistoryEnabled: boolean
+  videoLanguages: string[]
 
   videoQuota: number
   videoQuotaDaily: number
   account: Account
   videoChannels: VideoChannel[]
   createdAt: Date
+
+  theme: string
 
   adminFlags?: UserAdminFlag
 
@@ -46,6 +50,8 @@ export class User implements UserServerModel {
     this.videosHistoryEnabled = hash.videosHistoryEnabled
     this.autoPlayVideo = hash.autoPlayVideo
     this.createdAt = hash.createdAt
+
+    this.theme = hash.theme
 
     this.adminFlags = hash.adminFlags
 

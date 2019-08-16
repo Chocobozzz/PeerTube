@@ -114,11 +114,12 @@ describe('Test users notifications', function () {
   before(async function () {
     this.timeout(120000)
 
-    await MockSmtpServer.Instance.collectEmails(emails)
+    const port = await MockSmtpServer.Instance.collectEmails(emails)
 
     const overrideConfig = {
       smtp: {
-        hostname: 'localhost'
+        hostname: 'localhost',
+        port
       }
     }
     servers = await flushAndRunMultipleServers(3, overrideConfig)
@@ -194,7 +195,7 @@ describe('Test users notifications', function () {
     it('Should send a new video notification if the user follows the local video publisher', async function () {
       this.timeout(15000)
 
-      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:9001')
+      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
 
       const { name, uuid } = await uploadVideoByLocalAccount(servers)
@@ -204,7 +205,7 @@ describe('Test users notifications', function () {
     it('Should send a new video notification from a remote account', async function () {
       this.timeout(50000) // Server 2 has transcoding enabled
 
-      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:9002')
+      await addUserSubscription(servers[0].url, userAccessToken, 'root_channel@localhost:' + servers[1].port)
       await waitJobs(servers)
 
       const { name, uuid } = await uploadVideoByRemoteAccount(servers)
@@ -578,7 +579,9 @@ describe('Test users notifications', function () {
       const uuid = resVideo.body.video.uuid
 
       await waitJobs(servers)
-      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'hello @user_1@localhost:9001 1')
+
+      const text1 = `hello @user_1@localhost:${servers[ 0 ].port} 1`
+      const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, text1)
       const server2ThreadId = resThread.body.comment.id
 
       await waitJobs(servers)
@@ -588,8 +591,8 @@ describe('Test users notifications', function () {
       const server1ThreadId = resThread2.body.data[0].id
       await checkCommentMention(baseParams, uuid, server1ThreadId, server1ThreadId, 'super root 2 name', 'presence')
 
-      const text = '@user_1@localhost:9001 hello 2 @root@localhost:9001'
-      await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, server2ThreadId, text)
+      const text2 = `@user_1@localhost:${servers[ 0 ].port} hello 2 @root@localhost:${servers[ 0 ].port}`
+      await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, server2ThreadId, text2)
 
       await waitJobs(servers)
 
@@ -779,7 +782,7 @@ describe('Test users notifications', function () {
     it('Should not send a notification before the video is published', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 100000)
+      let updateAt = new Date(new Date().getTime() + 1000000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -889,10 +892,10 @@ describe('Test users notifications', function () {
 
       await waitJobs(servers)
 
-      await checkNewInstanceFollower(baseParams, 'localhost:9003', 'presence')
+      await checkNewInstanceFollower(baseParams, 'localhost:' + servers[2].port, 'presence')
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
-      await checkNewInstanceFollower(immutableAssign(baseParams, userOverride), 'localhost:9003', 'absence')
+      await checkNewInstanceFollower(immutableAssign(baseParams, userOverride), 'localhost:' + servers[2].port, 'absence')
     })
   })
 
@@ -933,29 +936,29 @@ describe('Test users notifications', function () {
     it('Should notify when a local channel is following one of our channel', async function () {
       this.timeout(10000)
 
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root name', myChannelName, 'presence')
 
-      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
+      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
     })
 
     it('Should notify when a remote channel is following one of our channel', async function () {
       this.timeout(10000)
 
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
       await waitJobs(servers)
 
       await checkNewActorFollow(baseParams, 'channel', 'root', 'super root 2 name', myChannelName, 'presence')
 
-      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
     })
 
     it('Should notify when a local account is following one of our channel', async function () {
       this.timeout(10000)
 
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:9001')
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:' + servers[0].port)
 
       await waitJobs(servers)
 
@@ -965,7 +968,7 @@ describe('Test users notifications', function () {
     it('Should notify when a remote account is following one of our channel', async function () {
       this.timeout(10000)
 
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:9001')
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:' + servers[0].port)
 
       await waitJobs(servers)
 
@@ -1019,8 +1022,8 @@ describe('Test users notifications', function () {
       autoBlacklistTestsCustomConfig.transcoding.enabled = true
       await updateCustomConfig(servers[0].url, servers[0].accessToken, autoBlacklistTestsCustomConfig)
 
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
 
     })
 
@@ -1071,7 +1074,7 @@ describe('Test users notifications', function () {
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 100000)
+      let updateAt = new Date(new Date().getTime() + 1000000)
 
       const name = 'video with auto-blacklist and future schedule ' + uuidv4()
 
@@ -1142,8 +1145,8 @@ describe('Test users notifications', function () {
     after(async () => {
       await updateCustomConfig(servers[0].url, servers[0].accessToken, currentCustomConfig)
 
-      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:9001')
-      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:9001')
+      await removeUserSubscription(servers[0].url, servers[0].accessToken, 'user_1_channel@localhost:' + servers[0].port)
+      await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
     })
   })
 

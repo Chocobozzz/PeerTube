@@ -2,13 +2,15 @@ import { ActivityLike } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { getVideoLikeActivityPubUrl } from '../url'
 import { getAPId } from '../../../helpers/activitypub'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { SignatureActorModel } from '../../../typings/models'
 
-async function processLikeActivity (activity: ActivityLike, byActor: ActorModel) {
+async function processLikeActivity (options: APProcessorOptions<ActivityLike>) {
+  const { activity, byActor } = options
   return retryTransactionWrapper(processLikeVideo, byActor, activity)
 }
 
@@ -20,7 +22,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
+async function processLikeVideo (byActor: SignatureActorModel, activity: ActivityLike) {
   const videoUrl = getAPId(activity.object)
 
   const byAccount = byActor.Account
@@ -29,19 +31,26 @@ async function processLikeVideo (byActor: ActorModel, activity: ActivityLike) {
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoUrl })
 
   return sequelizeTypescript.transaction(async t => {
-    const rate = {
-      type: 'like' as 'like',
-      videoId: video.id,
-      accountId: byAccount.id
-    }
-    const [ , created ] = await AccountVideoRateModel.findOrCreate({
-      where: rate,
-      defaults: Object.assign({}, rate, { url: getVideoLikeActivityPubUrl(byActor, video) }),
-      transaction: t
-    })
-    if (created === true) await video.increment('likes', { transaction: t })
+    const url = getVideoLikeActivityPubUrl(byActor, video)
 
-    if (video.isOwned() && created === true) {
+    const existingRate = await AccountVideoRateModel.loadByAccountAndVideoOrUrl(byAccount.id, video.id, url)
+    if (existingRate && existingRate.type === 'like') return
+
+    if (existingRate && existingRate.type === 'dislike') {
+      await video.decrement('dislikes', { transaction: t })
+    }
+
+    await video.increment('likes', { transaction: t })
+
+    const rate = existingRate || new AccountVideoRateModel()
+    rate.type = 'like'
+    rate.videoId = video.id
+    rate.accountId = byAccount.id
+    rate.url = url
+
+    await rate.save({ transaction: t })
+
+    if (video.isOwned()) {
       // Don't resend the activity to the sender
       const exceptions = [ byActor ]
 

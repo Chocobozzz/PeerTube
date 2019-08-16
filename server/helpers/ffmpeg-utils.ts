@@ -1,6 +1,6 @@
 import * as ffmpeg from 'fluent-ffmpeg'
 import { dirname, join } from 'path'
-import { getTargetBitrate, VideoResolution } from '../../shared/models/videos'
+import { getTargetBitrate, getMaxBitrate, VideoResolution } from '../../shared/models/videos'
 import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
@@ -18,7 +18,8 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
     VideoResolution.H_360P,
     VideoResolution.H_720P,
     VideoResolution.H_240P,
-    VideoResolution.H_1080P
+    VideoResolution.H_1080P,
+    VideoResolution.H_4K
   ]
 
   for (const resolution of resolutions) {
@@ -31,7 +32,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
 }
 
 async function getVideoFileSize (path: string) {
-  const videoStream = await getVideoFileStream(path)
+  const videoStream = await getVideoStreamFromFile(path)
 
   return {
     width: videoStream.width,
@@ -49,7 +50,7 @@ async function getVideoFileResolution (path: string) {
 }
 
 async function getVideoFileFPS (path: string) {
-  const videoStream = await getVideoFileStream(path)
+  const videoStream = await getVideoStreamFromFile(path)
 
   for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
     const valuesText: string = videoStream[key]
@@ -117,16 +118,37 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
   }
 }
 
-type TranscodeOptions = {
+type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio'
+
+interface BaseTranscodeOptions {
+  type: TranscodeOptionsType
   inputPath: string
   outputPath: string
   resolution: VideoResolution
   isPortraitMode?: boolean
+}
 
-  hlsPlaylist?: {
+interface HLSTranscodeOptions extends BaseTranscodeOptions {
+  type: 'hls'
+  hlsPlaylist: {
     videoFilename: string
   }
 }
+
+interface QuickTranscodeOptions extends BaseTranscodeOptions {
+  type: 'quick-transcode'
+}
+
+interface VideoTranscodeOptions extends BaseTranscodeOptions {
+  type: 'video'
+}
+
+interface MergeAudioTranscodeOptions extends BaseTranscodeOptions {
+  type: 'merge-audio'
+  audioPath: string
+}
+
+type TranscodeOptions = HLSTranscodeOptions | VideoTranscodeOptions | MergeAudioTranscodeOptions | QuickTranscodeOptions
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
@@ -134,8 +156,12 @@ function transcode (options: TranscodeOptions) {
       let command = ffmpeg(options.inputPath, { niceness: FFMPEG_NICE.TRANSCODING })
         .output(options.outputPath)
 
-      if (options.hlsPlaylist) {
+      if (options.type === 'quick-transcode') {
+        command = await buildQuickTranscodeCommand(command)
+      } else if (options.type === 'hls') {
         command = await buildHLSCommand(command, options)
+      } else if (options.type === 'merge-audio') {
+        command = await buildAudioMergeCommand(command, options)
       } else {
         command = await buildx264Command(command, options)
       }
@@ -151,7 +177,7 @@ function transcode (options: TranscodeOptions) {
           return rej(err)
         })
         .on('end', () => {
-          return onTranscodingSuccess(options)
+          return fixHLSPlaylistIfNeeded(options)
             .then(() => res())
             .catch(err => rej(err))
         })
@@ -162,6 +188,30 @@ function transcode (options: TranscodeOptions) {
   })
 }
 
+async function canDoQuickTranscode (path: string): Promise<boolean> {
+  // NOTE: This could be optimized by running ffprobe only once (but it runs fast anyway)
+  const videoStream = await getVideoStreamFromFile(path)
+  const parsedAudio = await audio.get(path)
+  const fps = await getVideoFileFPS(path)
+  const bitRate = await getVideoFileBitrate(path)
+  const resolution = await getVideoFileResolution(path)
+
+  // check video params
+  if (videoStream[ 'codec_name' ] !== 'h264') return false
+  if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
+  if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) return false
+
+    // check audio params (if audio stream exists)
+  if (parsedAudio.audioStream) {
+    if (parsedAudio.audioStream[ 'codec_name' ] !== 'aac') return false
+
+    const maxAudioBitrate = audio.bitrate[ 'aac' ](parsedAudio.audioStream[ 'bit_rate' ])
+    if (maxAudioBitrate !== -1 && parsedAudio.audioStream[ 'bit_rate' ] > maxAudioBitrate) return false
+  }
+
+  return true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -169,16 +219,19 @@ export {
   getVideoFileResolution,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
+  TranscodeOptions,
+  TranscodeOptionsType,
   transcode,
   getVideoFileFPS,
   computeResolutionsToTranscode,
   audio,
-  getVideoFileBitrate
+  getVideoFileBitrate,
+  canDoQuickTranscode
 }
 
 // ---------------------------------------------------------------------------
 
-async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
+async function buildx264Command (command: ffmpeg.FfmpegCommand, options: VideoTranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
   // On small/medium resolutions, limit FPS
   if (
@@ -189,7 +242,7 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
     fps = VIDEO_TRANSCODING_FPS.AVERAGE
   }
 
-  command = await presetH264(command, options.resolution, fps)
+  command = await presetH264(command, options.inputPath, options.resolution, fps)
 
   if (options.resolution !== undefined) {
     // '?x720' or '720x?' for example
@@ -208,7 +261,29 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
   return command
 }
 
-async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
+async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: MergeAudioTranscodeOptions) {
+  command = command.loop(undefined)
+
+  command = await presetH264VeryFast(command, options.audioPath, options.resolution)
+
+  command = command.input(options.audioPath)
+                   .videoFilter('scale=trunc(iw/2)*2:trunc(ih/2)*2') // Avoid "height not divisible by 2" error
+                   .outputOption('-tune stillimage')
+                   .outputOption('-shortest')
+
+  return command
+}
+
+async function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
+  command = await presetCopy(command)
+
+  command = command.outputOption('-map_metadata -1') // strip all metadata
+                   .outputOption('-movflags faststart')
+
+  return command
+}
+
+async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
   command = await presetCopy(command)
@@ -224,26 +299,26 @@ async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: Transcod
   return command
 }
 
-function getHLSVideoPath (options: TranscodeOptions) {
+function getHLSVideoPath (options: HLSTranscodeOptions) {
   return `${dirname(options.outputPath)}/${options.hlsPlaylist.videoFilename}`
 }
 
-async function onTranscodingSuccess (options: TranscodeOptions) {
-  if (!options.hlsPlaylist) return
+async function fixHLSPlaylistIfNeeded (options: TranscodeOptions) {
+  if (options.type !== 'hls') return
 
-  // Fix wrong mapping with some ffmpeg versions
   const fileContent = await readFile(options.outputPath)
 
   const videoFileName = options.hlsPlaylist.videoFilename
   const videoFilePath = getHLSVideoPath(options)
 
+  // Fix wrong mapping with some ffmpeg versions
   const newContent = fileContent.toString()
                                 .replace(`#EXT-X-MAP:URI="${videoFilePath}",`, `#EXT-X-MAP:URI="${videoFileName}",`)
 
   await writeFile(options.outputPath, newContent)
 }
 
-function getVideoFileStream (path: string) {
+function getVideoStreamFromFile (path: string) {
   return new Promise<any>((res, rej) => {
     ffmpeg.ffprobe(path, (err, metadata) => {
       if (err) return rej(err)
@@ -263,35 +338,18 @@ function getVideoFileStream (path: string) {
  * and quality. Superfast and ultrafast will give you better
  * performance, but then quality is noticeably worse.
  */
-async function presetH264VeryFast (command: ffmpeg.FfmpegCommand, resolution: VideoResolution, fps: number): Promise<ffmpeg.FfmpegCommand> {
-  let localCommand = await presetH264(command, resolution, fps)
+async function presetH264VeryFast (command: ffmpeg.FfmpegCommand, input: string, resolution: VideoResolution, fps?: number) {
+  let localCommand = await presetH264(command, input, resolution, fps)
+
   localCommand = localCommand.outputOption('-preset:v veryfast')
-             .outputOption([ '--aq-mode=2', '--aq-strength=1.3' ])
+
   /*
   MAIN reference: https://slhck.info/video/2017/03/01/rate-control.html
   Our target situation is closer to a livestream than a stream,
   since we want to reduce as much a possible the encoding burden,
-  altough not to the point of a livestream where there is a hard
+  although not to the point of a livestream where there is a hard
   constraint on the frames per second to be encoded.
-
-  why '--aq-mode=2 --aq-strength=1.3' instead of '-profile:v main'?
-    Make up for most of the loss of grain and macroblocking
-    with less computing power.
   */
-
-  return localCommand
-}
-
-/**
- * A preset optimised for a stillimage audio video
- */
-async function presetStillImageWithAudio (
-  command: ffmpeg.FfmpegCommand,
-  resolution: VideoResolution,
-  fps: number
-): Promise<ffmpeg.FfmpegCommand> {
-  let localCommand = await presetH264VeryFast(command, resolution, fps)
-  localCommand = localCommand.outputOption('-tune stillimage')
 
   return localCommand
 }
@@ -300,7 +358,7 @@ async function presetStillImageWithAudio (
  * A toolbox to play with audio
  */
 namespace audio {
-  export const get = (option: ffmpeg.FfmpegCommand | string) => {
+  export const get = (option: string) => {
     // without position, ffprobe considers the last input only
     // we make it consider the first input only
     // if you pass a file path to pos, then ffprobe acts on that file directly
@@ -322,25 +380,22 @@ namespace audio {
         return res({ absolutePath: data.format.filename })
       }
 
-      if (typeof option === 'string') {
-        return ffmpeg.ffprobe(option, parseFfprobe)
-      }
-
-      return option.ffprobe(parseFfprobe)
+      return ffmpeg.ffprobe(option, parseFfprobe)
     })
   }
 
   export namespace bitrate {
     const baseKbitrate = 384
 
-    const toBits = (kbits: number): number => { return kbits * 8000 }
+    const toBits = (kbits: number) => kbits * 8000
 
     export const aac = (bitrate: number): number => {
       switch (true) {
-      case bitrate > toBits(baseKbitrate):
-        return baseKbitrate
-      default:
-        return -1 // we interpret it as a signal to copy the audio stream as is
+        case bitrate > toBits(baseKbitrate):
+          return baseKbitrate
+
+        default:
+          return -1 // we interpret it as a signal to copy the audio stream as is
       }
     }
 
@@ -351,12 +406,14 @@ namespace audio {
       made here are not made to be accurate, especially with good mp3 encoders.
       */
       switch (true) {
-      case bitrate <= toBits(192):
-        return 128
-      case bitrate <= toBits(384):
-        return 256
-      default:
-        return baseKbitrate
+        case bitrate <= toBits(192):
+          return 128
+
+        case bitrate <= toBits(384):
+          return 256
+
+        default:
+          return baseKbitrate
       }
     }
   }
@@ -368,7 +425,7 @@ namespace audio {
  * As for the audio, quality '5' is the highest and ensures 96-112kbps/channel
  * See https://trac.ffmpeg.org/wiki/Encode/AAC#fdk_vbr
  */
-async function presetH264 (command: ffmpeg.FfmpegCommand, resolution: VideoResolution, fps: number): Promise<ffmpeg.FfmpegCommand> {
+async function presetH264 (command: ffmpeg.FfmpegCommand, input: string, resolution: VideoResolution, fps?: number) {
   let localCommand = command
     .format('mp4')
     .videoCodec('libx264')
@@ -379,7 +436,7 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, resolution: VideoResol
     .outputOption('-map_metadata -1') // strip all metadata
     .outputOption('-movflags faststart')
 
-  const parsedAudio = await audio.get(localCommand)
+  const parsedAudio = await audio.get(input)
 
   if (!parsedAudio.audioStream) {
     localCommand = localCommand.noAudio()
@@ -388,28 +445,30 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, resolution: VideoResol
       .audioCodec('libfdk_aac')
       .audioQuality(5)
   } else {
-    // we try to reduce the ceiling bitrate by making rough correspondances of bitrates
+    // we try to reduce the ceiling bitrate by making rough matches of bitrates
     // of course this is far from perfect, but it might save some space in the end
-    const audioCodecName = parsedAudio.audioStream[ 'codec_name' ]
-    let bitrate: number
-    if (audio.bitrate[ audioCodecName ]) {
-      localCommand = localCommand.audioCodec('aac')
+    localCommand = localCommand.audioCodec('aac')
 
-      bitrate = audio.bitrate[ audioCodecName ](parsedAudio.audioStream[ 'bit_rate' ])
+    const audioCodecName = parsedAudio.audioStream[ 'codec_name' ]
+
+    if (audio.bitrate[ audioCodecName ]) {
+      const bitrate = audio.bitrate[ audioCodecName ](parsedAudio.audioStream[ 'bit_rate' ])
       if (bitrate !== undefined && bitrate !== -1) localCommand = localCommand.audioBitrate(bitrate)
     }
   }
 
-  // Constrained Encoding (VBV)
-  // https://slhck.info/video/2017/03/01/rate-control.html
-  // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
-  const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
-  localCommand = localCommand.outputOptions([`-maxrate ${ targetBitrate }`, `-bufsize ${ targetBitrate * 2 }`])
+  if (fps) {
+    // Constrained Encoding (VBV)
+    // https://slhck.info/video/2017/03/01/rate-control.html
+    // https://trac.ffmpeg.org/wiki/Limiting%20the%20output%20bitrate
+    const targetBitrate = getTargetBitrate(resolution, fps, VIDEO_TRANSCODING_FPS)
+    localCommand = localCommand.outputOptions([ `-maxrate ${targetBitrate}`, `-bufsize ${targetBitrate * 2}` ])
 
-  // Keyframe interval of 2 seconds for faster seeking and resolution switching.
-  // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
-  // https://superuser.com/a/908325
-  localCommand = localCommand.outputOption(`-g ${ fps * 2 }`)
+    // Keyframe interval of 2 seconds for faster seeking and resolution switching.
+    // https://streaminglearningcenter.com/blogs/whats-the-right-keyframe-interval.html
+    // https://superuser.com/a/908325
+    localCommand = localCommand.outputOption(`-g ${fps * 2}`)
+  }
 
   return localCommand
 }

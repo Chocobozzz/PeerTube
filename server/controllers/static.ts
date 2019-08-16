@@ -2,13 +2,13 @@ import * as cors from 'cors'
 import * as express from 'express'
 import {
   HLS_STREAMING_PLAYLIST_DIRECTORY,
+  PEERTUBE_VERSION,
   ROUTE_CACHE_LIFETIME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
   WEBSERVER
 } from '../initializers/constants'
-import { VideosCaptionCache, VideosPreviewCache } from '../lib/files-cache'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosGetValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
@@ -18,8 +18,8 @@ import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/node
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
 import { CONFIG } from '../initializers/config'
+import { getPreview, getVideoCaption } from './lazy-static'
 
-const packageJSON = require('../../../package.json')
 const staticRouter = express.Router()
 
 staticRouter.use(cors())
@@ -69,22 +69,23 @@ staticRouter.use(
 const thumbnailsPhysicalPath = CONFIG.STORAGE.THUMBNAILS_DIR
 staticRouter.use(
   STATIC_PATHS.THUMBNAILS,
-  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE, fallthrough: false }) // 404 if the file does not exist
+  express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
 )
 
+// DEPRECATED: use lazy-static route instead
 const avatarsPhysicalPath = CONFIG.STORAGE.AVATARS_DIR
 staticRouter.use(
   STATIC_PATHS.AVATARS,
-  express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE, fallthrough: false }) // 404 if the file does not exist
+  express.static(avatarsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
 )
 
-// We don't have video previews, fetch them from the origin instance
+// DEPRECATED: use lazy-static route instead
 staticRouter.use(
   STATIC_PATHS.PREVIEWS + ':uuid.jpg',
   asyncMiddleware(getPreview)
 )
 
-// We don't have video captions, fetch them from the origin instance
+// DEPRECATED: use lazy-static route instead
 staticRouter.use(
   STATIC_PATHS.VIDEO_CAPTIONS + ':videoId-:captionLanguage([a-z]+).vtt',
   asyncMiddleware(getVideoCaption)
@@ -177,24 +178,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function getPreview (req: express.Request, res: express.Response) {
-  const result = await VideosPreviewCache.Instance.getFilePath(req.params.uuid)
-  if (!result) return res.sendStatus(404)
-
-  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
-}
-
-async function getVideoCaption (req: express.Request, res: express.Response) {
-  const result = await VideosCaptionCache.Instance.getFilePath({
-    videoId: req.params.videoId,
-    language: req.params.captionLanguage
-  })
-  if (!result) return res.sendStatus(404)
-
-  return res.sendFile(result.path, { maxAge: STATIC_MAX_AGE })
-}
-
-async function generateNodeinfo (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function generateNodeinfo (req: express.Request, res: express.Response) {
   const { totalVideos } = await VideoModel.getStats()
   const { totalLocalVideoComments } = await VideoCommentModel.getStats()
   const { totalUsers } = await UserModel.getStats()
@@ -205,7 +189,7 @@ async function generateNodeinfo (req: express.Request, res: express.Response, ne
       version: '2.0',
       software: {
         name: 'peertube',
-        version: packageJSON.version
+        version: PEERTUBE_VERSION
       },
       protocols: [
         'activitypub'

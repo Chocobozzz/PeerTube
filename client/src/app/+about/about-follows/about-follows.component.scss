@@ -1,0 +1,18 @@
+@import '_variables';
+@import '_mixins';
+
+.subtitle {
+  font-size: 18px;
+  font-weight: $font-semibold;
+  margin-bottom: 20px;
+}
+
+a {
+  display: block;
+  width: fit-content;
+  margin-top: 3px;
+}
+
+.no-results {
+  justify-content: flex-start;
+}

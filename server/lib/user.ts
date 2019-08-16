@@ -1,7 +1,6 @@
-import * as Sequelize from 'sequelize'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
-import { SERVER_ACTOR_NAME } from '../initializers/constants'
+import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
 import { UserModel } from '../models/account/user'
 import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
@@ -12,8 +11,19 @@ import { UserNotificationSettingModel } from '../models/account/user-notificatio
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../shared/models/users'
 import { createWatchLaterPlaylist } from './video-playlist'
 import { sequelizeTypescript } from '../initializers/database'
+import { Transaction } from 'sequelize/types'
+import { Redis } from './redis'
+import { Emailer } from './emailer'
 
-async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, validateUser = true) {
+type ChannelNames = { name: string, displayName: string }
+async function createUserAccountAndChannelAndPlaylist (parameters: {
+  userToCreate: UserModel,
+  userDisplayName?: string,
+  channelNames?: ChannelNames,
+  validateUser?: boolean
+}) {
+  const { userToCreate, userDisplayName, channelNames, validateUser = true } = parameters
+
   const { user, account, videoChannel } = await sequelizeTypescript.transaction(async t => {
     const userOptions = {
       transaction: t,
@@ -23,21 +33,17 @@ async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, 
     const userCreated = await userToCreate.save(userOptions)
     userCreated.NotificationSetting = await createDefaultUserNotificationSettings(userCreated, t)
 
-    const accountCreated = await createLocalAccountWithoutKeys(userCreated.username, userCreated.id, null, t)
+    const accountCreated = await createLocalAccountWithoutKeys({
+      name: userCreated.username,
+      displayName: userDisplayName,
+      userId: userCreated.id,
+      applicationId: null,
+      t: t
+    })
     userCreated.Account = accountCreated
 
-    let channelName = userCreated.username + '_channel'
-
-    // Conflict, generate uuid instead
-    const actor = await ActorModel.loadLocalByName(channelName)
-    if (actor) channelName = uuidv4()
-
-    const videoChannelDisplayName = `Main ${userCreated.username} channel`
-    const videoChannelInfo = {
-      name: channelName,
-      displayName: videoChannelDisplayName
-    }
-    const videoChannel = await createVideoChannel(videoChannelInfo, accountCreated, t)
+    const channelAttributes = await buildChannelAttributes(userCreated, channelNames)
+    const videoChannel = await createVideoChannel(channelAttributes, accountCreated, t)
 
     const videoPlaylist = await createWatchLaterPlaylist(accountCreated, t)
 
@@ -55,20 +61,22 @@ async function createUserAccountAndChannelAndPlaylist (userToCreate: UserModel, 
   return { user, account, videoChannel } as { user: UserModel, account: AccountModel, videoChannel: VideoChannelModel }
 }
 
-async function createLocalAccountWithoutKeys (
+async function createLocalAccountWithoutKeys (parameters: {
   name: string,
+  displayName?: string,
   userId: number | null,
   applicationId: number | null,
-  t: Sequelize.Transaction | undefined,
-  type: ActivityPubActorType= 'Person'
-) {
+  t: Transaction | undefined,
+  type?: ActivityPubActorType
+}) {
+  const { name, displayName, userId, applicationId, t, type = 'Person' } = parameters
   const url = getAccountActivityPubUrl(name)
 
   const actorInstance = buildActorInstance(type, url, name)
   const actorInstanceCreated = await actorInstance.save({ transaction: t })
 
   const accountInstance = new AccountModel({
-    name,
+    name: displayName || name,
     userId,
     applicationId,
     actorId: actorInstanceCreated.id
@@ -81,11 +89,28 @@ async function createLocalAccountWithoutKeys (
 }
 
 async function createApplicationActor (applicationId: number) {
-  const accountCreated = await createLocalAccountWithoutKeys(SERVER_ACTOR_NAME, null, applicationId, undefined, 'Application')
+  const accountCreated = await createLocalAccountWithoutKeys({
+    name: SERVER_ACTOR_NAME,
+    userId: null,
+    applicationId: applicationId,
+    t: undefined,
+    type: 'Application'
+  })
 
   accountCreated.Actor = await setAsyncActorKeys(accountCreated.Actor)
 
   return accountCreated
+}
+
+async function sendVerifyUserEmail (user: UserModel, isPendingEmail = false) {
+  const verificationString = await Redis.Instance.setVerifyEmailVerificationString(user.id)
+  let url = WEBSERVER.URL + '/verify-account/email?userId=' + user.id + '&verificationString=' + verificationString
+
+  if (isPendingEmail) url += '&isPendingEmail=true'
+
+  const email = isPendingEmail ? user.pendingEmail : user.email
+
+  await Emailer.Instance.addVerifyEmailJob(email, url)
 }
 
 // ---------------------------------------------------------------------------
@@ -93,12 +118,13 @@ async function createApplicationActor (applicationId: number) {
 export {
   createApplicationActor,
   createUserAccountAndChannelAndPlaylist,
-  createLocalAccountWithoutKeys
+  createLocalAccountWithoutKeys,
+  sendVerifyUserEmail
 }
 
 // ---------------------------------------------------------------------------
 
-function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Transaction | undefined) {
+function createDefaultUserNotificationSettings (user: UserModel, t: Transaction | undefined) {
   const values: UserNotificationSetting & { userId: number } = {
     userId: user.id,
     newVideoFromSubscription: UserNotificationSettingValue.WEB,
@@ -115,4 +141,21 @@ function createDefaultUserNotificationSettings (user: UserModel, t: Sequelize.Tr
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })
+}
+
+async function buildChannelAttributes (user: UserModel, channelNames?: ChannelNames) {
+  if (channelNames) return channelNames
+
+  let channelName = user.username + '_channel'
+
+  // Conflict, generate uuid instead
+  const actor = await ActorModel.loadLocalByName(channelName)
+  if (actor) channelName = uuidv4()
+
+  const videoChannelDisplayName = `Main ${user.username} channel`
+
+  return {
+    name: channelName,
+    displayName: videoChannelDisplayName
+  }
 }

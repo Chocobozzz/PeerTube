@@ -6,5 +6,5 @@
     <span *ngIf="labelHtml" [innerHTML]="labelHtml"></span>
   </label>
 
-  <my-help *ngIf="helpHtml" tooltipPlacement="top" helpType="custom" i18n-customHtml [customHtml]="helpHtml"></my-help>
+  <my-help *ngIf="helpHtml" [tooltipPlacement]="helpPlacement" helpType="custom" i18n-customHtml [customHtml]="helpHtml"></my-help>
 </div>

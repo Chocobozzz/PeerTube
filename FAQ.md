@@ -58,7 +58,7 @@ is named "Framatube".
 
 Yes, the origin server always seeds videos uploaded on it thanks to
 [Webseed](http://www.bittorrent.org/beps/bep_0019.html).
-It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/lang/en/devdocs/architecture.html#redundancy-between-instances).
+It can also be helped by other servers using [redundancy](https://docs.joinpeertube.org/#/contribute-architecture?id=redundancy-between-instances).
 
 
 ## What is WebSeed?

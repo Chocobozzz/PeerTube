@@ -10,6 +10,7 @@ import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { sortBy } from '@app/shared/misc/utils'
 import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
+import { cloneDeep } from 'lodash-es'
 
 @Injectable()
 export class ServerService {
@@ -40,6 +41,13 @@ export class ServerService {
         javascript: '',
         css: ''
       }
+    },
+    plugin: {
+      registered: []
+    },
+    theme: {
+      registered: [],
+      default: 'default'
     },
     email: {
       enabled: false
@@ -160,27 +168,27 @@ export class ServerService {
   }
 
   getConfig () {
-    return this.config
+    return cloneDeep(this.config)
   }
 
   getVideoCategories () {
-    return this.videoCategories
+    return cloneDeep(this.videoCategories)
   }
 
   getVideoLicences () {
-    return this.videoLicences
+    return cloneDeep(this.videoLicences)
   }
 
   getVideoLanguages () {
-    return this.videoLanguages
+    return cloneDeep(this.videoLanguages)
   }
 
   getVideoPrivacies () {
-    return this.videoPrivacies
+    return cloneDeep(this.videoPrivacies)
   }
 
   getVideoPlaylistPrivacies () {
-    return this.videoPlaylistPrivacies
+    return cloneDeep(this.videoPlaylistPrivacies)
   }
 
   private loadAttributeEnum (

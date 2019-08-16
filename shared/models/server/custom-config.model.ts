@@ -15,6 +15,10 @@ export interface CustomConfig {
     }
   }
 
+  theme: {
+    default: string
+  }
+
   services: {
     twitter: {
       username: string
@@ -54,6 +58,7 @@ export interface CustomConfig {
   transcoding: {
     enabled: boolean
     allowAdditionalExtensions: boolean
+    allowAudioFiles: boolean
     threads: number
     resolutions: {
       '240p': boolean
@@ -61,6 +66,7 @@ export interface CustomConfig {
       '480p': boolean
       '720p': boolean
       '1080p': boolean
+      '2160p': boolean
     }
     hls: {
       enabled: boolean

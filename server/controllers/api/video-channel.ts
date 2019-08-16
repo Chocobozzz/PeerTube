@@ -19,7 +19,7 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
-import { createVideoChannel } from '../../lib/video-channel'
+import { createVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
@@ -143,15 +143,14 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)
-    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.uuid, { err }))
+    .catch(err => logger.error('Cannot set async actor keys for account %s.', videoChannelCreated.Actor.url, { err }))
 
   auditLogger.create(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelCreated.toFormattedJSON()))
-  logger.info('Video channel with uuid %s created.', videoChannelCreated.Actor.uuid)
+  logger.info('Video channel %s created.', videoChannelCreated.Actor.url)
 
   return res.json({
     videoChannel: {
-      id: videoChannelCreated.id,
-      uuid: videoChannelCreated.Actor.uuid
+      id: videoChannelCreated.id
     }
   }).end()
 }
@@ -161,6 +160,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
   const videoChannelFieldsSave = videoChannelInstance.toJSON()
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannelInstance.toFormattedJSON())
   const videoChannelInfoToUpdate = req.body as VideoChannelUpdate
+  let doBulkVideoUpdate = false
 
   try {
     await sequelizeTypescript.transaction(async t => {
@@ -168,9 +168,18 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         transaction: t
       }
 
-      if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.set('name', videoChannelInfoToUpdate.displayName)
-      if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.set('description', videoChannelInfoToUpdate.description)
-      if (videoChannelInfoToUpdate.support !== undefined) videoChannelInstance.set('support', videoChannelInfoToUpdate.support)
+      if (videoChannelInfoToUpdate.displayName !== undefined) videoChannelInstance.name = videoChannelInfoToUpdate.displayName
+      if (videoChannelInfoToUpdate.description !== undefined) videoChannelInstance.description = videoChannelInfoToUpdate.description
+
+      if (videoChannelInfoToUpdate.support !== undefined) {
+        const oldSupportField = videoChannelInstance.support
+        videoChannelInstance.support = videoChannelInfoToUpdate.support
+
+        if (videoChannelInfoToUpdate.bulkVideosSupportUpdate === true && oldSupportField !== videoChannelInfoToUpdate.support) {
+          doBulkVideoUpdate = true
+          await VideoModel.bulkUpdateSupportField(videoChannelInstance, t)
+        }
+      }
 
       const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions)
       await sendUpdateActor(videoChannelInstanceUpdated, t)
@@ -180,7 +189,8 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         new VideoChannelAuditView(videoChannelInstanceUpdated.toFormattedJSON()),
         oldVideoChannelAuditKeys
       )
-      logger.info('Video channel with name %s and uuid %s updated.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
+
+      logger.info('Video channel %s updated.', videoChannelInstance.Actor.url)
     })
   } catch (err) {
     logger.debug('Cannot update the video channel.', { err })
@@ -193,7 +203,12 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
     throw err
   }
 
-  return res.type('json').status(204).end()
+  res.type('json').status(204).end()
+
+  // Don't process in a transaction, and after the response because it could be long
+  if (doBulkVideoUpdate) {
+    await federateAllVideosOfChannel(videoChannelInstance)
+  }
 }
 
 async function removeVideoChannel (req: express.Request, res: express.Response) {
@@ -205,7 +220,7 @@ async function removeVideoChannel (req: express.Request, res: express.Response) 
     await videoChannelInstance.destroy({ transaction: t })
 
     auditLogger.delete(getAuditIdFromRes(res), new VideoChannelAuditView(videoChannelInstance.toFormattedJSON()))
-    logger.info('Video channel with name %s and uuid %s deleted.', videoChannelInstance.name, videoChannelInstance.Actor.uuid)
+    logger.info('Video channel %s deleted.', videoChannelInstance.Actor.url)
   })
 
   return res.type('json').status(204).end()

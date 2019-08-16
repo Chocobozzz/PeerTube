@@ -52,6 +52,7 @@ storage:
   torrents: '../data/torrents/'
   captions: '../data/captions/'
   cache: '../data/cache/'
+  plugins: '../data/plugins/'
 
 log:
   level: 'info' # debug/info/warning/error

@@ -1,6 +1,6 @@
 import { join } from 'path'
 import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import { LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
@@ -44,6 +44,10 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   @Column
   fileUrl: string
 
+  @AllowNull(true)
+  @Column
+  automaticallyGenerated: boolean
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
@@ -83,17 +87,27 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     [ThumbnailType.PREVIEW]: {
       label: 'preview',
       directory: CONFIG.STORAGE.PREVIEWS_DIR,
-      staticPath: STATIC_PATHS.PREVIEWS
+      staticPath: LAZY_STATIC_PATHS.PREVIEWS
     }
   }
 
   @AfterDestroy
-  static removeFilesAndSendDelete (instance: ThumbnailModel) {
+  static removeFiles (instance: ThumbnailModel) {
     logger.info('Removing %s file %s.', ThumbnailModel.types[instance.type].label, instance.filename)
 
     // Don't block the transaction
     instance.removeThumbnail()
             .catch(err => logger.error('Cannot remove thumbnail file %s.', instance.filename, err))
+  }
+
+  static loadByName (filename: string) {
+    const query = {
+      where: {
+        filename
+      }
+    }
+
+    return ThumbnailModel.findOne(query)
   }
 
   static generateDefaultPreviewName (videoUUID: string) {
@@ -107,10 +121,12 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     return WEBSERVER.URL + staticPath + this.filename
   }
 
-  removeThumbnail () {
+  getPath () {
     const directory = ThumbnailModel.types[this.type].directory
-    const thumbnailPath = join(directory, this.filename)
+    return join(directory, this.filename)
+  }
 
-    return remove(thumbnailPath)
+  removeThumbnail () {
+    return remove(this.getPath())
   }
 }
