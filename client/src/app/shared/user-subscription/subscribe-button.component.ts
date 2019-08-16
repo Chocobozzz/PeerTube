@@ -28,19 +28,19 @@ export class SubscribeButtonComponent implements OnInit {
     private videoService: VideoService
   ) { }
 
-  get uri () {
+  get channelHandle () {
     return this.videoChannel.name + '@' + this.videoChannel.host
   }
 
-  get uriAccount () {
-    return this.videoChannel.ownerAccount.name + '@' + this.videoChannel.host
+  get channelUri () {
+    return this.videoChannel.url
   }
 
   ngOnInit () {
     if (this.isUserLoggedIn()) {
-      this.userSubscriptionService.doesSubscriptionExist(this.uri)
+      this.userSubscriptionService.doesSubscriptionExist(this.channelHandle)
         .subscribe(
-          res => this.subscribed = res[this.uri],
+          res => this.subscribed = res[this.channelHandle],
 
           err => this.notifier.error(err.message)
         )
@@ -56,7 +56,7 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   localSubscribe () {
-    this.userSubscriptionService.addSubscription(this.uri)
+    this.userSubscriptionService.addSubscription(this.channelHandle)
       .subscribe(
         () => {
           this.subscribed = true
@@ -78,7 +78,7 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   localUnsubscribe () {
-    this.userSubscriptionService.deleteSubscription(this.uri)
+    this.userSubscriptionService.deleteSubscription(this.channelHandle)
         .subscribe(
           () => {
             this.subscribed = false

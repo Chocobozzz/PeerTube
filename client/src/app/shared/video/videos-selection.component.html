@@ -1,7 +1,8 @@
 <div class="no-results" i18n *ngIf="pagination.totalItems === 0">No results.</div>
 
 <div myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" class="videos">
-  <div class="video" *ngFor="let video of videos; let i = index">
+  <div class="video" *ngFor="let video of videos; let i = index; trackBy: videoById">
+
     <div class="checkbox-container">
       <my-peertube-checkbox [inputName]="'video-check-' + video.id" [(ngModel)]="_selection[video.id]"></my-peertube-checkbox>
     </div>

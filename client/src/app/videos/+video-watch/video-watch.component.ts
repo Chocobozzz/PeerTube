@@ -8,7 +8,7 @@ import { MetaService } from '@ngx-meta/core'
 import { Notifier, ServerService } from '@app/core'
 import { forkJoin, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { UserVideoRateType, VideoCaption, VideoPlaylistPrivacy, VideoPrivacy, VideoState } from '../../../../../shared'
+import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
@@ -27,9 +27,9 @@ import {
 } from '../../../assets/player/peertube-player-manager'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Video } from '@app/shared/video/video.model'
 import { isWebRTCDisabled } from '../../../assets/player/utils'
+import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 
 @Component({
   selector: 'my-video-watch',
@@ -39,6 +39,7 @@ import { isWebRTCDisabled } from '../../../assets/player/utils'
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
+  @ViewChild('videoWatchPlaylist') videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
   @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
   @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
@@ -51,14 +52,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   descriptionLoading = false
 
   playlist: VideoPlaylist = null
-  playlistVideos: Video[] = []
-  playlistPagination: ComponentPagination = {
-    currentPage: 1,
-    itemsPerPage: 30,
-    totalItems: null
-  }
-  noPlaylistVideos = false
-  currentPlaylistPosition = 1
 
   completeDescriptionShown = false
   completeVideoDescription: string
@@ -126,23 +119,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (videoId) this.loadVideo(videoId)
     })
 
-    this.hotkeys = [
-      new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
-        this.setLike()
-        return false
-      }, undefined, this.i18n('Like the video')),
-      new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
-        this.setDislike()
-        return false
-      }, undefined, this.i18n('Dislike the video')),
-      new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
-        this.subscribeButton.subscribed ?
-          this.subscribeButton.unsubscribe() :
-          this.subscribeButton.subscribe()
-        return false
-      }, undefined, this.i18n('Subscribe to the account'))
-    ]
-    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+    this.initHotkeys()
   }
 
   ngOnDestroy () {
@@ -230,10 +207,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.tags
   }
 
-  isVideoRemovable () {
-    return this.video.isRemovableBy(this.authService.getUser())
-  }
-
   onVideoRemoved () {
     this.redirectService.redirectToHomepage()
   }
@@ -247,10 +220,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video && this.video.state.id === VideoState.TO_TRANSCODE
   }
 
-  isVideoDownloadable () {
-    return this.video && this.video.downloadEnabled
-  }
-
   isVideoToImport () {
     return this.video && this.video.state.id === VideoState.TO_IMPORT
   }
@@ -261,36 +230,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isVideoBlur (video: Video) {
     return video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
-  }
-
-  isPlaylistOwned () {
-    return this.playlist.isLocal === true && this.playlist.ownerAccount.name === this.user.username
-  }
-
-  isUnlistedPlaylist () {
-    return this.playlist.privacy.id === VideoPlaylistPrivacy.UNLISTED
-  }
-
-  isPrivatePlaylist () {
-    return this.playlist.privacy.id === VideoPlaylistPrivacy.PRIVATE
-  }
-
-  isPublicPlaylist () {
-    return this.playlist.privacy.id === VideoPlaylistPrivacy.PUBLIC
-  }
-
-  onPlaylistVideosNearOfBottom () {
-    // Last page
-    if (this.playlistPagination.totalItems <= (this.playlistPagination.currentPage * this.playlistPagination.itemsPerPage)) return
-
-    this.playlistPagination.currentPage += 1
-    this.loadPlaylistElements(false)
-  }
-
-  onElementRemoved (video: Video) {
-    this.playlistVideos = this.playlistVideos.filter(v => v.id !== video.id)
-
-    this.playlistPagination.totalItems--
   }
 
   private loadVideo (videoId: string) {
@@ -333,31 +272,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.playlist = playlist
 
         const videoId = this.route.snapshot.queryParams['videoId']
-        this.loadPlaylistElements(!videoId)
+        this.videoWatchPlaylist.loadPlaylistElements(playlist, !videoId)
       })
-  }
-
-  private loadPlaylistElements (redirectToFirst = false) {
-    this.videoService.getPlaylistVideos(this.playlist.uuid, this.playlistPagination)
-        .subscribe(({ totalVideos, videos }) => {
-          this.playlistVideos = this.playlistVideos.concat(videos)
-          this.playlistPagination.totalItems = totalVideos
-
-          if (totalVideos === 0) {
-            this.noPlaylistVideos = true
-            return
-          }
-
-          this.updatePlaylistIndex()
-
-          if (redirectToFirst) {
-            const extras = {
-              queryParams: { videoId: this.playlistVideos[ 0 ].uuid },
-              replaceUrl: true
-            }
-            this.router.navigate([], extras)
-          }
-        })
   }
 
   private updateVideoDescription (description: string) {
@@ -421,7 +337,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.remoteServerDown = false
     this.currentTime = undefined
 
-    this.updatePlaylistIndex()
+    this.videoWatchPlaylist.updatePlaylistIndex(video)
 
     let startTime = urlOptions.startTime || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
     // If we are at the end of the video, reset the timer
@@ -491,7 +407,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }
     }
 
-    const mode: PlayerMode = urlOptions.playerMode === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
+    let mode: PlayerMode
+
+    if (urlOptions.playerMode) {
+      if (urlOptions.playerMode === 'p2p-media-loader') mode = 'p2p-media-loader'
+      else mode = 'webtorrent'
+    } else {
+      if (this.video.hasHlsPlaylist()) mode = 'p2p-media-loader'
+      else mode = 'webtorrent'
+    }
 
     if (mode === 'p2p-media-loader') {
       const hlsPlaylist = this.video.getHlsPlaylist()
@@ -519,13 +443,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('ended', () => {
         if (this.playlist) {
-          this.zone.run(() => this.navigateToNextPlaylistVideo())
+          this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         }
       })
 
       this.player.one('stopped', () => {
         if (this.playlist) {
-          this.zone.run(() => this.navigateToNextPlaylistVideo())
+          this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         }
       })
 
@@ -586,20 +510,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setVideoLikesBarTooltipText()
   }
 
-  private updatePlaylistIndex () {
-    if (this.playlistVideos.length === 0 || !this.video) return
-
-    for (const video of this.playlistVideos) {
-      if (video.id === this.video.id) {
-        this.currentPlaylistPosition = video.playlistElement.position
-        return
-      }
-    }
-
-    // Load more videos to find our video
-    this.onPlaylistVideosNearOfBottom()
-  }
-
   private setOpenGraphTags () {
     this.metaService.setTitle(this.video.name)
 
@@ -640,13 +550,23 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  private navigateToNextPlaylistVideo () {
-    if (this.currentPlaylistPosition < this.playlistPagination.totalItems) {
-      const next = this.playlistVideos.find(v => v.playlistElement.position === this.currentPlaylistPosition + 1)
-
-      const start = next.playlistElement.startTimestamp
-      const stop = next.playlistElement.stopTimestamp
-      this.router.navigate([],{ queryParams: { videoId: next.uuid, start, stop } })
-    }
+  private initHotkeys () {
+    this.hotkeys = [
+      new Hotkey('shift+l', (event: KeyboardEvent): boolean => {
+        this.setLike()
+        return false
+      }, undefined, this.i18n('Like the video')),
+      new Hotkey('shift+d', (event: KeyboardEvent): boolean => {
+        this.setDislike()
+        return false
+      }, undefined, this.i18n('Dislike the video')),
+      new Hotkey('shift+s', (event: KeyboardEvent): boolean => {
+        this.subscribeButton.subscribed ?
+          this.subscribeButton.unsubscribe() :
+          this.subscribeButton.subscribe()
+        return false
+      }, undefined, this.i18n('Subscribe to the account'))
+    ]
+    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
   }
 }

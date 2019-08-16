@@ -25,8 +25,7 @@ function isActivityPubUrlValid (url: string) {
 }
 
 function isBaseActivityValid (activity: any, type: string) {
-  return (activity['@context'] === undefined || Array.isArray(activity['@context'])) &&
-    activity.type === type &&
+  return activity.type === type &&
     isActivityPubUrlValid(activity.id) &&
     isObjectValid(activity.actor) &&
     isUrlCollectionValid(activity.to) &&

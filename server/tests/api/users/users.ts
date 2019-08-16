@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, UserRole } from '../../../../shared/index'
+import { User, UserRole, Video } from '../../../../shared/index'
 import {
   blockUser,
   cleanupTests,
@@ -290,7 +290,10 @@ describe('Test users', function () {
       const videos = res.body.data
       expect(videos).to.have.lengthOf(1)
 
-      expect(videos[ 0 ].name).to.equal('super user video')
+      const video: Video = videos[ 0 ]
+      expect(video.name).to.equal('super user video')
+      expect(video.thumbnailPath).to.not.be.null
+      expect(video.previewPath).to.not.be.null
     })
   })
 

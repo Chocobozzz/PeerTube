@@ -19,7 +19,7 @@ async function loadActorUrlOrGetFromWebfinger (uriArg: string) {
   const [ name, host ] = uri.split('@')
   let actor: ActorModel
 
-  if (host === WEBSERVER.HOST) {
+  if (!host || host === WEBSERVER.HOST) {
     actor = await ActorModel.loadLocalByName(name)
   } else {
     actor = await ActorModel.loadByNameAndHost(name, host)

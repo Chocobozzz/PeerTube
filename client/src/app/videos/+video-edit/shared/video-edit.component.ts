@@ -189,7 +189,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   }
 
   private trackPrivacyChange () {
-    // We will update the "support" field depending on the channel
+    // We will update the schedule input and the wait transcoding checkbox validators
     this.form.controls[ 'privacy' ]
       .valueChanges
       .pipe(map(res => parseInt(res.toString(), 10)))

@@ -41,7 +41,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         languages=("fr_FR")
     else
         # Supported languages
-        languages=("pl_PL" "it_IT" "ru_RU" "fr_FR" "pt_BR" "sv_SE" "eu_ES" "ca_ES" "cs_CZ" "eo" "zh_Hant_TW" "de_DE" "es_ES" "oc" "zh_Hans_CN")
+        languages=("nl_NL" "es_ES" "oc" "pt_BR" "pt_PT" "sv_SE" "pl_PL" "ru_RU" "zh_Hans_CN" "zh_Hant_TW" "fr_FR" "ja_JP" "eu_ES" "ca_ES" "cs_CZ" "eo" "de_DE" "it_IT")
     fi
 
     for lang in "${languages[@]}"; do
@@ -51,7 +51,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         npm run ng build -- --prod --i18n-file "./src/locale/target/angular_$lang.xml" --i18n-format xlf --i18n-locale "$lang" \
             --output-path "dist/$lang/" --deploy-url "/client/$lang/"
 
-        # Do no duplicate assets
+        # Do not duplicate assets
         rm -r "./dist/$lang/assets"
 
         # TODO: remove when the project will use runtime translations

@@ -3,6 +3,7 @@ export const LOCALE_FILES = [ 'player', 'server' ]
 export const I18N_LOCALES = {
   'en-US': 'English',
   'fr-FR': 'Français',
+  'ja-JP': '日本語',
   'eu-ES': 'Euskara',
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',

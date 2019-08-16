@@ -67,7 +67,9 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
     if (previousIndex === newIndex) return
 
     const oldPosition = this.videos[previousIndex].playlistElement.position
-    const insertAfter = newIndex === 0 ? 0 : this.videos[newIndex].playlistElement.position
+    let insertAfter = this.videos[newIndex].playlistElement.position
+
+    if (oldPosition > insertAfter) insertAfter--
 
     this.videoPlaylistService.reorderPlaylist(this.playlist.id, oldPosition, insertAfter)
       .subscribe(

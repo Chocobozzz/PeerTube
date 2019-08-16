@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { AuthService, Notifier } from '@app/core'
 import { forkJoin } from 'rxjs'
@@ -22,7 +22,7 @@ type PlaylistSummary = {
   templateUrl: './video-add-to-playlist.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VideoAddToPlaylistComponent extends FormReactive implements OnInit {
+export class VideoAddToPlaylistComponent extends FormReactive implements OnInit, OnChanges {
   @Input() video: Video
   @Input() currentVideoTimestamp: number
   @Input() lazyLoad = false
@@ -54,13 +54,29 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit 
   }
 
   ngOnInit () {
-    this.resetOptions(true)
-
     this.buildForm({
       displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
     })
+  }
+
+  ngOnChanges (simpleChanges: SimpleChanges) {
+    if (simpleChanges['video']) {
+      this.reload()
+    }
+  }
+
+  init () {
+    this.resetOptions(true)
 
     if (this.lazyLoad !== true) this.load()
+  }
+
+  reload () {
+    this.videoPlaylists = []
+
+    this.init()
+
+    this.cd.markForCheck()
   }
 
   load () {

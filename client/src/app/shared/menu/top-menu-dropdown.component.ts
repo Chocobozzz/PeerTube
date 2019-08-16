@@ -4,6 +4,7 @@ import { NavigationEnd, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconName } from '@app/shared/images/global-icon.component'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 export type TopMenuDropdownParam = {
   label: string
@@ -27,11 +28,15 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
 
   suffixLabels: { [ parentLabel: string ]: string }
   hasIcons = false
+  container: undefined | 'body' = undefined
 
   private openedOnHover = false
   private routeSub: Subscription
 
-  constructor (private router: Router) {}
+  constructor (
+    private router: Router,
+    private screen: ScreenService
+  ) {}
 
   ngOnInit () {
     this.updateChildLabels(window.location.pathname)
@@ -43,6 +48,12 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     this.hasIcons = this.menuEntries.some(
       e => e.children && e.children.some(c => !!c.iconName)
     )
+
+    // FIXME: We have to set body for the container to avoid because of scroll overflow on mobile view
+    // But this break our hovering system
+    if (this.screen.isInMobileView()) {
+      this.container = 'body'
+    }
   }
 
   ngOnDestroy () {

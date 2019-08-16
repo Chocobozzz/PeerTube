@@ -75,13 +75,15 @@ menu {
     .logged-in-more {
       margin-right: 20px;
 
-      my-global-icon {
-        @include apply-svg-color(var(--mainBackgroundColor));
-
+      my-global-icon.dropdown-toggle {
         cursor: pointer;
 
         &::after {
           border: none;
+        }
+
+        /deep/ {
+          @include apply-svg-color(var(--menuForegroundColor));
         }
       }
 
@@ -89,8 +91,6 @@ menu {
         @include dropdown-with-icon-item;
 
         my-global-icon {
-          @include apply-svg-color(var(--mainForegroundColor));
-
           width: 22px;
           height: 22px;
 

@@ -206,6 +206,20 @@
           <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>دلیل...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
+        <source>No results.</source>
+        <target>بدون نتیجه.</target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
         <source>Delete</source>
         <target>حذف</target>
@@ -232,13 +246,6 @@
         <target>کمک گرفتن</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>دلیل...</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
@@ -392,7 +399,7 @@
         <source>Signup</source>
         <target>ثبت‌نام</target>
         <context-group name="null">
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
@@ -541,21 +548,21 @@
         <source>Category</source>
         <target>دسته‌بندی</target>
         <context-group name="null">
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>مجوز</target>
         <context-group name="null">
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>زبان</target>
         <context-group name="null">
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
@@ -563,13 +570,6 @@
         <target>فیلتر</target>
         <context-group name="null">
           <context context-type="linenumber">115</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
-        <source>No results.</source>
-        <target>بدون نتیجه.</target>
-        <context-group name="null">
-          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
@@ -636,14 +636,14 @@
         <source>Signup enabled</source>
         <target>ثبت‌نام فعال است</target>
         <context-group name="null">
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
         <source>Users</source>
         <target>کاربران</target>
         <context-group name="null">
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -657,28 +657,28 @@
         <source>Administrator</source>
         <target>مدیر</target>
         <context-group name="null">
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="99cb827741e93125476a0f5b676372d85d15b5fc">
         <source>Twitter</source>
         <target>توییتر</target>
         <context-group name="null">
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>نام‌کاربری توییتر شما</target>
         <context-group name="null">
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>جاوااکسریپت</target>
         <context-group name="null">
-          <context context-type="linenumber">320</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -700,14 +700,19 @@
       تنظیمات
     </target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
+        <source>State</source><target>State</target><context-group name="null">
+          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="380e20a1e13d9489c69f6dbea7da19025ab6eb25">
         <source>Score</source>
         <target>امتیاز</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22ca53e651df951dac25b67c17894b0980f767">
@@ -715,11 +720,6 @@
         <target>میزبان</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
-        <source>State</source><target>State</target><context-group name="null">
-          <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
@@ -769,6 +769,13 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">
+        <source>Info</source>
+        <target>راهنما</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
         <source>My videos</source>
         <target>ویديو‌های من</target>
@@ -779,13 +786,6 @@
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
         <source>My settings</source>
         <target>تنظیمات من</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">
-        <source>Info</source>
-        <target>راهنما</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -993,20 +993,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
-        <source>Upload cancelled</source>
-        <target>بارگزاری لغوشد</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
-        <source>Video published.</source>
-        <target>ویدئو انتشار‌یافت</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
         <source>Copied</source>
         <target>کپی‌شد</target>
@@ -1024,6 +1010,20 @@
       <trans-unit id="f1abd89c9280323209e939fa9c30f6e5cda20c95">
         <source>Do you really want to delete this video?</source>
         <target>میخواهید این ویدئو را پاک کنید؟</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
+        <source>Upload cancelled</source>
+        <target>بارگزاری لغوشد</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
+        <source>Video published.</source>
+        <target>ویدئو انتشار‌یافت</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

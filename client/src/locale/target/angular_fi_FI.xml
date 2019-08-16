@@ -227,6 +227,66 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9">
+        <source>Display name</source>
+        <target>Näyttönimi</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795">
+        <source>Create</source>
+        <target>Luo</target>
+        <context-group name="null">
+          <context context-type="linenumber">74</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611">
+        <source>Download video</source>
+        <target>Lataa video</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
+        <source>Direct download</source>
+        <target>Suora lataus</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b">
+        <source>Report video</source>
+        <target>Tee ilmoitus</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>Syy...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb">
+        <source>
+          Cancel
+        </source>
+        <target>
+          Peruuta
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
+        <source>Submit</source>
+        <target>Lähetä</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
         <source>Unlisted</source>
         <target>Piilotettu</target>
@@ -241,25 +301,11 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="9d5f16f0233b39fa2cd843321407a7358c323ad8">
-        <source><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> näyttökertaa</target>
+      <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
+        <source>No results.</source>
+        <target>Ei hakutuloksia.</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9">
-        <source>Display name</source>
-        <target>Näyttönimi</target>
-        <context-group name="null">
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="70a67e04629f6d412db0a12d51820b480788d795">
-        <source>Create</source>
-        <target>Luo</target>
-        <context-group name="null">
-          <context context-type="linenumber">73</context>
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7">
@@ -421,13 +467,6 @@
         <target>Sulje</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
-        <source>Reason...</source>
-        <target>Syy...</target>
-        <context-group name="null">
-          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
@@ -651,7 +690,7 @@
         <source>Signup</source>
         <target>Kirjaudu</target>
         <context-group name="null">
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
@@ -708,13 +747,6 @@
         <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> tilaajaa</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="602281e45fe8b79748e3fbf21c432379fcb58883">
-        <source><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> views</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ result.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ result.views | myNumberFormatter }}"/> näyttökertaa</target>
-        <context-group name="null">
-          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
@@ -914,21 +946,21 @@
         <source>Category</source>
         <target>Kategoria</target>
         <context-group name="null">
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="78d6d3ea26777cd0dad8ddbf9b314151678da46c">
         <source>Licence</source>
         <target>Lisenssi</target>
         <context-group name="null">
-          <context context-type="linenumber">224</context>
+          <context context-type="linenumber">198</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe46ccaae902ce974e2441abe752399288298619">
         <source>Language</source>
         <target>Kieli</target>
         <context-group name="null">
-          <context context-type="linenumber">233</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -957,13 +989,6 @@
         <target>Näytä piilotetut ja yksityiset videot</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
-        <source>No results.</source>
-        <target>Ei hakutuloksia.</target>
-        <context-group name="null">
-          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2290d09f4f113351baa9152ca8ad14cd03a11ba6">
@@ -1047,24 +1072,6 @@
         <target>Sinun viesti</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb">
-        <source>
-          Cancel
-        </source>
-        <target>
-          Peruuta
-        </target>
-        <context-group name="null">
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
-        <source>Submit</source>
-        <target>Lähetä</target>
-        <context-group name="null">
-          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="89e55a86cb300f06139ff398c9c8bb7376f78b07">
@@ -1179,8 +1186,10 @@
         <source>
       An HTTP request has to be sent on each tracker for each video to spy.
       If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-    </source>
-        <context-group name="null">
+    </source><target>
+      An HTTP request has to be sent on each tracker for each video to spy.
+      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
+    </target><context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
@@ -1393,42 +1402,42 @@
         <source>Signup enabled</source>
         <target>Rekisteröityminen on päällä</target>
         <context-group name="null">
-          <context context-type="linenumber">93</context>
+          <context context-type="linenumber">94</context>
         </context-group>
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7">
         <source>Signup requires email verification</source>
         <target>Rekisteröityminen vaatii sähköpostiosoitteen vahvistamisen</target>
         <context-group name="null">
-          <context context-type="linenumber">100</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="68bda70e0dd4f7f91549462e55f1b2a1602d8402">
         <source>Signup limit</source>
         <target>Rekisteröintiraja</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">106</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
         <source>Users</source>
         <target>Tilejä</target>
         <context-group name="null">
-          <context context-type="linenumber">114</context>
+          <context context-type="linenumber">116</context>
         </context-group>
       </trans-unit>
       <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
         <source>User default video quota</source>
         <target>Tilin oletusvideokoon raja:</target>
         <context-group name="null">
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">120</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f5528147716c4d3286c89defbe63ee0b75da5ffe">
         <source>User default daily upload limit</source>
         <target>Tilin oletusvideokoon päivittäinen raja:</target>
         <context-group name="null">
-          <context context-type="linenumber">130</context>
+          <context context-type="linenumber">132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
@@ -1442,35 +1451,35 @@
         <source>Video import with HTTP URL (i.e. YouTube) enabled</source>
         <target>Videon tuonti HTTP-osoitteella (esim. YouTube) on päällä</target>
         <context-group name="null">
-          <context context-type="linenumber">150</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e">
         <source>Video import with a torrent file or a magnet URI enabled</source>
         <target>Videon tuonti torrent-tiedostosta tai magnet-osoitteesta on päällä</target>
         <context-group name="null">
-          <context context-type="linenumber">157</context>
+          <context context-type="linenumber">160</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Ylläpitäjä</target>
         <context-group name="null">
-          <context context-type="linenumber">181</context>
+          <context context-type="linenumber">208</context>
         </context-group>
       </trans-unit>
       <trans-unit id="55a0f51e38679d3141841e8333da5779d349c587">
         <source>Admin email</source>
         <target>Ylläpidon sähköpostiosoite</target>
         <context-group name="null">
-          <context context-type="linenumber">184</context>
+          <context context-type="linenumber">211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f9bda6652199995a4bd4424f2e35b748eb0bda8a">
         <source>Enable contact form</source>
         <target>Ota yhteydenottolomake käyttöön</target>
         <context-group name="null">
-          <context context-type="linenumber">195</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5">
@@ -1484,49 +1493,49 @@
         <source>Twitter</source>
         <target>Twitter</target>
         <context-group name="null">
-          <context context-type="linenumber">204</context>
+          <context context-type="linenumber">231</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>Sinun Twitter käyttäjänimi</target>
         <context-group name="null">
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">237</context>
         </context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
         <source>Services</source>
         <target>Palvelut</target>
         <context-group name="null">
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fe22d2c0020e913ee4b75ec22a3abc8814810490">
         <source>Transcoding</source>
         <target>Transkoodaus</target>
         <context-group name="null">
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">268</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
         <source>Transcoding enabled</source>
         <target>Transkoodaus on päällä</target>
         <context-group name="null">
-          <context context-type="linenumber">247</context>
+          <context context-type="linenumber">274</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>Muokkaukset</target>
         <context-group name="null">
-          <context context-type="linenumber">315</context>
+          <context context-type="linenumber">342</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">320</context>
+          <context context-type="linenumber">347</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -1562,17 +1571,6 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="7bea88c54fdccfdc9f687b0ffe9bf6a653d19368">
-        <source>
-      Jobs
-    </source>
-        <target>
-      Työt
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="9c6ce37623b626a102002901ca12c37e7a3a7f13">
         <source>
       Configuration
@@ -1581,7 +1579,7 @@
       Kokoonpano
     </target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
       <trans-unit id="456c6383d8e7cd15aadbcdc196d4ae7a70092437">
@@ -1612,6 +1610,13 @@
           <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2">
+        <source>Refuse</source>
+        <target>Kieltäydy</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
         <source>Follow</source>
         <target>Seuraa</target>
@@ -1624,20 +1629,6 @@
         <target>Seuraajia</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a9f2501fcb2ff71f1376c2d2fbbbd49f200e6c8f">
-        <source>Jobs list</source>
-        <target>Työlista</target>
-        <context-group name="null">
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
-        <source>Type</source>
-        <target>Tyyppi</target>
-        <context-group name="null">
-          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">
@@ -1700,7 +1691,7 @@
         <source>Go to the account page</source>
         <target>Mene tilin sivulle</target>
         <context-group name="null">
-          <context context-type="linenumber">179</context>
+          <context context-type="linenumber">153</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
@@ -1766,6 +1757,20 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a9f2501fcb2ff71f1376c2d2fbbbd49f200e6c8f">
+        <source>Jobs list</source>
+        <target>Työlista</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
+        <source>Type</source>
+        <target>Tyyppi</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
         <source>Video quota:</source>
         <target>Videokoon raja:</target>
@@ -1798,7 +1803,7 @@
         <source>Change ownership</source>
         <target>Vaihda omistajuutta</target>
         <context-group name="null">
-          <context context-type="linenumber">40</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="046c4fa30411e6b1aa46dc51bf82d07b1adf14d4">
@@ -1861,18 +1866,11 @@
           <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2">
-        <source>Refuse</source>
-        <target>Kieltäydy</target>
-        <context-group name="null">
-          <context context-type="linenumber">47</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
         <target>Yksityisyys</target>
         <context-group name="null">
-          <context context-type="linenumber">205</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
@@ -1928,7 +1926,7 @@
         <source>Update</source>
         <target>Päivitä</target>
         <context-group name="null">
-          <context context-type="linenumber">138</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
@@ -1970,7 +1968,7 @@
         <source>Tags</source>
         <target>Tagit</target>
         <context-group name="null">
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf">
@@ -2012,35 +2010,14 @@
         <source>Support</source>
         <target>Tuki</target>
         <context-group name="null">
-          <context context-type="linenumber">101</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9aafb2a928664aa7a9375fd37c533f0375f8b611">
-        <source>Download video</source>
-        <target>Lataa video</target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
-        <source>Direct download</source>
-        <target>Suora lataus</target>
-        <context-group name="null">
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b">
-        <source>Report video</source>
-        <target>Tee ilmoitus</target>
-        <context-group name="null">
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">103</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
         <source>Share</source>
         <target>Jaa</target>
         <context-group name="null">
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">108</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
@@ -2072,7 +2049,7 @@
       OK
     </target>
         <context-group name="null">
-          <context context-type="linenumber">265</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
@@ -2297,6 +2274,20 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">
+        <source>Info</source>
+        <target>Tietoja</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
+        <source>Error</source>
+        <target>Virhe</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9910122dfedd2eaa544a990f1430e5b82a76d99f">
         <source>Update user</source>
         <target>Päivitä tili</target>
@@ -2335,13 +2326,6 @@
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
         <source>My videos</source>
         <target>Omat videot</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3">
-        <source>Published</source>
-        <target>Julkaistu</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2402,23 +2386,9 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d">
-        <source>Error</source>
-        <target>Virhe</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452">
         <source>Keyboard Shortcuts:</source>
         <target>Pikanäppäimet:</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5">
-        <source>Info</source>
-        <target>Tietoja</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2486,6 +2456,27 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>Video ilmoitettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1abd89c9280323209e939fa9c30f6e5cda20c95">
+        <source>Do you really want to delete this video?</source>
+        <target>Haluatko varmasti poistaa tämän videon?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3">
+        <source>Published</source>
+        <target>Julkaistu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
         <source>Upload cancelled</source>
         <target>Lataus peruttu</target>
@@ -2507,13 +2498,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
-        <source>Video reported.</source>
-        <target>Video ilmoitettu.</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="0e65067fdcc9d8725a41896cb1e229d1415a45f6">
         <source>Like the video</source>
         <target>Tykkää videosta</target>
@@ -2524,13 +2508,6 @@
       <trans-unit id="1a999e06e1aca0a70cd7d0e3e5c2c63d0e1885c8">
         <source>Dislike the video</source>
         <target>En tykkää videosta</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f1abd89c9280323209e939fa9c30f6e5cda20c95">
-        <source>Do you really want to delete this video?</source>
-        <target>Haluatko varmasti poistaa tämän videon?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

@@ -7,7 +7,7 @@ import { AbstractVideoList } from '../../shared/video/abstract-video-list'
 import { VideoService } from '../../shared/video/video.service'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
-import { tap } from 'rxjs/operators'
+import { first, tap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -50,12 +50,13 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
 
     // Parent get the account for us
     this.accountSub = this.accountService.accountLoaded
-      .subscribe(account => {
-        this.account = account
+                          .pipe(first())
+                          .subscribe(account => {
+                            this.account = account
 
-        this.reloadVideos()
-        this.generateSyndicationList()
-      })
+                            this.reloadVideos()
+                            this.generateSyndicationList()
+                          })
   }
 
   ngOnDestroy () {

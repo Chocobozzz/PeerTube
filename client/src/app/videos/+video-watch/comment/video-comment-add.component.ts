@@ -8,7 +8,6 @@ import { User } from '../../../shared/users'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCommentValidatorsService } from '@app/shared/forms/form-validators/video-comment-validators.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -40,8 +39,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     private videoCommentService: VideoCommentService,
     private authService: AuthService,
     private modalService: NgbModal,
-    private router: Router,
-    private i18n: I18n
+    private router: Router
   ) {
     super()
   }
@@ -124,7 +122,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     return this.form.value['text']
   }
 
-  getUrl () {
+  getUri () {
     return window.location.href
   }
 

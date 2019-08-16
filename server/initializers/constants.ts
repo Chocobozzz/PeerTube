@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 370
+const LAST_MIGRATION_VERSION = 380
 
 // ---------------------------------------------------------------------------
 
@@ -778,6 +778,7 @@ function buildLanguages () {
 
   // Override Occitan label
   languages[ 'oc' ] = 'Occitan'
+  languages[ 'el' ] = 'Greek'
 
   return languages
 }

@@ -1,8 +1,242 @@
 # Changelog
 
+## v1.3.1
+
+### Bug fixes
+
+ * Fix Mastodon remote interactions
+ * Fix missing video download button
+ * Fix error in video upload/update form when scheduling publication
+ * Fix black theme on some pages
+ * Fix video import if auto blacklist is enabled
+  
+
+## v1.3.0
+
+**Since v1.2.0**
+
+### IMPORTANT NOTES
+
+ * **nginx** Remove `text/html` from `gzip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
+ * Add `streaming_playlists` directory in configuration file. **You should configure it in your production.yaml**
+ * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110) 
+ 
+## Maintenance
+
+ * Add GitPod support ([@jankeromnes](https://github.com/jankeromnes)) that could help people to contribute on PeerTube: https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#online-development
+ * Add reminder to restart PeerTube in upgrade script ([@ldidry](https://github.com/ldidry))
+ * Add argument to dockerfile to pass options to npm run build ([@NaPs](https://github.com/NaPs))
+ * Add `NOCLIENT` env support to only install server dependencies. Example: `NOCLIENT=true yarn install --pure-lockfile` ([@rigelk](https://github.com/rigelk))
+
+### Docker
+ 
+ * **Important**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
+ * **Important**: Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) 
+and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L8) to fix IP forwarding issue ([@Nutomic](https://github.com/nutomic))
+ * Fix SMTP default configuration ([@Nutomic](https://github.com/nutomic))
+
+### Features
+ 
+ * Add video playlist support
+   * A user has a default `Watch-later` playlist
+   * A user can create private, unlisted or public playlists
+   * An element in this playlist can start or stop at specific timestamps (you can create some kind of zapping for example)
+   * The difference with a channel is that you cannot subscribe to a playlist, but you can add videos from any other user in your playlist.
+   It's useful to organize your videos, or create a playlist of videos you like and share the link on the web etc
+ * Add quarantine videos (auto blacklist videos on upload) feature :tada: ([@joshmorel](https://github.com/joshmorel))
+ * Add Japanese & Nederlands & Português (Portugal) support
+ * Add experimental HLS support
+   * Better playback
+   * Better bandwidth management (for both client & server)
+   * Needs to store another video file per resolution, so enabling this option multiplies the videos storage by 2 (only new uploaded videos, this is not retroactive)
+   * Requires ffmpeg >= 4
+ * Better instance's followers management:
+   * Add ability to remove an instance's follower
+   * Add ability to forbid all new instance's followers
+   * Add ability to manually approve new instance's followers
+   * Add notification on new instance's follower
+ * Improve UI:
+   * Increase player default height
+   * Reduce big play button border width
+   * Increase thumbnail sizes
+   * Add hover effect on video miniature
+   * Add "my library" section in menu
+   * Add missing icons in some buttons/dropdown
+   * 2 rows per overview section
+   * Increase video thumbnail blur ([@Zig-03](https://github.com/Zig-03))
+   * Improve video miniatures list on mobile
+   * Add animation when opening user notifications
+ * Add ability for admins to disable the tracker (and so the P2P aspect of PeerTube, in order to improve users privacy for example)
+ * Add original publication date attribute to videos, and add ability to filter on it (Andrés Maldonado)
+ * Add video miniature dropdown
+ * Add ability for admins to declare their instance as dedicated to NSFW content
+ * Improve SEO (there is still work to be done)
+ * Login is now case insensitive (if using official web client)
+ * Add NSFW policy & users signup policy & auto blacklist strategy in features table in about page
+ * Improve comment deletion warning
+ * Restore videos list component on history back
+ * Add ability to consult server logs in admin
+ * Allow administrators to change/reset a user's password ([@rigelk](https://github.com/rigelk))
+ * Add a debug page to help admins to fix IP configuration issues
+ * Add ability for admins to limit users videos history size
+ * Add ability for admins to delete old remote videos views (reduce database size)
+ * Optimize video update page load
+ * Less refresh jobs
+ * Cleanup invalid AP rates/comments/shares
+ * Better videos redundancy config error handling
+ * Check emails are enabled if the admin requires email verification ([@joshmorel](https://github.com/joshmorel))
+ * Add `Add /accounts/:username/ratings endpoint` ([@yohanboniface](https://github.com/yohanboniface))
+ * Allow to control API rates limit from configuration ([@yohanboniface](https://github.com/yohanboniface))
+
+### Bug fixes
+
+ * Don't notify prior to scheduled update ([@joshmorel](https://github.com/joshmorel))
+ * Fix account description database error
+ * Fix Pleroma follow
+ * Fix greek label
+ * Fix email notification for some users
+ * Fix translation of "Copy magnet URI"
+ * Fix negative seconds by displaying 0 instead [@zacharystenger](https://github.com/zacharystenger)
+ * Fix URL in video import notification
+ * Don't close help popover when clicking on it
+ * Fix `tmp` directory cleanup
+ * Fix custom CSS help
+ * Fix JSONLD context
+ * Fix privacy label display in upload form
+ * Fix my account settings responsiveness
+ * Fix keyboard icon transparency ([@gbip](https://github.com/gbip))
+ * Fix contact admin button overflow
+ * Wait config to be loaded before loading login/signup
+ * Privacy is optional in upload API endpoint
+ * Fix hotkeys help popup overflow
+
+***Since v1.3.0-rc.2***
+
+### Bug fixes
+
+ * Fix duplicates in playlist add component
+ * Fix crash in files cache
+ * Fix playlist view/update 403
+ * Fix search with bad webfinger handles
+ 
+ 
+## v1.3.0-rc.2
+
+### Docker
+
+ * Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) 
+and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L8) to fix IP forwarding issue ([@Nutomic](https://github.com/nutomic))
+
+### Bug fixes
+
+ * Fix playlist block width when the player is in theater mode
+ * Reset playlist add dropdown in watch page on video change
+ * Fix follow with Mastodon
+ * Fix playlist elements reordering
+ * Fix my videos list pagination
+ * Fix video thumbnails in admin blacklist page
+ * Fix video views that are not considered
+
+
+## v1.3.0-rc.1
+
+### IMPORTANT NOTES
+
+ * **nginx** Remove `text/html` from `gzip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
+ * Add `streaming_playlists` directory in configuration file. **You should configure it in your production.yaml**
+ * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110) 
+ 
+## Maintenance
+
+ * Add GitPod support ([@jankeromnes](https://github.com/jankeromnes)) that could help people to contribute on PeerTube: https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#online-development
+ * Add reminder to restart PeerTube in upgrade script ([@ldidry](https://github.com/ldidry))
+ * Add argument to dockerfile to pass options to npm run build ([@NaPs](https://github.com/NaPs))
+ * Add `NOCLIENT` env support to only install server dependencies. Example: `NOCLIENT=true yarn install --pure-lockfile` ([@rigelk](https://github.com/rigelk))
+
+### Docker
+ 
+ * **Important**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
+ * Fix SMTP default configuration ([@Nutomic](https://github.com/nutomic))
+
+### Features
+ 
+ * Add video playlist support
+   * A user has a default `Watch-later` playlist
+   * A user can create private, unlisted or public playlists
+   * An element in this playlist can start or stop at specific timestamps (you can create some kind of zapping for example)
+   * The difference with a channel is that you cannot subscribe to a playlist, but you can add videos from any other user in your playlist.
+   It's useful to organize your videos, or create a playlist of videos you like and share the link on the web etc
+ * Add quarantine videos (auto blacklist videos on upload) feature :tada: ([@joshmorel](https://github.com/joshmorel))
+ * Add Japanese & Nederlands & Português (Portugal) support
+ * Add experimental HLS support
+   * Better playback
+   * Better bandwidth management (for both client & server)
+   * Needs to store another video file per resolution, so enabling this option multiplies the videos storage by 2 (only new uploaded videos, this is not retroactive)
+   * Requires ffmpeg >= 4
+ * Better instance's followers management:
+   * Add ability to remove an instance's follower
+   * Add ability to forbid all new instance's followers
+   * Add ability to manually approve new instance's followers
+   * Add notification on new instance's follower
+ * Improve UI:
+   * Increase player default height
+   * Reduce big play button border width
+   * Increase thumbnail sizes
+   * Add hover effect on video miniature
+   * Add "my library" section in menu
+   * Add missing icons in some buttons/dropdown
+   * 2 rows per overview section
+   * Increase video thumbnail blur ([@Zig-03](https://github.com/Zig-03))
+   * Improve video miniatures list on mobile
+   * Add animation when opening user notifications
+ * Add ability for admins to disable the tracker (and so the P2P aspect of PeerTube, in order to improve users privacy for example)
+ * Add original publication date attribute to videos, and add ability to filter on it (Andrés Maldonado)
+ * Add video miniature dropdown
+ * Add ability for admins to declare their instance as dedicated to NSFW content
+ * Improve SEO (there is still work to be done)
+ * Login is now case insensitive (if using official web client)
+ * Add NSFW policy & users signup policy & auto blacklist strategy in features table in about page
+ * Improve comment deletion warning
+ * Restore videos list component on history back
+ * Add ability to consult server logs in admin
+ * Allow administrators to change/reset a user's password ([@rigelk](https://github.com/rigelk))
+ * Add a debug page to help admins to fix IP configuration issues
+ * Add ability for admins to limit users videos history size
+ * Add ability for admins to delete old remote videos views (reduce database size)
+ * Optimize video update page load
+ * Less refresh jobs
+ * Cleanup invalid AP rates/comments/shares
+ * Better videos redundancy config error handling
+ * Check emails are enabled if the admin requires email verification ([@joshmorel](https://github.com/joshmorel))
+ * Add `Add /accounts/:username/ratings endpoint` ([@yohanboniface](https://github.com/yohanboniface))
+ * Allow to control API rates limit from configuration ([@yohanboniface](https://github.com/yohanboniface))
+
+### Bug fixes
+
+ * Don't notify prior to scheduled update ([@joshmorel](https://github.com/joshmorel))
+ * Fix account description database error
+ * Fix Pleroma follow
+ * Fix greek label
+ * Fix email notification for some users
+ * Fix translation of "Copy magnet URI"
+ * Fix negative seconds by displaying 0 instead [@zacharystenger](https://github.com/zacharystenger)
+ * Fix URL in video import notification
+ * Don't close help popover when clicking on it
+ * Fix `tmp` directory cleanup
+ * Fix custom CSS help
+ * Fix JSONLD context
+ * Fix privacy label display in upload form
+ * Fix my account settings responsiveness
+ * Fix keyboard icon transparency ([@gbip](https://github.com/gbip))
+ * Fix contact admin button overflow
+ * Wait config to be loaded before loading login/signup
+ * Privacy is optional in upload API endpoint
+ * Fix hotkeys help popup overflow
+
+
 ## v1.2.1
 
-## Bug fixes
+### Bug fixes
 
  * **Important** Fix invalid `From` email header in contact form that could lead to the blacklisting of your SMTP server
  * Fix too long display name overflow in menu
@@ -76,7 +310,7 @@
  * Increase video abuse length to 3000 characters
  * Add totalLocalVideoFilesSize in the stats endpoint
 
-## Bug fixes
+### Bug fixes
 
  * Fix the addition of captions to a video
  * Fix federation of some videos

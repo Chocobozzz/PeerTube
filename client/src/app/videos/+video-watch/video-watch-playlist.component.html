@@ -1,0 +1,25 @@
+<div *ngIf="playlist && video" class="playlist" myInfiniteScroller [autoInit]="true" [onItself]="true" (nearOfBottom)="onPlaylistVideosNearOfBottom()">
+  <div class="playlist-info">
+    <div class="playlist-display-name">
+      {{ playlist.displayName }}
+
+      <span *ngIf="isUnlistedPlaylist()" class="badge badge-warning" i18n>Unlisted</span>
+      <span *ngIf="isPrivatePlaylist()" class="badge badge-danger" i18n>Private</span>
+      <span *ngIf="isPublicPlaylist()" class="badge badge-info" i18n>Public</span>
+    </div>
+
+    <div class="playlist-by-index">
+      <div class="playlist-by">{{ playlist.ownerBy }}</div>
+      <div class="playlist-index">
+        <span>{{ currentPlaylistPosition }}</span><span>{{ playlistPagination.totalItems }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div *ngFor="let playlistVideo of playlistVideos">
+    <my-video-playlist-element-miniature
+      [video]="playlistVideo" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
+      [playing]="currentPlaylistPosition === playlistVideo.playlistElement.position" [accountLink]="false" [position]="playlistVideo.playlistElement.position"
+    ></my-video-playlist-element-miniature>
+  </div>
+</div>

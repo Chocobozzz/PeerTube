@@ -15,10 +15,11 @@ $player-factor: 1.7; // 16/9
 }
 
 @mixin playlist-below-player {
-  width: 100%;
-  height: auto;
-  max-height: 300px;
-  border-bottom: 1px solid $separator-border-color;
+  width: 100% !important;
+  height: auto !important;
+  max-height: 300px !important;
+  max-width: initial;
+  border-bottom: 1px solid $separator-border-color !important;
 }
 
 .root {
@@ -37,7 +38,7 @@ $player-factor: 1.7; // 16/9
       width: 100%;
     }
 
-    .playlist {
+    my-video-watch-playlist /deep/ .playlist {
       @include playlist-below-player;
     }
   }
@@ -77,60 +78,6 @@ $player-factor: 1.7; // 16/9
 
     @media screen and (max-width: 600px) {
       font-size: 16px;
-    }
-  }
-
-  .playlist {
-    min-width: 200px;
-    max-width: 470px;
-    height: 66vh;
-    background-color: var(--mainBackgroundColor);
-    overflow-y: auto;
-    border-bottom: 1px solid $separator-border-color;
-
-    .playlist-info {
-      padding: 5px 30px;
-      background-color: #e4e4e4;
-
-      .playlist-display-name {
-        font-size: 18px;
-        font-weight: $font-semibold;
-        margin-bottom: 5px;
-      }
-
-      .playlist-by-index {
-        color: $grey-foreground-color;
-        display: flex;
-
-        .playlist-by {
-          margin-right: 5px;
-        }
-
-        .playlist-index span:first-child::after {
-          content: '/';
-          margin: 0 3px;
-        }
-      }
-    }
-
-    my-video-playlist-element-miniature {
-      /deep/ {
-        .video {
-          .position {
-            margin-right: 0;
-          }
-
-          .video-info {
-            .video-info-name {
-              font-size: 15px;
-            }
-          }
-        }
-
-        my-video-thumbnail {
-          @include thumbnail-size-component(90px, 50px);
-        }
-      }
     }
   }
 
@@ -508,7 +455,7 @@ my-video-comments {
     flex-direction: column;
     justify-content: center;
 
-    .playlist {
+    my-video-watch-playlist /deep/ .playlist {
       @include playlist-below-player;
     }
   }

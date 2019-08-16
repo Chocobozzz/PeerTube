@@ -156,6 +156,19 @@ staticRouter.use('/.well-known/change-password',
   }
 )
 
+staticRouter.use('/.well-known/host-meta',
+  (_, res: express.Response) => {
+    res.type('application/xml')
+
+    const xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+      '<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n' +
+      `  <Link rel="lrdd" type="application/xrd+xml" template="${WEBSERVER.URL}/.well-known/webfinger?resource={uri}"/>\n` +
+      '</XRD>'
+
+    res.send(xml).end()
+  }
+)
+
 // ---------------------------------------------------------------------------
 
 export {

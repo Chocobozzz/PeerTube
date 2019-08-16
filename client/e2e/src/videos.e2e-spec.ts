@@ -50,7 +50,7 @@ describe('Videos workflow', () => {
     return pageUploadPage.validSecondUploadStep(videoName)
   })
 
-  it('Should list the video', async () => {
+  it('Should list videos', async () => {
     await videoWatchPage.goOnVideosList(isMobileDevice, isSafari)
 
     if (isMobileDevice || isSafari) {

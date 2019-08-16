@@ -32,6 +32,10 @@
 
   .more-icon {
     width: 21px;
+
+    /deep/ {
+      @include apply-svg-color(var(--mainForegroundColor));
+    }
   }
 
   &.small {

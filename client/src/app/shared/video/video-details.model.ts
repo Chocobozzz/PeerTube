@@ -52,4 +52,8 @@ export class VideoDetails extends Video implements VideoDetailsServerModel {
   getHlsPlaylist () {
     return this.streamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
   }
+
+  hasHlsPlaylist () {
+    return !!this.getHlsPlaylist()
+  }
 }

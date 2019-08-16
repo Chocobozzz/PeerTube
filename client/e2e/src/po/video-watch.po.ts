@@ -99,6 +99,6 @@ export class VideoWatchPage {
   }
 
   async goOnP2PMediaLoaderEmbed () {
-    return browser.get('https://peertube2.cpy.re/videos/embed/4b997fc0-e106-42d9-bff9-ae9d64902bbb?mode=p2p-media-loader')
+    return browser.get('https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50?mode=p2p-media-loader')
   }
 }
