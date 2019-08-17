@@ -8,6 +8,7 @@ import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
+import { existsSync } from 'fs'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
@@ -19,7 +20,6 @@ type UserInfo = {
 }
 
 const processOptions = {
-  cwd: __dirname,
   maxBuffer: Infinity
 }
 
@@ -33,6 +33,7 @@ command
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('--target-url <targetUrl>', 'Video target URL')
+  .option('--tmpdir <tmpdir>', 'Working directory')
   .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('-v, --verbose', 'Verbose mode')
@@ -45,6 +46,17 @@ getServerCredentials(command)
 
       process.exit(-1)
     }
+
+    if (!program['tmpdir']) {
+      program[ 'tmpdir' ] = __dirname;
+    } else {
+      if (!existsSync(program[ 'tmpdir' ])) {
+        console.error('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
+
+        process.exit(-1)
+      }
+    }
+
 
     removeEndSlashes(url)
     removeEndSlashes(program[ 'targetUrl' ])
@@ -84,7 +96,7 @@ async function run (url: string, user: UserInfo) {
 
     for (const info of infoArray) {
       await processVideo({
-        cwd: processOptions.cwd,
+        cwd: program[ 'tmpdir' ],
         url,
         user,
         youtubeInfo: info
