@@ -36,6 +36,8 @@ command
   .option('--tmpdir <tmpdir>', 'Working directory')
   .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
+  .option('--first <first>', 'Process first n elements of returned playlist')
+  .option('--last <last>', 'Process last n elements of returned playlist')
   .option('-v, --verbose', 'Verbose mode')
   .parse(process.argv)
 
@@ -88,10 +90,17 @@ async function run (url: string, user: UserInfo) {
 
     // Normalize utf8 fields
     if (Array.isArray(info) === true) {
-      infoArray = info.map(i => normalizeObject(i))
+      if (program[ 'first' ]) {
+        infoArray = info.slice(0, program[ 'first' ]).map(i => normalizeObject(i))
+      } else if (program[ 'last' ]) {
+        infoArray = info.slice(0 - program[ 'last' ]).map(i => normalizeObject(i))
+      } else {
+        infoArray = info.map(i => normalizeObject(i))
+      }
     } else {
       infoArray = [ normalizeObject(info) ]
     }
+
     console.log('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
