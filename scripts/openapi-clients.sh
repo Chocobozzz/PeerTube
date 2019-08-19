@@ -4,7 +4,7 @@
 set -euvo pipefail
 IFS=$'\n\t '
 
-for lang in ${API_LANGS} ; do
+for lang in ${API_LANGS//:/ } ; do
 (
     echo "Generating client API libs for $lang"
 
