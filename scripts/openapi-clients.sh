@@ -8,11 +8,11 @@ for lang in ${API_LANGS} ; do
 (
     echo "Generating client API libs for $lang"
 
-    out_dir=dist/api/python
+    out_dir="dist/api/$lang"
     repo_id="${API_REPO_PREFIX}${lang}"
     git_remote="https://${API_GIT_USER}:${GIT_TOKEN}@github.com/${API_GIT_USER}/${repo_id}.git"
     if ! [ -e "$out_dir" ] ; then
-        git clone "https://github.com/${API_GIT_USER}/${repo_id}${lang}.git" "$out_dir"
+        git clone "https://github.com/${API_GIT_USER}/${repo_id}.git" "$out_dir"
     fi
 
     docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
