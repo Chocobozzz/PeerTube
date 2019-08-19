@@ -13,6 +13,7 @@ info:
     altText: PeerTube Project Homepage
   description: |
     # Introduction
+
     The PeerTube API is built on HTTP(S). Our API is RESTful. It has predictable
     resource URLs. It returns HTTP response codes to indicate errors. It also
     accepts and returns JSON in the HTTP body. You can use your favorite
@@ -22,11 +23,13 @@ info:
     which generates a client SDK in the language of your choice.
 
     # Authentication
+
     When you sign up for an account, you are given the possibility to generate
     sessions, and authenticate using this session token. One session token can
     currently be used at a time.
 
     # Errors
+
     The API uses standard HTTP status codes to indicate the success or failure
     of the API call. The body of the response will be JSON in the following
     format.
