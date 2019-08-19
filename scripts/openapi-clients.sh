@@ -6,6 +6,10 @@ IFS=$'\n\t'
 
 OUT_DIR=dist/api/python
 
+if ! [ -e $OUT_DIR ] ; then
+    git clone "https://github.com/${GIT_USER_ID}/${GIT_REPO_ID}.git" "$OUT_DIR"
+fi
+
 docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i /local/support/doc/api/openapi.yaml \
     -c /local/openapi/python.yaml \
@@ -15,7 +19,9 @@ docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -o /local/$OUT_DIR
 
 # Docker uses root so we need to undo that
-sudo chown -R `id -u` $OUT_DIR
+sudo chown -R `id -u` "$OUT_DIR"
 
 # Will use #$GIT_USER $GIT_REPO_ID and $GIT_TOKEN to update repo upon build
-bash $OUT_DIR/git_push.sh "${GIT_USER_ID}" "${GIT_REPO_ID}"
+cd "$OUT_DIR"
+git remote set-url origin https://${GIT_USER_ID}:${GIT_TOKEN}@github.com/${GIT_USER_ID}/${GIT_REPO_ID}.git
+bash git_push.sh "${GIT_USER_ID}" "${GIT_REPO_ID}"
