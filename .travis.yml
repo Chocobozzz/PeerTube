@@ -43,13 +43,20 @@ before_script:
 
 matrix:
   include:
-    - env: TEST_SUITE=misc
-    - env: TEST_SUITE=api-1
-    - env: TEST_SUITE=api-2
-    - env: TEST_SUITE=api-3
-    - env: TEST_SUITE=api-4
-    - env: TEST_SUITE=cli
-    - env: TEST_SUITE=lint
+    - state: test
+      env: TEST_SUITE=misc
+    - state: test
+      env: TEST_SUITE=api-1
+    - state: test
+      env: TEST_SUITE=api-2
+    - state: test
+      env: TEST_SUITE=api-3
+    - state: test
+      env: TEST_SUITE=api-4
+    - state: test
+      env: TEST_SUITE=cli
+    - state: test
+      env: TEST_SUITE=lint
     - stage: openapi
       script:
         - scripts/openapi-clients.sh
