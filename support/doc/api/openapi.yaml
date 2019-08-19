@@ -1089,6 +1089,8 @@ paths:
                 - channelId
                 - name
             encoding:
+              videofile:
+                contentType: video/mp4, video/webm, video/ogg, video/avi, video/quicktime, video/x-msvideo, video/x-flv, video/x-matroska, application/octet-stream
               thumbnailfile:
                 contentType: image/jpeg
               previewfile:
