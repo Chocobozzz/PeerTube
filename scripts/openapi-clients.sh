@@ -8,7 +8,7 @@ OUT_DIR=dist/api/python
 
 docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i /local/support/doc/api/openapi.yaml \
-    -c /local/openapi/python.yaml
+    -c /local/openapi/python.yaml \
     -g python \
     --git-user-id "${GIT_USER_ID}" \
     --git-repo-id "${GIT_REPO_ID}" \
