@@ -1,4 +1,21 @@
 #!/bin/bash
+# Required environment vars
+# =========================
+# API_LANGS
+#   A ':' delimited list of the client lib languages to be generated
+# API_GIT_USER
+#   The github username
+# API_REPO_PREFIX
+#   The prefix for the client lib repositories
+# GIT_TOKEN
+#   A personal access token for github for pushing to repos
+#   !!!This is a secret and shouldn't be logged publicly!!!
+
+# (Optional environment vars)
+# ===========================
+# API_COMMIT_MSG
+#   A message to use when committing to the lib repo
+
 # Unofficial bash strict mode
 # https://web.archive.org/web/20190115051613/https://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euvo pipefail
