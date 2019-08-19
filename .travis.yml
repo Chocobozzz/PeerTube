@@ -43,19 +43,19 @@ before_script:
 
 matrix:
   include:
-    - state: test
+    - stage: test
       env: TEST_SUITE=misc
-    - state: test
+    - stage: test
       env: TEST_SUITE=api-1
-    - state: test
+    - stage: test
       env: TEST_SUITE=api-2
-    - state: test
+    - stage: test
       env: TEST_SUITE=api-3
-    - state: test
+    - stage: test
       env: TEST_SUITE=api-4
-    - state: test
+    - stage: test
       env: TEST_SUITE=cli
-    - state: test
+    - stage: test
       env: TEST_SUITE=lint
     - stage: openapi
       script:
