@@ -7,8 +7,9 @@ IFS=$'\n\t'
 
 docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
     -i /local/support/doc/api/openapi.yaml \
+    -c /local/openapi/python.yaml
     -g python \
     -o /local/dist/api/python
 
 # Will use #$GIT_USER $GIT_REPO_ID and $GIT_TOKEN to update repo upon build
-bash dist/api/python/git_push.sh
+bash $OUT_DIR/git_push.sh "${GIT_USER_ID}" "${GIT_REPO_ID}"
