@@ -26,8 +26,9 @@ services:
 #  - redis-server
   - docker
 
-#install:
+install:
 #  - CC=gcc-4.9 CXX=g++-4.9 yarn install
+  - echo "doing nothing"
 
 #before_script:
 #  - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.0.3-64bit-static.tar.xz"
