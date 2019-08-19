@@ -19,11 +19,11 @@ cache:
     - $HOME/.cache/yarn
     - $HOME/fixtures
 
-#stages:
-#  - name: test
-#    if: env(NO_TESTING) IS blank
-#  - name: openapi
-#    if: (tag IS present) OR (env(FORCE_OPENAPI) IS present)
+stages:
+  - name: test
+    if: env(NO_TESTING) IS false
+  - name: openapi
+    if: (tag IS present) OR (env(FORCE_OPENAPI) IS true)
 
 services:
   - postgresql
@@ -56,7 +56,6 @@ jobs:
 #    - stage: test
 #      env: TEST_SUITE=cli
     - stage: test
-      if: env(NO_TESTING) IS false
       env: TEST_SUITE=lint
     - stage: openapi
       script:
