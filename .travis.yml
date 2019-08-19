@@ -19,7 +19,7 @@ git:
 #    - $HOME/.cache/yarn
 #    - $HOME/fixtures
 
-sudo: false
+#sudo: false
 
 services:
 #  - postgresql
