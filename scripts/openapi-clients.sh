@@ -47,7 +47,7 @@ for lang in ${API_LANGS//:/ } ; do
     cd "$out_dir"
     git remote set-url origin "$git_remote"
     # Make sure something has changed
-    if [[ `git status -c | wc -l` = 0 ]] ; then
+    if [[ `git status -s | wc -l` = 0 ]] ; then
         echo "No changes from previous version"
         continue
     fi
