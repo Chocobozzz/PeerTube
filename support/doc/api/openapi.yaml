@@ -829,9 +829,11 @@ paths:
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
+                  format: binary
                 previewfile:
                   description: Video preview file
                   type: string
+                  format: binary
                 category:
                   description: Video category
                   type: string
@@ -1029,9 +1031,11 @@ paths:
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
+                  format: binary
                 previewfile:
                   description: Video preview file
                   type: string
+                  format: binary
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
@@ -1142,9 +1146,11 @@ paths:
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
+                  format: binary
                 previewfile:
                   description: Video preview file
                   type: string
+                  format: binary
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
