@@ -726,7 +726,7 @@ paths:
                   type: string
                   format: binary
             encoding:
-              profileImage:
+              avatarfile:
                 # only accept png/jpeg
                 contentType: image/png, image/jpeg
   /videos:
