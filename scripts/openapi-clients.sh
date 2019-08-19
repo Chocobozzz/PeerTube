@@ -1,27 +1,36 @@
 #!/bin/bash
 # Unofficial bash strict mode
 # https://web.archive.org/web/20190115051613/https://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
-IFS=$'\n\t'
+set -euvo pipefail
+IFS=$'\n\t '
 
-OUT_DIR=dist/api/python
+for lang in ${API_LANGS} ; do
+(
+    echo "Generating client API libs for $lang"
 
-if ! [ -e $OUT_DIR ] ; then
-    git clone "https://github.com/${GIT_USER_ID}/${GIT_REPO_ID}.git" "$OUT_DIR"
-fi
+    out_dir=dist/api/python
+    repo_id="${API_REPO_PREFIX}${lang}"
+    git_remote="https://${API_GIT_USER}:${GIT_TOKEN}@github.com/${API_GIT_USER}/${repo_id}.git"
+    if ! [ -e "$out_dir" ] ; then
+        git clone "https://github.com/${API_GIT_USER}/${repo_id}${lang}.git" "$out_dir"
+    fi
 
-docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
-    -i /local/support/doc/api/openapi.yaml \
-    -c /local/openapi/python.yaml \
-    -g python \
-    --git-user-id "${GIT_USER_ID}" \
-    --git-repo-id "${GIT_REPO_ID}" \
-    -o /local/$OUT_DIR
+    docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+        -i /local/support/doc/api/openapi.yaml \
+        -c "/local/openapi/${lang}.yaml" \
+        -g "$lang" \
+        --git-user-id "${API_GIT_USER}" \
+        --git-repo-id "${repo_id}" \
+        -o "/local/$out_dir"
 
-# Docker uses root so we need to undo that
-sudo chown -R `id -u` "$OUT_DIR"
+    # Docker uses root so we need to undo that
+    sudo chown -R `id -u` "$out_dir"
 
-# Will use #$GIT_USER $GIT_REPO_ID and $GIT_TOKEN to update repo upon build
-cd "$OUT_DIR"
-git remote set-url origin https://${GIT_USER_ID}:${GIT_TOKEN}@github.com/${GIT_USER_ID}/${GIT_REPO_ID}.git
-bash git_push.sh "${GIT_USER_ID}" "${GIT_REPO_ID}"
+    # Commit and push changes to the remote
+    cd "$out_dir"
+    git remote set-url origin "$git_remote"
+    git add .
+    git commit -m "${API_COMMIT_MSG:-"Minor update"}"
+    git push
+)
+done
