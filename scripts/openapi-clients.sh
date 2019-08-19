@@ -46,6 +46,11 @@ for lang in ${API_LANGS//:/ } ; do
     # Commit and push changes to the remote
     cd "$out_dir"
     git remote set-url origin "$git_remote"
+    # Make sure something has changed
+    if [[ `git status -c | wc -l` = 0 ]] ; then
+        echo "No changes from previous version"
+        continue
+    fi
     git add .
     git commit -m "${API_COMMIT_MSG:-"Minor update"}"
     git push
