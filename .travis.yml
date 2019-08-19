@@ -43,18 +43,18 @@ before_script:
 
 jobs:
   include:
-#    - stage: test
-#      env: TEST_SUITE=misc
-#    - stage: test
-#      env: TEST_SUITE=api-1
-#    - stage: test
-#      env: TEST_SUITE=api-2
-#    - stage: test
-#      env: TEST_SUITE=api-3
-#    - stage: test
-#      env: TEST_SUITE=api-4
-#    - stage: test
-#      env: TEST_SUITE=cli
+    - stage: test
+      env: TEST_SUITE=misc
+    - stage: test
+      env: TEST_SUITE=api-1
+    - stage: test
+      env: TEST_SUITE=api-2
+    - stage: test
+      env: TEST_SUITE=api-3
+    - stage: test
+      env: TEST_SUITE=api-4
+    - stage: test
+      env: TEST_SUITE=cli
     - stage: test
       env: TEST_SUITE=lint
     - stage: openapi
