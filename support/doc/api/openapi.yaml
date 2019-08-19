@@ -727,7 +727,6 @@ paths:
                   format: binary
             encoding:
               avatarfile:
-                # only accept png/jpeg
                 contentType: image/png, image/jpeg
   /videos:
     get:
@@ -876,6 +875,11 @@ paths:
                   format: date-time
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
     get:
       summary: Get a video by its id
       tags:
@@ -1084,6 +1088,11 @@ paths:
                 - videofile
                 - channelId
                 - name
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
       x-code-samples:
         - lang: Shell
           source: |
@@ -1194,6 +1203,11 @@ paths:
               required:
                 - channelId
                 - name
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
   /videos/abuse:
     get:
       summary: Get list of reported video abuses
@@ -1958,7 +1972,7 @@ components:
           description: 'Video file size in bytes'
         torrentUrl:
           type: string
-        torrentDownaloadUrl:
+        torrentDownloadUrl:
           type: string
         fileUrl:
           type: string
