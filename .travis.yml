@@ -19,11 +19,11 @@ cache:
     - $HOME/.cache/yarn
     - $HOME/fixtures
 
-stages:
-  - name: test
-    if: env(NO_TESTING) IS blank
-  - name: openapi
-    if: (tag IS present) OR (env(FORCE_OPENAPI) IS present)
+#stages:
+#  - name: test
+#    if: env(NO_TESTING) IS blank
+#  - name: openapi
+#    if: (tag IS present) OR (env(FORCE_OPENAPI) IS present)
 
 services:
   - postgresql
@@ -41,7 +41,7 @@ before_script:
   - export PATH=$HOME/bin:$PATH
   - psql -c "create user peertube with password 'peertube';" -U postgres
 
-matrix:
+jobs:
   include:
 #    - stage: test
 #      env: TEST_SUITE=misc
@@ -59,6 +59,7 @@ matrix:
       if: env(NO_TESTING) IS blank
       env: TEST_SUITE=lint
     - stage: openapi
+      if: (tag IS present) OR (env(FORCE_OPENAPI) IS present)
       script:
         - scripts/openapi-clients.sh
 
