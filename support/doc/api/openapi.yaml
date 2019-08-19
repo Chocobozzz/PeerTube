@@ -1204,6 +1204,8 @@ paths:
                 - channelId
                 - name
             encoding:
+              torrentfile:
+                contentType: application/x-bittorrent
               thumbnailfile:
                 contentType: image/jpeg
               previewfile:
@@ -1328,6 +1330,9 @@ paths:
                   description: The file to upload.
                   type: string
                   format: binary
+            encoding:
+              captionfile:
+                contentType: text/vtt, application/x-subrip
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
