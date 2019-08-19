@@ -24,6 +24,7 @@ sudo: false
 services:
   - postgresql
   - redis-server
+  - docker
 
 install:
   - CC=gcc-4.9 CXX=g++-4.9 yarn install
@@ -56,3 +57,6 @@ after_failure:
   - cat test4/logs/peertube.log
   - cat test5/logs/peertube.log
   - cat test6/logs/peertube.log
+
+after_success:
+  -
