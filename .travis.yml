@@ -5,19 +5,19 @@ node_js:
 
 git:
   depth: 1
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - g++-4.9
-  postgresql: "9.6"
-
-cache:
-  directories:
-    - $HOME/.cache/yarn
-    - $HOME/fixtures
+#
+#addons:
+#  apt:
+#    sources:
+#      - ubuntu-toolchain-r-test
+#    packages:
+#      - g++-4.9
+#  postgresql: "9.6"
+#
+#cache:
+#  directories:
+#    - $HOME/.cache/yarn
+#    - $HOME/fixtures
 
 sudo: false
 
@@ -26,8 +26,8 @@ services:
 #  - redis-server
   - docker
 
-install:
-  - CC=gcc-4.9 CXX=g++-4.9 yarn install
+#install:
+#  - CC=gcc-4.9 CXX=g++-4.9 yarn install
 
 #before_script:
 #  - wget --no-check-certificate "https://download.cpy.re/ffmpeg/ffmpeg-release-4.0.3-64bit-static.tar.xz"
@@ -49,7 +49,11 @@ install:
 
 script:
 #  - NODE_PENDING_JOB_WAIT=2000 travis_retry npm run ci -- "$TEST_SUITE"
-  - NODE_PENDING_JOB_WAIT=2000 travis_retry npm run openapi-clients
+  - docker run --rm -v ${PWD}:/local openapitools/openapi-generator-cli generate \
+    -i /local/support/doc/api/openapi.yaml \
+    -g python \
+    -o /local/dist/api/python
+  - ls -l dist/api/python
 #
 #after_failure:
 #  - cat test1/logs/peertube.log

@@ -43,3 +43,4 @@
 /*.asc
 /server/tools/import-mediacore.ts
 /docker-volume/
+/dist/
