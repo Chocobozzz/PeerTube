@@ -56,7 +56,7 @@ jobs:
 #    - stage: test
 #      env: TEST_SUITE=cli
     - stage: test
-      if: env(NO_TESTING) IS blank
+      if: env(NO_TESTING) IS true
       env: TEST_SUITE=lint
     - stage: openapi
       script:
