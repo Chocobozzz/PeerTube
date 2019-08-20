@@ -63,7 +63,7 @@ import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { MVideoFullLight } from '@server/typings/models'
+import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -198,7 +198,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     originallyPublishedAt: videoInfo.originallyPublishedAt
   }
 
-  const video = new VideoModel(videoData)
+  const video = new VideoModel(videoData) as MVideoDetails
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({

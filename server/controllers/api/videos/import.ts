@@ -28,6 +28,7 @@ import {
   MChannelActorAccountDefault,
   MThumbnail,
   MUser,
+  MVideoTag,
   MVideoThumbnailAccountDefault,
   MVideoWithBlacklistLight
 } from '@server/typings/models'
@@ -244,7 +245,7 @@ function insertIntoDB (parameters: {
     const sequelizeOptions = { transaction: t }
 
     // Save video object in database
-    const videoCreated = await video.save(sequelizeOptions) as (MVideoThumbnailAccountDefault & MVideoWithBlacklistLight)
+    const videoCreated = await video.save(sequelizeOptions) as (MVideoThumbnailAccountDefault & MVideoWithBlacklistLight & MVideoTag)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
@@ -264,6 +265,9 @@ function insertIntoDB (parameters: {
       const tagInstances = await TagModel.findOrCreateTags(tags, t)
 
       await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
+      videoCreated.Tags = tagInstances
+    } else {
+      videoCreated.Tags = []
     }
 
     // Create video import object in database

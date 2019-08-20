@@ -65,9 +65,7 @@ import {
   MVideoFile,
   MVideoFullLight,
   MVideoId,
-  MVideoTag,
-  MVideoThumbnail,
-  MVideoWithAllFiles
+  MVideoThumbnail
 } from '../../typings/models'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
 
