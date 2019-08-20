@@ -21,7 +21,7 @@ import {
   MVideoFullLight
 } from '../typings/models/video'
 import { MUser, MUserAccount, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/typings/models/user'
-import { MActorFollowActors, MActorFollowFull } from '../typings/models'
+import { MActorFollowActors, MActorFollowFull, MActorFollowFollowingFullFollowerAccount } from '../typings/models'
 import { ActorFollowModel } from '../models/activitypub/actor-follow'
 import { MVideoImportVideo } from '@server/typings/models/video/video-import'
 import { AccountModel } from '@server/models/account/account'
@@ -102,7 +102,7 @@ class Notifier {
         .catch(err => logger.error('Cannot notify moderators of new user registration (%s).', user.username, { err }))
   }
 
-  notifyOfNewUserFollow (actorFollow: MActorFollowFull): void {
+  notifyOfNewUserFollow (actorFollow: MActorFollowFollowingFullFollowerAccount): void {
     this.notifyUserOfNewActorFollow(actorFollow)
       .catch(err => {
         logger.error(
@@ -231,7 +231,7 @@ class Notifier {
     return this.notify({ users, settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyUserOfNewActorFollow (actorFollow: MActorFollowFull) {
+  private async notifyUserOfNewActorFollow (actorFollow: MActorFollowFollowingFullFollowerAccount) {
     if (actorFollow.ActorFollowing.isOwned() === false) return
 
     // Account follows one of our account?

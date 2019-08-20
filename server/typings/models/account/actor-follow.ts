@@ -1,27 +1,55 @@
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { MActor, MActorAccountChannel, MActorChannel, MActorChannelAccount, MActorDefault, MActorHost, MActorUsername } from './actor'
+import {
+  MActor,
+  MActorAccount,
+  MActorAccountChannel,
+  MActorChannel,
+  MActorChannelAccountActor,
+  MActorDefault,
+  MActorHost,
+  MActorUsername
+} from './actor'
 import { PickWith } from '../../utils'
+import { ActorModel } from '@server/models/activitypub/actor'
+
+type Use<K extends keyof ActorFollowModel, M> = PickWith<ActorFollowModel, K, M>
+
+// ############################################################################
 
 export type MActorFollow = Omit<ActorFollowModel, 'ActorFollower' | 'ActorFollowing'>
 
-export type MActorFollowActors = MActorFollow &
-  PickWith<ActorFollowModel, 'ActorFollower', MActor> &
-  PickWith<ActorFollowModel, 'ActorFollowing', MActor>
-
-export type MActorFollowActorsDefault = MActorFollow &
-  PickWith<ActorFollowModel, 'ActorFollower', MActorDefault> &
-  PickWith<ActorFollowModel, 'ActorFollowing', MActorDefault>
-
-export type MActorFollowActorsDefaultSubscription = MActorFollow &
-  PickWith<ActorFollowModel, 'ActorFollower', MActorDefault> &
-  PickWith<ActorFollowModel, 'ActorFollowing', MActorDefault & MActorChannel>
-
-export type MActorFollowFull = MActorFollow &
-  PickWith<ActorFollowModel, 'ActorFollower', MActorAccountChannel> &
-  PickWith<ActorFollowModel, 'ActorFollowing', MActorAccountChannel>
+// ############################################################################
 
 export type MActorFollowFollowingHost = MActorFollow &
-  PickWith<ActorFollowModel, 'ActorFollowing', MActorUsername & MActorHost>
+  Use<'ActorFollowing', MActorUsername & MActorHost>
+
+// ############################################################################
+
+// With actors or actors default
+
+export type MActorFollowActors = MActorFollow &
+  Use<'ActorFollower', MActor> &
+  Use<'ActorFollowing', MActor>
+
+export type MActorFollowActorsDefault = MActorFollow &
+  Use<'ActorFollower', MActorDefault> &
+  Use<'ActorFollowing', MActorDefault>
+
+export type MActorFollowFull = MActorFollow &
+  Use<'ActorFollower', MActorAccountChannel> &
+  Use<'ActorFollowing', MActorAccountChannel>
+
+// ############################################################################
+
+// For subscriptions
+
+export type MActorFollowActorsDefaultSubscription = MActorFollow &
+  Use<'ActorFollower', MActorDefault> &
+  Use<'ActorFollowing', MActorDefault & MActorChannel>
+
+export type MActorFollowFollowingFullFollowerAccount = MActorFollow &
+  Use<'ActorFollower', MActorAccount> &
+  Use<'ActorFollowing', MActorAccountChannel>
 
 export type MActorFollowSubscriptions = MActorFollow &
-  PickWith<ActorFollowModel, 'ActorFollowing', MActorChannelAccount>
+  Use<'ActorFollowing', MActorChannelAccountActor>

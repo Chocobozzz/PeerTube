@@ -1,29 +1,43 @@
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { PickWith } from '../../utils'
 import { MAccountDefault } from '../account'
-import { MVideoAccountDefault, MVideoAccountLight, MVideoFeed, MVideoIdUrl } from './video'
+import { MVideoAccountLight, MVideoFeed, MVideoIdUrl } from './video'
+
+type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
+
+// ############################################################################
 
 export type MComment = Omit<VideoCommentModel, 'OriginVideoComment' | 'InReplyToVideoComment' | 'Video' | 'Account'>
 export type MCommentId = Pick<MComment, 'id'>
 
-export type MCommentAPI = MComment & { totalReplies: number }
+// ############################################################################
 
 export type MCommentOwner = MComment &
-  PickWith<VideoCommentModel, 'Account', MAccountDefault>
+  Use<'Account', MAccountDefault>
 
 export type MCommentVideo = MComment &
-  PickWith<VideoCommentModel, 'Video', MVideoAccountLight>
+  Use<'Video', MVideoAccountLight>
 
 export type MCommentReply = MComment &
-  PickWith<VideoCommentModel, 'InReplyToVideoComment', MComment>
+  Use<'InReplyToVideoComment', MComment>
 
-export type MCommentOwnerReply = MCommentOwner & MCommentReply
-export type MCommentOwnerVideo = MCommentOwner & MCommentVideo
-export type MCommentReplyVideo = MCommentReply & MCommentVideo
-export type MCommentOwnerVideoReply = MCommentOwnerVideo & MCommentReply
+export type MCommentOwnerVideo = MComment &
+  Use<'Account', MAccountDefault> &
+  Use<'Video', MVideoAccountLight>
 
-export type MCommentOwnerReplyVideoLight = MCommentOwnerReply &
-  PickWith<VideoCommentModel, 'Video', MVideoIdUrl>
+export type MCommentOwnerVideoReply = MComment &
+  Use<'Account', MAccountDefault> &
+  Use<'Video', MVideoAccountLight> &
+  Use<'InReplyToVideoComment', MComment>
+
+export type MCommentOwnerReplyVideoLight = MComment &
+  Use<'Account', MAccountDefault> &
+  Use<'InReplyToVideoComment', MComment> &
+  Use<'Video', MVideoIdUrl>
 
 export type MCommentOwnerVideoFeed = MCommentOwner &
-  PickWith<VideoCommentModel, 'Video', MVideoFeed>
+  Use<'Video', MVideoFeed>
+
+// ############################################################################
+
+export type MCommentAPI = MComment & { totalReplies: number }

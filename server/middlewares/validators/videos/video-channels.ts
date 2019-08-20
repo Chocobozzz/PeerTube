@@ -13,8 +13,7 @@ import { isActorPreferredUsernameValid } from '../../../helpers/custom-validator
 import { ActorModel } from '../../../models/activitypub/actor'
 import { isBooleanValid } from '../../../helpers/custom-validators/misc'
 import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
-import { MChannelActorAccountDefault } from '../../../typings/models/video'
-import { MUser } from '@server/typings/models'
+import { MChannelAccountDefault, MUser } from '@server/typings/models'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
@@ -132,7 +131,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelActorAccountDefault, res: express.Response) {
+function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAccountDefault, res: express.Response) {
   if (videoChannel.Actor.isOwned() === false) {
     res.status(403)
               .json({ error: 'Cannot remove video channel of another server.' })

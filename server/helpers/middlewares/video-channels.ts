@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { MChannelActorAccountDefault } from '../../typings/models'
+import { MChannelAccountDefault } from '@server/typings/models'
 
 async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
@@ -28,7 +28,7 @@ export {
   doesVideoChannelNameWithHostExist
 }
 
-function processVideoChannelExist (videoChannel: MChannelActorAccountDefault, res: express.Response) {
+function processVideoChannelExist (videoChannel: MChannelAccountDefault, res: express.Response) {
   if (!videoChannel) {
     res.status(404)
        .json({ error: 'Video channel not found' })

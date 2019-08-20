@@ -32,7 +32,9 @@ type CandidateToDuplicate = {
   streamingPlaylists: MStreamingPlaylist[]
 }
 
-function isMVideoRedundancyFileVideo (o: MVideoRedundancyVideo): o is MVideoRedundancyFileVideo {
+function isMVideoRedundancyFileVideo (
+  o: MVideoRedundancyFileVideo | MVideoRedundancyStreamingPlaylistVideo
+): o is MVideoRedundancyFileVideo {
   return !!(o as MVideoRedundancyFileVideo).VideoFile
 }
 

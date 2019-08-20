@@ -24,15 +24,17 @@ import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
 import { sequelizeTypescript } from '../../initializers/database'
 import {
   MAccount,
+  MAccountDefault,
   MActor,
   MActorAccountChannelId,
+  MActorAccountChannelIdActor,
   MActorAccountId,
   MActorDefault,
   MActorFull,
+  MActorFullActor,
   MActorId,
-  MActorAccountChannelIdActor,
   MChannel,
-  MActorFullActor, MAccountActorDefault, MChannelActorDefault, MChannelActorAccountDefault
+  MChannelAccountDefault
 } from '../../typings/models'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
@@ -374,12 +376,11 @@ function saveActorAndServerAndModelIfNotExist (
     })
 
     if (actorCreated.type === 'Person' || actorCreated.type === 'Application') {
-      actorCreated.Account = await saveAccount(actorCreated, result, t) as MAccountActorDefault
+      actorCreated.Account = await saveAccount(actorCreated, result, t) as MAccountDefault
       actorCreated.Account.Actor = actorCreated
     } else if (actorCreated.type === 'Group') { // Video channel
-      actorCreated.VideoChannel = await saveVideoChannel(actorCreated, result, ownerActor, t) as MChannelActorAccountDefault
-      actorCreated.VideoChannel.Actor = actorCreated
-      actorCreated.VideoChannel.Account = ownerActor.Account
+      const channel = await saveVideoChannel(actorCreated, result, ownerActor, t)
+      actorCreated.VideoChannel = Object.assign(channel, { Actor: actorCreated, Account: ownerActor.Account })
     }
 
     actorCreated.Server = server

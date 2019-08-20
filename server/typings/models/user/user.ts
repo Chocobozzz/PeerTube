@@ -3,30 +3,49 @@ import { PickWith } from '../../utils'
 import { MAccount, MAccountDefault, MAccountDefaultChannelDefault, MAccountId, MAccountIdActorId, MAccountUrl } from '../account'
 import { MNotificationSetting } from './user-notification-setting'
 
+type Use<K extends keyof UserModel, M> = PickWith<UserModel, K, M>
+
+// ############################################################################
+
 export type MUser = Omit<UserModel, 'Account' | 'NotificationSetting' | 'VideoImports' | 'OAuthTokens'>
+
+// ############################################################################
 
 export type MUserId = Pick<UserModel, 'id'>
 
-export type MUserWithNotificationSetting = MUser &
-  PickWith<UserModel, 'NotificationSetting', MNotificationSetting>
+// ############################################################################
 
-export type MUserAccountDefault = MUser &
-  PickWith<UserModel, 'Account', MAccountDefault>
-
-export type MUserAccount = MUser &
-  PickWith<UserModel, 'Account', MAccount>
+// With account
 
 export type MUserAccountId = MUser &
-  PickWith<UserModel, 'Account', MAccountId>
-
-export type MUserNotifSettingAccount = MUserWithNotificationSetting & MUserAccount
-
-export type MUserDefault = MUser &
-  MUserWithNotificationSetting &
-  MUserAccountDefault
-
-export type MUserChannel = MUserWithNotificationSetting &
-  PickWith<UserModel, 'Account', MAccountDefaultChannelDefault>
+  Use<'Account', MAccountId>
 
 export type MUserAccountUrl = MUser &
-  PickWith<UserModel, 'Account', MAccountUrl & MAccountIdActorId>
+  Use<'Account', MAccountUrl & MAccountIdActorId>
+
+export type MUserAccount = MUser &
+  Use<'Account', MAccount>
+
+export type MUserAccountDefault = MUser &
+  Use<'Account', MAccountDefault>
+
+// With channel
+
+export type MUserNotifSettingChannelDefault = MUser &
+  Use<'NotificationSetting', MNotificationSetting> &
+  Use<'Account', MAccountDefaultChannelDefault>
+
+// With notification settings
+
+export type MUserWithNotificationSetting = MUser &
+  Use<'NotificationSetting', MNotificationSetting>
+
+export type MUserNotifSettingAccount = MUser &
+  Use<'NotificationSetting', MNotificationSetting> &
+  Use<'Account', MAccount>
+
+// Default scope
+
+export type MUserDefault = MUser &
+  Use<'NotificationSetting', MNotificationSetting> &
+  Use<'Account', MAccountDefault>

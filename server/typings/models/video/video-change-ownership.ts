@@ -2,9 +2,13 @@ import { VideoChangeOwnershipModel } from '@server/models/video/video-change-own
 import { PickWith } from '@server/typings/utils'
 import { MAccountDefault, MVideoWithFileThumbnail } from '@server/typings/models'
 
+type Use<K extends keyof VideoChangeOwnershipModel, M> = PickWith<VideoChangeOwnershipModel, K, M>
+
+// ############################################################################
+
 export type MVideoChangeOwnership = Omit<VideoChangeOwnershipModel, 'Initiator' | 'NextOwner' | 'Video'>
 
 export type MVideoChangeOwnershipFull = MVideoChangeOwnership &
-  PickWith<VideoChangeOwnershipModel, 'Initiator', MAccountDefault> &
-  PickWith<VideoChangeOwnershipModel, 'NextOwner', MAccountDefault> &
-  PickWith<VideoChangeOwnershipModel, 'Video', MVideoWithFileThumbnail>
+  Use<'Initiator', MAccountDefault> &
+  Use<'NextOwner', MAccountDefault> &
+  Use<'Video', MVideoWithFileThumbnail>

@@ -55,7 +55,7 @@ import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import * as Bluebird from 'bluebird'
-import { MUserChannel, MUserDefault, MUserId, MUserWithNotificationSetting } from '@server/typings/models'
+import { MUserNotifSettingChannelDefault, MUserDefault, MUserId, MUserWithNotificationSetting } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -384,7 +384,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameAndPopulateChannels (username: string): Bluebird<MUserChannel> {
+  static loadByUsernameAndPopulateChannels (username: string): Bluebird<MUserNotifSettingChannelDefault> {
     const query = {
       where: {
         username: { [ Op.iLike ]: username }

@@ -3,13 +3,17 @@ import { PickWith, PickWithOpt } from '../../utils'
 import { MVideo, MVideoUUID } from './video'
 import { MVideoRedundancyFileUrl } from './video-redundancy'
 
+type Use<K extends keyof VideoFileModel, M> = PickWith<VideoFileModel, K, M>
+
+// ############################################################################
+
 export type MVideoFile = Omit<VideoFileModel, 'Video' | 'RedundancyVideos'>
 
 export type MVideoFileVideo = MVideoFile &
-  PickWith<VideoFileModel, 'Video', MVideo>
+  Use<'Video', MVideo>
 
 export type MVideoFileVideoUUID = MVideoFile &
-  PickWith<VideoFileModel, 'Video', MVideoUUID>
+  Use<'Video', MVideoUUID>
 
 export type MVideoFileRedundanciesOpt = MVideoFile &
   PickWithOpt<VideoFileModel, 'RedundancyVideos', MVideoRedundancyFileUrl[]>

@@ -25,7 +25,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import {
-  MChannelActorAccountDefault,
+  MChannelAccountDefault,
   MThumbnail,
   MUser,
   MVideoTag,
@@ -234,7 +234,7 @@ function insertIntoDB (parameters: {
   video: MVideoThumbnailAccountDefault,
   thumbnailModel: MThumbnail,
   previewModel: MThumbnail,
-  videoChannel: MChannelActorAccountDefault,
+  videoChannel: MChannelAccountDefault,
   tags: string[],
   videoImportAttributes: Partial<MVideoImport>,
   user: MUser

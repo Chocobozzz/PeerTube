@@ -1,70 +1,97 @@
-import { FunctionProperties, PickWith } from '../../utils'
+import { PickWith } from '../../utils'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import {
   MAccountActor,
   MAccountAPI,
-  MAccountBlocks,
   MAccountDefault,
   MAccountLight,
+  MAccountSummaryBlocks,
   MAccountUserId,
   MActor,
   MActorAccountChannelId,
   MActorAPI,
   MActorDefault,
-  MActorDefaultLight, MActorLight,
+  MActorDefaultLight,
+  MActorLight,
   MActorSummary
 } from '../account'
 import { MVideo } from './video'
 
-export type MChannelId = FunctionProperties<VideoChannelModel>
-export type MChannelIdActor = MChannelId &
-  PickWith<VideoChannelModel, 'Actor', MActorAccountChannelId>
+type Use<K extends keyof VideoChannelModel, M> = PickWith<VideoChannelModel, K, M>
+
+// ############################################################################
 
 export type MChannel = Omit<VideoChannelModel, 'Actor' | 'Account' | 'Videos' | 'VideoPlaylists'>
 
+// ############################################################################
+
+export type MChannelId = Pick<MChannel, 'id'>
+
+// ############################################################################
+
+export type MChannelIdActor = MChannelId &
+  Use<'Actor', MActorAccountChannelId>
+
 export type MChannelUserId = Pick<MChannel, 'accountId'> &
-  PickWith<VideoChannelModel, 'Account', MAccountUserId>
+  Use<'Account', MAccountUserId>
+
+export type MChannelActor = MChannel &
+  Use<'Actor', MActor>
 
 // Default scope
 export type MChannelDefault = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorDefault>
+  Use<'Actor', MActorDefault>
+
+// ############################################################################
+
+// Not all association attributes
 
 export type MChannelLight = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorDefaultLight>
+  Use<'Actor', MActorDefaultLight>
+
+export type MChannelActorLight = MChannel &
+  Use<'Actor', MActorLight>
 
 export type MChannelAccountLight = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorDefaultLight> &
-  PickWith<VideoChannelModel, 'Account', MAccountLight>
+  Use<'Actor', MActorDefaultLight> &
+  Use<'Account', MAccountLight>
 
-export type MChannelSummary = Pick<MChannel, 'id' | 'name' | 'description' | 'actorId'> &
-  PickWith<VideoChannelModel, 'Actor', MActorSummary>
+// ############################################################################
 
-export type MChannelSummaryAccount = MChannelSummary &
-  PickWith<VideoChannelModel, 'Account', MAccountBlocks>
-
-export type MChannelAPI = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorAPI> &
-  PickWith<VideoChannelModel, 'Account', MAccountAPI>
+// Account associations
 
 export type MChannelAccountActor = MChannel &
-  PickWith<VideoChannelModel, 'Account', MAccountActor>
-export type MChannelAccountDefault = MChannelActor &
-  PickWith<VideoChannelModel, 'Account', MAccountDefault>
+  Use<'Account', MAccountActor>
 
+export type MChannelAccountDefault = MChannel &
+  Use<'Actor', MActorDefault> &
+  Use<'Account', MAccountDefault>
+
+export type MChannelActorAccountActor = MChannel &
+  Use<'Account', MAccountActor> &
+  Use<'Actor', MActor>
+
+// ############################################################################
+
+// Videos  associations
 export type MChannelVideos = MChannel &
-  PickWith<VideoChannelModel, 'Videos', MVideo[]>
+  Use<'Videos', MVideo[]>
 
-export type MChannelActor = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActor>
-export type MChannelActorLight = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorLight>
-export type MChannelActorDefault = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorDefault>
+export type MChannelActorAccountDefaultVideos = MChannel &
+  Use<'Actor', MActorDefault> &
+  Use<'Account', MAccountDefault> &
+  Use<'Videos', MVideo[]>
 
-export type MChannelActorAccountActor = MChannelAccountActor & MChannelActor
+// ############################################################################
 
-export type MChannelActorAccountDefault = MChannel &
-  PickWith<VideoChannelModel, 'Actor', MActorDefault> &
-  PickWith<VideoChannelModel, 'Account', MAccountDefault>
+// For API
 
-export type MChannelActorAccountDefaultVideos = MChannelActorAccountDefault & MChannelVideos
+export type MChannelSummary = Pick<MChannel, 'id' | 'name' | 'description' | 'actorId'> &
+  Use<'Actor', MActorSummary>
+
+export type MChannelSummaryAccount = MChannelSummary &
+  Use<'Account', MAccountSummaryBlocks>
+
+export type MChannelAPI = MChannel &
+  Use<'Actor', MActorAPI> &
+  Use<'Account', MAccountAPI>

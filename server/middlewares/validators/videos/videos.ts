@@ -44,7 +44,7 @@ import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '../../../helpers/middlewares'
 import { MVideoFullLight } from '@server/typings/models'
-import { getVideo } from '../../../helpers/video'
+import { getVideoWithAttributes } from '../../../helpers/video'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -123,7 +123,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 ])
 
 async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const video = getVideo(res)
+  const video = getVideoWithAttributes(res)
 
   // Anybody can watch local videos
   if (video.isOwned() === true) return next()
@@ -157,7 +157,7 @@ const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-
       if (areValidationErrors(req, res)) return
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
-      const video = getVideo(res)
+      const video = getVideoWithAttributes(res)
       const videoAll = video as MVideoFullLight
 
       // Video private or blacklisted

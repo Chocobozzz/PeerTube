@@ -2,17 +2,25 @@ import { VideoRedundancyModel } from '../../../models/redundancy/video-redundanc
 import { PickWith } from '@server/typings/utils'
 import { MStreamingPlaylistVideo, MVideoFile, MVideoFileVideo } from '@server/typings/models'
 
+type Use<K extends keyof VideoRedundancyModel, M> = PickWith<VideoRedundancyModel, K, M>
+
+// ############################################################################
+
 export type MVideoRedundancy = Omit<VideoRedundancyModel, 'VideoFile' | 'VideoStreamingPlaylist' | 'Actor'>
 
 export type MVideoRedundancyFileUrl = Pick<MVideoRedundancy, 'fileUrl'>
 
+// ############################################################################
+
 export type MVideoRedundancyFile = MVideoRedundancy &
-  PickWith<VideoRedundancyModel, 'VideoFile', MVideoFile>
+  Use<'VideoFile', MVideoFile>
 
 export type MVideoRedundancyFileVideo = MVideoRedundancy &
-  PickWith<VideoRedundancyModel, 'VideoFile', MVideoFileVideo>
+  Use<'VideoFile', MVideoFileVideo>
 
 export type MVideoRedundancyStreamingPlaylistVideo = MVideoRedundancy &
-  PickWith<VideoRedundancyModel, 'VideoStreamingPlaylist', MStreamingPlaylistVideo>
+  Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
 
-export type MVideoRedundancyVideo = MVideoRedundancyFileVideo | MVideoRedundancyStreamingPlaylistVideo
+export type MVideoRedundancyVideo = MVideoRedundancy &
+  Use<'VideoFile', MVideoFileVideo> &
+  Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>

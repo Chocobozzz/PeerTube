@@ -2,14 +2,12 @@ import { createTransport, Transporter } from 'nodemailer'
 import { isTestInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
-import { UserModel } from '../models/account/user'
 import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs-extra'
-import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import { WEBSERVER } from '../initializers/constants'
 import { MCommentOwnerVideo, MVideo, MVideoAbuseVideo, MVideoAccountLight, MVideoBlacklistVideo } from '../typings/models/video'
-import { MActorFollowActors, MActorFollowFull, MUser } from '../typings/models'
+import { MActorFollowActors, MActorFollowFollowingFullFollowerAccount, MUser } from '../typings/models'
 import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
 
 type SendEmailOptions = {
@@ -109,7 +107,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewFollowNotification (to: string[], actorFollow: MActorFollowFull, followType: 'account' | 'channel') {
+  addNewFollowNotification (to: string[], actorFollow: MActorFollowFollowingFullFollowerAccount, followType: 'account' | 'channel') {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
 

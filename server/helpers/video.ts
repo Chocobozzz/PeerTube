@@ -1,6 +1,12 @@
 import { VideoModel } from '../models/video/video'
 import * as Bluebird from 'bluebird'
-import { MVideoAccountAllFiles, MVideoFullLight, MVideoThumbnail, MVideoWithRights, MVideoIdThumbnail } from '@server/typings/models'
+import {
+  MVideoAccountLightBlacklistAllFiles,
+  MVideoFullLight,
+  MVideoIdThumbnail,
+  MVideoThumbnail,
+  MVideoWithRights
+} from '@server/typings/models'
 import { Response } from 'express'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none'
@@ -30,10 +36,10 @@ function fetchVideo (
 
 type VideoFetchByUrlType = 'all' | 'only-video'
 
-function fetchVideoByUrl (url: string, fetchType: 'all'): Bluebird<MVideoAccountAllFiles>
+function fetchVideoByUrl (url: string, fetchType: 'all'): Bluebird<MVideoAccountLightBlacklistAllFiles>
 function fetchVideoByUrl (url: string, fetchType: 'only-video'): Bluebird<MVideoThumbnail>
-function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird<MVideoAccountAllFiles> | Bluebird<MVideoThumbnail>
-function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird<MVideoAccountAllFiles> | Bluebird<MVideoThumbnail> {
+function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
+function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail> {
   if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccount(url)
 
   if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
@@ -43,10 +49,15 @@ function getVideo (res: Response) {
   return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights || res.locals.videoId
 }
 
+function getVideoWithAttributes (res: Response) {
+  return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights
+}
+
 export {
   VideoFetchType,
   VideoFetchByUrlType,
   fetchVideo,
   getVideo,
+  getVideoWithAttributes,
   fetchVideoByUrl
 }

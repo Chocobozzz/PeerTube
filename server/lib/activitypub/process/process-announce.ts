@@ -7,7 +7,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { logger } from '../../../helpers/logger'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature, MVideoAccountAllFiles } from '../../../typings/models'
+import { MActorSignature, MVideoAccountLightBlacklistAllFiles } from '../../../typings/models'
 
 async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
   const { activity, byActor: actorAnnouncer } = options
@@ -28,7 +28,7 @@ export {
 async function processVideoShare (actorAnnouncer: MActorSignature, activity: ActivityAnnounce, notify: boolean) {
   const objectUri = typeof activity.object === 'string' ? activity.object : activity.object.id
 
-  let video: MVideoAccountAllFiles
+  let video: MVideoAccountLightBlacklistAllFiles
   let videoCreated: boolean
 
   try {

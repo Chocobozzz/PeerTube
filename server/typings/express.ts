@@ -5,7 +5,7 @@ import {
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
   MActorFull,
-  MChannelActorAccountDefault,
+  MChannelAccountDefault,
   MComment,
   MCommentOwnerVideoReply,
   MUserDefault,
@@ -53,7 +53,7 @@ declare module 'express' {
 
       videoStreamingPlaylist?: MStreamingPlaylist
 
-      videoChannel?: MChannelActorAccountDefault
+      videoChannel?: MChannelAccountDefault
 
       videoPlaylistFull?: MVideoPlaylistFull
       videoPlaylistSummary?: MVideoPlaylistFullSummary

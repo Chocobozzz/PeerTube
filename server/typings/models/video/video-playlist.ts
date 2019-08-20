@@ -5,38 +5,76 @@ import { MThumbnail } from './thumbnail'
 import { MChannelDefault, MChannelSummary } from './video-channels'
 import { MVideoPlaylistElementLight } from '@server/typings/models/video/video-playlist-element'
 
+type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
+
+// ############################################################################
+
 export type MVideoPlaylist = Omit<VideoPlaylistModel, 'OwnerAccount' | 'VideoChannel' | 'VideoPlaylistElements' | 'Thumbnail'>
+
+// ############################################################################
+
 export type MVideoPlaylistId = Pick<MVideoPlaylist, 'id'>
 export type MVideoPlaylistPrivacy = Pick<MVideoPlaylist, 'privacy'>
-
-export type MVideoPlaylistWithElements = MVideoPlaylist &
-  PickWith<VideoPlaylistModel, 'VideoPlaylistElements', MVideoPlaylistElementLight[]>
-export type MVideoPlaylistIdWithElements = MVideoPlaylistId & MVideoPlaylistWithElements
-
 export type MVideoPlaylistUUID = Pick<MVideoPlaylist, 'uuid'>
-
-export type MVideoPlaylistOwner = MVideoPlaylist &
-  PickWith<VideoPlaylistModel, 'OwnerAccount', MAccount>
-
-export type MVideoPlaylistOwnerDefault = MVideoPlaylist &
-  PickWith<VideoPlaylistModel, 'OwnerAccount', MAccountDefault>
-
-export type MVideoPlaylistThumbnail = MVideoPlaylist &
-  PickWith<VideoPlaylistModel, 'Thumbnail', MThumbnail>
-
-export type MVideoPlaylistAccountThumbnail = MVideoPlaylistOwnerDefault &
-  PickWith<VideoPlaylistModel, 'Thumbnail', MThumbnail>
-
-export type MVideoPlaylistAccountChannelSummary = MVideoPlaylist &
-  PickWith<VideoPlaylistModel, 'OwnerAccount', MAccountSummary> &
-  PickWith<VideoPlaylistModel, 'VideoChannel', MChannelSummary>
-
-export type MVideoPlaylistAccountChannelDefault = MVideoPlaylist &
-  PickWith<VideoPlaylistModel, 'OwnerAccount', MAccountDefault> &
-  PickWith<VideoPlaylistModel, 'VideoChannel', MChannelDefault>
-
 export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength: number }
 
-export type MVideoPlaylistFullSummary = MVideoPlaylistAccountChannelSummary & MVideoPlaylistThumbnail
+// ############################################################################
 
-export type MVideoPlaylistFull = MVideoPlaylist & MVideoPlaylistThumbnail & MVideoPlaylistAccountChannelDefault
+// With elements
+
+export type MVideoPlaylistWithElements = MVideoPlaylist &
+  Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
+
+export type MVideoPlaylistIdWithElements = MVideoPlaylistId &
+  Use<'VideoPlaylistElements', MVideoPlaylistElementLight[]>
+
+// ############################################################################
+
+// With account
+
+export type MVideoPlaylistOwner = MVideoPlaylist &
+  Use<'OwnerAccount', MAccount>
+
+export type MVideoPlaylistOwnerDefault = MVideoPlaylist &
+  Use<'OwnerAccount', MAccountDefault>
+
+// ############################################################################
+
+// With thumbnail
+
+export type MVideoPlaylistThumbnail = MVideoPlaylist &
+  Use<'Thumbnail', MThumbnail>
+
+export type MVideoPlaylistAccountThumbnail = MVideoPlaylist &
+  Use<'OwnerAccount', MAccountDefault> &
+  Use<'Thumbnail', MThumbnail>
+
+// ############################################################################
+
+// With channel
+
+export type MVideoPlaylistAccountChannelDefault = MVideoPlaylist &
+  Use<'OwnerAccount', MAccountDefault> &
+  Use<'VideoChannel', MChannelDefault>
+
+// ############################################################################
+
+// With all associations
+
+export type MVideoPlaylistFull = MVideoPlaylist &
+  Use<'OwnerAccount', MAccountDefault> &
+  Use<'VideoChannel', MChannelDefault> &
+  Use<'Thumbnail', MThumbnail>
+
+// ############################################################################
+
+// For API
+
+export type MVideoPlaylistAccountChannelSummary = MVideoPlaylist &
+  Use<'OwnerAccount', MAccountSummary> &
+  Use<'VideoChannel', MChannelSummary>
+
+export type MVideoPlaylistFullSummary = MVideoPlaylist &
+  Use<'Thumbnail', MThumbnail> &
+  Use<'OwnerAccount', MAccountSummary> &
+  Use<'VideoChannel', MChannelSummary>

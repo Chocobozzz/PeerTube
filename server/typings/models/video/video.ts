@@ -1,6 +1,6 @@
 import { VideoModel } from '../../../models/video/video'
 import { PickWith, PickWithOpt } from '../../utils'
-import { MChannelAccountLight, MChannelActor, MChannelActorAccountDefault, MChannelUserId } from './video-channels'
+import { MChannelAccountDefault, MChannelAccountLight, MChannelActor, MChannelUserId } from './video-channels'
 import { MTag } from './tag'
 import { MVideoCaptionLanguage } from './video-caption'
 import { MStreamingPlaylist, MStreamingPlaylistRedundancies } from './video-streaming-playlist'
@@ -10,9 +10,15 @@ import { MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blackl
 import { MScheduleVideoUpdate } from './schedule-video-update'
 import { MUserVideoHistoryTime } from '../user/user-video-history'
 
+type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
+
+// ############################################################################
+
 export type MVideo = Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
   'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions'>
+
+// ############################################################################
 
 export type MVideoId = Pick<MVideo, 'id'>
 export type MVideoUrl = Pick<MVideo, 'url'>
@@ -21,83 +27,120 @@ export type MVideoUUID = Pick<MVideo, 'uuid'>
 export type MVideoIdUrl = MVideoId & MVideoUrl
 export type MVideoFeed = Pick<MVideo, 'name' | 'uuid'>
 
+// ############################################################################
+
+// Video raw associations: schedules, video files, tags, thumbnails, captions, streaming playlists
+
+// "With" to not confuse with the VideoFile model
 export type MVideoWithFile = MVideo &
-  PickWith<VideoModel, 'VideoFiles', MVideoFile[]>
+  Use<'VideoFiles', MVideoFile[]>
 
 export type MVideoThumbnail = MVideo &
-  PickWith<VideoModel, 'Thumbnails', MThumbnail[]>
-export type MVideoIdThumbnail = MVideoThumbnail & MVideoId
+  Use<'Thumbnails', MThumbnail[]>
+
+export type MVideoIdThumbnail = MVideoId &
+  Use<'Thumbnails', MThumbnail[]>
+
+export type MVideoWithFileThumbnail = MVideo &
+  Use<'VideoFiles', MVideoFile[]> &
+  Use<'Thumbnails', MThumbnail[]>
 
 export type MVideoTag = MVideo &
-  PickWith<VideoModel, 'Tags', MTag[]>
+  Use<'Tags', MTag[]>
 
 export type MVideoWithSchedule = MVideo &
   PickWithOpt<VideoModel, 'ScheduleVideoUpdate', MScheduleVideoUpdate>
 
-export type MVideoWithFileThumbnail = MVideoWithFile & MVideoThumbnail
-
-export type MVideoUser = MVideo &
-  PickWith<VideoModel, 'VideoChannel', MChannelUserId>
-
 export type MVideoWithCaptions = MVideo &
-  PickWith<VideoModel, 'VideoCaptions', MVideoCaptionLanguage[]>
-
-export type MVideoWithBlacklistLight = MVideo &
-  PickWith<VideoModel, 'VideoBlacklist', MVideoBlacklistLight>
-
-export type MVideoAccountLight = MVideo &
-  PickWith<VideoModel, 'VideoChannel', MChannelAccountLight>
-
-export type MVideoWithRights = MVideoWithBlacklistLight & MVideoThumbnail & MVideoUser
+  Use<'VideoCaptions', MVideoCaptionLanguage[]>
 
 export type MVideoWithStreamingPlaylist = MVideo &
-  PickWith<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylist[]>
+  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]>
 
-export type MVideoWithAllFiles = MVideoWithFileThumbnail & MVideoWithStreamingPlaylist
+// ############################################################################
 
-export type MVideoAccountAllFiles = MVideoWithAllFiles & MVideoAccountLight & MVideoWithBlacklistLight
-export type MVideoAccountAllFilesCaptions = MVideoAccountAllFiles & MVideoWithCaptions
+// Associations with not all their attributes
 
 export type MVideoUserHistory = MVideo &
-  PickWith<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]>
+  Use<'UserVideoHistories', MUserVideoHistoryTime[]>
 
-export type MVideoWithBlacklistThumbnailScheduled = MVideoWithSchedule & MVideoWithBlacklistLight & MVideoWithFileThumbnail
+export type MVideoWithBlacklistLight = MVideo &
+  Use<'VideoBlacklist', MVideoBlacklistLight>
+
+export type MVideoAccountLight = MVideo &
+  Use<'VideoChannel', MChannelAccountLight>
+
+export type MVideoWithRights = MVideo &
+  Use<'VideoBlacklist', MVideoBlacklistLight> &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoChannel', MChannelUserId>
+
+// ############################################################################
+
+// All files with some additional associations
+
+export type MVideoWithAllFiles = MVideo &
+  Use<'VideoFiles', MVideoFile[]> &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]>
+
+export type MVideoAccountLightBlacklistAllFiles = MVideo &
+  Use<'VideoFiles', MVideoFile[]> &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]> &
+  Use<'VideoChannel', MChannelAccountLight> &
+  Use<'VideoBlacklist', MVideoBlacklistLight>
+
+// ############################################################################
+
+// With account
 
 export type MVideoAccountDefault = MVideo &
-  PickWith<VideoModel, 'VideoChannel', MChannelActorAccountDefault>
+  Use<'VideoChannel', MChannelAccountDefault>
 
-export type MVideoThumbnailAccountDefault = MVideoThumbnail &
-  PickWith<VideoModel, 'VideoChannel', MChannelActorAccountDefault>
+export type MVideoThumbnailAccountDefault = MVideo &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoChannel', MChannelAccountDefault>
 
 export type MVideoWithChannelActor = MVideo &
-  PickWith<VideoModel, 'VideoChannel', MChannelActor>
+  Use<'VideoChannel', MChannelActor>
 
-export type MVideoFullLight = MVideoThumbnail &
-  MVideoWithBlacklistLight &
-  MVideoTag &
-  MVideoAccountLight &
-  MVideoUserHistory &
-  MVideoWithFile &
-  MVideoWithSchedule &
-  MVideoWithStreamingPlaylist &
-  MVideoUserHistory
+export type MVideoFullLight = MVideo &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoBlacklist', MVideoBlacklistLight> &
+  Use<'Tags', MTag[]> &
+  Use<'VideoChannel', MChannelAccountLight> &
+  Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
+  Use<'VideoFiles', MVideoFile[]> &
+  Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]>
+
+// ############################################################################
+
+// API
 
 export type MVideoAP = MVideo &
-  MVideoTag &
-  MVideoAccountLight &
-  MVideoWithStreamingPlaylist &
-  MVideoWithCaptions &
-  PickWith<VideoModel, 'VideoBlacklist', MVideoBlacklistUnfederated> &
-  PickWith<VideoModel, 'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'Tags', MTag[]> &
+  Use<'VideoChannel', MChannelAccountLight> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]> &
+  Use<'VideoCaptions', MVideoCaptionLanguage[]> &
+  Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
 
 export type MVideoAPWithoutCaption = Omit<MVideoAP, 'VideoCaptions'>
 
 export type MVideoDetails = MVideo &
-  MVideoWithBlacklistLight &
-  MVideoTag &
-  MVideoAccountLight &
-  MVideoWithSchedule &
-  MVideoThumbnail &
-  MVideoUserHistory &
-  PickWith<VideoModel, 'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
-  PickWith<VideoModel, 'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'VideoBlacklist', MVideoBlacklistLight> &
+  Use<'Tags', MTag[]> &
+  Use<'VideoChannel', MChannelAccountLight> &
+  Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
+
+export type MVideoForUser = MVideo &
+  Use<'VideoChannel', MChannelAccountDefault> &
+  Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
+  Use<'VideoBlacklist', MVideoBlacklistLight> &
+  Use<'Thumbnails', MThumbnail[]>

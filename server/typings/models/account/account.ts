@@ -5,7 +5,8 @@ import {
   MActorAPI,
   MActorAudience,
   MActorDefault,
-  MActorDefaultLight, MActorId,
+  MActorDefaultLight,
+  MActorId,
   MActorServer,
   MActorSummary,
   MActorUrl
@@ -14,43 +15,63 @@ import { PickWith } from '../../utils'
 import { MAccountBlocklistId } from './account-blocklist'
 import { MChannelDefault } from '@server/typings/models'
 
-export type MAccountId = Pick<AccountModel, 'id'>
-export type MAccountIdActor = MAccountId &
-  PickWith<AccountModel, 'Actor', MActorAccountChannelId>
-export type MAccountIdActorId = MAccountId &
-  PickWith<AccountModel, 'Actor', MActorId>
+type Use<K extends keyof AccountModel, M> = PickWith<AccountModel, K, M>
+
+// ############################################################################
 
 export type MAccount = Omit<AccountModel, 'Actor' | 'User' | 'Application' | 'VideoChannels' | 'VideoPlaylists' |
   'VideoComments' | 'BlockedAccounts'>
 
-// Default scope
-export type MAccountDefault = MAccount &
-  PickWith<AccountModel, 'Actor', MActorDefault>
+// ############################################################################
 
-export type MAccountDefaultChannelDefault = MAccountDefault &
-  PickWith<AccountModel, 'VideoChannels', MChannelDefault[]>
-
-export type MAccountLight = MAccount &
-  PickWith<AccountModel, 'Actor', MActorDefaultLight>
-
+// Only some attributes
+export type MAccountId = Pick<MAccount, 'id'>
 export type MAccountUserId = Pick<MAccount, 'userId'>
 
-export type MAccountActor = MAccount &
-  PickWith<AccountModel, 'Actor', MActor>
-export type MAccountServer = MAccountActor &
-  PickWith<AccountModel, 'Actor', MActorServer>
+// Only some Actor attributes
+export type MAccountUrl = Use<'Actor', MActorUrl>
+export type MAccountAudience = Use<'Actor', MActorAudience>
 
-export type MAccountActorDefault = MAccount &
-  PickWith<AccountModel, 'Actor', MActorDefault>
+export type MAccountIdActor = MAccountId &
+  Use<'Actor', MActorAccountChannelId>
+
+export type MAccountIdActorId = MAccountId &
+  Use<'Actor', MActorId>
+
+// ############################################################################
+
+// Default scope
+export type MAccountDefault = MAccount &
+  Use<'Actor', MActorDefault>
+
+// Default with default association scopes
+export type MAccountDefaultChannelDefault = MAccount &
+  Use<'Actor', MActorDefault> &
+  Use<'VideoChannels', MChannelDefault[]>
+
+// We don't need some actors attributes
+export type MAccountLight = MAccount &
+  Use<'Actor', MActorDefaultLight>
+
+// ############################################################################
+
+// Full actor
+export type MAccountActor = MAccount &
+  Use<'Actor', MActor>
+
+// Full actor with server
+export type MAccountServer = MAccount &
+  Use<'Actor', MActorServer>
+
+// ############################################################################
+
+// For API
 
 export type MAccountSummary = Pick<MAccount, 'id' | 'name'> &
-  PickWith<AccountModel, 'Actor', MActorSummary>
+  Use<'Actor', MActorSummary>
 
-export type MAccountBlocks = MAccountSummary &
-  PickWith<AccountModel, 'BlockedAccounts', MAccountBlocklistId[]>
+export type MAccountSummaryBlocks = MAccountSummary &
+  Use<'BlockedAccounts', MAccountBlocklistId[]>
 
-export type MAccountAPI = MAccountDefault &
-  PickWith<AccountModel, 'Actor', MActorAPI>
-
-export type MAccountUrl = PickWith<AccountModel, 'Actor', MActorUrl>
-export type MAccountAudience = PickWith<AccountModel, 'Actor', MActorAudience>
+export type MAccountAPI = MAccount &
+  Use<'Actor', MActorAPI>

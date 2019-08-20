@@ -19,7 +19,7 @@ import { getOrCreateActorAndServerAndModel, getOrCreateVideoAndAccountAndChannel
 import { logger } from '../../helpers/logger'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { MChannelAccountDefault, MVideoAccountAllFiles } from '../../typings/models'
+import { MChannelAccountDefault, MVideoAccountLightBlacklistAllFiles } from '../../typings/models'
 
 const searchRouter = express.Router()
 
@@ -138,7 +138,7 @@ async function searchVideosDB (query: VideosSearchQuery, res: express.Response) 
 }
 
 async function searchVideoURI (url: string, res: express.Response) {
-  let video: MVideoAccountAllFiles
+  let video: MVideoAccountLightBlacklistAllFiles
 
   // Check if we can fetch a remote video with the URL
   if (isUserAbleToSearchRemoteURI(res)) {

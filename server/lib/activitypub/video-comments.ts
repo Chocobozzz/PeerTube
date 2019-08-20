@@ -7,7 +7,7 @@ import { getOrCreateActorAndServerAndModel } from './actor'
 import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
-import { MCommentOwner, MCommentOwnerVideo, MVideoAccountAllFiles } from '../../typings/models/video'
+import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../typings/models/video'
 
 type ResolveThreadParams = {
   url: string,
@@ -15,7 +15,7 @@ type ResolveThreadParams = {
   isVideo?: boolean,
   commentCreated?: boolean
 }
-type ResolveThreadResult = Promise<{ video: MVideoAccountAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
+type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 async function addVideoComments (commentUrls: string[]) {
   return Bluebird.map(commentUrls, commentUrl => {

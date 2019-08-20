@@ -10,7 +10,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { MActorFollowFull, MActorFull } from '../../../typings/models'
+import { MAccount, MActor, MActorFollowActors, MActorFollowFull, MActorFull } from '../../../typings/models'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
@@ -45,7 +45,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function follow (fromActor: MActorFull, targetActor: MActorFull) {
+async function follow (fromActor: MActor, targetActor: MActorFull) {
   if (fromActor.id === targetActor.id) {
     throw new Error('Follower is the same than target actor.')
   }
@@ -54,7 +54,7 @@ async function follow (fromActor: MActorFull, targetActor: MActorFull) {
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
   const actorFollow = await sequelizeTypescript.transaction(async t => {
-    const [ actorFollow ] = await ActorFollowModel.findOrCreate<MActorFollowFull>({
+    const [ actorFollow ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
       where: {
         actorId: fromActor.id,
         targetActorId: targetActor.id
@@ -75,5 +75,14 @@ async function follow (fromActor: MActorFull, targetActor: MActorFull) {
     return actorFollow
   })
 
-  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewUserFollow(actorFollow)
+  if (actorFollow.state === 'accepted') {
+    const followerFull = Object.assign(fromActor, { Account: await actorFollow.ActorFollower.$get('Account') as MAccount })
+
+    const actorFollowFull = Object.assign(actorFollow, {
+      ActorFollowing: targetActor,
+      ActorFollower: followerFull
+    })
+
+    Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
+  }
 }

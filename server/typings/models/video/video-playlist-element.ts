@@ -2,14 +2,27 @@ import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-e
 import { PickWith } from '@server/typings/utils'
 import { MVideoPlaylistPrivacy, MVideoThumbnail, MVideoUrl } from '@server/typings/models'
 
+type Use<K extends keyof VideoPlaylistElementModel, M> = PickWith<VideoPlaylistElementModel, K, M>
+
+// ############################################################################
+
 export type MVideoPlaylistElement = Omit<VideoPlaylistElementModel, 'VideoPlaylist' | 'Video'>
+
+// ############################################################################
+
 export type MVideoPlaylistElementId = Pick<MVideoPlaylistElement, 'id'>
 
 export type MVideoPlaylistElementLight = Pick<MVideoPlaylistElement, 'id' | 'videoId' | 'startTimestamp' | 'stopTimestamp'>
 
+// ############################################################################
+
 export type MVideoPlaylistVideoThumbnail = MVideoPlaylistElement &
-  PickWith<VideoPlaylistElementModel, 'Video', MVideoThumbnail>
+  Use<'Video', MVideoThumbnail>
+
+// ############################################################################
+
+// For API
 
 export type MVideoPlaylistAP = MVideoPlaylistElement &
-  PickWith<VideoPlaylistElementModel, 'Video', MVideoUrl> &
-  PickWith<VideoPlaylistElementModel, 'VideoPlaylist', MVideoPlaylistPrivacy>
+  Use<'Video', MVideoUrl> &
+  Use<'VideoPlaylist', MVideoPlaylistPrivacy>

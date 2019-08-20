@@ -11,7 +11,7 @@ import { Notifier } from '../../notifier'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature, MCommentOwnerVideo, MVideoAccountAllFiles } from '../../../typings/models'
+import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../typings/models'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -81,7 +81,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
-  let video: MVideoAccountAllFiles
+  let video: MVideoAccountLightBlacklistAllFiles
   let created: boolean
   let comment: MCommentOwnerVideo
   try {

@@ -1,74 +1,103 @@
 import { ActorModel } from '../../../models/activitypub/actor'
 import { PickWith } from '../../utils'
-import { MAccount, MAccountActorDefault, MAccountId, MAccountIdActor } from './account'
-import { MServerHost, MServerHostBlocks, MServer } from '../server'
+import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
+import { MServer, MServerHost, MServerHostBlocks } from '../server'
 import { MAvatar } from './avatar'
-import { MChannel, MChannelAccountActor, MChannelActorAccountDefault, MChannelId, MChannelIdActor } from '../video'
+import { MChannel, MChannelAccountActor, MChannelAccountDefault, MChannelId, MChannelIdActor } from '../video'
+
+type Use<K extends keyof ActorModel, M> = PickWith<ActorModel, K, M>
+
+// ############################################################################
 
 export type MActor = Omit<ActorModel, 'Account' | 'VideoChannel' | 'ActorFollowing' | 'Avatar' | 'ActorFollowers' | 'Server'>
+
+// ############################################################################
 
 export type MActorUrl = Pick<MActor, 'url'>
 export type MActorId = Pick<MActor, 'id'>
 export type MActorUsername = Pick<MActor, 'preferredUsername'>
-export type MActorHost = PickWith<ActorModel, 'Server', MServerHost>
 
 export type MActorFollowersUrl = Pick<MActor, 'followersUrl'>
 export type MActorAudience = MActorUrl & MActorFollowersUrl
+export type MActorFollowerException = Pick<ActorModel, 'sharedInboxUrl' | 'inboxUrl'>
+export type MActorSignature = MActorAccountChannelId
 
 export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 
+// ############################################################################
+
+// Some association attributes
+
+export type MActorHost = Use<'Server', MServerHost>
+
 export type MActorDefaultLight = MActorLight &
-  MActorHost &
-  PickWith<ActorModel, 'Avatar', MAvatar>
+  Use<'Server', MServerHost> &
+  Use<'Avatar', MAvatar>
 
 export type MActorAccountId = MActor &
-  PickWith<ActorModel, 'Account', MAccountId>
+  Use<'Account', MAccountId>
 export type MActorAccountIdActor = MActor &
-  PickWith<ActorModel, 'Account', MAccountIdActor>
+  Use<'Account', MAccountIdActor>
 
 export type MActorChannelId = MActor &
-  PickWith<ActorModel, 'VideoChannel', MChannelId>
+  Use<'VideoChannel', MChannelId>
 export type MActorChannelIdActor = MActor &
-  PickWith<ActorModel, 'VideoChannel', MChannelIdActor>
+  Use<'VideoChannel', MChannelIdActor>
 
 export type MActorAccountChannelId = MActorAccountId & MActorChannelId
 export type MActorAccountChannelIdActor = MActorAccountIdActor & MActorChannelIdActor
 
+// ############################################################################
+
+// Include raw account/channel/server
+
 export type MActorAccount = MActor &
-  PickWith<ActorModel, 'Account', MAccount>
+  Use<'Account', MAccount>
 
 export type MActorChannel = MActor &
-  PickWith<ActorModel, 'VideoChannel', MChannel>
+  Use<'VideoChannel', MChannel>
 
 export type MActorAccountChannel = MActorAccount & MActorChannel
 
-export type MActorChannelAccount = MActor &
-  PickWith<ActorModel, 'VideoChannel', MChannelAccountActor>
-
 export type MActorServer = MActor &
-  PickWith<ActorModel, 'Server', MServer>
+  Use<'Server', MServer>
 
-export type MActorDefault = MActorServer &
-  PickWith<ActorModel, 'Avatar', MAvatar>
+// ############################################################################
 
-export type MActorFull = MActorDefault &
-  PickWith<ActorModel, 'Account', MAccount> &
-  PickWith<ActorModel, 'VideoChannel', MChannelAccountActor>
+// Complex actor associations
 
-export type MActorFullActor = MActorDefault &
-  PickWith<ActorModel, 'Account', MAccountActorDefault> &
-  PickWith<ActorModel, 'VideoChannel', MChannelActorAccountDefault>
+export type MActorDefault = MActor &
+  Use<'Server', MServer> &
+  Use<'Avatar', MAvatar>
+
+// Actor with channel that is associated to an account and its actor
+// Actor -> VideoChannel -> Account -> Actor
+export type MActorChannelAccountActor = MActor &
+  Use<'VideoChannel', MChannelAccountActor>
+
+export type MActorFull = MActor &
+  Use<'Server', MServer> &
+  Use<'Avatar', MAvatar> &
+  Use<'Account', MAccount> &
+  Use<'VideoChannel', MChannelAccountActor>
+
+// Same than ActorFull, but the account and the channel have their actor
+export type MActorFullActor = MActor &
+  Use<'Server', MServer> &
+  Use<'Avatar', MAvatar> &
+  Use<'Account', MAccountDefault> &
+  Use<'VideoChannel', MChannelAccountDefault>
+
+// ############################################################################
+
+// API
 
 export type MActorSummary = Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
-  MActorHost &
-  PickWith<ActorModel, 'Avatar', MAvatar>
+  Use<'Server', MServerHost> &
+  Use<'Avatar', MAvatar>
 
-export type MActorSummaryBlocks = Omit<MActorSummary, 'Server'> &
-  PickWith<ActorModel, 'Server', MServerHostBlocks>
-
-export type MActorFollowerException = Pick<ActorModel, 'sharedInboxUrl' | 'inboxUrl'>
+export type MActorSummaryBlocks = MActorSummary &
+  Use<'Server', MServerHostBlocks>
 
 export type MActorAPI = Omit<MActorDefault, 'publicKey' | 'privateKey' | 'inboxUrl' | 'outboxUrl' | 'sharedInboxUrl' |
   'followersUrl' | 'followingUrl' | 'url' | 'createdAt' | 'updatedAt'>
-
-export type MActorSignature = MActorAccountChannelId

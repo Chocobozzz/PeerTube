@@ -58,7 +58,7 @@ import {
   MChannelDefault,
   MChannelId,
   MVideo,
-  MVideoAccountAllFiles,
+  MVideoAccountLightBlacklistAllFiles,
   MVideoAccountLight,
   MVideoAP,
   MVideoAPWithoutCaption,
@@ -213,19 +213,19 @@ function getOrCreateVideoAndAccountAndChannel (options: {
   syncParam?: SyncParam,
   fetchType?: 'all',
   allowRefresh?: boolean
-}): Promise<{ video: MVideoAccountAllFiles, created: boolean, autoBlacklisted?: boolean }>
+}): Promise<{ video: MVideoAccountLightBlacklistAllFiles, created: boolean, autoBlacklisted?: boolean }>
 function getOrCreateVideoAndAccountAndChannel (options: {
   videoObject: { id: string } | string,
   syncParam?: SyncParam,
   fetchType?: VideoFetchByUrlType,
   allowRefresh?: boolean
-}): Promise<{ video: MVideoAccountAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }>
+}): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }>
 async function getOrCreateVideoAndAccountAndChannel (options: {
   videoObject: { id: string } | string,
   syncParam?: SyncParam,
   fetchType?: VideoFetchByUrlType,
   allowRefresh?: boolean // true by default
-}): Promise<{ video: MVideoAccountAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }> {
+}): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }> {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
@@ -263,7 +263,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 }
 
 async function updateVideoFromAP (options: {
-  video: MVideoAccountAllFiles,
+  video: MVideoAccountLightBlacklistAllFiles,
   videoObject: VideoTorrentObject,
   account: MAccountActor,
   channel: MChannelDefault,
@@ -420,7 +420,7 @@ async function refreshVideoIfNeeded (options: {
 
   // We need more attributes if the argument video was fetched with not enough joints
   const video = options.fetchedType === 'all'
-    ? options.video as MVideoAccountAllFiles
+    ? options.video as MVideoAccountLightBlacklistAllFiles
     : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
   try {

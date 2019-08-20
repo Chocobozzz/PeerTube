@@ -37,7 +37,6 @@ import * as Bluebird from 'bluebird'
 import {
   MChannelAccountDefault,
   MChannelActor,
-  MChannelActorAccountDefault,
   MChannelActorAccountDefaultVideos
 } from '../../typings/models/video'
 
@@ -376,13 +375,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static loadByIdAndPopulateAccount (id: number): Bluebird<MChannelActorAccountDefault> {
+  static loadByIdAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByIdAndAccount (id: number, accountId: number): Bluebird<MChannelActorAccountDefault> {
+  static loadByIdAndAccount (id: number, accountId: number): Bluebird<MChannelAccountDefault> {
     const query = {
       where: {
         id,
@@ -395,7 +394,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadAndPopulateAccount (id: number): Bluebird<MChannelActorAccountDefault> {
+  static loadAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
@@ -427,7 +426,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
-  static loadLocalByNameAndPopulateAccount (name: string): Bluebird<MChannelActorAccountDefault> {
+  static loadLocalByNameAndPopulateAccount (name: string): Bluebird<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -446,7 +445,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Bluebird<MChannelActorAccountDefault> {
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Bluebird<MChannelAccountDefault> {
     const query = {
       include: [
         {

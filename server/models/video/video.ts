@@ -121,18 +121,18 @@ import { createTorrentPromise } from '../../helpers/webtorrent'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import {
   MChannel,
-  MChannelActorAccountDefault,
+  MChannelAccountDefault,
   MChannelId,
   MUserAccountId,
   MUserId,
-  MVideoAccountAllFiles,
   MVideoAccountLight,
+  MVideoAccountLightBlacklistAllFiles,
   MVideoDetails,
+  MVideoForUser,
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoThumbnail,
   MVideoWithAllFiles,
-  MVideoWithBlacklistThumbnailScheduled,
   MVideoWithRights
 } from '../../typings/models'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
@@ -1015,7 +1015,7 @@ export class VideoModel extends Model<VideoModel> {
             AccountModel
           ],
           transaction: options.transaction
-        }) as MChannelActorAccountDefault
+        }) as MChannelAccountDefault
       }
 
       return sendDeleteVideo(instance, options.transaction)
@@ -1209,10 +1209,10 @@ export class VideoModel extends Model<VideoModel> {
 
     return Promise.all([
       VideoModel.count(countQuery),
-      VideoModel.scope(findScopes).findAll(findQuery)
+      VideoModel.scope(findScopes).findAll<MVideoForUser>(findQuery)
     ]).then(([ count, rows ]) => {
       return {
-        data: rows as MVideoWithBlacklistThumbnailScheduled[],
+        data: rows,
         total: count
       }
     })
@@ -1468,7 +1468,7 @@ export class VideoModel extends Model<VideoModel> {
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Bluebird<MVideoAccountAllFiles> {
+  static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Bluebird<MVideoAccountLightBlacklistAllFiles> {
     const query: FindOptions = {
       where: {
         url

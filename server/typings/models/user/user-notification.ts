@@ -12,6 +12,10 @@ import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 
+type Use<K extends keyof UserNotificationModel, M> = PickWith<UserNotificationModel, K, M>
+
+// ############################################################################
+
 export namespace UserNotificationIncludes {
   export type VideoInclude = Pick<VideoModel, 'id' | 'uuid' | 'name'>
   export type VideoIncludeChannel = VideoInclude &
@@ -56,14 +60,18 @@ export namespace UserNotificationIncludes {
     PickWith<ActorFollowModel, 'ActorFollowing', ActorFollowing>
 }
 
-export type UserNotificationModelOnly = Omit<UserNotificationModel, 'User' | 'Video' | 'Comment' | 'VideoAbuse' | 'VideoBlacklist' |
+// ############################################################################
+
+export type MUserNotification = Omit<UserNotificationModel, 'User' | 'Video' | 'Comment' | 'VideoAbuse' | 'VideoBlacklist' |
   'VideoImport' | 'Account' | 'ActorFollow'>
 
-export type UserNotificationModelForApi = UserNotificationModelOnly &
-  PickWith<UserNotificationModel, 'Video', UserNotificationIncludes.VideoIncludeChannel> &
-  PickWith<UserNotificationModel, 'Comment', UserNotificationIncludes.VideoCommentInclude> &
-  PickWith<UserNotificationModel, 'VideoAbuse', UserNotificationIncludes.VideoAbuseInclude> &
-  PickWith<UserNotificationModel, 'VideoBlacklist', UserNotificationIncludes.VideoBlacklistInclude> &
-  PickWith<UserNotificationModel, 'VideoImport', UserNotificationIncludes.VideoImportInclude> &
-  PickWith<UserNotificationModel, 'ActorFollow', UserNotificationIncludes.ActorFollowInclude> &
-  PickWith<UserNotificationModel, 'Account', UserNotificationIncludes.AccountIncludeActor>
+// ############################################################################
+
+export type UserNotificationModelForApi = MUserNotification &
+  Use<'Video', UserNotificationIncludes.VideoIncludeChannel> &
+  Use<'Comment', UserNotificationIncludes.VideoCommentInclude> &
+  Use<'VideoAbuse', UserNotificationIncludes.VideoAbuseInclude> &
+  Use<'VideoBlacklist', UserNotificationIncludes.VideoBlacklistInclude> &
+  Use<'VideoImport', UserNotificationIncludes.VideoImportInclude> &
+  Use<'ActorFollow', UserNotificationIncludes.ActorFollowInclude> &
+  Use<'Account', UserNotificationIncludes.AccountIncludeActor>

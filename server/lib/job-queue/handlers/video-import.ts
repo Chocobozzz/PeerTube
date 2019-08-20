@@ -111,12 +111,10 @@ type ProcessFileOptions = {
   generateThumbnail: boolean
   generatePreview: boolean
 }
-async function processFile (downloader: () => Promise<string>, videoImportArg: MVideoImportDefault, options: ProcessFileOptions) {
+async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
   let tempVideoPath: string
   let videoDestFile: string
   let videoFile: VideoFileModel
-
-  const videoImport = videoImportArg as MVideoImportDefaultFiles
 
   try {
     // Download video from youtubeDL
@@ -142,35 +140,37 @@ async function processFile (downloader: () => Promise<string>, videoImportArg: M
       videoId: videoImport.videoId
     }
     videoFile = new VideoFileModel(videoFileData)
+
+    const videoWithFiles = Object.assign(videoImport.Video, { VideoFiles: [ videoFile ] })
     // To clean files if the import fails
-    videoImport.Video.VideoFiles = [ videoFile ]
+    const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
 
     // Move file
-    videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
+    videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImportWithFiles.Video.getVideoFilename(videoFile))
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail
     let thumbnailModel: MThumbnail
     if (options.downloadThumbnail && options.thumbnailUrl) {
-      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.MINIATURE)
+      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.MINIATURE)
     } else if (options.generateThumbnail || options.downloadThumbnail) {
-      thumbnailModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.MINIATURE)
+      thumbnailModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.MINIATURE)
     }
 
     // Process preview
     let previewModel: MThumbnail
     if (options.downloadPreview && options.thumbnailUrl) {
-      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.PREVIEW)
+      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.PREVIEW)
     } else if (options.generatePreview || options.downloadPreview) {
-      previewModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.PREVIEW)
+      previewModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.PREVIEW)
     }
 
     // Create torrent
-    await videoImport.Video.createTorrentAndSetInfoHash(videoFile)
+    await videoImportWithFiles.Video.createTorrentAndSetInfoHash(videoFile)
 
     const { videoImportUpdated, video } = await sequelizeTypescript.transaction(async t => {
-      const videoImportToUpdate = videoImport as MVideoImportVideo
+      const videoImportToUpdate = videoImportWithFiles as MVideoImportVideo
 
       // Refresh video
       const video = await VideoModel.load(videoImportToUpdate.videoId, t)
