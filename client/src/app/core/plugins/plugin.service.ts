@@ -18,6 +18,7 @@ import { PublicServerSetting } from '@shared/models/plugins/public-server.settin
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
 import { PluginTranslation } from '@shared/models/plugins/plugin-translation.model'
+import { importModule } from '@app/shared/misc/utils'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -222,7 +223,7 @@ export class PluginService implements ClientHook {
     console.log('Loading script %s of plugin %s.', clientScript.script, plugin.name)
 
     return this.zone.runOutsideAngular(() => {
-      return import(/* webpackIgnore: true */ clientScript.script)
+      return importModule(clientScript.script)
         .then((script: ClientScriptModule) => script.register({ registerHook, peertubeHelpers }))
         .then(() => this.sortHooksByPriority())
         .catch(err => console.error('Cannot import or register plugin %s.', pluginInfo.plugin.name, err))
