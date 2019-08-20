@@ -3,13 +3,13 @@ image: chocobozzz/peertube-ci:10
 stages:
   - build-and-lint
   - test
-  - nightly
+  - docker-nightly
 
-before_script:
-  - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
-  - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
-  - if [[ $CI_JOB_STAGE == "test" ]]; then psql -c "create user peertube with password 'peertube';"; fi
-  - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
+#before_script:
+#  - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
+#  - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
+#  - if [[ $CI_JOB_STAGE == "test" ]]; then psql -c "create user peertube with password 'peertube';"; fi
+#  - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
 
 cache:
   key: yarn
@@ -85,7 +85,7 @@ cache:
 #    - NODE_PENDING_JOB_WAIT=1000 npm run ci -- api-$CI_NODE_INDEX
 
 build-nightly:
-  stage: nightly
+  stage: docker-nightly
   only:
     - schedules
   script:
@@ -98,3 +98,27 @@ build-nightly:
     - if [ ! -z ${DEPLOYEMENT_KEY+x} ]; then ssh-add <(echo "${DEPLOYEMENT_KEY}"); fi
     - if [ ! -z ${DEPLOYEMENT_KEY+x} ]; then scp ./peertube-nightly-* ${DEPLOYEMENT_USER}@${DEPLOYEMENT_HOST}:../../web/nightly; fi
 
+.docker: &docker
+  stage: docker-nightly
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$CI_REGISTRY_AUTH\",\"email\":\"$CI_REGISTRY_EMAIL\"}}}" > /kaniko/.docker/config.json
+  script:
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/support/docker/production/Dockerfile.stretch --destination $DOCKER_IMAGE_NAME
+
+build-docker-develop:
+  <<: *docker
+  only:
+    - schedules
+    - develop
+  variables:
+    DOCKER_IMAGE_NAME: chocobozzz/peertube:develop-stretch
+
+build-docker-tag:
+  <<: *docker
+  only:
+    - tags
+  variables:
+    DOCKER_IMAGE_NAME: chocobozzz/peertube:$CI_COMMIT_TAG-stretch
