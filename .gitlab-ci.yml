@@ -112,7 +112,6 @@ build-docker-develop:
   <<: *docker
   only:
     - schedules
-    - develop
   variables:
     DOCKER_IMAGE_NAME: chocobozzz/peertube:develop-stretch
 
