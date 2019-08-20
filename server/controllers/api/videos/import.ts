@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as magnetUtil from 'magnet-uri'
-import 'multer'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import { MIMETYPES } from '../../../initializers/constants'
@@ -28,11 +27,12 @@ import {
   MChannelAccountDefault,
   MThumbnail,
   MUser,
+  MVideoAccountDefault,
   MVideoTag,
   MVideoThumbnailAccountDefault,
   MVideoWithBlacklistLight
 } from '@server/typings/models'
-import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
+import { MVideoImport, MVideoImportFormattable } from '@server/typings/models/video/video-import'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -238,14 +238,14 @@ function insertIntoDB (parameters: {
   tags: string[],
   videoImportAttributes: Partial<MVideoImport>,
   user: MUser
-}): Bluebird<MVideoImportVideo> {
+}): Bluebird<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
 
   return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     // Save video object in database
-    const videoCreated = await video.save(sequelizeOptions) as (MVideoThumbnailAccountDefault & MVideoWithBlacklistLight & MVideoTag)
+    const videoCreated = await video.save(sequelizeOptions) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
@@ -274,7 +274,7 @@ function insertIntoDB (parameters: {
     const videoImport = await VideoImportModel.create(
       Object.assign({ videoId: videoCreated.id }, videoImportAttributes),
       sequelizeOptions
-    ) as MVideoImportVideo
+    ) as MVideoImportFormattable
     videoImport.Video = videoCreated
 
     return videoImport

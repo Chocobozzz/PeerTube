@@ -132,8 +132,9 @@ import {
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoThumbnail,
-  MVideoWithAllFiles,
-  MVideoWithRights
+  MVideoWithAllFiles, MVideoWithFile,
+  MVideoWithRights,
+  MVideoFormattable
 } from '../../typings/models'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
@@ -1765,14 +1766,14 @@ export class VideoModel extends Model<VideoModel> {
       this.VideoChannel.Account.isBlocked()
   }
 
-  getOriginalFile () {
+  getOriginalFile <T extends MVideoWithFile> (this: T) {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
     // The original file is the file that have the higher resolution
     return maxBy(this.VideoFiles, file => file.resolution)
   }
 
-  getFile (resolution: number) {
+  getFile <T extends MVideoWithFile> (this: T, resolution: number) {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
     return this.VideoFiles.find(f => f.resolution === resolution)
@@ -1878,7 +1879,7 @@ export class VideoModel extends Model<VideoModel> {
     return join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename)
   }
 
-  toFormattedJSON (options?: VideoFormattingJSONOptions): Video {
+  toFormattedJSON <T extends MVideoFormattable> (this: T, options?: VideoFormattingJSONOptions): Video {
     return videoModelToFormattedJSON(this, options)
   }
 

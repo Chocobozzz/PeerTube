@@ -17,6 +17,7 @@ import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'se
 import * as Bluebird from 'bluebird'
 import {
   MComment,
+  MCommentFormattable,
   MCommentId,
   MCommentOwner,
   MCommentOwnerReplyVideoLight,
@@ -475,7 +476,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return uniq(result)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (this: MCommentFormattable) {
     return {
       id: this.id,
       url: this.url,

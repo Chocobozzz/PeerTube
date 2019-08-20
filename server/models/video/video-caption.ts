@@ -22,7 +22,7 @@ import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
 import * as Bluebird from 'bluebird'
-import { MVideoCaptionVideo } from '@server/typings/models'
+import { MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/typings/models'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
@@ -154,7 +154,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return this.Video.remote === false
   }
 
-  toFormattedJSON (): VideoCaption {
+  toFormattedJSON (this: MVideoCaptionFormattable): VideoCaption {
     return {
       language: {
         id: this.language,
@@ -164,15 +164,15 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     }
   }
 
-  getCaptionStaticPath () {
+  getCaptionStaticPath (this: MVideoCaptionFormattable) {
     return join(LAZY_STATIC_PATHS.VIDEO_CAPTIONS, this.getCaptionName())
   }
 
-  getCaptionName () {
+  getCaptionName (this: MVideoCaptionFormattable) {
     return `${this.Video.uuid}-${this.language}.vtt`
   }
 
-  removeCaptionFile () {
+  removeCaptionFile (this: MVideoCaptionFormattable) {
     return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.getCaptionName())
   }
 }

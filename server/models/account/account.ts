@@ -32,7 +32,7 @@ import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequ
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { ActorFollowModel } from '../activitypub/actor-follow'
-import { MAccountActor, MAccountDefault } from '../../typings/models'
+import { MAccountActor, MAccountDefault, MAccountSummaryFormattable, MAccountFormattable } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 
 export enum ScopeNames {
@@ -353,7 +353,7 @@ export class AccountModel extends Model<AccountModel> {
       .findAll(query)
   }
 
-  toFormattedJSON (): Account {
+  toFormattedJSON (this: MAccountFormattable): Account {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
@@ -367,8 +367,8 @@ export class AccountModel extends Model<AccountModel> {
     return Object.assign(actor, account)
   }
 
-  toFormattedSummaryJSON (): AccountSummary {
-    const actor = this.Actor.toFormattedJSON()
+  toFormattedSummaryJSON (this: MAccountSummaryFormattable): AccountSummary {
+    const actor = this.Actor.toFormattedSummaryJSON()
 
     return {
       id: this.id,

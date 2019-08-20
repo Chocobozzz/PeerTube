@@ -1,8 +1,8 @@
 import { ActorModel } from '../../../models/activitypub/actor'
-import { PickWith } from '../../utils'
+import { FunctionProperties, PickWith } from '../../utils'
 import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
-import { MServer, MServerHost, MServerHostBlocks } from '../server'
-import { MAvatar } from './avatar'
+import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'
+import { MAvatar, MAvatarFormattable } from './avatar'
 import { MChannel, MChannelAccountActor, MChannelAccountDefault, MChannelId, MChannelIdActor } from '../video'
 
 type Use<K extends keyof ActorModel, M> = PickWith<ActorModel, K, M>
@@ -29,6 +29,7 @@ export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 // Some association attributes
 
 export type MActorHost = Use<'Server', MServerHost>
+export type MActorRedundancyAllowed = Use<'Server', MServerRedundancyAllowed>
 
 export type MActorDefaultLight = MActorLight &
   Use<'Server', MServerHost> &
@@ -92,7 +93,8 @@ export type MActorFullActor = MActor &
 
 // API
 
-export type MActorSummary = Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
+export type MActorSummary = FunctionProperties<MActor> &
+  Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
   Use<'Server', MServerHost> &
   Use<'Avatar', MAvatar>
 
@@ -101,3 +103,16 @@ export type MActorSummaryBlocks = MActorSummary &
 
 export type MActorAPI = Omit<MActorDefault, 'publicKey' | 'privateKey' | 'inboxUrl' | 'outboxUrl' | 'sharedInboxUrl' |
   'followersUrl' | 'followingUrl' | 'url' | 'createdAt' | 'updatedAt'>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MActorSummaryFormattable = FunctionProperties<MActor> &
+  Pick<MActor, 'url' | 'preferredUsername'> &
+  Use<'Server', MServerHost> &
+  Use<'Avatar', MAvatarFormattable>
+
+export type MActorFormattable = MActorSummaryFormattable &
+  Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt'> &
+  Use<'Server', MServer>

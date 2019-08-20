@@ -21,12 +21,16 @@ import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { PlaylistElementObject } from '../../../shared/models/activitypub/objects/playlist-element-object'
 import * as validator from 'validator'
 import { AggregateOptions, Op, ScopeOptions, Sequelize, Transaction } from 'sequelize'
-import { UserModel } from '../account/user'
 import { VideoPlaylistElement, VideoPlaylistElementType } from '../../../shared/models/videos/playlist/video-playlist-element.model'
 import { AccountModel } from '../account/account'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import * as Bluebird from 'bluebird'
-import { MVideoPlaylistAP, MVideoPlaylistElement, MVideoPlaylistVideoThumbnail } from '@server/typings/models/video/video-playlist-element'
+import {
+  MVideoPlaylistElement,
+  MVideoPlaylistElementAP,
+  MVideoPlaylistElementFormattable,
+  MVideoPlaylistVideoThumbnail
+} from '@server/typings/models/video/video-playlist-element'
 import { MUserAccountId } from '@server/typings/models'
 
 @Table({
@@ -180,7 +184,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 
-  static loadByPlaylistAndVideoForAP (playlistId: number | string, videoId: number | string): Bluebird<MVideoPlaylistAP> {
+  static loadByPlaylistAndVideoForAP (playlistId: number | string, videoId: number | string): Bluebird<MVideoPlaylistElementAP> {
     const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
     const videoWhere = validator.isUUID('' + videoId) ? { uuid: videoId } : { id: videoId }
 
@@ -293,7 +297,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.increment({ position: by }, query)
   }
 
-  getType (displayNSFW?: boolean, accountId?: number) {
+  getType (this: MVideoPlaylistElementFormattable, displayNSFW?: boolean, accountId?: number) {
     const video = this.Video
 
     if (!video) return VideoPlaylistElementType.DELETED
@@ -309,14 +313,17 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementType.REGULAR
   }
 
-  getVideoElement (displayNSFW?: boolean, accountId?: number) {
+  getVideoElement (this: MVideoPlaylistElementFormattable, displayNSFW?: boolean, accountId?: number) {
     if (!this.Video) return null
     if (this.getType(displayNSFW, accountId) !== VideoPlaylistElementType.REGULAR) return null
 
     return this.Video.toFormattedJSON()
   }
 
-  toFormattedJSON (options: { displayNSFW?: boolean, accountId?: number } = {}): VideoPlaylistElement {
+  toFormattedJSON (
+    this: MVideoPlaylistElementFormattable,
+    options: { displayNSFW?: boolean, accountId?: number } = {}
+  ): VideoPlaylistElement {
     return {
       id: this.id,
       position: this.position,

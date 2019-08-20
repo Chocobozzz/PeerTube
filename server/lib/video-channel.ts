@@ -4,12 +4,12 @@ import { VideoChannelCreate } from '../../shared/models'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { buildActorInstance, federateVideoIfNeeded, getVideoChannelActivityPubUrl } from './activitypub'
 import { VideoModel } from '../models/video/video'
-import { MAccountId, MChannelActor, MChannelId } from '../typings/models'
+import { MAccountId, MChannelDefault, MChannelId } from '../typings/models'
 
-type CustomVideoChannelModelAccount <T extends MAccountId> = MChannelActor &
+type CustomVideoChannelModelAccount <T extends MAccountId> = MChannelDefault &
   { Account?: T }
 
-async function createVideoChannel <T extends MAccountId> (
+async function createLocalVideoChannel <T extends MAccountId> (
   videoChannelInfo: VideoChannelCreate,
   account: T,
   t: Sequelize.Transaction
@@ -31,7 +31,7 @@ async function createVideoChannel <T extends MAccountId> (
   const videoChannel = new VideoChannelModel(videoChannelData)
 
   const options = { transaction: t }
-  const videoChannelCreated: CustomVideoChannelModelAccount<T> = await videoChannel.save(options) as MChannelActor
+  const videoChannelCreated: CustomVideoChannelModelAccount<T> = await videoChannel.save(options) as MChannelDefault
 
   // Do not forget to add Account/Actor information to the created video channel
   videoChannelCreated.Account = account
@@ -54,6 +54,6 @@ async function federateAllVideosOfChannel (videoChannel: MChannelId) {
 // ---------------------------------------------------------------------------
 
 export {
-  createVideoChannel,
+  createLocalVideoChannel,
   federateAllVideosOfChannel
 }

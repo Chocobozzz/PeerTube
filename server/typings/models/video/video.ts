@@ -1,12 +1,19 @@
 import { VideoModel } from '../../../models/video/video'
 import { PickWith, PickWithOpt } from '../../utils'
-import { MChannelAccountDefault, MChannelAccountLight, MChannelActor, MChannelUserId } from './video-channels'
+import {
+  MChannelAccountDefault,
+  MChannelAccountLight,
+  MChannelAccountSummaryFormattable,
+  MChannelActor,
+  MChannelFormattable,
+  MChannelUserId
+} from './video-channels'
 import { MTag } from './tag'
 import { MVideoCaptionLanguage } from './video-caption'
 import { MStreamingPlaylist, MStreamingPlaylistRedundancies } from './video-streaming-playlist'
 import { MVideoFile, MVideoFileRedundanciesOpt } from './video-file'
 import { MThumbnail } from './thumbnail'
-import { MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
+import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
 import { MScheduleVideoUpdate } from './schedule-video-update'
 import { MUserVideoHistoryTime } from '../user/user-video-history'
 
@@ -144,3 +151,19 @@ export type MVideoForUser = MVideo &
   Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
   Use<'VideoBlacklist', MVideoBlacklistLight> &
   Use<'Thumbnails', MThumbnail[]>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MVideoFormattable = MVideo &
+  PickWithOpt<VideoModel, 'UserVideoHistories', MUserVideoHistoryTime[]> &
+  Use<'VideoChannel', MChannelAccountSummaryFormattable> &
+  PickWithOpt<VideoModel, 'ScheduleVideoUpdate', Pick<MScheduleVideoUpdate, 'updateAt' | 'privacy'>> &
+  PickWithOpt<VideoModel, 'VideoBlacklist', Pick<MVideoBlacklist, 'reason'>>
+
+export type MVideoFormattableDetails = MVideoFormattable &
+  Use<'VideoChannel', MChannelFormattable> &
+  Use<'Tags', MTag[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>

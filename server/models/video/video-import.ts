@@ -21,7 +21,7 @@ import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { UserModel } from '../account/user'
 import * as Bluebird from 'bluebird'
-import { MVideoImportDefault } from '@server/typings/models/video/video-import'
+import { MVideoImportDefault, MVideoImportFormattable } from '@server/typings/models/video/video-import'
 
 @DefaultScope(() => ({
   include: [
@@ -154,7 +154,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
     return this.targetUrl || this.magnetUri || this.torrentName
   }
 
-  toFormattedJSON (): VideoImport {
+  toFormattedJSON (this: MVideoImportFormattable): VideoImport {
     const videoFormatOptions = {
       completeDescription: true,
       additionalAttributes: { state: true, waitTranscoding: true, scheduledUpdate: true }

@@ -1,19 +1,23 @@
-import { PickWith } from '../../utils'
+import { FunctionProperties, PickWith, PickWithOpt } from '../../utils'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import {
   MAccountActor,
   MAccountAPI,
   MAccountDefault,
+  MAccountFormattable,
   MAccountLight,
   MAccountSummaryBlocks,
+  MAccountSummaryFormattable,
   MAccountUserId,
   MActor,
   MActorAccountChannelId,
   MActorAPI,
   MActorDefault,
   MActorDefaultLight,
+  MActorFormattable,
   MActorLight,
-  MActorSummary
+  MActorSummary,
+  MActorSummaryFormattable
 } from '../account'
 import { MVideo } from './video'
 
@@ -86,7 +90,8 @@ export type MChannelActorAccountDefaultVideos = MChannel &
 
 // For API
 
-export type MChannelSummary = Pick<MChannel, 'id' | 'name' | 'description' | 'actorId'> &
+export type MChannelSummary = FunctionProperties<MChannel> &
+  Pick<MChannel, 'id' | 'name' | 'description' | 'actorId'> &
   Use<'Actor', MActorSummary>
 
 export type MChannelSummaryAccount = MChannelSummary &
@@ -95,3 +100,19 @@ export type MChannelSummaryAccount = MChannelSummary &
 export type MChannelAPI = MChannel &
   Use<'Actor', MActorAPI> &
   Use<'Account', MAccountAPI>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MChannelSummaryFormattable = FunctionProperties<MChannel> &
+  Pick<MChannel, 'id' | 'name'> &
+  Use<'Actor', MActorSummaryFormattable>
+
+export type MChannelAccountSummaryFormattable = MChannelSummaryFormattable &
+  Use<'Account', MAccountSummaryFormattable>
+
+export type MChannelFormattable = FunctionProperties<MChannel> &
+  Pick<MChannel, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'support'> &
+  Use<'Actor', MActorFormattable> &
+  PickWithOpt<VideoChannelModel, 'Account', MAccountFormattable>

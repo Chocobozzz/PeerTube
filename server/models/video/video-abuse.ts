@@ -11,7 +11,7 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoAbuseState } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
-import { MVideoAbuse, MVideoAbuseAccountVideo, MVideoAbuseVideo } from '../../typings/models'
+import { MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 
 @Table({
@@ -108,7 +108,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       })
   }
 
-  toFormattedJSON (this: MVideoAbuseAccountVideo): VideoAbuse {
+  toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
     return {
       id: this.id,
       reason: this.reason,

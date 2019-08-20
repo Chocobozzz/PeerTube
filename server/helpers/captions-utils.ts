@@ -2,9 +2,9 @@ import { join } from 'path'
 import { CONFIG } from '../initializers/config'
 import * as srt2vtt from 'srt-to-vtt'
 import { createReadStream, createWriteStream, move, remove } from 'fs-extra'
-import { MVideoCaption } from '@server/typings/models'
+import { MVideoCaptionFormattable } from '@server/typings/models'
 
-async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaption) {
+async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaptionFormattable) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
   const destination = join(videoCaptionsDir, videoCaption.getCaptionName())
 

@@ -7,6 +7,7 @@ import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
 import { throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
+import { MAvatarFormattable } from '@server/typings/models'
 
 @Table({
   tableName: 'avatar',
@@ -57,7 +58,7 @@ export class AvatarModel extends Model<AvatarModel> {
     return AvatarModel.findOne(query)
   }
 
-  toFormattedJSON (): Avatar {
+  toFormattedJSON (this: MAvatarFormattable): Avatar {
     return {
       path: this.getStaticPath(),
       createdAt: this.createdAt,

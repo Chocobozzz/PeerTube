@@ -1,8 +1,8 @@
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { PickWith } from '../../utils'
-import { MAccount, MAccountDefault, MAccountSummary } from '../account'
+import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account'
 import { MThumbnail } from './thumbnail'
-import { MChannelDefault, MChannelSummary } from './video-channels'
+import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable } from './video-channels'
 import { MVideoPlaylistElementLight } from '@server/typings/models/video/video-playlist-element'
 
 type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
@@ -16,7 +16,7 @@ export type MVideoPlaylist = Omit<VideoPlaylistModel, 'OwnerAccount' | 'VideoCha
 export type MVideoPlaylistId = Pick<MVideoPlaylist, 'id'>
 export type MVideoPlaylistPrivacy = Pick<MVideoPlaylist, 'privacy'>
 export type MVideoPlaylistUUID = Pick<MVideoPlaylist, 'uuid'>
-export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength: number }
+export type MVideoPlaylistVideosLength = MVideoPlaylist & { videosLength?: number }
 
 // ############################################################################
 
@@ -78,3 +78,11 @@ export type MVideoPlaylistFullSummary = MVideoPlaylist &
   Use<'Thumbnail', MThumbnail> &
   Use<'OwnerAccount', MAccountSummary> &
   Use<'VideoChannel', MChannelSummary>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MVideoPlaylistFormattable = MVideoPlaylistVideosLength &
+  Use<'OwnerAccount', MAccountSummaryFormattable> &
+  Use<'VideoChannel', MChannelSummaryFormattable>

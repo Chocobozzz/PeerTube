@@ -32,6 +32,7 @@ import {
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
   MActorFollowFollowingHost,
+  MActorFollowFormattable,
   MActorFollowSubscriptions
 } from '@server/typings/models'
 
@@ -580,7 +581,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  toFormattedJSON (): ActorFollow {
+  toFormattedJSON (this: MActorFollowFormattable): ActorFollow {
     const follower = this.ActorFollower.toFormattedJSON()
     const following = this.ActorFollowing.toFormattedJSON()
 

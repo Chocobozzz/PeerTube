@@ -4,7 +4,7 @@ import { ServerModel } from './server'
 import { ServerBlock } from '../../../shared/models/blocklist'
 import { getSort } from '../utils'
 import * as Bluebird from 'bluebird'
-import { MServerBlocklist, MServerBlocklistAccountServer } from '@server/typings/models'
+import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -112,7 +112,7 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
       })
   }
 
-  toFormattedJSON (): ServerBlock {
+  toFormattedJSON (this: MServerBlocklistFormattable): ServerBlock {
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
       blockedServer: this.BlockedServer.toFormattedJSON(),

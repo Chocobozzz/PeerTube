@@ -3,14 +3,15 @@ import {
   MActor,
   MActorAccount,
   MActorAccountChannel,
-  MActorChannel,
   MActorChannelAccountActor,
   MActorDefault,
+  MActorFormattable,
   MActorHost,
   MActorUsername
 } from './actor'
 import { PickWith } from '../../utils'
 import { ActorModel } from '@server/models/activitypub/actor'
+import { MChannelDefault } from '@server/typings/models'
 
 type Use<K extends keyof ActorFollowModel, M> = PickWith<ActorFollowModel, K, M>
 
@@ -43,9 +44,12 @@ export type MActorFollowFull = MActorFollow &
 
 // For subscriptions
 
+type SubscriptionFollowing = MActorDefault &
+  PickWith<ActorModel, 'VideoChannel', MChannelDefault>
+
 export type MActorFollowActorsDefaultSubscription = MActorFollow &
   Use<'ActorFollower', MActorDefault> &
-  Use<'ActorFollowing', MActorDefault & MActorChannel>
+  Use<'ActorFollowing', SubscriptionFollowing>
 
 export type MActorFollowFollowingFullFollowerAccount = MActorFollow &
   Use<'ActorFollower', MActorAccount> &
@@ -53,3 +57,11 @@ export type MActorFollowFollowingFullFollowerAccount = MActorFollow &
 
 export type MActorFollowSubscriptions = MActorFollow &
   Use<'ActorFollowing', MActorChannelAccountActor>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MActorFollowFormattable = Pick<MActorFollow, 'id' | 'score' | 'state' | 'createdAt' | 'updatedAt'> &
+  Use<'ActorFollower', MActorFormattable> &
+  Use<'ActorFollowing', MActorFormattable>

@@ -11,7 +11,12 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { AccountVideoRate } from '../../../shared'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
 import * as Bluebird from 'bluebird'
-import { MAccountVideoRate, MAccountVideoRateAccountUrl, MAccountVideoRateAccountVideo } from '@server/typings/models/video/video-rate'
+import {
+  MAccountVideoRate,
+  MAccountVideoRateAccountUrl,
+  MAccountVideoRateAccountVideo,
+  MAccountVideoRateFormattable
+} from '@server/typings/models/video/video-rate'
 
 /*
   Account rates per video.
@@ -248,7 +253,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
     })
   }
 
-  toFormattedJSON (): AccountVideoRate {
+  toFormattedJSON (this: MAccountVideoRateFormattable): AccountVideoRate {
     return {
       video: this.Video.toFormattedJSON(),
       rating: this.type

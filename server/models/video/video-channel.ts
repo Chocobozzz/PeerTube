@@ -37,7 +37,7 @@ import * as Bluebird from 'bluebird'
 import {
   MChannelAccountDefault,
   MChannelActor,
-  MChannelActorAccountDefaultVideos
+  MChannelActorAccountDefaultVideos, MChannelSummaryFormattable, MChannelFormattable
 } from '../../typings/models/video'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
@@ -482,7 +482,20 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findByPk(id, options)
   }
 
-  toFormattedJSON (): VideoChannel {
+  toFormattedSummaryJSON (this: MChannelSummaryFormattable): VideoChannelSummary {
+    const actor = this.Actor.toFormattedSummaryJSON()
+
+    return {
+      id: this.id,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
+  }
+
+  toFormattedJSON (this: MChannelFormattable): VideoChannel {
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
@@ -498,19 +511,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
 
     return Object.assign(actor, videoChannel)
-  }
-
-  toFormattedSummaryJSON (): VideoChannelSummary {
-    const actor = this.Actor.toFormattedJSON()
-
-    return {
-      id: this.id,
-      name: actor.name,
-      displayName: this.getDisplayName(),
-      url: actor.url,
-      host: actor.host,
-      avatar: actor.avatar
-    }
   }
 
   toActivityPubObject (): ActivityPubActor {

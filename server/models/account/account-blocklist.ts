@@ -4,7 +4,7 @@ import { getSort } from '../utils'
 import { AccountBlock } from '../../../shared/models/blocklist'
 import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
-import { MAccountBlocklist, MAccountBlocklistAccounts } from '@server/typings/models'
+import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS'
@@ -134,7 +134,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       })
   }
 
-  toFormattedJSON (): AccountBlock {
+  toFormattedJSON (this: MAccountBlocklistFormattable): AccountBlock {
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
       blockedAccount: this.BlockedAccount.toFormattedJSON(),

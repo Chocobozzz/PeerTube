@@ -1,7 +1,7 @@
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { PickWith } from '../../utils'
 import { MVideo } from './video'
-import { MAccountDefault } from '../account'
+import { MAccountDefault, MAccountFormattable } from '../account'
 
 type Use<K extends keyof VideoAbuseModel, M> = PickWith<VideoAbuseModel, K, M>
 
@@ -21,3 +21,11 @@ export type MVideoAbuseAccountVideo = MVideoAbuse &
   Pick<VideoAbuseModel, 'toActivityPubObject'> &
   Use<'Video', MVideo> &
   Use<'Account', MAccountDefault>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MVideoAbuseFormattable = MVideoAbuse &
+  Use<'Account', MAccountFormattable> &
+  Use<'Video', Pick<MVideo, 'id' | 'uuid' | 'name'>>

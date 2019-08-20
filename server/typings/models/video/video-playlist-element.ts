@@ -1,6 +1,6 @@
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { PickWith } from '@server/typings/utils'
-import { MVideoPlaylistPrivacy, MVideoThumbnail, MVideoUrl } from '@server/typings/models'
+import { MVideoFormattable, MVideoPlaylistPrivacy, MVideoThumbnail, MVideoUrl } from '@server/typings/models'
 
 type Use<K extends keyof VideoPlaylistElementModel, M> = PickWith<VideoPlaylistElementModel, K, M>
 
@@ -23,6 +23,13 @@ export type MVideoPlaylistVideoThumbnail = MVideoPlaylistElement &
 
 // For API
 
-export type MVideoPlaylistAP = MVideoPlaylistElement &
+export type MVideoPlaylistElementAP = MVideoPlaylistElement &
   Use<'Video', MVideoUrl> &
   Use<'VideoPlaylist', MVideoPlaylistPrivacy>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MVideoPlaylistElementFormattable = MVideoPlaylistElement &
+  Use<'Video', MVideoFormattable>

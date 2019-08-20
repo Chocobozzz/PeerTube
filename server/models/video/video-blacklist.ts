@@ -8,7 +8,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { FindOptions } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
 import * as Bluebird from 'bluebird'
-import { MVideoBlacklist } from '@server/typings/models'
+import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/typings/models'
 
 @Table({
   tableName: 'videoBlacklist',
@@ -111,7 +111,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     return VideoBlacklistModel.findOne(query)
   }
 
-  toFormattedJSON (): VideoBlacklist {
+  toFormattedJSON (this: MVideoBlacklistFormattable): VideoBlacklist {
     return {
       id: this.id,
       createdAt: this.createdAt,

@@ -38,7 +38,7 @@ import {
 } from '../../typings/models'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
-function setAsyncActorKeys (actor: MActor) {
+function setAsyncActorKeys <T extends MActor> (actor: T) {
   return createPrivateAndPublicKeys()
     .then(({ publicKey, privateKey }) => {
       actor.publicKey = publicKey
@@ -148,7 +148,7 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
     sharedInboxUrl: WEBSERVER.URL + '/inbox',
     followersUrl: url + '/followers',
     followingUrl: url + '/following'
-  })
+  }) as MActor
 }
 
 async function updateActorInstance (actorInstance: ActorModel, attributes: ActivityPubActor) {

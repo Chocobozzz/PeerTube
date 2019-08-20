@@ -12,7 +12,7 @@ import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.m
 import { FindAndCountOptions, json } from 'sequelize'
 import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
 import * as Bluebird from 'bluebird'
-import { MPlugin } from '@server/typings/models'
+import { MPlugin, MPluginFormattable } from '@server/typings/models'
 
 @DefaultScope(() => ({
   attributes: {
@@ -253,7 +253,7 @@ export class PluginModel extends Model<PluginModel> {
     return result
   }
 
-  toFormattedJSON (): PeerTubePlugin {
+  toFormattedJSON (this: MPluginFormattable): PeerTubePlugin {
     return {
       name: this.name,
       type: this.type,

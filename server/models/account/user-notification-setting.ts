@@ -17,6 +17,7 @@ import { UserModel } from './user'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { clearCacheByUserId } from '../../lib/oauth-model'
+import { MNotificationSettingFormattable } from '@server/typings/models'
 
 @Table({
   tableName: 'userNotificationSetting',
@@ -152,7 +153,7 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
     return clearCacheByUserId(instance.userId)
   }
 
-  toFormattedJSON (): UserNotificationSetting {
+  toFormattedJSON (this: MNotificationSettingFormattable): UserNotificationSetting {
     return {
       newCommentOnMyVideo: this.newCommentOnMyVideo,
       newVideoFromSubscription: this.newVideoFromSubscription,

@@ -3,7 +3,7 @@ import { AccountModel } from '../account/account'
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { getSort } from '../utils'
-import { MVideoChangeOwnershipFull } from '@server/typings/models/video/video-change-ownership'
+import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@server/typings/models/video/video-change-ownership'
 import * as Bluebird from 'bluebird'
 
 enum ScopeNames {
@@ -119,7 +119,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
                                     .findByPk(id)
   }
 
-  toFormattedJSON (): VideoChangeOwnership {
+  toFormattedJSON (this: MVideoChangeOwnershipFormattable): VideoChangeOwnership {
     return {
       id: this.id,
       status: this.status,

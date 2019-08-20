@@ -1,6 +1,6 @@
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { PickWith } from '../../utils'
-import { MAccountDefault } from '../account'
+import { MAccountDefault, MAccountFormattable } from '../account'
 import { MVideoAccountLight, MVideoFeed, MVideoIdUrl } from './video'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>
@@ -8,6 +8,7 @@ type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, 
 // ############################################################################
 
 export type MComment = Omit<VideoCommentModel, 'OriginVideoComment' | 'InReplyToVideoComment' | 'Video' | 'Account'>
+export type MCommentTotalReplies = MComment & { totalReplies?: number }
 export type MCommentId = Pick<MComment, 'id'>
 
 // ############################################################################
@@ -41,3 +42,10 @@ export type MCommentOwnerVideoFeed = MCommentOwner &
 // ############################################################################
 
 export type MCommentAPI = MComment & { totalReplies: number }
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MCommentFormattable = MCommentTotalReplies &
+  Use<'Account', MAccountFormattable>

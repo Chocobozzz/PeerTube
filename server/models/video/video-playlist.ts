@@ -46,6 +46,7 @@ import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } fro
 import * as Bluebird from 'bluebird'
 import {
   MVideoPlaylistAccountThumbnail,
+  MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
   MVideoPlaylistIdWithElements
@@ -479,7 +480,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return isOutdated(this, ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL)
   }
 
-  toFormattedJSON (): VideoPlaylist {
+  toFormattedJSON (this: MVideoPlaylistFormattable): VideoPlaylist {
     return {
       id: this.id,
       uuid: this.uuid,

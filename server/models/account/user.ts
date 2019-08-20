@@ -55,7 +55,13 @@ import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import * as Bluebird from 'bluebird'
-import { MUserNotifSettingChannelDefault, MUserDefault, MUserId, MUserWithNotificationSetting } from '@server/typings/models'
+import {
+  MUserDefault,
+  MUserFormattable,
+  MUserId,
+  MUserNotifSettingChannelDefault,
+  MUserWithNotificationSetting
+} from '@server/typings/models'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -554,7 +560,9 @@ export class UserModel extends Model<UserModel> {
     return comparePassword(password, this.password)
   }
 
-  toFormattedJSON (parameters: { withAdminFlags?: boolean } = {}): User {
+  toSummaryJSON
+
+  toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
 

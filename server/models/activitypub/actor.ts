@@ -36,7 +36,16 @@ import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
 import { VideoModel } from '../video/video'
-import { MActor, MActorAccountChannelId, MActorFull } from '../../typings/models'
+import {
+  MActor,
+  MActorAccountChannelId,
+  MActorFormattable,
+  MActorFull, MActorHost,
+  MActorServer,
+  MActorSummaryFormattable,
+  MServerHost,
+  MActorRedundancyAllowed
+} from '../../typings/models'
 import * as Bluebird from 'bluebird'
 
 enum ScopeNames {
@@ -393,24 +402,31 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  toFormattedJSON () {
+  toFormattedSummaryJSON (this: MActorSummaryFormattable) {
     let avatar: Avatar = null
     if (this.Avatar) {
       avatar = this.Avatar.toFormattedJSON()
     }
 
     return {
-      id: this.id,
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
+      avatar
+    }
+  }
+
+  toFormattedJSON (this: MActorFormattable) {
+    const base = this.toFormattedSummaryJSON()
+
+    return Object.assign(base, {
+      id: this.id,
       hostRedundancyAllowed: this.getRedundancyAllowed(),
       followingCount: this.followingCount,
       followersCount: this.followersCount,
-      avatar,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt
-    }
+    })
   }
 
   toActivityPubObject (name: string, type: 'Account' | 'Application' | 'VideoChannel') {
@@ -500,7 +516,7 @@ export class ActorModel extends Model<ActorModel> {
     return this.serverId === null
   }
 
-  getWebfingerUrl () {
+  getWebfingerUrl (this: MActorServer) {
     return 'acct:' + this.preferredUsername + '@' + this.getHost()
   }
 
@@ -508,11 +524,11 @@ export class ActorModel extends Model<ActorModel> {
     return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
-  getHost () {
+  getHost (this: MActorHost) {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 
-  getRedundancyAllowed () {
+  getRedundancyAllowed (this: MActorRedundancyAllowed) {
     return this.Server ? this.Server.redundancyAllowed : false
   }
 

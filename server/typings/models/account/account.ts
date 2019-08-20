@@ -9,9 +9,11 @@ import {
   MActorId,
   MActorServer,
   MActorSummary,
-  MActorUrl
+  MActorSummaryFormattable,
+  MActorUrl,
+  MActorFormattable
 } from './actor'
-import { PickWith } from '../../utils'
+import { FunctionProperties, PickWith } from '../../utils'
 import { MAccountBlocklistId } from './account-blocklist'
 import { MChannelDefault } from '@server/typings/models'
 
@@ -67,7 +69,8 @@ export type MAccountServer = MAccount &
 
 // For API
 
-export type MAccountSummary = Pick<MAccount, 'id' | 'name'> &
+export type MAccountSummary = FunctionProperties<MAccount> &
+  Pick<MAccount, 'id' | 'name'> &
   Use<'Actor', MActorSummary>
 
 export type MAccountSummaryBlocks = MAccountSummary &
@@ -75,3 +78,15 @@ export type MAccountSummaryBlocks = MAccountSummary &
 
 export type MAccountAPI = MAccount &
   Use<'Actor', MActorAPI>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MAccountSummaryFormattable = FunctionProperties<MAccount> &
+  Pick<MAccount, 'id' | 'name'> &
+  Use<'Actor', MActorSummaryFormattable>
+
+export type MAccountFormattable = FunctionProperties<MAccount> &
+  Pick<MAccount, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'userId'> &
+  Use<'Actor', MActorFormattable>

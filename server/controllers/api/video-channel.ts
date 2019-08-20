@@ -19,7 +19,7 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
-import { createVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
+import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
@@ -139,7 +139,7 @@ async function addVideoChannel (req: express.Request, res: express.Response) {
   const videoChannelCreated = await sequelizeTypescript.transaction(async t => {
     const account = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
-    return createVideoChannel(videoChannelInfo, account, t)
+    return createLocalVideoChannel(videoChannelInfo, account, t)
   })
 
   setAsyncActorKeys(videoChannelCreated.Actor)

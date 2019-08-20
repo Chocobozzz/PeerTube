@@ -196,7 +196,7 @@ async function createUser (req: express.Request, res: express.Response) {
     videoQuota: body.videoQuota,
     videoQuotaDaily: body.videoQuotaDaily,
     adminFlags: body.adminFlags || UserAdminFlag.NONE
-  })
+  }) as MUser
 
   const { user, account } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
 

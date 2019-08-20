@@ -16,7 +16,7 @@ import {
 } from '../../lib/activitypub'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
-import { MVideo, MVideoAP, MVideoDetails } from '../../typings/models'
+import { MVideo, MVideoAP, MVideoFormattable, MVideoFormattableDetails } from '../../typings/models'
 import { MStreamingPlaylistRedundancies } from '../../typings/models/video/video-streaming-playlist'
 import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 
@@ -29,7 +29,7 @@ export type VideoFormattingJSONOptions = {
     blacklistInfo?: boolean
   }
 }
-function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormattingJSONOptions): Video {
+function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -103,7 +103,7 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
   return videoObject
 }
 
-function videoModelToFormattedDetailsJSON (video: MVideoDetails): VideoDetails {
+function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): VideoDetails {
   const formattedJson = video.toFormattedJSON({
     additionalAttributes: {
       scheduledUpdate: true,
