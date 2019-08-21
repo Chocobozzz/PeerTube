@@ -726,8 +726,7 @@ paths:
                   type: string
                   format: binary
             encoding:
-              profileImage:
-                # only accept png/jpeg
+              avatarfile:
                 contentType: image/png, image/jpeg
   /videos:
     get:
@@ -829,9 +828,11 @@ paths:
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
+                  format: binary
                 previewfile:
                   description: Video preview file
                   type: string
+                  format: binary
                 category:
                   description: Video category
                   type: string
@@ -874,6 +875,11 @@ paths:
                   format: date-time
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
     get:
       summary: Get a video by its id
       tags:
@@ -1029,9 +1035,11 @@ paths:
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
+                  format: binary
                 previewfile:
                   description: Video preview file
                   type: string
+                  format: binary
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
@@ -1080,6 +1088,13 @@ paths:
                 - videofile
                 - channelId
                 - name
+            encoding:
+              videofile:
+                contentType: video/mp4, video/webm, video/ogg, video/avi, video/quicktime, video/x-msvideo, video/x-flv, video/x-matroska, application/octet-stream
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
       x-code-samples:
         - lang: Shell
           source: |
@@ -1142,9 +1157,11 @@ paths:
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
+                  format: binary
                 previewfile:
                   description: Video preview file
                   type: string
+                  format: binary
                 privacy:
                   $ref: '#/components/schemas/VideoPrivacySet'
                 category:
@@ -1188,6 +1205,13 @@ paths:
               required:
                 - channelId
                 - name
+            encoding:
+              torrentfile:
+                contentType: application/x-bittorrent
+              thumbnailfile:
+                contentType: image/jpeg
+              previewfile:
+                contentType: image/jpeg
   /videos/abuse:
     get:
       summary: Get list of reported video abuses
@@ -1308,6 +1332,9 @@ paths:
                   description: The file to upload.
                   type: string
                   format: binary
+            encoding:
+              captionfile:
+                contentType: text/vtt, application/x-subrip
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1952,7 +1979,7 @@ components:
           description: 'Video file size in bytes'
         torrentUrl:
           type: string
-        torrentDownaloadUrl:
+        torrentDownloadUrl:
           type: string
         fileUrl:
           type: string
