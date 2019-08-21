@@ -1,17 +1,16 @@
 import { AccountModel } from '../../../models/account/account'
 import {
   MActor,
-  MActorAccountChannelId,
   MActorAPI,
   MActorAudience,
   MActorDefault,
   MActorDefaultLight,
+  MActorFormattable,
   MActorId,
   MActorServer,
   MActorSummary,
   MActorSummaryFormattable,
-  MActorUrl,
-  MActorFormattable
+  MActorUrl
 } from './actor'
 import { FunctionProperties, PickWith } from '../../utils'
 import { MAccountBlocklistId } from './account-blocklist'
@@ -35,7 +34,7 @@ export type MAccountUrl = Use<'Actor', MActorUrl>
 export type MAccountAudience = Use<'Actor', MActorAudience>
 
 export type MAccountIdActor = MAccountId &
-  Use<'Actor', MActorAccountChannelId>
+  Use<'Actor', MActor>
 
 export type MAccountIdActorId = MAccountId &
   Use<'Actor', MActorId>

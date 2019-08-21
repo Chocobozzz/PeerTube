@@ -15,7 +15,7 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature } from '../../../typings/models'
+import { MActorSignature, MAccountIdActor } from '../../../typings/models'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -64,10 +64,13 @@ async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpd
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id, allowRefresh: false, fetchType: 'all' })
   const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
 
+  const account = actor.Account as MAccountIdActor
+  account.Actor = actor
+
   const updateOptions = {
     video,
     videoObject,
-    account: channelActor.VideoChannel.Account,
+    account,
     channel: channelActor.VideoChannel,
     overrideTo: activity.to
   }

@@ -53,13 +53,13 @@ import { FilteredModelAttributes } from '../../typings/sequelize'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
 import { ActorFollowScoreCache } from '../files-cache'
 import {
-  MAccountActor,
+  MAccountIdActor,
   MChannelAccountLight,
   MChannelDefault,
   MChannelId,
   MVideo,
-  MVideoAccountLightBlacklistAllFiles,
   MVideoAccountLight,
+  MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
   MVideoAPWithoutCaption,
   MVideoFile,
@@ -265,7 +265,7 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 async function updateVideoFromAP (options: {
   video: MVideoAccountLightBlacklistAllFiles,
   videoObject: VideoTorrentObject,
-  account: MAccountActor,
+  account: MAccountIdActor,
   channel: MChannelDefault,
   overrideTo?: string[]
 }) {
