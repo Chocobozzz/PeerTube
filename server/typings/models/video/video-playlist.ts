@@ -2,7 +2,7 @@ import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { PickWith } from '../../utils'
 import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account'
 import { MThumbnail } from './thumbnail'
-import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable } from './video-channels'
+import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channels'
 import { MVideoPlaylistElementLight } from '@server/typings/models/video/video-playlist-element'
 
 type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
@@ -86,3 +86,7 @@ export type MVideoPlaylistFullSummary = MVideoPlaylist &
 export type MVideoPlaylistFormattable = MVideoPlaylistVideosLength &
   Use<'OwnerAccount', MAccountSummaryFormattable> &
   Use<'VideoChannel', MChannelSummaryFormattable>
+
+export type MVideoPlaylistAP = MVideoPlaylist &
+  Use<'Thumbnail', MThumbnail> &
+  Use<'VideoChannel', MChannelUrl>

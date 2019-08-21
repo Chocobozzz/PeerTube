@@ -1,6 +1,7 @@
 import { AccountModel } from '../../../models/account/account'
 import {
   MActor,
+  MActorAP,
   MActorAPI,
   MActorAudience,
   MActorDefault,
@@ -89,3 +90,6 @@ export type MAccountSummaryFormattable = FunctionProperties<MAccount> &
 export type MAccountFormattable = FunctionProperties<MAccount> &
   Pick<MAccount, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'userId'> &
   Use<'Actor', MActorFormattable>
+
+export type MAccountAP = Pick<MAccount, 'name' | 'description'> &
+  Use<'Actor', MActorAP>

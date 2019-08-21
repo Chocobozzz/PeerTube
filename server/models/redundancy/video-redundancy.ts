@@ -30,7 +30,7 @@ import * as Bluebird from 'bluebird'
 import { col, FindOptions, fn, literal, Op, Transaction } from 'sequelize'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
 import { CONFIG } from '../../initializers/config'
-import { MVideoRedundancy, MVideoRedundancyVideo } from '@server/typings/models'
+import { MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/typings/models'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -488,7 +488,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return !!this.strategy
   }
 
-  toActivityPubObject (): CacheFileObject {
+  toActivityPubObject (this: MVideoRedundancyAP): CacheFileObject {
     if (this.VideoStreamingPlaylist) {
       return {
         id: this.url,

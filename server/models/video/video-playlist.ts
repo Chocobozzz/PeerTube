@@ -45,7 +45,7 @@ import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import * as Bluebird from 'bluebird'
 import {
-  MVideoPlaylistAccountThumbnail,
+  MVideoPlaylistAccountThumbnail, MVideoPlaylistAP,
   MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
@@ -510,7 +510,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
   }
 
-  toActivityPubObject (page: number, t: Transaction): Promise<PlaylistObject> {
+  toActivityPubObject (this: MVideoPlaylistAP, page: number, t: Transaction): Promise<PlaylistObject> {
     const handler = (start: number, count: number) => {
       return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count, t)
     }

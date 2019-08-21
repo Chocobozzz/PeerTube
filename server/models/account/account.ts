@@ -32,7 +32,7 @@ import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequ
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { ActorFollowModel } from '../activitypub/actor-follow'
-import { MAccountActor, MAccountDefault, MAccountSummaryFormattable, MAccountFormattable } from '../../typings/models'
+import { MAccountActor, MAccountDefault, MAccountSummaryFormattable, MAccountFormattable, MAccountAP } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 
 export enum ScopeNames {
@@ -380,7 +380,7 @@ export class AccountModel extends Model<AccountModel> {
     }
   }
 
-  toActivityPubObject () {
+  toActivityPubObject (this: MAccountAP) {
     const obj = this.Actor.toActivityPubObject(this.name, 'Account')
 
     return Object.assign(obj, {

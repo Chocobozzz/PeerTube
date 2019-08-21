@@ -1,5 +1,5 @@
 import { ActorModel } from '../../../models/activitypub/actor'
-import { FunctionProperties, PickWith } from '../../utils'
+import { FunctionProperties, PickWith, PickWithOpt } from '../../utils'
 import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'
 import { MAvatar, MAvatarFormattable } from './avatar'
@@ -29,7 +29,7 @@ export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 // Some association attributes
 
 export type MActorHost = Use<'Server', MServerHost>
-export type MActorRedundancyAllowed = Use<'Server', MServerRedundancyAllowed>
+export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServerRedundancyAllowed>
 
 export type MActorDefaultLight = MActorLight &
   Use<'Server', MServerHost> &
@@ -115,4 +115,7 @@ export type MActorSummaryFormattable = FunctionProperties<MActor> &
 
 export type MActorFormattable = MActorSummaryFormattable &
   Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt'> &
-  Use<'Server', MServer>
+  Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>>
+
+export type MActorAP = MActor &
+  Use<'Avatar', MAvatar>

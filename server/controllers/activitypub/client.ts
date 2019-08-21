@@ -214,7 +214,7 @@ async function videoController (req: express.Request, res: express.Response) {
 
   // We need captions to render AP object
   const captions = await VideoCaptionModel.listVideoCaptions(video.id)
-  const videoWithCaptions: MVideoAPWithoutCaption = Object.assign(video, { VideoCaptions: captions })
+  const videoWithCaptions = Object.assign(video, { VideoCaptions: captions })
 
   const audience = getAudience(videoWithCaptions.VideoChannel.Account.Actor, videoWithCaptions.privacy === VideoPrivacy.PUBLIC)
   const videoObject = audiencify(videoWithCaptions.toActivityPubObject(), audience)
@@ -351,7 +351,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
 }
 
 async function videoPlaylistElementController (req: express.Request, res: express.Response) {
-  const videoPlaylistElement = res.locals.videoPlaylistElement
+  const videoPlaylistElement = res.locals.videoPlaylistElementAP
 
   const json = videoPlaylistElement.toActivityPubObject()
   return activityPubResponse(activityPubContextify(json), res)

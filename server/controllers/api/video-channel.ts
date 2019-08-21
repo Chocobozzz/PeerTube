@@ -35,6 +35,7 @@ import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
+import { MChannelAccountDefault } from '@server/typings/models'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
@@ -181,7 +182,7 @@ async function updateVideoChannel (req: express.Request, res: express.Response) 
         }
       }
 
-      const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions)
+      const videoChannelInstanceUpdated = await videoChannelInstance.save(sequelizeOptions) as MChannelAccountDefault
       await sendUpdateActor(videoChannelInstanceUpdated, t)
 
       auditLogger.update(

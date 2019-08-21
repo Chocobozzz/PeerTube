@@ -16,7 +16,7 @@ import {
 } from '../../lib/activitypub'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
-import { MVideo, MVideoAP, MVideoFormattable, MVideoFormattableDetails } from '../../typings/models'
+import { MStreamingPlaylistRedundanciesOpt, MVideo, MVideoAP, MVideoFormattable, MVideoFormattableDetails } from '../../typings/models'
 import { MStreamingPlaylistRedundancies } from '../../typings/models/video/video-streaming-playlist'
 import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 
@@ -143,7 +143,7 @@ function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): Vid
   return Object.assign(formattedJson, detailsJson)
 }
 
-function streamingPlaylistsModelToFormattedJSON (playlists: MStreamingPlaylistRedundancies[]): VideoStreamingPlaylist[] {
+function streamingPlaylistsModelToFormattedJSON (playlists: MStreamingPlaylistRedundanciesOpt[]): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
 
   return playlists

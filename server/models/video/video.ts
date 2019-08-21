@@ -127,14 +127,17 @@ import {
   MUserId,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
+  MVideoAP,
   MVideoDetails,
+  MVideoFormattable,
+  MVideoFormattableDetails,
   MVideoForUser,
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoThumbnail,
-  MVideoWithAllFiles, MVideoWithFile,
-  MVideoWithRights,
-  MVideoFormattable
+  MVideoWithAllFiles,
+  MVideoWithFile,
+  MVideoWithRights
 } from '../../typings/models'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
@@ -1879,11 +1882,11 @@ export class VideoModel extends Model<VideoModel> {
     return join(LAZY_STATIC_PATHS.PREVIEWS, preview.filename)
   }
 
-  toFormattedJSON <T extends MVideoFormattable> (this: T, options?: VideoFormattingJSONOptions): Video {
+  toFormattedJSON (this: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
     return videoModelToFormattedJSON(this, options)
   }
 
-  toFormattedDetailsJSON (): VideoDetails {
+  toFormattedDetailsJSON (this: MVideoFormattableDetails): VideoDetails {
     return videoModelToFormattedDetailsJSON(this)
   }
 
@@ -1891,7 +1894,7 @@ export class VideoModel extends Model<VideoModel> {
     return videoFilesModelToFormattedJSON(this, this.VideoFiles)
   }
 
-  toActivityPubObject (): VideoTorrentObject {
+  toActivityPubObject (this: MVideoAP): VideoTorrentObject {
     return videoModelToActivityPubObject(this)
   }
 

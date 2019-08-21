@@ -39,12 +39,13 @@ import { VideoModel } from '../video/video'
 import {
   MActor,
   MActorAccountChannelId,
+  MActorAP,
   MActorFormattable,
-  MActorFull, MActorHost,
+  MActorFull,
+  MActorHost,
+  MActorRedundancyAllowedOpt,
   MActorServer,
-  MActorSummaryFormattable,
-  MServerHost,
-  MActorRedundancyAllowed
+  MActorSummaryFormattable
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 
@@ -429,7 +430,7 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  toActivityPubObject (name: string, type: 'Account' | 'Application' | 'VideoChannel') {
+  toActivityPubObject (this: MActorAP, name: string, type: 'Account' | 'Application' | 'VideoChannel') {
     let activityPubType
     if (type === 'Account') {
       activityPubType = 'Person' as 'Person'
@@ -528,7 +529,7 @@ export class ActorModel extends Model<ActorModel> {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 
-  getRedundancyAllowed (this: MActorRedundancyAllowed) {
+  getRedundancyAllowed () {
     return this.Server ? this.Server.redundancyAllowed : false
   }
 

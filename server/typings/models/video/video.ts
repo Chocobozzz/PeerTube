@@ -10,7 +10,7 @@ import {
 } from './video-channels'
 import { MTag } from './tag'
 import { MVideoCaptionLanguage } from './video-caption'
-import { MStreamingPlaylist, MStreamingPlaylistRedundancies } from './video-streaming-playlist'
+import { MStreamingPlaylist, MStreamingPlaylistRedundancies, MStreamingPlaylistRedundanciesOpt } from './video-streaming-playlist'
 import { MVideoFile, MVideoFileRedundanciesOpt } from './video-file'
 import { MThumbnail } from './thumbnail'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
@@ -165,5 +165,5 @@ export type MVideoFormattable = MVideo &
 export type MVideoFormattableDetails = MVideoFormattable &
   Use<'VideoChannel', MChannelFormattable> &
   Use<'Tags', MTag[]> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesOpt[]> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]>

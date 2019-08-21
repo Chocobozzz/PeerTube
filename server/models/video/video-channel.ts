@@ -37,7 +37,10 @@ import * as Bluebird from 'bluebird'
 import {
   MChannelAccountDefault,
   MChannelActor,
-  MChannelActorAccountDefaultVideos, MChannelSummaryFormattable, MChannelFormattable
+  MChannelActorAccountDefaultVideos,
+  MChannelAP,
+  MChannelFormattable,
+  MChannelSummaryFormattable
 } from '../../typings/models/video'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
@@ -513,7 +516,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return Object.assign(actor, videoChannel)
   }
 
-  toActivityPubObject (): ActivityPubActor {
+  toActivityPubObject (this: MChannelAP): ActivityPubActor {
     const obj = this.Actor.toActivityPubObject(this.name, 'VideoChannel')
 
     return Object.assign(obj, {

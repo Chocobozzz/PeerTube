@@ -17,6 +17,7 @@ import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'se
 import * as Bluebird from 'bluebird'
 import {
   MComment,
+  MCommentAP,
   MCommentFormattable,
   MCommentId,
   MCommentOwner,
@@ -491,7 +492,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     } as VideoComment
   }
 
-  toActivityPubObject (threadParentComments: MCommentOwner[]): VideoCommentObject {
+  toActivityPubObject (this: MCommentAP, threadParentComments: MCommentOwner[]): VideoCommentObject {
     let inReplyTo: string
     // New thread, so in AS we reply to the video
     if (this.inReplyToCommentId === null) {

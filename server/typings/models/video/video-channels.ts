@@ -8,16 +8,18 @@ import {
   MAccountLight,
   MAccountSummaryBlocks,
   MAccountSummaryFormattable,
+  MAccountUrl,
   MAccountUserId,
   MActor,
   MActorAccountChannelId,
+  MActorAP,
   MActorAPI,
   MActorDefault,
   MActorDefaultLight,
   MActorFormattable,
   MActorLight,
   MActorSummary,
-  MActorSummaryFormattable
+  MActorSummaryFormattable, MActorUrl
 } from '../account'
 import { MVideo } from './video'
 
@@ -41,6 +43,8 @@ export type MChannelUserId = Pick<MChannel, 'accountId'> &
 
 export type MChannelActor = MChannel &
   Use<'Actor', MActor>
+
+export type MChannelUrl = Use<'Actor', MActorUrl>
 
 // Default scope
 export type MChannelDefault = MChannel &
@@ -116,3 +120,7 @@ export type MChannelFormattable = FunctionProperties<MChannel> &
   Pick<MChannel, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'support'> &
   Use<'Actor', MActorFormattable> &
   PickWithOpt<VideoChannelModel, 'Account', MAccountFormattable>
+
+export type MChannelAP = Pick<MChannel, 'name' | 'description' | 'support'> &
+  Use<'Actor', MActorAP> &
+  Use<'Account', MAccountUrl>

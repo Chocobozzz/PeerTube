@@ -29,6 +29,7 @@ import {
   MVideoPlaylistElement,
   MVideoPlaylistElementAP,
   MVideoPlaylistElementFormattable,
+  MVideoPlaylistElementVideoUrlPlaylistPrivacy,
   MVideoPlaylistVideoThumbnail
 } from '@server/typings/models/video/video-playlist-element'
 import { MUserAccountId } from '@server/typings/models'
@@ -184,7 +185,10 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 
-  static loadByPlaylistAndVideoForAP (playlistId: number | string, videoId: number | string): Bluebird<MVideoPlaylistElementAP> {
+  static loadByPlaylistAndVideoForAP (
+    playlistId: number | string,
+    videoId: number | string
+  ): Bluebird<MVideoPlaylistElementVideoUrlPlaylistPrivacy> {
     const playlistWhere = validator.isUUID('' + playlistId) ? { uuid: playlistId } : { id: playlistId }
     const videoWhere = validator.isUUID('' + videoId) ? { uuid: videoId } : { id: videoId }
 
@@ -336,7 +340,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     }
   }
 
-  toActivityPubObject (): PlaylistElementObject {
+  toActivityPubObject (this: MVideoPlaylistElementAP): PlaylistElementObject {
     const base: PlaylistElementObject = {
       id: this.url,
       type: 'PlaylistElement',

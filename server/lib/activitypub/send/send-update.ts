@@ -12,10 +12,10 @@ import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { getServerActor } from '../../../helpers/utils'
 import {
-  MAccountActor,
+  MAccountDefault,
   MActor,
   MActorLight,
-  MChannelActor,
+  MChannelDefault,
   MVideoAP,
   MVideoAPWithoutCaption,
   MVideoPlaylistFull,
@@ -49,7 +49,7 @@ async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction
   return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
 }
 
-async function sendUpdateActor (accountOrChannel: MAccountActor | MChannelActor, t: Transaction) {
+async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefault, t: Transaction) {
   const byActor = accountOrChannel.Actor
 
   logger.info('Creating job to update actor %s.', byActor.url)

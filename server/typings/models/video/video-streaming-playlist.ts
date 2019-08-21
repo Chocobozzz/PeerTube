@@ -1,7 +1,7 @@
 import { VideoStreamingPlaylistModel } from '../../../models/video/video-streaming-playlist'
-import { PickWith } from '../../utils'
+import { PickWith, PickWithOpt } from '../../utils'
 import { MVideoRedundancyFileUrl } from './video-redundancy'
-import { MVideo } from '@server/typings/models'
+import { MVideo, MVideoUrl } from '@server/typings/models'
 
 type Use<K extends keyof VideoStreamingPlaylistModel, M> = PickWith<VideoStreamingPlaylistModel, K, M>
 
@@ -14,3 +14,6 @@ export type MStreamingPlaylistVideo = MStreamingPlaylist &
 
 export type MStreamingPlaylistRedundancies = MStreamingPlaylist &
   Use<'RedundancyVideos', MVideoRedundancyFileUrl[]>
+
+export type MStreamingPlaylistRedundanciesOpt = MStreamingPlaylist &
+  PickWithOpt<VideoStreamingPlaylistModel, 'RedundancyVideos', MVideoRedundancyFileUrl[]>

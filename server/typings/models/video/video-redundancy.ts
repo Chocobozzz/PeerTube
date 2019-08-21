@@ -1,6 +1,10 @@
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { PickWith } from '@server/typings/utils'
-import { MStreamingPlaylistVideo, MVideoFile, MVideoFileVideo } from '@server/typings/models'
+import { PickWith, PickWithOpt } from '@server/typings/utils'
+import { MStreamingPlaylistVideo, MVideoFile, MVideoFileVideo, MVideoUrl } from '@server/typings/models'
+import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
+import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
+import { VideoFile } from '../../../../shared/models/videos'
+import { VideoFileModel } from '@server/models/video/video-file'
 
 type Use<K extends keyof VideoRedundancyModel, M> = PickWith<VideoRedundancyModel, K, M>
 
@@ -24,3 +28,11 @@ export type MVideoRedundancyStreamingPlaylistVideo = MVideoRedundancy &
 export type MVideoRedundancyVideo = MVideoRedundancy &
   Use<'VideoFile', MVideoFileVideo> &
   Use<'VideoStreamingPlaylist', MStreamingPlaylistVideo>
+
+// ############################################################################
+
+// Format for API or AP object
+
+export type MVideoRedundancyAP = MVideoRedundancy &
+  PickWithOpt<VideoRedundancyModel, 'VideoFile', MVideoFile & PickWith<VideoFileModel, 'Video', MVideoUrl>> &
+  PickWithOpt<VideoRedundancyModel, 'VideoStreamingPlaylist', PickWith<VideoStreamingPlaylistModel, 'Video', MVideoUrl>>

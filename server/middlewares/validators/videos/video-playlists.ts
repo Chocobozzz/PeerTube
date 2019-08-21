@@ -267,7 +267,7 @@ const videoPlaylistElementAPGetValidator = [
       return res.status(403).end()
     }
 
-    res.locals.videoPlaylistElement = videoPlaylistElement
+    res.locals.videoPlaylistElementAP = videoPlaylistElement
 
     return next()
   }
