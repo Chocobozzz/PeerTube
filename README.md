@@ -182,7 +182,7 @@ See the [architecture blueprint](https://docs.joinpeertube.org/#/contribute-arch
 
 See our REST API documentation:
   * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
-  * Spec explorer: [docs.joinpeertube.org/#/api-rest-reference.html](https://docs.joinpeertube.org/#/api-rest-reference.html)
+  * Spec explorer: [docs.joinpeertube.org/api-rest-reference.html](https://docs.joinpeertube.org/api-rest-reference.html)
 
 See our [ActivityPub documentation](https://docs.joinpeertube.org/#/api-activitypub).
 
