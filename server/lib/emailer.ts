@@ -104,7 +104,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + channelName + ' just published a new video',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + channelName + ' just published a new video',
       text
     }
 
@@ -123,7 +123,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New follower on your channel ' + followingName,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New follower on your channel ' + followingName,
       text
     }
 
@@ -141,7 +141,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New instance follower',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New instance follower',
       text
     }
 
@@ -161,7 +161,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Your video ${video.name} is published`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Your video ${video.name} is published`,
       text
     }
 
@@ -181,7 +181,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} is finished`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} is finished`,
       text
     }
 
@@ -201,7 +201,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
       text
     }
 
@@ -223,7 +223,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New comment on your video ' + video.name,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New comment on your video ' + video.name,
       text
     }
 
@@ -245,7 +245,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Mention on video ' + video.name,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Mention on video ' + video.name,
       text
     }
 
@@ -262,7 +262,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Received a video abuse',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Received a video abuse',
       text
     }
 
@@ -285,7 +285,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'An auto-blacklisted video is awaiting review',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'An auto-blacklisted video is awaiting review',
       text
     }
 
@@ -300,7 +300,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New user registration on ' + WEBSERVER.HOST,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New user registration on ' + WEBSERVER.HOST,
       text
     }
 
@@ -322,7 +322,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Video ${videoName} blacklisted`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Video ${videoName} blacklisted`,
       text
     }
 
@@ -340,7 +340,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Video ${video.name} unblacklisted`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Video ${video.name} unblacklisted`,
       text
     }
 
@@ -357,7 +357,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Reset your password',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Reset your password',
       text
     }
 
@@ -374,7 +374,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Verify your email',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Verify your email',
       text
     }
 
@@ -395,7 +395,7 @@ class Emailer {
     const to = user.email
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Account ' + blockedWord,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Account ' + blockedWord,
       text
     }
 
@@ -415,7 +415,7 @@ class Emailer {
       fromDisplayName: fromEmail,
       replyTo: fromEmail,
       to: [ CONFIG.ADMIN.EMAIL ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + subject,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + subject,
       text
     }
 

@@ -64,7 +64,7 @@ smtp:
 email:
   body:
     signature: "PeerTube"
-  object:
+  subject:
     prefix: "[PeerTube]"
 
 # From the project root directory
