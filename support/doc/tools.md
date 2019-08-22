@@ -11,6 +11,7 @@
     - [peertube-import-videos.js](#peertube-import-videosjs)
     - [peertube-upload.js](#peertube-uploadjs)
     - [peertube-watch.js](#peertube-watchjs)
+    - [peertube-plugins.js](#peertube-pluginsjs)
 - [Server tools](#server-tools)
   - [parse-log](#parse-log)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
@@ -183,6 +184,22 @@ It provides support for different players:
 - chromecast
 
 
+#### peertube-plugins.js
+
+Install/update/uninstall or list local or NPM PeerTube plugins:
+
+```
+$ cd ${CLONE}
+$ node dist/server/tools/peertube-plugins.js --help
+$ node dist/server/tools/peertube-plugins.js list --help
+$ node dist/server/tools/peertube-plugins.js install --help
+$ node dist/server/tools/peertube-plugins.js update --help
+$ node dist/server/tools/peertube-plugins.js uninstall --help
+
+$ node dist/server/tools/peertube-plugins.js install --path /my/plugin/path
+$ node dist/server/tools/peertube-plugins.js install --npm-name peertube-theme-example
+```
+
 ## Server tools
 
 These scripts should be run on the server, in `peertube-latest` directory.
@@ -263,7 +280,7 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 The difference with `peertube plugins` CLI is that these scripts can be used even if PeerTube is not running.
 If PeerTube is running, you need to restart it for the changes to take effect (whereas with `peertube plugins` CLI, plugins/themes are dynamically loaded on the server).
 
-To install a plugin or a theme from the disk:
+To install/update a plugin or a theme from the disk:
 
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:install -- --plugin-path /local/plugin/path
