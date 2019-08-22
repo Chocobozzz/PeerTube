@@ -200,13 +200,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target>
+        <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target>
+        <context-group name="null">
           <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ngb.toast.close-aria">
+        <source>Close</source>
+        <target>Κλείσιμο</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
@@ -903,6 +914,13 @@
           <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b4f8ab29acafa8172b27571fd682d482c1ff7798">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</source>
+        <target>(επεκτάσεις: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, όριο μεγέθους: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
         <source>
     Login
@@ -1184,6 +1202,13 @@
         <target>Ιστορικό</target>
         <context-group name="null">
           <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db">
+        <source>Discover</source>
+        <target>Ανακαλύψτε</target>
+        <context-group name="null">
+          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
@@ -1604,6 +1629,13 @@
           <context context-type="linenumber">135</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430">
+        <source>Video preview</source>
+        <target>Προεπισκόπηση βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">192</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
         <source>Support</source>
         <target>Υποστηρίξτε</target>
@@ -1711,6 +1743,28 @@
         <target>Προγραμματισμένο</target>
         <context-group name="null">
           <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d">
+        <source>Video background image</source>
+        <target>Εικόνα φόντου βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc">
+        <source>
+          Image that will be merged with your audio file.
+          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+          The chosen image will be definitive and cannot be modified.
+        </source>
+        <target>
+          Εικόνα που θα ενωθεί με το ηχητικό σας.
+          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+          Η εικόνα που θα επιλέξετε δεν θα μπορεί να αλλάξει αργότερα.
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6357683911e256c566259880de43ea9403de00d3">
@@ -1848,6 +1902,17 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7fde07b8ce27190ea8da456ac16af384528a9210">
+        <source>
+              The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+            </source>
+        <target>
+              Το url δεν είναι ασφαλές (χωρίς HTTPS), κι έτσι η ενσωμάτωση του βίντεο δεν θα λειτουργεί σε ιστοτόπους με HTTPS (οι περιηγητές μπλοκάρουν μη ασφαλή (HTTP) αιτήματα σε ιστοτόπους με HTTPS.
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
         <source>Embed</source>
         <target>Ενσωμάτωση</target>
@@ -1855,11 +1920,75 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9adb13e2ba5160c8b0b100dc3f4cbe6051b5af9b">
+        <source>Auto select subtitle</source>
+        <target>Αυτόματη επιλογή υποτίτλων</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="49c69dfce384acdb5469834182209808b107b4de">
+        <source>
+            More customization
+          </source>
+        <target>
+            Επιπλέον προσαρμογή
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3198e972f64f577ff88e6b6966e2b44e7c7d8c2d">
+        <source>
+            Less customization
+          </source>
+        <target>
+            Λιγότερη προσαρμογή
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0c2e76c41af25effefd456fb1e86143e0cfd1a4e">
+        <source>Autoplay</source>
+        <target>Αυτόματη αναπαραγωγή</target>
+        <context-group name="null">
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
         <source>Muted</source>
         <target>Σε σίγαση</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="67732b09326ab7941ce983205a42d7819dd35668">
+        <source>Loop</source>
+        <target>Επανάληψη</target>
+        <context-group name="null">
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af3ab1a1035c222ccc88816baa236eb95cea7523">
+        <source>Display video title</source>
+        <target>Προβολή τίτλου βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd0fb32d9b50b615bdce413ca955283df7ab0b74">
+        <source>Display privacy warning</source>
+        <target>Προβολή ειδοποίησης προσωπικών δεδομένων</target>
+        <context-group name="null">
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3e10c53d0372db827bf38571e56d166f1df963bf">
+        <source>Display player controls</source>
+        <target>Προβολή στοιχείων ελέγχου αναπαραγωγής</target>
+        <context-group name="null">
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
@@ -2200,6 +2329,17 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4cad4cde2db81e1b14ebb84196af33c3d23f7322">
+        <source>
+      Plugins/Themes
+    </source>
+        <target>
+      Πρόσθετα/Θέματα
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c">
         <source>
       System
@@ -2480,6 +2620,13 @@
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="df84781eeb873f037ee688789bde034be9b49074">
+        <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Όριο ανεβάσματος βίντεο <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
         <source>(banned)</source>
         <target>(έχει αποκλειστεί)</target>
@@ -2701,6 +2848,113 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d204665b42241ca94ecad49df699cc60df43a7b5">
+        <source>Plugins/Themes</source>
+        <target>Πρόσθετα/Θέματα</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86288c2ac6b43ed195f0bc8bce825a3ab8151b71">
+        <source>Installed</source>
+        <target>Εγκατεστημένα</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
+        <source>Search</source>
+        <target>Αναζήτηση</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cb86e649ad2e5cfc86efb2d28c06b1d959f8aa6">
+        <source>Homepage</source>
+        <target>Αρχική</target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4962915f14d9b61bdd1b96b81c27e3f9d8910768">
+        <source>Go to the plugin homepage</source>
+        <target>Σελίδα προσθέτου</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716">
+        <source>Settings</source>
+        <target>Ρυθμίσεις</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d">
+        <source>Uninstall</source>
+        <target>Απεγκατάσταση</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fcef699ec12dbd6fcf9881d527af2fd775ccfdc7">
+        <source>
+  To load your new installed plugins or themes, refresh the page.
+</source>
+        <target>
+  Για να δείτε τα νέα σας πρόσθετα ή θέματα, ανανεώστε τη σελίδα.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fc026bb4b317bf3a6159c364818202f5bb95a4e">
+        <source>Popular</source>
+        <target>Δημοφιλή</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005">
+        <source>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </source>
+        <target>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
+        <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
+        <target>{VAR_PLURAL, plural, =1 {result} other {results} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207">
+        <source>
+  No results.
+</source>
+        <target>
+  Κανένα αποτέλεσμα.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407">
+        <source>
+    This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.
+  </source>
+        <target>
+    Αυτό το <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> δεν έχει ρυθμίσεις.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
         <source>System</source>
         <target>Σύστημα</target>
@@ -2869,6 +3123,27 @@
         <target>Εμφάνιση</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522">
+        <source>Theme</source>
+        <target>Θέμα</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bb52a3e9e31d9dec02faeadb44935de49e3a33d">
+        <source>Global theme</source>
+        <target>Γενικό θέμα</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
+        <source>default</source>
+        <target>προκαθορισμένο</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
@@ -3078,11 +3353,32 @@
           <context context-type="linenumber">302</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88cfa6e185dd938361d1d9c04314bbd3afb54fb6">
+        <source>Allow audio files upload</source>
+        <target>Να επιτρέπεται το ανέβασμα ηχητικών</target>
+        <context-group name="null">
+          <context context-type="linenumber">309</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="850dc37b31a1b3e8c8ea55d55570f93d39818e33">
+        <source>Allow your users to upload audio files that will be merged with the preview file on upload</source>
+        <target>Επιτρέψτε στους χρήστες σας να ανεβάζουν ηχητικά που θα ενώνονται με εικόνα κατά το ανέβασμα</target>
+        <context-group name="null">
+          <context context-type="linenumber">310</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
         <target>Νήματα επανακωδικοποίησης</target>
         <context-group name="null">
           <context context-type="linenumber">315</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6221e8fc0bcfc87cbb03621bca82a6e4e188b75a">
+        <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> enabled</source>
+        <target>Ανάλυση <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> ενεργή</target>
+        <context-group name="null">
+          <context context-type="linenumber">330</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e9fb2d7685ae280026fe6463731170b067e419d5">
@@ -3219,6 +3515,13 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88a7dfa6fac89d61c28552598a23ba4ce9abe8ca">
+        <source>Interface</source>
+        <target>Περιβάλλον χρήσης</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
         <source>Danger zone</source>
         <target>Ρυθμίσεις που χρειάζονται προσοχή</target>
@@ -3261,6 +3564,27 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f4557d5ba869e938c5154660cd7f3a8c25b26a02">
+        <source>Only display videos in the following languages</source>
+        <target>Εμφάνιση βίντεο μόνο στις εξής γλώσσες</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eea4d56bf13e50a79d4ae4368bb7e4cb14f9e280">
+        <source>In Recently added, Trending, Local and Search pages</source>
+        <target>Στις σελίδες Πρόδφατα, Τάσεις, Τοπικά και Αναζήτηση</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f871b41bfbdb193507cce2cd848c2d02bde77a03">
+        <source>No results found</source>
+        <target>Δε βρέθηκαν αποτελέσματα</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d044c51156e295824813a866dba9545bdb59466b">
         <source>Use WebTorrent to exchange parts of the video with others</source>
         <target>Χρήση WebTorrent για την ανταλλαγή μέρους των δεδομένων με άλλους</target>
@@ -3280,6 +3604,70 @@
         <target>Ενημέρωση του προφίλ μου</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dbcc539bd3ca0b962b87ea26855ca9d5d3c5cdf1">
+        <source>
+  Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</source>
+        <target>
+  Το ισχύον email σας είναι <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="03d1a9c026074c12ea3f2fb39a34bc6a18fedf05">
+        <source>
+  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> is awaiting email verification
+</source>
+        <target>
+  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> αναμένει επιβεβαίωση
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d20a2fa4a3360caa8825e49a31b5fd3a442ac219">
+        <source>New email</source>
+        <target>Νέο email</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="150bb2b8ea3b2745294f0cfe8b37c83dbca4b463">
+        <source>Your new email</source>
+        <target>Το νέο σας email</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b5b91438db5731debea388908f788bab8d3d404">
+        <source>Your password</source>
+        <target>Ο κωδικός σας</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="820741079d4bc32fb98b7a871a6e507b18b6c85c">
+        <source>Change email</source>
+        <target>Αλλαγή email</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808">
+        <source>instance default</source>
+        <target>προκαθορισμένο του κόμβου</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d">
+        <source>peertube default</source>
+        <target>προκαθορισμένο του peertube</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf">
@@ -3393,6 +3781,13 @@ When you will upload a video in this channel, the video support field will be au
 Όταν ανεβάζετε βίντεο σ' αυτό το κανάλι, το πεδίο «Υποστηρίξτε» θα συμπληρωθεί αυτόματα μ' αυτό το κείμενο.</target>
         <context-group name="null">
           <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd">
+        <source>Overwrite support field of all videos of this channel</source>
+        <target>Αλλαγή των πεδίων υποστήριξης σε όλα τα βίντεο του καναλιού</target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503">
@@ -3539,11 +3934,29 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88f1b36ea2f7544792f04ee6b58f8c55aaba5c96">
+        <source>Playlist thumbnail</source>
+        <target>Μικρογραφία λίστας</target>
+        <context-group name="null">
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="188014887f7188d90b39e41d9606b91c77c17861">
         <source>No videos in this playlist.</source>
         <target>Κανένα βίντεο στη λίστα.</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f467ee94e8b6fbb88fd94c99a77b02e751046a1f">
+        <source>
+    If you need help to use PeerTube, you can take a look to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Αν χρειάζεστε βοήθεια στη χρήση του PeerTube, μπορείτε να δείτε την <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>τεκμηρίωση<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="09a69cde5889927629e2ac9dc63a71b88252b530">
@@ -3555,6 +3968,33 @@ When you will upload a video in this channel, the video support field will be au
   </target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf">
+        <source>
+  </source>
+        <target>
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b734a13448d714b0f68f49353607364ac3571c12">
+        <source>
+    Email updated.
+  </source>
+        <target>
+    Το email ενημερώθηκε.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61fd1cffcb763cbfd5829071723cf9b647174bd9">
+        <source>An error occurred.</source>
+        <target>Σφάλμα.</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2d02841904de7f5f60e2618670ac1059f3abec97">
@@ -3624,11 +4064,25 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="87f77a03c185ea644ed8378a562a2d0225513974">
+        <source>This account does not have channels.</source>
+        <target>Αυτός ο λογαριασμός δεν έχει κανάλια.</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f36bd6a1570cb9b0a5023870f35160957cad2a8f">
         <source>See this video channel</source>
         <target>Δείτε το κανάλι</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f04879385d6e3b0cf5fba6bb08983a55f73b696">
+        <source>This channel does not have videos.</source>
+        <target>Αυτό το κανάλι δεν έχει βίντεο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -3691,6 +4145,13 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a">
+        <source>Follows</source>
+        <target>Ακόλουθοι</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
         <target>Επικοινωνηστε με τον διαχειριστή του <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
@@ -3710,6 +4171,13 @@ When you will upload a video in this channel, the video support field will be au
         <target>Το e-mail σας</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b0ca852bafa5037c4e64c7b18f9cd1e14b799de">
+        <source>Subject</source>
+        <target>Θέμα</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2815c9b510b8172d8cac4008b9709df69d636df">
@@ -3999,6 +4467,27 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4b819dec78ae793726f7da0568912b4ba777d929">
+        <source>This instance does not have followers.</source>
+        <target>Αυτός ο κόμβος δεν έχει ακολούθους.</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="258c42c65fd235c739c55439d8265542316bd0ba">
+        <source>Followings</source>
+        <target>Ακολουθούνται</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2edb6a5a49961e867310e86a5626502cf7f779b">
+        <source>This instance does not have followings.</source>
+        <target>Αυτός ο κόμβος δεν ακολουθεί άλλους.</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
         <source>
     Create an account
@@ -4010,6 +4499,52 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982">
+        <source>Next</source>
+        <target>Επόμενο</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e8d122924e4ca9b515d4586b42fd1c3e2b825e7">
+        <source>User information</source>
+        <target>Πληροφορίες χρήστη</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f127303f2937f5d9ced837f692899f5d599659a1">
+        <source>
+            Create my account
+          </source>
+        <target>
+            Δημιουργία λογαριασμού
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa0afc083c3aeddc9ce989975903f854d611a601">
+        <source>Channel information</source>
+        <target>Πληροφορίες καναλιού</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cb9d0623f382c9803df997fb30b9a33a5438d919">
+        <source>PeerTube is creating your account...</source>
+        <target>Το PeerTube δημιουργεί τον λογαριασμό σας...</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8dd413cee2228118c536f503709329a4d1a395e2">
+        <source>Done</source>
+        <target>Ολοκληρώθηκε</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
         <source>Features found on this instance</source>
         <target>Χαρακτηριστικά σε αυτόν τον κόμβο</target>
@@ -4017,11 +4552,78 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">42</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b">
+        <source>
+      A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology.
+    </source>
+        <target>
+      Ένα κανάλι είναι μια μονάδα μέσα στην οποία ανεβάζετε βίντεο. Φτιάχνοντας διάφορα κανάλια μπορείτε να οργανώσετε και να ξεχωρίσετε καλύτερα το περιεχόμενό σας.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      Για παράδειγμα, μπορείτε να αποφασίσετε να κάνετε ένα κανάλι με βίντεο που παίζετε πιάνο και ένα άλλο για βίντεο στα οποία μιλάτε για το περιβάλλον.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="79b3619b36af71e5c70394a3a7b31545e32d83f0">
+        <source>Channel display name</source>
+        <target>Όνομα εμφάνισης καναλιού</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="306a2ab7f93c214af3f5579f54bd8b3ad0d5560e">
+        <source>Channel name</source>
+        <target>Όνομα καναλιού</target>
+        <context-group name="null">
+          <context context-type="linenumber">30</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cb4c2c5a4f4b34d3158f2344a3e625d0dc321f4d">
+        <source>Example: my_super_channel</source>
+        <target>Παράδειγμα: to_kanali_mou</target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fbccb6e6436dd8c6f9b7239a5b3b124aad134f6">
+        <source>
+      The channel name is a unique identifier of your channel on this instance. It's like an address mail, so other people can find your channel.
+    </source>
+        <target>
+      Το όνομα καναλιού είναι μοναδικό, σαν ταυτότητα σε αυτόν τον κόμβο. Μοιάζει με διεύθυνση email, ώστε άλλα άτομα να βρίσκουν το κανάλι σας.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60534abbe922bf9da7284c1c84d26315d695a5b7">
+        <source>
+      Channel name cannot be the same than your account name. You can click on the first step to update your account name.
+    </source>
+        <target>
+      Το όνομα καναλιού δεν μπορεί να είναι το ίδιο με το όνομα χρήστη. Μπορείτε να επιστρέψετε στο πρώτο βήμα για να αλλάξετε το όνομα χρήστη.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">50</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
         <source>Example: jane_doe</source>
         <target>Παράδειγμα: jane_doe</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="daf84c42f242507827d300a17ab75cd52c6e99a0">
+        <source>
+      The username is a unique identifier of your account on this instance. It's like an address mail, so other people can find you.
+    </source>
+        <target>
+      Το όνομα χρήστη είναι μοναδικό, σαν ταυτότητα σε αυτόν τον σέρβερ. Μοιάζει με διεύθυνση email, ώστε άλλα άτομα να βρίσκουν τον λογαριασμό σας.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fe213724c4c0a4112c40c673884acb98a0a3b92">
@@ -4044,7 +4646,7 @@ When you will upload a video in this channel, the video support field will be au
       </trans-unit>
       <trans-unit id="e0e3a472479c8ce1b78f682ffadbe59daf04d331">
         <source>Cannot get about information from server</source>
-        <target>Δεν μπορούμε να λάβουμε της πληροφορίες «Σχετικά» από τον σέρβερ</target>
+        <target>Δεν μπορούμε να λάβουμε της πληροφορίες «Σχετικά» από τον κόμβο</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4066,6 +4668,20 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="37b56526e384f843a15323dc730b484a97b4c968">
         <source>No description</source>
         <target>Χωρίς περιγραφή</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4">
+        <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
+        <target>Έχει δημοσιεύσει <x id="INTERPOLATION" equiv-text="{{total}}"/> βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="056a9a97eb47882159d3cf5bd8a9fc2cfe9371bf">
+        <source>Username copied</source>
+        <target>Το όνομα χρήστη αντιγράφτηκε</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4101,6 +4717,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="65c94f9beb6fe957808c40060da280cc7ace7ab9">
         <source>1080p</source>
         <target>1080p</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2303f8783df836e13c208710dc029a1d34b6a77a">
+        <source>2160p</source>
+        <target>2160p</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4420,6 +5043,111 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523">
+        <source>You don't have plugins installed yet.</source>
+        <target>Δεν έχετε εγκαταστήσει πρόσθετα ακόμα.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f">
+        <source>You don't have themes installed yet.</source>
+        <target>Δεν έχετε εγκαταστήσει θέματα ακόμα.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9">
+        <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
+        <target>Ενημερώστε στην <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702">
+        <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Θέλετε όντως να απεγκαταστήσετε το <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61136b14ca13f166ecc9ee7b05bb6fe865f10144">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</source>
+        <target>Το <x id="INTERPOLATION" equiv-text="{{pluginName}}"/> απεγκαταστάθηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d352fa8f51305c18ab8f882b37c4fdaab6f2371b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</source>
+        <target>Το <x id="INTERPOLATION" equiv-text="{{pluginName}}"/> ενημερώθηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d">
+        <source>The plugin index is not available. Please retry later.</source>
+        <target>Ο κατάλογος προσθέτων δεν είναι διαθέσιμος. Προσπαθήστε αργότερα.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0">
+        <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
+        <target>Παρακαλούμε εγκαταστήστε μόνο πρόσθετα που εμπιστεύεστε, καθώς θα μπορούν να εκτελέσουν κώδικα στον κόμβο σας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Να εγκατασταθεί το <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
+        <target>Το <x id="INTERPOLATION" equiv-text="{{pluginName}}"/> εγκαταστάθηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12">
+        <source>Settings updated.</source>
+        <target>Οι ρυθμίσεις ενημερώθηκαν.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50">
+        <source>Plugins</source>
+        <target>Πρόσθετα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf">
+        <source>Themes</source>
+        <target>Θέματα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e72b0e32070d4a69221ef64d793fe7d61381a819">
+        <source>plugin</source>
+        <target>πρόσθετο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f6f5bc1d9e83b758dd60bc6dc7aad7d2cb7f600">
+        <source>theme</source>
+        <target>θέμα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f">
         <source>Last week</source>
         <target>Τελευταία εβδομάδα</target>
@@ -4630,6 +5358,20 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3a8f29caac7ce9400d11a7c4f8b71a710865f56b">
+        <source>Please check your emails to verify your new email.</source>
+        <target>Παρακαλούμε δείτε τα email σας για να επιβεβαιώσετε τη διεύθυνσή σας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8155899f3b3b2e0467846ea7f27fcfb46c882204">
+        <source>Email updated.</source>
+        <target>Το email ενημερώθηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c">
         <source>You current password is invalid.</source>
         <target>Ο τρέχων κωδικός σας είναι άκυρος.</target>
@@ -4668,6 +5410,13 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
         <source>Your account is deleted.</source>
         <target>Ο λογαριασμός σας διαγράφηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="59f77c7dc03357ef1d7a334df06dfc7f31c9a165">
+        <source>Interface settings updated.</source>
+        <target>Οι ρυθμίσεις περιβάλλοντος χρήσης ενημερώθηκαν.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4766,6 +5515,34 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="1e003ad599ef836949b9f4dad3037a58ef3ff8d1">
         <source>Avatar changed.</source>
         <target>Η εικόνα χρήστη άλλαξε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="96d143e59c90c4f479eb7a3b55e2a24dc676b31f">
+        <source>Unknown language</source>
+        <target>Άγνωστη γλώσσα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="732fe7ff80eca196d9825b0ca16134ce8101e93e">
+        <source>Video settings updated.</source>
+        <target>Οι ρυθμίσεις βίντεο ενημερώθηκαν.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="812a3c71b3a8e6bfc7f1c5e8690cb4738edb2224">
+        <source>No language</source>
+        <target>Καμμία γλώσσα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="baa5048f978a6fed563ab1d30a6bb965ea687ba8">
+        <source>{{'{0} languages selected</source>
+        <target>{{'{0} γλώσσες επιλέχτηκαν</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4938,6 +5715,20 @@ When you will upload a video in this channel, the video support field will be au
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e58f5785ae64f23cd6a5e010b045511853ed84fa">
+        <source>Now please check your emails to verify your account and complete signup.</source>
+        <target>Και τώρα δείτε το email σας για να επιβεβαιώσετε τον λογαριασμό σας και να ολοκληρώσετε την εγγραφή.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6">
+        <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
+        <target>Έχετε συνδεθεί ως <x id="INTERPOLATION" equiv-text="{{username}}"/>!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="af55337b4032d675ab6b2081af797ca9c979b706">
         <source>An email with verification link will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
         <target>Ένα email με σύνδεσμο επιβεβαίωσης θα σταλεί στο <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
@@ -5097,6 +5888,1784 @@ When you will upload a video in this channel, the video support field will be au
       <trans-unit id="7701e3762dc4a2b2e302c24f17820bc8dd7cacc1">
         <source>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
         <target>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b0f24b7136e551a0deba831f1525711245b31a26">
+        <source>Your password has been successfully reset!</source>
+        <target>Ο κωδικός σας έχει ανανεωθεί με επιτυχία!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7fb1099e29660162f9154d5b2feee7743a423df6">
+        <source>Today</source>
+        <target>Σήμερα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="02e0243b60007368f87dc01e083f232dd025096d">
+        <source>Last 7 days</source>
+        <target>Τελευταίες 7 ημέρες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7668986b9f753fcd72ad4a00b1a0c4861d1f7fb8">
+        <source>Last 30 days</source>
+        <target>Τελευταίες 30 ημέρες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a77b663fd9b94c38bc9c6493a51b5f3acacb9bca">
+        <source>Last 365 days</source>
+        <target>Τελευταίες 365 ημέρες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2f3bf121699ff08a25fa4859bfdf3996bf821cc">
+        <source>Short (&lt; 4 min)</source>
+        <target>Σύντομα (&lt; 4 λεπτά)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f24d368d6be0fee70fb4503d2ad37a612e1b0889">
+        <source>Medium (4-10 min)</source>
+        <target>Μεσαία (4-10 λεπτά)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac0fa1039f09ec0d917303658c5bb1ee813a4225">
+        <source>Long (&gt; 10 min)</source>
+        <target>Μεγάλα (&gt; 10 λεπτά)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca">
+        <source>Relevance</source>
+        <target>Πιο σχετικά</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1aee80ab35aa99508802cdec6306e110b2feaf9e">
+        <source>Publish date</source>
+        <target>Ημερομηνία δημοσίευσης</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7641aed03492978b4ec6843b1e53f30464294d9">
+        <source>Views</source>
+        <target>Προβολές</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> χρόνια πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e622d3813449fe36371ea258281059306819199d">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> μήνες πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> μήνα πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> εβδομάδες πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> εβδομάδα πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> ημέρες πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> ημέρα πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> ώρες πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> ώρα πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> λ. πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7a158a7555a44ea7eff9fa4988df9aa24d262ceb">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> δ. πριν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
+        <source>Confirm</source>
+        <target>Επιβεβαίωση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323">
+        <source>Instance name is required.</source>
+        <target>Το όνομα του κόμβου απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10a248adb1ee12830355a04ac3cde2bad2d41d7d">
+        <source>Short description should not be longer than 250 characters.</source>
+        <target>Η σύντομη περιγραφή δεν πρέπει να υπερβαίνει τους 250 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="356e63270712273da168072ec0fc78a969919bf1">
+        <source>Twitter username is required.</source>
+        <target>Το όνομα χρήστη Twitter απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dbb2ef02020afc05e146855f2e1dd7c9522d49b6">
+        <source>Previews cache size is required.</source>
+        <target>Ο ορισμός μεγέθους χώρου προσωρινής αποθήκευσης για τις προεπισκοπήσεις απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97836c6e698185b4ce357de9d4b2ab3e838f2459">
+        <source>Previews cache size must be greater than 1.</source>
+        <target>Το μέγεθος του χώρου προσωρινής αποθήκευσης πρέπει να είναι πάνω από 1.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7393dc4a4aa12d005582eb9e1ddc7e5ca5bebd3">
+        <source>Previews cache size must be a number.</source>
+        <target>Το μέγεθος του χώρου προσωρινής αποθήκευσης πρέπει να είναι αριθμός.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="545f5dea553b2d7c4a65920ccdcb1e9dbdc7f4d8">
+        <source>Captions cache size is required.</source>
+        <target>Ο ορισμός μεγέθους χώρου προσωρινής αποθήκευσης για τους υποτίτλους απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a8d7131c0ca1eefe7b058e6081236ca1be364e2c">
+        <source>Captions cache size must be greater than 1.</source>
+        <target>Το μέγεθος του χώρου προσωρινής αποθήκευσης πρέπει να είναι πάνω από 1.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c3decd47b03cf542df091c1a2fb25b756e59074e">
+        <source>Captions cache size must be a number.</source>
+        <target>Το μέγεθος του χώρου προσωρινής αποθήκευσης πρέπει να είναι αριθμός.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2cdd5a8c604ef16c2f9a17ed81d73f4f9509e828">
+        <source>Signup limit is required.</source>
+        <target>Το όριο εγγραφών απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0ca9f7ec55c9896add6e82d2b52e9217e1140cf7">
+        <source>Signup limit must be greater than 1.</source>
+        <target>Το όριο εγγραφών πρέπει να είναι πάνω από 1.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="58c2f66ba74f1400914031ef4ed635938e9e8ced">
+        <source>Signup limit must be a number.</source>
+        <target>Το όριο εγγραφών πρέπει να είναι αριθμός.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1245841647f9b42d3e7554903c1c50bdd80ab021">
+        <source>Admin email is required.</source>
+        <target>Το email διαχειριστή απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fd2feb77dfe57fe82573e3cdf996105e2fafc66">
+        <source>Admin email must be valid.</source>
+        <target>Το email διαχειριστή πρέπει να είναι έγκυρο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f15f2e02b1f6a96553e98ea4a969045d17ec1400">
+        <source>Transcoding threads is required.</source>
+        <target>Ο ορισμός νημάτων επανακωδικοποίησης απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4166cc066b963a23829b48a09e394f73b453fabd">
+        <source>Transcoding threads must be greater or equal to 0.</source>
+        <target>Τα νήματα επανακωδικοποίησης πρέπει να είναι περισσότερα ή ίσα με 0</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0">
+        <source>Email is required.</source>
+        <target>Το email απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1">
+        <source>Email must be valid.</source>
+        <target>Το email πρέπει να είναι έγκυρο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac451f128840b34804ea69c820dc3566f476fb33">
+        <source>Your name is required.</source>
+        <target>Το όνομά σας απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1fc4633008a2431fdec891d58efcc8b865d7de1a">
+        <source>Your name must be at least 1 character long.</source>
+        <target>Το όνομά σας πρέπει να είναι τουλάχιστον 1 χαρακτήρας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7b44b92c0ce3ccd2f804d001e13da399524e11b">
+        <source>Your name cannot be more than 120 characters long.</source>
+        <target>Το όνομά σας δεν μπορεί να είναι πάνω από 120 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73417de6b009e361996f9cd0e3b83d88bed368b6">
+        <source>A subject is required.</source>
+        <target>Το θέμα απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f049fd004313524afeaf0ae25f98583a0ffd29b">
+        <source>The subject must be at least 1 character long.</source>
+        <target>Το θέμα πρέπει να είναι τουλάχιστον 1 χαρακτήρας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d82f880ea1d0ee03c47bf1212a0fbcb23b3edf18">
+        <source>The subject cannot be more than 120 characters long.</source>
+        <target>Το θέμα δεν μπορεί να είναι πάνω από 120 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="40b35cf927f9f9a59404a6c914ec4632690b69b2">
+        <source>A message is required.</source>
+        <target>Ένα μήνυμα είναι απαραίτητο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d8d4a23f467ee3e93ca0edb1198c233ed633cf64">
+        <source>The message must be at least 3 characters long.</source>
+        <target>Το μήνυμα πρέπει να είναι τουλάχιστον 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="07422f6141cfcabaf3c2ce77e3e063222849ef60">
+        <source>The message cannot be more than 5000 characters long.</source>
+        <target>Το μήνυμα δεν μπορεί να είναι πάνω από 5000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5db300f6fba918a35597160183205ede13e8e149">
+        <source>Username is required.</source>
+        <target>Το όνομα χρήστη απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4eb39d69b74d7a56652ec84fa6826994ee26c0e5">
+        <source>Password is required.</source>
+        <target>Ο κωδικός απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c90872a06666a51c2957c4b29724e68df5c67154">
+        <source>Confirmation of the password is required.</source>
+        <target>Η επιβεβαίωση κωδικού απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6330d25a3bc6f55dfd5177da6e681d1d3b1a2b1a">
+        <source>Username must be at least 1 character long.</source>
+        <target>Το όνομα χρήστη πρέπει να είναι τουλάχιστον 1 χαρακτήρας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aaaf3d00c35f809eebc7fd68a3f7b8b0230b197a">
+        <source>Username cannot be more than 50 characters long.</source>
+        <target>Το όνομα χρήστη δεν μπορεί να είναι πάνω από 50 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6f3e95be2538a22da07beaefc39bb2195683990c">
+        <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target>Το όνομα χρήστη αποτελείται μόνο από πεζά γράμματα και αριθμούς. Επιτρέπονται τελείες και κάτω παύλες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1fe26e49476ac701885abc59127e96a3760847f0">
+        <source>Password must be at least 6 characters long.</source>
+        <target>Ο κωδικός πρέπει να είναι από τουλάχιστον 6 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e">
+        <source>Password cannot be more than 255 characters long.</source>
+        <target>Ο κωδικός δεν μπορεί να είναι πάνω από 255 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2db8f1f93a5485c32267762a3bf4da499832e732">
+        <source>The new password and the confirmed password do not correspond.</source>
+        <target>Ο νέος κωδικός και η επιβεβαίωση κωδικού δεν αντστοιχούν.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abede840116d58f04a55d99a6cbd68da8a3e1bbf">
+        <source>Video quota is required.</source>
+        <target>Απαιτείται όριο βίντεο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="93a6dc1d3aa0d3201c86ef1ec8adf5cf0ada3c80">
+        <source>Quota must be greater than -1.</source>
+        <target>Το όριο βίντεο μπορεί να είναι 0 ή περισσότερο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e58d1fb4e86af94f5199660ef349d55811888bb">
+        <source>Daily upload limit is required.</source>
+        <target>Απαιτείται ημερήσιο όριο ανεβάσματος.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e283cbc4469959ea664f9d545f15278e089a6f1e">
+        <source>Daily upload limit must be greater than -1.</source>
+        <target>Το ημερήσιο όριο ανεβάσματος μπορεί να είναι 0 ή περισσότερο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="545e77fd5d9526228a2133109447c23225ed9c85">
+        <source>User role is required.</source>
+        <target>Ο ρόλος χρήστη απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d531c2261dc0c2739bd7cbb2bb175946b7eeb3ae">
+        <source>Description must be at least 3 characters long.</source>
+        <target>Η περιγραφή πρέπει να είναι τουλάχιστον 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a4179e366d4aa335f1ddd0a13e9109c71a9338d0">
+        <source>Description cannot be more than 1000 characters long.</source>
+        <target>Η περιγραφή δε μπορεί να είναι περισσότερο από 1000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a3ebc6ddb6b6677aed7b04eb503f9ddd0cfe561">
+        <source>You must to agree with the instance terms in order to registering on it.</source>
+        <target>Πρέπει να συμφωνήσετε με τους όρους χρήσης του κόμβου για να εγγραφείτε σε αυτόν.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d2c3ebffd49b8933200a6d4e5b74712be49bf00">
+        <source>Ban reason must be at least 3 characters long.</source>
+        <target>Ο λόγος αποκλεισμού πρέπει να είναι τουλάχιστον 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be32ff1dd6e464c5c085dd7d128316f476d2e0fd">
+        <source>Ban reason cannot be more than 250 characters long.</source>
+        <target>Ο λόγος αποκλεισμού δε μπορεί να είναι περισσότερο από 250 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4">
+        <source>Display name is required.</source>
+        <target>Το όνομα εμφάνισης απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="085b2d6f79819a72a2b56cada4ef5085ba51d90c">
+        <source>Display name must be at least 1 character long.</source>
+        <target>Το όνομα εμφάνισης πρέπει να είναι τουλάχιστον 1 χαρακτήρας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5a920575b8e1067f5b11c66a4a36d3ced87756f1">
+        <source>Display name cannot be more than 50 characters long.</source>
+        <target>Το όνομα εμφάνισης δε μπορεί να είναι πάνω από 50 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6">
+        <source>Report reason is required.</source>
+        <target>Ο λόγος αναφοράς απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="993f9f5703d449a1d467243db75253d288a2947e">
+        <source>Report reason must be at least 2 characters long.</source>
+        <target>Ο λόγος αναφοράς πρέπει να είναι τουλάχιστον 2 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8c7d4c82b057aea5dbae811e16935f9bcae4c2aa">
+        <source>Report reason cannot be more than 3000 characters long.</source>
+        <target>Ο λόγος αναφοράς δε μπορεί να είναι πάνω από 3000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fa41debd17a206d4a2a5e8d14bcd7055f6e5118">
+        <source>Moderation comment is required.</source>
+        <target>Το σχόλιο εποπτείας απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82e31d0837eaa69a4364e7434d253ce138b3c5c2">
+        <source>Moderation comment must be at least 2 characters long.</source>
+        <target>Το σχόλιο εποπτείας πρέπει να είναι τουλάχιστον 2 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23c1c2e105a98b0b6728949418a256b026b8971c">
+        <source>Moderation comment cannot be more than 3000 characters long.</source>
+        <target>Το σχόλιο εποπτείας δε μπορεί να είναι πάνω από 3000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="94b831c7e3684258f88e099c6cd3b8f73f8a2de6">
+        <source>The channel is required.</source>
+        <target>Το κανάλι απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0776b05d442a0a16f083a5eefa52a166b9d514ca">
+        <source>Blacklist reason must be at least 2 characters long.</source>
+        <target>Ο λόγος αποδημοσίευσης πρέπει να είναι τουλάχιστον 2 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5009443905b0b152915247799492bf5e164e7626">
+        <source>Blacklist reason cannot be more than 300 characters long.</source>
+        <target>Ο λόγος αποδημοσίευσης δε μπορεί να είναι πάνω από 3000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e">
+        <source>Video caption language is required.</source>
+        <target>Η γλώσσα υποτίτλων απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963">
+        <source>Video caption file is required.</source>
+        <target>Το αρχείο υποτίτλων απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd7fc070c728dc6dbf3959d49fe5bb27ce15d294">
+        <source>The username is required.</source>
+        <target>Το αρχείο υποτίτλων απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8465c3773699dd075e0147e264d2e232f605803">
+        <source>You can only transfer ownership to a local account</source>
+        <target>Μπορείτε να μεταφέρετε ιδιοκτησία μόνο σε τοπικό λογαριασμό.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="541087322c34e8b26954fd67ff4fc80d1a6c1b33">
+        <source>Name is required.</source>
+        <target>Το όνομα απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b8b59b6284a14fc71268cf722ed98c62c5af4a76">
+        <source>Name must be at least 1 character long.</source>
+        <target>Το όνομα πρέπει να είναι τουλάχιστον 1 χαρακτήρας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e14cd37d29f13eac7384c339e4f1df58d96e4e3d">
+        <source>Name cannot be more than 50 characters long.</source>
+        <target>Το όνομα δε μπορεί να είναι περισσότερο από 50 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="135185da003b14cbb69521f570fa617a00bbbe18">
+        <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target>Το όνομα πρέπει να είναι πεζά γράμματα και αριθμοί. Επιτρέπονται τελείες και κάτω παύλες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7182e21e9566cc81c83f92727461322f71fd69b">
+        <source>Support text must be at least 3 characters long.</source>
+        <target>Το κείμενο για την υποστήριξη πρέπει να είναι τουλάχιστον 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="15ec53d9ee65cb930c5f5d10ae2e8dd3fd44fc85">
+        <source>Support text cannot be more than 1000 characters long.</source>
+        <target>Το κείμενο για την υποστήριξη δε μπορεί να είναι πάνω από 1000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ca60e0f6dfbc0073b0514bce7d273150b0b9e79">
+        <source>Comment is required.</source>
+        <target>Το σχόλιο απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5a94cae76685e72f33541b977efdd7845cb0ed6">
+        <source>Comment must be at least 2 characters long.</source>
+        <target>Το σχόλιο πρέπει να είναι τουλάχιστον 2 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c194080446ee6901fd17a8b8648534ffe98b123">
+        <source>Comment cannot be more than 3000 characters long.</source>
+        <target>Το σχόλιο δε μπορεί να είναι πάνω από 3000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e81bda510399d52f26a44a15c3dbf4d6205d90a9">
+        <source>Display name cannot be more than 120 characters long.</source>
+        <target>Το όνομα εμφάνισης δε μπορεί να είναι πάνω από 120 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e8c50a2e0b9a6eec54a983a3284839d81739f18c">
+        <source>Privacy is required.</source>
+        <target>Απαιτείται ρύθμιση ιδιωτικότητας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3499ad3f4da49c7373332c5052d543929b94dc9c">
+        <source>The channel is required when the playlist is public.</source>
+        <target>Το κανάλι απαιτείται όταν η λίστα αναπαραγωγής είναι δημόσια.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1">
+        <source>Video name is required.</source>
+        <target>Το όνομα βίντεο απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c">
+        <source>Video name must be at least 3 characters long.</source>
+        <target>Το όνομα βίντεο πρέπει να είναι τουλάχιστον 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695">
+        <source>Video name cannot be more than 120 characters long.</source>
+        <target>Το όνομα βίντεο δε μπορεί να είναι μεγαλύτερο από 120 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
+        <source>Video privacy is required.</source>
+        <target>Η ρύθμιση ιδιωτικότητας βίντεο απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16">
+        <source>Video channel is required.</source>
+        <target>Το κανάλι βίντεο απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af5e2d5f3ac817c735fb7ff9ca16322789f66fef">
+        <source>Video description must be at least 3 characters long.</source>
+        <target>Η περιγραφή βίντεο πρέπει να είναι τουλάχιστον 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ce28a9403c2d7e5da2e59af27118f8b6d109e906">
+        <source>Video description cannot be more than 10000 characters long.</source>
+        <target>Η περιγραφή βίντεο δε μπορεί να είναι μεγαλύτερη από 10.000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1cffdc2e156716cd9880201d65ba457d11464f8">
+        <source>A tag should be more than 2 characters long.</source>
+        <target>Μια ετικέτα πρέπει να είναι τουλάχιστον 2 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea">
+        <source>A tag should be less than 30 characters long.</source>
+        <target>Μια ετικέτα δε μπορεί να είναι πάνω από 20 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
+        <source>Video support must be at least 3 characters long.</source>
+        <target>Το κείμενο για την υποστήριξη στο βίντεο πρέπει να είναι τουλάχιστο 3 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad">
+        <source>Video support cannot be more than 1000 characters long.</source>
+        <target>Το κείμενο για την υποστήριξη στο βίντεο δε μπορεί να είναι πάνω από 1.000 χαρακτήρες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
+        <source>A date is required to schedule video update.</source>
+        <target>Για την προγραμματισμένη ενημέρωση βίντεο η ημερομηνία απαιτείται.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3b7ed22d0730d03b38c254332829d855ee7256c4">
+        <source>This file is too large.</source>
+        <target>Το αρχείο είναι πολύ μεγάλο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f5f2093f14679fed82ff76a0cd2a28145a83ca9">
+        <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</source>
+        <target>Το PeerTube δεν δέχεται αυτόν τον τύπο αρχείου. Αποδεκτές επεκτάσεις είναι <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4">
+        <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
+        <target>Όλες οι πληροφορίες που δεν αποθηκευτηκαν θα χαθούν. Θέλετε σίγουρα να φύγετε από τη σελίδα;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf">
+        <source>Sunday</source>
+        <target>Κυριακή</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596">
+        <source>Monday</source>
+        <target>Δευτέρα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee">
+        <source>Tuesday</source>
+        <target>Τρίτη</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9">
+        <source>Wednesday</source>
+        <target>Τετάρτη</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b">
+        <source>Thursday</source>
+        <target>Πέμπτη</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215">
+        <source>Friday</source>
+        <target>Παρασκευή</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e">
+        <source>Saturday</source>
+        <target>Σάββατο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6549890cd0d6b59fb0e1aa383b00483a68a55eef">
+        <source>Sun</source>
+        <target>Κυρ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3382aa5d7f520e197fb59a4995fe1beffca2d0ff">
+        <source>Mon</source>
+        <target>Δευ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f883ec926274974df0fc46c037cbffd6a863ebc9">
+        <source>Tue</source>
+        <target>Τρι</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="242b4f4b5651e24f9a9007ef153a57981e4b989d">
+        <source>Wed</source>
+        <target>Τετ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5a2c39d56b8f00a6a4670a63b53caacbda953be6">
+        <source>Thu</source>
+        <target>Πεμ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4cdf23d523a0e52e0dec9cd650ffd9bd6952792c">
+        <source>Fri</source>
+        <target>Παρ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1283d165a942d7f4c469ba34f99dbb9e927d0261">
+        <source>Sat</source>
+        <target>Σαβ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fba8448ff13105c57665a9a6ffcfe9615d855dd">
+        <source>Su</source>
+        <target>Κυρ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="388144af7ac7651d2615b9be0e84f43ae71d9fb3">
+        <source>Mo</source>
+        <target>Δε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d96313e42b5f0751ce2676a31d309b4d322ab462">
+        <source>Tu</source>
+        <target>Τρ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="06cc3d39f78c0615b707cef39cd4875599611fef">
+        <source>We</source>
+        <target>Τε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="790894436cca9d675d59be9a8aafd58acccde2cd">
+        <source>Th</source>
+        <target>Πε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="42dfe37169f8471367c31489155229bbe1747ea5">
+        <source>Fr</source>
+        <target>Πα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1b64ea3e04ceeb512e8974eb0019dee4f211c7a0">
+        <source>Sa</source>
+        <target>Σα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7815f1c4a6d3cc157a16407a48865023cc35ec0">
+        <source>January</source>
+        <target>Ιανουάριος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0393a96b58df82af39a2ec83deec624749e42036">
+        <source>February</source>
+        <target>Φεβρουάριος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea41ee3743ec5bdbbf863ab793bbdd6e6d9af96e">
+        <source>March</source>
+        <target>Μάρτιος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b87ee784d9e93b5557aca9bdc9464dbd4328920a">
+        <source>April</source>
+        <target>Απρίλιος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="862da1034ac2707cc44123ed963b2f42109b6b3e">
+        <source>May</source>
+        <target>Μάιος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f234249d4c3c39e27c0f05d4a6b73a7959caeb2">
+        <source>June</source>
+        <target>Ιούνιος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="11447f95e83c8de675ab6c492150f88e4d9bd15e">
+        <source>July</source>
+        <target>Ιούλιος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddd9a3d59a8db4e822e54e9473c05b571aca9829">
+        <source>August</source>
+        <target>Αύγουστος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e21dc41f9b3fdaf35ab6b2d9e2e5e8a926fb1938">
+        <source>September</source>
+        <target>Σεπτέμβριος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71f49c502d13e22079a958a5532afa28dbe98b3b">
+        <source>October</source>
+        <target>Οκτώβριος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64b5ce921faa5e3d277d6d528ddcfc8c2bfe9f52">
+        <source>November</source>
+        <target>Νοέμβριος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2006e2aabb31714ebc684dc382539649f690ed5c">
+        <source>December</source>
+        <target>Δεκέμβριος</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8270e687cfb5624b3f6fbb7991a2e916c96464b7">
+        <source>Jan</source>
+        <target>Ιαν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60">
+        <source>Feb</source>
+        <target>Φεβ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7">
+        <source>Mar</source>
+        <target>Μαρ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="964a5f032bc846d32806a4838580a4f81cf14463">
+        <source>Apr</source>
+        <target>Απρ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8f7274f606f71d9290ed01c5683092d701632d7f">
+        <source>Jun</source>
+        <target>Ιουν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c3d8318d6d8d9920ae0a80350616732c33a3211">
+        <source>Jul</source>
+        <target>Ιουλ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212">
+        <source>Aug</source>
+        <target>Αυγ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f739d03be1c936c58978739c317d91566348204">
+        <source>Sep</source>
+        <target>Σεπ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6607cacb987a588530a13de7018d959240d19153">
+        <source>Oct</source>
+        <target>Οκτ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e597400ded12a366855615e18fcc8f9ac05b72e0">
+        <source>Nov</source>
+        <target>Νοε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e">
+        <source>Dec</source>
+        <target>Δεκ</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46">
+        <source>Clear</source>
+        <target>Εκκαθάριση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5">
+        <source>yy-mm-dd </source>
+        <target>εε-μμ-ηη</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c09a68321f26f058b547021e6e2c167ae22c6e24">
+        <source>Hidden</source>
+        <target>Απόκρυψη</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="75cc14815746a90d424157080fc7efd3e2631654">
+        <source>Blurred with confirmation request</source>
+        <target>Θόλωμα με επιβεβαίωση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e89bd0d46ef7d90b5f98b24f83afc312c6ef105">
+        <source>Displayed</source>
+        <target>Εμφάνιση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
+        <source>User registration allowed</source>
+        <target>Επιτρέπεται η εγγραφή μελών</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="55e17373c208e821dbb43ed4f6da7d0c5b800cab">
+        <source>Video uploads require manual validation by moderators</source>
+        <target>Απαιτείται επιβεβαίωση από τους επόπτες για τα βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a0fdb831d4557925dbaa4f8aff7e5035f7506411">
+        <source>Transcode your videos in multiple resolutions</source>
+        <target>Επανακωδικοποίηση των βίντεό σας σε πολλαπλές αναλύσεις</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1">
+        <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
+        <target>Εισαγωγή μέσω HTTP (από YouTube, Vimeo ή απευθείας URL...)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a">
+        <source>Torrent import</source>
+        <target>Εισαγωγή torrent</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5">
+        <source>P2P enabled</source>
+        <target>Το P2P είναι ενεργοποιημένο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
+        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
+        <target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24">
+        <source>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</source>
+        <target>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> βίντεο Full HD</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> βίντεο HD</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> βίντεο μεσαίας ποιότητας</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="457f161d3ca706b8de263b0cd58e493d54e7d4c5">
+        <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> compatible that supports:</source>
+        <target>Συμβατό με <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> που υποστηρίζει:</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980">
+        <source>Emphasis</source>
+        <target>Έμφαση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dc60677d5a906e69f38a5cf9da7f2eb03931bea0">
+        <source>Links</source>
+        <target>Σύνδεσμοι</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="80220239e07f36ea8d5f10118dc52ce4b13bc15a">
+        <source>New lines</source>
+        <target>Αλλαγή γραμμών</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b15e7bec5c7833d2d9634946ccbed68967b1bee1">
+        <source>Lists</source>
+        <target>Λίστες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b73f7f5060fb22a1e9ec462b1bb02493fa3ab866">
+        <source>Images</source>
+        <target>Εικόνες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f9b4f2d8146c789cd40314f640ec4e88efbaf681">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users banned.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> αποκλεισμένοι χρήστες.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
+        <target>Ο χρήστης <x id="INTERPOLATION" equiv-text="{{username}}"/> αποκλείστηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
+        <target>Θέλετε όντως να άρετε τον αποκλεισμό για <x id="INTERPOLATION" equiv-text="{{username}}"/>;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
+        <target>Ο αποκλεισμός του <x id="INTERPOLATION" equiv-text="{{username}}"/> έχει αρθεί.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
+        <source>If you remove this user, you will not be able to create another with the same username!</source>
+        <target>Αν διαγράψετε τον χρήστη, δεν θα μπορέσετε να φτιάξετε άλλον με το ίδιο όνομα χρήστη!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target>Ο χρήστης <x id="INTERPOLATION" equiv-text="{{username}}"/> διαγράφηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="534202c90c6dcadd2989fc72c5030d5483e26096">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> email set as verified</source>
+        <target>Το email για τον χρήστη <x id="INTERPOLATION" equiv-text="{{username}}"/> ορίστηκε ως επιβεβαιωμένο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="33a6319f765848a22a155cef9f1d8e645202e249">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source>
+        <target>Ο λογαριασμός <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> μπήκε σε σίγαση.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="086eda792aeb1b0d131d633b50fdd1792f5f24c6">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</source>
+        <target>Ο κόμβος <x id="INTERPOLATION" equiv-text="{{host}}"/> μπήκε σε σίγαση.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb72d6d1219e89d182e9fd09d853d83baf8d6499">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</source>
+        <target>Ο λογαριασμός <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> μπήκε σε σίγαση στον κόμβο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8686834bc4afe42c1991c6c18f0bce174a0e17a6">
+        <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source>
+        <target>Αφαιρέθηκε η σίγαση στον κόμβο για τον λογαριασμό <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="35d3509161861a610b0895bf084c781e56ba2830">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
+        <target>Ο κόμβος <x id="INTERPOLATION" equiv-text="{{host}}"/> μπήκε σε σίγαση σε αυτόν τον κόμβο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="978aeec5613fa97e8a5336d3599cebb23ee5a90f">
+        <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</source>
+        <target>Αφαιρέθηκε η σίγαση σε αυτόν τον κόμβο για τον κόμβο <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a09bf8724e7659fbb5ec33647529cdef7614bdc">
+        <source>Mute this account</source>
+        <target>Σίγαση λογαριασμού</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d666ca3261aef72b2ddcd649d7b32af488f59952">
+        <source>Unmute this account</source>
+        <target>Διακοπή σίγασης λογαριασμού</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e17218983b1de76e5a920b04e1c2ecbdb6e3e06d">
+        <source>Mute the instance</source>
+        <target>Σίγαση του κόμβου</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a23514d8aca2f8633622dda0e86b399dc576a2b9">
+        <source>Unmute the instance</source>
+        <target>Διακοπή σίγασης του κόμβου</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e4107055b44eee44b6954c41120de1cb4d46432">
+        <source>Mute this account by your instance</source>
+        <target>Σίγαση αυτού του λογαρισμού στον κόμβο σας</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a51c59cb5ecb7004a6a8ddd2855b5c52266ad957">
+        <source>Unmute this account by your instance</source>
+        <target>Διακοπή σίγασης του λογαριασμού στον κόμβο σας</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="588073e831cec240d6bb0db0b133e45dab69f178">
+        <source>Mute the instance by your instance</source>
+        <target>Σίγαση αυτού του κόμβου στον δικό σας κόμβο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="676221cdabd4805901343976988c028dbf71b20a">
+        <source>Unmute the instance by your instance</source>
+        <target>Διακοπή σίγασης του κόμβου στον κόμβο σας</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0c0f5bbcd2386018ec057877f9d3c5c2c9880cac">
+        <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
+        <target>Το αίτημα δεδομένων είναι πολύ μεγάλο για τον σέρβερ. Επικοινωνήστε με την διαχείριση αν θέλετε να αυξήσετε το όριο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="58546fd4d14b2d9635ce3d28c216ac68587bb25b">
+        <source>Too many attempts, please try again after <x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/> minutes.</source>
+        <target>Πάρα πολλές προσπάθειες, δοκιμάστε ξανά μετά από <x id="INTERPOLATION" equiv-text="{{minutesLeft}}"/> λεπτά.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ab783a52f2df9ff7a20139cab0da6d0764f3cc5d">
+        <source>Too many attempts, please try again later.</source>
+        <target>Πάρα πολλές προσπάθειες, δοκιμάστε ξανά αργότερα.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f286a597f0053c3578a52e044769c204ee516fc">
+        <source>Server error. Please retry later.</source>
+        <target>Σφάλμα κόμβου. Δοκιμάστε ξανά αργότερα.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="58639b3f0be657475928fb49c4a7cbd16aa44ded">
+        <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
+        <target>Είστε συνδρομητής στο <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
+        <source>Subscribed</source>
+        <target>Είστε συνδρομητής</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26">
+        <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
+        <target>Διακόψατε τη συνδρομή στο <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="294395337b767af84f952ac28d58d54a13a11471">
+        <source>Unsubscribed</source>
+        <target>Η συνδρομή διακόπηκε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf">
+        <source>Moderator</source>
+        <target>Συντονιστής</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5034e84fab7cd3d662d2483753e33caea0774b78">
+        <source>Video removed from <x id="INTERPOLATION" equiv-text="{{name}}"/></source>
+        <target>Το βίντεο αφαιρέθηκε από <x id="INTERPOLATION" equiv-text="{{name}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5cbf881bedb548fda270e2b745c8cbe332a5e4de">
+        <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/> at timestamps <x id="INTERPOLATION_1" equiv-text="{{t}}"/></source>
+        <target>Το βίντεο προστέθηκε στο <x id="INTERPOLATION" equiv-text="{{n}}"/> στη χρονοσήμανση <x id="INTERPOLATION_1" equiv-text="{{t}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f69a06eee4963406efdbff8c3d9765832c30482f">
+        <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/></source>
+        <target>Το βίντεο προστέθηκε στο <x id="INTERPOLATION" equiv-text="{{n}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="986f17319b16d01d0047e2e2cd728bf4dbac4fe8">
+        <source>Timestamps updated</source>
+        <target>Η χρονοσήμανση ενημερώθηκε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28d23ed47149ffd34c2ebd58bfeb4601649c784f">
+        <source>Starts at </source>
+        <target>Αρχή στο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e40e4317900075588705bc4084fda4b2ddb3372">
+        <source>Stops at </source>
+        <target>Τέλος στο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1b8201c470a1635cc9beab9adb90eabd19fc9691">
+        <source> and stops at </source>
+        <target>και τέλος στο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73c33d602da89a33d353d686f36c2fff39f0aee3">
+        <source>Video blacklisted.</source>
+        <target>Το βίντεο μπήκε σε αναθεώρηση.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
+        <source>Copied</source>
+        <target>Αντιγράφτηκε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
+        <source>Video reported.</source>
+        <target>Υποβλήθηκε αναφορά για το βίντεο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1abd89c9280323209e939fa9c30f6e5cda20c95">
+        <source>Do you really want to delete this video?</source>
+        <target>Θέλετε όντως να διαγράψετε το βίντεο;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f829293d953936450158c2dd7b483d6b960ed2b">
+        <source>Save to playlist</source>
+        <target>Αποθήκευση σε λίστα</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
+        <source>Blacklist</source>
+        <target>Αναθεώρηση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
+        <source>Report</source>
+        <target>Αναφορά</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3">
+        <source>Published</source>
+        <target>Δημοσιευμένο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8e6d54c4f760d9e90518eef5334211c48c0b71e2">
+        <source>Publication scheduled on </source>
+        <target>Προγραμματισμένη δημοσίευση για</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a7e91ebe1cf184db5f2bfecf9c16ff81c9e2c02">
+        <source>Waiting transcoding</source>
+        <target>Αναμονή επανακωδικοποίησης</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a">
+        <source>To transcode</source>
+        <target>Προς επανακωδικοποίηση</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392">
+        <source>To import</source>
+        <target>Προς εισαγωγή</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d4195053fd38eacf6dee1fc507296928978cc8fb">
+        <source>Only I can see this video</source>
+        <target>Μόνο εγώ μπορώ να το δω</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="17b62592e5fcabb5235bb25c4883a827ab37cf70">
+        <source>Only people with the private link can see this video</source>
+        <target>Μόνο χρήστες με τον σύνδεσμο μπορούν να το δουν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="15be15cbdc6e960f57e801f457c19165ab39632b">
+        <source>Anyone can see this video</source>
+        <target>Όλοι μπορούν να το δουν</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
+        <source>Video to import updated.</source>
+        <target>Ενημερώθηκε το βίντεο προς εισαγωγή.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
+        <source>Your video was uploaded to your account and is private.</source>
+        <target>Το βίντεο ανέβηκε στον λογαριασμό σας και είναι ιδιωτικό.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="24840228f2826b66252cfcaab9820b1c7e0da264">
+        <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
+        <target>Όμως οι σχετικές πληροφορίες (ετικέτες, περιγραφή...) θα χαθούν, σίγουρα θέλετε να φύγετε από τη σελίδα;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5af84926d631326e548573ebf0f6dff07845aeb4">
+        <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
+        <target>Το βίντεο δεν έχει ανέβει ακόμα, θέλετε σίγουρα να φύγετε από τη σελίδα;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bef4ec92fa80e7b7ac03f8ad2b49d2a126f0cc71">
+        <source>Upload <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></source>
+        <target>Ανεβάστε <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
+        <source>Upload cancelled</source>
+        <target>Το ανέβασμα ακυρώθηκε</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
+        <source>Video published.</source>
+        <target>Το βίνεο δημοσιεύτηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a6019e856f511dbe1fe658790c71c594b26930ee">
+        <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</source>
+        <target>Με αυτό το βίντεο ξεπερνάτε το όριο (μέγεθος: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, σε χρήση: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, όριο: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c980896ac8e08e9751545db1b7ef0e93fb8a52cd">
+        <source>Your daily video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</source>
+        <target>Με αυτό το βίντεο ξεπερνάτε το ημερήσιο όριο (μέγεθος: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, σε χρήση: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, όριο: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bfdf9de4bd9140f77feb6a5fe2b51f3f0565eaa4">
+        <source>You have unsaved changes! If you leave, your changes will be lost.</source>
+        <target>Έχετε αλλαγές που δεν έχουν αποθηκευτεί! Αν φύγετε, θα χαθούν.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="757e9c083c8f3d578bd74f055cc337c72417e187">
+        <source>Video updated.</source>
+        <target>Το βίντεο ενημερώθηκε.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aeb61b334cac080733c3e03766165a346bbf42fd">
+        <source> <x id="INTERPOLATION" equiv-text="{{totalReplies}}"/> replies will be deleted too.</source>
+        <target> <x id="INTERPOLATION" equiv-text="{{totalReplies}}"/> απαντήσεις θα διαγραφούν επίσης.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f18ffad7896788364e69a9ac6a376c84f54c58f7">
+        <source> The deletion will be sent to remote instances so they remove the comment too.</source>
+        <target>Η διαγραφή θα σταλεί και στους άλλους κόμβους ώστε να διαγραφεί κι εκεί το σχόλιο.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8d850ce30ecdacf4755d85cce1fe44cb0d1fc38d">
+        <source> It is a remote comment, so the deletion will only be effective on your instance.</source>
+        <target>Το σχόλιο έχει γίνει από άλλο κόμβο, επομένως η διαγραφή ισχύει μόνο για τον δικό σας.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e">
+        <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source>
+        <target><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> «μου αρέσει» / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> «δε μου αρέσει»</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ed013c2c29216501c688e9cb5f3a1c9fd9147b71">
+        <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
+        <target>Το βίντεο έχει σκληρό περιεχόμενο ή μόνο για ενήλικες. Σίγουρα θέλετε να το δείτε;</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ba3d522e4146eefcbd5c222247c1e2423d27cd8">
+        <source>Mature or explicit content</source>
+        <target>Σκληρό περιεχόμενο ή για ενήλικες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0e65067fdcc9d8725a41896cb1e229d1415a45f6">
+        <source>Like the video</source>
+        <target>Σας αρέσει το βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1a999e06e1aca0a70cd7d0e3e5c2c63d0e1885c8">
+        <source>Dislike the video</source>
+        <target>Δε σας αρέσει το βίντεο</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054">
+        <source>Trending for the last 24 hours</source>
+        <target>Τάσεις των τελευταίων 24 ωρών</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6e9cb0b3b38312870471954abec8690170429a4e">
+        <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
+        <target>Τα βίντεο στις τάσεις είναι αυτά με τις περισσότερες προβολές τις τελευταίες 24 ώρες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df">
+        <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
+        <target>Τάσεις των τελευταίων <x id="INTERPOLATION" equiv-text="{{days}}"/> ημερών</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509">
+        <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
+        <target>Τα βίντεο στις τάσεις είναι αυτά με τις περισσότερες προβολές τις τελευταίες <x id="INTERPOLATION" equiv-text="{{days}}"/> ημέρες</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1b157e15c434469d91e56d027b78bf69c9983165">
+        <source>Videos from your subscriptions</source>
+        <target>Βίντεο από τις συνδρομές σας</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

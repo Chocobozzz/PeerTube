@@ -20,6 +20,7 @@ export const I18N_LOCALES = {
   'pt-PT': 'Português (Portugal)',
   'sv-SE': 'svenska',
   'pl-PL': 'Polski',
+  'fi-FI': 'suomi',
   'ru-RU': 'русский',
   'zh-Hans-CN': '简体中文（中国）'
 }
@@ -33,6 +34,7 @@ const I18N_LOCALE_ALIAS = {
   'de': 'de-DE',
   'es': 'es-ES',
   'pt': 'pt-PT',
+  'fi': 'fi-FI',
   'sv': 'sv-SE',
   'pl': 'pl-PL',
   'ru': 'ru-RU',
