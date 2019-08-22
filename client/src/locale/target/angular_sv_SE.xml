@@ -512,7 +512,7 @@
       </trans-unit>
       <trans-unit id="bc155f9fc3be3f32083f19b2c77d4ad3b696d9b9">
         <source>Display name</source>
-        <target>Visa namn</target>
+        <target>Visningsnamn</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -3654,14 +3654,14 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808">
         <source>instance default</source>
-        <target>instansen standard</target>
+        <target>Instansens standard</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d">
         <source>peertube default</source>
-        <target>peertubes standard</target>
+        <target>PeerTubes standard</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -5904,21 +5904,21 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="02e0243b60007368f87dc01e083f232dd025096d">
         <source>Last 7 days</source>
-        <target>Senaste 7 dagarna</target>
+        <target>Senaste veckan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7668986b9f753fcd72ad4a00b1a0c4861d1f7fb8">
         <source>Last 30 days</source>
-        <target>Senaste 30 dagarna</target>
+        <target>Senaste månaden</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a77b663fd9b94c38bc9c6493a51b5f3acacb9bca">
         <source>Last 365 days</source>
-        <target>Senaste 365 dagarna</target>
+        <target>Senaste året</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

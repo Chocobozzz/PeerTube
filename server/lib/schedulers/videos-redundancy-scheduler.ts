@@ -200,7 +200,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
     const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, video.getVideoFilename(file))
-    await move(tmpPath, destPath)
+    await move(tmpPath, destPath, { overwrite: true })
 
     const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({
       expiresOn: this.buildNewExpiration(redundancy.minLifetime),

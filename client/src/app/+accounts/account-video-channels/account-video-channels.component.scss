@@ -9,7 +9,6 @@
 .section {
   @include miniature-rows;
 
-  overflow: visible; // For the subscribe dropdown
   padding-top: 0 !important;
 
   .section-title {

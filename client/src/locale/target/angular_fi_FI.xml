@@ -227,6 +227,262 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ade81bccd385c84f16f0e3862c1da3106bc3914b">
+        <source>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>new video<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> julkaisi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>uuden videon<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba93de990947141c5582ce8ccc3c6f74f7fd35a6">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Videosi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> esto on poistettu
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7923e220607db3b4039adc2ebf114825f6cc7f0">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blacklisted
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Videosi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on estetty
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2415980d62a72f501daea92a77d1d7c129858fac">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been created on video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Uusi valitus<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on lähetetty videosta <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3442afd9696d6abcd9210b2cb3cdfb969667ca01">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Vasta lisätty video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>automaattisesti estetty<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">39</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715">
+        <source>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> kommentoi videoosi <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b74d4c335377af0c83a08987d0d5b28ce11b091b">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been published
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Videosi <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on julkaistu
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5f838030f3fc0b2e5f14945c255ba3249371085">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Videon<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> tuonti onnistui
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9ac080afb0f7eab1d8a7ea61795ee9b84bd97082">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Videosi<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> tuonti epäonnistui
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cbdd98aa82d989bf2cc839b04dda4109126da50d">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/> registered<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> on your instance
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Käyttäjä <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/> rekisteröityi<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> sinun instanssiin
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2657af71bacee515160dcbdb1481cf1fbf7398d2">
+        <source>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is following
+
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+          <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your account<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> seuraa
+
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>kanavaasi <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+          <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>käyttäjääsi<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">87</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ebdf8d0e51333447680d6ac8b6a3166066a852d1">
+        <source>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mainitsi sinut videossa <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e3f47a553df834db218dd456c462c29f14ece449">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.host }}"/>)
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Instanssillasi on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>uusi seuraaja<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.host }}"/>)
+          ,
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> joka odottaa hyväksyntää<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">106</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566">
         <source>Save to</source>
         <target>Tallenna kohteeseen</target>
@@ -315,6 +571,19 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="827b1376aa35c7a7de90f7724d6a51ccfa20c908">
+        <source>
+      Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/>.
+      <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> It will be forwarded to origin instance <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/> too.<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+    </source>
+        <target>
+      Valituksesi lähetetään instanssin <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/> valvojille.
+      <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> Se ohjataan myös alkuperäiseen <x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/> instanssiin.<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
         <source>Reason...</source>
         <target>Syy...</target>
@@ -347,6 +616,13 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9849bf6a9e45a9a91d13a419afbb5176f9b2367d">
+        <source>Unfederate the video (ask for its deletion from the remote instances)</source>
+        <target>Poista video federaatiosta (pyydä videon poistoa muista instansseista)</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
         <source>Unlisted</source>
         <target>Piilotettu</target>
@@ -359,6 +635,13 @@
         <target>Yksityinen</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6aec8cb024acc333218d72f279caa8ea623bb628">
+        <source><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> näyttökertaa</target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d">
@@ -379,6 +662,31 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
+        <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</source>
+        <target>{VAR_PLURAL, plural, =0 {Ei videoita} =1 {Yksi video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videota} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582">
+        <source>
+      <x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/>
+    </source>
+        <target>
+      <x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/>
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4">
+        <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
+        <target>Päivitettiin <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2edccfda908b57c073dc0811eaa58818de2be2dc">
         <source>Edit starts/stops at</source>
         <target>Muokkaus alkaa/loppuu kohdassa</target>
@@ -391,6 +699,13 @@
         <target>Tallenna</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b9dee3108a18796bd69c6be316c8fb985b58fb8e">
+        <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
+        <target>Poista kanavalta <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">69</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -446,7 +761,7 @@
   </source>
         <target>
     <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Tilaa
+      Tilaa kanava
     <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
     <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
       <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
@@ -536,6 +851,13 @@
           <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2350869d835dfca2643c32e0ef1f5e35dc64f64b">
+        <source>Default NSFW/sensitive videos policy (can be redefined by the users)</source>
+        <target>Aikuisille tarkoitetun sisällön oletussäätö (käyttäjä pystyy mukauttaan)</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>Videokiintiö</target>
@@ -591,6 +913,13 @@
         <target><x id="INTERPOLATION" equiv-text="{{ menuEntry.label }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b4f8ab29acafa8172b27571fd682d482c1ff7798">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</source>
+        <target>(tiedostopäätteet: <x id="INTERPOLATION" equiv-text="{{ allowedExtensionsMessage }}"/>, suurin sallittu koko: <x id="INTERPOLATION_1" equiv-text="{{ maxVideoImageSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
@@ -878,7 +1207,7 @@
       </trans-unit>
       <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db">
         <source>Discover</source>
-        <target>Löydä videoita</target>
+        <target>Löydöt</target>
         <context-group name="null">
           <context context-type="linenumber">66</context>
         </context-group>
@@ -892,14 +1221,14 @@
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
         <source>Recently added</source>
-        <target>Viimeksi lisätyt</target>
+        <target>Vasta lisätyt</target>
         <context-group name="null">
           <context context-type="linenumber">76</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
         <source>Local</source>
-        <target>Paikallinen</target>
+        <target>Paikalliset</target>
         <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
@@ -962,7 +1291,7 @@
       </trans-unit>
       <trans-unit id="8aa58cf00d949c509df91c621ab38131df0a7599">
         <source>Search...</source>
-        <target>Hae...</target>
+        <target>Haku</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -1095,7 +1424,7 @@
       </trans-unit>
       <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8">
         <source>Select the caption file</source>
-        <target>Valitse kuvatekstitiedosto</target>
+        <target>Valitse tekstitys</target>
         <context-group name="null">
           <context context-type="linenumber">24</context>
         </context-group>
@@ -1104,7 +1433,9 @@
         <source>
         This will replace an existing caption!
       </source>
-        <target>Tämä korvaa nykyisen kuvatekstitiedoston!</target>
+        <target>
+        Tämä korvaa nykyisen tekstityksen!
+      </target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -1122,7 +1453,7 @@
       </trans-unit>
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c">
         <source>Add this caption</source>
-        <target>Lisää kyseinen kuvatekstitiedosto</target>
+        <target>Lisää kyseinen tekstitys</target>
         <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
@@ -1139,6 +1470,13 @@
         <target>Tagit</target>
         <context-group name="null">
           <context context-type="linenumber">191</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="457b1cff4d8d7fad0c8742f69c413ecf5e443851">
+        <source>Tags could be used to suggest relevant recommendations.&lt;/br&gt;Press Enter to add a new tag.</source>
+        <target>Tagit auttavat löytämään aiheita käsitteleviä videoita.&lt;/br&gt;Paina välilyöntiä lisääksesi uuden tagin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf">
@@ -1162,6 +1500,13 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
+        <source>Video descriptions are truncated by default and require manual action to expand them.</source>
+        <target>Videon kuvaukset katkaistaan oletuksena ja vaatii sen avaamista katsojalta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>Kanava</target>
@@ -1171,9 +1516,30 @@
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
         <source>Privacy</source>
-        <target>Yksityisyys</target>
+        <target>Näkyvyys</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
+        <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
+        <target>Ajoita julkaisu (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">105</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
+        <source>This video contains mature or explicit content</source>
+        <target>Tämä video sisältää aikuisille tarkoitettua sisältöä</target>
+        <context-group name="null">
+          <context context-type="linenumber">119</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
+        <source>Wait transcoding before publishing the video</source>
+        <target>Odota transkoodausta ennen videon julkaisemista</target>
+        <context-group name="null">
+          <context context-type="linenumber">126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1185,7 +1551,7 @@
       </trans-unit>
       <trans-unit id="92bcfd1d237a2bfe48dc9f46d074ed26abc8df22">
         <source>Add another caption</source>
-        <target>Lisää toinen kuvatekstitiedosto</target>
+        <target>Lisää toinen tekstitys</target>
         <context-group name="null">
           <context context-type="linenumber">142</context>
         </context-group>
@@ -1204,6 +1570,13 @@
           <context context-type="linenumber">155</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
+        <source>Will be created on update</source>
+        <target>Luodaan päivityksen yhteydessä</target>
+        <context-group name="null">
+          <context context-type="linenumber">163</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>Peruuta luonti</target>
@@ -1211,11 +1584,29 @@
           <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393">
+        <source>Will be deleted on update</source>
+        <target>Poistetaan päivityksen yhteydessä</target>
+        <context-group name="null">
+          <context context-type="linenumber">171</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>Peruuta poisto</target>
         <context-group name="null">
           <context context-type="linenumber">173</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
+        <source>
+            No captions for now.
+          </source>
+        <target>
+            Ei kuvatekstejä tällä hetkellä.
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">178</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
@@ -1239,11 +1630,25 @@
           <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0">
+        <source>Short text to tell people how they can support you (membership platform...).</source>
+        <target>Lyhyt teksti kuinka katsojat voivat tukea sinua (lahjoitukset...).</target>
+        <context-group name="null">
+          <context context-type="linenumber">202</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
         <source>Original publication date</source>
         <target>Alkuperäinen julkaisupäivä</target>
         <context-group name="null">
           <context context-type="linenumber">215</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f6ce709bf09f9f24c161840ae983971a09fb12c">
+        <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
+        <target>Tämä on päivämäärä milloin sisältö on alkuperäisesti julkaistu (esim. elokuvan julkaisupäivämäärä)</target>
+        <context-group name="null">
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
@@ -1316,6 +1721,24 @@
           <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6357683911e256c566259880de43ea9403de00d3">
+        <source>
+  Congratulations! Your video is now available in your private library.
+</source>
+        <target>
+  Onnea! Videosi on näkyvillä yksityisessä kirjastossasi.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
+        <source>Publish will be available when upload is finished</source>
+        <target>Julkaisu on mahdollista kun videon lataus on valmis</target>
+        <context-group name="null">
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3">
         <source>Publish</source>
         <target>Julkaise</target>
@@ -1323,11 +1746,50 @@
           <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
+        <source>Select the torrent to import</source>
+        <target>Valitse tuotava torrent</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1b518e7f8c067fa55ea797bb1b35b4a2d31dccbc">
         <source>Or</source>
         <target>Tai</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
+        <source>Paste magnet URI</source>
+        <target>Anna magnet-URI</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
+        <source>
+  Congratulations, the video will be imported with BitTorrent! You can already add information about this video.
+</source>
+        <target>
+  Onnea, videosi tuodaan BitTorrentilla! Voit alkaa jo lisäämään tietoa tästä videosta.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
+        <source>Import <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Tuo <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9cfe8bd050660077212af5c02f5be24821f28d5">
+        <source>Upload <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></source>
+        <target>Lataa <x id="INTERPOLATION" equiv-text="{{ videoName }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3">
@@ -1351,12 +1813,23 @@
           <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2335f0bd17c63d835b50cfbbcea6c459cb1314c0">
+        <source>
+    Update <x id="INTERPOLATION" equiv-text="{{ video?.name }}"/>
+  </source>
+        <target>
+    Päivitä <x id="INTERPOLATION" equiv-text="{{ video?.name }}"/>
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
         <source>
         Other videos
     </source>
         <target>
-        Muut videot
+        Muita videoita
     </target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
@@ -1383,6 +1856,42 @@
           <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9adb13e2ba5160c8b0b100dc3f4cbe6051b5af9b">
+        <source>Auto select subtitle</source>
+        <target>Valitse tekstitykset automaattisesti</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="49c69dfce384acdb5469834182209808b107b4de">
+        <source>
+            More customization
+          </source>
+        <target>
+            Lisämuokkauksia
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3198e972f64f577ff88e6b6966e2b44e7c7d8c2d">
+        <source>
+            Less customization
+          </source>
+        <target>
+            Vähemmän muokkauksia
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0c2e76c41af25effefd456fb1e86143e0cfd1a4e">
+        <source>Autoplay</source>
+        <target>Automaattinen toisto</target>
+        <context-group name="null">
+          <context context-type="linenumber">127</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
         <source>Muted</source>
         <target>Mykistetty</target>
@@ -1395,6 +1904,27 @@
         <target>Jatkuva toisto</target>
         <context-group name="null">
           <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af3ab1a1035c222ccc88816baa236eb95cea7523">
+        <source>Display video title</source>
+        <target>Näytä videon otsikko</target>
+        <context-group name="null">
+          <context context-type="linenumber">150</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd0fb32d9b50b615bdce413ca955283df7ab0b74">
+        <source>Display privacy warning</source>
+        <target>Näytä varoitus näkyvyydestä</target>
+        <context-group name="null">
+          <context context-type="linenumber">157</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3e10c53d0372db827bf38571e56d166f1df963bf">
+        <source>Display player controls</source>
+        <target>Näytä soittimen ohjaimet</target>
+        <context-group name="null">
+          <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
@@ -1411,11 +1941,44 @@
           <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d2a8e8e4e5345201c07ba03a7fafe8b663230246">
+        <source>
+      The video is being transcoded, it may not work properly.
+    </source>
+        <target>
+      Videota transkoodataan, se ei saata toimia vielä kunnolla.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bd7055d3e38beff538463e75d508d1c75c683710">
         <source>This video is blacklisted.</source>
         <target>Tämä video on estetty.</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99686034581579c92a971f4eeebd2c072c812e2d">
+        <source>
+              Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
+            </source>
+        <target>
+              Julkaistu <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> näyttökertaa
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3da5360f8314aa95973aa52629c9f635363c5a36">
+        <source>
+                Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
+              </source>
+        <target>
+                Julkaistu <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> näyttökertaa
+              </target>
+        <context-group name="null">
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced">
@@ -1481,6 +2044,13 @@
           <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
+        <source>More information</source>
+        <target>Näytä lisää</target>
+        <context-group name="null">
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
         <target>Näytä lisätietoa</target>
@@ -1517,6 +2087,13 @@
           <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
+        <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
+        <target>Näytä <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> vastausta</target>
+        <context-group name="null">
+          <context context-type="linenumber">54</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
         <source>
     Comments are disabled.
@@ -1546,11 +2123,36 @@
           <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8b2bb53dfb5f059f2b68cc4ac00661a865909135">
+        <source>You are one step away from commenting</source>
+        <target>Olet yhden askeleen kaukana kommentoinnista</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7984a44ce86b961f4f18c9a58c638f5e8f07a225">
+        <source>
+      If you have an account on this instance, you can login:
+    </source>
+        <target>
+      Jos sinulla on käyttäjä tässä instanssissa, niin voit kirjautua:
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="afe0ad39fee662489f1033e53aea3e16a7e89228">
         <source>login to comment</source>
         <target>Kirjaudu sisään kommentoidaksesi</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
+        <source>Highlighted comment</source>
+        <target>Korostettu kommentti</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cb23d4d98007aa4d7123837f4c17a671848377d6">
@@ -1604,6 +2206,17 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4cad4cde2db81e1b14ebb84196af33c3d23f7322">
+        <source>
+      Plugins/Themes
+    </source>
+        <target>
+      Lisäosat/Teemat
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c">
         <source>
       System
@@ -1613,6 +2226,13 @@
     </target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5fccee488a9ea908c16d2ab9dbdaf264f1aac479">
+        <source>Manage follows</source>
+        <target>Hallitse tilauksia</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f995df052a1dfc675c2a21926420a707d9601936">
@@ -1636,6 +2256,13 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
+        <source>1 host (without "http://") per line</source>
+        <target>Yksi isäntä (ilman "http://") per rivi</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="456c6383d8e7cd15aadbcdc196d4ae7a70092437">
         <source>Add following</source>
         <target>Lisää seuraava</target>
@@ -1657,6 +2284,13 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="1d284acc5ec053b3cd87e4e9fcd7aaefec0c54fb">
+        <source>Follower handle</source>
+        <target>Seuraajan käsittelijä</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
         <source>State</source>
         <target>Tila</target>
@@ -1669,6 +2303,13 @@
         <target>Pisteet</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ff3173170e5b03536dd3b3e1afbae1f55356eb1b">
+        <source>Created <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Luotiin <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7823909fb1d8d313382f6f4bd842f1a7ef6f08d1">
@@ -1748,6 +2389,19 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
+        <source>
+      Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+    </source>
+        <target>
+      Transkoodaus on käytössä tällä palvelimella. Videokiintiö laskee vain <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>alkuperäisen<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> videon. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+      Enimmälteen tämä käyttäjä voi käyttää ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
         <source>Daily video quota</source>
         <target>Päivittäinen videokoon raja</target>
@@ -1755,11 +2409,39 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="021ae82dcaddcb3e8d1c5e9645952b7c7e772fe1">
+        <source>Bypass video auto blacklist</source>
+        <target>Ohita videoiden automaattinen estolista</target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="85614ebfd89fe16873dfcf593a05f18b7468daac">
         <source>Danger Zone</source>
         <target>Vaara-alue</target>
         <context-group name="null">
           <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a8f947ecc46bcad10d965360f500a14128bd7d">
+        <source>Send a link to reset the password by email to the user</source>
+        <target>Lähetä salasanan alustamista varten sähköposti käyttäjälle</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="950adafba22e3c85e889f2c38faebe98145bfb7f">
+        <source>Ask for new password</source>
+        <target>Kysy uutta salasanaa</target>
+        <context-group name="null">
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e6a48b1ed6160a99fba3a1607e27e9e93a4f4244">
+        <source>Manually set the user password</source>
+        <target>Aseta käyttäjän salasana manuaalisesti</target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca">
@@ -1783,6 +2465,27 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ea762ca1d74c96d8568ac68482778f52ca531cc4">
+        <source>Batch actions</source>
+        <target>Erätoiminnot</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08ea8692dc2a7050026df26fc39b22960bde9de5">
+        <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Käyttäjänimi <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="df84781eeb873f037ee688789bde034be9b49074">
+        <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Videokiintiö <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
         <source>(banned)</source>
         <target>(suljettu)</target>
@@ -1790,11 +2493,74 @@
           <context context-type="linenumber">65</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
+        <source>User's email must be verified to login</source>
+        <target>Käyttäjän sähköpostiosoite pitää olla vahvistettu, jotta hän voi kirjautua.</target>
+        <context-group name="null">
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b">
+        <source>User's email is verified / User can login without email verification</source>
+        <target>Käyttäjän sähköpostiosoite on vahvistettu / Käyttäjä voi kirjautua ilman sähköpostiosoitteen vahvistusta</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
         <source>Ban reason:</source>
         <target>Sulkemisen syy:</target>
         <context-group name="null">
           <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="90868353e7e6f5994109ee1011131cefa992116c">
+        <source>Moderation</source>
+        <target>Valvonta</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23a793ed0df2e10823dd469c5cea9b5c36be8f7e">
+        <source>Video abuses</source>
+        <target>Videovalitukset</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6053443ad364f974301570cfadfa86ee0b43f1a9">
+        <source><x id="INTERPOLATION" equiv-text="{{ autoBlacklistVideosEnabled ? 'Manually blacklisted videos' : 'Blacklisted videos' }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ autoBlacklistVideosEnabled ? 'Manuaalisesti estetyt videot' : 'Estetyt videot' }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6106bd52908f3f323ed1d6bdcd53230d55401d45">
+        <source>Auto-blacklisted videos</source>
+        <target>Automaattisesti estetyt videot</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
+        <source>Muted accounts</source>
+        <target>Mykistetyt käyttäjät</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd0611346af048015e0a1275091ef68ce98832d2">
+        <source>Muted servers</source>
+        <target>Mykistetyt palvelimet</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b14fd2fc28c5eecd05554d2bcbc3a938c599e2bf">
+        <source>Video name <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Videon nimi <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a">
@@ -1809,6 +2575,13 @@
         <target>Ei federoitu</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99">
+        <source>Date <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Päivämäärä <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
@@ -1832,6 +2605,24 @@
           <context context-type="linenumber">43</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f">
+        <source>Moderation comment</source>
+        <target>Valvonnan kommentti</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5731e5d5ac989bf08848b5a57a5586cf84d80964">
+        <source>
+        This comment can only be seen by you or the other moderators.
+      </source>
+        <target>
+        Vain sinä ja muut valvojat pystytte näkemään tämän kommentin.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0562e455c88234829f3c27a38f3039f027bfd5d2">
         <source>Update this comment</source>
         <target>Päivitä kommentti</target>
@@ -1853,11 +2644,32 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7e7ad19f1bcc2c33cdba4c1ad25e2b398ad453d9">
+        <source>State <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Tila <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c6ab75e099e131d7a4f94e1732e7436d8fc386c7">
+        <source>Go to the account</source>
+        <target>Mene käyttäjään</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e330cbadca2d8639aabf525d5fe7e5b62d324ee2">
         <source>Reason:</source>
         <target>Syy:</target>
         <context-group name="null">
           <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="018cbb63c7eda4b82d17dd9058cfaa0fd055c638">
+        <source>Moderation comment:</source>
+        <target>Valvonnan kommentti:</target>
+        <context-group name="null">
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="86f26b106c67be3c2e98b82766656e5d9da86dff">
@@ -1872,6 +2684,13 @@
         <target>Instanssi</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4">
+        <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Mykistetty kohdassa <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
@@ -1955,6 +2774,35 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005">
+        <source>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </source>
+        <target>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
+        <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
+        <target>{VAR_PLURAL, plural, =1 {result} other {results} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207">
+        <source>
+  No results.
+</source>
+        <target>
+  Ei tuloksia.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
         <source>System</source>
         <target>Järjestelmä</target>
@@ -1969,6 +2817,20 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="eb3d5aefff38a814b76da74371cbf02c0789a1ef">
+        <source>Logs</source>
+        <target>Logit</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dcfc990a822e11feb00eb91d9cf4d6ec0ed37dd0">
+        <source>Debug</source>
+        <target>Debug-tila</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a9f2501fcb2ff71f1376c2d2fbbbd49f200e6c8f">
         <source>Jobs list</source>
         <target>Työlista</target>
@@ -1981,6 +2843,20 @@
         <target>Tyyppi</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="74c8f69ec23f41a429e241126ab4d25b9d12348e">
+        <source>Processed on</source>
+        <target>Prosessoitiin</target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4fa08915c99629d38c9da8a08b1985a7f4e38e40">
+        <source>Finished on</source>
+        <target>Valmistui</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a">
@@ -2041,7 +2917,7 @@
       </trans-unit>
       <trans-unit id="1861c96217213992e02dcb77e15ea69e718c9883">
         <source>Videos Recently Added</source>
-        <target>Viimeksi lisätyt videot</target>
+        <target>Vasta lisätyt videot</target>
         <context-group name="null">
           <context context-type="linenumber">62</context>
         </context-group>
@@ -2079,6 +2955,27 @@
         <target>Näytä</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522">
+        <source>Theme</source>
+        <target>Teema</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bb52a3e9e31d9dec02faeadb44935de49e3a33d">
+        <source>Global theme</source>
+        <target>Oletusteema</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
+        <source>default</source>
+        <target>oletus</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
@@ -2158,6 +3055,13 @@
           <context context-type="linenumber">203</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fda0a09374e5d89c25522b7c49cf8f440cfb9db8">
+        <source>Other instances can follow your instance</source>
+        <target>Muut instanssit voivat seurata instanssiasi</target>
+        <context-group name="null">
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Ylläpitäjä</target>
@@ -2200,6 +3104,13 @@
           <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c0716c28b9d4c9e0b2fd6031334394214e5f9605">
+        <source>Instance whitelisted by Twitter</source>
+        <target>Twitteri on hyväksynyt instanssin</target>
+        <context-group name="null">
+          <context context-type="linenumber">269</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
         <source>Services</source>
         <target>Palvelut</target>
@@ -2221,9 +3132,16 @@
           <context context-type="linenumber">291</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
+        <source>If you disable transcoding, many videos from your users will not work!</source>
+        <target>Jos poistat transkoodauksen käytöstä, niin moni video käyttäjiltäsi lakkaa toimimasta!</target>
+        <context-group name="null">
+          <context context-type="linenumber">292</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f">
         <source>Allow additional extensions</source>
-        <target>Salli lisäosat</target>
+        <target>Salli muita tiedostopäätteitä</target>
         <context-group name="null">
           <context context-type="linenumber">301</context>
         </context-group>
@@ -2235,11 +3153,61 @@
           <context context-type="linenumber">302</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88cfa6e185dd938361d1d9c04314bbd3afb54fb6">
+        <source>Allow audio files upload</source>
+        <target>Salli äänitiedostojen lataus</target>
+        <context-group name="null">
+          <context context-type="linenumber">309</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
         <target>Transkoodaussäiteet</target>
         <context-group name="null">
           <context context-type="linenumber">315</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6221e8fc0bcfc87cbb03621bca82a6e4e188b75a">
+        <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> enabled</source>
+        <target>Resoluutio <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> asetettu päälle</target>
+        <context-group name="null">
+          <context context-type="linenumber">330</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e9fb2d7685ae280026fe6463731170b067e419d5">
+        <source>
+          Cache
+
+          <x id="START_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;my-help&gt;"/><x id="CLOSE_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;/my-help&gt;"/>
+        </source>
+        <target>
+          Välimuisti
+
+          <x id="START_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;my-help&gt;"/><x id="CLOSE_TAG_MY-HELP" ctype="x-my-help" equiv-text="&lt;/my-help&gt;"/>
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">338</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
+        <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
+        <target>Joitain tiedostoja ei federoija (esikatselut, tekstitykset). Haemme ne suoraan alkuperäisestä instanssista ja tallennamme ne.</target>
+        <context-group name="null">
+          <context context-type="linenumber">343</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
+        <source>Previews cache size</source>
+        <target>Esikatselee välimuistin tilaa</target>
+        <context-group name="null">
+          <context context-type="linenumber">349</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
+        <source>Video captions cache size</source>
+        <target>Videotekstityksen välimuistin koko</target>
+        <context-group name="null">
+          <context context-type="linenumber">358</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
@@ -2256,9 +3224,30 @@
           <context context-type="linenumber">372</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
+        <source>Advanced configuration</source>
+        <target>Lisäasetukset</target>
+        <context-group name="null">
+          <context context-type="linenumber">282</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8">
+        <source>Update configuration</source>
+        <target>Päivitä konfiguraatio</target>
+        <context-group name="null">
+          <context context-type="linenumber">418</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
+        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
+        <target>Näyttää siltä, että konfiguraatio on virheellinen. Hae potentiaalisia virheitä ereiltä välilehdiltä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">419</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
         <source>Video quota:</source>
-        <target>Videokoon raja:</target>
+        <target>Videokiintiö:</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -2275,6 +3264,13 @@
         <target>Videoasetukset</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="88a7dfa6fac89d61c28552598a23ba4ce9abe8ca">
+        <source>Interface</source>
+        <target>Käyttöliittymä</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
@@ -2312,11 +3308,39 @@
           <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129">
+        <source>Default policy on videos containing sensitive content</source>
+        <target>Oletussäädäntö videoista, jotka sisältävät aikuisille tarkoitettua sisältöä</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4557d5ba869e938c5154660cd7f3a8c25b26a02">
+        <source>Only display videos in the following languages</source>
+        <target>Näytä videot vain seuraavilla kielillä</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eea4d56bf13e50a79d4ae4368bb7e4cb14f9e280">
+        <source>In Recently added, Trending, Local and Search pages</source>
+        <target>Vasta lisättyjen-, paikallisten- ja hakusivuilla</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f871b41bfbdb193507cce2cd848c2d02bde77a03">
         <source>No results found</source>
         <target>Hakutuloksia ei löytynyt</target>
         <context-group name="null">
           <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d044c51156e295824813a866dba9545bdb59466b">
+        <source>Use WebTorrent to exchange parts of the video with others</source>
+        <target>Käytä WebTorrenttia jakaaksesi videon osia muille</target>
+        <context-group name="null">
+          <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fb17c44abac2d1ed2a54cdd28bae289dc0b9a1c2">
@@ -2331,6 +3355,28 @@
         <target>Päivitä tilini</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dbcc539bd3ca0b962b87ea26855ca9d5d3c5cdf1">
+        <source>
+  Your current email is <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</source>
+        <target>
+  Nykyinen sähköpostiosoitteesi on <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.email }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="03d1a9c026074c12ea3f2fb39a34bc6a18fedf05">
+        <source>
+  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> is awaiting email verification
+</source>
+        <target>
+  <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ user.pendingEmail }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> odottaa sähköpostin hyväksyntää
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d20a2fa4a3360caa8825e49a31b5fd3a442ac219">
@@ -2389,6 +3435,40 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="fbc450919a486e8ed311a7e91a41987d47d83804">
+        <source>Accept ownership</source>
+        <target>Hyväksy omistajuus</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4570c754149df06f31096510abfc925968c35562">
+        <source>Select the target channel</source>
+        <target>Valitse kohdekanava</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e98239d8a6be1100119ff4b5630c822b82786740">
+        <source>Initiator</source>
+        <target>Aloittaja</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b08d67fe4e192ea8352bebdc6aabbd1bb7abed02">
+        <source>
+        Created
+        <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
+      </source>
+        <target>
+        Luotiin
+        <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1">
         <source>Status</source>
         <target>Tila</target>
@@ -2401,6 +3481,13 @@
         <target>Toiminta</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4212e793d36e1aaa6ee1b09881677f783b5feff">
+        <source><x id="INTERPOLATION" equiv-text="{{ videoChangeOwnership.status }}"/></source>
+        <target><x id="INTERPOLATION" equiv-text="{{ videoChangeOwnership.status }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="16f3de2dba2a3461d7f7a36157d22e6898bb3244">
@@ -2438,6 +3525,29 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="74728de5289ea2ff3f553bc2b48f1811680b931a">
+        <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt;
+When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
+        <target>Lyhyt teksti kuinka katsojat voivat tukea kanavaasi (lahjoitukset...)&lt;br /&gt;&lt;br /&gt;
+Kun lataat videon tälle kanavalle, niin videon tukiteksti täytetään automaattisesti kyseisellä tekstillä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd">
+        <source>Overwrite support field of all videos of this channel</source>
+        <target>Ylikirjoita tukitekstit kaikille kanavan videoille</target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503">
+        <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> tilaajaa</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c4a959fc6349bd0793e1ad571d492052a07bdab5">
         <source>Change the avatar</source>
         <target>Vaihda avatari</target>
@@ -2445,11 +3555,25 @@
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c860c88df9ad58b1187084251340b232cdf0a7f9">
+        <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</source>
+        <target>(tiedostopäätteet: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, suurin sallittu koko: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="38baeb215c17af9d9e295e371a57f4a48ab4c191">
         <source>Target</source>
         <target>Kohde</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d1a04ba05116499d4cf59a48a282a8bcbf5b622d">
+        <source>Once you delete your account, there is no going back. Please be certain.</source>
+        <target>Käyttäjän poistamisen jälkeen ei ole enään mahdollista perua tekoa. Tarkista mitä olet tekemässä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9a2f889dde4574a6883c853d1034e75891b28c45">
@@ -2466,6 +3590,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="c65641c36859c328928e6b0f14c3f913886f8add">
+        <source>Created by <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></source>
+        <target>Luonut <x id="INTERPOLATION" equiv-text="{{ videoChannel.ownerBy }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="e006ed166ce188cab168e1ca90435b33d042d913">
         <source>Go the owner account page</source>
         <target>Mene omistajan tilin sivulle</target>
@@ -2473,11 +3604,162 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2bc7533f8c8e7d183950ba1094a0acd9efc22e5e">
+        <source>Muted instances</source>
+        <target>Mykistetyt instanssit</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e8e93a7ae9a47c035bf5170b105c418b1deae530">
+        <source>History enabled</source>
+        <target>Historia on päällä</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="29c45bf49891748f930ef78b2e09857498b15131">
+        <source>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Delete history
+  </source>
+        <target>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Poista historia
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6b4dc5732f1f2211833d4b5e76deb5985f3749af">
+        <source>You don't have videos history yet.</source>
+        <target>Sinulla ei ole videohistoriaa vielä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d2d802fa417a5a3f230cb5bcc975551a252c59c">
+        <source>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Notification preferences
+  </source>
+        <target>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Ilmoitusasetukset
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="653df8973772369f71454924a6412c0a1a84c850">
+        <source>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Mark all as read
+  </source>
+        <target>
+    <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+    Merkitse kaikki luetuksi
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dd3b6c367381ddfa8f317b8e9b31c55368c65136">
         <source>Activities</source>
         <target>Aktiviteetit</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="847dffd493abbb2a5c71f3313f0eb730dd88a355">
+        <source>Web</source>
+        <target>Web</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be746a6e47e3388c7cf793aef8d7b44b86cc94f2">
+        <source>Create a new playlist</source>
+        <target>Luo uusi soittolista</target>
+        <context-group name="null">
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="88f1b36ea2f7544792f04ee6b58f8c55aaba5c96">
+        <source>Playlist thumbnail</source>
+        <target>Soittolistan pikkukuva</target>
+        <context-group name="null">
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="188014887f7188d90b39e41d9606b91c77c17861">
+        <source>No videos in this playlist.</source>
+        <target>Ei videoita tällä soittolistalla.</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f467ee94e8b6fbb88fd94c99a77b02e751046a1f">
+        <source>
+    If you need help to use PeerTube, you can take a look to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>documentation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </source>
+        <target>
+    Jos tarvitset apua PeerTuben käytössä, niin ehdotamme tutustumista <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>dokumentointiin<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="09a69cde5889927629e2ac9dc63a71b88252b530">
+        <source>
+    Verify account email confirmation
+  </source>
+        <target>
+    Vahvista käyttäjän sähköpostiosoite
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf">
+        <source>
+  </source>
+        <target>
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b734a13448d714b0f68f49353607364ac3571c12">
+        <source>
+    Email updated.
+  </source>
+        <target>
+    Sähköposti päivitetty.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61fd1cffcb763cbfd5829071723cf9b647174bd9">
+        <source>An error occurred.</source>
+        <target>Virhe ilmaantui.</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eb539ec6941044e284f237f5b40d6a0159afe7af">
+        <source>Send verification email</source>
+        <target>Lähetä vahvistus-sähköpostiviesti.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a08080316e052053fd20647731a6de826dc8072f">
+        <source>This instance does not require email verification.</source>
+        <target>Tämä instanssi ei vaadi sähköpostiosoitteen vahvistamista.</target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605">
@@ -2522,11 +3804,25 @@
           <context context-type="linenumber">36</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="87f77a03c185ea644ed8378a562a2d0225513974">
+        <source>This account does not have channels.</source>
+        <target>Tällä käyttäjällä ei ole kanavia.</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f36bd6a1570cb9b0a5023870f35160957cad2a8f">
         <source>See this video channel</source>
         <target>Näytä tämä videokanava</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f04879385d6e3b0cf5fba6bb08983a55f73b696">
+        <source>This channel does not have videos.</source>
+        <target>Tällä kanavalla ei ole videoita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">
@@ -2543,6 +3839,13 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b207b668dc1d056cd7557ffa3b41f1fd0865f93d">
+        <source>Video playlists</source>
+        <target>Soittolistat</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1380539d91f77f565de6e21ce210da891e6644b8">
         <source>Support this channel</source>
         <target>Tue kanavaa</target>
@@ -2550,11 +3853,43 @@
           <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5523952d0300c96cfba2ec5a693c95f923e90c40">
+        <source>Created <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/></source>
+        <target>Luotu <x id="INTERPOLATION" equiv-text="{{ videoChannel.createdAt | date }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c286611c692d1442f8536ae6e62becbd28413d0e">
+        <source>
+  Created <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> playlists
+</source>
+        <target>
+  Luotiin <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> soittolistaa
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fbbe62dee434f0521e0dfb8e3957d92fc5fcd76f">
+        <source>This channel does not have playlists.</source>
+        <target>Tällä kanavalla ei ole soittolistoja.</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6385c357c1de58ce92c0cf618ecf9cf74b917390">
         <source>PeerTube</source>
         <target>PeerTube</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a">
+        <source>Follows</source>
+        <target>Seuraajat</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
@@ -2576,6 +3911,13 @@
         <target>Sinun sähköpostiosoite</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b0ca852bafa5037c4e64c7b18f9cd1e14b799de">
+        <source>Subject</source>
+        <target>Otsikko</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2815c9b510b8172d8cac4008b9709df69d636df">
@@ -2741,6 +4083,47 @@
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b1372cb61ca791a0f7f95bf31c86c97df142adc4">
+        <source>
+    PeerTube is in its early stages, and want to deliver the best countermeasures possible by the time the stable is released.
+    In the meantime, we want to test different ideas related to this issue:
+  </source>
+        <target>
+    PeerTube on sen alkuvaiheissa ja haluaa tarjota parhaat vastatoimet mitä mahdollista, kun vakaa versio on julkaistu.
+    Sillä aikaa haluamme kokeilla erilaisia ideoita kohdistuen tähän ongelmaan:
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18">
+        <source>Disable P2P from the administration interface</source>
+        <target>Poista vertaisverkko (P2P) käytöstä ylläpidon hallintapaneelista</target>
+        <context-group name="null">
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4b819dec78ae793726f7da0568912b4ba777d929">
+        <source>This instance does not have followers.</source>
+        <target>Tällä instanssilla ei ole seuraajia.</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="258c42c65fd235c739c55439d8265542316bd0ba">
+        <source>Followings</source>
+        <target>Seuratut</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2edb6a5a49961e867310e86a5626502cf7f779b">
+        <source>This instance does not have followings.</source>
+        <target>Tämä instanssi ei seuraa muita.</target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
         <source>
     Create an account
@@ -2757,6 +4140,38 @@
         <target>Seuraava</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e8d122924e4ca9b515d4586b42fd1c3e2b825e7">
+        <source>User information</source>
+        <target>Käyttäjätiedot</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f127303f2937f5d9ced837f692899f5d599659a1">
+        <source>
+            Create my account
+          </source>
+        <target>
+            Luo käyttäjäni
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fa0afc083c3aeddc9ce989975903f854d611a601">
+        <source>Channel information</source>
+        <target>Kanavan tiedot</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cb9d0623f382c9803df997fb30b9a33a5438d919">
+        <source>PeerTube is creating your account...</source>
+        <target>PeerTube luo käyttäjääsi...</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8dd413cee2228118c536f503709329a4d1a395e2">
@@ -2787,6 +4202,13 @@
           <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cb4c2c5a4f4b34d3158f2344a3e625d0dc321f4d">
+        <source>Example: my_super_channel</source>
+        <target>Esimerkki: minun_kanavani</target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
         <source>Example: jane_doe</source>
         <target>Esimerkki: matti_meikalainen</target>
@@ -2801,6 +4223,24 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e242e3e8608a3c4a944327eb3d5c221dc6e4e3cd">
+        <source>
+  Sorry, but we couldn't find the page you were looking for.
+</source>
+        <target>
+  Sivu ei valitettavasti ole käytettävissä. Yritä hakea jotain muuta.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e0e3a472479c8ce1b78f682ffadbe59daf04d331">
+        <source>Cannot get about information from server</source>
+        <target>Palvelimelta ei saada tietoja.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9e601a3b227bb70afbb9b59cd43547b710af1e10">
         <source>Your message has been sent.</source>
         <target>Viestisi on lähetetty.</target>
@@ -2808,9 +4248,23 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8d6d4f48dae547bb32e0669cda5a665dc8db536c">
+        <source>You already sent this form recently</source>
+        <target>Lähetit jo tämän lomakkeen vasta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="37b56526e384f843a15323dc730b484a97b4c968">
         <source>No description</source>
         <target>Ei kuvausta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4">
+        <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
+        <target>Julkaistiin <x id="INTERPOLATION" equiv-text="{{total}}"/> videota</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2948,6 +4402,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="3d8e85e3f78a29db7959c495e74cc9af90838430">
+        <source>Do you really want to reject this follower?</source>
+        <target>Haluatko varmasti torjua tämän seuraajan?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="20c3d69c0b67a74df0aa3920485016b2080578f6">
         <source>Reject</source>
         <target>Hylkää</target>
@@ -2955,9 +4416,58 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="150d48f01a24d84c2bfffb2761419b9482074b61">
+        <source>Do you really want to delete this follower?</source>
+        <target>Haluatko varmasti poistaa tämän seuraajan?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc5731a28a99b25c62d43333ceebb250d60aff84">
+        <source><x id="INTERPOLATION" equiv-text="{{host}}"/> is not valid</source>
+        <target><x id="INTERPOLATION" equiv-text="{{host}}"/> ei ole sallittu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e02f50674f1d96966384dc096beb42d4973997df">
+        <source>You need to specify hosts to follow.</source>
+        <target>Sinun pitää määrittää tilattavat isännät.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c2a114eb000e7c38e8ad4b1768821bdf6e946d71">
+        <source>Hosts need to be unique.</source>
+        <target>Isäntöjen pitää olla ainutlaatuisia.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1266acb081ef0324c4a38ae2d514dd75d8b38409">
+        <source>Follow new server(s)</source>
+        <target>Seuraa uusia palvelimia</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="950f5111d567e5c0e971f07c26e8c2be1d919a8e">
+        <source>Follow request(s) sent!</source>
+        <target>Seurantapyynnöt lähetetty!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="a89875525c82ab81ffe32e481a5475b43d0c2902">
         <source>Unfollow</source>
         <target>Lopeta seuranta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fb4e35e2b0ea2abc1f71295a4b34830e57c07bd0">
+        <source>You are not following <x id="INTERPOLATION" equiv-text="{{host}}"/> anymore.</source>
+        <target>Et seuraa <x id="INTERPOLATION" equiv-text="{{host}}"/> enään.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -2990,6 +4500,55 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cf3b28ba29a907b334ab0e6dccd080a60ba23321">
+        <source>Update moderation comment</source>
+        <target>Päivitä valvonnan kommentti</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d512430037b6580ba970c80cfc1687b6bdc221a3">
+        <source>Mark as accepted</source>
+        <target>Merkitse hyvätyksi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d895b090c054bfc0ad3aba816af0615a1997f5a3">
+        <source>Mark as rejected</source>
+        <target>Merkitse ei hyvätyksi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73b70e37cddaa6494d8a666b6cba90dc80595599">
+        <source>Do you really want to delete this abuse report?</source>
+        <target>Haluatko varmasti poistaa tämän valituksen?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a7938b8780c27540ea70cc0f8f4d928c8916cf9">
+        <source>Abuse deleted.</source>
+        <target>Valitus poistettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="36e4cdb23056253e5ef0c62b7d4bbeb3f759f611">
+        <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</source>
+        <target>Videon <x id="INTERPOLATION" equiv-text="{{name}}"/> esto on poistettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3d651e314544825348900b3120e2cd5ff38c7fa5">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> videos removed from blacklist.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> videota poistettu estolistalta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0594812d4c50c2adbd1a892a3497c4e5c19e4b32">
         <source>yes</source>
         <target>kyllä</target>
@@ -3000,6 +4559,83 @@
       <trans-unit id="6320692861e01fa9c9d4e692d0d27b6c12b21c3b">
         <source>no</source>
         <target>ei</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
+        <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
+        <target>Videon <x id="INTERPOLATION" equiv-text="{{name}}"/> esto on poistettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523">
+        <source>You don't have plugins installed yet.</source>
+        <target>Sinulla ei ole vielä lisäosia asennettuna.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f">
+        <source>You don't have themes installed yet.</source>
+        <target>Sinulla ei ole vielä teemoja asennettuna.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9">
+        <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
+        <target>Päivitä versioon <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702">
+        <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Haluatko varmasti poistaa lisäosan <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61136b14ca13f166ecc9ee7b05bb6fe865f10144">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> poistettiin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d352fa8f51305c18ab8f882b37c4fdaab6f2371b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> päivitettiin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d">
+        <source>The plugin index is not available. Please retry later.</source>
+        <target>Lisäosalistaus ei ole saatavilla. Yritä myöhemmin uudelleen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0">
+        <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
+        <target>Asenna vain lisäosia ja teemoja mihin luotat, koska ne pystyvät suorittamaan komentoja instanssillasi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Asennetaanko <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> asennettiin.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3081,9 +4717,30 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="364463fab6c5714118d6449561a0f8de1cc10bfa">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> created.</source>
+        <target>Käyttäjä <x id="INTERPOLATION" equiv-text="{{username}}"/> luotiin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="924084727dc179dd5dc1a63dc3452ad41e4a8842">
+        <source>Password changed for user <x id="INTERPOLATION" equiv-text="{{username}}"/>.</source>
+        <target>Salasana vaihdettu käyttäjälle <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2dbda576172f583154031550e251e5a1e49207b2">
         <source>Update user password</source>
         <target>Päivitä tilin salasana</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="964865a3cd90b4af99902f071644a4b2aede4c32">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> updated.</source>
+        <target>Käyttäjä <x id="INTERPOLATION" equiv-text="{{username}}"/> päivitettiin.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3095,9 +4752,58 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8">
+        <source>Unban</source>
+        <target>Poista esto</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="910ed85f550272401b134a40d019ab3359fe883f">
+        <source>Set Email as Verified</source>
+        <target>Aseta sähköpostiosoite vahvistetuksi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac401df84c5fa471700c3368de51c969ccb8bacf">
+        <source>You cannot ban root.</source>
+        <target>Et voi estää root-käyttäjää.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98119091712a8ca72905e3b4c1cf60649af7565e">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{num}}"/> users?</source>
+        <target>Haluatko varmasti poistaa estot <x id="INTERPOLATION" equiv-text="{{num}}"/> käyttäjältä?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6121be086a51c4c73bbdd8aebdddd9744c8f1ffd">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users unbanned.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> käyttäjän estot poistettiin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11">
         <source>You cannot delete root.</source>
         <target>Et voi poistaa root -käyttäjää.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9de914fe915cc730efc57e81c987188a24d3ac51">
+        <source>If you remove these users, you will not be able to create others with the same username!</source>
+        <target>Jos poistat kyseiset käyttäjät, et voi luoda uusia käyttäjiä samoilla käyttäjänimillä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b708d332e3f89b24745e749fa530210f0bdea329">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users deleted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> käyttäjää poistettu.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3109,9 +4815,58 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="05f6dda1754741495451b8658bd2248856765d95">
+        <source>Videos history is enabled</source>
+        <target>Videohistoria asetettu päälle.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6bb9ade8637c5e35fb5cb36cf7dbec71c65d4013">
+        <source>Videos history is disabled</source>
+        <target>Videohistoria poistettu päältä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8453a7a55b8b23bbbc293cd0939fb59a73307de8">
+        <source>Delete videos history</source>
+        <target>Tyhjennä videohistoria</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f8f86df8a1ae711944c3ab819bb19bf360dfa7a4">
+        <source>Are you sure you want to delete all your videos history?</source>
+        <target>Haluatko varmasti tyhjentää videohistoriasi?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="195d5ba6c8bd05762d9318d0afd0b094fd776164">
+        <source>Videos history deleted</source>
+        <target>Videohistoria tyhjennetty</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="507192ee1fa84aefed02d603caada2d84927023e">
         <source>Ownership accepted</source>
-        <target>Omistajuus hyväksytty.</target>
+        <target>Omistajuus hyväksytty</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8155899f3b3b2e0467846ea7f27fcfb46c882204">
+        <source>Email updated.</source>
+        <target>Sähköpostiosoite päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c">
+        <source>You current password is invalid.</source>
+        <target>Nykyinen salasani ei ole sallittu.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3119,6 +4874,20 @@
       <trans-unit id="19508af0dfbc685cbf10cf02061bb5a0f423b6fc">
         <source>Password updated.</source>
         <target>Salasana päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ca8e8cf0f1686604db3b6a2ebadab7f7b426a047">
+        <source>Are you sure you want to delete your account? This will delete all you data, including channels, videos etc.</source>
+        <target>Haluatko varmasti poistaa käyttäjäsi? Tämä poistaa kaiken tietosi, mukaan lukien kanavat, videot ja niin edelleen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311">
+        <source>Type your username to confirm</source>
+        <target>Kirjoita käyttäjänimesi vahvistaaksesi</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3137,9 +4906,163 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="59f77c7dc03357ef1d7a334df06dfc7f31c9a165">
+        <source>Interface settings updated.</source>
+        <target>Käyttöliittymäasetukset päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c193bf704577e514b63497c4f366511afdb6585">
+        <source>New video from your subscriptions</source>
+        <target>Uusi video tilauksiltasi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba897defa2e6c34d5ee3d10edf8d797a35e7e3e5">
+        <source>New comment on your video</source>
+        <target>Uusi kommentti videollasi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f536b58345161afa5cd859cce5a0b66a39327ad8">
+        <source>New video abuse</source>
+        <target>Uusi valitus videosta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="051dd48c3e6254785c6f366656aaee58f8b46c47">
+        <source>Video auto-blacklisted waiting review</source>
+        <target>Automaattisesti estetty video vaatii tarkistuksen</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abac8b7629cfcd85bff25770f83ea229f646f996">
+        <source>One of your video is blacklisted/unblacklisted</source>
+        <target>Yksi videoistasi on estetty, tai sen esto poistettu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f3eff4df9e4aa9dab411e6eb83833a33016a88bc">
+        <source>Video published (after transcoding/scheduled update)</source>
+        <target>Video julkaistu (transkoodauksen/ajoituksen jälkeen)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ec7ddc265da1df78011ae7677d62a2ae10aef7a4">
+        <source>Video import finished</source>
+        <target>Videon tuonti valmistui</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c327bbac87cca61f5c52f5825d564878e98b9034">
+        <source>A new user registered on your instance</source>
+        <target>Uusi käyttäjä rekisteröityi instanssiisi</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f407b90e99a04e2e0d1872c02f01eadbf53e08e2">
+        <source>You or your channel(s) has a new follower</source>
+        <target>Sinulla tai sinun kanavillasi on uusi seuraaja</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="14c3050a9da4c1bc49d555c45d5660804d08e83b">
+        <source>Someone mentioned you in video comments</source>
+        <target>Sinut mainittiin videon kommenteissa</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f4bb57154f8b6b30f3272f340dc40e143af8607f">
+        <source>Your instance has a new follower</source>
+        <target>Instanssillasi on uusi seuraaja</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a0f04081717f5f00c0a2c723903c3a2d4c296401">
+        <source>Preferences saved</source>
+        <target>Asetuksesi on tallennettu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
+        <source>Profile updated.</source>
+        <target>Tili päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e003ad599ef836949b9f4dad3037a58ef3ff8d1">
+        <source>Avatar changed.</source>
+        <target>Profiilikuva vaihdettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="96d143e59c90c4f479eb7a3b55e2a24dc676b31f">
+        <source>Unknown language</source>
+        <target>Tuntematon kieli</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="732fe7ff80eca196d9825b0ca16134ce8101e93e">
+        <source>Video settings updated.</source>
+        <target>Videon tiedot päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="812a3c71b3a8e6bfc7f1c5e8690cb4738edb2224">
         <source>No language</source>
         <target>Ei kieltä</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="baa5048f978a6fed563ab1d30a6bb965ea687ba8">
+        <source>{{'{0} languages selected</source>
+        <target>{{'{0} kieltä valittu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645">
+        <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
+        <target>Videokanava <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> luotiin.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47">
+        <source>This name already exists on this instance.</source>
+        <target>Tämä nimi on jo olemassa tässä instanssissa.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559">
+        <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
+        <target>Videokanava <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7e4d8688bd06d723e512ab063c0c4fdf4a9804d">
+        <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> created.</source>
+        <target>Luotiin soittolista <x id="INTERPOLATION" equiv-text="{{playlistName}}"/>.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3151,9 +5074,30 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="dff7d4574cfaa785cbd4c0a5ffb5befec19a5d83">
+        <source><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos deleted.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videota poistettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="740c53a50a618bf5c7a5bd5c3f7321f0bd1840dd">
+        <source>Ownership change request sent.</source>
+        <target>Omistajuudenvaihtopyyntö lähetetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f">
         <source>My channels</source>
         <target>Minun kanavat</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1d3408919f4d08414721cc22c4be39d93d6691d2">
+        <source>My playlists</source>
+        <target>Minun soittolistat</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3179,6 +5123,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7">
+        <source>Ownership changes</source>
+        <target>Omistajuusmuutokset</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6">
         <source>My settings</source>
         <target>Minun asetukset</target>
@@ -3193,6 +5144,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6">
+        <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
+        <target>Olet nytten kirjautunut käyttäjälle <x id="INTERPOLATION" equiv-text="{{username}}"/>!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2f03e577e8f81a9f8be0095f93e1f9376c6eedc9">
         <source>Published videos</source>
         <target>Julkaistut videot</target>
@@ -3202,7 +5160,91 @@
       </trans-unit>
       <trans-unit id="ff6becacbce7fc0943b0af0df4dd67e5e11bf598">
         <source>Subscribe to the account</source>
-        <target>Tilaa tili</target>
+        <target>Tilaa käyttäjä</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c95cc372311830f936b39f73c5d6d20c0b16013">
+        <source>Focus the search bar</source>
+        <target>Valitse hakupalkki</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b19ee83cbd2b735fd081b9aa483a890578019099">
+        <source>Toggle the left menu</source>
+        <target>Valitse vasen valikko</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b54759e30f7c1983940cdacb8eb03f102a869084">
+        <source>Go to the videos overview page</source>
+        <target>Mene löydä videoita sivulle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0">
+        <source>Go to the trending videos page</source>
+        <target>Mene nousussa olevien videoiden sivulle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d">
+        <source>Go to the recently added videos page</source>
+        <target>Mene vasta lisättyjen videoiden sivulle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5">
+        <source>Go to the local videos page</source>
+        <target>Mene paikallisten videoiden sivulle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1fb6204f39a7338e5110b2f113643c9288496ba">
+        <source>Go to the videos upload page</source>
+        <target>Mene videoiden lataus-sivulle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2">
+        <source>Go to my subscriptions</source>
+        <target>Mene tilauksiini</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1">
+        <source>Go to my videos</source>
+        <target>Mene videoihini</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7">
+        <source>Go to my imports</source>
+        <target>Mene tuonteihini</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cfe3c51f0ae9385dc2ce6df740d87e5514aa9390">
+        <source>Go to my channels</source>
+        <target>Mene kanaviini</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e31bbf15d6ba5c7c0f17f89a98029cff0bd40b87">
+        <source>You need to reconnect.</source>
+        <target>Sinun pitää yhdistää udelleen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3228,9 +5270,72 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="39980cc1cf8df621d43f5480d001bdf5d4139338">
+        <source>You account is blocked.</source>
+        <target>Sinun käyttäjäsi on estetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7fb1099e29660162f9154d5b2feee7743a423df6">
         <source>Today</source>
         <target>Tänään</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="02e0243b60007368f87dc01e083f232dd025096d">
+        <source>Last 7 days</source>
+        <target>Viimeiset 7 päivää</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7668986b9f753fcd72ad4a00b1a0c4861d1f7fb8">
+        <source>Last 30 days</source>
+        <target>Viimeiset 30 päivää</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a77b663fd9b94c38bc9c6493a51b5f3acacb9bca">
+        <source>Last 365 days</source>
+        <target>Viimeiset 365 päivää</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2f3bf121699ff08a25fa4859bfdf3996bf821cc">
+        <source>Short (&lt; 4 min)</source>
+        <target>Lyhyt (&lt; 4 min)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f24d368d6be0fee70fb4503d2ad37a612e1b0889">
+        <source>Medium (4-10 min)</source>
+        <target>Keskiverto (4-10 min)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac0fa1039f09ec0d917303658c5bb1ee813a4225">
+        <source>Long (&gt; 10 min)</source>
+        <target>Pitkä (&gt; 10 min)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca">
+        <source>Relevance</source>
+        <target>Olennaisuus</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1aee80ab35aa99508802cdec6306e110b2feaf9e">
+        <source>Publish date</source>
+        <target>Julkaisupäivä</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3242,6 +5347,83 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> vuotta sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e622d3813449fe36371ea258281059306819199d">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> kuukautta sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> kuukausi sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> viikkoa sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> viikko sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> päivää sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> päivä sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> tuntia sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> tunti sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> minuuttia sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7a158a7555a44ea7eff9fa4988df9aa24d262ceb">
+        <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</source>
+        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> sekuntia sitten</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da">
         <source>Confirm</source>
         <target>Vahvista</target>
@@ -3249,9 +5431,415 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323">
+        <source>Instance name is required.</source>
+        <target>Instanssin nimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="356e63270712273da168072ec0fc78a969919bf1">
+        <source>Twitter username is required.</source>
+        <target>Twitter-käyttäjänimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1245841647f9b42d3e7554903c1c50bdd80ab021">
+        <source>Admin email is required.</source>
+        <target>Järjestelmänvalvojan sähköpostiosoite vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fd2feb77dfe57fe82573e3cdf996105e2fafc66">
+        <source>Admin email must be valid.</source>
+        <target>Järjestelmänvalvojan sähköpostiosoite pitää olla toimiva.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0">
+        <source>Email is required.</source>
+        <target>Sähköpostiosoite vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1">
+        <source>Email must be valid.</source>
+        <target>Sähköpostiosoitteen pitää olla toimiva.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac451f128840b34804ea69c820dc3566f476fb33">
+        <source>Your name is required.</source>
+        <target>Nimesi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73417de6b009e361996f9cd0e3b83d88bed368b6">
+        <source>A subject is required.</source>
+        <target>Otsikko vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="40b35cf927f9f9a59404a6c914ec4632690b69b2">
+        <source>A message is required.</source>
+        <target>Viesti vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5db300f6fba918a35597160183205ede13e8e149">
+        <source>Username is required.</source>
+        <target>Käyttäjänimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4eb39d69b74d7a56652ec84fa6826994ee26c0e5">
+        <source>Password is required.</source>
+        <target>Salasana vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c90872a06666a51c2957c4b29724e68df5c67154">
+        <source>Confirmation of the password is required.</source>
+        <target>Salasanan vahvistus vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6330d25a3bc6f55dfd5177da6e681d1d3b1a2b1a">
+        <source>Username must be at least 1 character long.</source>
+        <target>Käyttäjänimessä pitää olla ainakin yksi kirjain.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aaaf3d00c35f809eebc7fd68a3f7b8b0230b197a">
+        <source>Username cannot be more than 50 characters long.</source>
+        <target>Käyttäjänimi ei voi olla 50 kirjainta pidempi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6f3e95be2538a22da07beaefc39bb2195683990c">
+        <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
+        <target>Käyttäjänimen pitää olla pienaakkosilla kirjoitettu, mutta numerot pisteet ja alaviivat on sallittu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1fe26e49476ac701885abc59127e96a3760847f0">
+        <source>Password must be at least 6 characters long.</source>
+        <target>Salasanan pitää olla vähintään kuusi kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e">
+        <source>Password cannot be more than 255 characters long.</source>
+        <target>Salasana ei voi olla 255 kirjainta pidempi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2db8f1f93a5485c32267762a3bf4da499832e732">
+        <source>The new password and the confirmed password do not correspond.</source>
+        <target>Uusi salasana ja vahvistettu salasana eivät täsmää.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="abede840116d58f04a55d99a6cbd68da8a3e1bbf">
+        <source>Video quota is required.</source>
+        <target>Videokiintiö vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="93a6dc1d3aa0d3201c86ef1ec8adf5cf0ada3c80">
+        <source>Quota must be greater than -1.</source>
+        <target>Kiintiön pitää olla enemmän kuin -1.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7e58d1fb4e86af94f5199660ef349d55811888bb">
+        <source>Daily upload limit is required.</source>
+        <target>Päivittäinen latauskiintiö vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e283cbc4469959ea664f9d545f15278e089a6f1e">
+        <source>Daily upload limit must be greater than -1.</source>
+        <target>Päivittäinen latauskiintiö pitää olla enemmän kuin -1.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="545e77fd5d9526228a2133109447c23225ed9c85">
+        <source>User role is required.</source>
+        <target>Käyttäjärooli vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d531c2261dc0c2739bd7cbb2bb175946b7eeb3ae">
+        <source>Description must be at least 3 characters long.</source>
+        <target>Kuvauksen pitää olla vähintään kolme kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a4179e366d4aa335f1ddd0a13e9109c71a9338d0">
+        <source>Description cannot be more than 1000 characters long.</source>
+        <target>Kuvaus ei voi olla 1000 kirjainta pidempi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a3ebc6ddb6b6677aed7b04eb503f9ddd0cfe561">
+        <source>You must to agree with the instance terms in order to registering on it.</source>
+        <target>Sinun pitää hyväksyä instanssin käyttöehdot jatkaaksesi rekistöröitymistä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6d2c3ebffd49b8933200a6d4e5b74712be49bf00">
+        <source>Ban reason must be at least 3 characters long.</source>
+        <target>Eston syy pitää olla vähintään kolme kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be32ff1dd6e464c5c085dd7d128316f476d2e0fd">
+        <source>Ban reason cannot be more than 250 characters long.</source>
+        <target>Eston syy ei voi olla 250 kirjainta pidempi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4">
+        <source>Display name is required.</source>
+        <target>Näyttönimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="085b2d6f79819a72a2b56cada4ef5085ba51d90c">
+        <source>Display name must be at least 1 character long.</source>
+        <target>Näyttönimessä pitää olla ainakin yksi kirjain.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5a920575b8e1067f5b11c66a4a36d3ced87756f1">
+        <source>Display name cannot be more than 50 characters long.</source>
+        <target>Näyttönimi ei voi olla 50 kirjainta pidempi.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6">
+        <source>Report reason is required.</source>
+        <target>Valituksen syy vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="993f9f5703d449a1d467243db75253d288a2947e">
+        <source>Report reason must be at least 2 characters long.</source>
+        <target>Valituksen syy pitää olla vähintään kaksi kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="94b831c7e3684258f88e099c6cd3b8f73f8a2de6">
+        <source>The channel is required.</source>
+        <target>Kanava vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e">
+        <source>Video caption language is required.</source>
+        <target>Videotekstityksen kieli vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bd7fc070c728dc6dbf3959d49fe5bb27ce15d294">
         <source>The username is required.</source>
         <target>Käyttäjänimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c8465c3773699dd075e0147e264d2e232f605803">
+        <source>You can only transfer ownership to a local account</source>
+        <target>Voit siirtää omistajuutta vain paikalliselle käyttäjälle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="541087322c34e8b26954fd67ff4fc80d1a6c1b33">
+        <source>Name is required.</source>
+        <target>Nimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6ca60e0f6dfbc0073b0514bce7d273150b0b9e79">
+        <source>Comment is required.</source>
+        <target>Kommentti vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f5a94cae76685e72f33541b977efdd7845cb0ed6">
+        <source>Comment must be at least 2 characters long.</source>
+        <target>Kommentin pitää olla vähintään kaksi kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c194080446ee6901fd17a8b8648534ffe98b123">
+        <source>Comment cannot be more than 3000 characters long.</source>
+        <target>Kommentti ei voi sisältää enemmän kuin 3000 kirjainta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e81bda510399d52f26a44a15c3dbf4d6205d90a9">
+        <source>Display name cannot be more than 120 characters long.</source>
+        <target>Näyttönimi ei voi sisältää enemmän kuin 120 kirjainta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e8c50a2e0b9a6eec54a983a3284839d81739f18c">
+        <source>Privacy is required.</source>
+        <target>Näkyvyys vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3499ad3f4da49c7373332c5052d543929b94dc9c">
+        <source>The channel is required when the playlist is public.</source>
+        <target>Kanava tarvitaan, jos soittolista on julkinen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1">
+        <source>Video name is required.</source>
+        <target>Videon nimi vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c">
+        <source>Video name must be at least 3 characters long.</source>
+        <target>Videon nimen pitää olla vähintään kolme kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695">
+        <source>Video name cannot be more than 120 characters long.</source>
+        <target>Videon nimi ei voi sisältää enemmän kuin 120 kirjainta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
+        <source>Video privacy is required.</source>
+        <target>Videon näkyvyysasetus vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16">
+        <source>Video channel is required.</source>
+        <target>Videokanava vaaditaan.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af5e2d5f3ac817c735fb7ff9ca16322789f66fef">
+        <source>Video description must be at least 3 characters long.</source>
+        <target>Videon kuvauksen pitää olla vähintään kolme kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ce28a9403c2d7e5da2e59af27118f8b6d109e906">
+        <source>Video description cannot be more than 10000 characters long.</source>
+        <target>Videon kuvaus ei voi sisältää enemmän kuin 10000 kirjainta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1cffdc2e156716cd9880201d65ba457d11464f8">
+        <source>A tag should be more than 2 characters long.</source>
+        <target>Tagin pitää olla vähintään kaksi kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea">
+        <source>A tag should be less than 30 characters long.</source>
+        <target>Tagi ei voi sisältää enemmän kuin 30 kirjainta.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
+        <source>Video support must be at least 3 characters long.</source>
+        <target>Videon tukiteksti ptiää olla vähintään kolme kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad">
+        <source>Video support cannot be more than 1000 characters long.</source>
+        <target>Videon tukiteksti ei voi olla enemmän kuin 1000 kirjainta pitkä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
+        <source>A date is required to schedule video update.</source>
+        <target>Päivämäärä vaaditaan video ajastamista varten.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3b7ed22d0730d03b38c254332829d855ee7256c4">
+        <source>This file is too large.</source>
+        <target>Tiedoston koko on liian suuri.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f5f2093f14679fed82ff76a0cd2a28145a83ca9">
+        <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</source>
+        <target>PeerTube ei pysty käsittelemään kyseistä tiedostoa. Sallitut tiedostopäätteet ovat <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4">
+        <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
+        <target>Kaikki tallentamaton tieto katoaa, haluatko varmasti lähteä sivulta?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3487,6 +6075,83 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8270e687cfb5624b3f6fbb7991a2e916c96464b7">
+        <source>Jan</source>
+        <target>Tam</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60">
+        <source>Feb</source>
+        <target>Hel</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7">
+        <source>Mar</source>
+        <target>Mal</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="964a5f032bc846d32806a4838580a4f81cf14463">
+        <source>Apr</source>
+        <target>Huh</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8f7274f606f71d9290ed01c5683092d701632d7f">
+        <source>Jun</source>
+        <target>Kes</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c3d8318d6d8d9920ae0a80350616732c33a3211">
+        <source>Jul</source>
+        <target>Hei</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212">
+        <source>Aug</source>
+        <target>Elo</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f739d03be1c936c58978739c317d91566348204">
+        <source>Sep</source>
+        <target>Syy</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6607cacb987a588530a13de7018d959240d19153">
+        <source>Oct</source>
+        <target>Lok</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e597400ded12a366855615e18fcc8f9ac05b72e0">
+        <source>Nov</source>
+        <target>Mar</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e">
+        <source>Dec</source>
+        <target>Jou</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46">
         <source>Clear</source>
         <target>Alusta</target>
@@ -3508,6 +6173,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="75cc14815746a90d424157080fc7efd3e2631654">
+        <source>Blurred with confirmation request</source>
+        <target>Sumennettu ja vahvistus vaaditaan</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1e89bd0d46ef7d90b5f98b24f83afc312c6ef105">
         <source>Displayed</source>
         <target>Näytetty</target>
@@ -3515,9 +6187,70 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
+        <source>User registration allowed</source>
+        <target>Käyttäjän luonti sallittu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="55e17373c208e821dbb43ed4f6da7d0c5b800cab">
+        <source>Video uploads require manual validation by moderators</source>
+        <target>Videoiden lataus vaatii manuaalisen hyväksynnän valvojilta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a0fdb831d4557925dbaa4f8aff7e5035f7506411">
+        <source>Transcode your videos in multiple resolutions</source>
+        <target>Transkoodaa videosi moneen resoluutioon</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1">
+        <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
+        <target>HTTP-tuonti (YouTube, Vimeo, suora osoite...)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a">
+        <source>Torrent import</source>
+        <target>Torrentin tuonti</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5">
         <source>P2P enabled</source>
-        <target>P2P päällä</target>
+        <target>Vertaisverkko (P2P) käytössä</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
+        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source><target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target><context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> Full HD videoita</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8">
+        <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> HD videoita</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ab4426b60f13c00b61d6b714d390dc629f314980">
+        <source>Emphasis</source>
+        <target>Painotus</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3525,6 +6258,13 @@
       <trans-unit id="dc60677d5a906e69f38a5cf9da7f2eb03931bea0">
         <source>Links</source>
         <target>Linkit</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="80220239e07f36ea8d5f10118dc52ce4b13bc15a">
+        <source>New lines</source>
+        <target>Uudet rivit</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3543,6 +6283,20 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target>Käyttäjä <x id="INTERPOLATION" equiv-text="{{username}}"/> poistettu.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a09bf8724e7659fbb5ec33647529cdef7614bdc">
+        <source>Mute this account</source>
+        <target>Mykistä tämä käyttäjä.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d666ca3261aef72b2ddcd649d7b32af488f59952">
         <source>Unmute this account</source>
         <target>Poista mykistys tältä tililtä</target>
@@ -3550,9 +6304,44 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ab783a52f2df9ff7a20139cab0da6d0764f3cc5d">
+        <source>Too many attempts, please try again later.</source>
+        <target>Liian monta yritystä, yritä myöhemmin uudelleen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f286a597f0053c3578a52e044769c204ee516fc">
+        <source>Server error. Please retry later.</source>
+        <target>Palvelinvirhe. Yritä myöhemmin uudelleen.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="58639b3f0be657475928fb49c4a7cbd16aa44ded">
+        <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
+        <target>Tilattiin kanava <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
         <source>Subscribed</source>
         <target>Tilattu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26">
+        <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
+        <target>Tilaus poistettu kanavasta <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="294395337b767af84f952ac28d58d54a13a11471">
+        <source>Unsubscribed</source>
+        <target>Tilaus poistettu</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3588,6 +6377,13 @@
       <trans-unit id="1b8201c470a1635cc9beab9adb90eabd19fc9691">
         <source> and stops at </source>
         <target>ja loppuu kohdassa</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="73c33d602da89a33d353d686f36c2fff39f0aee3">
+        <source>Video blacklisted.</source>
+        <target>Video estetty.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3641,6 +6437,34 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8e6d54c4f760d9e90518eef5334211c48c0b71e2">
+        <source>Publication scheduled on </source>
+        <target>Julkaisu ajoitettu ajalle</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a7e91ebe1cf184db5f2bfecf9c16ff81c9e2c02">
+        <source>Waiting transcoding</source>
+        <target>Odottaa transkoodausta</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="21f1c9d5c67346c830aced4f670045fcf0aeb83a">
+        <source>To transcode</source>
+        <target>Transkoodattava</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392">
+        <source>To import</source>
+        <target>Tuotava</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d4195053fd38eacf6dee1fc507296928978cc8fb">
         <source>Only I can see this video</source>
         <target>Vain minä voin nähdä tämän videon</target>
@@ -3658,6 +6482,13 @@
       <trans-unit id="15be15cbdc6e960f57e801f457c19165ab39632b">
         <source>Anyone can see this video</source>
         <target>Kaikki voivat nähdä tämän videon</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
+        <source>Video to import updated.</source>
+        <target>Tuotava video päivitetty.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3690,6 +6521,20 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a6019e856f511dbe1fe658790c71c594b26930ee">
+        <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</source>
+        <target>Videokiintiösi ylittyy tällä videolla (videon koko: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, käytetty kiintiö: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, kokonaiskiintiö: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c980896ac8e08e9751545db1b7ef0e93fb8a52cd">
+        <source>Your daily video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</source>
+        <target>Päivittäinen videokiintiösi ylittyy tällä videolla (videon koko: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, käytetty kiintiö: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, kokonaiskiintiö: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="bfdf9de4bd9140f77feb6a5fe2b51f3f0565eaa4">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
         <target>Sinulla on tallentamattomia muutoksia! Jos lähdet sivulta, niin muutoksesi katoavat.</target>
@@ -3700,6 +6545,13 @@
       <trans-unit id="757e9c083c8f3d578bd74f055cc337c72417e187">
         <source>Video updated.</source>
         <target>Video päivitetty.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e">
+        <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source>
+        <target><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> tykkäystä / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> ei tykkäystä</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -3735,6 +6587,27 @@
       <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054">
         <source>Trending for the last 24 hours</source>
         <target>Nousussa viimeisen 24 tunnin ajan</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6e9cb0b3b38312870471954abec8690170429a4e">
+        <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
+        <target>Nousussa olevat videot ovat niitä mitkä keräävät eniten näyttökertoja 24 tunnin sisällä</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df">
+        <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
+        <target>Nousussa viimeiset <x id="INTERPOLATION" equiv-text="{{days}}"/> päivää</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509">
+        <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
+        <target>Nousussa olevat videot ovat niitä mitkä keräävät eniten näyttökertoja <x id="INTERPOLATION" equiv-text="{{days}}"/> päivän sisällä</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

@@ -7,7 +7,8 @@
       <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
     </div>
 
-    <my-video-miniature *ngFor="let video of object.videos" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>
+    <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
+    </my-video-miniature>
   </div>
 
   <div class="section" *ngFor="let object of overview.tags">
@@ -15,7 +16,8 @@
       <a routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
     </div>
 
-    <my-video-miniature *ngFor="let video of object.videos" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>
+    <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
+    </my-video-miniature>
   </div>
 
   <div class="section channel" *ngFor="let object of overview.channels">
@@ -27,7 +29,8 @@
       </a>
     </div>
 
-    <my-video-miniature *ngFor="let video of object.videos" [video]="video" [user]="user" [displayVideoActions]="false"></my-video-miniature>
+    <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
+    </my-video-miniature>
   </div>
 
 </div>
