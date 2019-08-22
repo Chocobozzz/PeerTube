@@ -226,7 +226,7 @@ export class AppComponent implements OnInit {
       new Hotkey('g o', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/overview' ])
         return false
-      }, undefined, this.i18n('Go to the videos overview page')),
+      }, undefined, this.i18n('Go to the videos discover page')),
       new Hotkey('g t', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/trending' ])
         return false

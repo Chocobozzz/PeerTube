@@ -19,7 +19,7 @@ const videosRoutes: Routes = [
         component: VideoOverviewComponent,
         data: {
           meta: {
-            title: 'Videos overview'
+            title: 'Discover videos'
           }
         }
       },
