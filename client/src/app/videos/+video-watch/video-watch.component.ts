@@ -34,6 +34,7 @@ import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watc
 import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { PlatformLocation } from '@angular/common'
 
 @Component({
   selector: 'my-video-watch',
@@ -95,6 +96,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private i18n: I18n,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
+    private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -374,13 +376,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
         this.i18n('Mature or explicit content')
       )
-      if (res === false) return this.redirectService.redirectToHomepage()
+      if (res === false) return this.location.back()
     }
 
     // Flush old player if needed
     this.flushPlayer()
 
-    // Build video element, because videojs remove it on dispose
+    // Build video element, because videojs removes it on dispose
     const playerElementWrapper = this.elementRef.nativeElement.querySelector('#videojs-wrapper')
     this.playerElement = document.createElement('video')
     this.playerElement.className = 'video-js vjs-peertube-skin'

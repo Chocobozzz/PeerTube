@@ -8,9 +8,11 @@ import { debounceTime, filter, map, pairwise, skip } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
-import { ViewportScroller } from '@angular/common'
+import { PlatformLocation, ViewportScroller } from '@angular/common'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
 
 @Component({
   selector: 'my-app',
@@ -35,7 +37,9 @@ export class AppComponent implements OnInit {
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
     private themeService: ThemeService,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private location: PlatformLocation,
+    private modalService: NgbModal
   ) { }
 
   get serverVersion () {
@@ -90,6 +94,8 @@ export class AppComponent implements OnInit {
     fromEvent(window, 'resize')
       .pipe(debounceTime(200))
       .subscribe(() => this.onResize())
+
+    this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
   }
 
   isUserLoggedIn () {
@@ -110,7 +116,6 @@ export class AppComponent implements OnInit {
     const eventsObs = this.router.events
 
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
-    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
 
     scrollEvent.subscribe(e => {
       if (e.position) {
@@ -125,6 +130,8 @@ export class AppComponent implements OnInit {
         return this.viewportScroller.scrollToPosition([ 0, 0 ])
       }
     })
+
+    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
 
     // When we add the a-state parameter, we don't want to alter the scroll
     navigationEndEvent.pipe(pairwise())

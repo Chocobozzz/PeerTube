@@ -44,6 +44,8 @@ async function getAvatar (req: express.Request, res: express.Response) {
   }
 
   const avatar = await AvatarModel.loadByName(filename)
+  if (!avatar) return res.sendStatus(404)
+
   if (avatar.onDisk === false) {
     if (!avatar.fileUrl) return res.sendStatus(404)
 
