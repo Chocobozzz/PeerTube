@@ -41,7 +41,11 @@ function isPluginEngineValid (engine: any) {
 }
 
 function isPluginHomepage (value: string) {
-  return isUrlValid(value)
+  return exists(value) && (!value || isUrlValid(value))
+}
+
+function isPluginBugs (value: string) {
+  return exists(value) && (!value || isUrlValid(value))
 }
 
 function areStaticDirectoriesValid (staticDirs: any) {
@@ -85,7 +89,7 @@ function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginT
     isPluginEngineValid(packageJSON.engine) &&
     isPluginHomepage(packageJSON.homepage) &&
     exists(packageJSON.author) &&
-    isUrlValid(packageJSON.bugs) &&
+    isPluginBugs(packageJSON.bugs) &&
     (pluginType === PluginType.THEME || isSafePath(packageJSON.library)) &&
     areStaticDirectoriesValid(packageJSON.staticDirs) &&
     areCSSPathsValid(packageJSON.css) &&
