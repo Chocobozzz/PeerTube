@@ -48,8 +48,8 @@ const CONFIG = {
     BODY: {
       SIGNATURE: config.get<string>('email.body.signature')
     },
-    OBJECT: {
-      PREFIX: config.get<string>('email.object.prefix') + ' '
+    SUBJECT: {
+      PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
   STORAGE: {
