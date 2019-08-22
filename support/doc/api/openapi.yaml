@@ -2254,8 +2254,6 @@ components:
       properties:
         id:
           type: number
-        uuid:
-          type: string
         url:
           type: string
         name:
@@ -2276,7 +2274,11 @@ components:
       allOf:
         - $ref: '#/components/schemas/Actor'
         - properties:
+            userId:
+              type: string
             displayName:
+              type: string
+            description:
               type: string
     User:
       properties:
