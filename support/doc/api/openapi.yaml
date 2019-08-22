@@ -130,9 +130,6 @@ paths:
       summary: Get the account by name
       parameters:
         - $ref: '#/components/parameters/name'
-        - $ref: '#/components/parameters/start'
-        - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
       responses:
         '200':
           description: successful operation
@@ -204,6 +201,10 @@ paths:
       tags:
         - Accounts
       summary: Get all accounts
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
       responses:
         '200':
           description: successful operation
