@@ -39,9 +39,9 @@ class PeerTubeSocket {
 
     if (!sockets) return
 
-    const json = notification.toFormattedJSON()
+    const notificationMessage = notification.toFormattedJSON()
     for (const socket of sockets) {
-      socket.emit('new-notification', json)
+      socket.emit('new-notification', notificationMessage)
     }
   }
 
