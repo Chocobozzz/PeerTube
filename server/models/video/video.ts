@@ -135,6 +135,7 @@ import {
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoThumbnail,
+  MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
   MVideoWithFile,
   MVideoWithRights
@@ -1407,6 +1408,19 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(options)
+  }
+
+  static loadWithBlacklist (id: number | string, t?: Transaction): Bluebird<MVideoThumbnailBlacklist> {
+    const where = buildWhereIdOrUUID(id)
+    const options = {
+      where,
+      transaction: t
+    }
+
+    return VideoModel.scope([
+      ScopeNames.WITH_THUMBNAILS,
+      ScopeNames.WITH_BLACKLISTED
+    ]).findOne(options)
   }
 
   static loadWithRights (id: number | string, t?: Transaction): Bluebird<MVideoWithRights> {

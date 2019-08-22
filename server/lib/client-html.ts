@@ -42,11 +42,11 @@ export class ClientHtml {
 
     const [ html, video ] = await Promise.all([
       ClientHtml.getIndexHTML(req, res),
-      VideoModel.load(videoId)
+      VideoModel.loadWithBlacklist(videoId)
     ])
 
     // Let Angular application handle errors
-    if (!video || video.privacy === VideoPrivacy.PRIVATE) {
+    if (!video || video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
       return ClientHtml.getIndexHTML(req, res)
     }
 

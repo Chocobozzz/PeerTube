@@ -52,6 +52,10 @@ export type MVideoWithFileThumbnail = MVideo &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'Thumbnails', MThumbnail[]>
 
+export type MVideoThumbnailBlacklist = MVideo &
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'VideoBlacklist', MVideoBlacklistLight>
+
 export type MVideoTag = MVideo &
   Use<'Tags', MTag[]>
 
