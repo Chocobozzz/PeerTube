@@ -8,7 +8,7 @@ class PeerTubeSocket {
 
   private static instance: PeerTubeSocket
 
-  private userNotificationSockets: { [ userId: number ]: SocketIO.Socket } = {}
+  private userNotificationSockets: { [ userId: number ]: SocketIO.Socket[] } = {}
 
   private constructor () {}
 
@@ -22,22 +22,26 @@ class PeerTubeSocket {
 
         logger.debug('User %d connected on the notification system.', userId)
 
-        this.userNotificationSockets[userId] = socket
+        if (!this.userNotificationSockets[userId]) this.userNotificationSockets[userId] = []
+
+        this.userNotificationSockets[userId].push(socket)
 
         socket.on('disconnect', () => {
           logger.debug('User %d disconnected from SocketIO notifications.', userId)
 
-          delete this.userNotificationSockets[userId]
+          this.userNotificationSockets[userId] = this.userNotificationSockets[userId].filter(s => s !== socket)
         })
       })
   }
 
   sendNotification (userId: number, notification: UserNotificationModel) {
-    const socket = this.userNotificationSockets[userId]
+    const sockets = this.userNotificationSockets[userId]
 
-    if (!socket) return
+    if (!sockets) return
 
-    socket.emit('new-notification', notification.toFormattedJSON())
+    for (const socket of sockets) {
+      socket.emit('new-notification', notification.toFormattedJSON())
+    }
   }
 
   static get Instance () {
