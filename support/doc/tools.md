@@ -19,6 +19,7 @@
   - [optimize-old-videos.js](#optimize-old-videosjs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
+  - [plugin install/uninstall](#plugin-installuninstall)
   - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
     - [.help](#help)
     - [Lodash example](#lodash-example)
