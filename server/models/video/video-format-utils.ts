@@ -1,6 +1,5 @@
 import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
 import { VideoModel } from './video'
-import { VideoFileModel } from './video-file'
 import {
   ActivityPlaylistInfohashesObject,
   ActivityPlaylistSegmentHashesObject,
@@ -17,7 +16,9 @@ import {
 } from '../../lib/activitypub'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
-import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { MStreamingPlaylistRedundanciesOpt, MVideo, MVideoAP, MVideoFormattable, MVideoFormattableDetails } from '../../typings/models'
+import { MStreamingPlaylistRedundancies } from '../../typings/models/video/video-streaming-playlist'
+import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
@@ -28,7 +29,7 @@ export type VideoFormattingJSONOptions = {
     blacklistInfo?: boolean
   }
 }
-function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormattingJSONOptions): Video {
+function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
   const videoObject: Video = {
@@ -102,7 +103,7 @@ function videoModelToFormattedJSON (video: VideoModel, options?: VideoFormatting
   return videoObject
 }
 
-function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
+function videoModelToFormattedDetailsJSON (video: MVideoFormattableDetails): VideoDetails {
   const formattedJson = video.toFormattedJSON({
     additionalAttributes: {
       scheduledUpdate: true,
@@ -114,7 +115,7 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
 
   const tags = video.Tags ? video.Tags.map(t => t.name) : []
 
-  const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video, video.VideoStreamingPlaylists)
+  const streamingPlaylists = streamingPlaylistsModelToFormattedJSON(video.VideoStreamingPlaylists)
 
   const detailsJson = {
     support: video.support,
@@ -142,7 +143,7 @@ function videoModelToFormattedDetailsJSON (video: VideoModel): VideoDetails {
   return Object.assign(formattedJson, detailsJson)
 }
 
-function streamingPlaylistsModelToFormattedJSON (video: VideoModel, playlists: VideoStreamingPlaylistModel[]): VideoStreamingPlaylist[] {
+function streamingPlaylistsModelToFormattedJSON (playlists: MStreamingPlaylistRedundanciesOpt[]): VideoStreamingPlaylist[] {
   if (isArray(playlists) === false) return []
 
   return playlists
@@ -161,7 +162,7 @@ function streamingPlaylistsModelToFormattedJSON (video: VideoModel, playlists: V
     })
 }
 
-function videoFilesModelToFormattedJSON (video: VideoModel, videoFiles: VideoFileModel[]): VideoFile[] {
+function videoFilesModelToFormattedJSON (video: MVideo, videoFiles: MVideoFileRedundanciesOpt[]): VideoFile[] {
   const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
 
   return videoFiles
@@ -189,7 +190,7 @@ function videoFilesModelToFormattedJSON (video: VideoModel, videoFiles: VideoFil
     })
 }
 
-function videoModelToActivityPubObject (video: VideoModel): VideoTorrentObject {
+function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
   const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
   if (!video.Tags) video.Tags = []
 

@@ -15,7 +15,7 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature, MAccountIdActor } from '../../../typings/models'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -53,7 +53,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processUpdateVideo (actor: SignatureActorModel, activity: ActivityUpdate) {
+async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpdate) {
   const videoObject = activity.object as VideoTorrentObject
 
   if (sanitizeAndCheckVideoTorrentObject(videoObject) === false) {
@@ -61,20 +61,23 @@ async function processUpdateVideo (actor: SignatureActorModel, activity: Activit
     return undefined
   }
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id, allowRefresh: false })
+  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoObject.id, allowRefresh: false, fetchType: 'all' })
   const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
+
+  const account = actor.Account as MAccountIdActor
+  account.Actor = actor
 
   const updateOptions = {
     video,
     videoObject,
-    account: actor.Account,
+    account,
     channel: channelActor.VideoChannel,
     overrideTo: activity.to
   }
   return updateVideoFromAP(updateOptions)
 }
 
-async function processUpdateCacheFile (byActor: SignatureActorModel, activity: ActivityUpdate) {
+async function processUpdateCacheFile (byActor: MActorSignature, activity: ActivityUpdate) {
   const cacheFileObject = activity.object as CacheFileObject
 
   if (!isCacheFileObjectValid(cacheFileObject)) {
@@ -150,7 +153,7 @@ async function processUpdateActor (actor: ActorModel, activity: ActivityUpdate) 
   }
 }
 
-async function processUpdatePlaylist (byActor: SignatureActorModel, activity: ActivityUpdate) {
+async function processUpdatePlaylist (byActor: MActorSignature, activity: ActivityUpdate) {
   const playlistObject = activity.object as PlaylistObject
   const byAccount = byActor.Account
 

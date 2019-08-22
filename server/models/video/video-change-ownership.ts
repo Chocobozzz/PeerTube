@@ -3,6 +3,8 @@ import { AccountModel } from '../account/account'
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
 import { getSort } from '../utils'
+import { MVideoChangeOwnershipFormattable, MVideoChangeOwnershipFull } from '@server/typings/models/video/video-change-ownership'
+import * as Bluebird from 'bluebird'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS',
@@ -108,16 +110,16 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
 
     return Promise.all([
       VideoChangeOwnershipModel.scope(ScopeNames.WITH_ACCOUNTS).count(query),
-      VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ]).findAll(query)
+      VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ]).findAll<MVideoChangeOwnershipFull>(query)
     ]).then(([ count, rows ]) => ({ total: count, data: rows }))
   }
 
-  static load (id: number) {
+  static load (id: number): Bluebird<MVideoChangeOwnershipFull> {
     return VideoChangeOwnershipModel.scope([ ScopeNames.WITH_ACCOUNTS, ScopeNames.WITH_VIDEO ])
                                     .findByPk(id)
   }
 
-  toFormattedJSON (): VideoChangeOwnership {
+  toFormattedJSON (this: MVideoChangeOwnershipFormattable): VideoChangeOwnership {
     return {
       id: this.id,
       status: this.status,

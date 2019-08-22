@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { body, param } from 'express-validator'
 import { omit } from 'lodash'
-import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toBooleanOrNull } from '../../helpers/custom-validators/misc'
 import {
   isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
@@ -31,6 +31,7 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { doesVideoExist } from '../../helpers/middlewares'
 import { UserRole } from '../../../shared/models/users'
+import { MUserDefault } from '@server/typings/models'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -457,7 +458,7 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   return true
 }
 
-async function checkUserExist (finder: () => Bluebird<UserModel>, res: express.Response, abortResponse = true) {
+async function checkUserExist (finder: () => Bluebird<MUserDefault>, res: express.Response, abortResponse = true) {
   const user = await finder()
 
   if (!user) {

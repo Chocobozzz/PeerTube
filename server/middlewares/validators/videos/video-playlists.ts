@@ -2,7 +2,6 @@ import * as express from 'express'
 import { body, param, query, ValidationChain } from 'express-validator'
 import { UserRight, VideoPlaylistCreate, VideoPlaylistUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { UserModel } from '../../../models/account/user'
 import { areValidationErrors } from '../utils'
 import { isVideoImage } from '../../../helpers/custom-validators/videos'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
@@ -22,13 +21,14 @@ import {
   isVideoPlaylistTimestampValid,
   isVideoPlaylistTypeValid
 } from '../../../helpers/custom-validators/video-playlists'
-import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
 import { VideoPlaylistElementModel } from '../../../models/video/video-playlist-element'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
-import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist } from '../../../helpers/middlewares'
+import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../../../helpers/middlewares'
+import { MVideoPlaylist } from '../../../typings/models/video/video-playlist'
+import { MUserAccountId } from '@server/typings/models'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')
@@ -67,9 +67,9 @@ const videoPlaylistsUpdateValidator = getCommonPlaylistEditAttributes().concat([
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return cleanUpReqFiles(req)
 
-    const videoPlaylist = res.locals.videoPlaylist
+    const videoPlaylist = getPlaylist(res)
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, res.locals.videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
+    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
       return cleanUpReqFiles(req)
     }
 
@@ -110,13 +110,13 @@ const videoPlaylistsDeleteValidator = [
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res)) return
 
-    const videoPlaylist = res.locals.videoPlaylist
+    const videoPlaylist = getPlaylist(res)
     if (videoPlaylist.type === VideoPlaylistType.WATCH_LATER) {
       return res.status(400)
                 .json({ error: 'Cannot delete a watch later playlist.' })
     }
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, res.locals.videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
+    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.REMOVE_ANY_VIDEO_PLAYLIST, res)) {
       return
     }
 
@@ -124,45 +124,47 @@ const videoPlaylistsDeleteValidator = [
   }
 ]
 
-const videoPlaylistsGetValidator = [
-  param('playlistId')
-    .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
+const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
+  return [
+    param('playlistId')
+      .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking videoPlaylistsGetValidator parameters', { parameters: req.params })
+    async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      logger.debug('Checking videoPlaylistsGetValidator parameters', { parameters: req.params })
 
-    if (areValidationErrors(req, res)) return
+      if (areValidationErrors(req, res)) return
 
-    if (!await doesVideoPlaylistExist(req.params.playlistId, res)) return
+      if (!await doesVideoPlaylistExist(req.params.playlistId, res, fetchType)) return
 
-    const videoPlaylist = res.locals.videoPlaylist
+      const videoPlaylist = res.locals.videoPlaylistFull || res.locals.videoPlaylistSummary
 
-    // Video is unlisted, check we used the uuid to fetch it
-    if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
-      if (isUUIDValid(req.params.playlistId)) return next()
+      // Video is unlisted, check we used the uuid to fetch it
+      if (videoPlaylist.privacy === VideoPlaylistPrivacy.UNLISTED) {
+        if (isUUIDValid(req.params.playlistId)) return next()
 
-      return res.status(404).end()
-    }
+        return res.status(404).end()
+      }
 
-    if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
-      await authenticatePromiseIfNeeded(req, res)
+      if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
+        await authenticatePromiseIfNeeded(req, res)
 
-      const user = res.locals.oauth ? res.locals.oauth.token.User : null
+        const user = res.locals.oauth ? res.locals.oauth.token.User : null
 
-      if (
-        !user ||
-        (videoPlaylist.OwnerAccount.id !== user.Account.id && !user.hasRight(UserRight.UPDATE_ANY_VIDEO_PLAYLIST))
-      ) {
-        return res.status(403)
-                  .json({ error: 'Cannot get this private video playlist.' })
+        if (
+          !user ||
+          (videoPlaylist.OwnerAccount.id !== user.Account.id && !user.hasRight(UserRight.UPDATE_ANY_VIDEO_PLAYLIST))
+        ) {
+          return res.status(403)
+                    .json({ error: 'Cannot get this private video playlist.' })
+        }
+
+        return next()
       }
 
       return next()
     }
-
-    return next()
-  }
-]
+  ]
+}
 
 const videoPlaylistsAddVideoValidator = [
   param('playlistId')
@@ -184,8 +186,8 @@ const videoPlaylistsAddVideoValidator = [
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
     if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
 
-    const videoPlaylist = res.locals.videoPlaylist
-    const video = res.locals.video
+    const videoPlaylist = getPlaylist(res)
+    const video = res.locals.onlyVideo
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadByPlaylistAndVideo(videoPlaylist.id, video.id)
     if (videoPlaylistElement) {
@@ -196,7 +198,7 @@ const videoPlaylistsAddVideoValidator = [
       return
     }
 
-    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, res.locals.videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) {
+    if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) {
       return
     }
 
@@ -223,7 +225,7 @@ const videoPlaylistsUpdateOrRemoveVideoValidator = [
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
 
-    const videoPlaylist = res.locals.videoPlaylist
+    const videoPlaylist = getPlaylist(res)
 
     const videoPlaylistElement = await VideoPlaylistElementModel.loadById(req.params.playlistElementId)
     if (!videoPlaylistElement) {
@@ -265,7 +267,7 @@ const videoPlaylistElementAPGetValidator = [
       return res.status(403).end()
     }
 
-    res.locals.videoPlaylistElement = videoPlaylistElement
+    res.locals.videoPlaylistElementAP = videoPlaylistElement
 
     return next()
   }
@@ -289,7 +291,7 @@ const videoPlaylistsReorderVideosValidator = [
 
     if (!await doesVideoPlaylistExist(req.params.playlistId, res, 'all')) return
 
-    const videoPlaylist = res.locals.videoPlaylist
+    const videoPlaylist = getPlaylist(res)
     if (!checkUserCanManageVideoPlaylist(res.locals.oauth.token.User, videoPlaylist, UserRight.UPDATE_ANY_VIDEO_PLAYLIST, res)) return
 
     const nextPosition = await VideoPlaylistElementModel.getNextPositionOf(videoPlaylist.id)
@@ -388,7 +390,7 @@ function getCommonPlaylistEditAttributes () {
   ] as (ValidationChain | express.Handler)[]
 }
 
-function checkUserCanManageVideoPlaylist (user: UserModel, videoPlaylist: VideoPlaylistModel, right: UserRight, res: express.Response) {
+function checkUserCanManageVideoPlaylist (user: MUserAccountId, videoPlaylist: MVideoPlaylist, right: UserRight, res: express.Response) {
   if (videoPlaylist.isOwned() === false) {
     res.status(403)
        .json({ error: 'Cannot manage video playlist of another server.' })
@@ -409,4 +411,8 @@ function checkUserCanManageVideoPlaylist (user: UserModel, videoPlaylist: VideoP
   }
 
   return true
+}
+
+function getPlaylist (res: express.Response) {
+  return res.locals.videoPlaylistFull || res.locals.videoPlaylistSummary
 }

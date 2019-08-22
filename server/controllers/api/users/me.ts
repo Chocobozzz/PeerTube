@@ -23,14 +23,11 @@ import { createReqFiles } from '../../../helpers/express-utils'
 import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
 import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
 import { updateActorAvatarFile } from '../../../lib/avatar'
-import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { AccountModel } from '../../../models/account/account'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { sendVerifyUserEmail } from '../../../lib/user'
-
-const auditLogger = auditLoggerFactory('users-me')
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 
@@ -147,7 +144,7 @@ async function getUserVideoQuotaUsed (req: express.Request, res: express.Respons
 }
 
 async function getUserVideoRating (req: express.Request, res: express.Response) {
-  const videoId = res.locals.video.id
+  const videoId = res.locals.videoId.id
   const accountId = +res.locals.oauth.token.User.Account.id
 
   const ratingObj = await AccountVideoRateModel.load(accountId, videoId, null)
@@ -165,8 +162,6 @@ async function deleteMe (req: express.Request, res: express.Response) {
 
   await user.destroy()
 
-  auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})))
-
   return res.sendStatus(204)
 }
 
@@ -175,7 +170,6 @@ async function updateMe (req: express.Request, res: express.Response) {
   let sendVerificationEmail = false
 
   const user = res.locals.oauth.token.user
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON({}))
 
   if (body.password !== undefined) user.password = body.password
   if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
@@ -204,8 +198,6 @@ async function updateMe (req: express.Request, res: express.Response) {
     await userAccount.save({ transaction: t })
 
     await sendUpdateActor(userAccount, t)
-
-    auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})), oldUserAuditView)
   })
 
   if (sendVerificationEmail === true) {
@@ -218,13 +210,10 @@ async function updateMe (req: express.Request, res: express.Response) {
 async function updateMyAvatar (req: express.Request, res: express.Response) {
   const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
   const user = res.locals.oauth.token.user
-  const oldUserAuditView = new UserAuditView(user.toFormattedJSON({}))
 
   const userAccount = await AccountModel.load(user.Account.id)
 
   const avatar = await updateActorAvatarFile(avatarPhysicalFile, userAccount)
-
-  auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON({})), oldUserAuditView)
 
   return res.json({ avatar: avatar.toFormattedJSON() })
 }

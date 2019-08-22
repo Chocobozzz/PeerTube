@@ -14,11 +14,15 @@
       "es2016",
       "es2017"
     ],
-    "typeRoots": [ "node_modules/@types", "server/typings" ]
+    "typeRoots": [ "node_modules/@types", "server/typings" ],
+    "baseUrl": "./",
+    "paths": {
+      "@server/typings/*": [ "server/typings/*" ],
+      "@server/models/*": [ "server/models/*" ]
+    }
   },
   "exclude": [
     "server/tools/",
-    "client/node_modules",
     "node_modules",
     "dist",
     "storage",

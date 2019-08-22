@@ -2,21 +2,29 @@ import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityUpdate } from '../../../../shared/models/activitypub'
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { AccountModel } from '../../../models/account/account'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { getUpdateActivityPubUrl } from '../url'
 import { broadcastToFollowers, sendVideoRelatedActivity } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { getServerActor } from '../../../helpers/utils'
+import {
+  MAccountDefault,
+  MActor,
+  MActorLight,
+  MChannelDefault,
+  MVideoAP,
+  MVideoAPWithoutCaption,
+  MVideoPlaylistFull,
+  MVideoRedundancyVideo
+} from '../../../typings/models'
 
-async function sendUpdateVideo (video: VideoModel, t: Transaction, overrodeByActor?: ActorModel) {
+async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction, overrodeByActor?: MActor) {
+  const video = videoArg as MVideoAP
+
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
   logger.info('Creating job to update video %s.', video.url)
@@ -41,7 +49,7 @@ async function sendUpdateVideo (video: VideoModel, t: Transaction, overrodeByAct
   return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
 }
 
-async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelModel, t: Transaction) {
+async function sendUpdateActor (accountOrChannel: MChannelDefault | MAccountDefault, t: Transaction) {
   const byActor = accountOrChannel.Actor
 
   logger.info('Creating job to update actor %s.', byActor.url)
@@ -51,7 +59,7 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
   const audience = getAudience(byActor)
   const updateActivity = buildUpdateActivity(url, byActor, accountOrChannelObject, audience)
 
-  let actorsInvolved: ActorModel[]
+  let actorsInvolved: MActor[]
   if (accountOrChannel instanceof AccountModel) {
     // Actors that shared my videos are involved too
     actorsInvolved = await VideoShareModel.loadActorsWhoSharedVideosOf(byActor.id, t)
@@ -65,7 +73,7 @@ async function sendUpdateActor (accountOrChannel: AccountModel | VideoChannelMod
   return broadcastToFollowers(updateActivity, byActor, actorsInvolved, t)
 }
 
-async function sendUpdateCacheFile (byActor: ActorModel, redundancyModel: VideoRedundancyModel) {
+async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVideoRedundancyVideo) {
   logger.info('Creating job to update cache file %s.', redundancyModel.url)
 
   const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(redundancyModel.getVideo().id)
@@ -80,7 +88,7 @@ async function sendUpdateCacheFile (byActor: ActorModel, redundancyModel: VideoR
   return sendVideoRelatedActivity(activityBuilder, { byActor, video })
 }
 
-async function sendUpdateVideoPlaylist (videoPlaylist: VideoPlaylistModel, t: Transaction) {
+async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, t: Transaction) {
   if (videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) return undefined
 
   const byActor = videoPlaylist.OwnerAccount.Actor
@@ -113,7 +121,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildUpdateActivity (url: string, byActor: ActorModel, object: any, audience?: ActivityAudience): ActivityUpdate {
+function buildUpdateActivity (url: string, byActor: MActorLight, object: any, audience?: ActivityAudience): ActivityUpdate {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(
@@ -121,8 +129,7 @@ function buildUpdateActivity (url: string, byActor: ActorModel, object: any, aud
       type: 'Update' as 'Update',
       id: url,
       actor: byActor.url,
-      object: audiencify(object, audience
-      )
+      object: audiencify(object, audience)
     },
     audience
   )

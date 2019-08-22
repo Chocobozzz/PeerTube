@@ -18,6 +18,7 @@ import { getFormattedObjects } from '../../../helpers/utils'
 import { changeVideoChannelShare } from '../../../lib/activitypub'
 import { sendUpdateVideo } from '../../../lib/activitypub/send'
 import { VideoModel } from '../../../models/video/video'
+import { MVideoFullLight } from '@server/typings/models'
 
 const ownershipVideoRouter = express.Router()
 
@@ -56,7 +57,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function giveVideoOwnership (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   const initiatorAccountId = res.locals.oauth.token.User.Account.id
   const nextOwner = res.locals.nextOwner
 
@@ -107,7 +108,7 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
 
     targetVideo.channelId = channel.id
 
-    const targetVideoUpdated = await targetVideo.save({ transaction: t })
+    const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoFullLight
     targetVideoUpdated.VideoChannel = channel
 
     if (targetVideoUpdated.privacy !== VideoPrivacy.PRIVATE && targetVideoUpdated.state === VideoState.PUBLISHED) {

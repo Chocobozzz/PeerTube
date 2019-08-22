@@ -1,12 +1,19 @@
 import * as Sequelize from 'sequelize'
 import * as uuidv4 from 'uuid/v4'
 import { VideoChannelCreate } from '../../shared/models'
-import { AccountModel } from '../models/account/account'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { buildActorInstance, federateVideoIfNeeded, getVideoChannelActivityPubUrl } from './activitypub'
 import { VideoModel } from '../models/video/video'
+import { MAccountId, MChannelDefault, MChannelId } from '../typings/models'
 
-async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account: AccountModel, t: Sequelize.Transaction) {
+type CustomVideoChannelModelAccount <T extends MAccountId> = MChannelDefault &
+  { Account?: T }
+
+async function createLocalVideoChannel <T extends MAccountId> (
+  videoChannelInfo: VideoChannelCreate,
+  account: T,
+  t: Sequelize.Transaction
+): Promise<CustomVideoChannelModelAccount<T>> {
   const uuid = uuidv4()
   const url = getVideoChannelActivityPubUrl(videoChannelInfo.name)
   const actorInstance = buildActorInstance('Group', url, videoChannelInfo.name, uuid)
@@ -21,10 +28,10 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
     actorId: actorInstanceCreated.id
   }
 
-  const videoChannel = VideoChannelModel.build(videoChannelData)
+  const videoChannel = new VideoChannelModel(videoChannelData)
 
   const options = { transaction: t }
-  const videoChannelCreated = await videoChannel.save(options)
+  const videoChannelCreated: CustomVideoChannelModelAccount<T> = await videoChannel.save(options) as MChannelDefault
 
   // Do not forget to add Account/Actor information to the created video channel
   videoChannelCreated.Account = account
@@ -34,7 +41,7 @@ async function createVideoChannel (videoChannelInfo: VideoChannelCreate, account
   return videoChannelCreated
 }
 
-async function federateAllVideosOfChannel (videoChannel: VideoChannelModel) {
+async function federateAllVideosOfChannel (videoChannel: MChannelId) {
   const videoIds = await VideoModel.getAllIdsFromChannel(videoChannel)
 
   for (const videoId of videoIds) {
@@ -47,6 +54,6 @@ async function federateAllVideosOfChannel (videoChannel: VideoChannelModel) {
 // ---------------------------------------------------------------------------
 
 export {
-  createVideoChannel,
+  createLocalVideoChannel,
   federateAllVideosOfChannel
 }

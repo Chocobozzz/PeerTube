@@ -2,20 +2,20 @@ import { sanitizeAndCheckVideoCommentObject } from '../../helpers/custom-validat
 import { logger } from '../../helpers/logger'
 import { doRequest } from '../../helpers/requests'
 import { ACTIVITY_PUB, CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
-import { VideoModel } from '../../models/video/video'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
+import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../typings/models/video'
 
 type ResolveThreadParams = {
   url: string,
-  comments?: VideoCommentModel[],
+  comments?: MCommentOwner[],
   isVideo?: boolean,
   commentCreated?: boolean
 }
-type ResolveThreadResult = Promise<{ video: VideoModel, comment: VideoCommentModel, commentCreated: boolean }>
+type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
 
 async function addVideoComments (commentUrls: string[]) {
   return Bluebird.map(commentUrls, commentUrl => {
@@ -85,9 +85,9 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
   const syncParam = { likes: true, dislikes: true, shares: true, comments: false, thumbnail: true, refreshVideo: false }
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: url, syncParam })
 
-  let resultComment: VideoCommentModel
+  let resultComment: MCommentOwnerVideo
   if (comments.length !== 0) {
-    const firstReply = comments[ comments.length - 1 ]
+    const firstReply = comments[ comments.length - 1 ] as MCommentOwnerVideo
     firstReply.inReplyToCommentId = null
     firstReply.originCommentId = null
     firstReply.videoId = video.id
@@ -97,7 +97,7 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
     comments[comments.length - 1] = await firstReply.save()
 
     for (let i = comments.length - 2; i >= 0; i--) {
-      const comment = comments[ i ]
+      const comment = comments[ i ] as MCommentOwnerVideo
       comment.originCommentId = firstReply.id
       comment.inReplyToCommentId = comments[ i + 1 ].id
       comment.videoId = video.id
@@ -107,7 +107,7 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
       comments[i] = await comment.save()
     }
 
-    resultComment = comments[0]
+    resultComment = comments[0] as MCommentOwnerVideo
   }
 
   return { video, comment: resultComment, commentCreated }
@@ -151,7 +151,7 @@ async function resolveParentComment (params: ResolveThreadParams) {
     originCommentId: null,
     createdAt: new Date(body.published),
     updatedAt: new Date(body.updated)
-  })
+  }) as MCommentOwner
   comment.Account = actor.Account
 
   return resolveThread({

@@ -6,6 +6,7 @@ import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
 import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
+import { MTag } from '@server/typings/models'
 
 @Table({
   tableName: 'tag',
@@ -37,10 +38,10 @@ export class TagModel extends Model<TagModel> {
   })
   Videos: VideoModel[]
 
-  static findOrCreateTags (tags: string[], transaction: Transaction) {
-    if (tags === null) return []
+  static findOrCreateTags (tags: string[], transaction: Transaction): Promise<MTag[]> {
+    if (tags === null) return Promise.resolve([])
 
-    const tasks: Bluebird<TagModel>[] = []
+    const tasks: Bluebird<MTag>[] = []
     tags.forEach(tag => {
       const query = {
         where: {
@@ -52,7 +53,7 @@ export class TagModel extends Model<TagModel> {
         transaction
       }
 
-      const promise = TagModel.findOrCreate(query)
+      const promise = TagModel.findOrCreate<MTag>(query)
         .then(([ tagInstance ]) => tagInstance)
       tasks.push(promise)
     })

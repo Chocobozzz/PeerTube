@@ -2,15 +2,13 @@ import { ActivityDelete } from '../../../../shared/models/activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers'
-import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MAccountActor, MActor, MActorSignature, MChannelActor, MChannelActorAccountActor } from '../../../typings/models'
 
 async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
   const { activity, byActor } = options
@@ -24,13 +22,17 @@ async function processDeleteActivity (options: APProcessorOptions<ActivityDelete
     if (byActorFull.type === 'Person') {
       if (!byActorFull.Account) throw new Error('Actor ' + byActorFull.url + ' is a person but we cannot find it in database.')
 
-      byActorFull.Account.Actor = await byActorFull.Account.$get('Actor') as ActorModel
-      return retryTransactionWrapper(processDeleteAccount, byActorFull.Account)
+      const accountToDelete = byActorFull.Account as MAccountActor
+      accountToDelete.Actor = byActorFull
+
+      return retryTransactionWrapper(processDeleteAccount, accountToDelete)
     } else if (byActorFull.type === 'Group') {
       if (!byActorFull.VideoChannel) throw new Error('Actor ' + byActorFull.url + ' is a group but we cannot find it in database.')
 
-      byActorFull.VideoChannel.Actor = await byActorFull.VideoChannel.$get('Actor') as ActorModel
-      return retryTransactionWrapper(processDeleteVideoChannel, byActorFull.VideoChannel)
+      const channelToDelete = byActorFull.VideoChannel as MChannelActorAccountActor
+      channelToDelete.Actor = byActorFull
+
+      return retryTransactionWrapper(processDeleteVideoChannel, channelToDelete)
     }
   }
 
@@ -70,7 +72,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processDeleteVideo (actor: ActorModel, videoToDelete: VideoModel) {
+async function processDeleteVideo (actor: MActor, videoToDelete: VideoModel) {
   logger.debug('Removing remote video "%s".', videoToDelete.uuid)
 
   await sequelizeTypescript.transaction(async t => {
@@ -84,7 +86,7 @@ async function processDeleteVideo (actor: ActorModel, videoToDelete: VideoModel)
   logger.info('Remote video with uuid %s removed.', videoToDelete.uuid)
 }
 
-async function processDeleteVideoPlaylist (actor: ActorModel, playlistToDelete: VideoPlaylistModel) {
+async function processDeleteVideoPlaylist (actor: MActor, playlistToDelete: VideoPlaylistModel) {
   logger.debug('Removing remote video playlist "%s".', playlistToDelete.uuid)
 
   await sequelizeTypescript.transaction(async t => {
@@ -98,7 +100,7 @@ async function processDeleteVideoPlaylist (actor: ActorModel, playlistToDelete: 
   logger.info('Remote video playlist with uuid %s removed.', playlistToDelete.uuid)
 }
 
-async function processDeleteAccount (accountToRemove: AccountModel) {
+async function processDeleteAccount (accountToRemove: MAccountActor) {
   logger.debug('Removing remote account "%s".', accountToRemove.Actor.url)
 
   await sequelizeTypescript.transaction(async t => {
@@ -108,7 +110,7 @@ async function processDeleteAccount (accountToRemove: AccountModel) {
   logger.info('Remote account %s removed.', accountToRemove.Actor.url)
 }
 
-async function processDeleteVideoChannel (videoChannelToRemove: VideoChannelModel) {
+async function processDeleteVideoChannel (videoChannelToRemove: MChannelActor) {
   logger.debug('Removing remote video channel "%s".', videoChannelToRemove.Actor.url)
 
   await sequelizeTypescript.transaction(async t => {
@@ -118,7 +120,7 @@ async function processDeleteVideoChannel (videoChannelToRemove: VideoChannelMode
   logger.info('Remote video channel %s removed.', videoChannelToRemove.Actor.url)
 }
 
-function processDeleteVideoComment (byActor: SignatureActorModel, videoComment: VideoCommentModel, activity: ActivityDelete) {
+function processDeleteVideoComment (byActor: MActorSignature, videoComment: VideoCommentModel, activity: ActivityDelete) {
   logger.debug('Removing remote video comment "%s".', videoComment.url)
 
   return sequelizeTypescript.transaction(async t => {

@@ -5,16 +5,16 @@ import { ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
-import { VideoModel } from '../models/video/video'
 import { updateMasterHLSPlaylist, updateSha256Segments } from './hls'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { VideoStreamingPlaylistType } from '../../shared/models/videos/video-streaming-playlist.type'
 import { CONFIG } from '../initializers/config'
+import { MVideoFile, MVideoWithFile, MVideoWithFileThumbnail } from '@server/typings/models'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.
  */
-async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFileModel) {
+async function optimizeVideofile (video: MVideoWithFile, inputVideoFileArg?: MVideoFile) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
@@ -57,7 +57,7 @@ async function optimizeVideofile (video: VideoModel, inputVideoFileArg?: VideoFi
 /**
  * Transcode the original video file to a lower resolution.
  */
-async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoResolution, isPortrait: boolean) {
+async function transcodeOriginalVideofile (video: MVideoWithFile, resolution: VideoResolution, isPortrait: boolean) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const extname = '.mp4'
@@ -87,7 +87,7 @@ async function transcodeOriginalVideofile (video: VideoModel, resolution: VideoR
   return onVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
-async function mergeAudioVideofile (video: VideoModel, resolution: VideoResolution) {
+async function mergeAudioVideofile (video: MVideoWithFileThumbnail, resolution: VideoResolution) {
   const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
   const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
   const newExtname = '.mp4'
@@ -117,7 +117,7 @@ async function mergeAudioVideofile (video: VideoModel, resolution: VideoResoluti
   return onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 }
 
-async function generateHlsPlaylist (video: VideoModel, resolution: VideoResolution, isPortraitMode: boolean) {
+async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoResolution, isPortraitMode: boolean) {
   const baseHlsDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   await ensureDir(join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid))
 
@@ -165,14 +165,14 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function onVideoFileTranscoding (video: VideoModel, videoFile: VideoFileModel, transcodingPath: string, outputPath: string) {
+async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoFile, transcodingPath: string, outputPath: string) {
   const stats = await stat(transcodingPath)
   const fps = await getVideoFileFPS(transcodingPath)
 
   await move(transcodingPath, outputPath)
 
-  videoFile.set('size', stats.size)
-  videoFile.set('fps', fps)
+  videoFile.size = stats.size
+  videoFile.fps = fps
 
   await video.createTorrentAndSetInfoHash(videoFile)
 

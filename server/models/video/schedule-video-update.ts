@@ -2,6 +2,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Ta
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { Op, Transaction } from 'sequelize'
+import { MScheduleVideoUpdateFormattable } from '@server/typings/models'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -96,7 +97,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
     return ScheduleVideoUpdateModel.destroy(query)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (this: MScheduleVideoUpdateFormattable) {
     return {
       updateAt: this.updateAt,
       privacy: this.privacy || undefined

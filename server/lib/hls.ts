@@ -1,4 +1,3 @@
-import { VideoModel } from '../models/video/video'
 import { basename, dirname, join } from 'path'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from '../initializers/constants'
 import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
@@ -12,6 +11,7 @@ import { flatten, uniq } from 'lodash'
 import { VideoFileModel } from '../models/video/video-file'
 import { CONFIG } from '../initializers/config'
 import { sequelizeTypescript } from '../initializers/database'
+import { MVideoWithFile } from '@server/typings/models'
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {
   const playlistsToUpdate = await VideoStreamingPlaylistModel.listByIncorrectPeerVersion()
@@ -28,7 +28,7 @@ async function updateStreamingPlaylistsInfohashesIfNeeded () {
   }
 }
 
-async function updateMasterHLSPlaylist (video: VideoModel) {
+async function updateMasterHLSPlaylist (video: MVideoWithFile) {
   const directory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)
   const masterPlaylists: string[] = [ '#EXTM3U', '#EXT-X-VERSION:3' ]
   const masterPlaylistPath = join(directory, VideoStreamingPlaylistModel.getMasterHlsPlaylistFilename())
@@ -55,7 +55,7 @@ async function updateMasterHLSPlaylist (video: VideoModel) {
   await writeFile(masterPlaylistPath, masterPlaylists.join('\n') + '\n')
 }
 
-async function updateSha256Segments (video: VideoModel) {
+async function updateSha256Segments (video: MVideoWithFile) {
   const json: { [filename: string]: { [range: string]: string } } = {}
 
   const playlistDirectory = join(HLS_STREAMING_PLAYLIST_DIRECTORY, video.uuid)

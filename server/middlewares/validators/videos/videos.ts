@@ -37,13 +37,14 @@ import { VideoModel } from '../../../models/video/video'
 import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } from '../../../helpers/custom-validators/video-ownership'
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
 import { AccountModel } from '../../../models/account/account'
-import { VideoFetchType } from '../../../helpers/video'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '../../../helpers/middlewares'
+import { MVideoFullLight } from '@server/typings/models'
+import { getVideoWithAttributes } from '../../../helpers/video'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -113,7 +114,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 
     if (req.body.channelId && !await doesVideoChannelOfAccountExist(req.body.channelId, user, res)) return cleanUpReqFiles(req)
 
@@ -122,7 +123,7 @@ const videosUpdateValidator = getCommonVideoEditAttributes().concat([
 ])
 
 async function checkVideoFollowConstraints (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const video = res.locals.video
+  const video = getVideoWithAttributes(res)
 
   // Anybody can watch local videos
   if (video.isOwned() === true) return next()
@@ -146,7 +147,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
             })
 }
 
-const videosCustomGetValidator = (fetchType: VideoFetchType) => {
+const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-with-rights') => {
   return [
     param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
@@ -156,10 +157,11 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
       if (areValidationErrors(req, res)) return
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
-      const video = res.locals.video
+      const video = getVideoWithAttributes(res)
+      const videoAll = video as MVideoFullLight
 
       // Video private or blacklisted
-      if (video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
+      if (video.privacy === VideoPrivacy.PRIVATE || videoAll.VideoBlacklist) {
         await authenticatePromiseIfNeeded(req, res)
 
         const user = res.locals.oauth ? res.locals.oauth.token.User : null
@@ -167,7 +169,7 @@ const videosCustomGetValidator = (fetchType: VideoFetchType) => {
         // Only the owner or a user that have blacklist rights can see the video
         if (
           !user ||
-          (video.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST))
+          (videoAll.VideoChannel && videoAll.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST))
         ) {
           return res.status(403)
                     .json({ error: 'Cannot get this private or blacklisted video.' })
@@ -202,7 +204,7 @@ const videosRemoveValidator = [
     if (!await doesVideoExist(req.params.id, res)) return
 
     // Check if the user who did the request is able to delete the video
-    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.REMOVE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.videoAll, UserRight.REMOVE_ANY_VIDEO, res)) return
 
     return next()
   }
@@ -218,7 +220,7 @@ const videosChangeOwnershipValidator = [
     if (!await doesVideoExist(req.params.videoId, res)) return
 
     // Check if the user who did the request is able to change the ownership of the video
-    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.video, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
+    if (!checkUserCanManageVideo(res.locals.oauth.token.User, res.locals.videoAll, UserRight.CHANGE_VIDEO_OWNERSHIP, res)) return
 
     const nextOwner = await AccountModel.loadLocalByName(req.body.username)
     if (!nextOwner) {

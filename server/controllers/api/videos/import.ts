@@ -1,6 +1,5 @@
 import * as express from 'express'
 import * as magnetUtil from 'magnet-uri'
-import 'multer'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import { MIMETYPES } from '../../../initializers/constants'
@@ -15,7 +14,6 @@ import { VideoImportModel } from '../../../models/video/video-import'
 import { JobQueue } from '../../../lib/job-queue/job-queue'
 import { join } from 'path'
 import { isArray } from '../../../helpers/custom-validators/misc'
-import { VideoChannelModel } from '../../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import * as parseTorrent from 'parse-torrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
@@ -25,8 +23,16 @@ import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
-import { ThumbnailModel } from '../../../models/video/thumbnail'
-import { UserModel } from '../../../models/account/user'
+import {
+  MChannelAccountDefault,
+  MThumbnail,
+  MUser,
+  MVideoAccountDefault,
+  MVideoTag,
+  MVideoThumbnailAccountDefault,
+  MVideoWithBlacklistLight
+} from '@server/typings/models'
+import { MVideoImport, MVideoImportFormattable } from '@server/typings/models/video/video-import'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()
@@ -225,28 +231,28 @@ async function processPreview (req: express.Request, video: VideoModel) {
 }
 
 function insertIntoDB (parameters: {
-  video: VideoModel,
-  thumbnailModel: ThumbnailModel,
-  previewModel: ThumbnailModel,
-  videoChannel: VideoChannelModel,
+  video: MVideoThumbnailAccountDefault,
+  thumbnailModel: MThumbnail,
+  previewModel: MThumbnail,
+  videoChannel: MChannelAccountDefault,
   tags: string[],
-  videoImportAttributes: Partial<VideoImportModel>,
-  user: UserModel
-}): Bluebird<VideoImportModel> {
+  videoImportAttributes: Partial<MVideoImport>,
+  user: MUser
+}): Bluebird<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters
 
   return sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
     // Save video object in database
-    const videoCreated = await video.save(sequelizeOptions)
+    const videoCreated = await video.save(sequelizeOptions) as (MVideoAccountDefault & MVideoWithBlacklistLight & MVideoTag)
     videoCreated.VideoChannel = videoChannel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     if (previewModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     await autoBlacklistVideoIfNeeded({
-      video,
+      video: videoCreated,
       user,
       notify: false,
       isRemote: false,
@@ -268,7 +274,7 @@ function insertIntoDB (parameters: {
     const videoImport = await VideoImportModel.create(
       Object.assign({ videoId: videoCreated.id }, videoImportAttributes),
       sequelizeOptions
-    )
+    ) as MVideoImportFormattable
     videoImport.Video = videoCreated
 
     return videoImport

@@ -1,16 +1,16 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, HasMany, Is, Model, Table, UpdatedAt, DataType } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, STATIC_PATHS, P2P_MEDIA_LOADER_PEER_VERSION } from '../../initializers/constants'
-import { VideoFileModel } from './video-file'
+import { CONSTRAINTS_FIELDS, P2P_MEDIA_LOADER_PEER_VERSION, STATIC_PATHS } from '../../initializers/constants'
 import { join } from 'path'
 import { sha1 } from '../../helpers/core-utils'
 import { isArrayOf } from '../../helpers/custom-validators/misc'
-import { QueryTypes, Op } from 'sequelize'
+import { Op, QueryTypes } from 'sequelize'
+import { MStreamingPlaylist, MVideoFile } from '@server/typings/models'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -91,7 +91,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
               .then(results => results.length === 1)
   }
 
-  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, videoFiles: VideoFileModel[]) {
+  static buildP2PMediaLoaderInfoHashes (playlistUrl: string, videoFiles: MVideoFile[]) {
     const hashes: string[] = []
 
     // https://github.com/Novage/p2p-media-loader/blob/master/p2p-media-loader-core/lib/p2p-media-manager.ts#L115
@@ -165,7 +165,7 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     return baseUrlHttp + STATIC_PATHS.REDUNDANCY + this.getStringType() + '/' + this.Video.uuid
   }
 
-  hasSameUniqueKeysThan (other: VideoStreamingPlaylistModel) {
+  hasSameUniqueKeysThan (other: MStreamingPlaylist) {
     return this.type === other.type &&
       this.videoId === other.videoId
   }

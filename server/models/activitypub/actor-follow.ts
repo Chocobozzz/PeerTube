@@ -27,7 +27,14 @@ import { createSafeIn, getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
-import { IncludeOptions, Op, Transaction, QueryTypes } from 'sequelize'
+import { IncludeOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import {
+  MActorFollowActorsDefault,
+  MActorFollowActorsDefaultSubscription,
+  MActorFollowFollowingHost,
+  MActorFollowFormattable,
+  MActorFollowSubscriptions
+} from '@server/typings/models'
 
 @Table({
   tableName: 'actorFollow',
@@ -143,7 +150,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction) {
+  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Bluebird<MActorFollowActorsDefault> {
     const query = {
       where: {
         actorId,
@@ -167,7 +174,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Transaction) {
+  static loadByActorAndTargetNameAndHostForAPI (
+    actorId: number,
+    targetName: string,
+    targetHost: string,
+    t?: Transaction
+  ): Bluebird<MActorFollowActorsDefaultSubscription> {
     const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
@@ -220,7 +232,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]) {
+  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Bluebird<MActorFollowFollowingHost[]> {
     const whereTab = targets
       .map(t => {
         if (t.host) {
@@ -314,7 +326,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
       .then(({ rows, count }) => {
         return {
           data: rows,
@@ -357,7 +369,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows,
@@ -414,7 +426,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowSubscriptions>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows.map(r => r.ActorFollowing.VideoChannel),
@@ -569,7 +581,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  toFormattedJSON (): ActorFollow {
+  toFormattedJSON (this: MActorFollowFormattable): ActorFollow {
     const follower = this.ActorFollower.toFormattedJSON()
     const following = this.ActorFollowing.toFormattedJSON()
 

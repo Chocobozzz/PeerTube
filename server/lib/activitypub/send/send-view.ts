@@ -1,13 +1,13 @@
 import { Transaction } from 'sequelize'
 import { ActivityAudience, ActivityView } from '../../../../shared/models/activitypub'
 import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoModel } from '../../../models/video/video'
 import { getVideoLikeActivityPubUrl } from '../url'
 import { sendVideoRelatedActivity } from './utils'
 import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
+import { MActorAudience, MVideoAccountLight, MVideoUrl } from '@server/typings/models'
 
-async function sendView (byActor: ActorModel, video: VideoModel, t: Transaction) {
+async function sendView (byActor: ActorModel, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to send view of %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {
@@ -19,7 +19,7 @@ async function sendView (byActor: ActorModel, video: VideoModel, t: Transaction)
   return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction: t })
 }
 
-function buildViewActivity (url: string, byActor: ActorModel, video: VideoModel, audience?: ActivityAudience): ActivityView {
+function buildViewActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityView {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify(

@@ -10,8 +10,7 @@ import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
-import { ActorFollowModelLight } from '../../../typings/models/actor-follow'
+import { MAccount, MActorFollowActors, MActorFollowFull, MActorSignature } from '../../../typings/models'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options
@@ -28,7 +27,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processFollow (byActor: SignatureActorModel, targetActorURL: string) {
+async function processFollow (byActor: MActorSignature, targetActorURL: string) {
   const { actorFollow, created, isFollowingInstance } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
@@ -43,10 +42,10 @@ async function processFollow (byActor: SignatureActorModel, targetActorURL: stri
 
       await sendReject(byActor, targetActor)
 
-      return { actorFollow: undefined }
+      return { actorFollow: undefined as MActorFollowActors }
     }
 
-    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate({
+    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
       where: {
         actorId: byActor.id,
         targetActorId: targetActor.id
@@ -57,7 +56,7 @@ async function processFollow (byActor: SignatureActorModel, targetActorURL: stri
         state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL ? 'pending' : 'accepted'
       },
       transaction: t
-    }) as [ ActorFollowModelLight, boolean ]
+    })
 
     if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
       actorFollow.state = 'accepted'
@@ -77,8 +76,14 @@ async function processFollow (byActor: SignatureActorModel, targetActorURL: stri
   if (!actorFollow) return
 
   if (created) {
-    if (isFollowingInstance) Notifier.Instance.notifyOfNewInstanceFollow(actorFollow)
-    else Notifier.Instance.notifyOfNewUserFollow(actorFollow)
+    if (isFollowingInstance) {
+      Notifier.Instance.notifyOfNewInstanceFollow(actorFollow)
+    } else {
+      const actorFollowFull = actorFollow as MActorFollowFull
+      actorFollowFull.ActorFollower.Account = await actorFollow.ActorFollower.$get('Account') as MAccount
+
+      Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
+    }
   }
 
   logger.info('Actor %s is followed by actor %s.', targetActorURL, byActor.url)

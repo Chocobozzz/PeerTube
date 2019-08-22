@@ -1,7 +1,6 @@
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
 import { checkUrlsSameHost, getAPId } from '../../../helpers/activitypub'
 import { logger } from '../../../helpers/logger'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { processAcceptActivity } from './process-accept'
 import { processAnnounceActivity } from './process-announce'
 import { processCreateActivity } from './process-create'
@@ -16,7 +15,7 @@ import { processDislikeActivity } from './process-dislike'
 import { processFlagActivity } from './process-flag'
 import { processViewActivity } from './process-view'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorDefault, MActorSignature } from '../../../typings/models'
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,
@@ -36,15 +35,15 @@ const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Act
 async function processActivities (
   activities: Activity[],
   options: {
-    signatureActor?: SignatureActorModel
-    inboxActor?: ActorModel
+    signatureActor?: MActorSignature
+    inboxActor?: MActorDefault
     outboxUrl?: string
     fromFetch?: boolean
   } = {}
 ) {
   const { outboxUrl, signatureActor, inboxActor, fromFetch = false } = options
 
-  const actorsCache: { [ url: string ]: SignatureActorModel } = {}
+  const actorsCache: { [ url: string ]: MActorSignature } = {}
 
   for (const activity of activities) {
     if (!signatureActor && [ 'Create', 'Announce', 'Like' ].includes(activity.type) === false) {
@@ -75,7 +74,7 @@ async function processActivities (
     }
 
     try {
-      await activityProcessor({ activity, byActor, inboxActor: inboxActor, fromFetch })
+      await activityProcessor({ activity, byActor, inboxActor, fromFetch })
     } catch (err) {
       logger.warn('Cannot process activity %s.', activity.type, { err })
     }

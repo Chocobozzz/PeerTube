@@ -33,7 +33,7 @@ const videoAbuseGetValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoAbuseExist(req.params.id, res.locals.video.id, res)) return
+    if (!await doesVideoAbuseExist(req.params.id, res.locals.videoAll.id, res)) return
 
     return next()
   }
@@ -54,7 +54,7 @@ const videoAbuseUpdateValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoAbuseExist(req.params.id, res.locals.video.id, res)) return
+    if (!await doesVideoAbuseExist(req.params.id, res.locals.videoAll.id, res)) return
 
     return next()
   }

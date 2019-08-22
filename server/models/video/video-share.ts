@@ -8,6 +8,8 @@ import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { Op, Transaction } from 'sequelize'
+import { MVideoShareActor, MVideoShareFull } from '../../typings/models/video'
+import { MActorDefault } from '../../typings/models'
 
 enum ScopeNames {
   FULL = 'FULL',
@@ -88,7 +90,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
   })
   Video: VideoModel
 
-  static load (actorId: number, videoId: number, t?: Transaction) {
+  static load (actorId: number, videoId: number, t?: Transaction): Bluebird<MVideoShareActor> {
     return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
       where: {
         actorId,
@@ -98,7 +100,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
     })
   }
 
-  static loadByUrl (url: string, t: Transaction) {
+  static loadByUrl (url: string, t: Transaction): Bluebird<MVideoShareFull> {
     return VideoShareModel.scope(ScopeNames.FULL).findOne({
       where: {
         url
@@ -107,7 +109,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
     })
   }
 
-  static loadActorsByShare (videoId: number, t: Transaction) {
+  static loadActorsByShare (videoId: number, t: Transaction): Bluebird<MActorDefault[]> {
     const query = {
       where: {
         videoId
@@ -122,10 +124,10 @@ export class VideoShareModel extends Model<VideoShareModel> {
     }
 
     return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
-      .then(res => res.map(r => r.Actor))
+      .then((res: MVideoShareFull[]) => res.map(r => r.Actor))
   }
 
-  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Transaction): Bluebird<ActorModel[]> {
+  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Transaction): Bluebird<MActorDefault[]> {
     const query = {
       attributes: [],
       include: [
@@ -163,7 +165,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .then(res => res.map(r => r.Actor))
   }
 
-  static loadActorsByVideoChannel (videoChannelId: number, t: Transaction): Bluebird<ActorModel[]> {
+  static loadActorsByVideoChannel (videoChannelId: number, t: Transaction): Bluebird<MActorDefault[]> {
     const query = {
       attributes: [],
       include: [

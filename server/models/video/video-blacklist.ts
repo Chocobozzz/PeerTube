@@ -1,12 +1,14 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { getSortOnModel, SortType, throwIfNotValid } from '../utils'
-import { ScopeNames as VideoModelScopeNames, VideoModel } from './video'
+import { VideoModel } from './video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { FindOptions } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
+import * as Bluebird from 'bluebird'
+import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/typings/models'
 
 @Table({
   tableName: 'videoBlacklist',
@@ -99,7 +101,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     })
   }
 
-  static loadByVideoId (id: number) {
+  static loadByVideoId (id: number): Bluebird<MVideoBlacklist> {
     const query = {
       where: {
         videoId: id
@@ -109,7 +111,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     return VideoBlacklistModel.findOne(query)
   }
 
-  toFormattedJSON (): VideoBlacklist {
+  toFormattedJSON (this: MVideoBlacklistFormattable): VideoBlacklist {
     return {
       id: this.id,
       createdAt: this.createdAt,

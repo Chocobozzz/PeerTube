@@ -18,6 +18,8 @@ import { Transaction } from 'sequelize'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { clearCacheByToken } from '../../lib/oauth-model'
+import * as Bluebird from 'bluebird'
+import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
 
 export type OAuthTokenInfo = {
   refreshToken: string
@@ -160,7 +162,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
       })
   }
 
-  static getByTokenAndPopulateUser (bearerToken: string) {
+  static getByTokenAndPopulateUser (bearerToken: string): Bluebird<MOAuthTokenUser> {
     const query = {
       where: {
         accessToken: bearerToken
@@ -170,13 +172,13 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     return OAuthTokenModel.scope(ScopeNames.WITH_USER)
                           .findOne(query)
                           .then(token => {
-                            if (token) token[ 'user' ] = token.User
+                            if (!token) return null
 
-                            return token
+                            return Object.assign(token, { user: token.User })
                           })
   }
 
-  static getByRefreshTokenAndPopulateUser (refreshToken: string) {
+  static getByRefreshTokenAndPopulateUser (refreshToken: string): Bluebird<MOAuthTokenUser> {
     const query = {
       where: {
         refreshToken: refreshToken
@@ -186,12 +188,9 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     return OAuthTokenModel.scope(ScopeNames.WITH_USER)
       .findOne(query)
       .then(token => {
-        if (token) {
-          token['user'] = token.User
-          return token
-        } else {
-          return new OAuthTokenModel()
-        }
+        if (!token) return new OAuthTokenModel()
+
+        return Object.assign(token, { user: token.User })
       })
   }
 

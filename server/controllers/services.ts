@@ -23,7 +23,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function generateOEmbed (req: express.Request, res: express.Response) {
-  const video = res.locals.video
+  const video = res.locals.videoAll
   const webserverUrl = WEBSERVER.URL
   const maxHeight = parseInt(req.query.maxheight, 10)
   const maxWidth = parseInt(req.query.maxwidth, 10)

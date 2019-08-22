@@ -16,6 +16,7 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
+import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/typings/models/user'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'
@@ -371,7 +372,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     return UserNotificationModel.update({ read: true }, query)
   }
 
-  toFormattedJSON (): UserNotification {
+  toFormattedJSON (this: UserNotificationModelForApi): UserNotification {
     const video = this.Video
       ? Object.assign(this.formatVideo(this.Video),{ channel: this.formatActor(this.Video.VideoChannel) })
       : undefined
@@ -436,7 +437,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     }
   }
 
-  private formatVideo (video: VideoModel) {
+  formatVideo (this: UserNotificationModelForApi, video: UserNotificationIncludes.VideoInclude) {
     return {
       id: video.id,
       uuid: video.uuid,
@@ -444,7 +445,10 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     }
   }
 
-  private formatActor (accountOrChannel: AccountModel | VideoChannelModel) {
+  formatActor (
+    this: UserNotificationModelForApi,
+    accountOrChannel: UserNotificationIncludes.AccountIncludeActor | UserNotificationIncludes.VideoChannelIncludeActor
+  ) {
     const avatar = accountOrChannel.Actor.Avatar
       ? { path: accountOrChannel.Actor.Avatar.getStaticPath() }
       : undefined

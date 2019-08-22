@@ -36,6 +36,18 @@ import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
 import { VideoModel } from '../video/video'
+import {
+  MActor,
+  MActorAccountChannelId,
+  MActorAP,
+  MActorFormattable,
+  MActorFull,
+  MActorHost,
+  MActorRedundancyAllowedOpt,
+  MActorServer,
+  MActorSummaryFormattable
+} from '../../typings/models'
+import * as Bluebird from 'bluebird'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -252,11 +264,15 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
-  static load (id: number) {
+  static load (id: number): Bluebird<MActor> {
     return ActorModel.unscoped().findByPk(id)
   }
 
-  static loadAccountActorByVideoId (videoId: number, transaction: Sequelize.Transaction) {
+  static loadFull (id: number): Bluebird<MActorFull> {
+    return ActorModel.scope(ScopeNames.FULL).findByPk(id)
+  }
+
+  static loadFromAccountByVideoId (videoId: number, transaction: Sequelize.Transaction): Bluebird<MActor> {
     const query = {
       include: [
         {
@@ -300,7 +316,7 @@ export class ActorModel extends Model<ActorModel> {
       .then(a => !!a)
   }
 
-  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
+  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction): Bluebird<MActorFull[]> {
     const query = {
       where: {
         followersUrl: {
@@ -313,7 +329,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction) {
+  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername,
@@ -325,7 +341,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByNameAndHost (preferredUsername: string, host: string) {
+  static loadByNameAndHost (preferredUsername: string, host: string): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername
@@ -344,7 +360,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrl (url: string, transaction?: Sequelize.Transaction): Bluebird<MActorAccountChannelId> {
     const query = {
       where: {
         url
@@ -367,7 +383,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         url
@@ -387,27 +403,34 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  toFormattedJSON () {
+  toFormattedSummaryJSON (this: MActorSummaryFormattable) {
     let avatar: Avatar = null
     if (this.Avatar) {
       avatar = this.Avatar.toFormattedJSON()
     }
 
     return {
-      id: this.id,
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      hostRedundancyAllowed: this.getRedundancyAllowed(),
-      followingCount: this.followingCount,
-      followersCount: this.followersCount,
-      avatar,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      avatar
     }
   }
 
-  toActivityPubObject (name: string, type: 'Account' | 'Application' | 'VideoChannel') {
+  toFormattedJSON (this: MActorFormattable) {
+    const base = this.toFormattedSummaryJSON()
+
+    return Object.assign(base, {
+      id: this.id,
+      hostRedundancyAllowed: this.getRedundancyAllowed(),
+      followingCount: this.followingCount,
+      followersCount: this.followersCount,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    })
+  }
+
+  toActivityPubObject (this: MActorAP, name: string, type: 'Account' | 'Application' | 'VideoChannel') {
     let activityPubType
     if (type === 'Account') {
       activityPubType = 'Person' as 'Person'
@@ -494,7 +517,7 @@ export class ActorModel extends Model<ActorModel> {
     return this.serverId === null
   }
 
-  getWebfingerUrl () {
+  getWebfingerUrl (this: MActorServer) {
     return 'acct:' + this.preferredUsername + '@' + this.getHost()
   }
 
@@ -502,7 +525,7 @@ export class ActorModel extends Model<ActorModel> {
     return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
-  getHost () {
+  getHost (this: MActorHost) {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 

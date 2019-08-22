@@ -11,6 +11,8 @@ import { getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoAbuseState } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
+import { MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
+import * as Bluebird from 'bluebird'
 
 @Table({
   tableName: 'videoAbuse',
@@ -73,7 +75,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   })
   Video: VideoModel
 
-  static loadByIdAndVideoId (id: number, videoId: number) {
+  static loadByIdAndVideoId (id: number, videoId: number): Bluebird<MVideoAbuse> {
     const query = {
       where: {
         id,
@@ -106,7 +108,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       })
   }
 
-  toFormattedJSON (): VideoAbuse {
+  toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
     return {
       id: this.id,
       reason: this.reason,
@@ -125,7 +127,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     }
   }
 
-  toActivityPubObject (): VideoAbuseObject {
+  toActivityPubObject (this: MVideoAbuseVideo): VideoAbuseObject {
     return {
       type: 'Flag' as 'Flag',
       content: this.reason,

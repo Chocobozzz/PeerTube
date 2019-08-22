@@ -1,10 +1,10 @@
 import { Response } from 'express'
-import * as validator from 'validator'
 import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
-import { UserModel } from '../../models/account/user'
+import { MVideoChangeOwnershipFull } from '@server/typings/models/video/video-change-ownership'
+import { MUserId } from '@server/typings/models'
 
-export async function doesChangeVideoOwnershipExist (id: string, res: Response): Promise<boolean> {
-  const videoChangeOwnership = await loadVideoChangeOwnership(id)
+export async function doesChangeVideoOwnershipExist (id: number, res: Response) {
+  const videoChangeOwnership = await VideoChangeOwnershipModel.load(id)
 
   if (!videoChangeOwnership) {
     res.status(404)
@@ -18,19 +18,7 @@ export async function doesChangeVideoOwnershipExist (id: string, res: Response):
   return true
 }
 
-async function loadVideoChangeOwnership (id: string): Promise<VideoChangeOwnershipModel | undefined> {
-  if (validator.isInt(id)) {
-    return VideoChangeOwnershipModel.load(parseInt(id, 10))
-  }
-
-  return undefined
-}
-
-export function checkUserCanTerminateOwnershipChange (
-  user: UserModel,
-  videoChangeOwnership: VideoChangeOwnershipModel,
-  res: Response
-): boolean {
+export function checkUserCanTerminateOwnershipChange (user: MUserId, videoChangeOwnership: MVideoChangeOwnershipFull, res: Response) {
   if (videoChangeOwnership.NextOwner.userId === user.id) {
     return true
   }

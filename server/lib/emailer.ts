@@ -2,17 +2,13 @@ import { createTransport, Transporter } from 'nodemailer'
 import { isTestInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
-import { UserModel } from '../models/account/user'
-import { VideoModel } from '../models/video/video'
 import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs-extra'
-import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoAbuseModel } from '../models/video/video-abuse'
-import { VideoBlacklistModel } from '../models/video/video-blacklist'
-import { VideoImportModel } from '../models/video/video-import'
-import { ActorFollowModel } from '../models/activitypub/actor-follow'
 import { WEBSERVER } from '../initializers/constants'
+import { MCommentOwnerVideo, MVideo, MVideoAbuseVideo, MVideoAccountLight, MVideoBlacklistVideo } from '../typings/models/video'
+import { MActorFollowActors, MActorFollowFollowingFullFollowerAccount, MUser } from '../typings/models'
+import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
 
 type SendEmailOptions = {
   to: string[]
@@ -90,7 +86,7 @@ class Emailer {
     }
   }
 
-  addNewVideoFromSubscriberNotification (to: string[], video: VideoModel) {
+  addNewVideoFromSubscriberNotification (to: string[], video: MVideoAccountLight) {
     const channelName = video.VideoChannel.getDisplayName()
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
@@ -111,7 +107,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewFollowNotification (to: string[], actorFollow: ActorFollowModel, followType: 'account' | 'channel') {
+  addNewFollowNotification (to: string[], actorFollow: MActorFollowFollowingFullFollowerAccount, followType: 'account' | 'channel') {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
 
@@ -130,7 +126,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewInstanceFollowerNotification (to: string[], actorFollow: ActorFollowModel) {
+  addNewInstanceFollowerNotification (to: string[], actorFollow: MActorFollowActors) {
     const awaitingApproval = actorFollow.state === 'pending' ? ' awaiting manual approval.' : ''
 
     const text = `Hi dear admin,\n\n` +
@@ -148,7 +144,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  myVideoPublishedNotification (to: string[], video: VideoModel) {
+  myVideoPublishedNotification (to: string[], video: MVideo) {
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
     const text = `Hi dear user,\n\n` +
@@ -168,7 +164,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  myVideoImportSuccessNotification (to: string[], videoImport: VideoImportModel) {
+  myVideoImportSuccessNotification (to: string[], videoImport: MVideoImportVideo) {
     const videoUrl = WEBSERVER.URL + videoImport.Video.getWatchStaticPath()
 
     const text = `Hi dear user,\n\n` +
@@ -188,7 +184,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  myVideoImportErrorNotification (to: string[], videoImport: VideoImportModel) {
+  myVideoImportErrorNotification (to: string[], videoImport: MVideoImport) {
     const importUrl = WEBSERVER.URL + '/my-account/video-imports'
 
     const text = `Hi dear user,\n\n` +
@@ -208,7 +204,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewCommentOnMyVideoNotification (to: string[], comment: VideoCommentModel) {
+  addNewCommentOnMyVideoNotification (to: string[], comment: MCommentOwnerVideo) {
     const accountName = comment.Account.getDisplayName()
     const video = comment.Video
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
@@ -230,7 +226,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewCommentMentionNotification (to: string[], comment: VideoCommentModel) {
+  addNewCommentMentionNotification (to: string[], comment: MCommentOwnerVideo) {
     const accountName = comment.Account.getDisplayName()
     const video = comment.Video
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
@@ -252,7 +248,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoAbuseModeratorsNotification (to: string[], videoAbuse: VideoAbuseModel) {
+  addVideoAbuseModeratorsNotification (to: string[], videoAbuse: MVideoAbuseVideo) {
     const videoUrl = WEBSERVER.URL + videoAbuse.Video.getWatchStaticPath()
 
     const text = `Hi,\n\n` +
@@ -269,7 +265,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoAutoBlacklistModeratorsNotification (to: string[], video: VideoModel) {
+  addVideoAutoBlacklistModeratorsNotification (to: string[], video: MVideo) {
     const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
@@ -292,7 +288,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewUserRegistrationNotification (to: string[], user: UserModel) {
+  addNewUserRegistrationNotification (to: string[], user: MUser) {
     const text = `Hi,\n\n` +
       `User ${user.username} just registered on ${WEBSERVER.HOST} PeerTube instance.\n\n` +
       `Cheers,\n` +
@@ -307,7 +303,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoBlacklistNotification (to: string[], videoBlacklist: VideoBlacklistModel) {
+  addVideoBlacklistNotification (to: string[], videoBlacklist: MVideoBlacklistVideo) {
     const videoName = videoBlacklist.Video.name
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
@@ -329,7 +325,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoUnblacklistNotification (to: string[], video: VideoModel) {
+  addVideoUnblacklistNotification (to: string[], video: MVideo) {
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
     const text = 'Hi,\n\n' +
@@ -381,7 +377,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addUserBlockJob (user: UserModel, blocked: boolean, reason?: string) {
+  addUserBlockJob (user: MUser, blocked: boolean, reason?: string) {
     const reasonString = reason ? ` for the following reason: ${reason}` : ''
     const blockedWord = blocked ? 'blocked' : 'unblocked'
     const blockedString = `Your account ${user.username} on ${WEBSERVER.HOST} has been ${blockedWord}${reasonString}.`

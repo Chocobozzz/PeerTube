@@ -22,13 +22,27 @@ import { JobQueue } from '../job-queue'
 import { getServerActor } from '../../helpers/utils'
 import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
 import { sequelizeTypescript } from '../../initializers/database'
+import {
+  MAccount,
+  MAccountDefault,
+  MActor,
+  MActorAccountChannelId,
+  MActorAccountChannelIdActor,
+  MActorAccountId,
+  MActorDefault,
+  MActorFull,
+  MActorFullActor,
+  MActorId,
+  MChannel,
+  MChannelAccountDefault
+} from '../../typings/models'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
-function setAsyncActorKeys (actor: ActorModel) {
+function setAsyncActorKeys <T extends MActor> (actor: T) {
   return createPrivateAndPublicKeys()
     .then(({ publicKey, privateKey }) => {
-      actor.set('publicKey', publicKey)
-      actor.set('privateKey', privateKey)
+      actor.publicKey = publicKey
+      actor.privateKey = privateKey
       return actor.save()
     })
     .catch(err => {
@@ -37,12 +51,26 @@ function setAsyncActorKeys (actor: ActorModel) {
     })
 }
 
+function getOrCreateActorAndServerAndModel (
+  activityActor: string | ActivityPubActor,
+  fetchType: 'all',
+  recurseIfNeeded?: boolean,
+  updateCollections?: boolean
+): Promise<MActorFullActor>
+
+function getOrCreateActorAndServerAndModel (
+  activityActor: string | ActivityPubActor,
+  fetchType?: 'association-ids',
+  recurseIfNeeded?: boolean,
+  updateCollections?: boolean
+): Promise<MActorAccountChannelId>
+
 async function getOrCreateActorAndServerAndModel (
   activityActor: string | ActivityPubActor,
-  fetchType: ActorFetchByUrlType = 'actor-and-association-ids',
+  fetchType: ActorFetchByUrlType = 'association-ids',
   recurseIfNeeded = true,
   updateCollections = false
-) {
+): Promise<MActorFullActor | MActorAccountChannelId> {
   const actorUrl = getAPId(activityActor)
   let created = false
   let accountPlaylistsUrl: string
@@ -61,7 +89,7 @@ async function getOrCreateActorAndServerAndModel (
 
     // Create the attributed to actor
     // In PeerTube a video channel is owned by an account
-    let ownerActor: ActorModel = undefined
+    let ownerActor: MActorFullActor
     if (recurseIfNeeded === true && result.actor.type === 'Group') {
       const accountAttributedTo = result.attributedTo.find(a => a.type === 'Person')
       if (!accountAttributedTo) throw new Error('Cannot find account attributed to video channel ' + actor.url)
@@ -85,8 +113,8 @@ async function getOrCreateActorAndServerAndModel (
     accountPlaylistsUrl = result.playlists
   }
 
-  if (actor.Account) actor.Account.Actor = actor
-  if (actor.VideoChannel) actor.VideoChannel.Actor = actor
+  if (actor.Account) (actor as MActorAccountChannelIdActor).Account.Actor = actor
+  if (actor.VideoChannel) (actor as MActorAccountChannelIdActor).VideoChannel.Actor = actor
 
   const { actor: actorRefreshed, refreshed } = await retryTransactionWrapper(refreshActorIfNeeded, actor, fetchType)
   if (!actorRefreshed) throw new Error('Actor ' + actorRefreshed.url + ' does not exist anymore.')
@@ -120,7 +148,7 @@ function buildActorInstance (type: ActivityPubActorType, url: string, preferredU
     sharedInboxUrl: WEBSERVER.URL + '/inbox',
     followersUrl: url + '/followers',
     followingUrl: url + '/following'
-  })
+  }) as MActor
 }
 
 async function updateActorInstance (actorInstance: ActorModel, attributes: ActivityPubActor) {
@@ -140,7 +168,8 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   actorInstance.followingUrl = attributes.following
 }
 
-async function updateActorAvatarInstance (actor: ActorModel, info: { name: string, onDisk: boolean, fileUrl: string }, t: Transaction) {
+type AvatarInfo = { name: string, onDisk: boolean, fileUrl: string }
+async function updateActorAvatarInstance (actor: MActorDefault, info: AvatarInfo, t: Transaction) {
   if (info.name !== undefined) {
     if (actor.avatarId) {
       try {
@@ -212,14 +241,16 @@ async function addFetchOutboxJob (actor: Pick<ActorModel, 'id' | 'outboxUrl'>) {
   return JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
 }
 
-async function refreshActorIfNeeded (
-  actorArg: ActorModel,
+async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannelId> (
+  actorArg: T,
   fetchedType: ActorFetchByUrlType
-): Promise<{ actor: ActorModel, refreshed: boolean }> {
+): Promise<{ actor: T | MActorFull, refreshed: boolean }> {
   if (!actorArg.isOutdated()) return { actor: actorArg, refreshed: false }
 
   // We need more attributes
-  const actor = fetchedType === 'all' ? actorArg : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
+  const actor = fetchedType === 'all'
+    ? actorArg as MActorFull
+    : await ActorModel.loadByUrlAndPopulateAccountAndChannel(actorArg.url)
 
   try {
     let actorUrl: string
@@ -297,9 +328,9 @@ export {
 
 function saveActorAndServerAndModelIfNotExist (
   result: FetchRemoteActorResult,
-  ownerActor?: ActorModel,
+  ownerActor?: MActorFullActor,
   t?: Transaction
-): Bluebird<ActorModel> | Promise<ActorModel> {
+): Bluebird<MActorFullActor> | Promise<MActorFullActor> {
   let actor = result.actor
 
   if (t !== undefined) return save(t)
@@ -336,7 +367,7 @@ function saveActorAndServerAndModelIfNotExist (
 
     // Force the actor creation, sometimes Sequelize skips the save() when it thinks the instance already exists
     // (which could be false in a retried query)
-    const [ actorCreated ] = await ActorModel.findOrCreate({
+    const [ actorCreated ] = await ActorModel.findOrCreate<MActorFullActor>({
       defaults: actor.toJSON(),
       where: {
         url: actor.url
@@ -345,12 +376,11 @@ function saveActorAndServerAndModelIfNotExist (
     })
 
     if (actorCreated.type === 'Person' || actorCreated.type === 'Application') {
-      actorCreated.Account = await saveAccount(actorCreated, result, t)
+      actorCreated.Account = await saveAccount(actorCreated, result, t) as MAccountDefault
       actorCreated.Account.Actor = actorCreated
     } else if (actorCreated.type === 'Group') { // Video channel
-      actorCreated.VideoChannel = await saveVideoChannel(actorCreated, result, ownerActor, t)
-      actorCreated.VideoChannel.Actor = actorCreated
-      actorCreated.VideoChannel.Account = ownerActor.Account
+      const channel = await saveVideoChannel(actorCreated, result, ownerActor, t)
+      actorCreated.VideoChannel = Object.assign(channel, { Actor: actorCreated, Account: ownerActor.Account })
     }
 
     actorCreated.Server = server
@@ -360,7 +390,7 @@ function saveActorAndServerAndModelIfNotExist (
 }
 
 type FetchRemoteActorResult = {
-  actor: ActorModel
+  actor: MActor
   name: string
   summary: string
   support?: string
@@ -429,7 +459,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
   }
 }
 
-async function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t: Transaction) {
+async function saveAccount (actor: MActorId, result: FetchRemoteActorResult, t: Transaction) {
   const [ accountCreated ] = await AccountModel.findOrCreate({
     defaults: {
       name: result.name,
@@ -442,10 +472,10 @@ async function saveAccount (actor: ActorModel, result: FetchRemoteActorResult, t
     transaction: t
   })
 
-  return accountCreated
+  return accountCreated as MAccount
 }
 
-async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResult, ownerActor: ActorModel, t: Transaction) {
+async function saveVideoChannel (actor: MActorId, result: FetchRemoteActorResult, ownerActor: MActorAccountId, t: Transaction) {
   const [ videoChannelCreated ] = await VideoChannelModel.findOrCreate({
     defaults: {
       name: result.name,
@@ -460,5 +490,5 @@ async function saveVideoChannel (actor: ActorModel, result: FetchRemoteActorResu
     transaction: t
   })
 
-  return videoChannelCreated
+  return videoChannelCreated as MChannel
 }

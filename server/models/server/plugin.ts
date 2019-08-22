@@ -11,6 +11,8 @@ import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
 import { FindAndCountOptions, json } from 'sequelize'
 import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
+import * as Bluebird from 'bluebird'
+import { MPlugin, MPluginFormattable } from '@server/typings/models'
 
 @DefaultScope(() => ({
   attributes: {
@@ -85,7 +87,7 @@ export class PluginModel extends Model<PluginModel> {
   @UpdatedAt
   updatedAt: Date
 
-  static listEnabledPluginsAndThemes () {
+  static listEnabledPluginsAndThemes (): Bluebird<MPlugin[]> {
     const query = {
       where: {
         enabled: true,
@@ -96,7 +98,7 @@ export class PluginModel extends Model<PluginModel> {
     return PluginModel.findAll(query)
   }
 
-  static loadByNpmName (npmName: string) {
+  static loadByNpmName (npmName: string): Bluebird<MPlugin> {
     const name = this.normalizePluginName(npmName)
     const type = this.getTypeFromNpmName(npmName)
 
@@ -206,13 +208,13 @@ export class PluginModel extends Model<PluginModel> {
     if (options.pluginType) query.where['type'] = options.pluginType
 
     return PluginModel
-      .findAndCountAll(query)
+      .findAndCountAll<MPlugin>(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
   }
 
-  static listInstalled () {
+  static listInstalled (): Bluebird<MPlugin[]> {
     const query = {
       where: {
         uninstalled: false
@@ -251,7 +253,7 @@ export class PluginModel extends Model<PluginModel> {
     return result
   }
 
-  toFormattedJSON (): PeerTubePlugin {
+  toFormattedJSON (this: MPluginFormattable): PeerTubePlugin {
     return {
       name: this.name,
       type: this.type,

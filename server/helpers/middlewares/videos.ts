@@ -1,9 +1,8 @@
 import { Response } from 'express'
 import { fetchVideo, VideoFetchType } from '../video'
-import { UserModel } from '../../models/account/user'
 import { UserRight } from '../../../shared/models/users'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { VideoModel } from '../../models/video/video'
+import { MUser, MUserAccountId, MVideoAccountLight, MVideoFullLight, MVideoThumbnail, MVideoWithRights } from '@server/typings/models'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoFetchType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
@@ -18,11 +17,28 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
     return false
   }
 
-  if (fetchType !== 'none') res.locals.video = video
+  switch (fetchType) {
+    case 'all':
+      res.locals.videoAll = video as MVideoFullLight
+      break
+
+    case 'id':
+      res.locals.videoId = video
+      break
+
+    case 'only-video':
+      res.locals.onlyVideo = video as MVideoThumbnail
+      break
+
+    case 'only-video-with-rights':
+      res.locals.onlyVideoWithRights = video as MVideoWithRights
+      break
+  }
+
   return true
 }
 
-async function doesVideoChannelOfAccountExist (channelId: number, user: UserModel, res: Response) {
+async function doesVideoChannelOfAccountExist (channelId: number, user: MUserAccountId, res: Response) {
   if (user.hasRight(UserRight.UPDATE_ANY_VIDEO) === true) {
     const videoChannel = await VideoChannelModel.loadAndPopulateAccount(channelId)
     if (videoChannel === null) {
@@ -50,7 +66,7 @@ async function doesVideoChannelOfAccountExist (channelId: number, user: UserMode
   return true
 }
 
-function checkUserCanManageVideo (user: UserModel, video: VideoModel, right: UserRight, res: Response) {
+function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right: UserRight, res: Response) {
   // Retrieve the user who did the request
   if (video.isOwned() === false) {
     res.status(403)

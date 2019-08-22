@@ -63,6 +63,7 @@ import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
 import { Hooks } from '../../../lib/plugins/hooks'
+import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -197,7 +198,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     originallyPublishedAt: videoInfo.originallyPublishedAt
   }
 
-  const video = new VideoModel(videoData)
+  const video = new VideoModel(videoData) as MVideoDetails
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({
@@ -238,7 +239,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    const videoCreated = await video.save(sequelizeOptions)
+    const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
 
     await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     await videoCreated.addAndSaveThumbnail(previewModel, t)
@@ -318,7 +319,7 @@ async function addVideo (req: express.Request, res: express.Response) {
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   const videoFieldsSave = videoInstance.toJSON()
   const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
@@ -371,7 +372,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         }
       }
 
-      const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
+      const videoInstanceUpdated = await videoInstance.save(sequelizeOptions) as MVideoFullLight
 
       if (thumbnailModel) await videoInstanceUpdated.addAndSaveThumbnail(thumbnailModel, t)
       if (previewModel) await videoInstanceUpdated.addAndSaveThumbnail(previewModel, t)
@@ -447,7 +448,7 @@ async function getVideo (req: express.Request, res: express.Response) {
 
   const video = await Hooks.wrapPromiseFun(
     VideoModel.loadForGetAPI,
-    { id: res.locals.video.id, userId },
+    { id: res.locals.onlyVideoWithRights.id, userId },
     'filter:api.video.get.result'
   )
 
@@ -460,7 +461,7 @@ async function getVideo (req: express.Request, res: express.Response) {
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
 
   const ip = req.ip
   const exists = await Redis.Instance.doesVideoIPViewExist(ip, videoInstance.uuid)
@@ -483,7 +484,7 @@ async function viewVideo (req: express.Request, res: express.Response) {
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   let description = ''
 
   if (videoInstance.isOwned()) {
@@ -522,7 +523,7 @@ async function listVideos (req: express.Request, res: express.Response) {
 }
 
 async function removeVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
 
   await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })

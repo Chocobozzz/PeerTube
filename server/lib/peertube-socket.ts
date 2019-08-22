@@ -1,8 +1,8 @@
 import * as SocketIO from 'socket.io'
 import { authenticateSocket } from '../middlewares'
-import { UserNotificationModel } from '../models/account/user-notification'
 import { logger } from '../helpers/logger'
 import { Server } from 'http'
+import { UserNotificationModelForApi } from '@server/typings/models/user'
 
 class PeerTubeSocket {
 
@@ -34,7 +34,7 @@ class PeerTubeSocket {
       })
   }
 
-  sendNotification (userId: number, notification: UserNotificationModel) {
+  sendNotification (userId: number, notification: UserNotificationModelForApi) {
     const sockets = this.userNotificationSockets[userId]
 
     if (!sockets) return

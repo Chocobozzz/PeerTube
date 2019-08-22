@@ -8,6 +8,7 @@ import { cloneDeep } from 'lodash'
 import { createVerify } from 'crypto'
 import { buildDigest } from '../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as bcrypt from 'bcrypt'
+import { MActor } from '../typings/models'
 
 const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
 const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)
@@ -46,7 +47,7 @@ function isHTTPSignatureDigestValid (rawBody: Buffer, req: Request): boolean {
   return true
 }
 
-function isHTTPSignatureVerified (httpSignatureParsed: any, actor: ActorModel): boolean {
+function isHTTPSignatureVerified (httpSignatureParsed: any, actor: MActor): boolean {
   return httpSignature.verifySignature(httpSignatureParsed, actor.publicKey) === true
 }
 
@@ -56,7 +57,7 @@ function parseHTTPSignature (req: Request, clockSkew?: number) {
 
 // JSONLD
 
-async function isJsonLDSignatureVerified (fromActor: ActorModel, signedDocument: any): Promise<boolean> {
+async function isJsonLDSignatureVerified (fromActor: MActor, signedDocument: any): Promise<boolean> {
   if (signedDocument.signature.type === 'RsaSignature2017') {
     // Mastodon algorithm
     const res = await isJsonLDRSA2017Verified(fromActor, signedDocument)
@@ -93,7 +94,7 @@ async function isJsonLDSignatureVerified (fromActor: ActorModel, signedDocument:
 }
 
 // Backward compatibility with "other" implementations
-async function isJsonLDRSA2017Verified (fromActor: ActorModel, signedDocument: any) {
+async function isJsonLDRSA2017Verified (fromActor: MActor, signedDocument: any) {
   function hash (obj: any): Promise<any> {
     return jsonld.promises
                  .normalize(obj, {
@@ -130,7 +131,7 @@ async function isJsonLDRSA2017Verified (fromActor: ActorModel, signedDocument: a
   return verify.verify(fromActor.publicKey, signedDocument.signature.signatureValue, 'base64')
 }
 
-function signJsonLDObject (byActor: ActorModel, data: any) {
+function signJsonLDObject (byActor: MActor, data: any) {
   const options = {
     privateKeyPem: byActor.privateKey,
     creator: byActor.url,
