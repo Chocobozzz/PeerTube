@@ -2324,18 +2324,102 @@ components:
           type: number
     ServerConfig:
       properties:
+        instance:
+          type: object
+          properties:
+            name:
+              type: string
+            shortDescription:
+              type: string
+            defaultClientRoute:
+              type: string
+            isNSFW:
+              type: boolean
+            defaultNSFWPolicy:
+              type: string
+            customizations:
+              type: object
+              properties:
+                javascript:
+                  type: string
+                css:
+                  type: string
+        plugin:
+          type: object
+          properties:
+            registered:
+              type: array
+              items:
+                type: string
+        theme:
+          type: object
+          properties:
+            registered:
+              type: array
+              items:
+                type: string
+        email:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+        contactForm:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+        serverVersion:
+          type: string
+        serverCommit:
+          type: string
         signup:
           type: object
           properties:
             allowed:
               type: boolean
+            allowedForCurrentIP:
+              type: boolean
+            requiresEmailVerification:
+              type: boolean
         transcoding:
           type: object
           properties:
+            hls:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
             enabledResolutions:
               type: array
               items:
                 type: number
+        import:
+          type: object
+          properties:
+            videos:
+              type: object
+              properties:
+                http:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                torrent:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+        autoBlacklist:
+          type: object
+          properties:
+            videos:
+              type: object
+              properties:
+                ofUsers:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
         avatar:
           type: object
           properties:
@@ -2354,6 +2438,18 @@ components:
         video:
           type: object
           properties:
+            image:
+              type: object
+              properties:
+                extensions:
+                  type: array
+                  items:
+                    type: string
+                size:
+                  type: object
+                  properties:
+                    max:
+                      type: number
             file:
               type: object
               properties:
@@ -2361,6 +2457,41 @@ components:
                   type: array
                   items:
                     type: string
+        videoCaption:
+          type: object
+          properties:
+            file:
+              type: object
+              properties:
+                size:
+                  type: object
+                  properties:
+                    max:
+                      type: number
+                extensions:
+                  type: array
+                  items:
+                    type: string
+        user:
+          type: object
+          properties:
+            videoQuota:
+              type: number
+            videoQuotaDaily:
+              type: number
+        trending:
+          type: object
+          properties:
+            videos:
+              type: object
+              properties:
+                intervalDays:
+                  type: number
+        tracker:
+          ype: object
+          properties:
+            enabled:
+              type: boolean
     Follow:
       properties:
         id:
