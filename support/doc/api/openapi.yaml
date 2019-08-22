@@ -234,6 +234,10 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerConfigAbout'
   /config/custom:
     get:
       summary: Get the runtime configuration of the server
@@ -245,6 +249,10 @@ paths:
       responses:
         '200':
           description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerConfigCustom'
     put:
       summary: Set the runtime configuration of the server
       tags:
@@ -2492,6 +2500,167 @@ components:
           properties:
             enabled:
               type: boolean
+    ServerConfigAbout:
+      properties:
+        instance:
+          type: object
+          properties:
+            name:
+              type: string
+            shortDescription:
+              type: string
+            description:
+              type: string
+            terms:
+              type: string
+    ServerConfigCustom:
+      properties:
+        instance:
+          type: object
+          properties:
+            name:
+              type: string
+            shortDescription:
+              type: string
+            description:
+              type: string
+            terms:
+              type: string
+            defaultClientRoute:
+              type: string
+            isNSFW:
+              type: boolean
+            defaultNSFWPolicy:
+              type: string
+            customizations:
+              type: object
+              properties:
+                javascript:
+                  type: string
+                css:
+                  type: string
+        theme:
+          type: object
+          properties:
+            default:
+              type: string
+        services:
+          type: object
+          properties:
+            twitter:
+              type: object
+              properties:
+                username:
+                  type: string
+                whitelisted:
+                  type: boolean
+        cache:
+          type: object
+          properties:
+            previews:
+              type: object
+              properties:
+                size:
+                  type: number
+            captions:
+              type: object
+              properties:
+                size:
+                  type: number
+        signup:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+            limit:
+              type: number
+            requiresEmailVerification:
+              type: boolean
+        admin:
+          type: object
+          properties:
+            email:
+              type: string
+        contactForm:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+        user:
+          type: object
+          properties:
+            videoQuota:
+              type: number
+            videoQuotaDaily:
+              type: number
+        transcoding:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+            allowAdditionalExtensions:
+              type: boolean
+            allowAudioFiles:
+              type: boolean
+            threads:
+              type: number
+            resolutions:
+              type: object
+              properties:
+                240p:
+                  type: boolean
+                360p:
+                  type: boolean
+                480p:
+                  type: boolean
+                720p:
+                  type: boolean
+                1080p:
+                  type: boolean
+                2160p:
+                  type: boolean
+            hls:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+        import:
+          type: object
+          properties:
+            videos:
+              type: object
+              properties:
+                http:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+                torrent:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+        autoBlacklist:
+          type: object
+          properties:
+            videos:
+              type: object
+              properties:
+                ofUsers:
+                  type: object
+                  properties:
+                    enabled:
+                      type: boolean
+        followers:
+          type: object
+          properties:
+            instance:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                manualApproval:
+                  type: boolean
     Follow:
       properties:
         id:
