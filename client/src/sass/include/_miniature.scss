@@ -140,9 +140,6 @@ $play-overlay-width: 18px;
 }
 
 @mixin miniature-rows {
-  max-height: 540px; // 2 rows max
-  overflow: hidden;
-
   &:first-child {
     padding-top: 30px;
 

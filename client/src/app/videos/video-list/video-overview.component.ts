@@ -4,6 +4,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideosOverview } from '@app/shared/overview/videos-overview.model'
 import { OverviewService } from '@app/shared/overview'
 import { Video } from '@app/shared/video/video.model'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-video-overview',
@@ -22,7 +23,8 @@ export class VideoOverviewComponent implements OnInit {
     private i18n: I18n,
     private notifier: Notifier,
     private authService: AuthService,
-    private overviewService: OverviewService
+    private overviewService: OverviewService,
+    private screenService: ScreenService
   ) { }
 
   get user () {
@@ -52,5 +54,11 @@ export class VideoOverviewComponent implements OnInit {
 
   buildVideoChannelAvatarUrl (object: { videos: Video[] }) {
     return object.videos[0].videoChannelAvatarUrl
+  }
+
+  buildVideos (videos: Video[]) {
+    const numberOfVideos = this.screenService.getNumberOfAvailableMiniatures()
+
+    return videos.slice(0, numberOfVideos * 2)
   }
 }
