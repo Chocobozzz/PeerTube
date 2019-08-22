@@ -12,6 +12,7 @@ import { PlatformLocation, ViewportScroller } from '@angular/common'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
 
 @Component({
   selector: 'my-app',
@@ -94,7 +95,7 @@ export class AppComponent implements OnInit {
       .pipe(debounceTime(200))
       .subscribe(() => this.onResize())
 
-    this.location.onPopState(() => this.modalService.dismissAll())
+    this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
   }
 
   isUserLoggedIn () {
@@ -115,7 +116,6 @@ export class AppComponent implements OnInit {
     const eventsObs = this.router.events
 
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
-    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
 
     scrollEvent.subscribe(e => {
       if (e.position) {
@@ -130,6 +130,8 @@ export class AppComponent implements OnInit {
         return this.viewportScroller.scrollToPosition([ 0, 0 ])
       }
     })
+
+    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
 
     // When we add the a-state parameter, we don't want to alter the scroll
     navigationEndEvent.pipe(pairwise())
