@@ -28,7 +28,17 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
     'with WebTorrent and Angular.'
   )
   expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
+
   expect(data.instance.terms).to.equal('No terms for now.')
+  expect(data.instance.codeOfConduct).to.be.empty
+  expect(data.instance.moderationInformation).to.be.empty
+  expect(data.instance.administrator).to.be.empty
+  expect(data.instance.maintenanceLifetime).to.be.empty
+  expect(data.instance.businessModel).to.be.empty
+
+  expect(data.instance.languages).to.have.lengthOf(0)
+  expect(data.instance.categories).to.have.lengthOf(0)
+
   expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
   expect(data.instance.isNSFW).to.be.false
   expect(data.instance.defaultNSFWPolicy).to.equal('display')
@@ -78,7 +88,17 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube updated')
   expect(data.instance.shortDescription).to.equal('my short description')
   expect(data.instance.description).to.equal('my super description')
+
   expect(data.instance.terms).to.equal('my super terms')
+  expect(data.instance.codeOfConduct).to.equal('my super coc')
+  expect(data.instance.moderationInformation).to.equal('my super moderation information')
+  expect(data.instance.administrator).to.equal('Kuja')
+  expect(data.instance.maintenanceLifetime).to.equal('forever')
+  expect(data.instance.businessModel).to.equal('my super business model')
+
+  expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
+  expect(data.instance.categories).to.deep.equal([ 1, 2 ])
+
   expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
   expect(data.instance.isNSFW).to.be.true
   expect(data.instance.defaultNSFWPolicy).to.equal('blur')
@@ -190,6 +210,16 @@ describe('Test config', function () {
         shortDescription: 'my short description',
         description: 'my super description',
         terms: 'my super terms',
+        codeOfConduct: 'my super coc',
+
+        moderationInformation: 'my super moderation information',
+        administrator: 'Kuja',
+        maintenanceLifetime: 'forever',
+        businessModel: 'my super business model',
+
+        languages: [ 'en', 'es' ],
+        categories: [ 1, 2 ],
+
         defaultClientRoute: '/videos/recently-added',
         isNSFW: true,
         defaultNSFWPolicy: 'blur' as 'blur',

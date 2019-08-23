@@ -2,12 +2,13 @@
 
   <ngb-tabset class="root-tabset bootstrap">
 
-    <ngb-tab i18n-title title="Basic configuration">
+    <ngb-tab i18n-title title="Instance information">
       <ng-template ngbTabContent>
 
-        <div i18n class="inner-form-title">Instance</div>
-
         <ng-container formGroupName="instance">
+
+          <div i18n class="inner-form-title">Instance</div>
+
           <div class="form-group">
             <label i18n for="instanceName">Name</label>
             <input
@@ -36,34 +37,38 @@
           </div>
 
           <div class="form-group">
-            <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
-            <my-markdown-textarea
-              id="instanceTerms" formControlName="terms" textareaWidth="500px" [previewColumn]="true"
-              [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
-            ></my-markdown-textarea>
-            <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
+            <label i18n for="instanceCategories">Main instance categories</label>
+
+            <div>
+              <p-multiSelect
+                inputId="instanceCategories" [options]="categoryItems" formControlName="categories" showToggleAll="false"
+                [defaultLabel]="getDefaultCategoryLabel()" [selectedItemsLabel]="getSelectedCategoryLabel()"
+                emptyFilterMessage="No results found" i18n-emptyFilterMessage
+              ></p-multiSelect>
+            </div>
           </div>
+
+          <div class="form-group">
+            <label i18n for="instanceLanguages">Main languages you/your moderators speak</label>
+
+            <div>
+              <p-multiSelect
+                inputId="instanceLanguages" [options]="languageItems" formControlName="languages" showToggleAll="false"
+                [defaultLabel]="getDefaultLanguageLabel()" [selectedItemsLabel]="getSelectedLanguageLabel()"
+                emptyFilterMessage="No results found" i18n-emptyFilterMessage
+              ></p-multiSelect>
+            </div>
+          </div>
+
+          <div i18n class="inner-form-title">Moderation & NSFW</div>
 
           <div class="form-group">
             <my-peertube-checkbox
               inputName="instanceIsNSFW" formControlName="isNSFW"
-              i18n-labelText labelText="Dedicated to sensitive or NSFW content"
+              i18n-labelText labelText="This instance is dedicated to sensitive or NSFW content"
               i18n-helpHtml helpHtml="Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
               Moreover, the NSFW checkbox on video upload will be automatically checked by default."
             ></my-peertube-checkbox>
-          </div>
-
-          <div class="form-group">
-            <label i18n for="instanceDefaultClientRoute">Default client route</label>
-            <div class="peertube-select-container">
-              <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">
-                <option i18n value="/videos/overview">Videos Overview</option>
-                <option i18n value="/videos/trending">Videos Trending</option>
-                <option i18n value="/videos/recently-added">Videos Recently Added</option>
-                <option i18n value="/videos/local">Local videos</option>
-              </select>
-            </div>
-            <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
           </div>
 
           <div class="form-group">
@@ -82,10 +87,79 @@
             </div>
             <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error">{{ formErrors.instance.defaultNSFWPolicy }}</div>
           </div>
+
+          <div class="form-group">
+            <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
+            <my-markdown-textarea
+              id="instanceTerms" formControlName="terms" textareaWidth="500px" [previewColumn]="true"
+              [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
+            ></my-markdown-textarea>
+            <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
+            <my-markdown-textarea
+              id="instanceCodeOfConduct" formControlName="codeOfConduct" textareaWidth="500px" [previewColumn]="true"
+              [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
+            ></my-markdown-textarea>
+            <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
+            <div class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
+
+            <my-markdown-textarea
+              id="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px" [previewColumn]="true"
+              [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
+            ></my-markdown-textarea>
+            <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
+          </div>
+
+          <div i18n class="inner-form-title">You and your instance</div>
+
+          <div class="form-group">
+            <label i18n for="instanceAdministrator">Who is behind the instance? </label>
+            <div class="label-small-info">A single person? A non profit? A company?</div>
+
+            <textarea
+              id="instanceAdministrator" formControlName="administrator"
+              [ngClass]="{ 'input-error': formErrors['instance.administrator'] }"
+            ></textarea>
+            <div *ngIf="formErrors.instance.administrator" class="form-error">{{ formErrors.instance.administrator }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label>
+            <div class="label-small-info">It's important to know for users who want to register on your instance</div>
+
+            <textarea
+              id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime"
+              [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
+            ></textarea>
+            <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceBusinessModel">How will you pay the PeerTube instance server?</label>
+            <div class="label-small-info">With you own funds? With users donations? Advertising?</div>
+
+            <textarea
+              id="instanceBusinessModel" formControlName="businessModel"
+              [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
+            ></textarea>
+            <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
+          </div>
+
         </ng-container>
+      </ng-template>
+    </ngb-tab>
 
+    <ngb-tab i18n-title title="Basic configuration">
+      <ng-template ngbTabContent>
 
-        <div i18n class="inner-form-title">Theme</div>
+        <div i18n class="inner-form-title">Theme & Default route</div>
 
         <ng-container formGroupName="theme">
           <div class="form-group">
@@ -101,6 +175,19 @@
           </div>
         </ng-container>
 
+
+        <div class="form-group" formGroupName="instance">
+          <label i18n for="instanceDefaultClientRoute">Default client route</label>
+          <div class="peertube-select-container">
+            <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">
+              <option i18n value="/videos/overview">Videos Discover</option>
+              <option i18n value="/videos/trending">Videos Trending</option>
+              <option i18n value="/videos/recently-added">Videos Recently Added</option>
+              <option i18n value="/videos/local">Local videos</option>
+            </select>
+          </div>
+          <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
+        </div>
 
         <div i18n class="inner-form-title">Signup</div>
 

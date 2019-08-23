@@ -23,7 +23,7 @@
 
     <div>
       <p-multiSelect
-        [options]="languageItems" formControlName="videoLanguages" showToggleAll="true"
+        inputId="videoLanguages" [options]="languageItems" formControlName="videoLanguages" showToggleAll="true"
         [defaultLabel]="getDefaultVideoLanguageLabel()" [selectedItemsLabel]="getSelectedVideoLanguageLabel()"
         emptyFilterMessage="No results found" i18n-emptyFilterMessage
       ></p-multiSelect>

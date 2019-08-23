@@ -6,6 +6,16 @@ export interface CustomConfig {
     shortDescription: string
     description: string
     terms: string
+    codeOfConduct: string
+
+    moderationInformation: string
+    administrator: string
+    maintenanceLifetime: string
+    businessModel: string
+
+    languages: string[]
+    categories: number[]
+
     isNSFW: boolean
     defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType

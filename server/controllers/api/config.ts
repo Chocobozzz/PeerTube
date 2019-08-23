@@ -158,7 +158,16 @@ function getAbout (req: express.Request, res: express.Response) {
       name: CONFIG.INSTANCE.NAME,
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
-      terms: CONFIG.INSTANCE.TERMS
+      terms: CONFIG.INSTANCE.TERMS,
+      codeOfConduct: CONFIG.INSTANCE.CODE_OF_CONDUCT,
+
+      moderationInformation: CONFIG.INSTANCE.MODERATION_INFORMATION,
+      administrator: CONFIG.INSTANCE.ADMINISTRATOR,
+      maintenanceLifetime: CONFIG.INSTANCE.MAINTENANCE_LIFETIME,
+      businessModel: CONFIG.INSTANCE.BUSINESS_MODEL,
+
+      languages: CONFIG.INSTANCE.LANGUAGES,
+      categories: CONFIG.INSTANCE.CATEGORIES
     }
   }
 
@@ -221,6 +230,16 @@ function customConfig (): CustomConfig {
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
+      codeOfConduct: CONFIG.INSTANCE.CODE_OF_CONDUCT,
+
+      moderationInformation: CONFIG.INSTANCE.MODERATION_INFORMATION,
+      administrator: CONFIG.INSTANCE.ADMINISTRATOR,
+      maintenanceLifetime: CONFIG.INSTANCE.MAINTENANCE_LIFETIME,
+      businessModel: CONFIG.INSTANCE.BUSINESS_MODEL,
+
+      languages: CONFIG.INSTANCE.LANGUAGES,
+      categories: CONFIG.INSTANCE.CATEGORIES,
+
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,

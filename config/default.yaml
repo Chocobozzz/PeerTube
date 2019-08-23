@@ -238,7 +238,53 @@ instance:
   short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
   description: 'Welcome to this PeerTube instance!' # Support markdown
   terms: 'No terms for now.' # Support markdown
+  code_of_conduct: '' # Supports markdown
+
+  # Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc
+  moderation_information: '' # Supports markdown
+
+  # Who is behind the instance? A single person? A non profit?
+  administrator: ''
+
+  # How long do you plan to maintain this instance?
+  maintenance_lifetime: ''
+
+  # How will you pay the PeerTube instance server? With you own funds? With users donations? Advertising?
+  business_model: ''
+
+  # What are the main languages of your instance? To interact with your users for example
+  # Uncomment or add the languages you want
+  # List of supported languages: https://peertube.cpy.re/api/v1/videos/languages
+  languages:
+#    - en
+#    - es
+#    - fr
+
+  # You can specify the main categories of your instance (dedicated to music, gaming or politics etc)
+  # Uncomment or add the category ids you want
+  # List of supported categories: https://peertube.cpy.re/api/v1/videos/categories
+  categories:
+#    - 1  # Music
+#    - 2  # Films
+#    - 3  # Vehicles
+#    - 4  # Art
+#    - 5  # Sports
+#    - 6  # Travels
+#    - 7  # Gaming
+#    - 8  # People
+#    - 9  # Comedy
+#    - 10 # Entertainment
+#    - 11 # News & Politics
+#    - 12 # How To
+#    - 13 # Education
+#    - 14 # Activism
+#    - 15 # Science & Technology
+#    - 16 # Animals
+#    - 17 # Kids
+#    - 18 # Food
+
   default_client_route: '/videos/trending'
+
   # Whether or not the instance is dedicated to NSFW content
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
   # Moreover, the NSFW checkbox on video upload will be automatically checked by default
@@ -246,6 +292,7 @@ instance:
   # By default, "do_not_list" or "blur" or "display" NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
+
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime

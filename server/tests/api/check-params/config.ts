@@ -27,6 +27,16 @@ describe('Test config API validators', function () {
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
+      codeOfConduct: 'my super coc',
+
+      moderationInformation: 'my super moderation information',
+      administrator: 'Kuja',
+      maintenanceLifetime: 'forever',
+      businessModel: 'my super business model',
+
+      languages: [ 'en', 'es' ],
+      categories: [ 1, 2 ],
+
       isNSFW: true,
       defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
