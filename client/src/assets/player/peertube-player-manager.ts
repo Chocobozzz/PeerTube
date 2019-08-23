@@ -17,6 +17,7 @@ import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig } from '
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
+import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -226,8 +227,10 @@ export class PeertubePlayerManager {
     }
 
     if (mode === 'p2p-media-loader') {
+      const redundancyUrlManager = new RedundancyUrlManager(options.p2pMediaLoader.redundancyBaseUrls)
+
       const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
-        redundancyBaseUrls: options.p2pMediaLoader.redundancyBaseUrls,
+        redundancyUrlManager,
         type: 'application/x-mpegURL',
         startTime: commonOptions.startTime,
         src: p2pMediaLoaderOptions.playlistUrl
@@ -242,7 +245,7 @@ export class PeertubePlayerManager {
           segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
           rtcConfig: getRtcConfig(),
           requiredSegmentsPriority: 5,
-          segmentUrlBuilder: segmentUrlBuilderFactory(options.p2pMediaLoader.redundancyBaseUrls)
+          segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager)
         },
         segments: {
           swarmId: p2pMediaLoaderOptions.playlistUrl
