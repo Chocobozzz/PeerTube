@@ -3,7 +3,7 @@
 import * as videojs from 'video.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo, VideoJSComponentInterface } from '../peertube-videojs-typings'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
-import { Events } from 'p2p-media-loader-core'
+import { Events, Segment } from 'p2p-media-loader-core'
 import { timeToInt } from '../utils'
 
 // videojs-hlsjs-plugin needs videojs in window
@@ -57,7 +57,6 @@ class P2pMediaLoaderPlugin extends Plugin {
     initVideoJsContribHlsJsPlayer(player)
 
     this.startTime = timeToInt(options.startTime)
-    console.log(this.startTime)
 
     player.src({
       type: options.type,
@@ -90,11 +89,13 @@ class P2pMediaLoaderPlugin extends Plugin {
       this.trigger('resolutionChange', { auto: this.hlsjs.autoLevelEnabled, resolutionId: data.height })
     })
 
-    this.p2pEngine.on(Events.SegmentError, (segment, err) => {
+    this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       console.error('Segment error.', segment, err)
+
+      this.options.redundancyUrlManager.removeByOriginUrl(segment.url)
     })
 
-    this.statsP2PBytes.numPeers = 1 + this.options.redundancyBaseUrls.length
+    this.statsP2PBytes.numPeers = 1 + this.options.redundancyUrlManager.countBaseUrls()
 
     this.runStats()
 

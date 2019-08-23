@@ -1,17 +1,9 @@
-import { basename } from 'path'
 import { Segment } from 'p2p-media-loader-core'
+import { RedundancyUrlManager } from './redundancy-url-manager'
 
-function segmentUrlBuilderFactory (baseUrls: string[]) {
+function segmentUrlBuilderFactory (redundancyUrlManager: RedundancyUrlManager) {
   return function segmentBuilder (segment: Segment) {
-    const max = baseUrls.length + 1
-    const i = getRandomInt(max)
-
-    if (i === max - 1) return segment.url
-
-    const newBaseUrl = baseUrls[i]
-    const middlePart = newBaseUrl.endsWith('/') ? '' : '/'
-
-    return newBaseUrl + middlePart + basename(segment.url)
+    return redundancyUrlManager.buildUrl(segment.url)
   }
 }
 
@@ -19,10 +11,4 @@ function segmentUrlBuilderFactory (baseUrls: string[]) {
 
 export {
   segmentUrlBuilderFactory
-}
-
-// ---------------------------------------------------------------------------
-
-function getRandomInt (max: number) {
-  return Math.floor(Math.random() * Math.floor(max))
 }
