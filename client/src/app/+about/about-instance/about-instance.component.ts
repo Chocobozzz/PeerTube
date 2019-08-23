@@ -14,8 +14,20 @@ export class AboutInstanceComponent implements OnInit {
   @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
-  descriptionHTML = ''
-  termsHTML = ''
+
+  html = {
+    description: '',
+    terms: '',
+    codeOfConduct: '',
+    moderationInformation: '',
+    administrator: ''
+  }
+
+  maintenanceLifetime = ''
+  businessModel = ''
+
+  languages: string[] = []
+  categories: number[] = []
 
   constructor (
     private notifier: Notifier,
@@ -43,8 +55,15 @@ export class AboutInstanceComponent implements OnInit {
         async res => {
           this.shortDescription = res.instance.shortDescription
 
-          this.descriptionHTML = await this.markdownService.textMarkdownToHTML(res.instance.description)
-          this.termsHTML = await this.markdownService.textMarkdownToHTML(res.instance.terms)
+          this.maintenanceLifetime = res.instance.maintenanceLifetime
+          this.businessModel = res.instance.businessModel
+
+          for (const key of [ 'description', 'terms', 'codeOfConduct', 'moderationInformation', 'administrator' ]) {
+            this.html[key] = await this.markdownService.textMarkdownToHTML(res.instance[key])
+          }
+
+          this.languages = res.instance.languages
+          this.categories = res.instance.categories
         },
 
         () => this.notifier.error(this.i18n('Cannot get about information from server'))

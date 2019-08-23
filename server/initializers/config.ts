@@ -209,6 +209,16 @@ const CONFIG = {
     get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
+    get CODE_OF_CONDUCT () { return config.get<string>('instance.code_of_conduct') },
+
+    get MODERATION_INFORMATION () { return config.get<string>('instance.moderation_information') },
+    get ADMINISTRATOR () { return config.get<string>('instance.administrator') },
+    get MAINTENANCE_LIFETIME () { return config.get<string>('instance.maintenance_lifetime') },
+    get BUSINESS_MODEL () { return config.get<string>('instance.business_model') },
+
+    get LANGUAGES () { return config.get<string[]>('instance.languages') || [] },
+    get CATEGORIES () { return config.get<number[]>('instance.categories') || [] },
+
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },

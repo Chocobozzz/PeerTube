@@ -5,13 +5,13 @@
   display: flex;
   justify-content: space-between;
 
-  & > div {
+  .title {
     font-size: 20px;
-    font-weight: bold;
     margin-bottom: 15px;
+    font-weight: $font-semibold;
   }
 
-  & > .contact-admin {
+  .contact-admin {
     @include peertube-button;
     @include orange-button;
 
@@ -21,11 +21,20 @@
 
 .section-title {
   font-weight: $font-semibold;
-  font-size: 20px;
+  font-size: 16px;
   margin-bottom: 5px;
+  display: flex;
+  align-items: center;
 }
 
-.short-description, .description, .terms, .signup {
+.middle-title {
+  @include in-content-small-title;
+
+  margin-top: 45px;
+  margin-bottom: 25px;
+}
+
+.block {
   margin-bottom: 30px;
 }
 
