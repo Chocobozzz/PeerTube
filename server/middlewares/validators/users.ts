@@ -2,7 +2,7 @@ import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { body, param } from 'express-validator'
 import { omit } from 'lodash'
-import { isIdOrUUIDValid, toBooleanOrNull } from '../../helpers/custom-validators/misc'
+import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import {
   isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
