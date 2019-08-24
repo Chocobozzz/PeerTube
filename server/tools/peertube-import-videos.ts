@@ -2,18 +2,17 @@
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import * as program from 'commander'
-import * as log from 'loglevel'
 import { join } from 'path'
 import { doRequestAndSaveToFile } from '../helpers/requests'
 import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
-import { existsSync } from 'fs'
+import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
-import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
+import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials, getLogger } from './cli'
 
 type UserInfo = {
   username: string
@@ -34,54 +33,25 @@ command
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
   .option('--target-url <targetUrl>', 'Video target URL')
-  .option('--tmpdir <tmpdir>', 'Working directory')
   .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--first <first>', 'Process first n elements of returned playlist')
   .option('--last <last>', 'Process last n elements of returned playlist')
-  .option('-v, --verbose [verbosity]', 'Verbosity, from 0 (only report errors) to 4 (for debugging), default is 2 (info)')
+  .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
   .parse(process.argv)
+
+let log = getLogger(program[ 'verbose' ])
 
 getServerCredentials(command)
   .then(({ url, username, password }) => {
     if (!program[ 'targetUrl' ]) {
-      log.error('--targetUrl field is required.')
-
-      process.exit(-1)
+      exit_error('--target-url field is required.')
     }
 
-    if (!program['tmpdir']) {
-      program[ 'tmpdir' ] = __dirname;
-    } else {
-      if (!existsSync(program[ 'tmpdir' ])) {
-        log.error('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
-
-        process.exit(-1)
-      }
-    }
-
-    log.setLevel('info')
-    if (program[ 'verbose' ]) {
-      switch (program[ 'verbose' ]) {
-        case '0':
-          log.setLevel('error')
-          break
-        case '1':
-          log.setLevel('warn')
-          break
-        case '2':
-          log.setLevel('info')
-          break
-        case '3':
-          log.setLevel('debug')
-          break
-        case '4':
-          log.setLevel('trace')
-          break
-        default:
-          log.setLevel('debug')
-          break
-      }
+    try {
+      accessSync(program[ 'tmpdir' ], constants.R_OK | constants.W_OK)
+    } catch (e) {
+      exit_error('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
     }
 
     removeEndSlashes(url)
@@ -91,8 +61,7 @@ getServerCredentials(command)
 
     run(url, user)
       .catch(err => {
-        log.error(err)
-        process.exit(-1)
+        exit_error(err)
       })
   })
 
@@ -106,24 +75,19 @@ async function run (url: string, user: UserInfo) {
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program[ 'targetUrl' ], options, processOptions, async (err, info) => {
     if (err) {
-      log.error(err.message)
-      process.exit(1)
+      exit_error(err.message)
     }
 
     let infoArray: any[]
 
     // Normalize utf8 fields
-    if (Array.isArray(info) === true) {
-      if (program[ 'first' ]) {
-        infoArray = info.slice(0, program[ 'first' ]).map(i => normalizeObject(i))
-      } else if (program[ 'last' ]) {
-        infoArray = info.slice(0 - program[ 'last' ]).map(i => normalizeObject(i))
-      } else {
-        infoArray = info.map(i => normalizeObject(i))
-      }
-    } else {
-      infoArray = [ normalizeObject(info) ]
+    infoArray = [].concat(info);
+    if (program[ 'first' ]) {
+      infoArray = infoArray.slice(0, program[ 'first' ])
+    } else if (program[ 'last' ]) {
+      infoArray = infoArray.slice(- program[ 'last' ])
     }
+    infoArray = infoArray.map(i => normalizeObject(i))
 
     log.info('Will download and upload %d videos.\n', infoArray.length)
 
@@ -136,7 +100,7 @@ async function run (url: string, user: UserInfo) {
       })
     }
 
-    log.info('Video/s for user %s imported: %s', program[ 'username' ], program[ 'targetUrl' ])
+    log.info('Video/s for user %s imported: %s', user.username, program[ 'targetUrl' ])
     process.exit(0)
   })
 }
@@ -276,8 +240,7 @@ async function uploadVideoOnPeerTube (parameters: {
 
       await uploadVideo(url, accessToken, videoAttributes)
     } else {
-      log.error(err.message)
-      process.exit(1)
+      exit_error(err.message)
     }
   }
 
@@ -400,24 +363,27 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
     const res = await login(url, client, user)
     return res.body.access_token
   } catch (err) {
-    log.error('Cannot authenticate. Please check your username/password.')
-    process.exit(-1)
+    exit_error('Cannot authenticate. Please check your username/password.')
   }
 }
 
 function parseDate (dateAsStr: string): Date {
   if (!/\d{4}-\d{2}-\d{2}/.test(dateAsStr)) {
-    log.error(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
-    process.exit(-1);
+    exit_error(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
   }
   const date = new Date(dateAsStr);
   if (isNaN(date.getTime())) {
-    log.error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
-    process.exit(-1);
+    exit_error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
   }
   return date;
 }
 
 function formatDate (date: Date): string {
   return date.toISOString().split('T')[0];
+}
+
+function exit_error (message:string, ...meta: any[]) {
+  // use console.error instead of log.error here
+  console.error(message, ...meta)
+  process.exit(-1)
 }
