@@ -120,7 +120,7 @@ function buildCommonVideoOptions (command: Command) {
     .option('-m, --comments-enabled', 'Enable comments')
     .option('-s, --support <support>', 'Video support text')
     .option('-w, --wait-transcoding', 'Wait transcoding before publishing the video')
-    .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' (only report errors) to 4/\'debug\', default is 2/\'info\'', 'info')
+    .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
 async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
