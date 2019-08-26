@@ -45,13 +45,13 @@ let log = getLogger(program[ 'verbose' ])
 getServerCredentials(command)
   .then(({ url, username, password }) => {
     if (!program[ 'targetUrl' ]) {
-      exit_error('--target-url field is required.')
+      exitError('--target-url field is required.')
     }
 
     try {
       accessSync(program[ 'tmpdir' ], constants.R_OK | constants.W_OK)
     } catch (e) {
-      exit_error('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
+      exitError('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
     }
 
     removeEndSlashes(url)
@@ -61,7 +61,7 @@ getServerCredentials(command)
 
     run(url, user)
       .catch(err => {
-        exit_error(err)
+        exitError(err)
       })
   })
 
@@ -75,7 +75,7 @@ async function run (url: string, user: UserInfo) {
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program[ 'targetUrl' ], options, processOptions, async (err, info) => {
     if (err) {
-      exit_error(err.message)
+      exitError(err.message)
     }
 
     let infoArray: any[]
@@ -240,7 +240,7 @@ async function uploadVideoOnPeerTube (parameters: {
 
       await uploadVideo(url, accessToken, videoAttributes)
     } else {
-      exit_error(err.message)
+      exitError(err.message)
     }
   }
 
@@ -363,17 +363,17 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
     const res = await login(url, client, user)
     return res.body.access_token
   } catch (err) {
-    exit_error('Cannot authenticate. Please check your username/password.')
+    exitError('Cannot authenticate. Please check your username/password.')
   }
 }
 
 function parseDate (dateAsStr: string): Date {
   if (!/\d{4}-\d{2}-\d{2}/.test(dateAsStr)) {
-    exit_error(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
+    exitError(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
   }
   const date = new Date(dateAsStr);
   if (isNaN(date.getTime())) {
-    exit_error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
+    exitError(`Invalid date passed: ${dateAsStr}. See help for usage.`);
   }
   return date;
 }
@@ -382,7 +382,7 @@ function formatDate (date: Date): string {
   return date.toISOString().split('T')[0];
 }
 
-function exit_error (message:string, ...meta: any[]) {
+function exitError (message:string, ...meta: any[]) {
   // use console.error instead of log.error here
   console.error(message, ...meta)
   process.exit(-1)
