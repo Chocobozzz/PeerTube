@@ -5,6 +5,7 @@ import { root } from '../../shared/extra-utils/miscs/miscs'
 import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
 import { Command } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
+import { createLogger, format, transports } from 'winston'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -119,6 +120,7 @@ function buildCommonVideoOptions (command: Command) {
     .option('-m, --comments-enabled', 'Enable comments')
     .option('-s, --support <support>', 'Video support text')
     .option('-w, --wait-transcoding', 'Wait transcoding before publishing the video')
+    .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
 async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
@@ -175,11 +177,42 @@ function getServerCredentials (program: any) {
          })
 }
 
+function getLogger (logLevel = 'info') {
+  const logLevels = {
+    0: 0,
+    error: 0,
+    1: 1,
+    warn: 1,
+    2: 2,
+    info: 2,
+    3: 3,
+    verbose: 3,
+    4: 4,
+    debug: 4
+  }
+
+  const logger = createLogger({
+    levels: logLevels,
+    format: format.combine(
+      format.splat(),
+      format.simple()
+    ),
+    transports: [
+      new (transports.Console)({
+        level: logLevel
+      })
+    ]
+  })
+
+  return logger
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   version,
   config,
+  getLogger,
   getSettings,
   getNetrc,
   getRemoteObjectOrDie,

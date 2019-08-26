@@ -8,10 +8,11 @@ import { CONSTRAINTS_FIELDS } from '../initializers/constants'
 import { getClient, getVideoCategories, login, searchVideoWithSort, uploadVideo } from '../../shared/extra-utils/index'
 import { truncate } from 'lodash'
 import * as prompt from 'prompt'
+import { accessSync, constants } from 'fs'
 import { remove } from 'fs-extra'
 import { sha256 } from '../helpers/core-utils'
 import { buildOriginallyPublishedAt, safeGetYoutubeDL } from '../helpers/youtube-dl'
-import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials } from './cli'
+import { buildCommonVideoOptions, buildVideoAttributesFromCommander, getServerCredentials, getLogger } from './cli'
 
 type UserInfo = {
   username: string
@@ -19,7 +20,6 @@ type UserInfo = {
 }
 
 const processOptions = {
-  cwd: __dirname,
   maxBuffer: Infinity
 }
 
@@ -35,15 +35,23 @@ command
   .option('--target-url <targetUrl>', 'Video target URL')
   .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
-  .option('-v, --verbose', 'Verbose mode')
+  .option('--first <first>', 'Process first n elements of returned playlist')
+  .option('--last <last>', 'Process last n elements of returned playlist')
+  .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
   .parse(process.argv)
+
+let log = getLogger(program[ 'verbose' ])
 
 getServerCredentials(command)
   .then(({ url, username, password }) => {
     if (!program[ 'targetUrl' ]) {
-      console.error('--targetUrl field is required.')
+      exitError('--target-url field is required.')
+    }
 
-      process.exit(-1)
+    try {
+      accessSync(program[ 'tmpdir' ], constants.R_OK | constants.W_OK)
+    } catch (e) {
+      exitError('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
     }
 
     removeEndSlashes(url)
@@ -53,8 +61,7 @@ getServerCredentials(command)
 
     run(url, user)
       .catch(err => {
-        console.error(err)
-        process.exit(-1)
+        exitError(err)
       })
   })
 
@@ -68,30 +75,32 @@ async function run (url: string, user: UserInfo) {
   const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
   youtubeDL.getInfo(program[ 'targetUrl' ], options, processOptions, async (err, info) => {
     if (err) {
-      console.log(err.message)
-      process.exit(1)
+      exitError(err.message)
     }
 
     let infoArray: any[]
 
     // Normalize utf8 fields
-    if (Array.isArray(info) === true) {
-      infoArray = info.map(i => normalizeObject(i))
-    } else {
-      infoArray = [ normalizeObject(info) ]
+    infoArray = [].concat(info);
+    if (program[ 'first' ]) {
+      infoArray = infoArray.slice(0, program[ 'first' ])
+    } else if (program[ 'last' ]) {
+      infoArray = infoArray.slice(- program[ 'last' ])
     }
-    console.log('Will download and upload %d videos.\n', infoArray.length)
+    infoArray = infoArray.map(i => normalizeObject(i))
+
+    log.info('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
       await processVideo({
-        cwd: processOptions.cwd,
+        cwd: program[ 'tmpdir' ],
         url,
         user,
         youtubeInfo: info
       })
     }
 
-    console.log('Video/s for user %s imported: %s', program[ 'username' ], program[ 'targetUrl' ])
+    log.info('Video/s for user %s imported: %s', user.username, program[ 'targetUrl' ])
     process.exit(0)
   })
 }
@@ -105,21 +114,21 @@ function processVideo (parameters: {
   const { youtubeInfo, cwd, url, user } = parameters
 
   return new Promise(async res => {
-    if (program[ 'verbose' ]) console.log('Fetching object.', youtubeInfo)
+    log.debug('Fetching object.', youtubeInfo)
 
     const videoInfo = await fetchObject(youtubeInfo)
-    if (program[ 'verbose' ]) console.log('Fetched object.', videoInfo)
+    log.debug('Fetched object.', videoInfo)
 
     if (program[ 'since' ]) {
       if (buildOriginallyPublishedAt(videoInfo).getTime() < program[ 'since' ].getTime()) {
-        console.log('Video "%s" has been published before "%s", don\'t upload it.\n',
+        log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
           videoInfo.title, formatDate(program[ 'since' ]));
         return res();
       }
     }
     if (program[ 'until' ]) {
       if (buildOriginallyPublishedAt(videoInfo).getTime() > program[ 'until' ].getTime()) {
-        console.log('Video "%s" has been published after "%s", don\'t upload it.\n',
+        log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
           videoInfo.title, formatDate(program[ 'until' ]));
         return res();
       }
@@ -127,27 +136,27 @@ function processVideo (parameters: {
 
     const result = await searchVideoWithSort(url, videoInfo.title, '-match')
 
-    console.log('############################################################\n')
+    log.info('############################################################\n')
 
     if (result.body.data.find(v => v.name === videoInfo.title)) {
-      console.log('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
+      log.info('Video "%s" already exists, don\'t reupload it.\n', videoInfo.title)
       return res()
     }
 
     const path = join(cwd, sha256(videoInfo.url) + '.mp4')
 
-    console.log('Downloading video "%s"...', videoInfo.title)
+    log.info('Downloading video "%s"...', videoInfo.title)
 
     const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
     try {
       const youtubeDL = await safeGetYoutubeDL()
       youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
         if (err) {
-          console.error(err)
+          log.error(err)
           return res()
         }
 
-        console.log(output.join('\n'))
+        log.info(output.join('\n'))
         await uploadVideoOnPeerTube({
           cwd,
           url,
@@ -158,7 +167,7 @@ function processVideo (parameters: {
         return res()
       })
     } catch (err) {
-      console.log(err.message)
+      log.error(err.message)
       return res()
     }
   })
@@ -217,7 +226,7 @@ async function uploadVideoOnPeerTube (parameters: {
     fixture: videoPath
   })
 
-  console.log('\nUploading on PeerTube video "%s".', videoAttributes.name)
+  log.info('\nUploading on PeerTube video "%s".', videoAttributes.name)
 
   let accessToken = await getAccessTokenOrDie(url, user)
 
@@ -225,21 +234,20 @@ async function uploadVideoOnPeerTube (parameters: {
     await uploadVideo(url, accessToken, videoAttributes)
   } catch (err) {
     if (err.message.indexOf('401') !== -1) {
-      console.log('Got 401 Unauthorized, token may have expired, renewing token and retry.')
+      log.info('Got 401 Unauthorized, token may have expired, renewing token and retry.')
 
       accessToken = await getAccessTokenOrDie(url, user)
 
       await uploadVideo(url, accessToken, videoAttributes)
     } else {
-      console.log(err.message)
-      process.exit(1)
+      exitError(err.message)
     }
   }
 
   await remove(videoPath)
   if (thumbnailfile) await remove(thumbnailfile)
 
-  console.log('Uploaded video "%s"!\n', videoAttributes.name)
+  log.warn('Uploaded video "%s"!\n', videoAttributes.name)
 }
 
 /* ---------------------------------------------------------- */
@@ -355,24 +363,27 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
     const res = await login(url, client, user)
     return res.body.access_token
   } catch (err) {
-    console.error('Cannot authenticate. Please check your username/password.')
-    process.exit(-1)
+    exitError('Cannot authenticate. Please check your username/password.')
   }
 }
 
 function parseDate (dateAsStr: string): Date {
   if (!/\d{4}-\d{2}-\d{2}/.test(dateAsStr)) {
-    console.error(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
-    process.exit(-1);
+    exitError(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
   }
   const date = new Date(dateAsStr);
   if (isNaN(date.getTime())) {
-    console.error(`Invalid date passed: ${dateAsStr}. See help for usage.`);
-    process.exit(-1);
+    exitError(`Invalid date passed: ${dateAsStr}. See help for usage.`);
   }
   return date;
 }
 
 function formatDate (date: Date): string {
   return date.toISOString().split('T')[0];
+}
+
+function exitError (message:string, ...meta: any[]) {
+  // use console.error instead of log.error here
+  console.error(message, ...meta)
+  process.exit(-1)
 }
