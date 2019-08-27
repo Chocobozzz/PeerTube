@@ -23,10 +23,11 @@
           or create an account on another instance
         </a>
 
-        <my-help
-          *ngIf="signupAllowed === false" helpType="custom" i18n-customHtml
-          customHtml="User registration is not allowed on this instance, but you can register on many others!"
-        ></my-help>
+        <my-help *ngIf="signupAllowed === false">
+          <ng-template ptTemplate="customHtml">
+            <ng-container i18n>User registration is not allowed on this instance, but you can register on many others!</ng-container>
+          </ng-template>
+        </my-help>
       </div>
 
       <div *ngIf="formErrors.username" class="form-error">

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { AuthService } from '@app/core'
 import { FormReactive, UserService, UserValidatorsService } from '@app/shared'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
@@ -12,7 +12,11 @@ import { concat, of } from 'rxjs'
   styleUrls: [ './register.component.scss' ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
+  @Input() hasCodeOfConduct = false
+
   @Output() formBuilt = new EventEmitter<FormGroup>()
+  @Output() termsClick = new EventEmitter<void>()
+  @Output() codeOfConductClick = new EventEmitter<void>()
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -43,6 +47,16 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
       this.form.get('displayName').valueChanges
     ).pipe(pairwise())
      .subscribe(([ oldValue, newValue ]) => this.onDisplayNameChange(oldValue, newValue))
+  }
+
+  onTermsClick (event: Event) {
+    event.preventDefault()
+    this.termsClick.emit()
+  }
+
+  onCodeOfConductClick (event: Event) {
+    event.preventDefault()
+    this.codeOfConductClick.emit()
   }
 
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {

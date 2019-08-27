@@ -1,15 +1,25 @@
 <ng-template #tooltipTemplate>
-  <ng-template [ngIf]="preHtml">
-    <p [innerHTML]="preHtml"></p>
-    <br />
-  </ng-template>
+  <p *ngIf="preHtmlTemplate">
+    <ng-template *ngTemplateOutlet="preHtmlTemplate"></ng-template>
+  </p>
 
-  <p [innerHTML]="mainHtml"></p>
+  <ng-container *ngIf="preHtmlTemplate && (customHtmlTemplate || mainHtml || postHtmlTemplate)">
+    <br /><br />
+  </ng-container>
 
-  <ng-template [ngIf]="postHtml">
-    <br />
-    <p [innerHTML]="postHtml"></p>
-  </ng-template>
+  <p *ngIf="customHtmlTemplate">
+    <ng-template *ngTemplateOutlet="customHtmlTemplate"></ng-template>
+  </p>
+
+  <p *ngIf="mainHtml" [innerHTML]="mainHtml"></p>
+
+  <ng-container *ngIf="(customHtmlTemplate || mainHtml) && postHtmlTemplate">
+    <br /><br />
+  </ng-container>
+
+  <p *ngIf="postHtmlTemplate">
+    <ng-template *ngTemplateOutlet="postHtmlTemplate"></ng-template>
+  </p>
 </ng-template>
 
 <span

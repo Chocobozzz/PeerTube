@@ -1,5 +1,9 @@
 @import '_variables';
 @import '_mixins';
+@import "./_bootstrap-variables";
+
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
 .alert {
   font-size: 15px;
@@ -13,18 +17,37 @@
 
   & > div {
     margin-bottom: 40px;
-    width: 450px;
+
+    &.register-form {
+      width: 450px;
+    }
+
+    &.instance-information {
+      width: 600px;
+      margin-bottom: 40px;
+
+      .block {
+        font-size: 15px;
+        margin-bottom: 15px;
+        padding: 0 $btn-padding-x;
+      }
+
+      @media screen and (max-width: 1500px) {
+        width: 450px;
+      }
+
+      ngb-accordion ::ng-deep {
+        .btn {
+          font-weight: $font-semibold !important;
+          color: var(--mainForegroundColor) !important;
+        }
+      }
+    }
 
     @media screen and (max-width: 500px) {
       width: auto;
     }
   }
-}
-
-my-instance-features-table {
-  display: block;
-
-  margin-bottom: 40px;
 }
 
 .form-group-terms {

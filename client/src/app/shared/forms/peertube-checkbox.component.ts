@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, forwardRef, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { AfterContentInit, ChangeDetectorRef, Component, ContentChildren, forwardRef, Input, QueryList, TemplateRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
+import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
 
 @Component({
   selector: 'my-peertube-checkbox',
@@ -13,19 +14,34 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
     }
   ]
 })
-export class PeertubeCheckboxComponent implements ControlValueAccessor {
+export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterContentInit {
   @Input() checked = false
   @Input() inputName: string
   @Input() labelText: string
-  @Input() labelHtml: string
-  @Input() helpHtml: string
   @Input() helpPlacement = 'top'
   @Input() disabled = false
+
+  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'label' | 'help'>>
 
   // FIXME: https://github.com/angular/angular/issues/10816#issuecomment-307567836
   @Input() onPushWorkaround = false
 
+  labelTemplate: TemplateRef<any>
+  helpTemplate: TemplateRef<any>
+
   constructor (private cdr: ChangeDetectorRef) { }
+
+  ngAfterContentInit () {
+    {
+      const t = this.templates.find(t => t.name === 'label')
+      if (t) this.labelTemplate = t.template
+    }
+
+    {
+      const t = this.templates.find(t => t.name === 'help')
+      if (t) this.helpTemplate = t.template
+    }
+  }
 
   propagateChange = (_: any) => { /* empty */ }
 

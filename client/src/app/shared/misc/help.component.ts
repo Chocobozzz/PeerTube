@@ -1,6 +1,7 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core'
+import { AfterContentInit, Component, ContentChildren, Input, OnChanges, OnInit, QueryList, TemplateRef } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { MarkdownService } from '@app/shared/renderer'
+import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
 
 @Component({
   selector: 'my-help',
@@ -8,20 +9,40 @@ import { MarkdownService } from '@app/shared/renderer'
   templateUrl: './help.component.html'
 })
 
-export class HelpComponent implements OnInit, OnChanges {
-  @Input() preHtml = ''
-  @Input() postHtml = ''
-  @Input() customHtml = ''
+export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() helpType: 'custom' | 'markdownText' | 'markdownEnhanced' = 'custom'
   @Input() tooltipPlacement = 'right'
 
+  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'preHtml' | 'customHtml' | 'postHtml'>>
+
   isPopoverOpened = false
   mainHtml = ''
+
+  preHtmlTemplate: TemplateRef<any>
+  customHtmlTemplate: TemplateRef<any>
+  postHtmlTemplate: TemplateRef<any>
 
   constructor (private i18n: I18n) { }
 
   ngOnInit () {
     this.init()
+  }
+
+  ngAfterContentInit () {
+    {
+      const t = this.templates.find(t => t.name === 'preHtml')
+      if (t) this.preHtmlTemplate = t.template
+    }
+
+    {
+      const t = this.templates.find(t => t.name === 'customHtml')
+      if (t) this.customHtmlTemplate = t.template
+    }
+
+    {
+      const t = this.templates.find(t => t.name === 'postHtml')
+      if (t) this.postHtmlTemplate = t.template
+    }
   }
 
   ngOnChanges () {
@@ -37,11 +58,6 @@ export class HelpComponent implements OnInit, OnChanges {
   }
 
   private init () {
-    if (this.helpType === 'custom') {
-      this.mainHtml = this.customHtml
-      return
-    }
-
     if (this.helpType === 'markdownText') {
       this.mainHtml = this.formatMarkdownSupport(MarkdownService.TEXT_RULES)
       return

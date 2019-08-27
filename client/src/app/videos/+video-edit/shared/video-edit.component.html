@@ -15,7 +15,16 @@
 
             <div class="form-group">
               <label i18n class="label-tags">Tags</label>
-              <my-help i18n-preHtml preHtml="Tags could be used to suggest relevant recommendations.</br>Press Enter to add a new tag."></my-help>
+
+              <my-help>
+                <ng-template ptTemplate="customHtml">
+                  <ng-container i18n>
+                    Tags could be used to suggest relevant recommendations. <br />
+                    Press Enter to add a new tag.
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
               <tag-input
                 [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
                 i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a new tag"
@@ -25,7 +34,15 @@
 
             <div class="form-group">
               <label i18n for="description">Description</label>
-              <my-help helpType="markdownText" i18n-preHtml preHtml="Video descriptions are truncated by default and require manual action to expand them."></my-help>
+
+              <my-help helpType="markdownText">
+                <ng-template ptTemplate="preHtml">
+                  <ng-container i18n>
+                    Video descriptions are truncated by default and require manual action to expand them.
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
               <my-markdown-textarea truncate="250" formControlName="description"></my-markdown-textarea>
 
               <div *ngIf="formErrors.description" class="form-error">
@@ -114,20 +131,25 @@
               </div>
             </div>
 
-            <my-peertube-checkbox
-              inputName="nsfw" formControlName="nsfw"
-              i18n-labelText labelText="This video contains mature or explicit content"
-              i18n-helpHtml helpHtml="Some instances do not list videos containing mature or explicit content by default."
-              helpPlacement="bottom-right"
-            ></my-peertube-checkbox>
+            <my-peertube-checkbox inputName="nsfw" formControlName="nsfw" helpPlacement="bottom-right">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>This video contains mature or explicit content</ng-container>
+              </ng-template>
 
-            <my-peertube-checkbox
-              *ngIf="waitTranscodingEnabled"
-              inputName="waitTranscoding" formControlName="waitTranscoding"
-              i18n-labelText labelText="Wait transcoding before publishing the video"
-              i18n-helpHtml helpHtml="If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends."
-              helpPlacement="bottom-right"
-            ></my-peertube-checkbox>
+              <ng-template ptTemplate="help">
+                <ng-container i18n>Some instances do not list videos containing mature or explicit content by default.</ng-container>
+              </ng-template>
+            </my-peertube-checkbox>
+
+            <my-peertube-checkbox *ngIf="waitTranscodingEnabled" inputName="waitTranscoding" formControlName="waitTranscoding" helpPlacement="bottom-right">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>Wait transcoding before publishing the video</ng-container>
+              </ng-template>
+
+              <ng-template ptTemplate="help">
+                <ng-container i18n>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</ng-container>
+              </ng-template>
+            </my-peertube-checkbox>
 
           </div>
         </div>
