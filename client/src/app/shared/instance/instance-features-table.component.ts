@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-instance-features-table',
@@ -8,8 +9,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './instance-features-table.component.scss' ]
 })
 export class InstanceFeaturesTableComponent implements OnInit {
-  features: { label: string, value?: boolean }[] = []
   quotaHelpIndication = ''
+  config: ServerConfig
 
   constructor (
     private i18n: I18n,
@@ -28,7 +29,7 @@ export class InstanceFeaturesTableComponent implements OnInit {
   ngOnInit () {
     this.serverService.configLoaded
         .subscribe(() => {
-          this.buildFeatures()
+          this.config = this.serverService.getConfig()
           this.buildQuotaHelpIndication()
         })
   }
@@ -39,37 +40,6 @@ export class InstanceFeaturesTableComponent implements OnInit {
     if (policy === 'do_not_list') return this.i18n('Hidden')
     if (policy === 'blur') return this.i18n('Blurred with confirmation request')
     if (policy === 'display') return this.i18n('Displayed')
-  }
-
-  private buildFeatures () {
-    const config = this.serverService.getConfig()
-
-    this.features = [
-      {
-        label: this.i18n('User registration allowed'),
-        value: config.signup.allowed
-      },
-      {
-        label: this.i18n('Video uploads require manual validation by moderators'),
-        value: config.autoBlacklist.videos.ofUsers.enabled
-      },
-      {
-        label: this.i18n('Transcode your videos in multiple resolutions'),
-        value: config.transcoding.enabledResolutions.length !== 0
-      },
-      {
-        label: this.i18n('HTTP import (YouTube, Vimeo, direct URL...)'),
-        value: config.import.videos.http.enabled
-      },
-      {
-        label: this.i18n('Torrent import'),
-        value: config.import.videos.torrent.enabled
-      },
-      {
-        label: this.i18n('P2P enabled'),
-        value: config.tracker.enabled
-      }
-    ]
   }
 
   private getApproximateTime (seconds: number) {

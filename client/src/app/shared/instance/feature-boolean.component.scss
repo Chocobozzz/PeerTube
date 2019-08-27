@@ -1,0 +1,10 @@
+@import '_variables';
+@import '_mixins';
+
+.glyphicon-ok {
+  color: $green;
+}
+
+.glyphicon-remove {
+  color: $red;
+}

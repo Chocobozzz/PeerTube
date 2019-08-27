@@ -5,16 +5,28 @@ table {
   font-size: 14px;
   color: var(--mainForegroundColor);
 
-  .label {
-    font-weight: $font-semibold;
+  .label,
+  .sub-label {
     min-width: 330px;
+
+    &.label {
+      font-weight: $font-semibold;
+    }
+
+    &.sub-label {
+      padding-left: 30px;
+    }
+
+    .more-info {
+      font-style: italic;
+      font-weight: initial;
+      font-size: 14px
+    }
   }
 
-  .glyphicon-ok {
-    color: $green;
-  }
-
-  .glyphicon-remove {
-    color: $red;
+  td {
+    vertical-align: middle;
   }
 }
+
+
