@@ -92,6 +92,7 @@ import { VideoReportComponent } from '@app/shared/video/modals/video-report.comp
 import { ClipboardModule } from 'ngx-clipboard'
 import { FollowService } from '@app/shared/instance/follow.service'
 import { MultiSelectModule } from 'primeng/multiselect'
+import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.component'
 
 @NgModule({
   imports: [
@@ -156,6 +157,7 @@ import { MultiSelectModule } from 'primeng/multiselect'
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
+    FeatureBooleanComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
