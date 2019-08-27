@@ -6,7 +6,6 @@ import { InstanceService } from '@app/shared/instance/instance.service'
 import { MarkdownService } from '@app/shared/renderer'
 import { forkJoin } from 'rxjs'
 import { first } from 'rxjs/operators'
-import { peertubeTranslate } from '@shared/models'
 
 @Component({
   selector: 'my-about-instance',
@@ -59,32 +58,16 @@ export class AboutInstanceComponent implements OnInit {
       this.serverService.videoLanguagesLoaded.pipe(first()),
       this.serverService.videoCategoriesLoaded.pipe(first())
     ]).subscribe(
-      async ([ res, translations ]) => {
-        this.shortDescription = res.instance.shortDescription
+      async ([ about, translations ]) => {
+        this.shortDescription = about.instance.shortDescription
 
-        this.maintenanceLifetime = res.instance.maintenanceLifetime
-        this.businessModel = res.instance.businessModel
+        this.maintenanceLifetime = about.instance.maintenanceLifetime
+        this.businessModel = about.instance.businessModel
 
-        for (const key of [ 'description', 'terms', 'codeOfConduct', 'moderationInformation', 'administrator' ]) {
-          this.html[ key ] = await this.markdownService.textMarkdownToHTML(res.instance[ key ])
-        }
+        this.html = await this.instanceService.buildHtml(about)
 
-        const languagesArray = this.serverService.getVideoLanguages()
-        const categoriesArray = this.serverService.getVideoCategories()
-
-        this.languages = res.instance.languages
-                            .map(l => {
-                              const languageObj = languagesArray.find(la => la.id === l)
-
-                              return peertubeTranslate(languageObj.label, translations)
-                            })
-
-        this.categories = res.instance.categories
-                             .map(c => {
-                               const categoryObj = categoriesArray.find(ca => ca.id === c)
-
-                               return peertubeTranslate(categoryObj.label, translations)
-                             })
+        this.languages = this.instanceService.buildTranslatedLanguages(about, translations)
+        this.categories = this.instanceService.buildTranslatedCategories(about, translations)
       },
 
       () => this.notifier.error(this.i18n('Cannot get about information from server'))

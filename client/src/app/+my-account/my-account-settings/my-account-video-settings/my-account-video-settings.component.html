@@ -1,10 +1,13 @@
 <form role="form" (ngSubmit)="updateDetails()" [formGroup]="form">
   <div class="form-group">
     <label i18n for="nsfwPolicy">Default policy on videos containing sensitive content</label>
-    <my-help
-      helpType="custom" i18n-customHtml
-      customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."
-    ></my-help>
+    <my-help>
+      <ng-template ptTemplate="customHtml">
+        <ng-container i18n>
+          With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
+        </ng-container>
+      </ng-template>
+    </my-help>
 
     <div class="peertube-select-container">
       <select id="nsfwPolicy" formControlName="nsfwPolicy">
@@ -17,9 +20,11 @@
 
   <div class="form-group">
     <label i18n for="videoLanguages">Only display videos in the following languages</label>
-    <my-help i18n-customHtml
-             customHtml="In Recently added, Trending, Local and Search pages"
-    ></my-help>
+    <my-help>
+      <ng-template ptTemplate="customHtml">
+        <ng-container i18n>In Recently added, Trending, Local and Search pages</ng-container>
+      </ng-template>
+    </my-help>
 
     <div>
       <p-multiSelect

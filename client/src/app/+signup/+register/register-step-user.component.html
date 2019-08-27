@@ -60,11 +60,16 @@
   </div>
 
   <div class="form-group form-group-terms">
-    <my-peertube-checkbox
-      inputName="terms" formControlName="terms"
-      i18n-labelHtml
-      labelHtml="I am at least 16 years old and agree to the <a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'>Terms</a> of this instance"
-    ></my-peertube-checkbox>
+    <my-peertube-checkbox inputName="terms" formControlName="terms">
+      <ng-template ptTemplate="label">
+        <ng-container i18n>
+          I am at least 16 years old and agree
+          to the <a (click)="onTermsClick($event)" href='#'>Terms</a>
+          <ng-container *ngIf="hasCodeOfConduct"> and to the <a (click)="onCodeOfConductClick($event)" href='#'>Code of Conduct</a></ng-container>
+          of this instance
+        </ng-container>
+      </ng-template>
+    </my-peertube-checkbox>
 
     <div *ngIf="formErrors.terms" class="form-error">
       {{ formErrors.terms }}

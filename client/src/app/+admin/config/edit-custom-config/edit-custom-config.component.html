@@ -63,20 +63,30 @@
           <div i18n class="inner-form-title">Moderation & NSFW</div>
 
           <div class="form-group">
-            <my-peertube-checkbox
-              inputName="instanceIsNSFW" formControlName="isNSFW"
-              i18n-labelText labelText="This instance is dedicated to sensitive or NSFW content"
-              i18n-helpHtml helpHtml="Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
-              Moreover, the NSFW checkbox on video upload will be automatically checked by default."
-            ></my-peertube-checkbox>
+            <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>This instance is dedicated to sensitive or NSFW content</ng-container>
+              </ng-template>
+
+              <ng-template ptTemplate="help">
+                <ng-container i18n>
+                  Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
+                  Moreover, the NSFW checkbox on video upload will be automatically checked by default.
+                </ng-container>
+              </ng-template>
+            </my-peertube-checkbox>
           </div>
 
           <div class="form-group">
             <label i18n for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
-            <my-help
-              helpType="custom" i18n-customHtml
-              customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."
-            ></my-help>
+
+            <my-help>
+              <ng-template ptTemplate="customHtml">
+                <ng-container i18n>
+                  With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
+                </ng-container>
+              </ng-template>
+            </my-help>
 
             <div class="peertube-select-container">
               <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy">
@@ -374,10 +384,13 @@
 
             <div class="form-group">
               <label i18n for="signupLimit">Your Twitter username</label>
-              <my-help
-                helpType="custom" i18n-customHtml
-                customHtml="Indicates the Twitter account for the website or platform on which the content was published."
-              ></my-help>
+
+              <my-help>
+                <ng-template ptTemplate="customHtml">
+                  <ng-container i18n>Indicates the Twitter account for the website or platform on which the content was published.</ng-container>
+                </ng-template>
+              </my-help>
+
               <input
                 type="text" id="servicesTwitterUsername"
                 formControlName="username" [ngClass]="{ 'input-error': formErrors['services.twitter.username'] }"
@@ -386,13 +399,21 @@
             </div>
 
             <div class="form-group">
-              <my-peertube-checkbox
-                inputName="servicesTwitterWhitelisted" formControlName="whitelisted"
-                i18n-labelText labelText="Instance whitelisted by Twitter"
-                i18n-helpHtml helpHtml="If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
-        If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
-        Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a> to see if you instance is whitelisted."
-              ></my-peertube-checkbox>
+              <my-peertube-checkbox inputName="servicesTwitterWhitelisted" formControlName="whitelisted">
+                <ng-template ptTemplate="label">
+                  <ng-container i18n>Instance whitelisted by Twitter</ng-container>
+                </ng-template>
+
+                <ng-template ptTemplate="help">
+                  <ng-container i18n>
+                    If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
+                    If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
+                    Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on
+                    <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
+                    to see if you instance is whitelisted.
+                  </ng-container>
+                </ng-template>
+              </my-peertube-checkbox>
             </div>
 
           </ng-container>
@@ -408,11 +429,15 @@
 
         <ng-container formGroupName="transcoding">
           <div class="form-group">
-            <my-peertube-checkbox
-              inputName="transcodingEnabled" formControlName="enabled"
-              i18n-labelText labelText="Transcoding enabled"
-              i18n-helpHtml helpHtml="If you disable transcoding, many videos from your users will not work!"
-            ></my-peertube-checkbox>
+            <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled">
+              <ng-template ptTemplate="label">
+                <ng-container i18n>Transcoding enabled</ng-container>
+              </ng-template>
+
+              <ng-template ptTemplate="help">
+                <ng-container i18n>If you disable transcoding, many videos from your users will not work!</ng-container>
+              </ng-template>
+            </my-peertube-checkbox>
           </div>
 
           <ng-container *ngIf="isTranscodingEnabled()">
@@ -421,16 +446,22 @@
               <my-peertube-checkbox
                 inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
                 i18n-labelText labelText="Allow additional extensions"
-                i18n-helpHtml helpHtml="Allow your users to upload .mkv, .mov, .avi, .flv videos"
-              ></my-peertube-checkbox>
+              >
+                <ng-template ptTemplate="help">
+                  <ng-container i18n>Allow your users to upload .mkv, .mov, .avi, .flv videos</ng-container>
+                </ng-template>
+              </my-peertube-checkbox>
             </div>
 
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
                 i18n-labelText labelText="Allow audio files upload"
-                i18n-helpHtml helpHtml="Allow your users to upload audio files that will be merged with the preview file on upload"
-              ></my-peertube-checkbox>
+              >
+                <ng-template ptTemplate="help">
+                  <ng-container i18n>Allow your users to upload audio files that will be merged with the preview file on upload</ng-container>
+                </ng-template>
+              </my-peertube-checkbox>
             </div>
 
             <div class="form-group">
@@ -460,10 +491,11 @@
         <div i18n class="inner-form-title">
           Cache
 
-          <my-help
-            helpType="custom" i18n-customHtml
-            customHtml="Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them."
-          ></my-help>
+          <my-help>
+            <ng-template ptTemplate="customHtml">
+              <ng-container i18n>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</ng-container>
+            </ng-template>
+          </my-help>
         </div>
 
         <ng-container formGroupName="cache">
@@ -492,38 +524,45 @@
           <ng-container formGroupName="customizations">
             <div class="form-group">
               <label i18n for="customizationJavascript">JavaScript</label>
-              <my-help
-                helpType="custom" i18n-customHtml
-                customHtml="Write directly JavaScript code.<br />Example: <pre>console.log('my instance is amazing');</pre>"
-              ></my-help>
+              <my-help>
+                <ng-template ptTemplate="customHtml">
+                  <ng-container i18n>
+                    Write directly JavaScript code.<br />Example: <pre>console.log('my instance is amazing');</pre>
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
               <textarea
                 id="customizationJavascript" formControlName="javascript"
                 [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
               ></textarea>
+
               <div *ngIf="formErrors.instance.customizations.javascript" class="form-error">{{ formErrors.instance.customizations.javascript }}</div>
             </div>
 
             <div class="form-group">
               <label for="customizationCSS">CSS</label>
-              <my-help
-                  helpType="custom"
-                  i18n-customHtml
-                  customHtml="
+
+              <my-help>
+                <ng-template ptTemplate="customHtml">
+                  <ng-container i18n>
                     Write directly CSS code. Example:<br /><br />
-                    <pre>
-  #custom-css {{ '{' }}
-    color: red;
-  {{ '}' }}
-                    </pre>
+<pre>
+#custom-css {{ '{' }}
+  color: red;
+{{ '}' }}
+</pre>
 
                     Prepend with <em>#custom-css</em> to override styles. Example:<br /><br />
-                    <pre>
-  #custom-css .logged-in-email {{ '{' }}
-    color: red;
-  {{ '}' }}
-                    </pre>
-                  "
-              ></my-help>
+<pre>
+#custom-css .logged-in-email {{ '{' }}
+  color: red;
+{{ '}' }}
+</pre>
+                  </ng-container>
+                </ng-template>
+              </my-help>
+
               <textarea
                 id="customizationCSS" formControlName="css"
                 [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"

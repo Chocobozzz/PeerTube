@@ -12,13 +12,21 @@
     <span *ngIf="interact">Remote interact</span>
   </button>
 
-  <my-help *ngIf="!interact && showHelp"
-           helpType="custom"
-           i18n-customHtml customHtml="You can subscribe to the channel via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.">
+  <my-help *ngIf="!interact && showHelp">
+    <ng-template ptTemplate="customHtml">
+      <ng-container i18n>
+        You can subscribe to the channel via any ActivityPub-capable fediverse instance.<br /><br />
+        For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.
+      </ng-container>
+    </ng-template>
   </my-help>
 
-  <my-help *ngIf="showHelp && interact"
-           helpType="custom"
-           i18n-customHtml customHtml="You can interact with this via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.">
+  <my-help *ngIf="showHelp && interact">
+    <ng-template ptTemplate="customHtml">
+      <ng-container i18n>
+        You can interact with this via any ActivityPub-capable fediverse instance.<br /><br />
+        For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.
+      </ng-container>
+    </ng-template>
   </my-help>
 </form>

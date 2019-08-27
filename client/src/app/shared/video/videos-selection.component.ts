@@ -35,7 +35,7 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
   @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<ResultList<Video>>
-  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective>
+  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'rowButtons' | 'globalButtons'>>
 
   @Output() selectionChange = new EventEmitter<SelectionType>()
   @Output() videosModelChange = new EventEmitter<Video[]>()

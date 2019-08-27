@@ -7,11 +7,15 @@
   <my-signup-success *ngIf="signupDone" [message]="success"></my-signup-success>
   <div *ngIf="info" class="alert alert-info">{{ info }}</div>
 
-  <div class="wrapper" *ngIf="!signupDone">
-    <div>
+  <div class="wrapper" [hidden]="signupDone">
+    <div class="register-form">
       <my-custom-stepper linear *ngIf="!signupDone">
         <cdk-step [stepControl]="formStepUser" i18n-label label="User information">
-          <my-register-step-user (formBuilt)="onUserFormBuilt($event)"></my-register-step-user>
+          <my-register-step-user
+            [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
+            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
+          >
+          </my-register-step-user>
 
           <button i18n cdkStepperNext [disabled]="!formStepUser || !formStepUser.valid">Next</button>
         </cdk-step>
@@ -38,9 +42,56 @@
       </my-custom-stepper>
     </div>
 
-    <div>
-      <label i18n>Features found on this instance</label>
-      <my-instance-features-table></my-instance-features-table>
+    <div class="instance-information">
+      <ngb-accordion [closeOthers]="true" #accordion="ngbAccordion">
+        <ngb-panel id="instance-features" i18n-title title="Features found on this instance">
+          <ng-template ngbPanelContent>
+            <my-instance-features-table></my-instance-features-table>
+          </ng-template>
+        </ngb-panel>
+
+        <ng-container *ngIf="about">
+          <ngb-panel
+            *ngIf="aboutHtml.administrator || about.instance.maintenanceLifetime || about.instance.businessModel"
+            id="admin-sustainability" i18n-title title="Administrators & Sustainability"
+          >
+            <ng-template ngbPanelContent>
+              <div class="block">
+                <strong i18n>Who are we?</strong>
+                <div [innerHTML]="aboutHtml.administrator"></div>
+              </div>
+
+              <div class="block">
+                <strong i18n>How long do we plan to maintain this instance?</strong>
+                <div [innerHTML]="about.instance.maintenanceLifetime"></div>
+              </div>
+
+              <div class="block">
+                <strong i18n>How will we pay this instance?</strong>
+                <div [innerHTML]="about.instance.businessModel"></div>
+              </div>
+            </ng-template>
+          </ngb-panel>
+
+          <ngb-panel *ngIf="aboutHtml.moderationInformation" id="moderation-information" i18n-title title="Moderation information">
+            <ng-template ngbPanelContent>
+              <div class="block" [innerHTML]="aboutHtml.moderationInformation"></div>
+            </ng-template>
+          </ngb-panel>
+
+          <ngb-panel *ngIf="aboutHtml.codeOfConduct" id="code-of-conduct" i18n-title title="Code of conduct">
+            <ng-template ngbPanelContent>
+              <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
+            </ng-template>
+          </ngb-panel>
+
+          <ngb-panel *ngIf="aboutHtml.terms" id="terms" i18n-title title="Terms">
+            <ng-template ngbPanelContent>
+              <div class="block" [innerHTML]="aboutHtml.terms"></div>
+            </ng-template>
+          </ngb-panel>
+        </ng-container>
+      </ngb-accordion>
     </div>
   </div>
 
