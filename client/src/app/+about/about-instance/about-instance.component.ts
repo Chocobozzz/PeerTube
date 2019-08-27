@@ -4,6 +4,9 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { MarkdownService } from '@app/shared/renderer'
+import { forkJoin } from 'rxjs'
+import { first } from 'rxjs/operators'
+import { peertubeTranslate } from '@shared/models'
 
 @Component({
   selector: 'my-about-instance',
@@ -27,7 +30,7 @@ export class AboutInstanceComponent implements OnInit {
   businessModel = ''
 
   languages: string[] = []
-  categories: number[] = []
+  categories: string[] = []
 
   constructor (
     private notifier: Notifier,
@@ -50,28 +53,45 @@ export class AboutInstanceComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.instanceService.getAbout()
-      .subscribe(
-        async res => {
-          this.shortDescription = res.instance.shortDescription
+    forkJoin([
+      this.instanceService.getAbout(),
+      this.serverService.localeObservable.pipe(first()),
+      this.serverService.videoLanguagesLoaded.pipe(first()),
+      this.serverService.videoCategoriesLoaded.pipe(first())
+    ]).subscribe(
+      async ([ res, translations ]) => {
+        this.shortDescription = res.instance.shortDescription
 
-          this.maintenanceLifetime = res.instance.maintenanceLifetime
-          this.businessModel = res.instance.businessModel
+        this.maintenanceLifetime = res.instance.maintenanceLifetime
+        this.businessModel = res.instance.businessModel
 
-          for (const key of [ 'description', 'terms', 'codeOfConduct', 'moderationInformation', 'administrator' ]) {
-            this.html[key] = await this.markdownService.textMarkdownToHTML(res.instance[key])
-          }
+        for (const key of [ 'description', 'terms', 'codeOfConduct', 'moderationInformation', 'administrator' ]) {
+          this.html[ key ] = await this.markdownService.textMarkdownToHTML(res.instance[ key ])
+        }
 
-          this.languages = res.instance.languages
-          this.categories = res.instance.categories
-        },
+        const languagesArray = this.serverService.getVideoLanguages()
+        const categoriesArray = this.serverService.getVideoCategories()
 
-        () => this.notifier.error(this.i18n('Cannot get about information from server'))
-      )
+        this.languages = res.instance.languages
+                            .map(l => {
+                              const languageObj = languagesArray.find(la => la.id === l)
+
+                              return peertubeTranslate(languageObj.label, translations)
+                            })
+
+        this.categories = res.instance.categories
+                             .map(c => {
+                               const categoryObj = categoriesArray.find(ca => ca.id === c)
+
+                               return peertubeTranslate(categoryObj.label, translations)
+                             })
+      },
+
+      () => this.notifier.error(this.i18n('Cannot get about information from server'))
+    )
   }
 
   openContactModal () {
     return this.contactAdminModal.show()
   }
-
 }

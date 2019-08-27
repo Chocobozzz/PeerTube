@@ -8,9 +8,25 @@
     </div>
 
     <div class="short-description">
-      <div>{{ shortDescription }}</div>
+      <div class="block short-description">{{ shortDescription }}</div>
 
-      <div *ngIf="isNSFW" class="dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
+      <div *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
+
+      <div class="block">
+        <div class="section-title" *ngIf="languages.length !== 0">Main instance languages</div>
+
+        <ul>
+          <li *ngFor="let language of languages">{{ language }}</li>
+        </ul>
+      </div>
+
+      <div class="block">
+        <div class="section-title" *ngIf="categories.length !== 0">Main instance categories</div>
+
+        <ul>
+          <li *ngFor="let category of categories">{{ category }}</li>
+        </ul>
+      </div>
     </div>
 
     <div class="middle-title" *ngIf="html.administrator || maintenanceLifetime || businessModel">
@@ -18,19 +34,19 @@
     </div>
 
     <div class="block administrator" *ngIf="html.administrator">
-      <div i18n class="section-title">Instance administrators</div>
+      <div i18n class="section-title">Who are we?</div>
 
       <div [innerHTML]="html.administrator"></div>
     </div>
 
     <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
-      <div i18n class="section-title">Maintenance lifetime</div>
+      <div i18n class="section-title">How long do we plan to maintain this instance?</div>
 
       <p>{{ maintenanceLifetime }}</p>
     </div>
 
     <div class="block business-model" *ngIf="businessModel">
-      <div i18n class="section-title">Business model</div>
+      <div i18n class="section-title">How will we pay this instance?</div>
 
       <p>{{ businessModel }}</p>
     </div>
