@@ -190,8 +190,8 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     category: body.category || importData.category,
     licence: body.licence || importData.licence,
     language: body.language || undefined,
-    commentsEnabled: body.commentsEnabled && true,
-    downloadEnabled: body.downloadEnabled && true,
+    commentsEnabled: body.commentsEnabled !== false, // If the value is not "false", the default is "true"
+    downloadEnabled: body.downloadEnabled !== false,
     waitTranscoding: body.waitTranscoding || false,
     state: VideoState.TO_IMPORT,
     nsfw: body.nsfw || importData.nsfw || false,

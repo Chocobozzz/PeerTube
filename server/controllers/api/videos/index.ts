@@ -186,7 +186,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     licence: videoInfo.licence,
     language: videoInfo.language,
     commentsEnabled: videoInfo.commentsEnabled || false,
-    downloadEnabled: videoInfo.downloadEnabled || true,
+    downloadEnabled: videoInfo.downloadEnabled !== false, // If the value is not "false", the default is "true"
     waitTranscoding: videoInfo.waitTranscoding || false,
     state: CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED,
     nsfw: videoInfo.nsfw || false,
