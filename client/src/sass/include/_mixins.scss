@@ -343,6 +343,7 @@
   & + span {
     position: relative;
     width: 18px;
+    min-width: 18px;
     height: 18px;
     border: $border-width solid var(--mainForegroundColor);
     border-radius: 3px;
