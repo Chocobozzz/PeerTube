@@ -7,7 +7,6 @@
 
   .title {
     font-size: 20px;
-    margin-bottom: 15px;
     font-weight: $font-semibold;
   }
 
@@ -16,6 +15,20 @@
     @include orange-button;
 
     height: fit-content;
+  }
+}
+
+.instance-badges {
+  font-size: 16px;
+
+  .badge {
+    font-size: 12px;
+    font-weight: $font-semibold;
+    margin-right: 5px;
+
+    &.category {
+      background-color: var(--mainColor);
+    }
   }
 }
 
