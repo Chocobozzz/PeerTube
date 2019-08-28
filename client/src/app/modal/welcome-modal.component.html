@@ -1,0 +1,66 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Welcome on PeerTube dear administrator!</h4>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="block-links">
+      <div class="subtitle">Useful links</div>
+
+      <ul>
+        <li>
+          Official PeerTube website: <a href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">https://joinpeertube.org</a>
+        </li>
+
+        <li>
+          Discover CLI PeerTube tools (to upload or import videos, parse logs, prune storage directories, reset user password...):
+          <a href="https://docs.joinpeertube.org/#/maintain-tools" target="_blank" rel="noopener noreferrer">https://docs.joinpeertube.org/#/maintain-tools</a>
+        </li>
+
+        <li>
+          Understand how to administer your instance (managing users, following other instances, dealing with spammers...):
+          <a href="https://docs.joinpeertube.org/#/admin-following-instances" target="_blank" rel="noopener noreferrer">https://docs.joinpeertube.org/#/admin-following-instances</a>
+        </li>
+
+        <li>
+          Learn how to use PeerTube (setup your account, managing video playlists, discover third-party applications...):
+          <a href="https://docs.joinpeertube.org/#/use-setup-account" target="_blank" rel="noopener noreferrer">https://docs.joinpeertube.org/#/use-setup-account</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="block-configuration">
+      <div class="subtitle">Configure your instance</div>
+
+      <p>
+        Now it's time to configure your instance! Choosing your <strong>instance name</strong>, <strong>setting up a description</strong>,
+        specifying <strong>who you are</strong> and <strong>how long</strong> you plan to <strong>maintain your instance</strong>
+        is very important for visitors to understand on what type of instance they are.
+      </p>
+
+      <p>
+        If you want to open registrations, please decide what are <strong>your moderation rules</strong>, fill your <strong>instance terms</strong>
+        and specify the categories and languages you speak. This way, users that are looking for a PeerTube instance on which they can register
+        will be able to choose <strong>the right one</strong>.
+      </p>
+
+      <div class="configure-instance">
+        <a href="/admin/config/edit-custom" target="_blank" rel="noopener noreferrer">Configure your instance</a>
+      </div>
+    </div>
+
+    <div class="block-instance">
+      <div class="subtitle">Index your instance</div>
+
+      If you want, you can index your PeerTube instance on the public PeerTube instances list:
+      <a href="https://instances.joinpeertube.org/instances">https://instances.joinpeertube.org/instances</a>
+    </div>
+  </div>
+
+  <div class="modal-footer inputs">
+    <span i18n class="action-button action-button-submit" (click)="hide()">Understood!</span>
+  </div>
+
+</ng-template>

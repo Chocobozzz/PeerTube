@@ -54,3 +54,8 @@
     </div>
   </ng-template>
 </p-toast>
+
+<ng-template [ngIf]="isUserLoggedIn()">
+  <my-welcome-modal #welcomeModal></my-welcome-modal>
+  <my-instance-config-warning-modal #instanceConfigWarningModal></my-instance-config-warning-modal>
+</ng-template>

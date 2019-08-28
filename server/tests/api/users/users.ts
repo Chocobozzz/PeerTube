@@ -442,7 +442,7 @@ describe('Test users', function () {
         url: server.url,
         accessToken: accessTokenUser,
         currentPassword: 'super password',
-        newPassword: 'new password'
+        password: 'new password'
       })
       user.password = 'new password'
 
@@ -543,7 +543,7 @@ describe('Test users', function () {
       })
 
       const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
+      const user: User = res.body
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
@@ -552,6 +552,8 @@ describe('Test users', function () {
       expect(user.id).to.be.a('number')
       expect(user.account.displayName).to.equal('new display name')
       expect(user.account.description).to.equal('my super description updated')
+      expect(user.noWelcomeModal).to.be.false
+      expect(user.noInstanceConfigWarningModal).to.be.false
     })
 
     it('Should be able to update my theme', async function () {
@@ -567,6 +569,21 @@ describe('Test users', function () {
 
         expect(body.theme).to.equal(theme)
       }
+    })
+
+    it('Should be able to update my modal preferences', async function () {
+      await updateMyUser({
+        url: server.url,
+        accessToken: accessTokenUser,
+        noInstanceConfigWarningModal: true,
+        noWelcomeModal: true
+      })
+
+      const res = await getMyUserInformation(server.url, accessTokenUser)
+      const user: User = res.body
+
+      expect(user.noWelcomeModal).to.be.true
+      expect(user.noInstanceConfigWarningModal).to.be.true
     })
   })
 

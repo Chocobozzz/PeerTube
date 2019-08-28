@@ -1,0 +1,15 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Warning!</h4>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+
+  </div>
+
+  <div class="modal-footer inputs">
+    <span i18n class="action-button action-button-cancel" (click)="hide()">Close</span>
+  </div>
+
+</ng-template>

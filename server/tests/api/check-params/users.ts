@@ -476,6 +476,22 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid noInstanceConfigWarningModal attribute', async function () {
+      const fields = {
+        noInstanceConfigWarningModal: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
+    it('Should fail with an invalid noWelcomeModal attribute', async function () {
+      const fields = {
+        noWelcomeModal: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should succeed to change password with the correct params', async function () {
       const fields = {
         currentPassword: 'my super password',
@@ -483,7 +499,9 @@ describe('Test users API validators', function () {
         nsfwPolicy: 'blur',
         autoPlayVideo: false,
         email: 'super_email@example.com',
-        theme: 'default'
+        theme: 'default',
+        noInstanceConfigWarningModal: true,
+        noWelcomeModal: true
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
