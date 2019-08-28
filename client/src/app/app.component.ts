@@ -244,15 +244,19 @@ export class AppComponent implements OnInit {
     if (user.noWelcomeModal !== true) return this.welcomeModal.show()
 
     const config = this.serverService.getConfig()
+    if (user.noInstanceConfigWarningModal === true || !config.signup.allowed) return
 
-    if (user.noInstanceConfigWarningModal !== true && config.signup.allowed && config.instance.name.toLowerCase() === 'peertube') {
-      this.instanceService.getAbout()
-        .subscribe(about => {
-          if (!about.instance.terms) {
-            this.instanceConfigWarningModal.show()
-          }
-        })
-    }
+    this.instanceService.getAbout()
+      .subscribe(about => {
+        if (
+          config.instance.name.toLowerCase() === 'peertube' ||
+          !about.instance.terms ||
+          !about.instance.administrator ||
+          !about.instance.maintenanceLifetime
+        ) {
+          this.instanceConfigWarningModal.show(about)
+        }
+      })
   }
 
   private initHotkeys () {

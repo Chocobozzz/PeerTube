@@ -34,7 +34,5 @@ export class WelcomeModalComponent {
 
         err => this.notifier.error(err.message)
       )
-
-    return true
   }
 }

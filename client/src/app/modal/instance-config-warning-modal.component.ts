@@ -1,7 +1,8 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { About } from '@shared/models/server'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-instance-config-warning-modal',
@@ -11,13 +12,31 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 export class InstanceConfigWarningModalComponent {
   @ViewChild('modal', { static: true }) modal: ElementRef
 
+  stopDisplayModal = false
+  about: About
+
   constructor (
+    private userService: UserService,
     private modalService: NgbModal,
-    private notifier: Notifier,
-    private i18n: I18n
+    private notifier: Notifier
   ) { }
 
-  show () {
-    this.modalService.open(this.modal)
+  show (about: About) {
+    this.about = about
+
+    const ref = this.modalService.open(this.modal)
+
+    ref.result.finally(() => {
+      if (this.stopDisplayModal === true) this.doNotOpenAgain()
+    })
+  }
+
+  private doNotOpenAgain () {
+    this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
+        .subscribe(
+          () => console.log('We will not open the instance config warning modal again.'),
+
+          err => this.notifier.error(err.message)
+        )
   }
 }

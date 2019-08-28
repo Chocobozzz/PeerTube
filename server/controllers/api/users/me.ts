@@ -190,19 +190,19 @@ async function updateMe (req: express.Request, res: express.Response) {
     }
   }
 
-  if (body.displayName !== undefined || body.description !== undefined) {
-    await sequelizeTypescript.transaction(async t => {
-      const userAccount = await AccountModel.load(user.Account.id, t)
+  await sequelizeTypescript.transaction(async t => {
+    await user.save({ transaction: t })
 
-      await user.save({ transaction: t })
+    if (body.displayName !== undefined || body.description !== undefined) {
+      const userAccount = await AccountModel.load(user.Account.id, t)
 
       if (body.displayName !== undefined) userAccount.name = body.displayName
       if (body.description !== undefined) userAccount.description = body.description
       await userAccount.save({ transaction: t })
 
       await sendUpdateActor(userAccount, t)
-    })
-  }
+    }
+  })
 
   if (sendVerificationEmail === true) {
     await sendVerifyUserEmail(user, true)
