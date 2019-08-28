@@ -15,4 +15,7 @@ export interface UserUpdateMe {
   password?: string
 
   theme?: string
+
+  noInstanceConfigWarningModal?: boolean
+  noWelcomeModal?: boolean
 }

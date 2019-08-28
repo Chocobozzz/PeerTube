@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { debounceTime, filter, map, pairwise, skip } from 'rxjs/operators'
+import { debounceTime, filter, map, pairwise, skip, switchMap } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
@@ -13,6 +13,11 @@ import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
+import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
+import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
+import { UserRole } from '@shared/models'
+import { User } from '@app/shared'
+import { InstanceService } from '@app/shared/instance/instance.service'
 
 @Component({
   selector: 'my-app',
@@ -20,6 +25,9 @@ import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
+  @ViewChild('welcomeModal', { static: false }) welcomeModal: WelcomeModalComponent
+  @ViewChild('instanceConfigWarningModal', { static: false }) instanceConfigWarningModal: InstanceConfigWarningModalComponent
+
   isMenuDisplayed = true
   isMenuChangedByUser = false
 
@@ -32,6 +40,7 @@ export class AppComponent implements OnInit {
     private authService: AuthService,
     private serverService: ServerService,
     private pluginService: PluginService,
+    private instanceService: InstanceService,
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService,
     private screenService: ScreenService,
@@ -96,6 +105,8 @@ export class AppComponent implements OnInit {
       .subscribe(() => this.onResize())
 
     this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
+
+    this.openModalsIfNeeded()
   }
 
   isUserLoggedIn () {
@@ -220,32 +231,62 @@ export class AppComponent implements OnInit {
     this.hooks.runAction('action:application.init', 'common')
   }
 
+  private async openModalsIfNeeded () {
+    this.serverService.configLoaded
+        .pipe(
+          switchMap(() => this.authService.userInformationLoaded),
+          map(() => this.authService.getUser()),
+          filter(user => user.role === UserRole.ADMINISTRATOR)
+        ).subscribe(user => setTimeout(() => this.openAdminModals(user))) // setTimeout because of ngIf in template
+  }
+
+  private async openAdminModals (user: User) {
+    if (user.noWelcomeModal !== true) return this.welcomeModal.show()
+
+    const config = this.serverService.getConfig()
+
+    if (user.noInstanceConfigWarningModal !== true && config.signup.allowed && config.instance.name.toLowerCase() === 'peertube') {
+      this.instanceService.getAbout()
+        .subscribe(about => {
+          if (!about.instance.terms) {
+            this.instanceConfigWarningModal.show()
+          }
+        })
+    }
+  }
+
   private initHotkeys () {
     this.hotkeysService.add([
       new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
         document.getElementById('search-video').focus()
         return false
       }, undefined, this.i18n('Focus the search bar')),
+
       new Hotkey('b', (event: KeyboardEvent): boolean => {
         this.toggleMenu()
         return false
       }, undefined, this.i18n('Toggle the left menu')),
+
       new Hotkey('g o', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/overview' ])
         return false
       }, undefined, this.i18n('Go to the discover videos page')),
+
       new Hotkey('g t', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/trending' ])
         return false
       }, undefined, this.i18n('Go to the trending videos page')),
+
       new Hotkey('g r', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/recently-added' ])
         return false
       }, undefined, this.i18n('Go to the recently added videos page')),
+
       new Hotkey('g l', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/local' ])
         return false
       }, undefined, this.i18n('Go to the local videos page')),
+
       new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false

@@ -1,0 +1,31 @@
+@import '_mixins';
+@import '_variables';
+
+.modal-body {
+  font-size: 15px;
+}
+
+.action-button-cancel {
+  margin-right: 0 !important;
+}
+
+.subtitle {
+  font-weight: $font-semibold;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.block-configuration,
+.block-instance {
+  margin-top: 30px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.configure-instance {
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+}

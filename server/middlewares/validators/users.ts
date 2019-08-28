@@ -4,6 +4,7 @@ import { body, param } from 'express-validator'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import {
+  isNoInstanceConfigWarningModal, isNoWelcomeModal,
   isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
@@ -216,6 +217,12 @@ const usersUpdateMeValidator = [
   body('theme')
     .optional()
     .custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
+  body('noInstanceConfigWarningModal')
+    .optional()
+    .custom(v => isNoInstanceConfigWarningModal(v)).withMessage('Should have a valid noInstanceConfigWarningModal boolean'),
+  body('noWelcomeModal')
+    .optional()
+    .custom(v => isNoWelcomeModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })

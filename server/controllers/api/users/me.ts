@@ -127,7 +127,7 @@ async function getUserInformation (req: express.Request, res: express.Response) 
   // We did not load channels in res.locals.user
   const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
 
-  return res.json(user.toFormattedJSON({}))
+  return res.json(user.toFormattedJSON())
 }
 
 async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
@@ -178,6 +178,8 @@ async function updateMe (req: express.Request, res: express.Response) {
   if (body.videosHistoryEnabled !== undefined) user.videosHistoryEnabled = body.videosHistoryEnabled
   if (body.videoLanguages !== undefined) user.videoLanguages = body.videoLanguages
   if (body.theme !== undefined) user.theme = body.theme
+  if (body.noInstanceConfigWarningModal !== undefined) user.noInstanceConfigWarningModal = body.noInstanceConfigWarningModal
+  if (body.noWelcomeModal !== undefined) user.noWelcomeModal = body.noWelcomeModal
 
   if (body.email !== undefined) {
     if (CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
@@ -188,17 +190,19 @@ async function updateMe (req: express.Request, res: express.Response) {
     }
   }
 
-  await sequelizeTypescript.transaction(async t => {
-    const userAccount = await AccountModel.load(user.Account.id)
+  if (body.displayName !== undefined || body.description !== undefined) {
+    await sequelizeTypescript.transaction(async t => {
+      const userAccount = await AccountModel.load(user.Account.id, t)
 
-    await user.save({ transaction: t })
+      await user.save({ transaction: t })
 
-    if (body.displayName !== undefined) userAccount.name = body.displayName
-    if (body.description !== undefined) userAccount.description = body.description
-    await userAccount.save({ transaction: t })
+      if (body.displayName !== undefined) userAccount.name = body.displayName
+      if (body.description !== undefined) userAccount.description = body.description
+      await userAccount.save({ transaction: t })
 
-    await sendUpdateActor(userAccount, t)
-  })
+      await sendUpdateActor(userAccount, t)
+    })
+  }
 
   if (sendVerificationEmail === true) {
     await sendVerifyUserEmail(user, true)
