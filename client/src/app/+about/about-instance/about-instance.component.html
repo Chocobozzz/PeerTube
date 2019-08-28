@@ -7,26 +7,16 @@
       <div *ngIf="isContactFormEnabled" (click)="openContactModal()" i18n role="button" class="contact-admin">Contact administrator</div>
     </div>
 
+    <div class="block instance-badges">
+      <span *ngFor="let category of categories" class="badge badge-primary category">{{ category }}</span>
+
+      <span *ngFor="let language of languages" class="badge badge-secondary language">{{ language }}</span>
+    </div>
+
     <div class="short-description">
       <div class="block short-description">{{ shortDescription }}</div>
 
       <div *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
-
-      <div class="block">
-        <div class="section-title" *ngIf="languages.length !== 0">Main instance languages</div>
-
-        <ul>
-          <li *ngFor="let language of languages">{{ language }}</li>
-        </ul>
-      </div>
-
-      <div class="block">
-        <div class="section-title" *ngIf="categories.length !== 0">Main instance categories</div>
-
-        <ul>
-          <li *ngFor="let category of categories">{{ category }}</li>
-        </ul>
-      </div>
     </div>
 
     <div class="middle-title" *ngIf="html.administrator || maintenanceLifetime || businessModel">
