@@ -101,6 +101,8 @@ async function checkJsonLDSignature (req: Request, res: Response) {
   const verified = await isJsonLDSignatureVerified(actor, req.body)
 
   if (verified !== true) {
+    logger.warn('Signature not verified.', req.body)
+
     res.sendStatus(403)
     return false
   }

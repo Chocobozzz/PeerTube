@@ -1,11 +1,10 @@
 import { Request } from 'express'
 import { BCRYPT_SALT_SIZE, HTTP_SIGNATURE, PRIVATE_RSA_KEY_SIZE } from '../initializers/constants'
-import { ActorModel } from '../models/activitypub/actor'
 import { createPrivateKey, getPublicKey, promisify1, promisify2, sha256 } from './core-utils'
-import { jsig, jsonld } from './custom-jsonld-signature'
+import { jsonld } from './custom-jsonld-signature'
 import { logger } from './logger'
 import { cloneDeep } from 'lodash'
-import { createVerify } from 'crypto'
+import { createSign, createVerify } from 'crypto'
 import { buildDigest } from '../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as bcrypt from 'bcrypt'
 import { MActor } from '../typings/models'
@@ -57,70 +56,21 @@ function parseHTTPSignature (req: Request, clockSkew?: number) {
 
 // JSONLD
 
-async function isJsonLDSignatureVerified (fromActor: MActor, signedDocument: any): Promise<boolean> {
+function isJsonLDSignatureVerified (fromActor: MActor, signedDocument: any): Promise<boolean> {
   if (signedDocument.signature.type === 'RsaSignature2017') {
-    // Mastodon algorithm
-    const res = await isJsonLDRSA2017Verified(fromActor, signedDocument)
-    // Success? If no, try with our library
-    if (res === true) return true
+    return isJsonLDRSA2017Verified(fromActor, signedDocument)
   }
 
-  const publicKeyObject = {
-    '@context': jsig.SECURITY_CONTEXT_URL,
-    id: fromActor.url,
-    type: 'CryptographicKey',
-    owner: fromActor.url,
-    publicKeyPem: fromActor.publicKey
-  }
+  logger.warn('Unknown JSON LD signature %s.', signedDocument.signature.type, signedDocument)
 
-  const publicKeyOwnerObject = {
-    '@context': jsig.SECURITY_CONTEXT_URL,
-    id: fromActor.url,
-    publicKey: [ publicKeyObject ]
-  }
-
-  const options = {
-    publicKey: publicKeyObject,
-    publicKeyOwner: publicKeyOwnerObject
-  }
-
-  return jsig.promises
-             .verify(signedDocument, options)
-             .then((result: { verified: boolean }) => result.verified)
-             .catch(err => {
-               logger.error('Cannot check signature.', { err })
-               return false
-             })
+  return Promise.resolve(false)
 }
 
 // Backward compatibility with "other" implementations
 async function isJsonLDRSA2017Verified (fromActor: MActor, signedDocument: any) {
-  function hash (obj: any): Promise<any> {
-    return jsonld.promises
-                 .normalize(obj, {
-                   algorithm: 'URDNA2015',
-                   format: 'application/n-quads'
-                 })
-                 .then(res => sha256(res))
-  }
-
-  const signatureCopy = cloneDeep(signedDocument.signature)
-  Object.assign(signatureCopy, {
-    '@context': [
-      'https://w3id.org/security/v1',
-      { RsaSignature2017: 'https://w3id.org/security#RsaSignature2017' }
-    ]
-  })
-  delete signatureCopy.type
-  delete signatureCopy.id
-  delete signatureCopy.signatureValue
-
-  const docWithoutSignature = cloneDeep(signedDocument)
-  delete docWithoutSignature.signature
-
   const [ documentHash, optionsHash ] = await Promise.all([
-    hash(docWithoutSignature),
-    hash(signatureCopy)
+    createDocWithoutSignatureHash(signedDocument),
+    createSignatureHash(signedDocument.signature)
   ])
 
   const toVerify = optionsHash + documentHash
@@ -131,14 +81,27 @@ async function isJsonLDRSA2017Verified (fromActor: MActor, signedDocument: any) 
   return verify.verify(fromActor.publicKey, signedDocument.signature.signatureValue, 'base64')
 }
 
-function signJsonLDObject (byActor: MActor, data: any) {
-  const options = {
-    privateKeyPem: byActor.privateKey,
+async function signJsonLDObject (byActor: MActor, data: any) {
+  const signature = {
+    type: 'RsaSignature2017',
     creator: byActor.url,
-    algorithm: 'RsaSignature2017'
+    created: new Date().toISOString()
   }
 
-  return jsig.promises.sign(data, options)
+  const [ documentHash, optionsHash ] = await Promise.all([
+    createDocWithoutSignatureHash(data),
+    createSignatureHash(signature)
+  ])
+
+  const toSign = optionsHash + documentHash
+
+  const sign = createSign('RSA-SHA256')
+  sign.update(toSign, 'utf8')
+
+  const signatureValue = sign.sign(byActor.privateKey, 'base64')
+  Object.assign(signature, { signatureValue })
+
+  return Object.assign(data, { signature })
 }
 
 // ---------------------------------------------------------------------------
@@ -155,3 +118,35 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+function hash (obj: any): Promise<any> {
+  return jsonld.promises
+               .normalize(obj, {
+                 algorithm: 'URDNA2015',
+                 format: 'application/n-quads'
+               })
+               .then(res => sha256(res))
+}
+
+function createSignatureHash (signature: any) {
+  const signatureCopy = cloneDeep(signature)
+  Object.assign(signatureCopy, {
+    '@context': [
+      'https://w3id.org/security/v1',
+      { RsaSignature2017: 'https://w3id.org/security#RsaSignature2017' }
+    ]
+  })
+
+  delete signatureCopy.type
+  delete signatureCopy.id
+  delete signatureCopy.signatureValue
+
+  return hash(signatureCopy)
+}
+
+function createDocWithoutSignatureHash (doc: any) {
+  const docWithoutSignature = cloneDeep(doc)
+  delete docWithoutSignature.signature
+
+  return hash(docWithoutSignature)
+}

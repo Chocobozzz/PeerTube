@@ -128,7 +128,6 @@
     "iso-639-3": "^1.0.1",
     "js-yaml": "^3.5.4",
     "jsonld": "~1.1.0",
-    "jsonld-signatures": "https://github.com/Chocobozzz/jsonld-signatures#rsa2017",
     "lodash": "^4.17.10",
     "lru-cache": "^5.1.1",
     "magnet-uri": "^5.1.4",
