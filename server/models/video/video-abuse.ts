@@ -7,12 +7,13 @@ import {
   isVideoAbuseStateValid
 } from '../../helpers/custom-validators/video-abuses'
 import { AccountModel } from '../account/account'
-import { getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoAbuseState } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
-import { MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
+import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
+import { literal, Op } from 'sequelize'
 
 @Table({
   tableName: 'videoAbuse',
@@ -85,11 +86,25 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     return VideoAbuseModel.findOne(query)
   }
 
-  static listForApi (start: number, count: number, sort: string) {
+  static listForApi (parameters: {
+    start: number,
+    count: number,
+    sort: string,
+    serverAccountId: number
+    user?: MUserAccountId
+  }) {
+    const { start, count, sort, user, serverAccountId } = parameters
+    const userAccountId = user ? user.Account.id : undefined
+
     const query = {
       offset: start,
       limit: count,
       order: getSort(sort),
+      where: {
+        reporterAccountId: {
+          [Op.notIn]: literal('(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')')
+        }
+      },
       include: [
         {
           model: AccountModel,

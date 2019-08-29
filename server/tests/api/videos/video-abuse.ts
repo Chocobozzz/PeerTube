@@ -17,6 +17,12 @@ import {
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import {
+  addAccountToServerBlocklist,
+  addServerToServerBlocklist,
+  removeAccountFromServerBlocklist,
+  removeServerFromServerBlocklist
+} from '../../../../shared/extra-utils/users/blocklist'
 
 const expect = chai.expect
 
@@ -163,13 +169,76 @@ describe('Test video abuses', function () {
     expect(res.body.data[0].moderationComment).to.equal('It is valid')
   })
 
+  it('Should hide video abuses from blocked accounts', async function () {
+    this.timeout(10000)
+
+    {
+      await reportVideoAbuse(servers[1].url, servers[1].accessToken, servers[0].video.uuid, 'will mute this')
+      await waitJobs(servers)
+
+      const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
+      expect(res.body.total).to.equal(3)
+    }
+
+    const accountToBlock = 'root@localhost:' + servers[1].port
+
+    {
+      await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, accountToBlock)
+
+      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      expect(res.body.total).to.equal(2)
+
+      const abuse = res.body.data.find(a => a.reason === 'will mute this')
+      expect(abuse).to.be.undefined
+    }
+
+    {
+      await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, accountToBlock)
+
+      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      expect(res.body.total).to.equal(3)
+    }
+  })
+
+  it('Should hide video abuses from blocked servers', async function () {
+    const serverToBlock = servers[1].host
+
+    {
+      await addServerToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, servers[1].host)
+
+      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      expect(res.body.total).to.equal(2)
+
+      const abuse = res.body.data.find(a => a.reason === 'will mute this')
+      expect(abuse).to.be.undefined
+    }
+
+    {
+      await removeServerFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, serverToBlock)
+
+      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      expect(res.body.total).to.equal(3)
+    }
+  })
+
   it('Should delete the video abuse', async function () {
+    this.timeout(10000)
+
     await deleteVideoAbuse(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid, abuseServer2.id)
 
-    const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
-    expect(res.body.total).to.equal(0)
-    expect(res.body.data).to.be.an('array')
-    expect(res.body.data.length).to.equal(0)
+    await waitJobs(servers)
+
+    {
+      const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
+      expect(res.body.total).to.equal(1)
+      expect(res.body.data.length).to.equal(1)
+      expect(res.body.data[0].id).to.not.equal(abuseServer2.id)
+    }
+
+    {
+      const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
+      expect(res.body.total).to.equal(3)
+    }
   })
 
   after(async function () {

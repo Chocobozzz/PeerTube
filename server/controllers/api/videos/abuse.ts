@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { UserRight, VideoAbuseCreate, VideoAbuseState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { getFormattedObjects } from '../../../helpers/utils'
+import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
 import {
   asyncMiddleware,
@@ -62,7 +62,16 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoAbuses (req: express.Request, res: express.Response) {
-  const resultList = await VideoAbuseModel.listForApi(req.query.start, req.query.count, req.query.sort)
+  const user = res.locals.oauth.token.user
+  const serverActor = await getServerActor()
+
+  const resultList = await VideoAbuseModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    serverAccountId: serverActor.Account.id,
+    user
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
