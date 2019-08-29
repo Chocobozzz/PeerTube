@@ -878,6 +878,9 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
+                downloadEnabled:
+                  description: Enable or disable download for this video
+                  type: string
                 originallyPublishedAt:
                   description: Date when the content was originally published
                   type: string
@@ -1087,6 +1090,9 @@ paths:
                 commentsEnabled:
                   description: Enable or disable comments for this video
                   type: string
+                downloadEnabled:
+                  description: Enable or disable download for this video
+                  type: string
                 originallyPublishedAt:
                   description: Date when the content was originally published
                   type: string
@@ -1208,6 +1214,9 @@ paths:
                     maxLength: 30
                 commentsEnabled:
                   description: Enable or disable comments for this video
+                  type: string
+                downloadEnabled:
+                  description: Enable or disable download for this video
                   type: string
                 scheduleUpdate:
                   $ref: '#/components/schemas/VideoScheduledUpdate'
