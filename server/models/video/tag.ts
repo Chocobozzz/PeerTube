@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { QueryTypes, Transaction } from 'sequelize'
+import { fn, QueryTypes, Transaction, col } from 'sequelize'
 import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
@@ -15,6 +15,10 @@ import { MTag } from '@server/typings/models'
     {
       fields: [ 'name' ],
       unique: true
+    },
+    {
+      name: 'tag_lower_name',
+      fields: [ fn('lower', col('name')) ] as any // FIXME: typings
     }
   ]
 })

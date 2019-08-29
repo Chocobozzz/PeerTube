@@ -468,13 +468,15 @@ export type AvailableForListIDsOptions = {
     // FIXME: issues with sequelize count when making a join on n:m relation, so we just make a IN()
     if (options.tagsAllOf || options.tagsOneOf) {
       if (options.tagsOneOf) {
+        const tagsOneOfLower = options.tagsOneOf.map(t => t.toLowerCase())
+
         whereAnd.push({
           id: {
             [ Op.in ]: Sequelize.literal(
               '(' +
               'SELECT "videoId" FROM "videoTag" ' +
               'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE "tag"."name" IN (' + createSafeIn(VideoModel, options.tagsOneOf) + ')' +
+              'WHERE lower("tag"."name") IN (' + createSafeIn(VideoModel, tagsOneOfLower) + ')' +
               ')'
             )
           }
@@ -482,14 +484,16 @@ export type AvailableForListIDsOptions = {
       }
 
       if (options.tagsAllOf) {
+        const tagsAllOfLower = options.tagsAllOf.map(t => t.toLowerCase())
+
         whereAnd.push({
           id: {
             [ Op.in ]: Sequelize.literal(
               '(' +
               'SELECT "videoId" FROM "videoTag" ' +
               'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE "tag"."name" IN (' + createSafeIn(VideoModel, options.tagsAllOf) + ')' +
-              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + options.tagsAllOf.length +
+              'WHERE lower("tag"."name") IN (' + createSafeIn(VideoModel, tagsAllOfLower) + ')' +
+              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
               ')'
             )
           }
