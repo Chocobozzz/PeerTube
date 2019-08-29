@@ -69,7 +69,7 @@ email:
 
 # From the project root directory
 storage:
-  tmp: 'storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
+  tmp: 'storage/tmp/' # Use to download data (imports etc), store uploaded files before processing...
   avatars: 'storage/avatars/'
   videos: 'storage/videos/'
   streaming_playlists: 'storage/streaming-playlists/'
@@ -85,7 +85,7 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
   rotation:
-    enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
+    enabled : true
 
 search:
   # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
