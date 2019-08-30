@@ -27,7 +27,7 @@ function isActorPublicKeyValid (publicKey: string) {
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
-const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.]'
+const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]'
 const actorNameRegExp = new RegExp(`^${actorNameAlphabet}+$`)
 function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
@@ -46,19 +46,20 @@ function isActorObjectValid (actor: any) {
   return exists(actor) &&
     isActivityPubUrlValid(actor.id) &&
     isActorTypeValid(actor.type) &&
-    isActivityPubUrlValid(actor.following) &&
-    isActivityPubUrlValid(actor.followers) &&
     isActivityPubUrlValid(actor.inbox) &&
-    isActivityPubUrlValid(actor.outbox) &&
     isActorPreferredUsernameValid(actor.preferredUsername) &&
     isActivityPubUrlValid(actor.url) &&
     isActorPublicKeyObjectValid(actor.publicKey) &&
     isActorEndpointsObjectValid(actor.endpoints) &&
-    setValidAttributedTo(actor) &&
 
-    // If this is not an account, it should be attributed to an account
+    (!actor.outbox || isActivityPubUrlValid(actor.outbox)) &&
+    (!actor.following || isActivityPubUrlValid(actor.following)) &&
+    (!actor.followers || isActivityPubUrlValid(actor.followers)) &&
+
+    setValidAttributedTo(actor) &&
+    // If this is a group (a channel), it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
-    (actor.type === 'Person' || actor.attributedTo.length !== 0)
+    (actor.type !== 'Group' || actor.attributedTo.length !== 0)
 }
 
 function isActorFollowingCountValid (value: string) {

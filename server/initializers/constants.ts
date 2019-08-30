@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 420
+const LAST_MIGRATION_VERSION = 425
 
 // ---------------------------------------------------------------------------
 

@@ -26,28 +26,36 @@ export {
 async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag, byActor: MActorSignature) {
   const flag = activity.type === 'Flag' ? activity : (activity.object as VideoAbuseObject)
 
-  logger.debug('Reporting remote abuse for video %s.', getAPId(flag.object))
-
   const account = byActor.Account
   if (!account) throw new Error('Cannot create video abuse with the non account actor ' + byActor.url)
 
-  const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: flag.object })
+  const objects = Array.isArray(flag.object) ? flag.object : [ flag.object ]
 
-  const videoAbuse = await sequelizeTypescript.transaction(async t => {
-    const videoAbuseData = {
-      reporterAccountId: account.id,
-      reason: flag.content,
-      videoId: video.id,
-      state: VideoAbuseState.PENDING
+  for (const object of objects) {
+    try {
+      logger.debug('Reporting remote abuse for video %s.', getAPId(object))
+
+      const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: object })
+
+      const videoAbuse = await sequelizeTypescript.transaction(async t => {
+        const videoAbuseData = {
+          reporterAccountId: account.id,
+          reason: flag.content,
+          videoId: video.id,
+          state: VideoAbuseState.PENDING
+        }
+
+        const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t }) as MVideoAbuseVideo
+        videoAbuseInstance.Video = video
+
+        logger.info('Remote abuse for video uuid %s created', flag.object)
+
+        return videoAbuseInstance
+      })
+
+      Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
+    } catch (err) {
+      logger.debug('Cannot process report of %s. (Maybe not a video abuse).', getAPId(object), { err })
     }
-
-    const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t }) as MVideoAbuseVideo
-    videoAbuseInstance.Video = video
-
-    logger.info('Remote abuse for video uuid %s created', flag.object)
-
-    return videoAbuseInstance
-  })
-
-  Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
+  }
 }

@@ -175,8 +175,8 @@ export class ActorModel extends Model<ActorModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   inboxUrl: string
 
-  @AllowNull(false)
-  @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url'))
+  @AllowNull(true)
+  @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   outboxUrl: string
 
@@ -185,13 +185,13 @@ export class ActorModel extends Model<ActorModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   sharedInboxUrl: string
 
-  @AllowNull(false)
-  @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url'))
+  @AllowNull(true)
+  @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followersUrl: string
 
-  @AllowNull(false)
-  @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url'))
+  @AllowNull(true)
+  @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followingUrl: string
 
