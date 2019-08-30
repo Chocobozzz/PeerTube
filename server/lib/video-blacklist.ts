@@ -6,7 +6,7 @@ import { logger } from '../helpers/logger'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
 import { Hooks } from './plugins/hooks'
 import { Notifier } from './notifier'
-import { MUser, MVideoBlacklist, MVideoWithBlacklistLight } from '@server/typings/models'
+import { MUser, MVideoBlacklistVideo, MVideoWithBlacklistLight } from '@server/typings/models'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight,
@@ -31,7 +31,7 @@ async function autoBlacklistVideoIfNeeded (parameters: {
     reason: 'Auto-blacklisted. Moderator review required.',
     type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
   }
-  const [ videoBlacklist ] = await VideoBlacklistModel.findOrCreate<MVideoBlacklist>({
+  const [ videoBlacklist ] = await VideoBlacklistModel.findOrCreate<MVideoBlacklistVideo>({
     where: {
       videoId: video.id
     },
@@ -40,7 +40,9 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   })
   video.VideoBlacklist = videoBlacklist
 
-  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(video)
+  videoBlacklist.Video = video
+
+  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
 
   logger.info('Video %s auto-blacklisted.', video.uuid)
 

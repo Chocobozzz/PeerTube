@@ -58,7 +58,7 @@ export type MActorAccount = MActor &
 export type MActorChannel = MActor &
   Use<'VideoChannel', MChannel>
 
-export type MActorAccountChannel = MActorAccount & MActorChannel
+export type MActorDefaultAccountChannel = MActorDefault & MActorAccount & MActorChannel
 
 export type MActorServer = MActor &
   Use<'Server', MServer>

@@ -1,5 +1,7 @@
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 import { CustomConfig } from '../../models/server/custom-config.model'
+import { DeepPartial } from '@server/typings/utils'
+import { merge } from 'lodash'
 
 function getConfig (url: string) {
   const path = '/api/v1/config'
@@ -44,7 +46,7 @@ function updateCustomConfig (url: string, token: string, newCustomConfig: Custom
   })
 }
 
-function updateCustomSubConfig (url: string, token: string, newConfig: any) {
+function updateCustomSubConfig (url: string, token: string, newConfig: DeepPartial<CustomConfig>) {
   const updateParams: CustomConfig = {
     instance: {
       name: 'PeerTube updated',
@@ -130,10 +132,21 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
         enabled: true,
         manualApproval: false
       }
+    },
+    followings: {
+      instance: {
+        autoFollowBack: {
+          enabled: false
+        },
+        autoFollowIndex: {
+          indexUrl: 'https://instances.joinpeertube.org',
+          enabled: false
+        }
+      }
     }
   }
 
-  Object.assign(updateParams, newConfig)
+  merge(updateParams, newConfig)
 
   return updateCustomConfig(url, token, updateParams)
 }

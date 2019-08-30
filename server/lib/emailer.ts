@@ -6,8 +6,15 @@ import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs-extra'
 import { WEBSERVER } from '../initializers/constants'
-import { MCommentOwnerVideo, MVideo, MVideoAbuseVideo, MVideoAccountLight, MVideoBlacklistVideo } from '../typings/models/video'
-import { MActorFollowActors, MActorFollowFollowingFullFollowerAccount, MUser } from '../typings/models'
+import {
+  MCommentOwnerVideo,
+  MVideo,
+  MVideoAbuseVideo,
+  MVideoAccountLight,
+  MVideoBlacklistLightVideo,
+  MVideoBlacklistVideo
+} from '../typings/models/video'
+import { MActorFollowActors, MActorFollowFull, MUser } from '../typings/models'
 import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
 
 type SendEmailOptions = {
@@ -107,7 +114,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewFollowNotification (to: string[], actorFollow: MActorFollowFollowingFullFollowerAccount, followType: 'account' | 'channel') {
+  addNewFollowNotification (to: string[], actorFollow: MActorFollowFull, followType: 'account' | 'channel') {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
 
@@ -138,6 +145,22 @@ class Emailer {
     const emailPayload: EmailPayload = {
       to,
       subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New instance follower',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  addAutoInstanceFollowingNotification (to: string[], actorFollow: MActorFollowActors) {
+    const text = `Hi dear admin,\n\n` +
+      `Your instance automatically followed a new instance: ${actorFollow.ActorFollowing.url}` +
+      `\n\n` +
+      `Cheers,\n` +
+      `${CONFIG.EMAIL.BODY.SIGNATURE}`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Auto instance following',
       text
     }
 
@@ -265,9 +288,9 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoAutoBlacklistModeratorsNotification (to: string[], video: MVideo) {
+  addVideoAutoBlacklistModeratorsNotification (to: string[], videoBlacklist: MVideoBlacklistLightVideo) {
     const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
-    const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
+    const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
     const text = `Hi,\n\n` +
       `A recently added video was auto-blacklisted and requires moderator review before publishing.` +

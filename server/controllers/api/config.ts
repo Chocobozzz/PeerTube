@@ -300,6 +300,18 @@ function customConfig (): CustomConfig {
         enabled: CONFIG.FOLLOWERS.INSTANCE.ENABLED,
         manualApproval: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL
       }
+    },
+    followings: {
+      instance: {
+        autoFollowBack: {
+          enabled: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_BACK.ENABLED
+        },
+
+        autoFollowIndex: {
+          enabled: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.ENABLED,
+          indexUrl: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
+        }
+      }
     }
   }
 }

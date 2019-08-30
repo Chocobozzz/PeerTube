@@ -17,8 +17,7 @@
     "typeRoots": [ "node_modules/@types", "server/typings" ],
     "baseUrl": "./",
     "paths": {
-      "@server/typings/*": [ "server/typings/*" ],
-      "@server/models/*": [ "server/models/*" ]
+      "@server/*": [ "server/*" ]
     }
   },
   "exclude": [

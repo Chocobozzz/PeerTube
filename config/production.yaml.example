@@ -288,5 +288,20 @@ followers:
     # Whether or not an administrator must manually validate a new follower
     manual_approval: false
 
+followings:
+  instance:
+    # If you want to automatically follow back new instance followers
+    # If this option is enabled, use the mute feature instead of deleting followings
+    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+    auto_follow_back:
+      enabled: false
+
+    # If you want to automatically follow instances of the public index
+    # If this option is enabled, use the mute feature instead of deleting followings
+    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+    auto_follow_index:
+      enabled: false
+      index_url: 'https://instances.joinpeertube.org'
+
 theme:
   default: 'default'

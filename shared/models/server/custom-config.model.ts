@@ -99,4 +99,16 @@ export interface CustomConfig {
     }
   }
 
+  followings: {
+    instance: {
+      autoFollowBack: {
+        enabled: boolean
+      }
+
+      autoFollowIndex: {
+        enabled: boolean
+        indexUrl: string
+      }
+    }
+  }
 }

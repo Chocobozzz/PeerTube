@@ -21,6 +21,7 @@ import { createVideoMiniatureFromUrl, generateVideoMiniature } from '../../thumb
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { MThumbnail } from '../../../typings/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
+import { MVideoBlacklistVideo, MVideoBlacklist } from '@server/typings/models'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -204,7 +205,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
 
     if (video.isBlacklisted()) {
-      Notifier.Instance.notifyOnVideoAutoBlacklist(video)
+      const videoBlacklist = Object.assign(video.VideoBlacklist, { Video: video })
+
+      Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
     } else {
       Notifier.Instance.notifyOnNewVideoIfNeeded(video)
     }

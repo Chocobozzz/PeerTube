@@ -1,30 +1,30 @@
 import { UserNotificationSettingValue, UserNotificationType, UserRight } from '../../shared/models/users'
 import { logger } from '../helpers/logger'
-import { VideoModel } from '../models/video/video'
 import { Emailer } from './emailer'
 import { UserNotificationModel } from '../models/account/user-notification'
-import { VideoCommentModel } from '../models/video/video-comment'
 import { UserModel } from '../models/account/user'
 import { PeerTubeSocket } from './peertube-socket'
 import { CONFIG } from '../initializers/config'
 import { VideoPrivacy, VideoState } from '../../shared/models/videos'
-import { VideoBlacklistModel } from '../models/video/video-blacklist'
 import * as Bluebird from 'bluebird'
-import { VideoImportModel } from '../models/video/video-import'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import {
   MCommentOwnerVideo,
-  MVideo,
   MVideoAbuseVideo,
   MVideoAccountLight,
+  MVideoBlacklistLightVideo,
   MVideoBlacklistVideo,
   MVideoFullLight
 } from '../typings/models/video'
-import { MUser, MUserAccount, MUserWithNotificationSetting, UserNotificationModelForApi } from '@server/typings/models/user'
-import { MActorFollowActors, MActorFollowFull, MActorFollowFollowingFullFollowerAccount } from '../typings/models'
-import { ActorFollowModel } from '../models/activitypub/actor-follow'
+import {
+  MUser,
+  MUserDefault,
+  MUserNotifSettingAccount,
+  MUserWithNotificationSetting,
+  UserNotificationModelForApi
+} from '@server/typings/models/user'
+import { MActorFollowFull } from '../typings/models'
 import { MVideoImportVideo } from '@server/typings/models/video/video-import'
-import { AccountModel } from '@server/models/account/account'
 
 class Notifier {
 
@@ -77,9 +77,9 @@ class Notifier {
       .catch(err => logger.error('Cannot notify of new video abuse of video %s.', videoAbuse.Video.url, { err }))
   }
 
-  notifyOnVideoAutoBlacklist (video: MVideo): void {
-    this.notifyModeratorsOfVideoAutoBlacklist(video)
-      .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', video.url, { err }))
+  notifyOnVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo): void {
+    this.notifyModeratorsOfVideoAutoBlacklist(videoBlacklist)
+      .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', videoBlacklist.Video.url, { err }))
   }
 
   notifyOnVideoBlacklist (videoBlacklist: MVideoBlacklistVideo): void {
@@ -87,7 +87,7 @@ class Notifier {
       .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
   }
 
-  notifyOnVideoUnblacklist (video: MVideo): void {
+  notifyOnVideoUnblacklist (video: MVideoFullLight): void {
     this.notifyVideoOwnerOfUnblacklist(video)
         .catch(err => logger.error('Cannot notify video owner of unblacklist of %s.', video.url, { err }))
   }
@@ -97,12 +97,12 @@ class Notifier {
       .catch(err => logger.error('Cannot notify owner that its video import %s is finished.', videoImport.getTargetIdentifier(), { err }))
   }
 
-  notifyOnNewUserRegistration (user: MUserAccount): void {
+  notifyOnNewUserRegistration (user: MUserDefault): void {
     this.notifyModeratorsOfNewUserRegistration(user)
         .catch(err => logger.error('Cannot notify moderators of new user registration (%s).', user.username, { err }))
   }
 
-  notifyOfNewUserFollow (actorFollow: MActorFollowFollowingFullFollowerAccount): void {
+  notifyOfNewUserFollow (actorFollow: MActorFollowFull): void {
     this.notifyUserOfNewActorFollow(actorFollow)
       .catch(err => {
         logger.error(
@@ -114,10 +114,17 @@ class Notifier {
       })
   }
 
-  notifyOfNewInstanceFollow (actorFollow: MActorFollowActors): void {
+  notifyOfNewInstanceFollow (actorFollow: MActorFollowFull): void {
     this.notifyAdminsOfNewInstanceFollow(actorFollow)
         .catch(err => {
           logger.error('Cannot notify administrators of new follower %s.', actorFollow.ActorFollower.url, { err })
+        })
+  }
+
+  notifyOfAutoInstanceFollowing (actorFollow: MActorFollowFull): void {
+    this.notifyAdminsOfAutoInstanceFollowing(actorFollow)
+        .catch(err => {
+          logger.error('Cannot notify administrators of auto instance following %s.', actorFollow.ActorFollowing.url, { err })
         })
   }
 
@@ -127,17 +134,17 @@ class Notifier {
 
     logger.info('Notifying %d users of new video %s.', users.length, video.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.newVideoFromSubscription
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION,
         userId: user.id,
         videoId: video.id
       })
-      notification.Video = video as VideoModel
+      notification.Video = video
 
       return notification
     }
@@ -162,17 +169,17 @@ class Notifier {
 
     logger.info('Notifying user %s of new comment %s.', user.username, comment.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.newCommentOnMyVideo
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_COMMENT_ON_MY_VIDEO,
         userId: user.id,
         commentId: comment.id
       })
-      notification.Comment = comment as VideoCommentModel
+      notification.Comment = comment
 
       return notification
     }
@@ -207,19 +214,19 @@ class Notifier {
 
     logger.info('Notifying %d users of new comment %s.', users.length, comment.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserNotifSettingAccount) {
       if (accountMutedHash[user.Account.id] === true) return UserNotificationSettingValue.NONE
 
       return user.NotificationSetting.commentMention
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserNotifSettingAccount) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.COMMENT_MENTION,
         userId: user.id,
         commentId: comment.id
       })
-      notification.Comment = comment as VideoCommentModel
+      notification.Comment = comment
 
       return notification
     }
@@ -231,7 +238,7 @@ class Notifier {
     return this.notify({ users, settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyUserOfNewActorFollow (actorFollow: MActorFollowFollowingFullFollowerAccount) {
+  private async notifyUserOfNewActorFollow (actorFollow: MActorFollowFull) {
     if (actorFollow.ActorFollowing.isOwned() === false) return
 
     // Account follows one of our account?
@@ -253,17 +260,17 @@ class Notifier {
 
     logger.info('Notifying user %s of new follower: %s.', user.username, followerAccount.getDisplayName())
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.newFollow
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_FOLLOW,
         userId: user.id,
         actorFollowId: actorFollow.id
       })
-      notification.ActorFollow = actorFollow as ActorFollowModel
+      notification.ActorFollow = actorFollow
 
       return notification
     }
@@ -275,22 +282,22 @@ class Notifier {
     return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyAdminsOfNewInstanceFollow (actorFollow: MActorFollowActors) {
+  private async notifyAdminsOfNewInstanceFollow (actorFollow: MActorFollowFull) {
     const admins = await UserModel.listWithRight(UserRight.MANAGE_SERVER_FOLLOW)
 
     logger.info('Notifying %d administrators of new instance follower: %s.', admins.length, actorFollow.ActorFollower.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.newInstanceFollower
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_INSTANCE_FOLLOWER,
         userId: user.id,
         actorFollowId: actorFollow.id
       })
-      notification.ActorFollow = actorFollow as ActorFollowModel
+      notification.ActorFollow = actorFollow
 
       return notification
     }
@@ -302,18 +309,45 @@ class Notifier {
     return this.notify({ users: admins, settingGetter, notificationCreator, emailSender })
   }
 
+  private async notifyAdminsOfAutoInstanceFollowing (actorFollow: MActorFollowFull) {
+    const admins = await UserModel.listWithRight(UserRight.MANAGE_SERVER_FOLLOW)
+
+    logger.info('Notifying %d administrators of auto instance following: %s.', admins.length, actorFollow.ActorFollowing.url)
+
+    function settingGetter (user: MUserWithNotificationSetting) {
+      return user.NotificationSetting.autoInstanceFollowing
+    }
+
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
+        type: UserNotificationType.AUTO_INSTANCE_FOLLOWING,
+        userId: user.id,
+        actorFollowId: actorFollow.id
+      })
+      notification.ActorFollow = actorFollow
+
+      return notification
+    }
+
+    function emailSender (emails: string[]) {
+      return Emailer.Instance.addAutoInstanceFollowingNotification(emails, actorFollow)
+    }
+
+    return this.notify({ users: admins, settingGetter, notificationCreator, emailSender })
+  }
+
   private async notifyModeratorsOfNewVideoAbuse (videoAbuse: MVideoAbuseVideo) {
     const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_ABUSES)
     if (moderators.length === 0) return
 
     logger.info('Notifying %s user/moderators of new video abuse %s.', moderators.length, videoAbuse.Video.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.videoAbuseAsModerator
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification: UserNotificationModelForApi = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification: UserNotificationModelForApi = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS,
         userId: user.id,
         videoAbuseId: videoAbuse.id
@@ -330,29 +364,29 @@ class Notifier {
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyModeratorsOfVideoAutoBlacklist (video: MVideo) {
+  private async notifyModeratorsOfVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo) {
     const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_BLACKLIST)
     if (moderators.length === 0) return
 
-    logger.info('Notifying %s moderators of video auto-blacklist %s.', moderators.length, video.url)
+    logger.info('Notifying %s moderators of video auto-blacklist %s.', moderators.length, videoBlacklist.Video.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.videoAutoBlacklistAsModerator
     }
-    async function notificationCreator (user: UserModel) {
 
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS,
         userId: user.id,
-        videoId: video.id
+        videoBlacklistId: videoBlacklist.id
       })
-      notification.Video = video as VideoModel
+      notification.VideoBlacklist = videoBlacklist
 
       return notification
     }
 
     function emailSender (emails: string[]) {
-      return Emailer.Instance.addVideoAutoBlacklistModeratorsNotification(emails, video)
+      return Emailer.Instance.addVideoAutoBlacklistModeratorsNotification(emails, videoBlacklist)
     }
 
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
@@ -364,17 +398,17 @@ class Notifier {
 
     logger.info('Notifying user %s that its video %s has been blacklisted.', user.username, videoBlacklist.Video.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.blacklistOnMyVideo
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.BLACKLIST_ON_MY_VIDEO,
         userId: user.id,
         videoBlacklistId: videoBlacklist.id
       })
-      notification.VideoBlacklist = videoBlacklist as VideoBlacklistModel
+      notification.VideoBlacklist = videoBlacklist
 
       return notification
     }
@@ -386,23 +420,23 @@ class Notifier {
     return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyVideoOwnerOfUnblacklist (video: MVideo) {
+  private async notifyVideoOwnerOfUnblacklist (video: MVideoFullLight) {
     const user = await UserModel.loadByVideoId(video.id)
     if (!user) return
 
     logger.info('Notifying user %s that its video %s has been unblacklisted.', user.username, video.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.blacklistOnMyVideo
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.UNBLACKLIST_ON_MY_VIDEO,
         userId: user.id,
         videoId: video.id
       })
-      notification.Video = video as VideoModel
+      notification.Video = video
 
       return notification
     }
@@ -420,17 +454,17 @@ class Notifier {
 
     logger.info('Notifying user %s of the publication of its video %s.', user.username, video.url)
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.myVideoPublished
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.MY_VIDEO_PUBLISHED,
         userId: user.id,
         videoId: video.id
       })
-      notification.Video = video as VideoModel
+      notification.Video = video
 
       return notification
     }
@@ -448,17 +482,17 @@ class Notifier {
 
     logger.info('Notifying user %s its video import %s is finished.', user.username, videoImport.getTargetIdentifier())
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.myVideoImportFinished
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: success ? UserNotificationType.MY_VIDEO_IMPORT_SUCCESS : UserNotificationType.MY_VIDEO_IMPORT_ERROR,
         userId: user.id,
         videoImportId: videoImport.id
       })
-      notification.VideoImport = videoImport as VideoImportModel
+      notification.VideoImport = videoImport
 
       return notification
     }
@@ -472,7 +506,7 @@ class Notifier {
     return this.notify({ users: [ user ], settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyModeratorsOfNewUserRegistration (registeredUser: MUserAccount) {
+  private async notifyModeratorsOfNewUserRegistration (registeredUser: MUserDefault) {
     const moderators = await UserModel.listWithRight(UserRight.MANAGE_USERS)
     if (moderators.length === 0) return
 
@@ -481,17 +515,17 @@ class Notifier {
       moderators.length, registeredUser.username
     )
 
-    function settingGetter (user: UserModel) {
+    function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.newUserRegistration
     }
 
-    async function notificationCreator (user: UserModel) {
-      const notification = await UserNotificationModel.create({
+    async function notificationCreator (user: MUserWithNotificationSetting) {
+      const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_USER_REGISTRATION,
         userId: user.id,
         accountId: registeredUser.Account.id
       })
-      notification.Account = registeredUser.Account as AccountModel
+      notification.Account = registeredUser.Account
 
       return notification
     }
@@ -503,11 +537,11 @@ class Notifier {
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
   }
 
-  private async notify (options: {
-    users: MUserWithNotificationSetting[],
-    notificationCreator: (user: MUserWithNotificationSetting) => Promise<UserNotificationModelForApi>,
+  private async notify <T extends MUserWithNotificationSetting> (options: {
+    users: T[],
+    notificationCreator: (user: T) => Promise<UserNotificationModelForApi>,
     emailSender: (emails: string[]) => Promise<any> | Bluebird<any>,
-    settingGetter: (user: MUserWithNotificationSetting) => UserNotificationSettingValue
+    settingGetter: (user: T) => UserNotificationSettingValue
   }) {
     const emails: string[] = []
 

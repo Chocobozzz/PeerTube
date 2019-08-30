@@ -2,7 +2,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import {
   MActor,
   MActorAccount,
-  MActorAccountChannel,
+  MActorDefaultAccountChannel,
   MActorChannelAccountActor,
   MActorDefault,
   MActorFormattable,
@@ -37,8 +37,8 @@ export type MActorFollowActorsDefault = MActorFollow &
   Use<'ActorFollowing', MActorDefault>
 
 export type MActorFollowFull = MActorFollow &
-  Use<'ActorFollower', MActorAccountChannel> &
-  Use<'ActorFollowing', MActorAccountChannel>
+  Use<'ActorFollower', MActorDefaultAccountChannel> &
+  Use<'ActorFollowing', MActorDefaultAccountChannel>
 
 // ############################################################################
 
@@ -50,10 +50,6 @@ type SubscriptionFollowing = MActorDefault &
 export type MActorFollowActorsDefaultSubscription = MActorFollow &
   Use<'ActorFollower', MActorDefault> &
   Use<'ActorFollowing', SubscriptionFollowing>
-
-export type MActorFollowFollowingFullFollowerAccount = MActorFollow &
-  Use<'ActorFollower', MActorAccount> &
-  Use<'ActorFollowing', MActorAccountChannel>
 
 export type MActorFollowSubscriptions = MActorFollow &
   Use<'ActorFollowing', MActorChannelAccountActor>

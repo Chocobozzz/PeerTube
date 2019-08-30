@@ -132,6 +132,7 @@
     "lru-cache": "^5.1.1",
     "magnet-uri": "^5.1.4",
     "memoizee": "^0.4.14",
+    "module-alias": "^2.2.1",
     "morgan": "^1.5.3",
     "multer": "^1.1.0",
     "nodemailer": "^6.0.0",
@@ -224,5 +225,8 @@
   "scripty": {
     "silent": true
   },
-  "sasslintConfig": "client/.sass-lint.yml"
+  "sasslintConfig": "client/.sass-lint.yml",
+  "_moduleAliases": {
+    "@server": "dist/server"
+  }
 }

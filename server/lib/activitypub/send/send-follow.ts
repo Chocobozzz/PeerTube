@@ -1,5 +1,4 @@
 import { ActivityFollow } from '../../../../shared/models/activitypub'
-import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { logger } from '../../../helpers/logger'

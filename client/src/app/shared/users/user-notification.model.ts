@@ -112,7 +112,7 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
           this.videoAutoBlacklistUrl = '/admin/moderation/video-auto-blacklist/list'
-          this.videoUrl = this.buildVideoUrl(this.video)
+          this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
           break
 
         case UserNotificationType.BLACKLIST_ON_MY_VIDEO:

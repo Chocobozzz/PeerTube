@@ -13,6 +13,9 @@ export type MVideoBlacklistUnfederated = Pick<MVideoBlacklist, 'unfederated'>
 
 // ############################################################################
 
+export type MVideoBlacklistLightVideo = MVideoBlacklistLight &
+  Use<'Video', MVideo>
+
 export type MVideoBlacklistVideo = MVideoBlacklist &
   Use<'Video', MVideo>
 

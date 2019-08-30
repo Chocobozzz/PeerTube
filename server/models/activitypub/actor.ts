@@ -43,7 +43,6 @@ import {
   MActorFormattable,
   MActorFull,
   MActorHost,
-  MActorRedundancyAllowedOpt,
   MActorServer,
   MActorSummaryFormattable
 } from '../../typings/models'
@@ -430,15 +429,8 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  toActivityPubObject (this: MActorAP, name: string, type: 'Account' | 'Application' | 'VideoChannel') {
+  toActivityPubObject (this: MActorAP, name: string) {
     let activityPubType
-    if (type === 'Account') {
-      activityPubType = 'Person' as 'Person'
-    } else if (type === 'Application') {
-      activityPubType = 'Application' as 'Application'
-    } else { // VideoChannel
-      activityPubType = 'Group' as 'Group'
-    }
 
     let icon = undefined
     if (this.avatarId) {
@@ -451,7 +443,7 @@ export class ActorModel extends Model<ActorModel> {
     }
 
     const json = {
-      type: activityPubType,
+      type: this.type,
       id: this.url,
       following: this.getFollowingUrl(),
       followers: this.getFollowersUrl(),
