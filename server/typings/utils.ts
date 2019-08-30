@@ -11,3 +11,12 @@ export type PickWith<T, KT extends keyof T, V> = {
 export type PickWithOpt<T, KT extends keyof T, V> = {
   [P in KT]?: T[P] extends V ? V : never
 }
+
+// https://github.com/krzkaczor/ts-essentials Rocks!
+export type DeepPartial<T> = {
+  [P in keyof T]?: T[P] extends Array<infer U>
+    ? Array<DeepPartial<U>>
+    : T[P] extends ReadonlyArray<infer U>
+      ? ReadonlyArray<DeepPartial<U>>
+      : DeepPartial<T[P]>
+};

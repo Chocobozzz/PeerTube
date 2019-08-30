@@ -16,8 +16,8 @@ import {
   immutableAssign,
   registerUser,
   removeVideoFromBlacklist,
-  reportVideoAbuse,
-  updateCustomConfig,
+  reportVideoAbuse, unfollow,
+  updateCustomConfig, updateCustomSubConfig,
   updateMyUser,
   updateVideo,
   updateVideoChannel,
@@ -45,7 +45,8 @@ import {
   getUserNotifications,
   markAsReadAllNotifications,
   markAsReadNotifications,
-  updateMyNotificationSettings
+  updateMyNotificationSettings,
+  checkAutoInstanceFollowing
 } from '../../../../shared/extra-utils/users/user-notifications'
 import {
   User,
@@ -108,7 +109,8 @@ describe('Test users notifications', function () {
     commentMention: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
     newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
-    newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+    newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
   }
 
   before(async function () {
@@ -896,6 +898,36 @@ describe('Test users notifications', function () {
 
       const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
       await checkNewInstanceFollower(immutableAssign(baseParams, userOverride), 'localhost:' + servers[2].port, 'absence')
+    })
+
+    it('Should send a notification on auto follow back', async function () {
+      this.timeout(40000)
+
+      await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+      await waitJobs(servers)
+
+      const config = {
+        followings: {
+          instance: {
+            autoFollowBack: { enabled: true }
+          }
+        }
+      }
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+
+      await follow(servers[2].url, [ servers[0].url ], servers[2].accessToken)
+
+      await waitJobs(servers)
+
+      const followerHost = servers[0].host
+      const followingHost = servers[2].host
+      await checkAutoInstanceFollowing(baseParams, followerHost, followingHost, 'presence')
+
+      const userOverride = { socketNotifications: userNotifications, token: userAccessToken, check: { web: true, mail: false } }
+      await checkAutoInstanceFollowing(immutableAssign(baseParams, userOverride), followerHost, followingHost, 'absence')
+
+      config.followings.instance.autoFollowBack.enabled = false
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
     })
   })
 

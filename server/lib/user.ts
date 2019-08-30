@@ -138,7 +138,8 @@ function createDefaultUserNotificationSettings (user: MUserId, t: Transaction | 
     newUserRegistration: UserNotificationSettingValue.WEB,
     commentMention: UserNotificationSettingValue.WEB,
     newFollow: UserNotificationSettingValue.WEB,
-    newInstanceFollower: UserNotificationSettingValue.WEB
+    newInstanceFollower: UserNotificationSettingValue.WEB,
+    autoInstanceFollowing: UserNotificationSettingValue.WEB
   }
 
   return UserNotificationSettingModel.create(values, { transaction: t })

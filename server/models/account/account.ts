@@ -381,7 +381,7 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   toActivityPubObject (this: MAccountAP) {
-    const obj = this.Actor.toActivityPubObject(this.name, 'Account')
+    const obj = this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description

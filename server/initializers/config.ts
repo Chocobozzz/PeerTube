@@ -232,6 +232,23 @@ const CONFIG = {
       get MANUAL_APPROVAL () { return config.get<boolean>('followers.instance.manual_approval') }
     }
   },
+  FOLLOWINGS: {
+    INSTANCE: {
+      AUTO_FOLLOW_BACK: {
+        get ENABLED () {
+          return config.get<boolean>('followings.instance.auto_follow_back.enabled')
+        }
+      },
+      AUTO_FOLLOW_INDEX: {
+        get ENABLED () {
+          return config.get<boolean>('followings.instance.auto_follow_index.enabled')
+        },
+        get INDEX_URL () {
+          return config.get<string>('followings.instance.auto_follow_index.index_url')
+        }
+      }
+    }
+  },
   THEME: {
     get DEFAULT () { return config.get<string>('theme.default') }
   }

@@ -24,7 +24,7 @@ async function processAccept (actor: MActorDefault, targetActor: MActorSignature
   if (!follow) throw new Error('Cannot find associated follow.')
 
   if (follow.state !== 'accepted') {
-    follow.set('state', 'accepted')
+    follow.state = 'accepted'
     await follow.save()
 
     await addFetchOutboxJob(targetActor)

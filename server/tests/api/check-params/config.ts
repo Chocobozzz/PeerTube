@@ -5,8 +5,16 @@ import 'mocha'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, flushAndRunServer, ServerInfo,
-  setAccessTokensToServers, userLogin, immutableAssign, cleanupTests
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  immutableAssign,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePutBodyRequest,
+  ServerInfo,
+  setAccessTokensToServers,
+  userLogin
 } from '../../../../shared/extra-utils'
 
 describe('Test config API validators', function () {
@@ -97,6 +105,17 @@ describe('Test config API validators', function () {
       instance: {
         enabled: false,
         manualApproval: true
+      }
+    },
+    followings: {
+      instance: {
+        autoFollowBack: {
+          enabled: true
+        },
+        autoFollowIndex: {
+          enabled: true,
+          indexUrl: 'https://index.example.com'
+        }
       }
     }
   }

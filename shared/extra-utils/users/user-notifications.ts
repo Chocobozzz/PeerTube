@@ -279,8 +279,9 @@ async function checkNewActorFollow (
       expect(notification.actorFollow.follower.name).to.equal(followerName)
       expect(notification.actorFollow.follower.host).to.not.be.undefined
 
-      expect(notification.actorFollow.following.displayName).to.equal(followingDisplayName)
-      expect(notification.actorFollow.following.type).to.equal(followType)
+      const following = notification.actorFollow.following
+      expect(following.displayName).to.equal(followingDisplayName)
+      expect(following.type).to.equal(followType)
     } else {
       expect(notification).to.satisfy(n => {
         return n.type !== notificationType ||
@@ -322,6 +323,37 @@ async function checkNewInstanceFollower (base: CheckerBaseParams, followerHost: 
     const text: string = email[ 'text' ]
 
     return text.includes('instance has a new follower') && text.includes(followerHost)
+  }
+
+  await checkNotification(base, notificationChecker, emailFinder, type)
+}
+
+async function checkAutoInstanceFollowing (base: CheckerBaseParams, followerHost: string, followingHost: string, type: CheckerType) {
+  const notificationType = UserNotificationType.AUTO_INSTANCE_FOLLOWING
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      const following = notification.actorFollow.following
+      checkActor(following)
+      expect(following.name).to.equal('peertube')
+      expect(following.host).to.equal(followingHost)
+
+      expect(notification.actorFollow.follower.name).to.equal('peertube')
+      expect(notification.actorFollow.follower.host).to.equal(followerHost)
+    } else {
+      expect(notification).to.satisfy(n => {
+        return n.type !== notificationType || n.actorFollow.following.host !== followingHost
+      })
+    }
+  }
+
+  function emailFinder (email: object) {
+    const text: string = email[ 'text' ]
+
+    return text.includes(' automatically followed a new instance') && text.includes(followingHost)
   }
 
   await checkNotification(base, notificationChecker, emailFinder, type)
@@ -427,8 +459,8 @@ async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, vi
       expect(notification).to.not.be.undefined
       expect(notification.type).to.equal(notificationType)
 
-      expect(notification.video.id).to.be.a('number')
-      checkVideo(notification.video, videoName, videoUUID)
+      expect(notification.videoBlacklist.video.id).to.be.a('number')
+      checkVideo(notification.videoBlacklist.video, videoName, videoUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
         return n === undefined || n.video === undefined || n.video.uuid !== videoUUID
@@ -480,6 +512,7 @@ export {
   markAsReadAllNotifications,
   checkMyVideoImportIsFinished,
   checkUserRegistered,
+  checkAutoInstanceFollowing,
   checkVideoIsPublished,
   checkNewVideoFromSubscription,
   checkNewActorFollow,

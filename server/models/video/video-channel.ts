@@ -517,7 +517,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   toActivityPubObject (this: MChannelAP): ActivityPubActor {
-    const obj = this.Actor.toActivityPubObject(this.name, 'VideoChannel')
+    const obj = this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description,

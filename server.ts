@@ -1,3 +1,5 @@
+require('module-alias/register')
+
 // FIXME: https://github.com/nodejs/node/pull/16853
 import { PluginManager } from './server/lib/plugins/plugin-manager'
 

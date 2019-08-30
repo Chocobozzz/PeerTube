@@ -51,6 +51,16 @@ export class ServerModel extends Model<ServerModel> {
   })
   BlockedByAccounts: ServerBlocklistModel[]
 
+  static load (id: number): Bluebird<MServer> {
+    const query = {
+      where: {
+        id
+      }
+    }
+
+    return ServerModel.findOne(query)
+  }
+
   static loadByHost (host: string): Bluebird<MServer> {
     const query = {
       where: {

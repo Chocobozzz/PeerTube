@@ -10,12 +10,13 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { MAccount, MActor, MActorFollowActors, MActorFollowFull, MActorFull } from '../../../typings/models'
+import { MActor, MActorFollowActors, MActorFull } from '../../../typings/models'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
   name: string
   host: string
+  isAutoFollow?: boolean
 }
 
 async function processActivityPubFollow (job: Bull.Job) {
@@ -35,7 +36,7 @@ async function processActivityPubFollow (job: Bull.Job) {
 
   const fromActor = await ActorModel.load(payload.followerActorId)
 
-  return retryTransactionWrapper(follow, fromActor, targetActor)
+  return retryTransactionWrapper(follow, fromActor, targetActor, payload.isAutoFollow)
 }
 // ---------------------------------------------------------------------------
 
@@ -45,7 +46,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function follow (fromActor: MActor, targetActor: MActorFull) {
+async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow = false) {
   if (fromActor.id === targetActor.id) {
     throw new Error('Follower is the same than target actor.')
   }
@@ -75,14 +76,15 @@ async function follow (fromActor: MActor, targetActor: MActorFull) {
     return actorFollow
   })
 
-  if (actorFollow.state === 'accepted') {
-    const followerFull = Object.assign(fromActor, { Account: await actorFollow.ActorFollower.$get('Account') as MAccount })
+  const followerFull = await ActorModel.loadFull(fromActor.id)
 
-    const actorFollowFull = Object.assign(actorFollow, {
-      ActorFollowing: targetActor,
-      ActorFollower: followerFull
-    })
+  const actorFollowFull = Object.assign(actorFollow, {
+    ActorFollowing: targetActor,
+    ActorFollower: followerFull
+  })
 
-    Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
-  }
+  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
+  if (isAutoFollow === true) Notifier.Instance.notifyOfAutoInstanceFollowing(actorFollowFull)
+
+  return actorFollow
 }

@@ -1,5 +1,5 @@
 import { UserNotificationModel } from '../../../models/account/user-notification'
-import { PickWith } from '../../utils'
+import { PickWith, PickWithOpt } from '../../utils'
 import { VideoModel } from '../../../models/video/video'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ServerModel } from '../../../models/server/server'
@@ -48,12 +48,13 @@ export namespace UserNotificationIncludes {
 
   export type ActorFollower = Pick<ActorModel, 'preferredUsername' | 'getHost'> &
     PickWith<ActorModel, 'Account', AccountInclude> &
-    PickWith<ActorModel, 'Avatar', Pick<AvatarModel, 'filename' | 'getStaticPath'>> &
-    PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>
+    PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>> &
+    PickWithOpt<ActorModel, 'Avatar', Pick<AvatarModel, 'filename' | 'getStaticPath'>>
 
-  export type ActorFollowing = Pick<ActorModel, 'preferredUsername'> &
+  export type ActorFollowing = Pick<ActorModel, 'preferredUsername' | 'type' | 'getHost'> &
     PickWith<ActorModel, 'VideoChannel', VideoChannelInclude> &
-    PickWith<ActorModel, 'Account', AccountInclude>
+    PickWith<ActorModel, 'Account', AccountInclude> &
+    PickWith<ActorModel, 'Server', Pick<ServerModel, 'host'>>
 
   export type ActorFollowInclude = Pick<ActorFollowModel, 'id' | 'state'> &
     PickWith<ActorFollowModel, 'ActorFollower', ActorFollower> &

@@ -68,6 +68,10 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.followers.instance.enabled).to.be.true
   expect(data.followers.instance.manualApproval).to.be.false
+
+  expect(data.followings.instance.autoFollowBack.enabled).to.be.false
+  expect(data.followings.instance.autoFollowIndex.enabled).to.be.false
+  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('https://instances.joinpeertube.org')
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
@@ -119,6 +123,10 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.followers.instance.enabled).to.be.false
   expect(data.followers.instance.manualApproval).to.be.true
+
+  expect(data.followings.instance.autoFollowBack.enabled).to.be.true
+  expect(data.followings.instance.autoFollowIndex.enabled).to.be.true
+  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('https://updated.example.com')
 }
 
 describe('Test config', function () {
@@ -260,6 +268,17 @@ describe('Test config', function () {
         instance: {
           enabled: false,
           manualApproval: true
+        }
+      },
+      followings: {
+        instance: {
+          autoFollowBack: {
+            enabled: true
+          },
+          autoFollowIndex: {
+            enabled: true,
+            indexUrl: 'https://updated.example.com'
+          }
         }
       }
     }

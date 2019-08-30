@@ -135,13 +135,18 @@ function buildAccountInclude (required: boolean, withActor = false) {
             ]
           },
           {
-            attributes: [ 'preferredUsername' ],
+            attributes: [ 'preferredUsername', 'type' ],
             model: ActorModel.unscoped(),
             required: true,
             as: 'ActorFollowing',
             include: [
               buildChannelInclude(false),
-              buildAccountInclude(false)
+              buildAccountInclude(false),
+              {
+                attributes: [ 'host' ],
+                model: ServerModel.unscoped(),
+                required: false
+              }
             ]
           }
         ]
@@ -404,6 +409,11 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
 
     const account = this.Account ? this.formatActor(this.Account) : undefined
 
+    const actorFollowingType = {
+      Application: 'instance' as 'instance',
+      Group: 'channel' as 'channel',
+      Person: 'account' as 'account'
+    }
     const actorFollow = this.ActorFollow ? {
       id: this.ActorFollow.id,
       state: this.ActorFollow.state,
@@ -415,9 +425,10 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
         host: this.ActorFollow.ActorFollower.getHost()
       },
       following: {
-        type: this.ActorFollow.ActorFollowing.VideoChannel ? 'channel' as 'channel' : 'account' as 'account',
+        type: actorFollowingType[this.ActorFollow.ActorFollowing.type],
         displayName: (this.ActorFollow.ActorFollowing.VideoChannel || this.ActorFollow.ActorFollowing.Account).getDisplayName(),
-        name: this.ActorFollow.ActorFollowing.preferredUsername
+        name: this.ActorFollow.ActorFollowing.preferredUsername,
+        host: this.ActorFollow.ActorFollowing.getHost()
       }
     } : undefined
 

@@ -19,7 +19,9 @@ export enum UserNotificationType {
 
   VIDEO_AUTO_BLACKLIST_FOR_MODERATORS = 12,
 
-  NEW_INSTANCE_FOLLOWER = 13
+  NEW_INSTANCE_FOLLOWER = 13,
+
+  AUTO_INSTANCE_FOLLOWING = 14
 }
 
 export interface VideoInfo {
@@ -78,10 +80,12 @@ export interface UserNotification {
     id: number
     follower: ActorInfo
     state: FollowState
+
     following: {
-      type: 'account' | 'channel'
+      type: 'account' | 'channel' | 'instance'
       name: string
       displayName: string
+      host: string
     }
   }
 

@@ -10,7 +10,8 @@ import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MAccount, MActorFollowActors, MActorFollowFull, MActorSignature } from '../../../typings/models'
+import { MActorFollowActors, MActorSignature } from '../../../typings/models'
+import { autoFollowBackIfNeeded } from '../follow'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options
@@ -28,7 +29,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function processFollow (byActor: MActorSignature, targetActorURL: string) {
-  const { actorFollow, created, isFollowingInstance } = await sequelizeTypescript.transaction(async t => {
+  const { actorFollow, created, isFollowingInstance, targetActor } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
@@ -67,21 +68,24 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
     actorFollow.ActorFollowing = targetActor
 
     // Target sends to actor he accepted the follow request
-    if (actorFollow.state === 'accepted') await sendAccept(actorFollow)
+    if (actorFollow.state === 'accepted') {
+      await sendAccept(actorFollow)
+      await autoFollowBackIfNeeded(actorFollow)
+    }
 
-    return { actorFollow, created, isFollowingInstance }
+    return { actorFollow, created, isFollowingInstance, targetActor }
   })
 
   // Rejected
   if (!actorFollow) return
 
   if (created) {
-    if (isFollowingInstance) {
-      Notifier.Instance.notifyOfNewInstanceFollow(actorFollow)
-    } else {
-      const actorFollowFull = actorFollow as MActorFollowFull
-      actorFollowFull.ActorFollower.Account = await actorFollow.ActorFollower.$get('Account') as MAccount
+    const follower = await ActorModel.loadFull(byActor.id)
+    const actorFollowFull = Object.assign(actorFollow, { ActorFollowing: targetActor, ActorFollower: follower })
 
+    if (isFollowingInstance) {
+      Notifier.Instance.notifyOfNewInstanceFollow(actorFollowFull)
+    } else {
       Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
     }
   }

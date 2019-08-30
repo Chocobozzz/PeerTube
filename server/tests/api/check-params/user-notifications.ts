@@ -172,7 +172,8 @@ describe('Test user notifications API validators', function () {
       commentMention: UserNotificationSettingValue.WEB,
       newFollow: UserNotificationSettingValue.WEB,
       newUserRegistration: UserNotificationSettingValue.WEB,
-      newInstanceFollower: UserNotificationSettingValue.WEB
+      newInstanceFollower: UserNotificationSettingValue.WEB,
+      autoInstanceFollowing: UserNotificationSettingValue.WEB
     }
 
     it('Should fail with missing fields', async function () {
