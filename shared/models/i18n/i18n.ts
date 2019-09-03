@@ -39,7 +39,9 @@ const I18N_LOCALE_ALIAS = {
   'pl': 'pl-PL',
   'ru': 'ru-RU',
   'nl': 'nl-NL',
-  'zh': 'zh-Hans-CN'
+  'zh': 'zh-Hans-CN',
+  'zh-CN': 'zh-Hans-CN',
+  'zh-TW': 'zh-Hant-TW'
 }
 
 export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
