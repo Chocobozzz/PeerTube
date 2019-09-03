@@ -10,7 +10,7 @@
 
     <ul>
       <li i18n *ngIf="about.instance.name.toLowerCase() === 'peertube'">Instance name</li>
-      <li i18n *ngIf="about.instance.shortDescription">Instance short description</li>
+      <li i18n *ngIf="isDefaultShortDescription(about.instance.shortDescription)">Instance short description</li>
 
       <li i18n *ngIf="!about.instance.administrator">Who you are</li>
       <li i18n *ngIf="!about.instance.maintenanceLifetime">How long you plan to maintain your instance</li>
@@ -20,7 +20,10 @@
       <li i18n *ngIf="!about.instance.terms">Instance terms</li>
     </ul>
 
-    <p>Please consider to configure these fields to help people to choose <strong>the appropriate instance</strong>.</p>
+    <p>
+      Please consider to configure these fields to help people to choose <strong>the appropriate instance</strong>.
+      Without them, your instance may not be referenced on <a target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org">JoinPeerTube website</a>.
+    </p>
 
     <div class="configure-instance">
       <a i18n href="/admin/config/edit-custom" target="_blank" rel="noopener noreferrer">Configure these fields</a>

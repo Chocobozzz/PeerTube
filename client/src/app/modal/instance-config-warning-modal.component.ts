@@ -31,6 +31,11 @@ export class InstanceConfigWarningModalComponent {
     })
   }
 
+  isDefaultShortDescription (description: string) {
+    return description === 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly ' +
+      'in the web browser with WebTorrent and Angular.'
+  }
+
   private doNotOpenAgain () {
     this.userService.updateMyProfile({ noInstanceConfigWarningModal: true })
         .subscribe(
