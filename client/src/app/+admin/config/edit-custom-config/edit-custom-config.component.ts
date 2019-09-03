@@ -100,6 +100,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
         terms: null,
         codeOfConduct: null,
+
+        creationReason: null,
         moderationInformation: null,
         administrator: null,
         maintenanceLifetime: null,

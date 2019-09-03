@@ -44,8 +44,8 @@ textarea {
 
   display: block;
 
-  &#instanceShortDescription {
-    height: 100px;
+  &.small {
+    height: 75px;
   }
 }
 

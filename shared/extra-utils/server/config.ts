@@ -55,6 +55,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       terms: 'my super terms',
       codeOfConduct: 'my super coc',
 
+      creationReason: 'my super creation reason',
       moderationInformation: 'my super moderation information',
       administrator: 'Kuja',
       maintenanceLifetime: 'forever',

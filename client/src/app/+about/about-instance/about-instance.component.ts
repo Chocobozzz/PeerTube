@@ -25,6 +25,7 @@ export class AboutInstanceComponent implements OnInit {
     administrator: ''
   }
 
+  creationReason = ''
   maintenanceLifetime = ''
   businessModel = ''
 
@@ -61,6 +62,7 @@ export class AboutInstanceComponent implements OnInit {
       async ([ about, translations ]) => {
         this.shortDescription = about.instance.shortDescription
 
+        this.creationReason = about.instance.creationReason
         this.maintenanceLifetime = about.instance.maintenanceLifetime
         this.businessModel = about.instance.businessModel
 

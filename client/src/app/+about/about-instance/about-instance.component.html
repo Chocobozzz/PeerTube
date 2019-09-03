@@ -24,19 +24,25 @@
     </div>
 
     <div class="block administrator" *ngIf="html.administrator">
-      <div i18n class="section-title">Who are we?</div>
+      <div i18n class="section-title">Who we are</div>
 
       <div [innerHTML]="html.administrator"></div>
     </div>
 
+    <div class="block creation-reason" *ngIf="creationReason">
+      <div i18n class="section-title">Why we created this instance</div>
+
+      <p>{{ creationReason }}</p>
+    </div>
+
     <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
-      <div i18n class="section-title">How long do we plan to maintain this instance?</div>
+      <div i18n class="section-title">How long we plan to maintain this instance</div>
 
       <p>{{ maintenanceLifetime }}</p>
     </div>
 
     <div class="block business-model" *ngIf="businessModel">
-      <div i18n class="section-title">How will we pay this instance?</div>
+      <div i18n class="section-title">How we will pay this instance</div>
 
       <p>{{ businessModel }}</p>
     </div>

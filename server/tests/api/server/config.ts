@@ -30,6 +30,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
 
   expect(data.instance.terms).to.equal('No terms for now.')
+  expect(data.instance.creationReason).to.be.empty
   expect(data.instance.codeOfConduct).to.be.empty
   expect(data.instance.moderationInformation).to.be.empty
   expect(data.instance.administrator).to.be.empty
@@ -90,6 +91,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.description).to.equal('my super description')
 
   expect(data.instance.terms).to.equal('my super terms')
+  expect(data.instance.creationReason).to.equal('my super creation reason')
   expect(data.instance.codeOfConduct).to.equal('my super coc')
   expect(data.instance.moderationInformation).to.equal('my super moderation information')
   expect(data.instance.administrator).to.equal('Kuja')
@@ -212,6 +214,7 @@ describe('Test config', function () {
         terms: 'my super terms',
         codeOfConduct: 'my super coc',
 
+        creationReason: 'my super creation reason',
         moderationInformation: 'my super moderation information',
         administrator: 'Kuja',
         maintenanceLifetime: 'forever',

@@ -21,7 +21,7 @@
           <div class="form-group">
             <label i18n for="instanceShortDescription">Short description</label>
             <textarea
-              id="instanceShortDescription" formControlName="shortDescription"
+              id="instanceShortDescription" formControlName="shortDescription" class="small"
               [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
             ></textarea>
             <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
@@ -130,14 +130,26 @@
           <div i18n class="inner-form-title">You and your instance</div>
 
           <div class="form-group">
-            <label i18n for="instanceAdministrator">Who is behind the instance? </label>
+            <label i18n for="instanceAdministrator">Who is behind the instance?</label>
             <div class="label-small-info">A single person? A non profit? A company?</div>
 
-            <textarea
-              id="instanceAdministrator" formControlName="administrator"
-              [ngClass]="{ 'input-error': formErrors['instance.administrator'] }"
-            ></textarea>
+            <my-markdown-textarea
+              id="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
+              [classes]="{ 'input-error': formErrors['instance.administrator'] }"
+            ></my-markdown-textarea>
+
             <div *ngIf="formErrors.instance.administrator" class="form-error">{{ formErrors.instance.administrator }}</div>
+          </div>
+
+          <div class="form-group">
+            <label i18n for="instanceCreationReason">Why did you create this instance?</label>
+            <div class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
+
+            <textarea
+              id="instanceCreationReason" formControlName="creationReason" class="small"
+              [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
+            ></textarea>
+            <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
           </div>
 
           <div class="form-group">
@@ -145,7 +157,7 @@
             <div class="label-small-info">It's important to know for users who want to register on your instance</div>
 
             <textarea
-              id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime"
+              id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="small"
               [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
             ></textarea>
             <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
@@ -156,7 +168,7 @@
             <div class="label-small-info">With you own funds? With users donations? Advertising?</div>
 
             <textarea
-              id="instanceBusinessModel" formControlName="businessModel"
+              id="instanceBusinessModel" formControlName="businessModel" class="small"
               [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
             ></textarea>
             <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>

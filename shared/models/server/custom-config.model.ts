@@ -8,6 +8,7 @@ export interface CustomConfig {
     terms: string
     codeOfConduct: string
 
+    creationReason: string
     moderationInformation: string
     administrator: string
     maintenanceLifetime: string

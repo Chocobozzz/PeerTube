@@ -243,6 +243,9 @@ instance:
   # Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc
   moderation_information: '' # Supports markdown
 
+  # Why did you create this instance?
+  creation_reason: ''
+
   # Who is behind the instance? A single person? A non profit?
   administrator: ''
 

@@ -29,6 +29,7 @@ describe('Test config API validators', function () {
       terms: 'my super terms',
       codeOfConduct: 'my super coc',
 
+      creationReason: 'my super reason',
       moderationInformation: 'my super moderation information',
       administrator: 'Kuja',
       maintenanceLifetime: 'forever',
