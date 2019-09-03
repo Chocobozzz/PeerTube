@@ -161,6 +161,7 @@ function getAbout (req: express.Request, res: express.Response) {
       terms: CONFIG.INSTANCE.TERMS,
       codeOfConduct: CONFIG.INSTANCE.CODE_OF_CONDUCT,
 
+      creationReason: CONFIG.INSTANCE.CREATION_REASON,
       moderationInformation: CONFIG.INSTANCE.MODERATION_INFORMATION,
       administrator: CONFIG.INSTANCE.ADMINISTRATOR,
       maintenanceLifetime: CONFIG.INSTANCE.MAINTENANCE_LIFETIME,
@@ -232,6 +233,7 @@ function customConfig (): CustomConfig {
       terms: CONFIG.INSTANCE.TERMS,
       codeOfConduct: CONFIG.INSTANCE.CODE_OF_CONDUCT,
 
+      creationReason: CONFIG.INSTANCE.CREATION_REASON,
       moderationInformation: CONFIG.INSTANCE.MODERATION_INFORMATION,
       administrator: CONFIG.INSTANCE.ADMINISTRATOR,
       maintenanceLifetime: CONFIG.INSTANCE.MAINTENANCE_LIFETIME,

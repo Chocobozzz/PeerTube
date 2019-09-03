@@ -211,6 +211,8 @@ const CONFIG = {
     get TERMS () { return config.get<string>('instance.terms') },
     get CODE_OF_CONDUCT () { return config.get<string>('instance.code_of_conduct') },
 
+    get CREATION_REASON () { return config.get<string>('instance.creation_reason') },
+
     get MODERATION_INFORMATION () { return config.get<string>('instance.moderation_information') },
     get ADMINISTRATOR () { return config.get<string>('instance.administrator') },
     get MAINTENANCE_LIFETIME () { return config.get<string>('instance.maintenance_lifetime') },

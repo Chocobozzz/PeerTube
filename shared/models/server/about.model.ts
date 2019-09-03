@@ -7,6 +7,7 @@ export interface About {
 
     codeOfConduct: string
 
+    creationReason: string
     moderationInformation: string
     administrator: string
     maintenanceLifetime: string
