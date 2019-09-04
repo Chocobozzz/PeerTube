@@ -40,7 +40,7 @@
         <my-global-icon iconName="no"></my-global-icon>
 
         <div class="message">
-          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blacklisted</a>
+          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blacklisted</a>
         </div>
       </ng-container>
 
@@ -109,6 +109,14 @@
         <div class="message">
           Your instance has <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">a new follower</a> ({{ notification.actorFollow.follower.host }})
           <ng-container *ngIf="notification.actorFollow.state === 'pending'"> awaiting your approval</ng-container>
+        </div>
+      </ng-container>
+
+      <ng-container i18n *ngSwitchCase="UserNotificationType.AUTO_INSTANCE_FOLLOWING">
+        <my-global-icon iconName="users"></my-global-icon>
+
+        <div class="message">
+          Your instance automatically followed <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">{{ notification.actorFollow.following.host }}</a>
         </div>
       </ng-container>
     </ng-container>

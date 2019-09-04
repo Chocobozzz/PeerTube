@@ -42,9 +42,10 @@ export class UserNotification implements UserNotificationServer {
     state: FollowState
     follower: ActorInfo & { avatarUrl?: string }
     following: {
-      type: 'account' | 'channel'
+      type: 'account' | 'channel' | 'instance'
       name: string
       displayName: string
+      host: string
     }
   }
 
@@ -145,6 +146,10 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.NEW_INSTANCE_FOLLOWER:
           this.instanceFollowUrl = '/admin/follows/followers-list'
+          break
+
+        case UserNotificationType.AUTO_INSTANCE_FOLLOWING:
+          this.instanceFollowUrl = '/admin/follows/following-list'
           break
       }
     } catch (err) {

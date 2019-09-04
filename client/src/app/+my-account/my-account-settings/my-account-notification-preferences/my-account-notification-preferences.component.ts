@@ -43,7 +43,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newUserRegistration: this.i18n('A new user registered on your instance'),
       newFollow: this.i18n('You or your channel(s) has a new follower'),
       commentMention: this.i18n('Someone mentioned you in video comments'),
-      newInstanceFollower: this.i18n('Your instance has a new follower')
+      newInstanceFollower: this.i18n('Your instance has a new follower'),
+      autoInstanceFollowing: this.i18n('Your instance auto followed another instance')
     }
     this.notificationSettingKeys = Object.keys(this.labelNotifications) as (keyof UserNotificationSetting)[]
 
@@ -51,7 +52,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       videoAbuseAsModerator: UserRight.MANAGE_VIDEO_ABUSES,
       videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLACKLIST,
       newUserRegistration: UserRight.MANAGE_USERS,
-      newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW
+      newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
+      autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION
     }
 
     this.emailEnabled = this.serverService.getConfig().email.enabled

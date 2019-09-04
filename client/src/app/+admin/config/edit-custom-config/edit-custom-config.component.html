@@ -221,6 +221,41 @@
           </ng-container>
         </ng-container>
 
+        <div i18n class="inner-form-title">Instance followings</div>
+
+        <ng-container formGroupName="followings">
+          <ng-container formGroupName="instance">
+
+            <ng-container formGroupName="autoFollowBack">
+              <div class="form-group">
+                <my-peertube-checkbox
+                  inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
+                  i18n-labelText labelText="Automatically follow other instances that follow you"
+                ></my-peertube-checkbox>
+              </div>
+            </ng-container>
+
+            <ng-container formGroupName="autoFollowIndex">
+              <div class="form-group">
+                <my-peertube-checkbox
+                  inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
+                  i18n-labelText labelText="Automatically follow instance of the public index (below)"
+                ></my-peertube-checkbox>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
+                <input
+                  type="text" id="followingsInstanceAutoFollowIndexUrl"
+                  formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
+                >
+                <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+              </div>
+
+            </ng-container>
+          </ng-container>
+        </ng-container>
+
 
         <div i18n class="inner-form-title">Administrator</div>
 
