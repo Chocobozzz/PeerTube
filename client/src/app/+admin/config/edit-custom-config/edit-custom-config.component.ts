@@ -158,6 +158,17 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           enabled: null,
           manualApproval: null
         }
+      },
+      followings: {
+        instance: {
+          autoFollowBack: {
+            enabled: null
+          },
+          autoFollowIndex: {
+            enabled: null,
+            indexUrl: this.customConfigValidatorsService.INDEX_URL
+          }
+        }
       }
     }
 
