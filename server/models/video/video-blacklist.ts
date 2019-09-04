@@ -64,7 +64,6 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     const countQuery = buildBaseQuery()
 
     const findQuery = buildBaseQuery()
-    findQuery.subQuery = false
     findQuery.include = [
       {
         model: VideoModel,
