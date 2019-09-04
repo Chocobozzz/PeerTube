@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { values } from 'lodash'
+import { values, difference } from 'lodash'
 import {
   AfterCreate,
   AfterDestroy,
@@ -21,7 +21,7 @@ import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
-import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES } from '../../initializers/constants'
+import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { createSafeIn, getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
@@ -433,6 +433,45 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                                total: count
                              }
                            })
+  }
+
+  static async keepUnfollowedInstance (hosts: string[]) {
+    const followerId = (await getServerActor()).id
+
+    const query = {
+      attributes: [],
+      where: {
+        actorId: followerId
+      },
+      include: [
+        {
+          attributes: [ ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          where: {
+            preferredUsername: SERVER_ACTOR_NAME
+          },
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: {
+                host: {
+                  [Op.in]: hosts
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    const res = await ActorFollowModel.findAll(query)
+    const followedHosts = res.map(res => res.ActorFollowing.Server.host)
+
+    return difference(hosts, followedHosts)
   }
 
   static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Transaction, start?: number, count?: number) {

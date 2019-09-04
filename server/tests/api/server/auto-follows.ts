@@ -6,10 +6,12 @@ import {
   acceptFollower,
   cleanupTests,
   flushAndRunMultipleServers,
+  MockInstancesIndex,
   ServerInfo,
   setAccessTokensToServers,
   unfollow,
-  updateCustomSubConfig
+  updateCustomSubConfig,
+  wait
 } from '../../../../shared/extra-utils/index'
 import { follow, getFollowersListPaginationAndSort, getFollowingListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -22,13 +24,14 @@ async function checkFollow (follower: ServerInfo, following: ServerInfo, exists:
     const res = await getFollowersListPaginationAndSort(following.url, 0, 5, '-createdAt')
     const follows = res.body.data as ActorFollow[]
 
-    if (exists === true) {
-      expect(res.body.total).to.equal(1)
+    const follow = follows.find(f => {
+      return f.follower.host === follower.host && f.state === 'accepted'
+    })
 
-      expect(follows[ 0 ].follower.host).to.equal(follower.host)
-      expect(follows[ 0 ].state).to.equal('accepted')
+    if (exists === true) {
+      expect(follow).to.exist
     } else {
-      expect(follows.filter(f => f.state === 'accepted')).to.have.lengthOf(0)
+      expect(follow).to.be.undefined
     }
   }
 
@@ -36,13 +39,14 @@ async function checkFollow (follower: ServerInfo, following: ServerInfo, exists:
     const res = await getFollowingListPaginationAndSort(follower.url, 0, 5, '-createdAt')
     const follows = res.body.data as ActorFollow[]
 
-    if (exists === true) {
-      expect(res.body.total).to.equal(1)
+    const follow = follows.find(f => {
+      return f.following.host === following.host && f.state === 'accepted'
+    })
 
-      expect(follows[ 0 ].following.host).to.equal(following.host)
-      expect(follows[ 0 ].state).to.equal('accepted')
+    if (exists === true) {
+      expect(follow).to.exist
     } else {
-      expect(follows.filter(f => f.state === 'accepted')).to.have.lengthOf(0)
+      expect(follow).to.be.undefined
     }
   }
 }
@@ -71,7 +75,7 @@ describe('Test auto follows', function () {
   before(async function () {
     this.timeout(30000)
 
-    servers = await flushAndRunMultipleServers(2)
+    servers = await flushAndRunMultipleServers(3)
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -139,6 +143,61 @@ describe('Test auto follows', function () {
       await checkFollow(servers[1], servers[0], true)
 
       await resetFollows(servers)
+    })
+  })
+
+  describe('Auto follow index', function () {
+    const instanceIndexServer = new MockInstancesIndex()
+
+    before(async () => {
+      await instanceIndexServer.initialize()
+    })
+
+    it('Should not auto follow index if the option is not enabled', async function () {
+      this.timeout(30000)
+
+      await wait(5000)
+      await waitJobs(servers)
+
+      await checkFollow(servers[ 0 ], servers[ 1 ], false)
+      await checkFollow(servers[ 1 ], servers[ 0 ], false)
+    })
+
+    it('Should auto follow the index', async function () {
+      this.timeout(30000)
+
+      instanceIndexServer.addInstance(servers[1].host)
+
+      const config = {
+        followings: {
+          instance: {
+            autoFollowIndex: {
+              indexUrl: 'http://localhost:42100',
+              enabled: true
+            }
+          }
+        }
+      }
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+
+      await wait(5000)
+      await waitJobs(servers)
+
+      await checkFollow(servers[ 0 ], servers[ 1 ], true)
+
+      await resetFollows(servers)
+    })
+
+    it('Should follow new added instances in the index but not old ones', async function () {
+      this.timeout(30000)
+
+      instanceIndexServer.addInstance(servers[2].host)
+
+      await wait(5000)
+      await waitJobs(servers)
+
+      await checkFollow(servers[ 0 ], servers[ 1 ], false)
+      await checkFollow(servers[ 0 ], servers[ 2 ], true)
     })
   })
 
