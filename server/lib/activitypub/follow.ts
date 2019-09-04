@@ -4,7 +4,7 @@ import { SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { JobQueue } from '../job-queue'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
-import { ServerModel } from '@server/models/server/server'
+import { ServerModel } from '../../models/server/server'
 
 async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors) {
   if (!CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_BACK.ENABLED) return
