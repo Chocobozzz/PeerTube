@@ -143,6 +143,10 @@ describe('Test auto follows', function () {
       await checkFollow(servers[1], servers[0], true)
 
       await resetFollows(servers)
+
+      config.followings.instance.autoFollowBack.enabled = false
+      config.followers.instance.manualApproval = false
+      await updateCustomSubConfig(servers[1].url, servers[1].accessToken, config)
     })
   })
 
