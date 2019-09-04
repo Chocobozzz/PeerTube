@@ -14,10 +14,13 @@ import {
   getVideoCommentThreads,
   getVideoThreadComments,
   immutableAssign,
+  MockInstancesIndex,
   registerUser,
   removeVideoFromBlacklist,
-  reportVideoAbuse, unfollow,
-  updateCustomConfig, updateCustomSubConfig,
+  reportVideoAbuse,
+  unfollow,
+  updateCustomConfig,
+  updateCustomSubConfig,
   updateMyUser,
   updateVideo,
   updateVideoChannel,
@@ -29,6 +32,7 @@ import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/l
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getUserNotificationSocket } from '../../../../shared/extra-utils/socket/socket-io'
 import {
+  checkAutoInstanceFollowing,
   checkCommentMention,
   CheckerBaseParams,
   checkMyVideoImportIsFinished,
@@ -45,8 +49,7 @@ import {
   getUserNotifications,
   markAsReadAllNotifications,
   markAsReadNotifications,
-  updateMyNotificationSettings,
-  checkAutoInstanceFollowing
+  updateMyNotificationSettings
 } from '../../../../shared/extra-utils/users/user-notifications'
 import {
   User,
@@ -875,7 +878,18 @@ describe('Test users notifications', function () {
     })
   })
 
-  describe('New instance follower', function () {
+  describe('New instance follows', function () {
+    const instanceIndexServer = new MockInstancesIndex()
+    const config = {
+      followings: {
+        instance: {
+          autoFollowIndex: {
+            indexUrl: 'http://localhost:42100',
+            enabled: true
+          }
+        }
+      }
+    }
     let baseParams: CheckerBaseParams
 
     before(async () => {
@@ -885,6 +899,9 @@ describe('Test users notifications', function () {
         socketNotifications: adminNotifications,
         token: servers[0].accessToken
       }
+
+      await instanceIndexServer.initialize()
+      instanceIndexServer.addInstance(servers[1].host)
     })
 
     it('Should send a notification only to admin when there is a new instance follower', async function () {
@@ -928,6 +945,26 @@ describe('Test users notifications', function () {
 
       config.followings.instance.autoFollowBack.enabled = false
       await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await unfollow(servers[0].url, servers[0].accessToken, servers[2])
+      await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+    })
+
+    it('Should send a notification on auto instances index follow', async function () {
+      this.timeout(30000)
+      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+
+      await wait(5000)
+      await waitJobs(servers)
+
+      const followerHost = servers[0].host
+      const followingHost = servers[1].host
+      await checkAutoInstanceFollowing(baseParams, followerHost, followingHost, 'presence')
+
+      config.followings.instance.autoFollowIndex.enabled = false
+      await updateCustomSubConfig(servers[0].url, servers[0].accessToken, config)
+      await unfollow(servers[0].url, servers[0].accessToken, servers[1])
     })
   })
 

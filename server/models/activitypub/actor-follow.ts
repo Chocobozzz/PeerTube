@@ -439,13 +439,13 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     const followerId = (await getServerActor()).id
 
     const query = {
-      attributes: [],
+      attributes: [ 'id' ],
       where: {
         actorId: followerId
       },
       include: [
         {
-          attributes: [ ],
+          attributes: [ 'id' ],
           model: ActorModel.unscoped(),
           required: true,
           as: 'ActorFollowing',
@@ -469,7 +469,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const res = await ActorFollowModel.findAll(query)
-    const followedHosts = res.map(res => res.ActorFollowing.Server.host)
+    const followedHosts = res.map(row => row.ActorFollowing.Server.host)
 
     return difference(hosts, followedHosts)
   }
