@@ -17,7 +17,8 @@
     "typeRoots": [ "node_modules/@types", "server/typings" ],
     "baseUrl": "./",
     "paths": {
-      "@server/*": [ "server/*" ]
+      "@server/*": [ "server/*" ],
+      "@shared/*": [ "shared/*" ]
     }
   },
   "exclude": [

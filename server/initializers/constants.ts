@@ -168,8 +168,13 @@ const SCHEDULER_INTERVALS_MS = {
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
   checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24 // 1 day
+}
+
+const INSTANCES_INDEX = {
+  HOSTS_PATH: '/api/v1/instances/hosts'
 }
 
 // ---------------------------------------------------------------------------
@@ -633,6 +638,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.removeOldHistory = 5000
   SCHEDULER_INTERVALS_MS.removeOldViews = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
+  SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   REPEAT_JOBS[ 'videos-views' ] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
@@ -683,6 +689,7 @@ export {
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
+  INSTANCES_INDEX,
   DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,
   PLUGIN_GLOBAL_CSS_FILE_NAME,

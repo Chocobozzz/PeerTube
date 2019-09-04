@@ -115,6 +115,7 @@ import { UpdateVideosScheduler } from './server/lib/schedulers/update-videos-sch
 import { YoutubeDlUpdateScheduler } from './server/lib/schedulers/youtube-dl-update-scheduler'
 import { VideosRedundancyScheduler } from './server/lib/schedulers/videos-redundancy-scheduler'
 import { RemoveOldHistoryScheduler } from './server/lib/schedulers/remove-old-history-scheduler'
+import { AutoFollowIndexInstances } from './server/lib/schedulers/auto-follow-index-instances'
 import { isHTTPSignatureDigestValid } from './server/helpers/peertube-crypto'
 import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
@@ -260,6 +261,7 @@ async function startApplication () {
   RemoveOldHistoryScheduler.Instance.enable()
   RemoveOldViewsScheduler.Instance.enable()
   PluginsCheckScheduler.Instance.enable()
+  AutoFollowIndexInstances.Instance.enable()
 
   // Redis initialization
   Redis.Instance.init()
