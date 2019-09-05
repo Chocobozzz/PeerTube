@@ -92,7 +92,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.p2pEngine.on(Events.SegmentError, (segment: Segment, err) => {
       console.error('Segment error.', segment, err)
 
-      this.options.redundancyUrlManager.removeByOriginUrl(segment.url)
+      this.options.redundancyUrlManager.removeBySegmentUrl(segment.requestUrl)
     })
 
     this.statsP2PBytes.numPeers = 1 + this.options.redundancyUrlManager.countBaseUrls()
