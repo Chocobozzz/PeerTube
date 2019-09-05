@@ -8,7 +8,7 @@
         <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
 
         <div class="message">
-          {{ notification.video.channel.displayName }} published a <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">new video</a>
+          {{ notification.video.channel.displayName }} published a new video: <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
         </div>
       </ng-container>
 

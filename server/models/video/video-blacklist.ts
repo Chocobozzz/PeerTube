@@ -5,7 +5,7 @@ import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
 import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
-import { FindOptions, literal } from 'sequelize'
+import { FindOptions } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
 import * as Bluebird from 'bluebird'
 import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/typings/models'
