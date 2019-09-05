@@ -396,6 +396,7 @@
   border-radius: 50%;
   width: $size;
   height: $size;
+  min-width: $size;
 }
 
 @mixin chevron ($size, $border-width) {
