@@ -113,6 +113,9 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
           this.videoAutoBlacklistUrl = '/admin/moderation/video-auto-blacklist/list'
+          // Backward compatibility where we did not assign videoBlacklist to this type of notification before
+          if (!this.videoBlacklist) this.videoBlacklist = { id: null, video: this.video }
+
           this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
           break
 
