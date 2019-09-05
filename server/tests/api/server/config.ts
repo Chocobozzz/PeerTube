@@ -36,6 +36,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.instance.administrator).to.be.empty
   expect(data.instance.maintenanceLifetime).to.be.empty
   expect(data.instance.businessModel).to.be.empty
+  expect(data.instance.hardwareInformation).to.be.empty
 
   expect(data.instance.languages).to.have.lengthOf(0)
   expect(data.instance.categories).to.have.lengthOf(0)
@@ -97,6 +98,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.administrator).to.equal('Kuja')
   expect(data.instance.maintenanceLifetime).to.equal('forever')
   expect(data.instance.businessModel).to.equal('my super business model')
+  expect(data.instance.hardwareInformation).to.equal('2vCore 3GB RAM')
 
   expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
   expect(data.instance.categories).to.deep.equal([ 1, 2 ])
@@ -219,6 +221,7 @@ describe('Test config', function () {
         administrator: 'Kuja',
         maintenanceLifetime: 'forever',
         businessModel: 'my super business model',
+        hardwareInformation: '2vCore 3GB RAM',
 
         languages: [ 'en', 'es' ],
         categories: [ 1, 2 ],
@@ -362,6 +365,17 @@ describe('Test config', function () {
     expect(data.instance.shortDescription).to.equal('my short description')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
+    expect(data.instance.codeOfConduct).to.equal('my super coc')
+
+    expect(data.instance.creationReason).to.equal('my super creation reason')
+    expect(data.instance.moderationInformation).to.equal('my super moderation information')
+    expect(data.instance.administrator).to.equal('Kuja')
+    expect(data.instance.maintenanceLifetime).to.equal('forever')
+    expect(data.instance.businessModel).to.equal('my super business model')
+    expect(data.instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+
+    expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
+    expect(data.instance.categories).to.deep.equal([ 1, 2 ])
   })
 
   it('Should remove the custom configuration', async function () {

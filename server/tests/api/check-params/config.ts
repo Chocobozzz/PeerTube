@@ -34,6 +34,7 @@ describe('Test config API validators', function () {
       administrator: 'Kuja',
       maintenanceLifetime: 'forever',
       businessModel: 'my super business model',
+      hardwareInformation: '2vCore 3GB RAM',
 
       languages: [ 'en', 'es' ],
       categories: [ 1, 2 ],

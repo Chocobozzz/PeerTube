@@ -107,6 +107,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         maintenanceLifetime: null,
         businessModel: null,
 
+        hardwareInformation: null,
+
         categories: null,
         languages: null,
 

@@ -22,7 +22,8 @@ export class AboutInstanceComponent implements OnInit {
     terms: '',
     codeOfConduct: '',
     moderationInformation: '',
-    administrator: ''
+    administrator: '',
+    hardwareInformation: ''
   }
 
   creationReason = ''

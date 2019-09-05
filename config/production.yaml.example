@@ -270,6 +270,10 @@ instance:
   # How will you pay the PeerTube instance server? With you own funds? With users donations? Advertising?
   business_model: ''
 
+  # If you want to explain on what type of hardware your PeerTube instance runs
+  # Example: "2 vCore, 2GB RAM..."
+  hardware_information: '' # Supports Markdown
+
   # What are the main languages of your instance? To interact with your users for example
   # Uncomment or add the languages you want
   # List of supported languages: https://peertube.cpy.re/api/v1/videos/languages
