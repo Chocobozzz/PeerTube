@@ -4,7 +4,7 @@
     <div class="about-instance-title">
       <div i18n class="title">About {{ instanceName }} instance</div>
 
-      <div *ngIf="isContactFormEnabled" (click)="openContactModal()" i18n role="button" class="contact-admin">Contact administrator</div>
+      <div i18n *ngIf="isContactFormEnabled" (click)="openContactModal()" role="button" class="contact-admin">Contact administrator</div>
     </div>
 
     <div class="block instance-badges">
@@ -16,10 +16,10 @@
     <div class="short-description">
       <div class="block short-description">{{ shortDescription }}</div>
 
-      <div *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
+      <div i18n *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
     </div>
 
-    <div class="middle-title" *ngIf="html.administrator || maintenanceLifetime || businessModel">
+    <div i18n class="middle-title" *ngIf="html.administrator || maintenanceLifetime || businessModel">
       Administrators & sustainability
     </div>
 
@@ -47,7 +47,7 @@
       <p>{{ businessModel }}</p>
     </div>
 
-    <div class="middle-title" *ngIf="html.description">
+    <div i18n class="middle-title" *ngIf="html.description">
       Information
     </div>
 
@@ -57,7 +57,7 @@
       <div [innerHTML]="html.description"></div>
     </div>
 
-    <div class="middle-title" *ngIf="html.moderationInformation || html.codeOfConduct || html.terms">
+    <div i18n class="middle-title" *ngIf="html.moderationInformation || html.codeOfConduct || html.terms">
       Moderation
     </div>
 
@@ -79,7 +79,7 @@
       <div [innerHTML]="html.terms"></div>
     </div>
 
-    <div class="middle-title" *ngIf="html.hardwareInformation">
+    <div i18n class="middle-title" *ngIf="html.hardwareInformation">
       Other information
     </div>
 
@@ -91,7 +91,7 @@
   </div>
 
   <div class="col-md-12 col-xl-6">
-    <label>Features found on this instance</label>
+    <label i18n>Features found on this instance</label>
     <my-instance-features-table></my-instance-features-table>
   </div>
 </div>

@@ -13,7 +13,7 @@ async function run () {
   {
     const contributors = await fetchGithub('https://api.github.com/repos/chocobozzz/peertube/contributors')
 
-    console.log('# Code\n')
+    console.log('# Code contributors\n')
     for (const contributor of contributors) {
       const contributorUrl = contributor.url.replace('api.github.com/users', 'github.com')
       console.log(` * [${contributor.login}](${contributorUrl})`)
@@ -27,7 +27,7 @@ async function run () {
 
     const translators = await fetchZanata(zanataUsername, zanataToken)
 
-    console.log('\n\n# Translations\n')
+    console.log('\n\n# Translation contributors\n')
     for (const translator of translators) {
       console.log(` * [${translator.username}](https://trad.framasoft.org/zanata/profile/view/${translator.username})`)
     }

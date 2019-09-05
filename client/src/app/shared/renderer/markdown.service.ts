@@ -13,9 +13,11 @@ export class MarkdownService {
     'list'
   ]
   static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
+  static COMPLETE_RULES = MarkdownService.ENHANCED_RULES.concat([ 'block', 'inline', 'heading', 'html_inline', 'html_block', 'paragraph' ])
 
   private textMarkdownIt: MarkdownIt
   private enhancedMarkdownIt: MarkdownIt
+  private completeMarkdownIt: MarkdownIt
 
   async textMarkdownToHTML (markdown: string) {
     if (!markdown) return ''
@@ -39,11 +41,22 @@ export class MarkdownService {
     return this.avoidTruncatedTags(html)
   }
 
-  private async createMarkdownIt (rules: string[]) {
-    // FIXME: import('..') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
+  async completeMarkdownToHTML (markdown: string) {
+    if (!markdown) return ''
+
+    if (!this.completeMarkdownIt) {
+      this.completeMarkdownIt = await this.createMarkdownIt(MarkdownService.COMPLETE_RULES, true)
+    }
+
+    const html = this.completeMarkdownIt.render(markdown)
+    return this.avoidTruncatedTags(html)
+  }
+
+  private async createMarkdownIt (rules: string[], html = false) {
+    // FIXME: import('...') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
     const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
 
-    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true })
+    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true, html })
 
     for (const rule of rules) {
       markdownIt.enable(rule)

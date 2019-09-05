@@ -22,7 +22,7 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
 <p align="center">
   <a href="https://framasoft.org">
-    <img width="150px" src="http://lutim.cpy.re/Prd3ci7G.png" alt="Framasoft logo"/>
+    <img width="150px" src="https://lutim.cpy.re/FeRgHH8r.png" alt="Framasoft logo"/>
   </a>
 </p>
 
