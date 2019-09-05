@@ -31,7 +31,7 @@
 
       <div class="video-info-privacy">
         <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
-        <ng-container *ngIf="displayOptions.privacyText && getStateLabel(video)"> - </ng-container>
+        <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
         <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
       </div>
 

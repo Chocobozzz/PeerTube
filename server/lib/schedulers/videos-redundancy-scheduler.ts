@@ -261,7 +261,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   }
 
   private async purgeCacheIfNeeded (candidateToDuplicate: CandidateToDuplicate) {
-    while (this.isTooHeavy(candidateToDuplicate)) {
+    while (await this.isTooHeavy(candidateToDuplicate)) {
       const redundancy = candidateToDuplicate.redundancy
       const toDelete = await VideoRedundancyModel.loadOldestLocalExpired(redundancy.strategy, redundancy.minLifetime)
       if (!toDelete) return
