@@ -6,6 +6,7 @@ export interface About {
     terms: string
 
     codeOfConduct: string
+    hardwareInformation: string
 
     creationReason: string
     moderationInformation: string

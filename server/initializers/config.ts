@@ -217,6 +217,7 @@ const CONFIG = {
     get ADMINISTRATOR () { return config.get<string>('instance.administrator') },
     get MAINTENANCE_LIFETIME () { return config.get<string>('instance.maintenance_lifetime') },
     get BUSINESS_MODEL () { return config.get<string>('instance.business_model') },
+    get HARDWARE_INFORMATION () { return config.get<string>('instance.hardware_information') },
 
     get LANGUAGES () { return config.get<string[]>('instance.languages') || [] },
     get CATEGORIES () { return config.get<number[]>('instance.categories') || [] },

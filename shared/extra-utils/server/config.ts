@@ -60,6 +60,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       administrator: 'Kuja',
       maintenanceLifetime: 'forever',
       businessModel: 'my super business model',
+      hardwareInformation: '2vCore 3GB RAM',
 
       languages: [ 'en', 'es' ],
       categories: [ 1, 2 ],

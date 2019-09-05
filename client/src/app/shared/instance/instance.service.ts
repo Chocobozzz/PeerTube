@@ -46,10 +46,11 @@ export class InstanceService {
       terms: '',
       codeOfConduct: '',
       moderationInformation: '',
-      administrator: ''
+      administrator: '',
+      hardwareInformation: ''
     }
 
-    for (const key of [ 'description', 'terms', 'codeOfConduct', 'moderationInformation', 'administrator' ]) {
+    for (const key of Object.keys(html)) {
       html[ key ] = await this.markdownService.textMarkdownToHTML(about.instance[ key ])
     }
 

@@ -13,6 +13,7 @@ export interface CustomConfig {
     administrator: string
     maintenanceLifetime: string
     businessModel: string
+    hardwareInformation: string
 
     languages: string[]
     categories: number[]

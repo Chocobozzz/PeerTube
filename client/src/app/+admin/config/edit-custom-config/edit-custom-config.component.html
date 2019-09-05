@@ -174,6 +174,20 @@
             <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
           </div>
 
+          <div i18n class="inner-form-title">Other information</div>
+
+          <div class="form-group">
+            <label i18n for="instanceHardwareInformation">On what server/hardware the instance runs?</label>
+            <div class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
+
+            <my-markdown-textarea
+              id="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
+              [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
+            ></my-markdown-textarea>
+
+            <div *ngIf="formErrors.instance.hardwareInformation" class="form-error">{{ formErrors.instance.hardwareInformation }}</div>
+          </div>
+
         </ng-container>
       </ng-template>
     </ngb-tab>

@@ -73,10 +73,20 @@
       <div [innerHTML]="html.codeOfConduct"></div>
     </div>
 
-    <div class="block terms" id="terms-section">
+    <div class="block terms">
       <div i18n class="section-title">Terms</div>
 
       <div [innerHTML]="html.terms"></div>
+    </div>
+
+    <div class="middle-title" *ngIf="html.hardwareInformation">
+      Other information
+    </div>
+
+    <div class="block hardware-information">
+      <div i18n class="section-title">Hardware information</div>
+
+      <div [innerHTML]="html.hardwareInformation"></div>
     </div>
   </div>
 
