@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.4.1
+
+### Bug fixes
+
+ * Fix too fast redundancy eviction
+ * Fix broken auto blacklist page
+ * Rename signup steps
+ * Fix menu x overflow
+
+
 ## v1.4.0
 
 **Since v1.3.1**
