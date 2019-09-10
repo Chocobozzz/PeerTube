@@ -303,9 +303,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Job'
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Job'
   '/server/following/{host}':
     delete:
       security:
@@ -2653,19 +2658,21 @@ components:
             - processing
             - error
             - success
-        category:
+        type:
           type: string
-          enum:
-            - transcoding
-            - activitypub-http
-        handlerName:
-          type: string
-        handlerInputData:
+        data:
+          type: object
+        error:
           type: string
         createdAt:
           type: string
-        updatedAt:
+          format: date-time
+        finishedOn:
           type: string
+          format: date-time
+        processedOn:
+          type: string
+          format: date-time
     AddUserResponse:
       properties:
         id:
