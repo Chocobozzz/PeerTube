@@ -344,9 +344,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Follow'
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
   /server/following:
     get:
       tags:
@@ -362,9 +367,14 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Follow'
+                type: object
+                properties:
+                  total:
+                    type: number
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Follow'
     post:
       security:
         - OAuth2:
@@ -2236,6 +2246,8 @@ components:
           type: string
         host:
           type: string
+        hostRedundancyAllowed:
+          type: boolean
         followingCount:
           type: number
         followersCount:
@@ -2645,8 +2657,10 @@ components:
             - accepted
         createdAt:
           type: string
+          format: date-time
         updatedAt:
           type: string
+          format: date-time
     Job:
       properties:
         id:
