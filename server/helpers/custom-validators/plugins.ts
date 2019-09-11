@@ -84,17 +84,65 @@ function isThemeNameValid (name: string) {
 }
 
 function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginType) {
-  return isNpmPluginNameValid(packageJSON.name) &&
-    isPluginDescriptionValid(packageJSON.description) &&
-    isPluginEngineValid(packageJSON.engine) &&
-    isPluginHomepage(packageJSON.homepage) &&
-    exists(packageJSON.author) &&
-    isPluginBugs(packageJSON.bugs) &&
-    (pluginType === PluginType.THEME || isSafePath(packageJSON.library)) &&
-    areStaticDirectoriesValid(packageJSON.staticDirs) &&
-    areCSSPathsValid(packageJSON.css) &&
-    areClientScriptsValid(packageJSON.clientScripts) &&
-    areTranslationPathsValid(packageJSON.translations)
+  let result = true
+  const badFields: string[] = []
+
+  if (!isNpmPluginNameValid(packageJSON.name)) {
+    result = false
+    badFields.push('name')
+  }
+
+  if (!isPluginDescriptionValid(packageJSON.description)) {
+    result = false
+    badFields.push('description')
+  }
+
+  if (!isPluginEngineValid(packageJSON.engine)) {
+    result = false
+    badFields.push('engine')
+  }
+
+  if (!isPluginHomepage(packageJSON.homepage)) {
+    result = false
+    badFields.push('homepage')
+  }
+
+  if (!exists(packageJSON.author)) {
+    result = false
+    badFields.push('author')
+  }
+
+  if (!isPluginBugs(packageJSON.bugs)) {
+    result = false
+    badFields.push('bugs')
+  }
+
+  if (pluginType === PluginType.PLUGIN && !isSafePath(packageJSON.library)) {
+    result = false
+    badFields.push('library')
+  }
+
+  if (!areStaticDirectoriesValid(packageJSON.staticDirs)) {
+    result = false
+    badFields.push('staticDirs')
+  }
+
+  if (!areCSSPathsValid(packageJSON.css)) {
+    result = false
+    badFields.push('css')
+  }
+
+  if (!areClientScriptsValid(packageJSON.clientScripts)) {
+    result = false
+    badFields.push('clientScripts')
+  }
+
+  if (!areTranslationPathsValid(packageJSON.translations)) {
+    result = false
+    badFields.push('translations')
+  }
+
+  return { result, badFields }
 }
 
 function isLibraryCodeValid (library: any) {
