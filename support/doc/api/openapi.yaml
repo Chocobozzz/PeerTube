@@ -311,24 +311,6 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Job'
-  '/server/following/{host}':
-    delete:
-      security:
-        - OAuth2:
-            - admin
-      tags:
-        - Server Following
-      summary: Unfollow a server by hostname
-      parameters:
-        - name: host
-          in: path
-          required: true
-          description: 'The host to unfollow '
-          schema:
-            type: string
-      responses:
-        '201':
-          description: successful operation
   /server/followers:
     get:
       tags:
@@ -352,6 +334,24 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Follow'
+  '/serverfollowers/{nameWithHost}':
+    delete:
+      security:
+        - OAuth2:
+            - admin
+      tags:
+        - Server Following
+      summary: Remove a follower by hostname
+      parameters:
+        - name: nameWithHost
+          in: path
+          required: true
+          description: 'The host to be removed as follower'
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
   /server/following:
     get:
       tags:
@@ -390,6 +390,24 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Follow'
+  '/server/following/{host}':
+    delete:
+      security:
+        - OAuth2:
+            - admin
+      tags:
+        - Server Following
+      summary: Unfollow a server by hostname
+      parameters:
+        - name: host
+          in: path
+          required: true
+          description: 'The host to unfollow '
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
   /users:
     post:
       summary: Creates user
