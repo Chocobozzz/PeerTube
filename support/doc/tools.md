@@ -124,7 +124,7 @@ $ node dist/server/tools/peertube-import-videos.js \
     -u 'PEERTUBE_URL' \
     -U 'PEERTUBE_USER' \
     --password 'PEERTUBE_PASSWORD' \
-    -t 'TARGET_URL'
+    --target-url 'TARGET_URL'
 ```
 
 * `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
