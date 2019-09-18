@@ -69,6 +69,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
   hotkeys: Hotkey[]
 
+  private nextVideoUuid = ''
   private currentTime: number
   private paramsSub: Subscription
   private queryParamsSub: Subscription
@@ -215,6 +216,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
     return this.video.tags
+  }
+
+  onRecomendations(videos: Video[]){
+    if(videos.length>0){
+      this.nextVideoUuid = videos[0].uuid
+    }
   }
 
   onVideoRemoved () {
@@ -470,6 +477,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 
+      if(this.user && this.user.autoPlayNextVideo){
+        this.player.on('ended', (() => this.autoplayNext()))
+      }
+
       this.player.on('timeupdate', () => {
         this.currentTime = Math.floor(this.player.currentTime())
       })
@@ -498,6 +509,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
 
     this.hooks.runAction('action:video-watch.video.loaded', 'video-watch')
+  }
+
+  private autoplayNext () {
+    if(this.nextVideoUuid){
+      this.router.navigate([ '/videos/watch', this.nextVideoUuid ])
+    }
   }
 
   private setRating (nextRating: UserVideoRateType) {

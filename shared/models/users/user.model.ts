@@ -17,6 +17,7 @@ export interface User {
   adminFlags?: UserAdminFlag
 
   autoPlayVideo: boolean
+  autoPlayNextVideo: boolean
   webTorrentEnabled: boolean
   videosHistoryEnabled: boolean
   videoLanguages: string[]

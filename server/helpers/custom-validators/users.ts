@@ -65,6 +65,10 @@ function isUserBlockedValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserAutoPlayNextVideoValid (value: any) {
+  return isBooleanValid(value)
+}
+
 function isNoInstanceConfigWarningModal (value: any) {
   return isBooleanValid(value)
 }
@@ -106,6 +110,7 @@ export {
   isUserNSFWPolicyValid,
   isUserWebTorrentEnabledValid,
   isUserAutoPlayVideoValid,
+  isUserAutoPlayNextVideoValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
   isNoInstanceConfigWarningModal,

@@ -25,6 +25,7 @@ import {
   isNoInstanceConfigWarningModal,
   isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
+  isUserAutoPlayNextVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
@@ -159,6 +160,12 @@ export class UserModel extends Model<UserModel> {
   @Is('UserAutoPlayVideo', value => throwIfNotValid(value, isUserAutoPlayVideoValid, 'auto play video boolean'))
   @Column
   autoPlayVideo: boolean
+
+  @AllowNull(false)
+  @Default(false)
+  @Is('UserAutoPlayNextVideo', value => throwIfNotValid(value, isUserAutoPlayNextVideoValid, 'auto play next video boolean'))
+  @Column
+  autoPlayNextVideo: boolean
 
   @AllowNull(true)
   @Default(null)
@@ -597,6 +604,7 @@ export class UserModel extends Model<UserModel> {
       webTorrentEnabled: this.webTorrentEnabled,
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      autoPlayNextVideo: this.autoPlayNextVideo,
       videoLanguages: this.videoLanguages,
 
       role: this.role,

@@ -175,6 +175,7 @@ async function updateMe (req: express.Request, res: express.Response) {
   if (body.nsfwPolicy !== undefined) user.nsfwPolicy = body.nsfwPolicy
   if (body.webTorrentEnabled !== undefined) user.webTorrentEnabled = body.webTorrentEnabled
   if (body.autoPlayVideo !== undefined) user.autoPlayVideo = body.autoPlayVideo
+  if (body.autoPlayNextVideo !== undefined) user.autoPlayNextVideo = body.autoPlayNextVideo
   if (body.videosHistoryEnabled !== undefined) user.videosHistoryEnabled = body.videosHistoryEnabled
   if (body.videoLanguages !== undefined) user.videoLanguages = body.videoLanguages
   if (body.theme !== undefined) user.theme = body.theme

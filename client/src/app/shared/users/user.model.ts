@@ -16,6 +16,7 @@ export class User implements UserServerModel {
   adminFlags?: UserAdminFlag
 
   autoPlayVideo: boolean
+  autoPlayNextVideo: boolean
   webTorrentEnabled: boolean
   videosHistoryEnabled: boolean
   videoLanguages: string[]
