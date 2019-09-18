@@ -998,7 +998,7 @@ describe('Test multiple servers', function () {
           },
           isLocal,
           duration: 5,
-          commentsEnabled: false,
+          commentsEnabled: true,
           downloadEnabled: true,
           tags: [ ],
           privacy: VideoPrivacy.PUBLIC,
