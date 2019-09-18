@@ -37,6 +37,8 @@
 /scripts/i18n/generate-iso639-target.ts
 
 # Other
+/dump.rdb
+/.theia/
 /profiling/
 /*.zip
 /*.tar.xz
