@@ -47,6 +47,11 @@
       inputName="autoPlayVideo" formControlName="autoPlayVideo"
       i18n-labelText labelText="Automatically plays video"
     ></my-peertube-checkbox>
+
+    <my-peertube-checkbox
+      inputName="autoPlayNextVideo" formControlName="autoPlayNextVideo"
+      i18n-labelText labelText="Automatically starts playing next video"
+    ></my-peertube-checkbox>
   </div>
 
   <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
