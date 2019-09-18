@@ -2,8 +2,8 @@
     [ngClass]="{'subscribe-button': subscribed !== true, 'unsubscribe-button': subscribed === true}">
   <button *ngIf="subscribed === false && isUserLoggedIn()" type="button"
           class="btn btn-sm" role="button"
-          (click)="subscribe()" i18n>
-    <span>
+          (click)="subscribe()">
+    <span i18n>
       Subscribe
     </span>
     <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
@@ -23,7 +23,7 @@
        placement="bottom-right" role="group"
        aria-label="Multiple ways to subscribe to the current channel">
     <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle>
-      <span *ngIf="!isUserLoggedIn()">
+      <span *ngIf="!isUserLoggedIn()" i18n>
         Subscribe
       </span>
       <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
