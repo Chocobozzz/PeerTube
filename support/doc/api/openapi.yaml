@@ -49,10 +49,6 @@ tags:
     description: >
       Each server exposes public information regarding supported videos and
       options.
-  - name: Feeds
-    description: |
-      Feeds of videos and feeds of comments allow to see updates and get them in
-      an aggregator or script of your choice.
   - name: Job
     description: >
       Jobs are long-running tasks enqueued and processed by the instance
@@ -113,9 +109,6 @@ x-tagGroups:
     tags:
       - Config
       - Server Following
-  - name: Notifications
-    tags:
-      - Feeds
   - name: Jobs
     tags:
       - Job
@@ -270,44 +263,6 @@ paths:
       security:
         - OAuth2:
             - admin
-      responses:
-        '200':
-          description: successful operation
-  '/feeds/videos.{format}':
-    get:
-      summary: >-
-        Get the feed of videos for the server, with optional filter by account
-        name or id
-      tags:
-        - Feeds
-      parameters:
-        - name: format
-          in: path
-          required: true
-          description: >-
-            The format expected (xml defaults to RSS 2.0, atom to ATOM 1.0 and
-            json to JSON FEED 1.0
-          schema:
-            type: string
-            enum:
-              - xml
-              - atom
-              - json
-            default: xml
-        - name: accountId
-          in: query
-          required: false
-          description: >-
-            The id of the local account to filter to (beware, users IDs and not
-            actors IDs which will return empty feeds
-          schema:
-            type: number
-        - name: accountName
-          in: query
-          required: false
-          description: The name of the local account to filter to
-          schema:
-            type: string
       responses:
         '200':
           description: successful operation
