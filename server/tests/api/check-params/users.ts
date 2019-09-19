@@ -418,6 +418,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid autoPlayNextVideo attribute', async function () {
+      const fields = {
+        autoPlayNextVideo: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should fail with an invalid videosHistoryEnabled attribute', async function () {
       const fields = {
         videosHistoryEnabled: -1
