@@ -477,10 +477,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 
-      if (this.user && this.user.autoPlayNextVideo) {
-        this.player.on('ended', (() => this.autoplayNext()))
-      }
-
       this.player.on('timeupdate', () => {
         this.currentTime = Math.floor(this.player.currentTime())
       })
@@ -488,6 +484,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.one('ended', () => {
         if (this.playlist) {
           this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+        } else if (this.user && this.user.autoPlayNextVideo) {
+          this.zone.run(() => this.autoplayNext());
         }
       })
 
