@@ -218,8 +218,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.tags
   }
 
-  onRecommendations(videos: Video[]){
-    if(videos.length>0){
+  onRecommendations (videos: Video[]) {
+    if (videos.length > 0) {
       this.nextVideoUuid = videos[0].uuid
     }
   }
@@ -477,7 +477,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 
-      if(this.user && this.user.autoPlayNextVideo){
+      if (this.user && this.user.autoPlayNextVideo) {
         this.player.on('ended', (() => this.autoplayNext()))
       }
 
@@ -512,7 +512,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   private autoplayNext () {
-    if(this.nextVideoUuid){
+    if (this.nextVideoUuid) {
       this.router.navigate([ '/videos/watch', this.nextVideoUuid ])
     }
   }
