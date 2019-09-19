@@ -218,7 +218,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.video.tags
   }
 
-  onRecomendations(videos: Video[]){
+  onRecommendations(videos: Video[]){
     if(videos.length>0){
       this.nextVideoUuid = videos[0].uuid
     }
