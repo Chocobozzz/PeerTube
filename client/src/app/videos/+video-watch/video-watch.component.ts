@@ -35,7 +35,7 @@ import { getStoredTheater } from '../../../assets/player/peertube-player-local-s
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
-import { randomInt } from '@shared/core-utils/miscs/miscs';
+import { randomInt } from '@shared/core-utils/miscs/miscs'
 
 @Component({
   selector: 'my-video-watch',
@@ -222,7 +222,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   onRecommendations (videos: Video[]) {
     if (videos.length > 0) {
       // Pick a random video until the recommendations are improved
-      this.nextVideoUuid = videos[randomInt(0,videos.length-1)].uuid
+      this.nextVideoUuid = videos[randomInt(0,videos.length - 1)].uuid
     }
   }
 
@@ -487,7 +487,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         if (this.playlist) {
           this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         } else if (this.user && this.user.autoPlayNextVideo) {
-          this.zone.run(() => this.autoplayNext());
+          this.zone.run(() => this.autoplayNext())
         }
       })
 
