@@ -103,7 +103,7 @@ export class UserValidatorsService {
         Validators.requiredTrue
       ],
       MESSAGES: {
-        'required': this.i18n('You must to agree with the instance terms in order to registering on it.')
+        'required': this.i18n('You must agree with the instance terms in order to register on it.')
       }
     }
 
