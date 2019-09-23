@@ -48,7 +48,7 @@ export {
 
 async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow = false) {
   if (fromActor.id === targetActor.id) {
-    throw new Error('Follower is the same than target actor.')
+    throw new Error('Follower is the same as target actor.')
   }
 
   // Same server, direct accept

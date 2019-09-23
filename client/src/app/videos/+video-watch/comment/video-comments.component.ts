@@ -158,7 +158,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     if (commentToDelete.isLocal) {
-      message += this.i18n(' The deletion will be sent to remote instances so they remove the comment too.')
+      message += this.i18n(' The deletion will be sent to remote instances, so they remove the comment too.')
     } else {
       message += this.i18n(' It is a remote comment, so the deletion will only be effective on your instance.')
     }
