@@ -36,6 +36,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       nsfwPolicy: null,
       webTorrentEnabled: null,
       autoPlayVideo: null,
+      autoPlayNextVideo: null,
       videoLanguages: null
     })
 
@@ -57,6 +58,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
         nsfwPolicy: this.user.nsfwPolicy,
         webTorrentEnabled: this.user.webTorrentEnabled,
         autoPlayVideo: this.user.autoPlayVideo === true,
+        autoPlayNextVideo: this.user.autoPlayNextVideo,
         videoLanguages
       })
     })
@@ -66,6 +68,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
     const nsfwPolicy = this.form.value[ 'nsfwPolicy' ]
     const webTorrentEnabled = this.form.value['webTorrentEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
+    const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
 
     let videoLanguages: string[] = this.form.value['videoLanguages']
     if (Array.isArray(videoLanguages)) {
@@ -84,6 +87,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       nsfwPolicy,
       webTorrentEnabled,
       autoPlayVideo,
+      autoPlayNextVideo,
       videoLanguages
     }
 

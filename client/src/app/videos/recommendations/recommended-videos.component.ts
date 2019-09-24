@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core'
+import { Component, Input, Output, OnChanges, EventEmitter } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Video } from '@app/shared/video/video.model'
 import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
@@ -12,6 +12,7 @@ import { User } from '@app/shared'
 export class RecommendedVideosComponent implements OnChanges {
   @Input() inputRecommendation: RecommendationInfo
   @Input() user: User
+  @Output() gotRecommendations = new EventEmitter<Video[]>()
 
   readonly hasVideos$: Observable<boolean>
   readonly videos$: Observable<Video[]>
@@ -21,6 +22,7 @@ export class RecommendedVideosComponent implements OnChanges {
   ) {
     this.videos$ = this.store.recommendations$
     this.hasVideos$ = this.store.hasRecommendations$
+    this.videos$.subscribe(videos => this.gotRecommendations.emit(videos))
   }
 
   public ngOnChanges (): void {

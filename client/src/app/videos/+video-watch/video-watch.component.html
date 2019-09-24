@@ -199,7 +199,11 @@
       <my-video-comments [video]="video" [user]="user"></my-video-comments>
     </div>
 
-    <my-recommended-videos [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }" [user]="user"></my-recommended-videos>
+    <my-recommended-videos
+        [inputRecommendation]="{ uuid: video.uuid, tags: video.tags }"
+        [user]="user"
+        (gotRecommendations)="onRecommendations($event)"
+    ></my-recommended-videos>
   </div>
 
   <div class="row privacy-concerns" *ngIf="hasAlreadyAcceptedPrivacyConcern === false">
