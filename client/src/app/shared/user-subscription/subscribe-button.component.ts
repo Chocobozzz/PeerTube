@@ -36,6 +36,14 @@ export class SubscribeButtonComponent implements OnInit {
     return this.videoChannel.url
   }
 
+  get rssUri () {
+    const rssFeed = this.videoService
+                      .getVideoChannelFeedUrls(this.videoChannel.id)
+                      .find(i => i.format === FeedFormat.RSS)
+
+    return rssFeed.url
+  }
+
   ngOnInit () {
     if (this.isUserLoggedIn()) {
       this.userSubscriptionService.doesSubscriptionExist(this.channelHandle)
@@ -99,13 +107,5 @@ export class SubscribeButtonComponent implements OnInit {
 
   gotoLogin () {
     this.router.navigate([ '/login' ])
-  }
-
-  rssOpen () {
-    const rssFeed = this.videoService
-                      .getVideoChannelFeedUrls(this.videoChannel.id)
-                      .find(i => i.format === FeedFormat.RSS)
-
-    window.open(rssFeed.url)
   }
 }
