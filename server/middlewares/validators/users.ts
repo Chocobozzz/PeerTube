@@ -4,8 +4,10 @@ import { body, param } from 'express-validator'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import {
-  isNoInstanceConfigWarningModal, isNoWelcomeModal,
+  isNoInstanceConfigWarningModal,
+  isNoWelcomeModal,
   isUserAdminFlagsValid,
+  isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserDescriptionValid,
@@ -223,6 +225,9 @@ const usersUpdateMeValidator = [
   body('noWelcomeModal')
     .optional()
     .custom(v => isNoWelcomeModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
+  body('autoPlayNextVideo')
+    .optional()
+    .custom(v => isUserAutoPlayNextVideoValid(v)).withMessage('Should have a valid autoPlayNextVideo boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
