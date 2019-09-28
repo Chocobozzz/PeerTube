@@ -1,4 +1,5 @@
-FROM node:10-stretch-slim
+# use buster for new enough ffmpeg
+FROM node:10-buster-slim
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
@@ -16,9 +17,8 @@ RUN groupadd -r peertube \
     && useradd -r -g peertube -m peertube
 
 # Install PeerTube
+COPY --chown=peertube:peertube . /app
 WORKDIR /app
-COPY . ./
-RUN chown -R peertube:peertube /app
 
 USER peertube
 
