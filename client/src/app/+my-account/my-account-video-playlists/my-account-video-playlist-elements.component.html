@@ -14,7 +14,7 @@
       class="videos" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()"
       cdkDropList (cdkDropListDropped)="drop($event)" [dataObservable]="onDataSubject.asObservable()"
     >
-      <div class="video" *ngFor="let playlistElement of playlistElements; trackBy: trackByFn" cdkDrag>
+      <div class="video" *ngFor="let playlistElement of playlistElements; trackBy: trackByFn" cdkDrag [cdkDragStartDelay]="getDragStartDelay()">
         <my-video-playlist-element-miniature
           [playlistElement]="playlistElement" [playlist]="playlist" [owned]="true" (elementRemoved)="onElementRemoved($event)"
           [position]="playlistElement.position"
