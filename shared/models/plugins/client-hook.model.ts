@@ -5,6 +5,10 @@ export const clientFilterHookObject = {
   'filter:api.trending-videos.videos.list.params': true,
   'filter:api.trending-videos.videos.list.result': true,
 
+  // Filter params/result of the function that fetch videos of the trending page
+  'filter:api.most-liked-videos.videos.list.params': true,
+  'filter:api.most-liked-videos.videos.list.result': true,
+
   // Filter params/result of the function that fetch videos of the local page
   'filter:api.local-videos.videos.list.params': true,
   'filter:api.local-videos.videos.list.result': true,
