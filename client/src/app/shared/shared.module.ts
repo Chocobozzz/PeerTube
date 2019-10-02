@@ -61,6 +61,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap'
 import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
+import { InstanceStatisticsComponent } from '@app/shared/instance/instance-statistics.component'
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
@@ -157,6 +158,7 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
+    InstanceStatisticsComponent,
     FeatureBooleanComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
@@ -224,6 +226,7 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
+    InstanceStatisticsComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
