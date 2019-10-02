@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
 import { MarkdownIt } from 'markdown-it'
+import { buildVideoLink } from '../../../assets/player/utils'
 import { HtmlRendererService } from '@app/shared/renderer/html-renderer.service'
 
 type MarkdownParsers = {
@@ -90,6 +91,14 @@ export class MarkdownService {
     return html
   }
 
+  async processVideoTimestamps (html: string) {
+    return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
+      const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
+      const url = buildVideoLink({ startTime: t })
+      return `<a href="${url}">${str}</a>`
+    })
+  }
+
   private async createMarkdownIt (config: MarkdownConfig) {
     // FIXME: import('...') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
     const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
@@ -130,7 +139,7 @@ export class MarkdownService {
   private avoidTruncatedTags (html: string) {
     return html.replace(/\*\*?([^*]+)$/, '$1')
       .replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
-      .replace(/\[[^\]]+\]\(([^\)]+)$/m, '$1')
+      .replace(/\[[^\]]+\]?\(?([^\)]+)$/, '$1')
       .replace(/\s?\[[^\]]+\]?[.]{3}<\/p>$/m, '...</p>')
   }
 }
