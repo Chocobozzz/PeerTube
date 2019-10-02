@@ -27,6 +27,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() previewColumn = false
   @Input() truncate: number
   @Input() markdownType: 'text' | 'enhanced' = 'text'
+  @Input() markdownVideo = false
 
   textareaMarginRight = '0'
   flexDirection = 'column'
@@ -89,9 +90,11 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     this.previewHTML = await this.markdownRender(this.content)
   }
 
-  private markdownRender (text: string) {
-    if (this.markdownType === 'text') return this.markdownService.textMarkdownToHTML(text)
+  private async markdownRender (text: string) {
+    const html = this.markdownType === 'text' ?
+      await this.markdownService.textMarkdownToHTML(text) :
+      await this.markdownService.enhancedMarkdownToHTML(text)
 
-    return this.markdownService.enhancedMarkdownToHTML(text)
+    return this.markdownVideo ? this.markdownService.processVideoTimestamps(html) : html
   }
 }
