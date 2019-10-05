@@ -73,6 +73,7 @@ import { UserNotificationsComponent } from '@app/shared/users/user-notifications
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
+import { DateToggleComponent } from '@app/shared/date/date-toggle.component'
 import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { PreviewUploadComponent } from '@app/shared/images/preview-upload.component'
@@ -165,6 +166,7 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
+    DateToggleComponent,
 
     GlobalIconComponent,
     PreviewUploadComponent
@@ -232,6 +234,7 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
+    DateToggleComponent,
 
     GlobalIconComponent,
     PreviewUploadComponent,
