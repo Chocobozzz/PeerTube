@@ -2,6 +2,7 @@
 /node_modules/
 /server/tools/node_modules
 *npm-debug.log
+yarn-error.log
 
 # Testing
 /test1/
@@ -45,3 +46,4 @@
 /*.asc
 /server/tools/import-mediacore.ts
 /docker-volume/
+/init.mp4
