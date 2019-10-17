@@ -20,6 +20,7 @@
     <input
       type="text" id="email" i18n-placeholder placeholder="mail@example.com"
       formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
+      autocomplete="off"
     >
     <div *ngIf="formErrors.email" class="form-error">
       {{ formErrors.email }}
