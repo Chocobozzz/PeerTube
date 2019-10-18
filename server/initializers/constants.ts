@@ -410,7 +410,8 @@ const MIMETYPES = {
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
       'text/vtt': '.vtt',
-      'application/x-subrip': '.srt'
+      'application/x-subrip': '.srt',
+      'text/plain': '.srt'
     }
   },
   TORRENT: {
