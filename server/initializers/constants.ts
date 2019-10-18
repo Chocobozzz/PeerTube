@@ -576,7 +576,7 @@ const REDUNDANCY = {
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 const ASSETS_PATH = {
-  DEFAULT_AUDIO_BACKGROUND: join(root(), 'server', 'assets', 'default-audio-background.jpg')
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg')
 }
 
 // ---------------------------------------------------------------------------
