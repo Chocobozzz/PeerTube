@@ -1,7 +1,14 @@
 import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSERVER } from '../initializers/constants'
-import { join } from 'path'
-import { canDoQuickTranscode, getVideoFileFPS, transcode, TranscodeOptions, TranscodeOptionsType } from '../helpers/ffmpeg-utils'
-import { ensureDir, move, remove, stat } from 'fs-extra'
+import { basename, join } from 'path'
+import {
+  canDoQuickTranscode,
+  getDurationFromVideoFile,
+  getVideoFileFPS,
+  transcode,
+  TranscodeOptions,
+  TranscodeOptionsType
+} from '../helpers/ffmpeg-utils'
+import { copyFile, ensureDir, move, remove, stat } from 'fs-extra'
 import { logger } from '../helpers/logger'
 import { VideoResolution } from '../../shared/models/videos'
 import { VideoFileModel } from '../models/video/video-file'
@@ -97,22 +104,37 @@ async function mergeAudioVideofile (video: MVideoWithFileThumbnail, resolution: 
   const audioInputPath = join(videosDirectory, video.getVideoFilename(video.getOriginalFile()))
   const videoTranscodedPath = join(transcodeDirectory, video.id + '-transcoded' + newExtname)
 
+  // If the user updates the video preview during transcoding
+  const previewPath = video.getPreview().getPath()
+  const tmpPreviewPath = join(CONFIG.STORAGE.TMP_DIR, basename(previewPath))
+  await copyFile(previewPath, tmpPreviewPath)
+
   const transcodeOptions = {
     type: 'merge-audio' as 'merge-audio',
-    inputPath: video.getPreview().getPath(),
+    inputPath: tmpPreviewPath,
     outputPath: videoTranscodedPath,
     audioPath: audioInputPath,
     resolution
   }
 
-  await transcode(transcodeOptions)
+  try {
+    await transcode(transcodeOptions)
 
-  await remove(audioInputPath)
+    await remove(audioInputPath)
+    await remove(tmpPreviewPath)
+  } catch (err) {
+    await remove(tmpPreviewPath)
+    throw err
+  }
 
   // Important to do this before getVideoFilename() to take in account the new file extension
   inputVideoFile.extname = newExtname
 
   const videoOutputPath = video.getVideoFilePath(inputVideoFile)
+  // ffmpeg generated a new video file, so update the video duration
+  // See https://trac.ffmpeg.org/ticket/5456
+  video.duration = await getDurationFromVideoFile(videoTranscodedPath)
+  await video.save()
 
   return onVideoFileTranscoding(video, inputVideoFile, videoTranscodedPath, videoOutputPath)
 }
