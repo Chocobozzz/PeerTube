@@ -1,13 +1,6 @@
-import { resolve } from 'path'
+import { registerTSPaths } from './server/helpers/register-ts-paths'
 
-const tsConfig = require('./tsconfig.json')
-const tsConfigPaths = require('tsconfig-paths')
-
-// Thanks: https://github.com/dividab/tsconfig-paths/issues/75#issuecomment-458936883
-tsConfigPaths.register({
-  baseUrl: resolve(tsConfig.compilerOptions.baseUrl || '', tsConfig.compilerOptions.outDir || ''),
-  paths: tsConfig.compilerOptions.paths
-})
+registerTSPaths()
 
 // FIXME: https://github.com/nodejs/node/pull/16853
 require('tls').DEFAULT_ECDH_CURVE = 'auto'

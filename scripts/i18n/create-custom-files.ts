@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import * as jsToXliff12 from 'xliff/jsToXliff12'
 import { writeFile } from 'fs-extra'
 import { join } from 'path'

@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import { initDatabaseModels } from '../server/initializers'
 import { UserModel } from '../server/models/account/user'

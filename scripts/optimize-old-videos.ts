@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import { VIDEO_TRANSCODING_FPS } from '../server/initializers/constants'
 import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffmpeg-utils'
 import { getMaxBitrate } from '../shared/models/videos'

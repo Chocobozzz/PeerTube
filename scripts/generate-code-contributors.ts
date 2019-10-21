@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import { doRequest } from '../server/helpers/requests'
 import { readFileSync } from 'fs-extra'
 

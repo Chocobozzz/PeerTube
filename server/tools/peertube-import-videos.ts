@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 // FIXME: https://github.com/nodejs/node/pull/16853
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
