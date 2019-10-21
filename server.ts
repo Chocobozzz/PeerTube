@@ -1,12 +1,18 @@
-require('module-alias/register')
+import { resolve } from 'path'
+
+const tsConfig = require('./tsconfig.json')
+const tsConfigPaths = require('tsconfig-paths')
+
+// Thanks: https://github.com/dividab/tsconfig-paths/issues/75#issuecomment-458936883
+tsConfigPaths.register({
+  baseUrl: resolve(tsConfig.compilerOptions.baseUrl || '', tsConfig.compilerOptions.outDir || ''),
+  paths: tsConfig.compilerOptions.paths
+})
 
 // FIXME: https://github.com/nodejs/node/pull/16853
-import { PluginManager } from './server/lib/plugins/plugin-manager'
-
 require('tls').DEFAULT_ECDH_CURVE = 'auto'
 
 import { isTestInstance } from './server/helpers/core-utils'
-
 if (isTestInstance()) {
   require('source-map-support').install()
 }
@@ -121,6 +127,7 @@ import { PeerTubeSocket } from './server/lib/peertube-socket'
 import { updateStreamingPlaylistsInfohashesIfNeeded } from './server/lib/hls'
 import { PluginsCheckScheduler } from './server/lib/schedulers/plugins-check-scheduler'
 import { Hooks } from './server/lib/plugins/hooks'
+import { PluginManager } from './server/lib/plugins/plugin-manager'
 
 // ----------- Command line -----------
 
