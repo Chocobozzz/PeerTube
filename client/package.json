@@ -68,7 +68,7 @@
     "@types/video.js": "^7.2.5",
     "@types/webtorrent": "^0.107.0",
     "angular2-hotkeys": "^2.1.2",
-    "angularx-qrcode": "^1.7.0-beta.5",
+    "angularx-qrcode": "1.6.4",
     "awesome-typescript-loader": "5.2.1",
     "bootstrap": "^4.1.3",
     "buffer": "^5.1.0",
