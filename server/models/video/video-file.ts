@@ -99,7 +99,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
     const options = {
-      type: QueryTypes.SELECT,
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
       bind: { infoHash },
       raw: true
     }

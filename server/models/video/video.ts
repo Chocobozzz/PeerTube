@@ -1608,7 +1608,7 @@ export class VideoModel extends Model<VideoModel> {
     'LIMIT 1'
 
     const options = {
-      type: QueryTypes.SELECT,
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
       bind: { followerActorId, videoId },
       raw: true
     }

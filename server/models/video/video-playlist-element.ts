@@ -181,7 +181,7 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     return VideoPlaylistElementModel.findOne(query)
   }
 
-  static loadById (playlistElementId: number): Bluebird<MVideoPlaylistElement> {
+  static loadById (playlistElementId: number | string): Bluebird<MVideoPlaylistElement> {
     return VideoPlaylistElementModel.findByPk(playlistElementId)
   }
 

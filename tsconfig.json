@@ -14,7 +14,11 @@
       "es2016",
       "es2017"
     ],
-    "typeRoots": [ "node_modules/@types", "server/typings" ],
+    "typeRoots": [
+      "node_modules/sitemap/node_modules/@types",
+      "node_modules/@types",
+      "server/typings"
+    ],
     "baseUrl": "./",
     "paths": {
       "@server/*": [ "server/*" ],

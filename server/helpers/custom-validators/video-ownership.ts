@@ -3,7 +3,8 @@ import { VideoChangeOwnershipModel } from '../../models/video/video-change-owner
 import { MVideoChangeOwnershipFull } from '@server/typings/models/video/video-change-ownership'
 import { MUserId } from '@server/typings/models'
 
-export async function doesChangeVideoOwnershipExist (id: number, res: Response) {
+export async function doesChangeVideoOwnershipExist (idArg: number | string, res: Response) {
+  const id = parseInt(idArg + '', 10)
   const videoChangeOwnership = await VideoChangeOwnershipModel.load(id)
 
   if (!videoChangeOwnership) {

@@ -430,8 +430,6 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   toActivityPubObject (this: MActorAP, name: string) {
-    let activityPubType
-
     let icon = undefined
     if (this.avatarId) {
       const extension = extname(this.Avatar.filename)

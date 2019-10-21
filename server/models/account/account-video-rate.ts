@@ -150,7 +150,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   static loadLocalAndPopulateVideo (
     rateType: VideoRateType,
     accountName: string,
-    videoId: number,
+    videoId: number | string,
     t?: Transaction
   ): Bluebird<MAccountVideoRateAccountVideo> {
     const options: FindOptions = {

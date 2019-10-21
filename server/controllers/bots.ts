@@ -2,7 +2,6 @@ import * as express from 'express'
 import { asyncMiddleware } from '../middlewares'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
 import * as sitemapModule from 'sitemap'
-import { logger } from '../helpers/logger'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { AccountModel } from '../models/account/account'
@@ -39,15 +38,10 @@ async function getSitemap (req: express.Request, res: express.Response) {
     urls: urls
   })
 
-  sitemap.toXML((err, xml) => {
-    if (err) {
-      logger.error('Cannot generate sitemap.', { err })
-      return res.sendStatus(500)
-    }
+  const xml = sitemap.toXML()
 
-    res.header('Content-Type', 'application/xml')
-    res.send(xml)
-  })
+  res.header('Content-Type', 'application/xml')
+  res.send(xml)
 }
 
 async function getSitemapVideoChannelUrls () {

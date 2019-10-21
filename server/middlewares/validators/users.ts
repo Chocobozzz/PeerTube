@@ -448,7 +448,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserIdExist (id: number, res: express.Response) {
+function checkUserIdExist (idArg: number | string, res: express.Response) {
+  const id = parseInt(idArg + '', 10)
   return checkUserExist(() => UserModel.loadById(id), res)
 }
 

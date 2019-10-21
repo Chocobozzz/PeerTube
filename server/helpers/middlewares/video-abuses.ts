@@ -1,7 +1,8 @@
 import { Response } from 'express'
 import { VideoAbuseModel } from '../../models/video/video-abuse'
 
-async function doesVideoAbuseExist (abuseId: number, videoId: number, res: Response) {
+async function doesVideoAbuseExist (abuseIdArg: number | string, videoId: number, res: Response) {
+  const abuseId = parseInt(abuseIdArg + '', 10)
   const videoAbuse = await VideoAbuseModel.loadByIdAndVideoId(abuseId, videoId)
 
   if (videoAbuse === null) {

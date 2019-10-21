@@ -120,7 +120,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function doesVideoCommentThreadExist (id: number, video: MVideoId, res: express.Response) {
+async function doesVideoCommentThreadExist (idArg: number | string, video: MVideoId, res: express.Response) {
+  const id = parseInt(idArg + '', 10)
   const videoComment = await VideoCommentModel.loadById(id)
 
   if (!videoComment) {
@@ -151,7 +152,8 @@ async function doesVideoCommentThreadExist (id: number, video: MVideoId, res: ex
   return true
 }
 
-async function doesVideoCommentExist (id: number, video: MVideoId, res: express.Response) {
+async function doesVideoCommentExist (idArg: number | string, video: MVideoId, res: express.Response) {
+  const id = parseInt(idArg + '', 10)
   const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {

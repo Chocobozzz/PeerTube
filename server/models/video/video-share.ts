@@ -90,7 +90,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
   })
   Video: VideoModel
 
-  static load (actorId: number, videoId: number, t?: Transaction): Bluebird<MVideoShareActor> {
+  static load (actorId: number | string, videoId: number | string, t?: Transaction): Bluebird<MVideoShareActor> {
     return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
       where: {
         actorId,
