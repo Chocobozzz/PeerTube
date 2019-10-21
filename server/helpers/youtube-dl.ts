@@ -1,10 +1,9 @@
-import { truncate } from 'lodash'
 import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers/constants'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { join } from 'path'
-import { root } from './core-utils'
-import { ensureDir, writeFile, remove } from 'fs-extra'
+import { peertubeTruncate, root } from './core-utils'
+import { ensureDir, remove, writeFile } from 'fs-extra'
 import * as request from 'request'
 import { createWriteStream } from 'fs'
 
@@ -212,20 +211,20 @@ function buildVideoInfo (obj: any) {
 }
 
 function titleTruncation (title: string) {
-  return truncate(title, {
-    'length': CONSTRAINTS_FIELDS.VIDEOS.NAME.max,
-    'separator': /,? +/,
-    'omission': ' […]'
+  return peertubeTruncate(title, {
+    length: CONSTRAINTS_FIELDS.VIDEOS.NAME.max,
+    separator: /,? +/,
+    omission: ' […]'
   })
 }
 
 function descriptionTruncation (description: string) {
   if (!description || description.length < CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.min) return undefined
 
-  return truncate(description, {
-    'length': CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max,
-    'separator': /,? +/,
-    'omission': ' […]'
+  return peertubeTruncate(description, {
+    length: CONSTRAINTS_FIELDS.VIDEOS.DESCRIPTION.max,
+    separator: /,? +/,
+    omission: ' […]'
   })
 }
 

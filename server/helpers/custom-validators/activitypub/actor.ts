@@ -1,9 +1,9 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { exists, isArray } from '../misc'
-import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { isHostValid } from '../servers'
+import { peertubeTruncate } from '@server/helpers/core-utils'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
   return isActivityPubUrlValid(endpointObject.sharedInbox)
@@ -88,7 +88,7 @@ function normalizeActor (actor: any) {
   }
 
   if (actor.summary && typeof actor.summary === 'string') {
-    actor.summary = truncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
+    actor.summary = peertubeTruncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
 
     if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
       actor.summary = null

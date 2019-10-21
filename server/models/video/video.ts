@@ -1920,7 +1920,7 @@ export class VideoModel extends Model<VideoModel> {
     if (!this.description) return null
 
     const maxLength = CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max
-    return peertubeTruncate(this.description, maxLength)
+    return peertubeTruncate(this.description, { length: maxLength })
   }
 
   getOriginalFileResolution () {
