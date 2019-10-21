@@ -4538,7 +4538,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology.
     </source>
         <target>
-      Une chaîne est une entité dans laquelle vous téléversez vos vidéos. La création de plusieurs d'entre elles vous aide à organiser et séparer votre contenu.&lt;x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/&gt;".
+      Une chaîne est une entité dans laquelle vous téléversez vos vidéos. La création de plusieurs d'entre elles vous aide à organiser et séparer votre contenu.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
       Par exemple, vous pourriez décider d'avoir une chaîne pour publier vos concerts de piano et une autre chaîne pour publier vos vidéos sur l'écologie.</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
