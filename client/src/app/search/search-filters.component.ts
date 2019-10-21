@@ -83,9 +83,9 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.videoCategories = this.serverService.getVideoCategories()
-    this.videoLicences = this.serverService.getVideoLicences()
-    this.videoLanguages = this.serverService.getVideoLanguages()
+    this.serverService.videoCategoriesLoaded.subscribe(() => this.videoCategories = this.serverService.getVideoCategories())
+    this.serverService.videoLicencesLoaded.subscribe(() => this.videoLicences = this.serverService.getVideoLicences())
+    this.serverService.videoLanguagesLoaded.subscribe(() => this.videoLanguages = this.serverService.getVideoLanguages())
 
     this.loadFromDurationRange()
     this.loadFromPublishedRange()
