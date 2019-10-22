@@ -2,7 +2,7 @@
 
 set -eu
 
-for i in 1 2 3; do
+for i in $(seq 1 20); do
     # Angular does not like when there is not target element, so we create it with the same content than the source element
     perl -0pi -e 's#<source>([^<]+)</source>\s*<context-group #<source>\1</source><target>\1</target><context-group #g' client/src/locale/target/angular_*.xml
 
