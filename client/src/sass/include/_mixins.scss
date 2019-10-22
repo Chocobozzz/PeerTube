@@ -345,7 +345,7 @@
     width: 18px;
     min-width: 18px;
     height: 18px;
-    border: $border-width solid var(--mainForegroundColor);
+    border: $border-width solid $fg-color;
     border-radius: 3px;
     vertical-align: middle;
     cursor: pointer;
@@ -359,14 +359,14 @@
       height: 12px;
       opacity: 0;
       transform: rotate(45deg) scale(0);
-      border-right: 2px solid var(--mainBackgroundColor);
-      border-bottom: 2px solid var(--mainBackgroundColor);
+      border-right: 2px solid $bg-color;
+      border-bottom: 2px solid $bg-color;
     }
   }
 
   &:checked + span {
     border-color: transparent;
-    background: var(--mainColor);
+    background: $orange-color;
     animation: jelly 0.6s ease;
 
     &:after {
