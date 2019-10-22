@@ -7630,5 +7630,12 @@ Sorry, maar die pagina kon niet gevonden worden.
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81">
+        <source>Go to the discover videos page</source>
+        <target>Ga naar de ontdek videos pagina</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file></xliff>

@@ -852,7 +852,7 @@
       </trans-unit>
       <trans-unit id="2350869d835dfca2643c32e0ef1f5e35dc64f64b">
         <source>Default NSFW/sensitive videos policy (can be redefined by the users)</source>
-        <target>Standardpolicy for videor med känsligt eller oförbehållsamt innehåll (kan skrivas om av användarna)</target>
+        <target>Standardpolicy for videor med känsligt eller oförbehållsamt innehåll (kan ändras av användarna)</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -2050,7 +2050,7 @@
               Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
             </source>
         <target>
-              Publicerad <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> – <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar
+              Publicerad för <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> – <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar
             </target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
@@ -2061,7 +2061,7 @@
                 Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
               </source>
         <target>
-                Publicerad <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> – <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar
+                Publicerad för <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> – <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> visningar
               </target>
         <context-group name="null">
           <context context-type="linenumber">53</context>
@@ -7662,6 +7662,13 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       <trans-unit id="1b157e15c434469d91e56d027b78bf69c9983165">
         <source>Videos from your subscriptions</source>
         <target>Videor från dina prenumerationer</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81">
+        <source>Go to the discover videos page</source>
+        <target>Gå till upptäck videor-sidan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

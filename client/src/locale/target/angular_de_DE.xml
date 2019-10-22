@@ -209,6 +209,13 @@
           <context context-type="linenumber">72</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ngb.toast.close-aria">
+        <source>Close</source>
+        <target>Schließen</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
         <target>Du hast keine Benachrichtigungen.</target>
@@ -324,7 +331,7 @@ erstellt
         <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
 
         <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hat dein Video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/> vorgeschlagen<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> hat dein Video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> kommentiert
         <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
       </target>
         <context-group name="null">
@@ -1706,7 +1713,7 @@ Hilf mit PeerTube zu übersetzen!</target>
   Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
 </source>
         <target>
-  Gückwunsch, das Video unter <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> wird importiert. Du kannst bereits Informationen über dieses Video hinzufügen.
+  Glückwunsch, das Video unter <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> wird importiert. Du kannst bereits Informationen über dieses Video hinzufügen.
 </target>
         <context-group name="null">
           <context context-type="linenumber">46</context>
@@ -2317,6 +2324,17 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">15</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="4cad4cde2db81e1b14ebb84196af33c3d23f7322">
+        <source>
+      Plugins/Themes
+    </source>
+        <target>
+      Plugins / Designs
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c">
         <source>
       System
@@ -2596,6 +2614,13 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">40</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="df84781eeb873f037ee688789bde034be9b49074">
+        <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Video-Kontingent <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
         <source>(banned)</source>
         <target>(gebannt)</target>
@@ -2612,7 +2637,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b">
         <source>User's email is verified / User can login without email verification</source>
-        <target>Die E-Mail-Addresse des Nutzers wurde bestätigt / Nutzer kann ohne E-Mail-Bestätigung einloggen</target>
+        <target>Die E-Mail-Adresse des Nutzers wurde bestätigt / Nutzer kann ohne E-Mail-Bestätigung einloggen</target>
         <context-group name="null">
           <context context-type="linenumber">76</context>
         </context-group>
@@ -2817,11 +2842,111 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d204665b42241ca94ecad49df699cc60df43a7b5">
+        <source>Plugins/Themes</source>
+        <target>Plugins / Designs</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="86288c2ac6b43ed195f0bc8bce825a3ab8151b71">
+        <source>Installed</source>
+        <target>Installiert</target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="7e892ba15f2c6c17e83510e273b3e10fc32ea016">
         <source>Search</source>
         <target>Suche</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cb86e649ad2e5cfc86efb2d28c06b1d959f8aa6">
+        <source>Homepage</source>
+        <target>Homepage</target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4962915f14d9b61bdd1b96b81c27e3f9d8910768">
+        <source>Go to the plugin homepage</source>
+        <target>Zur Plugin-Homepage</target>
+        <context-group name="null">
+          <context context-type="linenumber">48</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="121cc5391cd2a5115bc2b3160379ee5b36cd7716">
+        <source>Settings</source>
+        <target>Einstellungen</target>
+        <context-group name="null">
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d">
+        <source>Uninstall</source>
+        <target>Deinstallation</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fcef699ec12dbd6fcf9881d527af2fd775ccfdc7">
+        <source>
+  To load your new installed plugins or themes, refresh the page.
+</source>
+        <target>
+  Um Ihre neu installierten Plugins oder Designs zu laden, aktualisieren Sie die Seite.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fc026bb4b317bf3a6159c364818202f5bb95a4e">
+        <source>Popular</source>
+        <target>Beliebt</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2d336e3fe6d5d0cb687ea6413890930b3d709005">
+        <source>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> for "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </source>
+        <target>
+      <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/> für "&lt;x id="INTERPOLATION_1" equiv-text="{{ search }}"/&gt;"
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="16e81be2315b29492395d99ba53a83e770430494">
+        <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
+        <target>{VAR_PLURAL, plural, =1 {result} andere {results} }</target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207">
+        <source>
+  No results.
+</source>
+        <target>
+  Keine Ergebnisse.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407">
+        <source>
+    This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings.
+  </source>
+        <target>
+    Das <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> hat keine Einstellungen.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
@@ -2994,6 +3119,27 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">13</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522">
+        <source>Theme</source>
+        <target>Theme</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7bb52a3e9e31d9dec02faeadb44935de49e3a33d">
+        <source>Global theme</source>
+        <target>Globales Theme</target>
+        <context-group name="null">
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb">
+        <source>default</source>
+        <target>Standard</target>
+        <context-group name="null">
+          <context context-type="linenumber">96</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>Registrieren</target>
@@ -3152,8 +3298,8 @@ Hilf mit PeerTube zu übersetzen!</target>
         <source>If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.&lt;br /&gt;
         If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.&lt;br /&gt;&lt;br /&gt;
         Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; to see if you instance is whitelisted.</source>
-        <target>Wenn deine Instanz von Twitter zugelassen wird, wird ein Videoplayer den Twitter-Feed auf PeerTube eingebettet.&lt;br /&gt;
-        Wenn die Instanz nicht zugelassen wird, wird ein Karte mit Verknüpfungsbild verwendet, das auf deine PeerTube-Instanz weiterleitet.&lt;br /&gt;&lt;br /&gt;
+        <target>Wenn deine Instanz von Twitter zugelassen wird, wird ein Videoplayer im Twitter-Feed eingebettet, wenn du ein PeerTube Video teilst.&lt;br /&gt;
+        Wenn die Instanz nicht zugelassen wird, wird eine Karte mit Verknüpfungsbild verwendet, das auf deine PeerTube-Instanz weiterleitet.&lt;br /&gt;&lt;br /&gt;
         Wähle dieses Formularfeld aus, speichere die Einstellungen und überprüfe das mit einer Video-URL deiner Instanz (https://example.com/videos/watch/blabla) mit &lt;a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'&gt;https://cards-dev.twitter.com/validator&lt;/a&gt; um festzustellen, ob deine Instanz zugelassen ist.</target>
         <context-group name="null">
           <context context-type="linenumber">270</context>
@@ -3210,7 +3356,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="850dc37b31a1b3e8c8ea55d55570f93d39818e33">
         <source>Allow your users to upload audio files that will be merged with the preview file on upload</source>
-        <target>Ermöglicht deinen Benutzern das Hochladen von Audiodateien die mit der Vorschaudatei beim Hochladen zusammengeführt werden.</target>
+        <target>Ermöglicht deinen Benutzern das Hochladen von Audiodateien, die mit der Vorschaudatei beim Hochladen zusammengeführt werden.</target>
         <context-group name="null">
           <context context-type="linenumber">310</context>
         </context-group>
@@ -3363,6 +3509,13 @@ Hilf mit PeerTube zu übersetzen!</target>
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="88a7dfa6fac89d61c28552598a23ba4ce9abe8ca">
+        <source>Interface</source>
+        <target>Schnittstelle</target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
         <source>Danger zone</source>
         <target>Gefahrenzone</target>
@@ -3495,6 +3648,20 @@ Hilf mit PeerTube zu übersetzen!</target>
         <target>E-Mail ändern</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808">
+        <source>instance default</source>
+        <target>Instanz-Standard</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aad0303b66062ca5fb031b72df15b2cbce6e35d">
+        <source>peertube default</source>
+        <target>Peertube Standard</target>
+        <context-group name="null">
+          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc22fcebf6aaa76196d2def33a827a34bf910bf">
@@ -4497,6 +4664,13 @@ Erstelle mein Konto</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4">
+        <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
+        <target>Veröffentlichte <x id="INTERPOLATION" equiv-text="{{total}}"/> Videos</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="056a9a97eb47882159d3cf5bd8a9fc2cfe9371bf">
         <source>Username copied</source>
         <target>Benutzername kopiert</target>
@@ -4861,6 +5035,111 @@ Erstelle mein Konto</target>
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523">
+        <source>You don't have plugins installed yet.</source>
+        <target>Du hast noch keine Plugins installiert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f">
+        <source>You don't have themes installed yet.</source>
+        <target>Du hast noch keine Designs installiert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9">
+        <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
+        <target>Aktualisieren auf <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702">
+        <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Möchten Sie wirklich <x id="INTERPOLATION" equiv-text="{{pluginName}}"/> deinstallieren?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="61136b14ca13f166ecc9ee7b05bb6fe865f10144">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> deinstalliert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d352fa8f51305c18ab8f882b37c4fdaab6f2371b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> aktualisiert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d">
+        <source>The plugin index is not available. Please retry later.</source>
+        <target>Das Plugin-Index ist nicht verfügbar. Bitte versuchen Sie es später noch einmal.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0">
+        <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
+        <target>Bitte installieren Sie nur Plugins oder Designs, denen Sie vertrauen, da sie jeden Code auf Ihrer Instanz ausführen können.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b">
+        <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
+        <target>Installiere <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b">
+        <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> Installiert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12">
+        <source>Settings updated.</source>
+        <target>Einstellungen aktualisiert.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50">
+        <source>Plugins</source>
+        <target>Plugins</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf">
+        <source>Themes</source>
+        <target>Designs</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e72b0e32070d4a69221ef64d793fe7d61381a819">
+        <source>plugin</source>
+        <target>Plugin</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0f6f5bc1d9e83b758dd60bc6dc7aad7d2cb7f600">
+        <source>theme</source>
+        <target>Designs</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f">
         <source>Last week</source>
         <target>Letzte Woche</target>
@@ -4940,7 +5219,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="9f0d12f959768275edb5fd71001a41e17d5d7548">
         <source>An email asking for password reset has been sent to <x id="INTERPOLATION" equiv-text="{{username}}"/>.</source>
-        <target>Eine E-Mail, die zum Zurücksetzen des Kennworts auffordert wurde an <x id="INTERPOLATION" equiv-text="{{username}}"/> gesendet.</target>
+        <target>Eine E-Mail, die zum Zurücksetzen des Kennworts auffordert, wurde an <x id="INTERPOLATION" equiv-text="{{username}}"/> gesendet.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -4989,7 +5268,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="9de914fe915cc730efc57e81c987188a24d3ac51">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target>Wenn du diesen Benutzer löschst, kannst du keine neuen Benutzer mit gleichem Benutzernamen einrichten !</target>
+        <target>Wenn du diesen Benutzer löschst, kannst du keine neuen Benutzer mit gleichem Benutzernamen einrichten!</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5073,7 +5352,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="3a8f29caac7ce9400d11a7c4f8b71a710865f56b">
         <source>Please check your emails to verify your new email.</source>
-        <target>Bitte prüfe dein E-Mail-Postfach um deine neue E-Mailadresse zu bestätigen.</target>
+        <target>Bitte prüfe dein E-Mail-Postfach, um deine neue E-Mail-Adresse zu bestätigen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5123,6 +5402,13 @@ Erstelle mein Konto</target>
       <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7">
         <source>Your account is deleted.</source>
         <target>Dein Konto ist gelöscht.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="59f77c7dc03357ef1d7a334df06dfc7f31c9a165">
+        <source>Interface settings updated.</source>
+        <target>Schnittstelleneinstellungen aktualisiert.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5423,7 +5709,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="e58f5785ae64f23cd6a5e010b045511853ed84fa">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target>Bitte prüfe jetzt dein E-Mail-Postfach um dein Konto zu bestätigen und die Registrierung abzuschließen.</target>
+        <target>Bitte prüfe jetzt dein E-Mail-Postfach, um dein Konto zu bestätigen und die Registrierung abzuschließen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -6321,7 +6607,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="ce28a9403c2d7e5da2e59af27118f8b6d109e906">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target>Die Beschreibung des Videos darf nicht nicht mehr als 10000 Zeichen umfassen.</target>
+        <target>Die Beschreibung des Videos darf nicht mehr als 10000 Zeichen umfassen.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -6356,7 +6642,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
         <source>A date is required to schedule video update.</source>
-        <target>Bitte gib ein ein Datum für die geplante Veröffentlichung ein.</target>
+        <target>Bitte gib ein Datum für die geplante Veröffentlichung ein.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7372,6 +7658,13 @@ Erstelle mein Konto</target>
       <trans-unit id="1b157e15c434469d91e56d027b78bf69c9983165">
         <source>Videos from your subscriptions</source>
         <target>Videos aus deinen Abos</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81">
+        <source>Go to the discover videos page</source>
+        <target>Gehe zu "Entdecken"</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

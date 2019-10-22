@@ -139,6 +139,14 @@
         <source>Failed</source>
         <target>Fallou</target>
       </trans-unit>
+      <trans-unit id="Regular">
+        <source>Regular</source>
+        <target>Regular</target>
+      </trans-unit>
+      <trans-unit id="Watch later">
+        <source>Watch later</source>
+        <target>Ver máis tarde</target>
+      </trans-unit>
       <trans-unit id="This video does not exist.">
         <source>This video does not exist.</source>
         <target>Este vídeo non existe</target>
