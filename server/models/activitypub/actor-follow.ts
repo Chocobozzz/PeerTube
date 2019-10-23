@@ -574,8 +574,8 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const selections: string[] = []
-    if (distinct === true) selections.push('DISTINCT("Follows"."' + columnUrl + '") AS "selectionUrl"')
-    else selections.push('"Follows"."' + columnUrl + '" AS "selectionUrl"')
+    if (distinct === true) selections.push(`DISTINCT("Follows"."${columnUrl}") AS "selectionUrl"`)
+    else selections.push(`"Follows"."${columnUrl}" AS "selectionUrl"`)
 
     selections.push('COUNT(*) AS "total"')
 
@@ -585,7 +585,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +
         'INNER JOIN "actorFollow" ON "actorFollow"."' + firstJoin + '" = "actor"."id" ' +
         'INNER JOIN "actor" AS "Follows" ON "actorFollow"."' + secondJoin + '" = "Follows"."id" ' +
-        'WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = \'accepted\' AND "selectionUrl" IS NOT NULL '
+        `WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = 'accepted' AND "Follows"."${columnUrl}" IS NOT NULL `
 
       if (count !== undefined) query += 'LIMIT ' + count
       if (start !== undefined) query += ' OFFSET ' + start
