@@ -19,7 +19,7 @@ export type MActorUsername = Pick<MActor, 'preferredUsername'>
 
 export type MActorFollowersUrl = Pick<MActor, 'followersUrl'>
 export type MActorAudience = MActorUrl & MActorFollowersUrl
-export type MActorFollowerException = Pick<ActorModel, 'sharedInboxUrl' | 'inboxUrl'>
+export type MActorWithInboxes = Pick<ActorModel, 'sharedInboxUrl' | 'inboxUrl' | 'getSharedInbox'>
 export type MActorSignature = MActorAccountChannelId
 
 export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>

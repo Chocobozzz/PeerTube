@@ -44,7 +44,8 @@ import {
   MActorFull,
   MActorHost,
   MActorServer,
-  MActorSummaryFormattable
+  MActorSummaryFormattable,
+  MActorWithInboxes
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 
@@ -179,8 +180,8 @@ export class ActorModel extends Model<ActorModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   outboxUrl: string
 
-  @AllowNull(false)
-  @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url'))
+  @AllowNull(true)
+  @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   sharedInboxUrl: string
 
@@ -400,6 +401,10 @@ export class ActorModel extends Model<ActorModel> {
         id
       }
     })
+  }
+
+  getSharedInbox (this: MActorWithInboxes) {
+    return this.sharedInboxUrl || this.inboxUrl
   }
 
   toFormattedSummaryJSON (this: MActorSummaryFormattable) {

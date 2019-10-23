@@ -574,8 +574,8 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const selections: string[] = []
-    if (distinct === true) selections.push('DISTINCT("Follows"."' + columnUrl + '") AS "url"')
-    else selections.push('"Follows"."' + columnUrl + '" AS "url"')
+    if (distinct === true) selections.push('DISTINCT("Follows"."' + columnUrl + '") AS "selectionUrl"')
+    else selections.push('"Follows"."' + columnUrl + '" AS "selectionUrl"')
 
     selections.push('COUNT(*) AS "total"')
 
@@ -585,7 +585,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +
         'INNER JOIN "actorFollow" ON "actorFollow"."' + firstJoin + '" = "actor"."id" ' +
         'INNER JOIN "actor" AS "Follows" ON "actorFollow"."' + secondJoin + '" = "Follows"."id" ' +
-        'WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = \'accepted\' '
+        'WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = \'accepted\' AND "selectionUrl" IS NOT NULL '
 
       if (count !== undefined) query += 'LIMIT ' + count
       if (start !== undefined) query += ' OFFSET ' + start
@@ -599,7 +599,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const [ followers, [ dataTotal ] ] = await Promise.all(tasks)
-    const urls: string[] = followers.map(f => f.url)
+    const urls: string[] = followers.map(f => f.selectionUrl)
 
     return {
       data: urls,

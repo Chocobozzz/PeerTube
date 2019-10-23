@@ -71,7 +71,7 @@ async function sendDeleteVideoComment (videoComment: MCommentOwnerVideoReply, t:
   if (isVideoOrigin) return broadcastToFollowers(activity, byActor, actorsInvolvedInComment, t, actorsException)
 
   // Send to origin
-  t.afterCommit(() => unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.sharedInboxUrl))
+  t.afterCommit(() => unicastTo(activity, byActor, videoComment.Video.VideoChannel.Account.Actor.getSharedInbox()))
 }
 
 async function sendDeleteVideoPlaylist (videoPlaylist: MVideoPlaylistFullSummary, t: Transaction) {

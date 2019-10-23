@@ -163,9 +163,12 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   actorInstance.followingCount = followingCount
   actorInstance.inboxUrl = attributes.inbox
   actorInstance.outboxUrl = attributes.outbox
-  actorInstance.sharedInboxUrl = attributes.endpoints.sharedInbox
   actorInstance.followersUrl = attributes.followers
   actorInstance.followingUrl = attributes.following
+
+  if (attributes.endpoints && attributes.endpoints.sharedInbox) {
+    actorInstance.sharedInboxUrl = attributes.endpoints.sharedInbox
+  }
 }
 
 type AvatarInfo = { name: string, onDisk: boolean, fileUrl: string }
@@ -437,9 +440,12 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
     followingCount: followingCount,
     inboxUrl: actorJSON.inbox,
     outboxUrl: actorJSON.outbox,
-    sharedInboxUrl: actorJSON.endpoints.sharedInbox,
     followersUrl: actorJSON.followers,
-    followingUrl: actorJSON.following
+    followingUrl: actorJSON.following,
+
+    sharedInboxUrl: actorJSON.endpoints && actorJSON.endpoints.sharedInbox
+      ? actorJSON.endpoints.sharedInbox
+      : null,
   })
 
   const avatarInfo = await getAvatarInfoIfExists(actorJSON)

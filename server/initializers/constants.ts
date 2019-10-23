@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 440
+const LAST_MIGRATION_VERSION = 445
 
 // ---------------------------------------------------------------------------
 
@@ -459,7 +459,9 @@ const ACTIVITY_PUB = {
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
   GROUP: 'Group',
   PERSON: 'Person',
-  APPLICATION: 'Application'
+  APPLICATION: 'Application',
+  ORGANIZATION: 'Organization',
+  SERVICE: 'Service'
 }
 
 const HTTP_SIGNATURE = {

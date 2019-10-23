@@ -18,7 +18,7 @@ async function sendVideoAbuse (byActor: MActor, videoAbuse: MVideoAbuseVideo, vi
   const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
   const flagActivity = buildFlagActivity(url, byActor, videoAbuse, audience)
 
-  t.afterCommit(() => unicastTo(flagActivity, byActor, video.VideoChannel.Account.Actor.sharedInboxUrl))
+  t.afterCommit(() => unicastTo(flagActivity, byActor, video.VideoChannel.Account.Actor.getSharedInbox()))
 }
 
 function buildFlagActivity (url: string, byActor: MActor, videoAbuse: MVideoAbuseVideo, audience: ActivityAudience): ActivityFlag {

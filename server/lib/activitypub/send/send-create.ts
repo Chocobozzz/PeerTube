@@ -100,7 +100,7 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, t: Transacti
   if (isOrigin) return broadcastToFollowers(createActivity, byActor, actorsInvolvedInComment, t, actorsException)
 
   // Send to origin
-  t.afterCommit(() => unicastTo(createActivity, byActor, comment.Video.VideoChannel.Account.Actor.sharedInboxUrl))
+  t.afterCommit(() => unicastTo(createActivity, byActor, comment.Video.VideoChannel.Account.Actor.getSharedInbox()))
 }
 
 function buildCreateActivity (url: string, byActor: MActorLight, object: any, audience?: ActivityAudience): ActivityCreate {
