@@ -131,7 +131,7 @@
 
           <div class="form-group">
             <label i18n for="instanceAdministrator">Who is behind the instance?</label>
-            <div class="label-small-info">A single person? A non profit? A company?</div>
+            <div class="label-small-info">A single person? A non-profit? A company?</div>
 
             <my-markdown-textarea
               id="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
@@ -164,7 +164,7 @@
           </div>
 
           <div class="form-group">
-            <label i18n for="instanceBusinessModel">How will you pay the PeerTube instance server?</label>
+            <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label>
             <div class="label-small-info">With you own funds? With users donations? Advertising?</div>
 
             <textarea
@@ -177,7 +177,7 @@
           <div i18n class="inner-form-title">Other information</div>
 
           <div class="form-group">
-            <label i18n for="instanceHardwareInformation">On what server/hardware the instance runs?</label>
+            <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
             <div class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
 
             <my-markdown-textarea
@@ -216,10 +216,10 @@
           <label i18n for="instanceDefaultClientRoute">Default client route</label>
           <div class="peertube-select-container">
             <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">
-              <option i18n value="/videos/overview">Videos Discover</option>
-              <option i18n value="/videos/trending">Videos Trending</option>
-              <option i18n value="/videos/most-liked">Most Liked Videos</option>
-              <option i18n value="/videos/recently-added">Videos Recently Added</option>
+              <option i18n value="/videos/overview">Discover videos</option>
+              <option i18n value="/videos/trending">Trending videos</option>
+              <option i18n value="/videos/most-liked">Most liked videos</option>
+              <option i18n value="/videos/recently-added">Recently added videos</option>
               <option i18n value="/videos/local">Local videos</option>
             </select>
           </div>
@@ -258,7 +258,7 @@
 
         <ng-container formGroupName="user">
           <div class="form-group">
-            <label i18n for="userVideoQuota">User default video quota</label>
+            <label i18n for="userVideoQuota">Default video quota per user</label>
             <div class="peertube-select-container">
               <select id="userVideoQuota" formControlName="videoQuota">
                 <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
@@ -270,7 +270,7 @@
           </div>
 
           <div class="form-group">
-            <label i18n for="userVideoQuotaDaily">User default daily upload limit</label>
+            <label i18n for="userVideoQuotaDaily">Default daily upload limit per user</label>
             <div class="peertube-select-container">
               <select id="userVideoQuotaDaily" formControlName="videoQuotaDaily">
                 <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
@@ -475,7 +475,7 @@
                 i18n-labelText labelText="Allow additional extensions"
               >
                 <ng-template ptTemplate="help">
-                  <ng-container i18n>Allow your users to upload .mkv, .mov, .avi, .flv videos</ng-container>
+                  <ng-container i18n>Allow your users to upload .mkv, .mov, .avi and .flv videos</ng-container>
                 </ng-template>
               </my-peertube-checkbox>
             </div>
@@ -554,7 +554,7 @@
               <my-help>
                 <ng-template ptTemplate="customHtml">
                   <ng-container i18n>
-                    Write directly JavaScript code.<br />Example: <pre>console.log('my instance is amazing');</pre>
+                    Write JavaScript code directly.<br />Example: <pre>console.log('my instance is amazing');</pre>
                   </ng-container>
                 </ng-template>
               </my-help>
@@ -573,7 +573,7 @@
               <my-help>
                 <ng-template ptTemplate="customHtml">
                   <ng-container i18n>
-                    Write directly CSS code. Example:<br /><br />
+                    Write CSS code directly. Example:<br /><br />
 <pre>
 #custom-css {{ '{' }}
   color: red;
@@ -604,5 +604,5 @@
   </ngb-tabset>
 
   <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid">
-  <span class="form-error" i18n *ngIf="!form.valid">It seems the configuration is invalid. Please search potential errors in the different tabs.</span>
+  <span class="form-error" i18n *ngIf="!form.valid">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</span>
 </form>
