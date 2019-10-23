@@ -111,7 +111,7 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
    * @returns {null|number} Null for no delay, or a number in milliseconds.
    */
   getDragStartDelay (): null | number {
-    if (this.screenService.isInSmallView()) {
+    if (this.screenService.isInTouchScreen()) {
       return 500
     }
 
