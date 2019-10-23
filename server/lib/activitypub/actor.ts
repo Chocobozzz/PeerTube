@@ -445,7 +445,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
 
     sharedInboxUrl: actorJSON.endpoints && actorJSON.endpoints.sharedInbox
       ? actorJSON.endpoints.sharedInbox
-      : null,
+      : null
   })
 
   const avatarInfo = await getAvatarInfoIfExists(actorJSON)
