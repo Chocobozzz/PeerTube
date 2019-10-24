@@ -157,25 +157,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ade81bccd385c84f16f0e3862c1da3106bc3914b">
-        <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>new video<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </source>
-        <target>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> je objavil/a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>nov videoposnetek<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715">
         <source>
         <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
@@ -358,7 +339,7 @@
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
         <target>Izbriši iz <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
         <context-group name="null">
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -393,28 +374,7 @@
         <source>Get help</source>
         <target>Najdi pomoč</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="450025269732888db1f04cfe6033843110ab65ee">
-        <source>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Subscribe
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </source>
-        <target>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Naroči se
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="60251958d9e05c8cc00abf9645bb0026ebbe4dc3">
@@ -445,11 +405,18 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="319933e1af77ca2e35b75a5e9270a3c90e83dd4b">
-        <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.</source>
-        <target>Na kanal se lahko naročite is katerega koli Fediverse strežnika, ki uporablja ActivityPub. V Mastodonu in Pleromi se lahko na primer naročite tako, da v iskalnik vtipkate URL kanala.</target>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>Uvozi</target>
         <context-group name="null">
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">286</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>Lokalno</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
@@ -509,7 +476,7 @@
         <source>I forgot my password</source>
         <target>Pozabil sem svoje geslo</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -523,7 +490,7 @@
         <source>Forgot your password</source>
         <target>Ste pozabili geslo?</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -544,7 +511,7 @@
         <source>Send me an email to reset my password</source>
         <target>Pošlji me e-sporočilo za ponastavitev gesla</target>
         <context-group name="null">
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -642,13 +609,6 @@
         <source>Recently added</source>
         <target>Nedavno dodano</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
-        <source>Local</source>
-        <target>Lokalno</target>
-        <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
@@ -656,21 +616,21 @@
         <source>More</source>
         <target>Več</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>Administracija</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4752e5e33da1c3396d3248eb8fef59bca5d00cb3">
         <source>Show keyboard shortcuts</source>
         <target>Bljižnjice na tipkovnici</target>
         <context-group name="null">
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
@@ -803,14 +763,14 @@
         <source>Enable download</source>
         <target>Dovoli prenos</target>
         <context-group name="null">
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>Napredne nastavitve</target>
         <context-group name="null">
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
       <trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6">
@@ -818,13 +778,6 @@
         <target>URL</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
-        <source>Import</source>
-        <target>Uvozi</target>
-        <context-group name="null">
-          <context context-type="linenumber">162</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">

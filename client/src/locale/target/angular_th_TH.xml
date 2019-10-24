@@ -227,25 +227,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ade81bccd385c84f16f0e3862c1da3106bc3914b">
-        <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>new video<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </source>
-        <target>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> ได้เผยแพร่<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>วิดีโอใหม่<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="ba93de990947141c5582ce8ccc3c6f74f7fd35a6">
         <source>
         <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
@@ -301,25 +282,6 @@
       </target>
         <context-group name="null">
           <context context-type="linenumber">31</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3442afd9696d6abcd9210b2cb3cdfb969667ca01">
-        <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </source>
-        <target>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          วิดีโอที่เพิ่งเพิ่ม <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ได้ถูก<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>แบล็กลิสต์โดยอัตโนมัติ<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715">
@@ -690,7 +652,7 @@
         <source>Edit starts/stops at</source>
         <target>แก้ไขช่วงเวลาเริ่ม/จบ</target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe">
@@ -704,7 +666,7 @@
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
         <target>ลบออกจาก <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
         <context-group name="null">
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -746,28 +708,7 @@
         <source>Get help</source>
         <target>ขอความช่วยเหลือ</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="450025269732888db1f04cfe6033843110ab65ee">
-        <source>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Subscribe
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </source>
-        <target>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      ติดตาม
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
@@ -836,32 +777,11 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="319933e1af77ca2e35b75a5e9270a3c90e83dd4b">
-        <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.</source>
-        <target>คุณสามารถติดตามช่องผ่านระบบเฟดิเวิร์สใดก็ได้ที่รองรับ ActivityPub เช่น Mastodon หรือ Pleroma โดยคุณสามารถกรอก URL ของช่องในกล่องค้นหาแล้วติดตามจากที่นั่นได้เลย</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2767d5461b6c622ccdeb868df8becf26bc16b99a">
-        <source>You can interact with this via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.</source>
-        <target>คุณสามารถโต้ตอบผ่านระบบเฟดิเวิร์สใดก็ได้ที่รองรับ ActivityPub เช่น Mastodon หรือ Pleroma โดยคุณสามารถกรอก URL ของช่องในกล่องค้นหาแล้วโต้ตอบจากที่นั่นได้เลย</target>
-        <context-group name="null">
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2350869d835dfca2643c32e0ef1f5e35dc64f64b">
-        <source>Default NSFW/sensitive videos policy (can be redefined by the users)</source>
-        <target>นโยบายวิดีโอที่ไม่เหมาะสม (สามารถเปลี่ยนโดยผู้ใช้)</target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>ปริมาณวิดีโอที่สามารถอัพโหลดได้</target>
         <context-group name="null">
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
@@ -872,7 +792,14 @@
           ไม่จำกัด <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> ต่อวัน)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
         </target>
         <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>วิดีโอในเว็บไซต์นี้</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
@@ -993,7 +920,7 @@
         <source>I forgot my password</source>
         <target>ฉันลืมรหัสผ่าน</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -1007,18 +934,7 @@
         <source>Forgot your password</source>
         <target>ลืมรหัสผ่าน</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f876804a6725f7b950c8e4c56ca596206856e6a2">
-        <source>
-      We are sorry, you cannot recover you password because your instance administrator did not configure the PeerTube email system.
-    </source>
-        <target>
-      ขออภัย คุณไม่สามารถกู้คืนรหัสผ่านได้เนื่องจากผู้ดูแลระบบนี้ไม่ได้ตั้งค่าระบบอีเมล PeerTube
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -1039,7 +955,7 @@
         <source>Send me an email to reset my password</source>
         <target>ส่งอีเมลเพื่อรีเซ็ทรหัสผ่าน</target>
         <context-group name="null">
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -1127,7 +1043,7 @@
         <source>Change the language</source>
         <target>เปลี่ยนภาษา</target>
         <context-group name="null">
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28">
@@ -1222,13 +1138,6 @@
         <source>Recently added</source>
         <target>เพิ่งเผยแพร่</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
-        <source>Local</source>
-        <target>วิดีโอในเว็บไซต์นี้</target>
-        <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
@@ -1236,14 +1145,14 @@
         <source>More</source>
         <target>เพิ่มเติม</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>การดูแล</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -1257,7 +1166,7 @@
         <source>Show keyboard shortcuts</source>
         <target>แสดงปุ่มลัดคีย์บอร์ด</target>
         <context-group name="null">
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
@@ -1471,46 +1380,32 @@
           <context context-type="linenumber">191</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="457b1cff4d8d7fad0c8742f69c413ecf5e443851">
-        <source>Tags could be used to suggest relevant recommendations.&lt;/br&gt;Press Enter to add a new tag.</source>
-        <target>แท็กสามารถใช้เพื่อแนะนำวิดีโอที่เกี่ยวข้องได้&lt;/br&gt;กด Enter เพื่อเพิ่มแท็กใหม่</target>
-        <context-group name="null">
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf">
         <source>+ Tag</source>
         <target>+ แท็ก</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
         <source>Enter a new tag</source>
         <target>เพิ่มแท็กใหม่</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
         <source>Description</source>
         <target>คำอธิบาย</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
-        <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target>คำอธิบายของวิดีโอแบบย่อจะถูกแสดงเป็นค่าเริ่มต้น โดยต้องคลิกเพื่อขยายคำอธิบาย</target>
-        <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>ช่อง</target>
         <context-group name="null">
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
@@ -1524,35 +1419,35 @@
         <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
         <target>ตั้งเวลาเผยแพร่ (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>วิดีโอนี้มีเนื้อหาที่รุนแรงหรือไม่เหมาะสม</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
         <target>ระบบอื่น ๆ บางระบบจะไม่แสดงวิดีโอที่มีเนื้อหาที่รุนแรงหรือไม่เหมาะสมเป็นค่าเริ่มต้น</target>
         <context-group name="null">
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
         <target>รอการประมวลผลก่อนที่จะเผยแพร่วิดีโอ</target>
         <context-group name="null">
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
         <target>หากคุณไม่ต้องการรอให้ประมวลผลเสร็จก่อนที่จะเผยแพร่วิดีโอ วิดีโออาจไม่สามารถเล่นได้จนกว่าจะประมวลผลเสร็จสิ้น</target>
         <context-group name="null">
-          <context context-type="linenumber">127</context>
+          <context context-type="linenumber">150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1566,49 +1461,49 @@
         <source>Add another caption</source>
         <target>เพิ่มคำบรรยายอื่น</target>
         <context-group name="null">
-          <context context-type="linenumber">142</context>
+          <context context-type="linenumber">166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
         <source>See the subtitle file</source>
         <target>ดูไฟล์คำบรรยายใต้ภาพ</target>
         <context-group name="null">
-          <context context-type="linenumber">151</context>
+          <context context-type="linenumber">175</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
         <source>Already uploaded	✔</source>
         <target>อัพโหลดแล้ว	✔</target>
         <context-group name="null">
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
         <source>Will be created on update</source>
         <target>จะถูกสร้างตอนอัปเดต</target>
         <context-group name="null">
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>ยกเลิกการสร้าง</target>
         <context-group name="null">
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393">
         <source>Will be deleted on update</source>
         <target>จะถูกลบตอนอัปเดต</target>
         <context-group name="null">
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>ยกเลิกการลบ</target>
         <context-group name="null">
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82f867b2607d45ba36de11d4c8b53d7177122ee0">
@@ -1619,21 +1514,21 @@
             ไม่มีคำบรรยาย
           </target>
         <context-group name="null">
-          <context context-type="linenumber">178</context>
+          <context context-type="linenumber">202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c720e0dd9e6c60095f961cb714f47e8c0090f93">
         <source>Captions</source>
         <target>คำบรรยายเสียง</target>
         <context-group name="null">
-          <context context-type="linenumber">135</context>
+          <context context-type="linenumber">159</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430">
         <source>Video preview</source>
         <target>ตัวอย่างวิดีโอ</target>
         <context-group name="null">
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -1647,14 +1542,14 @@
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <target>ข้อความสั้นเพื่ออธิบายผู้ชมว่าจะสนับสนุนคุณได้อย่างไร (แพลตฟอร์มสมาชิก ฯลฯ)</target>
         <context-group name="null">
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
         <source>Original publication date</source>
         <target>วันที่เผยแพร่ครั้งแรก</target>
         <context-group name="null">
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
@@ -1689,65 +1584,42 @@
         <source>Short description</source>
         <target>คำอธิบายสั้น</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
-        <source>Terms</source>
-        <target>เงื่อนไข</target>
-        <context-group name="null">
           <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="8ae5153c547e445a293ee6ef9adfbf4107aa0772">
-        <source>Dedicated to sensitive or NSFW content</source>
-        <target>มีเนื้อหาที่ไม่เหมาะสมโดยเฉพาะ</target>
-        <context-group name="null">
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="c9a1f510f6a1365c5bc5615661f8505792889347">
-        <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.&lt;br /&gt;&lt;br /&gt;
-              Moreover, the NSFW checkbox on video upload will be automatically checked by default.</source>
-        <target>การเปิดตัวเลือกนี้จะทำให้ผู้ดูแลระบบอื่นทราบว่าคุณมีเนื้อหาที่ไม่เหมาะสมโดยเฉพาะ&lt;br /&gt;&lt;br /&gt;
-              นอกจากนี้ ตัวเลือกวิดีโอไม่เหมาะสมตอนอัพโหลดจะถูกติ๊กโดยอัตโนมัติ</target>
-        <context-group name="null">
-          <context context-type="linenumber">51</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
         <source>Policy on videos containing sensitive content</source>
         <target>นโยบายสำหรับวิดีโอที่มีเนื้อหาที่ไม่เหมาะสม</target>
         <context-group name="null">
-          <context context-type="linenumber">70</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="aa3ef567a1ea22c1e4d0acfdc8f80bc636bf12df">
-        <source>With &lt;strong&gt;Do not list&lt;/strong&gt; or &lt;strong&gt;Blur thumbnails&lt;/strong&gt;, a confirmation will be requested to watch the video.</source>
-        <target>หากตั้งค่าว่า &lt;strong&gt;ห้ามแสดงในรายการ&lt;/strong&gt; หรือ &lt;strong&gt;เบลอภาพขนาดย่อ&lt;/strong&gt; จะมีข้อความเตือนเมื่อรับชมวิดีโอที่ไม่เหมาะสม</target>
-        <context-group name="null">
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
         <source>Do not list</source>
         <target>ห้ามแสดงในรายการ</target>
         <context-group name="null">
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aaa900149c2ca1575ac1918d1ded33fb69830ab2">
         <source>Blur thumbnails</source>
         <target>เบลอภาพขนาดย่อ</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
+        <source>Terms</source>
+        <target>เงื่อนไข</target>
+        <context-group name="null">
+          <context context-type="linenumber">88</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c">
         <source>Contact administrator</source>
         <target>ติดต่อผู้ดูแลระบบ</target>
         <context-group name="null">
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
@@ -1794,40 +1666,14 @@
         <source>P2P &amp; Privacy</source>
         <target>P2P และความเป็นส่วนตัว</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6">
-        <source>
-    PeerTube uses the BitTorrent protocol to share bandwidth between users.
-    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
-  </source>
-        <target>
-    PeerTube ใช้โปรโตคอล BitTorrent เพื่อแชร์แบนด์วิธระหว่างผู้ใช้งาน
-    ซึ่งหมายความว่าที่อยู่ไอพีของคุณจะถูกเก็บอยู่ในแทร็กเกอร์ BitTorrent ของระบบนี้ขณะที่คุณกำลังดาวน์โหลดหรือรับชมวิดีโออยู่
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
         <source>What are the consequences?</source>
         <target>มีข้อเสียอะไรบ้าง?</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a">
-        <source>
-    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
-    In practice, this is much more difficult because:
-  </source>
-        <target>
-    ในทฤษฎี ผู้ที่มีความชำนาญทางเทคนิคที่มากพอสามารถสร้างสคริปต์ที่ติดตามได้ว่าที่อยู่ไอพีแต่ละอันกำลังดาวน์โหลดวิดีโออะไรอยู่บ้าง
-    แต่ในความเป็นจริง สามารถทำได้ยากกว่ามาก เพราะ:
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">27</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
     </body>

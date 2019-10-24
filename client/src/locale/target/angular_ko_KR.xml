@@ -386,7 +386,7 @@
         <source>Edit starts/stops at</source>
         <target>시작 / 종료 지점 수정</target>
         <context-group name="null">
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">48</context>
         </context-group>
       </trans-unit>
       <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe">
@@ -435,7 +435,7 @@
         <source>Get help</source>
         <target>도움말</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
@@ -484,32 +484,11 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="319933e1af77ca2e35b75a5e9270a3c90e83dd4b">
-        <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.</source>
-        <target>이 채널을 AcitivityPub를 지원하는 아무 연합 인스턴스에서 구독할 수 있습니다. 마스토돈이나 플레로마로 예를 들자면 채널 주소를 검색한 뒤 거기에서 바로 구독할 수 있습니다.</target>
-        <context-group name="null">
-          <context context-type="linenumber">17</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2767d5461b6c622ccdeb868df8becf26bc16b99a">
-        <source>You can interact with this via any ActivityPub-capable fediverse instance. For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.</source>
-        <target>이 채널을 AcitivityPub를 지원하는 아무 연합 인스턴스에서 상호작용할 수 있습니다. 마스토돈이나 플레로마로 예를 들자면 채널 주소를 검색한 뒤 거기에서 바로 상호작용할 수 있습니다.</target>
-        <context-group name="null">
-          <context context-type="linenumber">22</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2350869d835dfca2643c32e0ef1f5e35dc64f64b">
-        <source>Default NSFW/sensitive videos policy (can be redefined by the users)</source>
-        <target>기본 NSFW / 민감한 영상 정책 (사용자가 재지정 가능)</target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>영상 업로드 제한</target>
         <context-group name="null">
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
@@ -520,7 +499,14 @@
           무제한<x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(하루에 <x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/>)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
         </target>
         <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>로컬</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
@@ -641,7 +627,7 @@
         <source>I forgot my password</source>
         <target>암호를 잊었습니다</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -655,18 +641,7 @@
         <source>Forgot your password</source>
         <target>암호 잊음</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f876804a6725f7b950c8e4c56ca596206856e6a2">
-        <source>
-      We are sorry, you cannot recover you password because your instance administrator did not configure the PeerTube email system.
-    </source>
-        <target>
-      죄송합니다. 인스턴스 관리자가 PeerTube에 이메일 시스템을 설정하지 않아서 암호를 찾을 수 없습니다.
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -687,7 +662,7 @@
         <source>Send me an email to reset my password</source>
         <target>암호 재설정 이메일 보내기</target>
         <context-group name="null">
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -751,7 +726,7 @@
         <source>Change the language</source>
         <target>언어 변경</target>
         <context-group name="null">
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28">
@@ -846,13 +821,6 @@
         <source>Recently added</source>
         <target>최근 추가됨</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
-        <source>Local</source>
-        <target>로컬</target>
-        <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
@@ -860,14 +828,14 @@
         <source>More</source>
         <target>더 보기</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>관리</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -881,7 +849,7 @@
         <source>Show keyboard shortcuts</source>
         <target>키보드 단축키 보기</target>
         <context-group name="null">
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
@@ -1085,42 +1053,35 @@
         <source>+ Tag</source>
         <target>+ 태그</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
         <source>Enter a new tag</source>
         <target>새 태그 입력</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
         <source>Description</source>
         <target>설명</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
-        <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target>영상 설명은 기본적으로 줄어든 채로 보이고, 자세히 보려면 직접 클릭해야 합니다.</target>
-        <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>채널</target>
         <context-group name="null">
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>이 영상에는 성인 컨텐츠가 포함되어 있습니다.</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
     </body>
