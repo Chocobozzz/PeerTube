@@ -17,6 +17,7 @@ import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const configRouter = express.Router()
 
@@ -47,7 +48,12 @@ configRouter.delete('/custom',
 let serverCommit: string
 
 async function getConfig (req: express.Request, res: express.Response) {
-  const allowed = await isSignupAllowed()
+  const { allowed } = await Hooks.wrapPromiseFun(
+    isSignupAllowed,
+    {},
+    'filter:api.user.signup.allowed.result'
+  )
+
   const allowedForCurrentIP = isSignupAllowedForCurrentIP(req.ip)
   const defaultTheme = getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
 

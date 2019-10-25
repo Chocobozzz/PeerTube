@@ -35,6 +35,8 @@ import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { doesVideoExist } from '../../helpers/middlewares'
 import { UserRole } from '../../../shared/models/users'
 import { MUserDefault } from '@server/typings/models'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { isLocalVideoAccepted } from '@server/lib/moderation'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -280,10 +282,19 @@ const usersVideoRatingValidator = [
 
 const ensureUserRegistrationAllowed = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const allowed = await isSignupAllowed()
-    if (allowed === false) {
+    const allowedParams = {
+      body: req.body
+    }
+
+    const allowedResult = await Hooks.wrapPromiseFun(
+      isSignupAllowed,
+      allowedParams,
+      'filter:api.user.signup.allowed.result'
+    )
+
+    if (allowedResult.allowed === false) {
       return res.status(403)
-                .json({ error: 'User registration is not enabled or user limit is reached.' })
+                .json({ error: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.' })
     }
 
     return next()

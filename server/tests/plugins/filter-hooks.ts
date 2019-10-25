@@ -28,11 +28,12 @@ import {
   getVideoWithToken,
   setDefaultVideoChannel,
   waitJobs,
-  doubleFollow
+  doubleFollow, getConfig, registerUser
 } from '../../../shared/extra-utils'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 import { VideoDetails } from '../../../shared/models/videos'
 import { getYoutubeVideoUrl, importVideo } from '../../../shared/extra-utils/videos/video-imports'
+import { ServerConfig } from '@shared/models'
 
 const expect = chai.expect
 
@@ -184,6 +185,24 @@ describe('Test plugin filter hooks', function () {
       await waitJobs(servers)
 
       await checkIsBlacklisted(res, true)
+    })
+  })
+
+  describe('Should run filter:api.user.signup.allowed.result', function () {
+
+    it('Should run on config endpoint', async function () {
+      const res = await getConfig(servers[0].url)
+      expect((res.body as ServerConfig).signup.allowed).to.be.true
+    })
+
+    it('Should allow a signup', async function () {
+      await registerUser(servers[0].url, 'john', 'password')
+    })
+
+    it('Should not allow a signup', async function () {
+      const res = await registerUser(servers[0].url, 'jma', 'password', 403)
+
+      expect(res.body.error).to.equal('No jma')
     })
   })
 
