@@ -1,9 +1,12 @@
-<div *ngIf="hasVideos$ | async" class="other-videos">
+<div class="other-videos">
+  <ng-container *ngIf="hasVideos$ | async">
     <div i18n class="title-page title-page-single">
-        Other videos
+      Other videos
     </div>
 
     <div *ngFor="let video of (videos$ | async)">
-        <my-video-miniature [video]="video" [user]="user" (videoBlacklisted)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()"></my-video-miniature>
+      <my-video-miniature [video]="video" [user]="user" (videoBlacklisted)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()">
+      </my-video-miniature>
     </div>
+  </ng-container>
 </div>
