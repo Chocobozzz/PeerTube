@@ -71,6 +71,9 @@ export class AppComponent implements OnInit {
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
 
+    this.loadPlugins()
+    this.themeService.initialize()
+
     this.authService.loadClientCredentials()
 
     if (this.isUserLoggedIn()) {
@@ -85,9 +88,6 @@ export class AppComponent implements OnInit {
     this.serverService.loadVideoLicences()
     this.serverService.loadVideoPrivacies()
     this.serverService.loadVideoPlaylistPrivacies()
-
-    this.loadPlugins()
-    this.themeService.initialize()
 
     // Do not display menu on small screens
     if (this.screenService.isInSmallView()) {
