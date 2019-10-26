@@ -241,7 +241,21 @@
         <source>Get help</source>
         <target>کمک گرفتن</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>وارد‌کردن</target>
+        <context-group name="null">
+          <context context-type="linenumber">286</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>محلی</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
@@ -298,7 +312,7 @@
         <source>I forgot my password</source>
         <target>گذرواژه‌ام را فراموش کرده‌ام</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -312,7 +326,7 @@
         <source>Forgot your password</source>
         <target>گذرواژه‌تان را فراموش کرده‌اید</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -333,7 +347,7 @@
         <source>Send me an email to reset my password</source>
         <target>یک رایانامه برای بازنشانی گذرواژه برای من بفرست</target>
         <context-group name="null">
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -383,7 +397,7 @@
         <source>Change the language</source>
         <target>تغییر زبان</target>
         <context-group name="null">
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d207cc1965ec0c29e594e0e9917f39bfc276ed87">
@@ -418,13 +432,6 @@
         <source>Recently added</source>
         <target>به تازگی اضافه شده</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
-        <source>Local</source>
-        <target>محلی</target>
-        <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
@@ -432,14 +439,14 @@
         <source>More</source>
         <target>دیگر</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>مدیریت</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -530,14 +537,7 @@
         <source>Description</source>
         <target>توضیحات</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
-        <source>Import</source>
-        <target>وارد‌کردن</target>
-        <context-group name="null">
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -640,74 +640,67 @@
           <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3fae5a310387c065757fde11f22689b45a7b6f2d">
-        <source>Videos Overview</source>
-        <target>نمای‌کلی ویدئو‌ها</target>
+      <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e">
+        <source>Display</source>
+        <target>نمایش</target>
         <context-group name="null">
-          <context context-type="linenumber">60</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>ویدئو‌های محلی</target>
         <context-group name="null">
-          <context context-type="linenumber">63</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="010d24ef3c43b2d8f45a4d6cba7d73e12ee1557e">
-        <source>Display</source>
-        <target>نمایش</target>
-        <context-group name="null">
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>ثبت‌نام</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
         <source>Signup enabled</source>
         <target>ثبت‌نام فعال است</target>
         <context-group name="null">
-          <context context-type="linenumber">111</context>
+          <context context-type="linenumber">235</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
         <source>Users</source>
         <target>کاربران</target>
         <context-group name="null">
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>مدیر</target>
         <context-group name="null">
-          <context context-type="linenumber">225</context>
+          <context context-type="linenumber">384</context>
         </context-group>
       </trans-unit>
       <trans-unit id="99cb827741e93125476a0f5b676372d85d15b5fc">
         <source>Twitter</source>
         <target>توییتر</target>
         <context-group name="null">
-          <context context-type="linenumber">248</context>
+          <context context-type="linenumber">407</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
         <source>Your Twitter username</source>
         <target>نام‌کاربری توییتر شما</target>
         <context-group name="null">
-          <context context-type="linenumber">254</context>
+          <context context-type="linenumber">413</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>جاوااکسریپت</target>
         <context-group name="null">
-          <context context-type="linenumber">372</context>
+          <context context-type="linenumber">553</context>
         </context-group>
       </trans-unit>
       <trans-unit id="299f97b8ee9c62d45f2cc01961aa1e5101d6d05a">

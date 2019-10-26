@@ -23,10 +23,11 @@
           or create an account on another instance
         </a>
 
-        <my-help
-          *ngIf="signupAllowed === false" helpType="custom" i18n-customHtml
-          customHtml="User registration is not allowed on this instance, but you can register on many others!"
-        ></my-help>
+        <my-help *ngIf="signupAllowed === false">
+          <ng-template ptTemplate="customHtml">
+            <ng-container i18n>User registration is not allowed on this instance, but you can register on many others!</ng-container>
+          </ng-template>
+        </my-help>
       </div>
 
       <div *ngIf="formErrors.username" class="form-error">
@@ -62,7 +63,7 @@
   <div class="modal-body">
 
     <div *ngIf="isEmailDisabled()" class="alert alert-danger" i18n>
-      We are sorry, you cannot recover you password because your instance administrator did not configure the PeerTube email system.
+      We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
     </div>
 
     <div class="form-group" [hidden]="isEmailDisabled()">

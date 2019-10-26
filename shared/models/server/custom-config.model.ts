@@ -6,6 +6,18 @@ export interface CustomConfig {
     shortDescription: string
     description: string
     terms: string
+    codeOfConduct: string
+
+    creationReason: string
+    moderationInformation: string
+    administrator: string
+    maintenanceLifetime: string
+    businessModel: string
+    hardwareInformation: string
+
+    languages: string[]
+    categories: number[]
+
     isNSFW: boolean
     defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
@@ -99,4 +111,16 @@ export interface CustomConfig {
     }
   }
 
+  followings: {
+    instance: {
+      autoFollowBack: {
+        enabled: boolean
+      }
+
+      autoFollowIndex: {
+        enabled: boolean
+        indexUrl: string
+      }
+    }
+  }
 }

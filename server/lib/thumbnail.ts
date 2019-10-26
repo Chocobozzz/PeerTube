@@ -1,20 +1,20 @@
-import { VideoFileModel } from '../models/video/video-file'
 import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
 import { CONFIG } from '../initializers/config'
-import { PREVIEWS_SIZE, THUMBNAILS_SIZE, ASSETS_PATH } from '../initializers/constants'
-import { VideoModel } from '../models/video/video'
+import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
 import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { processImage } from '../helpers/image-utils'
 import { join } from 'path'
 import { downloadImage } from '../helpers/requests'
-import { VideoPlaylistModel } from '../models/video/video-playlist'
+import { MVideoPlaylistThumbnail } from '../typings/models/video/video-playlist'
+import { MVideoFile, MVideoThumbnail } from '../typings/models'
+import { MThumbnail } from '../typings/models/video/thumbnail'
 
 type ImageSize = { height: number, width: number }
 
 function createPlaylistMiniatureFromExisting (
   inputPath: string,
-  playlist: VideoPlaylistModel,
+  playlist: MVideoPlaylistThumbnail,
   automaticallyGenerated: boolean,
   keepOriginal = false,
   size?: ImageSize
@@ -26,7 +26,7 @@ function createPlaylistMiniatureFromExisting (
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
 }
 
-function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: VideoPlaylistModel, size?: ImageSize) {
+function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: MVideoPlaylistThumbnail, size?: ImageSize) {
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromPlaylist(playlist, size)
   const type = ThumbnailType.MINIATURE
 
@@ -34,7 +34,7 @@ function createPlaylistMiniatureFromUrl (fileUrl: string, playlist: VideoPlaylis
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, existingThumbnail, fileUrl })
 }
 
-function createVideoMiniatureFromUrl (fileUrl: string, video: VideoModel, type: ThumbnailType, size?: ImageSize) {
+function createVideoMiniatureFromUrl (fileUrl: string, video: MVideoThumbnail, type: ThumbnailType, size?: ImageSize) {
   const { filename, basePath, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
   const thumbnailCreator = () => downloadImage(fileUrl, basePath, filename, { width, height })
 
@@ -43,7 +43,7 @@ function createVideoMiniatureFromUrl (fileUrl: string, video: VideoModel, type: 
 
 function createVideoMiniatureFromExisting (
   inputPath: string,
-  video: VideoModel,
+  video: MVideoThumbnail,
   type: ThumbnailType,
   automaticallyGenerated: boolean,
   size?: ImageSize
@@ -54,7 +54,7 @@ function createVideoMiniatureFromExisting (
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated, existingThumbnail })
 }
 
-function generateVideoMiniature (video: VideoModel, videoFile: VideoFileModel, type: ThumbnailType) {
+function generateVideoMiniature (video: MVideoThumbnail, videoFile: MVideoFile, type: ThumbnailType) {
   const input = video.getVideoFilePath(videoFile)
 
   const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
@@ -65,7 +65,7 @@ function generateVideoMiniature (video: VideoModel, videoFile: VideoFileModel, t
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated: true, existingThumbnail })
 }
 
-function createPlaceholderThumbnail (fileUrl: string, video: VideoModel, type: ThumbnailType, size: ImageSize) {
+function createPlaceholderThumbnail (fileUrl: string, video: MVideoThumbnail, type: ThumbnailType, size: ImageSize) {
   const { filename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
   const thumbnail = existingThumbnail ? existingThumbnail : new ThumbnailModel()
@@ -90,7 +90,7 @@ export {
   createPlaylistMiniatureFromExisting
 }
 
-function buildMetadataFromPlaylist (playlist: VideoPlaylistModel, size: ImageSize) {
+function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: ImageSize) {
   const filename = playlist.generateThumbnailName()
   const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
@@ -104,7 +104,7 @@ function buildMetadataFromPlaylist (playlist: VideoPlaylistModel, size: ImageSiz
   }
 }
 
-function buildMetadataFromVideo (video: VideoModel, type: ThumbnailType, size?: ImageSize) {
+function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, size?: ImageSize) {
   const existingThumbnail = Array.isArray(video.Thumbnails)
     ? video.Thumbnails.find(t => t.type === type)
     : undefined
@@ -148,7 +148,7 @@ async function createThumbnailFromFunction (parameters: {
   type: ThumbnailType,
   automaticallyGenerated?: boolean,
   fileUrl?: string,
-  existingThumbnail?: ThumbnailModel
+  existingThumbnail?: MThumbnail
 }) {
   const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
 

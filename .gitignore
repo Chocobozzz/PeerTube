@@ -2,6 +2,7 @@
 /node_modules/
 /server/tools/node_modules
 *npm-debug.log
+yarn-error.log
 
 # Testing
 /test1/
@@ -37,9 +38,12 @@
 /scripts/i18n/generate-iso639-target.ts
 
 # Other
+/dump.rdb
+/.theia/
 /profiling/
 /*.zip
 /*.tar.xz
 /*.asc
 /server/tools/import-mediacore.ts
 /docker-volume/
+/init.mp4

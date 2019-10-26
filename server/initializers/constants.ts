@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 420
+const LAST_MIGRATION_VERSION = 445
 
 // ---------------------------------------------------------------------------
 
@@ -168,8 +168,13 @@ const SCHEDULER_INTERVALS_MS = {
   updateVideos: 60000, // 1 minute
   youtubeDLUpdate: 60000 * 60 * 24, // 1 day
   checkPlugins: CONFIG.PLUGINS.INDEX.CHECK_LATEST_VERSIONS_INTERVAL,
+  autoFollowIndexInstances: 60000 * 60 * 24, // 1 day
   removeOldViews: 60000 * 60 * 24, // 1 day
   removeOldHistory: 60000 * 60 * 24 // 1 day
+}
+
+const INSTANCES_INDEX = {
+  HOSTS_PATH: '/api/v1/instances/hosts'
 }
 
 // ---------------------------------------------------------------------------
@@ -405,7 +410,8 @@ const MIMETYPES = {
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
       'text/vtt': '.vtt',
-      'application/x-subrip': '.srt'
+      'application/x-subrip': '.srt',
+      'text/plain': '.srt'
     }
   },
   TORRENT: {
@@ -453,13 +459,16 @@ const ACTIVITY_PUB = {
 const ACTIVITY_PUB_ACTOR_TYPES: { [ id: string ]: ActivityPubActorType } = {
   GROUP: 'Group',
   PERSON: 'Person',
-  APPLICATION: 'Application'
+  APPLICATION: 'Application',
+  ORGANIZATION: 'Organization',
+  SERVICE: 'Service'
 }
 
 const HTTP_SIGNATURE = {
   HEADER_NAME: 'signature',
   ALGORITHM: 'rsa-sha256',
-  HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ]
+  HEADERS_TO_SIGN: [ '(request-target)', 'host', 'date', 'digest' ],
+  CLOCK_SKEW_SECONDS: 1800
 }
 
 // ---------------------------------------------------------------------------
@@ -570,7 +579,7 @@ const REDUNDANCY = {
 const ACCEPT_HEADERS = [ 'html', 'application/json' ].concat(ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS)
 
 const ASSETS_PATH = {
-  DEFAULT_AUDIO_BACKGROUND: join(root(), 'server', 'assets', 'default-audio-background.jpg')
+  DEFAULT_AUDIO_BACKGROUND: join(root(), 'dist', 'server', 'assets', 'default-audio-background.jpg')
 }
 
 // ---------------------------------------------------------------------------
@@ -633,6 +642,7 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.removeOldHistory = 5000
   SCHEDULER_INTERVALS_MS.removeOldViews = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
+  SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
   REPEAT_JOBS[ 'videos-views' ] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
@@ -683,6 +693,7 @@ export {
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
+  INSTANCES_INDEX,
   DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,
   PLUGIN_GLOBAL_CSS_FILE_NAME,

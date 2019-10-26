@@ -1,0 +1,45 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 i18n class="modal-title">Configuration warning!</h4>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+
+    <p i18n>Hello dear administrator. You enabled user registration on your instance but you did not configure the following fields:</p>
+
+    <ul>
+      <li i18n *ngIf="about.instance.name.toLowerCase() === 'peertube'">Instance name</li>
+      <li i18n *ngIf="isDefaultShortDescription(about.instance.shortDescription)">Instance short description</li>
+
+      <li i18n *ngIf="!about.instance.administrator">Who you are</li>
+      <li i18n *ngIf="!about.instance.maintenanceLifetime">How long you plan to maintain your instance</li>
+      <li i18n *ngIf="!about.instance.businessModel">How you plan to pay your instance</li>
+
+      <li i18n *ngIf="!about.instance.moderationInformation">How you will moderate your instance</li>
+      <li i18n *ngIf="!about.instance.terms">Instance terms</li>
+    </ul>
+
+    <p>
+      Please consider to configure these fields to help people to choose <strong>the appropriate instance</strong>.
+      Without them, your instance may not be referenced on <a target="_blank" rel="noopener noreferrer" href="https://joinpeertube.org">JoinPeerTube website</a>.
+    </p>
+
+    <div class="configure-instance">
+      <a i18n href="/admin/config/edit-custom" target="_blank" rel="noopener noreferrer">Configure these fields</a>
+    </div>
+
+  </div>
+
+  <div class="modal-footer inputs">
+    <my-peertube-checkbox
+      inputName="stopDisplayModal" [(ngModel)]="stopDisplayModal"
+      i18n-labelText labelText="Don't show me this warning anymore"
+    >
+
+    </my-peertube-checkbox>
+
+    <span i18n class="action-button action-button-cancel" (click)="hide()">Close</span>
+  </div>
+
+</ng-template>

@@ -1,9 +1,9 @@
 import { Model, Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
-import { OrderItem, literal } from 'sequelize'
+import { col, literal, OrderItem } from 'sequelize'
 
-type SortType = { sortModel: any, sortValue: string }
+type SortType = { sortModel: string, sortValue: string }
 
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
 function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
@@ -51,10 +51,10 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
   return [ firstSort, lastSort ]
 }
 
-function getSortOnModel (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+function getBlacklistSort (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const [ firstSort ] = getSort(value)
 
-  if (model) return [ [ model, firstSort[0], firstSort[1] ], lastSort ]
+  if (model) return [ [ literal(`"${model}.${firstSort[ 0 ]}" ${firstSort[ 1 ]}`) ], lastSort ] as any[] // FIXME: typings
   return [ firstSort, lastSort ]
 }
 
@@ -155,7 +155,7 @@ export {
   buildLocalAccountIdsIn,
   getSort,
   getVideoSort,
-  getSortOnModel,
+  getBlacklistSort,
   createSimilarityAttribute,
   throwIfNotValid,
   buildServerIdsFollowedBy,

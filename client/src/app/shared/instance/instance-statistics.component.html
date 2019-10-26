@@ -1,0 +1,101 @@
+<p i18n *ngIf="null === serverStats">Loading instance statistics...</p>
+
+<section *ngIf="null !== serverStats">
+  <h5 i18n>Local</h5>
+
+  <div class="row">
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalUsers }}</p>
+          <p class="stat-label" i18n>users</p>
+        </div>
+        <i class="glyphicon glyphicon-user icon-bottom"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalLocalVideos }}</p>
+          <p class="stat-label" i18n>videos</p>
+        </div>
+        <i class="glyphicon glyphicon-facetime-video"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalLocalVideoViews }}</p>
+          <p class="stat-label" i18n>video views</p>
+        </div>
+        <i class="glyphicon glyphicon-eye-open"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalLocalVideoComments }}</p>
+          <p class="stat-label" i18n>video comments</p>
+        </div>
+        <i class="glyphicon glyphicon-comment"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalLocalVideoFilesSize | bytes:1 }}</p>
+          <p class="stat-label" i18n>of hosted video</p>
+        </div>
+        <i class="glyphicon glyphicon-hdd"></i>
+      </div>
+    </div>
+  </div>
+
+  <h5 i18n>Federation</h5>
+
+  <div class="row">
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalVideos }}</p>
+          <p class="stat-label" i18n>videos</p>
+        </div>
+        <i class="glyphicon glyphicon-facetime-video"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalVideoComments }}</p>
+          <p class="stat-label" i18n>video comments</p>
+        </div>
+        <i class="glyphicon glyphicon-comment"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalInstanceFollowers }}</p>
+          <p class="stat-label" i18n>followers</p>
+        </div>
+        <i class="glyphicon glyphicon-retweet"></i>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-4 col-xl-3">
+      <div class="card stat">
+        <div class="card-body">
+          <p class="stat-value">{{ serverStats.totalInstanceFollowing }}</p>
+          <p class="stat-label" i18n>following</p>
+        </div>
+        <i class="glyphicon glyphicon-retweet"></i>
+      </div>
+    </div>
+  </div>
+</section>

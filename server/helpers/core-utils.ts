@@ -179,18 +179,15 @@ function buildPath (path: string) {
 }
 
 // Consistent with .length, lodash truncate function is not
-function peertubeTruncate (str: string, maxLength: number) {
-  const options = {
-    length: maxLength
-  }
+function peertubeTruncate (str: string, options: { length: number, separator?: RegExp, omission?: string }) {
   const truncatedStr = truncate(str, options)
 
   // The truncated string is okay, we can return it
-  if (truncatedStr.length <= maxLength) return truncatedStr
+  if (truncatedStr.length <= options.length) return truncatedStr
 
   // Lodash takes into account all UTF characters, whereas String.prototype.length does not: some characters have a length of 2
   // We always use the .length so we need to truncate more if needed
-  options.length -= truncatedStr.length - maxLength
+  options.length -= truncatedStr.length - options.length
   return truncate(str, options)
 }
 

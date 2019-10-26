@@ -43,7 +43,7 @@ export {
 async function generateVideoCommentsFeed (req: express.Request, res: express.Response) {
   const start = 0
 
-  const video = res.locals.video
+  const video = res.locals.videoAll
   const videoId: number = video ? video.id : undefined
 
   const comments = await VideoCommentModel.listForFeed(start, FEEDS.COUNT, videoId)

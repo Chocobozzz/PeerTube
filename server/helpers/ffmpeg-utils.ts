@@ -198,6 +198,7 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
 
   // check video params
   if (videoStream[ 'codec_name' ] !== 'h264') return false
+  if (videoStream[ 'pix_fmt' ] !== 'yuv420p') return false
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
   if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) return false
 

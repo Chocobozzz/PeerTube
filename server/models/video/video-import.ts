@@ -20,6 +20,8 @@ import { isVideoImportStateValid, isVideoImportTargetUrlValid } from '../../help
 import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { UserModel } from '../account/user'
+import * as Bluebird from 'bluebird'
+import { MVideoImportDefault, MVideoImportFormattable } from '@server/typings/models/video/video-import'
 
 @DefaultScope(() => ({
   include: [
@@ -28,7 +30,11 @@ import { UserModel } from '../account/user'
       required: true
     },
     {
-      model: VideoModel.scope([ VideoModelScopeNames.WITH_ACCOUNT_DETAILS, VideoModelScopeNames.WITH_TAGS]),
+      model: VideoModel.scope([
+        VideoModelScopeNames.WITH_ACCOUNT_DETAILS,
+        VideoModelScopeNames.WITH_TAGS,
+        VideoModelScopeNames.WITH_THUMBNAILS
+      ]),
       required: false
     }
   ]
@@ -114,7 +120,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
     return undefined
   }
 
-  static loadAndPopulateVideo (id: number) {
+  static loadAndPopulateVideo (id: number): Bluebird<MVideoImportDefault> {
     return VideoImportModel.findByPk(id)
   }
 
@@ -135,7 +141,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
       }
     }
 
-    return VideoImportModel.findAndCountAll(query)
+    return VideoImportModel.findAndCountAll<MVideoImportDefault>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows,
@@ -148,7 +154,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
     return this.targetUrl || this.magnetUri || this.torrentName
   }
 
-  toFormattedJSON (): VideoImport {
+  toFormattedJSON (this: MVideoImportFormattable): VideoImport {
     const videoFormatOptions = {
       completeDescription: true,
       additionalAttributes: { state: true, waitTranscoding: true, scheduledUpdate: true }

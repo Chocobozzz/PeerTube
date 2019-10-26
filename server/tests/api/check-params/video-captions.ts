@@ -124,22 +124,23 @@ describe('Test video captions API validator', function () {
       })
     })
 
-    it('Should fail with an invalid captionfile extension', async function () {
-      const attaches = {
-        'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.txt')
-      }
-
-      const captionPath = path + videoUUID + '/captions/fr'
-      await makeUploadRequest({
-        method: 'PUT',
-        url: server.url,
-        path: captionPath,
-        token: server.accessToken,
-        fields,
-        attaches,
-        statusCodeExpected: 400
-      })
-    })
+    // We accept any file now
+    // it('Should fail with an invalid captionfile extension', async function () {
+    //   const attaches = {
+    //     'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-bad.txt')
+    //   }
+    //
+    //   const captionPath = path + videoUUID + '/captions/fr'
+    //   await makeUploadRequest({
+    //     method: 'PUT',
+    //     url: server.url,
+    //     path: captionPath,
+    //     token: server.accessToken,
+    //     fields,
+    //     attaches,
+    //     statusCodeExpected: 400
+    //   })
+    // })
 
     // We don't check the extension yet
     // it('Should fail with an invalid captionfile extension and octet-stream mime type', async function () {

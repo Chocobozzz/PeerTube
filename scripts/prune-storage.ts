@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import * as prompt from 'prompt'
 import { join } from 'path'
 import { CONFIG } from '../server/initializers/config'

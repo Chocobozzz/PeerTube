@@ -113,11 +113,10 @@ export class VideoPlaylistService {
   }
 
   addVideoInPlaylist (playlistId: number, body: VideoPlaylistElementCreate) {
-    return this.authHttp.post(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos', body)
-               .pipe(
-                 map(this.restExtractor.extractDataBool),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
+    const url = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + playlistId + '/videos'
+
+    return this.authHttp.post<{ videoPlaylistElement: { id: number } }>(url, body)
+               .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
   updateVideoOfPlaylist (playlistId: number, playlistElementId: number, body: VideoPlaylistElementUpdate) {

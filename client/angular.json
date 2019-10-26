@@ -86,7 +86,8 @@
           "options": {
             "baseHref": "/",
             "deployUrl": "client/",
-            "browserTarget": "PeerTube:build"
+            "browserTarget": "PeerTube:build",
+            "proxyConfig": "proxy.config.json"
           },
           "configurations": {
             "production": {
@@ -96,7 +97,8 @@
               "browserTarget": "PeerTube:build:hmr"
             },
             "e2e": {
-              "browserTarget": "PeerTube:build:e2e"
+              "browserTarget": "PeerTube:build:e2e",
+              "proxyConfig": "e2e/proxy.config.json"
             }
           }
         },

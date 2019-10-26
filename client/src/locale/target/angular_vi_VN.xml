@@ -164,23 +164,61 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ade81bccd385c84f16f0e3862c1da3106bc3914b">
+      <trans-unit id="ba93de990947141c5582ce8ccc3c6f74f7fd35a6">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> của bạn đã được loại khỏi danh sách đen
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7923e220607db3b4039adc2ebf114825f6cc7f0">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blacklisted
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> của bạn đã bị đưa vào danh sách đen
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715">
         <source>
         <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
 
         <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>new video<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> commented your video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
         <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
       </source>
         <target>
         <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
 
         <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> đã xuất bản một <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>video mới<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> đã bình luận về video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/> của bạn <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
         <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
       </target>
         <context-group name="null">
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b74d4c335377af0c83a08987d0d5b28ce11b091b">
@@ -372,6 +410,24 @@
           <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125">
+        <source>Reason...</source>
+        <target>Lí do...</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb">
+        <source>
+          Cancel
+        </source>
+        <target>
+          Huỷ
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="71c77bb8cecdf11ec3eead24dd1ba506573fa9cd">
         <source>Submit</source>
         <target>Gửi</target>
@@ -384,6 +440,13 @@
         <target>Thêm video vào danh sách đen</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9849bf6a9e45a9a91d13a419afbb5176f9b2367d">
+        <source>Unfederate the video (ask for its deletion from the remote instances)</source>
+        <target>Huỷ liên kết video này (yêu cầu xoá video này khỏi đơn vị từ xa)</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
@@ -454,7 +517,7 @@
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
         <target>Xoá khỏi <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
         <context-group name="null">
-          <context context-type="linenumber">69</context>
+          <context context-type="linenumber">85</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c31161d1661884f54fbc5635aad5ce8d4803897e">
@@ -478,32 +541,25 @@
           <context context-type="linenumber">63</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
+        <source>Truncated preview</source>
+        <target>Xem trước rút gọn</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196">
+        <source>Complete preview</source>
+        <target>Xem trước đầy đủ</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="9c71feb04c2beab559f79c41c6127815fb9c1a6f">
         <source>Get help</source>
         <target>Nhận trợ giúp</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="450025269732888db1f04cfe6033843110ab65ee">
-        <source>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Subscribe
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </source>
-        <target>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Đăng kí
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
@@ -522,6 +578,13 @@
         <target>Đang dùng tài khoản ActivityPub</target>
         <context-group name="null">
           <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="60251958d9e05c8cc00abf9645bb0026ebbe4dc3">
+        <source>Subscribe with an account on <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></source>
+        <target>Đăng kí bằng tài khoản trên <x id="INTERPOLATION" equiv-text="{{ videoChannel.host }}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
@@ -545,11 +608,64 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
+        <source>User registration allowed</source>
+        <target>Cho phép người dùng đăng kí</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
         <target>Giới hạn video</target>
         <context-group name="null">
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
+        <source>Import</source>
+        <target>Nhập</target>
+        <context-group name="null">
+          <context context-type="linenumber">286</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a">
+        <source>Torrent import</source>
+        <target>Nhập torrent</target>
+        <context-group name="null">
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5">
+        <source>P2P enabled</source>
+        <target>Đã bật P2P</target>
+        <context-group name="null">
+          <context context-type="linenumber">83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>Địa phương</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
+        <source>Ban</source>
+        <target>Chặn</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251">
+        <source>
+        A banned user will no longer be able to login.
+      </source>
+        <target>
+        Người dùng bị chặn sẽ không đăng nhập được nữa.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
@@ -557,6 +673,13 @@
         <target>Huỷ</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
+        <source>Ban this user</source>
+        <target>Chặn người dùng này</target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c078d4901a5fac169665947cc7a6108b94dd80c7">
@@ -616,6 +739,24 @@
           <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="d6290381021b16febc426d3e3a52dda83991ce0b">
+        <source>
+          or create an account on another instance
+        </source>
+        <target>
+          hay tạo tài khoản trên một đơn vị khác
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="76e1f485e6ead4c84b606f46d413878881d66ad3">
+        <source>User registration is not allowed on this instance, but you can register on many others!</source>
+        <target>Đơn vị này không cho phép đăng kí tài khoản, nhưng bạn vẫn có thể đăng kí trên các đơn vị khác!</target>
+        <context-group name="null">
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407">
         <source>Password</source>
         <target>Mật khẩu</target>
@@ -627,7 +768,7 @@
         <source>I forgot my password</source>
         <target>Tôi quên mật khẩu</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -641,7 +782,7 @@
         <source>Forgot your password</source>
         <target>Quên mật khẩu</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -662,7 +803,7 @@
         <source>Send me an email to reset my password</source>
         <target>Gửi tôi thư đặt lại mật khẩu</target>
         <context-group name="null">
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -684,7 +825,9 @@
         </context-group>
       </trans-unit>
       <trans-unit id="3652e5c6e33165264d5271d06cc04ab7123b6df1">
-        <source>Confirmed password</source><target>Confirmed password</target><context-group name="null">
+        <source>Confirmed password</source>
+        <target>Đã xác nhận mật khẩu</target>
+        <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
@@ -700,6 +843,19 @@
         <target><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> kết quả</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c603b9ed878097782e2b8908f662e2344b46061">
+        <source>
+          Filters
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </source>
+        <target>
+          Bộ lọc
+          <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ numberOfFilters() }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e2dbf0426cbb0b573faf49dffeb7d5bdf16eda5d">
@@ -720,11 +876,18 @@
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
+        <source>Close</source>
+        <target>Đóng</target>
+        <context-group name="null">
+          <context context-type="linenumber">173</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
         <source>Change the language</source>
         <target>Đổi ngôn ngữ</target>
         <context-group name="null">
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28">
@@ -736,6 +899,13 @@
   </target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="20f3ffdc9938528fe27db4444ee54a561670075a">
+        <source>My public profile</source>
+        <target>Hồ sơ công khai</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e4825b5d86d89ae0f4c797ba256f66fd8abd4ee6">
@@ -812,21 +982,21 @@
         <source>Recently added</source>
         <target>Đã thêm gần đây</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
+          <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ac0f81713a84217c9bd1d9bb460245d8190b073f">
         <source>More</source>
         <target>Thêm</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>Người quản trị</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -840,7 +1010,7 @@
         <source>Show keyboard shortcuts</source>
         <target>Hiện phím tắt bàn phím</target>
         <context-group name="null">
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">111</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
@@ -1026,35 +1196,28 @@
         <source>+ Tag</source>
         <target>+ Thẻ</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
         <source>Enter a new tag</source>
         <target>Thêm thẻ mới</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
         <source>Description</source>
         <target>Mô tả</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="50f53834157770b8205ada0e7a6e235211e4765e">
-        <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target>Mô tả video được rút ngắn lại theo mặc định và cần người dùng tự tay mở rộng.</target>
-        <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>Kênh</target>
         <context-group name="null">
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c78b53bca33467190c0b7a01320bc093a2b1427">
@@ -1066,23 +1229,30 @@
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
         <source>Schedule publication (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</source>
-        <target>Lênh lịch xuất bản (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
+        <target>Lên lịch xuất bản (<x id="INTERPOLATION" equiv-text="{{ calendarTimezone }}"/>)</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">122</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
-        <target>Video chứa nội dung người lớn hoặc khiêu dâm</target>
+        <target>Video chứa nội dung người lớn hoặc nhạy cảm</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">136</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
+        <source>Some instances do not list videos containing mature or explicit content by default.</source>
+        <target>Vài đơn vị không liệt kê các video chứa nội dung người lớn hay nhạy cảm theo mặc định.</target>
+        <context-group name="null">
+          <context context-type="linenumber">140</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
         <target>Đang chờ chuyển mã trước khi xuất bản video</target>
         <context-group name="null">
-          <context context-type="linenumber">126</context>
+          <context context-type="linenumber">146</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
@@ -1096,42 +1266,42 @@
         <source>Already uploaded	✔</source>
         <target>Đã tải lên	✔</target>
         <context-group name="null">
-          <context context-type="linenumber">155</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca4588e185413b2fc77dbe35c861cc540b11b9ad">
         <source>Will be created on update</source>
         <target>Sẽ được tạo khi cập nhật</target>
         <context-group name="null">
-          <context context-type="linenumber">163</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>Huỷ việc tạo</target>
         <context-group name="null">
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b6bfdd386cb0b560d697c93555d8cd8cab00c393">
         <source>Will be deleted on update</source>
         <target>Sẽ bị xoá khi cập nhật</target>
         <context-group name="null">
-          <context context-type="linenumber">171</context>
+          <context context-type="linenumber">195</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>Huỷ việc xoá</target>
         <context-group name="null">
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430">
         <source>Video preview</source>
         <target>Xem trước video</target>
         <context-group name="null">
-          <context context-type="linenumber">192</context>
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -1145,35 +1315,35 @@
         <source>Short text to tell people how they can support you (membership platform...).</source>
         <target>Một đoạn văn ngắn để người xem biết cách ủng hộ bạn (như nền tảng đăng kí thành viên chẳng hạn)</target>
         <context-group name="null">
-          <context context-type="linenumber">202</context>
+          <context context-type="linenumber">226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="50d14e019ef14b4180e247e0b3a45386a8a78bf6">
         <source>Original publication date</source>
         <target>Ngày xuất bản gốc</target>
         <context-group name="null">
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>Bật bình luận video</target>
         <context-group name="null">
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0">
         <source>Enable download</source>
         <target>Cho phép tải về</target>
         <context-group name="null">
-          <context context-type="linenumber">235</context>
+          <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>Tuỳ chỉnh nâng cao</target>
         <context-group name="null">
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
       <trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6">
@@ -1183,11 +1353,11 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36">
-        <source>Import</source>
-        <target>Nhập</target>
+      <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
+        <source>Sorry, but something went wrong</source>
+        <target>Thật tiếc, có thứ gì đó đã gặp lỗi</target>
         <context-group name="null">
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="047f50bc5b5d17b5bec0196355953e1a5c590ddb">
@@ -1204,11 +1374,57 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5e420747842373fa99a75a7a18df068cc81e46fb">
+        <source>Scheduled</source>
+        <target>Đã lên lịch</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6357683911e256c566259880de43ea9403de00d3">
+        <source>
+  Congratulations! Your video is now available in your private library.
+</source>
+        <target>
+  Xin chúc mừng! Video của bạn bây giờ đã có sẵn trong thư viện cá nhân.
+</target>
+        <context-group name="null">
+          <context context-type="linenumber">66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
+        <source>Publish will be available when upload is finished</source>
+        <target>Bạn chỉ có thể xuất bản khi video đã được tải lên hoàn toàn</target>
+        <context-group name="null">
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="223aae0477f79f0bc4436c1c57619415f04cbbb3">
+        <source>Publish</source>
+        <target>Xuất bản</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b">
         <source>Select the torrent to import</source>
         <target>Chọn torrent để nhập</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1b518e7f8c067fa55ea797bb1b35b4a2d31dccbc">
+        <source>Or</source>
+        <target>Hay</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
+        <source>Paste magnet URI</source>
+        <target>Dán URI magnet</target>
+        <context-group name="null">
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
@@ -1282,11 +1498,44 @@
           <context context-type="linenumber">27</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="7fde07b8ce27190ea8da456ac16af384528a9210">
+        <source>
+              The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+            </source>
+        <target>
+              URL không bảo mật (không HTTPS), do đó video nhúng sẽ không phát được trên các website HTTPS (trình duyệt web chặn yêu cầu HTTP không bảo mật trên các website HTTPS).
+            </target>
+        <context-group name="null">
+          <context context-type="linenumber">47</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
         <source>Embed</source>
         <target>Nhúng</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="49c69dfce384acdb5469834182209808b107b4de">
+        <source>
+            More customization
+          </source>
+        <target>
+            Hiện thêm tuỳ chỉnh
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3198e972f64f577ff88e6b6966e2b44e7c7d8c2d">
+        <source>
+            Less customization
+          </source>
+        <target>
+            Ẩn bớt tuỳ chỉnh
+          </target>
+        <context-group name="null">
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0c2e76c41af25effefd456fb1e86143e0cfd1a4e">
@@ -1331,18 +1580,33 @@
           <context context-type="linenumber">164</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
-        <source>Close</source>
-        <target>Đóng</target>
-        <context-group name="null">
-          <context context-type="linenumber">173</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="3c4c080864b313cfdff5fdea6aae5da276246d99">
         <source>Public</source>
         <target>Công cộng</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="38e66e2d779d6d819cd7703ab73ab1bab75f8614">
+        <source>
+      The video is being imported, it will be available when the import is finished.
+    </source>
+        <target>
+      Video này đang được nhập và sẽ sẵn có khi việc nhập đã hoàn tất.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d2a8e8e4e5345201c07ba03a7fafe8b663230246">
+        <source>
+      The video is being transcoded, it may not work properly.
+    </source>
+        <target>
+      Video này đang được chuyển mã và có thể không phát đúng cách.
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="bd7055d3e38beff538463e75d508d1c75c683710">
@@ -1398,7 +1662,79 @@
         <source>Friendly Reminder: </source>
         <target>Nhắc nhở Thân thiện:</target>
         <context-group name="null">
-          <context context-type="linenumber">207</context>
+          <context context-type="linenumber">211</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
+        <source>
+      OK
+    </source>
+        <target>
+      Đồng ý
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b5f5df598f2d75640849b2a7744f91e5dbd390e7">
+        <source>
+      Comments
+    </source>
+        <target>
+      Bình luận
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
+        <source>No comments.</source>
+        <target>Không có bình luận.</target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="69c081796209e45e26af91152ec9bd0a65ec261e">
+        <source>View all <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
+        <target>Xem toàn bộ <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> trả lời</target>
+        <context-group name="null">
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
+        <source>
+    Comments are disabled.
+  </source>
+        <target>
+    Đã tắt bình luận.
+  </target>
+        <context-group name="null">
+          <context context-type="linenumber">64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
+        <source>Add comment...</source>
+        <target>Thêm bình luận...</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="26fa50ba8e69b53162b348d98e25f8b76c81343e">
+        <source>
+      Post comment
+    </source>
+        <target>
+      Đăng bình luận
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="afe0ad39fee662489f1033e53aea3e16a7e89228">
+        <source>login to comment</source>
+        <target>đăng nhập để bình luận</target>
+        <context-group name="null">
+          <context context-type="linenumber">35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cb23d4d98007aa4d7123837f4c17a671848377d6">
@@ -1408,11 +1744,239 @@
           <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
+        <source>
+      Users
+    </source>
+        <target>
+      Người dùng
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
+        <source>Follow</source>
+        <target>Theo dõi</target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
+        <source>Followers</source>
+        <target>Người theo dõi</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="25925fc5826bc5b3eeae7c45b08b0ed74b9e2954">
+        <source>Filter...</source>
+        <target>Bộ lọc...</target>
+        <context-group name="null">
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
+        <source>ID</source>
+        <target>Mã</target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
+        <source>State</source>
+        <target>Trạng thái</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7823909fb1d8d313382f6f4bd842f1a7ef6f08d1">
+        <source>Accepted</source>
+        <target>Đã chấp nhận</target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e6a27066251ca1e04c5be86ad758380856df2506">
+        <source>Pending</source>
+        <target>Đang chờ</target>
+        <context-group name="null">
+          <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6fc5e65900ae1415d3170d5d2842f0dcae1b6645">
+        <source>Accept</source>
+        <target>Chấp nhận</target>
+        <context-group name="null">
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2">
+        <source>Refuse</source>
+        <target>Từ chối</target>
+        <context-group name="null">
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">
+        <source>Create user</source>
+        <target>Tạo người dùng</target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
+        <source>Username</source>
+        <target>Tên đăng nhập</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a">
+        <source>john</source>
+        <target>john</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05">
+        <source>mail@example.com</source>
+        <target>mail@example.com</target>
+        <context-group name="null">
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c36a66f2107e8da5371ebc9d15c2008dff567f46">
+        <source>Role</source>
+        <target>Vai trò</target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
         <source>Daily video quota</source>
         <target>Giới hạn video hằng ngày</target>
         <context-group name="null">
+          <context context-type="linenumber">73</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="85614ebfd89fe16873dfcf593a05f18b7468daac">
+        <source>Danger Zone</source>
+        <target>Vùng Nguy Hiểm</target>
+        <context-group name="null">
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a8f947ecc46bcad10d965360f500a14128bd7d">
+        <source>Send a link to reset the password by email to the user</source>
+        <target>Gửi đường dẫn đặt lại mật khẩu bằng thư điện tử cho người dùng</target>
+        <context-group name="null">
+          <context context-type="linenumber">97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="950adafba22e3c85e889f2c38faebe98145bfb7f">
+        <source>Ask for new password</source>
+        <target>Yêu cầu mật khẩu mới</target>
+        <context-group name="null">
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e6a48b1ed6160a99fba3a1607e27e9e93a4f4244">
+        <source>Manually set the user password</source>
+        <target>Tự tay đặt mật khẩu cho người dùng</target>
+        <context-group name="null">
+          <context context-type="linenumber">102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca">
+        <source>Show</source>
+        <target>Hiện</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1eede69e18c5ac9c0b0295b72cabb7e64e029e74">
+        <source>Hide</source>
+        <target>Ẩn</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5e8b4663c17c337a1f11160c0a683350936faa1f">
+        <source>Users list</source>
+        <target>Danh sách người dùng</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
+        <source>(banned)</source>
+        <target>(đã bị chặn)</target>
+        <context-group name="null">
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
+        <source>User's email must be verified to login</source>
+        <target>Cần xác nhận địa chỉ thư của người dùng trước khi đăng nhập</target>
+        <context-group name="null">
           <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b">
+        <source>User's email is verified / User can login without email verification</source>
+        <target>Địa chỉ thư của người dùng đã được xác nhận / Người dùng có thể đăng nhập mà không cần xác nhận qua thư</target>
+        <context-group name="null">
+          <context context-type="linenumber">76</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
+        <source>Ban reason:</source>
+        <target>Lí do chặn:</target>
+        <context-group name="null">
+          <context context-type="linenumber">95</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6106bd52908f3f323ed1d6bdcd53230d55401d45">
+        <source>Auto-blacklisted videos</source>
+        <target>Các video tự động được thêm vào danh sách đen</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
+        <source>Muted accounts</source>
+        <target>Tài khoản đã tắt tiếng</target>
+        <context-group name="null">
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd0611346af048015e0a1275091ef68ce98832d2">
+        <source>Muted servers</source>
+        <target>Máy chủ đã tắt tiếng</target>
+        <context-group name="null">
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a">
+        <source>Sensitive</source>
+        <target>Nhạy cảm</target>
+        <context-group name="null">
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b748c96a1ee98d2fa9a645fb71838f5d4938855b">
+        <source>Unfederated</source>
+        <target>Không được liên kết</target>
+        <context-group name="null">
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99">
+        <source>Date <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
+        <target>Ngày <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
@@ -1420,6 +1984,31 @@
         <target>Tới video</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
+        <source>Actions</source>
+        <target>Hành động</target>
+        <context-group name="null">
+          <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7963019b5535b51efa399e6a62b163f3e04d296f">
+        <source>Blacklist reason:</source>
+        <target>Lí do bị thêm vào danh sách đen:</target>
+        <context-group name="null">
+          <context context-type="linenumber">43</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5731e5d5ac989bf08848b5a57a5586cf84d80964">
+        <source>
+        This comment can only be seen by you or the other moderators.
+      </source>
+        <target>
+        Chỉ có bạn và những người quản trị khác mới thấy được bình luận này.
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">18</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
@@ -1433,7 +2022,7 @@
         <source>Allow your users to upload .mkv, .mov, .avi, .flv videos</source>
         <target>Cho phép người dùng tải lên video .mkv, .mov, .avi, .flv</target>
         <context-group name="null">
-          <context context-type="linenumber">302</context>
+          <context context-type="linenumber">478</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -1455,6 +2044,48 @@
         <target>Danh sách này không có video.</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd2edf99dd6562385ccec19a7ab2d1898e626605">
+        <source>Banned</source>
+        <target>đã bị chặn</target>
+        <context-group name="null">
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8">
+        <source>Unban</source>
+        <target>Bỏ chặn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ac401df84c5fa471700c3368de51c969ccb8bacf">
+        <source>You cannot ban root.</source>
+        <target>Không thể chặn root.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="98119091712a8ca72905e3b4c1cf60649af7565e">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{num}}"/> users?</source>
+        <target>Bạn có chắc muốn bỏ chặn <x id="INTERPOLATION" equiv-text="{{num}}"/> người dùng?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6121be086a51c4c73bbdd8aebdddd9744c8f1ffd">
+        <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users unbanned.</source>
+        <target>Đã bỏ chặn <x id="INTERPOLATION" equiv-text="{{num}}"/> người dùng.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="39980cc1cf8df621d43f5480d001bdf5d4139338">
+        <source>You account is blocked.</source>
+        <target>Tài khoản của bạn đã bị chặn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e">
@@ -1485,16 +2116,429 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a">
-        <source>Torrent import</source>
-        <target>Nhập torrent</target>
+      <trans-unit id="6d2c3ebffd49b8933200a6d4e5b74712be49bf00">
+        <source>Ban reason must be at least 3 characters long.</source>
+        <target>Lí do chặn phải từ 3 kí tự trở lên.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5">
-        <source>P2P enabled</source>
-        <target>Đã bật P2P</target>
+      <trans-unit id="be32ff1dd6e464c5c085dd7d128316f476d2e0fd">
+        <source>Ban reason cannot be more than 250 characters long.</source>
+        <target>Lí do chặn phải từ 250 kí tự trở xuống.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1">
+        <source>Video name is required.</source>
+        <target>Video cần có tên</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c">
+        <source>Video name must be at least 3 characters long.</source>
+        <target>Tên video cần dài hơn 3 kí tự.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695">
+        <source>Video name cannot be more than 120 characters long.</source>
+        <target>Tên video cần ngắn hơn 120 kí tự.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
+        <source>Video privacy is required.</source>
+        <target>Cần quy định tính riêng tư của video.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1cffdc2e156716cd9880201d65ba457d11464f8">
+        <source>A tag should be more than 2 characters long.</source>
+        <target>Một thẻ cần dài hơn 2 kí tự.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea">
+        <source>A tag should be less than 30 characters long.</source>
+        <target>Một thẻ cần ngắn hơn 30 kí tự.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
+        <source>A date is required to schedule video update.</source>
+        <target>Cần có ngày để lên lịch cập nhật video.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3b7ed22d0730d03b38c254332829d855ee7256c4">
+        <source>This file is too large.</source>
+        <target>Tập tin này quá lớn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f5f2093f14679fed82ff76a0cd2a28145a83ca9">
+        <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</source>
+        <target>PeerTube không thể xử lý tập tin dạng này. Các tập tin được chấp nhận gồm <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4">
+        <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
+        <target>Dữ liệu chưa lưu sẽ mất, bạn có chắc muốn rời trang?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf">
+        <source>Sunday</source>
+        <target>Chủ Nhật</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596">
+        <source>Monday</source>
+        <target>Thứ Hai</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee">
+        <source>Tuesday</source>
+        <target>Thứ Ba</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9">
+        <source>Wednesday</source>
+        <target>Thứ Tư</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b">
+        <source>Thursday</source>
+        <target>Thứ Năm</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215">
+        <source>Friday</source>
+        <target>Thứ Sáu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e">
+        <source>Saturday</source>
+        <target>Thứ Bảy</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6549890cd0d6b59fb0e1aa383b00483a68a55eef">
+        <source>Sun</source>
+        <target>CN</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3382aa5d7f520e197fb59a4995fe1beffca2d0ff">
+        <source>Mon</source>
+        <target>T2</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f883ec926274974df0fc46c037cbffd6a863ebc9">
+        <source>Tue</source>
+        <target>T3</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="242b4f4b5651e24f9a9007ef153a57981e4b989d">
+        <source>Wed</source>
+        <target>T4</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5a2c39d56b8f00a6a4670a63b53caacbda953be6">
+        <source>Thu</source>
+        <target>T5</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4cdf23d523a0e52e0dec9cd650ffd9bd6952792c">
+        <source>Fri</source>
+        <target>T6</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1283d165a942d7f4c469ba34f99dbb9e927d0261">
+        <source>Sat</source>
+        <target>T7</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2fba8448ff13105c57665a9a6ffcfe9615d855dd">
+        <source>Su</source>
+        <target>CN</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="388144af7ac7651d2615b9be0e84f43ae71d9fb3">
+        <source>Mo</source>
+        <target>T2</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d96313e42b5f0751ce2676a31d309b4d322ab462">
+        <source>Tu</source>
+        <target>T3</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="06cc3d39f78c0615b707cef39cd4875599611fef">
+        <source>We</source>
+        <target>T4</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="790894436cca9d675d59be9a8aafd58acccde2cd">
+        <source>Th</source>
+        <target>T5</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="42dfe37169f8471367c31489155229bbe1747ea5">
+        <source>Fr</source>
+        <target>T6</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1b64ea3e04ceeb512e8974eb0019dee4f211c7a0">
+        <source>Sa</source>
+        <target>T7</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e7815f1c4a6d3cc157a16407a48865023cc35ec0">
+        <source>January</source>
+        <target>Tháng Một</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0393a96b58df82af39a2ec83deec624749e42036">
+        <source>February</source>
+        <target>Tháng Hai</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ea41ee3743ec5bdbbf863ab793bbdd6e6d9af96e">
+        <source>March</source>
+        <target>Tháng Ba</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b87ee784d9e93b5557aca9bdc9464dbd4328920a">
+        <source>April</source>
+        <target>Tháng Tư</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="862da1034ac2707cc44123ed963b2f42109b6b3e">
+        <source>May</source>
+        <target>Tháng Năm</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f234249d4c3c39e27c0f05d4a6b73a7959caeb2">
+        <source>June</source>
+        <target>Tháng Sáu</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="11447f95e83c8de675ab6c492150f88e4d9bd15e">
+        <source>July</source>
+        <target>Tháng Bảy</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ddd9a3d59a8db4e822e54e9473c05b571aca9829">
+        <source>August</source>
+        <target>Tháng Tám</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e21dc41f9b3fdaf35ab6b2d9e2e5e8a926fb1938">
+        <source>September</source>
+        <target>Tháng Chín</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="71f49c502d13e22079a958a5532afa28dbe98b3b">
+        <source>October</source>
+        <target>Tháng Mười</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="64b5ce921faa5e3d277d6d528ddcfc8c2bfe9f52">
+        <source>November</source>
+        <target>Tháng Mười Một</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2006e2aabb31714ebc684dc382539649f690ed5c">
+        <source>December</source>
+        <target>Tháng Mười Hai</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8270e687cfb5624b3f6fbb7991a2e916c96464b7">
+        <source>Jan</source>
+        <target>Tg1</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60">
+        <source>Feb</source>
+        <target>Tg2</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7">
+        <source>Mar</source>
+        <target>Tg3</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="964a5f032bc846d32806a4838580a4f81cf14463">
+        <source>Apr</source>
+        <target>Tg4</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8f7274f606f71d9290ed01c5683092d701632d7f">
+        <source>Jun</source>
+        <target>Tg6</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c3d8318d6d8d9920ae0a80350616732c33a3211">
+        <source>Jul</source>
+        <target>Tg7</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212">
+        <source>Aug</source>
+        <target>Tg8</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f739d03be1c936c58978739c317d91566348204">
+        <source>Sep</source>
+        <target>Tg9</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6607cacb987a588530a13de7018d959240d19153">
+        <source>Oct</source>
+        <target>Tg10</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="e597400ded12a366855615e18fcc8f9ac05b72e0">
+        <source>Nov</source>
+        <target>Tg11</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e">
+        <source>Dec</source>
+        <target>Tg12</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46">
+        <source>Clear</source>
+        <target>Xoá</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5">
+        <source>yy-mm-dd </source>
+        <target>nă-th-ng</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c09a68321f26f058b547021e6e2c167ae22c6e24">
+        <source>Hidden</source>
+        <target>Ẩn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="75cc14815746a90d424157080fc7efd3e2631654">
+        <source>Blurred with confirmation request</source>
+        <target>Được che mờ, yêu cầu xác nhận</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1e89bd0d46ef7d90b5f98b24f83afc312c6ef105">
+        <source>Displayed</source>
+        <target>Đã hiện</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1569,6 +2613,34 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734">
+        <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
+        <target>Bạn có chắc muốn bỏ chặn <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
+        <target>Đã bỏ chặn người dùng <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603">
+        <source>If you remove this user, you will not be able to create another with the same username!</source>
+        <target>Nếu xoá người dùng này, bạn sẽ không thể tạo tài khoản mới có cùng tên đăng nhập!</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28220fae6799ab98ef6b41af449aa9680082357a">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> deleted.</source>
+        <target>Đã xoá người dùng <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="33a6319f765848a22a155cef9f1d8e645202e249">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source>
         <target>Đã tắt tiếng tài khoản <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
@@ -1590,9 +2662,51 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="e17218983b1de76e5a920b04e1c2ecbdb6e3e06d">
+        <source>Mute the instance</source>
+        <target>Tắt tiếng đơn vị</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a23514d8aca2f8633622dda0e86b399dc576a2b9">
+        <source>Unmute the instance</source>
+        <target>Ngừng tắt tiếng đơn vị</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e4107055b44eee44b6954c41120de1cb4d46432">
+        <source>Mute this account by your instance</source>
+        <target>Tắt tiếng tài khoản này trên đơn vị của bạn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a51c59cb5ecb7004a6a8ddd2855b5c52266ad957">
+        <source>Unmute this account by your instance</source>
+        <target>Ngừng tắt tiếng tài khoản này trên đơn vị của bạn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="588073e831cec240d6bb0db0b133e45dab69f178">
+        <source>Mute the instance by your instance</source>
+        <target>Tắt tiếng đơn vị này trên đơn vị của bạn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="676221cdabd4805901343976988c028dbf71b20a">
+        <source>Unmute the instance by your instance</source>
+        <target>Ngừng tắt tiếng đơn vị này trên đơn vị của bạn</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="0c0f5bbcd2386018ec057877f9d3c5c2c9880cac">
         <source>Request is too large for the server. Please contact you administrator if you want to increase the limit size.</source>
-        <target>Yêu cầu của bạn quá lớn đối với máy chủ. Hãy liên lạc quản trị viên nếu bạn muốn tăng kích cỡ giới hạn.</target>
+        <target>Yêu cầu quá nặng đối với máy chủ. Hãy liên lạc người quản trị nếu bạn muốn nâng giới hạn kích cỡ.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1646,9 +2760,23 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf">
+        <source>Moderator</source>
+        <target>Người quản trị</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="5034e84fab7cd3d662d2483753e33caea0774b78">
         <source>Video removed from <x id="INTERPOLATION" equiv-text="{{name}}"/></source>
         <target>Video đã bị xoá khỏi <x id="INTERPOLATION" equiv-text="{{name}}"/></target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5cbf881bedb548fda270e2b745c8cbe332a5e4de">
+        <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/> at timestamps <x id="INTERPOLATION_1" equiv-text="{{t}}"/></source>
+        <target>Video được thêm vào <x id="INTERPOLATION" equiv-text="{{n}}"/> at timestamps <x id="INTERPOLATION_1" equiv-text="{{t}}"/></target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1702,6 +2830,13 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="007ab5fa2aae8a7372307d3fc45a2dbcb11ffd61">
+        <source>Blacklist</source>
+        <target>Danh sách đen</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
         <source>Report</source>
         <target>Báo cáo</target>
@@ -1719,6 +2854,13 @@
       <trans-unit id="8e6d54c4f760d9e90518eef5334211c48c0b71e2">
         <source>Publication scheduled on </source>
         <target>Đã lên lịch xuất bản vào</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4a7e91ebe1cf184db5f2bfecf9c16ff81c9e2c02">
+        <source>Waiting transcoding</source>
+        <target>Đang chờ chuyển mã</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1752,6 +2894,13 @@
       <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
         <source>Your video was uploaded to your account and is private.</source>
         <target>Video đã được tải lên riêng tư vào tài khoản của bạn.</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="24840228f2826b66252cfcaab9820b1c7e0da264">
+        <source>But associated data (tags, description...) will be lost, are you sure you want to leave this page?</source>
+        <target>Nhưng các dữ liệu liên quan (thẻ, mô tả,...) sẽ bị mất. Bạn có chắc muốn rời khỏi trang không?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -1828,14 +2977,14 @@
       </trans-unit>
       <trans-unit id="ed013c2c29216501c688e9cb5f3a1c9fd9147b71">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
-        <target>Video này chứa nội dung cho người lớn hoặc khiêu dâm. Bạn có chắc chắn muốn xem không?</target>
+        <target>Video này chứa nội dung cho người lớn hoặc nhạy cảm. Bạn có chắc chắn muốn xem không?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ba3d522e4146eefcbd5c222247c1e2423d27cd8">
         <source>Mature or explicit content</source>
-        <target>Nội dung người lớn hoặc khiêu dâm</target>
+        <target>Nội dung người lớn hoặc nhạy cảm</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>

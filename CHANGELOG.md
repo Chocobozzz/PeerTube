@@ -1,5 +1,141 @@
 # Changelog
 
+## v1.4.1
+
+### Bug fixes
+
+ * Fix too fast redundancy eviction
+ * Fix broken auto blacklist page
+ * Rename signup steps
+ * Fix menu x overflow
+
+
+## v1.4.0
+
+**Since v1.3.1**
+
+### IMPORTANT NOTES
+
+ * **Important** Add `plugins` directory in configuration file. **You should configure it in your production.yaml**
+ * **Important:** Deprecate NodeJS 8 (support ends on [December 2019](https://github.com/nodejs/Release#release-schedule)). Please upgrade to NodeJS 10.
+ * **Important:** Updated nginx template (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
+   * Fix long server responses on dual stack servers: https://github.com/Chocobozzz/PeerTube/commit/fd2ddcae8ff4eb10bf7168ac3c8801f06b37627f
+   * Improve images HTTP cache: https://github.com/Chocobozzz/PeerTube/commit/c928e1364fbdff87f27fd982710b95426a250491
+ * **Important:** With the new theme system, we removed the dark mode button. Your administrator has to install [the dark theme](https://framagit.org/framasoft/peertube/official-plugins/tree/master/peertube-theme-dark)
+ from their admin panel, and then users can choose this theme in their settings
+ * Changed the playlist REST API to fix various issues. See https://github.com/Chocobozzz/PeerTube/pull/1998 for more information
+ * Removed magnet URI support in download modal since most of the BitTorrent clients do not understand the `xs` parameter
+ * Renamed `Overview` page to `Discover`
+
+### Security
+
+ * Moderators can only create and update regular users (thanks GGC-Project)
+
+### Maintenance
+
+ * Create a dedicated `package.json` for CLI tools to reduce server dependencies size
+ * Add ability to set root password by environment at first start ([@darnuria](https://github.com/darnuria))
+ * Removed unused `uuid` actor field (we already have a unique identifier that is the `preferredUsername`)
+ * Add ability to disable PeerTube log rotation ([@NassimBounouas](https://github.com/NassimBounouas))
+ * Speedup font display ([@BO41](https://github.com/BO41))
+ * Improve static files HTTP cache
+ * Add `--since` and `--until` parameters to import videos script to easily sync external channels ([@fflorent](https://github.com/fflorent))
+ * Optimize `/watch/:uuid` endpoint
+ * Optimize Sequelize (SQL ORM) queries generation (consumes less CPU)
+ * Prune script is faster and can prune avatar files
+
+### Features
+
+ * :tada: Support Finnish, Greek and Scottish Gaelic languages
+ * :tada: Add basic plugins and themes support (**beta**): https://docs.joinpeertube.org/#/contribute-plugins
+   * Install plugins or themes from the administration panel
+   * Choose a default theme for your instance
+   * Users can choose the theme they want among the list of themes their administrator installed
+ * :tada: Add ability to upload audio files: PeerTube will merge the audio file and the thumbnail to create a video
+ * Multi step registration:
+   * Add ability for new users to create their default channel
+   * Guess the account username/channel username according to their display name
+   * Add explanations about what the purpose of a username/channel name is, and what a channel is
+ * Improve account video channels page:
+   * Set it as the default page for the account page in order to avoid confusion between the account homepage and the video channel homepage
+   * Display channels in rows with some of their videos
+ * Support more URL parameters in embeds: `muted`, `loop`, `peertubeLink`
+ * Redesign share modal and add customizations:
+   * Start/stop at a specific timestamp
+   * Automatically play/mute/loop the video
+   * Set a specific subtitle by default
+ * Group subscriptions and recently added videos in chronological order
+ * Add ability for users to change their email address
+ * Add ability to update the support field of all channel videos when we update the channel support field
+ * Add a language filter in user preferences to display only videos in specific languages
+ * Add instance follows list in a dedicated tab in the "About" page
+ * Add ability to set to private a public/unlisted video or video playlist
+ * Transcode in the `tmp` directory for s3fs compatibility ([@libertysoft3](https://github.com/libertysoft3))
+ * Add a button to copy account username ([@NassimBounouas](https://github.com/NassimBounouas))
+ * Redirect to "Local videos" page when going to the `peertube` account page
+ * Rearrange search filter options ([@realityfabric](https://github.com/realityfabric))
+ * Close modal after clicking on download ([@LeoMouyna](https://github.com/LeoMouyna))
+ * Add ability for admins to customize emails object prefix and body signature ([@yohanboniface](https://github.com/yohanboniface))
+ * Support 4K transcoding
+ * Add link of the follower profile in administration ([@NassimBounouas](https://github.com/NassimBounouas))
+ * Add subject field in contact form ([@NassimBounouas](https://github.com/NassimBounouas))
+ * Add rate limit to registration and API endpoints
+ * Add "video quota used" sortable column in user admin list ([@darnuria](https://github.com/darnuria))
+ * Automatically update the playlist thumbnail according to the video at the first position (if the user did not set a specific thumbnail)
+ * Automatically remove dead followings
+ * Federate comment deletion if the comment was deleted by the video owner
+
+### Bug fixes
+
+ * Fix transcoding information in features table ([LiPek](https://github.com/LiPeK))
+ * Fix tools auth with remote instances
+ * Fix various issues in upload/import scripts
+ * Fix redundancy exceeded quota
+ * Fix login with email ([@NassimBounouas](https://github.com/NassimBounouas))
+ * Fix quota display in features table
+ * Fix transcoding help placement
+ * Fix invisible videos in playlists
+ * Fix HLS transcoding in lower resolutions
+ * Fix various federation issues
+ * Fix mute badge labels
+ * Fix broken follow notification when the actor is deleted
+ * Fix overflow and playlist block width in the watch page
+ * Fix search results overflow on mobile
+ * Fix infinite scroll on big screens
+ * Fix start time on some HLS videos
+ * Fix socket notification with multiple user tabs
+ * Fix redundancy if the instance has already the file on disk
+ * Fix image and plugin CSP
+ * Fix video rows overflow
+ * Dismiss modals on pop state
+ * Go back when cancel NSFW modal
+
+
+***Since v1.4.0-rc.1***
+
+### Features
+
+ * Add Finnish language support
+
+### Bug fixes
+
+ * Fix broken front end on Firefox ESR (60)
+ * Fix prune storage script when using a same directory for multiple storage keys
+ * Relax plugin `package.json` validation
+ * Replace "overview" by "discover" in client titles
+ * Change configuration: `email.object` becomes `email.subject`
+ * Fix user creation by moderators
+ * Fix video playlist element removal
+ * Fix plugin card background color with dark theme
+ * Fix lazy static route with unknown avatars (404 instead of 500)
+ * Fix socket notification with multiple user tabs
+ * Fix redundancy if the instance has already the file on disk
+ * Fix image and plugin CSP
+ * Fix video rows overflow
+ * Dismiss modals on pop state
+ * Go back when cancel NSFW modal
+
+
 ## v1.4.0-rc.1
 
 ### IMPORTANT NOTES
@@ -10,7 +146,7 @@
    * Fix long server responses on dual stack servers: https://github.com/Chocobozzz/PeerTube/commit/fd2ddcae8ff4eb10bf7168ac3c8801f06b37627f
    * Improve images HTTP cache: https://github.com/Chocobozzz/PeerTube/commit/c928e1364fbdff87f27fd982710b95426a250491
  * **Important:** With the new theme system, we removed the dark mode button. Your administrator has to install [the dark theme](https://framagit.org/framasoft/peertube/official-plugins/tree/master/peertube-theme-dark)
- from their admin panel, and then users can choose this theme in their settings 
+ from their admin panel, and then users can choose this theme in their settings
  * Changed the playlist REST API to fix various issues. See https://github.com/Chocobozzz/PeerTube/pull/1998 for more information
  * Removed magnet URI support in download modal since most of the BitTorrent clients do not understand the `xs` parameter
  * Renamed `Overview` page to `Discover`
@@ -27,7 +163,7 @@
  * Optimize `/watch/:uuid` endpoint
  * Optimize Sequelize (SQL ORM) queries generation (consumes less CPU)
  * Prune script is faster and can prune avatar files
- 
+
 ### Features
 
  * :tada: Support Greek and Scottish Gaelic languages
@@ -68,7 +204,7 @@
  * Automatically update the playlist thumbnail according to the video at the first position (if the user did not set a specific thumbnail)
  * Automatically remove dead followings
  * Federate comment deletion if the comment was deleted by the video owner
- 
+
 ### Bug fixes
 
  * Fix transcoding information in features table ([LiPek](https://github.com/LiPeK))
@@ -98,7 +234,7 @@
  * Fix error in video upload/update form when scheduling publication
  * Fix black theme on some pages
  * Fix video import if auto blacklist is enabled
-  
+
 
 ## v1.3.0
 
@@ -108,8 +244,8 @@
 
  * **nginx** Remove `text/html` from `gzip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
  * Add `streaming_playlists` directory in configuration file. **You should configure it in your production.yaml**
- * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110) 
- 
+ * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110)
+
 ### Maintenance
 
  * Add GitPod support ([@jankeromnes](https://github.com/jankeromnes)) that could help people to contribute on PeerTube: https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#online-development
@@ -118,14 +254,14 @@
  * Add `NOCLIENT` env support to only install server dependencies. Example: `NOCLIENT=true yarn install --pure-lockfile` ([@rigelk](https://github.com/rigelk))
 
 ### Docker
- 
+
  * **Important**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
- * **Important**: Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) 
+ * **Important**: Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml)
 and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L8) to fix IP forwarding issue ([@Nutomic](https://github.com/nutomic))
  * Fix SMTP default configuration ([@Nutomic](https://github.com/nutomic))
 
 ### Features
- 
+
  * Add video playlist support
    * A user has a default `Watch-later` playlist
    * A user can create private, unlisted or public playlists
@@ -207,13 +343,13 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
  * Fix crash in files cache
  * Fix playlist view/update 403
  * Fix search with bad webfinger handles
- 
- 
+
+
 ## v1.3.0-rc.2
 
 ### Docker
 
- * Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) 
+ * Add a network section to [docker-compose.yml template](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml)
 and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env#L8) to fix IP forwarding issue ([@Nutomic](https://github.com/nutomic))
 
 ### Bug fixes
@@ -233,8 +369,8 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
 
  * **nginx** Remove `text/html` from `gzip_types`: https://github.com/Chocobozzz/PeerTube/commit/7eeb6a0ba4028d0e20847b846332dd0b7747c7f8 [@bnjbvr](https://github.com/bnjbvr)
  * Add `streaming_playlists` directory in configuration file. **You should configure it in your production.yaml**
- * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110) 
- 
+ * CSP configuration changed: it's now in a [dedicated section](https://github.com/Chocobozzz/PeerTube/blob/develop/config/production.yaml.example#L110)
+
 ## Maintenance
 
  * Add GitPod support ([@jankeromnes](https://github.com/jankeromnes)) that could help people to contribute on PeerTube: https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#online-development
@@ -243,12 +379,12 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
  * Add `NOCLIENT` env support to only install server dependencies. Example: `NOCLIENT=true yarn install --pure-lockfile` ([@rigelk](https://github.com/rigelk))
 
 ### Docker
- 
+
  * **Important**: Add host network mode to the reverse proxy section (without this, it could break videos views and P2P: https://github.com/Chocobozzz/PeerTube/issues/1643#issuecomment-464789666)
  * Fix SMTP default configuration ([@Nutomic](https://github.com/nutomic))
 
 ### Features
- 
+
  * Add video playlist support
    * A user has a default `Watch-later` playlist
    * A user can create private, unlisted or public playlists
@@ -455,7 +591,7 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
    * Disable Træfik web UI
 
 ### Features
- 
+
  * Automatically resume videos if the user is logged in
  * Hide automatically the menu when the window is resized ([@BO41](https://github.com/BO41))
  * Remove confirm modal for JavaScript/CSS injection ([@scanlime](https://github.com/scanlime))
@@ -562,16 +698,16 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
  * Fix player progress bar/seeking when changing resolution
  * Fix search tab title with no search
  * Fix YouTube video import with some videos
-    
+
 
 ## v1.1.0-alpha.2 (since v1.1.0-alpha.1)
 
 ### Security/Maintenance/Federation
- 
+
  * Add HTTP Signature in addition to Linked Signature:
     * It's faster
-    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation 
- 
+    * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation
+
 ### Features
 
  * Set shorter keyframe interval for transcoding (2 seconds) ([@Nutomic](https://github.com/nutomic))
@@ -592,7 +728,7 @@ and update your [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/suppo
 ## v1.0.1
 
 ### Security/Maintenance/Federation
- 
+
  * Add HTTP Signature in addition to Linked Signature:
     * It's faster
     * Will allow us to use RSA Signature 2018 in the future without too much incompatibilities in the peertube federation
@@ -614,7 +750,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
  * Add docker dev image ([@am97](https://github.com/am97))
 
 ### Features
- 
+
  * Automatically resume videos if the user is logged in
  * Hide automatically the menu when the window is resized ([@BO41](https://github.com/BO41))
  * Remove confirm modal for JavaScript/CSS injection ([@scanlime](https://github.com/scanlime))
@@ -708,7 +844,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
  * Increase timeout on upload endpoint
  * Fix redundancy with videos already duplicated by another instance(s)
  * Correctly delete files on failed import
- 
+
 
 ## v1.0.0-beta.15
 
@@ -728,7 +864,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
  * Fix redundancy totalVideos stats
  * Reduce video import TTL to 1 hour
  * Only duplicate public videos
- 
+
 
 ## v1.0.0-beta.14
 
@@ -751,7 +887,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
  * Add chevron hotkeys to change playback rate ([@rigelk](https://github.com/rigelk))
 
 ### Bug fixes
- 
+
  * Fix 24 hours delay to process views
  * Fix tag search on overview page
  * Handle actors search beginning with '@'
@@ -771,14 +907,14 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
 
  * Improve keyboard navigation ([@rigelk](https://github.com/rigelk))
  * Remember theme in local storage ([@rigelk](https://github.com/rigelk))
- 
+
 ### Bug fixes
 
   * Fix upgrade/installation on node 8.12 (bcrypt issue)
   * Fix video channel deletion
   * Fix video channel RSS
   * Fix video views increment
- 
+
 
 ## v1.0.0-beta.12
 
@@ -786,7 +922,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
 
 ### BREAKING CHANGES
 
- * Users can now use the name they want for their channel. 
+ * Users can now use the name they want for their channel.
  We will therefore favour the display of video channel handles/names instead of account in the future.
 
 ### Documentation
@@ -799,9 +935,9 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
 ### nginx template
 
  * Add gzip support ([@scanlime](https://github.com/scanlime))
- 
+
 ### Docker template
- 
+
  * Add quota to the docker configuration values ([@kaiyou](https://github.com/kaiyou))
 
 ### Features
@@ -846,7 +982,7 @@ This release could contain bugs. Don't expect a stable v1.1.0 until December :)
  * Fix thumbnail/preview in upload.js script
  * Fix import-videos.js duplicate detection
  * Fix occitan language label
- 
+
 
 ## v1.0.0-beta.11
 

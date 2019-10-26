@@ -55,7 +55,7 @@ async function checkHttpSignature (req: Request, res: Response) {
   const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
   if (sig && sig.startsWith('Signature ') === false) req.headers[HTTP_SIGNATURE.HEADER_NAME] = 'Signature ' + sig
 
-  const parsed = parseHTTPSignature(req)
+  const parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
 
   const keyId = parsed.keyId
   if (!keyId) {
@@ -101,6 +101,8 @@ async function checkJsonLDSignature (req: Request, res: Response) {
   const verified = await isJsonLDSignatureVerified(actor, req.body)
 
   if (verified !== true) {
+    logger.warn('Signature not verified.', req.body)
+
     res.sendStatus(403)
     return false
   }

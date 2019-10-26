@@ -34,6 +34,8 @@ import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watc
 import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { PlatformLocation } from '@angular/common'
+import { randomInt } from '@shared/core-utils/miscs/miscs'
 
 @Component({
   selector: 'my-video-watch',
@@ -68,6 +70,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
   hotkeys: Hotkey[]
 
+  private nextVideoUuid = ''
   private currentTime: number
   private paramsSub: Subscription
   private queryParamsSub: Subscription
@@ -95,6 +98,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private i18n: I18n,
     private hotkeysService: HotkeysService,
     private hooks: HooksService,
+    private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
   ) {}
 
@@ -213,6 +217,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!this.video || Array.isArray(this.video.tags) === false) return []
 
     return this.video.tags
+  }
+
+  onRecommendations (videos: Video[]) {
+    if (videos.length > 0) {
+      // Pick a random video until the recommendations are improved
+      this.nextVideoUuid = videos[randomInt(0,videos.length - 1)].uuid
+    }
   }
 
   onVideoRemoved () {
@@ -374,13 +385,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
         this.i18n('Mature or explicit content')
       )
-      if (res === false) return this.redirectService.redirectToHomepage()
+      if (res === false) return this.location.back()
     }
 
     // Flush old player if needed
     this.flushPlayer()
 
-    // Build video element, because videojs remove it on dispose
+    // Build video element, because videojs removes it on dispose
     const playerElementWrapper = this.elementRef.nativeElement.querySelector('#videojs-wrapper')
     this.playerElement = document.createElement('video')
     this.playerElement.className = 'video-js vjs-peertube-skin'
@@ -475,6 +486,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.one('ended', () => {
         if (this.playlist) {
           this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+        } else if (this.user && this.user.autoPlayNextVideo) {
+          this.zone.run(() => this.autoplayNext())
         }
       })
 
@@ -496,6 +509,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.checkUserRating()
 
     this.hooks.runAction('action:video-watch.video.loaded', 'video-watch')
+  }
+
+  private autoplayNext () {
+    if (this.nextVideoUuid) {
+      this.router.navigate([ '/videos/watch', this.nextVideoUuid ])
+    }
   }
 
   private setRating (nextRating: UserVideoRateType) {

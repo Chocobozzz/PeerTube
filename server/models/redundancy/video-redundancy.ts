@@ -30,6 +30,7 @@ import * as Bluebird from 'bluebird'
 import { col, FindOptions, fn, literal, Op, Transaction } from 'sequelize'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
 import { CONFIG } from '../../initializers/config'
+import { MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/typings/models'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -166,7 +167,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return undefined
   }
 
-  static async loadLocalByFileId (videoFileId: number) {
+  static async loadLocalByFileId (videoFileId: number): Promise<MVideoRedundancyVideo> {
     const actor = await getServerActor()
 
     const query = {
@@ -179,7 +180,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number) {
+  static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo> {
     const actor = await getServerActor()
 
     const query = {
@@ -192,7 +193,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MVideoRedundancy> {
     const query = {
       where: {
         url
@@ -306,7 +307,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
   }
 
-  static async loadOldestLocalThatAlreadyExpired (strategy: VideoRedundancyStrategy, expiresAfterMs: number) {
+  static async loadOldestLocalExpired (strategy: VideoRedundancyStrategy, expiresAfterMs: number): Promise<MVideoRedundancyVideo> {
     const expiredDate = new Date()
     expiredDate.setMilliseconds(expiredDate.getMilliseconds() - expiresAfterMs)
 
@@ -487,7 +488,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return !!this.strategy
   }
 
-  toActivityPubObject (): CacheFileObject {
+  toActivityPubObject (this: MVideoRedundancyAP): CacheFileObject {
     if (this.VideoStreamingPlaylist) {
       return {
         id: this.url,

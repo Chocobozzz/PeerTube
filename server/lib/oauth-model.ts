@@ -8,10 +8,11 @@ import { LRU_CACHE } from '../initializers/constants'
 import { Transaction } from 'sequelize'
 import { CONFIG } from '../initializers/config'
 import * as LRUCache from 'lru-cache'
+import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
-const accessTokenCache = new LRUCache<string, OAuthTokenModel>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
+const accessTokenCache = new LRUCache<string, MOAuthTokenUser>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
 const userHavingToken = new LRUCache<number, string>({ max: LRU_CACHE.USER_TOKENS.MAX_SIZE })
 
 // ---------------------------------------------------------------------------

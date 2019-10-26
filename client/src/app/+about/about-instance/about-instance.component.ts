@@ -4,6 +4,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { MarkdownService } from '@app/shared/renderer'
+import { forkJoin } from 'rxjs'
+import { first } from 'rxjs/operators'
 
 @Component({
   selector: 'my-about-instance',
@@ -14,8 +16,22 @@ export class AboutInstanceComponent implements OnInit {
   @ViewChild('contactAdminModal', { static: true }) contactAdminModal: ContactAdminModalComponent
 
   shortDescription = ''
-  descriptionHTML = ''
-  termsHTML = ''
+
+  html = {
+    description: '',
+    terms: '',
+    codeOfConduct: '',
+    moderationInformation: '',
+    administrator: '',
+    hardwareInformation: ''
+  }
+
+  creationReason = ''
+  maintenanceLifetime = ''
+  businessModel = ''
+
+  languages: string[] = []
+  categories: string[] = []
 
   constructor (
     private notifier: Notifier,
@@ -38,21 +54,30 @@ export class AboutInstanceComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.instanceService.getAbout()
-      .subscribe(
-        async res => {
-          this.shortDescription = res.instance.shortDescription
+    forkJoin([
+      this.instanceService.getAbout(),
+      this.serverService.localeObservable.pipe(first()),
+      this.serverService.videoLanguagesLoaded.pipe(first()),
+      this.serverService.videoCategoriesLoaded.pipe(first())
+    ]).subscribe(
+      async ([ about, translations ]) => {
+        this.shortDescription = about.instance.shortDescription
 
-          this.descriptionHTML = await this.markdownService.textMarkdownToHTML(res.instance.description)
-          this.termsHTML = await this.markdownService.textMarkdownToHTML(res.instance.terms)
-        },
+        this.creationReason = about.instance.creationReason
+        this.maintenanceLifetime = about.instance.maintenanceLifetime
+        this.businessModel = about.instance.businessModel
 
-        () => this.notifier.error(this.i18n('Cannot get about information from server'))
-      )
+        this.html = await this.instanceService.buildHtml(about)
+
+        this.languages = this.instanceService.buildTranslatedLanguages(about, translations)
+        this.categories = this.instanceService.buildTranslatedCategories(about, translations)
+      },
+
+      () => this.notifier.error(this.i18n('Cannot get about information from server'))
+    )
   }
 
   openContactModal () {
     return this.contactAdminModal.show()
   }
-
 }

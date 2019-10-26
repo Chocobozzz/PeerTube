@@ -16,4 +16,5 @@ export interface UserNotificationSetting {
   newFollow: UserNotificationSettingValue
   commentMention: UserNotificationSettingValue
   newInstanceFollower: UserNotificationSettingValue
+  autoInstanceFollowing: UserNotificationSettingValue
 }

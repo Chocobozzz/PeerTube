@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { getAccessToken } from '../../shared/extra-utils/users/login'

@@ -7,7 +7,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getVideoDislikeActivityPubUrl } from '../url'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature } from '../../../typings/models'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
   const { activity, byActor } = options
@@ -22,7 +22,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processDislike (activity: ActivityCreate | ActivityDislike, byActor: SignatureActorModel) {
+async function processDislike (activity: ActivityCreate | ActivityDislike, byActor: MActorSignature) {
   const dislikeObject = activity.type === 'Dislike' ? activity.object : (activity.object as DislikeObject).object
   const byAccount = byActor.Account
 

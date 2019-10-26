@@ -1,16 +1,15 @@
 import { Transaction } from 'sequelize'
 import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/activitypub'
-import { VideoModel } from '../../../models/video/video'
 import { broadcastToFollowers } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { ActorModelOnly } from '../../../typings/models'
-import { VideoShareModelOnly } from '../../../typings/models/video-share'
+import { MActorLight, MVideo } from '../../../typings/models'
+import { MVideoShare } from '../../../typings/models/video'
 
 async function buildAnnounceWithVideoAudience (
-  byActor: ActorModelOnly,
-  videoShare: VideoShareModelOnly,
-  video: VideoModel,
+  byActor: MActorLight,
+  videoShare: MVideoShare,
+  video: MVideo,
   t: Transaction
 ) {
   const announcedObject = video.url
@@ -23,7 +22,7 @@ async function buildAnnounceWithVideoAudience (
   return { activity, actorsInvolvedInVideo }
 }
 
-async function sendVideoAnnounce (byActor: ActorModelOnly, videoShare: VideoShareModelOnly, video: VideoModel, t: Transaction) {
+async function sendVideoAnnounce (byActor: MActorLight, videoShare: MVideoShare, video: MVideo, t: Transaction) {
   const { activity, actorsInvolvedInVideo } = await buildAnnounceWithVideoAudience(byActor, videoShare, video, t)
 
   logger.info('Creating job to send announce %s.', videoShare.url)
@@ -32,7 +31,7 @@ async function sendVideoAnnounce (byActor: ActorModelOnly, videoShare: VideoShar
   return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, t, followersException)
 }
 
-function buildAnnounceActivity (url: string, byActor: ActorModelOnly, object: string, audience?: ActivityAudience): ActivityAnnounce {
+function buildAnnounceActivity (url: string, byActor: MActorLight, object: string, audience?: ActivityAudience): ActivityAnnounce {
   if (!audience) audience = getAudience(byActor)
 
   return audiencify({

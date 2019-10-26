@@ -13,6 +13,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
+import { MAccountActor, MChannelActor, MVideo } from '../typings/models'
 
 export class ClientHtml {
 
@@ -41,11 +42,11 @@ export class ClientHtml {
 
     const [ html, video ] = await Promise.all([
       ClientHtml.getIndexHTML(req, res),
-      VideoModel.load(videoId)
+      VideoModel.loadWithBlacklist(videoId)
     ])
 
     // Let Angular application handle errors
-    if (!video || video.privacy === VideoPrivacy.PRIVATE) {
+    if (!video || video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
       return ClientHtml.getIndexHTML(req, res)
     }
 
@@ -65,7 +66,7 @@ export class ClientHtml {
   }
 
   private static async getAccountOrChannelHTMLPage (
-    loader: () => Bluebird<AccountModel | VideoChannelModel>,
+    loader: () => Bluebird<MAccountActor | MChannelActor>,
     req: express.Request,
     res: express.Response
   ) {
@@ -157,7 +158,7 @@ export class ClientHtml {
     return htmlStringPage.replace('</head>', linkTag + '</head>')
   }
 
-  private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: VideoModel) {
+  private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: MVideo) {
     const previewUrl = WEBSERVER.URL + video.getPreviewStaticPath()
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
@@ -236,7 +237,7 @@ export class ClientHtml {
     return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
   }
 
-  private static addAccountOrChannelMetaTags (htmlStringPage: string, entity: AccountModel | VideoChannelModel) {
+  private static addAccountOrChannelMetaTags (htmlStringPage: string, entity: MAccountActor | MChannelActor) {
     // SEO, use origin account or channel URL
     const metaTags = `<link rel="canonical" href="${entity.Actor.url}" />`
 

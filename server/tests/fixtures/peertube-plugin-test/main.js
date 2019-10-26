@@ -86,6 +86,17 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
       return false
     }
   })
+
+  registerHook({
+    target: 'filter:api.user.signup.allowed.result',
+    handler: (result, params) => {
+      if (params && params.body.email.includes('jma')) {
+        return { allowed: false, errorMessage: 'No jma' }
+      }
+
+      return result
+    }
+  })
 }
 
 async function unregister () {

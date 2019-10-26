@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import * as prompt from 'prompt'
 import { getNetrc, getSettings, writeSettings } from './cli'

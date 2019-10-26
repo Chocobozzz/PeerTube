@@ -11,7 +11,6 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { Video } from '@app/shared/video/video.model'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { PluginService } from '@app/core/plugins/plugin.service'
 
 @Component({
   selector: 'my-search',
@@ -44,8 +43,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     private notifier: Notifier,
     private searchService: SearchService,
     private authService: AuthService,
-    private hooks: HooksService,
-    private pluginService: PluginService
+    private hooks: HooksService
   ) { }
 
   get user () {

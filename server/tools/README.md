@@ -18,7 +18,7 @@ COMMANDS
 
 Unless otherwise specified, every command can be queried for its own help or manual by passing its name to the `help` command, or by using the `--help` option.
 
-`auth [action]`: stores credentials for your accounts on remote instances so that you don't need to pass them at every command
+`auth [action]`: stores credentials for your accounts on remote instances, so that you don't need to pass them at every command
 
 `upload|up`: upload a video to a remote instance
 

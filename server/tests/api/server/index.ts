@@ -1,3 +1,4 @@
+import './auto-follows'
 import './config'
 import './contact-form'
 import './email'

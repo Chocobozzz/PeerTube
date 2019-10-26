@@ -2,6 +2,12 @@
 @import '_mixins';
 @import './_player-variables';
 
+body {
+  --embedForegroundColor: #{$primary-foreground-color};
+
+  --embedBigPlayBackgroundColor: #{$primary-background-color};
+}
+
 @mixin big-play-button-triangle-size($triangle-size) {
   width: $triangle-size;
   height: $triangle-size;

@@ -17,9 +17,12 @@
       </a>
 
       <span class="video-miniature-created-at-views">
-        <ng-container *ngIf="displayOptions.date">{{ video.publishedAt | myFromNow }}</ng-container>
-        <ng-container *ngIf="displayOptions.date && displayOptions.views"> - </ng-container>
-        <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} views</ng-container>
+        <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
+
+        <span class="views">
+          <ng-container *ngIf="displayOptions.date && displayOptions.views"> - </ng-container>
+          <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} views</ng-container>
+        </span>
       </span>
 
       <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
@@ -31,7 +34,7 @@
 
       <div class="video-info-privacy">
         <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
-        <ng-container *ngIf="displayOptions.privacyText && getStateLabel(video)"> - </ng-container>
+        <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>
         <ng-container *ngIf="displayOptions.state">{{ getStateLabel(video) }}</ng-container>
       </div>
 

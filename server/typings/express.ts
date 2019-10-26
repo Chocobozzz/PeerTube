@@ -1,89 +1,103 @@
-import { VideoChannelModel } from '../models/video/video-channel'
-import { VideoPlaylistModel } from '../models/video/video-playlist'
-import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
-import { UserModel } from '../models/account/user'
-import { VideoModel } from '../models/video/video'
-import { AccountModel } from '../models/account/account'
-import { VideoChangeOwnershipModel } from '../models/video/video-change-ownership'
-import { ActorModel } from '../models/activitypub/actor'
-import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoShareModel } from '../models/video/video-share'
-import { AccountVideoRateModel } from '../models/account/account-video-rate'
-import { ActorFollowModel } from '../models/activitypub/actor-follow'
-import { ServerModel } from '../models/server/server'
-import { VideoFileModel } from '../models/video/video-file'
-import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
-import { ServerBlocklistModel } from '../models/server/server-blocklist'
-import { AccountBlocklistModel } from '../models/account/account-blocklist'
-import { VideoImportModel } from '../models/video/video-import'
-import { VideoAbuseModel } from '../models/video/video-abuse'
-import { VideoBlacklistModel } from '../models/video/video-blacklist'
-import { VideoCaptionModel } from '../models/video/video-caption'
-import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { RegisteredPlugin } from '../lib/plugins/plugin-manager'
-import { PluginModel } from '../models/server/plugin'
-import { SignatureActorModel } from './models'
+import {
+  MAccountDefault,
+  MActorAccountChannelId,
+  MActorFollowActorsDefault,
+  MActorFollowActorsDefaultSubscription,
+  MActorFull,
+  MChannelAccountDefault,
+  MComment,
+  MCommentOwnerVideoReply,
+  MUserDefault,
+  MVideoAbuse,
+  MVideoBlacklist,
+  MVideoCaptionVideo,
+  MVideoFullLight,
+  MVideoIdThumbnail,
+  MVideoRedundancyVideo,
+  MVideoShareActor,
+  MVideoThumbnail,
+  MVideoWithRights
+} from './models'
+import { MVideoPlaylistFull, MVideoPlaylistFullSummary } from './models/video/video-playlist'
+import { MVideoImportDefault } from '@server/typings/models/video/video-import'
+import { MAccountBlocklist, MStreamingPlaylist, MVideoFile } from '@server/typings/models'
+import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/typings/models/video/video-playlist-element'
+import { MAccountVideoRateAccountVideo } from '@server/typings/models/video/video-rate'
+import { MVideoChangeOwnershipFull } from './models/video/video-change-ownership'
+import { MPlugin, MServer } from '@server/typings/models/server'
+import { MServerBlocklist } from './models/server/server-blocklist'
+import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
 
 declare module 'express' {
 
   interface Response {
+
     locals: {
-      video?: VideoModel
-      videoShare?: VideoShareModel
-      videoFile?: VideoFileModel
+      videoAll?: MVideoFullLight
+      onlyVideo?: MVideoThumbnail
+      onlyVideoWithRights?: MVideoWithRights
+      videoId?: MVideoIdThumbnail
 
-      videoImport?: VideoImportModel
+      videoShare?: MVideoShareActor
 
-      videoBlacklist?: VideoBlacklistModel
+      videoFile?: MVideoFile
 
-      videoCaption?: VideoCaptionModel
+      videoImport?: MVideoImportDefault
 
-      videoAbuse?: VideoAbuseModel
+      videoBlacklist?: MVideoBlacklist
 
-      videoStreamingPlaylist?: VideoStreamingPlaylistModel
+      videoCaption?: MVideoCaptionVideo
 
-      videoChannel?: VideoChannelModel
+      videoAbuse?: MVideoAbuse
 
-      videoPlaylist?: VideoPlaylistModel
-      videoPlaylistElement?: VideoPlaylistElementModel
+      videoStreamingPlaylist?: MStreamingPlaylist
 
-      accountVideoRate?: AccountVideoRateModel
+      videoChannel?: MChannelAccountDefault
 
-      videoComment?: VideoCommentModel
-      videoCommentThread?: VideoCommentModel
+      videoPlaylistFull?: MVideoPlaylistFull
+      videoPlaylistSummary?: MVideoPlaylistFullSummary
 
-      follow?: ActorFollowModel
-      subscription?: ActorFollowModel
+      videoPlaylistElement?: MVideoPlaylistElement
+      videoPlaylistElementAP?: MVideoPlaylistElementVideoUrlPlaylistPrivacy
 
-      nextOwner?: AccountModel
-      videoChangeOwnership?: VideoChangeOwnershipModel
-      account?: AccountModel
-      actor?: ActorModel
-      user?: UserModel
+      accountVideoRate?: MAccountVideoRateAccountVideo
 
-      server?: ServerModel
+      videoCommentFull?: MCommentOwnerVideoReply
+      videoCommentThread?: MComment
 
-      videoRedundancy?: VideoRedundancyModel
+      follow?: MActorFollowActorsDefault
+      subscription?: MActorFollowActorsDefaultSubscription
 
-      accountBlock?: AccountBlocklistModel
-      serverBlock?: ServerBlocklistModel
+      nextOwner?: MAccountDefault
+      videoChangeOwnership?: MVideoChangeOwnershipFull
+
+      account?: MAccountDefault
+
+      actorFull?: MActorFull
+
+      user?: MUserDefault
+
+      server?: MServer
+
+      videoRedundancy?: MVideoRedundancyVideo
+
+      accountBlock?: MAccountBlocklist
+      serverBlock?: MServerBlocklist
 
       oauth?: {
-        token: {
-          User: UserModel
-          user: UserModel
-        }
+        token: MOAuthTokenUser
       }
 
       signature?: {
-        actor: SignatureActorModel
+        actor: MActorAccountChannelId
       }
 
       authenticated?: boolean
 
       registeredPlugin?: RegisteredPlugin
 
-      plugin?: PluginModel
+      plugin?: MPlugin
     }
   }
 }

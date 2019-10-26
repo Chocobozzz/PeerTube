@@ -26,7 +26,7 @@ const addVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -41,11 +41,11 @@ const deleteVideoCaptionValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoCaptionExist(res.locals.video, req.params.captionLanguage, res)) return
+    if (!await doesVideoCaptionExist(res.locals.videoAll, req.params.captionLanguage, res)) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
 
     return next()
   }

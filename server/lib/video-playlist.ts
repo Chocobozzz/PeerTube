@@ -1,12 +1,13 @@
 import * as Sequelize from 'sequelize'
-import { AccountModel } from '../models/account/account'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { getVideoPlaylistActivityPubUrl } from './activitypub'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
+import { MAccount } from '../typings/models'
+import { MVideoPlaylistOwner } from '../typings/models/video/video-playlist'
 
-async function createWatchLaterPlaylist (account: AccountModel, t: Sequelize.Transaction) {
-  const videoPlaylist = new VideoPlaylistModel({
+async function createWatchLaterPlaylist (account: MAccount, t: Sequelize.Transaction) {
+  const videoPlaylist: MVideoPlaylistOwner = new VideoPlaylistModel({
     name: 'Watch later',
     privacy: VideoPlaylistPrivacy.PRIVATE,
     type: VideoPlaylistType.WATCH_LATER,

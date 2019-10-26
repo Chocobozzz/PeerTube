@@ -1,20 +1,34 @@
-import { Component } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { AuthService, Notifier, RedirectService, ServerService } from '@app/core'
 import { UserService, UserValidatorsService } from '@app/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRegister } from '@shared/models/users/user-register.model'
 import { FormGroup } from '@angular/forms'
+import { About } from '@shared/models/server'
+import { InstanceService } from '@app/shared/instance/instance.service'
+import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-register',
   templateUrl: './register.component.html',
   styleUrls: [ './register.component.scss' ]
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
+  @ViewChild('accordion', { static: true }) accordion: NgbAccordion
+
   info: string = null
   error: string = null
   success: string = null
   signupDone = false
+
+  about: About
+  aboutHtml = {
+    description: '',
+    terms: '',
+    codeOfConduct: '',
+    moderationInformation: '',
+    administrator: ''
+  }
 
   formStepUser: FormGroup
   formStepChannel: FormGroup
@@ -26,12 +40,26 @@ export class RegisterComponent {
     private userService: UserService,
     private serverService: ServerService,
     private redirectService: RedirectService,
+    private instanceService: InstanceService,
     private i18n: I18n
   ) {
   }
 
   get requiresEmailVerification () {
     return this.serverService.getConfig().signup.requiresEmailVerification
+  }
+
+  ngOnInit (): void {
+    this.instanceService.getAbout()
+      .subscribe(
+        async about => {
+          this.about = about
+
+          this.aboutHtml = await this.instanceService.buildHtml(about)
+        },
+
+        err => this.notifier.error(err.message)
+      )
   }
 
   hasSameChannelAndAccountNames () {
@@ -56,6 +84,14 @@ export class RegisterComponent {
 
   onChannelFormBuilt (form: FormGroup) {
     this.formStepChannel = form
+  }
+
+  onTermsClick () {
+    if (this.accordion) this.accordion.toggle('terms')
+  }
+
+  onCodeOfConductClick () {
+    if (this.accordion) this.accordion.toggle('code-of-conduct')
   }
 
   signup () {

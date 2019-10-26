@@ -5,8 +5,16 @@ import 'mocha'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, flushAndRunServer, ServerInfo,
-  setAccessTokensToServers, userLogin, immutableAssign, cleanupTests
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  immutableAssign,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePutBodyRequest,
+  ServerInfo,
+  setAccessTokensToServers,
+  userLogin
 } from '../../../../shared/extra-utils'
 
 describe('Test config API validators', function () {
@@ -19,6 +27,18 @@ describe('Test config API validators', function () {
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
+      codeOfConduct: 'my super coc',
+
+      creationReason: 'my super reason',
+      moderationInformation: 'my super moderation information',
+      administrator: 'Kuja',
+      maintenanceLifetime: 'forever',
+      businessModel: 'my super business model',
+      hardwareInformation: '2vCore 3GB RAM',
+
+      languages: [ 'en', 'es' ],
+      categories: [ 1, 2 ],
+
       isNSFW: true,
       defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
@@ -97,6 +117,17 @@ describe('Test config API validators', function () {
       instance: {
         enabled: false,
         manualApproval: true
+      }
+    },
+    followings: {
+      instance: {
+        autoFollowBack: {
+          enabled: true
+        },
+        autoFollowIndex: {
+          enabled: true,
+          indexUrl: 'https://index.example.com'
+        }
       }
     }
   }

@@ -10,10 +10,8 @@ import { createOrUpdateCacheFile } from '../cache-file'
 import { Notifier } from '../../notifier'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
-import { VideoModel } from '../../../models/video/video'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { VideoCommentModel } from '../../../models/video/video-comment'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../typings/models'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -61,7 +59,7 @@ async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
   return video
 }
 
-async function processCreateCacheFile (activity: ActivityCreate, byActor: SignatureActorModel) {
+async function processCreateCacheFile (activity: ActivityCreate, byActor: MActorSignature) {
   const cacheFile = activity.object as CacheFileObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })
@@ -77,15 +75,15 @@ async function processCreateCacheFile (activity: ActivityCreate, byActor: Signat
   }
 }
 
-async function processCreateVideoComment (activity: ActivityCreate, byActor: SignatureActorModel, notify: boolean) {
+async function processCreateVideoComment (activity: ActivityCreate, byActor: MActorSignature, notify: boolean) {
   const commentObject = activity.object as VideoCommentObject
   const byAccount = byActor.Account
 
   if (!byAccount) throw new Error('Cannot create video comment with the non account actor ' + byActor.url)
 
-  let video: VideoModel
+  let video: MVideoAccountLightBlacklistAllFiles
   let created: boolean
-  let comment: VideoCommentModel
+  let comment: MCommentOwnerVideo
   try {
     const resolveThreadResult = await resolveThread({ url: commentObject.id, isVideo: false })
     video = resolveThreadResult.video
@@ -110,7 +108,7 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: Sig
   if (created && notify) Notifier.Instance.notifyOnNewComment(comment)
 }
 
-async function processCreatePlaylist (activity: ActivityCreate, byActor: SignatureActorModel) {
+async function processCreatePlaylist (activity: ActivityCreate, byActor: MActorSignature) {
   const playlistObject = activity.object as PlaylistObject
   const byAccount = byActor.Account
 

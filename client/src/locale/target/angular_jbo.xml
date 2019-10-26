@@ -183,25 +183,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ade81bccd385c84f16f0e3862c1da3106bc3914b">
-        <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>new video<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </source>
-        <target>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          .i gau la\'o zoi. <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> .zoi pa <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>cnino se vidvi<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> co\'a gubni
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715">
         <source>
         <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
@@ -440,7 +421,7 @@
         <source>Get help</source>
         <target>nu sidju do</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
@@ -451,6 +432,13 @@
 sisti lo nu jersi pe'a</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
+        <source>Local</source>
+        <target>lo diklo</target>
+        <context-group name="null">
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d7b35c384aecd25a516200d6921836374613dfe7">
@@ -485,7 +473,7 @@ sisti lo nu jersi pe'a</target>
         <source>I forgot my password</source>
         <target>.i mi nalmo'i le mi lerpoijaspu</target>
         <context-group name="null">
-          <context context-type="linenumber">44</context>
+          <context context-type="linenumber">45</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -499,18 +487,7 @@ sisti lo nu jersi pe'a</target>
         <source>Forgot your password</source>
         <target>.i mi nalmo'i le mi lerpoijaspu</target>
         <context-group name="null">
-          <context context-type="linenumber">57</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f876804a6725f7b950c8e4c56ca596206856e6a2">
-        <source>
-      We are sorry, you cannot recover you password because your instance administrator did not configure the PeerTube email system.
-    </source>
-        <target>
-      .i .uu do na kakne lo ka ce'u basygau fo lo ka ce'u japyvla do kei kei xoi se rinka lo nu lo jitro be lo samtcise'u na ba'o tcimi'e lo samymri ciste pe la .pirtub.
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">64</context>
+          <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -531,7 +508,7 @@ sisti lo nu jersi pe'a</target>
         <source>Send me an email to reset my password</source>
         <target>samymri fi mi te zu'e lo nu galfi le mi japyvla</target>
         <context-group name="null">
-          <context context-type="linenumber">81</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
@@ -575,11 +552,18 @@ galfi le mi japyvla</target>
           <context context-type="linenumber">44</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
+        <source>Close</source>
+        <target>mipri</target>
+        <context-group name="null">
+          <context context-type="linenumber">173</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="aef5c45fb9c725573d20a6283492e6b80fd2ae96">
         <source>Change the language</source>
         <target>galfi lo bangu</target>
         <context-group name="null">
-          <context context-type="linenumber">102</context>
+          <context context-type="linenumber">107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28">
@@ -631,13 +615,6 @@ galfi le mi japyvla</target>
         <source>Recently added</source>
         <target>pu za se jmina</target>
         <context-group name="null">
-          <context context-type="linenumber">76</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
-        <source>Local</source>
-        <target>lo diklo</target>
-        <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
@@ -645,14 +622,14 @@ galfi le mi japyvla</target>
         <source>More</source>
         <target>lo drata</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">91</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
         <target>nu jitro</target>
         <context-group name="null">
-          <context context-type="linenumber">90</context>
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
@@ -778,49 +755,49 @@ galfi le mi japyvla</target>
         <source>+ Tag</source>
         <target>jmina lo tcita</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
         <source>Enter a new tag</source>
         <target>ciska lo tcita poi cnino</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">30</context>
         </context-group>
       </trans-unit>
       <trans-unit id="eec715de352a6b114713b30b640d319fa78207a0">
         <source>Description</source>
         <target>lo ve skicu</target>
         <context-group name="null">
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">55</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
         <source>Channel</source>
         <target>lo te tivni</target>
         <context-group name="null">
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
         <target>.i le vi vidvi cu vasru lo makcu ja cnixai ganvi</target>
         <context-group name="null">
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">136</context>
         </context-group>
       </trans-unit>
       <trans-unit id="308a79679d012938a625e41fdd4b804fe42b57b9">
         <source>Cancel create</source>
         <target>co'u zbasu</target>
         <context-group name="null">
-          <context context-type="linenumber">165</context>
+          <context context-type="linenumber">189</context>
         </context-group>
       </trans-unit>
       <trans-unit id="88395fc0137e46a9853cf16762bf5a87687d0d0c">
         <source>Cancel deletion</source>
         <target>co'u vimcu</target>
         <context-group name="null">
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -834,28 +811,28 @@ galfi le mi japyvla</target>
         <source>Original publication date</source>
         <target>detri lo nu pa re'u co'a gubni</target>
         <context-group name="null">
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">239</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4f6ce709bf09f9f24c161840ae983971a09fb12c">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
         <target>.i detri lo nu lo skina pu pa re'u co'a gubni</target>
         <context-group name="null">
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">240</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
         <target>lo nu pinka le vidvi cu cumki</target>
         <context-group name="null">
-          <context context-type="linenumber">230</context>
+          <context context-type="linenumber">254</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
         <source>Advanced settings</source>
         <target>lo certu se cuxna</target>
         <context-group name="null">
-          <context context-type="linenumber">186</context>
+          <context context-type="linenumber">210</context>
         </context-group>
       </trans-unit>
       <trans-unit id="801b98c6f02fe3b32f6afa3ee854c99ed83474e6">
@@ -884,13 +861,6 @@ galfi le mi japyvla</target>
         <target>fatri</target>
         <context-group name="null">
           <context context-type="linenumber">83</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
-        <source>Close</source>
-        <target>mipri</target>
-        <context-group name="null">
-          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a">
@@ -947,7 +917,7 @@ galfi le mi japyvla</target>
     lo nu pinka na cumki
     </target>
         <context-group name="null">
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">64</context>
         </context-group>
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
@@ -1056,56 +1026,56 @@ lo pilno</target>
         <source>Short description</source>
         <target>cmalu ke skicu vlapoi</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
-        <source>Videos Trending</source>
-        <target>zasni misno vidvi</target>
-        <context-group name="null">
-          <context context-type="linenumber">61</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
-        <source>Local videos</source>
-        <target>diklo vidvi</target>
-        <context-group name="null">
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">22</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
         <source>Policy on videos containing sensitive content</source>
         <target>javni tu'a lo se vidvi poi te ganvi fi lo te kajde</target>
         <context-group name="null">
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">81</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
+        <source>Videos Trending</source>
+        <target>zasni misno vidvi</target>
+        <context-group name="null">
+          <context context-type="linenumber">220</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
+        <source>Local videos</source>
+        <target>diklo vidvi</target>
+        <context-group name="null">
+          <context context-type="linenumber">223</context>
         </context-group>
       </trans-unit>
       <trans-unit id="717a5e3574fec754fbeb348c2d5561c4d81facc4">
         <source>Signup</source>
         <target>cmiveigau</target>
         <context-group name="null">
-          <context context-type="linenumber">105</context>
+          <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4d13a9cd5ed3dcee0eab22cb25198d43886942be">
         <source>Users</source>
         <target>pilno</target>
         <context-group name="null">
-          <context context-type="linenumber">133</context>
+          <context context-type="linenumber">257</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>la .djavascript.</target>
         <context-group name="null">
-          <context context-type="linenumber">372</context>
+          <context context-type="linenumber">553</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8">
         <source>Update configuration</source>
         <target>nu basti fi lo ka ce'u te tcimi'e</target>
         <context-group name="null">
-          <context context-type="linenumber">418</context>
+          <context context-type="linenumber">606</context>
         </context-group>
       </trans-unit>
       <trans-unit id="994363f08f9fbfa3b3994ff7b35c6904fdff18d8">
@@ -1161,7 +1131,7 @@ lo pilno</target>
         <source>Use WebTorrent to exchange parts of the video with others</source>
         <target>pilno la .uebytorent. lo nu lo pagbu be le vidvi cu fatri lo drata</target>
         <context-group name="null">
-          <context context-type="linenumber">36</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d2fa66a905b6b7f691c83be681d18188cbe4a8ba">
@@ -1294,14 +1264,14 @@ lo pilno</target>
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> instance</source>
         <target>datni lo samtcise\'u no\'u la\'o zoi. <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> .zoi</target>
         <context-group name="null">
-          <context context-type="linenumber">4</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c1aff50472b313c70a72ee02c081b8eeb1c616c">
         <source>Contact administrator</source>
         <target>nu tavla lo jitro</target>
         <context-group name="null">
-          <context context-type="linenumber">6</context>
+          <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
@@ -1336,93 +1306,35 @@ datni la .pirtub.
         <source>P2P &amp; Privacy</source>
         <target>ni'o ni'o sau'e'u lo su'u simxu benji jo'u lo ka sivni</target>
         <context-group name="null">
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cd429d53cb8f4a87879301248e38cb85f07fa9d6">
-        <source>
-    PeerTube uses the BitTorrent protocol to share bandwidth between users.
-    This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
-  </source>
-        <target>
-    .i .o'i la .pirtub. cu pilno la .bitorent. noi ciste ku'o lo nu lo benji nilsutra cu fatri lo'i pilno
-    .i la'e di'u nibli lo du'u lo ciste pe la .bitorent. ge'u pe le samtcise'u cu vreji lo do kibro judri ca'o lo nu do kibycpa lo vidvi ja cu catlu ri</target>
-        <context-group name="null">
-          <context context-type="linenumber">20</context>
+          <context context-type="linenumber">21</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
         <source>What are the consequences?</source>
         <target>ni'o ma jalge</target>
         <context-group name="null">
-          <context context-type="linenumber">25</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="9a612748b059ad246935df17ef4ec4e6afb43a2a">
-        <source>
-    In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
-    In practice, this is much more difficult because:
-  </source>
-        <target>
-    .i da'i lo banzu certu be lo zbaske cu ka'e sampla fi lo pu'u gau vreji lo kibro judri ku lo vidvi poi se kibycpa ri
-    .i da'i nai la'e di'e rinka lo nu la'e di'u mutce nandu .i tu'e</target>
-        <context-group name="null">
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="64f96be62df4a95a0615b6f630ad25d6348a29d3">
-        <source>
-      An HTTP request has to be sent on each tracker for each video to spy.
-      If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-    </source>
-        <target>
-    .i ro vreji ro vidvi pa di poi mipyzga ve cpedu zo'u lo mipyzga cu nitcu lo ka ce'u benji di
-    .i ga na ja da'i mi djica lo ka ce'u mipyzga ro lo vidvi pe la .pirtub. gi ro vidvi pe py. zo'u .ei mi benji pa ve cpedu to sordu'e la'a toi</target>
-        <context-group name="null">
-          <context context-type="linenumber">33</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="fec3239a860de66c718e3442df836b692b8568c3">
-        <source>
-      The IP address is a vague information : usually, it regularly changes and can represent many persons or entities
-    </source>
-        <target>
-    .i lo kibro judri cu smuvrici datni .i bo  ri se galfi di'i gi'e ka'e judri so'i lo prenu ja zukyka'e</target>
-        <context-group name="null">
-          <context context-type="linenumber">51</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="50d8e8388f5ceab292850ed828f306c9f2cab389">
-        <source>
-    The worst-case scenario of an average person spying on their friends is quite unlikely.
-    There are much more effective ways to get that kind of information.
-  </source>
-        <target>
-    .i la'a nai sai lo fadni prenu cu mipyzga lo pendo be ri
-    .i da noi mutce xagmau cu drata tadji lo'e nu cpacu le datni</target>
-        <context-group name="null">
-          <context context-type="linenumber">62</context>
+          <context context-type="linenumber">28</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
         <source>How does PeerTube compare with YouTube?</source>
         <target>ni'o xe karbi la .pirtub. la .iutub.</target>
         <context-group name="null">
-          <context context-type="linenumber">67</context>
+          <context context-type="linenumber">70</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
         <source>What can I do to limit the exposure of my IP address?</source>
         <target>ni'o mi ka'e zukte ma lo nu jimte le mi kibro judri</target>
         <context-group name="null">
-          <context context-type="linenumber">75</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
         <source>What will be done to mitigate this problem?</source>
         <target>ni'o se zukte fi lo nu spuda lo nabmi</target>
         <context-group name="null">
-          <context context-type="linenumber">83</context>
+          <context context-type="linenumber">86</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
@@ -1440,13 +1352,6 @@ zbasu lo pilno</target>
         <target>.i zoi gy. jane_doe .gy. mupli</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="7fe213724c4c0a4112c40c673884acb98a0a3b92">
-        <source>I am at least 16 years old and agree to the &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;Terms&lt;/a&gt; of this instance</source>
-        <target>.i li su'o pa xa jbetei mi .i ji'a mi tolpro fi &lt;a href='/about/instance#terms-section' target='_blank'rel='noopener noreferrer'&gt;lo javni be fi le vi mupli&lt;/a&gt;</target>
-        <context-group name="null">
-          <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b9e64712e3e5c342ce9cd32eec6cd7d6c00f4048">

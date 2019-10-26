@@ -1,11 +1,12 @@
 import * as Bluebird from 'bluebird'
-import { QueryTypes, Transaction } from 'sequelize'
+import { fn, QueryTypes, Transaction, col } from 'sequelize'
 import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
 import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
+import { MTag } from '@server/typings/models'
 
 @Table({
   tableName: 'tag',
@@ -14,6 +15,10 @@ import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
     {
       fields: [ 'name' ],
       unique: true
+    },
+    {
+      name: 'tag_lower_name',
+      fields: [ fn('lower', col('name')) ] as any // FIXME: typings
     }
   ]
 })
@@ -37,10 +42,10 @@ export class TagModel extends Model<TagModel> {
   })
   Videos: VideoModel[]
 
-  static findOrCreateTags (tags: string[], transaction: Transaction) {
-    if (tags === null) return []
+  static findOrCreateTags (tags: string[], transaction: Transaction): Promise<MTag[]> {
+    if (tags === null) return Promise.resolve([])
 
-    const tasks: Bluebird<TagModel>[] = []
+    const tasks: Bluebird<MTag>[] = []
     tags.forEach(tag => {
       const query = {
         where: {
@@ -52,7 +57,7 @@ export class TagModel extends Model<TagModel> {
         transaction
       }
 
-      const promise = TagModel.findOrCreate(query)
+      const promise = TagModel.findOrCreate<MTag>(query)
         .then(([ tagInstance ]) => tagInstance)
       tasks.push(promise)
     })

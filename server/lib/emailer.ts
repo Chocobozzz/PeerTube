@@ -2,17 +2,20 @@ import { createTransport, Transporter } from 'nodemailer'
 import { isTestInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG } from '../initializers/config'
-import { UserModel } from '../models/account/user'
-import { VideoModel } from '../models/video/video'
 import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs-extra'
-import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoAbuseModel } from '../models/video/video-abuse'
-import { VideoBlacklistModel } from '../models/video/video-blacklist'
-import { VideoImportModel } from '../models/video/video-import'
-import { ActorFollowModel } from '../models/activitypub/actor-follow'
 import { WEBSERVER } from '../initializers/constants'
+import {
+  MCommentOwnerVideo,
+  MVideo,
+  MVideoAbuseVideo,
+  MVideoAccountLight,
+  MVideoBlacklistLightVideo,
+  MVideoBlacklistVideo
+} from '../typings/models/video'
+import { MActorFollowActors, MActorFollowFull, MUser } from '../typings/models'
+import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
 
 type SendEmailOptions = {
   to: string[]
@@ -90,7 +93,7 @@ class Emailer {
     }
   }
 
-  addNewVideoFromSubscriberNotification (to: string[], video: VideoModel) {
+  addNewVideoFromSubscriberNotification (to: string[], video: MVideoAccountLight) {
     const channelName = video.VideoChannel.getDisplayName()
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
@@ -104,14 +107,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + channelName + ' just published a new video',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + channelName + ' just published a new video',
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewFollowNotification (to: string[], actorFollow: ActorFollowModel, followType: 'account' | 'channel') {
+  addNewFollowNotification (to: string[], actorFollow: MActorFollowFull, followType: 'account' | 'channel') {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
 
@@ -123,14 +126,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New follower on your channel ' + followingName,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New follower on your channel ' + followingName,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewInstanceFollowerNotification (to: string[], actorFollow: ActorFollowModel) {
+  addNewInstanceFollowerNotification (to: string[], actorFollow: MActorFollowActors) {
     const awaitingApproval = actorFollow.state === 'pending' ? ' awaiting manual approval.' : ''
 
     const text = `Hi dear admin,\n\n` +
@@ -141,14 +144,30 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New instance follower',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New instance follower',
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  myVideoPublishedNotification (to: string[], video: VideoModel) {
+  addAutoInstanceFollowingNotification (to: string[], actorFollow: MActorFollowActors) {
+    const text = `Hi dear admin,\n\n` +
+      `Your instance automatically followed a new instance: ${actorFollow.ActorFollowing.url}` +
+      `\n\n` +
+      `Cheers,\n` +
+      `${CONFIG.EMAIL.BODY.SIGNATURE}`
+
+    const emailPayload: EmailPayload = {
+      to,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Auto instance following',
+      text
+    }
+
+    return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
+  }
+
+  myVideoPublishedNotification (to: string[], video: MVideo) {
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
     const text = `Hi dear user,\n\n` +
@@ -161,14 +180,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Your video ${video.name} is published`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Your video ${video.name} is published`,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  myVideoImportSuccessNotification (to: string[], videoImport: VideoImportModel) {
+  myVideoImportSuccessNotification (to: string[], videoImport: MVideoImportVideo) {
     const videoUrl = WEBSERVER.URL + videoImport.Video.getWatchStaticPath()
 
     const text = `Hi dear user,\n\n` +
@@ -181,14 +200,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} is finished`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} is finished`,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  myVideoImportErrorNotification (to: string[], videoImport: VideoImportModel) {
+  myVideoImportErrorNotification (to: string[], videoImport: MVideoImport) {
     const importUrl = WEBSERVER.URL + '/my-account/video-imports'
 
     const text = `Hi dear user,\n\n` +
@@ -201,14 +220,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Your video import ${videoImport.getTargetIdentifier()} encountered an error`,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewCommentOnMyVideoNotification (to: string[], comment: VideoCommentModel) {
+  addNewCommentOnMyVideoNotification (to: string[], comment: MCommentOwnerVideo) {
     const accountName = comment.Account.getDisplayName()
     const video = comment.Video
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
@@ -223,14 +242,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New comment on your video ' + video.name,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New comment on your video ' + video.name,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewCommentMentionNotification (to: string[], comment: VideoCommentModel) {
+  addNewCommentMentionNotification (to: string[], comment: MCommentOwnerVideo) {
     const accountName = comment.Account.getDisplayName()
     const video = comment.Video
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
@@ -245,14 +264,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Mention on video ' + video.name,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Mention on video ' + video.name,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoAbuseModeratorsNotification (to: string[], videoAbuse: VideoAbuseModel) {
+  addVideoAbuseModeratorsNotification (to: string[], videoAbuse: MVideoAbuseVideo) {
     const videoUrl = WEBSERVER.URL + videoAbuse.Video.getWatchStaticPath()
 
     const text = `Hi,\n\n` +
@@ -262,16 +281,16 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Received a video abuse',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Received a video abuse',
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoAutoBlacklistModeratorsNotification (to: string[], video: VideoModel) {
+  addVideoAutoBlacklistModeratorsNotification (to: string[], videoBlacklist: MVideoBlacklistLightVideo) {
     const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
-    const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
+    const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
     const text = `Hi,\n\n` +
       `A recently added video was auto-blacklisted and requires moderator review before publishing.` +
@@ -285,14 +304,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'An auto-blacklisted video is awaiting review',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'An auto-blacklisted video is awaiting review',
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addNewUserRegistrationNotification (to: string[], user: UserModel) {
+  addNewUserRegistrationNotification (to: string[], user: MUser) {
     const text = `Hi,\n\n` +
       `User ${user.username} just registered on ${WEBSERVER.HOST} PeerTube instance.\n\n` +
       `Cheers,\n` +
@@ -300,14 +319,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'New user registration on ' + WEBSERVER.HOST,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New user registration on ' + WEBSERVER.HOST,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoBlacklistNotification (to: string[], videoBlacklist: VideoBlacklistModel) {
+  addVideoBlacklistNotification (to: string[], videoBlacklist: MVideoBlacklistVideo) {
     const videoName = videoBlacklist.Video.name
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
@@ -322,14 +341,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Video ${videoName} blacklisted`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Video ${videoName} blacklisted`,
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoUnblacklistNotification (to: string[], video: VideoModel) {
+  addVideoUnblacklistNotification (to: string[], video: MVideo) {
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
     const text = 'Hi,\n\n' +
@@ -340,7 +359,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to,
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + `Video ${video.name} unblacklisted`,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + `Video ${video.name} unblacklisted`,
       text
     }
 
@@ -357,7 +376,7 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Reset your password',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Reset your password',
       text
     }
 
@@ -374,14 +393,14 @@ class Emailer {
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Verify your email',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Verify your email',
       text
     }
 
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addUserBlockJob (user: UserModel, blocked: boolean, reason?: string) {
+  addUserBlockJob (user: MUser, blocked: boolean, reason?: string) {
     const reasonString = reason ? ` for the following reason: ${reason}` : ''
     const blockedWord = blocked ? 'blocked' : 'unblocked'
     const blockedString = `Your account ${user.username} on ${WEBSERVER.HOST} has been ${blockedWord}${reasonString}.`
@@ -395,7 +414,7 @@ class Emailer {
     const to = user.email
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + 'Account ' + blockedWord,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Account ' + blockedWord,
       text
     }
 
@@ -415,7 +434,7 @@ class Emailer {
       fromDisplayName: fromEmail,
       replyTo: fromEmail,
       to: [ CONFIG.ADMIN.EMAIL ],
-      subject: CONFIG.EMAIL.OBJECT.PREFIX + subject,
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + subject,
       text
     }
 

@@ -24,7 +24,6 @@ import {
   REMOTE_SCHEME,
   STATIC_PATHS
 } from '../../initializers/constants'
-import { ActorModel } from '../../models/activitypub/actor'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
 import { VideoFileModel } from '../../models/video/video-file'
@@ -38,7 +37,6 @@ import { JobQueue } from '../job-queue'
 import { ActivitypubHttpFetcherPayload } from '../job-queue/handlers/activitypub-http-fetcher'
 import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
-import { AccountModel } from '../../models/account/account'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { Notifier } from '../notifier'
@@ -49,15 +47,31 @@ import { VideoShareModel } from '../../models/video/video-share'
 import { VideoCommentModel } from '../../models/video/video-comment'
 import { sequelizeTypescript } from '../../initializers/database'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
-import { ThumbnailModel } from '../../models/video/thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { join } from 'path'
 import { FilteredModelAttributes } from '../../typings/sequelize'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
 import { ActorFollowScoreCache } from '../files-cache'
-import { AccountModelIdActor, VideoChannelModelId, VideoChannelModelIdActor } from '../../typings/models'
+import {
+  MAccountIdActor,
+  MChannelAccountLight,
+  MChannelDefault,
+  MChannelId,
+  MVideo,
+  MVideoAccountLight,
+  MVideoAccountLightBlacklistAllFiles,
+  MVideoAP,
+  MVideoAPWithoutCaption,
+  MVideoFile,
+  MVideoFullLight,
+  MVideoId,
+  MVideoThumbnail
+} from '../../typings/models'
+import { MThumbnail } from '../../typings/models/video/thumbnail'
 
-async function federateVideoIfNeeded (video: VideoModel, isNewVideo: boolean, transaction?: sequelize.Transaction) {
+async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {
+  const video = videoArg as MVideoAP
+
   if (
     // Check this is not a blacklisted video, or unfederated blacklisted video
     (video.isBlacklisted() === false || (isNewVideo === false && video.VideoBlacklist.unfederated === false)) &&
@@ -102,7 +116,7 @@ async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.
   return { response, videoObject: body }
 }
 
-async function fetchRemoteVideoDescription (video: VideoModel) {
+async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
   const host = video.VideoChannel.Account.Actor.Server.host
   const path = video.getDescriptionAPIPath()
   const options = {
@@ -114,14 +128,14 @@ async function fetchRemoteVideoDescription (video: VideoModel) {
   return body.description ? body.description : ''
 }
 
-function fetchRemoteVideoStaticFile (video: VideoModel, path: string, destPath: string) {
+function fetchRemoteVideoStaticFile (video: MVideoAccountLight, path: string, destPath: string) {
   const url = buildRemoteBaseUrl(video, path)
 
   // We need to provide a callback, if no we could have an uncaught exception
   return doRequestAndSaveToFile({ uri: url }, destPath)
 }
 
-function buildRemoteBaseUrl (video: VideoModel, path: string) {
+function buildRemoteBaseUrl (video: MVideoAccountLight, path: string) {
   const host = video.VideoChannel.Account.Actor.Server.host
 
   return REMOTE_SCHEME.HTTP + '://' + host + path
@@ -146,7 +160,7 @@ type SyncParam = {
   thumbnail: boolean
   refreshVideo?: boolean
 }
-async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: VideoTorrentObject, syncParam: SyncParam) {
+async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTorrentObject, syncParam: SyncParam) {
   logger.info('Adding likes/dislikes/shares/comments of video %s.', video.uuid)
 
   const jobPayloads: ActivitypubHttpFetcherPayload[] = []
@@ -194,12 +208,24 @@ async function syncVideoExternalAttributes (video: VideoModel, fetchedVideo: Vid
   await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload }))
 }
 
+function getOrCreateVideoAndAccountAndChannel (options: {
+  videoObject: { id: string } | string,
+  syncParam?: SyncParam,
+  fetchType?: 'all',
+  allowRefresh?: boolean
+}): Promise<{ video: MVideoAccountLightBlacklistAllFiles, created: boolean, autoBlacklisted?: boolean }>
+function getOrCreateVideoAndAccountAndChannel (options: {
+  videoObject: { id: string } | string,
+  syncParam?: SyncParam,
+  fetchType?: VideoFetchByUrlType,
+  allowRefresh?: boolean
+}): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }>
 async function getOrCreateVideoAndAccountAndChannel (options: {
   videoObject: { id: string } | string,
   syncParam?: SyncParam,
   fetchType?: VideoFetchByUrlType,
   allowRefresh?: boolean // true by default
-}) {
+}): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }> {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
@@ -227,8 +253,9 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
   const { videoObject: fetchedVideo } = await fetchRemoteVideo(videoUrl)
   if (!fetchedVideo) throw new Error('Cannot fetch remote video with url: ' + videoUrl)
 
-  const channelActor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
-  const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(createVideo, fetchedVideo, channelActor, syncParam.thumbnail)
+  const actor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
+  const videoChannel = actor.VideoChannel
+  const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(createVideo, fetchedVideo, videoChannel, syncParam.thumbnail)
 
   await syncVideoExternalAttributes(videoCreated, fetchedVideo, syncParam)
 
@@ -236,22 +263,22 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 }
 
 async function updateVideoFromAP (options: {
-  video: VideoModel,
+  video: MVideoAccountLightBlacklistAllFiles,
   videoObject: VideoTorrentObject,
-  account: AccountModelIdActor,
-  channel: VideoChannelModelIdActor,
+  account: MAccountIdActor,
+  channel: MChannelDefault,
   overrideTo?: string[]
 }) {
   const { video, videoObject, account, channel, overrideTo } = options
 
-  logger.debug('Updating remote video "%s".', options.videoObject.uuid)
+  logger.debug('Updating remote video "%s".', options.videoObject.uuid, { account, channel })
 
   let videoFieldsSave: any
   const wasPrivateVideo = video.privacy === VideoPrivacy.PRIVATE
   const wasUnlistedVideo = video.privacy === VideoPrivacy.UNLISTED
 
   try {
-    let thumbnailModel: ThumbnailModel
+    let thumbnailModel: MThumbnail
 
     try {
       thumbnailModel = await createVideoMiniatureFromUrl(videoObject.icon.url, video, ThumbnailType.MINIATURE)
@@ -259,7 +286,7 @@ async function updateVideoFromAP (options: {
       logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err })
     }
 
-    await sequelizeTypescript.transaction(async t => {
+    const videoUpdated = await sequelizeTypescript.transaction(async t => {
       const sequelizeOptions = { transaction: t }
 
       videoFieldsSave = video.toJSON()
@@ -293,21 +320,21 @@ async function updateVideoFromAP (options: {
       video.channelId = videoData.channelId
       video.views = videoData.views
 
-      await video.save(sequelizeOptions)
+      const videoUpdated = await video.save(sequelizeOptions) as MVideoFullLight
 
-      if (thumbnailModel) await video.addAndSaveThumbnail(thumbnailModel, t)
+      if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
       // FIXME: use icon URL instead
-      const previewUrl = buildRemoteBaseUrl(video, join(STATIC_PATHS.PREVIEWS, video.getPreview().filename))
+      const previewUrl = buildRemoteBaseUrl(videoUpdated, join(STATIC_PATHS.PREVIEWS, videoUpdated.getPreview().filename))
       const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
-      await video.addAndSaveThumbnail(previewModel, t)
+      await videoUpdated.addAndSaveThumbnail(previewModel, t)
 
       {
-        const videoFileAttributes = videoFileActivityUrlToDBAttributes(video, videoObject)
+        const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoUpdated, videoObject)
         const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
 
         // Remove video files that do not exist anymore
-        const destroyTasks = video.VideoFiles
+        const destroyTasks = videoUpdated.VideoFiles
                                   .filter(f => !newVideoFiles.find(newFile => newFile.hasSameUniqueKeysThan(f)))
                                   .map(f => f.destroy(sequelizeOptions))
         await Promise.all(destroyTasks)
@@ -318,15 +345,15 @@ async function updateVideoFromAP (options: {
             .then(([ file ]) => file)
         })
 
-        video.VideoFiles = await Promise.all(upsertTasks)
+        videoUpdated.VideoFiles = await Promise.all(upsertTasks)
       }
 
       {
-        const streamingPlaylistAttributes = streamingPlaylistActivityUrlToDBAttributes(video, videoObject, video.VideoFiles)
+        const streamingPlaylistAttributes = streamingPlaylistActivityUrlToDBAttributes(videoUpdated, videoObject, videoUpdated.VideoFiles)
         const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 
         // Remove video files that do not exist anymore
-        const destroyTasks = video.VideoStreamingPlaylists
+        const destroyTasks = videoUpdated.VideoStreamingPlaylists
                                   .filter(f => !newStreamingPlaylists.find(newPlaylist => newPlaylist.hasSameUniqueKeysThan(f)))
                                   .map(f => f.destroy(sequelizeOptions))
         await Promise.all(destroyTasks)
@@ -337,38 +364,42 @@ async function updateVideoFromAP (options: {
                                .then(([ streamingPlaylist ]) => streamingPlaylist)
         })
 
-        video.VideoStreamingPlaylists = await Promise.all(upsertTasks)
+        videoUpdated.VideoStreamingPlaylists = await Promise.all(upsertTasks)
       }
 
       {
         // Update Tags
         const tags = videoObject.tag.map(tag => tag.name)
         const tagInstances = await TagModel.findOrCreateTags(tags, t)
-        await video.$set('Tags', tagInstances, sequelizeOptions)
+        await videoUpdated.$set('Tags', tagInstances, sequelizeOptions)
       }
 
       {
         // Update captions
-        await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(video.id, t)
+        await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(videoUpdated.id, t)
 
         const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-          return VideoCaptionModel.insertOrReplaceLanguage(video.id, c.identifier, t)
+          return VideoCaptionModel.insertOrReplaceLanguage(videoUpdated.id, c.identifier, t)
         })
-        video.VideoCaptions = await Promise.all(videoCaptionsPromises)
+        await Promise.all(videoCaptionsPromises)
       }
+
+      return videoUpdated
     })
 
     await autoBlacklistVideoIfNeeded({
-      video,
+      video: videoUpdated,
       user: undefined,
       isRemote: true,
       isNew: false,
       transaction: undefined
     })
 
-    if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(video) // Notify our users?
+    if (wasPrivateVideo || wasUnlistedVideo) Notifier.Instance.notifyOnNewVideoIfNeeded(videoUpdated) // Notify our users?
 
     logger.info('Remote video with uuid %s updated', videoObject.uuid)
+
+    return videoUpdated
   } catch (err) {
     if (video !== undefined && videoFieldsSave !== undefined) {
       resetSequelizeInstance(video, videoFieldsSave)
@@ -381,15 +412,15 @@ async function updateVideoFromAP (options: {
 }
 
 async function refreshVideoIfNeeded (options: {
-  video: VideoModel,
+  video: MVideoThumbnail,
   fetchedType: VideoFetchByUrlType,
   syncParam: SyncParam
-}): Promise<VideoModel> {
+}): Promise<MVideoThumbnail> {
   if (!options.video.isOutdated()) return options.video
 
   // We need more attributes if the argument video was fetched with not enough joints
   const video = options.fetchedType === 'all'
-    ? options.video
+    ? options.video as MVideoAccountLightBlacklistAllFiles
     : await VideoModel.loadByUrlAndPopulateAccount(options.video.url)
 
   try {
@@ -410,12 +441,11 @@ async function refreshVideoIfNeeded (options: {
     }
 
     const channelActor = await getOrCreateVideoChannelFromVideoObject(videoObject)
-    const account = await AccountModel.load(channelActor.VideoChannel.accountId)
 
     const updateOptions = {
       video,
       videoObject,
-      account,
+      account: channelActor.VideoChannel.Account,
       channel: channelActor.VideoChannel
     }
     await retryTransactionWrapper(updateVideoFromAP, updateOptions)
@@ -467,15 +497,15 @@ function isAPPlaylistSegmentHashesUrlObject (tag: any): tag is ActivityPlaylistS
   return tag.name === 'sha256' && tag.type === 'Link' && urlMediaType === 'application/json'
 }
 
-async function createVideo (videoObject: VideoTorrentObject, channelActor: ActorModel, waitThumbnail = false) {
+async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAccountLight, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
-  const videoData = await videoActivityObjectToDBAttributes(channelActor.VideoChannel, videoObject, videoObject.to)
-  const video = VideoModel.build(videoData)
+  const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, videoObject.to)
+  const video = VideoModel.build(videoData) as MVideoThumbnail
 
   const promiseThumbnail = createVideoMiniatureFromUrl(videoObject.icon.url, video, ThumbnailType.MINIATURE)
 
-  let thumbnailModel: ThumbnailModel
+  let thumbnailModel: MThumbnail
   if (waitThumbnail === true) {
     thumbnailModel = await promiseThumbnail
   }
@@ -483,8 +513,8 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
   const { autoBlacklisted, videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    const videoCreated = await video.save(sequelizeOptions)
-    videoCreated.VideoChannel = channelActor.VideoChannel
+    const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
+    videoCreated.VideoChannel = channel
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
@@ -517,15 +547,14 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
     const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
       return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
     })
-    const captions = await Promise.all(videoCaptionsPromises)
+    await Promise.all(videoCaptionsPromises)
 
-    video.VideoFiles = videoFiles
-    video.VideoStreamingPlaylists = streamingPlaylists
-    video.Tags = tagInstances
-    video.VideoCaptions = captions
+    videoCreated.VideoFiles = videoFiles
+    videoCreated.VideoStreamingPlaylists = streamingPlaylists
+    videoCreated.Tags = tagInstances
 
     const autoBlacklisted = await autoBlacklistVideoIfNeeded({
-      video,
+      video: videoCreated,
       user: undefined,
       isRemote: true,
       isNew: true,
@@ -548,11 +577,7 @@ async function createVideo (videoObject: VideoTorrentObject, channelActor: Actor
   return { autoBlacklisted, videoCreated }
 }
 
-async function videoActivityObjectToDBAttributes (
-  videoChannel: VideoChannelModelId,
-  videoObject: VideoTorrentObject,
-  to: string[] = []
-) {
+async function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoTorrentObject, to: string[] = []) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
   const duration = videoObject.duration.replace(/[^\d]+/, '')
 
@@ -603,7 +628,7 @@ async function videoActivityObjectToDBAttributes (
   }
 }
 
-function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: VideoTorrentObject) {
+function videoFileActivityUrlToDBAttributes (video: MVideo, videoObject: VideoTorrentObject) {
   const fileUrls = videoObject.url.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
   if (fileUrls.length === 0) {
@@ -641,7 +666,7 @@ function videoFileActivityUrlToDBAttributes (video: VideoModel, videoObject: Vid
   return attributes
 }
 
-function streamingPlaylistActivityUrlToDBAttributes (video: VideoModel, videoObject: VideoTorrentObject, videoFiles: VideoFileModel[]) {
+function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObject: VideoTorrentObject, videoFiles: MVideoFile[]) {
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 

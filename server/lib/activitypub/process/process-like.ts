@@ -7,7 +7,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { getVideoLikeActivityPubUrl } from '../url'
 import { getAPId } from '../../../helpers/activitypub'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActorSignature } from '../../../typings/models'
 
 async function processLikeActivity (options: APProcessorOptions<ActivityLike>) {
   const { activity, byActor } = options
@@ -22,7 +22,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processLikeVideo (byActor: SignatureActorModel, activity: ActivityLike) {
+async function processLikeVideo (byActor: MActorSignature, activity: ActivityLike) {
   const videoUrl = getAPId(activity.object)
 
   const byAccount = byActor.Account

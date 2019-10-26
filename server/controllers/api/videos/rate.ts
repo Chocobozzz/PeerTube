@@ -27,7 +27,7 @@ export {
 async function rateVideo (req: express.Request, res: express.Response) {
   const body: UserVideoRateUpdate = req.body
   const rateType = body.rating
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   const userAccount = res.locals.oauth.token.User.Account
 
   await sequelizeTypescript.transaction(async t => {

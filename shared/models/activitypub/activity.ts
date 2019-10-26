@@ -91,5 +91,5 @@ export interface ActivityDislike extends BaseActivity {
 export interface ActivityFlag extends BaseActivity {
   type: 'Flag',
   content: string,
-  object: APObject
+  object: APObject | APObject[]
 }

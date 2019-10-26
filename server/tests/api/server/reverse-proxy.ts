@@ -128,8 +128,12 @@ describe('Test application behind a reverse proxy', function () {
 
     await wait(7000)
 
-    for (let i = 0; i < 50; i++) {
-      await getVideo(server.url, videoId)
+    for (let i = 0; i < 100; i++) {
+      try {
+        await getVideo(server.url, videoId)
+      } catch {
+        // don't care if it fails
+      }
     }
 
     await getVideo(server.url, videoId, 429)

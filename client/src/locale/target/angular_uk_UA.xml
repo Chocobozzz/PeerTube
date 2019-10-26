@@ -185,25 +185,6 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ade81bccd385c84f16f0e3862c1da3106bc3914b">
-        <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>new video<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </source>
-        <target>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
-          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> опублікував <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>нове відео<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </target>
-        <context-group name="null">
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="ba93de990947141c5582ce8ccc3c6f74f7fd35a6">
         <source>
         <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
@@ -432,28 +413,7 @@
         <source>Get help</source>
         <target>Отримати допомогу</target>
         <context-group name="null">
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="450025269732888db1f04cfe6033843110ab65ee">
-        <source>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Subscribe
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </source>
-        <target>
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      Підписатися
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-    <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>
-      <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount | myNumberFormatter }}"/>
-    <x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
-        <context-group name="null">
-          <context context-type="linenumber">5</context>
+          <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
@@ -497,7 +457,7 @@
         <source>Video quota</source>
         <target>Квота відео</target>
         <context-group name="null">
-          <context context-type="linenumber">56</context>
+          <context context-type="linenumber">57</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
@@ -506,7 +466,7 @@
         </source><target>
           Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
         </target><context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">

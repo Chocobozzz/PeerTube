@@ -1,12 +1,11 @@
 import { ActivityFollow, ActivityReject } from '../../../../shared/models/activitypub'
-import { ActorModel } from '../../../models/activitypub/actor'
 import { getActorFollowActivityPubUrl, getActorFollowRejectActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
-import { SignatureActorModel } from '../../../typings/models'
+import { MActor } from '../../../typings/models'
 
-async function sendReject (follower: SignatureActorModel, following: ActorModel) {
+async function sendReject (follower: MActor, following: MActor) {
   if (!follower.serverId) { // This should never happen
     logger.warn('Do not sending reject to local follower.')
     return
@@ -31,7 +30,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildRejectActivity (url: string, byActor: ActorModel, followActivityData: ActivityFollow): ActivityReject {
+function buildRejectActivity (url: string, byActor: MActor, followActivityData: ActivityFollow): ActivityReject {
   return {
     type: 'Reject',
     id: url,

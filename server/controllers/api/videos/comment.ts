@@ -27,9 +27,6 @@ import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../.
 import { AccountModel } from '../../../models/account/account'
 import { Notifier } from '../../../lib/notifier'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { VideoChannelModel } from '../../../models/video/video-channel'
-import { VideoModel } from '../../../models/video/video'
 import { sendDeleteVideoComment } from '../../../lib/activitypub/send'
 
 const auditLogger = auditLoggerFactory('comments')
@@ -75,7 +72,7 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoThreads (req: express.Request, res: express.Response) {
-  const video = res.locals.video
+  const video = res.locals.onlyVideo
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   let resultList: ResultList<VideoCommentModel>
@@ -86,7 +83,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
       start: req.query.start,
       count: req.query.count,
       sort: req.query.sort,
-      user: user
+      user
     }, 'filter:api.video-threads.list.params')
 
     resultList = await Hooks.wrapPromiseFun(
@@ -105,7 +102,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
 }
 
 async function listVideoThreadComments (req: express.Request, res: express.Response) {
-  const video = res.locals.video
+  const video = res.locals.onlyVideo
   const user = res.locals.oauth ? res.locals.oauth.token.User : undefined
 
   let resultList: ResultList<VideoCommentModel>
@@ -141,7 +138,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
     return createVideoComment({
       text: videoCommentInfo.text,
       inReplyToComment: null,
-      video: res.locals.video,
+      video: res.locals.videoAll,
       account
     }, t)
   })
@@ -164,8 +161,8 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
 
     return createVideoComment({
       text: videoCommentInfo.text,
-      inReplyToComment: res.locals.videoComment,
-      video: res.locals.video,
+      inReplyToComment: res.locals.videoCommentFull,
+      video: res.locals.videoAll,
       account
     }, t)
   })
@@ -179,7 +176,7 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
 }
 
 async function removeVideoComment (req: express.Request, res: express.Response) {
-  const videoCommentInstance = res.locals.videoComment
+  const videoCommentInstance = res.locals.videoCommentFull
 
   await sequelizeTypescript.transaction(async t => {
     await videoCommentInstance.destroy({ transaction: t })

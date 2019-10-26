@@ -6,10 +6,8 @@ import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
 import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
-
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
-
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ButtonComponent } from './buttons/button.component'
 import { DeleteButtonComponent } from './buttons/delete-button.component'
@@ -63,6 +61,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap'
 import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
 import { InstanceFeaturesTableComponent } from '@app/shared/instance/instance-features-table.component'
+import { InstanceStatisticsComponent } from '@app/shared/instance/instance-statistics.component'
 import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
@@ -74,6 +73,7 @@ import { UserNotificationsComponent } from '@app/shared/users/user-notifications
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { HtmlRendererService, LinkifierService, MarkdownService } from '@app/shared/renderer'
 import { ConfirmComponent } from '@app/shared/confirm/confirm.component'
+import { DateToggleComponent } from '@app/shared/date/date-toggle.component'
 import { SmallLoaderComponent } from '@app/shared/misc/small-loader.component'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { PreviewUploadComponent } from '@app/shared/images/preview-upload.component'
@@ -93,6 +93,8 @@ import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.
 import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
 import { ClipboardModule } from 'ngx-clipboard'
 import { FollowService } from '@app/shared/instance/follow.service'
+import { MultiSelectModule } from 'primeng/multiselect'
+import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.component'
 
 @NgModule({
   imports: [
@@ -113,7 +115,8 @@ import { FollowService } from '@app/shared/instance/follow.service'
 
     PrimeSharedModule,
     InputMaskModule,
-    NgPipesModule
+    NgPipesModule,
+    MultiSelectModule
   ],
 
   declarations: [
@@ -156,11 +159,14 @@ import { FollowService } from '@app/shared/instance/follow.service'
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
+    InstanceStatisticsComponent,
+    FeatureBooleanComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
+    DateToggleComponent,
 
     GlobalIconComponent,
     PreviewUploadComponent
@@ -186,6 +192,7 @@ import { FollowService } from '@app/shared/instance/follow.service'
     InputMaskModule,
     BytesPipe,
     KeysPipe,
+    MultiSelectModule,
 
     LoaderComponent,
     SmallLoaderComponent,
@@ -221,11 +228,13 @@ import { FollowService } from '@app/shared/instance/follow.service'
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
+    InstanceStatisticsComponent,
     UserBanModalComponent,
     UserModerationDropdownComponent,
     TopMenuDropdownComponent,
     UserNotificationsComponent,
     ConfirmComponent,
+    DateToggleComponent,
 
     GlobalIconComponent,
     PreviewUploadComponent,

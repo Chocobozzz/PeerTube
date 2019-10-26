@@ -48,6 +48,7 @@ import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
+import { MUser, MUserAccountDefault } from '@server/typings/models'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -195,7 +196,7 @@ async function createUser (req: express.Request, res: express.Response) {
     videoQuota: body.videoQuota,
     videoQuotaDaily: body.videoQuotaDaily,
     adminFlags: body.adminFlags || UserAdminFlag.NONE
-  })
+  }) as MUser
 
   const { user, account } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
 
@@ -359,7 +360,7 @@ function success (req: express.Request, res: express.Response) {
   res.end()
 }
 
-async function changeUserBlock (res: express.Response, user: UserModel, block: boolean, reason?: string) {
+async function changeUserBlock (res: express.Response, user: MUserAccountDefault, block: boolean, reason?: string) {
   const oldUserAuditView = new UserAuditView(user.toFormattedJSON())
 
   user.blocked = block

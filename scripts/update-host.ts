@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import { WEBSERVER } from '../server/initializers/constants'
 import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
 import { VideoModel } from '../server/models/video/video'

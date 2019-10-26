@@ -1,10 +1,13 @@
 <form role="form" (ngSubmit)="updateDetails()" [formGroup]="form">
   <div class="form-group">
     <label i18n for="nsfwPolicy">Default policy on videos containing sensitive content</label>
-    <my-help
-      helpType="custom" i18n-customHtml
-      customHtml="With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video."
-    ></my-help>
+    <my-help>
+      <ng-template ptTemplate="customHtml">
+        <ng-container i18n>
+          With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
+        </ng-container>
+      </ng-template>
+    </my-help>
 
     <div class="peertube-select-container">
       <select id="nsfwPolicy" formControlName="nsfwPolicy">
@@ -17,13 +20,15 @@
 
   <div class="form-group">
     <label i18n for="videoLanguages">Only display videos in the following languages</label>
-    <my-help i18n-customHtml
-             customHtml="In Recently added, Trending, Local and Search pages"
-    ></my-help>
+    <my-help>
+      <ng-template ptTemplate="customHtml">
+        <ng-container i18n>In Recently added, Trending, Local and Search pages</ng-container>
+      </ng-template>
+    </my-help>
 
     <div>
       <p-multiSelect
-        [options]="languageItems" formControlName="videoLanguages" showToggleAll="true"
+        inputId="videoLanguages" [options]="languageItems" formControlName="videoLanguages" showToggleAll="true"
         [defaultLabel]="getDefaultVideoLanguageLabel()" [selectedItemsLabel]="getSelectedVideoLanguageLabel()"
         emptyFilterMessage="No results found" i18n-emptyFilterMessage
       ></p-multiSelect>
@@ -41,6 +46,13 @@
     <my-peertube-checkbox
       inputName="autoPlayVideo" formControlName="autoPlayVideo"
       i18n-labelText labelText="Automatically plays video"
+    ></my-peertube-checkbox>
+  </div>
+
+  <div class="form-group">
+    <my-peertube-checkbox
+      inputName="autoPlayNextVideo" formControlName="autoPlayNextVideo"
+      i18n-labelText labelText="Automatically starts playing next video"
     ></my-peertube-checkbox>
   </div>
 

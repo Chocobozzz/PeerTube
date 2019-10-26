@@ -2,12 +2,12 @@
 @import '_mixins';
 
 .about-peertube-title {
-  font-size: 25px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: $font-semibold;
   margin-bottom: 15px;
 }
 
-.section-title {
+/deep/ .section-title {
   font-weight: $font-semibold;
   font-size: 20px;
   margin-bottom: 5px;
@@ -17,6 +17,41 @@
   margin-bottom: 30px;
 }
 
+.description,
+.p2p-privacy,
+my-about-peertube-contributors {
+  /deep/ {
+    p, li {
+      font-size: 15px;
+    }
+  }
+}
+
 .p2p-privacy-title {
   margin-top: 15px;
+}
+
+.privacy-contributors {
+  display: flex;
+  flex-direction: row;
+
+  > div,
+  > my-about-peertube-contributors {
+    flex-basis: 100%;
+    display: block;
+  }
+
+  .p2p-privacy {
+    h6 {
+      font-size: 20px;
+    }
+  }
+
+  my-about-peertube-contributors {
+    margin: 0 40px 40px 0;
+  }
+
+  @media screen and (max-width: $small-view) {
+    flex-direction: column;
+  }
 }

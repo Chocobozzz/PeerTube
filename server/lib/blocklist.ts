@@ -1,6 +1,7 @@
 import { sequelizeTypescript } from '../initializers'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
+import { MAccountBlocklist, MServerBlocklist } from '@server/typings/models'
 
 function addAccountInBlocklist (byAccountId: number, targetAccountId: number) {
   return sequelizeTypescript.transaction(async t => {
@@ -20,13 +21,13 @@ function addServerInBlocklist (byAccountId: number, targetServerId: number) {
   })
 }
 
-function removeAccountFromBlocklist (accountBlock: AccountBlocklistModel) {
+function removeAccountFromBlocklist (accountBlock: MAccountBlocklist) {
   return sequelizeTypescript.transaction(async t => {
     return accountBlock.destroy({ transaction: t })
   })
 }
 
-function removeServerFromBlocklist (serverBlock: ServerBlocklistModel) {
+function removeServerFromBlocklist (serverBlock: MServerBlocklist) {
   return sequelizeTypescript.transaction(async t => {
     return serverBlock.destroy({ transaction: t })
   })

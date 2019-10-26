@@ -36,8 +36,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listJobs (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const state: JobState = req.params.state
+async function listJobs (req: express.Request, res: express.Response) {
+  const state = req.params.state as JobState
   const asc = req.query.sort === 'createdAt'
 
   const jobs = await JobQueue.Instance.listForApi(state, req.query.start, req.query.count, asc)

@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { values } from 'lodash'
+import { values, difference } from 'lodash'
 import {
   AfterCreate,
   AfterDestroy,
@@ -21,13 +21,20 @@ import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
-import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES } from '../../initializers/constants'
+import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { createSafeIn, getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
-import { IncludeOptions, Op, Transaction, QueryTypes } from 'sequelize'
+import { IncludeOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import {
+  MActorFollowActorsDefault,
+  MActorFollowActorsDefaultSubscription,
+  MActorFollowFollowingHost,
+  MActorFollowFormattable,
+  MActorFollowSubscriptions
+} from '@server/typings/models'
 
 @Table({
   tableName: 'actorFollow',
@@ -143,7 +150,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction) {
+  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Bluebird<MActorFollowActorsDefault> {
     const query = {
       where: {
         actorId,
@@ -167,7 +174,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Transaction) {
+  static loadByActorAndTargetNameAndHostForAPI (
+    actorId: number,
+    targetName: string,
+    targetHost: string,
+    t?: Transaction
+  ): Bluebird<MActorFollowActorsDefaultSubscription> {
     const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
@@ -220,7 +232,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]) {
+  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Bluebird<MActorFollowFollowingHost[]> {
     const whereTab = targets
       .map(t => {
         if (t.host) {
@@ -314,7 +326,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
       .then(({ rows, count }) => {
         return {
           data: rows,
@@ -357,7 +369,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows,
@@ -414,13 +426,52 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowSubscriptions>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows.map(r => r.ActorFollowing.VideoChannel),
                                total: count
                              }
                            })
+  }
+
+  static async keepUnfollowedInstance (hosts: string[]) {
+    const followerId = (await getServerActor()).id
+
+    const query = {
+      attributes: [ 'id' ],
+      where: {
+        actorId: followerId
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          where: {
+            preferredUsername: SERVER_ACTOR_NAME
+          },
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: {
+                host: {
+                  [Op.in]: hosts
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    const res = await ActorFollowModel.findAll(query)
+    const followedHosts = res.map(row => row.ActorFollowing.Server.host)
+
+    return difference(hosts, followedHosts)
   }
 
   static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Transaction, start?: number, count?: number) {
@@ -523,8 +574,8 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const selections: string[] = []
-    if (distinct === true) selections.push('DISTINCT("Follows"."' + columnUrl + '") AS "url"')
-    else selections.push('"Follows"."' + columnUrl + '" AS "url"')
+    if (distinct === true) selections.push(`DISTINCT("Follows"."${columnUrl}") AS "selectionUrl"`)
+    else selections.push(`"Follows"."${columnUrl}" AS "selectionUrl"`)
 
     selections.push('COUNT(*) AS "total"')
 
@@ -534,7 +585,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +
         'INNER JOIN "actorFollow" ON "actorFollow"."' + firstJoin + '" = "actor"."id" ' +
         'INNER JOIN "actor" AS "Follows" ON "actorFollow"."' + secondJoin + '" = "Follows"."id" ' +
-        'WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = \'accepted\' '
+        `WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = 'accepted' AND "Follows"."${columnUrl}" IS NOT NULL `
 
       if (count !== undefined) query += 'LIMIT ' + count
       if (start !== undefined) query += ' OFFSET ' + start
@@ -548,7 +599,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const [ followers, [ dataTotal ] ] = await Promise.all(tasks)
-    const urls: string[] = followers.map(f => f.url)
+    const urls: string[] = followers.map(f => f.selectionUrl)
 
     return {
       data: urls,
@@ -569,7 +620,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  toFormattedJSON (): ActorFollow {
+  toFormattedJSON (this: MActorFollowFormattable): ActorFollow {
     const follower = this.ActorFollower.toFormattedJSON()
     const following = this.ActorFollowing.toFormattedJSON()
 

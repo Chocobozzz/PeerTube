@@ -226,14 +226,14 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
   return res.send(json).end()
 }
 
-async function downloadTorrent (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function downloadTorrent (req: express.Request, res: express.Response) {
   const { video, videoFile } = getVideoAndFile(req, res)
   if (!videoFile) return res.status(404).end()
 
   return res.download(video.getTorrentFilePath(videoFile), `${video.name}-${videoFile.resolution}p.torrent`)
 }
 
-async function downloadVideoFile (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function downloadVideoFile (req: express.Request, res: express.Response) {
   const { video, videoFile } = getVideoAndFile(req, res)
   if (!videoFile) return res.status(404).end()
 
@@ -242,7 +242,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response, n
 
 function getVideoAndFile (req: express.Request, res: express.Response) {
   const resolution = parseInt(req.params.resolution, 10)
-  const video = res.locals.video
+  const video = res.locals.videoAll
 
   const videoFile = video.VideoFiles.find(f => f.resolution === resolution)
 

@@ -48,8 +48,8 @@ const CONFIG = {
     BODY: {
       SIGNATURE: config.get<string>('email.body.signature')
     },
-    OBJECT: {
-      PREFIX: config.get<string>('email.object.prefix') + ' '
+    SUBJECT: {
+      PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
   STORAGE: {
@@ -209,6 +209,19 @@ const CONFIG = {
     get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
+    get CODE_OF_CONDUCT () { return config.get<string>('instance.code_of_conduct') },
+
+    get CREATION_REASON () { return config.get<string>('instance.creation_reason') },
+
+    get MODERATION_INFORMATION () { return config.get<string>('instance.moderation_information') },
+    get ADMINISTRATOR () { return config.get<string>('instance.administrator') },
+    get MAINTENANCE_LIFETIME () { return config.get<string>('instance.maintenance_lifetime') },
+    get BUSINESS_MODEL () { return config.get<string>('instance.business_model') },
+    get HARDWARE_INFORMATION () { return config.get<string>('instance.hardware_information') },
+
+    get LANGUAGES () { return config.get<string[]>('instance.languages') || [] },
+    get CATEGORIES () { return config.get<number[]>('instance.categories') || [] },
+
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
@@ -230,6 +243,23 @@ const CONFIG = {
     INSTANCE: {
       get ENABLED () { return config.get<boolean>('followers.instance.enabled') },
       get MANUAL_APPROVAL () { return config.get<boolean>('followers.instance.manual_approval') }
+    }
+  },
+  FOLLOWINGS: {
+    INSTANCE: {
+      AUTO_FOLLOW_BACK: {
+        get ENABLED () {
+          return config.get<boolean>('followings.instance.auto_follow_back.enabled')
+        }
+      },
+      AUTO_FOLLOW_INDEX: {
+        get ENABLED () {
+          return config.get<boolean>('followings.instance.auto_follow_index.enabled')
+        },
+        get INDEX_URL () {
+          return config.get<string>('followings.instance.auto_follow_index.index_url')
+        }
+      }
     }
   },
   THEME: {

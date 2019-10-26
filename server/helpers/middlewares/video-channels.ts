@@ -1,23 +1,42 @@
-import { Response } from 'express'
-import { VideoAbuseModel } from '../../models/video/video-abuse'
+import * as express from 'express'
+import { VideoChannelModel } from '../../models/video/video-channel'
+import { MChannelAccountDefault } from '@server/typings/models'
 
-async function doesVideoAbuseExist (abuseId: number, videoId: number, res: Response) {
-  const videoAbuse = await VideoAbuseModel.loadByIdAndVideoId(abuseId, videoId)
+async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
+  const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)
 
-  if (videoAbuse === null) {
-    res.status(404)
-       .json({ error: 'Video abuse not found' })
-       .end()
+  return processVideoChannelExist(videoChannel, res)
+}
 
-    return false
-  }
+async function doesVideoChannelIdExist (id: number, res: express.Response) {
+  const videoChannel = await VideoChannelModel.loadAndPopulateAccount(+id)
 
-  res.locals.videoAbuse = videoAbuse
-  return true
+  return processVideoChannelExist(videoChannel, res)
+}
+
+async function doesVideoChannelNameWithHostExist (nameWithDomain: string, res: express.Response) {
+  const videoChannel = await VideoChannelModel.loadByNameWithHostAndPopulateAccount(nameWithDomain)
+
+  return processVideoChannelExist(videoChannel, res)
 }
 
 // ---------------------------------------------------------------------------
 
 export {
-  doesVideoAbuseExist
+  doesLocalVideoChannelNameExist,
+  doesVideoChannelIdExist,
+  doesVideoChannelNameWithHostExist
+}
+
+function processVideoChannelExist (videoChannel: MChannelAccountDefault, res: express.Response) {
+  if (!videoChannel) {
+    res.status(404)
+       .json({ error: 'Video channel not found' })
+       .end()
+
+    return false
+  }
+
+  res.locals.videoChannel = videoChannel
+  return true
 }

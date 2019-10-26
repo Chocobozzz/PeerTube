@@ -65,16 +65,16 @@ smtp:
 email:
   body:
     signature: "PeerTube"
-  object:
+  subject:
     prefix: "[PeerTube]"
 
 # From the project root directory
 storage:
-  tmp: '/var/www/peertube/storage/tmp/' # Used to download data (imports etc), store uploaded files before processing...
+  tmp: '/var/www/peertube/storage/tmp/' # Use to download data (imports etc), store uploaded files before processing...
   avatars: '/var/www/peertube/storage/avatars/'
   videos: '/var/www/peertube/storage/videos/'
   streaming_playlists: '/var/www/peertube/storage/streaming-playlists/'
-  redundancy: '/var/www/peertube/storage/videos/'
+  redundancy: '/var/www/peertube/storage/redundancy/'
   logs: '/var/www/peertube/storage/logs/'
   previews: '/var/www/peertube/storage/previews/'
   thumbnails: '/var/www/peertube/storage/thumbnails/'
@@ -86,7 +86,7 @@ storage:
 log:
   level: 'info' # debug/info/warning/error
   rotation:
-    enabled : true
+    enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
 
 search:
   # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
@@ -157,8 +157,8 @@ views:
       max_age: -1
 
 plugins:
-  # The website PeerTube will ask for available PeerTube plugins
-  # This is an unmoderated plugin index, so only install plugins you trust
+  # The website PeerTube will ask for available PeerTube plugins and themes
+  # This is an unmoderated plugin index, so only install plugins/themes you trust
   index:
     enabled: true
     check_latest_versions_interval: '12 hours' # How often you want to check new plugins/themes versions
@@ -251,9 +251,62 @@ auto_blacklist:
 instance:
   name: 'PeerTube'
   short_description: 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser with WebTorrent and Angular.'
-  description: '' # Support markdown
-  terms: '' # Support markdown
+  description: 'Welcome to this PeerTube instance!' # Support markdown
+  terms: 'No terms for now.' # Support markdown
+  code_of_conduct: '' # Supports markdown
+
+  # Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc
+  moderation_information: '' # Supports markdown
+
+  # Why did you create this instance?
+  creation_reason: ''
+
+  # Who is behind the instance? A single person? A non profit?
+  administrator: ''
+
+  # How long do you plan to maintain this instance?
+  maintenance_lifetime: ''
+
+  # How will you pay the PeerTube instance server? With you own funds? With users donations? Advertising?
+  business_model: ''
+
+  # If you want to explain on what type of hardware your PeerTube instance runs
+  # Example: "2 vCore, 2GB RAM..."
+  hardware_information: '' # Supports Markdown
+
+  # What are the main languages of your instance? To interact with your users for example
+  # Uncomment or add the languages you want
+  # List of supported languages: https://peertube.cpy.re/api/v1/videos/languages
+  languages:
+#    - en
+#    - es
+#    - fr
+
+  # You can specify the main categories of your instance (dedicated to music, gaming or politics etc)
+  # Uncomment or add the category ids you want
+  # List of supported categories: https://peertube.cpy.re/api/v1/videos/categories
+  categories:
+#    - 1  # Music
+#    - 2  # Films
+#    - 3  # Vehicles
+#    - 4  # Art
+#    - 5  # Sports
+#    - 6  # Travels
+#    - 7  # Gaming
+#    - 8  # People
+#    - 9  # Comedy
+#    - 10 # Entertainment
+#    - 11 # News & Politics
+#    - 12 # How To
+#    - 13 # Education
+#    - 14 # Activism
+#    - 15 # Science & Technology
+#    - 16 # Animals
+#    - 17 # Kids
+#    - 18 # Food
+
   default_client_route: '/videos/trending'
+
   # Whether or not the instance is dedicated to NSFW content
   # Enabling it will allow other administrators to know that you are mainly federating sensitive content
   # Moreover, the NSFW checkbox on video upload will be automatically checked by default
@@ -261,6 +314,7 @@ instance:
   # By default, "do_not_list" or "blur" or "display" NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
+
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime
     css: '' # Directly your CSS code (without <style> tags). Will be injected at runtime
@@ -278,7 +332,7 @@ services:
     username: '@Chocobozzz' # Indicates the Twitter account for the website or platform on which the content was published
     # If true, a video player will be embedded in the Twitter feed on PeerTube video share
     # If false, we use an image link card that will redirect on your PeerTube instance
-    # Test on https://cards-dev.twitter.com/validator to see if you are whitelisted
+    # Change it to "true", and then test on https://cards-dev.twitter.com/validator to see if you are whitelisted
     whitelisted: false
 
 followers:
@@ -287,6 +341,21 @@ followers:
     enabled: true
     # Whether or not an administrator must manually validate a new follower
     manual_approval: false
+
+followings:
+  instance:
+    # If you want to automatically follow back new instance followers
+    # If this option is enabled, use the mute feature instead of deleting followings
+    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+    auto_follow_back:
+      enabled: false
+
+    # If you want to automatically follow instances of the public index
+    # If this option is enabled, use the mute feature instead of deleting followings
+    # /!\ Don't enable this if you don't have a reactive moderation team /!\
+    auto_follow_index:
+      enabled: false
+      index_url: 'https://instances.joinpeertube.org'
 
 theme:
   default: 'default'

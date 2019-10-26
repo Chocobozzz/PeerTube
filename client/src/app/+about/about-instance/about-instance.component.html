@@ -1,33 +1,105 @@
 <div class="row">
   <div class="col-md-12 col-xl-6">
-    <div class="about-instance-title">
-      <div i18n>About {{ instanceName }} instance</div>
 
-      <div *ngIf="isContactFormEnabled" (click)="openContactModal()" i18n role="button" class="contact-admin">Contact administrator</div>
+    <div class="about-instance-title">
+      <div i18n class="title">About {{ instanceName }} instance</div>
+
+      <div i18n *ngIf="isContactFormEnabled" (click)="openContactModal()" role="button" class="contact-admin">Contact administrator</div>
+    </div>
+
+    <div class="block instance-badges">
+      <span *ngFor="let category of categories" class="badge badge-primary category">{{ category }}</span>
+
+      <span *ngFor="let language of languages" class="badge badge-secondary language">{{ language }}</span>
     </div>
 
     <div class="short-description">
-      <div>{{ shortDescription }}</div>
+      <div class="block short-description">{{ shortDescription }}</div>
 
-      <div *ngIf="isNSFW" class="dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
+      <div i18n *ngIf="isNSFW" class="block dedicated-to-nsfw">This instance is dedicated to sensitive/NSFW content.</div>
     </div>
 
-    <div class="description">
+    <div i18n class="middle-title" *ngIf="html.administrator || maintenanceLifetime || businessModel">
+      Administrators & sustainability
+    </div>
+
+    <div class="block administrator" *ngIf="html.administrator">
+      <div i18n class="section-title">Who we are</div>
+
+      <div [innerHTML]="html.administrator"></div>
+    </div>
+
+    <div class="block creation-reason" *ngIf="creationReason">
+      <div i18n class="section-title">Why we created this instance</div>
+
+      <p>{{ creationReason }}</p>
+    </div>
+
+    <div class="block maintenance-lifetime" *ngIf="maintenanceLifetime">
+      <div i18n class="section-title">How long we plan to maintain this instance</div>
+
+      <p>{{ maintenanceLifetime }}</p>
+    </div>
+
+    <div class="block business-model" *ngIf="businessModel">
+      <div i18n class="section-title">How we will pay this instance</div>
+
+      <p>{{ businessModel }}</p>
+    </div>
+
+    <div i18n class="middle-title" *ngIf="html.description">
+      Information
+    </div>
+
+    <div class="block description">
       <div i18n class="section-title">Description</div>
 
-      <div [innerHTML]="descriptionHTML"></div>
+      <div [innerHTML]="html.description"></div>
     </div>
 
-    <div class="terms" id="terms-section">
+    <div i18n class="middle-title" *ngIf="html.moderationInformation || html.codeOfConduct || html.terms">
+      Moderation
+    </div>
+
+    <div class="block moderation-information" *ngIf="html.moderationInformation">
+      <div i18n class="section-title">Moderation information</div>
+
+      <div [innerHTML]="html.moderationInformation"></div>
+    </div>
+
+    <div class="block code-of-conduct" *ngIf="html.codeOfConduct">
+      <div i18n class="section-title">Code of conduct</div>
+
+      <div [innerHTML]="html.codeOfConduct"></div>
+    </div>
+
+    <div class="block terms">
       <div i18n class="section-title">Terms</div>
 
-      <div [innerHTML]="termsHTML"></div>
+      <div [innerHTML]="html.terms"></div>
+    </div>
+
+    <div i18n class="middle-title" *ngIf="html.hardwareInformation">
+      Other information
+    </div>
+
+    <div class="block hardware-information">
+      <div i18n class="section-title">Hardware information</div>
+
+      <div [innerHTML]="html.hardwareInformation"></div>
     </div>
   </div>
 
   <div class="col-md-12 col-xl-6">
-    <label>Features found on this instance</label>
+    <label i18n>Features found on this instance</label>
     <my-instance-features-table></my-instance-features-table>
+  </div>
+
+  <div class="col">
+    <div i18n class="middle-title">
+      Statistics
+    </div>
+    <my-instance-statistics></my-instance-statistics>
   </div>
 </div>
 

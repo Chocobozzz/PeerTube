@@ -191,7 +191,7 @@ describe('Test video change ownership - nominal', function () {
     await waitJobs(servers)
   })
 
-  it('Should have video channel updated', async function () {
+  it('Should have the channel of the video updated', async function () {
     for (const server of servers) {
       const res = await getVideo(server.url, servers[0].video.uuid)
 

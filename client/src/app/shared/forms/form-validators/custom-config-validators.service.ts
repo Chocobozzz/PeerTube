@@ -13,6 +13,7 @@ export class CustomConfigValidatorsService {
   readonly SIGNUP_LIMIT: BuildFormValidator
   readonly ADMIN_EMAIL: BuildFormValidator
   readonly TRANSCODING_THREADS: BuildFormValidator
+  readonly INDEX_URL: BuildFormValidator
 
   constructor (private i18n: I18n) {
     this.INSTANCE_NAME = {
@@ -76,6 +77,14 @@ export class CustomConfigValidatorsService {
       MESSAGES: {
         'required': this.i18n('Transcoding threads is required.'),
         'min': this.i18n('Transcoding threads must be greater or equal to 0.')
+      }
+    }
+
+    this.INDEX_URL = {
+      VALIDATORS: [ Validators.required, Validators.pattern(/^https:\/\//) ],
+      MESSAGES: {
+        'required': this.i18n('Index URL is required.'),
+        'pattern': this.i18n('Index URL should be a URL')
       }
     }
   }

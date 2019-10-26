@@ -18,12 +18,16 @@ export class ConfirmService {
   confirm (message: string, title = '', confirmButtonText?: string) {
     this.showConfirm.next({ title, message, confirmButtonText })
 
-    return this.confirmResponse.asObservable().pipe(first()).toPromise()
+    return this.confirmResponse.asObservable()
+               .pipe(first())
+               .toPromise()
   }
 
   confirmWithInput (message: string, inputLabel: string, expectedInputValue: string, title = '', confirmButtonText?: string) {
     this.showConfirm.next({ title, message, inputLabel, expectedInputValue, confirmButtonText })
 
-    return this.confirmResponse.asObservable().pipe(first()).toPromise()
+    return this.confirmResponse.asObservable()
+               .pipe(first())
+               .toPromise()
   }
 }

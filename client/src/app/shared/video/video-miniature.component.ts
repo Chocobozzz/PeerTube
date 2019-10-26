@@ -95,6 +95,8 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   getStateLabel (video: Video) {
+    if (!video.state) return ''
+
     if (video.privacy.id !== VideoPrivacy.PRIVATE && video.state.id === VideoState.PUBLISHED) {
       return this.i18n('Published')
     }

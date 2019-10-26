@@ -206,7 +206,7 @@ describe('Test videos search', function () {
     const query = {
       search: '9999',
       categoryOneOf: [ 1 ],
-      tagsOneOf: [ 'aaaa', 'ffff' ]
+      tagsOneOf: [ 'aAaa', 'ffff' ]
     }
     const res1 = await advancedVideosSearch(server.url, query)
     expect(res1.body.total).to.equal(2)
@@ -219,15 +219,15 @@ describe('Test videos search', function () {
     const query = {
       search: '9999',
       categoryOneOf: [ 1 ],
-      tagsAllOf: [ 'cccc' ]
+      tagsAllOf: [ 'CCcc' ]
     }
     const res1 = await advancedVideosSearch(server.url, query)
     expect(res1.body.total).to.equal(2)
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'blabla' ] }))
+    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'blAbla' ] }))
     expect(res2.body.total).to.equal(0)
 
-    const res3 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'bbbb', 'cccc' ] }))
+    const res3 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'bbbb', 'CCCC' ] }))
     expect(res3.body.total).to.equal(1)
   })
 

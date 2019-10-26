@@ -139,6 +139,7 @@ export class AdvancedSearch {
 
   private intoArray (value: any) {
     if (!value) return undefined
+    if (Array.isArray(value)) return value
 
     if (typeof value === 'string') return value.split(',')
 

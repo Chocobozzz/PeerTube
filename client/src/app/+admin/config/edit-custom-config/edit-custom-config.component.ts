@@ -6,6 +6,9 @@ import { Notifier } from '@app/core'
 import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { SelectItem } from 'primeng/api'
+import { forkJoin } from 'rxjs'
+import { first } from 'rxjs/operators'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -17,6 +20,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   resolutions: { id: string, label: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
+
+  languageItems: SelectItem[] = []
+  categoryItems: SelectItem[] = []
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -88,10 +94,26 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         name: this.customConfigValidatorsService.INSTANCE_NAME,
         shortDescription: this.customConfigValidatorsService.INSTANCE_SHORT_DESCRIPTION,
         description: null,
-        terms: null,
-        defaultClientRoute: null,
+
         isNSFW: false,
         defaultNSFWPolicy: null,
+
+        terms: null,
+        codeOfConduct: null,
+
+        creationReason: null,
+        moderationInformation: null,
+        administrator: null,
+        maintenanceLifetime: null,
+        businessModel: null,
+
+        hardwareInformation: null,
+
+        categories: null,
+        languages: null,
+
+        defaultClientRoute: null,
+
         customizations: {
           javascript: null,
           css: null
@@ -158,6 +180,17 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
           enabled: null,
           manualApproval: null
         }
+      },
+      followings: {
+        instance: {
+          autoFollowBack: {
+            enabled: null
+          },
+          autoFollowIndex: {
+            enabled: null,
+            indexUrl: this.customConfigValidatorsService.INDEX_URL
+          }
+        }
       }
     }
 
@@ -173,18 +206,27 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
     this.buildForm(formGroupData)
 
-    this.configService.getCustomConfig()
-      .subscribe(
-        res => {
-          this.customConfig = res
+    forkJoin([
+      this.configService.getCustomConfig(),
+      this.serverService.videoLanguagesLoaded.pipe(first()), // First so the observable completes
+      this.serverService.videoCategoriesLoaded.pipe(first())
+    ]).subscribe(
+      ([ config ]) => {
+        this.customConfig = config
 
-          this.updateForm()
-          // Force form validation
-          this.forceCheck()
-        },
+        const languages = this.serverService.getVideoLanguages()
+        this.languageItems = languages.map(l => ({ label: l.label, value: l.id }))
 
-        err => this.notifier.error(err.message)
-      )
+        const categories = this.serverService.getVideoCategories()
+        this.categoryItems = categories.map(l => ({ label: l.label, value: l.id }))
+
+        this.updateForm()
+        // Force form validation
+        this.forceCheck()
+      },
+
+      err => this.notifier.error(err.message)
+    )
   }
 
   isTranscodingEnabled () {
@@ -213,8 +255,23 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       )
   }
 
+  getSelectedLanguageLabel () {
+    return this.i18n('{{\'{0} languages selected')
+  }
+
+  getDefaultLanguageLabel () {
+    return this.i18n('No language')
+  }
+
+  getSelectedCategoryLabel () {
+    return this.i18n('{{\'{0} categories selected')
+  }
+
+  getDefaultCategoryLabel () {
+    return this.i18n('No category')
+  }
+
   private updateForm () {
     this.form.patchValue(this.customConfig)
   }
-
 }

@@ -10,11 +10,13 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { MActor, MActorFollowActors, MActorFull } from '../../../typings/models'
 
 export type ActivitypubFollowPayload = {
   followerActorId: number
   name: string
   host: string
+  isAutoFollow?: boolean
 }
 
 async function processActivityPubFollow (job: Bull.Job) {
@@ -23,18 +25,18 @@ async function processActivityPubFollow (job: Bull.Job) {
 
   logger.info('Processing ActivityPub follow in job %d.', job.id)
 
-  let targetActor: ActorModel
+  let targetActor: MActorFull
   if (!host || host === WEBSERVER.HOST) {
     targetActor = await ActorModel.loadLocalByName(payload.name)
   } else {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
     const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
-    targetActor = await getOrCreateActorAndServerAndModel(actorUrl)
+    targetActor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
   }
 
   const fromActor = await ActorModel.load(payload.followerActorId)
 
-  return retryTransactionWrapper(follow, fromActor, targetActor)
+  return retryTransactionWrapper(follow, fromActor, targetActor, payload.isAutoFollow)
 }
 // ---------------------------------------------------------------------------
 
@@ -44,16 +46,16 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function follow (fromActor: ActorModel, targetActor: ActorModel) {
+async function follow (fromActor: MActor, targetActor: MActorFull, isAutoFollow = false) {
   if (fromActor.id === targetActor.id) {
-    throw new Error('Follower is the same than target actor.')
+    throw new Error('Follower is the same as target actor.')
   }
 
   // Same server, direct accept
   const state = !fromActor.serverId && !targetActor.serverId ? 'accepted' : 'pending'
 
   const actorFollow = await sequelizeTypescript.transaction(async t => {
-    const [ actorFollow ] = await ActorFollowModel.findOrCreate({
+    const [ actorFollow ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
       where: {
         actorId: fromActor.id,
         targetActorId: targetActor.id
@@ -74,5 +76,15 @@ async function follow (fromActor: ActorModel, targetActor: ActorModel) {
     return actorFollow
   })
 
-  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewUserFollow(actorFollow)
+  const followerFull = await ActorModel.loadFull(fromActor.id)
+
+  const actorFollowFull = Object.assign(actorFollow, {
+    ActorFollowing: targetActor,
+    ActorFollower: followerFull
+  })
+
+  if (actorFollow.state === 'accepted') Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
+  if (isAutoFollow === true) Notifier.Instance.notifyOfAutoInstanceFollowing(actorFollowFull)
+
+  return actorFollow
 }

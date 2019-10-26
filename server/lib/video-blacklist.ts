@@ -2,16 +2,15 @@ import { Transaction } from 'sequelize'
 import { CONFIG } from '../initializers/config'
 import { UserRight, VideoBlacklistType } from '../../shared/models'
 import { VideoBlacklistModel } from '../models/video/video-blacklist'
-import { UserModel } from '../models/account/user'
-import { VideoModel } from '../models/video/video'
 import { logger } from '../helpers/logger'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
 import { Hooks } from './plugins/hooks'
 import { Notifier } from './notifier'
+import { MUser, MVideoBlacklistVideo, MVideoWithBlacklistLight } from '@server/typings/models'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
-  video: VideoModel,
-  user?: UserModel,
+  video: MVideoWithBlacklistLight,
+  user?: MUser,
   isRemote: boolean,
   isNew: boolean,
   notify?: boolean,
@@ -32,7 +31,7 @@ async function autoBlacklistVideoIfNeeded (parameters: {
     reason: 'Auto-blacklisted. Moderator review required.',
     type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
   }
-  const [ videoBlacklist ] = await VideoBlacklistModel.findOrCreate({
+  const [ videoBlacklist ] = await VideoBlacklistModel.findOrCreate<MVideoBlacklistVideo>({
     where: {
       videoId: video.id
     },
@@ -41,7 +40,9 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   })
   video.VideoBlacklist = videoBlacklist
 
-  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(video)
+  videoBlacklist.Video = video
+
+  if (notify) Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
 
   logger.info('Video %s auto-blacklisted.', video.uuid)
 
@@ -49,10 +50,10 @@ async function autoBlacklistVideoIfNeeded (parameters: {
 }
 
 async function autoBlacklistNeeded (parameters: {
-  video: VideoModel,
+  video: MVideoWithBlacklistLight,
   isRemote: boolean,
   isNew: boolean,
-  user?: UserModel
+  user?: MUser
 }) {
   const { user, video, isRemote, isNew } = parameters
 

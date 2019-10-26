@@ -11,6 +11,7 @@ import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 import { generateHlsPlaylist, optimizeVideofile, transcodeOriginalVideofile, mergeAudioVideofile } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
+import { MVideoUUID, MVideoWithFile } from '@server/typings/models'
 
 interface BaseTranscodingPayload {
   videoUUID: string
@@ -73,7 +74,7 @@ async function processVideoTranscoding (job: Bull.Job) {
   return video
 }
 
-async function onHlsPlaylistGenerationSuccess (video: VideoModel) {
+async function onHlsPlaylistGenerationSuccess (video: MVideoUUID) {
   if (video === undefined) return undefined
 
   await sequelizeTypescript.transaction(async t => {
@@ -87,7 +88,7 @@ async function onHlsPlaylistGenerationSuccess (video: VideoModel) {
   })
 }
 
-async function publishNewResolutionIfNeeded (video: VideoModel, payload?: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload) {
+async function publishNewResolutionIfNeeded (video: MVideoUUID, payload?: NewResolutionTranscodingPayload | MergeAudioTranscodingPayload) {
   const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
     let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(video.uuid, t)
@@ -119,7 +120,7 @@ async function publishNewResolutionIfNeeded (video: VideoModel, payload?: NewRes
   await createHlsJobIfEnabled(payload)
 }
 
-async function onVideoFileOptimizerSuccess (videoArg: VideoModel, payload: OptimizeTranscodingPayload) {
+async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: OptimizeTranscodingPayload) {
   if (videoArg === undefined) return undefined
 
   // Outside the transaction (IO on disk)

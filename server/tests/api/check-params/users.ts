@@ -418,6 +418,14 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid autoPlayNextVideo attribute', async function () {
+      const fields = {
+        autoPlayNextVideo: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should fail with an invalid videosHistoryEnabled attribute', async function () {
       const fields = {
         videosHistoryEnabled: -1
@@ -476,6 +484,22 @@ describe('Test users API validators', function () {
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
     })
 
+    it('Should fail with an invalid noInstanceConfigWarningModal attribute', async function () {
+      const fields = {
+        noInstanceConfigWarningModal: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
+    it('Should fail with an invalid noWelcomeModal attribute', async function () {
+      const fields = {
+        noWelcomeModal: -1
+      }
+
+      await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields })
+    })
+
     it('Should succeed to change password with the correct params', async function () {
       const fields = {
         currentPassword: 'my super password',
@@ -483,7 +507,9 @@ describe('Test users API validators', function () {
         nsfwPolicy: 'blur',
         autoPlayVideo: false,
         email: 'super_email@example.com',
-        theme: 'default'
+        theme: 'default',
+        noInstanceConfigWarningModal: true,
+        noWelcomeModal: true
       }
 
       await makePutBodyRequest({ url: server.url, path: path + 'me', token: userAccessToken, fields, statusCodeExpected: 204 })
@@ -883,7 +909,7 @@ describe('Test users API validators', function () {
       await makePostBodyRequest({ url: server.url, path: registrationPath, token: server.accessToken, fields })
     })
 
-    it('Should fail with a channel name that is the same than user username', async function () {
+    it('Should fail with a channel name that is the same as username', async function () {
       const source = { username: 'super_user', channel: { name: 'super_user', displayName: 'display name' } }
       const fields = immutableAssign(baseCorrectParams, source)
 

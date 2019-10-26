@@ -42,9 +42,10 @@ export class UserNotification implements UserNotificationServer {
     state: FollowState
     follower: ActorInfo & { avatarUrl?: string }
     following: {
-      type: 'account' | 'channel'
+      type: 'account' | 'channel' | 'instance'
       name: string
       displayName: string
+      host: string
     }
   }
 
@@ -112,7 +113,10 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
           this.videoAutoBlacklistUrl = '/admin/moderation/video-auto-blacklist/list'
-          this.videoUrl = this.buildVideoUrl(this.video)
+          // Backward compatibility where we did not assign videoBlacklist to this type of notification before
+          if (!this.videoBlacklist) this.videoBlacklist = { id: null, video: this.video }
+
+          this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
           break
 
         case UserNotificationType.BLACKLIST_ON_MY_VIDEO:
@@ -145,6 +149,10 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.NEW_INSTANCE_FOLLOWER:
           this.instanceFollowUrl = '/admin/follows/followers-list'
+          break
+
+        case UserNotificationType.AUTO_INSTANCE_FOLLOWING:
+          this.instanceFollowUrl = '/admin/follows/following-list'
           break
       }
     } catch (err) {

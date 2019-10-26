@@ -1,33 +1,88 @@
 <div class="feature-table">
 
-  <table class="table">
+  <table class="table" *ngIf="config">
     <tr>
-      <td i18n class="label">Default NSFW/sensitive videos policy (can be redefined by the users)</td>
+      <td i18n class="label">
+        <div>Default NSFW/sensitive videos policy</div>
+        <div class="more-info">can be redefined by the users</div>
+      </td>
 
       <td class="value">{{ buildNSFWLabel() }}</td>
     </tr>
 
-    <tr *ngFor="let feature of features">
-      <td class="label">{{ feature.label }}</td>
+    <tr>
+      <td i18n class="label">User registration allowed</td>
       <td>
-        <span *ngIf="feature.value === true" class="glyphicon glyphicon-ok"></span>
-        <span *ngIf="feature.value === false" class="glyphicon glyphicon-remove"></span>
+        <my-feature-boolean [value]="config.signup.allowed"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <td i18n class="label">Video quota</td>
+      <td i18n class="label" colspan="2">Video uploads</td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">Transcoding in multiple resolutions</td>
+      <td>
+        <my-feature-boolean [value]="config.transcoding.enabledResolutions.length !== 0"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">Video uploads</td>
+      <td>
+        <span *ngIf="config.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
+        <span *ngIf="!config.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
+      </td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">Video quota</td>
 
       <td class="value">
         <ng-container *ngIf="initialUserVideoQuota !== -1">
           {{ initialUserVideoQuota | bytes: 0 }} <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
 
-          <my-help tooltipPlacement="auto" helpType="custom" [customHtml]="quotaHelpIndication"></my-help>
+          <my-help tooltipPlacement="auto" helpType="custom">
+            <ng-template ptTemplate="customHtml">
+              <div [innerHTML]="quotaHelpIndication"></div>
+            </ng-template>
+          </my-help>
         </ng-container>
 
         <ng-container i18n *ngIf="initialUserVideoQuota === -1">
           Unlimited <ng-container *ngIf="dailyUserVideoQuota !== -1">({{ dailyUserVideoQuota | bytes: 0 }} per day)</ng-container>
         </ng-container>
+      </td>
+    </tr>
+
+    <tr>
+      <td i18n class="label" colspan="2">Import</td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">HTTP import (YouTube, Vimeo, direct URL...)</td>
+      <td>
+        <my-feature-boolean [value]="config.import.videos.http.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">Torrent import</td>
+      <td>
+        <my-feature-boolean [value]="config.import.videos.torrent.enabled"></my-feature-boolean>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td i18n class="label" colspan="2">Player</td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">P2P enabled</td>
+      <td>
+        <my-feature-boolean [value]="config.tracker.enabled"></my-feature-boolean>
       </td>
     </tr>
   </table>

@@ -29,7 +29,10 @@ export const serverFilterHookObject = {
 
   // Filter result used to check if we need to auto blacklist a video
   // (fired when a local or remote video is created or updated)
-  'filter:video.auto-blacklist.result': true
+  'filter:video.auto-blacklist.result': true,
+
+  // Filter result used to check if a user can register on the instance
+  'filter:api.user.signup.allowed.result': true
 }
 
 export type ServerFilterHookName = keyof typeof serverFilterHookObject

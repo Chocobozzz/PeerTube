@@ -1,19 +1,18 @@
 import { Transaction } from 'sequelize'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { getServerActor } from '../../helpers/utils'
-import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
 import { getVideoAnnounceActivityPubUrl } from './url'
-import { VideoChannelModel } from '../../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { doRequest } from '../../helpers/requests'
 import { getOrCreateActorAndServerAndModel } from './actor'
 import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
+import { MChannelActor, MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../typings/models/video'
 
-async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) {
+async function shareVideoByServerAndChannel (video: MVideoAccountLight, t: Transaction) {
   if (video.privacy === VideoPrivacy.PRIVATE) return undefined
 
   return Promise.all([
@@ -22,7 +21,11 @@ async function shareVideoByServerAndChannel (video: VideoModel, t: Transaction) 
   ])
 }
 
-async function changeVideoChannelShare (video: VideoModel, oldVideoChannel: VideoChannelModel, t: Transaction) {
+async function changeVideoChannelShare (
+  video: MVideoAccountLight,
+  oldVideoChannel: MChannelActorLight,
+  t: Transaction
+) {
   logger.info('Updating video channel of video %s: %s -> %s.', video.uuid, oldVideoChannel.name, video.VideoChannel.name)
 
   await undoShareByVideoChannel(video, oldVideoChannel, t)
@@ -30,7 +33,7 @@ async function changeVideoChannelShare (video: VideoModel, oldVideoChannel: Vide
   await shareByVideoChannel(video, t)
 }
 
-async function addVideoShares (shareUrls: string[], instance: VideoModel) {
+async function addVideoShares (shareUrls: string[], video: MVideoId) {
   await Bluebird.map(shareUrls, async shareUrl => {
     try {
       // Fetch url
@@ -50,7 +53,7 @@ async function addVideoShares (shareUrls: string[], instance: VideoModel) {
 
       const entry = {
         actorId: actor.id,
-        videoId: instance.id,
+        videoId: video.id,
         url: shareUrl
       }
 
@@ -69,7 +72,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function shareByServer (video: VideoModel, t: Transaction) {
+async function shareByServer (video: MVideo, t: Transaction) {
   const serverActor = await getServerActor()
 
   const serverShareUrl = getVideoAnnounceActivityPubUrl(serverActor, video)
@@ -88,7 +91,7 @@ async function shareByServer (video: VideoModel, t: Transaction) {
   return sendVideoAnnounce(serverActor, serverShare, video, t)
 }
 
-async function shareByVideoChannel (video: VideoModel, t: Transaction) {
+async function shareByVideoChannel (video: MVideoAccountLight, t: Transaction) {
   const videoChannelShareUrl = getVideoAnnounceActivityPubUrl(video.VideoChannel.Actor, video)
   const [ videoChannelShare ] = await VideoShareModel.findOrCreate({
     defaults: {
@@ -105,7 +108,7 @@ async function shareByVideoChannel (video: VideoModel, t: Transaction) {
   return sendVideoAnnounce(video.VideoChannel.Actor, videoChannelShare, video, t)
 }
 
-async function undoShareByVideoChannel (video: VideoModel, oldVideoChannel: VideoChannelModel, t: Transaction) {
+async function undoShareByVideoChannel (video: MVideo, oldVideoChannel: MChannelActorLight, t: Transaction) {
   // Load old share
   const oldShare = await VideoShareModel.load(oldVideoChannel.actorId, video.id, t)
   if (!oldShare) return new Error('Cannot find old video channel share ' + oldVideoChannel.actorId + ' for video ' + video.id)

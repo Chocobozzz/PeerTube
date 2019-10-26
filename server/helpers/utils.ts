@@ -19,7 +19,10 @@ async function generateRandomString (size: number) {
   return raw.toString('hex')
 }
 
-interface FormattableToJSON<U, V> { toFormattedJSON (args?: U): V }
+interface FormattableToJSON<U, V> {
+  toFormattedJSON (args?: U): V
+}
+
 function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: T[], objectsTotal: number, formattedArg?: U) {
   const formattedObjects = objects.map(o => o.toFormattedJSON(formattedArg))
 

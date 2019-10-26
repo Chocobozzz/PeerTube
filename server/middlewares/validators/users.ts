@@ -4,7 +4,10 @@ import { body, param } from 'express-validator'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import {
+  isNoInstanceConfigWarningModal,
+  isNoWelcomeModal,
   isUserAdminFlagsValid,
+  isUserAutoPlayNextVideoValid,
   isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserDescriptionValid,
@@ -31,6 +34,9 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { doesVideoExist } from '../../helpers/middlewares'
 import { UserRole } from '../../../shared/models/users'
+import { MUserDefault } from '@server/typings/models'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { isLocalVideoAccepted } from '@server/lib/moderation'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
@@ -38,7 +44,9 @@ const usersAddValidator = [
   body('email').isEmail().withMessage('Should have a valid email'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
-  body('role').custom(isUserRoleValid).withMessage('Should have a valid role'),
+  body('role')
+    .customSanitizer(toIntOrNull)
+    .custom(isUserRoleValid).withMessage('Should have a valid role'),
   body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -50,7 +58,7 @@ const usersAddValidator = [
     const authUser = res.locals.oauth.token.User
     if (authUser.role !== UserRole.ADMINISTRATOR && req.body.role !== UserRole.USER) {
       return res.status(403)
-        .json({ error: 'You can only create users (and not administrators or moderators' })
+        .json({ error: 'You can only create users (and not administrators or moderators)' })
     }
 
     return next()
@@ -87,7 +95,7 @@ const usersRegisterValidator = [
 
       if (body.channel.name === body.username) {
         return res.status(400)
-                  .json({ error: 'Channel name cannot be the same than user username.' })
+                  .json({ error: 'Channel name cannot be the same as user username.' })
       }
 
       const existing = await ActorModel.loadLocalByName(body.channel.name)
@@ -160,7 +168,10 @@ const usersUpdateValidator = [
   body('emailVerified').optional().isBoolean().withMessage('Should have a valid email verified attribute'),
   body('videoQuota').optional().custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').optional().custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),
-  body('role').optional().custom(isUserRoleValid).withMessage('Should have a valid role'),
+  body('role')
+    .optional()
+    .customSanitizer(toIntOrNull)
+    .custom(isUserRoleValid).withMessage('Should have a valid role'),
   body('adminFlags').optional().custom(isUserAdminFlagsValid).withMessage('Should have a valid admin flags'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -210,6 +221,15 @@ const usersUpdateMeValidator = [
   body('theme')
     .optional()
     .custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
+  body('noInstanceConfigWarningModal')
+    .optional()
+    .custom(v => isNoInstanceConfigWarningModal(v)).withMessage('Should have a valid noInstanceConfigWarningModal boolean'),
+  body('noWelcomeModal')
+    .optional()
+    .custom(v => isNoWelcomeModal(v)).withMessage('Should have a valid noWelcomeModal boolean'),
+  body('autoPlayNextVideo')
+    .optional()
+    .custom(v => isUserAutoPlayNextVideoValid(v)).withMessage('Should have a valid autoPlayNextVideo boolean'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
@@ -262,10 +282,19 @@ const usersVideoRatingValidator = [
 
 const ensureUserRegistrationAllowed = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const allowed = await isSignupAllowed()
-    if (allowed === false) {
+    const allowedParams = {
+      body: req.body
+    }
+
+    const allowedResult = await Hooks.wrapPromiseFun(
+      isSignupAllowed,
+      allowedParams,
+      'filter:api.user.signup.allowed.result'
+    )
+
+    if (allowedResult.allowed === false) {
       return res.status(403)
-                .json({ error: 'User registration is not enabled or user limit is reached.' })
+                .json({ error: allowedResult.errorMessage || 'User registration is not enabled or user limit is reached.' })
     }
 
     return next()
@@ -430,7 +459,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserIdExist (id: number, res: express.Response) {
+function checkUserIdExist (idArg: number | string, res: express.Response) {
+  const id = parseInt(idArg + '', 10)
   return checkUserExist(() => UserModel.loadById(id), res)
 }
 
@@ -457,7 +487,7 @@ async function checkUserNameOrEmailDoesNotAlreadyExist (username: string, email:
   return true
 }
 
-async function checkUserExist (finder: () => Bluebird<UserModel>, res: express.Response, abortResponse = true) {
+async function checkUserExist (finder: () => Bluebird<MUserDefault>, res: express.Response, abortResponse = true) {
   const user = await finder()
 
   if (!user) {

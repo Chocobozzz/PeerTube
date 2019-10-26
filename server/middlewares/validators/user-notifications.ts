@@ -43,6 +43,8 @@ const updateNotificationSettingsValidator = [
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid new user registration notification setting'),
   body('newInstanceFollower')
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid new instance follower notification setting'),
+  body('autoInstanceFollowing')
+    .custom(isUserNotificationSettingValid).withMessage('Should have a valid new instance following notification setting'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking updateNotificationSettingsValidator parameters', { parameters: req.body })

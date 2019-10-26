@@ -3,8 +3,6 @@ import { sendUpdateActor } from './activitypub/send'
 import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
 import { updateActorAvatarInstance } from './activitypub'
 import { processImage } from '../helpers/image-utils'
-import { AccountModel } from '../models/account/account'
-import { VideoChannelModel } from '../models/video/video-channel'
 import { extname, join } from 'path'
 import { retryTransactionWrapper } from '../helpers/database-utils'
 import * as uuidv4 from 'uuid/v4'
@@ -13,8 +11,12 @@ import { sequelizeTypescript } from '../initializers/database'
 import * as LRUCache from 'lru-cache'
 import { queue } from 'async'
 import { downloadImage } from '../helpers/requests'
+import { MAccountDefault, MChannelDefault } from '../typings/models'
 
-async function updateActorAvatarFile (avatarPhysicalFile: Express.Multer.File, accountOrChannel: AccountModel | VideoChannelModel) {
+async function updateActorAvatarFile (
+  avatarPhysicalFile: Express.Multer.File,
+  accountOrChannel: MAccountDefault | MChannelDefault
+) {
   const extension = extname(avatarPhysicalFile.filename)
   const avatarName = uuidv4() + extension
   const destination = join(CONFIG.STORAGE.AVATARS_DIR, avatarName)

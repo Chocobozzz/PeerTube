@@ -10,8 +10,8 @@ import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { SignatureActorModel } from '../../../typings/models'
-import { ActorFollowModelLight } from '../../../typings/models/actor-follow'
+import { MActorFollowActors, MActorSignature } from '../../../typings/models'
+import { autoFollowBackIfNeeded } from '../follow'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options
@@ -28,8 +28,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processFollow (byActor: SignatureActorModel, targetActorURL: string) {
-  const { actorFollow, created, isFollowingInstance } = await sequelizeTypescript.transaction(async t => {
+async function processFollow (byActor: MActorSignature, targetActorURL: string) {
+  const { actorFollow, created, isFollowingInstance, targetActor } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
@@ -43,10 +43,10 @@ async function processFollow (byActor: SignatureActorModel, targetActorURL: stri
 
       await sendReject(byActor, targetActor)
 
-      return { actorFollow: undefined }
+      return { actorFollow: undefined as MActorFollowActors }
     }
 
-    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate({
+    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
       where: {
         actorId: byActor.id,
         targetActorId: targetActor.id
@@ -57,7 +57,7 @@ async function processFollow (byActor: SignatureActorModel, targetActorURL: stri
         state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL ? 'pending' : 'accepted'
       },
       transaction: t
-    }) as [ ActorFollowModelLight, boolean ]
+    })
 
     if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
       actorFollow.state = 'accepted'
@@ -68,17 +68,26 @@ async function processFollow (byActor: SignatureActorModel, targetActorURL: stri
     actorFollow.ActorFollowing = targetActor
 
     // Target sends to actor he accepted the follow request
-    if (actorFollow.state === 'accepted') await sendAccept(actorFollow)
+    if (actorFollow.state === 'accepted') {
+      await sendAccept(actorFollow)
+      await autoFollowBackIfNeeded(actorFollow)
+    }
 
-    return { actorFollow, created, isFollowingInstance }
+    return { actorFollow, created, isFollowingInstance, targetActor }
   })
 
   // Rejected
   if (!actorFollow) return
 
   if (created) {
-    if (isFollowingInstance) Notifier.Instance.notifyOfNewInstanceFollow(actorFollow)
-    else Notifier.Instance.notifyOfNewUserFollow(actorFollow)
+    const follower = await ActorModel.loadFull(byActor.id)
+    const actorFollowFull = Object.assign(actorFollow, { ActorFollowing: targetActor, ActorFollower: follower })
+
+    if (isFollowingInstance) {
+      Notifier.Instance.notifyOfNewInstanceFollow(actorFollowFull)
+    } else {
+      Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
+    }
   }
 
   logger.info('Actor %s is followed by actor %s.', targetActorURL, byActor.url)

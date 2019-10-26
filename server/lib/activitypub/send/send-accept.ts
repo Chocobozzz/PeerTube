@@ -3,10 +3,9 @@ import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from
 import { unicastTo } from './utils'
 import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
-import { ActorFollowModelLight } from '../../../typings/models/actor-follow'
-import { ActorModelOnly } from '../../../typings/models'
+import { MActor, MActorFollowActors } from '../../../typings/models'
 
-async function sendAccept (actorFollow: ActorFollowModelLight) {
+async function sendAccept (actorFollow: MActorFollowActors) {
   const follower = actorFollow.ActorFollower
   const me = actorFollow.ActorFollowing
 
@@ -34,7 +33,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildAcceptActivity (url: string, byActor: ActorModelOnly, followActivityData: ActivityFollow): ActivityAccept {
+function buildAcceptActivity (url: string, byActor: MActor, followActivityData: ActivityFollow): ActivityAccept {
   return {
     type: 'Accept',
     id: url,

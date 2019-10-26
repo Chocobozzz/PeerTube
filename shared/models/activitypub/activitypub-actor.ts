@@ -1,6 +1,6 @@
 import { ActivityPubAttributedTo } from './objects/common-objects'
 
-export type ActivityPubActorType = 'Person' | 'Application' | 'Group'
+export type ActivityPubActorType = 'Person' | 'Application' | 'Group' | 'Service' | 'Organization'
 
 export interface ActivityPubActor {
   '@context': any[]

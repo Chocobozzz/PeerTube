@@ -25,6 +25,7 @@ import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { FindOptions, QueryTypes, Transaction } from 'sequelize'
 import { MIMETYPES } from '../../initializers/constants'
+import { MVideoFile } from '@server/typings/models'
 
 @Table({
   tableName: 'videoFile',
@@ -98,7 +99,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'
     const options = {
-      type: QueryTypes.SELECT,
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
       bind: { infoHash },
       raw: true
     }
@@ -166,7 +167,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
     return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
   }
 
-  hasSameUniqueKeysThan (other: VideoFileModel) {
+  hasSameUniqueKeysThan (other: MVideoFile) {
     return this.fps === other.fps &&
       this.resolution === other.resolution &&
       this.videoId === other.videoId

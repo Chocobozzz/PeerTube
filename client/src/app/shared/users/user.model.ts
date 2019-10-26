@@ -9,31 +9,39 @@ export class User implements UserServerModel {
   username: string
   email: string
   pendingEmail: string | null
+
   emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
+
+  adminFlags?: UserAdminFlag
+
+  autoPlayVideo: boolean
+  autoPlayNextVideo: boolean
+  webTorrentEnabled: boolean
+  videosHistoryEnabled: boolean
+  videoLanguages: string[]
 
   role: UserRole
   roleLabel: string
 
-  webTorrentEnabled: boolean
-  autoPlayVideo: boolean
-  videosHistoryEnabled: boolean
-  videoLanguages: string[]
-
   videoQuota: number
   videoQuotaDaily: number
-  account: Account
-  videoChannels: VideoChannel[]
-  createdAt: Date
+  videoQuotaUsed?: number
+  videoQuotaUsedDaily?: number
 
   theme: string
 
-  adminFlags?: UserAdminFlag
+  account: Account
+  notificationSettings?: UserNotificationSetting
+  videoChannels?: VideoChannel[]
 
   blocked: boolean
   blockedReason?: string
 
-  notificationSettings?: UserNotificationSetting
+  noInstanceConfigWarningModal: boolean
+  noWelcomeModal: boolean
+
+  createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {
     this.id = hash.id
@@ -43,13 +51,16 @@ export class User implements UserServerModel {
     this.role = hash.role
 
     this.videoChannels = hash.videoChannels
+
     this.videoQuota = hash.videoQuota
     this.videoQuotaDaily = hash.videoQuotaDaily
+    this.videoQuotaUsed = hash.videoQuotaUsed
+    this.videoQuotaUsedDaily = hash.videoQuotaUsedDaily
+
     this.nsfwPolicy = hash.nsfwPolicy
     this.webTorrentEnabled = hash.webTorrentEnabled
     this.videosHistoryEnabled = hash.videosHistoryEnabled
     this.autoPlayVideo = hash.autoPlayVideo
-    this.createdAt = hash.createdAt
 
     this.theme = hash.theme
 
@@ -58,7 +69,12 @@ export class User implements UserServerModel {
     this.blocked = hash.blocked
     this.blockedReason = hash.blockedReason
 
+    this.noInstanceConfigWarningModal = hash.noInstanceConfigWarningModal
+    this.noWelcomeModal = hash.noWelcomeModal
+
     this.notificationSettings = hash.notificationSettings
+
+    this.createdAt = hash.createdAt
 
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)

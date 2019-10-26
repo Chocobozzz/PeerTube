@@ -20,6 +20,9 @@ tar_name="peertube-nightly-$today.tar.xz"
 
 npm run build
 
+nightly_version="nightly-$today"
+sed -i 's/"version": "\([^"]\+\)"/"version": "\1-'"$nightly_version"'"/' ./package.json
+
 # Creating the archives
 (
   # local variables
@@ -40,3 +43,5 @@ npm run build
   # temporary setup destruction
   rm "$directory_name"
 )
+
+git checkout -- ./package.json

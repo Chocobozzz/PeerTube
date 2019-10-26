@@ -155,7 +155,7 @@ function setValidRemoteVideoUrls (video: any) {
 
 function setRemoteVideoTruncatedContent (video: any) {
   if (video.content) {
-    video.content = peertubeTruncate(video.content, CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max)
+    video.content = peertubeTruncate(video.content, { length: CONSTRAINTS_FIELDS.VIDEOS.TRUNCATED_DESCRIPTION.max })
   }
 
   return true

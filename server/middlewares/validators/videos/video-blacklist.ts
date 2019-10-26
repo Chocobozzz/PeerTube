@@ -14,7 +14,7 @@ const videosBlacklistRemoveValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoBlacklistExist(res.locals.video.id, res)) return
+    if (!await doesVideoBlacklistExist(res.locals.videoAll.id, res)) return
 
     return next()
   }
@@ -36,7 +36,7 @@ const videosBlacklistAddValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
+    const video = res.locals.videoAll
     if (req.body.unfederate === true && video.remote === true) {
       return res
         .status(409)
@@ -59,7 +59,7 @@ const videosBlacklistUpdateValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoBlacklistExist(res.locals.video.id, res)) return
+    if (!await doesVideoBlacklistExist(res.locals.videoAll.id, res)) return
 
     return next()
   }

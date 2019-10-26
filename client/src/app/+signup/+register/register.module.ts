@@ -7,13 +7,15 @@ import { RegisterStepChannelComponent } from './register-step-channel.component'
 import { RegisterStepUserComponent } from './register-step-user.component'
 import { CustomStepperComponent } from './custom-stepper.component'
 import { SignupSharedModule } from '@app/+signup/shared/signup-shared.module'
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap'
 
 @NgModule({
   imports: [
     RegisterRoutingModule,
     SharedModule,
     CdkStepperModule,
-    SignupSharedModule
+    SignupSharedModule,
+    NgbAccordionModule
   ],
 
   declarations: [

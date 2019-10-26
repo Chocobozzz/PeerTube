@@ -163,6 +163,10 @@
         <source>Dzongkha</source>
         <target>Dzongkha</target>
       </trans-unit>
+      <trans-unit id="Greek">
+        <source>Greek</source>
+        <target>Grego</target>
+      </trans-unit>
       <trans-unit id="English">
         <source>English</source>
         <target>Inglés</target>

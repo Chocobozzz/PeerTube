@@ -3,7 +3,7 @@ version: "3.3"
 services:
 
   reverse-proxy:
-    image: traefik
+    image: traefik:v1.7
     network_mode: "host"
     command: --docker # Tells Træfik to listen to docker
     ports:

@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ScreenService } from '@app/shared/misc/screen.service'
 import { CdkDragDrop } from '@angular/cdk/drag-drop'
 import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 
@@ -38,6 +39,7 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
     private confirmService: ConfirmService,
     private route: ActivatedRoute,
     private i18n: I18n,
+    private screenService: ScreenService,
     private videoPlaylistService: VideoPlaylistService
   ) {}
 
@@ -97,6 +99,23 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
 
   trackByFn (index: number, elem: VideoPlaylistElement) {
     return elem.id
+  }
+
+  /**
+   * Returns null to not have drag and drop delay.
+   * In small views, where elements are about 100% wide,
+   * we add a delay to prevent unwanted drag&drop.
+   *
+   * @see {@link https://github.com/Chocobozzz/PeerTube/issues/2078}
+   *
+   * @returns {null|number} Null for no delay, or a number in milliseconds.
+   */
+  getDragStartDelay (): null | number {
+    if (this.screenService.isInTouchScreen()) {
+      return 500
+    }
+
+    return null
   }
 
   private loadElements () {

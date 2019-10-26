@@ -222,9 +222,8 @@ export class PluginManager implements ServerHook {
       const pluginName = PluginModel.normalizePluginName(npmName)
 
       const packageJSON = await this.getPackageJSON(pluginName, pluginType)
-      if (!isPackageJSONValid(packageJSON, pluginType)) {
-        throw new Error('PackageJSON is invalid.')
-      }
+
+      this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, pluginType);
 
       [ plugin ] = await PluginModel.upsert({
         name: pluginName,
@@ -301,9 +300,7 @@ export class PluginManager implements ServerHook {
     const packageJSON = await this.getPackageJSON(plugin.name, plugin.type)
     const pluginPath = this.getPluginPath(plugin.name, plugin.type)
 
-    if (!isPackageJSONValid(packageJSON, plugin.type)) {
-      throw new Error('Package.JSON is invalid.')
-    }
+    this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, plugin.type)
 
     let library: PluginLibrary
     if (plugin.type === PluginType.PLUGIN) {
@@ -595,6 +592,21 @@ export class PluginManager implements ServerHook {
       }
 
       delete this.updatedVideoConstants[type][npmName]
+    }
+  }
+
+  private sanitizeAndCheckPackageJSONOrThrow (packageJSON: PluginPackageJson, pluginType: PluginType) {
+    if (!packageJSON.staticDirs) packageJSON.staticDirs = {}
+    if (!packageJSON.css) packageJSON.css = []
+    if (!packageJSON.clientScripts) packageJSON.clientScripts = []
+    if (!packageJSON.translations) packageJSON.translations = {}
+
+    const { result: packageJSONValid, badFields } = isPackageJSONValid(packageJSON, pluginType)
+    if (!packageJSONValid) {
+      const formattedFields = badFields.map(f => `"${f}"`)
+                              .join(', ')
+
+      throw new Error(`PackageJSON is invalid (invalid fields: ${formattedFields}).`)
     }
   }
 

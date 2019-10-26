@@ -25,6 +25,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
 import { removeRedundancyOf } from '../../../lib/redundancy'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
@@ -171,6 +172,8 @@ async function acceptFollower (req: express.Request, res: express.Response) {
 
   follow.state = 'accepted'
   await follow.save()
+
+  await autoFollowBackIfNeeded(follow)
 
   return res.status(204).end()
 }

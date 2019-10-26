@@ -7,6 +7,7 @@ export interface UserUpdateMe {
 
   webTorrentEnabled?: boolean
   autoPlayVideo?: boolean
+  autoPlayNextVideo?: boolean
   videosHistoryEnabled?: boolean
   videoLanguages?: string[]
 
@@ -15,4 +16,7 @@ export interface UserUpdateMe {
   password?: string
 
   theme?: string
+
+  noInstanceConfigWarningModal?: boolean
+  noWelcomeModal?: boolean
 }

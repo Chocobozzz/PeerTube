@@ -11,6 +11,7 @@
     - [peertube-import-videos.js](#peertube-import-videosjs)
     - [peertube-upload.js](#peertube-uploadjs)
     - [peertube-watch.js](#peertube-watchjs)
+    - [peertube-plugins.js](#peertube-pluginsjs)
 - [Server tools](#server-tools)
   - [parse-log](#parse-log)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
@@ -19,6 +20,7 @@
   - [optimize-old-videos.js](#optimize-old-videosjs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
+  - [plugin install/uninstall](#plugin-installuninstall)
   - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
     - [.help](#help)
     - [Lodash example](#lodash-example)
@@ -122,7 +124,7 @@ $ node dist/server/tools/peertube-import-videos.js \
     -u 'PEERTUBE_URL' \
     -U 'PEERTUBE_USER' \
     --password 'PEERTUBE_PASSWORD' \
-    -t 'TARGET_URL'
+    --target-url 'TARGET_URL'
 ```
 
 * `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
@@ -181,6 +183,22 @@ It provides support for different players:
 - airplay
 - chromecast
 
+
+#### peertube-plugins.js
+
+Install/update/uninstall or list local or NPM PeerTube plugins:
+
+```
+$ cd ${CLONE}
+$ node dist/server/tools/peertube-plugins.js --help
+$ node dist/server/tools/peertube-plugins.js list --help
+$ node dist/server/tools/peertube-plugins.js install --help
+$ node dist/server/tools/peertube-plugins.js update --help
+$ node dist/server/tools/peertube-plugins.js uninstall --help
+
+$ node dist/server/tools/peertube-plugins.js install --path /my/plugin/path
+$ node dist/server/tools/peertube-plugins.js install --npm-name peertube-theme-example
+```
 
 ## Server tools
 
@@ -262,22 +280,22 @@ $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production 
 The difference with `peertube plugins` CLI is that these scripts can be used even if PeerTube is not running.
 If PeerTube is running, you need to restart it for the changes to take effect (whereas with `peertube plugins` CLI, plugins/themes are dynamically loaded on the server).
 
-To install a plugin or a theme from the disk:
+To install/update a plugin or a theme from the disk:
 
 ```
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:install -- --plugin-path /local/plugin/path
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
 ```
 
 From NPM:
 
 ```
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:install -- --npm-name peertube-plugin-myplugin
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
 ```
 
 To uninstall a plugin or a theme:
 
 ```
-$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
 ```
 
 ### REPL ([Read Eval Print Loop](https://nodejs.org/docs/latest-v10.x/api/repl.html))

@@ -36,7 +36,7 @@
 
 ## Concepts
 
-Themes are exactly the same than plugins, except that:
+Themes are exactly the same as plugins, except that:
  * Their name starts with `peertube-theme-` instead of `peertube-plugin-`
  * They cannot declare server code (so they cannot register server hooks or settings)
  * CSS files are loaded by client only if the theme is chosen by the administrator or the user

@@ -24,9 +24,13 @@ const videoFileRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
+    const video = res.locals.videoAll
+
+    const paramResolution = req.params.resolution as unknown as number // We casted to int above
+    const paramFPS = req.params.fps as unknown as number // We casted to int above
+
     const videoFile = video.VideoFiles.find(f => {
-      return f.resolution === req.params.resolution && (!req.params.fps || f.fps === req.params.fps)
+      return f.resolution === paramResolution && (!req.params.fps || paramFPS)
     })
 
     if (!videoFile) return res.status(404).json({ error: 'Video file not found.' })
@@ -41,8 +45,12 @@ const videoFileRedundancyGetValidator = [
 ]
 
 const videoPlaylistRedundancyGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
-  param('streamingPlaylistType').custom(exists).withMessage('Should have a valid streaming playlist type'),
+  param('videoId')
+    .custom(isIdOrUUIDValid)
+    .not().isEmpty().withMessage('Should have a valid video id'),
+  param('streamingPlaylistType')
+    .customSanitizer(toIntOrNull)
+    .custom(exists).withMessage('Should have a valid streaming playlist type'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
@@ -50,8 +58,10 @@ const videoPlaylistRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
-    const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p === req.params.streamingPlaylistType)
+    const video = res.locals.videoAll
+
+    const paramPlaylistType = req.params.streamingPlaylistType as unknown as number // We casted to int above
+    const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p.type === paramPlaylistType)
 
     if (!videoStreamingPlaylist) return res.status(404).json({ error: 'Video playlist not found.' })
     res.locals.videoStreamingPlaylist = videoStreamingPlaylist
