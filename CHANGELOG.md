@@ -34,10 +34,10 @@
      * **Hardware** information
    * Add these information in the about page and in the signup page
    * Add a welcome modal at first admin login with some explanations of PeerTube and some useful links
-   * Add warning modal when the administrators enables or enabled signup but did not fill some important information regarding their instance
+   * Add warning modal when administrators enable or enabled signup but did not fill some important instance information
    (for now the instance **name**, **terms**, **administrator** and **maintenance lifetime** information)
  * Add ability to automatically follow back other instances
- * Add ability to automatically follow instances from [the public registry](https://instances.joinpeertube.org/)
+ * Add ability to automatically follow [the public registry](https://instances.joinpeertube.org/) instances
  * Add *Most liked videos* page ([@alcalyn](https://github.com/alcalyn))
  * Add a drag&drop delay on playlist videos to allow user scroll on small screens ([@alcalyn](https://github.com/alcalyn))
  * Allow to toggle video publication date to display absolute date ([@alcalyn](https://github.com/alcalyn))
