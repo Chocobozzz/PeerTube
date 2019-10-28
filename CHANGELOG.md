@@ -1,5 +1,79 @@
 # Changelog
 
+## v2.0.0-rc.1
+
+### IMPORTANT NOTES
+
+ * Removed old JSON LD signature implementation. There will be some **federation incompatibilities** with forwarded activities sent
+  by PeerTube instances < v2.0.0
+ * Replaced configuration key `email.object` with `email.subject`: https://github.com/Chocobozzz/PeerTube/commit/916937d7daf386e4e2d37b2ca22db07b644b02df
+
+### Plugins/Themes API
+
+ * Add plugin hook on registration `filter:api.user.signup.allowed.result`
+
+### Maintenance
+
+ * Add `--tmpdir`, `--first`, `--last` and `--verbose [level]` parameters to peertube-import-videos script ([Yetangitu](https://github.com/Yetangitu))
+ * Improve REST API documentation ([@frankstrater](https://github.com/frankstrater))
+ * Improve plugin management documentation
+
+### Features
+
+ * Better instance admin responsibility:
+   * Add ability to set more information about your instance. This will be used in the future on https://joinpeertube.org to help people find
+   the appropriate PeerTube instance on which they can register:
+     * Main **Categories**
+     * **Languages** you/your moderators speak
+     * **Code of Conduct**
+     * **Moderation information** (who moderates your instance, NSFW policy etc)
+     * Who is **behind the instance** (a single person? non-profit?)
+     * Why did the admin **create this instance**
+     * How long the admin plan to **maintain the instance**
+     * How the administrator **will finance** the PeerTube server
+     * **Hardware** information
+   * Add these information in the about page and in the signup page
+   * Add a welcome modal at first admin login with some explanations of PeerTube and some useful links
+   * Add warning modal when the administrators enables or enabled signup but did not fill some important information regarding their instance
+   (for now the instance **name**, **terms**, **administrator** and **maintenance lifetime** information)
+ * Add ability to automatically follow back other instances
+ * Add ability to automatically follow instances from [the public registry](https://instances.joinpeertube.org/)
+ * Add *Most liked videos* page ([@alcalyn](https://github.com/alcalyn))
+ * Add a drag&drop delay on playlist videos to allow user scroll on small screens ([@alcalyn](https://github.com/alcalyn))
+ * Allow to toggle video publication date to display absolute date ([@alcalyn](https://github.com/alcalyn))
+ * Add statistics in about page ([@alcalyn](https://github.com/alcalyn))
+ * Improve the *feature table* in about page
+ * Add contributors in about page
+ * Clearer warning of IP address leaking on embedded videos ([@robinkooli](https://github.com/robinkooli))
+ * Case insensitive search on video tags
+ * Add video name in "video publish notification"
+ * Add ability to autoplay next recommended video (opt in) ([@LoveIsGrief](https://github.com/LoveIsGrief))
+ * Add link behind the subscribe via RSS button ([@frankstrater](https://github.com/frankstrater))
+ * Support text/plain caption files
+ * Speedup theme injection
+
+### Bug fixes
+
+ * Fix audio upload
+ * Fix traefik version docker compose
+ * Handle video reports from mastodon
+ * Fix videos redundancy exceeding the limit
+ * Fix search when user defined video languages in their preferences
+ * Don't quick transcode with the wrong pixel format
+ * Hide videos abuses of muted accounts
+ * Fix account avatar widths
+ * Fix default `commentsEnabled` and `downloadEnabled` values on video upload/import ([@frankstrater](https://github.com/frankstrater))
+ * Disable auto complete of email field when editing another user information in admin panel ([@Knackie](https://github.com/Knackie))
+ * Fix federation issues with some actors (that have long descriptions, or missing optional AP fields)
+ * Remove down redundancy endpoints in HLS player
+ * Fix user notifications with multiple opened tabs
+ * Replace "overview" by "discover" in webpage titles
+ * Clearer IP debug message in admin panel
+ * Fix checkbox styles when using a theme
+ * Don't redirect on verify account page after login
+ * Fix player captions menu after choosing a subtitle
+
+
 ## v1.4.1
 
 ### Bug fixes
