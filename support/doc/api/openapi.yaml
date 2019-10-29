@@ -2451,7 +2451,7 @@ components:
                 intervalDays:
                   type: number
         tracker:
-          ype: object
+          type: object
           properties:
             enabled:
               type: boolean
