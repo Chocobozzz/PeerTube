@@ -10,7 +10,9 @@
 
 ### Plugins/Themes API
 
- * Add plugin hook on registration `filter:api.user.signup.allowed.result`
+### Docker
+
+ * Fix traefik version docker compose (**you need to update your `docker-compose.yml` file**: https://github.com/Chocobozzz/PeerTube/commit/f1b38883922fd59b36f093e44a5091e090d20862)
 
 ### Maintenance
 
@@ -55,7 +57,6 @@
 ### Bug fixes
 
  * Fix audio upload
- * Fix traefik version docker compose
  * Handle video reports from mastodon
  * Fix videos redundancy exceeding the limit
  * Fix search when user defined video languages in their preferences
