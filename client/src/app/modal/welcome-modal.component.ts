@@ -18,13 +18,11 @@ export class WelcomeModalComponent {
   ) { }
 
   show () {
-    const ref = this.modalService.open(this.modal,{
+    this.modalService.open(this.modal,{
       backdrop: 'static',
       keyboard: false,
       size: 'lg'
     })
-
-    ref.result.finally(() => this.doNotOpenAgain())
   }
 
   private doNotOpenAgain () {

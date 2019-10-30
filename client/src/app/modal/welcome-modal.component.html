@@ -7,61 +7,81 @@
   <div class="modal-body">
 
     <div class="block-documentation">
-      <div i18n class="subtitle">Documentation</div>
-
       <div class="columns">
         <a class="link-block" href="https://docs.joinpeertube.org/#/maintain-tools" target="_blank" rel="noopener noreferrer">
-          <a class="link-title" href="https://docs.joinpeertube.org/#/maintain-tools" target="_blank" rel="noopener noreferrer">CLI</a>
+          <a class="link-title" href="https://docs.joinpeertube.org/#/maintain-tools" target="_blank" rel="noopener noreferrer">CLI
+            documentation</a>
 
           <div>Upload or import videos, parse logs, prune storage directories, reset user password...</div>
         </a>
 
         <a class="link-block" href="https://docs.joinpeertube.org/#/admin-following-instances" target="_blank" rel="noopener noreferrer">
-          <a class="link-title" href="https://docs.joinpeertube.org/#/admin-following-instances" target="_blank" rel="noopener noreferrer">Administer</a>
+          <a class="link-title" href="https://docs.joinpeertube.org/#/admin-following-instances" target="_blank" rel="noopener noreferrer">Administer
+            documentation</a>
 
           <div>Managing users, following other instances, dealing with spammers...</div>
         </a>
 
         <a class="link-block" href="https://docs.joinpeertube.org/#/use-setup-account" target="_blank" rel="noopener noreferrer">
-          <a class="link-title" href="https://docs.joinpeertube.org/#/use-setup-account" target="_blank" rel="noopener noreferrer">Use</a>
+          <a class="link-title" href="https://docs.joinpeertube.org/#/use-setup-account" target="_blank" rel="noopener noreferrer">Use
+            documentation</a>
 
           <div>Setup your account, managing video playlists, discover third-party applications...</div>
         </a>
       </div>
     </div>
 
-    <div class="block-configuration">
-      <div i18n class="subtitle">It's time to configure your instance!</div>
+    <div class="two-columns">
 
-      <p i18n>
-        Choosing your <strong>instance name</strong>, <strong>setting up a description</strong>, specifying <strong>who you are</strong>,
-        why <strong>you created your instance</strong> and <strong>how long</strong> you plan to <strong>maintain your it</strong>
-        is very important for visitors to understand on what type of instance they are.
-      </p>
+      <div class="mascot">
+        <img src="/client/assets/images/mascot/pointing.png" alt="mascot">
+      </div>
 
-      <p i18n>
-        If you want to open registrations, please decide what are <strong>your moderation rules</strong>, fill your <strong>instance terms</strong>
-        and specify the categories and languages you speak. This way, you will help users to register on <strong>the appropriate</strong> PeerTube instance.
-      </p>
+      <div class="block-links">
+        <div i18n class="subtitle">Useful links</div>
 
-      <div class="configure-instance">
-        <a i18n href="/admin/config/edit-custom" target="_blank" rel="noopener noreferrer">Configure your instance</a>
+        <ul>
+          <li>Official PeerTube website (news, support, contribute...): <a href="https://joinpeertube.org" target="_blank"
+                                                                           rel="noopener noreferrer">https://joinpeertube.org</a></li>
+
+          <li>Put your instance on the public PeerTube index: <a href="https://instances.joinpeertube.org/instances">https://instances.joinpeertube.org/instances</a>
+          </li>
+        </ul>
       </div>
     </div>
 
-    <div class="block-links">
-      <div i18n class="subtitle">Useful links</div>
+    <div class="two-columns">
+      <div class="mascot">
+        <img src="/client/assets/images/mascot/happy.png" alt="mascot">
+      </div>
 
-      <ul>
-        <li>Official PeerTube website (news, support, contribute...): <a href="https://joinpeertube.org" target="_blank" rel="noopener noreferrer">https://joinpeertube.org</a></li>
+      <div class="block-configuration">
+        <div i18n class="subtitle">It's time to configure your instance!</div>
 
-        <li>Put your instance on the public PeerTube index: <a href="https://instances.joinpeertube.org/instances">https://instances.joinpeertube.org/instances</a></li>
-      </ul>
+        <p i18n>
+          Choosing your <strong>instance name</strong>, <strong>setting up a description</strong>, specifying <strong>who you are</strong>,
+          why <strong>you created your instance</strong> and <strong>how long</strong> you plan to <strong>maintain your it</strong>
+          is very important for visitors to understand on what type of instance they are.
+        </p>
+
+        <p i18n>
+          If you want to open registrations, please decide what are <strong>your moderation rules</strong>, fill your <strong>instance
+          terms</strong>
+          and specify the categories and languages you speak. This way, you will help users to register on <strong>the
+          appropriate</strong>
+          PeerTube instance.
+        </p>
+      </div>
     </div>
   </div>
 
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-submit" (click)="hide()">Understood!</span>
+    <span i18n class="action-button action-button-understood" (click)="hide()">Remind me later</span>
+
+    <a i18n (click)="doNotOpenAgain(); hide()" class="configure-instance-button" href="/admin/config/edit-custom" target="_blank"
+       rel="noopener noreferrer">
+      Configure my instance
+    </a>
   </div>
 
 </ng-template>
