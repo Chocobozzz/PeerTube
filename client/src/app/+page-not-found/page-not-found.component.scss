@@ -6,6 +6,8 @@
 
   img {
     margin-bottom: 75px;
+    width: 220px;
+    height: auto;
   }
 
   .text {
@@ -14,5 +16,9 @@
 
   @media screen and (max-height: 600px) {
     padding-top: 50px;
+
+    img {
+      width: 160px;
+    }
   }
 }
