@@ -104,6 +104,18 @@ body {
     }
   }
 
+  // Show poster and controls when playing audio-only content
+  &.vjs-playing-audio-only-content {
+    .vjs-poster {
+      display: block;
+      visibility: visible;
+    }
+
+    .vjs-control-bar {
+      opacity: $primary-foreground-opacity-hover;
+    }
+  }
+
   // Hide the big play button on autoplay
   &.vjs-has-autoplay {
     .vjs-big-play-button {
