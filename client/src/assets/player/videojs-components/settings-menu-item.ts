@@ -75,7 +75,6 @@ class SettingsMenuItem extends MenuItem {
               this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
               this.update()
               this.bindClickEvents()
-
             }, 0)
           })
         }
@@ -107,6 +106,10 @@ class SettingsMenuItem extends MenuItem {
     // To update the sub menu value on click, setTimeout is needed because
     // updating the value is not instant
     setTimeout(() => this.update(event), 0)
+
+    // Seems like videojs adds a vjs-hidden class on the caption menu after a click
+    // We don't need it
+    this.subMenu.menu.removeClass('vjs-hidden')
   }
 
   /**

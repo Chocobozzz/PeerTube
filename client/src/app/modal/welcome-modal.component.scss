@@ -5,19 +5,28 @@
   font-size: 15px;
 }
 
+.two-columns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.mascot {
+  display: block;
+  min-width: 170px;
+}
+
 .subtitle {
   font-weight: $font-semibold;
   margin-bottom: 10px;
   font-size: 16px;
 }
 
-.block-documentation .subtitle {
-  margin-bottom: 20px;
-}
-
-.block-configuration,
-.block-instance {
-  margin-top: 30px;
+.block-documentation {
+  .subtitle {
+    margin-bottom: 20px;
+  }
 }
 
 li {
@@ -52,5 +61,22 @@ li {
       justify-content: center;
       margin-bottom: 5px;
     }
+
+    .link-title,
+    div {
+      text-align: center;
+    }
   }
+}
+
+.configure-instance-button {
+  @include peertube-button;
+  @include orange-button;
+
+  display: inline-block;
+}
+
+.action-button-understood {
+  @include peertube-button;
+  @include grey-button;
 }

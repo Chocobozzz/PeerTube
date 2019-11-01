@@ -35,7 +35,7 @@ Tweak the `docker-compose.yml` file there according to your needs:
 $ vim ./docker-compose.yml
 ```
 
-Then tweak the `.env` file to change the enviromnent variables:
+Then tweak the `.env` file to change the environment variables:
 
 ```shell
 $ vim ./.env

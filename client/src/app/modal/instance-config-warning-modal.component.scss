@@ -20,3 +20,15 @@ li {
   margin-top: 40px;
   margin-bottom: 10px;
 }
+
+.mascot {
+  display: block;
+  margin: 0 auto 50px;
+}
+
+.action-button-configure {
+  display: inline-block;
+
+  @include peertube-button;
+  @include orange-button;
+}
