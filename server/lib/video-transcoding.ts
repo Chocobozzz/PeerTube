@@ -81,12 +81,52 @@ async function transcodeOriginalVideofile (video: MVideoWithFile, resolution: Vi
   const videoOutputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(newVideoFile))
   const videoTranscodedPath = join(transcodeDirectory, video.getVideoFilename(newVideoFile))
 
+  const transcodeOptions = resolution === VideoResolution.H_NOVIDEO
+    ? {
+        type: 'split-audio' as 'split-audio',
+        inputPath: videoInputPath,
+        outputPath: videoTranscodedPath,
+        resolution,
+      }
+    : {
+        type: 'video' as 'video',
+        inputPath: videoInputPath,
+        outputPath: videoTranscodedPath,
+        resolution,
+        isPortraitMode: isPortrait
+      }
+
+  await transcode(transcodeOptions)
+
+  return onVideoFileTranscoding(video, newVideoFile, videoTranscodedPath, videoOutputPath)
+}
+
+/**
+ * Extract audio into a separate audio-only mp4.
+ */
+async function splitAudioFile (video: MVideoWithFile) {
+  const videosDirectory = CONFIG.STORAGE.VIDEOS_DIR
+  const transcodeDirectory = CONFIG.STORAGE.TMP_DIR
+  const extname = '.mp4'
+  const resolution = VideoResolution.H_NOVIDEO
+
+  // We are sure it's x264 in mp4 because optimizeOriginalVideofile was already executed
+  const videoInputPath = join(videosDirectory, video.getVideoFilename(video.getOriginalFile()))
+
+  const newVideoFile = new VideoFileModel({
+    resolution,
+    extname,
+    size: 0,
+    videoId: video.id
+  })
+  const videoOutputPath = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(newVideoFile))
+  const videoTranscodedPath = join(transcodeDirectory, video.getVideoFilename(newVideoFile))
+
   const transcodeOptions = {
-    type: 'video' as 'video',
+    type: 'split-audio' as 'split-audio',
     inputPath: videoInputPath,
     outputPath: videoTranscodedPath,
-    resolution,
-    isPortraitMode: isPortrait
+    resolution
   }
 
   await transcode(transcodeOptions)

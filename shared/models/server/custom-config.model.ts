@@ -73,6 +73,7 @@ export interface CustomConfig {
     allowAudioFiles: boolean
     threads: number
     resolutions: {
+      '0p': boolean
       '240p': boolean
       '360p': boolean
       '480p': boolean

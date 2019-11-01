@@ -79,7 +79,7 @@ class ResolutionMenuButton extends MenuButton {
         this.player_,
         {
           id: d.id,
-          label: d.label,
+          label: d.id == 0 ? this.player .localize('Audio-only') : d.label,
           selected: d.selected,
           callback: data.qualitySwitchCallback
         })
