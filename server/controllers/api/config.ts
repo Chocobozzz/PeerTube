@@ -300,6 +300,7 @@ function customConfig (): CustomConfig {
       allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
+        '0p': CONFIG.TRANSCODING.RESOLUTIONS[ '0p' ],
         '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
         '360p': CONFIG.TRANSCODING.RESOLUTIONS[ '360p' ],
         '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
@@ -356,6 +357,7 @@ function convertCustomConfigBody (body: CustomConfig) {
   function keyConverter (k: string) {
     // Transcoding resolutions exception
     if (/^\d{3,4}p$/.exec(k)) return k
+    if (/^0p$/.exec(k)) return k
 
     return snakeCase(k)
   }

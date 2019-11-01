@@ -72,6 +72,7 @@ transcoding:
   allow_audio_files: false
   threads: 2
   resolutions:
+    0p: true
     240p: true
     360p: true
     480p: true

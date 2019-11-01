@@ -37,6 +37,7 @@ const customConfigUpdateValidator = [
   body('transcoding.enabled').isBoolean().withMessage('Should have a valid transcoding enabled boolean'),
   body('transcoding.allowAdditionalExtensions').isBoolean().withMessage('Should have a valid additional extensions boolean'),
   body('transcoding.threads').isInt().withMessage('Should have a valid transcoding threads number'),
+  body('transcoding.resolutions.0p').isBoolean().withMessage('Should have a valid transcoding 0p resolution enabled boolean'),
   body('transcoding.resolutions.240p').isBoolean().withMessage('Should have a valid transcoding 240p resolution enabled boolean'),
   body('transcoding.resolutions.360p').isBoolean().withMessage('Should have a valid transcoding 360p resolution enabled boolean'),
   body('transcoding.resolutions.480p').isBoolean().withMessage('Should have a valid transcoding 480p resolution enabled boolean'),

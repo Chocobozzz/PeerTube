@@ -75,6 +75,7 @@ export interface CustomConfig {
 
     threads: number
     resolutions: {
+      '0p': boolean
       '240p': boolean
       '360p': boolean
       '480p': boolean

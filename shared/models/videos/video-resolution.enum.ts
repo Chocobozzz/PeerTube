@@ -1,6 +1,7 @@
 import { VideoTranscodingFPS } from './video-transcoding-fps.model'
 
 export enum VideoResolution {
+  H_NOVIDEO = 0,
   H_240P = 240,
   H_360P = 360,
   H_480P = 480,
@@ -18,6 +19,10 @@ export enum VideoResolution {
  */
 function getBaseBitrate (resolution: VideoResolution) {
   switch (resolution) {
+    case VideoResolution.H_NOVIDEO:
+      // audio-only
+      return 64 * 1000
+
     case VideoResolution.H_240P:
       // quality according to Google Live Encoder: 300 - 700 Kbps
       // Quality according to YouTube Video Info: 186 Kbps

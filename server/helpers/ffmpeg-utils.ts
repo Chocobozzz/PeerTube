@@ -14,6 +14,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
 
   // Put in the order we want to proceed jobs
   const resolutions = [
+    VideoResolution.H_NOVIDEO,
     VideoResolution.H_480P,
     VideoResolution.H_360P,
     VideoResolution.H_720P,
@@ -34,10 +35,15 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
 async function getVideoFileSize (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
 
-  return {
-    width: videoStream.width,
-    height: videoStream.height
-  }
+  return videoStream == null 
+    ? {
+        width: 0,
+        height: 0
+      }
+    : {
+        width: videoStream.width,
+        height: videoStream.height
+      }
 }
 
 async function getVideoFileResolution (path: string) {
@@ -51,6 +57,10 @@ async function getVideoFileResolution (path: string) {
 
 async function getVideoFileFPS (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
+
+  if (videoStream == null) {
+      return 0
+  }
 
   for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
     const valuesText: string = videoStream[key]
@@ -118,7 +128,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
   }
 }
 
-type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio'
+type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio' | 'split-audio'
 
 interface BaseTranscodeOptions {
   type: TranscodeOptionsType
@@ -149,7 +159,11 @@ interface MergeAudioTranscodeOptions extends BaseTranscodeOptions {
   audioPath: string
 }
 
-type TranscodeOptions = HLSTranscodeOptions | VideoTranscodeOptions | MergeAudioTranscodeOptions | QuickTranscodeOptions
+interface SplitAudioTranscodeOptions extends BaseTranscodeOptions {
+  type: 'split-audio'
+}
+
+type TranscodeOptions = HLSTranscodeOptions | VideoTranscodeOptions | MergeAudioTranscodeOptions | SplitAudioTranscodeOptions | QuickTranscodeOptions
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
@@ -163,6 +177,8 @@ function transcode (options: TranscodeOptions) {
         command = await buildHLSCommand(command, options)
       } else if (options.type === 'merge-audio') {
         command = await buildAudioMergeCommand(command, options)
+      } else if (options.type === 'split-audio') {
+        command = await buildAudioSplitCommand(command, options)
       } else {
         command = await buildx264Command(command, options)
       }
@@ -198,6 +214,7 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
   const resolution = await getVideoFileResolution(path)
 
   // check video params
+  if (videoStream == null) return false
   if (videoStream[ 'codec_name' ] !== 'h264') return false
   if (videoStream[ 'pix_fmt' ] !== 'yuv420p') return false
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
@@ -276,6 +293,12 @@ async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: M
   return command
 }
 
+async function buildAudioSplitCommand (command: ffmpeg.FfmpegCommand, options: SplitAudioTranscodeOptions) {
+  command = await presetAudioSplit(command)
+
+  return command
+}
+
 async function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
   command = await presetCopy(command)
 
@@ -327,7 +350,7 @@ function getVideoStreamFromFile (path: string) {
       if (err) return rej(err)
 
       const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      if (!videoStream) return rej(new Error('Cannot find video stream of ' + path))
+      //if (!videoStream) return rej(new Error('Cannot find video stream of ' + path))
 
       return res(videoStream)
     })
@@ -481,4 +504,12 @@ async function presetCopy (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.Ffmpeg
     .format('mp4')
     .videoCodec('copy')
     .audioCodec('copy')
+}
+
+
+async function presetAudioSplit (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.FfmpegCommand> {
+  return command
+    .format('mp4')
+    .audioCodec('copy')
+    .noVideo()
 }

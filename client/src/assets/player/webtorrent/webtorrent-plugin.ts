@@ -181,12 +181,20 @@ class WebTorrentPlugin extends Plugin {
     const currentTime = this.player.currentTime()
     const isPaused = this.player.paused()
 
-    // Remove poster to have black background
-    this.playerElement.poster = ''
-
     // Hide bigPlayButton
     if (!isPaused) {
       this.player.bigPlayButton.hide()
+    }
+
+    // Audio-only (resolutionId == 0) gets special treatment
+    if (resolutionId > 0) {
+      // Hide poster to have black background 
+      this.player.removeClass('vjs-playing-audio-only-content')
+      this.player.posterImage.hide()
+    } else {
+      // Audio-only: show poster, do not auto-hide controls
+      this.player.addClass('vjs-playing-audio-only-content')
+      this.player.posterImage.show()
     }
 
     const newVideoFile = this.videoFiles.find(f => f.resolution.id === resolutionId)
@@ -195,6 +203,7 @@ class WebTorrentPlugin extends Plugin {
       delay,
       seek: currentTime + (delay / 1000)
     }
+
     this.updateVideoFile(newVideoFile, options)
   }
 
@@ -327,6 +336,7 @@ class WebTorrentPlugin extends Plugin {
                           this.player.posterImage.show()
                           this.player.removeClass('vjs-has-autoplay')
                           this.player.removeClass('vjs-has-big-play-button-clicked')
+                          this.player.removeClass('vjs-playing-audio-only-content')
 
                           return done()
                         })
