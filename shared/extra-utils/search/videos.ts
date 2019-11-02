@@ -29,26 +29,6 @@ function searchVideoWithToken (url: string, search: string, token: string, query
             .expect('Content-Type', /json/)
 }
 
-function searchVideoWithPagination (url: string, search: string, start: number, count: number, sort?: string) {
-  const path = '/api/v1/search/videos'
-
-  const query = {
-    start,
-    search,
-    count
-  }
-
-  const req = request(url)
-    .get(path)
-    .query(query)
-
-  if (sort) req.query({ sort })
-
-  return req.set('Accept', 'application/json')
-            .expect(200)
-            .expect('Content-Type', /json/)
-}
-
 function searchVideoWithSort (url: string, search: string, sort: string) {
   const path = '/api/v1/search/videos'
 
@@ -79,6 +59,5 @@ export {
   searchVideo,
   advancedVideosSearch,
   searchVideoWithToken,
-  searchVideoWithPagination,
   searchVideoWithSort
 }
