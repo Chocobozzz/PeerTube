@@ -217,7 +217,7 @@ transcoding:
   allow_audio_files: true
   threads: 1
   resolutions: # Only created if the original video has a higher resolution, uses more storage!
-    0p: false # audio-only (creates mp4 without video stream)
+    0p: false # audio-only (creates mp4 without video stream, always created when enabled)
     240p: false
     360p: false
     480p: false
