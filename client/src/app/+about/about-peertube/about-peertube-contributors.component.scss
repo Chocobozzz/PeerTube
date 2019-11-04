@@ -1,15 +1,17 @@
 @import '_variables';
 @import '_mixins';
 
-/deep/ h1 {
-  font-size: 1rem;
-}
+.peertube-contributors {
+  /deep/ h1 {
+    font-size: 1rem;
+  }
 
-/deep/ ul {
-  padding: 0;
+  /deep/ ul {
+    padding: 0;
 
-  li {
-    display: inline-block;
-    margin-right: 10px;
+    li {
+      display: inline-block;
+      margin-right: 10px;
+    }
   }
 }

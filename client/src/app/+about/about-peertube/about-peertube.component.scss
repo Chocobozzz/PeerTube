@@ -2,9 +2,15 @@
 @import '_mixins';
 
 .about-peertube-title {
-  font-size: 20px;
+  font-size: 25px;
+  text-align: center;
   font-weight: $font-semibold;
   margin-bottom: 15px;
+}
+
+.mascot {
+  display: block;
+  margin: 20px auto;
 }
 
 /deep/ .section-title {
@@ -14,7 +20,8 @@
 }
 
 .description {
-  margin-bottom: 30px;
+  margin-bottom: 100px;
+  text-align: center;
 }
 
 .description,
