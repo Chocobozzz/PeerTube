@@ -36,7 +36,9 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
 
       const uri = indexUrl + INSTANCES_INDEX.HOSTS_PATH
 
-      const qs = this.lastCheck ? { since: this.lastCheck.toISOString() } : {}
+      const qs = { count: 1000 }
+      if (this.lastCheck) Object.assign(qs, { since: this.lastCheck.toISOString() })
+
       this.lastCheck = new Date()
 
       const { body } = await doRequest({ uri, qs, json: true })
