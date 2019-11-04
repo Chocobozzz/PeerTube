@@ -375,6 +375,7 @@ function parseDate (dateAsStr: string): Date {
     exitError(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
   }
   const date = new Date(dateAsStr);
+  date.setHours(0, 0, 0);
   if (isNaN(date.getTime())) {
     exitError(`Invalid date passed: ${dateAsStr}. See help for usage.`);
   }
