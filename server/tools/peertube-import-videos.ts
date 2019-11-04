@@ -57,8 +57,8 @@ getServerCredentials(command)
       exitError('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
     }
 
-    removeEndSlashes(url)
-    removeEndSlashes(program[ 'targetUrl' ])
+    url = removeEndSlashes(url)
+    program[ 'targetUrl' ] = removeEndSlashes(program[ 'targetUrl' ])
 
     const user = { username, password }
 
@@ -330,9 +330,7 @@ function isNSFW (info: any) {
 }
 
 function removeEndSlashes (url: string) {
-  while (url.endsWith('/')) {
-    url.slice(0, -1)
-  }
+  return url.replace(/\/+$/, '')
 }
 
 async function promptPassword () {
