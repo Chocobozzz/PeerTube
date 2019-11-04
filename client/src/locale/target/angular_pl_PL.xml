@@ -1018,17 +1018,6 @@
           <context context-type="linenumber">2</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
-        <source>
-        Other videos
-    </source>
-        <target>
-        Inne filmy
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
         <source>Share</source>
         <target>Udostępnij</target>
@@ -1048,17 +1037,6 @@
         <target>Umieść</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3da5360f8314aa95973aa52629c9f635363c5a36">
-        <source>
-                Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
-              </source>
-        <target>
-                Opublikowano <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> wyświetleń
-              </target>
-        <context-group name="null">
-          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced">
@@ -1572,20 +1550,6 @@
           <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
-        <source>Videos Trending</source>
-        <target>Filmy na czasie</target>
-        <context-group name="null">
-          <context context-type="linenumber">220</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1861c96217213992e02dcb77e15ea69e718c9883">
-        <source>Videos Recently Added</source>
-        <target>Ostatnio dodane filmy</target>
-        <context-group name="null">
-          <context context-type="linenumber">222</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>Lokalne filmy</target>
@@ -1626,20 +1590,6 @@
         <target>Użytkownicy</target>
         <context-group name="null">
           <context context-type="linenumber">257</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
-        <source>User default video quota</source>
-        <target>Domyślna powierzchnia na filmy dla użytkownika</target>
-        <context-group name="null">
-          <context context-type="linenumber">261</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="f5528147716c4d3286c89defbe63ee0b75da5ffe">
-        <source>User default daily upload limit</source>
-        <target>Domyślny limit dziennego wysyłania przez użytkownika</target>
-        <context-group name="null">
-          <context context-type="linenumber">273</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
@@ -1766,13 +1716,6 @@
         <target>Aktualizuj konfigurację</target>
         <context-group name="null">
           <context context-type="linenumber">606</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3e459b5c3861d8c80084d21d233b7c8e2edd3cca">
-        <source>It seems the configuration is invalid. Please search potential errors in the different tabs.</source>
-        <target>Wygląda na to, że konfiguracja jest nieprawidłowa. Poszukaj możliwych błędów w innych kartach.</target>
-        <context-group name="null">
-          <context context-type="linenumber">607</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -2015,24 +1958,6 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
-        <source>
-  About PeerTube
-</source>
-        <target>
-  O PeerTube
-</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
-        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>PeerTube jest sfederowaną (ActivityPub) platformą streamingową filmów korzystającą z P2P (WebTorrent) bezpośrednio w przeglądarce.</target>
-        <context-group name="null">
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
         <source>
     It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
@@ -2041,7 +1966,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
     Jest to wolne i otwartoźródłowe oprogramowanie udostępniane na licencji <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a">
@@ -2052,68 +1977,68 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
     Aby uzyskać więcej informacji, odwiedź <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
         <target>P2P i prywatność</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
         <source>What are the consequences?</source>
         <target>Jakie są tego konsekwencje?</target>
         <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
         <source>What can I do to limit the exposure of my IP address?</source>
         <target>Jak mogę ograniczyć widoczność mojego adresu IP?</target>
         <context-group name="null">
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
         <source>What will be done to mitigate this problem?</source>
         <target>Co zostanie zrobione, aby złagodzić ten problem?</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d32608aba08c6bb3cc4e4e8ec6223e5f4e78ca19">
         <source>Set a limit to the number of peers sent by the tracker</source>
         <target>Ustawienie maksymalnej liczby peerów wysłanych przez tracker</target>
         <context-group name="null">
-          <context context-type="linenumber">94</context>
+          <context context-type="linenumber">98</context>
         </context-group>
       </trans-unit>
       <trans-unit id="a6d732b614143f862e69798046dc0868716547e5">
         <source>Set a limit on the request frequency received by the tracker (being tested)</source>
         <target>Ustawienie maksymalnej częstotliwości otrzymywania żądań przez tracker (jest testowane)</target>
         <context-group name="null">
-          <context context-type="linenumber">95</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ba77e356eaa5c06caaf5c8734c361d1a5415fe1c">
         <source>Ring a bell if there are unusual requests (being tested)</source>
         <target>Reagowanie na nietypowe żądania (jest testowane)</target>
         <context-group name="null">
-          <context context-type="linenumber">96</context>
+          <context context-type="linenumber">100</context>
         </context-group>
       </trans-unit>
       <trans-unit id="81861ff8a71c8a5881cdf66417f3bddb753f0e18">
         <source>Disable P2P from the administration interface</source>
         <target>Wyłącz P2P z interfejsu administracyjnego</target>
         <context-group name="null">
-          <context context-type="linenumber">97</context>
+          <context context-type="linenumber">101</context>
         </context-group>
       </trans-unit>
       <trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6">
         <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source><target>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</target><context-group name="null">
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">
@@ -2132,17 +2057,6 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         <target>Przykład: jane_doe</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="e242e3e8608a3c4a944327eb3d5c221dc6e4e3cd">
-        <source>
-  Sorry, but we couldn't find the page you were looking for.
-</source>
-        <target>
-  Przepraszamy, ale nie mogliśmy odnaleźć tego, czego szukasz.
-</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9e601a3b227bb70afbb9b59cd43547b710af1e10">

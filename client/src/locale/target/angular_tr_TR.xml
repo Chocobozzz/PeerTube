@@ -474,7 +474,7 @@
         <source><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
         <target><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme</target>
         <context-group name="null">
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a">
@@ -685,44 +685,11 @@
           <context context-type="linenumber">259</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="abf2b0f7b6405fa2841ca39c827e86089a95cc27">
-        <source>
-        Other videos
-    </source>
-        <target>
-        Diğer videolar
-    </target>
-        <context-group name="null">
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
         <source>Share</source>
         <target>Paylaş</target>
         <context-group name="null">
           <context context-type="linenumber">83</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="99686034581579c92a971f4eeebd2c072c812e2d">
-        <source>
-              Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
-            </source>
-        <target>
-              <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> yayınlandı - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme
-            </target>
-        <context-group name="null">
-          <context context-type="linenumber">44</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3da5360f8314aa95973aa52629c9f635363c5a36">
-        <source>
-                Published <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> views
-              </source>
-        <target>
-                <x id="INTERPOLATION" equiv-text="{{ video.publishedAt | myFromNow }}"/> yayınlandı - <x id="INTERPOLATION_1" equiv-text="{{ video.views | myNumberFormatter }}"/> görüntüleme
-              </target>
-        <context-group name="null">
-          <context context-type="linenumber">53</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
@@ -796,32 +763,11 @@
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
-        <source>Videos Trending</source>
-        <target>Öne çıkan videolar</target>
-        <context-group name="null">
-          <context context-type="linenumber">220</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="1861c96217213992e02dcb77e15ea69e718c9883">
-        <source>Videos Recently Added</source>
-        <target>Son eklenen videolar</target>
-        <context-group name="null">
-          <context context-type="linenumber">222</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>Yerel videolar</target>
         <context-group name="null">
           <context context-type="linenumber">223</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="31b3275d999af45fe64c6824e6e017d2e2704f09">
-        <source>User default video quota</source>
-        <target>Kullanıcı varsayılan video kotası</target>
-        <context-group name="null">
-          <context context-type="linenumber">261</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
@@ -845,24 +791,6 @@
           <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
-        <source>
-  About PeerTube
-</source>
-        <target>
-  PeerTube Hakkında
-</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
-        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>PeerTube, doğrudan web tarayıcısında P2P (WebTorrent) kullanan bir federasyon (ActivityPub) video akışı platformudur.</target>
-        <context-group name="null">
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
         <source>
     It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
@@ -871,7 +799,7 @@
     <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>AGPLv3 lisansı<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> altında, ücretsiz ve açık kaynaklı bir yazılımdır.
   </target>
         <context-group name="null">
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="14c3050a9da4c1bc49d555c45d5660804d08e83b">

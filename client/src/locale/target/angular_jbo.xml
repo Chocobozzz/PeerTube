@@ -1036,13 +1036,6 @@ lo pilno</target>
           <context context-type="linenumber">81</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="1cbeb1eb589bfbe5efce94184cacd3095ca26948">
-        <source>Videos Trending</source>
-        <target>zasni misno vidvi</target>
-        <context-group name="null">
-          <context context-type="linenumber">220</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
         <target>diklo vidvi</target>
@@ -1274,24 +1267,6 @@ lo pilno</target>
           <context context-type="linenumber">7</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="a11e3ba2c5aea841de67a3c85892bb61295e94dc">
-        <source>
-  About PeerTube
-</source>
-        <target>
-datni la .pirtub.
-</target>
-        <context-group name="null">
-          <context context-type="linenumber">1</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="bd29138e1e17572596ce8f2fe61bcea6ac5fb0bf">
-        <source>PeerTube is a federated (ActivityPub) video streaming platform using P2P (WebTorrent) directly in the web browser.</source>
-        <target>.i la .pirtub. cu jikca jorne be fi la .aktivitipyb. ku ke vidvi tivni ciste je cu pilno pa benji be fo lo kibyca'o ku simxu ciste no'u la .uebytorent.</target>
-        <context-group name="null">
-          <context context-type="linenumber">6</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="a10308f7ac111f5b66d08af0a24fc9ddf143931a">
         <source>
     For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
@@ -1299,42 +1274,42 @@ datni la .pirtub.
         <target>
 .i ga na ja do djica lo ka ce'u facki lo zmadu gi ko vitke la'o zoi. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> .zoi</target>
         <context-group name="null">
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="c02493cfa08b82c468233b83069b5baff23890e1">
         <source>P2P &amp; Privacy</source>
         <target>ni'o ni'o sau'e'u lo su'u simxu benji jo'u lo ka sivni</target>
         <context-group name="null">
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
         <source>What are the consequences?</source>
         <target>ni'o ma jalge</target>
         <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
         <source>How does PeerTube compare with YouTube?</source>
         <target>ni'o xe karbi la .pirtub. la .iutub.</target>
         <context-group name="null">
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
         <source>What can I do to limit the exposure of my IP address?</source>
         <target>ni'o mi ka'e zukte ma lo nu jimte le mi kibro judri</target>
         <context-group name="null">
-          <context context-type="linenumber">78</context>
+          <context context-type="linenumber">82</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
         <source>What will be done to mitigate this problem?</source>
         <target>ni'o se zukte fi lo nu spuda lo nabmi</target>
         <context-group name="null">
-          <context context-type="linenumber">86</context>
+          <context context-type="linenumber">90</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4499806949402133d08a5029cb5462c5ea25336d">

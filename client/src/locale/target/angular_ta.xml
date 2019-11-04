@@ -472,14 +472,14 @@
         <source>What are the consequences?</source>
         <target>பின்விளைவுகள் என்ன?</target>
         <context-group name="null">
-          <context context-type="linenumber">28</context>
+          <context context-type="linenumber">32</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
         <source>How does PeerTube compare with YouTube?</source>
         <target>PeerTube-ஐ Youtube-உடன் எப்படு ஒப்பிடுவது?</target>
         <context-group name="null">
-          <context context-type="linenumber">70</context>
+          <context context-type="linenumber">74</context>
         </context-group>
       </trans-unit>
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
