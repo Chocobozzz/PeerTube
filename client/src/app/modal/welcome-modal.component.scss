@@ -49,6 +49,7 @@ li {
     color: var(--mainForegroundColor);
     padding: 10px;
     transition: background-color 0.2s ease-in;
+    flex-basis: 33%;
 
     &:hover {
       background-color: rgba(0, 0, 0, 0.05);

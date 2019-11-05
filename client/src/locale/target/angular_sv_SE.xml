@@ -3801,56 +3801,56 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Transcoding threads</source>
         <target>Omkodningstrådar</target>
         <context-group name="null">
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6221e8fc0bcfc87cbb03621bca82a6e4e188b75a">
         <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> enabled</source>
         <target>Upplösningen <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> är tillåten</target>
         <context-group name="null">
-          <context context-type="linenumber">510</context>
+          <context context-type="linenumber">532</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38">
         <source>Cache</source>
         <target>Cache</target>
         <context-group name="null">
-          <context context-type="linenumber">519</context>
+          <context context-type="linenumber">541</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
         <target>Vissa filer är inte federerade (till exempel förhandsvisningar och undertexter). Vi kan hämta dem direkt från ursprungsinstansen och cachelagra dem.</target>
         <context-group name="null">
-          <context context-type="linenumber">523</context>
+          <context context-type="linenumber">545</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>Förhandsvisningens cachestorlek</target>
         <context-group name="null">
-          <context context-type="linenumber">530</context>
+          <context context-type="linenumber">552</context>
         </context-group>
       </trans-unit>
       <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
         <source>Video captions cache size</source>
         <target>Undertexternas cachestorlek</target>
         <context-group name="null">
-          <context context-type="linenumber">539</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>Anpassningar</target>
         <context-group name="null">
-          <context context-type="linenumber">548</context>
+          <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dd9e2ece240f87c7fcc2d8f2c0fc0d187d0cd30c">
@@ -3861,7 +3861,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
                     Skriv din JavaScript-kod här.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Exempel: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('min instans är fantastisk');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
                   </target>
         <context-group name="null">
-          <context context-type="linenumber">556</context>
+          <context context-type="linenumber">578</context>
         </context-group>
       </trans-unit>
       <trans-unit id="89c9bfb2fe99372c85311d9895d30e47d2552a02">
@@ -3892,7 +3892,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
 <x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
                   </target>
         <context-group name="null">
-          <context context-type="linenumber">575</context>
+          <context context-type="linenumber">597</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -3906,14 +3906,14 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <source>Update configuration</source>
         <target>Uppdatera inställningar</target>
         <context-group name="null">
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">628</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f8f8fca3139cba7d4fd6d9578d93e601f639cc83">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
         <target>Det verkar som att konfigurationen inte stämmer. Sök efter eventuella fel i de olika flikarna.</target>
         <context-group name="null">
-          <context context-type="linenumber">607</context>
+          <context context-type="linenumber">629</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">

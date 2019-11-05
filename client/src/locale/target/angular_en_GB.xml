@@ -2367,42 +2367,42 @@
         <source>Transcoding threads</source>
         <target>Transcoding threads</target>
         <context-group name="null">
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
         <target>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</target>
         <context-group name="null">
-          <context context-type="linenumber">523</context>
+          <context context-type="linenumber">545</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>Previews cache size</target>
         <context-group name="null">
-          <context context-type="linenumber">530</context>
+          <context context-type="linenumber">552</context>
         </context-group>
       </trans-unit>
       <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
         <source>Video captions cache size</source>
         <target>Video captions cache size</target>
         <context-group name="null">
-          <context context-type="linenumber">539</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>Customisations</target>
         <context-group name="null">
-          <context context-type="linenumber">548</context>
+          <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -2416,7 +2416,7 @@
         <source>Update configuration</source>
         <target>Update configuration</target>
         <context-group name="null">
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">628</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">

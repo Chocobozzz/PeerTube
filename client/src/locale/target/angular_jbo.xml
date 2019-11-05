@@ -1061,14 +1061,14 @@ lo pilno</target>
         <source>JavaScript</source>
         <target>la .djavascript.</target>
         <context-group name="null">
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dad5a5283e4c853c011a0f03d5a52310338bbff8">
         <source>Update configuration</source>
         <target>nu basti fi lo ka ce'u te tcimi'e</target>
         <context-group name="null">
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">628</context>
         </context-group>
       </trans-unit>
       <trans-unit id="994363f08f9fbfa3b3994ff7b35c6904fdff18d8">

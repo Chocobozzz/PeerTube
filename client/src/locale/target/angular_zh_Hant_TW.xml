@@ -227,6 +227,25 @@
           <context context-type="linenumber">1</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="23e2d8a43af729f896ac66787ed5e756078f5566">
+        <source>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> 發佈了一部新影片：<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="ba93de990947141c5582ce8ccc3c6f74f7fd35a6">
         <source>
         <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
@@ -282,6 +301,25 @@
       </target>
         <context-group name="null">
           <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="215e69763313e97ad8f35cfe1b70bbdcda22aa47">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          最近新增的影片 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>被自動加入黑名單<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715">
@@ -421,6 +459,46 @@
       </target>
         <context-group name="null">
           <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2a17038a035574afa33cb5557783468be596a025">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>)
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          您的站臺有 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>1 個新的追蹤者<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>)
+          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>正在等待您的批准<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fc54954d383d13ebb444d2c1d59f4454e3f06f97">
+        <source>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon&gt;"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon&gt;"/>
+
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>
+          您的站臺自動追蹤了 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566">
@@ -627,6 +705,20 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="15c02cb6b6c3be53477e502d3e1ee26955b23af0">
+        <source>Unavailable</source>
+        <target>不可用</target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28df1b02fd88d2deb0212bc5d7ff34cf9492fa54">
+        <source>Deleted</source>
+        <target>已刪除</target>
+        <context-group name="null">
+          <context context-type="linenumber">34</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2edccfda908b57c073dc0811eaa58818de2be2dc">
         <source>Edit starts/stops at</source>
         <target>編輯開始／停止於</target>
@@ -690,6 +782,17 @@
           <context context-type="linenumber">29</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="5c76e3ae0f85719fb16644ea75bced0229069b97">
+        <source>
+      Subscribe
+    </source>
+        <target>
+      訂閱
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="c374edf3b9228d3df6d761bdc8a289e7df0096e8">
         <source>
     Unsubscribe
@@ -699,6 +802,17 @@
   </target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2f3f48994ece05cebb717c75ee0c39e871e3df91">
+        <source>
+        Subscribe
+      </source>
+        <target>
+        訂閱
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66">
@@ -756,11 +870,64 @@
           <context context-type="linenumber">10</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963">
+        <source>
+        You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.
+      </source>
+        <target>
+        您可以透過任何支援 ActivityPub 協定的聯盟實體訂閱此頻道。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        舉例來說，您可以在 Mastodon 或 Pleroma 中的搜尋框輸入頻道的 URL，並在那裡訂閱。
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d">
+        <source>
+        You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.
+      </source>
+        <target>
+        您可以透過任何支援 ActivityPub 協定的聯盟實體與此互動。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+        舉例來說，您可以在 Mastodon 或 Pleroma 中的搜尋框輸入頻道的 URL，並在那裡訂閱。
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f">
+        <source>
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+        <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </source>
+        <target>
+        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>預設的 NSFW／敏感影片政策<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+        <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>可以被使用者重新定義<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
+      </target>
+        <context-group name="null">
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
         <source>User registration allowed</source>
         <target>允許使用者註冊</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2">
+        <source>Video uploads</source>
+        <target>影片上傳</target>
+        <context-group name="null">
+          <context context-type="linenumber">32</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d">
+        <source>Transcoding in multiple resolutions</source>
+        <target>正在轉換編碼到多種解析度</target>
+        <context-group name="null">
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
@@ -802,6 +969,13 @@
           <context context-type="linenumber">71</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="59bdc3dfa4075f92c734588899485db702c8f120">
+        <source>Player</source>
+        <target>播放器</target>
+        <context-group name="null">
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5">
         <source>P2P enabled</source>
         <target>已啟用 P2P</target>
@@ -809,11 +983,74 @@
           <context context-type="linenumber">83</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="b8b6a001cca6fa2ba15600ca3a78dfeebf685d60">
+        <source>Loading instance statistics...</source>
+        <target>正在載入站臺統計……</target>
+        <context-group name="null">
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="eadc17c3df80143992e2d9028dead3199ae6d79d">
         <source>Local</source>
         <target>本地</target>
         <context-group name="null">
           <context context-type="linenumber">86</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7c7f4be7b726e61c577e63842a58d9e435f7c597">
+        <source>users</source>
+        <target>使用者</target>
+        <context-group name="null">
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5bc509bb72973f9895241127d5556e9e31051137">
+        <source>videos</source>
+        <target>影片</target>
+        <context-group name="null">
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd21b1e6b5674003187e5cbec0e7e2854f9d8388">
+        <source>video views</source>
+        <target>影片檢視</target>
+        <context-group name="null">
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84">
+        <source>video comments</source>
+        <target>影片留言</target>
+        <context-group name="null">
+          <context context-type="linenumber">75</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d">
+        <source>of hosted video</source>
+        <target>託管影片的數量</target>
+        <context-group name="null">
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7">
+        <source>Federation</source>
+        <target>聯盟</target>
+        <context-group name="null">
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8de9d3173fafc2c7a94352dec3de899b6cedf9c5">
+        <source>followers</source>
+        <target>追蹤者</target>
+        <context-group name="null">
+          <context context-type="linenumber">85</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe">
+        <source>following</source>
+        <target>正在追蹤</target>
+        <context-group name="null">
+          <context context-type="linenumber">95</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
@@ -949,6 +1186,17 @@
           <context context-type="linenumber">58</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a">
+        <source>
+      We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
+    </source>
+        <target>
+      我們很抱歉，您無法復原您的密碼，因為您的站臺管理員並未設定 PeerTube 電子郵件系統。
+    </target>
+        <context-group name="null">
+          <context context-type="linenumber">65</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
         <source>Email</source>
         <target>電子郵件</target>
@@ -1045,6 +1293,61 @@
         <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> 個訂閱者</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5cf92a1d527e65908c75633e8484cdd3b6d16b9b">
+        <source>Welcome to PeerTube, dear administrator!</source>
+        <target>歡迎來到 PeerTube，親愛的管理員！</target>
+        <context-group name="null">
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6b705cdf0d567cf608b9891a1d912daebac3523e">
+        <source>Useful links</source>
+        <target>實用連結</target>
+        <context-group name="null">
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859">
+        <source>It's time to configure your instance!</source>
+        <target>是時候設定您的站臺了！</target>
+        <context-group name="null">
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6">
+        <source>
+          Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>,
+          why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain your it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
+          is very important for visitors to understand on what type of instance they are.
+        </source>
+        <target>
+          選擇您的<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>站臺名稱<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>、<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>設定描述<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>、指定<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>您是誰<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>、
+          為什麼<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>您要建立您自己的站臺<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>與<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>您計畫<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>要<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>維護它多久<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
+          都對訪客了解他們正在哪種站臺上非常重要。
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c">
+        <source>
+          If you want to open registrations, please decide what are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, fill your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance
+          terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
+          and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the
+          appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
+          PeerTube instance.
+        </source>
+        <target>
+          如果您想要開放註冊，請決定好<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>您的管理規則<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>，填寫您的<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>站臺
+          條款<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
+          並指定分類與您說的語言。這樣，您就可以協助使用者在<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the
+          適合的<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
+          PeerTube 站臺上註冊。
+        </target>
+        <context-group name="null">
+          <context context-type="linenumber">67</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f4e529ae5ffd73001d1ff4bbdeeb0a72e342e5c8">
@@ -3117,56 +3420,56 @@
         <source>Transcoding threads</source>
         <target>轉換編碼執行緒</target>
         <context-group name="null">
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6221e8fc0bcfc87cbb03621bca82a6e4e188b75a">
         <source>Resolution <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> enabled</source>
         <target>解析度 <x id="INTERPOLATION" equiv-text="{{resolution.label}}"/> 已啟用</target>
         <context-group name="null">
-          <context context-type="linenumber">510</context>
+          <context context-type="linenumber">532</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38">
         <source>Cache</source>
         <target>快取</target>
         <context-group name="null">
-          <context context-type="linenumber">519</context>
+          <context context-type="linenumber">541</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
         <target>有一些檔案並未聯盟化（預覽、字幕）。我們會直接從原始實體擷取它們並快取。</target>
         <context-group name="null">
-          <context context-type="linenumber">523</context>
+          <context context-type="linenumber">545</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>預覽快取大小</target>
         <context-group name="null">
-          <context context-type="linenumber">530</context>
+          <context context-type="linenumber">552</context>
         </context-group>
       </trans-unit>
       <trans-unit id="98970cd72e776308a37dc4e84bebbedffc787607">
         <source>Video captions cache size</source>
         <target>影片字幕快取大小</target>
         <context-group name="null">
-          <context context-type="linenumber">539</context>
+          <context context-type="linenumber">561</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>自訂</target>
         <context-group name="null">
-          <context context-type="linenumber">548</context>
+          <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -3180,7 +3483,7 @@
         <source>Update configuration</source>
         <target>更新設定</target>
         <context-group name="null">
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">628</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">

@@ -1157,35 +1157,35 @@
         <source>Transcoding threads</source>
         <target>Subprocessos per la transcodificació</target>
         <context-group name="null">
-          <context context-type="linenumber">495</context>
+          <context context-type="linenumber">517</context>
         </context-group>
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38">
         <source>Cache</source>
         <target>Memòria cau</target>
         <context-group name="null">
-          <context context-type="linenumber">519</context>
+          <context context-type="linenumber">541</context>
         </context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
         <source>Previews cache size</source>
         <target>Memòria cau per a visualitzacions prèvies</target>
         <context-group name="null">
-          <context context-type="linenumber">530</context>
+          <context context-type="linenumber">552</context>
         </context-group>
       </trans-unit>
       <trans-unit id="e3a65df2560e99864bbde695da3a7bdf743a184c">
         <source>Customizations</source>
         <target>Personalitzacions</target>
         <context-group name="null">
-          <context context-type="linenumber">548</context>
+          <context context-type="linenumber">570</context>
         </context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
         <source>JavaScript</source>
         <target>JavaScript</target>
         <context-group name="null">
-          <context context-type="linenumber">553</context>
+          <context context-type="linenumber">575</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6c44844ebdb7352c433b7734feaa65f01bb594ab">
@@ -1199,7 +1199,7 @@
         <source>Update configuration</source>
         <target>Actualitza la configuració</target>
         <context-group name="null">
-          <context context-type="linenumber">606</context>
+          <context context-type="linenumber">628</context>
         </context-group>
       </trans-unit>
       <trans-unit id="9518d3fb042d551167c1701ddeb88a1374cf1e48">
