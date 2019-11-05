@@ -491,6 +491,28 @@
               </my-peertube-checkbox>
             </div>
 
+            <ng-container formGroupName="hls">
+              <div class="form-group" >
+                <my-peertube-checkbox
+                  inputName="transcodingHlsEnabled" formControlName="enabled"
+                  i18n-labelText labelText="HLS support enabled"
+                >
+                  <ng-template ptTemplate="help">
+                    <ng-container i18n>
+                      <strong>Requires ffmpeg >= 4.1 and multiplies videos storage by 2!</strong>
+
+                      <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:</p>
+                      <ul>
+                        <li>Resolution change is smoother</li>
+                        <li>Faster playback in particular with long videos</li>
+                        <li>More stable playback (less bugs/infinite loading)</li>
+                      </ul>
+                    </ng-container>
+                  </ng-template>
+                </my-peertube-checkbox>
+              </div>
+            </ng-container>
+
             <div class="form-group">
               <label i18n for="transcodingThreads">Transcoding threads</label>
               <div class="peertube-select-container">
