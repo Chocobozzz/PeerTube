@@ -69,12 +69,12 @@ function checkMissedConfig () {
 // Check the available codecs
 // We get CONFIG by param to not import it in this file (import orders)
 async function checkFFmpeg (CONFIG: { TRANSCODING: { ENABLED: boolean } }) {
+  if (CONFIG.TRANSCODING.ENABLED === false) return undefined
+
   const Ffmpeg = require('fluent-ffmpeg')
   const getAvailableCodecsPromise = promisify0(Ffmpeg.getAvailableCodecs)
   const codecs = await getAvailableCodecsPromise()
   const canEncode = [ 'libx264' ]
-
-  if (CONFIG.TRANSCODING.ENABLED === false) return undefined
 
   for (const codec of canEncode) {
     if (codecs[codec] === undefined) {
