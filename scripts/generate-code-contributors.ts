@@ -91,5 +91,5 @@ async function fetchZanata (zanataUsername: string, zanataPassword: string) {
     get(year2019, headers)
   ])
 
-  return uniqBy((results2018.concat(results2019)), 'username')
+  return uniqBy(results2018.concat(results2019) as { username: string }[], 'username')
 }
