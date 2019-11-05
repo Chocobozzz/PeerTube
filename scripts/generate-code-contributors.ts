@@ -1,8 +1,10 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
+
 registerTSPaths()
 
 import { doRequest } from '../server/helpers/requests'
 import { readFileSync } from 'fs-extra'
+import { uniqBy } from 'lodash'
 
 run()
   .then(() => process.exit(0))
@@ -89,5 +91,5 @@ async function fetchZanata (zanataUsername: string, zanataPassword: string) {
     get(year2019, headers)
   ])
 
-  return results2018.concat(results2019)
+  return uniqBy((results2018.concat(results2019)), 'username')
 }
