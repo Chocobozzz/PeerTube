@@ -80,7 +80,11 @@ export class VideoWatchPlaylistComponent {
 
           if (redirectToFirst) {
             const extras = {
-              queryParams: { videoId: firstAvailableVideos.video.uuid },
+              queryParams: {
+                start: firstAvailableVideos.startTimestamp,
+                stop: firstAvailableVideos.stopTimestamp,
+                videoId: firstAvailableVideos.video.uuid
+              },
               replaceUrl: true
             }
             this.router.navigate([], extras)
