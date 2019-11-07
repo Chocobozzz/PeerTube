@@ -94,7 +94,7 @@
 
  * Fix auto index follow
  * Fix CLI scripts with URLs ending with a `/`
- * Fix `--since` and `--until` timezone in `peertube-import-videos` script
+ * Fix `--since` and `--until` timezone in `peertube-import-videos` script ([@fflorent](https://github.com/fflorent))
  * Avoid circular error in logger
  * Fix start/stop of first element when loading a playlist
  
