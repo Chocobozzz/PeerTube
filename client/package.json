@@ -48,6 +48,7 @@
     "@angularclass/hmr": "^2.1.3",
     "@neos21/bootstrap3-glyphicons": "^1.0.1",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
+    "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.6",
     "@ngx-loading-bar/core": "^4.2.0",
     "@ngx-loading-bar/http-client": "^4.2.0",
     "@ngx-loading-bar/router": "^4.2.0",
@@ -131,5 +132,8 @@
     "webtorrent": "^0.107.16",
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.10.0"
+  },
+  "dependencies": {
+    "@ngx-i18nsupport/tooling": "^8.0.3"
   }
 }

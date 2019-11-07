@@ -78,6 +78,13 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ]
+            },
+            "fr_FR": {
+              "aot": true,
+              "outputPath": "dist/PeerTube-fr_FR",
+              "i18nFile": "src/i18n/messages.fr_FR.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr_FR"
             }
           }
         },
@@ -99,6 +106,9 @@
             "e2e": {
               "browserTarget": "PeerTube:build:e2e",
               "proxyConfig": "e2e/proxy.config.json"
+            },
+            "fr_FR": {
+              "browserTarget": "PeerTube:build:fr_FR"
             }
           }
         },
@@ -134,6 +144,23 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "i18nFormat": "xlf",
+              "srcDir": "src/locale",
+              "genDir": "src/locale",
+              "useSourceAsTarget": false,
+              "i18nBaseFile": "angular",
+              "defaultLanguage": "en-US",
+              "languages": [
+                "en-US",
+                "fr-FR"
+              ]
+            }
           }
         }
       }
