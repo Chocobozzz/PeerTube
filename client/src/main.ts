@@ -16,7 +16,7 @@ if (environment.production) {
 // Template translation, should be in the bootstrap step
 if (isOnDevLocale()) {
   const locale = buildFileLocale(getDevLocale())
-  const translations = require(`raw-loader!./locale/target/angular_${locale}.xml`)
+  const translations = require(`raw-loader!./locale/angular.${locale}.xlf`)
 
   providers = [
     { provide: TRANSLATIONS, useValue: translations },
