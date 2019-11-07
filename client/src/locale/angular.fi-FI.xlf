@@ -7422,7 +7422,8 @@ Kun lataat videon tälle kanavalle, niin videon tukiteksti täytetään automaat
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
       <trans-unit id="7296e9f7cc4956b6d57c541728b0826e76d108ba">
-        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source><target>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></target><context-group name="null">
+        <source>~ <x id="INTERPOLATION" equiv-text="{{minutes}}"/> <x id="ICU" equiv-text="{minutes, plural, =1 {...} other {...}}"/></source>
+        <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24" datatype="html">

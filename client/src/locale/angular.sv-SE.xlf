@@ -1303,40 +1303,46 @@
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit><trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit>
+      <trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c">
         <source>CLI
-            documentation</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
+            documentation</source>
+        <target>Kommandotolk
+            dokumentation</target>
+        <context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
-      </trans-unit><trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit><trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source><target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">15</context>
         </context-group>
-      </trans-unit><trans-unit id="054dd8ba0dece8069a5a7e538efaca9f58cf81f9" datatype="html">
+      </trans-unit>
+      <trans-unit id="054dd8ba0dece8069a5a7e538efaca9f58cf81f9">
         <source>Administer
-            documentation</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
+            documentation</source>
+        <target>Administration
+            dokumentation</target>
+        <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
-      </trans-unit><trans-unit id="c38a3f5b5eff069d0097527fa40a3f8c4d9c1e4e" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit><trans-unit id="c38a3f5b5eff069d0097527fa40a3f8c4d9c1e4e" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source><target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
         </context-group>
-      </trans-unit><trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417" datatype="html">
+      </trans-unit>
+      <trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417">
         <source>Use
-            documentation</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
+            documentation</source>
+        <target>Användning
+            dokumentation</target>
+        <context-group name="null">
           <context context-type="linenumber">26</context>
         </context-group>
-      </trans-unit><trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">26</context></context-group></trans-unit><trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source><target state="new"/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
@@ -1355,14 +1361,16 @@
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">44</context>
         </context-group>
-      </trans-unit><trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
+      </trans-unit>
+      <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-          </source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
+          </source>
+        <target>Lägg till din instans i PeerTubes offentliga index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
+          </target>
+        <context-group name="null">
           <context context-type="linenumber">47</context>
         </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">47</context></context-group></trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859">
         <source>It's time to configure your instance!</source>
         <target>Det är dags att konfigurera din instans!</target>
@@ -3744,25 +3752,28 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">348</context>
         </context-group>
-      </trans-unit><trans-unit id="2704064923ec2275d8ba7892e0ed03d7fe3b7fdf" datatype="html">
-        <source>Automatically follow other instances that follow you</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+      </trans-unit>
+      <trans-unit id="2704064923ec2275d8ba7892e0ed03d7fe3b7fdf">
+        <source>Automatically follow other instances that follow you</source>
+        <target>Följ instanser som följer dig automatiskt</target>
+        <context-group name="null">
           <context context-type="linenumber">357</context>
         </context-group>
-      </trans-unit><trans-unit id="e2790f53c14b8d5d068791aece9655ddb5eb9847" datatype="html">
-        <source>Automatically follow instance of the public index (below)</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">357</context></context-group></trans-unit>
+      <trans-unit id="e2790f53c14b8d5d068791aece9655ddb5eb9847">
+        <source>Automatically follow instance of the public index (below)</source>
+        <target>Följ instanser i det publika indexet automatiskt (nedan)</target>
+        <context-group name="null">
           <context context-type="linenumber">366</context>
         </context-group>
-      </trans-unit><trans-unit id="764910b42b08b8342f7ba5907b258341ec044fa0" datatype="html">
-        <source>Index URL</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">366</context></context-group></trans-unit>
+      <trans-unit id="764910b42b08b8342f7ba5907b258341ec044fa0">
+        <source>Index URL</source>
+        <target>Index-URL</target>
+        <context-group name="null">
           <context context-type="linenumber">371</context>
         </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">371</context></context-group></trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
         <source>Administrator</source>
         <target>Administratör</target>
@@ -3893,7 +3904,8 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
         <context-group name="null">
           <context context-type="linenumber">486</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">486</context></context-group></trans-unit><trans-unit id="cc22eea1bd3ba6e2fcd7cc70b9b3c3f9a7807d50" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">486</context></context-group></trans-unit>
+      <trans-unit id="cc22eea1bd3ba6e2fcd7cc70b9b3c3f9a7807d50">
         <source>
                       <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Requires ffmpeg >= 4.1 and multiplies videos storage by 2!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
 
@@ -3903,18 +3915,28 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
                         <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/>
                         <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/>
                       <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul>"/>
-                    </source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+                    </source>
+        <target>
+                      <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>Kräver ffmpeg >= 4.1 och dubblerar lagringsmöjligheten för videor!<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/>
+
+                      <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p>"/>Generera HLS-spellistor och fragmenterade MP4-filer för att få bättre uppspelning än med den nuvarande standardspelaren:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p>"/>
+                      <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul>"/>
+                        <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Mjukare växling mellan upplösningar<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/>
+                        <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Snabbare uppspelning, särskilt för längre videor<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/>
+                        <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li>"/>Stabilare uppspelning (färre buggar samt obegränsad buffring)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li>"/>
+                      <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul>"/>
+                    </target>
+        <context-group name="null">
           <context context-type="linenumber">501</context>
         </context-group>
-      </trans-unit><trans-unit id="94213e7007705d887db1d366b5abc163122d9202" datatype="html">
-        <source>HLS support enabled</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">501</context></context-group></trans-unit>
+      <trans-unit id="94213e7007705d887db1d366b5abc163122d9202">
+        <source>HLS support enabled</source>
+        <target>HLS-stöd aktiverat</target>
+        <context-group name="null">
           <context context-type="linenumber">498</context>
         </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">498</context></context-group></trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
         <source>Transcoding threads</source>
         <target>Omkodningstrådar</target>
@@ -4869,23 +4891,29 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <context-group name="null">
           <context context-type="linenumber">99</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">99</context></context-group></trans-unit><trans-unit id="5acca660f9a98180926e5d8ec36535bf91881667" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">99</context></context-group></trans-unit>
+      <trans-unit id="5acca660f9a98180926e5d8ec36535bf91881667">
         <source>
   What is PeerTube?
-</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
+</source>
+        <target>
+  Vad är PeerTube?
+</target>
+        <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      </trans-unit><trans-unit id="10b8a184a237225269db5a293abd64e1cbbd13a4" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">1</context></context-group></trans-unit>
+      <trans-unit id="10b8a184a237225269db5a293abd64e1cbbd13a4">
         <source>
     PeerTube is a self hosted federated (ActivityPub) video streaming platform using P2P directly in the web browser.
-  </source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
+  </source>
+        <target>
+    PeerTube är en federerad (ActivityPub) videostreaming-plattform som använder P2P direkt i webbläsaren.
+  </target>
+        <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">8</context></context-group></trans-unit>
       <trans-unit id="c2bc16265b72b9af4a4374b805931ae03e3f73a5">
         <source>
     It is a free and open-source software, under the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>AGPLv3 licence<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
@@ -6886,19 +6914,21 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="6975c8c2dac1982f393cb9a890e33ef95b758111" datatype="html">
-        <source>Index URL is required.</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
+      <trans-unit id="6975c8c2dac1982f393cb9a890e33ef95b758111">
+        <source>Index URL is required.</source>
+        <target>Index-URL måste anges.</target>
+        <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      </trans-unit><trans-unit id="febc4795f39d34b901907a2718b0c5c21165eb36" datatype="html">
-        <source>Index URL should be a URL</source><target state="new"/>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
+      <trans-unit id="febc4795f39d34b901907a2718b0c5c21165eb36">
+        <source>Index URL should be a URL</source>
+        <target>Index-URL måste vara en URL</target>
+        <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      </trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
       <trans-unit id="b6f52e19f074f77866fa03fabe1ddd5cdae346f0">
         <source>Email is required.</source>
         <target>E-postadress måste uppges.</target>

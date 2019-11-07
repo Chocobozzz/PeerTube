@@ -116,7 +116,8 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts</context><context context-type="linenumber">6</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.increment-hours">
-        <source>Increment hours</source><target>Increment hours</target><context-group name="null">
+        <source>Increment hours</source>
+        <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">9</context></context-group></trans-unit><trans-unit id="ngb.timepicker.HH" datatype="html">
@@ -141,7 +142,8 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">21</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.increment-minutes">
-        <source>Increment minutes</source><target>Increment minutes</target><context-group name="null">
+        <source>Increment minutes</source>
+        <context-group name="null">
           <context context-type="linenumber">30</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">30</context></context-group></trans-unit><trans-unit id="ngb.timepicker.MM" datatype="html">
@@ -159,12 +161,14 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">35</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.decrement-minutes">
-        <source>Decrement minutes</source><target>Decrement minutes</target><context-group name="null">
+        <source>Decrement minutes</source>
+        <context-group name="null">
           <context context-type="linenumber">42</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">42</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.increment-seconds">
-        <source>Increment seconds</source><target>Increment seconds</target><context-group name="null">
+        <source>Increment seconds</source>
+        <context-group name="null">
           <context context-type="linenumber">51</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">51</context></context-group></trans-unit><trans-unit id="ngb.timepicker.SS" datatype="html">
@@ -182,17 +186,20 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">56</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.decrement-seconds">
-        <source>Decrement seconds</source><target>Decrement seconds</target><context-group name="null">
+        <source>Decrement seconds</source>
+        <context-group name="null">
           <context context-type="linenumber">63</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
+        <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
+        <context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">72</context></context-group></trans-unit><trans-unit id="ngb.toast.close-aria" datatype="html">
@@ -784,7 +791,8 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/buttons/edit-button.component.html</context><context context-type="linenumber">5</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/buttons/edit-button.component.html</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">219</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context><context context-type="linenumber">63</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d">
-        <source>Truncated preview</source><target>Truncated preview</target><context-group name="null">
+        <source>Truncated preview</source>
+        <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/markdown-textarea.component.html</context><context context-type="linenumber">9</context></context-group></trans-unit>
@@ -844,7 +852,8 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0">
-        <source>Subscribe with your local account</source><target>Subscribe with your local account</target><context-group name="null">
+        <source>Subscribe with your local account</source>
+        <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context><context context-type="linenumber">40</context></context-group></trans-unit><trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed" datatype="html">
@@ -935,9 +944,8 @@
       <trans-unit id="9270dfd4606fb45a991fe7716e640b6efa28ba85">
         <source>
           Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container>"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
-        </source><target>
-          Unlimited <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container>"/>(<x id="INTERPOLATION" equiv-text="{{ dailyUserVideoQuota | bytes: 0 }}"/> per day)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
-        </target><context-group name="null">
+        </source>
+        <context-group name="null">
           <context context-type="linenumber">53</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">53</context></context-group></trans-unit><trans-unit id="a059709f71aa4c0ac219e160e78a738682ca6a36" datatype="html">

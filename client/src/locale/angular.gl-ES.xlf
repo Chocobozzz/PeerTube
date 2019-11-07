@@ -207,7 +207,8 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
+        <context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">72</context></context-group></trans-unit>

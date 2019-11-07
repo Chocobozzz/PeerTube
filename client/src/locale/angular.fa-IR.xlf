@@ -199,12 +199,14 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
+        <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></target><context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
+        <context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">72</context></context-group></trans-unit><trans-unit id="ngb.toast.close-aria" datatype="html">
@@ -2553,7 +2555,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d29764bcbaad3ef69b6be92be35bdf25972ce246">
-        <source>Follow</source><target>Follow</target><context-group name="null">
+        <source>Follow</source>
+        <context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context><context context-type="linenumber">7</context></context-group></trans-unit>
@@ -2619,7 +2622,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
-        <source>State</source><target>State</target><context-group name="null">
+        <source>State</source>
+        <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">18</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit>
@@ -2727,7 +2731,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
-        <source>Username</source><target>Username</target><context-group name="null">
+        <source>Username</source>
+        <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit><trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a" datatype="html">
