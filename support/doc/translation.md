@@ -1,17 +1,19 @@
 # Translation
 
-We use [Zanata](http://zanata.org/) as translation platform.
-Please do not edit xml files directly from Git, you have to use Zanata!
+We use [Weblate](https://weblate.org) as translation platform.
+Please do not edit translation files directly from Git, you have to use Weblate!
 
-If you don't see your locale in the platform, please [create an issue](https://github.com/Chocobozzz/PeerTube/issues) so we add it!
+If you don't see your locale in the platform you can add it directly in the Weblate interface.
+Then, if you think there are enough translated strings, please [create an issue](https://github.com/Chocobozzz/PeerTube/issues) so we add the new locale in PeerTube!
 
 
 ## How to
 
- * Create an account: https://trad.framasoft.org/account/register
- * Join a language team: https://trad.framasoft.org/languages
- * Go to the PeerTube page https://trad.framasoft.org/iteration/view/peertube/develop
- * Choose the locale and begin to translate PeerTube!
+ * Create an account: https://weblate.framasoft.org/accounts/register/
+ * Validate your email and follow the link sent
+ * Create your password (keep the `Current password` field empty) and setup your account
+ * Go to the PeerTube page https://weblate.framasoft.org/projects/peertube/
+ * Choose the file and the locale you want to translate
  
 
 ## Files
@@ -20,9 +22,9 @@ There are 4 files:
  * **angular**: contains client strings
  * **player**: contains player strings. 
  Most of the strings come from VideoJS, so you can help yourself by using [video.js JSON files](https://github.com/videojs/video.js/tree/master/lang)
- * **server**: contains server strings (privacies, licences...)
- * **iso639**: contains iso639 (languages) strings used by PeerTube to describe the audio language of a particular video.
+ * **server**: contains server strings (privacies, licences...) and iso639 (languages) strings used by PeerTube to describe the audio language of a particular video.
  It's the reason why these strings should be translated too. There are many strings so do not hesitate to translate only main audio languages.
+
 
 ## Tips
 
@@ -39,7 +41,7 @@ should be in french
 
 ### Singular/plural
 
-For singular/plural translations, you must translate values inside `{` and `}`.
+For singular/plural translations, you must translate values inside `{` and `}`. **Please don't translate the word *other***
 
 For example:
 
