@@ -76,7 +76,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
         // On dev mode, test localization
         if (isOnDevLocale()) {
           locale = buildFileLocale(getDevLocale())
-          return require(`raw-loader!../locale/target/angular_${locale}.xml`)
+          return require(`raw-loader!../locale/angular.${locale}.xlf`)
         }
 
         // Default locale, nothing to translate
@@ -84,7 +84,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
         if (isDefaultLocale(completeLocale)) return ''
 
         const fileLocale = buildFileLocale(locale)
-        return require(`raw-loader!../locale/target/angular_${fileLocale}.xml`)
+        return require(`raw-loader!../locale/angular.${fileLocale}.xlf`)
       },
       deps: [ LOCALE_ID ]
     },

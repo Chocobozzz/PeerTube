@@ -83,7 +83,5 @@ export function getShortLocale (locale: string) {
 }
 
 export function buildFileLocale (locale: string) {
-  const completeLocale = getCompleteLocale(locale)
-
-  return completeLocale.replace(/-/g, '_')
+  return getCompleteLocale(locale)
 }

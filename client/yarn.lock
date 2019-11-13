@@ -899,6 +899,35 @@
     tree-kill "1.2.1"
     webpack-sources "1.4.3"
 
+"@ngx-i18nsupport/ngx-i18nsupport-lib@^1.12.1":
+  version "1.12.1"
+  resolved "https://registry.yarnpkg.com/@ngx-i18nsupport/ngx-i18nsupport-lib/-/ngx-i18nsupport-lib-1.12.1.tgz#4ecb2227c576dac51d75b3ef82b9962be7d87ef5"
+  integrity sha512-6HSv4lPZLYSkghprg4k0kKCaAGbsppK6vlAVswDkPHO659WnIkNpZYSloQPziFt6NqL9WpZJ3V1gBbVx9tKV0g==
+  dependencies:
+    "@types/xmldom" "^0.1.29"
+    tokenizr "^1.3.10"
+    tslib "^1.9.0"
+    xmldom "^0.1.27"
+
+"@ngx-i18nsupport/ngx-i18nsupport@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@ngx-i18nsupport/ngx-i18nsupport/-/ngx-i18nsupport-1.1.6.tgz#d53ffd7e7b54cb8ba404db151bca3b68034a84eb"
+  integrity sha512-YQDOsz2FOdALOoQEQtsYZVnNuxi3qFKJ+n+lDm8uFjRIYegHXKD6m1i7nTGX+NEIr/0ICnWS3yPCyCy5x+6+hg==
+  dependencies:
+    "@ngx-i18nsupport/ngx-i18nsupport-lib" "^1.12.1"
+    chalk "^2.4.1"
+    he "^1.1.1"
+    request "^2.85.0"
+    tslib "^1.9.0"
+
+"@ngx-i18nsupport/tooling@^8.0.3":
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/@ngx-i18nsupport/tooling/-/tooling-8.0.3.tgz#be3454eaa06ad8518ddda7a6bfbc57b95dffbfce"
+  integrity sha512-AAsjwklil2HKEHLreAEAOHB71WDqHtYxWinP+B/YWQH8UlVyZwvXXQigrsaiQyKIKdTueKGQ8ThS24GRiE1R/g==
+  dependencies:
+    "@ngx-i18nsupport/ngx-i18nsupport" "^1.1.6"
+    tslib "^1.9.0"
+
 "@ngx-loading-bar/core@^4.2.0":
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/@ngx-loading-bar/core/-/core-4.2.0.tgz#cf0cc209eb967bd7625c2cec565841890cd5e17e"
@@ -1146,6 +1175,11 @@
     "@types/node" "*"
     "@types/parse-torrent" "*"
     "@types/simple-peer" "*"
+
+"@types/xmldom@^0.1.29":
+  version "0.1.29"
+  resolved "https://registry.yarnpkg.com/@types/xmldom/-/xmldom-0.1.29.tgz#c4428b0ca86d3b881475726fd94980b38a27c381"
+  integrity sha1-xEKLDKhtO4gUdXJv2UmAs4onw4E=
 
 "@videojs/http-streaming@1.10.6":
   version "1.10.6"
@@ -4711,7 +4745,7 @@ hash.js@^1.0.0, hash.js@^1.0.3:
     inherits "^2.0.3"
     minimalistic-assert "^1.0.1"
 
-he@1.2.x:
+he@1.2.x, he@^1.1.1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
@@ -8325,7 +8359,7 @@ repeating@^2.0.0:
   dependencies:
     is-finite "^1.0.0"
 
-request@^2.83.0, request@^2.87.0, request@^2.88.0:
+request@^2.83.0, request@^2.85.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -9709,6 +9743,11 @@ toidentifier@1.0.0:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
 
+tokenizr@^1.3.10:
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/tokenizr/-/tokenizr-1.5.5.tgz#bdb68ce4e52f6afefb2ed1b18279e32be87ef649"
+  integrity sha512-cbiOvnZXf9JFUAgbxnsu8Uv0KDiPKevcYRcx/UirBqwgm4PJ6Vigi5ezjXeVTD0Tk6uGzwocGGjmkgPP8NLlAw==
+
 toposort@^1.0.0:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/toposort/-/toposort-1.0.7.tgz#2e68442d9f64ec720b8cc89e6443ac6caa950029"
@@ -10656,6 +10695,11 @@ xmlbuilder@~11.0.0:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-11.0.1.tgz#be9bae1c8a046e76b31127726347d0ad7002beb3"
   integrity sha512-fDlsI/kFEx7gLvbecc0/ohLG50fugQp8ryHzMTuW9vSa1GJ0XYWKnhsUx7oie3G98+r56aTQIUB4kht42R3JvA==
+
+xmldom@^0.1.27:
+  version "0.1.27"
+  resolved "https://registry.yarnpkg.com/xmldom/-/xmldom-0.1.27.tgz#d501f97b3bdb403af8ef9ecc20573187aadac0e9"
+  integrity sha1-1QH5ezvbQDr4757MIFcxh6rawOk=
 
 xmlhttprequest-ssl@~1.5.4:
   version "1.5.5"

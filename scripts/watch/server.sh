@@ -5,7 +5,7 @@ set -eu
 # Copy locales
 mkdir -p "./client/dist"
 rm -rf "./client/dist/locale"
-cp -r "./client/src/locale/target" "./client/dist/locale"
+cp -r "./client/src/locale" "./client/dist/locale"
 
 rm -rf "./dist"
 

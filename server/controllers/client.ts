@@ -75,7 +75,7 @@ async function serveServerTranslations (req: express.Request, res: express.Respo
     const completeLocale = getCompleteLocale(locale)
     const completeFileLocale = buildFileLocale(completeLocale)
 
-    const path = join(__dirname, `../../../client/dist/locale/${file}_${completeFileLocale}.json`)
+    const path = join(__dirname, `../../../client/dist/locale/${file}.${completeFileLocale}.json`)
     return res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   }
 

@@ -1,25 +1,21 @@
 import { registerTSPaths } from '../../server/helpers/register-ts-paths'
-registerTSPaths()
-
-import * as jsToXliff12 from 'xliff/jsToXliff12'
-import { writeFile } from 'fs-extra'
+import { writeJSON } from 'fs-extra'
 import { join } from 'path'
 import {
   buildLanguages,
   VIDEO_CATEGORIES,
   VIDEO_IMPORT_STATES,
-  VIDEO_LICENCES, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES,
+  VIDEO_LICENCES,
+  VIDEO_PLAYLIST_PRIVACIES,
+  VIDEO_PLAYLIST_TYPES,
   VIDEO_PRIVACIES,
   VIDEO_STATES
 } from '../../server/initializers/constants'
 import { values } from 'lodash'
 
-type TranslationType = {
-  target: string
-  data: { [id: string]: string }
-}
+registerTSPaths()
 
-const videojs = require(join(__dirname, '../../../client/src/locale/source/videojs_en_US.json'))
+const videojs = require(join(__dirname, '../../../client/src/locale/videojs.en-US.json'))
 const playerKeys = {
   'Quality': 'Quality',
   'Auto': 'Auto',
@@ -37,10 +33,7 @@ const playerKeys = {
   'Total downloaded: ': 'Total downloaded: ',
   'Total uploaded: ': 'Total uploaded: '
 }
-const playerTranslations = {
-  target: join(__dirname, '../../../client/src/locale/source/player_en_US.xml'),
-  data: Object.assign({}, videojs, playerKeys)
-}
+Object.assign(playerKeys, videojs)
 
 // Server keys
 const serverKeys: any = {}
@@ -65,57 +58,17 @@ Object.assign(serverKeys, {
   'Unknown': 'Unknown'
 })
 
-const serverTranslations = {
-  target: join(__dirname, '../../../client/src/locale/source/server_en_US.xml'),
-  data: serverKeys
-}
-
 // ISO 639 keys
 const languageKeys: any = {}
 const languages = buildLanguages()
 Object.keys(languages).forEach(k => languageKeys[languages[k]] = languages[k])
 
-const iso639Translations = {
-  target: join(__dirname, '../../../client/src/locale/source/iso639_en_US.xml'),
-  data: languageKeys
-}
+Object.assign(serverKeys, languageKeys)
 
-saveToXliffFile(playerTranslations, err => {
-  if (err) return handleError(err)
-
-  saveToXliffFile(serverTranslations, err => {
-    if (err) return handleError(err)
-
-    saveToXliffFile(iso639Translations, err => {
-      if (err) return handleError(err)
-
-      process.exit(0)
-    })
-  })
-})
-
-// Then, the server strings
-
-function saveToXliffFile (jsonTranslations: TranslationType, cb: Function) {
-  const obj = {
-    resources: {
-      namespace1: {}
-    }
-  }
-  Object.keys(jsonTranslations.data).forEach(k => obj.resources.namespace1[ k ] = { source: jsonTranslations.data[ k ] })
-
-  jsToXliff12(obj, (err, res) => {
-    if (err) return cb(err)
-
-    writeFile(jsonTranslations.target, res, err => {
-      if (err) return cb(err)
-
-      return cb(null)
-    })
-  })
-}
-
-function handleError (err: any) {
+Promise.all([
+  writeJSON(join(__dirname, '../../../client/src/locale/player.en-US.json'), playerKeys),
+  writeJSON(join(__dirname, '../../../client/src/locale/server.en-US.json'), serverKeys)
+]).catch(err => {
   console.error(err)
   process.exit(-1)
-}
+})
