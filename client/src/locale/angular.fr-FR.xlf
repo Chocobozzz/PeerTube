@@ -1508,7 +1508,7 @@
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target state="new"/>
+        <target state="translated">Avertissement de configuration !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -2019,7 +2019,7 @@
       </trans-unit>
       <trans-unit id="e6c5724e60577560cba12daa669979fe820429c1" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Press Enter to add a new tag. </source>
-        <target state="new"/>
+        <target state="translated">Les tags peuvent être utilisés pour améliorer les recommandations. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Appuyez sur entrée pour ajouter un nouveau tag. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context>
           <context context-type="linenumber">21</context>
@@ -2489,7 +2489,7 @@
       </trans-unit>
       <trans-unit id="7e933f8c4dce85002cbc0ce7ad804a32d83664da" datatype="html">
         <source>Other videos</source>
-        <target state="new"/>
+        <target state="translated">Autres vidéos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3927,7 +3927,7 @@
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
         <source>How will you finance the PeerTube server?</source>
-        <target state="new"/>
+        <target state="translated">Comment allez-vous financer le serveur PeerTube ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">167</context>
@@ -3943,7 +3943,7 @@
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="new"/>
+        <target state="translated">Sur quel type de serveur/hardware l'instance est-elle hébergée ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">180</context>
@@ -4071,7 +4071,7 @@
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
         <source>Default video quota per user</source>
-        <target state="new"/>
+        <target state="translated">Quota de vidéo par défaut par utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">261</context>
@@ -4079,7 +4079,7 @@
       </trans-unit>
       <trans-unit id="493c65a11deddda45b42a39f503fc4bb3f876cf2" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target state="new"/>
+        <target state="translated">Limite de téléversement journalière par défaut par utilisateur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">273</context>
@@ -4279,7 +4279,7 @@
       </trans-unit>
       <trans-unit id="84d88c8cf2d2a477c407f3f71c10925730ba6397" datatype="html">
         <source>Allow your users to upload .mkv, .mov, .avi and .flv videos</source>
-        <target state="new"/>
+        <target state="translated">Permettre à vos utilisateurs de téléverser des vidéos aux formats .mkv, .mov, .avi et .flv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">478</context>
@@ -4319,7 +4319,7 @@
       </trans-unit>
       <trans-unit id="94213e7007705d887db1d366b5abc163122d9202" datatype="html">
         <source>HLS support enabled</source>
-        <target state="new"/>
+        <target state="translated">Support HLS activé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">498</context>
@@ -4423,7 +4423,7 @@
       </trans-unit>
       <trans-unit id="f8f8fca3139cba7d4fd6d9578d93e601f639cc83" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new"/>
+        <target state="translated">La configuration semble invalide. Merci de vérifier dans les onglets.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">629</context>
@@ -4984,7 +4984,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf">
-        <source></source>
+        <source/>
         <target>
   </target>
         <context-group name="null">
@@ -5348,7 +5348,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="5acca660f9a98180926e5d8ec36535bf91881667" datatype="html">
         <source>What is PeerTube?</source>
-        <target state="new"/>
+        <target state="translated">Qu'est ce que PeerTube ?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">1</context>
@@ -5356,7 +5356,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="10b8a184a237225269db5a293abd64e1cbbd13a4" datatype="html">
         <source>PeerTube is a self hosted federated (ActivityPub) video streaming platform using P2P directly in the web browser.</source>
-        <target state="new"/>
+        <target state="translated">PeerTube est une plateforme de streaming vidéo fédérée (ActivityPub) qui utilise P2P (WebTorrent) directement depuis le navigateur web.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">8</context>
@@ -5464,7 +5464,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="4ca71d83b4a8c78d3c1969f65ca1a136e4dd9236" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="new"/>
+        <target state="translated">L'adresse IP est une information vague : généralement, elle change régulièrement et peut représenter plusieurs personnes ou des entités</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">58</context>
