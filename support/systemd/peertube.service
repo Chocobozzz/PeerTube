@@ -16,9 +16,6 @@ SyslogIdentifier=peertube
 Restart=always
 
 ; Some security directives.
-; Use private /tmp and /var/tmp folders inside a new file system namespace,
-; which are discarded after the process stops.
-PrivateTmp=true
 ; Mount /usr, /boot, and /etc as read-only for processes invoked by this service.
 ProtectSystem=full
 ; Sets up a new /dev mount for the process and only adds API pseudo devices
