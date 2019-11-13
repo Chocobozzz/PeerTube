@@ -139,7 +139,7 @@ You can also join the cheerful bunch that makes our community:
     
 Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
-:package: Create your own instance
+:package: Create your own instance<a name="package-create-your-own-instance"></a>
 ----------------------------------------------------------------
 
 #### Dependencies
@@ -166,22 +166,22 @@ See the [user documentation](https://docs.joinpeertube.org/#/use-setup-account).
 
 ### Admin documentation
 
-See [how to create your own instance](https://github.com/Chocobozzz/PeerTube/blob/develop/README.md#package-create-your-own-instance).
+See [how to create your own instance](#package-create-your-own-instance).
 
 See the more general [admin documentation](https://docs.joinpeertube.org/#/admin-following-instances).
 
 #### Tools
 
  * [Import videos (YouTube, Dailymotion, Vimeo...)](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/tools.md)
- * [Upload videos from the CLI](https://github.com/Chocobozzz/PeerTube/blob/support/doc/tools.md)
- * [Admin server tools (create transcoding jobs, prune storage...)](https://github.com/Chocobozzz/PeerTube/blob/support/doc/tools.md#server-tools)
+ * [Upload videos from the CLI](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/tools.md)
+ * [Admin server tools (create transcoding jobs, prune storage...)](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/tools.md#server-tools)
 
 ### Technical documentation
 
 See the [architecture blueprint](https://docs.joinpeertube.org/#/contribute-architecture) for a more detailed explanation of the architectural choices.
 
 See our REST API documentation:
-  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/PeerTube/blob/support/doc/api/openapi.yaml)
+  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml)
   * Spec explorer: [docs.joinpeertube.org/api-rest-reference.html](https://docs.joinpeertube.org/api-rest-reference.html)
 
 See our [ActivityPub documentation](https://docs.joinpeertube.org/#/api-activitypub).
