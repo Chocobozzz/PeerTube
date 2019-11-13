@@ -35,8 +35,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
   
-  <a href="https://www.browserstack.com/automate/public-build/cWJhRDFJbS9qeUhzYW04MnlIVjlQQ0x3aE5POXBaV1lycGo5VlQxK3JqZz0tLTNUWW5ySEVvS1N4UnBhYlhsdXVCeVE9PQ==--db09e291d36a582af8b2929d62a625ed660cdf1d">
-    <img src='https://www.browserstack.com/automate/badge.svg?badge_key=cWJhRDFJbS9qeUhzYW04MnlIVjlQQ0x3aE5POXBaV1lycGo5VlQxK3JqZz0tLTNUWW5ySEVvS1N4UnBhYlhsdXVCeVE9PQ==--db09e291d36a582af8b2929d62a625ed660cdf1d'/>
+  <a href="https://automate.browserstack.com/public-build/cW5mYW43VDNUR1Jrb0Y5TnVoaC85Tk84SVhzSU9rS0ppWWJJYUVlRzVQRT0tLW9tVGIvK2ZmOGRld3lVVFRYTFM4aEE9PQ==--591b0056e00a2d1cbdfbcfa324634046132008ec">
+    <img src="https://automate.browserstack.com/badge.svg?badge_key=cW5mYW43VDNUR1Jrb0Y5TnVoaC85Tk84SVhzSU9rS0ppWWJJYUVlRzVQRT0tLW9tVGIvK2ZmOGRld3lVVFRYTFM4aEE9PQ==--591b0056e00a2d1cbdfbcfa324634046132008ec"/>
   </a>
 </p>
 
