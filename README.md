@@ -118,7 +118,7 @@ Be it as a user or an instance administrator, you can decide what your experienc
 In addition to visitors using WebTorrent to share the load among them, instances can help each other by caching one another's videos. This way even small instances have a way to show content to a wider audience, as they will be shouldered by friend instances (more about that in our <a href="https://docs.joinpeertube.org/#/contribute-architecture?id=redundancy-between-instances">redundancy guide</a>).
 </p>
 <p align="right">
-Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="./FAQ.md">FAQ</a>).
+Content creators can get help from their viewers in the simplest way possible: a support button showing a message linking to their donation accounts or really anything else. No more pay-per-view and advertisements that hurt visitors and <strike>incentivize</strike> alter creativity (more about that in our <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md">FAQ</a>).
 </p>
 
 :raised_hands: Contributing
@@ -127,7 +127,7 @@ Content creators can get help from their viewers in the simplest way possible: a
 You don't need to be a coder to help!
 
 You can give us your feedback, report bugs, help us translate PeerTube, write documentation, and more. Check out the [contributing
-guide](/.github/CONTRIBUTING.md) to know how, it takes less than 2 minutes to get started. :wink:
+guide](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md) to know how, it takes less than 2 minutes to get started. :wink:
 
 You can also join the cheerful bunch that makes our community:
 
@@ -151,14 +151,14 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
   * **yarn >= 1.x**
   * **FFmpeg >= 3.x**
 
-See the [production guide](/support/doc/production.md), which is the recommended way to install or upgrade PeerTube. For hardware requirements, see [Should I have a big server to run PeerTube?](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) in the FAQ.
+See the [production guide](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md), which is the recommended way to install or upgrade PeerTube. For hardware requirements, see [Should I have a big server to run PeerTube?](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md#should-i-have-a-big-server-to-run-peertube) in the FAQ.
 
-See the [community packages](https://docs.joinpeertube.org/#/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](/support/doc/docker.md)).
+See the [community packages](https://docs.joinpeertube.org/#/install-unofficial), which cover various platforms (including [YunoHost](https://install-app.yunohost.org/?app=peertube) and [Docker](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/docker.md)).
 
 :book: Documentation
 ----------------------------------------------------------------
 
-If you have a question, please try to find the answer in the [FAQ](/FAQ.md) first.
+If you have a question, please try to find the answer in the [FAQ](https://github.com/Chocobozzz/PeerTube/blob/develop/FAQ.md) first.
 
 ### User documentation
 
@@ -172,16 +172,16 @@ See the more general [admin documentation](https://docs.joinpeertube.org/#/admin
 
 #### Tools
 
- * [Import videos (YouTube, Dailymotion, Vimeo...)](/support/doc/tools.md)
- * [Upload videos from the CLI](/support/doc/tools.md)
- * [Admin server tools (create transcoding jobs, prune storage...)](/support/doc/tools.md#server-tools)
+ * [Import videos (YouTube, Dailymotion, Vimeo...)](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/tools.md)
+ * [Upload videos from the CLI](https://github.com/Chocobozzz/PeerTube/blob/support/doc/tools.md)
+ * [Admin server tools (create transcoding jobs, prune storage...)](https://github.com/Chocobozzz/PeerTube/blob/support/doc/tools.md#server-tools)
 
 ### Technical documentation
 
 See the [architecture blueprint](https://docs.joinpeertube.org/#/contribute-architecture) for a more detailed explanation of the architectural choices.
 
 See our REST API documentation:
-  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](/support/doc/api/openapi.yaml)
+  * OpenAPI 3.0.0 schema: [/support/doc/api/openapi.yaml](https://github.com/Chocobozzz/PeerTube/blob/support/doc/api/openapi.yaml)
   * Spec explorer: [docs.joinpeertube.org/api-rest-reference.html](https://docs.joinpeertube.org/api-rest-reference.html)
 
 See our [ActivityPub documentation](https://docs.joinpeertube.org/#/api-activitypub).
