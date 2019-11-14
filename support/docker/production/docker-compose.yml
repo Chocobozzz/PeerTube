@@ -65,8 +65,8 @@ services:
 
   postfix:
     image: mwader/postfix-relay
-    environment:
-      - POSTFIX_myhostname=${PEERTUBE_WEBSERVER_HOSTNAME}
+    env_file:
+      - .env
     labels:
       traefik.enable: "false"
     restart: "always"
