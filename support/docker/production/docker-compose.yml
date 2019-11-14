@@ -54,6 +54,9 @@ services:
     restart: "always"
     labels:
       traefik.enable: "false"
+    networks:
+      default:
+        ipv4_address: 172.20.0.3
 
   redis:
     image: redis:4-alpine
