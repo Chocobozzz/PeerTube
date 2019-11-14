@@ -109,8 +109,7 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context><context context-type="linenumber">49</context></context-group></trans-unit>
       <trans-unit id="ngb.progressbar.value">
-        <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts</context><context context-type="linenumber">6</context></context-group></trans-unit>

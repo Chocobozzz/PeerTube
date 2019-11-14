@@ -200,14 +200,12 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target state="new"/><context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target state="new"/><context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">72</context></context-group></trans-unit><trans-unit id="ngb.toast.close-aria" datatype="html">
@@ -3553,8 +3551,7 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">318</context></context-group></trans-unit>
       <trans-unit id="2c2af9710d6f6c3ab117c3a74f5aa9d40710f5b9">
-        <source>Instance followers</source>
-        <context-group name="null">
+        <source>Instance followers</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">327</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">327</context></context-group></trans-unit><trans-unit id="fda0a09374e5d89c25522b7c49cf8f440cfb9db8" datatype="html">

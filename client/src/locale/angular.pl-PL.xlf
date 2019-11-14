@@ -199,14 +199,12 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.PM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getAfternoonPeriod() }}"/></source><target state="new"/><context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">71</context></context-group></trans-unit>
       <trans-unit id="ngb.timepicker.AM">
-        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{ i18n.getMorningPeriod() }}"/></source><target state="new"/><context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context><context context-type="linenumber">72</context></context-group></trans-unit><trans-unit id="ngb.toast.close-aria" datatype="html">
@@ -919,8 +917,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="6a323f80f9d90a32db8ce52cc82075938c3c36f0">
-        <source>Ban</source>
-        <context-group name="null">
+        <source>Ban</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context><context context-type="linenumber">3</context></context-group></trans-unit><trans-unit id="f21428bd564d1cacdbc737f87a8def2e2ad42251" datatype="html">
@@ -2224,8 +2221,7 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit>
       <trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509">
-        <source>Dislike this video</source>
-        <context-group name="null">
+        <source>Dislike this video</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">71</context></context-group></trans-unit>
@@ -2556,8 +2552,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
-        <source>State</source>
-        <context-group name="null">
+        <source>State</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">18</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit>
@@ -3356,8 +3351,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="554488d11165f38b27b8fe230aba8a2e30d57003">
-        <source>Default client route</source>
-        <context-group name="null">
+        <source>Default client route</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">216</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">216</context></context-group></trans-unit><trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
@@ -4700,8 +4694,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">101</context></context-group></trans-unit>
       <trans-unit id="efde279863678ed95a8949a3712c99748bdabfe6">
-        <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source>
-        <context-group name="null">
+        <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">102</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">102</context></context-group></trans-unit><trans-unit id="4b819dec78ae793726f7da0568912b4ba777d929" datatype="html">
@@ -6807,8 +6800,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
-        <source>Video support must be at least 3 characters long.</source>
-        <context-group name="null">
+        <source>Video support must be at least 3 characters long.</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="f17de746af56840511cae11559539b6d8b6955ad" datatype="html">
@@ -7696,8 +7688,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
         </context-group>
       </trans-unit>
       <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e">
-        <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source>
-        <context-group name="null">
+        <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source><target state="new"/><context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
