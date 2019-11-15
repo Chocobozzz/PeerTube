@@ -3,7 +3,7 @@ import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT, WEBSERVER }
 import { logger } from '../../helpers/logger'
 import { VideosRedundancy } from '../../../shared/models/redundancy'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
-import { downloadWebTorrentVideo } from '../../helpers/webtorrent'
+import { downloadWebTorrentVideo, generateMagnetUri } from '../../helpers/webtorrent'
 import { join } from 'path'
 import { move } from 'fs-extra'
 import { getServerActor } from '../../helpers/utils'
@@ -24,6 +24,7 @@ import {
   MVideoRedundancyVideo,
   MVideoWithAllFiles
 } from '@server/typings/models'
+import { getVideoFilename } from '../video-paths'
 
 type CandidateToDuplicate = {
   redundancy: VideosRedundancy,
@@ -195,11 +196,11 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, redundancy.strategy)
 
     const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
-    const magnetUri = video.generateMagnetUri(file, baseUrlHttp, baseUrlWs)
+    const magnetUri = await generateMagnetUri(video, file, baseUrlHttp, baseUrlWs)
 
     const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
-    const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, video.getVideoFilename(file))
+    const destPath = join(CONFIG.STORAGE.REDUNDANCY_DIR, getVideoFilename(video, file))
     await move(tmpPath, destPath, { overwrite: true })
 
     const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({

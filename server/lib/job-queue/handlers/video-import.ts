@@ -4,14 +4,14 @@ import { downloadYoutubeDLVideo } from '../../../helpers/youtube-dl'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
-import { extname, join } from 'path'
+import { extname } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
-import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
+import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { move, remove, stat } from 'fs-extra'
 import { Notifier } from '../../notifier'
@@ -21,7 +21,7 @@ import { createVideoMiniatureFromUrl, generateVideoMiniature } from '../../thumb
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { MThumbnail } from '../../../typings/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
-import { MVideoBlacklistVideo, MVideoBlacklist } from '@server/typings/models'
+import { getVideoFilePath } from '@server/lib/video-paths'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -142,12 +142,12 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
     videoFile = new VideoFileModel(videoFileData)
 
-    const videoWithFiles = Object.assign(videoImport.Video, { VideoFiles: [ videoFile ] })
+    const videoWithFiles = Object.assign(videoImport.Video, { VideoFiles: [ videoFile ], VideoStreamingPlaylists: [] })
     // To clean files if the import fails
     const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
 
     // Move file
-    videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImportWithFiles.Video.getVideoFilename(videoFile))
+    videoDestFile = getVideoFilePath(videoImportWithFiles.Video, videoFile)
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
@@ -168,7 +168,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
 
     // Create torrent
-    await videoImportWithFiles.Video.createTorrentAndSetInfoHash(videoFile)
+    await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
 
     const { videoImportUpdated, video } = await sequelizeTypescript.transaction(async t => {
       const videoImportToUpdate = videoImportWithFiles as MVideoImportVideo

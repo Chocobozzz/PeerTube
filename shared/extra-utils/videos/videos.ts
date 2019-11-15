@@ -573,7 +573,6 @@ async function completeVideoCheck (
     // Transcoding enabled: extension will always be .mp4
     if (attributes.files.length > 1) extension = '.mp4'
 
-    const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
     expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
     expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
@@ -594,7 +593,7 @@ async function completeVideoCheck (
       await testImage(url, attributes.previewfile, videoDetails.previewPath)
     }
 
-    const torrent = await webtorrentAdd(magnetUri, true)
+    const torrent = await webtorrentAdd(file.magnetUri, true)
     expect(torrent.files).to.be.an('array')
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')

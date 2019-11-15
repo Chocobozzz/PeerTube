@@ -134,9 +134,9 @@ async function doesRedundancyExist (file: string) {
     return true
   }
 
-  const videoFile = video.getFile(resolution)
+  const videoFile = video.getWebTorrentFile(resolution)
   if (!videoFile) {
-    console.error('Cannot find file of video %s - %d', video.url, resolution)
+    console.error('Cannot find webtorrent file of video %s - %d', video.url, resolution)
     return true
   }
 

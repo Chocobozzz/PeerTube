@@ -1,6 +1,7 @@
 import { AccountVideoRateModel } from '@server/models/account/account-video-rate'
 import { PickWith } from '@server/typings/utils'
-import { MAccountAudience, MAccountUrl, MVideo, MVideoFormattable } from '..'
+import { MAccountAudience, MAccountUrl } from '../account/account'
+import { MVideo, MVideoFormattable } from './video'
 
 type Use<K extends keyof AccountVideoRateModel, M> = PickWith<AccountVideoRateModel, K, M>
 

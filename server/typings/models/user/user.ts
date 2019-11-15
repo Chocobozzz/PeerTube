@@ -11,7 +11,7 @@ import {
 } from '../account'
 import { MNotificationSetting, MNotificationSettingFormattable } from './user-notification-setting'
 import { AccountModel } from '@server/models/account/account'
-import { MChannelFormattable } from '@server/typings/models'
+import { MChannelFormattable } from '../video/video-channels'
 
 type Use<K extends keyof UserModel, M> = PickWith<UserModel, K, M>
 

@@ -1,6 +1,6 @@
 import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { PickWith } from '@server/typings/utils'
-import { MVideo, MVideoFormattable } from '@server/typings/models'
+import { MVideo, MVideoFormattable } from './video'
 
 type Use<K extends keyof VideoBlacklistModel, M> = PickWith<VideoBlacklistModel, K, M>
 

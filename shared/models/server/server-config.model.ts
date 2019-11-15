@@ -56,6 +56,10 @@ export interface ServerConfig {
       enabled: boolean
     }
 
+    webtorrent: {
+      enabled: boolean
+    }
+
     enabledResolutions: number[]
   }
 

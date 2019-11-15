@@ -1,6 +1,7 @@
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
 import { PickWith } from '@server/typings/utils'
-import { MVideoFormattable, MVideoPlaylistPrivacy, MVideoThumbnail, MVideoUrl } from '@server/typings/models'
+import { MVideoFormattable, MVideoThumbnail, MVideoUrl } from './video'
+import { MVideoPlaylistPrivacy } from './video-playlist'
 
 type Use<K extends keyof VideoPlaylistElementModel, M> = PickWith<VideoPlaylistElementModel, K, M>
 

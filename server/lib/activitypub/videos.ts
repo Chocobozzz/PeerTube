@@ -3,8 +3,10 @@ import * as sequelize from 'sequelize'
 import * as magnetUtil from 'magnet-uri'
 import * as request from 'request'
 import {
+  ActivityHashTagObject,
+  ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
-  ActivityPlaylistUrlObject,
+  ActivityPlaylistUrlObject, ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
   VideoState
@@ -13,7 +15,7 @@ import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
-import { resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
+import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
 import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
 import {
@@ -57,6 +59,7 @@ import {
   MChannelAccountLight,
   MChannelDefault,
   MChannelId,
+  MStreamingPlaylist,
   MVideo,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
@@ -330,21 +333,15 @@ async function updateVideoFromAP (options: {
       await videoUpdated.addAndSaveThumbnail(previewModel, t)
 
       {
-        const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoUpdated, videoObject)
+        const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoUpdated, videoObject.url)
         const newVideoFiles = videoFileAttributes.map(a => new VideoFileModel(a))
 
         // Remove video files that do not exist anymore
-        const destroyTasks = videoUpdated.VideoFiles
-                                  .filter(f => !newVideoFiles.find(newFile => newFile.hasSameUniqueKeysThan(f)))
-                                  .map(f => f.destroy(sequelizeOptions))
+        const destroyTasks = deleteNonExistingModels(videoUpdated.VideoFiles, newVideoFiles, t)
         await Promise.all(destroyTasks)
 
         // Update or add other one
-        const upsertTasks = videoFileAttributes.map(a => {
-          return VideoFileModel.upsert<VideoFileModel>(a, { returning: true, transaction: t })
-            .then(([ file ]) => file)
-        })
-
+        const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'video', t))
         videoUpdated.VideoFiles = await Promise.all(upsertTasks)
       }
 
@@ -352,24 +349,39 @@ async function updateVideoFromAP (options: {
         const streamingPlaylistAttributes = streamingPlaylistActivityUrlToDBAttributes(videoUpdated, videoObject, videoUpdated.VideoFiles)
         const newStreamingPlaylists = streamingPlaylistAttributes.map(a => new VideoStreamingPlaylistModel(a))
 
-        // Remove video files that do not exist anymore
-        const destroyTasks = videoUpdated.VideoStreamingPlaylists
-                                  .filter(f => !newStreamingPlaylists.find(newPlaylist => newPlaylist.hasSameUniqueKeysThan(f)))
-                                  .map(f => f.destroy(sequelizeOptions))
+        // Remove video playlists that do not exist anymore
+        const destroyTasks = deleteNonExistingModels(videoUpdated.VideoStreamingPlaylists, newStreamingPlaylists, t)
         await Promise.all(destroyTasks)
 
-        // Update or add other one
-        const upsertTasks = streamingPlaylistAttributes.map(a => {
-          return VideoStreamingPlaylistModel.upsert<VideoStreamingPlaylistModel>(a, { returning: true, transaction: t })
-                               .then(([ streamingPlaylist ]) => streamingPlaylist)
-        })
+        let oldStreamingPlaylistFiles: MVideoFile[] = []
+        for (const videoStreamingPlaylist of videoUpdated.VideoStreamingPlaylists) {
+          oldStreamingPlaylistFiles = oldStreamingPlaylistFiles.concat(videoStreamingPlaylist.VideoFiles)
+        }
 
-        videoUpdated.VideoStreamingPlaylists = await Promise.all(upsertTasks)
+        videoUpdated.VideoStreamingPlaylists = []
+
+        for (const playlistAttributes of streamingPlaylistAttributes) {
+          const streamingPlaylistModel = await VideoStreamingPlaylistModel.upsert(playlistAttributes, { returning: true, transaction: t })
+                                     .then(([ streamingPlaylist ]) => streamingPlaylist)
+
+          const newVideoFiles: MVideoFile[] = videoFileActivityUrlToDBAttributes(streamingPlaylistModel, playlistAttributes.tagAPObject)
+            .map(a => new VideoFileModel(a))
+          const destroyTasks = deleteNonExistingModels(oldStreamingPlaylistFiles, newVideoFiles, t)
+          await Promise.all(destroyTasks)
+
+          // Update or add other one
+          const upsertTasks = newVideoFiles.map(f => VideoFileModel.customUpsert(f, 'streaming-playlist', t))
+          streamingPlaylistModel.VideoFiles = await Promise.all(upsertTasks)
+
+          videoUpdated.VideoStreamingPlaylists.push(streamingPlaylistModel)
+        }
       }
 
       {
         // Update Tags
-        const tags = videoObject.tag.map(tag => tag.name)
+        const tags = videoObject.tag
+                                .filter(isAPHashTagObject)
+                                .map(tag => tag.name)
         const tagInstances = await TagModel.findOrCreateTags(tags, t)
         await videoUpdated.$set('Tags', tagInstances, sequelizeOptions)
       }
@@ -478,23 +490,27 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function isAPVideoUrlObject (url: ActivityUrlObject): url is ActivityVideoUrlObject {
+function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
   const mimeTypes = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
-  const urlMediaType = url.mediaType || url.mimeType
+  const urlMediaType = url.mediaType
   return mimeTypes.indexOf(urlMediaType) !== -1 && urlMediaType.startsWith('video/')
 }
 
 function isAPStreamingPlaylistUrlObject (url: ActivityUrlObject): url is ActivityPlaylistUrlObject {
-  const urlMediaType = url.mediaType || url.mimeType
-
-  return urlMediaType === 'application/x-mpegURL'
+  return url && url.mediaType === 'application/x-mpegURL'
 }
 
 function isAPPlaylistSegmentHashesUrlObject (tag: any): tag is ActivityPlaylistSegmentHashesObject {
-  const urlMediaType = tag.mediaType || tag.mimeType
+  return tag && tag.name === 'sha256' && tag.type === 'Link' && tag.mediaType === 'application/json'
+}
 
-  return tag.name === 'sha256' && tag.type === 'Link' && urlMediaType === 'application/json'
+function isAPMagnetUrlObject (url: any): url is ActivityMagnetUrlObject {
+  return url && url.mediaType === 'application/x-bittorrent;x-scheme-handler/magnet'
+}
+
+function isAPHashTagObject (url: any): url is ActivityHashTagObject {
+  return url && url.type === 'Hashtag'
 }
 
 async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAccountLight, waitThumbnail = false) {
@@ -524,21 +540,27 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     // Process files
-    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject)
-    if (videoFileAttributes.length === 0) {
-      throw new Error('Cannot find valid files for video %s ' + videoObject.url)
-    }
+    const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoCreated, videoObject.url)
 
     const videoFilePromises = videoFileAttributes.map(f => VideoFileModel.create(f, { transaction: t }))
     const videoFiles = await Promise.all(videoFilePromises)
 
-    const videoStreamingPlaylists = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject, videoFiles)
-    const playlistPromises = videoStreamingPlaylists.map(p => VideoStreamingPlaylistModel.create(p, { transaction: t }))
-    const streamingPlaylists = await Promise.all(playlistPromises)
+    const streamingPlaylistsAttributes = streamingPlaylistActivityUrlToDBAttributes(videoCreated, videoObject, videoFiles)
+    videoCreated.VideoStreamingPlaylists = []
+
+    for (const playlistAttributes of streamingPlaylistsAttributes) {
+      const playlistModel = await VideoStreamingPlaylistModel.create(playlistAttributes, { transaction: t })
+
+      const playlistFiles = videoFileActivityUrlToDBAttributes(playlistModel, playlistAttributes.tagAPObject)
+      const videoFilePromises = playlistFiles.map(f => VideoFileModel.create(f, { transaction: t }))
+      playlistModel.VideoFiles = await Promise.all(videoFilePromises)
+
+      videoCreated.VideoStreamingPlaylists.push(playlistModel)
+    }
 
     // Process tags
     const tags = videoObject.tag
-                            .filter(t => t.type === 'Hashtag')
+                            .filter(isAPHashTagObject)
                             .map(t => t.name)
     const tagInstances = await TagModel.findOrCreateTags(tags, t)
     await videoCreated.$set('Tags', tagInstances, sequelizeOptions)
@@ -550,7 +572,6 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
     await Promise.all(videoCaptionsPromises)
 
     videoCreated.VideoFiles = videoFiles
-    videoCreated.VideoStreamingPlaylists = streamingPlaylists
     videoCreated.Tags = tagInstances
 
     const autoBlacklisted = await autoBlacklistVideoIfNeeded({
@@ -628,20 +649,19 @@ async function videoActivityObjectToDBAttributes (videoChannel: MChannelId, vide
   }
 }
 
-function videoFileActivityUrlToDBAttributes (video: MVideo, videoObject: VideoTorrentObject) {
-  const fileUrls = videoObject.url.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
+function videoFileActivityUrlToDBAttributes (
+  videoOrPlaylist: MVideo | MStreamingPlaylist,
+  urls: (ActivityTagObject | ActivityUrlObject)[]
+) {
+  const fileUrls = urls.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
 
-  if (fileUrls.length === 0) {
-    throw new Error('Cannot find video files for ' + video.url)
-  }
+  if (fileUrls.length === 0) return []
 
   const attributes: FilteredModelAttributes<VideoFileModel>[] = []
   for (const fileUrl of fileUrls) {
     // Fetch associated magnet uri
-    const magnet = videoObject.url.find(u => {
-      const mediaType = u.mediaType || u.mimeType
-      return mediaType === 'application/x-bittorrent;x-scheme-handler/magnet' && (u as any).height === fileUrl.height
-    })
+    const magnet = urls.filter(isAPMagnetUrlObject)
+                       .find(u => u.height === fileUrl.height)
 
     if (!magnet) throw new Error('Cannot find associated magnet uri for file ' + fileUrl.href)
 
@@ -650,14 +670,17 @@ function videoFileActivityUrlToDBAttributes (video: MVideo, videoObject: VideoTo
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }
 
-    const mediaType = fileUrl.mediaType || fileUrl.mimeType
+    const mediaType = fileUrl.mediaType
     const attribute = {
       extname: MIMETYPES.VIDEO.MIMETYPE_EXT[ mediaType ],
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,
-      videoId: video.id,
-      fps: fileUrl.fps || -1
+      fps: fileUrl.fps || -1,
+
+      // This is a video file owned by a video or by a streaming playlist
+      videoId: (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id,
+      videoStreamingPlaylistId: (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? videoOrPlaylist.id : null
     }
 
     attributes.push(attribute)
@@ -670,12 +693,15 @@ function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObjec
   const playlistUrls = videoObject.url.filter(u => isAPStreamingPlaylistUrlObject(u)) as ActivityPlaylistUrlObject[]
   if (playlistUrls.length === 0) return []
 
-  const attributes: FilteredModelAttributes<VideoStreamingPlaylistModel>[] = []
+  const attributes: (FilteredModelAttributes<VideoStreamingPlaylistModel> & { tagAPObject?: ActivityTagObject[] })[] = []
   for (const playlistUrlObject of playlistUrls) {
-    const segmentsSha256UrlObject = playlistUrlObject.tag
-                                                     .find(t => {
-                                                       return isAPPlaylistSegmentHashesUrlObject(t)
-                                                     }) as ActivityPlaylistSegmentHashesObject
+    const segmentsSha256UrlObject = playlistUrlObject.tag.find(isAPPlaylistSegmentHashesUrlObject)
+
+    let files: unknown[] = playlistUrlObject.tag.filter(u => isAPVideoUrlObject(u)) as ActivityVideoUrlObject[]
+
+    // FIXME: backward compatibility introduced in v2.1.0
+    if (files.length === 0) files = videoFiles
+
     if (!segmentsSha256UrlObject) {
       logger.warn('No segment sha256 URL found in AP playlist object.', { playlistUrl: playlistUrlObject })
       continue
@@ -685,9 +711,10 @@ function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObjec
       type: VideoStreamingPlaylistType.HLS,
       playlistUrl: playlistUrlObject.href,
       segmentsSha256Url: segmentsSha256UrlObject.href,
-      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, videoFiles),
+      p2pMediaLoaderInfohashes: VideoStreamingPlaylistModel.buildP2PMediaLoaderInfoHashes(playlistUrlObject.href, files),
       p2pMediaLoaderPeerVersion: P2P_MEDIA_LOADER_PEER_VERSION,
-      videoId: video.id
+      videoId: video.id,
+      tagAPObject: playlistUrlObject.tag
     }
 
     attributes.push(attribute)

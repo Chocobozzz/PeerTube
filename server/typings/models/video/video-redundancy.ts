@@ -1,10 +1,10 @@
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
 import { PickWith, PickWithOpt } from '@server/typings/utils'
-import { MStreamingPlaylistVideo, MVideoFile, MVideoFileVideo, MVideoUrl } from '@server/typings/models'
-import { VideoStreamingPlaylist } from '../../../../shared/models/videos/video-streaming-playlist.model'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
-import { VideoFile } from '../../../../shared/models/videos'
 import { VideoFileModel } from '@server/models/video/video-file'
+import { MVideoFile, MVideoFileVideo } from './video-file'
+import { MStreamingPlaylistVideo } from './video-streaming-playlist'
+import { MVideoUrl } from './video'
 
 type Use<K extends keyof VideoRedundancyModel, M> = PickWith<VideoRedundancyModel, K, M>
 

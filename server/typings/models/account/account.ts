@@ -15,7 +15,7 @@ import {
 } from './actor'
 import { FunctionProperties, PickWith } from '../../utils'
 import { MAccountBlocklistId } from './account-blocklist'
-import { MChannelDefault } from '@server/typings/models'
+import { MChannelDefault } from '../video/video-channels'
 
 type Use<K extends keyof AccountModel, M> = PickWith<AccountModel, K, M>
 

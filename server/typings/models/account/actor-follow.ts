@@ -1,17 +1,16 @@
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import {
   MActor,
-  MActorAccount,
-  MActorDefaultAccountChannel,
   MActorChannelAccountActor,
   MActorDefault,
+  MActorDefaultAccountChannel,
   MActorFormattable,
   MActorHost,
   MActorUsername
 } from './actor'
 import { PickWith } from '../../utils'
 import { ActorModel } from '@server/models/activitypub/actor'
-import { MChannelDefault } from '@server/typings/models'
+import { MChannelDefault } from '../video/video-channels'
 
 type Use<K extends keyof ActorFollowModel, M> = PickWith<ActorFollowModel, K, M>
 

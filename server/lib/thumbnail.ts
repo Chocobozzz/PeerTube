@@ -9,6 +9,7 @@ import { downloadImage } from '../helpers/requests'
 import { MVideoPlaylistThumbnail } from '../typings/models/video/video-playlist'
 import { MVideoFile, MVideoThumbnail } from '../typings/models'
 import { MThumbnail } from '../typings/models/video/thumbnail'
+import { getVideoFilePath } from './video-paths'
 
 type ImageSize = { height: number, width: number }
 
@@ -55,7 +56,7 @@ function createVideoMiniatureFromExisting (
 }
 
 function generateVideoMiniature (video: MVideoThumbnail, videoFile: MVideoFile, type: ThumbnailType) {
-  const input = video.getVideoFilePath(videoFile)
+  const input = getVideoFilePath(video, videoFile)
 
   const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
   const thumbnailCreator = videoFile.isAudio()

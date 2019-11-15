@@ -130,6 +130,7 @@ interface BaseTranscodeOptions {
 
 interface HLSTranscodeOptions extends BaseTranscodeOptions {
   type: 'hls'
+  copyCodecs: boolean
   hlsPlaylist: {
     videoFilename: string
   }
@@ -232,7 +233,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function buildx264Command (command: ffmpeg.FfmpegCommand, options: VideoTranscodeOptions) {
+async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
   // On small/medium resolutions, limit FPS
   if (
@@ -287,7 +288,8 @@ async function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
 async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
-  command = await presetCopy(command)
+  if (options.copyCodecs) command = await presetCopy(command)
+  else command = await buildx264Command(command, options)
 
   command = command.outputOption('-hls_time 4')
                    .outputOption('-hls_list_size 0')

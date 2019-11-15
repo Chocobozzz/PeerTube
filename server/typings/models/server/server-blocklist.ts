@@ -1,6 +1,7 @@
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import { PickWith } from '@server/typings/utils'
-import { MAccountDefault, MAccountFormattable, MServer, MServerFormattable } from '@server/typings/models'
+import { MAccountDefault, MAccountFormattable } from '../account/account'
+import { MServer, MServerFormattable } from './server'
 
 type Use<K extends keyof ServerBlocklistModel, M> = PickWith<ServerBlocklistModel, K, M>
 

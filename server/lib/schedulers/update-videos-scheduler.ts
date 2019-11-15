@@ -6,8 +6,8 @@ import { federateVideoIfNeeded } from '../activitypub'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { Notifier } from '../notifier'
-import { VideoModel } from '../../models/video/video'
 import { sequelizeTypescript } from '../../initializers/database'
+import { MVideoFullLight } from '@server/typings/models'
 
 export class UpdateVideosScheduler extends AbstractScheduler {
 
@@ -28,7 +28,7 @@ export class UpdateVideosScheduler extends AbstractScheduler {
 
     const publishedVideos = await sequelizeTypescript.transaction(async t => {
       const schedules = await ScheduleVideoUpdateModel.listVideosToUpdate(t)
-      const publishedVideos: VideoModel[] = []
+      const publishedVideos: MVideoFullLight[] = []
 
       for (const schedule of schedules) {
         const video = schedule.Video
@@ -45,8 +45,8 @@ export class UpdateVideosScheduler extends AbstractScheduler {
           await federateVideoIfNeeded(video, isNewVideo, t)
 
           if (oldPrivacy === VideoPrivacy.UNLISTED || oldPrivacy === VideoPrivacy.PRIVATE) {
-            video.ScheduleVideoUpdate = schedule
-            publishedVideos.push(video)
+            const videoToPublish: MVideoFullLight = Object.assign(video, { ScheduleVideoUpdate: schedule, UserVideoHistories: [] })
+            publishedVideos.push(videoToPublish)
           }
         }
 

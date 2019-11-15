@@ -1,6 +1,6 @@
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { PickWith, PickWithOpt } from '../../utils'
-import { MAccountDefault, MAccountFormattable, MAccountUrl, MActorUrl } from '../account'
+import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account'
 import { MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video'
 
 type Use<K extends keyof VideoCommentModel, M> = PickWith<VideoCommentModel, K, M>

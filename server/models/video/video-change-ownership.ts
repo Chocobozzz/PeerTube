@@ -43,7 +43,11 @@ enum ScopeNames {
   [ScopeNames.WITH_VIDEO]: {
     include: [
       {
-        model: VideoModel.scope([ VideoScopeNames.WITH_THUMBNAILS, VideoScopeNames.WITH_FILES ]),
+        model: VideoModel.scope([
+          VideoScopeNames.WITH_THUMBNAILS,
+          VideoScopeNames.WITH_WEBTORRENT_FILES,
+          VideoScopeNames.WITH_STREAMING_PLAYLISTS
+        ]),
         required: true
       }
     ]

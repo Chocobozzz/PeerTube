@@ -101,6 +101,13 @@ function checkConfig () {
     }
   }
 
+  // Transcoding
+  if (CONFIG.TRANSCODING.ENABLED) {
+    if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
+      return 'You need to enable at least WebTorrent transcoding or HLS transcoding.'
+    }
+  }
+
   return null
 }
 

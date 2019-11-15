@@ -95,6 +95,9 @@ async function getConfig (req: express.Request, res: express.Response) {
       hls: {
         enabled: CONFIG.TRANSCODING.HLS.ENABLED
       },
+      webtorrent: {
+        enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
+      },
       enabledResolutions: getEnabledResolutions()
     },
     import: {
@@ -303,6 +306,9 @@ function customConfig (): CustomConfig {
         '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
         '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ],
         '2160p': CONFIG.TRANSCODING.RESOLUTIONS[ '2160p' ]
+      },
+      webtorrent: {
+        enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
       },
       hls: {
         enabled: CONFIG.TRANSCODING.HLS.ENABLED

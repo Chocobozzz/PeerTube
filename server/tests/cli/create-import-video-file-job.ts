@@ -2,22 +2,21 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { VideoDetails, VideoFile } from '../../../shared/models/videos'
+import { VideoDetails } from '../../../shared/models/videos'
 import {
   cleanupTests,
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
-  flushTests,
   getEnvCli,
   getVideo,
   getVideosList,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
+import { VideoFile } from '@shared/models/videos/video-file.model'
 
 const expect = chai.expect
 

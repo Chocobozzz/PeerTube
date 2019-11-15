@@ -2,6 +2,7 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 import { stat } from 'fs-extra'
 import { VideoModel } from '../../models/video/video'
+import { getVideoFilePath } from '@server/lib/video-paths'
 
 function up (utils: {
   transaction: Sequelize.Transaction,
@@ -16,7 +17,7 @@ function up (utils: {
       videos.forEach(video => {
         video.VideoFiles.forEach(videoFile => {
           const p = new Promise((res, rej) => {
-            stat(video.getVideoFilePath(videoFile), (err, stats) => {
+            stat(getVideoFilePath(video, videoFile), (err, stats) => {
               if (err) return rej(err)
 
               videoFile.size = stats.size

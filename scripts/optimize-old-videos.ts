@@ -1,15 +1,16 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { VIDEO_TRANSCODING_FPS } from '../server/initializers/constants'
 import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../server/helpers/ffmpeg-utils'
 import { getMaxBitrate } from '../shared/models/videos'
 import { VideoModel } from '../server/models/video/video'
-import { optimizeVideofile } from '../server/lib/video-transcoding'
+import { optimizeOriginalVideofile } from '../server/lib/video-transcoding'
 import { initDatabaseModels } from '../server/initializers'
-import { basename, dirname, join } from 'path'
+import { basename, dirname } from 'path'
 import { copy, move, remove } from 'fs-extra'
-import { CONFIG } from '../server/initializers/config'
+import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { getVideoFilePath } from '@server/lib/video-paths'
+
+registerTSPaths()
 
 run()
   .then(() => process.exit(0))
@@ -37,7 +38,7 @@ async function run () {
     currentVideoId = video.id
 
     for (const file of video.VideoFiles) {
-      currentFile = join(CONFIG.STORAGE.VIDEOS_DIR, video.getVideoFilename(file))
+      currentFile = getVideoFilePath(video, file)
 
       const [ videoBitrate, fps, resolution ] = await Promise.all([
         getVideoFileBitrate(currentFile),
@@ -56,7 +57,7 @@ async function run () {
         const backupFile = `${currentFile}_backup`
         await copy(currentFile, backupFile)
 
-        await optimizeVideofile(video, file)
+        await optimizeOriginalVideofile(video, file)
 
         const originalDuration = await getDurationFromVideoFile(backupFile)
         const newDuration = await getDurationFromVideoFile(currentFile)
@@ -69,7 +70,7 @@ async function run () {
 
         console.log('Failed to optimize %s, restoring original', basename(currentFile))
         await move(backupFile, currentFile, { overwrite: true })
-        await video.createTorrentAndSetInfoHash(file)
+        await createTorrentAndSetInfoHash(video, file)
         await file.save()
       }
     }

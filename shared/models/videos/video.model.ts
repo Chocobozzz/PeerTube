@@ -5,17 +5,7 @@ import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoConstant } from './video-constant.model'
 import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
-
-export interface VideoFile {
-  magnetUri: string
-  resolution: VideoConstant<VideoResolution>
-  size: number // Bytes
-  torrentUrl: string
-  torrentDownloadUrl: string
-  fileUrl: string
-  fileDownloadUrl: string
-  fps: number
-}
+import { VideoFile } from './video-file.model'
 
 export interface Video {
   id: number

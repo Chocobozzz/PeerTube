@@ -1,6 +1,7 @@
 import { VideoImportModel } from '@server/models/video/video-import'
 import { PickWith, PickWithOpt } from '@server/typings/utils'
-import { MUser, MVideo, MVideoAccountLight, MVideoFormattable, MVideoTag, MVideoThumbnail, MVideoWithFile } from '@server/typings/models'
+import { MVideo, MVideoAccountLight, MVideoFormattable, MVideoTag, MVideoThumbnail, MVideoWithFile } from './video'
+import { MUser } from '../user/user'
 
 type Use<K extends keyof VideoImportModel, M> = PickWith<VideoImportModel, K, M>
 

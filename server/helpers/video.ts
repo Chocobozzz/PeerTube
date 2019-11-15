@@ -45,10 +45,6 @@ function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird
   if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
 }
 
-function getVideo (res: Response) {
-  return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights || res.locals.videoId
-}
-
 function getVideoWithAttributes (res: Response) {
   return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights
 }
@@ -57,7 +53,6 @@ export {
   VideoFetchType,
   VideoFetchByUrlType,
   fetchVideo,
-  getVideo,
   getVideoWithAttributes,
   fetchVideoByUrl
 }

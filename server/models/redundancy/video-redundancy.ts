@@ -497,7 +497,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
         expires: this.expiresOn.toISOString(),
         url: {
           type: 'Link',
-          mimeType: 'application/x-mpegURL',
           mediaType: 'application/x-mpegURL',
           href: this.fileUrl
         }
@@ -511,7 +510,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       expires: this.expiresOn.toISOString(),
       url: {
         type: 'Link',
-        mimeType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,

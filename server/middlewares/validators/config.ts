@@ -43,6 +43,9 @@ const customConfigUpdateValidator = [
   body('transcoding.resolutions.720p').isBoolean().withMessage('Should have a valid transcoding 720p resolution enabled boolean'),
   body('transcoding.resolutions.1080p').isBoolean().withMessage('Should have a valid transcoding 1080p resolution enabled boolean'),
 
+  body('transcoding.webtorrent.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
+  body('transcoding.hls.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
+
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
   body('import.videos.torrent.enabled').isBoolean().withMessage('Should have a valid import video torrent enabled boolean'),
 
@@ -56,6 +59,7 @@ const customConfigUpdateValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!checkInvalidConfigIfEmailDisabled(req.body as CustomConfig, res)) return
+    if (!checkInvalidTranscodingConfig(req.body as CustomConfig, res)) return
 
     return next()
   }
@@ -74,6 +78,19 @@ function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: exp
     res.status(400)
       .send({ error: 'Emailer is disabled but you require signup email verification.' })
       .end()
+    return false
+  }
+
+  return true
+}
+
+function checkInvalidTranscodingConfig (customConfig: CustomConfig, res: express.Response) {
+  if (customConfig.transcoding.enabled === false) return true
+
+  if (customConfig.transcoding.webtorrent.enabled === false && customConfig.transcoding.hls.enabled === false) {
+    res.status(400)
+       .send({ error: 'You need to enable at least webtorrent transcoding or hls transcoding' })
+       .end()
     return false
   }
 

@@ -118,6 +118,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         '1080p': false,
         '2160p': false
       },
+      webtorrent: {
+        enabled: true
+      },
       hls: {
         enabled: false
       }

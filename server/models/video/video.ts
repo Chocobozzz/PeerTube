@@ -1,7 +1,5 @@
 import * as Bluebird from 'bluebird'
 import { maxBy } from 'lodash'
-import * as magnetUtil from 'magnet-uri'
-import * as parseTorrent from 'parse-torrent'
 import { join } from 'path'
 import {
   CountOptions,
@@ -38,11 +36,11 @@ import {
 } from 'sequelize-typescript'
 import { UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { Video, VideoDetails, VideoFile } from '../../../shared/models/videos'
+import { Video, VideoDetails } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { isArray, isBooleanValid } from '../../helpers/custom-validators/misc'
+import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import {
   isVideoCategoryValid,
   isVideoDescriptionValid,
@@ -100,7 +98,7 @@ import { VideoTagModel } from './video-tag'
 import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
-import { remove, writeFile } from 'fs-extra'
+import { remove } from 'fs-extra'
 import { VideoViewModel } from './video-views'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import {
@@ -117,18 +115,20 @@ import { VideoPlaylistElementModel } from './video-playlist-element'
 import { CONFIG } from '../../initializers/config'
 import { ThumbnailModel } from './thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { createTorrentPromise } from '../../helpers/webtorrent'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import {
   MChannel,
   MChannelAccountDefault,
   MChannelId,
+  MStreamingPlaylist,
+  MStreamingPlaylistFilesVideo,
   MUserAccountId,
   MUserId,
   MVideoAccountLight,
   MVideoAccountLightBlacklistAllFiles,
   MVideoAP,
   MVideoDetails,
+  MVideoFileVideo,
   MVideoFormattable,
   MVideoFormattableDetails,
   MVideoForUser,
@@ -140,8 +140,10 @@ import {
   MVideoWithFile,
   MVideoWithRights
 } from '../../typings/models'
-import { MVideoFile, MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
+import { VideoFile } from '@shared/models/videos/video-file.model'
+import { getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -211,7 +213,7 @@ export enum ScopeNames {
   FOR_API = 'FOR_API',
   WITH_ACCOUNT_DETAILS = 'WITH_ACCOUNT_DETAILS',
   WITH_TAGS = 'WITH_TAGS',
-  WITH_FILES = 'WITH_FILES',
+  WITH_WEBTORRENT_FILES = 'WITH_WEBTORRENT_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
   WITH_BLOCKLIST = 'WITH_BLOCKLIST',
@@ -666,7 +668,7 @@ export type AvailableForListIDsOptions = {
       }
     ]
   },
-  [ ScopeNames.WITH_FILES ]: (withRedundancies = false) => {
+  [ ScopeNames.WITH_WEBTORRENT_FILES ]: (withRedundancies = false) => {
     let subInclude: any[] = []
 
     if (withRedundancies === true) {
@@ -691,16 +693,19 @@ export type AvailableForListIDsOptions = {
     }
   },
   [ ScopeNames.WITH_STREAMING_PLAYLISTS ]: (withRedundancies = false) => {
-    let subInclude: any[] = []
+    const subInclude: IncludeOptions[] = [
+      {
+        model: VideoFileModel.unscoped(),
+        required: false
+      }
+    ]
 
     if (withRedundancies === true) {
-      subInclude = [
-        {
-          attributes: [ 'fileUrl' ],
-          model: VideoRedundancyModel.unscoped(),
-          required: false
-        }
-      ]
+      subInclude.push({
+        attributes: [ 'fileUrl' ],
+        model: VideoRedundancyModel.unscoped(),
+        required: false
+      })
     }
 
     return {
@@ -913,7 +918,7 @@ export class VideoModel extends Model<VideoModel> {
   @HasMany(() => VideoFileModel, {
     foreignKey: {
       name: 'videoId',
-      allowNull: false
+      allowNull: true
     },
     hooks: true,
     onDelete: 'cascade'
@@ -1071,7 +1076,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel.scope([
-      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_WEBTORRENT_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
       ScopeNames.WITH_THUMBNAILS
     ]).findAll(query)
@@ -1463,7 +1468,7 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel.scope([
-      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_WEBTORRENT_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
       ScopeNames.WITH_THUMBNAILS
     ]).findOne(query)
@@ -1500,7 +1505,7 @@ export class VideoModel extends Model<VideoModel> {
 
     return VideoModel.scope([
       ScopeNames.WITH_ACCOUNT_DETAILS,
-      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_WEBTORRENT_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
       ScopeNames.WITH_THUMBNAILS,
       ScopeNames.WITH_BLACKLISTED
@@ -1521,7 +1526,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_BLACKLISTED,
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
-      ScopeNames.WITH_FILES,
+      ScopeNames.WITH_WEBTORRENT_FILES,
       ScopeNames.WITH_STREAMING_PLAYLISTS,
       ScopeNames.WITH_THUMBNAILS
     ]
@@ -1555,7 +1560,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_THUMBNAILS,
-      { method: [ ScopeNames.WITH_FILES, true ] },
+      { method: [ ScopeNames.WITH_WEBTORRENT_FILES, true ] },
       { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
     ]
 
@@ -1787,17 +1792,31 @@ export class VideoModel extends Model<VideoModel> {
       this.VideoChannel.Account.isBlocked()
   }
 
-  getOriginalFile <T extends MVideoWithFile> (this: T) {
-    if (Array.isArray(this.VideoFiles) === false) return undefined
+  getMaxQualityFile <T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
+    if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
+      const file = maxBy(this.VideoFiles, file => file.resolution)
 
-    // The original file is the file that have the higher resolution
-    return maxBy(this.VideoFiles, file => file.resolution)
+      return Object.assign(file, { Video: this })
+    }
+
+    // No webtorrent files, try with streaming playlist files
+    if (Array.isArray(this.VideoStreamingPlaylists) && this.VideoStreamingPlaylists.length !== 0) {
+      const streamingPlaylistWithVideo = Object.assign(this.VideoStreamingPlaylists[0], { Video: this })
+
+      const file = maxBy(streamingPlaylistWithVideo.VideoFiles, file => file.resolution)
+      return Object.assign(file, { VideoStreamingPlaylist: streamingPlaylistWithVideo })
+    }
+
+    return undefined
   }
 
-  getFile <T extends MVideoWithFile> (this: T, resolution: number) {
+  getWebTorrentFile <T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
     if (Array.isArray(this.VideoFiles) === false) return undefined
 
-    return this.VideoFiles.find(f => f.resolution === resolution)
+    const file = this.VideoFiles.find(f => f.resolution === resolution)
+    if (!file) return undefined
+
+    return Object.assign(file, { Video: this })
   }
 
   async addAndSaveThumbnail (thumbnail: MThumbnail, transaction: Transaction) {
@@ -1811,10 +1830,6 @@ export class VideoModel extends Model<VideoModel> {
     if (this.Thumbnails.find(t => t.id === savedThumbnail.id)) return
 
     this.Thumbnails.push(savedThumbnail)
-  }
-
-  getVideoFilename (videoFile: MVideoFile) {
-    return this.uuid + '-' + videoFile.resolution + videoFile.extname
   }
 
   generateThumbnailName () {
@@ -1837,44 +1852,8 @@ export class VideoModel extends Model<VideoModel> {
     return this.Thumbnails.find(t => t.type === ThumbnailType.PREVIEW)
   }
 
-  getTorrentFileName (videoFile: MVideoFile) {
-    const extension = '.torrent'
-    return this.uuid + '-' + videoFile.resolution + extension
-  }
-
   isOwned () {
     return this.remote === false
-  }
-
-  getTorrentFilePath (videoFile: MVideoFile) {
-    return join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
-  }
-
-  getVideoFilePath (videoFile: MVideoFile) {
-    return join(CONFIG.STORAGE.VIDEOS_DIR, this.getVideoFilename(videoFile))
-  }
-
-  async createTorrentAndSetInfoHash (videoFile: MVideoFile) {
-    const options = {
-      // Keep the extname, it's used by the client to stream the file inside a web browser
-      name: `${this.name} ${videoFile.resolution}p${videoFile.extname}`,
-      createdBy: 'PeerTube',
-      announceList: [
-        [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-        [ WEBSERVER.URL + '/tracker/announce' ]
-      ],
-      urlList: [ WEBSERVER.URL + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile) ]
-    }
-
-    const torrent = await createTorrentPromise(this.getVideoFilePath(videoFile), options)
-
-    const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
-    logger.info('Creating torrent %s.', filePath)
-
-    await writeFile(filePath, torrent)
-
-    const parsedTorrent = parseTorrent(torrent)
-    videoFile.infoHash = parsedTorrent.infoHash
   }
 
   getWatchStaticPath () {
@@ -1909,7 +1888,8 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   getFormattedVideoFilesJSON (): VideoFile[] {
-    return videoFilesModelToFormattedJSON(this, this.VideoFiles)
+    const { baseUrlHttp, baseUrlWs } = this.getBaseUrls()
+    return videoFilesModelToFormattedJSON(this, baseUrlHttp, baseUrlWs, this.VideoFiles)
   }
 
   toActivityPubObject (this: MVideoAP): VideoTorrentObject {
@@ -1923,8 +1903,10 @@ export class VideoModel extends Model<VideoModel> {
     return peertubeTruncate(this.description, { length: maxLength })
   }
 
-  getOriginalFileResolution () {
-    const originalFilePath = this.getVideoFilePath(this.getOriginalFile())
+  getMaxQualityResolution () {
+    const file = this.getMaxQualityFile()
+    const videoOrPlaylist = file.getVideoOrStreamingPlaylist()
+    const originalFilePath = getVideoFilePath(videoOrPlaylist, file)
 
     return getVideoFileResolution(originalFilePath)
   }
@@ -1933,22 +1915,36 @@ export class VideoModel extends Model<VideoModel> {
     return `/api/${API_VERSION}/videos/${this.uuid}/description`
   }
 
-  getHLSPlaylist () {
+  getHLSPlaylist (): MStreamingPlaylistFilesVideo {
     if (!this.VideoStreamingPlaylists) return undefined
 
-    return this.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
+    const playlist = this.VideoStreamingPlaylists.find(p => p.type === VideoStreamingPlaylistType.HLS)
+    playlist.Video = this
+
+    return playlist
+  }
+
+  setHLSPlaylist (playlist: MStreamingPlaylist) {
+    const toAdd = [ playlist ] as [ VideoStreamingPlaylistModel ]
+
+    if (Array.isArray(this.VideoStreamingPlaylists) === false || this.VideoStreamingPlaylists.length === 0) {
+      this.VideoStreamingPlaylists = toAdd
+      return
+    }
+
+    this.VideoStreamingPlaylists = this.VideoStreamingPlaylists
+      .filter(s => s.type !== VideoStreamingPlaylistType.HLS)
+      .concat(toAdd)
   }
 
   removeFile (videoFile: MVideoFile, isRedundancy = false) {
-    const baseDir = isRedundancy ? CONFIG.STORAGE.REDUNDANCY_DIR : CONFIG.STORAGE.VIDEOS_DIR
-
-    const filePath = join(baseDir, this.getVideoFilename(videoFile))
+    const filePath = getVideoFilePath(this, videoFile, isRedundancy)
     return remove(filePath)
       .catch(err => logger.warn('Cannot delete file %s.', filePath, { err }))
   }
 
   removeTorrent (videoFile: MVideoFile) {
-    const torrentPath = join(CONFIG.STORAGE.TORRENTS_DIR, this.getTorrentFileName(videoFile))
+    const torrentPath = getTorrentFilePath(this, videoFile)
     return remove(torrentPath)
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
@@ -1973,38 +1969,30 @@ export class VideoModel extends Model<VideoModel> {
     return this.save()
   }
 
-  getBaseUrls () {
-    let baseUrlHttp
-    let baseUrlWs
+  async publishIfNeededAndSave (t: Transaction) {
+    if (this.state !== VideoState.PUBLISHED) {
+      this.state = VideoState.PUBLISHED
+      this.publishedAt = new Date()
+      await this.save({ transaction: t })
 
-    if (this.isOwned()) {
-      baseUrlHttp = WEBSERVER.URL
-      baseUrlWs = WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT
-    } else {
-      baseUrlHttp = REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Actor.Server.host
-      baseUrlWs = REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Actor.Server.host
+      return true
     }
 
-    return { baseUrlHttp, baseUrlWs }
+    return false
   }
 
-  generateMagnetUri (videoFile: MVideoFileRedundanciesOpt, baseUrlHttp: string, baseUrlWs: string) {
-    const xs = this.getTorrentUrl(videoFile, baseUrlHttp)
-    const announce = this.getTrackerUrls(baseUrlHttp, baseUrlWs)
-    let urlList = [ this.getVideoFileUrl(videoFile, baseUrlHttp) ]
-
-    const redundancies = videoFile.RedundancyVideos
-    if (isArray(redundancies)) urlList = urlList.concat(redundancies.map(r => r.fileUrl))
-
-    const magnetHash = {
-      xs,
-      announce,
-      urlList,
-      infoHash: videoFile.infoHash,
-      name: this.name
+  getBaseUrls () {
+    if (this.isOwned()) {
+      return {
+        baseUrlHttp: WEBSERVER.URL,
+        baseUrlWs: WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT
+      }
     }
 
-    return magnetUtil.encode(magnetHash)
+    return {
+      baseUrlHttp: REMOTE_SCHEME.HTTP + '://' + this.VideoChannel.Account.Actor.Server.host,
+      baseUrlWs: REMOTE_SCHEME.WS + '://' + this.VideoChannel.Account.Actor.Server.host
+    }
   }
 
   getTrackerUrls (baseUrlHttp: string, baseUrlWs: string) {
@@ -2012,23 +2000,23 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   getTorrentUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+    return baseUrlHttp + STATIC_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
   }
 
   getTorrentDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + this.getTorrentFileName(videoFile)
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.TORRENTS + getTorrentFileName(this, videoFile)
   }
 
   getVideoFileUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.WEBSEED + this.getVideoFilename(videoFile)
+    return baseUrlHttp + STATIC_PATHS.WEBSEED + getVideoFilename(this, videoFile)
   }
 
   getVideoRedundancyUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + this.getVideoFilename(videoFile)
+    return baseUrlHttp + STATIC_PATHS.REDUNDANCY + getVideoFilename(this, videoFile)
   }
 
   getVideoFileDownloadUrl (videoFile: MVideoFile, baseUrlHttp: string) {
-    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + this.getVideoFilename(videoFile)
+    return baseUrlHttp + STATIC_DOWNLOAD_PATHS.VIDEOS + getVideoFilename(this, videoFile)
   }
 
   getBandwidthBits (videoFile: MVideoFile) {

@@ -23,22 +23,52 @@ import { parseAggregateResult, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
-import { FindOptions, QueryTypes, Transaction } from 'sequelize'
+import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { MIMETYPES } from '../../initializers/constants'
-import { MVideoFile } from '@server/typings/models'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../typings/models/video/video-file'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
 
 @Table({
   tableName: 'videoFile',
   indexes: [
     {
-      fields: [ 'videoId' ]
+      fields: [ 'videoId' ],
+      where: {
+        videoId: {
+          [Op.ne]: null
+        }
+      }
     },
+    {
+      fields: [ 'videoStreamingPlaylistId' ],
+      where: {
+        videoStreamingPlaylistId: {
+          [Op.ne]: null
+        }
+      }
+    },
+
     {
       fields: [ 'infoHash' ]
     },
+
     {
       fields: [ 'videoId', 'resolution', 'fps' ],
-      unique: true
+      unique: true,
+      where: {
+        videoId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'videoStreamingPlaylistId', 'resolution', 'fps' ],
+      unique: true,
+      where: {
+        videoStreamingPlaylistId: {
+          [Op.ne]: null
+        }
+      }
     }
   ]
 })
@@ -81,11 +111,23 @@ export class VideoFileModel extends Model<VideoFileModel> {
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'CASCADE'
   })
   Video: VideoModel
+
+  @ForeignKey(() => VideoStreamingPlaylistModel)
+  @Column
+  videoStreamingPlaylistId: number
+
+  @BelongsTo(() => VideoStreamingPlaylistModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
+  })
+  VideoStreamingPlaylist: VideoStreamingPlaylistModel
 
   @HasMany(() => VideoRedundancyModel, {
     foreignKey: {
@@ -163,6 +205,36 @@ export class VideoFileModel extends Model<VideoFileModel> {
       }))
   }
 
+  // Redefine upsert because sequelize does not use an appropriate where clause in the update query with 2 unique indexes
+  static async customUpsert (
+    videoFile: MVideoFile,
+    mode: 'streaming-playlist' | 'video',
+    transaction: Transaction
+  ) {
+    const baseWhere = {
+      fps: videoFile.fps,
+      resolution: videoFile.resolution
+    }
+
+    if (mode === 'streaming-playlist') Object.assign(baseWhere, { videoStreamingPlaylistId: videoFile.videoStreamingPlaylistId })
+    else Object.assign(baseWhere, { videoId: videoFile.videoId })
+
+    const element = await VideoFileModel.findOne({ where: baseWhere, transaction })
+    if (!element) return videoFile.save({ transaction })
+
+    for (const k of Object.keys(videoFile.toJSON())) {
+      element[k] = videoFile[k]
+    }
+
+    return element.save({ transaction })
+  }
+
+  getVideoOrStreamingPlaylist (this: MVideoFileVideo | MVideoFileStreamingPlaylistVideo): MVideo | MStreamingPlaylistVideo {
+    if (this.videoId) return (this as MVideoFileVideo).Video
+
+    return (this as MVideoFileStreamingPlaylistVideo).VideoStreamingPlaylist
+  }
+
   isAudio () {
     return !!MIMETYPES.AUDIO.EXT_MIMETYPE[this.extname]
   }
@@ -170,6 +242,9 @@ export class VideoFileModel extends Model<VideoFileModel> {
   hasSameUniqueKeysThan (other: MVideoFile) {
     return this.fps === other.fps &&
       this.resolution === other.resolution &&
-      this.videoId === other.videoId
+      (
+        (this.videoId !== null && this.videoId === other.videoId) ||
+        (this.videoStreamingPlaylistId !== null && this.videoStreamingPlaylistId === other.videoStreamingPlaylistId)
+      )
   }
 }

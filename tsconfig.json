@@ -16,8 +16,7 @@
     ],
     "typeRoots": [
       "node_modules/sitemap/node_modules/@types",
-      "node_modules/@types",
-      "server/typings"
+      "node_modules/@types"
     ],
     "baseUrl": "./",
     "paths": {

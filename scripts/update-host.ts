@@ -1,6 +1,4 @@
 import { registerTSPaths } from '../server/helpers/register-ts-paths'
-registerTSPaths()
-
 import { WEBSERVER } from '../server/initializers/constants'
 import { ActorFollowModel } from '../server/models/activitypub/actor-follow'
 import { VideoModel } from '../server/models/video/video'
@@ -19,6 +17,9 @@ import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
 import { VideoStreamingPlaylistModel } from '../server/models/video/video-streaming-playlist'
 import { initDatabaseModels } from '../server/initializers'
+import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+
+registerTSPaths()
 
 run()
   .then(() => process.exit(0))
@@ -124,7 +125,7 @@ async function run () {
 
     for (const file of video.VideoFiles) {
       console.log('Updating torrent file %s of video %s.', file.resolution, video.uuid)
-      await video.createTorrentAndSetInfoHash(file)
+      await createTorrentAndSetInfoHash(video, file)
     }
 
     for (const playlist of video.VideoStreamingPlaylists) {

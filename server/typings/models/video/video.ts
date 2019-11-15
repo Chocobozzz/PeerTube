@@ -10,7 +10,7 @@ import {
 } from './video-channels'
 import { MTag } from './tag'
 import { MVideoCaptionLanguage } from './video-caption'
-import { MStreamingPlaylist, MStreamingPlaylistRedundancies, MStreamingPlaylistRedundanciesOpt } from './video-streaming-playlist'
+import { MStreamingPlaylistFiles, MStreamingPlaylistRedundancies, MStreamingPlaylistRedundanciesOpt } from './video-streaming-playlist'
 import { MVideoFile, MVideoFileRedundanciesOpt } from './video-file'
 import { MThumbnail } from './thumbnail'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
@@ -40,7 +40,8 @@ export type MVideoFeed = Pick<MVideo, 'name' | 'uuid'>
 
 // "With" to not confuse with the VideoFile model
 export type MVideoWithFile = MVideo &
-  Use<'VideoFiles', MVideoFile[]>
+  Use<'VideoFiles', MVideoFile[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
 
 export type MVideoThumbnail = MVideo &
   Use<'Thumbnails', MThumbnail[]>
@@ -66,7 +67,7 @@ export type MVideoWithCaptions = MVideo &
   Use<'VideoCaptions', MVideoCaptionLanguage[]>
 
 export type MVideoWithStreamingPlaylist = MVideo &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]>
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
 
 // ############################################################################
 
@@ -93,12 +94,12 @@ export type MVideoWithRights = MVideo &
 export type MVideoWithAllFiles = MVideo &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'Thumbnails', MThumbnail[]> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]>
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
 
 export type MVideoAccountLightBlacklistAllFiles = MVideo &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'Thumbnails', MThumbnail[]> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
   Use<'VideoChannel', MChannelAccountLight> &
   Use<'VideoBlacklist', MVideoBlacklistLight>
 
@@ -124,7 +125,7 @@ export type MVideoFullLight = MVideo &
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]>
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]>
 
 // ############################################################################
 
@@ -133,10 +134,11 @@ export type MVideoFullLight = MVideo &
 export type MVideoAP = MVideo &
   Use<'Tags', MTag[]> &
   Use<'VideoChannel', MChannelAccountLight> &
-  Use<'VideoStreamingPlaylists', MStreamingPlaylist[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
   Use<'VideoCaptions', MVideoCaptionLanguage[]> &
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
-  Use<'VideoFiles', MVideoFileRedundanciesOpt[]>
+  Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
+  Use<'Thumbnails', MThumbnail[]>
 
 export type MVideoAPWithoutCaption = Omit<MVideoAP, 'VideoCaptions'>
 

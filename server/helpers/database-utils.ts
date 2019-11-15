@@ -79,6 +79,15 @@ function afterCommitIfTransaction (t: Transaction, fn: Function) {
   return fn()
 }
 
+function deleteNonExistingModels <T extends { hasSameUniqueKeysThan (other: T): boolean } & Model<T>> (
+  fromDatabase: T[],
+  newModels: T[],
+  t: Transaction
+) {
+  return fromDatabase.filter(f => !newModels.find(newModel => newModel.hasSameUniqueKeysThan(f)))
+              .map(f => f.destroy({ transaction: t }))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -86,5 +95,6 @@ export {
   retryTransactionWrapper,
   transactionRetryer,
   updateInstanceWithAnother,
-  afterCommitIfTransaction
+  afterCommitIfTransaction,
+  deleteNonExistingModels
 }

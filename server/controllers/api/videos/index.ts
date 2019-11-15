@@ -64,6 +64,8 @@ import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
+import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -203,7 +205,8 @@ async function addVideo (req: express.Request, res: express.Response) {
 
   const videoFile = new VideoFileModel({
     extname: extname(videoPhysicalFile.filename),
-    size: videoPhysicalFile.size
+    size: videoPhysicalFile.size,
+    videoStreamingPlaylistId: null
   })
 
   if (videoFile.isAudio()) {
@@ -214,11 +217,10 @@ async function addVideo (req: express.Request, res: express.Response) {
   }
 
   // Move physical file
-  const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-  const destination = join(videoDir, video.getVideoFilename(videoFile))
+  const destination = getVideoFilePath(video, videoFile)
   await move(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+  videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
   videoPhysicalFile.path = destination
 
   // Process thumbnail or create it from the video
@@ -234,7 +236,7 @@ async function addVideo (req: express.Request, res: express.Response) {
     : await generateVideoMiniature(video, videoFile, ThumbnailType.PREVIEW)
 
   // Create the torrent file
-  await video.createTorrentAndSetInfoHash(videoFile)
+  await createTorrentAndSetInfoHash(video, videoFile)
 
   const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }

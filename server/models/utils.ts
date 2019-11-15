@@ -1,7 +1,7 @@
 import { Model, Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
-import { col, literal, OrderItem } from 'sequelize'
+import { literal, OrderItem } from 'sequelize'
 
 type SortType = { sortModel: string, sortValue: string }
 

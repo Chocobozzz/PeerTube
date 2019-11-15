@@ -219,7 +219,7 @@
     "ts-node": "8.4.1",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^8.0.1",
-    "typescript": "^3.4.3",
+    "typescript": "^3.7.2",
     "xliff": "^4.0.0"
   },
   "scripty": {

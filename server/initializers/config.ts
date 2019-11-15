@@ -177,6 +177,9 @@ const CONFIG = {
     },
     HLS: {
       get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') }
+    },
+    WEBTORRENT: {
+      get ENABLED () { return config.get<boolean>('transcoding.webtorrent.enabled') }
     }
   },
   IMPORT: {

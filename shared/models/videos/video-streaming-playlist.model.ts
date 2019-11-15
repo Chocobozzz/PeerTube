@@ -1,4 +1,5 @@
 import { VideoStreamingPlaylistType } from './video-streaming-playlist.type'
+import { VideoFile } from '@shared/models/videos/video-file.model'
 
 export class VideoStreamingPlaylist {
   id: number
@@ -9,4 +10,6 @@ export class VideoStreamingPlaylist {
   redundancies: {
     baseUrl: string
   }[]
+
+  files: VideoFile[]
 }

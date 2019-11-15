@@ -223,12 +223,18 @@ transcoding:
     720p: false
     1080p: false
     2160p: false
+
+  # Generate videos in a WebTorrent format (what we do since the first PeerTube release)
+  # If you also enabled the hls format, it will multiply videos storage by 2
+  webtorrent:
+    enabled: true
+
   # /!\ Requires ffmpeg >= 4.1
   # Generate HLS playlists and fragmented MP4 files. Better playback than with WebTorrent:
   #     * Resolution change is smoother
   #     * Faster playback in particular with long videos
   #     * More stable playback (less bugs/infinite loading)
-  # /!\ Multiplies videos storage by 2 /!\
+  # If you also enabled the webtorrent format, it will multiply videos storage by 2
   hls:
     enabled: false
 

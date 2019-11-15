@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 445
+const LAST_MIGRATION_VERSION = 450
 
 // ---------------------------------------------------------------------------
 
@@ -505,7 +505,8 @@ const STATIC_PATHS = {
 }
 const STATIC_DOWNLOAD_PATHS = {
   TORRENTS: '/download/torrents/',
-  VIDEOS: '/download/videos/'
+  VIDEOS: '/download/videos/',
+  HLS_VIDEOS: '/download/streaming-playlists/hls/videos/'
 }
 const LAZY_STATIC_PATHS = {
   AVATARS: '/lazy-static/avatars/',

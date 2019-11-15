@@ -7,6 +7,8 @@ import { copy, stat } from 'fs-extra'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { extname } from 'path'
 import { MVideoFile, MVideoWithFile } from '@server/typings/models'
+import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { getVideoFilePath } from '@server/lib/video-paths'
 
 export type VideoFileImportPayload = {
   videoUUID: string,
@@ -68,10 +70,10 @@ async function updateVideoFile (video: MVideoWithFile, inputFilePath: string) {
     updatedVideoFile = currentVideoFile
   }
 
-  const outputPath = video.getVideoFilePath(updatedVideoFile)
+  const outputPath = getVideoFilePath(video, updatedVideoFile)
   await copy(inputFilePath, outputPath)
 
-  await video.createTorrentAndSetInfoHash(updatedVideoFile)
+  await createTorrentAndSetInfoHash(video, updatedVideoFile)
 
   await updatedVideoFile.save()
 
