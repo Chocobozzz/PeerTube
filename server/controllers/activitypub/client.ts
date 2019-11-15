@@ -308,13 +308,16 @@ async function videoCommentController (req: express.Request, res: express.Respon
 
   const threadParentComments = await VideoCommentModel.listThreadParentComments(videoComment, undefined)
   const isPublic = true // Comments are always public
-  const audience = getAudience(videoComment.Account.Actor, isPublic)
+  let videoCommentObject = videoComment.toActivityPubObject(threadParentComments)
 
-  const videoCommentObject = audiencify(videoComment.toActivityPubObject(threadParentComments), audience)
+  if (videoComment.Account) {
+    const audience = getAudience(videoComment.Account.Actor, isPublic)
+    videoCommentObject = audiencify(videoCommentObject, audience)
 
-  if (req.path.endsWith('/activity')) {
-    const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
-    return activityPubResponse(activityPubContextify(data), res)
+    if (req.path.endsWith('/activity')) {
+      const data = buildCreateActivity(videoComment.url, videoComment.Account.Actor, videoCommentObject, audience)
+      return activityPubResponse(activityPubContextify(data), res)
+    }
   }
 
   return activityPubResponse(activityPubContextify(videoCommentObject), res)
