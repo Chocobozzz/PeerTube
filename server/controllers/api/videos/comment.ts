@@ -1,10 +1,11 @@
 import * as express from 'express'
+import { cloneDeep } from 'lodash'
 import { ResultList } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers'
-import { buildFormattedCommentTree, createVideoComment } from '../../../lib/video-comment'
+import { buildFormattedCommentTree, createVideoComment, markCommentAsDeleted } from '../../../lib/video-comment'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -177,19 +178,22 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
 
 async function removeVideoComment (req: express.Request, res: express.Response) {
   const videoCommentInstance = res.locals.videoCommentFull
+  const videoCommentInstanceBefore = cloneDeep(videoCommentInstance)
 
   await sequelizeTypescript.transaction(async t => {
-    await videoCommentInstance.destroy({ transaction: t })
-
     if (videoCommentInstance.isOwned() || videoCommentInstance.Video.isOwned()) {
       await sendDeleteVideoComment(videoCommentInstance, t)
     }
+
+    markCommentAsDeleted(videoCommentInstance)
+
+    await videoCommentInstance.save()
   })
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
   logger.info('Video comment %d deleted.', videoCommentInstance.id)
 
-  Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstance })
+  Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstanceBefore })
 
   return res.type('json').status(204).end()
 }

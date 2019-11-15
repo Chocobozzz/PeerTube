@@ -153,10 +153,6 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
 
-    if (commentToDelete.totalReplies !== 0) {
-      message += this.i18n(' {{totalReplies}} replies will be deleted too.', { totalReplies: commentToDelete.totalReplies })
-    }
-
     if (commentToDelete.isLocal) {
       message += this.i18n(' The deletion will be sent to remote instances, so they remove the comment too.')
     } else {
@@ -169,21 +165,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
       .subscribe(
         () => {
-          // Delete the comment in the tree
-          if (commentToDelete.inReplyToCommentId) {
-            const thread = this.threadComments[commentToDelete.threadId]
-            if (!thread) {
-              console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
-              return
-            }
-
-            this.deleteLocalCommentThread(thread, commentToDelete)
-            return
-          }
-
-          // Delete the thread
-          this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
-          this.componentPagination.totalItems--
+          // Mark the comment as deleted
+          this.softDeleteComment(commentToDelete)
 
           if (this.highlightedThread.id === commentToDelete.id) this.highlightedThread = undefined
         },
@@ -204,15 +187,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  private deleteLocalCommentThread (parentComment: VideoCommentThreadTree, commentToDelete: VideoComment) {
-    for (const commentChild of parentComment.children) {
-      if (commentChild.comment.id === commentToDelete.id) {
-        parentComment.children = parentComment.children.filter(c => c.comment.id !== commentToDelete.id)
-        return
-      }
-
-      this.deleteLocalCommentThread(commentChild, commentToDelete)
-    }
+  private softDeleteComment (comment: VideoComment) {
+    comment.isDeleted = true
+    comment.deletedAt = new Date()
+    comment.text = ''
+    comment.account = null
   }
 
   private resetVideo () {

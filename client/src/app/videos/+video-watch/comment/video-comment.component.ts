@@ -78,7 +78,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   isRemovableByUser () {
-    return this.isUserLoggedIn() &&
+    return this.comment.account && this.isUserLoggedIn() &&
       (
         this.user.account.id === this.comment.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)

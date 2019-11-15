@@ -73,9 +73,16 @@ function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): 
   return thread
 }
 
+function markCommentAsDeleted (comment: MCommentOwnerVideoReply): void {
+  comment.text = ''
+  comment.deletedAt = new Date()
+  comment.accountId = null
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   createVideoComment,
-  buildFormattedCommentTree
+  buildFormattedCommentTree,
+  markCommentAsDeleted
 }

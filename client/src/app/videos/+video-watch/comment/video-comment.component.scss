@@ -5,7 +5,7 @@
   font-size: 15px;
   display: flex;
 
-  img {
+  .comment-avatar {
     @include avatar(36px);
 
     margin-top: 5px;
@@ -48,6 +48,7 @@
 
     .comment-html {
       @include peertube-word-wrap;
+      margin-bottom: 10px;
 
       // Mentions
       ::ng-deep a {
@@ -61,10 +62,14 @@
         }
 
       }
+
+      &.comment-html-deleted {
+        color: $grey-foreground-color;
+      }
     }
 
     .comment-actions {
-      margin: 10px 0;
+      margin-bottom: 10px;
       display: flex;
 
       .comment-action-reply,
@@ -100,7 +105,7 @@
   }
 
   .root-comment {
-    img { margin-right: 10px; }
+    .comment-avatar { margin-right: 10px; }
   }
 }
 

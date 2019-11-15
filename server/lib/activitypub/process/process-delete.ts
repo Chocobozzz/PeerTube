@@ -5,6 +5,7 @@ import { sequelizeTypescript } from '../../../initializers'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoModel } from '../../../models/video/video'
 import { VideoCommentModel } from '../../../models/video/video-comment'
+import { markCommentAsDeleted } from '../../video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
@@ -128,7 +129,11 @@ function processDeleteVideoComment (byActor: MActorSignature, videoComment: Vide
       throw new Error(`Account ${byActor.url} does not own video comment ${videoComment.url} or video ${videoComment.Video.url}`)
     }
 
-    await videoComment.destroy({ transaction: t })
+    await sequelizeTypescript.transaction(async t => {
+      markCommentAsDeleted(videoComment)
+
+      await videoComment.save()
+    })
 
     if (videoComment.Video.isOwned()) {
       // Don't resend the activity to the sender

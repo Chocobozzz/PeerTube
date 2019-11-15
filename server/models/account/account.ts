@@ -201,7 +201,7 @@ export class AccountModel extends Model<AccountModel> {
 
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'cascade',
     hooks: true

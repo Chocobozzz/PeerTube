@@ -89,3 +89,14 @@ export interface ActivityPubAttributedTo {
   type: 'Group' | 'Person'
   id: string
 }
+
+export interface ActivityTombstoneObject {
+  '@context'?: any
+  id: string
+  type: 'Tombstone'
+  name?: string
+  formerType?: string
+  published: string
+  updated: string
+  deleted: string
+}
