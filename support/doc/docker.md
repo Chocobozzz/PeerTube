@@ -50,9 +50,15 @@ You can use the regular `up` command to set it up:
 ```shell
 $ docker-compose up
 ```
+### Obtaining Your Automatically Generated Admin Credentials
+Now that you've installed your PeerTube instance you'll want to grep your peertube container's logs for the `root` password.
+You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
+```BASH
+user@s:~/peertube|master⚡ ⇒  docker-compose logs peertube | grep -A1 root
 
-**Important**: note that you'll get the initial `root` user password from the
-program output, so check out your logs to find them.
+peertube_1  | [example.com:443] 2019-11-16 04:26:06.082 info: Username: root
+peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abcdefghijklmnop
+```
 
 ### What now?
 
