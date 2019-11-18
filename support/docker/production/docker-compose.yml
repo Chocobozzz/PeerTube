@@ -47,10 +47,8 @@ services:
 
   postgres:
     image: postgres:10-alpine
-    environment:
-      POSTGRES_USER: ${PEERTUBE_DB_USERNAME}
-      POSTGRES_PASSWORD: ${PEERTUBE_DB_PASSWORD}
-      POSTGRES_DB: peertube
+    env_file:
+      - .env
     volumes:
       - ./docker-volume/db:/var/lib/postgresql/data
     restart: "always"
@@ -67,8 +65,8 @@ services:
 
   postfix:
     image: mwader/postfix-relay
-    environment:
-      - POSTFIX_myhostname=${PEERTUBE_WEBSERVER_HOSTNAME}
+    env_file:
+      - .env
     labels:
       traefik.enable: "false"
     restart: "always"
