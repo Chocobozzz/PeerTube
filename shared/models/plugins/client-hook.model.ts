@@ -51,6 +51,8 @@ export const clientActionHookObject = {
   'action:video-watch.init': true,
   // Fired when the video watch page loaded the video
   'action:video-watch.video.loaded': true,
+  // Fired when the player finished loading
+  'action:video-watch.player.loaded': true,
 
   // Fired when the search page is being initialized
   'action:search.init': true,

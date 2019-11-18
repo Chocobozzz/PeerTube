@@ -20,6 +20,7 @@ import { environment } from '../../../environments/environment'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { MarkdownService } from '@app/shared/renderer'
 import {
+  videojs,
   CustomizationOptions,
   P2PMediaLoaderOptions,
   PeertubePlayerManager,
@@ -500,6 +501,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.on('theaterChange', (_: any, enabled: boolean) => {
         this.zone.run(() => this.theaterEnabled = enabled)
       })
+
+      this.hooks.runAction('action:video-watch.player.loaded', 'video-watch', { player: this.player })
     })
 
     this.setVideoDescriptionHTML()
@@ -508,7 +511,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.setOpenGraphTags()
     this.checkUserRating()
 
-    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch')
+    this.hooks.runAction('action:video-watch.video.loaded', 'video-watch', { videojs })
   }
 
   private autoplayNext () {
