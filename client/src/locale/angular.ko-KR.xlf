@@ -226,265 +226,153 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="23e2d8a43af729f896ac66787ed5e756078f5566" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="d8b279845a8ddff74c000c43eaab381caa4c2055" datatype="html">
         <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="INTERPOLATION" equiv-text="{{ notification.video.channel.displayName }}"/> published a new video: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION_1" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">10</context>
         </context-group>
-      </trans-unit><trans-unit id="ba93de990947141c5582ce8ccc3c6f74f7fd35a6" datatype="html">
+      </trans-unit><trans-unit id="cd1df1f67905a0fc5c598a95f450ab6cfd6ca3c6" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been unblacklisted
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been unblacklisted
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">18</context>
         </context-group>
-      </trans-unit><trans-unit id="b7923e220607db3b4039adc2ebf114825f6cc7f0" datatype="html">
+      </trans-unit><trans-unit id="066903c4bc7d397c799979d64ce8c450792eb664" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been blacklisted
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been blacklisted
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">23</context>
+          <context context-type="linenumber">26</context>
         </context-group>
-      </trans-unit><trans-unit id="2415980d62a72f501daea92a77d1d7c129858fac" datatype="html">
+      </trans-unit><trans-unit id="b5e2152dd5b4222093fcec9c8289f12308a598e7" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been created on video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>A new video abuse<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been created on video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoAbuse.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">34</context>
         </context-group>
-      </trans-unit><trans-unit id="215e69763313e97ad8f35cfe1b70bbdcda22aa47" datatype="html">
+      </trans-unit><trans-unit id="8b6534c6f0dab443bd67f7d6b51f5347b115b9af" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">39</context>
+          <context context-type="linenumber">42</context>
         </context-group>
-      </trans-unit><trans-unit id="dfb1edb72e1fa8ae9a87f58a57d8fe488e337715" datatype="html">
+      </trans-unit><trans-unit id="db788be4b3a79cae33765119361f8e1fcee5a4f8" datatype="html">
         <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> commented your video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> commented your video <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">47</context>
+          <context context-type="linenumber">50</context>
         </context-group>
-      </trans-unit><trans-unit id="b74d4c335377af0c83a08987d0d5b28ce11b091b" datatype="html">
+      </trans-unit><trans-unit id="b187dd5f406f4195b326ab01fa81f823025821b9" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been published
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> has been published
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">55</context>
+          <context context-type="linenumber">58</context>
         </context-group>
-      </trans-unit><trans-unit id="d5f838030f3fc0b2e5f14945c255ba3249371085" datatype="html">
+      </trans-unit><trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">63</context>
+          <context context-type="linenumber">66</context>
         </context-group>
-      </trans-unit><trans-unit id="9ac080afb0f7eab1d8a7ea61795ee9b84bd97082" datatype="html">
+      </trans-unit><trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">71</context>
+          <context context-type="linenumber">74</context>
         </context-group>
-      </trans-unit><trans-unit id="cbdd98aa82d989bf2cc839b04dda4109126da50d" datatype="html">
+      </trans-unit><trans-unit id="095e6339c6877edbfcc7941077a7834f88618c8b" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/> registered<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> on your instance
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/> registered<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> on your instance
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">79</context>
+          <context context-type="linenumber">82</context>
         </context-group>
-      </trans-unit><trans-unit id="2657af71bacee515160dcbdb1481cf1fbf7398d2" datatype="html">
+      </trans-unit><trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
         <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> is following
 
           <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container>"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
           <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container>"/>your account<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> is following
 
           <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container>"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
           <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container>"/>your account<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">87</context>
+          <context context-type="linenumber">90</context>
         </context-group>
-      </trans-unit><trans-unit id="ebdf8d0e51333447680d6ac8b6a3166066a852d1" datatype="html">
+      </trans-unit><trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source>
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> mentioned you on <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="TAG_IMG" ctype="image" equiv-text="&lt;img/>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> mentioned you on <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a>"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">98</context>
+          <context context-type="linenumber">101</context>
         </context-group>
-      </trans-unit><trans-unit id="2a17038a035574afa33cb5557783468be596a025" datatype="html">
+      </trans-unit><trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>)
           <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container>"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>)
           <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container>"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">106</context>
+          <context context-type="linenumber">109</context>
         </context-group>
-      </trans-unit><trans-unit id="fc54954d383d13ebb444d2c1d59f4454e3f06f97" datatype="html">
+      </trans-unit><trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
           Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </source><target state="new">
-        <x id="START_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;my-global-icon>"/><x id="CLOSE_TAG_MY-GLOBAL-ICON" ctype="x-my-global-icon" equiv-text="&lt;/my-global-icon>"/>
-
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div>"/>
+        </source><target state="new">
           Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>
-        <x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div>"/>
-      </target>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
-          <context context-type="linenumber">115</context>
+          <context context-type="linenumber">118</context>
         </context-group>
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566">
