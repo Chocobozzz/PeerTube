@@ -207,7 +207,7 @@ export class PeerTubeEmbed {
           segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
           redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
           trackerAnnounce: videoInfo.trackerUrls,
-          videoFiles: videoInfo.files
+          videoFiles: hlsPlaylist.files
         } as P2PMediaLoaderOptions
       })
     }

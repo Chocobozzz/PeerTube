@@ -469,7 +469,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
         redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
         trackerAnnounce: this.video.trackerUrls,
-        videoFiles: this.video.files
+        videoFiles: hlsPlaylist.files
       } as P2PMediaLoaderOptions
 
       Object.assign(options, { p2pMediaLoader })

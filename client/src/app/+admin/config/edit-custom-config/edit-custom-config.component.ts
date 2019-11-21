@@ -169,6 +169,9 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         resolutions: {},
         hls: {
           enabled: null
+        },
+        webtorrent: {
+          enabled: null
         }
       },
       autoBlacklist: {

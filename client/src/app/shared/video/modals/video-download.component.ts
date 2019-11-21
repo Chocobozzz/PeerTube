@@ -24,12 +24,18 @@ export class VideoDownloadComponent {
     private i18n: I18n
   ) { }
 
+  getVideoFiles () {
+    if (!this.video) return []
+
+    return this.video.getFiles()
+  }
+
   show (video: VideoDetails) {
     this.video = video
 
     this.activeModal = this.modalService.open(this.modal)
 
-    this.resolutionId = this.video.files[0].resolution.id
+    this.resolutionId = this.getVideoFiles()[0].resolution.id
   }
 
   onClose () {
@@ -45,7 +51,7 @@ export class VideoDownloadComponent {
     // HTML select send us a string, so convert it to a number
     this.resolutionId = parseInt(this.resolutionId.toString(), 10)
 
-    const file = this.video.files.find(f => f.resolution.id === this.resolutionId)
+    const file = this.getVideoFiles().find(f => f.resolution.id === this.resolutionId)
     if (!file) {
       console.error('Could not find file with resolution %d.', this.resolutionId)
       return

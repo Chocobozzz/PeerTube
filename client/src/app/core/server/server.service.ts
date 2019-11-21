@@ -65,6 +65,9 @@ export class ServerService {
       enabledResolutions: [],
       hls: {
         enabled: false
+      },
+      webtorrent: {
+        enabled: true
       }
     },
     avatar: {

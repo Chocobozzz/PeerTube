@@ -221,7 +221,7 @@
   </div>
 </div>
 
-<ng-template [ngIf]="video !== null">
+<ng-container *ngIf="video !== null">
   <my-video-support #videoSupportModal [video]="video"></my-video-support>
   <my-video-share #videoShareModal [video]="video" [videoCaptions]="videoCaptions"></my-video-share>
-</ng-template>
+</ng-container>
