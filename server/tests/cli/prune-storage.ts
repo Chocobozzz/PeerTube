@@ -11,7 +11,7 @@ import {
   execCLI,
   flushAndRunMultipleServers,
   getAccount,
-  getEnvCli,
+  getEnvCli, makeGetRequest, makeRawRequest,
   ServerInfo,
   setAccessTokensToServers, setDefaultVideoChannel,
   updateMyAvatar,
@@ -46,7 +46,7 @@ async function assertCountAreOkay (servers: ServerInfo[]) {
     expect(videosCount).to.equal(8)
 
     const torrentsCount = await countFiles(server.internalServerNumber, 'torrents')
-    expect(torrentsCount).to.equal(8)
+    expect(torrentsCount).to.equal(16)
 
     const previewsCount = await countFiles(server.internalServerNumber, 'previews')
     expect(previewsCount).to.equal(2)
@@ -94,13 +94,21 @@ describe('Test prune storage scripts', function () {
     {
       const res = await getAccount(servers[ 0 ].url, 'root@localhost:' + servers[ 1 ].port)
       const account: Account = res.body
-      await request('http://localhost:' + servers[ 0 ].port).get(account.avatar.path).expect(200)
+      await makeGetRequest({
+        url: servers[ 0 ].url,
+        path: account.avatar.path,
+        statusCodeExpected: 200
+      })
     }
 
     {
       const res = await getAccount(servers[ 1 ].url, 'root@localhost:' + servers[ 0 ].port)
       const account: Account = res.body
-      await request('http://localhost:' + servers[ 1 ].port).get(account.avatar.path).expect(200)
+      await makeGetRequest({
+        url: servers[ 1 ].url,
+        path: account.avatar.path,
+        statusCodeExpected: 200
+      })
     }
 
     await wait(1000)

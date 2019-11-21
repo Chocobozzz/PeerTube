@@ -14,7 +14,7 @@ import { getOrCreateVideoAndAccountAndChannel } from '../activitypub'
 import { downloadPlaylistSegments } from '../hls'
 import { CONFIG } from '../../initializers/config'
 import {
-  MStreamingPlaylist,
+  MStreamingPlaylist, MStreamingPlaylistFiles,
   MStreamingPlaylistVideo,
   MVideoAccountLight,
   MVideoFile,
@@ -30,7 +30,7 @@ type CandidateToDuplicate = {
   redundancy: VideosRedundancy,
   video: MVideoWithAllFiles,
   files: MVideoFile[],
-  streamingPlaylists: MStreamingPlaylist[]
+  streamingPlaylists: MStreamingPlaylistFiles[]
 }
 
 function isMVideoRedundancyFileVideo (
@@ -196,7 +196,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, redundancy.strategy)
 
     const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
-    const magnetUri = await generateMagnetUri(video, file, baseUrlHttp, baseUrlWs)
+    const magnetUri = generateMagnetUri(video, file, baseUrlHttp, baseUrlWs)
 
     const tmpPath = await downloadWebTorrentVideo({ magnetUri }, VIDEO_IMPORT_TIMEOUT)
 
@@ -290,12 +290,15 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     return `${object.VideoStreamingPlaylist.playlistUrl}`
   }
 
-  private getTotalFileSizes (files: MVideoFile[], playlists: MStreamingPlaylist[]) {
+  private getTotalFileSizes (files: MVideoFile[], playlists: MStreamingPlaylistFiles[]) {
     const fileReducer = (previous: number, current: MVideoFile) => previous + current.size
 
-    const totalSize = files.reduce(fileReducer, 0)
+    let allFiles = files
+    for (const p of playlists) {
+      allFiles = allFiles.concat(p.VideoFiles)
+    }
 
-    return totalSize + (totalSize * playlists.length)
+    return allFiles.reduce(fileReducer, 0)
   }
 
   private async loadAndRefreshVideo (videoUrl: string) {

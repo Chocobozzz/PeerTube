@@ -143,7 +143,7 @@ import {
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
-import { getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath, getHLSDirectory } from '@server/lib/video-paths'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -1950,11 +1950,10 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   removeStreamingPlaylist (isRedundancy = false) {
-    const baseDir = isRedundancy ? HLS_REDUNDANCY_DIRECTORY : HLS_STREAMING_PLAYLIST_DIRECTORY
+    const directoryPath = getHLSDirectory(this, isRedundancy)
 
-    const filePath = join(baseDir, this.uuid)
-    return remove(filePath)
-      .catch(err => logger.warn('Cannot delete playlist directory %s.', filePath, { err }))
+    return remove(directoryPath)
+      .catch(err => logger.warn('Cannot delete playlist directory %s.', directoryPath, { err }))
   }
 
   isOutdated () {

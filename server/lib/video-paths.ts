@@ -1,8 +1,8 @@
-import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile } from '@server/typings/models'
+import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/typings/models'
 import { extractVideo } from './videos'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config'
-import { HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
+import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
 
 // ################## Video file name ##################
 
@@ -34,6 +34,14 @@ function getVideoFilePath (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, vi
   return join(baseDir, getVideoFilename(videoOrPlaylist, videoFile))
 }
 
+// ################## Streaming playlist ##################
+
+function getHLSDirectory (video: MVideoUUID, isRedundancy = false) {
+  const baseDir = isRedundancy ? HLS_REDUNDANCY_DIRECTORY : HLS_STREAMING_PLAYLIST_DIRECTORY
+
+  return join(baseDir, video.uuid)
+}
+
 // ################## Torrents ##################
 
 function getTorrentFileName (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
@@ -60,5 +68,7 @@ export {
   getVideoFilePath,
 
   getTorrentFileName,
-  getTorrentFilePath
+  getTorrentFilePath,
+
+  getHLSDirectory
 }
