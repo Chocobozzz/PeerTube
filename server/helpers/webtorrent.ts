@@ -72,6 +72,7 @@ async function downloadWebTorrentVideo (target: { magnetUri: string, torrentName
 
 async function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreamingPlaylistVideo, videoFile: MVideoFile) {
   const video = extractVideo(videoOrPlaylist)
+  const { baseUrlHttp } = video.getBaseUrls()
 
   const options = {
     // Keep the extname, it's used by the client to stream the file inside a web browser
@@ -81,7 +82,7 @@ async function createTorrentAndSetInfoHash (videoOrPlaylist: MVideo | MStreaming
       [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
       [ WEBSERVER.URL + '/tracker/announce' ]
     ],
-    urlList: [ WEBSERVER.URL + STATIC_PATHS.WEBSEED + getVideoFilename(videoOrPlaylist, videoFile) ]
+    urlList: [ videoOrPlaylist.getVideoFileUrl(videoFile, baseUrlHttp) ]
   }
 
   const torrent = await createTorrentPromise(getVideoFilePath(videoOrPlaylist, videoFile), options)
@@ -126,6 +127,7 @@ function generateMagnetUri (
 // ---------------------------------------------------------------------------
 
 export {
+  createTorrentPromise,
   createTorrentAndSetInfoHash,
   generateMagnetUri,
   downloadWebTorrentVideo
