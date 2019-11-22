@@ -116,7 +116,7 @@ export class PeerTubeEmbed {
     this.api.initialize()
   }
 
-  private loadParams () {
+  private loadParams (video: VideoDetails) {
     try {
       const params = new URL(window.location.toString()).searchParams
 
@@ -136,7 +136,15 @@ export class PeerTubeEmbed {
       this.bigPlayBackgroundColor = this.getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = this.getParamString(params, 'foregroundColor')
 
-      this.mode = this.getParamString(params, 'mode') === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
+      const modeParam = this.getParamString(params, 'mode')
+
+      if (modeParam) {
+        if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
+        else this.mode = 'webtorrent'
+      } else {
+        if (Array.isArray(video.streamingPlaylists) && video.streamingPlaylists.length !== 0) this.mode = 'p2p-media-loader'
+        else this.mode = 'webtorrent'
+      }
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
@@ -162,7 +170,7 @@ export class PeerTubeEmbed {
     const videoInfo: VideoDetails = await videoResponse.json()
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
 
-    this.loadParams()
+    this.loadParams(videoInfo)
 
     const options: PeertubePlayerManagerOptions = {
       common: {
