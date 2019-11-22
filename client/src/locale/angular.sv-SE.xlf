@@ -826,7 +826,7 @@
       </trans-unit>
       <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target state="new">You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </target>
+        <target state="translated"></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26</context>
@@ -967,7 +967,7 @@
       </trans-unit>
       <trans-unit id="bd21b1e6b5674003187e5cbec0e7e2854f9d8388">
         <source>video views</source>
-        <target>videovisningar</target>
+        <target>visningar</target>
         <context-group name="null">
           <context context-type="linenumber">31</context>
         </context-group>
@@ -975,7 +975,7 @@
       </trans-unit>
       <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84">
         <source>video comments</source>
-        <target>videokommentarer</target>
+        <target>kommentarer</target>
         <context-group name="null">
           <context context-type="linenumber">75</context>
         </context-group>
@@ -1350,7 +1350,7 @@
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="new">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated"></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1403,7 +1403,7 @@
       </trans-unit>
       <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
         <source>If you want to open registrations, please decide what are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, fill your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube instance. </source>
-        <target state="new">If you want to open registrations, please decide what are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, fill your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube instance. </target>
+        <target state="translated"></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">67</context>
