@@ -67,7 +67,7 @@ staticRouter.use(
 )
 
 staticRouter.use(
-  STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + ':id-:resolution([0-9]+).:extension',
+  STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + ':id-:resolution([0-9]+)-fragmented.:extension',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(downloadHLSVideoFile)
 )
