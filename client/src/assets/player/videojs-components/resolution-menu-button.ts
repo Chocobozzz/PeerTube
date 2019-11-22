@@ -75,11 +75,15 @@ class ResolutionMenuButton extends MenuButton {
       // Skip auto resolution, we'll add it ourselves
       if (d.id === -1) continue
 
+      const label = d.id === 0
+        ? this.player.localize('Audio-only')
+        : d.label
+
       this.menu.addChild(new ResolutionMenuItem(
         this.player_,
         {
           id: d.id,
-          label: d.id == 0 ? this.player .localize('Audio-only') : d.label,
+          label,
           selected: d.selected,
           callback: data.qualitySwitchCallback
         })

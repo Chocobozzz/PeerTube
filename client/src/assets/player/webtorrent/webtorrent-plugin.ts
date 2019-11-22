@@ -186,15 +186,15 @@ class WebTorrentPlugin extends Plugin {
       this.player.bigPlayButton.hide()
     }
 
-    // Audio-only (resolutionId == 0) gets special treatment
-    if (resolutionId > 0) {
-      // Hide poster to have black background 
-      this.player.removeClass('vjs-playing-audio-only-content')
-      this.player.posterImage.hide()
-    } else {
+    // Audio-only (resolutionId === 0) gets special treatment
+    if (resolutionId === 0) {
       // Audio-only: show poster, do not auto-hide controls
       this.player.addClass('vjs-playing-audio-only-content')
       this.player.posterImage.show()
+    } else {
+      // Hide poster to have black background
+      this.player.removeClass('vjs-playing-audio-only-content')
+      this.player.posterImage.hide()
     }
 
     const newVideoFile = this.videoFiles.find(f => f.resolution.id === resolutionId)

@@ -35,15 +35,9 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
 async function getVideoFileSize (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
 
-  return videoStream == null 
-    ? {
-        width: 0,
-        height: 0
-      }
-    : {
-        width: videoStream.width,
-        height: videoStream.height
-      }
+  return videoStream === null
+    ? { width: 0, height: 0 }
+    : { width: videoStream.width, height: videoStream.height }
 }
 
 async function getVideoFileResolution (path: string) {
@@ -57,13 +51,10 @@ async function getVideoFileResolution (path: string) {
 
 async function getVideoFileFPS (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
-
-  if (videoStream == null) {
-      return 0
-  }
+  if (videoStream === null) return 0
 
   for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
-    const valuesText: string = videoStream[key]
+    const valuesText: string = videoStream[ key ]
     if (!valuesText) continue
 
     const [ frames, seconds ] = valuesText.split('/')
@@ -128,7 +119,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
   }
 }
 
-type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio' | 'split-audio'
+type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio' | 'only-audio'
 
 interface BaseTranscodeOptions {
   type: TranscodeOptionsType
@@ -159,11 +150,15 @@ interface MergeAudioTranscodeOptions extends BaseTranscodeOptions {
   audioPath: string
 }
 
-interface SplitAudioTranscodeOptions extends BaseTranscodeOptions {
-  type: 'split-audio'
+interface OnlyAudioTranscodeOptions extends BaseTranscodeOptions {
+  type: 'only-audio'
 }
 
-type TranscodeOptions = HLSTranscodeOptions | VideoTranscodeOptions | MergeAudioTranscodeOptions | SplitAudioTranscodeOptions | QuickTranscodeOptions
+type TranscodeOptions = HLSTranscodeOptions
+  | VideoTranscodeOptions
+  | MergeAudioTranscodeOptions
+  | OnlyAudioTranscodeOptions
+  | QuickTranscodeOptions
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
@@ -177,8 +172,8 @@ function transcode (options: TranscodeOptions) {
         command = await buildHLSCommand(command, options)
       } else if (options.type === 'merge-audio') {
         command = await buildAudioMergeCommand(command, options)
-      } else if (options.type === 'split-audio') {
-        command = await buildAudioSplitCommand(command, options)
+      } else if (options.type === 'only-audio') {
+        command = await buildOnlyAudioCommand(command, options)
       } else {
         command = await buildx264Command(command, options)
       }
@@ -220,7 +215,7 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
   if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) return false
 
-    // check audio params (if audio stream exists)
+  // check audio params (if audio stream exists)
   if (parsedAudio.audioStream) {
     if (parsedAudio.audioStream[ 'codec_name' ] !== 'aac') return false
 
@@ -293,8 +288,8 @@ async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: M
   return command
 }
 
-async function buildAudioSplitCommand (command: ffmpeg.FfmpegCommand, options: SplitAudioTranscodeOptions) {
-  command = await presetAudioSplit(command)
+async function buildOnlyAudioCommand (command: ffmpeg.FfmpegCommand, options: OnlyAudioTranscodeOptions) {
+  command = await presetOnlyAudio(command)
 
   return command
 }
@@ -350,9 +345,7 @@ function getVideoStreamFromFile (path: string) {
       if (err) return rej(err)
 
       const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      //if (!videoStream) return rej(new Error('Cannot find video stream of ' + path))
-
-      return res(videoStream)
+      return res(videoStream || null)
     })
   })
 }
@@ -384,7 +377,7 @@ async function presetH264VeryFast (command: ffmpeg.FfmpegCommand, input: string,
  * A toolbox to play with audio
  */
 namespace audio {
-  export const get = (option: string) => {
+  export const get = (videoPath: string) => {
     // without position, ffprobe considers the last input only
     // we make it consider the first input only
     // if you pass a file path to pos, then ffprobe acts on that file directly
@@ -394,7 +387,7 @@ namespace audio {
         if (err) return rej(err)
 
         if ('streams' in data) {
-          const audioStream = data.streams.find(stream => stream['codec_type'] === 'audio')
+          const audioStream = data.streams.find(stream => stream[ 'codec_type' ] === 'audio')
           if (audioStream) {
             return res({
               absolutePath: data.format.filename,
@@ -406,7 +399,7 @@ namespace audio {
         return res({ absolutePath: data.format.filename })
       }
 
-      return ffmpeg.ffprobe(option, parseFfprobe)
+      return ffmpeg.ffprobe(videoPath, parseFfprobe)
     })
   }
 
@@ -506,8 +499,7 @@ async function presetCopy (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.Ffmpeg
     .audioCodec('copy')
 }
 
-
-async function presetAudioSplit (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.FfmpegCommand> {
+async function presetOnlyAudio (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.FfmpegCommand> {
   return command
     .format('mp4')
     .audioCodec('copy')

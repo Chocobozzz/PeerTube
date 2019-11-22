@@ -357,7 +357,7 @@ function convertCustomConfigBody (body: CustomConfig) {
   function keyConverter (k: string) {
     // Transcoding resolutions exception
     if (/^\d{3,4}p$/.exec(k)) return k
-    if (/^0p$/.exec(k)) return k
+    if (k === '0p') return k
 
     return snakeCase(k)
   }
