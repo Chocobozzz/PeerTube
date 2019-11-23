@@ -3681,7 +3681,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="f14028bddcf7760c635464db8a9d2f69afd81b92" datatype="html">
         <source>Main instance categories</source>
-        <target state="new">Main instance categories</target>
+        <target state="translated">Fő példány kategóriák</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">40</context>
@@ -3689,7 +3689,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="f871b41bfbdb193507cce2cd848c2d02bde77a03" datatype="html">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">Nincs találat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">46</context>
@@ -3705,7 +3705,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629" datatype="html">
         <source>Main languages you/your moderators speak</source>
-        <target state="new">Main languages you/your moderators speak</target>
+        <target state="translated">Fő nyelvek, amelyek(et) a te moderátorod/moderátorjaid beszél</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">52</context>
@@ -3713,7 +3713,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="cfcb1f4a6a536c158bfea40f6714618c8504ecb7" datatype="html">
         <source>Moderation &amp; NSFW</source>
-        <target state="new">Moderation &amp; NSFW</target>
+        <target state="translated">NSFW &amp; moderálás</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">63</context>
@@ -3721,7 +3721,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634" datatype="html">
         <source>This instance is dedicated to sensitive or NSFW content</source>
-        <target state="new">This instance is dedicated to sensitive or NSFW content</target>
+        <target state="translated">Ez a példány az érzékeny vagy NSFW tartalmakhoz van létrehozva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">68</context>
@@ -3790,7 +3790,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="2c88654dd44fe8477ce6f85c1081cd24a590701b" datatype="html">
         <source>Code of conduct</source>
-        <target state="new">Code of conduct</target>
+        <target state="translated">Magatartási kódex</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">111</context>
@@ -3806,7 +3806,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="06119c0230042048f8a3fd6aa9260934b6fa5878" datatype="html">
         <source>Moderation information</source>
-        <target state="new">Moderation information</target>
+        <target state="translated">Moderációs információk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">120</context>
@@ -3822,7 +3822,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="d678ce061bead229fd9526bae0029b6567f2a279" datatype="html">
         <source>You and your instance</source>
-        <target state="new">You and your instance</target>
+        <target state="translated">Te és a te példányod</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">130</context>
@@ -3830,7 +3830,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="fdbabe6f967747b657518384b54bcc58d3913063" datatype="html">
         <source>Who is behind the instance?</source>
-        <target state="new">Who is behind the instance?</target>
+        <target state="translated">Ki van a példány mögött?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">133</context>
@@ -3838,7 +3838,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="fef7c7a74c5646fe219d94db60e0652d6b878af5" datatype="html">
         <source>Why did you create this instance?</source>
-        <target state="new">Why did you create this instance?</target>
+        <target state="translated">Miért hoztad létre ezt a példányt?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">145</context>
@@ -3846,7 +3846,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="ac6b554b2f923239f6d7c5fcef8a7cce7d6b43b6" datatype="html">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="new">How long do you plan to maintain this instance?</target>
+        <target state="translated">Meddig tervezed fenntartani ezt a példányt?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">156</context>
@@ -3854,7 +3854,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
         <source>How will you finance the PeerTube server?</source>
-        <target state="new">How will you finance the PeerTube server?</target>
+        <target state="translated">Hogyan fogod finanszírozni a PeerTube szervert?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">167</context>
@@ -3862,7 +3862,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="34c4e700f4ef721fe991fc4f383bc75fa9b77885" datatype="html">
         <source>Other information</source>
-        <target state="new">Other information</target>
+        <target state="translated">Egyéb információ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">177</context>
@@ -3870,7 +3870,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="new">What server/hardware does the instance run on?</target>
+        <target state="translated">Milyen szerveren/hardveren fut a példány?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">180</context>
@@ -3878,7 +3878,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
-        <target state="new">Instance information</target>
+        <target state="translated">Példányinformációk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3886,7 +3886,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="400509157ba944e81f5fbfcce2f43d11a297ae22" datatype="html">
         <source>Theme &amp; Default route</source>
-        <target state="new">Theme &amp; Default route</target>
+        <target state="translated">Téma &amp; Alapértelmezett útvonal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">198</context>
@@ -3894,7 +3894,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="7bb52a3e9e31d9dec02faeadb44935de49e3a33d" datatype="html">
         <source>Global theme</source>
-        <target state="new">Global theme</target>
+        <target state="translated">Globális téma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">202</context>
@@ -3902,7 +3902,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb" datatype="html">
         <source>default</source>
-        <target state="new">default</target>
+        <target state="translated">alapértelmezett</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">206</context>
@@ -3918,7 +3918,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Videók felfedése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">219</context>
@@ -3926,7 +3926,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">Fekapott videók</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">220</context>
@@ -3934,7 +3934,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">A legtetszetebb videók</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">221</context>
@@ -3942,7 +3942,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">Legutóbb hozzáadott videók</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">222</context>
@@ -4046,7 +4046,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="2c2af9710d6f6c3ab117c3a74f5aa9d40710f5b9" datatype="html">
         <source>Instance followers</source>
-        <target state="new">Instance followers</target>
+        <target state="translated">Példány követők</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">327</context>
@@ -4054,7 +4054,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="fda0a09374e5d89c25522b7c49cf8f440cfb9db8" datatype="html">
         <source>Other instances can follow your instance</source>
-        <target state="new">Other instances can follow your instance</target>
+        <target state="translated">Más példányok követhetik a te példányodat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">335</context>
@@ -4062,7 +4062,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="1df9e784f36295ebd75a87980873e5bce62e8cd9" datatype="html">
         <source>Manually approve new instance follower</source>
-        <target state="new">Manually approve new instance follower</target>
+        <target state="translated">Új példánykövető kézi jóváhagyása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">342</context>
@@ -4070,7 +4070,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="5360e0c21d65618c91b61573693dc01cf4e3f3ed" datatype="html">
         <source>Instance followings</source>
-        <target state="new">Instance followings</target>
+        <target state="translated">Példánykövetések</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">348</context>
@@ -4094,7 +4094,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="764910b42b08b8342f7ba5907b258341ec044fa0" datatype="html">
         <source>Index URL</source>
-        <target state="new">Index URL</target>
+        <target state="translated">Index URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">371</context>
@@ -4150,7 +4150,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="6e671e839ca889feef0d8ed525d1a44b4b10870c" datatype="html">
         <source>Indicates the Twitter account for the website or platform on which the content was published.</source>
-        <target state="new">Indicates the Twitter account for the website or platform on which the content was published.</target>
+        <target state="translated">A weboldal vagy platform Twitter-fiókját jelöli, amelyen a tartalmat közzétették.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">417</context>
@@ -4551,7 +4551,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808" datatype="html">
         <source>instance default</source>
-        <target state="new">instance default</target>
+        <target state="translated">példány alapértelmezettés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-interface/my-account-interface-settings.component.html</context>
           <context context-type="linenumber">7</context>
@@ -4627,7 +4627,7 @@ Leiratkozás</target>
       </trans-unit>
       <trans-unit id="1bd5e17c9582661e20763a7634ef07881e33bbd7" datatype="html">
         <source>Action</source>
-        <target state="new">Action</target>
+        <target state="translated">Művelet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context>
           <context context-type="linenumber">20</context>
@@ -5660,7 +5660,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="b925172fc8e9b9a7fc6b9f5d742993b77ffdda2c" datatype="html">
         <source>Sorry, we couldn't find the page you were looking for.</source>
-        <target state="new">Sorry, we couldn't find the page you were looking for.</target>
+        <target state="translated">Sajnáljuk, nem található a keresett oldal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5761,7 +5761,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="2303f8783df836e13c208710dc029a1d34b6a77a" datatype="html">
         <source>2160p</source>
-        <target state="new">2160p</target>
+        <target state="translated">2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -5845,7 +5845,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="54adc67482fdaa0d361a2992bc91e064dc61cc9a" datatype="html">
         <source>100MB</source>
-        <target state="new">100MB</target>
+        <target state="translated">100MB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5857,7 +5857,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="cd34ef1f476d5422f49f6ed429f61fc1cfcb1174" datatype="html">
         <source>500MB</source>
-        <target state="new">500MB</target>
+        <target state="translated">500MB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5869,7 +5869,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="4a47b4beea31cac6e5970b6bc522902f545acc8b" datatype="html">
         <source>1GB</source>
-        <target state="new">1GB</target>
+        <target state="translated">1GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5877,7 +5877,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="b26d0cac75638623098ab7e06e16b096d1f55cc8" datatype="html">
         <source>5GB</source>
-        <target state="new">5GB</target>
+        <target state="translated">5GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5889,7 +5889,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f9fc4e7ec6743cb6f69bea2d0859a655ed44ffae" datatype="html">
         <source>20GB</source>
-        <target state="new">20GB</target>
+        <target state="translated">20GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5897,7 +5897,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="a56e3f92fe16d97ee4f05051ea61c466ecb51d5e" datatype="html">
         <source>50GB</source>
-        <target state="new">50GB</target>
+        <target state="translated">50GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5905,7 +5905,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="31dcc0c63f6234ace8caa84ae1abc33d4022122d" datatype="html">
         <source>10MB</source>
-        <target state="new">10MB</target>
+        <target state="translated">10MB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5913,7 +5913,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f2f968b6f2199b919f567702c6f23b43e5ea71af" datatype="html">
         <source>50MB</source>
-        <target state="new">50MB</target>
+        <target state="translated">50MB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -5921,7 +5921,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="c31575424fe1b2a57064413f3eda7ce657c46c8a" datatype="html">
         <source>2GB</source>
-        <target state="new">2GB</target>
+        <target state="translated">2GB</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/config.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6025,7 +6025,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="5729c34a858c78daa1aa606f62a3665527cf97e6" datatype="html">
         <source>Do you really want to unfollow <x id="INTERPOLATION" equiv-text="{{host}}"/>?</source>
-        <target state="new">Do you really want to unfollow <x id="INTERPOLATION" equiv-text="{{host}}"/>?</target>
+        <target state="translated">Biztos nem akarod követni a <x id="INTERPOLATION" equiv-text="{{host}}"/>-t?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6033,7 +6033,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="a89875525c82ab81ffe32e481a5475b43d0c2902" datatype="html">
         <source>Unfollow</source>
-        <target state="new">Unfollow</target>
+        <target state="translated">Nem követés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6041,7 +6041,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="fb4e35e2b0ea2abc1f71295a4b34830e57c07bd0" datatype="html">
         <source>You are not following <x id="INTERPOLATION" equiv-text="{{host}}"/> anymore.</source>
-        <target state="new">You are not following <x id="INTERPOLATION" equiv-text="{{host}}"/> anymore.</target>
+        <target state="translated">Többé nem követed <x id="INTERPOLATION" equiv-text="{{host}}"/>-t.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6049,7 +6049,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="4d8f527638f3e0b518a96e07d41d886bcce01246" datatype="html">
         <source>enabled</source>
-        <target state="new">enabled</target>
+        <target state="translated">engedélyezve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6057,7 +6057,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="795733aac948794cadeb3be6386882efac2c38ad" datatype="html">
         <source>disabled</source>
-        <target state="new">disabled</target>
+        <target state="translated">letiltva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6065,7 +6065,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="1123807fc813c816404598147173403d00117557" datatype="html">
         <source>Redundancy for <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></source>
-        <target state="new">Redundancy for <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></target>
+        <target state="translated">Redundancia a <x id="INTERPOLATION" equiv-text="{{host}}"/> is <x id="INTERPOLATION_1" equiv-text="{{stateLabel}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/shared/redundancy-checkbox.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6073,7 +6073,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="53cc0f4a4566c4139c65f93b5dce2fe8302e78da" datatype="html">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source>
-        <target state="new">Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</target>
+        <target state="translated">A <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> fiók némitásának feloldva a példányod által.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6089,7 +6089,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="800cd3cdf47751b576587259ba3a1bc0a7f435b6" datatype="html">
         <source>Comment updated.</source>
-        <target state="new">Comment updated.</target>
+        <target state="translated">Hozzászólás frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6097,7 +6097,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="586bee8c27a761611eb05661524cc7ca944b5978" datatype="html">
         <source>Delete this report</source>
-        <target state="new">Delete this report</target>
+        <target state="translated">Jelentés törlése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6105,7 +6105,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="cf3b28ba29a907b334ab0e6dccd080a60ba23321" datatype="html">
         <source>Update moderation comment</source>
-        <target state="new">Update moderation comment</target>
+        <target state="translated">Moderálási megjegyzés frissítés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6113,7 +6113,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d512430037b6580ba970c80cfc1687b6bdc221a3" datatype="html">
         <source>Mark as accepted</source>
-        <target state="new">Mark as accepted</target>
+        <target state="translated">Jelölés elfogadotnak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6121,7 +6121,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d895b090c054bfc0ad3aba816af0615a1997f5a3" datatype="html">
         <source>Mark as rejected</source>
-        <target state="new">Mark as rejected</target>
+        <target state="translated">Jelölés elutasítottnak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6129,7 +6129,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="73b70e37cddaa6494d8a666b6cba90dc80595599" datatype="html">
         <source>Do you really want to delete this abuse report?</source>
-        <target state="new">Do you really want to delete this abuse report?</target>
+        <target state="translated">Tényleg törlöd ezt a visszaélésről szóló jelentést?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6137,7 +6137,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="6a7938b8780c27540ea70cc0f8f4d928c8916cf9" datatype="html">
         <source>Abuse deleted.</source>
-        <target state="new">Abuse deleted.</target>
+        <target state="translated">Visszaélés törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6145,7 +6145,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="36e4cdb23056253e5ef0c62b7d4bbeb3f759f611" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</target>
+        <target state="translated">A <x id="INTERPOLATION" equiv-text="{{name}}"/> videó eltávolítva a feketelistáról.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-auto-blacklist-list/video-auto-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6153,7 +6153,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3d651e314544825348900b3120e2cd5ff38c7fa5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> videos removed from blacklist.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{num}}"/> videos removed from blacklist.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{num}}"/> videók eltávolítva a feketelistáról.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-auto-blacklist-list/video-auto-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6161,7 +6161,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="0594812d4c50c2adbd1a892a3497c4e5c19e4b32" datatype="html">
         <source>yes</source>
-        <target state="new">yes</target>
+        <target state="translated">igen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6169,7 +6169,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="6320692861e01fa9c9d4e692d0d27b6c12b21c3b" datatype="html">
         <source>no</source>
-        <target state="new">no</target>
+        <target state="translated">nem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6177,7 +6177,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="652845b2b32b2e117b9b02879b1af07859b0e223" datatype="html">
         <source>Do you really want to remove this video from the blacklist? It will be available again in the videos list.</source>
-        <target state="new">Do you really want to remove this video from the blacklist? It will be available again in the videos list.</target>
+        <target state="translated">Tényleg el akarod távolítani ezt a videót a feketelistáról? Ez újra elérhető lesz a videók listájában.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6189,7 +6189,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</target>
+        <target state="translated">A <x id="INTERPOLATION" equiv-text="{{name}}"/> videó eltávolítva a feketelistáról.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6201,7 +6201,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target state="new">You don't have plugins installed yet.</target>
+        <target state="translated">Még nem telepítettél bővítőket.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6209,7 +6209,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target state="new">You don't have themes installed yet.</target>
+        <target state="translated">Még nem telepítettél témákat.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6217,7 +6217,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9" datatype="html">
         <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
-        <target state="new">Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <target state="translated">Frissítés a <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6225,7 +6225,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702" datatype="html">
         <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
-        <target state="new">Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <target state="translated">Tényleg eltávolítod a <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>-t?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6233,7 +6233,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="61136b14ca13f166ecc9ee7b05bb6fe865f10144" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> eltávolítva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6241,7 +6241,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d352fa8f51305c18ab8f882b37c4fdaab6f2371b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6249,7 +6249,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
-        <target state="new">The plugin index is not available. Please retry later.</target>
+        <target state="translated">A bővítő indexe nem elérhető. Kérjük, próbáld újra később.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6257,7 +6257,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0" datatype="html">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target state="new">Please only install plugins or themes you trust, since they can execute any code on your instance.</target>
+        <target state="translated">Kérjük olyan bővítőt vagy témát telepísd fel, amelyikben megbízzol, mivel bármilyen kódot végrehajthatnak a te példányodon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6265,7 +6265,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b" datatype="html">
         <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
-        <target state="new">Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <target state="translated">Telepítse a <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>-t?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6273,7 +6273,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> telepítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6281,7 +6281,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12" datatype="html">
         <source>Settings updated.</source>
-        <target state="new">Settings updated.</target>
+        <target state="translated">Beállítások frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6289,7 +6289,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50" datatype="html">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">Bővítők</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6297,7 +6297,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf" datatype="html">
         <source>Themes</source>
-        <target state="new">Themes</target>
+        <target state="translated">Témák</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6305,7 +6305,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="e72b0e32070d4a69221ef64d793fe7d61381a819" datatype="html">
         <source>plugin</source>
-        <target state="new">plugin</target>
+        <target state="translated">bővítő</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6313,7 +6313,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="0f6f5bc1d9e83b758dd60bc6dc7aad7d2cb7f600" datatype="html">
         <source>theme</source>
-        <target state="new">theme</target>
+        <target state="translated">téma</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6321,7 +6321,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f" datatype="html">
         <source>Last week</source>
-        <target state="new">Last week</target>
+        <target state="translated">Legutóbbi hét</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6329,7 +6329,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="76f7f502edd5c7a38bbf2a262db38f90cc440441" datatype="html">
         <source>Last day</source>
-        <target state="new">Last day</target>
+        <target state="translated">Legutóbbi nap</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6337,7 +6337,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="9c152780247b402c410b861e521967dca7d9fd10" datatype="html">
         <source>Last hour</source>
-        <target state="new">Last hour</target>
+        <target state="translated">Legutóbbi óra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6345,7 +6345,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="321e4419a943044e674beb55b8039f42a9761ca5" datatype="html">
         <source>Info</source>
-        <target state="new">Info</target>
+        <target state="translated">Infó</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6357,7 +6357,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="a8059e31694578c1b0344a76a345357dd60e8f01" datatype="html">
         <source>Warning</source>
-        <target state="new">Warning</target>
+        <target state="translated">Figyelem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6369,7 +6369,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="6080b77234e92ad41bb52653b239c4c4f851317d" datatype="html">
         <source>Error</source>
-        <target state="new">Error</target>
+        <target state="translated">Hiba</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6385,7 +6385,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="364463fab6c5714118d6449561a0f8de1cc10bfa" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> created.</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{username}}"/> created.</target>
+        <target state="translated">Elkészült a <x id="INTERPOLATION" equiv-text="{{username}}"/> felhasználó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6393,7 +6393,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="924084727dc179dd5dc1a63dc3452ad41e4a8842" datatype="html">
         <source>Password changed for user <x id="INTERPOLATION" equiv-text="{{username}}"/>.</source>
-        <target state="new">Password changed for user <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
+        <target state="translated">Jelszó megváltoztatva a <x id="INTERPOLATION" equiv-text="{{username}}"/> felhasználó számára.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6401,7 +6401,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="2dbda576172f583154031550e251e5a1e49207b2" datatype="html">
         <source>Update user password</source>
-        <target state="new">Update user password</target>
+        <target state="translated">Felhasználói jelszó frissítése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6409,7 +6409,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="964865a3cd90b4af99902f071644a4b2aede4c32" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> updated.</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{username}}"/> updated.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{username}}"/> felasználó frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6417,7 +6417,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="9910122dfedd2eaa544a990f1430e5b82a76d99f" datatype="html">
         <source>Update user</source>
-        <target state="new">Update user</target>
+        <target state="translated">Felhasználó frissítése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6425,7 +6425,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="9f0d12f959768275edb5fd71001a41e17d5d7548" datatype="html">
         <source>An email asking for password reset has been sent to <x id="INTERPOLATION" equiv-text="{{username}}"/>.</source>
-        <target state="new">An email asking for password reset has been sent to <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
+        <target state="translated">E-mailt küldtünk a jelszó visszaállításáról <x id="INTERPOLATION" equiv-text="{{username}}"/> számára.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6433,7 +6433,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="50dc7afa2305131cdbdb384cfc1f2a5f0f4647d8" datatype="html">
         <source>Unban</source>
-        <target state="new">Unban</target>
+        <target state="translated">Tiltás feloldása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6453,7 +6453,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="910ed85f550272401b134a40d019ab3359fe883f" datatype="html">
         <source>Set Email as Verified</source>
-        <target state="new">Set Email as Verified</target>
+        <target state="translated">Email állítása ellenőrzöttként</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6465,7 +6465,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ac401df84c5fa471700c3368de51c969ccb8bacf" datatype="html">
         <source>You cannot ban root.</source>
-        <target state="new">You cannot ban root.</target>
+        <target state="translated">Nem tilthatod le a rootot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6477,7 +6477,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="98119091712a8ca72905e3b4c1cf60649af7565e" datatype="html">
         <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{num}}"/> users?</source>
-        <target state="new">Do you really want to unban <x id="INTERPOLATION" equiv-text="{{num}}"/> users?</target>
+        <target state="translated">Tényleg vissza szeretnéd vonni a <x id="INTERPOLATION" equiv-text="{{num}}"/> felhasználót?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6485,7 +6485,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="6121be086a51c4c73bbdd8aebdddd9744c8f1ffd" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users unbanned.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{num}}"/> users unbanned.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{num}}"/> felhasználó visszavonva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6493,7 +6493,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="911fc197949e47aa5f0541627bc319f59edd9d11" datatype="html">
         <source>You cannot delete root.</source>
-        <target state="new">You cannot delete root.</target>
+        <target state="translated">Nem távolíthatod el a root-ot.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6505,7 +6505,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="9de914fe915cc730efc57e81c987188a24d3ac51" datatype="html">
         <source>If you remove these users, you will not be able to create others with the same username!</source>
-        <target state="new">If you remove these users, you will not be able to create others with the same username!</target>
+        <target state="translated">Ha eltávolítod ezeket a felhasználókat, akkor nem leszel képes más felhasználókat létrehozni ugyanazzal a felhasználónévvel!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6513,7 +6513,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="b708d332e3f89b24745e749fa530210f0bdea329" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users deleted.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{num}}"/> users deleted.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{num}}"/> felhasználók eltávolítva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6521,7 +6521,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f4a8f2ef1fbfc19e1e049e69f63c40063c0d0650" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users email set as verified.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{num}}"/> users email set as verified.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{num}}"/> felhasználók e-mailje igazoltnak van beállítva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6529,7 +6529,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="2667ca38672421a0a7a22343d2a0060ee41246de" datatype="html">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted.</source>
-        <target state="new">Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted.</target>
+        <target state="translated">A <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> fiók némításának feloldva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6541,7 +6541,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="c6af80b42938d4a49e6f6c4f60ce26228916994c" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</source>
-        <target state="new">Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{host}}"/> példány némítása feloldva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6553,7 +6553,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="80057baa3b97a4349304bdaa0a880e6f4778561f" datatype="html">
         <source>My videos history</source>
-        <target state="new">My videos history</target>
+        <target state="translated">Videó előzményeim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6561,7 +6561,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="05f6dda1754741495451b8658bd2248856765d95" datatype="html">
         <source>Videos history is enabled</source>
-        <target state="new">Videos history is enabled</target>
+        <target state="translated">Videók előzményei engedélyezve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6569,7 +6569,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="6bb9ade8637c5e35fb5cb36cf7dbec71c65d4013" datatype="html">
         <source>Videos history is disabled</source>
-        <target state="new">Videos history is disabled</target>
+        <target state="translated">Videók előzményei letiltva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6577,7 +6577,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="8453a7a55b8b23bbbc293cd0939fb59a73307de8" datatype="html">
         <source>Delete videos history</source>
-        <target state="new">Delete videos history</target>
+        <target state="translated">Videóelőzmények törlése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6585,7 +6585,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f8f86df8a1ae711944c3ab819bb19bf360dfa7a4" datatype="html">
         <source>Are you sure you want to delete all your videos history?</source>
-        <target state="new">Are you sure you want to delete all your videos history?</target>
+        <target state="translated">Biztos vagy benne, hogy törölni szeretnéd az összes videó előzményt?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6593,7 +6593,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="195d5ba6c8bd05762d9318d0afd0b094fd776164" datatype="html">
         <source>Videos history deleted</source>
-        <target state="new">Videos history deleted</target>
+        <target state="translated">A videók előzményei törölve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6601,7 +6601,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="507192ee1fa84aefed02d603caada2d84927023e" datatype="html">
         <source>Ownership accepted</source>
-        <target state="new">Ownership accepted</target>
+        <target state="translated">A tulajdonjog elfogadva</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6609,7 +6609,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3a8f29caac7ce9400d11a7c4f8b71a710865f56b" datatype="html">
         <source>Please check your emails to verify your new email.</source>
-        <target state="new">Please check your emails to verify your new email.</target>
+        <target state="translated">Kérjük, ellenőrizd e-mailjeidet az új e-mail megerősítéséhez.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6617,7 +6617,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="8155899f3b3b2e0467846ea7f27fcfb46c882204" datatype="html">
         <source>Email updated.</source>
-        <target state="new">Email updated.</target>
+        <target state="translated">Email frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6625,7 +6625,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="466fc8cf56fd4e4e90fec4b900ef083d52bec38c" datatype="html">
         <source>You current password is invalid.</source>
-        <target state="new">You current password is invalid.</target>
+        <target state="translated">A jelenlegi jelszavad érvénytelen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6637,7 +6637,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="19508af0dfbc685cbf10cf02061bb5a0f423b6fc" datatype="html">
         <source>Password updated.</source>
-        <target state="new">Password updated.</target>
+        <target state="translated">Jelszó frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-password/my-account-change-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6645,7 +6645,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="e381d4750a4eec494e65f68fb147806f9034d59d" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos etc.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos etc.</target>
+        <target state="translated">Biztosan törlöd a fiókodat? Ezzel törlöd az összes adatot, beleértve a csatornákat, videókat stb.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6653,7 +6653,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="e7d5b2de566e4c807c285daf8d8a78b5f7f33311" datatype="html">
         <source>Type your username to confirm</source>
-        <target state="new">Type your username to confirm</target>
+        <target state="translated">Írd be felhasználónevedet a megerősítéshez</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6661,7 +6661,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d8a8a7f7160939fb55e82bc01fe9f876f5f2e065" datatype="html">
         <source>Delete my account</source>
-        <target state="new">Delete my account</target>
+        <target state="translated">Fiókom törlése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6669,7 +6669,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="8eb8b1a728159f43c31abf76c28ef3ff6c230af7" datatype="html">
         <source>Your account is deleted.</source>
-        <target state="new">Your account is deleted.</target>
+        <target state="translated">Fiókod törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6677,7 +6677,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="59f77c7dc03357ef1d7a334df06dfc7f31c9a165" datatype="html">
         <source>Interface settings updated.</source>
-        <target state="new">Interface settings updated.</target>
+        <target state="translated">Az interfész beállításai frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-interface/my-account-interface-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6685,7 +6685,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="7c193bf704577e514b63497c4f366511afdb6585" datatype="html">
         <source>New video from your subscriptions</source>
-        <target state="new">New video from your subscriptions</target>
+        <target state="translated">Új videó az előfizetéseidből</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6693,7 +6693,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ba897defa2e6c34d5ee3d10edf8d797a35e7e3e5" datatype="html">
         <source>New comment on your video</source>
-        <target state="new">New comment on your video</target>
+        <target state="translated">Új megjegyzés a videódhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6701,7 +6701,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f536b58345161afa5cd859cce5a0b66a39327ad8" datatype="html">
         <source>New video abuse</source>
-        <target state="new">New video abuse</target>
+        <target state="translated">Új videó visszaélés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6709,7 +6709,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="051dd48c3e6254785c6f366656aaee58f8b46c47" datatype="html">
         <source>Video auto-blacklisted waiting review</source>
-        <target state="new">Video auto-blacklisted waiting review</target>
+        <target state="translated">A videó automatikusan feketelistára helyezve várakozási áttekintése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6717,7 +6717,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="abac8b7629cfcd85bff25770f83ea229f646f996" datatype="html">
         <source>One of your video is blacklisted/unblacklisted</source>
-        <target state="new">One of your video is blacklisted/unblacklisted</target>
+        <target state="translated">Az egyik videód feketelistán/nem feketelistán van</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6725,7 +6725,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f3eff4df9e4aa9dab411e6eb83833a33016a88bc" datatype="html">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target state="new">Video published (after transcoding/scheduled update)</target>
+        <target state="translated">Videó közzétéve (átkódolás/ütemezett frissítés után)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6733,7 +6733,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ec7ddc265da1df78011ae7677d62a2ae10aef7a4" datatype="html">
         <source>Video import finished</source>
-        <target state="new">Video import finished</target>
+        <target state="translated">A videó importálása befejeződött</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6741,7 +6741,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="c327bbac87cca61f5c52f5825d564878e98b9034" datatype="html">
         <source>A new user registered on your instance</source>
-        <target state="new">A new user registered on your instance</target>
+        <target state="translated">Egy új felhasználó regisztrált a példányodban</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6757,7 +6757,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="14c3050a9da4c1bc49d555c45d5660804d08e83b" datatype="html">
         <source>Someone mentioned you in video comments</source>
-        <target state="new">Someone mentioned you in video comments</target>
+        <target state="translated">Valaki megemlített téged a videó megjegyzéseiben</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6765,7 +6765,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f4bb57154f8b6b30f3272f340dc40e143af8607f" datatype="html">
         <source>Your instance has a new follower</source>
-        <target state="new">Your instance has a new follower</target>
+        <target state="translated">A példányodnak új követője van</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6781,7 +6781,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="a0f04081717f5f00c0a2c723903c3a2d4c296401" datatype="html">
         <source>Preferences saved</source>
-        <target state="new">Preferences saved</target>
+        <target state="translated">A személyre szabás mentve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6789,7 +6789,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b" datatype="html">
         <source>Profile updated.</source>
-        <target state="new">Profile updated.</target>
+        <target state="translated">Profil frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-profile/my-account-profile.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6797,7 +6797,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="1e003ad599ef836949b9f4dad3037a58ef3ff8d1" datatype="html">
         <source>Avatar changed.</source>
-        <target state="new">Avatar changed.</target>
+        <target state="translated">Avatar módosítva.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6809,7 +6809,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="96d143e59c90c4f479eb7a3b55e2a24dc676b31f" datatype="html">
         <source>Unknown language</source>
-        <target state="new">Unknown language</target>
+        <target state="translated">Ismeretlen nyelv</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6817,7 +6817,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="732fe7ff80eca196d9825b0ca16134ce8101e93e" datatype="html">
         <source>Video settings updated.</source>
-        <target state="new">Video settings updated.</target>
+        <target state="translated">A videobeállítások frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6825,7 +6825,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645" datatype="html">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
-        <target state="new">Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</target>
+        <target state="translated">A <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> videó csatorna elkészült.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6833,7 +6833,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="new">This name already exists on this instance.</target>
+        <target state="translated">Ez a név már létezik ebben a példányban.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6841,7 +6841,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559" datatype="html">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
-        <target state="new">Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> videó csatorna frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6849,7 +6849,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="4e613272923d6f1976e3c73e8b857ac45c37b791" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</target>
+        <target state="translated">Valóban kitörlöd a(z) <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>-t? Törli az erre a csatornára feltöltött összes videót, és nem tudsz létrehozni a <x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>-val azonos nevű csatornát!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6857,7 +6857,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3859ca2a7577ba8797058d7d97eb8054bc56ec99" datatype="html">
         <source>Please type the display name of the video channel (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) to confirm</source>
-        <target state="new">Please type the display name of the video channel (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) to confirm</target>
+        <target state="translated">Kérjük, írd be a videocsatorna megjelenített nevét (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) a megerősítéshez</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6865,7 +6865,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2" datatype="html">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
-        <target state="new">Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</target>
+        <target state="translated">A <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> videócsatorna törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6873,7 +6873,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="c7e4d8688bd06d723e512ab063c0c4fdf4a9804d" datatype="html">
         <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> created.</source>
-        <target state="new">Playlist <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> created.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{playlistName}}"/> lejátszási lista elkészült.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6881,7 +6881,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="3222e26b41803055328d893a73df485ec8a0328d" datatype="html">
         <source>Playlist <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> updated.</source>
-        <target state="new">Playlist <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> updated.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> lejátszási lista frissítve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6889,7 +6889,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="082d28149b07cd5178cad0fdaf2cd8963833b783" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/>?</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/>?</target>
+        <target state="translated">Valóban szeretnéd törölni a <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/>-t?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlists.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6897,7 +6897,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d6c948062aa2a0482332d4f7de420a39ac253a86" datatype="html">
         <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> deleted.</source>
-        <target state="new">Playlist <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> deleted.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> lejátszási lista törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlists.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6905,7 +6905,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">Videóim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6917,7 +6917,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="00e16d1f1c5cc936ec0881cd02cbf66aa1b4cddd" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos?</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos?</target>
+        <target state="translated">Valóban törölni szeretnél <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videókat?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6925,7 +6925,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="dff7d4574cfaa785cbd4c0a5ffb5befec19a5d83" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos deleted.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos deleted.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videó törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6933,7 +6933,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="4ec5852c869b2fb4ae0e564b51278d7be8013fc7" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{videoName}}"/>?</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{videoName}}"/>?</target>
+        <target state="translated">Valóban ki szeretnéd törölni a <x id="INTERPOLATION" equiv-text="{{videoName}}"/>-t?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6941,7 +6941,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="d39a0bfa616a9a8473b2e379eefe17d8ed1af118" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> deleted.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> deleted.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{videoName}}"/> videó törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6953,7 +6953,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="740c53a50a618bf5c7a5bd5c3f7321f0bd1840dd" datatype="html">
         <source>Ownership change request sent.</source>
-        <target state="new">Ownership change request sent.</target>
+        <target state="translated">Tulajdonjog-változási kérelem elküldve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6961,7 +6961,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">Csatornáim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6969,7 +6969,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="1d3408919f4d08414721cc22c4be39d93d6691d2" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">Lejátszási listáim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6977,7 +6977,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">Feliratkozásaim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6985,7 +6985,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="4f953496ca94b4f83af049ff715172df2729fb79" datatype="html">
         <source>My history</source>
-        <target state="new">My history</target>
+        <target state="translated">Előzményeim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7001,7 +7001,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">Tulajdonosi változások</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7009,7 +7009,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6" datatype="html">
         <source>My settings</source>
-        <target state="new">My settings</target>
+        <target state="translated">Beállításaim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7017,7 +7017,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="0e2434e7d84145c4e8a930ccc4c26c3cb2887e0d" datatype="html">
         <source>My notifications</source>
-        <target state="new">My notifications</target>
+        <target state="translated">Értesítéseim</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7025,7 +7025,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="e58f5785ae64f23cd6a5e010b045511853ed84fa" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target state="new">Now please check your emails to verify your account and complete signup.</target>
+        <target state="translated">Most ellenőrizd az e-mailedet, hogy igazold a fiókodat és befejezd a regisztrációt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7033,7 +7033,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6" datatype="html">
         <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
-        <target state="new">You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</target>
+        <target state="translated">Most be vagy jelentkezve mint <x id="INTERPOLATION" equiv-text="{{username}}"/>!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7041,7 +7041,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="af55337b4032d675ab6b2081af797ca9c979b706" datatype="html">
         <source>An email with verification link will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
-        <target state="new">An email with verification link will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
+        <target state="translated">E-mailt küldünk ellenőrző linkkel a következő címre: <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7049,7 +7049,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752" datatype="html">
         <source>Unable to find user id or verification string.</source>
-        <target state="new">Unable to find user id or verification string.</target>
+        <target state="translated">Nem található felhasználói azonosító vagy ellenőrző karakterlánc.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7069,7 +7069,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="ff6becacbce7fc0943b0af0df4dd67e5e11bf598" datatype="html">
         <source>Subscribe to the account</source>
-        <target state="new">Subscribe to the account</target>
+        <target state="translated">Feliratkozás a fiókra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7081,7 +7081,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="1c95cc372311830f936b39f73c5d6d20c0b16013" datatype="html">
         <source>Focus the search bar</source>
-        <target state="new">Focus the search bar</target>
+        <target state="translated">Fókuszálás a keresősávra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7089,7 +7089,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="b19ee83cbd2b735fd081b9aa483a890578019099" datatype="html">
         <source>Toggle the left menu</source>
-        <target state="new">Toggle the left menu</target>
+        <target state="translated">Váltás a bal oldali menüre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7097,7 +7097,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">Ugrás a videók felfedezése oldalra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7105,7 +7105,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="new">Go to the trending videos page</target>
+        <target state="translated">Ugrás a felkapott videók oldalra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7113,7 +7113,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="new">Go to the recently added videos page</target>
+        <target state="translated">Ugrás a nemrégiben hozzáadott videók oldalára</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7121,7 +7121,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="new">Go to the local videos page</target>
+        <target state="translated">Ugrás a helyi videók oldalra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7129,7 +7129,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="f1fb6204f39a7338e5110b2f113643c9288496ba" datatype="html">
         <source>Go to the videos upload page</source>
-        <target state="new">Go to the videos upload page</target>
+        <target state="translated">Ugrás a videók feltöltési oldalát</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7137,7 +7137,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2" datatype="html">
         <source>Go to my subscriptions</source>
-        <target state="new">Go to my subscriptions</target>
+        <target state="translated">Ugrás az feliratkozásaimhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7145,7 +7145,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1" datatype="html">
         <source>Go to my videos</source>
-        <target state="new">Go to my videos</target>
+        <target state="translated">Ugrás a videóimhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7153,7 +7153,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7" datatype="html">
         <source>Go to my imports</source>
-        <target state="new">Go to my imports</target>
+        <target state="translated">Ugrás az importokhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7161,7 +7161,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="cfe3c51f0ae9385dc2ce6df740d87e5514aa9390" datatype="html">
         <source>Go to my channels</source>
-        <target state="new">Go to my channels</target>
+        <target state="translated">Ugrás a csatornáimhoz</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7169,7 +7169,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>. </source>
-        <target state="new">Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>. </target>
+        <target state="translated">Nem lehet beolvasni az OAuth Client hitelesítő adatait: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7177,7 +7177,7 @@ Amikor feltöltesz egy videót erre a csatornára, a videó támogatás mezője 
       </trans-unit>
       <trans-unit id="8d9b4f4b69108c3c9aa0f3b0dbde87786ba9b319" datatype="html">
         <source>Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="new">Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">Győződj meg arról, hogy helyesen konfiguráltad a PeerTube-ot (config/könyvtár), különösen a "webszerver" részt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
