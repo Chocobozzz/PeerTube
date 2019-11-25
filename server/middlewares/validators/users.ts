@@ -283,7 +283,8 @@ const usersVideoRatingValidator = [
 const ensureUserRegistrationAllowed = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const allowedParams = {
-      body: req.body
+      body: req.body,
+      ip: req.ip
     }
 
     const allowedResult = await Hooks.wrapPromiseFun(
