@@ -65,7 +65,7 @@ describe('Test audio only video transcoding', function () {
   it('Should upload a video and transcode it', async function () {
     this.timeout(120000)
 
-    const resUpload = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'audio only'})
+    const resUpload = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'audio only' })
     videoUUID = resUpload.body.video.uuid
 
     await waitJobs(servers)
