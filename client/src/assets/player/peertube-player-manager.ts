@@ -262,6 +262,7 @@ export class PeertubePlayerManager {
         },
         html5: {
           hlsjsConfig: {
+            autoStartLoad: false,
             liveSyncDurationCount: 7,
             loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
           }
