@@ -21,7 +21,8 @@
 }
 
 .second-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
   justify-content: space-between;
 
@@ -30,6 +31,7 @@
   }
 
   .buttons {
+    margin-left: 10px;
     > *:not(:last-child) {
       margin-right: 10px;
     }
