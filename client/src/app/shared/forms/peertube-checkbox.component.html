@@ -3,6 +3,7 @@
     <input type="checkbox" [(ngModel)]="checked" (ngModelChange)="onModelChange()" [id]="inputName" [disabled]="disabled" />
     <span role="checkbox" [attr.aria-checked]="checked"></span>
     <span *ngIf="labelText">{{ labelText }}</span>
+    <span *ngIf="!labelText && labelInnerHTML" [innerHTML]="labelInnerHTML"></span>
 
     <span *ngIf="labelTemplate">
       <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>

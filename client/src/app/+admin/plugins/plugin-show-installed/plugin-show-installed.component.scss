@@ -5,6 +5,7 @@ h2 {
   margin-bottom: 20px;
 }
 
+textarea,
 input:not([type=submit]) {
   @include peertube-input-text(340px);
   display: block;
