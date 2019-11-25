@@ -38,7 +38,10 @@ export const clientFilterHookObject = {
   'filter:api.search.videos.list.result': true,
   // Filter params/result of the function that fetch video-channels according to the user search
   'filter:api.search.video-channels.list.params': true,
-  'filter:api.search.video-channels.list.result': true
+  'filter:api.search.video-channels.list.result': true,
+
+  // Filter form
+  'filter:api.signup.registration.create.params': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
@@ -58,7 +61,10 @@ export const clientActionHookObject = {
   'action:search.init': true,
 
   // Fired every time Angular URL changes
-  'action:router.navigation-end': true
+  'action:router.navigation-end': true,
+
+  // Fired when the registration page is being initialized
+  'action:signup.register.init': true
 }
 
 export type ClientActionHookName = keyof typeof clientActionHookObject

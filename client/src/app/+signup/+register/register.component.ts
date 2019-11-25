@@ -6,6 +6,7 @@ import { UserRegister } from '@shared/models/users/user-register.model'
 import { FormGroup } from '@angular/forms'
 import { About } from '@shared/models/server'
 import { InstanceService } from '@app/shared/instance/instance.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
@@ -41,6 +42,7 @@ export class RegisterComponent implements OnInit {
     private serverService: ServerService,
     private redirectService: RedirectService,
     private instanceService: InstanceService,
+    private hooks: HooksService,
     private i18n: I18n
   ) {
   }
@@ -60,6 +62,8 @@ export class RegisterComponent implements OnInit {
 
         err => this.notifier.error(err.message)
       )
+
+    this.hooks.runAction('action:signup.register.init', 'signup')
   }
 
   hasSameChannelAndAccountNames () {
@@ -94,10 +98,13 @@ export class RegisterComponent implements OnInit {
     if (this.accordion) this.accordion.toggle('code-of-conduct')
   }
 
-  signup () {
+  async signup () {
     this.error = null
 
-    const body: UserRegister = Object.assign(this.formStepUser.value, { channel: this.formStepChannel.value })
+    const body: UserRegister = await this.hooks.wrapObject(
+      Object.assign(this.formStepUser.value, { channel: this.formStepChannel.value }),
+      'filter:api.signup.registration.create.params'
+    )
 
     this.userService.signup(body).subscribe(
       () => {
