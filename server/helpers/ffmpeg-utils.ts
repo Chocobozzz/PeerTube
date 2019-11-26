@@ -70,7 +70,7 @@ async function getAudioStreamCodec (path: string) {
   if (!audioStream) return ''
 
   const audioCodec = audioStream.codec_name
-  if (audioCodec.codec_name === 'aac') return 'mp4a.40.2'
+  if (audioCodec === 'aac') return 'mp4a.40.2'
 
   logger.warn('Cannot get audio codec of %s.', path, { audioStream })
 
