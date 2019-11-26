@@ -127,7 +127,7 @@ Now you have the certificates you can reload nginx:
 $ sudo systemctl reload nginx
 ```
 
-**On FreeBSD**
+**FreeBSD**
 
 ```
 On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated` for [Let's Encrypt](https://letsencrypt.org/)
@@ -183,7 +183,7 @@ $ sudo systemctl start peertube
 $ sudo journalctl -feu peertube
 ```
 
-**On FreeBSD**
+**FreeBSD**
 
 ```
 On FreeBSD, copy the startup script and update rc.conf:
