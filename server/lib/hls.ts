@@ -1,7 +1,7 @@
 import { basename, dirname, join } from 'path'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION } from '../initializers/constants'
 import { close, ensureDir, move, open, outputJSON, pathExists, read, readFile, remove, writeFile } from 'fs-extra'
-import { getVideoFileSize } from '../helpers/ffmpeg-utils'
+import { getVideoStreamSize, getAudioStreamCodec, getVideoStreamCodec } from '../helpers/ffmpeg-utils'
 import { sha256 } from '../helpers/core-utils'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { logger } from '../helpers/logger'
@@ -42,13 +42,17 @@ async function updateMasterHLSPlaylist (video: MVideoWithFile) {
 
     const videoFilePath = getVideoFilePath(streamingPlaylist, file)
 
-    const size = await getVideoFileSize(videoFilePath)
+    const size = await getVideoStreamSize(videoFilePath)
 
     const bandwidth = 'BANDWIDTH=' + video.getBandwidthBits(file)
     const resolution = `RESOLUTION=${size.width}x${size.height}`
 
     let line = `#EXT-X-STREAM-INF:${bandwidth},${resolution}`
     if (file.fps) line += ',FRAME-RATE=' + file.fps
+
+    const audioCodec = await getAudioStreamCodec(filePlaylistPath)
+    const videoCodec = await getVideoStreamCodec(filePlaylistPath)
+    line += `,CODECS="${videoCodec},${audioCodec}"`
 
     masterPlaylists.push(line)
     masterPlaylists.push(VideoStreamingPlaylistModel.getHlsPlaylistFilename(file.resolution))

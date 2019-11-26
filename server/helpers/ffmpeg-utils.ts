@@ -32,7 +32,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
-async function getVideoFileSize (path: string) {
+async function getVideoStreamSize (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
 
   return videoStream === null
@@ -40,8 +40,45 @@ async function getVideoFileSize (path: string) {
     : { width: videoStream.width, height: videoStream.height }
 }
 
+async function getVideoStreamCodec (path: string) {
+  const videoStream = await getVideoStreamFromFile(path)
+
+  if (!videoStream) return ''
+
+  const videoCodec = videoStream.codec_tag_string
+
+  const baseProfileMatrix = {
+    'High': '6400',
+    'Main': '4D40',
+    'Baseline': '42E0'
+  }
+
+  let baseProfile = baseProfileMatrix[videoStream.profile]
+  if (!baseProfile) {
+    logger.warn('Cannot get video profile codec of %s.', path, { videoStream })
+    baseProfile = baseProfileMatrix['High'] // Fallback
+  }
+
+  const level = videoStream.level.toString(16)
+
+  return `${videoCodec}.${baseProfile}${level}`
+}
+
+async function getAudioStreamCodec (path: string) {
+  const { audioStream } = await audio.get(path)
+
+  if (!audioStream) return ''
+
+  const audioCodec = audioStream.codec_name
+  if (audioCodec.codec_name === 'aac') return 'mp4a.40.2'
+
+  logger.warn('Cannot get audio codec of %s.', path, { audioStream })
+
+  return 'mp4a.40.2' // Fallback
+}
+
 async function getVideoFileResolution (path: string) {
-  const size = await getVideoFileSize(path)
+  const size = await getVideoStreamSize(path)
 
   return {
     videoFileResolution: Math.min(size.height, size.width),
@@ -229,7 +266,9 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
 // ---------------------------------------------------------------------------
 
 export {
-  getVideoFileSize,
+  getVideoStreamCodec,
+  getAudioStreamCodec,
+  getVideoStreamSize,
   getVideoFileResolution,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
@@ -448,8 +487,8 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, input: string, resolut
   let localCommand = command
     .format('mp4')
     .videoCodec('libx264')
-    .outputOption('-level 3.1') // 3.1 is the minimal ressource allocation for our highest supported resolution
-    .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorythm, 16 is optimal B-frames for it
+    .outputOption('-level 3.1') // 3.1 is the minimal resource allocation for our highest supported resolution
+    .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
     .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
     .outputOption('-pix_fmt yuv420p') // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
     .outputOption('-map_metadata -1') // strip all metadata

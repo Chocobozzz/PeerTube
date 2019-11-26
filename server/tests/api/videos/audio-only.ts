@@ -22,7 +22,7 @@ import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { join } from 'path'
 import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
-import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution, audio, getVideoFileSize } from '@server/helpers/ffmpeg-utils'
+import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution, audio, getVideoStreamSize } from '@server/helpers/ffmpeg-utils'
 
 const expect = chai.expect
 
@@ -96,7 +96,7 @@ describe('Test audio only video transcoding', function () {
       expect(audioStream[ 'codec_name' ]).to.be.equal('aac')
       expect(audioStream[ 'bit_rate' ]).to.be.at.most(384 * 8000)
 
-      const size = await getVideoFileSize(path)
+      const size = await getVideoStreamSize(path)
       expect(size.height).to.equal(0)
       expect(size.width).to.equal(0)
     }

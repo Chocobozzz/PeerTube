@@ -66,7 +66,10 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
       const masterPlaylist = res.text
 
       for (const resolution of resolutions) {
-        expect(masterPlaylist).to.match(new RegExp('#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',FRAME-RATE=\\d+'))
+        const reg = new RegExp('#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',FRAME-RATE=\\d+,CODECS="avc1.64001f,mp4a.40.2"')
+
+        expect(masterPlaylist).to.match(reg)
+        expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
       }
     }
