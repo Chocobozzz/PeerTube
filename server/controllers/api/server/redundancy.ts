@@ -31,7 +31,7 @@ async function updateRedundancy (req: express.Request, res: express.Response) {
 
   // Async, could be long
   removeRedundancyOf(server.id)
-    .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, err))
+    .catch(err => logger.error('Cannot remove redundancy of %s.', server.host, { err }))
 
   return res.sendStatus(204)
 }
