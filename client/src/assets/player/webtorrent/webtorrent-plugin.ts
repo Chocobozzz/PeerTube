@@ -233,6 +233,10 @@ class WebTorrentPlugin extends Plugin {
     return this.torrent
   }
 
+  getCurrentVideoFile () {
+    return this.currentVideoFile
+  }
+
   private addTorrent (
     magnetOrTorrentUrl: string,
     previousVideoFile: VideoFile,
