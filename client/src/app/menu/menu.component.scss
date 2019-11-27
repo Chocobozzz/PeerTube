@@ -145,15 +145,19 @@ menu {
     margin-bottom: 45px;
 
     a {
+      @include disable-default-a-behaviour;
+
       display: flex;
       align-items: center;
       padding-left: $menu-lateral-padding;
       color: var(--menuForegroundColor);
       cursor: pointer;
-      height: 40px;
+      min-height: 40px;
       font-size: 16px;
       transition: background-color .1s ease-in-out;
-      @include disable-default-a-behaviour;
+      white-space: normal;
+      word-break: break-word;
+      padding-right: 20px;
 
       &.active {
         background-color: rgba(255, 255, 255, 0.15);
