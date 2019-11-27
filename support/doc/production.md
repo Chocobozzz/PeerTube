@@ -128,6 +128,8 @@ $ sudo systemctl reload nginx
 ```
 
 **FreeBSD**
+
+```
 On FreeBSD you can use [Dehydrated](https://dehydrated.io/) `security/dehydrated` for [Let's Encrypt](https://letsencrypt.org/)
 
 ```
@@ -182,6 +184,8 @@ $ sudo journalctl -feu peertube
 ```
 
 **FreeBSD**
+
+```
 On FreeBSD, copy the startup script and update rc.conf:
 
 ```
