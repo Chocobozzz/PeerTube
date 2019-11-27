@@ -36,7 +36,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     super()
 
     this.resolutions = [
-       {
+      {
         id: '0p',
         label: this.i18n('Audio-only')
       },
