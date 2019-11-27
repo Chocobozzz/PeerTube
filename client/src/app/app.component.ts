@@ -4,7 +4,7 @@ import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { debounceTime, filter, map, pairwise, skip, switchMap } from 'rxjs/operators'
+import { debounceTime, filter, first, map, pairwise, skip, switchMap } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
@@ -234,6 +234,7 @@ export class AppComponent implements OnInit {
   private async openModalsIfNeeded () {
     this.serverService.configLoaded
         .pipe(
+          first(),
           switchMap(() => this.authService.userInformationLoaded),
           map(() => this.authService.getUser()),
           filter(user => user.role === UserRole.ADMINISTRATOR)
