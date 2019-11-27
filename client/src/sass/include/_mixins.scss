@@ -99,7 +99,7 @@
 
 @mixin peertube-input-group($width) {
   width: $width;
-  height: $button-height;
+  min-height: $button-height;
   padding-top: 0;
   padding-bottom: 0;
 

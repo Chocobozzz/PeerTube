@@ -11,7 +11,7 @@ my-actor-avatar-info {
 }
 
 .input-group {
-  @include peertube-input-group(340px);
+  @include peertube-input-group(fit-content);
 }
 
 .input-group-append {
