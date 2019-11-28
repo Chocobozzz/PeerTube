@@ -329,6 +329,8 @@ class SettingsMenuItem extends MenuItem {
   }
 
   setMargin () {
+    if (!this.size) return
+
     const [ width ] = this.size
 
     this.settingsSubMenuEl_.style.marginRight = `-${width}px`
