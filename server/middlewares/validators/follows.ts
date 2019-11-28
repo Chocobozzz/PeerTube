@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
@@ -11,6 +11,19 @@ import { ActorModel } from '../../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { MActorFollowActorsDefault } from '@server/typings/models'
+import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
+
+const listFollowsValidator = [
+  query('state')
+    .optional()
+    .custom(isFollowStateValid).withMessage('Should have a valid follow state'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
@@ -110,5 +123,6 @@ export {
   followValidator,
   removeFollowingValidator,
   getFollowerValidator,
-  acceptOrRejectFollowerValidator
+  acceptOrRejectFollowerValidator,
+  listFollowsValidator
 }

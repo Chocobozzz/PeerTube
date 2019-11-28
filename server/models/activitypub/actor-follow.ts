@@ -292,12 +292,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  static listFollowingForApi (id: number, start: number, count: number, sort: string, search?: string) {
+  static listFollowingForApi (options: {
+    id: number,
+    start: number,
+    count: number,
+    sort: string,
+    state?: FollowState,
+    search?: string
+  }) {
+    const { id, start, count, sort, search, state } = options
+
+    const followWhere = state ? { state } : {}
+
     const query = {
       distinct: true,
       offset: start,
       limit: count,
       order: getSort(sort),
+      where: followWhere,
       include: [
         {
           model: ActorModel,
@@ -335,12 +347,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listFollowersForApi (actorId: number, start: number, count: number, sort: string, search?: string) {
+  static listFollowersForApi (options: {
+    actorId: number,
+    start: number,
+    count: number,
+    sort: string,
+    state?: FollowState,
+    search?: string
+  }) {
+    const { actorId, start, count, sort, search, state } = options
+
+    const followWhere = state ? { state } : {}
+
     const query = {
       distinct: true,
       offset: start,
       limit: count,
       order: getSort(sort),
+      where: followWhere,
       include: [
         {
           model: ActorModel,

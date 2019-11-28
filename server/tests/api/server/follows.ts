@@ -97,14 +97,23 @@ describe('Test follows', function () {
     expect(server3Follow.state).to.equal('accepted')
   })
 
-  it('Should search followings on server 1', async function () {
+  it('Should search/filter followings on server 1', async function () {
     {
-      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', ':' + servers[1].port)
+      const search = ':' + servers[1].port
+      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', search)
       const follows = res.body.data
 
       expect(res.body.total).to.equal(1)
       expect(follows.length).to.equal(1)
       expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[1].port)
+
+      const res2 = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', search, 'accepted')
+      expect(res2.body.total).to.equal(1)
+      expect(res2.body.data).to.have.lengthOf(1)
+
+      const res3 = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', search, 'pending')
+      expect(res3.body.total).to.equal(0)
+      expect(res3.body.data).to.have.lengthOf(0)
     }
 
     {
@@ -139,14 +148,23 @@ describe('Test follows', function () {
     }
   })
 
-  it('Should search followers on server 2', async function () {
+  it('Should search/filter followers on server 2', async function () {
     {
-      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', servers[0].port + '')
+      const search = servers[0].port + ''
+      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', search)
       const follows = res.body.data
 
       expect(res.body.total).to.equal(1)
       expect(follows.length).to.equal(1)
       expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[2].port)
+
+      const res2 = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', search, 'accepted')
+      expect(res2.body.total).to.equal(1)
+      expect(res2.body.data).to.have.lengthOf(1)
+
+      const res3 = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', search, 'pending')
+      expect(res3.body.total).to.equal(0)
+      expect(res3.body.data).to.have.lengthOf(0)
     }
 
     {

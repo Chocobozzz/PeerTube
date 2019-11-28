@@ -2,7 +2,7 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { ActorFollow, ResultList } from '@shared/index'
+import { ActorFollow, FollowState, ResultList } from '@shared/index'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 import { SortMeta } from 'primeng/api'
@@ -18,11 +18,19 @@ export class FollowService {
   ) {
   }
 
-  getFollowing (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<ActorFollow>> {
+  getFollowing (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string,
+    state?: FollowState
+  }): Observable<ResultList<ActorFollow>> {
+    const { pagination, sort, search, state } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (search) params = params.append('search', search)
+    if (state) params = params.append('state', state)
 
     return this.authHttp.get<ResultList<ActorFollow>>(FollowService.BASE_APPLICATION_URL + '/following', { params })
                .pipe(
@@ -31,11 +39,19 @@ export class FollowService {
                )
   }
 
-  getFollowers (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<ActorFollow>> {
+  getFollowers (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string,
+    state?: FollowState
+  }): Observable<ResultList<ActorFollow>> {
+    const { pagination, sort, search, state } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (search) params = params.append('search', search)
+    if (state) params = params.append('state', state)
 
     return this.authHttp.get<ResultList<ActorFollow>>(FollowService.BASE_APPLICATION_URL + '/followers', { params })
                .pipe(

@@ -74,7 +74,7 @@ export class AboutFollowsComponent implements OnInit {
   private loadMoreFollowers () {
     const pagination = this.restService.componentPaginationToRestPagination(this.followersPagination)
 
-    this.followService.getFollowers(pagination, this.sort)
+    this.followService.getFollowers({ pagination: pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
             const newFollowers = resultList.data.map(r => r.follower.host)
@@ -92,7 +92,7 @@ export class AboutFollowsComponent implements OnInit {
   private loadMoreFollowings () {
     const pagination = this.restService.componentPaginationToRestPagination(this.followingsPagination)
 
-    this.followService.getFollowing(pagination, this.sort)
+    this.followService.getFollowing({ pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
             const newFollowings = resultList.data.map(r => r.following.host)
