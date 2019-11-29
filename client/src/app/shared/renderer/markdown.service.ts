@@ -92,7 +92,7 @@ export class MarkdownService {
   private avoidTruncatedTags (html: string) {
     return html.replace(/\*\*?([^*]+)$/, '$1')
       .replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
-      .replace(/\[[^\]]+\]?\(?([^\)]+)$/, '$1')
-
+      .replace(/\[[^\]]+\]\(([^\)]+)$/m, '$1')
+      .replace(/\s?\[[^\]]+\]?[.]{3}<\/p>$/m, '...</p>')
   }
 }
