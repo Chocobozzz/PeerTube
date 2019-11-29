@@ -58,6 +58,19 @@ function getBlacklistSort (model: any, value: string, lastSort: OrderItem = [ 'i
   return [ firstSort, lastSort ]
 }
 
+function getFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
+
+  if (field === 'redundancyAllowed') {
+    return [
+      [ 'ActorFollowing', 'Server', 'redundancyAllowed', direction ],
+      lastSort
+    ]
+  }
+
+  return getSort(value, lastSort)
+}
+
 function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
   const now = Date.now()
   const createdAtTime = model.createdAt.getTime()
@@ -163,6 +176,7 @@ export {
   buildWhereIdOrUUID,
   isOutdated,
   parseAggregateResult,
+  getFollowsSort,
   createSafeIn
 }
 

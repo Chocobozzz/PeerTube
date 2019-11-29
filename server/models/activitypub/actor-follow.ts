@@ -23,7 +23,7 @@ import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { createSafeIn, getSort } from '../utils'
+import { createSafeIn, getSort, getFollowsSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
@@ -324,7 +324,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getFollowsSort(sort),
       where: followWhere,
       include: [
         {
@@ -391,7 +391,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       distinct: true,
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getFollowsSort(sort),
       where: followWhere,
       include: [
         {

@@ -13,10 +13,9 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th i18n style="width: 60px">ID</th>
       <th i18n>Follower handle</th>
-      <th i18n>State</th>
-      <th i18n>Score</th>
+      <th i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th i18n pSortableColumn="score">Score <p-sortIcon field="score"></p-sortIcon></th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th></th>
     </tr>
@@ -24,7 +23,6 @@
 
   <ng-template pTemplate="body" let-follow>
     <tr>
-      <td>{{ follow.id }}</td>
       <td><a [href]="follow.follower.url" target="_blank" rel="noopener noreferrer">{{ follow.follower.name + '@' + follow.follower.host }}</a></td>
 
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>

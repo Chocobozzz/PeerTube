@@ -15,18 +15,16 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th i18n style="width: 60px">ID</th>
       <th i18n>Host</th>
-      <th i18n>State</th>
+      <th i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th i18n>Redundancy allowed</th>
+      <th i18n pSortableColumn="redundancyAllowed">Redundancy allowed <p-sortIcon field="redundancyAllowed"></p-sortIcon></th>
       <th></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-follow>
     <tr>
-      <td>{{ follow.id }}</td>
       <td>{{ follow.following.host }}</td>
 
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
