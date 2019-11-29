@@ -10,7 +10,7 @@ function getStoredVolume () {
   return undefined
 }
 
-function getStoredWebTorrentEnabled (): boolean {
+function getStoredP2PEnabled (): boolean {
   const value = getLocalStorage('webtorrent_enabled')
   if (value !== null && value !== undefined) return value === 'true'
 
@@ -72,7 +72,7 @@ function getStoredLastSubtitle () {
 
 export {
   getStoredVolume,
-  getStoredWebTorrentEnabled,
+  getStoredP2PEnabled,
   getStoredMute,
   getStoredTheater,
   saveVolumeInStore,

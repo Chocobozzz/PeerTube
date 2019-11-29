@@ -11,7 +11,7 @@ import {
   getAverageBandwidthInStore,
   getStoredMute,
   getStoredVolume,
-  getStoredWebTorrentEnabled,
+  getStoredP2PEnabled,
   saveAverageBandwidth
 } from '../peertube-player-local-storage'
 import { VideoFile } from '@shared/models'
@@ -77,7 +77,7 @@ class WebTorrentPlugin extends Plugin {
 
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false
-    this.playerRefusedP2P = !getStoredWebTorrentEnabled()
+    this.playerRefusedP2P = !getStoredP2PEnabled()
 
     this.videoFiles = options.videoFiles
     this.videoDuration = options.videoDuration

@@ -18,6 +18,7 @@ import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from 
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
+import { getStoredP2PEnabled } from './peertube-player-local-storage'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -245,7 +246,8 @@ export class PeertubePlayerManager {
           segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
           rtcConfig: getRtcConfig(),
           requiredSegmentsPriority: 5,
-          segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager)
+          segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
+          useP2P: getStoredP2PEnabled()
         },
         segments: {
           swarmId: p2pMediaLoaderOptions.playlistUrl
