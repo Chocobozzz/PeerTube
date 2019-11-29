@@ -142,13 +142,24 @@ describe('Test server follows API validators', function () {
         })
       })
 
+      it('Should fail with an incorrect actor type', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          query: {
+            actorType: 'blabla'
+          }
+        })
+      })
+
       it('Should fail succeed with the correct params', async function () {
         await makeGetRequest({
           url: server.url,
           path,
           statusCodeExpected: 200,
           query: {
-            state: 'accepted'
+            state: 'accepted',
+            actorType: 'Application'
           }
         })
       })
@@ -169,12 +180,23 @@ describe('Test server follows API validators', function () {
         await checkBadSortPagination(server.url, path)
       })
 
+      it('Should fail with an incorrect actor type', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          query: {
+            actorType: 'blabla'
+          }
+        })
+      })
+
       it('Should fail with an incorrect state', async function () {
         await makeGetRequest({
           url: server.url,
           path,
           query: {
-            state: 'blabla'
+            state: 'blabla',
+            actorType: 'Application'
           }
         })
       })

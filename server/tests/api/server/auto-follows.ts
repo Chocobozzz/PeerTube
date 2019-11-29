@@ -21,7 +21,7 @@ const expect = chai.expect
 
 async function checkFollow (follower: ServerInfo, following: ServerInfo, exists: boolean) {
   {
-    const res = await getFollowersListPaginationAndSort(following.url, 0, 5, '-createdAt')
+    const res = await getFollowersListPaginationAndSort({ url: following.url, start: 0, count: 5, sort: '-createdAt' })
     const follows = res.body.data as ActorFollow[]
 
     const follow = follows.find(f => {
@@ -36,7 +36,7 @@ async function checkFollow (follower: ServerInfo, following: ServerInfo, exists:
   }
 
   {
-    const res = await getFollowingListPaginationAndSort(follower.url, 0, 5, '-createdAt')
+    const res = await getFollowingListPaginationAndSort({ url: follower.url, start: 0, count: 5, sort: '-createdAt' })
     const follows = res.body.data as ActorFollow[]
 
     const follow = follows.find(f => {

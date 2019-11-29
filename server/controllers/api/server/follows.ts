@@ -101,6 +101,7 @@ async function listFollowing (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     search: req.query.search,
+    actorType: req.query.actorType,
     state: req.query.state
   })
 
@@ -115,6 +116,7 @@ async function listFollowers (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     search: req.query.search,
+    actorType: req.query.actorType,
     state: req.query.state
   })
 

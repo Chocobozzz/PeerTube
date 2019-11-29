@@ -2,9 +2,18 @@ import * as request from 'supertest'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
 import { makePostBodyRequest } from '../requests/requests'
-import { FollowState } from '@shared/models'
+import { ActivityPubActorType, FollowState } from '@shared/models'
 
-function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string, state?: FollowState) {
+function getFollowersListPaginationAndSort (options: {
+  url: string,
+  start: number,
+  count: number,
+  sort: string,
+  search?: string,
+  actorType?: ActivityPubActorType,
+  state?: FollowState
+}) {
+  const { url, start, count, sort, search, state, actorType } = options
   const path = '/api/v1/server/followers'
 
   const query = {
@@ -12,7 +21,8 @@ function getFollowersListPaginationAndSort (url: string, start: number, count: n
     count,
     sort,
     search,
-    state
+    state,
+    actorType
   }
 
   return request(url)
@@ -45,7 +55,16 @@ function rejectFollower (url: string, token: string, follower: string, statusCod
   })
 }
 
-function getFollowingListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string, state?: FollowState) {
+function getFollowingListPaginationAndSort (options: {
+  url: string,
+  start: number,
+  count: number,
+  sort: string,
+  search?: string,
+  actorType?: ActivityPubActorType,
+  state?: FollowState
+}) {
+  const { url, start, count, sort, search, state, actorType } = options
   const path = '/api/v1/server/following'
 
   const query = {
@@ -53,7 +72,8 @@ function getFollowingListPaginationAndSort (url: string, start: number, count: n
     count,
     sort,
     search,
-    state
+    state,
+    actorType
   }
 
   return request(url)

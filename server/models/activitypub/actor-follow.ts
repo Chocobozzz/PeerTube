@@ -27,7 +27,7 @@ import { createSafeIn, getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
-import { IncludeOptions, Op, QueryTypes, Transaction } from 'sequelize'
+import { IncludeOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
 import {
   MActorFollowActorsDefault,
   MActorFollowActorsDefaultSubscription,
@@ -35,6 +35,7 @@ import {
   MActorFollowFormattable,
   MActorFollowSubscriptions
 } from '@server/typings/models'
+import { ActivityPubActorType } from '@shared/models'
 
 @Table({
   tableName: 'actorFollow',
@@ -298,11 +299,26 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     count: number,
     sort: string,
     state?: FollowState,
+    actorType?: ActivityPubActorType,
     search?: string
   }) {
-    const { id, start, count, sort, search, state } = options
+    const { id, start, count, sort, search, state, actorType } = options
 
     const followWhere = state ? { state } : {}
+    const followingWhere: WhereOptions = {}
+    const followingServerWhere: WhereOptions = {}
+
+    if (search) {
+      Object.assign(followingServerWhere, {
+        host: {
+          [ Op.iLike ]: '%' + search + '%'
+        }
+      })
+    }
+
+    if (actorType) {
+      Object.assign(followingWhere, { type: actorType })
+    }
 
     const query = {
       distinct: true,
@@ -323,15 +339,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
+          where: followingWhere,
           include: [
             {
               model: ServerModel,
               required: true,
-              where: search ? {
-                host: {
-                  [Op.iLike]: '%' + search + '%'
-                }
-              } : undefined
+              where: followingServerWhere
             }
           ]
         }
@@ -353,11 +366,26 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     count: number,
     sort: string,
     state?: FollowState,
+    actorType?: ActivityPubActorType,
     search?: string
   }) {
-    const { actorId, start, count, sort, search, state } = options
+    const { actorId, start, count, sort, search, state, actorType } = options
 
     const followWhere = state ? { state } : {}
+    const followerWhere: WhereOptions = {}
+    const followerServerWhere: WhereOptions = {}
+
+    if (search) {
+      Object.assign(followerServerWhere, {
+        host: {
+          [ Op.iLike ]: '%' + search + '%'
+        }
+      })
+    }
+
+    if (actorType) {
+      Object.assign(followerWhere, { type: actorType })
+    }
 
     const query = {
       distinct: true,
@@ -370,15 +398,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           model: ActorModel,
           required: true,
           as: 'ActorFollower',
+          where: followerWhere,
           include: [
             {
               model: ServerModel,
               required: true,
-              where: search ? {
-                host: {
-                  [ Op.iLike ]: '%' + search + '%'
-                }
-              } : undefined
+              where: followerServerWhere
             }
           ]
         },

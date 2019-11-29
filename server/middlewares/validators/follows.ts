@@ -9,7 +9,7 @@ import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
+import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
 import { MActorFollowActorsDefault } from '@server/typings/models'
 import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
 
@@ -17,6 +17,9 @@ const listFollowsValidator = [
   query('state')
     .optional()
     .custom(isFollowStateValid).withMessage('Should have a valid follow state'),
+  query('actorType')
+    .optional()
+    .custom(isActorTypeValid).withMessage('Should have a valid actor type'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (areValidationErrors(req, res)) return

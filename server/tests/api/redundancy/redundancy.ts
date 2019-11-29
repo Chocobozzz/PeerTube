@@ -247,7 +247,7 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategy) {
 async function enableRedundancyOnServer1 () {
   await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, true)
 
-  const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
+  const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: '-createdAt' })
   const follows: ActorFollow[] = res.body.data
   const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
   const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
@@ -262,7 +262,7 @@ async function enableRedundancyOnServer1 () {
 async function disableRedundancyOnServer1 () {
   await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, false)
 
-  const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
+  const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: '-createdAt' })
   const follows: ActorFollow[] = res.body.data
   const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
   const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
