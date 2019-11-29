@@ -14,6 +14,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { isBooleanValid } from '../../../helpers/custom-validators/misc'
 import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
 import { MChannelAccountDefault, MUser } from '@server/typings/models'
+import { VIDEO_CHANNELS } from '@server/initializers/constants'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
@@ -31,6 +32,14 @@ const videoChannelsAddValidator = [
       res.status(409)
          .send({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
          .end()
+      return false
+    }
+
+    const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
+    if (count > VIDEO_CHANNELS.MAX_PER_USER) {
+      res.status(400)
+        .send({ error: `You cannot create more than ${VIDEO_CHANNELS.MAX_PER_USER} channels` })
+        .end()
       return false
     }
 

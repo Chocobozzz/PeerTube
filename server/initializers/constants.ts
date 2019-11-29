@@ -431,6 +431,10 @@ const OVERVIEWS = {
   }
 }
 
+const VIDEO_CHANNELS = {
+  MAX_PER_USER: 20
+}
+
 // ---------------------------------------------------------------------------
 
 const SERVER_ACTOR_NAME = 'peertube'
@@ -725,6 +729,7 @@ export {
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
   VIDEO_ABUSE_STATES,
+  VIDEO_CHANNELS,
   LRU_CACHE,
   JOB_REQUEST_TIMEOUT,
   USER_PASSWORD_RESET_LIFETIME,
