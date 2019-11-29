@@ -441,7 +441,7 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  sendMail (options: EmailPayload) {
+  async sendMail (options: EmailPayload) {
     if (!Emailer.isEnabled()) {
       throw new Error('Cannot send mail because SMTP is not configured.')
     }
@@ -450,13 +450,15 @@ class Emailer {
       ? options.fromDisplayName
       : WEBSERVER.HOST
 
-    return this.transporter.sendMail({
-      from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`,
-      replyTo: options.replyTo,
-      to: options.to.join(','),
-      subject: options.subject,
-      text: options.text
-    })
+    for (const to of options.to) {
+      await this.transporter.sendMail({
+        from: `"${fromDisplayName}" <${CONFIG.SMTP.FROM_ADDRESS}>`,
+        replyTo: options.replyTo,
+        to,
+        subject: options.subject,
+        text: options.text
+      })
+    }
   }
 
   private dieOnConnectionFailure (err?: Error) {
