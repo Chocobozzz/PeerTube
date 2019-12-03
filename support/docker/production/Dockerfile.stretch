@@ -1,35 +1,19 @@
-FROM node:10-stretch
+FROM node:10-stretch-slim
 
 # Allow to pass extra options to the npm run build
 # eg: --light --light-fr to not build all client languages
 #     (speed up build time if i18n is not required)
 ARG NPM_RUN_BUILD_OPTS
 
-RUN set -ex; \
-    if ! command -v gpg > /dev/null; then \
-      apt update; \
-      apt install -y --no-install-recommends \
-        gnupg \
-        dirmngr \
-      ; \
-      rm -rf /var/lib/apt/lists/*; \
-fi
-
 # Install dependencies
 RUN apt update \
-    && apt -y install ffmpeg \
-    && rm /var/lib/apt/lists/* -fR
+ && apt install -y --no-install-recommends ffmpeg gnupg gosu \
+ && gosu nobody true \
+ && rm /var/lib/apt/lists/* -fR
 
 # Add peertube user
 RUN groupadd -r peertube \
     && useradd -r -g peertube -m peertube
-
-# grab gosu for easy step-down from root
-RUN set -eux; \
-	apt update; \
-	apt install -y gosu; \
-	rm -rf /var/lib/apt/lists/*; \
-	gosu nobody true
 
 # Install PeerTube
 WORKDIR /app
