@@ -78,9 +78,11 @@ export interface ActivityPubAttributedTo {
 export interface ActivityTombstoneObject {
   '@context'?: any
   id: string
+  url?: string
   type: 'Tombstone'
   name?: string
   formerType?: string
+  inReplyTo?: string
   published: string
   updated: string
   deleted: string

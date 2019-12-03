@@ -507,17 +507,6 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }
 
   toActivityPubObject (this: MCommentAP, threadParentComments: MCommentOwner[]): VideoCommentObject | ActivityTombstoneObject {
-    if (this.isDeleted()) {
-      return {
-        id: this.url,
-        type: 'Tombstone',
-        formerType: 'Note',
-        published: this.createdAt.toISOString(),
-        updated: this.updatedAt.toISOString(),
-        deleted: this.deletedAt.toISOString()
-      }
-    }
-
     let inReplyTo: string
     // New thread, so in AS we reply to the video
     if (this.inReplyToCommentId === null) {
@@ -526,8 +515,22 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       inReplyTo = this.InReplyToVideoComment.url
     }
 
+    if (this.isDeleted()) {
+      return {
+        id: this.url,
+        type: 'Tombstone',
+        formerType: 'Note',
+        inReplyTo,
+        published: this.createdAt.toISOString(),
+        updated: this.updatedAt.toISOString(),
+        deleted: this.deletedAt.toISOString()
+      }
+    }
+
     const tag: ActivityTagObject[] = []
     for (const parentComment of threadParentComments) {
+      if (!parentComment.Account) continue
+
       const actor = parentComment.Account.Actor
 
       tag.push({
