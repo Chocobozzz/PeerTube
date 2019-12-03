@@ -255,6 +255,19 @@ $player-factor: 1.7; // 16/9
               }
             }
 
+            &.action-button-support {
+              color: var(--supportButtonColor);
+              background-color: var(--supportButtonBackgroundColor);
+
+              &:hover {
+                opacity: 0.9;
+              }
+
+              my-global-icon {
+                @include apply-svg-color(var(--supportButtonColor));
+              }
+            }
+
             &.action-button-save {
               my-global-icon {
                 top: 0 !important;

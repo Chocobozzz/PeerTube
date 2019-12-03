@@ -14,6 +14,8 @@ $grey-foreground-hover-color: #303030;
 $orange-color: #F1680D;
 $orange-hover-color: #F97D46;
 
+$support-button: #38981a;
+
 $bg-color: #fff;
 $fg-color: #000;
 
@@ -68,11 +70,17 @@ $variables: (
   --mainHoverColor: var(--mainHoverColor),
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
+
   --menuBackgroundColor: var(--menuBackgroundColor),
   --menuForegroundColor: var(--menuForegroundColor),
   --submenuColor: var(--submenuColor),
+
   --inputColor: var(--inputColor),
   --inputPlaceholderColor: var(--inputPlaceholderColor),
+
+  --supportButtonColor: var(--supportButtonColor),
+  --supportButtonBackgroundColor: var(--supportButtonBackgroundColor),
+
   --embedForegroundColor: var(--embedForegroundColor),
   --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
 );
