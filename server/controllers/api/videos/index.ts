@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { extname, join } from 'path'
+import { extname } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
@@ -65,7 +65,7 @@ import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-t
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
-import { getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { getVideoFilePath } from '@server/lib/video-paths'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()

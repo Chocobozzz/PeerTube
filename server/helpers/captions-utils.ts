@@ -12,7 +12,7 @@ async function moveAndProcessCaptionFile (physicalFile: { filename: string, path
   if (physicalFile.path.endsWith('.srt')) {
     await convertSrtToVtt(physicalFile.path, destination)
     await remove(physicalFile.path)
-  } else { // Just move the vtt file
+  } else if (physicalFile.path !== destination) { // Just move the vtt file
     await move(physicalFile.path, destination, { overwrite: true })
   }
 
