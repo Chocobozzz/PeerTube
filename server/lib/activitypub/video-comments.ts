@@ -131,9 +131,9 @@ async function resolveParentComment (params: ResolveThreadParams) {
   }
 
   const actorUrl = body.attributedTo
-  if (!actorUrl) throw new Error('Miss attributed to in comment')
+  if (!actorUrl && body.type !== 'Tombstone') throw new Error('Miss attributed to in comment')
 
-  if (checkUrlsSameHost(url, actorUrl) !== true) {
+  if (actorUrl && checkUrlsSameHost(url, actorUrl) !== true) {
     throw new Error(`Actor url ${actorUrl} has not the same host than the comment url ${url}`)
   }
 
@@ -141,18 +141,19 @@ async function resolveParentComment (params: ResolveThreadParams) {
     throw new Error(`Comment url ${url} host is different from the AP object id ${body.id}`)
   }
 
-  const actor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+  const actor = actorUrl ? await getOrCreateActorAndServerAndModel(actorUrl, 'all') : null
   const comment = new VideoCommentModel({
     url: body.id,
-    text: body.content,
+    text: body.content ? body.content : '',
     videoId: null,
-    accountId: actor.Account.id,
+    accountId: actor ? actor.Account.id : null,
     inReplyToCommentId: null,
     originCommentId: null,
     createdAt: new Date(body.published),
-    updatedAt: new Date(body.updated)
+    updatedAt: new Date(body.updated),
+    deletedAt: body.deleted ? new Date(body.deleted) : null
   }) as MCommentOwner
-  comment.Account = actor.Account
+  comment.Account = actor ? actor.Account : null
 
   return resolveThread({
     url: body.inReplyTo,
