@@ -12,7 +12,7 @@ import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plu
 import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
 import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
 import { HttpClient } from '@angular/common/http'
-import { AuthService } from '@app/core'
+import { AuthService } from '@app/core/auth'
 import { RestExtractor } from '@app/shared/rest'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 import { PublicServerSetting } from '@shared/models/plugins/public-server.setting'

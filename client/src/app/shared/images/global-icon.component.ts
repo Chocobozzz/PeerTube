@@ -26,7 +26,7 @@ const icons = {
   'validate': require('!!raw-loader?!../../../assets/images/global/validate.svg'),
   'tick': require('!!raw-loader?!../../../assets/images/global/tick.svg'),
   'dislike': require('!!raw-loader?!../../../assets/images/video/dislike.svg'),
-  'heart': require('!!raw-loader?!../../../assets/images/video/heart.svg'),
+  'support': require('!!raw-loader?!../../../assets/images/video/support.svg'),
   'like': require('!!raw-loader?!../../../assets/images/video/like.svg'),
   'more-horizontal': require('!!raw-loader?!../../../assets/images/global/more-horizontal.svg'),
   'more-vertical': require('!!raw-loader?!../../../assets/images/global/more-vertical.svg'),
