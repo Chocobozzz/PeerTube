@@ -147,7 +147,7 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
             })
 }
 
-const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-with-rights') => {
+const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-with-rights', authenticateInQuery = false) => {
   return [
     param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
@@ -162,7 +162,7 @@ const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-
 
       // Video private or blacklisted
       if (video.privacy === VideoPrivacy.PRIVATE || videoAll.VideoBlacklist) {
-        await authenticatePromiseIfNeeded(req, res)
+        await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
 
         const user = res.locals.oauth ? res.locals.oauth.token.User : null
 
@@ -193,6 +193,7 @@ const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-
 }
 
 const videosGetValidator = videosCustomGetValidator('all')
+const videosDownloadValidator = videosCustomGetValidator('all', true)
 
 const videosRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -407,6 +408,7 @@ export {
   videosAddValidator,
   videosUpdateValidator,
   videosGetValidator,
+  videosDownloadValidator,
   checkVideoFollowConstraints,
   videosCustomGetValidator,
   videosRemoveValidator,

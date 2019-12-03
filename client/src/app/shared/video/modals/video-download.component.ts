@@ -2,7 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
+import { VideoPrivacy } from '@shared/models'
 
 @Component({
   selector: 'my-video-download',
@@ -21,6 +22,7 @@ export class VideoDownloadComponent {
   constructor (
     private notifier: Notifier,
     private modalService: NgbModal,
+    private auth: AuthService,
     private i18n: I18n
   ) { }
 
@@ -57,12 +59,16 @@ export class VideoDownloadComponent {
       return
     }
 
+    const suffix = this.video.privacy.id === VideoPrivacy.PRIVATE
+      ? '?access_token=' + this.auth.getAccessToken()
+      : ''
+
     switch (this.downloadType) {
       case 'direct':
-        return file.fileDownloadUrl
+        return file.fileDownloadUrl + suffix
 
       case 'torrent':
-        return file.torrentDownloadUrl
+        return file.torrentDownloadUrl + suffix
     }
   }
 

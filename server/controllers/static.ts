@@ -10,7 +10,7 @@ import {
   WEBSERVER
 } from '../initializers/constants'
 import { cacheRoute } from '../middlewares/cache'
-import { asyncMiddleware, videosGetValidator } from '../middlewares'
+import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import { UserModel } from '../models/account/user'
 import { VideoCommentModel } from '../models/video/video-comment'
@@ -39,12 +39,12 @@ staticRouter.use(
 )
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.TORRENTS + ':id-:resolution([0-9]+).torrent',
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadTorrent)
 )
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.TORRENTS + ':id-:resolution([0-9]+)-hls.torrent',
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadHLSVideoFileTorrent)
 )
 
@@ -62,13 +62,13 @@ staticRouter.use(
 
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadVideoFile)
 )
 
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + ':id-:resolution([0-9]+)-fragmented.:extension',
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosDownloadValidator),
   asyncMiddleware(downloadHLSVideoFile)
 )
 
