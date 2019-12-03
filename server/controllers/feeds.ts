@@ -118,6 +118,17 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
       url: videoFile.torrentUrl,
       size_in_bytes: videoFile.size
     }))
+    const videos = formattedVideoFiles.map(videoFile => (Object.assign({
+      type: 'video/mp4',
+      medium: 'video',
+      height: videoFile.resolution.label.replace('p', ''),
+      fileSize: videoFile.size,
+      url: videoFile.fileUrl,
+      framerate: videoFile.fps,
+      duration: video.duration
+    }, video.language ? {
+      lang: video.language
+    } : {})))
 
     feed.addItem({
       title: video.name,
@@ -132,9 +143,25 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
         }
       ],
       date: video.publishedAt,
-      language: video.language,
       nsfw: video.nsfw,
       torrent: torrents,
+      videos,
+      embed: {
+        url: video.getEmbedStaticPath(),
+        allowFullscreen: true
+      },
+      player: {
+        url: video.getWatchStaticPath()
+      },
+      categories: [video.category ? {
+        value: video.category,
+        label: VideoModel.getCategoryLabel(video.category)
+      } : null],
+      community: {
+        statistics: {
+          views: video.views
+        }
+      },
       thumbnail: [
         {
           url: WEBSERVER.URL + video.getMiniatureStaticPath(),
