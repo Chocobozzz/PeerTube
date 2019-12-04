@@ -39,70 +39,82 @@
     <div class="video-info">
       <div class="video-info-first-row">
         <div>
-          <div class="d-block d-md-none"> <!-- only shown on medium devices, has its conterpart for larger viewports below -->
+          <div class="d-block d-md-none"> <!-- only shown on medium devices, has its counterpart for larger viewports below -->
             <h1 class="video-info-name">{{ video.name }}</h1>
+
             <div i18n class="video-info-date-views">
               Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> - {{ video.views | myNumberFormatter }} views</span>
             </div>
           </div>
 
-          <div class="d-flex justify-content-between align-items-md-end">
+          <div class="d-flex justify-content-between flex-direction-column">
             <div class="d-none d-md-block">
               <h1 class="video-info-name">{{ video.name }}</h1>
-
-              <div i18n class="video-info-date-views">
-                Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> - {{ video.views | myNumberFormatter }} views</span>
-              </div>
             </div>
 
-            <div class="video-actions-rates">
-              <div class="video-actions fullWidth justify-content-end">
-                <div
-                  [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
-                  class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
-                  i18n-title title="Like this video"
-                >
-                  <my-global-icon iconName="like"></my-global-icon>
-                  <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
-                </div>
+            <div class="video-info-first-row-bottom">
+              <div i18n class="d-none d-md-block video-info-date-views">
+                Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> - {{ video.views | myNumberFormatter }} views</span>
+              </div>
 
-                <div
-                  [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
-                  class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
-                  i18n-title title="Dislike this video"
-                >
-                  <my-global-icon iconName="dislike"></my-global-icon>
-                  <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
-                </div>
-
-                <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">
-                  <my-global-icon iconName="support"></my-global-icon>
-                  <span class="icon-text" i18n>Support</span>
-                </div>
-
-                <div (click)="showShareModal()" class="action-button" role="button">
-                  <my-global-icon iconName="share"></my-global-icon>
-                  <span class="icon-text" i18n>Share</span>
-                </div>
-
-                <div
-                  class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
-                   *ngIf="isUserLoggedIn()" (openChange)="addContent.openChange($event)"
-                >
-                  <div class="action-button action-button-save" ngbDropdownToggle role="button">
-                    <my-global-icon iconName="playlist-add"></my-global-icon>
-                    <span class="icon-text" i18n>Save</span>
+              <div class="video-actions-rates">
+                <div class="video-actions fullWidth justify-content-end">
+                  <div
+                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+                    class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
+                    i18n-title title="Like this video"
+                  >
+                    <my-global-icon iconName="like"></my-global-icon>
+                    <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
                   </div>
 
-                  <div ngbDropdownMenu>
-                    <my-video-add-to-playlist #addContent [video]="video"></my-video-add-to-playlist>
+                  <div
+                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+                    class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
+                    i18n-title title="Dislike this video"
+                  >
+                    <my-global-icon iconName="dislike"></my-global-icon>
+                    <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
                   </div>
+  
+                  <div *ngIf="video.support" (click)="showSupportModal()" class="action-button">
+                    <my-global-icon iconName="heart"></my-global-icon>
+                    <span class="icon-text" i18n>Support</span>
+                  </div>
+  
+                  <div (click)="showShareModal()" class="action-button" role="button">
+                    <my-global-icon iconName="share"></my-global-icon>
+                    <span class="icon-text" i18n>Share</span>
+                  </div>
+  
+                  <div
+                    class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
+                     *ngIf="isUserLoggedIn()" (openChange)="addContent.openChange($event)"
+                  >
+                    <div class="action-button action-button-save" ngbDropdownToggle role="button">
+                      <my-global-icon iconName="playlist-add"></my-global-icon>
+                      <span class="icon-text" i18n>Save</span>
+                    </div>
+  
+                    <div ngbDropdownMenu>
+                      <my-video-add-to-playlist #addContent [video]="video"></my-video-add-to-playlist>
+                    </div>
+                  </div>
+  
+                  <my-video-actions-dropdown
+                    placement="top" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
+                    (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
+                  ></my-video-actions-dropdown>
                 </div>
-
-                <my-video-actions-dropdown
-                  placement="top" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
-                  (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
-                ></my-video-actions-dropdown>
+  
+                <div
+                  class="video-info-likes-dislikes-bar"
+                  *ngIf="video.likes !== 0 || video.dislikes !== 0"
+                  [ngbTooltip]="likesBarTooltipText"
+                  placement="bottom"
+                >
+                  <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+                </div>
               </div>
 
               <div
