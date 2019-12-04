@@ -138,7 +138,7 @@
     "parse-torrent": "^7.0.0",
     "password-generator": "^2.0.2",
     "pem": "^1.12.3",
-    "pfeed": "1.1.10",
+    "pfeed": "1.1.11",
     "pg": "^7.4.1",
     "prompt": "^1.0.0",
     "redis": "^2.8.0",

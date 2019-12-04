@@ -4902,10 +4902,10 @@ performance-now@^2.1.0:
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
   integrity sha1-Ywn04OX6kT7BxpMHrjZLSzd8nns=
 
-pfeed@1.1.10:
-  version "1.1.10"
-  resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.10.tgz#9550017c61925e73b18c6fe3d6c6329d4d41d75f"
-  integrity sha512-Gv13vtX/6Bac+NxWOYauLCW4br7QaooKUcGHOhKn0SSaYZc5cx2vT5P5hs4533su9uf8VnlLi44VzXodWnQYNg==
+pfeed@1.1.11:
+  version "1.1.11"
+  resolved "https://registry.yarnpkg.com/pfeed/-/pfeed-1.1.11.tgz#a52f6b18aa01dfd3c8ff3c7189c456dc1b66d28f"
+  integrity sha512-EheEV1A3xCQ61irXBvqy+V2vAEpeKjw7bTqH2Ck64LFMcGh9yOwncESreaWfUftRf6djRa0sXP6kkOnGWX/P7g==
   dependencies:
     lodash "^4.17.15"
     xml "^1.0.1"
