@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { cleanupTests, completeVideoCheck } from '../../../../shared/extra-utils'
+import { cleanupTests, completeVideoCheck, deleteVideoComment } from '../../../../shared/extra-utils'
 import {
   flushAndRunMultipleServers,
   getVideosList,
@@ -356,19 +356,40 @@ describe('Test follows', function () {
         }
 
         {
-          const text = 'my super first comment'
-          const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
-          const threadId = res.body.comment.id
+          {
+            const text = 'my super first comment'
+            const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
+            const threadId = res.body.comment.id
 
-          const text1 = 'my super answer to thread 1'
-          const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
-          const childCommentId = childCommentRes.body.comment.id
+            const text1 = 'my super answer to thread 1'
+            const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
+            const childCommentId = childCommentRes.body.comment.id
 
-          const text2 = 'my super answer to answer of thread 1'
-          await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
+            const text2 = 'my super answer to answer of thread 1'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
 
-          const text3 = 'my second answer to thread 1'
-          await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+            const text3 = 'my second answer to thread 1'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+          }
+
+          {
+            const text = 'will be deleted'
+            const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
+            const threadId = res.body.comment.id
+
+            const text1 = 'answer to deleted'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
+
+            const text2 = 'will also be deleted'
+            const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text2)
+            const childCommentId = childCommentRes.body.comment.id
+
+            const text3 = 'my second answer to deleted'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text3)
+
+            await deleteVideoComment(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId)
+            await deleteVideoComment(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId)
+          }
         }
 
         {
@@ -453,42 +474,80 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated comments', async function () {
-      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5)
+      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5, 'createdAt')
 
-      expect(res1.body.total).to.equal(1)
+      expect(res1.body.total).to.equal(2)
       expect(res1.body.data).to.be.an('array')
-      expect(res1.body.data).to.have.lengthOf(1)
+      expect(res1.body.data).to.have.lengthOf(2)
 
-      const comment: VideoComment = res1.body.data[0]
-      expect(comment.inReplyToCommentId).to.be.null
-      expect(comment.text).equal('my super first comment')
-      expect(comment.videoId).to.equal(video4.id)
-      expect(comment.id).to.equal(comment.threadId)
-      expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:' + servers[2].port)
-      expect(comment.totalReplies).to.equal(3)
-      expect(dateIsValid(comment.createdAt as string)).to.be.true
-      expect(dateIsValid(comment.updatedAt as string)).to.be.true
+      {
+        const comment: VideoComment = res1.body.data[ 0 ]
+        expect(comment.inReplyToCommentId).to.be.null
+        expect(comment.text).equal('my super first comment')
+        expect(comment.videoId).to.equal(video4.id)
+        expect(comment.id).to.equal(comment.threadId)
+        expect(comment.account.name).to.equal('root')
+        expect(comment.account.host).to.equal('localhost:' + servers[ 2 ].port)
+        expect(comment.totalReplies).to.equal(3)
+        expect(dateIsValid(comment.createdAt as string)).to.be.true
+        expect(dateIsValid(comment.updatedAt as string)).to.be.true
 
-      const threadId = comment.threadId
+        const threadId = comment.threadId
 
-      const res2 = await getVideoThreadComments(servers[0].url, video4.id, threadId)
+        const res2 = await getVideoThreadComments(servers[ 0 ].url, video4.id, threadId)
 
-      const tree: VideoCommentThreadTree = res2.body
-      expect(tree.comment.text).equal('my super first comment')
-      expect(tree.children).to.have.lengthOf(2)
+        const tree: VideoCommentThreadTree = res2.body
+        expect(tree.comment.text).equal('my super first comment')
+        expect(tree.children).to.have.lengthOf(2)
 
-      const firstChild = tree.children[0]
-      expect(firstChild.comment.text).to.equal('my super answer to thread 1')
-      expect(firstChild.children).to.have.lengthOf(1)
+        const firstChild = tree.children[ 0 ]
+        expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+        expect(firstChild.children).to.have.lengthOf(1)
 
-      const childOfFirstChild = firstChild.children[0]
-      expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
-      expect(childOfFirstChild.children).to.have.lengthOf(0)
+        const childOfFirstChild = firstChild.children[ 0 ]
+        expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
+        expect(childOfFirstChild.children).to.have.lengthOf(0)
 
-      const secondChild = tree.children[1]
-      expect(secondChild.comment.text).to.equal('my second answer to thread 1')
-      expect(secondChild.children).to.have.lengthOf(0)
+        const secondChild = tree.children[ 1 ]
+        expect(secondChild.comment.text).to.equal('my second answer to thread 1')
+        expect(secondChild.children).to.have.lengthOf(0)
+      }
+
+      {
+        const deletedComment: VideoComment = res1.body.data[1]
+        expect(deletedComment).to.not.be.undefined
+        expect(deletedComment.isDeleted).to.be.true
+        expect(deletedComment.deletedAt).to.not.be.null
+        expect(deletedComment.text).to.equal('')
+        expect(deletedComment.inReplyToCommentId).to.be.null
+        expect(deletedComment.account).to.be.null
+        expect(deletedComment.totalReplies).to.equal(3)
+        expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
+
+        const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)
+
+        const tree: VideoCommentThreadTree = res2.body
+        const [ commentRoot, deletedChildRoot ] = tree.children
+
+        expect(deletedChildRoot).to.not.be.undefined
+        expect(deletedChildRoot.comment.isDeleted).to.be.true
+        expect(deletedChildRoot.comment.deletedAt).to.not.be.null
+        expect(deletedChildRoot.comment.text).to.equal('')
+        expect(deletedChildRoot.comment.inReplyToCommentId).to.equal(deletedComment.id)
+        expect(deletedChildRoot.comment.account).to.be.null
+        expect(deletedChildRoot.children).to.have.lengthOf(1)
+
+        const answerToDeletedChild = deletedChildRoot.children[0]
+        expect(answerToDeletedChild.comment).to.not.be.undefined
+        expect(answerToDeletedChild.comment.inReplyToCommentId).to.equal(deletedChildRoot.comment.id)
+        expect(answerToDeletedChild.comment.text).to.equal('my second answer to deleted')
+        expect(answerToDeletedChild.comment.account.name).to.equal('root')
+
+        expect(commentRoot.comment).to.not.be.undefined
+        expect(commentRoot.comment.inReplyToCommentId).to.equal(deletedComment.id)
+        expect(commentRoot.comment.text).to.equal('answer to deleted')
+        expect(commentRoot.comment.account.name).to.equal('root')
+      }
     })
 
     it('Should have propagated captions', async function () {

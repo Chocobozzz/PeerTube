@@ -517,6 +517,8 @@ describe('Test multiple servers', function () {
       // Wait the repeatable job
       await wait(6000)
 
+      await waitJobs(servers)
+
       for (const server of servers) {
         const res = await getVideosList(server.url)
 
@@ -550,6 +552,8 @@ describe('Test multiple servers', function () {
 
       // Wait the repeatable job
       await wait(16000)
+
+      await waitJobs(servers)
 
       let baseVideos = null
 
@@ -936,48 +940,6 @@ describe('Test multiple servers', function () {
           expect(dateIsValid(deletedComment.updatedAt as string)).to.be.true
           expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
         }
-      }
-    })
-
-    it('Should retrieve all comments when subscribing to a new server', async function () {
-      this.timeout(120000)
-
-      const newServer = await flushAndRunServer(4)
-
-      await setAccessTokensToServers([newServer])
-      await doubleFollow(newServer, servers[0])
-      await doubleFollow(newServer, servers[2])
-      await waitJobs([newServer, ...servers])
-
-      const res = await getVideoCommentThreads(newServer.url, videoUUID, 0, 5)
-
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data).to.be.an('array')
-      expect(res.body.data).to.have.lengthOf(2)
-
-      {
-        const comment: VideoComment = res.body.data[0]
-        expect(comment).to.not.be.undefined
-        expect(comment.inReplyToCommentId).to.be.null
-        expect(comment.account.name).to.equal('root')
-        expect(comment.account.host).to.equal('localhost:' + servers[2].port)
-        expect(comment.totalReplies).to.equal(0)
-        expect(dateIsValid(comment.createdAt as string)).to.be.true
-        expect(dateIsValid(comment.updatedAt as string)).to.be.true
-      }
-
-      {
-        const deletedComment: VideoComment = res.body.data[1]
-        expect(deletedComment).to.not.be.undefined
-        expect(deletedComment.isDeleted).to.be.true
-        expect(deletedComment.deletedAt).to.not.be.null
-        expect(deletedComment.text).to.equal('')
-        expect(deletedComment.inReplyToCommentId).to.be.null
-        expect(deletedComment.account).to.be.null
-        expect(deletedComment.totalReplies).to.equal(3)
-        expect(dateIsValid(deletedComment.createdAt as string)).to.be.true
-        expect(dateIsValid(deletedComment.updatedAt as string)).to.be.true
-        expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
       }
     })
 

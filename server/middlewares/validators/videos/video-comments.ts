@@ -189,6 +189,13 @@ function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
 }
 
 function checkUserCanDeleteVideoComment (user: MUser, videoComment: MCommentOwner, res: express.Response) {
+  if (videoComment.isDeleted()) {
+    res.status(409)
+      .json({ error: 'This comment is already deleted' })
+      .end()
+    return false
+  }
+
   const account = videoComment.Account
   if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) === false && account.userId !== user.id) {
     res.status(403)

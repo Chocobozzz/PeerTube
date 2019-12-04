@@ -3,18 +3,10 @@ import { ACTIVITY_PUB } from '../../../initializers/constants'
 import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid } from './misc'
 
-function isTypeValid (comment: any): boolean {
-  if (comment.type === 'Note') return true
-
-  if (comment.type === 'Tombstone' && comment.formerType === 'Note') return true
-
-  return false
-}
-
 function sanitizeAndCheckVideoCommentObject (comment: any) {
   if (!comment) return false
 
-  if (!isTypeValid(comment)) return false
+  if (!isCommentTypeValid(comment)) return false
 
   normalizeComment(comment)
 
@@ -58,4 +50,12 @@ function normalizeComment (comment: any) {
   }
 
   return
+}
+
+function isCommentTypeValid (comment: any): boolean {
+  if (comment.type === 'Note') return true
+
+  if (comment.type === 'Tombstone' && comment.formerType === 'Note') return true
+
+  return false
 }
