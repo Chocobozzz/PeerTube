@@ -150,12 +150,13 @@ p-calendar {
     border: 1px solid #C6C6C6;
     border-radius: 3px;
     padding: 5px !important;
-    height: 40px;
+    height: max-content;
   }
 
   tag-input-form {
     input {
       height: 30px !important;
+      font-size: 12px !important;
 
       background-color: var(--mainBackgroundColor) !important;
       color: var(--mainForegroundColor) !important;
@@ -166,7 +167,7 @@ p-calendar {
     background-color: $grey-background-color !important;
     color: #000 !important;
     border-radius: 3px !important;
-    font-size: 15px !important;
+    font-size: 12px !important;
     height: 30px !important;
     line-height: 30px !important;
     margin: 0 5px 0 0 !important;
