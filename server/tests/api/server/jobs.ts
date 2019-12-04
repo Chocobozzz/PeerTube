@@ -41,20 +41,46 @@ describe('Test jobs', function () {
     expect(res.body.data).to.have.length.above(2)
   })
 
-  it('Should list jobs with sort and pagination', async function () {
-    const res = await getJobsListPaginationAndSort(servers[1].url, servers[1].accessToken, 'completed', 1, 2, 'createdAt')
-    expect(res.body.total).to.be.above(2)
-    expect(res.body.data).to.have.lengthOf(2)
+  it('Should list jobs with sort, pagination and job type', async function () {
+    {
+      const res = await getJobsListPaginationAndSort({
+        url: servers[ 1 ].url,
+        accessToken: servers[ 1 ].accessToken,
+        state: 'completed',
+        start: 1,
+        count: 2,
+        sort: 'createdAt'
+      })
+      expect(res.body.total).to.be.above(2)
+      expect(res.body.data).to.have.lengthOf(2)
 
-    let job = res.body.data[0]
-    // Skip repeat jobs
-    if (job.type === 'videos-views') job = res.body.data[1]
+      let job: Job = res.body.data[ 0 ]
+      // Skip repeat jobs
+      if (job.type === 'videos-views') job = res.body.data[ 1 ]
 
-    expect(job.state).to.equal('completed')
-    expect(job.type.startsWith('activitypub-')).to.be.true
-    expect(dateIsValid(job.createdAt)).to.be.true
-    expect(dateIsValid(job.processedOn)).to.be.true
-    expect(dateIsValid(job.finishedOn)).to.be.true
+      expect(job.state).to.equal('completed')
+      expect(job.type.startsWith('activitypub-')).to.be.true
+      expect(dateIsValid(job.createdAt as string)).to.be.true
+      expect(dateIsValid(job.processedOn as string)).to.be.true
+      expect(dateIsValid(job.finishedOn as string)).to.be.true
+    }
+
+    {
+      const res = await getJobsListPaginationAndSort({
+        url: servers[ 1 ].url,
+        accessToken: servers[ 1 ].accessToken,
+        state: 'completed',
+        start: 0,
+        count: 100,
+        sort: 'createdAt',
+        jobType: 'activitypub-http-broadcast'
+      })
+      expect(res.body.total).to.be.above(2)
+
+      for (const j of res.body.data as Job[]) {
+        expect(j.type).to.equal('activitypub-http-broadcast')
+      }
+    }
   })
 
   after(async function () {

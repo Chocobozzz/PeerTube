@@ -1,8 +1,22 @@
 @import '_variables';
 @import '_mixins';
 
-.peertube-select-container {
-  @include peertube-select-container(auto);
+.admin-sub-header {
+  align-items: flex-end;
+
+  .select-filter-block {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    label {
+      margin-bottom: 2px;
+    }
+
+    .peertube-select-container {
+      @include peertube-select-container(auto);
+    }
+  }
 }
 
 pre {

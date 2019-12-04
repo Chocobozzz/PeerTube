@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
-import { Job } from '../../../../../../shared/index'
+import { Job, JobType } from '../../../../../../shared/index'
 import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
 import { JobService } from './job.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { JobTypeClient } from '../../../../types/job-type-client.type'
 
 @Component({
   selector: 'my-jobs',
@@ -15,9 +16,26 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 })
 export class JobsComponent extends RestTable implements OnInit {
   private static JOB_STATE_LOCAL_STORAGE_STATE = 'jobs-list-state'
+  private static JOB_STATE_LOCAL_STORAGE_TYPE = 'jobs-list-type'
 
   jobState: JobState = 'waiting'
   jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
+
+  jobType: JobTypeClient = 'all'
+  jobTypes: JobTypeClient[] = [
+    'all',
+    'activitypub-follow',
+    'activitypub-http-broadcast',
+    'activitypub-http-fetcher',
+    'activitypub-http-unicast',
+    'email',
+    'video-transcoding',
+    'video-file-import',
+    'video-import',
+    'videos-views',
+    'activitypub-refresher'
+  ]
+
   jobs: Job[] = []
   totalRecords: number
   rowsPerPage = 10
@@ -33,20 +51,20 @@ export class JobsComponent extends RestTable implements OnInit {
   }
 
   ngOnInit () {
-    this.loadJobState()
+    this.loadJobStateAndType()
     this.initialize()
   }
 
-  onJobStateChanged () {
+  onJobStateOrTypeChanged () {
     this.pagination.start = 0
 
     this.loadData()
-    this.saveJobState()
+    this.saveJobStateAndType()
   }
 
   protected loadData () {
     this.jobsService
-      .getJobs(this.jobState, this.pagination, this.sort)
+      .getJobs(this.jobState, this.jobType, this.pagination, this.sort)
       .subscribe(
         resultList => {
           this.jobs = resultList.data
@@ -57,13 +75,16 @@ export class JobsComponent extends RestTable implements OnInit {
       )
   }
 
-  private loadJobState () {
-    const result = peertubeLocalStorage.getItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_STATE)
+  private loadJobStateAndType () {
+    const state = peertubeLocalStorage.getItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_STATE)
+    if (state) this.jobState = state as JobState
 
-    if (result) this.jobState = result as JobState
+    const type = peertubeLocalStorage.getItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_TYPE)
+    if (type) this.jobType = type as JobType
   }
 
-  private saveJobState () {
+  private saveJobStateAndType () {
     peertubeLocalStorage.setItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_STATE, this.jobState)
+    peertubeLocalStorage.setItem(JobsComponent.JOB_STATE_LOCAL_STORAGE_TYPE, this.jobType)
   }
 }
