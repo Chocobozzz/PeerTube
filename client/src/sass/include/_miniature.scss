@@ -205,6 +205,7 @@ $play-overlay-width: 18px;
     color: $grey-foreground-color;
     margin-bottom: 10px;
     font-weight: $font-semibold;
+    text-decoration: none;
   }
 
   @media screen and (max-width: $mobile-view) {

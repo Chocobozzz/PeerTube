@@ -19,6 +19,8 @@ form {
 
 .peertube-select-container {
   @include peertube-select-container(auto);
+
+  margin-bottom: 1rem;
 }
 
 .form-group {
@@ -37,4 +39,92 @@ input[type=submit] {
 
 .submit-button {
   text-align: right;
+}
+
+.reset-button {
+  @include peertube-button;
+
+  font-weight: $font-semibold;
+  display: inline-block;
+  padding: 0 10px 0 10px;
+  white-space: nowrap;
+  background: transparent;
+
+  margin-right: 1rem;
+}
+
+.reset-button-small {
+  font-size: 80%;
+  height: unset;
+  line-height: unset;
+  margin: unset;
+  margin-bottom: 0.5rem;
+}
+
+.label-container {
+  display: flex;
+  white-space: nowrap;
+}
+
+::ng-deep {
+  .ng2-tag-input {
+    border: none !important;
+  }
+
+  .ng2-tags-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #C6C6C6;
+    border-radius: 3px;
+    padding: 5px !important;
+    height: max-content;
+  }
+
+  tag-input-form {
+    input {
+      height: 30px !important;
+      font-size: 12px !important;
+
+      background-color: var(--mainBackgroundColor) !important;
+      color: var(--mainForegroundColor) !important;
+    }
+  }
+
+  tag {
+    background-color: $grey-background-color !important;
+    color: #000 !important;
+    border-radius: 3px !important;
+    font-size: 12px !important;
+    height: 30px !important;
+    line-height: 30px !important;
+    margin: 0 5px 0 0 !important;
+    cursor: default !important;
+    padding: 0 8px 0 10px !important;
+
+    div {
+      height: 100% !important;
+    }
+  }
+
+  delete-icon {
+    cursor: pointer !important;
+    height: auto !important;
+    vertical-align: middle !important;
+    padding-left: 6px !important;
+
+    svg {
+      position: relative;
+      top: -1px;
+      height: auto !important;
+      vertical-align: middle !important;
+
+      path  {
+        fill: $grey-foreground-color !important;
+      }
+    }
+
+    &:hover {
+      transform: none !important;
+    }
+  }
 }

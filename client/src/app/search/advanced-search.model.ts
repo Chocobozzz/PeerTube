@@ -65,7 +65,7 @@ export class AdvancedSearch {
     for (const k of Object.keys(obj)) {
       if (k === 'sort') continue // Exception
 
-      if (obj[k] !== undefined) return true
+      if (obj[k] !== undefined && obj[k] !== '') return true
     }
 
     return false
@@ -131,7 +131,7 @@ export class AdvancedSearch {
     for (const k of Object.keys(obj)) {
       if (k === 'sort') continue // Exception
 
-      if (obj[k] !== undefined) acc++
+      if (obj[k] !== undefined && obj[k] !== '') acc++
     }
 
     return acc

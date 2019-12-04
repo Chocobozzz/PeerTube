@@ -3,7 +3,12 @@
   <div class="row">
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
-        <div i18n class="radio-label">Sort</div>
+        <div class="radio-label label-container">
+          <label i18n>Sort</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetField('sort', '-match')" *ngIf="advancedSearch.sort !== '-match'">
+            Reset
+          </button>
+        </div>
 
         <div class="peertube-radio-container" *ngFor="let sort of sorts">
           <input type="radio" name="sort" [id]="sort.id" [value]="sort.id" [(ngModel)]="advancedSearch.sort">
@@ -12,20 +17,32 @@
       </div>
 
       <div class="form-group">
-        <div i18n class="radio-label">Published date</div>
+        <div class="radio-label label-container">
+          <label i18n>Published date</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetLocalField('publishedDateRange')" *ngIf="publishedDateRange !== undefined">
+            Reset
+          </button>
+        </div>
 
         <div class="peertube-radio-container" *ngFor="let date of publishedDateRanges">
-          <input type="radio" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
+          <input type="radio" (change)="inputUpdated()" name="publishedDateRange" [id]="date.id" [value]="date.id" [(ngModel)]="publishedDateRange">
           <label [for]="date.id" class="radio">{{ date.label }}</label>
         </div>
       </div>
 
       <div class="form-group">
-        <label i18n for="original-publication-after">Original publication year</label>
+        <div class="label-container">
+          <label i18n for="original-publication-after">Original publication year</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetOriginalPublicationYears()" *ngIf="originallyPublishedStartYear || originallyPublishedEndYear">
+            Reset
+          </button>
+        </div>
 
         <div class="row">
           <div class="col-sm-6">
             <input
+              (change)="inputUpdated()"
+              (keydown.enter)="$event.preventDefault()"
               type="text" id="original-publication-after" name="original-publication-after"
               i18n-placeholder placeholder="After..."
               [(ngModel)]="originallyPublishedStartYear"
@@ -33,6 +50,8 @@
           </div>
           <div class="col-sm-6">
             <input
+              (change)="inputUpdated()"
+              (keydown.enter)="$event.preventDefault()"
               type="text" id="original-publication-before" name="original-publication-before"
               i18n-placeholder placeholder="Before..."
               [(ngModel)]="originallyPublishedEndYear"
@@ -42,16 +61,26 @@
       </div>
 
       <div class="form-group">
-        <div i18n class="radio-label">Duration</div>
+        <div class="radio-label label-container">
+          <label i18n>Duration</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetLocalField('durationRange')" *ngIf="durationRange !== undefined">
+            Reset
+          </button>
+        </div>
 
         <div class="peertube-radio-container" *ngFor="let duration of durationRanges">
-          <input type="radio" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
+          <input type="radio" (change)="inputUpdated()" name="durationRange" [id]="duration.id" [value]="duration.id" [(ngModel)]="durationRange">
           <label [for]="duration.id" class="radio">{{ duration.label }}</label>
         </div>
       </div>
 
       <div class="form-group">
-        <div i18n class="radio-label">Display sensitive content</div>
+        <div class="radio-label label-container">
+          <label i18n>Display sensitive content</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
+            Reset
+          </button>
+        </div>
 
         <div class="peertube-radio-container">
           <input type="radio" name="sensitiveContent" id="sensitiveContentYes" value="both" [(ngModel)]="advancedSearch.nsfw">
@@ -69,9 +98,12 @@
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <label i18n for="category">Category</label>
+        <button i18n class="reset-button reset-button-small" (click)="resetField('categoryOneOf')" *ngIf="advancedSearch.categoryOneOf !== undefined">
+          Reset
+        </button>
         <div class="peertube-select-container">
           <select id="category" name="category" [(ngModel)]="advancedSearch.categoryOneOf">
-            <option></option>
+            <option [value]="undefined" i18n>Any or no category set</option>
             <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
           </select>
         </div>
@@ -79,9 +111,12 @@
 
       <div class="form-group">
         <label i18n for="licence">Licence</label>
+        <button i18n class="reset-button reset-button-small" (click)="resetField('licenceOneOf')" *ngIf="advancedSearch.licenceOneOf !== undefined">
+          Reset
+        </button>
         <div class="peertube-select-container">
           <select id="licence" name="licence" [(ngModel)]="advancedSearch.licenceOneOf">
-            <option></option>
+            <option [value]="undefined" i18n>Any or no license set</option>
             <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
           </select>
         </div>
@@ -89,9 +124,12 @@
 
       <div class="form-group">
         <label i18n for="language">Language</label>
+        <button i18n class="reset-button reset-button-small" (click)="resetField('languageOneOf')" *ngIf="advancedSearch.languageOneOf !== undefined">
+          Reset
+        </button>
         <div class="peertube-select-container">
           <select id="language" name="language" [(ngModel)]="advancedSearch.languageOneOf">
-            <option></option>
+            <option [value]="undefined" i18n>Any or no language set</option>
             <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
           </select>
         </div>
@@ -101,17 +139,37 @@
     <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <label i18n for="tagsAllOf">All of these tags</label>
-        <input type="text" name="tagsAllOf" id="tagsAllOf" [(ngModel)]="advancedSearch.tagsAllOf" />
+        <button i18n class="reset-button reset-button-small" (click)="resetField('tagsAllOf')" *ngIf="advancedSearch.tagsAllOf">
+          Reset
+        </button>
+        <tag-input
+          [(ngModel)]="advancedSearch.tagsAllOf" name="tagsAllOf" id="tagsAllOf"
+          [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
+          i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
+          maxItems="5" modelAsStrings="true"
+        ></tag-input>
       </div>
 
       <div class="form-group">
         <label i18n for="tagsOneOf">One of these tags</label>
-        <input type="text" name="tagsOneOf" id="tagsOneOf" [(ngModel)]="advancedSearch.tagsOneOf" />
+        <button i18n class="reset-button reset-button-small" (click)="resetField('tagsOneOf')" *ngIf="advancedSearch.tagsOneOf">
+          Reset
+        </button>
+        <tag-input
+          [(ngModel)]="advancedSearch.tagsOneOf" name="tagsOneOf" id="tagsOneOf"
+          [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
+          i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
+          maxItems="5" modelAsStrings="true"
+        ></tag-input>
       </div>
     </div>
   </div>
 
   <div class="submit-button">
+    <button i18n class="reset-button" (click)="reset()" *ngIf="advancedSearch.size()">
+      Reset
+    </button>
+
     <input type="submit" i18n-value value="Filter">
   </div>
 </form>

@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { TagInputModule } from 'ngx-chips'
 import { SharedModule } from '../shared'
 import { SearchComponent } from '@app/search/search.component'
 import { SearchService } from '@app/search/search.service'
@@ -7,6 +8,8 @@ import { SearchFiltersComponent } from '@app/search/search-filters.component'
 
 @NgModule({
   imports: [
+    TagInputModule,
+
     SearchRoutingModule,
     SharedModule
   ],
@@ -17,6 +20,7 @@ import { SearchFiltersComponent } from '@app/search/search-filters.component'
   ],
 
   exports: [
+    TagInputModule,
     SearchComponent
   ],
 
