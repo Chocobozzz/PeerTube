@@ -13,8 +13,12 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 })
 export class MyAccountSettingsComponent implements OnInit {
   user: User = null
+
   userVideoQuota = '0'
   userVideoQuotaUsed = 0
+
+  userVideoQuotaDaily = '0'
+  userVideoQuotaUsedDaily = 0
 
   constructor (
     private userService: UserService,
@@ -37,11 +41,20 @@ export class MyAccountSettingsComponent implements OnInit {
         } else {
           this.userVideoQuota = this.i18n('Unlimited')
         }
+
+        if (this.user.videoQuotaDaily !== -1) {
+          this.userVideoQuotaDaily = new BytesPipe().transform(this.user.videoQuotaDaily, 0).toString()
+        } else {
+          this.userVideoQuotaDaily = this.i18n('Unlimited')
+        }
       }
     )
 
     this.userService.getMyVideoQuotaUsed()
-      .subscribe(data => this.userVideoQuotaUsed = data.videoQuotaUsed)
+      .subscribe(data => {
+        this.userVideoQuotaUsed = data.videoQuotaUsed
+        this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
+      })
   }
 
   onAvatarChange (formData: FormData) {
@@ -55,5 +68,9 @@ export class MyAccountSettingsComponent implements OnInit {
 
         err => this.notifier.error(err.message)
       )
+  }
+
+  hasDailyQuota () {
+    return this.user.videoQuotaDaily !== -1
   }
 }

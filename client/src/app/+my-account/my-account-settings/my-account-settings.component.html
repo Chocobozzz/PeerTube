@@ -1,7 +1,15 @@
 <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
 
 <div class="user-quota">
-  <span i18n class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
+  <div>
+    <span i18n class="user-quota-label">Total video quota:</span>
+    <ng-container i18n>{{ userVideoQuotaUsed | bytes: 0 }} used</ng-container> / {{ userVideoQuota }}
+  </div>
+
+  <div *ngIf="hasDailyQuota()">
+    <span i18n class="user-quota-label">Daily video quota:</span>
+    <ng-container>{{ userVideoQuotaUsedDaily | bytes: 0 }} used</ng-container> / {{ userVideoQuotaDaily }}
+  </div>
 </div>
 
 <div i18n class="account-title">Profile</div>
