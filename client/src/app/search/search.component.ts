@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, of, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -184,6 +184,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   private getVideoChannelObs () {
+    if (!this.currentSearch) return of({ data: [], total: 0 })
+
     const params = {
       search: this.currentSearch,
       componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage })
