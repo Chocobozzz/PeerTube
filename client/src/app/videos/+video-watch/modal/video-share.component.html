@@ -4,167 +4,176 @@
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
+
   <div class="modal-body">
-    <ngb-tabset class="root-tabset bootstrap" (tabChange)="onTabChange($event)">
+    <div class="playlist" *ngIf="hasPlaylist()">
+      <div class="title-page title-page-single" i18n>Share the playlist</div>
 
-      <ngb-tab i18n-title title="URL" id="url">
-        <ng-template ngbTabContent>
+      <my-input-readonly-copy [value]="getPlaylistUrl()"></my-input-readonly-copy>
 
-          <div class="tab-content">
-            <div class="input-group">
-              <input #urlInput (click)="urlInput.select()" type="text" class="form-control readonly" readonly [value]="getVideoUrl()" />
-              <div class="input-group-append">
-                <button [ngxClipboard]="urlInput" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-                  <span class="glyphicon glyphicon-copy"></span>
-                </button>
-              </div>
-            </div>
-          </div>
+      <div class="filters">
 
-        </ng-template>
-      </ngb-tab>
-
-      <ngb-tab i18n-title title="QR-Code" id="qrcode">
-        <ng-template ngbTabContent>
-          <div class="tab-content">
-            <qrcode [qrdata]="getVideoUrl()" size="256" level="Q"></qrcode>
-          </div>
-        </ng-template>
-      </ngb-tab>
-
-      <ngb-tab i18n-title title="Embed" id="embed">
-        <ng-template ngbTabContent>
-          <div class="tab-content">
-            <div class="input-group">
-              <input #shareInput (click)="shareInput.select()" type="text" class="form-control readonly" readonly [value]="getVideoIframeCode()" />
-              <div class="input-group-append">
-                <button [ngxClipboard]="shareInput" (click)="activateCopiedMessage()" type="button" class="btn btn-outline-secondary">
-                  <span class="glyphicon glyphicon-copy"></span>
-                </button>
-              </div>
-            </div>
-
-            <div i18n *ngIf="notSecure()" class="alert alert-warning">
-              The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
-            </div>
-          </div>
-        </ng-template>
-      </ngb-tab>
-
-    </ngb-tabset>
-
-    <div class="filters">
-      <div>
-        <div class="form-group start-at">
+        <div class="form-group">
           <my-peertube-checkbox
-            inputName="startAt" [(ngModel)]="customizations.startAtCheckbox"
-            i18n-labelText labelText="Start at"
+            inputName="includeVideoInPlaylist" [(ngModel)]="includeVideoInPlaylist"
+            i18n-labelText labelText="Share the playlist at this video position"
           ></my-peertube-checkbox>
-
-          <my-timestamp-input
-            [timestamp]="customizations.startAt"
-            [maxTimestamp]="video.duration"
-            [disabled]="!customizations.startAtCheckbox"
-            [(ngModel)]="customizations.startAt"
-          >
-          </my-timestamp-input>
         </div>
 
-        <div *ngIf="videoCaptions.length !== 0" class="form-group video-caption-block">
-          <my-peertube-checkbox
-            inputName="subtitleCheckbox" [(ngModel)]="customizations.subtitleCheckbox"
-            i18n-labelText labelText="Auto select subtitle"
-          ></my-peertube-checkbox>
-
-          <div class="peertube-select-container" [ngClass]="{ disabled: !customizations.subtitleCheckbox }">
-            <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox">
-              <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
-            </select>
-          </div>
-        </div>
       </div>
+    </div>
 
-      <div (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed" role="button" class="advanced-filters-button"
-           [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic">
 
-        <ng-container *ngIf="isAdvancedCustomizationCollapsed">
-          <span class="glyphicon glyphicon-menu-down"></span>
+    <div class="video">
+      <div class="title-page title-page-single" *ngIf="hasPlaylist()" i18n>Share the video</div>
 
-          <ng-container i18n>
-            More customization
-          </ng-container>
-        </ng-container>
+      <ngb-tabset class="root-tabset bootstrap" (tabChange)="onTabChange($event)">
 
-        <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
-          <span class="glyphicon glyphicon-menu-up"></span>
+        <ngb-tab i18n-title title="URL" id="url">
+          <ng-template ngbTabContent>
 
-          <ng-container i18n>
-            Less customization
-          </ng-container>
-        </ng-container>
-      </div>
+            <div class="tab-content">
+              <my-input-readonly-copy [value]="getVideoUrl()"></my-input-readonly-copy>
+            </div>
 
-      <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
+          </ng-template>
+        </ngb-tab>
+
+        <ngb-tab i18n-title title="QR-Code" id="qrcode">
+          <ng-template ngbTabContent>
+            <div class="tab-content">
+              <qrcode [qrdata]="getVideoUrl()" size="256" level="Q"></qrcode>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+        <ngb-tab i18n-title title="Embed" id="embed">
+          <ng-template ngbTabContent>
+            <div class="tab-content">
+              <my-input-readonly-copy [value]="getVideoIframeCode()"></my-input-readonly-copy>
+
+              <div i18n *ngIf="notSecure()" class="alert alert-warning">
+                The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+      </ngb-tabset>
+
+      <div class="filters">
         <div>
-          <div class="form-group stop-at">
+          <div class="form-group start-at">
             <my-peertube-checkbox
-              inputName="stopAt" [(ngModel)]="customizations.stopAtCheckbox"
-              i18n-labelText labelText="Stop at"
+              inputName="startAt" [(ngModel)]="customizations.startAtCheckbox"
+              i18n-labelText labelText="Start at"
             ></my-peertube-checkbox>
 
             <my-timestamp-input
-              [timestamp]="customizations.stopAt"
+              [timestamp]="customizations.startAt"
               [maxTimestamp]="video.duration"
-              [disabled]="!customizations.stopAtCheckbox"
-              [(ngModel)]="customizations.stopAt"
+              [disabled]="!customizations.startAtCheckbox"
+              [(ngModel)]="customizations.startAt"
             >
             </my-timestamp-input>
           </div>
 
-          <div class="form-group">
+          <div *ngIf="videoCaptions.length !== 0" class="form-group video-caption-block">
             <my-peertube-checkbox
-              inputName="autoplay" [(ngModel)]="customizations.autoplay"
-              i18n-labelText labelText="Autoplay"
+              inputName="subtitleCheckbox" [(ngModel)]="customizations.subtitleCheckbox"
+              i18n-labelText labelText="Auto select subtitle"
             ></my-peertube-checkbox>
-          </div>
 
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="muted" [(ngModel)]="customizations.muted"
-              i18n-labelText labelText="Muted"
-            ></my-peertube-checkbox>
-          </div>
-
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="loop" [(ngModel)]="customizations.loop"
-              i18n-labelText labelText="Loop"
-            ></my-peertube-checkbox>
+            <div class="peertube-select-container" [ngClass]="{ disabled: !customizations.subtitleCheckbox }">
+              <select [(ngModel)]="customizations.subtitle" [disabled]="!customizations.subtitleCheckbox">
+                <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <ng-container *ngIf="isInEmbedTab()">
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="title" [(ngModel)]="customizations.title"
-              i18n-labelText labelText="Display video title"
-            ></my-peertube-checkbox>
+        <div (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed" role="button" class="advanced-filters-button"
+             [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic">
+
+          <ng-container *ngIf="isAdvancedCustomizationCollapsed">
+            <span class="glyphicon glyphicon-menu-down"></span>
+
+            <ng-container i18n>
+              More customization
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
+            <span class="glyphicon glyphicon-menu-up"></span>
+
+            <ng-container i18n>
+              Less customization
+            </ng-container>
+          </ng-container>
+        </div>
+
+        <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
+          <div>
+            <div class="form-group stop-at">
+              <my-peertube-checkbox
+                inputName="stopAt" [(ngModel)]="customizations.stopAtCheckbox"
+                i18n-labelText labelText="Stop at"
+              ></my-peertube-checkbox>
+
+              <my-timestamp-input
+                [timestamp]="customizations.stopAt"
+                [maxTimestamp]="video.duration"
+                [disabled]="!customizations.stopAtCheckbox"
+                [(ngModel)]="customizations.stopAt"
+              >
+              </my-timestamp-input>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="autoplay" [(ngModel)]="customizations.autoplay"
+                i18n-labelText labelText="Autoplay"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="muted" [(ngModel)]="customizations.muted"
+                i18n-labelText labelText="Muted"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="loop" [(ngModel)]="customizations.loop"
+                i18n-labelText labelText="Loop"
+              ></my-peertube-checkbox>
+            </div>
           </div>
 
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="warningTitle" [(ngModel)]="customizations.warningTitle"
-              i18n-labelText labelText="Display privacy warning"
-            ></my-peertube-checkbox>
-          </div>
+          <ng-container *ngIf="isInEmbedTab()">
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="title" [(ngModel)]="customizations.title"
+                i18n-labelText labelText="Display video title"
+              ></my-peertube-checkbox>
+            </div>
 
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="controls" [(ngModel)]="customizations.controls"
-              i18n-labelText labelText="Display player controls"
-            ></my-peertube-checkbox>
-          </div>
-        </ng-container>
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="warningTitle" [(ngModel)]="customizations.warningTitle"
+                i18n-labelText labelText="Display privacy warning"
+              ></my-peertube-checkbox>
+            </div>
+
+            <div class="form-group">
+              <my-peertube-checkbox
+                inputName="controls" [(ngModel)]="customizations.controls"
+                i18n-labelText labelText="Display player controls"
+              ></my-peertube-checkbox>
+            </div>
+          </ng-container>
+        </div>
       </div>
     </div>
   </div>

@@ -95,6 +95,7 @@ import { ClipboardModule } from 'ngx-clipboard'
 import { FollowService } from '@app/shared/instance/follow.service'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.component'
+import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-copy.component'
 
 @NgModule({
   imports: [
@@ -155,6 +156,7 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
     TimestampInputComponent,
+    InputReadonlyCopyComponent,
 
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
@@ -220,6 +222,7 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+    InputReadonlyCopyComponent,
 
     ReactiveFileComponent,
     PeertubeCheckboxComponent,

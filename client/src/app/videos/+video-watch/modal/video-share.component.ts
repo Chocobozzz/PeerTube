@@ -5,6 +5,7 @@ import { buildVideoEmbed, buildVideoLink } from '../../../../assets/player/utils
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
+import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 
 type Customizations = {
   startAtCheckbox: boolean
@@ -34,18 +35,16 @@ export class VideoShareComponent {
 
   @Input() video: VideoDetails = null
   @Input() videoCaptions: VideoCaption[] = []
+  @Input() playlist: VideoPlaylist = null
 
   activeId: 'url' | 'qrcode' | 'embed'
   customizations: Customizations
   isAdvancedCustomizationCollapsed = true
+  includeVideoInPlaylist = false
 
   private currentVideoTimestamp: number
 
-  constructor (
-    private modalService: NgbModal,
-    private notifier: Notifier,
-    private i18n: I18n
-  ) { }
+  constructor (private modalService: NgbModal) { }
 
   show (currentVideoTimestamp?: number) {
     this.currentVideoTimestamp = currentVideoTimestamp
@@ -86,17 +85,22 @@ export class VideoShareComponent {
   }
 
   getVideoUrl () {
-    const options = this.getOptions()
+    const baseUrl = window.location.origin + '/videos/watch/' + this.video.uuid
+    const options = this.getOptions(baseUrl)
 
     return buildVideoLink(options)
   }
 
-  notSecure () {
-    return window.location.protocol === 'http:'
+  getPlaylistUrl () {
+    const base = window.location.origin + '/videos/watch/playlist/' + this.playlist.uuid
+
+    if (!this.includeVideoInPlaylist) return base
+
+    return base  + '?videoId=' + this.video.uuid
   }
 
-  activateCopiedMessage () {
-    this.notifier.success(this.i18n('Copied'))
+  notSecure () {
+    return window.location.protocol === 'http:'
   }
 
   onTabChange (event: NgbTabChangeEvent) {
@@ -105,6 +109,10 @@ export class VideoShareComponent {
 
   isInEmbedTab () {
     return this.activeId === 'embed'
+  }
+
+  hasPlaylist () {
+    return !!this.playlist
   }
 
   private getOptions (baseUrl?: string) {

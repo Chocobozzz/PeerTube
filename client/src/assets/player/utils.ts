@@ -51,6 +51,8 @@ function buildVideoLink (options: {
     : window.location.origin + window.location.pathname.replace('/embed/', '/watch/')
 
   const params = new URLSearchParams(window.location.search)
+  // Remove this unused parameter when we are on a playlist page
+  params.delete('videoId')
 
   if (options.startTime) {
     const startTimeInt = Math.floor(options.startTime)
