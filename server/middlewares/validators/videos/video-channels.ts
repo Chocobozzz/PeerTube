@@ -36,7 +36,7 @@ const videoChannelsAddValidator = [
     }
 
     const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
-    if (count > VIDEO_CHANNELS.MAX_PER_USER) {
+    if (count >= VIDEO_CHANNELS.MAX_PER_USER) {
       res.status(400)
         .send({ error: `You cannot create more than ${VIDEO_CHANNELS.MAX_PER_USER} channels` })
         .end()
