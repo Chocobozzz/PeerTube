@@ -63,7 +63,7 @@ export interface CommonOptions extends CustomizationOptions {
   inactivityTimeout: number
   poster: string
 
-  theaterMode: boolean
+  theaterButton: boolean
   captions: boolean
 
   videoViewUrl: string
@@ -311,7 +311,7 @@ export class PeertubePlayerManager {
         children: this.getControlBarChildren(mode, {
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
-          theaterMode: commonOptions.theaterMode
+          theaterButton: commonOptions.theaterButton
         })
       }
     }
@@ -382,7 +382,7 @@ export class PeertubePlayerManager {
 
   private static getControlBarChildren (mode: PlayerMode, options: {
     peertubeLink: boolean
-    theaterMode: boolean,
+    theaterButton: boolean,
     captions: boolean
   }) {
     const settingEntries = []
@@ -432,7 +432,7 @@ export class PeertubePlayerManager {
       })
     }
 
-    if (options.theaterMode === true) {
+    if (options.theaterButton === true) {
       Object.assign(children, {
         'theaterButton': {}
       })

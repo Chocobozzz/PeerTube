@@ -194,7 +194,7 @@ export class PeerTubeEmbed {
         enableHotkeys: true,
         peertubeLink: true,
         poster: window.location.origin + videoInfo.previewPath,
-        theaterMode: false,
+        theaterButton: false,
 
         serverUrl: window.location.origin,
         language: navigator.language,

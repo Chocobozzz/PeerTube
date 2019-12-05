@@ -1,4 +1,5 @@
 // Data from API hooks: {hookType}:api.{location}.{elementType}.{actionType}.{target}
+// Data in internal functions: {hookType}:{location}.{elementType}.{actionType}.{target}
 
 export const clientFilterHookObject = {
   // Filter params/result of the function that fetch videos of the trending page
@@ -41,7 +42,10 @@ export const clientFilterHookObject = {
   'filter:api.search.video-channels.list.result': true,
 
   // Filter form
-  'filter:api.signup.registration.create.params': true
+  'filter:api.signup.registration.create.params': true,
+
+  // Filter the options to create our player
+  'filter:internal.video-watch.player.build-options.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject

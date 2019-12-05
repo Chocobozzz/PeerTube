@@ -5,7 +5,7 @@ import { RedirectService } from '@app/core/routing/redirect.service'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
-import { Notifier, ServerService } from '@app/core'
+import { AuthUser, Notifier, ServerService } from '@app/core'
 import { forkJoin, Observable, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
@@ -391,10 +391,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.videoWatchPlaylist.updatePlaylistIndex(video)
 
-    let startTime = timeToInt(urlOptions.startTime) || (this.video.userHistory ? this.video.userHistory.currentTime : 0)
-    // If we are at the end of the video, reset the timer
-    if (this.video.duration - startTime <= 1) startTime = 0
-
     if (this.isVideoBlur(this.video)) {
       const res = await this.confirmService.confirm(
         this.i18n('This video contains mature or explicit content. Are you sure you want to watch it?'),
@@ -413,84 +409,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.playerElement.setAttribute('playsinline', 'true')
     playerElementWrapper.appendChild(this.playerElement)
 
-    const playerCaptions = videoCaptions.map(c => ({
-      label: c.language.label,
-      language: c.language.id,
-      src: environment.apiUrl + c.captionPath
-    }))
-
-    const options: PeertubePlayerManagerOptions = {
-      common: {
-        autoplay: this.isAutoplay(),
-
-        playerElement: this.playerElement,
-        onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
-
-        videoDuration: this.video.duration,
-        enableHotkeys: true,
-        inactivityTimeout: 2500,
-        poster: this.video.previewUrl,
-
-        startTime,
-        stopTime: urlOptions.stopTime,
-        controls: urlOptions.controls,
-        muted: urlOptions.muted,
-        loop: urlOptions.loop,
-        subtitle: urlOptions.subtitle,
-
-        peertubeLink: urlOptions.peertubeLink,
-
-        theaterMode: true,
-        captions: videoCaptions.length !== 0,
-
-        videoViewUrl: this.video.privacy.id !== VideoPrivacy.PRIVATE
-          ? this.videoService.getVideoViewUrl(this.video.uuid)
-          : null,
-        embedUrl: this.video.embedUrl,
-
-        language: this.localeId,
-
-        userWatching: this.user && this.user.videosHistoryEnabled === true ? {
-          url: this.videoService.getUserWatchingVideoUrl(this.video.uuid),
-          authorizationHeader: this.authService.getRequestHeaderValue()
-        } : undefined,
-
-        serverUrl: environment.apiUrl,
-
-        videoCaptions: playerCaptions
-      },
-
-      webtorrent: {
-        videoFiles: this.video.files
-      }
+    const params = {
+      video: this.video,
+      videoCaptions,
+      urlOptions,
+      user: this.user
     }
-
-    let mode: PlayerMode
-
-    if (urlOptions.playerMode) {
-      if (urlOptions.playerMode === 'p2p-media-loader') mode = 'p2p-media-loader'
-      else mode = 'webtorrent'
-    } else {
-      if (this.video.hasHlsPlaylist()) mode = 'p2p-media-loader'
-      else mode = 'webtorrent'
-    }
-
-    if (mode === 'p2p-media-loader') {
-      const hlsPlaylist = this.video.getHlsPlaylist()
-
-      const p2pMediaLoader = {
-        playlistUrl: hlsPlaylist.playlistUrl,
-        segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
-        redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
-        trackerAnnounce: this.video.trackerUrls,
-        videoFiles: hlsPlaylist.files
-      } as P2PMediaLoaderOptions
-
-      Object.assign(options, { p2pMediaLoader })
-    }
+    const { playerMode, playerOptions } = await this.hooks.wrapFun(
+      this.buildPlayerManagerOptions.bind(this),
+      params,
+      'filter:internal.video-watch.player.build-options.result'
+    )
 
     this.zone.runOutsideAngular(async () => {
-      this.player = await PeertubePlayerManager.initialize(mode, options, player => this.player = player)
+      this.player = await PeertubePlayerManager.initialize(playerMode, playerOptions, player => this.player = player)
       this.player.focus()
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
@@ -635,6 +567,97 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }, undefined, this.i18n('Subscribe to the account'))
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+  }
+
+  private buildPlayerManagerOptions (params: {
+    video: VideoDetails,
+    videoCaptions: VideoCaption[],
+    urlOptions: CustomizationOptions & { playerMode: PlayerMode },
+    user?: AuthUser
+  }) {
+    const { video, videoCaptions, urlOptions, user } = params
+
+    let startTime = timeToInt(urlOptions.startTime) || (video.userHistory ? video.userHistory.currentTime : 0)
+    // If we are at the end of the video, reset the timer
+    if (video.duration - startTime <= 1) startTime = 0
+
+    const playerCaptions = videoCaptions.map(c => ({
+      label: c.language.label,
+      language: c.language.id,
+      src: environment.apiUrl + c.captionPath
+    }))
+
+    const options: PeertubePlayerManagerOptions = {
+      common: {
+        autoplay: this.isAutoplay(),
+
+        playerElement: this.playerElement,
+        onPlayerElementChange: (element: HTMLVideoElement) => this.playerElement = element,
+
+        videoDuration: video.duration,
+        enableHotkeys: true,
+        inactivityTimeout: 2500,
+        poster: video.previewUrl,
+
+        startTime,
+        stopTime: urlOptions.stopTime,
+        controls: urlOptions.controls,
+        muted: urlOptions.muted,
+        loop: urlOptions.loop,
+        subtitle: urlOptions.subtitle,
+
+        peertubeLink: urlOptions.peertubeLink,
+
+        theaterButton: true,
+        captions: videoCaptions.length !== 0,
+
+        videoViewUrl: video.privacy.id !== VideoPrivacy.PRIVATE
+          ? this.videoService.getVideoViewUrl(video.uuid)
+          : null,
+        embedUrl: video.embedUrl,
+
+        language: this.localeId,
+
+        userWatching: user && user.videosHistoryEnabled === true ? {
+          url: this.videoService.getUserWatchingVideoUrl(video.uuid),
+          authorizationHeader: this.authService.getRequestHeaderValue()
+        } : undefined,
+
+        serverUrl: environment.apiUrl,
+
+        videoCaptions: playerCaptions
+      },
+
+      webtorrent: {
+        videoFiles: video.files
+      }
+    }
+
+    let mode: PlayerMode
+
+    if (urlOptions.playerMode) {
+      if (urlOptions.playerMode === 'p2p-media-loader') mode = 'p2p-media-loader'
+      else mode = 'webtorrent'
+    } else {
+      if (video.hasHlsPlaylist()) mode = 'p2p-media-loader'
+      else mode = 'webtorrent'
+    }
+
+    if (mode === 'p2p-media-loader') {
+      const hlsPlaylist = video.getHlsPlaylist()
+
+      const p2pMediaLoader = {
+        playlistUrl: hlsPlaylist.playlistUrl,
+        segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
+        redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
+        trackerAnnounce: video.trackerUrls,
+        videoFiles: hlsPlaylist.files
+      } as P2PMediaLoaderOptions
+
+      Object.assign(options, { p2pMediaLoader })
+    }
+
+    return { playerMode: mode, playerOptions: options }
   }
 
   private pausePlayer () {
