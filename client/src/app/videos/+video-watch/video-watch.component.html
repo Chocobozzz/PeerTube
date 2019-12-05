@@ -58,19 +58,21 @@
             <div class="video-actions-rates">
               <div class="video-actions fullWidth justify-content-end">
                 <div
-                  *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
+                  [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
                   class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
                   i18n-title title="Like this video"
                 >
                   <my-global-icon iconName="like"></my-global-icon>
+                  <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
                 </div>
 
                 <div
-                  *ngIf="isUserLoggedIn()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
+                  [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
                   class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
                   i18n-title title="Dislike this video"
                 >
                   <my-global-icon iconName="dislike"></my-global-icon>
+                  <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
                 </div>
 
                 <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support">

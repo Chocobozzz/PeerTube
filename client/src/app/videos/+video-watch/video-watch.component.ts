@@ -166,6 +166,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     else this.setRating('dislike')
   }
 
+  getRatePopoverText () {
+    if (this.isUserLoggedIn()) return undefined
+
+    return this.i18n('You need to be connected to rate this content.')
+  }
+
   showMoreDescription () {
     if (this.completeVideoDescription === undefined) {
       return this.loadCompleteDescription()

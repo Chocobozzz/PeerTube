@@ -239,8 +239,19 @@ $player-factor: 1.7; // 16/9
               display: none;
             }
 
+            .action-button-like,
+            .action-button-dislike {
+              .count {
+                margin-right: 5px;
+              }
+            }
+
             &.action-button-like.activated {
               background-color: $green;
+
+              .count {
+                color: #fff;
+              }
 
               my-global-icon {
                 @include apply-svg-color(#fff);
@@ -249,6 +260,10 @@ $player-factor: 1.7; // 16/9
 
             &.action-button-dislike.activated {
               background-color: $red;
+
+              .count {
+                color: #fff;
+              }
 
               my-global-icon {
                 @include apply-svg-color(#fff);
