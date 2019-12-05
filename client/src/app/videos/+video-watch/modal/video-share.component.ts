@@ -96,7 +96,7 @@ export class VideoShareComponent {
 
     if (!this.includeVideoInPlaylist) return base
 
-    return base  + '?videoId=' + this.video.uuid
+    return base + '?videoId=' + this.video.uuid
   }
 
   notSecure () {

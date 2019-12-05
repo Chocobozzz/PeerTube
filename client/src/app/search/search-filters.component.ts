@@ -119,6 +119,28 @@ export class SearchFiltersComponent implements OnInit {
     this.filtered.emit(this.advancedSearch)
   }
 
+  reset () {
+    this.advancedSearch.reset()
+    this.durationRange = undefined
+    this.publishedDateRange = undefined
+    this.originallyPublishedStartYear = undefined
+    this.originallyPublishedEndYear = undefined
+    this.inputUpdated()
+  }
+
+  resetField (fieldName: string, value?: any) {
+    this.advancedSearch[fieldName] = value
+  }
+
+  resetLocalField (fieldName: string, value?: any) {
+    this[fieldName] = value
+    this.inputUpdated()
+  }
+
+  resetOriginalPublicationYears () {
+    this.originallyPublishedStartYear = this.originallyPublishedEndYear = undefined
+  }
+
   private loadOriginallyPublishedAtYears () {
     this.originallyPublishedStartYear = this.advancedSearch.originallyPublishedStartDate
       ? new Date(this.advancedSearch.originallyPublishedStartDate).getFullYear().toString()
@@ -234,27 +256,4 @@ export class SearchFiltersComponent implements OnInit {
 
     this.advancedSearch.startDate = date.toISOString()
   }
-
-  private reset () {
-    this.advancedSearch.reset()
-    this.durationRange = undefined
-    this.publishedDateRange = undefined
-    this.originallyPublishedStartYear = undefined
-    this.originallyPublishedEndYear = undefined
-    this.inputUpdated()
-  }
-
-  private resetField (fieldName: string, value?: any) {
-    this.advancedSearch[fieldName] = value
-  }
-
-  private resetLocalField (fieldName: string, value?: any) {
-    this[fieldName] = value
-    this.inputUpdated()
-  }
-
-  private resetOriginalPublicationYears () {
-    this.originallyPublishedStartYear = this.originallyPublishedEndYear = undefined
-  }
-
 }
