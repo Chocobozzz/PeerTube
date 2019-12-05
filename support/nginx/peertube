@@ -44,6 +44,10 @@ server {
   gzip_types text/css application/javascript;
   gzip_vary on;
 
+  # If you have a small /var/lib partition, it could be interesting to store temp nginx uploads in a different place
+  # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path
+  # client_body_temp_path /var/www/peertube/storage/nginx/;
+
   # Enable HSTS
   # Tells browsers to stick with HTTPS and never visit the insecure HTTP
   # version. Once a browser sees this header, it will only visit the site over
