@@ -46,12 +46,12 @@ function getBaseBitrate (resolution: VideoResolution) {
     case VideoResolution.H_1080P:
       // quality according to Google Live Encoder: 3000 - 6000 Kbps
       // Quality according to YouTube Video Info: 5081 Kbps
-      return 5800 * 1000
+      return 5200 * 1000
 
     case VideoResolution.H_4K: // fallthrough
     default:
       // quality according to Google Live Encoder: 13000 - 34000 Kbps
-      return 15000 * 1000
+      return 22000 * 1000
   }
 }
 
