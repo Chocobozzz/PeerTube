@@ -1,0 +1,13 @@
+@import '~pthumbnails/dist/videojs-vtt-thumbnails';
+
+.video-js {
+
+  .vjs-vtt-thumbnail-display {
+    height: 11vh;
+    width: 20vh;
+    background-size: cover !important;
+    left: calc(-10vh + 1vh / 2);
+    bottom: 150%;
+  }
+
+}

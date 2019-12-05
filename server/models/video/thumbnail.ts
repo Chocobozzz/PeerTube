@@ -21,6 +21,7 @@ import { VideoPlaylistModel } from './video-playlist'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { MVideoAccountLight } from '@server/typings/models'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
+import { TimecodeThumbnailManifestModel } from './timecode-thumbnail-manifest'
 
 @Table({
   tableName: 'thumbnail',
@@ -86,6 +87,18 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   })
   VideoPlaylist: VideoPlaylistModel
 
+  @ForeignKey(() => TimecodeThumbnailManifestModel)
+  @Column
+  manifestId: number
+
+  @BelongsTo(() => TimecodeThumbnailManifestModel, {
+    foreignKey: {
+      allowNull: true
+    },
+    onDelete: 'CASCADE'
+  })
+  Manifest: TimecodeThumbnailManifestModel
+
   @CreatedAt
   createdAt: Date
 
@@ -102,6 +115,11 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
       label: 'preview',
       directory: CONFIG.STORAGE.PREVIEWS_DIR,
       staticPath: LAZY_STATIC_PATHS.PREVIEWS
+    },
+    [ThumbnailType.TIMECODE]: {
+      label: 'timecode',
+      directory: CONFIG.STORAGE.THUMBNAILS_DIR,
+      staticPath: STATIC_PATHS.THUMBNAILS
     }
   }
 

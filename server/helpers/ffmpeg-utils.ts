@@ -1,13 +1,18 @@
 import * as ffmpeg from 'fluent-ffmpeg'
-import { dirname, join } from 'path'
-import { getMaxBitrate, getTargetBitrate, VideoResolution } from '../../shared/models/videos'
-import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS } from '../initializers/constants'
+import { dirname, join, extname } from 'path'
+import { getTargetBitrate, getMaxBitrate, VideoResolution } from '../../shared/models/videos'
+import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS, STATIC_PATHS } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { CONFIG } from '../initializers/config'
 import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
+import { insertBeforeExtension } from './utils'
+import { ThumbnailType } from '@shared/models/videos/thumbnail.type'
+import { createThumbnailFromFunction } from '@server/lib/thumbnail'
+import { TimecodeThumbnailManifestModel } from '@server/models/video/timecode-thumbnail-manifest'
+const webvtt = require('node-webvtt')
 
 /**
  * A toolbox to play with audio
@@ -193,6 +198,14 @@ function getVideoStreamFromFile (path: string) {
   return getMetadataFromFile<any>(path, metadata => metadata.streams.find(s => s.codec_type === 'video') || null)
 }
 
+/**
+ * Generates images representing a video, used for miniature image and player background
+ *
+ * @param fromPath source path
+ * @param folder destination folder
+ * @param imageName base image name
+ * @param size dimensions to which the image should be resized
+ */
 async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
   const pendingImageName = 'pending-' + imageName
 
@@ -222,6 +235,104 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
     } catch (err) {
       logger.debug('Cannot remove pending image path after generation error.', { err })
     }
+  }
+}
+
+/**
+ * Generates images representing timecodes of the video, used for scrubbing preview
+ *
+ * @param fromPath source path
+ * @param folder destination folder
+ * @param imageName base image name
+ * @param size dimensions to which the images should be resized
+ * @param count images/video, always capped at 1 image/sec
+ */
+async function generateTimecodeThumbnailsFromVideoFile (
+  fromPath: string,
+  folder: string,
+  imageName: string,
+  size: {
+    width: number,
+    height: number
+  },
+  count = 50
+) {
+  // cap thumbnails at 1 image/sec max
+  let duration = await getDurationFromVideoFile(fromPath)
+  if (count > duration) count = duration
+
+  imageName = TimecodeThumbnailManifestModel.generateManifestName().replace(/\.[^.]+$/, extname(imageName))
+  const pendingImagePattern = 'pending-' + insertBeforeExtension(imageName, '-%00i')
+  const pendingImageName = i => 'pending-' + insertBeforeExtension(imageName, `-${('000' + i).slice(-3)}`)
+
+  const options = {
+    filename: pendingImagePattern,
+    count,
+    folder
+  }
+
+  let thumbnails = []
+
+  try {
+    await new Promise<void>((res, rej) => {
+      ffmpeg(fromPath, { niceness: FFMPEG_NICE.THUMBNAIL })
+        .on('error', rej)
+        .on('end', () => res())
+        .thumbnail(options)
+    })
+
+    for (let i = 1; i <= count; i++) {
+      const thumbnailCreator = async () => {
+        const pendingImagePath = join(folder, pendingImageName(i))
+        const destination = join(folder, pendingImageName(i).replace('pending-', ''))
+        await processImage(pendingImagePath, destination, size)
+      }
+
+      thumbnails.push(
+        await createThumbnailFromFunction({
+          thumbnailCreator,
+          filename: pendingImageName(i).replace('pending-', ''),
+          height: size.height,
+          width: size.width,
+          type: ThumbnailType.TIMECODE,
+          automaticallyGenerated: true,
+          existingThumbnail: null
+        })
+      )
+    }
+  } catch (err) {
+    logger.error('Cannot generate image(s) from video %s.', fromPath, { err })
+
+    try {
+      for (let i = 1; i <= count; i++) {
+        const pendingImagePath = join(folder, pendingImageName(i))
+        await remove(pendingImagePath)
+      }
+    } catch (err) {
+      logger.debug('Cannot remove pending image(s) path after generation error.', { err })
+      return
+    }
+  }
+
+  const manifest = new TimecodeThumbnailManifestModel()
+
+  manifest.filename = imageName.replace(/\.[^.]+$/, '.vtt')
+
+  const manifestContent = webvtt.compile({
+    valid: true,
+    cues: Array(count).fill(0).map((x, i) => ({
+      identifier: '',
+      start: (i * duration / count),
+      end: ((i + 1) * duration / count),
+      text: join(STATIC_PATHS.THUMBNAILS, pendingImageName(i + 1).replace('pending-', '')),
+      styles: ''
+    }))
+  })
+  await writeFile(join(folder, manifest.filename), manifestContent)
+
+  return {
+    thumbnails,
+    manifest
   }
 }
 
@@ -348,6 +459,7 @@ export {
   getMetadataFromFile,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
+  generateTimecodeThumbnailsFromVideoFile,
   TranscodeOptions,
   TranscodeOptionsType,
   transcode,

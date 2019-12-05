@@ -1,4 +1,4 @@
-import { generateImageFromVideoFile } from '../helpers/ffmpeg-utils'
+import { generateImageFromVideoFile, generateTimecodeThumbnailsFromVideoFile } from '../helpers/ffmpeg-utils'
 import { CONFIG } from '../initializers/config'
 import { ASSETS_PATH, PREVIEWS_SIZE, THUMBNAILS_SIZE } from '../initializers/constants'
 import { ThumbnailModel } from '../models/video/thumbnail'
@@ -7,7 +7,7 @@ import { processImage } from '../helpers/image-utils'
 import { join } from 'path'
 import { downloadImage } from '../helpers/requests'
 import { MVideoPlaylistThumbnail } from '../typings/models/video/video-playlist'
-import { MVideoFile, MVideoThumbnail } from '../typings/models'
+import { MVideoFile, MVideoThumbnail, MVideoFullLight } from '../typings/models'
 import { MThumbnail } from '../typings/models/video/thumbnail'
 import { getVideoFilePath } from './video-paths'
 
@@ -66,6 +66,15 @@ function generateVideoMiniature (video: MVideoThumbnail, videoFile: MVideoFile, 
   return createThumbnailFromFunction({ thumbnailCreator, filename, height, width, type, automaticallyGenerated: true, existingThumbnail })
 }
 
+function generateVideoTimecodeThumbnails (video: MVideoThumbnail, videoFile: MVideoFile, type: ThumbnailType) {
+  if (videoFile.isAudio()) return
+
+  const input = getVideoFilePath(video, videoFile)
+
+  const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
+  return generateTimecodeThumbnailsFromVideoFile(input, basePath, filename, { height, width })
+}
+
 function createPlaceholderThumbnail (fileUrl: string, video: MVideoThumbnail, type: ThumbnailType, size: ImageSize) {
   const { filename, height, width, existingThumbnail } = buildMetadataFromVideo(video, type, size)
 
@@ -80,15 +89,43 @@ function createPlaceholderThumbnail (fileUrl: string, video: MVideoThumbnail, ty
   return thumbnail
 }
 
+async function createThumbnailFromFunction (parameters: {
+  thumbnailCreator: () => Promise<any>,
+  filename: string,
+  height: number,
+  width: number,
+  type: ThumbnailType,
+  automaticallyGenerated?: boolean,
+  fileUrl?: string,
+  existingThumbnail?: MThumbnail
+}) {
+  const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
+
+  const thumbnail = existingThumbnail ? existingThumbnail : new ThumbnailModel()
+
+  thumbnail.filename = filename
+  thumbnail.height = height
+  thumbnail.width = width
+  thumbnail.type = type
+  thumbnail.fileUrl = fileUrl
+  thumbnail.automaticallyGenerated = automaticallyGenerated
+
+  await thumbnailCreator()
+
+  return thumbnail
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   generateVideoMiniature,
+  generateVideoTimecodeThumbnails,
   createVideoMiniatureFromUrl,
   createVideoMiniatureFromExisting,
   createPlaceholderThumbnail,
   createPlaylistMiniatureFromUrl,
-  createPlaylistMiniatureFromExisting
+  createPlaylistMiniatureFromExisting,
+  createThumbnailFromFunction
 }
 
 function buildMetadataFromPlaylist (playlist: MVideoPlaylistThumbnail, size: ImageSize) {
@@ -110,7 +147,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     ? video.Thumbnails.find(t => t.type === type)
     : undefined
 
-  if (type === ThumbnailType.MINIATURE) {
+  if (type === ThumbnailType.MINIATURE || type === ThumbnailType.TIMECODE) {
     const filename = video.generateThumbnailName()
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 

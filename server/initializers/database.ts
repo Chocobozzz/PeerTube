@@ -37,6 +37,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
 import { ThumbnailModel } from '../models/video/thumbnail'
+import { TimecodeThumbnailManifestModel } from "../models/video/timecode-thumbnail-manifest"
 import { PluginModel } from '../models/server/plugin'
 import { QueryTypes, Transaction } from 'sequelize'
 
@@ -109,6 +110,7 @@ async function initDatabaseModels (silent: boolean) {
     VideoPlaylistModel,
     VideoPlaylistElementModel,
     ThumbnailModel,
+    TimecodeThumbnailManifestModel,
     PluginModel
   ])
 

@@ -35,6 +35,8 @@ export class Video implements VideoServerModel {
   thumbnailUrl: string
   previewPath: string
   previewUrl: string
+  manifestPath: string
+  manifestUrl: string
   embedPath: string
   embedUrl: string
   views: number
@@ -104,6 +106,9 @@ export class Video implements VideoServerModel {
 
     this.previewPath = hash.previewPath
     this.previewUrl = absoluteAPIUrl + hash.previewPath
+
+    this.manifestPath = hash.manifestPath
+    this.manifestUrl = hash.manifestPath ? absoluteAPIUrl + hash.manifestPath : undefined
 
     this.embedPath = hash.embedPath
     this.embedUrl = absoluteAPIUrl + hash.embedPath

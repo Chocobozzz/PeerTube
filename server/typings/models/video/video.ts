@@ -27,7 +27,7 @@ type Use<K extends keyof VideoModel, M> = PickWith<VideoModel, K, M>
 // ############################################################################
 
 export type MVideo =
-  Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'VideoPlaylistElements' | 'VideoAbuses' |
+  Omit<VideoModel, 'VideoChannel' | 'Tags' | 'Thumbnails' | 'TimecodeThumbnailManifestModel' | 'VideoPlaylistElements' | 'VideoAbuses' |
   'VideoFiles' | 'VideoStreamingPlaylists' | 'VideoShares' | 'AccountVideoRates' | 'VideoComments' | 'VideoViews' | 'UserVideoHistories' |
   'ScheduleVideoUpdate' | 'VideoBlacklist' | 'VideoImport' | 'VideoCaptions'>
 

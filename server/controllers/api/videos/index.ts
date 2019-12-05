@@ -60,7 +60,7 @@ import { Notifier } from '../../../lib/notifier'
 import { sendView } from '../../../lib/activitypub/send/send-view'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
+import { createVideoMiniatureFromExisting, generateVideoMiniature, generateVideoTimecodeThumbnails } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
@@ -230,13 +230,13 @@ async function addVideo (req: express.Request, res: express.Response) {
   videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
   videoPhysicalFile.path = destination
 
-  // Process thumbnail or create it from the video
+  // Process thumbnail or create it from the video (small thumbnail used for miniatures)
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
     ? await createVideoMiniatureFromExisting(thumbnailField[0].path, video, ThumbnailType.MINIATURE, false)
     : await generateVideoMiniature(video, videoFile, ThumbnailType.MINIATURE)
 
-  // Process preview or create it from the video
+  // Process preview or create it from the video (large thumbnail used for player backgrounds)
   const previewField = req.files['previewfile']
   const previewModel = previewField
     ? await createVideoMiniatureFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW, false)
@@ -252,6 +252,19 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     await videoCreated.addAndSaveThumbnail(previewModel, t)
+
+    // Process timecoded thumbnails from the video (small thumbnails bound to a timecode range, used for player scrubbing preview)
+    // We do not wait for it to finish as that non-critical task could impede the task length
+    generateVideoTimecodeThumbnails(video, videoFile, ThumbnailType.TIMECODE)
+      .then(res => {
+        sequelizeTypescript.transaction(async t2 => {
+          res.thumbnails.forEach(thumbnail => {
+            videoCreated.addAndSaveThumbnail(thumbnail, t2)
+          })
+          videoCreated.addAndSaveTimecodeThumbnailManifest(res.manifest, t2)
+        })
+      })
+      .catch(err => logger.error(err))
 
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel

@@ -1,7 +1,7 @@
 import { Video, VideoDetails } from '../../../shared/models/videos'
 import { VideoModel } from './video'
 import { ActivityTagObject, ActivityUrlObject, VideoTorrentObject } from '../../../shared/models/activitypub/objects'
-import { MIMETYPES, WEBSERVER } from '../../initializers/constants'
+import { MIMETYPES, WEBSERVER, STATIC_PATHS } from '../../initializers/constants'
 import { VideoCaptionModel } from './video-caption'
 import {
   getVideoCommentsActivityPubUrl,
@@ -23,6 +23,9 @@ import {
 import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
+import { pathExists, pathExistsSync } from 'fs-extra'
+import { CONFIG } from '@server/initializers/config'
+import { join } from 'path'
 import { extractVideo } from '@server/lib/videos'
 
 export type VideoFormattingJSONOptions = {
@@ -68,6 +71,7 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     thumbnailPath: video.getMiniatureStaticPath(),
     previewPath: video.getPreviewStaticPath(),
     embedPath: video.getEmbedStaticPath(),
+    manifestPath: video.getThumbnailsVTTStaticPath(),
     createdAt: video.createdAt,
     updatedAt: video.updatedAt,
     publishedAt: video.publishedAt,
@@ -311,6 +315,22 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
       mediaType: 'application/x-mpegURL' as 'application/x-mpegURL',
       href: playlist.playlistUrl,
       tag
+    })
+  }
+
+  // Add video url too
+  url.push({
+    type: 'Link',
+    mediaType: 'text/html',
+    href: WEBSERVER.URL + '/videos/watch/' + video.uuid
+  })
+
+  // Add video thumbnails, if any
+  if (video.TimecodeThumbnailManifest) {
+    url.push({
+      type: 'Link',
+      mediaType: 'text/vtt',
+      href: WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + video.TimecodeThumbnailManifest.filename
     })
   }
 

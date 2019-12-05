@@ -689,6 +689,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           ? this.videoService.getVideoViewUrl(video.uuid)
           : null,
         embedUrl: video.embedUrl,
+        manifestUrl: video.manifestUrl,
 
         language: this.localeId,
 

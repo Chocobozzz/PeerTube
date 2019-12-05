@@ -92,6 +92,7 @@ import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { VideoPlaylistElementModel } from './video-playlist-element'
 import { CONFIG } from '../../initializers/config'
 import { ThumbnailModel } from './thumbnail'
+import { TimecodeThumbnailManifestModel } from './timecode-thumbnail-manifest'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import {
@@ -139,7 +140,8 @@ export enum ScopeNames {
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
   WITH_USER_ID = 'WITH_USER_ID',
   WITH_IMMUTABLE_ATTRIBUTES = 'WITH_IMMUTABLE_ATTRIBUTES',
-  WITH_THUMBNAILS = 'WITH_THUMBNAILS'
+  WITH_THUMBNAILS = 'WITH_THUMBNAILS',
+  WITH_TIMECODE_THUMBNAIL_MANIFEST = 'WITH_TIMECODE_THUMBNAIL_MANIFEST'
 }
 
 export type ForAPIOptions = {
@@ -203,6 +205,11 @@ export type AvailableForListIDsOptions = {
           attributes: [ 'type', 'filename' ],
           model: ThumbnailModel,
           required: false
+        },
+        {
+          attributes: [ 'filename' ],
+          model: TimecodeThumbnailManifestModel,
+          required: false
         }
       ]
     }
@@ -238,6 +245,14 @@ export type AvailableForListIDsOptions = {
     include: [
       {
         model: ThumbnailModel,
+        required: false
+      }
+    ]
+  },
+  [ScopeNames.WITH_TIMECODE_THUMBNAIL_MANIFEST]: {
+    include: [
+      {
+        model: TimecodeThumbnailManifestModel,
         required: false
       }
     ]
@@ -615,6 +630,16 @@ export class VideoModel extends Model<VideoModel> {
     onDelete: 'cascade'
   })
   Thumbnails: ThumbnailModel[]
+
+  @HasOne(() => TimecodeThumbnailManifestModel, {
+    foreignKey: {
+      name: 'videoId',
+      allowNull: true
+    },
+    hooks: true,
+    onDelete: 'cascade'
+  })
+  TimecodeThumbnailManifest: TimecodeThumbnailManifestModel
 
   @HasMany(() => VideoPlaylistElementModel, {
     foreignKey: {
@@ -1250,8 +1275,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_WEBTORRENT_FILES,
-      ScopeNames.WITH_STREAMING_PLAYLISTS,
-      ScopeNames.WITH_THUMBNAILS
+      ScopeNames.WITH_STREAMING_PLAYLISTS
     ]
 
     if (userId) {
@@ -1283,6 +1307,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_THUMBNAILS,
+      ScopeNames.WITH_TIMECODE_THUMBNAIL_MANIFEST,
       { method: [ ScopeNames.WITH_WEBTORRENT_FILES, true ] },
       { method: [ ScopeNames.WITH_STREAMING_PLAYLISTS, true ] }
     ]
@@ -1638,6 +1663,14 @@ export class VideoModel extends Model<VideoModel> {
     this.Thumbnails.push(savedThumbnail)
   }
 
+  async addAndSaveTimecodeThumbnailManifest (manifest: MTimecodeThumbnailManifest, transaction: Transaction) {
+    manifest.videoId = this.id
+
+    const savedManifest = await manifest.save({ transaction })
+
+    this.TimecodeThumbnailManifest = savedManifest
+  }
+
   generateThumbnailName () {
     return this.uuid + '.jpg'
   }
@@ -1679,6 +1712,13 @@ export class VideoModel extends Model<VideoModel> {
     if (!thumbnail) return null
 
     return join(STATIC_PATHS.THUMBNAILS, thumbnail.filename)
+  }
+
+  getThumbnailsVTTStaticPath () {
+    const manifest = this.TimecodeThumbnailManifest
+    if (!manifest) return null
+
+    return join(STATIC_PATHS.THUMBNAILS, manifest.filename)
   }
 
   getPreviewStaticPath () {

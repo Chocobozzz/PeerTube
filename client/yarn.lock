@@ -8960,6 +8960,15 @@ psl@^1.1.28:
   resolved "https://registry.yarnpkg.com/psl/-/psl-1.8.0.tgz#9326f8bcfb013adcc005fdff056acce020e51c24"
   integrity sha512-RIdOzyoavK+hA18OGGWDqUTsCLhtA7IcZ/6NCs4fFJaHBDab+pDDmDIByWFRQJq2Cd7r1OoQxBGKOaztq+hjIQ==
 
+pthumbnails@1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/pthumbnails/-/pthumbnails-1.1.4.tgz#d10949b7703cbe3e9449d5eb36818562da95655a"
+  integrity sha512-TdXWVhBxLyPwENpIdwpocPCh5J73lfl3Rwzpi+v91IVQKUnfruFjYknyjc58KHOYabcxqd/nVkGobRtXDKC6Mg==
+  dependencies:
+    global "^4.3.2"
+    request "^2.83.0"
+    video.js "^7.2.0 || ^6.6.0"
+
 public-encrypt@^4.0.0:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/public-encrypt/-/public-encrypt-4.0.3.tgz#4fcc9d77a07e48ba7527e7cbe0de33d0701331e0"
@@ -11428,10 +11437,22 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+<<<<<<< HEAD
 "video.js@^6 || ^7", "video.js@^6.8.0 || ^7.0.0", video.js@^7, video.js@^7.6.0:
   version "7.7.5"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.7.5.tgz#7b066c4eb56fdf4980d3be09491ce520ffe8ed75"
   integrity sha512-+HSp2KNZmGzkmTecXyaXxEGi3F41WAm43PqNp3hWq5wYUQOHwcRu5YhhCz+5q0fDV+SlnFMSSLl/I6QLMlYv/g==
+||||||| parent of 3a4a1a620... Add scrubbing thumbnails to the player
+"video.js@^6 || ^7", "video.js@^6.8.0 || ^7.0.0", video.js@^7, video.js@^7.6.0:
+  version "7.6.5"
+  resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.6.5.tgz#af66a71bc05fd79c581c1673ac5a78a6b31bc831"
+  integrity sha512-r0kC9SNJhXz9th/wwbRaLVOIZTvXkF+rhFq9/FWU+e+EJClwClRCgP8STGmfrPHDXrfWiJwH9YY21JZK61vGGQ==
+=======
+"video.js@^6 || ^7", "video.js@^6.8.0 || ^7.0.0", video.js@^7, "video.js@^7.2.0 || ^6.6.0", video.js@^7.6.0:
+  version "7.6.5"
+  resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.6.5.tgz#af66a71bc05fd79c581c1673ac5a78a6b31bc831"
+  integrity sha512-r0kC9SNJhXz9th/wwbRaLVOIZTvXkF+rhFq9/FWU+e+EJClwClRCgP8STGmfrPHDXrfWiJwH9YY21JZK61vGGQ==
+>>>>>>> 3a4a1a620... Add scrubbing thumbnails to the player
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@videojs/http-streaming" "1.12.2"

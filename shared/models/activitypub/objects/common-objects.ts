@@ -69,6 +69,12 @@ export type ActivityHtmlUrlObject = {
   href: string
 }
 
+export type ActivityThumbnailsUrlObject = {
+  type: 'Link'
+  mediaType: 'text/vtt'
+  href: string
+}
+
 export interface ActivityHashTagObject {
   type: 'Hashtag' | 'Mention'
   href?: string
@@ -98,6 +104,7 @@ export type ActivityUrlObject =
   | ActivityMagnetUrlObject
   | ActivityHtmlUrlObject
   | ActivityVideoFileMetadataObject
+  | ActivityThumbnailsUrlObject
 
 export interface ActivityPubAttributedTo {
   type: 'Group' | 'Person'

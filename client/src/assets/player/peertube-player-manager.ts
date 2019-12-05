@@ -4,6 +4,7 @@ import 'videojs-hotkeys'
 import 'videojs-dock'
 import 'videojs-contextmenu-ui'
 import 'videojs-contrib-quality-levels'
+import 'pthumbnails'
 import './upnext/end-card'
 import './upnext/upnext-plugin'
 import './bezels/bezels-plugin'
@@ -28,6 +29,7 @@ import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
 import { TranslationsManager } from './translations-manager'
+import { environment } from '../../environments/environment'
 
 // For VideoJS
 (window as any).WebVTT = require('vtt.js/lib/vtt.js').WebVTT;
@@ -84,6 +86,7 @@ export interface CommonOptions extends CustomizationOptions {
 
   videoViewUrl: string
   embedUrl: string
+  manifestUrl?: string
 
   language?: string
 
@@ -142,6 +145,15 @@ export class PeertubePlayerManager {
         self.addContextMenu(mode, player, options.common.embedUrl)
 
         player.bezels()
+
+        if (options.common.manifestUrl) {
+          player.vttThumbnails({
+            // src is the .vtt file
+            src: options.common.manifestUrl,
+            // baseUrl is the (optional) prepended base to each image url in the .vtt, which if unset defaults to thumbnailUrl's
+            baseUrl: environment.apiUrl || '/' // either use the apiUrl if set, or default to the host of thumbnailsUrl
+          })
+        }
 
         return res(player)
       })

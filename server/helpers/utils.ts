@@ -98,6 +98,20 @@ function getUUIDFromFilename (filename: string) {
   return result[0]
 }
 
+/**
+ * Returns string with text appended before its extension part.
+ *
+ * @param filenameWithExtension filename or path with extension
+ * @param textToInsert text to append
+ */
+function insertBeforeExtension (filenameWithExtension: string, textToInsert) {
+  return (
+    filenameWithExtension.substring(0, filenameWithExtension.lastIndexOf('.')) +
+    textToInsert +
+    filenameWithExtension.substring(filenameWithExtension.lastIndexOf('.'))
+  )
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -108,5 +122,6 @@ export {
   getServerActor,
   getServerCommit,
   generateVideoImportTmpPath,
-  getUUIDFromFilename
+  getUUIDFromFilename,
+  insertBeforeExtension
 }

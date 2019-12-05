@@ -4126,6 +4126,13 @@ node-pre-gyp@~0.11.0:
     semver "^5.3.0"
     tar "^4"
 
+node-webvtt@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/node-webvtt/-/node-webvtt-1.6.1.tgz#5cd6aac427765481e8364f9456e2ad0c31fec200"
+  integrity sha512-k7WC2VdrprpNuL2WIXOm8m4IGNy9DpuDFW51FB84q31nXqjpJPwcmdK1CW+lASD4/oKSgKqDfGjA2kAc//JCeQ==
+  dependencies:
+    commander "^2.20.0"
+
 nodemailer@5.0.0:
   version "5.0.0"
   resolved "https://registry.yarnpkg.com/nodemailer/-/nodemailer-5.0.0.tgz#bcb409eca613114e85de42646d0ce7f1fa70b716"
