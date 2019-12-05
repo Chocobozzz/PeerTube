@@ -15,7 +15,7 @@ export enum VideoResolution {
  *
  * Sources for individual quality levels:
  * Google Live Encoder: https://support.google.com/youtube/answer/2853702?hl=en
- * YouTube Video Info (tested with random music video): https://www.h3xed.com/blogmedia/youtube-info.php
+ * YouTube Video Info: youtube-dl --list-formats, with sample videos
  */
 function getBaseBitrate (resolution: VideoResolution) {
   switch (resolution) {
@@ -25,28 +25,28 @@ function getBaseBitrate (resolution: VideoResolution) {
 
     case VideoResolution.H_240P:
       // quality according to Google Live Encoder: 300 - 700 Kbps
-      // Quality according to YouTube Video Info: 186 Kbps
-      return 250 * 1000
+      // Quality according to YouTube Video Info: 285 Kbps
+      return 320 * 1000
 
     case VideoResolution.H_360P:
       // quality according to Google Live Encoder: 400 - 1,000 Kbps
-      // Quality according to YouTube Video Info: 480 Kbps
-      return 500 * 1000
+      // Quality according to YouTube Video Info: 700 Kbps
+      return 780 * 1000
 
     case VideoResolution.H_480P:
       // quality according to Google Live Encoder: 500 - 2,000 Kbps
-      // Quality according to YouTube Video Info: 879 Kbps
-      return 900 * 1000
+      // Quality according to YouTube Video Info: 1300 Kbps
+      return 1500 * 1000
 
     case VideoResolution.H_720P:
       // quality according to Google Live Encoder: 1,500 - 4,000 Kbps
-      // Quality according to YouTube Video Info: 1752 Kbps
-      return 1750 * 1000
+      // Quality according to YouTube Video Info: 2680 Kbps
+      return 2800 * 1000
 
     case VideoResolution.H_1080P:
       // quality according to Google Live Encoder: 3000 - 6000 Kbps
-      // Quality according to YouTube Video Info: 3277 Kbps
-      return 3300 * 1000
+      // Quality according to YouTube Video Info: 5081 Kbps
+      return 5800 * 1000
 
     case VideoResolution.H_4K: // fallthrough
     default:

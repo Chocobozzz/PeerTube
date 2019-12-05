@@ -48,6 +48,7 @@ import {
   MActorWithInboxes
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
+import { Op } from 'sequelize'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -115,7 +116,19 @@ export const unusedActorAttributesForAPI = [
     },
     {
       fields: [ 'preferredUsername', 'serverId' ],
-      unique: true
+      unique: true,
+      where: {
+        serverId: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'preferredUsername' ],
+      unique: true,
+      where: {
+        serverId: null
+      }
     },
     {
       fields: [ 'inboxUrl', 'sharedInboxUrl' ]
