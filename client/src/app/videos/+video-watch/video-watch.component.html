@@ -98,7 +98,8 @@
                 </div>
 
                 <my-video-actions-dropdown
-                  placement="top" buttonDirection="horizontal" [buttonStyled]="true" [video]="video" (videoRemoved)="onVideoRemoved()"
+                  placement="top" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
+                  (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
                 ></my-video-actions-dropdown>
               </div>
 

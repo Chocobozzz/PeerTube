@@ -203,10 +203,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   showSupportModal () {
+    this.pausePlayer()
+
     this.videoSupportModal.show()
   }
 
   showShareModal () {
+    this.pausePlayer()
+
     this.videoShareModal.show(this.currentTime)
   }
 
@@ -225,6 +229,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       // Pick a random video until the recommendations are improved
       this.nextVideoUuid = videos[randomInt(0,videos.length - 1)].uuid
     }
+  }
+
+  onModalOpened () {
+    this.pausePlayer()
   }
 
   onVideoRemoved () {
@@ -621,5 +629,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       }, undefined, this.i18n('Subscribe to the account'))
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+  }
+
+  private pausePlayer () {
+    if (!this.player) return
+
+    this.player.pause()
   }
 }
