@@ -418,6 +418,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const { playerMode, playerOptions } = await this.hooks.wrapFun(
       this.buildPlayerManagerOptions.bind(this),
       params,
+      'video-watch',
+      'filter:internal.video-watch.player.build-options.params',
       'filter:internal.video-watch.player.build-options.result'
     )
 

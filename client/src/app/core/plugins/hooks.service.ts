@@ -16,13 +16,10 @@ export class HooksService {
     private pluginService: PluginService
   ) { }
 
-  wrapObject<T, U extends ClientFilterHookName> (result: T, hookName: U) {
-    return this.pluginService.runHook(hookName, result)
-  }
-
   wrapObsFun
     <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-    (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
+    (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2)
+  {
     return from(this.pluginService.ensurePluginsAreLoaded(scope))
       .pipe(
         mergeMap(() => this.wrapObject(params, hookParamName)),
@@ -31,15 +28,25 @@ export class HooksService {
       )
   }
 
-  async wrapFun<U, T, V extends ClientFilterHookName> (fun: RawFunction<U, T>, params: U, hookName: V) {
-    const result = fun(params)
+  async wrapFun
+    <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
+    (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2)
+  {
+    await this.pluginService.ensurePluginsAreLoaded(scope)
 
-    return this.pluginService.runHook(hookName, result, params)
+    const newParams = await this.wrapObject(params, hookParamName)
+    const result = fun(newParams)
+
+    return this.pluginService.runHook(hookResultName, result, params)
   }
 
   runAction<T, U extends ClientActionHookName> (hookName: U, scope: PluginClientScope, params?: T) {
     this.pluginService.ensurePluginsAreLoaded(scope)
         .then(() => this.pluginService.runHook(hookName, undefined, params))
         .catch((err: any) => console.error('Fatal hook error.', { err }))
+  }
+
+  private wrapObject<T, U extends ClientFilterHookName> (result: T, hookName: U) {
+    return this.pluginService.runHook(hookName, result)
   }
 }

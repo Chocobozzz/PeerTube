@@ -45,7 +45,12 @@ export const clientFilterHookObject = {
   'filter:api.signup.registration.create.params': true,
 
   // Filter the options to create our player
-  'filter:internal.video-watch.player.build-options.result': true
+  'filter:internal.video-watch.player.build-options.params': true,
+  'filter:internal.video-watch.player.build-options.result': true,
+
+  // Filter our SVG icons content
+  'filter:internal.common.svg-icons.get-content.params': true,
+  'filter:internal.common.svg-icons.get-content.result': true
 }
 
 export type ClientFilterHookName = keyof typeof clientFilterHookObject
