@@ -1,4 +1,4 @@
-<div class="dropdown-root" ngbDropdown [placement]="placement">
+<div class="dropdown-root" ngbDropdown [placement]="placement" *ngIf="areActionsDisplayed(actions, entry)">
   <div
     class="action-button" [ngClass]="{ small: buttonSize === 'small', grey: theme === 'grey', orange: theme === 'orange', 'button-styled': buttonStyled }"
     ngbDropdownToggle role="button"

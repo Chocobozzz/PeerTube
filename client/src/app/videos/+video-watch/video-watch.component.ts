@@ -69,7 +69,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   likesBarTooltipText = ''
   hasAlreadyAcceptedPrivacyConcern = false
   remoteServerDown = false
-  hotkeys: Hotkey[]
+  hotkeys: Hotkey[] = []
 
   private nextVideoUuid = ''
   private currentTime: number
@@ -147,7 +147,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (this.queryParamsSub) this.queryParamsSub.unsubscribe()
 
     // Unbind hotkeys
-    if (this.isUserLoggedIn()) this.hotkeysService.remove(this.hotkeys)
+    this.hotkeysService.remove(this.hotkeys)
   }
 
   setLike () {
@@ -650,21 +650,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   private initHotkeys () {
     this.hotkeys = [
-      new Hotkey('shift+l', () => {
-        this.setLike()
-        return false
-      }, undefined, this.i18n('Like the video')),
-
-      new Hotkey('shift+d', () => {
-        this.setDislike()
-        return false
-      }, undefined, this.i18n('Dislike the video')),
-
-      new Hotkey('shift+s', () => {
-        this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
-        return false
-      }, undefined, this.i18n('Subscribe to the account')),
-
       // These hotkeys are managed by the player
       new Hotkey('f', e => e, undefined, this.i18n('Enter/exit fullscreen (requires player focus)')),
       new Hotkey('space', e => e, undefined, this.i18n('Play/Pause the video (requires player focus)')),
@@ -683,6 +668,26 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       new Hotkey('.', e => e, undefined, this.i18n('Navigate in the video frame by frame (requires player focus)'))
     ]
-    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+
+    if (this.isUserLoggedIn()) {
+      this.hotkeys = this.hotkeys.concat([
+        new Hotkey('shift+l', () => {
+          this.setLike()
+          return false
+        }, undefined, this.i18n('Like the video')),
+
+        new Hotkey('shift+d', () => {
+          this.setDislike()
+          return false
+        }, undefined, this.i18n('Dislike the video')),
+
+        new Hotkey('shift+s', () => {
+          this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
+          return false
+        }, undefined, this.i18n('Subscribe to the account'))
+      ])
+    }
+
+    this.hotkeysService.add(this.hotkeys)
   }
 }
