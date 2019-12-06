@@ -18,11 +18,10 @@ export class HooksService {
 
   wrapObsFun
     <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-    (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2)
-  {
+    (fun: ObservableFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
     return from(this.pluginService.ensurePluginsAreLoaded(scope))
       .pipe(
-        mergeMap(() => this.wrapObject(params, hookParamName)),
+        mergeMap(() => this.wrapObjectWithoutScopeLoad(params, hookParamName)),
         switchMap(params => fun(params)),
         mergeMap(result => this.pluginService.runHook(hookResultName, result, params))
       )
@@ -30,11 +29,10 @@ export class HooksService {
 
   async wrapFun
     <P, R, H1 extends ClientFilterHookName, H2 extends ClientFilterHookName>
-    (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2)
-  {
+    (fun: RawFunction<P, R>, params: P, scope: PluginClientScope, hookParamName: H1, hookResultName: H2) {
     await this.pluginService.ensurePluginsAreLoaded(scope)
 
-    const newParams = await this.wrapObject(params, hookParamName)
+    const newParams = await this.wrapObjectWithoutScopeLoad(params, hookParamName)
     const result = fun(newParams)
 
     return this.pluginService.runHook(hookResultName, result, params)
@@ -46,7 +44,13 @@ export class HooksService {
         .catch((err: any) => console.error('Fatal hook error.', { err }))
   }
 
-  private wrapObject<T, U extends ClientFilterHookName> (result: T, hookName: U) {
+  async wrapObject<T, U extends ClientFilterHookName> (result: T, scope: PluginClientScope, hookName: U) {
+    await this.pluginService.ensurePluginsAreLoaded(scope)
+
+    return this.wrapObjectWithoutScopeLoad(result, hookName)
+  }
+
+  private wrapObjectWithoutScopeLoad<T, U extends ClientFilterHookName> (result: T, hookName: U) {
     return this.pluginService.runHook(hookName, result)
   }
 }

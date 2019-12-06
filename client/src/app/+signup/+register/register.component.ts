@@ -103,6 +103,7 @@ export class RegisterComponent implements OnInit {
 
     const body: UserRegister = await this.hooks.wrapObject(
       Object.assign(this.formStepUser.value, { channel: this.formStepChannel.value }),
+      'signup',
       'filter:api.signup.registration.create.params'
     )
 
