@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+.root {
+  max-width: 1200px;
+  margin: auto;
+}
+
 .about-peertube-title {
   font-size: 25px;
   text-align: center;
@@ -20,8 +25,20 @@
 }
 
 .description {
-  margin-bottom: 100px;
   text-align: center;
+}
+
+.documentation {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 50px 0;
+  justify-content: center;
+
+  .card {
+    margin: 30px;
+    flex-basis: 300px;
+    font-size: 15px;
+  }
 }
 
 .description,
@@ -34,31 +51,19 @@ my-about-peertube-contributors {
   }
 }
 
-.p2p-privacy-title {
-  margin-top: 15px;
-}
-
 .privacy-contributors {
   display: flex;
-  flex-direction: row;
-
-  > div,
-  > my-about-peertube-contributors {
-    flex-basis: 100%;
-    display: block;
-  }
+  flex-direction: column;
 
   .p2p-privacy {
+    .section-title {
+      margin: 50px 0 20px;
+      text-align: center;
+    }
+
     h6 {
       font-size: 20px;
+      margin-top: 15px;
     }
-  }
-
-  my-about-peertube-contributors {
-    margin: 0 40px 40px 0;
-  }
-
-  @media screen and (max-width: $small-view) {
-    flex-direction: column;
   }
 }
