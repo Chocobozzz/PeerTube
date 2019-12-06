@@ -85,8 +85,6 @@ export class MarkdownService {
     let html = this.markdownParsers[ name ].render(markdown)
     html = this.avoidTruncatedTags(html)
 
-    console.log(html)
-
     if (config.escape) return this.htmlRenderer.toSafeHtml(html)
 
     return html
