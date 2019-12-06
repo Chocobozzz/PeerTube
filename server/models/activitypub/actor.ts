@@ -1,6 +1,5 @@
 import { values } from 'lodash'
 import { extname } from 'path'
-import * as Sequelize from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -48,7 +47,7 @@ import {
   MActorWithInboxes
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
-import { Op } from 'sequelize'
+import { Op, Transaction } from 'sequelize'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -285,7 +284,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findByPk(id)
   }
 
-  static loadFromAccountByVideoId (videoId: number, transaction: Sequelize.Transaction): Bluebird<MActor> {
+  static loadFromAccountByVideoId (videoId: number, transaction: Transaction): Bluebird<MActor> {
     const query = {
       include: [
         {
@@ -329,11 +328,11 @@ export class ActorModel extends Model<ActorModel> {
       .then(a => !!a)
   }
 
-  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction): Bluebird<MActorFull[]> {
+  static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Bluebird<MActorFull[]> {
     const query = {
       where: {
         followersUrl: {
-          [ Sequelize.Op.in ]: followersUrls
+          [ Op.in ]: followersUrls
         }
       },
       transaction
@@ -342,7 +341,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction): Bluebird<MActorFull> {
+  static loadLocalByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername,
@@ -373,7 +372,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction): Bluebird<MActorAccountChannelId> {
+  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MActorAccountChannelId> {
     const query = {
       where: {
         url
@@ -396,7 +395,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction): Bluebird<MActorFull> {
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         url
@@ -483,7 +482,7 @@ export class ActorModel extends Model<ActorModel> {
     return activityPubContextify(json)
   }
 
-  getFollowerSharedInboxUrls (t: Sequelize.Transaction) {
+  getFollowerSharedInboxUrls (t: Transaction) {
     const query = {
       attributes: [ 'sharedInboxUrl' ],
       include: [

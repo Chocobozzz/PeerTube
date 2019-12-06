@@ -551,26 +551,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     }
   }
 
-  private initHotkeys () {
-    this.hotkeys = [
-      new Hotkey('shift+l', () => {
-        this.setLike()
-        return false
-      }, undefined, this.i18n('Like the video')),
-
-      new Hotkey('shift+d', () => {
-        this.setDislike()
-        return false
-      }, undefined, this.i18n('Dislike the video')),
-
-      new Hotkey('shift+s', () => {
-        this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
-        return false
-      }, undefined, this.i18n('Subscribe to the account'))
-    ]
-    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
-  }
-
   private buildPlayerManagerOptions (params: {
     video: VideoDetails,
     videoCaptions: VideoCaption[],
@@ -666,5 +646,43 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     if (!this.player) return
 
     this.player.pause()
+  }
+
+  private initHotkeys () {
+    this.hotkeys = [
+      new Hotkey('shift+l', () => {
+        this.setLike()
+        return false
+      }, undefined, this.i18n('Like the video')),
+
+      new Hotkey('shift+d', () => {
+        this.setDislike()
+        return false
+      }, undefined, this.i18n('Dislike the video')),
+
+      new Hotkey('shift+s', () => {
+        this.subscribeButton.subscribed ? this.subscribeButton.unsubscribe() : this.subscribeButton.subscribe()
+        return false
+      }, undefined, this.i18n('Subscribe to the account')),
+
+      // These hotkeys are managed by the player
+      new Hotkey('f', e => e, undefined, this.i18n('Enter/exit fullscreen (requires player focus)')),
+      new Hotkey('space', e => e, undefined, this.i18n('Play/Pause the video (requires player focus)')),
+      new Hotkey('m', e => e, undefined, this.i18n('Mute/unmute the video (requires player focus)')),
+
+      new Hotkey('0-9', e => e, undefined, this.i18n('Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)')),
+
+      new Hotkey('up', e => e, undefined, this.i18n('Increase the volume (requires player focus)')),
+      new Hotkey('down', e => e, undefined, this.i18n('Decrease the volume (requires player focus)')),
+
+      new Hotkey('right', e => e, undefined, this.i18n('Seek the video forward (requires player focus)')),
+      new Hotkey('left', e => e, undefined, this.i18n('Seek the video backward (requires player focus)')),
+
+      new Hotkey('>', e => e, undefined, this.i18n('Increase playback rate (requires player focus)')),
+      new Hotkey('<', e => e, undefined, this.i18n('Decrease playback rate (requires player focus)')),
+
+      new Hotkey('.', e => e, undefined, this.i18n('Navigate in the video frame by frame (requires player focus)'))
+    ]
+    if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
   }
 }

@@ -292,7 +292,7 @@ describe('Test video transcoding', function () {
       tempFixturePath = await generateHighBitrateVideo()
 
       const bitrate = await getVideoFileBitrate(tempFixturePath)
-      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 25, VIDEO_TRANSCODING_FPS))
     }
 
     const videoAttributes = {
@@ -331,7 +331,7 @@ describe('Test video transcoding', function () {
       tempFixturePath = await generateHighBitrateVideo()
 
       const bitrate = await getVideoFileBitrate(tempFixturePath)
-      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 60, VIDEO_TRANSCODING_FPS))
+      expect(bitrate).to.be.above(getMaxBitrate(VideoResolution.H_1080P, 25, VIDEO_TRANSCODING_FPS))
     }
 
     for (const fixture of [ 'video_short.mkv', 'video_short.avi' ]) {
