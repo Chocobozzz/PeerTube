@@ -9,7 +9,15 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
     'action:api.video-thread.created',
     'action:api.video-comment-reply.created',
-    'action:api.video-comment.deleted'
+    'action:api.video-comment.deleted',
+
+    'action:api.user.blocked',
+    'action:api.user.unblocked',
+    'action:api.user.registered',
+    'action:api.user.created',
+    'action:api.user.deleted',
+    'action:api.user.updated',
+    'action:api.user.oauth2-got-token'
   ]
 
   for (const h of actionHooks) {

@@ -5,19 +5,26 @@ import 'mocha'
 import {
   cleanupTests,
   flushAndRunMultipleServers,
-  flushAndRunServer, killallServers, reRunServer,
+  killallServers,
+  reRunServer,
   ServerInfo,
   waitUntilLog
 } from '../../../shared/extra-utils/server/servers'
 import {
   addVideoCommentReply,
-  addVideoCommentThread, deleteVideoComment,
+  addVideoCommentThread,
+  blockUser,
+  createUser,
+  deleteVideoComment,
   getPluginTestPath,
-  installPlugin, removeVideo,
+  installPlugin, login,
+  registerUser, removeUser,
   setAccessTokensToServers,
+  unblockUser, updateUser,
   updateVideo,
   uploadVideo,
-  viewVideo
+  viewVideo,
+  userLogin
 } from '../../../shared/extra-utils'
 
 const expect = chai.expect
@@ -48,52 +55,104 @@ describe('Test plugin action hooks', function () {
     await reRunServer(servers[0])
   })
 
-  it('Should run action:application.listening', async function () {
-    await checkHook('action:application.listening')
+  describe('Application hooks', function () {
+    it('Should run action:application.listening', async function () {
+      await checkHook('action:application.listening')
+    })
   })
 
-  it('Should run action:api.video.uploaded', async function () {
-    const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
-    videoUUID = res.body.video.uuid
+  describe('Videos hooks', function () {
+    it('Should run action:api.video.uploaded', async function () {
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
+      videoUUID = res.body.video.uuid
 
-    await checkHook('action:api.video.uploaded')
+      await checkHook('action:api.video.uploaded')
+    })
+
+    it('Should run action:api.video.updated', async function () {
+      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video updated' })
+
+      await checkHook('action:api.video.updated')
+    })
+
+    it('Should run action:api.video.viewed', async function () {
+      await viewVideo(servers[0].url, videoUUID)
+
+      await checkHook('action:api.video.viewed')
+    })
   })
 
-  it('Should run action:api.video.updated', async function () {
-    await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video updated' })
+  describe('Comments hooks', function () {
+    it('Should run action:api.video-thread.created', async function () {
+      const res = await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'thread')
+      threadId = res.body.comment.id
 
-    await checkHook('action:api.video.updated')
+      await checkHook('action:api.video-thread.created')
+    })
+
+    it('Should run action:api.video-comment-reply.created', async function () {
+      await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID, threadId, 'reply')
+
+      await checkHook('action:api.video-comment-reply.created')
+    })
+
+    it('Should run action:api.video-comment.deleted', async function () {
+      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
+
+      await checkHook('action:api.video-comment.deleted')
+    })
   })
 
-  it('Should run action:api.video.viewed', async function () {
-    await viewVideo(servers[0].url, videoUUID)
+  describe('Users hooks', function () {
+    let userId: number
 
-    await checkHook('action:api.video.viewed')
-  })
+    it('Should run action:api.user.registered', async function () {
+      await registerUser(servers[0].url, 'registered_user', 'super_password')
 
-  it('Should run action:api.video-thread.created', async function () {
-    const res = await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'thread')
-    threadId = res.body.comment.id
+      await checkHook('action:api.user.registered')
+    })
 
-    await checkHook('action:api.video-thread.created')
-  })
+    it('Should run action:api.user.created', async function () {
+      const res = await createUser({
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
+        username: 'created_user',
+        password: 'super_password'
+      })
+      userId = res.body.user.id
 
-  it('Should run action:api.video-comment-reply.created', async function () {
-    await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID, threadId, 'reply')
+      await checkHook('action:api.user.created')
+    })
 
-    await checkHook('action:api.video-comment-reply.created')
-  })
+    it('Should run action:api.user.oauth2-got-token', async function () {
+      await userLogin(servers[0], { username: 'created_user', password: 'super_password' })
 
-  it('Should run action:api.video-comment.deleted', async function () {
-    await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
+      await checkHook('action:api.user.oauth2-got-token')
+    })
 
-    await checkHook('action:api.video-comment.deleted')
-  })
+    it('Should run action:api.user.blocked', async function () {
+      await blockUser(servers[0].url, userId, servers[0].accessToken)
 
-  it('Should run action:api.video.deleted', async function () {
-    await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
+      await checkHook('action:api.user.blocked')
+    })
 
-    await checkHook('action:api.video.deleted')
+    it('Should run action:api.user.unblocked', async function () {
+      await unblockUser(servers[0].url, userId, servers[0].accessToken)
+
+      await checkHook('action:api.user.unblocked')
+    })
+
+    it('Should run action:api.user.updated', async function () {
+      await updateUser({ url: servers[0].url, accessToken: servers[0].accessToken, userId, videoQuota: 50 })
+
+      await checkHook('action:api.user.updated')
+    })
+
+    it('Should run action:api.user.deleted', async function () {
+      await removeUser(servers[0].url, userId, servers[0].accessToken)
+
+      await checkHook('action:api.user.deleted')
+    })
   })
 
   after(async function () {

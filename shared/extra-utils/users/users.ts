@@ -8,7 +8,8 @@ import { userLogin } from './login'
 import { UserUpdateMe } from '../../models/users'
 import { omit } from 'lodash'
 
-type CreateUserArgs = { url: string,
+type CreateUserArgs = {
+  url: string,
   accessToken: string,
   username: string,
   password: string,

@@ -49,6 +49,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
 import { MUser, MUserAccountDefault } from '@server/typings/models'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -172,7 +173,7 @@ usersRouter.post('/:id/verify-email',
 usersRouter.post('/token',
   loginRateLimiter,
   token,
-  success
+  tokenSuccess
 )
 // TODO: Once https://github.com/oauthjs/node-oauth2-server/pull/289 is merged, implement revoke token route
 
@@ -198,10 +199,12 @@ async function createUser (req: express.Request, res: express.Response) {
     adminFlags: body.adminFlags || UserAdminFlag.NONE
   }) as MUser
 
-  const { user, account } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
+  const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
+
+  Hooks.runAction('action:api.user.created', { body, user, account, videoChannel })
 
   return res.json({
     user: {
@@ -228,7 +231,7 @@ async function registerUser (req: express.Request, res: express.Response) {
     emailVerified: CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION ? false : null
   })
 
-  const { user } = await createUserAccountAndChannelAndPlaylist({
+  const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({
     userToCreate: userToCreate,
     userDisplayName: body.displayName || undefined,
     channelNames: body.channel
@@ -243,6 +246,8 @@ async function registerUser (req: express.Request, res: express.Response) {
 
   Notifier.Instance.notifyOnNewUserRegistration(user)
 
+  Hooks.runAction('action:api.user.registered', { body, user, account, videoChannel })
+
   return res.type('json').status(204).end()
 }
 
@@ -250,6 +255,8 @@ async function unblockUser (req: express.Request, res: express.Response) {
   const user = res.locals.user
 
   await changeUserBlock(res, user, false)
+
+  Hooks.runAction('action:api.user.unblocked', { user })
 
   return res.status(204).end()
 }
@@ -259,6 +266,8 @@ async function blockUser (req: express.Request, res: express.Response) {
   const reason = req.body.reason
 
   await changeUserBlock(res, user, true, reason)
+
+  Hooks.runAction('action:api.user.blocked', { user })
 
   return res.status(204).end()
 }
@@ -286,6 +295,8 @@ async function removeUser (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
 
+  Hooks.runAction('action:api.user.deleted', { user })
+
   return res.sendStatus(204)
 }
 
@@ -309,6 +320,8 @@ async function updateUser (req: express.Request, res: express.Response) {
   if (roleChanged || body.password !== undefined) await deleteUserToken(userToUpdate.id)
 
   auditLogger.update(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()), oldUserAuditView)
+
+  Hooks.runAction('action:api.user.updated', { user })
 
   // Don't need to send this update to followers, these attributes are not federated
 
@@ -356,8 +369,10 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
   return res.status(204).end()
 }
 
-function success (req: express.Request, res: express.Response) {
-  res.end()
+function tokenSuccess (req: express.Request) {
+  const username = req.body.username
+
+  Hooks.runAction('action:api.user.oauth2-got-token', { username, ip: req.ip })
 }
 
 async function changeUserBlock (res: express.Response, user: MUserAccountDefault, block: boolean, reason?: string) {
