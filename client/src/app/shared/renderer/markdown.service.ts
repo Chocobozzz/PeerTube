@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core'
 import { MarkdownIt } from 'markdown-it'
 import { HtmlRendererService } from '@app/shared/renderer/html-renderer.service'
-import { mark } from '@angular/compiler-cli/src/ngtsc/perf/src/clock'
 
 type MarkdownParsers = {
   textMarkdownIt: MarkdownIt
+  textWithHTMLMarkdownIt: MarkdownIt
+
   enhancedMarkdownIt: MarkdownIt
-  enhancedMarkdownWithHTMLIt: MarkdownIt
+  enhancedWithHTMLMarkdownIt: MarkdownIt
+
   completeMarkdownIt: MarkdownIt
 }
 
@@ -30,36 +32,45 @@ export class MarkdownService {
     'newline',
     'list'
   ]
+  static TEXT_WITH_HTML_RULES = MarkdownService.TEXT_RULES.concat([ 'html_inline', 'html_block' ])
+
   static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
-  static ENHANCED_WITH_HTML_RULES = MarkdownService.ENHANCED_RULES.concat([ 'html_inline', 'html_block' ])
+  static ENHANCED_WITH_HTML_RULES = MarkdownService.TEXT_WITH_HTML_RULES.concat([ 'image' ])
+
   static COMPLETE_RULES = MarkdownService.ENHANCED_WITH_HTML_RULES.concat([ 'block', 'inline', 'heading', 'paragraph' ])
 
   private markdownParsers: MarkdownParsers = {
     textMarkdownIt: null,
+    textWithHTMLMarkdownIt: null,
     enhancedMarkdownIt: null,
-    enhancedMarkdownWithHTMLIt: null,
+    enhancedWithHTMLMarkdownIt: null,
     completeMarkdownIt: null
   }
   private parsersConfig: MarkdownParserConfigs = {
     textMarkdownIt: { rules: MarkdownService.TEXT_RULES, html: false },
+    textWithHTMLMarkdownIt: { rules: MarkdownService.TEXT_WITH_HTML_RULES, html: true, escape: true },
+
     enhancedMarkdownIt: { rules: MarkdownService.ENHANCED_RULES, html: false },
-    enhancedMarkdownWithHTMLIt: { rules: MarkdownService.ENHANCED_WITH_HTML_RULES, html: true, escape: true },
+    enhancedWithHTMLMarkdownIt: { rules: MarkdownService.ENHANCED_WITH_HTML_RULES, html: true, escape: true },
+
     completeMarkdownIt: { rules: MarkdownService.COMPLETE_RULES, html: true }
   }
 
   constructor (private htmlRenderer: HtmlRendererService) {}
 
-  textMarkdownToHTML (markdown: string) {
+  textMarkdownToHTML (markdown: string, withHtml = false) {
+    if (withHtml) return this.render('textWithHTMLMarkdownIt', markdown)
+
     return this.render('textMarkdownIt', markdown)
   }
 
-  async enhancedMarkdownToHTML (markdown: string, withHtml = false) {
-    if (withHtml) return this.render('enhancedMarkdownWithHTMLIt', markdown)
+  enhancedMarkdownToHTML (markdown: string, withHtml = false) {
+    if (withHtml) return this.render('enhancedWithHTMLMarkdownIt', markdown)
 
     return this.render('enhancedMarkdownIt', markdown)
   }
 
-  async completeMarkdownToHTML (markdown: string) {
+  completeMarkdownToHTML (markdown: string) {
     return this.render('completeMarkdownIt', markdown)
   }
 
