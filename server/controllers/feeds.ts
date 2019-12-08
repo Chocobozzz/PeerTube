@@ -156,7 +156,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
       categories: [video.category ? {
         value: video.category,
         label: VideoModel.getCategoryLabel(video.category)
-      } : null],
+      } : null].filter(Boolean),
       community: {
         statistics: {
           views: video.views
