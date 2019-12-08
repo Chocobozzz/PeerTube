@@ -45,7 +45,7 @@ $play-overlay-width: 18px;
     width: inherit;
     height: inherit;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.3);
 
     &, .icon {
       transition: all $play-overlay-transition;
