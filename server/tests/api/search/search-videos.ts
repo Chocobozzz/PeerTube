@@ -20,6 +20,7 @@ const expect = chai.expect
 describe('Test videos search', function () {
   let server: ServerInfo = null
   let startDate: string
+  let videoUUID: string
 
   before(async function () {
     this.timeout(30000)
@@ -46,6 +47,7 @@ describe('Test videos search', function () {
         const attributes3 = immutableAssign(attributes1, { name: attributes1.name + ' - 3', language: undefined })
         const res = await uploadVideo(server.url, server.accessToken, attributes3)
         const videoId = res.body.video.id
+        videoUUID = res.body.video.uuid
 
         await createVideoCaption({
           url: server.url,
@@ -437,6 +439,14 @@ describe('Test videos search', function () {
       expect(res.body.total).to.equal(1)
       expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
     }
+  })
+
+  it('Should search by UUID', async function () {
+    const search = videoUUID
+    const res = await advancedVideosSearch(server.url, { search })
+
+    expect(res.body.total).to.equal(1)
+    expect(res.body.data[0].name).to.equal('1111 2222 3333 - 3')
   })
 
   after(async function () {

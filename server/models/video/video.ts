@@ -59,8 +59,6 @@ import {
   ACTIVITY_PUB,
   API_VERSION,
   CONSTRAINTS_FIELDS,
-  HLS_REDUNDANCY_DIRECTORY,
-  HLS_STREAMING_PLAYLIST_DIRECTORY,
   LAZY_STATIC_PATHS,
   REMOTE_SCHEME,
   STATIC_DOWNLOAD_PATHS,
@@ -143,7 +141,8 @@ import {
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
-import { getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath, getHLSDirectory } from '@server/lib/video-paths'
+import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import * as validator from 'validator'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -1352,24 +1351,35 @@ export class VideoModel extends Model<VideoModel> {
     const escapedSearch = VideoModel.sequelize.escape(options.search)
     const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
     if (options.search) {
-      whereAnd.push(
-        {
-          id: {
-            [ Op.in ]: Sequelize.literal(
-              '(' +
-              'SELECT "video"."id" FROM "video" ' +
-              'WHERE ' +
-              'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
-              'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-              'UNION ALL ' +
-              'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
-              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE "tag"."name" = ' + escapedSearch +
-              ')'
-            )
-          }
+      const trigramSearch = {
+        id: {
+          [ Op.in ]: Sequelize.literal(
+            '(' +
+            'SELECT "video"."id" FROM "video" ' +
+            'WHERE ' +
+            'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+            'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+            'UNION ALL ' +
+            'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
+            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
+            'WHERE "tag"."name" = ' + escapedSearch +
+            ')'
+          )
         }
-      )
+      }
+
+      if (validator.isUUID(options.search)) {
+        whereAnd.push({
+          [Op.or]: [
+            trigramSearch,
+            {
+              uuid: options.search
+            }
+          ]
+        })
+      } else {
+        whereAnd.push(trigramSearch)
+      }
 
       attributesInclude.push(createSimilarityAttribute('VideoModel.name', options.search))
     }
