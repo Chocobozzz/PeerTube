@@ -16,7 +16,7 @@ export class HtmlRendererService {
     const html = this.linkifier.linkify(text)
 
     return sanitizeHtml(html, {
-      allowedTags: [ 'a', 'p', 'span', 'br' ],
+      allowedTags: [ 'a', 'p', 'span', 'br', 'strong', 'em', 'ul', 'ol', 'li' ],
       allowedSchemes: [ 'http', 'https' ],
       allowedAttributes: {
         'a': [ 'href', 'class', 'target' ]
