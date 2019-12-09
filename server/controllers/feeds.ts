@@ -113,22 +113,36 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   // Adding video items to the feed, one at a time
   resultList.data.forEach(video => {
     const formattedVideoFiles = video.getFormattedVideoFilesJSON()
+
     const torrents = formattedVideoFiles.map(videoFile => ({
       title: video.name,
       url: videoFile.torrentUrl,
       size_in_bytes: videoFile.size
     }))
-    const videos = formattedVideoFiles.map(videoFile => (Object.assign({
-      type: 'video/mp4',
-      medium: 'video',
-      height: videoFile.resolution.label.replace('p', ''),
-      fileSize: videoFile.size,
-      url: videoFile.fileUrl,
-      framerate: videoFile.fps,
-      duration: video.duration
-    }, video.language ? {
-      lang: video.language
-    } : {})))
+
+    const videos = formattedVideoFiles.map(videoFile => {
+      const result = {
+        type: 'video/mp4',
+        medium: 'video',
+        height: videoFile.resolution.label.replace('p', ''),
+        fileSize: videoFile.size,
+        url: videoFile.fileUrl,
+        framerate: videoFile.fps,
+        duration: video.duration
+      }
+
+      if (video.language) Object.assign(result, { lang: video.language })
+
+      return result
+    })
+
+    const categories: { value: number, label: string }[] = []
+    if (video.category) {
+      categories.push({
+        value: video.category,
+        label: VideoModel.getCategoryLabel(video.category)
+      })
+    }
 
     feed.addItem({
       title: video.name,
@@ -153,10 +167,7 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
       player: {
         url: video.getWatchStaticPath()
       },
-      categories: [video.category ? {
-        value: video.category,
-        label: VideoModel.getCategoryLabel(video.category)
-      } : null].filter(Boolean),
+      categories,
       community: {
         statistics: {
           views: video.views
