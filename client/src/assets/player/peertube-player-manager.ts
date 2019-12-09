@@ -302,7 +302,7 @@ export class PeertubePlayerManager {
 
     let consumeOnly = false
     // FIXME: typings
-    if (navigator && (navigator as any).connection && (navigator as any).connection.effectiveType === 'cellular') {
+    if (navigator && (navigator as any).connection && (navigator as any).connection.type === 'cellular') {
       console.log('We are on a cellular connection: disabling seeding.')
       consumeOnly = true
     }
