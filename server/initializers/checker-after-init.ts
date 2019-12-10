@@ -108,6 +108,10 @@ function checkConfig () {
     }
   }
 
+  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
+    logger.warn('Redundancy directory should be different than the videos folder.')
+  }
+
   return null
 }
 
