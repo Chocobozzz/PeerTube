@@ -1,7 +1,13 @@
 <div class="other-videos">
   <ng-container *ngIf="hasVideos$ | async">
-    <div i18n class="title-page title-page-single">
-      Other videos
+    <div class="d-flex title-page-container">
+      <div i18n class="title-page title-page-single">
+        Other videos
+      </div>
+      <div class="d-flex title-page-autoplay">
+        <span>Autoplay</span>
+        <p-inputSwitch [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"></p-inputSwitch>
+      </div>
     </div>
 
     <div *ngFor="let video of (videos$ | async)">
