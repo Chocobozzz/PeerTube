@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { InputSwitchModule } from 'primeng/inputswitch'
 import { RecommendedVideosComponent } from '@app/videos/recommendations/recommended-videos.component'
 import { RecommendedVideosStore } from '@app/videos/recommendations/recommended-videos.store'
 import { CommonModule } from '@angular/common'
@@ -7,6 +8,7 @@ import { RecentVideosRecommendationService } from '@app/videos/recommendations/r
 
 @NgModule({
   imports: [
+    InputSwitchModule,
     SharedModule,
     CommonModule
   ],

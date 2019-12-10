@@ -45,6 +45,7 @@ import { randomInt } from '@shared/core-utils/miscs/miscs'
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
+  private static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO = 'auto_play_next_video'
 
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('videoShareModal', { static: false }) videoShareModal: VideoShareComponent
@@ -436,7 +437,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.player.one('ended', () => {
         if (this.playlist) {
           this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
-        } else if (this.user && this.user.autoPlayNextVideo) {
+        } else if (
+          this.user && this.user.autoPlayNextVideo ||
+          peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+        ) {
           this.zone.run(() => this.autoplayNext())
         }
       })
