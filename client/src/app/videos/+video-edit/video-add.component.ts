@@ -2,7 +2,7 @@ import { Component, HostListener, ViewChild } from '@angular/core'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
 import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
-import { ServerService } from '@app/core'
+import { AuthService, ServerService } from '@app/core'
 import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-components/video-import-torrent.component'
 
 @Component({
@@ -19,6 +19,7 @@ export class VideoAddComponent implements CanComponentDeactivate {
   videoName: string
 
   constructor (
+    private auth: AuthService,
     private serverService: ServerService
   ) {}
 
@@ -56,5 +57,13 @@ export class VideoAddComponent implements CanComponentDeactivate {
 
   isVideoImportTorrentEnabled () {
     return this.serverService.getConfig().import.videos.torrent.enabled
+  }
+
+  isInSecondStep () {
+    return !!this.secondStepType
+  }
+
+  isRootUser () {
+    return this.auth.getUser().username === 'root'
   }
 }

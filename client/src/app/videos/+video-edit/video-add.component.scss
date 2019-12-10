@@ -5,13 +5,22 @@ $border-width: 3px;
 $border-type: solid;
 $border-color: #EAEAEA;
 
+.margin-content {
+  padding-top: 50px;
+}
+
+.alert {
+  font-size: 15px;
+}
+
 ::ng-deep .root-tabset.video-add-tabset {
+  margin-top: 50px;
+
   &.hide-nav > .nav {
     display: none !important;
   }
 
   & > .nav {
-
     border-bottom: $border-width $border-type $border-color;
     margin: 0 !important;
 

@@ -1,5 +1,11 @@
 <div class="margin-content">
-  <div class="title-page title-page-single">
+  <div class="alert alert-warning" *ngIf="isRootUser()" i18n>
+    We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.
+    <br />
+    Instead, <a routerLink="/admin/users">create a dedicated account</a> to upload your videos.
+  </div>
+
+  <div class="title-page title-page-single" *ngIf="isInSecondStep()">
     <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>
     <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
   </div>
