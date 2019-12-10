@@ -44,7 +44,7 @@
 }
 
 @mixin peertube-word-wrap {
-  word-break: normal;
+  word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
   -webkit-hyphens: auto;
@@ -397,6 +397,7 @@
   width: $size;
   height: $size;
   min-width: $size;
+  min-height: $size;
 }
 
 @mixin chevron ($size, $border-width) {

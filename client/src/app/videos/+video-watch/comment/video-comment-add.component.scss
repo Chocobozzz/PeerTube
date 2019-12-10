@@ -10,10 +10,10 @@ form {
   margin-bottom: 10px;
 
   img {
-    @include avatar(36px);
+    @include avatar(25px);
 
     vertical-align: top;
-    margin-right: 20px;
+    margin-right: 10px;
   }
 
   .form-group {
@@ -40,9 +40,13 @@ form {
   }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 600px) {
   textarea, .submit-comment button {
     font-size: 14px !important;
+  }
+
+  textarea {
+    padding: 5px !important;
   }
 }
 

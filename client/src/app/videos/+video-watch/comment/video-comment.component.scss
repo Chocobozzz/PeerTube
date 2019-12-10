@@ -5,11 +5,24 @@
   font-size: 15px;
   display: flex;
 
+  .left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 10px;
+
+    .vertical-border {
+      width: 2px;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.05);
+      margin: 10px 0;
+    }
+  }
+
   .comment-avatar {
     @include avatar(36px);
 
     margin-top: 5px;
-    margin-right: 20px;
   }
 
   .comment {
@@ -84,33 +97,47 @@
       }
     }
   }
-}
 
-// Decrease the space of child comments on small screens
-@media screen and (max-width: 1600px) {
   .children {
-    margin-left: -20px;
+    // Reduce avatars size for replies
+    .comment-avatar {
+      @include avatar(25px);
+    }
+
+    .left {
+      margin-right: 6px;
+    }
   }
 }
 
 @media screen and (max-width: 1200px) {
   .children {
-    margin-left: -30px;
+    margin-left: -10px;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .children {
-    margin-left: -35px;
-  }
-
   .root-comment {
-    .comment-avatar { margin-right: 10px; }
-  }
-}
+    .children {
+      margin-left: -20px;
 
-@media screen and (max-width: 450px) {
-  .root-comment {
-    font-size: 14px;
+      .left {
+        align-items: flex-start;
+
+        .vertical-border {
+          margin-left: 2px;
+        }
+      }
+    }
+
+    .comment {
+      .comment-account-date {
+        flex-direction: column;
+
+        .comment-date {
+          margin-left: 0;
+        }
+      }
+    }
   }
 }
