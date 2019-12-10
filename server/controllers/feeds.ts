@@ -56,8 +56,11 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   comments.forEach(comment => {
     const link = WEBSERVER.URL + comment.getCommentStaticPath()
 
+    let title = comment.Video.name
+    if (comment.Account) title += ` - ${comment.Account.getDisplayName()}`
+
     feed.addItem({
-      title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,
+      title,
       id: comment.url,
       link,
       content: comment.text,
