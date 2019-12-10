@@ -119,9 +119,7 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Could be removed
-  location ~ ^/static/(webseed|redundancy)/ {
-    # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
-    limit_rate 800k;
+  location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {
 
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
@@ -142,10 +140,25 @@ server {
       access_log off;
     }
 
+    # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
+    set $peertube_limit_rate 800k;
+
+    # Increase rate limit in HLS mode, because we don't have multiple simultaneous connections
+    if ($request_uri ~ -fragmented.mp4$) {
+      set $peertube_limit_rate 5000k;
+    }
+
+    # Use this with nginx >= 1.17.0
+    # limit_rate $peertube_limit_rate;
+    # Or this if your nginx < 1.17.0
+    set $limit_rate $peertube_limit_rate;
+    limit_rate_after 5000k;
+
     root /var/www/peertube/storage;
 
     rewrite ^/static/webseed/(.*)$ /videos/$1 break;
     rewrite ^/static/redundancy/(.*)$ /redundancy/$1 break;
+    rewrite ^/static/streaming-playlists/(.*)$ /streaming-playlists/$1 break;
 
     try_files $uri /;
   }
