@@ -8,6 +8,7 @@ export interface UserUpdateMe {
   webTorrentEnabled?: boolean
   autoPlayVideo?: boolean
   autoPlayNextVideo?: boolean
+  autoPlayNextVideoPlaylist?: boolean
   videosHistoryEnabled?: boolean
   videoLanguages?: string[]
 

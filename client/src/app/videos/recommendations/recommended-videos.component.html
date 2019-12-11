@@ -4,15 +4,17 @@
       <div i18n class="title-page title-page-single">
         Other videos
       </div>
-      <div class="d-flex title-page-autoplay">
-        <span>Autoplay</span>
+      <div *ngIf="!playlist" class="d-flex title-page-autoplay">
+        <span i18n>Autoplay</span>
         <p-inputSwitch [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"></p-inputSwitch>
       </div>
     </div>
 
-    <div *ngFor="let video of (videos$ | async)">
+    <div *ngFor="let video of (videos$ | async); let i = index; let length = count">
       <my-video-miniature [video]="video" [user]="user" (videoBlacklisted)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()">
       </my-video-miniature>
+      
+      <hr *ngIf="!playlist && i == 0 && length > 1" />
     </div>
   </ng-container>
 </div>

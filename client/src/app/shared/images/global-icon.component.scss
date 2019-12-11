@@ -1,4 +1,6 @@
-::ng-deep svg {
-  width: inherit;
-  height: inherit;
+::ng-deep {
+  svg {
+    width: inherit;
+    height: inherit;
+  }
 }

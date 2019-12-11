@@ -37,6 +37,7 @@ import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
 import { randomInt } from '@shared/core-utils/miscs/miscs'
+import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
 
 @Component({
   selector: 'my-video-watch',
@@ -436,10 +437,13 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('ended', () => {
         if (this.playlist) {
-          this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+          if (
+            this.user && this.user.autoPlayNextVideoPlaylist ||
+            peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+          ) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         } else if (
           this.user && this.user.autoPlayNextVideo ||
-          peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+          peertubeLocalStorage.getItem(RecommendedVideosComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
         ) {
           this.zone.run(() => this.autoplayNext())
         }
@@ -447,7 +451,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('stopped', () => {
         if (this.playlist) {
-          this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+          if (
+            this.user && this.user.autoPlayNextVideoPlaylist ||
+            peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+          ) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         }
       })
 

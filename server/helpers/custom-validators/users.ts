@@ -69,6 +69,10 @@ function isUserAutoPlayNextVideoValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserAutoPlayNextVideoPlaylistValid (value: any) {
+  return isBooleanValid(value)
+}
+
 function isNoInstanceConfigWarningModal (value: any) {
   return isBooleanValid(value)
 }
@@ -111,6 +115,7 @@ export {
   isUserWebTorrentEnabledValid,
   isUserAutoPlayVideoValid,
   isUserAutoPlayNextVideoValid,
+  isUserAutoPlayNextVideoPlaylistValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
   isNoInstanceConfigWarningModal,

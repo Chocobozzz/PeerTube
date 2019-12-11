@@ -3,9 +3,12 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
 import { Router } from '@angular/router'
-import { AuthService } from '@app/core'
+import { User, UserService } from '@app/shared'
+import { AuthService, Notifier } from '@app/core'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-watch-playlist',
@@ -13,6 +16,8 @@ import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-
   styleUrls: [ './video-watch-playlist.component.scss' ]
 })
 export class VideoWatchPlaylistComponent {
+  static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'auto_play_video_playlist'
+
   @Input() video: VideoDetails
   @Input() playlist: VideoPlaylist
 
@@ -23,14 +28,24 @@ export class VideoWatchPlaylistComponent {
     totalItems: null
   }
 
+  autoPlayNextVideoPlaylist: boolean
+  autoPlayNextVideoPlaylistSwitchText = ''
   noPlaylistVideos = false
   currentPlaylistPosition = 1
 
   constructor (
+    private userService: UserService,
     private auth: AuthService,
+    private notifier: Notifier,
+    private i18n: I18n,
     private videoPlaylist: VideoPlaylistService,
     private router: Router
-  ) {}
+  ) {
+    this.autoPlayNextVideoPlaylist = this.auth.isLoggedIn()
+      ? this.auth.getUser().autoPlayNextVideoPlaylist
+      : peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
+    this.setAutoPlayNextVideoPlaylistSwitchText()
+  }
 
   onPlaylistVideosNearOfBottom () {
     // Last page
@@ -120,5 +135,34 @@ export class VideoWatchPlaylistComponent {
       const stop = next.stopTimestamp
       this.router.navigate([],{ queryParams: { videoId: next.video.uuid, start, stop } })
     }
+  }
+
+  switchAutoPlayNextVideoPlaylist () {
+    this.autoPlayNextVideoPlaylist = !this.autoPlayNextVideoPlaylist
+    this.setAutoPlayNextVideoPlaylistSwitchText()
+
+    peertubeLocalStorage.setItem(
+      VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST,
+      this.autoPlayNextVideoPlaylist.toString()
+    )
+
+    if (this.auth.isLoggedIn()) {
+      const details = {
+        autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist
+      }
+
+      this.userService.updateMyProfile(details).subscribe(
+        () => {
+          this.auth.refreshUserInformation()
+        },
+        err => this.notifier.error(err.message)
+      )
+    }
+  }
+
+  private setAutoPlayNextVideoPlaylistSwitchText () {
+    this.autoPlayNextVideoPlaylistSwitchText = this.i18n('{{verb}} autoplay for playlists', {
+      verb: this.autoPlayNextVideoPlaylist ? this.i18n('Disable') : this.i18n('Enable')
+    })
   }
 }

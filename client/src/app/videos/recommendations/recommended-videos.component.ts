@@ -1,6 +1,7 @@
 import { Component, Input, Output, OnChanges, EventEmitter } from '@angular/core'
 import { Observable } from 'rxjs'
 import { Video } from '@app/shared/video/video.model'
+import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
 import { RecommendedVideosStore } from '@app/videos/recommendations/recommended-videos.store'
 import { User } from '@app/shared'
@@ -14,10 +15,11 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
   styleUrls: [ './recommended-videos.component.scss' ]
 })
 export class RecommendedVideosComponent implements OnChanges {
-  private static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO = 'auto_play_next_video'
+  static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO = 'auto_play_next_video'
 
   @Input() inputRecommendation: RecommendationInfo
   @Input() user: User
+  @Input() playlist: VideoPlaylist
   @Output() gotRecommendations = new EventEmitter<Video[]>()
 
   readonly hasVideos$: Observable<boolean>
