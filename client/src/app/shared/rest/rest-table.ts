@@ -1,4 +1,4 @@
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent'
 import { SortMeta } from 'primeng/components/common/sortmeta'
 import { RestPagination } from './rest-pagination'

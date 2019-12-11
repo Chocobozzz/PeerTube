@@ -39,6 +39,10 @@
       display: flex;
       margin: 10px 0;
 
+      my-global-icon:not(:last-child) {
+        margin-right: .5rem;
+      }
+
       my-global-icon {
         &:not(.active) {
           opacity: .5

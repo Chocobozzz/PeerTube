@@ -42,12 +42,14 @@ class MemoryStorage {
 }
 
 let peertubeLocalStorage: Storage
+let peertubeSessionStorage: Storage
 try {
   peertubeLocalStorage = localStorage
+  peertubeSessionStorage = sessionStorage
 } catch (err) {
   const instance = new MemoryStorage()
 
-  peertubeLocalStorage = new Proxy(instance, {
+  peertubeLocalStorage = sessionStorage = new Proxy(instance, {
     set: function (obj, prop: string | number, value) {
       if (MemoryStorage.prototype.hasOwnProperty(prop)) {
         instance[prop] = value
@@ -67,4 +69,7 @@ try {
   })
 }
 
-export { peertubeLocalStorage }
+export {
+  peertubeLocalStorage,
+  peertubeSessionStorage
+}

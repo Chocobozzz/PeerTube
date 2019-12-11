@@ -24,6 +24,15 @@
         placement="bottom auto"
         container="body"
       ></my-global-icon>
+
+      <my-global-icon
+        iconName="repeat"
+        [class.active]="loopPlaylist"
+        (click)="switchLoopPlaylist()"
+        [ngbTooltip]="'Loop playlist videos'"
+        placement="bottom auto"
+        container="body"
+      ></my-global-icon>
     </div>
   </div>
 

@@ -3,11 +3,11 @@ import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
 import { Router } from '@angular/router'
-import { User, UserService } from '@app/shared'
+import { UserService } from '@app/shared'
 import { AuthService, Notifier } from '@app/core'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
@@ -17,6 +17,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 })
 export class VideoWatchPlaylistComponent {
   static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'auto_play_video_playlist'
+  static SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST = 'loop_playlist'
 
   @Input() video: VideoDetails
   @Input() playlist: VideoPlaylist
@@ -30,6 +31,8 @@ export class VideoWatchPlaylistComponent {
 
   autoPlayNextVideoPlaylist: boolean
   autoPlayNextVideoPlaylistSwitchText = ''
+  loopPlaylist: boolean
+  loopPlaylistSwitchText = ''
   noPlaylistVideos = false
   currentPlaylistPosition = 1
 
@@ -45,6 +48,9 @@ export class VideoWatchPlaylistComponent {
       ? this.auth.getUser().autoPlayNextVideoPlaylist
       : peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
     this.setAutoPlayNextVideoPlaylistSwitchText()
+
+    this.loopPlaylist = peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+    this.setLoopPlaylistSwitchText()
   }
 
   onPlaylistVideosNearOfBottom () {
@@ -121,9 +127,9 @@ export class VideoWatchPlaylistComponent {
     this.onPlaylistVideosNearOfBottom()
   }
 
-  navigateToNextPlaylistVideo () {
+  navigateToNextPlaylistVideo (_next: VideoPlaylistElement = null) {
     if (this.currentPlaylistPosition < this.playlistPagination.totalItems) {
-      const next = this.playlistElements.find(e => e.position === this.currentPlaylistPosition + 1)
+      const next = _next || this.playlistElements.find(e => e.position === this.currentPlaylistPosition + 1)
 
       if (!next || !next.video) {
         this.currentPlaylistPosition++
@@ -134,6 +140,9 @@ export class VideoWatchPlaylistComponent {
       const start = next.startTimestamp
       const stop = next.stopTimestamp
       this.router.navigate([],{ queryParams: { videoId: next.video.uuid, start, stop } })
+    } else if (this.loopPlaylist) {
+      this.currentPlaylistPosition = 0
+      this.navigateToNextPlaylistVideo(this.playlistElements.find(e => e.position === this.currentPlaylistPosition))
     }
   }
 
@@ -160,9 +169,25 @@ export class VideoWatchPlaylistComponent {
     }
   }
 
+  switchLoopPlaylist () {
+    this.loopPlaylist = !this.loopPlaylist
+    this.setLoopPlaylistSwitchText()
+
+    peertubeSessionStorage.setItem(
+      VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST,
+      this.loopPlaylist.toString()
+    )
+  }
+
   private setAutoPlayNextVideoPlaylistSwitchText () {
-    this.autoPlayNextVideoPlaylistSwitchText = this.i18n('{{verb}} autoplay for playlists', {
-      verb: this.autoPlayNextVideoPlaylist ? this.i18n('Disable') : this.i18n('Enable')
-    })
+    this.autoPlayNextVideoPlaylistSwitchText = this.autoPlayNextVideoPlaylist
+      ? this.i18n('Stop autoplaying next video')
+      : this.i18n('Autoplay next video')
+  }
+
+  private setLoopPlaylistSwitchText () {
+    this.loopPlaylistSwitchText = this.loopPlaylist
+      ? this.i18n('Stop looping playlist videos')
+      : this.i18n('Loop playlist videos')
   }
 }
