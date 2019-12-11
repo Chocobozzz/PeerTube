@@ -570,7 +570,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }) {
     const { video, videoCaptions, urlOptions, user } = params
 
-    let startTime = timeToInt(urlOptions.startTime) || (video.userHistory ? video.userHistory.currentTime : 0)
+    let startTime = timeToInt(urlOptions.startTime) || (video.userHistory && !this.playlist ? video.userHistory.currentTime : 0)
     // If we are at the end of the video, reset the timer
     if (video.duration - startTime <= 1) startTime = 0
 
