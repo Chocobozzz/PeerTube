@@ -26,6 +26,7 @@ const icons = {
   'cross': require('!!raw-loader?!../../../assets/images/global/cross.svg'),
   'validate': require('!!raw-loader?!../../../assets/images/global/validate.svg'),
   'tick': require('!!raw-loader?!../../../assets/images/global/tick.svg'),
+  'repeat': require('!!raw-loader?!../../../assets/images/global/repeat.svg'),
   'dislike': require('!!raw-loader?!../../../assets/images/video/dislike.svg'),
   'support': require('!!raw-loader?!../../../assets/images/video/support.svg'),
   'like': require('!!raw-loader?!../../../assets/images/video/like.svg'),

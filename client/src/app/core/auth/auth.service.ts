@@ -12,7 +12,7 @@ import { RestExtractor } from '../../shared/rest/rest-extractor.service'
 import { AuthStatus } from './auth-status.model'
 import { AuthUser } from './auth-user.model'
 import { objectToUrlEncoded } from '@app/shared/misc/utils'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 

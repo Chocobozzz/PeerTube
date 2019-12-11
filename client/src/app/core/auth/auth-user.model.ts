@@ -1,4 +1,4 @@
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 import { User as ServerUserModel } from '../../../../../shared/models/users/user.model'
 // Do not use the barrel (dependency loop)

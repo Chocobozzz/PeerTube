@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { AuthUser, Notifier, ServerService } from '@app/core'
@@ -46,7 +46,6 @@ import { RecommendedVideosComponent } from '../recommendations/recommended-video
 })
 export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
-  private static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO = 'auto_play_next_video'
 
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
   @ViewChild('videoShareModal', { static: false }) videoShareModal: VideoShareComponent
@@ -439,11 +438,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         if (this.playlist) {
           if (
             this.user && this.user.autoPlayNextVideoPlaylist ||
-            peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+            peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
           ) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         } else if (
           this.user && this.user.autoPlayNextVideo ||
-          peertubeLocalStorage.getItem(RecommendedVideosComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+          peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
         ) {
           this.zone.run(() => this.autoplayNext())
         }
@@ -453,7 +452,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         if (this.playlist) {
           if (
             this.user && this.user.autoPlayNextVideoPlaylist ||
-            peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+            peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
           ) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         }
       })

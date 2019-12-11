@@ -7,7 +7,7 @@ import { RecommendedVideosStore } from '@app/videos/recommendations/recommended-
 import { User } from '@app/shared'
 import { AuthService, Notifier } from '@app/core'
 import { UserService } from '@app/shared/users/user.service'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
 
 @Component({
   selector: 'my-recommended-videos',
@@ -15,7 +15,7 @@ import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
   styleUrls: [ './recommended-videos.component.scss' ]
 })
 export class RecommendedVideosComponent implements OnChanges {
-  static LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO = 'auto_play_next_video'
+  static SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO = 'auto_play_next_video'
 
   @Input() inputRecommendation: RecommendationInfo
   @Input() user: User
@@ -39,7 +39,7 @@ export class RecommendedVideosComponent implements OnChanges {
 
     this.autoPlayNextVideo = this.authService.isLoggedIn()
       ? this.authService.getUser().autoPlayNextVideo
-      : peertubeLocalStorage.getItem(RecommendedVideosComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true' || false
+      : peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true' || false
   }
 
   public ngOnChanges (): void {
@@ -53,7 +53,7 @@ export class RecommendedVideosComponent implements OnChanges {
   }
 
   switchAutoPlayNextVideo () {
-    peertubeLocalStorage.setItem(RecommendedVideosComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO, this.autoPlayNextVideo.toString())
+    peertubeSessionStorage.setItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, this.autoPlayNextVideo.toString())
 
     if (this.authService.isLoggedIn()) {
       const details = {

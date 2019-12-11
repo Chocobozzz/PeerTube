@@ -4,7 +4,7 @@ import { ServerService } from '@app/core/server'
 import { environment } from '../../../environments/environment'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { ServerConfigTheme } from '@shared/models'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 
 @Injectable()
 export class ThemeService {

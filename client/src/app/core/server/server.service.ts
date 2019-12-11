@@ -1,7 +1,7 @@
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { Observable, of, ReplaySubject } from 'rxjs'
 import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
