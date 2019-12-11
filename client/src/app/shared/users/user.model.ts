@@ -17,6 +17,7 @@ export class User implements UserServerModel {
 
   autoPlayVideo: boolean
   autoPlayNextVideo: boolean
+  autoPlayNextVideoPlaylist: boolean
   webTorrentEnabled: boolean
   videosHistoryEnabled: boolean
   videoLanguages: string[]

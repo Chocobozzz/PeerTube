@@ -34,6 +34,21 @@
         margin: 0 3px;
       }
     }
+
+    .playlist-controls {
+      display: flex;
+      margin: 10px 0;
+
+      my-global-icon {
+        &:not(.active) {
+          opacity: .5
+        }
+
+        ::ng-deep {
+          cursor: pointer;
+        }
+      }
+    }
   }
 
   my-video-playlist-element-miniature {

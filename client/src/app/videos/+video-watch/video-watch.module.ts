@@ -12,6 +12,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 import { QRCodeModule } from 'angularx-qrcode'
+import { InputSwitchModule } from 'primeng/inputswitch'
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { QRCodeModule } from 'angularx-qrcode'
     SharedModule,
     NgbTooltipModule,
     QRCodeModule,
-    RecommendationsModule
+    RecommendationsModule,
+    InputSwitchModule
   ],
 
   declarations: [
