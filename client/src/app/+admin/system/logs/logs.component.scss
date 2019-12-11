@@ -23,12 +23,22 @@
     margin-right: 5px;
   }
 
+  .log-by {
+    margin: 0 5px;
+  }
+
   .warn {
     color: $orange-color;
   }
 
   .error {
     color: $red;
+  }
+
+  pre {
+    margin-bottom: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
   }
 }
 

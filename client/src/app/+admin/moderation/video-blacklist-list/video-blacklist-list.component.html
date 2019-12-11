@@ -15,7 +15,7 @@
 
   <ng-template pTemplate="body" let-videoBlacklist let-expanded="expanded">
     <tr>
-      <td>
+      <td class="expand-cell">
         <span *ngIf="videoBlacklist.reason" class="expander" [pRowToggler]="videoBlacklist">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>

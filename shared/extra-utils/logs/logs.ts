@@ -13,6 +13,19 @@ function getLogs (url: string, accessToken: string, startDate: Date, endDate?: D
   })
 }
 
+function getAuditLogs (url: string, accessToken: string, startDate: Date, endDate?: Date) {
+  const path = '/api/v1/server/audit-logs'
+
+  return makeGetRequest({
+    url,
+    path,
+    token: accessToken,
+    query: { startDate, endDate },
+    statusCodeExpected: 200
+  })
+}
+
 export {
-  getLogs
+  getLogs,
+  getAuditLogs
 }

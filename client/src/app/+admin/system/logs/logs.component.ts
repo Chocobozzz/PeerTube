@@ -17,9 +17,11 @@ export class LogsComponent implements OnInit {
   logs: LogRow[] = []
   timeChoices: { id: string, label: string }[] = []
   levelChoices: { id: LogLevel, label: string }[] = []
+  logTypeChoices: { id: 'audit' | 'standard', label: string }[] = []
 
   startDate: string
   level: LogLevel
+  logType: 'audit' | 'standard'
 
   constructor (
     private logsService: LogsService,
@@ -30,6 +32,7 @@ export class LogsComponent implements OnInit {
   ngOnInit (): void {
     this.buildTimeChoices()
     this.buildLevelChoices()
+    this.buildLogTypeChoices()
 
     this.load()
   }
@@ -42,7 +45,7 @@ export class LogsComponent implements OnInit {
   load () {
     this.loading = true
 
-    this.logsService.getLogs(this.level, this.startDate)
+    this.logsService.getLogs({ isAuditLog: this.isAuditLog(), level: this.level, startDate: this.startDate })
         .subscribe(
           logs => {
             this.logs = logs
@@ -56,6 +59,10 @@ export class LogsComponent implements OnInit {
 
           () => this.loading = false
         )
+  }
+
+  isAuditLog () {
+    return this.logType === 'audit'
   }
 
   buildTimeChoices () {
@@ -107,5 +114,20 @@ export class LogsComponent implements OnInit {
     ]
 
     this.level = 'warn'
+  }
+
+  buildLogTypeChoices () {
+    this.logTypeChoices = [
+      {
+        id: 'standard',
+        label: this.i18n('Standard logs')
+      },
+      {
+        id: 'audit',
+        label: this.i18n('Audit logs')
+      }
+    ]
+
+    this.logType = 'audit'
   }
 }

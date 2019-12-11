@@ -49,7 +49,7 @@
   <ng-template pTemplate="body" let-expanded="expanded" let-user>
 
     <tr [pSelectableRow]="user" [ngClass]="{ banned: user.blocked }">
-      <td>
+      <td class="expand-cell">
         <p-tableCheckbox [value]="user"></p-tableCheckbox>
       </td>
 

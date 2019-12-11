@@ -603,6 +603,8 @@ const FEEDS = {
 }
 
 const MAX_LOGS_OUTPUT_CHARACTERS = 10 * 1000 * 1000
+const LOG_FILENAME = 'peertube.log'
+const AUDIT_LOG_FILENAME = 'peertube-audit.log'
 
 // ---------------------------------------------------------------------------
 
@@ -684,6 +686,7 @@ export {
   BCRYPT_SALT_SIZE,
   TRACKER_RATE_LIMITS,
   FILES_CACHE,
+  LOG_FILENAME,
   CONSTRAINTS_FIELDS,
   EMBED_SIZE,
   REDUNDANCY,
@@ -693,6 +696,7 @@ export {
   OAUTH_LIFETIME,
   CUSTOM_HTML_TAG_COMMENTS,
   BROADCAST_CONCURRENCY,
+  AUDIT_LOG_FILENAME,
   PAGINATION,
   ACTOR_FOLLOW_SCORE,
   PREVIEWS_SIZE,

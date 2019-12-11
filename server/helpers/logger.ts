@@ -5,6 +5,7 @@ import * as winston from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
 import { omit } from 'lodash'
+import { LOG_FILENAME } from '@server/initializers/constants'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 
@@ -58,7 +59,7 @@ const labelFormatter = winston.format.label({
 })
 
 const fileLoggerOptions: FileTransportOptions = {
-  filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube.log'),
+  filename: path.join(CONFIG.STORAGE.LOG_DIR, LOG_FILENAME),
   handleExceptions: true,
   format: winston.format.combine(
     winston.format.timestamp(),

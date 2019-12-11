@@ -24,8 +24,25 @@ const getLogsValidator = [
   }
 ]
 
+const getAuditLogsValidator = [
+  query('startDate')
+    .custom(isDateValid).withMessage('Should have a valid start date'),
+  query('endDate')
+    .optional()
+    .custom(isDateValid).withMessage('Should have a valid end date'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking getAuditLogsValidator parameters.', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
-  getLogsValidator
+  getLogsValidator,
+  getAuditLogsValidator
 }
