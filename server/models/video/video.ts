@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { maxBy } from 'lodash'
+import { maxBy, minBy } from 'lodash'
 import { join } from 'path'
 import {
   CountOptions,
@@ -1802,9 +1802,9 @@ export class VideoModel extends Model<VideoModel> {
       this.VideoChannel.Account.isBlocked()
   }
 
-  getMaxQualityFile <T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
+  getQualityFileBy <T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {
     if (Array.isArray(this.VideoFiles) && this.VideoFiles.length !== 0) {
-      const file = maxBy(this.VideoFiles, file => file.resolution)
+      const file = fun(this.VideoFiles, file => file.resolution)
 
       return Object.assign(file, { Video: this })
     }
@@ -1813,11 +1813,19 @@ export class VideoModel extends Model<VideoModel> {
     if (Array.isArray(this.VideoStreamingPlaylists) && this.VideoStreamingPlaylists.length !== 0) {
       const streamingPlaylistWithVideo = Object.assign(this.VideoStreamingPlaylists[0], { Video: this })
 
-      const file = maxBy(streamingPlaylistWithVideo.VideoFiles, file => file.resolution)
+      const file = fun(streamingPlaylistWithVideo.VideoFiles, file => file.resolution)
       return Object.assign(file, { VideoStreamingPlaylist: streamingPlaylistWithVideo })
     }
 
     return undefined
+  }
+
+  getMaxQualityFile <T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
+    return this.getQualityFileBy(maxBy)
+  }
+
+  getMinQualityFile <T extends MVideoWithFile> (this: T): MVideoFileVideo | MVideoFileStreamingPlaylistVideo {
+    return this.getQualityFileBy(minBy)
   }
 
   getWebTorrentFile <T extends MVideoWithFile> (this: T, resolution: number): MVideoFileVideo {
