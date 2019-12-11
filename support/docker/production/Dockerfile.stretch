@@ -1,4 +1,3 @@
-# use buster for new enough ffmpeg
 FROM node:10-buster-slim
 
 # Allow to pass extra options to the npm run build
