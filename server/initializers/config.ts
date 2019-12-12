@@ -93,7 +93,12 @@ const CONFIG = {
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level'),
-    ROTATION: config.get<boolean>('log.rotation.enabled')
+    ROTATION: {
+      ENABLED: config.get<boolean>('log.rotation.enabled'),
+      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.maxFileSize')),
+      MAX_FILES: config.get<number>('log.rotation.maxFiles')
+    },
+    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP')
   },
   SEARCH: {
     REMOTE_URI: {

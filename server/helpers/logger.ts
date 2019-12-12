@@ -67,9 +67,9 @@ const fileLoggerOptions: FileTransportOptions = {
   )
 }
 
-if (CONFIG.LOG.ROTATION) {
-  fileLoggerOptions.maxsize = 1024 * 1024 * 12
-  fileLoggerOptions.maxFiles = 20
+if (CONFIG.LOG.ROTATION.ENABLED) {
+  fileLoggerOptions.maxsize = CONFIG.LOG.ROTATION.MAX_FILE_SIZE
+  fileLoggerOptions.maxFiles = CONFIG.LOG.ROTATION.MAX_FILES
 }
 
 const logger = winston.createLogger({

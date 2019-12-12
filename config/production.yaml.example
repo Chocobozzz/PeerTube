@@ -87,6 +87,9 @@ log:
   level: 'info' # debug/info/warning/error
   rotation:
     enabled : true # Enabled by default, if disabled make sure that 'storage.logs' is pointing to a folder handled by logrotate
+    maxFileSize: 12MB
+    maxFiles: 20
+  anonymizeIP: false
 
 search:
   # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance

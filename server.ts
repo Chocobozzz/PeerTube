@@ -142,7 +142,7 @@ if (isTestInstance()) {
 
 // For the logger
 morgan.token('remote-addr', req => {
-  if (req.get('DNT') === '1') {
+  if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
     return anonymize(req.ip, 16, 16)
   }
 
