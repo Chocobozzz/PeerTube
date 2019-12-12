@@ -8,6 +8,16 @@
   padding-right: 40px; // For the search icon
   font-size: 14px;
 
+  transition: box-shadow .3s ease;
+
+  /* light border style */
+  border: 1px solid var(--mainBackgroundColor);
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 20px 0px;
+
+  &:focus {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 20px 0px;
+  }
+
   &::placeholder {
     color: var(--inputPlaceholderColor);
   }
