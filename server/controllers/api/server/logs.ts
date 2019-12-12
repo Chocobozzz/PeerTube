@@ -79,6 +79,7 @@ async function generateOutput (options: {
     if (nameFilter.exec(meta.file) === null) continue
 
     const path = join(CONFIG.STORAGE.LOG_DIR, meta.file)
+    logger.debug('Opening %s to fetch logs.', path)
 
     const result = await getOutputFromFile(path, startDate, endDate, level, currentSize)
     if (!result.output) break
@@ -136,5 +137,5 @@ async function getOutputFromFile (path: string, startDate: Date, endDate: Date, 
 }
 
 function generateLogNameFilter (baseName: string) {
-  return new RegExp('^' + baseName.replace(/\.log$/, '') + '\d*.log$')
+  return new RegExp('^' + baseName.replace(/\.log$/, '') + '\\d*.log$')
 }
