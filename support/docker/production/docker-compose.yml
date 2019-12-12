@@ -23,8 +23,8 @@ services:
     # If you don't want to use the official image and build one from sources
     # build:
     #   context: .
-    #   dockerfile: ./support/docker/production/Dockerfile.stretch
-    image: chocobozzz/peertube:production-stretch
+    #   dockerfile: ./support/docker/production/Dockerfile.buster
+    image: chocobozzz/peertube:production-buster
     env_file:
       - .env
     # Traefik labels are suggested as an example for people using Traefik,

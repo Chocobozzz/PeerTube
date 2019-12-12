@@ -107,25 +107,25 @@ build-nightly:
   before_script:
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$CI_REGISTRY_AUTH\",\"email\":\"$CI_REGISTRY_EMAIL\"}}}" > /kaniko/.docker/config.json
   script:
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/support/docker/production/Dockerfile.stretch --destination $DOCKER_IMAGE_NAME
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/support/docker/production/Dockerfile.buster --destination $DOCKER_IMAGE_NAME
 
 build-docker-develop:
   <<: *docker
   only:
     - schedules
   variables:
-    DOCKER_IMAGE_NAME: chocobozzz/peertube:develop-stretch
+    DOCKER_IMAGE_NAME: chocobozzz/peertube:develop-buster
 
 build-docker-tag:
   <<: *docker
   only:
     - tags
   variables:
-    DOCKER_IMAGE_NAME: chocobozzz/peertube:$CI_COMMIT_TAG-stretch
+    DOCKER_IMAGE_NAME: chocobozzz/peertube:$CI_COMMIT_TAG-buster
 
 build-docker-master:
   <<: *docker
   only:
     - master
   variables:
-    DOCKER_IMAGE_NAME: chocobozzz/peertube:production-stretch
+    DOCKER_IMAGE_NAME: chocobozzz/peertube:production-buster
