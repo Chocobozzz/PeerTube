@@ -72,6 +72,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   remoteServerDown = false
   hotkeys: Hotkey[] = []
 
+  tooltipLike = ''
+  tooltipDislike = ''
+  tooltipSupport = ''
+  tooltipSaveToPlaylist = ''
+
   private nextVideoUuid = ''
   private currentTime: number
   private paramsSub: Subscription
@@ -102,7 +107,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private hooks: HooksService,
     private location: PlatformLocation,
     @Inject(LOCALE_ID) private localeId: string
-  ) {}
+  ) {
+    this.tooltipLike = this.i18n('Like this video')
+    this.tooltipDislike = this.i18n('Dislike this video')
+    this.tooltipSupport = this.i18n('Support options for this video')
+    this.tooltipSaveToPlaylist = this.i18n('Save to playlist')
+  }
 
   get user () {
     return this.authService.getUser()
