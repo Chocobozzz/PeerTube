@@ -44,11 +44,13 @@ export class VideoWatchPlaylistComponent {
     private videoPlaylist: VideoPlaylistService,
     private router: Router
   ) {
+    // defaults to true
     this.autoPlayNextVideoPlaylist = this.auth.isLoggedIn()
       ? this.auth.getUser().autoPlayNextVideoPlaylist
       : peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
     this.setAutoPlayNextVideoPlaylistSwitchText()
 
+    // defaults to false
     this.loopPlaylist = peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
     this.setLoopPlaylistSwitchText()
   }
@@ -127,23 +129,31 @@ export class VideoWatchPlaylistComponent {
     this.onPlaylistVideosNearOfBottom()
   }
 
-  navigateToNextPlaylistVideo (_next: VideoPlaylistElement = null) {
-    if (this.currentPlaylistPosition < this.playlistPagination.totalItems) {
-      const next = _next || this.playlistElements.find(e => e.position === this.currentPlaylistPosition + 1)
-
-      if (!next || !next.video) {
-        this.currentPlaylistPosition++
-        this.navigateToNextPlaylistVideo()
+  findNextPlaylistVideo (position = this.currentPlaylistPosition): VideoPlaylistElement {
+    if (this.currentPlaylistPosition >= this.playlistPagination.totalItems) {
+      // we have reached the end of the playlist: either loop or stop
+      if (this.loopPlaylist) {
+        this.currentPlaylistPosition = position = 0
+      } else {
         return
       }
-
-      const start = next.startTimestamp
-      const stop = next.stopTimestamp
-      this.router.navigate([],{ queryParams: { videoId: next.video.uuid, start, stop } })
-    } else if (this.loopPlaylist) {
-      this.currentPlaylistPosition = 0
-      this.navigateToNextPlaylistVideo(this.playlistElements.find(e => e.position === this.currentPlaylistPosition))
     }
+
+    const next = this.playlistElements.find(e => e.position === position)
+
+    if (!next || !next.video) {
+      return this.findNextPlaylistVideo(position + 1)
+    }
+
+    return next
+  }
+
+  navigateToNextPlaylistVideo () {
+    const next = this.findNextPlaylistVideo(this.currentPlaylistPosition + 1)
+    if (!next) return
+    const start = next.startTimestamp
+    const stop = next.stopTimestamp
+    this.router.navigate([],{ queryParams: { videoId: next.video.uuid, start, stop } })
   }
 
   switchAutoPlayNextVideoPlaylist () {

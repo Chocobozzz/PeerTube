@@ -267,6 +267,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
   }
 
+  isAutoPlayEnabled () {
+    return (
+      this.user && this.user.autoPlayNextVideo ||
+      peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+    )
+  }
+
+  isPlaylistAutoPlayEnabled () {
+    return (
+      this.user && this.user.autoPlayNextVideoPlaylist ||
+      peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+    )
+  }
+
   private loadVideo (videoId: string) {
     // Video did not change
     if (this.video && this.video.uuid === videoId) return
@@ -436,24 +450,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       this.player.one('ended', () => {
         if (this.playlist) {
-          if (
-            this.user && this.user.autoPlayNextVideoPlaylist ||
-            peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
-          ) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
-        } else if (
-          this.user && this.user.autoPlayNextVideo ||
-          peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
-        ) {
+          if (this.isPlaylistAutoPlayEnabled()) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+        } else if (this.isAutoPlayEnabled()) {
           this.zone.run(() => this.autoplayNext())
         }
       })
 
       this.player.one('stopped', () => {
         if (this.playlist) {
-          if (
-            this.user && this.user.autoPlayNextVideoPlaylist ||
-            peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
-          ) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+          if (this.isPlaylistAutoPlayEnabled()) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
         }
       })
 
@@ -568,8 +573,20 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     user?: AuthUser
   }) {
     const { video, videoCaptions, urlOptions, user } = params
+    const getStartTime = () => {
+      const byUrl = urlOptions.startTime !== undefined
+      const byHistory = video.userHistory && !this.playlist
 
-    let startTime = timeToInt(urlOptions.startTime) || (video.userHistory && !this.playlist ? video.userHistory.currentTime : 0)
+      if (byUrl) {
+        return timeToInt(urlOptions.startTime)
+      } else if (byHistory) {
+        return video.userHistory.currentTime
+      } else {
+        return 0
+      }
+    }
+
+    let startTime = getStartTime()
     // If we are at the end of the video, reset the timer
     if (video.duration - startTime <= 1) startTime = 0
 
