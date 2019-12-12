@@ -48,61 +48,6 @@ async function up (utils: {
 
     await utils.sequelize.query(query, { transaction: utils.transaction })
   }
-
-  {
-    const query = 'select "videoFile".id as id, "videoFile".resolution as resolution, "video".uuid as uuid from "videoFile" ' +
-      'inner join "videoStreamingPlaylist" ON "videoStreamingPlaylist".id = "videoFile"."videoStreamingPlaylistId" ' +
-      'inner join video ON video.id = "videoStreamingPlaylist"."videoId" ' +
-      'WHERE video.remote IS FALSE'
-    const options = {
-      type: Sequelize.QueryTypes.SELECT,
-      transaction: utils.transaction
-    }
-    const res = await utils.sequelize.query(query, options)
-
-    for (const row of res) {
-      const videoFilename = `${row['uuid']}-${row['resolution']}-fragmented.mp4`
-      const videoFilePath = join(HLS_STREAMING_PLAYLIST_DIRECTORY, row['uuid'], videoFilename)
-
-      if (!await pathExists(videoFilePath)) {
-        console.warn('Cannot generate torrent of %s: file does not exist.', videoFilePath)
-        continue
-      }
-
-      const createTorrentOptions = {
-        // Keep the extname, it's used by the client to stream the file inside a web browser
-        name: `video ${row['uuid']}`,
-        createdBy: 'PeerTube',
-        announceList: [
-          [ WEBSERVER.WS + '://' + WEBSERVER.HOSTNAME + ':' + WEBSERVER.PORT + '/tracker/socket' ],
-          [ WEBSERVER.URL + '/tracker/announce' ]
-        ],
-        urlList: [ WEBSERVER.URL + join(HLS_STREAMING_PLAYLIST_DIRECTORY, row['uuid'], videoFilename) ]
-      }
-      const torrent = await createTorrentPromise(videoFilePath, createTorrentOptions)
-
-      const torrentName = `${row['uuid']}-${row['resolution']}-hls.torrent`
-      const filePath = join(CONFIG.STORAGE.TORRENTS_DIR, torrentName)
-
-      await writeFile(filePath, torrent)
-
-      const parsedTorrent = parseTorrent(torrent)
-      const infoHash = parsedTorrent.infoHash
-
-      const stats = await stat(videoFilePath)
-      const size = stats.size
-
-      const queryUpdate = 'UPDATE "videoFile" SET "infoHash" = ?, "size" = ? WHERE id = ?'
-
-      const options = {
-        type: Sequelize.QueryTypes.UPDATE,
-        replacements: [ infoHash, size, row['id'] ],
-        transaction: utils.transaction
-      }
-      await utils.sequelize.query(queryUpdate, options)
-
-    }
-  }
 }
 
 function down (options) {

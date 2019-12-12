@@ -26,7 +26,7 @@ import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
 import { MIMETYPES } from '../../initializers/constants'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../typings/models/video/video-file'
-import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
+import { MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
 
 @Table({
   tableName: 'videoFile',
