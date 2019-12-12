@@ -25,7 +25,7 @@ import {
 async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction, overrodeByActor?: MActor) {
   const video = videoArg as MVideoAP
 
-  if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+  if (!video.hasPrivacyForFederation()) return undefined
 
   logger.info('Creating job to update video %s.', video.url)
 

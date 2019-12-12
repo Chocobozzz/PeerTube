@@ -348,9 +348,8 @@ export type AvailableForListIDsOptions = {
 
     // Only list public/published videos
     if (!options.filter || options.filter !== 'all-local') {
-      const privacyWhere = {
-        // Always list public videos
-        privacy: VideoPrivacy.PUBLIC,
+
+      const publishWhere = {
         // Always list published videos, or videos that are being transcoded but on which we don't want to wait for transcoding
         [ Op.or ]: [
           {
@@ -364,8 +363,26 @@ export type AvailableForListIDsOptions = {
           }
         ]
       }
+      whereAnd.push(publishWhere)
 
-      whereAnd.push(privacyWhere)
+      // List internal videos if the user is logged in
+      if (options.user) {
+        const privacyWhere = {
+          [Op.or]: [
+            {
+              privacy: VideoPrivacy.INTERNAL
+            },
+            {
+              privacy: VideoPrivacy.PUBLIC
+            }
+          ]
+        }
+
+        whereAnd.push(privacyWhere)
+      } else { // Or only public videos
+        const privacyWhere = { privacy: VideoPrivacy.PUBLIC }
+        whereAnd.push(privacyWhere)
+      }
     }
 
     if (options.videoPlaylistId) {
@@ -1773,6 +1790,10 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
+  private static isPrivacyForFederation (privacy: VideoPrivacy) {
+    return privacy === VideoPrivacy.PUBLIC || privacy === VideoPrivacy.UNLISTED
+  }
+
   static getCategoryLabel (id: number) {
     return VIDEO_CATEGORIES[ id ] || 'Misc'
   }
@@ -1980,10 +2001,36 @@ export class VideoModel extends Model<VideoModel> {
     return isOutdated(this, ACTIVITY_PUB.VIDEO_REFRESH_INTERVAL)
   }
 
+  hasPrivacyForFederation () {
+    return VideoModel.isPrivacyForFederation(this.privacy)
+  }
+
+  isNewVideo (newPrivacy: VideoPrivacy) {
+    return this.hasPrivacyForFederation() === false && VideoModel.isPrivacyForFederation(newPrivacy) === true
+  }
+
   setAsRefreshed () {
     this.changed('updatedAt', true)
 
     return this.save()
+  }
+
+  requiresAuth () {
+    return this.privacy === VideoPrivacy.PRIVATE || this.privacy === VideoPrivacy.INTERNAL || !!this.VideoBlacklist
+  }
+
+  setPrivacy (newPrivacy: VideoPrivacy) {
+    if (this.privacy === VideoPrivacy.PRIVATE && newPrivacy !== VideoPrivacy.PRIVATE) {
+      this.publishedAt = new Date()
+    }
+
+    this.privacy = newPrivacy
+  }
+
+  isConfidential () {
+    return this.privacy === VideoPrivacy.PRIVATE ||
+      this.privacy === VideoPrivacy.UNLISTED ||
+      this.privacy === VideoPrivacy.INTERNAL
   }
 
   async publishIfNeededAndSave (t: Transaction) {

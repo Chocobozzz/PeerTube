@@ -18,7 +18,7 @@ import {
 } from '../../../typings/models'
 
 async function sendCreateVideo (video: MVideoAP, t: Transaction) {
-  if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+  if (!video.hasPrivacyForFederation()) return undefined
 
   logger.info('Creating job to send video creation of %s.', video.url)
 

@@ -1,5 +1,4 @@
 import { Transaction } from 'sequelize'
-import { VideoPrivacy } from '../../../shared/models/videos'
 import { getServerActor } from '../../helpers/utils'
 import { VideoShareModel } from '../../models/video/video-share'
 import { sendUndoAnnounce, sendVideoAnnounce } from './send'
@@ -10,10 +9,10 @@ import { getOrCreateActorAndServerAndModel } from './actor'
 import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { MChannelActor, MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../typings/models/video'
+import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../typings/models/video'
 
 async function shareVideoByServerAndChannel (video: MVideoAccountLight, t: Transaction) {
-  if (video.privacy === VideoPrivacy.PRIVATE) return undefined
+  if (!video.hasPrivacyForFederation()) return undefined
 
   return Promise.all([
     shareByServer(video, t),

@@ -59,7 +59,7 @@ export class VideoDownloadComponent {
       return
     }
 
-    const suffix = this.video.privacy.id === VideoPrivacy.PRIVATE
+    const suffix = this.video.privacy.id === VideoPrivacy.PRIVATE || this.video.privacy.id === VideoPrivacy.INTERNAL
       ? '?access_token=' + this.auth.getAccessToken()
       : ''
 

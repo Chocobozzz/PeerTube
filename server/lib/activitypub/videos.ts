@@ -79,7 +79,7 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
     // Check this is not a blacklisted video, or unfederated blacklisted video
     (video.isBlacklisted() === false || (isNewVideo === false && video.VideoBlacklist.unfederated === false)) &&
     // Check the video is public/unlisted and published
-    video.privacy !== VideoPrivacy.PRIVATE && video.state === VideoState.PUBLISHED
+    video.hasPrivacyForFederation() && video.state === VideoState.PUBLISHED
   ) {
     // Fetch more attributes that we will need to serialize in AP object
     if (isArray(video.VideoCaptions) === false) {

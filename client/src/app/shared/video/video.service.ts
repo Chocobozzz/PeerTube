@@ -332,18 +332,26 @@ export class VideoService implements VideosProvider {
   }
 
   explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
-    const newPrivacies = privacies.slice()
+    const base = [
+      {
+        id: VideoPrivacy.PRIVATE,
+        label: this.i18n('Only I can see this video')
+      },
+      {
+        id: VideoPrivacy.UNLISTED,
+        label: this.i18n('Only people with the private link can see this video')
+      },
+      {
+        id: VideoPrivacy.PUBLIC,
+        label: this.i18n('Anyone can see this video')
+      },
+      {
+        id: VideoPrivacy.INTERNAL,
+        label: this.i18n('Only users of this instance can see this video')
+      }
+    ]
 
-    const privatePrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PRIVATE)
-    if (privatePrivacy) privatePrivacy.label = this.i18n('Only I can see this video')
-
-    const unlistedPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.UNLISTED)
-    if (unlistedPrivacy) unlistedPrivacy.label = this.i18n('Only people with the private link can see this video')
-
-    const publicPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PUBLIC)
-    if (publicPrivacy) publicPrivacy.label = this.i18n('Anyone can see this video')
-
-    return privacies
+    return base.filter(o => !!privacies.find(p => p.id === o.id))
   }
 
   private setVideoRate (id: number, rateType: UserVideoRateType) {

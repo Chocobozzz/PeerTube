@@ -19,7 +19,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
+import { hasUserRight, USER_ROLE_LABELS, UserRight, VideoPrivacy } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isNoInstanceConfigWarningModal,
@@ -63,7 +63,7 @@ import {
   MUserFormattable,
   MUserId,
   MUserNotifSettingChannelDefault,
-  MUserWithNotificationSetting
+  MUserWithNotificationSetting, MVideoFullLight
 } from '@server/typings/models'
 
 enum ScopeNames {
@@ -573,6 +573,20 @@ export class UserModel extends Model<UserModel> {
 
     return UserModel.findAll(query)
                     .then(u => u.map(u => u.username))
+  }
+
+  canGetVideo (video: MVideoFullLight) {
+    if (video.privacy === VideoPrivacy.INTERNAL) return true
+
+    if (video.privacy === VideoPrivacy.PRIVATE) {
+      return video.VideoChannel && video.VideoChannel.Account.userId === this.id
+    }
+
+    if (video.isBlacklisted()) {
+      return this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+    }
+
+    return false
   }
 
   hasRight (right: UserRight) {

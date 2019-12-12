@@ -46,7 +46,7 @@ export class ClientHtml {
     ])
 
     // Let Angular application handle errors
-    if (!video || video.privacy === VideoPrivacy.PRIVATE || video.VideoBlacklist) {
+    if (!video || video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL || video.VideoBlacklist) {
       return ClientHtml.getIndexHTML(req, res)
     }
 

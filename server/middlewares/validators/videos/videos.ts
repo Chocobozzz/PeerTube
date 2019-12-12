@@ -161,18 +161,15 @@ const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-
       const videoAll = video as MVideoFullLight
 
       // Video private or blacklisted
-      if (video.privacy === VideoPrivacy.PRIVATE || videoAll.VideoBlacklist) {
+      if (videoAll.requiresAuth()) {
         await authenticatePromiseIfNeeded(req, res, authenticateInQuery)
 
         const user = res.locals.oauth ? res.locals.oauth.token.User : null
 
         // Only the owner or a user that have blacklist rights can see the video
-        if (
-          !user ||
-          (videoAll.VideoChannel && videoAll.VideoChannel.Account.userId !== user.id && !user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST))
-        ) {
+        if (!user || !user.canGetVideo(videoAll)) {
           return res.status(403)
-                    .json({ error: 'Cannot get this private or blacklisted video.' })
+                    .json({ error: 'Cannot get this private/internal or blacklisted video.' })
         }
 
         return next()

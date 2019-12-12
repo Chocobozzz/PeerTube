@@ -353,7 +353,8 @@ let VIDEO_LANGUAGES: { [id: string]: string } = {}
 const VIDEO_PRIVACIES = {
   [ VideoPrivacy.PUBLIC ]: 'Public',
   [ VideoPrivacy.UNLISTED ]: 'Unlisted',
-  [ VideoPrivacy.PRIVATE ]: 'Private'
+  [ VideoPrivacy.PRIVATE ]: 'Private',
+  [ VideoPrivacy.INTERNAL ]: 'Internal'
 }
 
 const VIDEO_STATES = {

@@ -26,7 +26,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
   @AllowNull(true)
   @Default(null)
   @Column
-  privacy: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED
+  privacy: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED | VideoPrivacy.INTERNAL
 
   @CreatedAt
   createdAt: Date

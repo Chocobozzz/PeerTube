@@ -12,7 +12,7 @@ import {
   videosTerminateChangeOwnershipValidator
 } from '../../../middlewares'
 import { VideoChangeOwnershipModel } from '../../../models/video/video-change-ownership'
-import { VideoChangeOwnershipStatus, VideoPrivacy, VideoState } from '../../../../shared/models/videos'
+import { VideoChangeOwnershipStatus, VideoState } from '../../../../shared/models/videos'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { changeVideoChannelShare } from '../../../lib/activitypub'
@@ -111,7 +111,7 @@ async function acceptOwnership (req: express.Request, res: express.Response) {
     const targetVideoUpdated = await targetVideo.save({ transaction: t }) as MVideoFullLight
     targetVideoUpdated.VideoChannel = channel
 
-    if (targetVideoUpdated.privacy !== VideoPrivacy.PRIVATE && targetVideoUpdated.state === VideoState.PUBLISHED) {
+    if (targetVideoUpdated.hasPrivacyForFederation() && targetVideoUpdated.state === VideoState.PUBLISHED) {
       await changeVideoChannelShare(targetVideoUpdated, oldVideoChannel, t)
       await sendUpdateVideo(targetVideoUpdated, t, oldVideoChannel.Account.Actor)
     }

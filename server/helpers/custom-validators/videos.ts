@@ -102,7 +102,7 @@ function isVideoPrivacyValid (value: number) {
 }
 
 function isScheduleVideoUpdatePrivacyValid (value: number) {
-  return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC
+  return value === VideoPrivacy.UNLISTED || value === VideoPrivacy.PUBLIC || value === VideoPrivacy.INTERNAL
 }
 
 function isVideoOriginallyPublishedAtValid (value: string | null) {

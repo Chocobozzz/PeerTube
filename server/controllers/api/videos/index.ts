@@ -326,9 +326,8 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
 
-  const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
-  const wasNotPrivateVideo = videoInstance.privacy !== VideoPrivacy.PRIVATE
-  const wasUnlistedVideo = videoInstance.privacy === VideoPrivacy.UNLISTED
+  const wasConfidentialVideo = videoInstance.isConfidential()
+  const hadPrivacyForFederation = videoInstance.hasPrivacyForFederation()
 
   // Process thumbnail or create it from the video
   const thumbnailModel = req.files && req.files['thumbnailfile']
@@ -359,17 +358,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
         videoInstance.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
       }
 
+      let isNewVideo = false
       if (videoInfoToUpdate.privacy !== undefined) {
+        isNewVideo = videoInstance.isNewVideo(videoInfoToUpdate.privacy)
+
         const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
-        videoInstance.privacy = newPrivacy
+        videoInstance.setPrivacy(newPrivacy)
 
-        // The video was private, and is not anymore -> publish it
-        if (wasPrivateVideo === true && newPrivacy !== VideoPrivacy.PRIVATE) {
-          videoInstance.publishedAt = new Date()
-        }
-
-        // The video was not private, but now it is -> we need to unfederate it
-        if (wasNotPrivateVideo === true && newPrivacy === VideoPrivacy.PRIVATE) {
+        // Unfederate the video if the new privacy is not compatible with federation
+        if (hadPrivacyForFederation && !videoInstance.hasPrivacyForFederation()) {
           await VideoModel.sendDelete(videoInstance, { transaction: t })
         }
       }
@@ -392,7 +389,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel, { transaction: t })
         videoInstanceUpdated.VideoChannel = res.locals.videoChannel
 
-        if (wasPrivateVideo === false) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
+        if (hadPrivacyForFederation === true) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
       }
 
       // Schedule an update in the future?
@@ -414,7 +411,6 @@ async function updateVideo (req: express.Request, res: express.Response) {
         transaction: t
       })
 
-      const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
       await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
 
       auditLogger.update(
@@ -427,7 +423,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
       return videoInstanceUpdated
     })
 
-    if (wasUnlistedVideo || wasPrivateVideo) {
+    if (wasConfidentialVideo) {
       Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
     }
 
