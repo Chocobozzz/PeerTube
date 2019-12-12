@@ -62,7 +62,8 @@
                   <div
                     [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
                     class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
-                    i18n-title title="Like this video"
+                    [ngbTooltip]="tooltipLike"
+                    placement="bottom auto"
                   >
                     <my-global-icon iconName="like"></my-global-icon>
                     <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
@@ -71,13 +72,17 @@
                   <div
                     [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
                     class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
-                    i18n-title title="Dislike this video"
+                    [ngbTooltip]="tooltipDislike"
+                    placement="bottom auto"
                   >
                     <my-global-icon iconName="dislike"></my-global-icon>
                     <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
                   </div>
   
-                  <div *ngIf="video.support" (click)="showSupportModal()" class="action-button">
+                  <div *ngIf="video.support" (click)="showSupportModal()" class="action-button"
+                    [ngbTooltip]="tooltipSupport"
+                    placement="bottom auto"
+                  >
                     <my-global-icon iconName="heart"></my-global-icon>
                     <span class="icon-text" i18n>Support</span>
                   </div>
@@ -90,6 +95,8 @@
                   <div
                     class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
                      *ngIf="isUserLoggedIn()" (openChange)="addContent.openChange($event)"
+                     [ngbTooltip]="tooltipSaveToPlaylist"
+                     placement="bottom auto"
                   >
                     <div class="action-button action-button-save" ngbDropdownToggle role="button">
                       <my-global-icon iconName="playlist-add"></my-global-icon>
@@ -102,7 +109,7 @@
                   </div>
   
                   <my-video-actions-dropdown
-                    placement="top" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
+                    placement="top auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
                     (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
                   ></my-video-actions-dropdown>
                 </div>
@@ -131,9 +138,8 @@
 
           <div class="pt-3 border-top video-info-channel">
             <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Go the channel page">
-              {{ video.channel.displayName }}
-
               <img [src]="video.videoChannelAvatarUrl" alt="Video channel avatar" />
+              {{ video.channel.displayName }}
             </a>
 
             <my-subscribe-button #subscribeButton [videoChannel]="video.channel" size="small"></my-subscribe-button>
@@ -141,15 +147,15 @@
 
           <div class="video-info-by">
             <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Go to the account page">
-              <span i18n>By {{ video.byAccount }}</span>
               <img [src]="video.accountAvatarUrl" alt="Account avatar" />
+              <span i18n>By {{ video.byAccount }}</span>
             </a>
           </div>
         </div>
 
       </div>
 
-      <div class="video-info-description">
+      <div class="video-info-description ml-4">
         <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
 
         <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
@@ -164,7 +170,7 @@
         </div>
       </div>
 
-      <div class="video-attributes">
+      <div class="video-attributes mb-3 ml-4">
         <div class="video-attribute">
           <span i18n class="video-attribute-label">Privacy</span>
           <span class="video-attribute-value">{{ video.privacy.label }}</span>
@@ -211,7 +217,7 @@
         </div>
       </div>
 
-      <my-video-comments [video]="video" [user]="user"></my-video-comments>
+      <my-video-comments class="border-top" [video]="video" [user]="user"></my-video-comments>
     </div>
 
     <my-recommended-videos

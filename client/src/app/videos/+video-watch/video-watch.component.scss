@@ -176,7 +176,7 @@ $player-factor: 1.7; // 16/9
           img {
             @include avatar(18px);
 
-            margin: -2px 2px 0 5px;
+            margin: -2px 5px 0 0;
           }
         }
 
@@ -199,11 +199,14 @@ $player-factor: 1.7; // 16/9
             opacity: 0.8;
           }
 
+          span {
+            margin-left: 2px;
+          }
+
           img {
             @include avatar(18px);
 
-            margin-top: -2px;
-            margin-left: 7px;
+            margin: -2px 5px 0 0;
           }
         }
 
@@ -397,7 +400,7 @@ $player-factor: 1.7; // 16/9
 
     .video-miniature {
       display: flex;
-      width: $other-videos-width;
+      width: max-content;
       height: 100%;
       margin-bottom: 20px;
       flex-wrap: wrap;
