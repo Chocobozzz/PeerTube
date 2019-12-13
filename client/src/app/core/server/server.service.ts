@@ -174,6 +174,16 @@ export class ServerService {
     return cloneDeep(this.config)
   }
 
+  getServerVersionAndCommit () {
+    const serverVersion = this.config.serverVersion
+    const commit = this.config.serverCommit || ''
+
+    let result = `v${serverVersion}`
+    if (commit) result += '...' + commit
+
+    return result
+  }
+
   getVideoCategories () {
     return cloneDeep(this.videoCategories)
   }

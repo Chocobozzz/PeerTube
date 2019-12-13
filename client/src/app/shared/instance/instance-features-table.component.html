@@ -2,6 +2,12 @@
 
   <table class="table" *ngIf="config">
     <tr>
+      <td i18n class="label">PeerTube version</td>
+
+      <td class="value">{{ getServerVersionAndCommit() }}</td>
+    </tr>
+
+    <tr>
       <td i18n class="label">
         <div>Default NSFW/sensitive videos policy</div>
         <div class="more-info">can be redefined by the users</div>

@@ -53,6 +53,10 @@ export class InstanceFeaturesTableComponent implements OnInit {
     return this.i18n('~ {{minutes}} {minutes, plural, =1 {minute} other {minutes}}', { minutes })
   }
 
+  getServerVersionAndCommit () {
+    return this.serverService.getServerVersionAndCommit()
+  }
+
   private buildQuotaHelpIndication () {
     if (this.initialUserVideoQuota === -1) return
 

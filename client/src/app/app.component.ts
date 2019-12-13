@@ -51,15 +51,6 @@ export class AppComponent implements OnInit {
     private modalService: NgbModal
   ) { }
 
-  get serverVersion () {
-    return this.serverService.getConfig().serverVersion
-  }
-
-  get serverCommit () {
-    const commit = this.serverService.getConfig().serverCommit || ''
-    return (commit !== '') ? '...' + commit : commit
-  }
-
   get instanceName () {
     return this.serverService.getConfig().instance.name
   }
@@ -120,6 +111,10 @@ export class AppComponent implements OnInit {
 
   onResize () {
     this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
+  }
+
+  getServerVersionAndCommit () {
+    return this.serverService.getServerVersionAndCommit()
   }
 
   private initRouteEvents () {
