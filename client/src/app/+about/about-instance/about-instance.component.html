@@ -83,7 +83,7 @@
       Other information
     </div>
 
-    <div class="block hardware-information">
+    <div class="block hardware-information" *ngIf="html.hardwareInformation">
       <div i18n class="section-title">Hardware information</div>
 
       <div [innerHTML]="html.hardwareInformation"></div>
