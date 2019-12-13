@@ -22,10 +22,10 @@ export class RecommendedVideosComponent implements OnChanges {
   @Input() playlist: VideoPlaylist
   @Output() gotRecommendations = new EventEmitter<Video[]>()
 
+  autoPlayNextVideo: boolean
+
   readonly hasVideos$: Observable<boolean>
   readonly videos$: Observable<Video[]>
-
-  private autoPlayNextVideo: boolean
 
   constructor (
     private userService: UserService,
