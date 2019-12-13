@@ -279,14 +279,14 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   isAutoPlayEnabled () {
     return (
-      this.user && this.user.autoPlayNextVideo ||
+      (this.user && this.user.autoPlayNextVideo) ||
       peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
     )
   }
 
   isPlaylistAutoPlayEnabled () {
     return (
-      this.user && this.user.autoPlayNextVideoPlaylist ||
+      (this.user && this.user.autoPlayNextVideoPlaylist) ||
       peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
     )
   }

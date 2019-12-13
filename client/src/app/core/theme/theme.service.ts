@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { ServerConfigTheme } from '@shared/models'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
+import { first } from 'rxjs/operators'
 
 @Injectable()
 export class ThemeService {
@@ -123,6 +124,7 @@ export class ThemeService {
     }
 
     this.auth.userInformationLoaded
+      .pipe(first())
       .subscribe(() => this.updateCurrentTheme())
   }
 
