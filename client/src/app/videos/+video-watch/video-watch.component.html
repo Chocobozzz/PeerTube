@@ -78,20 +78,20 @@
                     <my-global-icon iconName="dislike"></my-global-icon>
                     <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
                   </div>
-  
+
                   <div *ngIf="video.support" (click)="showSupportModal()" class="action-button"
                     [ngbTooltip]="tooltipSupport"
                     placement="bottom auto"
                   >
-                    <my-global-icon iconName="heart"></my-global-icon>
+                    <my-global-icon iconName="support"></my-global-icon>
                     <span class="icon-text" i18n>Support</span>
                   </div>
-  
+
                   <div (click)="showShareModal()" class="action-button" role="button">
                     <my-global-icon iconName="share"></my-global-icon>
                     <span class="icon-text" i18n>Share</span>
                   </div>
-  
+
                   <div
                     class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
                      *ngIf="isUserLoggedIn()" (openChange)="addContent.openChange($event)"
@@ -102,18 +102,18 @@
                       <my-global-icon iconName="playlist-add"></my-global-icon>
                       <span class="icon-text" i18n>Save</span>
                     </div>
-  
+
                     <div ngbDropdownMenu>
                       <my-video-add-to-playlist #addContent [video]="video"></my-video-add-to-playlist>
                     </div>
                   </div>
-  
+
                   <my-video-actions-dropdown
                     placement="top auto" buttonDirection="horizontal" [buttonStyled]="true" [video]="video"
                     (videoRemoved)="onVideoRemoved()" (modalOpened)="onModalOpened()"
                   ></my-video-actions-dropdown>
                 </div>
-  
+
                 <div
                   class="video-info-likes-dislikes-bar"
                   *ngIf="video.likes !== 0 || video.dislikes !== 0"
