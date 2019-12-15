@@ -136,26 +136,26 @@
           </div>
 
 
-          <div class="pt-3 border-top video-info-channel">
-            <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Go the channel page">
-              <img [src]="video.videoChannelAvatarUrl" alt="Video channel avatar" />
-              {{ video.channel.displayName }}
-            </a>
+          <div class="pt-3 border-top video-info-channel d-flex">
+            <div class="video-info-channel-left d-flex">
+              <avatar-channel [video]="video"></avatar-channel>
+              <div class="video-info-channel-left-links ml-1">
+                <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Go the channel page">
+                  {{ video.channel.displayName }}
+                </a>
+                <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Go to the account page">
+                  <span i18n>By {{ video.byAccount }}</span>
+                </a>
+              </div>
+            </div>
 
             <my-subscribe-button #subscribeButton [videoChannel]="video.channel" size="small"></my-subscribe-button>
-          </div>
-
-          <div class="video-info-by">
-            <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Go to the account page">
-              <img [src]="video.accountAvatarUrl" alt="Account avatar" />
-              <span i18n>By {{ video.byAccount }}</span>
-            </a>
           </div>
         </div>
 
       </div>
 
-      <div class="video-info-description ml-4">
+      <div class="video-info-description">
         <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
 
         <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
@@ -170,7 +170,7 @@
         </div>
       </div>
 
-      <div class="video-attributes mb-3 ml-4">
+      <div class="video-attributes mb-3">
         <div class="video-attribute">
           <span i18n class="video-attribute-label">Privacy</span>
           <span class="video-attribute-value">{{ video.privacy.label }}</span>

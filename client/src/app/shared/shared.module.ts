@@ -66,6 +66,7 @@ import { OverviewService } from '@app/shared/overview'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { UserModerationDropdownComponent } from '@app/shared/moderation/user-moderation-dropdown.component'
 import { BlocklistService } from '@app/shared/blocklist'
+import { AvatarComponent } from '@app/shared/channel/avatar.component'
 import { TopMenuDropdownComponent } from '@app/shared/menu/top-menu-dropdown.component'
 import { UserHistoryService } from '@app/shared/users/user-history.service'
 import { UserNotificationService } from '@app/shared/users/user-notification.service'
@@ -158,6 +159,7 @@ import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-cop
     TimestampInputComponent,
     InputReadonlyCopyComponent,
 
+    AvatarComponent,
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,
@@ -228,6 +230,7 @@ import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-cop
     PeertubeCheckboxComponent,
     TimestampInputComponent,
 
+    AvatarComponent,
     SubscribeButtonComponent,
     RemoteSubscribeComponent,
     InstanceFeaturesTableComponent,

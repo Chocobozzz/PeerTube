@@ -1,0 +1,8 @@
+<div class="wrapper">
+  <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Go the channel page">
+    <img [src]="video.videoChannelAvatarUrl" alt="Channel avatar" />
+  </a>
+  <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Go to the account page">
+    <img [src]="video.accountAvatarUrl" alt="Account avatar" />
+  </a>
+</div>

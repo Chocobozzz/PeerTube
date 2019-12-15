@@ -3,8 +3,8 @@
 @import '_bootstrap-variables';
 @import '_miniature';
 
-$other-videos-width: 260px;
 $player-factor: 1.7; // 16/9
+$video-info-margin-left: 44px;
 
 @function getPlayerHeight($width){
   @return calc(#{$width} / #{$player-factor})
@@ -180,40 +180,24 @@ $player-factor: 1.7; // 16/9
           }
         }
 
+        .video-info-channel-left {
+          flex-grow: 1;
+
+          .video-info-channel-left-links {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            line-height: 1.3;
+
+            a:nth-of-type(2) {
+              font-weight: 500;
+              font-size: 90%;
+            }
+          }
+        }
+
         my-subscribe-button {
           margin-left: 5px;
-        }
-      }
-
-      .video-info-by {
-
-        a {
-          @include disable-default-a-behaviour;
-
-          display: inline;
-          align-items: center;
-          font-size: 13px;
-          color: var(--mainForegroundColor);
-
-          span:hover {
-            opacity: 0.8;
-          }
-
-          span {
-            margin-left: 2px;
-          }
-
-          img {
-            @include avatar(18px);
-
-            margin: -2px 5px 0 0;
-          }
-        }
-
-        my-help {
-          position: relative;
-          top: 1px;
-          margin-left: 2px;
         }
       }
 
@@ -330,6 +314,7 @@ $player-factor: 1.7; // 16/9
 
     .video-info-description {
       margin: 20px 0;
+      margin-left: $video-info-margin-left;
       font-size: 15px;
 
       .video-info-description-html {
@@ -355,6 +340,10 @@ $player-factor: 1.7; // 16/9
           top: 2px;
         }
       }
+    }
+
+    .video-attributes {
+      margin-left: $video-info-margin-left;
     }
 
     .video-attributes .video-attribute {
@@ -391,11 +380,9 @@ $player-factor: 1.7; // 16/9
 
   ::ng-deep .other-videos {
     padding-left: 15px;
-    flex-basis: $other-videos-width;
-    min-width: $other-videos-width;
 
     .title-page {
-      margin-top: 0 !important;
+      margin: 0 !important;
     }
 
     .video-miniature {
