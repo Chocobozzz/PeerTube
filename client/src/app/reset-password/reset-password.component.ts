@@ -16,10 +16,6 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
   private userId: number
   private verificationString: string
 
-  invalidVerifactionString: boolean;
-  invalidUser: boolean;
-  isLoading: boolean;
-
   constructor (
     protected formValidatorService: FormValidatorService,
     private resetPasswordValidatorsService: ResetPasswordValidatorsService,
@@ -34,7 +30,6 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.isLoading = true
     this.buildForm({
       password: this.userValidatorsService.USER_PASSWORD,
       'password-confirm': this.resetPasswordValidatorsService.RESET_PASSWORD_CONFIRM
@@ -47,22 +42,6 @@ export class ResetPasswordComponent extends FormReactive implements OnInit {
       this.notifier.error(this.i18n('Unable to find user id or verification string.'))
       this.router.navigate([ '/' ])
     }
-
-    this.userService.verifyResetPasswordLink(this.userId, this.verificationString).subscribe(
-      resp => {
-        this.isLoading = false
-      },
-      err => {
-        if(err.status === 403) {
-          this.invalidVerifactionString = true;
-        } else if (err.status === 404) {
-          this.invalidUser = true;
-        } else {
-          console.log(err)
-        }
-        this.isLoading = false
-      }
-    )
   }
 
   resetPassword () {
