@@ -12,6 +12,7 @@ type PlaylistSummary = {
   inPlaylist: boolean
   displayName: string
 
+  playlistElementId?: number
   startTimestamp?: number
   stopTimestamp?: number
 }
@@ -81,7 +82,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   load () {
     forkJoin([
-      this.videoPlaylistService.listAccountPlaylists(this.user.account, '-updatedAt'),
+      this.videoPlaylistService.listAccountPlaylists(this.user.account, undefined,'-updatedAt'),
       this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
     ])
       .subscribe(
@@ -93,6 +94,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
               id: playlist.id,
               displayName: playlist.displayName,
               inPlaylist: !!existingPlaylist,
+              playlistElementId:  existingPlaylist ? existingPlaylist.playlistElementId : undefined,
               startTimestamp: existingPlaylist ? existingPlaylist.startTimestamp : undefined,
               stopTimestamp: existingPlaylist ? existingPlaylist.stopTimestamp : undefined
             })
@@ -177,12 +179,15 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   }
 
   private removeVideoFromPlaylist (playlist: PlaylistSummary) {
-    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, this.video.id)
+    if (!playlist.playlistElementId) return
+
+    this.videoPlaylistService.removeVideoFromPlaylist(playlist.id, playlist.playlistElementId)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Video removed from {{name}}', { name: playlist.displayName }))
 
             playlist.inPlaylist = false
+            playlist.playlistElementId = undefined
           },
 
           err => {
@@ -203,8 +208,9 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
     this.videoPlaylistService.addVideoInPlaylist(playlist.id, body)
       .subscribe(
-        () => {
+        res => {
           playlist.inPlaylist = true
+          playlist.playlistElementId = res.videoPlaylistElement.id
 
           playlist.startTimestamp = body.startTimestamp
           playlist.stopTimestamp = body.stopTimestamp

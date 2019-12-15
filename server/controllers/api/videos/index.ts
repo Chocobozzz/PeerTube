@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { extname, join } from 'path'
+import { extname } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
 import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
@@ -62,6 +62,10 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
+import { Hooks } from '../../../lib/plugins/hooks'
+import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
+import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { getVideoFilePath } from '@server/lib/video-paths'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -183,8 +187,8 @@ async function addVideo (req: express.Request, res: express.Response) {
     category: videoInfo.category,
     licence: videoInfo.licence,
     language: videoInfo.language,
-    commentsEnabled: videoInfo.commentsEnabled || false,
-    downloadEnabled: videoInfo.downloadEnabled || true,
+    commentsEnabled: videoInfo.commentsEnabled !== false, // If the value is not "false", the default is "true"
+    downloadEnabled: videoInfo.downloadEnabled !== false,
     waitTranscoding: videoInfo.waitTranscoding || false,
     state: CONFIG.TRANSCODING.ENABLED ? VideoState.TO_TRANSCODE : VideoState.PUBLISHED,
     nsfw: videoInfo.nsfw || false,
@@ -196,12 +200,13 @@ async function addVideo (req: express.Request, res: express.Response) {
     originallyPublishedAt: videoInfo.originallyPublishedAt
   }
 
-  const video = new VideoModel(videoData)
+  const video = new VideoModel(videoData) as MVideoDetails
   video.url = getVideoActivityPubUrl(video) // We use the UUID, so set the URL after building the object
 
   const videoFile = new VideoFileModel({
     extname: extname(videoPhysicalFile.filename),
-    size: videoPhysicalFile.size
+    size: videoPhysicalFile.size,
+    videoStreamingPlaylistId: null
   })
 
   if (videoFile.isAudio()) {
@@ -212,32 +217,31 @@ async function addVideo (req: express.Request, res: express.Response) {
   }
 
   // Move physical file
-  const videoDir = CONFIG.STORAGE.VIDEOS_DIR
-  const destination = join(videoDir, video.getVideoFilename(videoFile))
+  const destination = getVideoFilePath(video, videoFile)
   await move(videoPhysicalFile.path, destination)
   // This is important in case if there is another attempt in the retry process
-  videoPhysicalFile.filename = video.getVideoFilename(videoFile)
+  videoPhysicalFile.filename = getVideoFilePath(video, videoFile)
   videoPhysicalFile.path = destination
 
   // Process thumbnail or create it from the video
   const thumbnailField = req.files['thumbnailfile']
   const thumbnailModel = thumbnailField
-    ? await createVideoMiniatureFromExisting(thumbnailField[0].path, video, ThumbnailType.MINIATURE)
+    ? await createVideoMiniatureFromExisting(thumbnailField[0].path, video, ThumbnailType.MINIATURE, false)
     : await generateVideoMiniature(video, videoFile, ThumbnailType.MINIATURE)
 
   // Process preview or create it from the video
   const previewField = req.files['previewfile']
   const previewModel = previewField
-    ? await createVideoMiniatureFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW)
+    ? await createVideoMiniatureFromExisting(previewField[0].path, video, ThumbnailType.PREVIEW, false)
     : await generateVideoMiniature(video, videoFile, ThumbnailType.PREVIEW)
 
   // Create the torrent file
-  await video.createTorrentAndSetInfoHash(videoFile)
+  await createTorrentAndSetInfoHash(video, videoFile)
 
-  const { videoCreated, videoWasAutoBlacklisted } = await sequelizeTypescript.transaction(async t => {
+  const { videoCreated } = await sequelizeTypescript.transaction(async t => {
     const sequelizeOptions = { transaction: t }
 
-    const videoCreated = await video.save(sequelizeOptions)
+    const videoCreated = await video.save(sequelizeOptions) as MVideoFullLight
 
     await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     await videoCreated.addAndSaveThumbnail(previewModel, t)
@@ -267,23 +271,22 @@ async function addVideo (req: express.Request, res: express.Response) {
       }, { transaction: t })
     }
 
-    const videoWasAutoBlacklisted = await autoBlacklistVideoIfNeeded(video, res.locals.oauth.token.User, t)
-
-    if (!videoWasAutoBlacklisted) {
-      await federateVideoIfNeeded(video, true, t)
-    }
+    await autoBlacklistVideoIfNeeded({
+      video,
+      user: res.locals.oauth.token.User,
+      isRemote: false,
+      isNew: true,
+      transaction: t
+    })
+    await federateVideoIfNeeded(video, true, t)
 
     auditLogger.create(getAuditIdFromRes(res), new VideoAuditView(videoCreated.toFormattedDetailsJSON()))
     logger.info('Video with name %s and uuid %s created.', videoInfo.name, videoCreated.uuid)
 
-    return { videoCreated, videoWasAutoBlacklisted }
+    return { videoCreated }
   })
 
-  if (videoWasAutoBlacklisted) {
-    Notifier.Instance.notifyOnVideoAutoBlacklist(videoCreated)
-  } else {
-    Notifier.Instance.notifyOnNewVideo(videoCreated)
-  }
+  Notifier.Instance.notifyOnNewVideoIfNeeded(videoCreated)
 
   if (video.state === VideoState.TO_TRANSCODE) {
     // Put uuid because we don't have id auto incremented for now
@@ -307,6 +310,8 @@ async function addVideo (req: express.Request, res: express.Response) {
     await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
   }
 
+  Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
+
   return res.json({
     video: {
       id: videoCreated.id,
@@ -316,22 +321,21 @@ async function addVideo (req: express.Request, res: express.Response) {
 }
 
 async function updateVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   const videoFieldsSave = videoInstance.toJSON()
   const oldVideoAuditView = new VideoAuditView(videoInstance.toFormattedDetailsJSON())
   const videoInfoToUpdate: VideoUpdate = req.body
 
-  const wasPrivateVideo = videoInstance.privacy === VideoPrivacy.PRIVATE
-  const wasNotPrivateVideo = videoInstance.privacy !== VideoPrivacy.PRIVATE
-  const wasUnlistedVideo = videoInstance.privacy === VideoPrivacy.UNLISTED
+  const wasConfidentialVideo = videoInstance.isConfidential()
+  const hadPrivacyForFederation = videoInstance.hasPrivacyForFederation()
 
   // Process thumbnail or create it from the video
   const thumbnailModel = req.files && req.files['thumbnailfile']
-    ? await createVideoMiniatureFromExisting(req.files['thumbnailfile'][0].path, videoInstance, ThumbnailType.MINIATURE)
+    ? await createVideoMiniatureFromExisting(req.files['thumbnailfile'][0].path, videoInstance, ThumbnailType.MINIATURE, false)
     : undefined
 
   const previewModel = req.files && req.files['previewfile']
-    ? await createVideoMiniatureFromExisting(req.files['previewfile'][0].path, videoInstance, ThumbnailType.PREVIEW)
+    ? await createVideoMiniatureFromExisting(req.files['previewfile'][0].path, videoInstance, ThumbnailType.PREVIEW, false)
     : undefined
 
   try {
@@ -339,37 +343,35 @@ async function updateVideo (req: express.Request, res: express.Response) {
       const sequelizeOptions = { transaction: t }
       const oldVideoChannel = videoInstance.VideoChannel
 
-      if (videoInfoToUpdate.name !== undefined) videoInstance.set('name', videoInfoToUpdate.name)
-      if (videoInfoToUpdate.category !== undefined) videoInstance.set('category', videoInfoToUpdate.category)
-      if (videoInfoToUpdate.licence !== undefined) videoInstance.set('licence', videoInfoToUpdate.licence)
-      if (videoInfoToUpdate.language !== undefined) videoInstance.set('language', videoInfoToUpdate.language)
-      if (videoInfoToUpdate.nsfw !== undefined) videoInstance.set('nsfw', videoInfoToUpdate.nsfw)
-      if (videoInfoToUpdate.waitTranscoding !== undefined) videoInstance.set('waitTranscoding', videoInfoToUpdate.waitTranscoding)
-      if (videoInfoToUpdate.support !== undefined) videoInstance.set('support', videoInfoToUpdate.support)
-      if (videoInfoToUpdate.description !== undefined) videoInstance.set('description', videoInfoToUpdate.description)
-      if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.set('commentsEnabled', videoInfoToUpdate.commentsEnabled)
-      if (videoInfoToUpdate.downloadEnabled !== undefined) videoInstance.set('downloadEnabled', videoInfoToUpdate.downloadEnabled)
+      if (videoInfoToUpdate.name !== undefined) videoInstance.name = videoInfoToUpdate.name
+      if (videoInfoToUpdate.category !== undefined) videoInstance.category = videoInfoToUpdate.category
+      if (videoInfoToUpdate.licence !== undefined) videoInstance.licence = videoInfoToUpdate.licence
+      if (videoInfoToUpdate.language !== undefined) videoInstance.language = videoInfoToUpdate.language
+      if (videoInfoToUpdate.nsfw !== undefined) videoInstance.nsfw = videoInfoToUpdate.nsfw
+      if (videoInfoToUpdate.waitTranscoding !== undefined) videoInstance.waitTranscoding = videoInfoToUpdate.waitTranscoding
+      if (videoInfoToUpdate.support !== undefined) videoInstance.support = videoInfoToUpdate.support
+      if (videoInfoToUpdate.description !== undefined) videoInstance.description = videoInfoToUpdate.description
+      if (videoInfoToUpdate.commentsEnabled !== undefined) videoInstance.commentsEnabled = videoInfoToUpdate.commentsEnabled
+      if (videoInfoToUpdate.downloadEnabled !== undefined) videoInstance.downloadEnabled = videoInfoToUpdate.downloadEnabled
 
       if (videoInfoToUpdate.originallyPublishedAt !== undefined && videoInfoToUpdate.originallyPublishedAt !== null) {
         videoInstance.originallyPublishedAt = new Date(videoInfoToUpdate.originallyPublishedAt)
       }
 
+      let isNewVideo = false
       if (videoInfoToUpdate.privacy !== undefined) {
+        isNewVideo = videoInstance.isNewVideo(videoInfoToUpdate.privacy)
+
         const newPrivacy = parseInt(videoInfoToUpdate.privacy.toString(), 10)
-        videoInstance.privacy = newPrivacy
+        videoInstance.setPrivacy(newPrivacy)
 
-        // The video was private, and is not anymore -> publish it
-        if (wasPrivateVideo === true && newPrivacy !== VideoPrivacy.PRIVATE) {
-          videoInstance.publishedAt = new Date()
-        }
-
-        // The video was not private, but now it is -> we need to unfederate it
-        if (wasNotPrivateVideo === true && newPrivacy === VideoPrivacy.PRIVATE) {
+        // Unfederate the video if the new privacy is not compatible with federation
+        if (hadPrivacyForFederation && !videoInstance.hasPrivacyForFederation()) {
           await VideoModel.sendDelete(videoInstance, { transaction: t })
         }
       }
 
-      const videoInstanceUpdated = await videoInstance.save(sequelizeOptions)
+      const videoInstanceUpdated = await videoInstance.save(sequelizeOptions) as MVideoFullLight
 
       if (thumbnailModel) await videoInstanceUpdated.addAndSaveThumbnail(thumbnailModel, t)
       if (previewModel) await videoInstanceUpdated.addAndSaveThumbnail(previewModel, t)
@@ -387,7 +389,7 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await videoInstanceUpdated.$set('VideoChannel', res.locals.videoChannel, { transaction: t })
         videoInstanceUpdated.VideoChannel = res.locals.videoChannel
 
-        if (wasPrivateVideo === false) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
+        if (hadPrivacyForFederation === true) await changeVideoChannelShare(videoInstanceUpdated, oldVideoChannel, t)
       }
 
       // Schedule an update in the future?
@@ -401,12 +403,15 @@ async function updateVideo (req: express.Request, res: express.Response) {
         await ScheduleVideoUpdateModel.deleteByVideoId(videoInstanceUpdated.id, t)
       }
 
-      const isNewVideo = wasPrivateVideo && videoInstanceUpdated.privacy !== VideoPrivacy.PRIVATE
+      await autoBlacklistVideoIfNeeded({
+        video: videoInstanceUpdated,
+        user: res.locals.oauth.token.User,
+        isRemote: false,
+        isNew: false,
+        transaction: t
+      })
 
-      // Don't send update if the video was unfederated
-      if (!videoInstanceUpdated.VideoBlacklist || videoInstanceUpdated.VideoBlacklist.unfederated === false) {
-        await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
-      }
+      await federateVideoIfNeeded(videoInstanceUpdated, isNewVideo, t)
 
       auditLogger.update(
         getAuditIdFromRes(res),
@@ -418,9 +423,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
       return videoInstanceUpdated
     })
 
-    if (wasUnlistedVideo || wasPrivateVideo) {
-      Notifier.Instance.notifyOnNewVideo(videoInstanceUpdated)
+    if (wasConfidentialVideo) {
+      Notifier.Instance.notifyOnNewVideoIfNeeded(videoInstanceUpdated)
     }
+
+    Hooks.runAction('action:api.video.updated', { video: videoInstanceUpdated })
   } catch (err) {
     // Force fields we want to update
     // If the transaction is retried, sequelize will think the object has not changed
@@ -436,7 +443,12 @@ async function updateVideo (req: express.Request, res: express.Response) {
 async function getVideo (req: express.Request, res: express.Response) {
   // We need more attributes
   const userId: number = res.locals.oauth ? res.locals.oauth.token.User.id : null
-  const video = await VideoModel.loadForGetAPI(res.locals.video.id, undefined, userId)
+
+  const video = await Hooks.wrapPromiseFun(
+    VideoModel.loadForGetAPI,
+    { id: res.locals.onlyVideoWithRights.id, userId },
+    'filter:api.video.get.result'
+  )
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
@@ -447,7 +459,7 @@ async function getVideo (req: express.Request, res: express.Response) {
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
 
   const ip = req.ip
   const exists = await Redis.Instance.doesVideoIPViewExist(ip, videoInstance.uuid)
@@ -464,11 +476,13 @@ async function viewVideo (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
   await sendView(serverActor, videoInstance, undefined)
 
+  Hooks.runAction('action:api.video.viewed', { video: videoInstance, ip })
+
   return res.status(204).end()
 }
 
 async function getVideoDescription (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
   let description = ''
 
   if (videoInstance.isOwned()) {
@@ -481,7 +495,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
-  const resultList = await VideoModel.listForApi({
+  const apiOptions = await Hooks.wrapObject({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
@@ -495,13 +509,19 @@ async function listVideos (req: express.Request, res: express.Response) {
     filter: req.query.filter as VideoFilter,
     withFiles: false,
     user: res.locals.oauth ? res.locals.oauth.token.User : undefined
-  })
+  }, 'filter:api.videos.list.params')
+
+  const resultList = await Hooks.wrapPromiseFun(
+    VideoModel.listForApi,
+    apiOptions,
+    'filter:api.videos.list.result'
+  )
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function removeVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.video
+  const videoInstance = res.locals.videoAll
 
   await sequelizeTypescript.transaction(async t => {
     await videoInstance.destroy({ transaction: t })
@@ -509,6 +529,8 @@ async function removeVideo (req: express.Request, res: express.Response) {
 
   auditLogger.delete(getAuditIdFromRes(res), new VideoAuditView(videoInstance.toFormattedDetailsJSON()))
   logger.info('Video with name %s and uuid %s deleted.', videoInstance.name, videoInstance.uuid)
+
+  Hooks.runAction('action:api.video.deleted', { video: videoInstance })
 
   return res.type('json').status(204).end()
 }

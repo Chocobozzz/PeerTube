@@ -28,7 +28,19 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
     'with WebTorrent and Angular.'
   )
   expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
+
   expect(data.instance.terms).to.equal('No terms for now.')
+  expect(data.instance.creationReason).to.be.empty
+  expect(data.instance.codeOfConduct).to.be.empty
+  expect(data.instance.moderationInformation).to.be.empty
+  expect(data.instance.administrator).to.be.empty
+  expect(data.instance.maintenanceLifetime).to.be.empty
+  expect(data.instance.businessModel).to.be.empty
+  expect(data.instance.hardwareInformation).to.be.empty
+
+  expect(data.instance.languages).to.have.lengthOf(0)
+  expect(data.instance.categories).to.have.lengthOf(0)
+
   expect(data.instance.defaultClientRoute).to.equal('/videos/trending')
   expect(data.instance.isNSFW).to.be.false
   expect(data.instance.defaultNSFWPolicy).to.equal('display')
@@ -60,6 +72,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.transcoding.resolutions['720p']).to.be.true
   expect(data.transcoding.resolutions['1080p']).to.be.true
   expect(data.transcoding.resolutions['2160p']).to.be.true
+  expect(data.transcoding.webtorrent.enabled).to.be.true
   expect(data.transcoding.hls.enabled).to.be.true
 
   expect(data.import.videos.http.enabled).to.be.true
@@ -68,13 +81,29 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.followers.instance.enabled).to.be.true
   expect(data.followers.instance.manualApproval).to.be.false
+
+  expect(data.followings.instance.autoFollowBack.enabled).to.be.false
+  expect(data.followings.instance.autoFollowIndex.enabled).to.be.false
+  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('https://instances.joinpeertube.org')
 }
 
 function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube updated')
   expect(data.instance.shortDescription).to.equal('my short description')
   expect(data.instance.description).to.equal('my super description')
+
   expect(data.instance.terms).to.equal('my super terms')
+  expect(data.instance.creationReason).to.equal('my super creation reason')
+  expect(data.instance.codeOfConduct).to.equal('my super coc')
+  expect(data.instance.moderationInformation).to.equal('my super moderation information')
+  expect(data.instance.administrator).to.equal('Kuja')
+  expect(data.instance.maintenanceLifetime).to.equal('forever')
+  expect(data.instance.businessModel).to.equal('my super business model')
+  expect(data.instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+
+  expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
+  expect(data.instance.categories).to.deep.equal([ 1, 2 ])
+
   expect(data.instance.defaultClientRoute).to.equal('/videos/recently-added')
   expect(data.instance.isNSFW).to.be.true
   expect(data.instance.defaultNSFWPolicy).to.equal('blur')
@@ -112,6 +141,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.transcoding.resolutions['1080p']).to.be.false
   expect(data.transcoding.resolutions['2160p']).to.be.false
   expect(data.transcoding.hls.enabled).to.be.false
+  expect(data.transcoding.webtorrent.enabled).to.be.true
 
   expect(data.import.videos.http.enabled).to.be.false
   expect(data.import.videos.torrent.enabled).to.be.false
@@ -119,6 +149,10 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.followers.instance.enabled).to.be.false
   expect(data.followers.instance.manualApproval).to.be.true
+
+  expect(data.followings.instance.autoFollowBack.enabled).to.be.true
+  expect(data.followings.instance.autoFollowIndex.enabled).to.be.true
+  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('https://updated.example.com')
 }
 
 describe('Test config', function () {
@@ -182,6 +216,18 @@ describe('Test config', function () {
         shortDescription: 'my short description',
         description: 'my super description',
         terms: 'my super terms',
+        codeOfConduct: 'my super coc',
+
+        creationReason: 'my super creation reason',
+        moderationInformation: 'my super moderation information',
+        administrator: 'Kuja',
+        maintenanceLifetime: 'forever',
+        businessModel: 'my super business model',
+        hardwareInformation: '2vCore 3GB RAM',
+
+        languages: [ 'en', 'es' ],
+        categories: [ 1, 2 ],
+
         defaultClientRoute: '/videos/recently-added',
         isNSFW: true,
         defaultNSFWPolicy: 'blur' as 'blur',
@@ -189,6 +235,9 @@ describe('Test config', function () {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
         }
+      },
+      theme: {
+        default: 'default'
       },
       services: {
         twitter: {
@@ -225,12 +274,16 @@ describe('Test config', function () {
         allowAudioFiles: true,
         threads: 1,
         resolutions: {
+          '0p': false,
           '240p': false,
           '360p': true,
           '480p': true,
           '720p': false,
           '1080p': false,
           '2160p': false
+        },
+        webtorrent: {
+          enabled: true
         },
         hls: {
           enabled: false
@@ -257,6 +310,17 @@ describe('Test config', function () {
         instance: {
           enabled: false,
           manualApproval: true
+        }
+      },
+      followings: {
+        instance: {
+          autoFollowBack: {
+            enabled: true
+          },
+          autoFollowIndex: {
+            enabled: true,
+            indexUrl: 'https://updated.example.com'
+          }
         }
       }
     }
@@ -307,6 +371,17 @@ describe('Test config', function () {
     expect(data.instance.shortDescription).to.equal('my short description')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
+    expect(data.instance.codeOfConduct).to.equal('my super coc')
+
+    expect(data.instance.creationReason).to.equal('my super creation reason')
+    expect(data.instance.moderationInformation).to.equal('my super moderation information')
+    expect(data.instance.administrator).to.equal('Kuja')
+    expect(data.instance.maintenanceLifetime).to.equal('forever')
+    expect(data.instance.businessModel).to.equal('my super business model')
+    expect(data.instance.hardwareInformation).to.equal('2vCore 3GB RAM')
+
+    expect(data.instance.languages).to.deep.equal([ 'en', 'es' ])
+    expect(data.instance.categories).to.deep.equal([ 1, 2 ])
   })
 
   it('Should remove the custom configuration', async function () {

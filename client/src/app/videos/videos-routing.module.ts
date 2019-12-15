@@ -4,6 +4,7 @@ import { VideoLocalComponent } from '@app/videos/video-list/video-local.componen
 import { MetaGuard } from '@ngx-meta/core'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
 import { VideoTrendingComponent } from './video-list/video-trending.component'
+import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
 import { VideosComponent } from './videos.component'
 import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
 import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
@@ -19,7 +20,7 @@ const videosRoutes: Routes = [
         component: VideoOverviewComponent,
         data: {
           meta: {
-            title: 'Videos overview'
+            title: 'Discover videos'
           }
         }
       },
@@ -33,6 +34,19 @@ const videosRoutes: Routes = [
           reuse: {
             enabled: true,
             key: 'trending-videos-list'
+          }
+        }
+      },
+      {
+        path: 'most-liked',
+        component: VideoMostLikedComponent,
+        data: {
+          meta: {
+            title: 'Most liked videos'
+          },
+          reuse: {
+            enabled: true,
+            key: 'most-liked-videos-list'
           }
         }
       },
@@ -77,7 +91,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'upload',
-        loadChildren: 'app/videos/+video-edit/video-add.module#VideoAddModule',
+        loadChildren: () => import('@app/videos/+video-edit/video-add.module').then(m => m.VideoAddModule),
         data: {
           meta: {
             title: 'Upload a video'
@@ -86,7 +100,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'update/:uuid',
-        loadChildren: 'app/videos/+video-edit/video-update.module#VideoUpdateModule',
+        loadChildren: () => import('@app/videos/+video-edit/video-update.module').then(m => m.VideoUpdateModule),
         data: {
           meta: {
             title: 'Edit a video'
@@ -95,7 +109,7 @@ const videosRoutes: Routes = [
       },
       {
         path: 'watch',
-        loadChildren: 'app/videos/+video-watch/video-watch.module#VideoWatchModule',
+        loadChildren: () => import('@app/videos/+video-watch/video-watch.module').then(m => m.VideoWatchModule),
         data: {
           preload: 3000
         }

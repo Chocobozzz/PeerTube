@@ -172,7 +172,7 @@ describe('Test video comments', function () {
 
     const tree: VideoCommentThreadTree = res.body
     expect(tree.comment.text).equal('my super first comment')
-    expect(tree.children).to.have.lengthOf(1)
+    expect(tree.children).to.have.lengthOf(2)
 
     const firstChild = tree.children[0]
     expect(firstChild.comment.text).to.equal('my super answer to thread 1')
@@ -181,20 +181,32 @@ describe('Test video comments', function () {
     const childOfFirstChild = firstChild.children[0]
     expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
     expect(childOfFirstChild.children).to.have.lengthOf(0)
+
+    const deletedChildOfFirstChild = tree.children[1]
+    expect(deletedChildOfFirstChild.comment.text).to.equal('')
+    expect(deletedChildOfFirstChild.comment.isDeleted).to.be.true
+    expect(deletedChildOfFirstChild.comment.deletedAt).to.not.be.null
+    expect(deletedChildOfFirstChild.comment.account).to.be.null
+    expect(deletedChildOfFirstChild.children).to.have.lengthOf(0)
   })
 
   it('Should delete a complete thread', async function () {
     await deleteVideoComment(server.url, server.accessToken, videoId, threadId)
 
     const res = await getVideoCommentThreads(server.url, videoUUID, 0, 5, 'createdAt')
-    expect(res.body.total).to.equal(2)
+    expect(res.body.total).to.equal(3)
     expect(res.body.data).to.be.an('array')
-    expect(res.body.data).to.have.lengthOf(2)
+    expect(res.body.data).to.have.lengthOf(3)
 
-    expect(res.body.data[0].text).to.equal('super thread 2')
-    expect(res.body.data[0].totalReplies).to.equal(0)
-    expect(res.body.data[1].text).to.equal('super thread 3')
+    expect(res.body.data[0].text).to.equal('')
+    expect(res.body.data[0].isDeleted).to.be.true
+    expect(res.body.data[0].deletedAt).to.not.be.null
+    expect(res.body.data[0].account).to.be.null
+    expect(res.body.data[0].totalReplies).to.equal(3)
+    expect(res.body.data[1].text).to.equal('super thread 2')
     expect(res.body.data[1].totalReplies).to.equal(0)
+    expect(res.body.data[2].text).to.equal('super thread 3')
+    expect(res.body.data[2].totalReplies).to.equal(0)
   })
 
   after(async function () {

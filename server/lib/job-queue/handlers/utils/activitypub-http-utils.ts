@@ -3,6 +3,7 @@ import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { sha256 } from '../../../../helpers/core-utils'
 import { HTTP_SIGNATURE } from '../../../../initializers/constants'
+import { MActor } from '../../../../typings/models'
 
 type Payload = { body: any, signatureActorId?: number }
 
@@ -19,7 +20,8 @@ async function computeBody (payload: Payload) {
 }
 
 async function buildSignedRequestOptions (payload: Payload) {
-  let actor: ActorModel | null
+  let actor: MActor | null
+
   if (payload.signatureActorId) {
     actor = await ActorModel.load(payload.signatureActorId)
     if (!actor) throw new Error('Unknown signature actor id.')

@@ -37,7 +37,7 @@ import {
 } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { MyAccountChangeEmailComponent } from '@app/+my-account/my-account-settings/my-account-change-email'
-import { MultiSelectModule } from 'primeng/primeng'
+import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account-settings/my-account-interface'
 
 @NgModule({
   imports: [
@@ -47,8 +47,7 @@ import { MultiSelectModule } from 'primeng/primeng'
     SharedModule,
     TableModule,
     InputSwitchModule,
-    DragDropModule,
-    MultiSelectModule
+    DragDropModule
   ],
 
   declarations: [
@@ -58,6 +57,7 @@ import { MultiSelectModule } from 'primeng/primeng'
     MyAccountVideoSettingsComponent,
     MyAccountProfileComponent,
     MyAccountChangeEmailComponent,
+    MyAccountInterfaceSettingsComponent,
 
     MyAccountVideosComponent,
 

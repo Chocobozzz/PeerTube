@@ -2,8 +2,9 @@ import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { sendUndoCacheFile } from './activitypub/send'
 import { Transaction } from 'sequelize'
 import { getServerActor } from '../helpers/utils'
+import { MVideoRedundancyVideo } from '@server/typings/models'
 
-async function removeVideoRedundancy (videoRedundancy: VideoRedundancyModel, t?: Transaction) {
+async function removeVideoRedundancy (videoRedundancy: MVideoRedundancyVideo, t?: Transaction) {
   const serverActor = await getServerActor()
 
   // Local cache, send undo to remote instances

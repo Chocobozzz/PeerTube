@@ -1,15 +1,14 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, query } from 'express-validator/check'
+import { body, query } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
-import { isNotEmptyIntArray } from '../../helpers/custom-validators/misc'
+import { isNotEmptyIntArray, toBooleanOrNull } from '../../helpers/custom-validators/misc'
 
 const listUserNotificationsValidator = [
   query('unread')
     .optional()
-    .toBoolean()
+    .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should have a valid unread boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -44,6 +43,8 @@ const updateNotificationSettingsValidator = [
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid new user registration notification setting'),
   body('newInstanceFollower')
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid new instance follower notification setting'),
+  body('autoInstanceFollowing')
+    .custom(isUserNotificationSettingValid).withMessage('Should have a valid new instance following notification setting'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking updateNotificationSettingsValidator parameters', { parameters: req.body })

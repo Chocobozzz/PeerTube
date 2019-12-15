@@ -1,5 +1,4 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
-@import '_bootstrap';
 
 @import '_variables';
 @import '_mixins';
@@ -27,15 +26,21 @@ body {
   --mainHoverColor: #{$orange-hover-color};
   --mainBackgroundColor: #{$bg-color};
   --mainForegroundColor: #{$fg-color};
+
   --menuBackgroundColor: #{$menu-background};
   --menuForegroundColor: #{$menu-color};
   --submenuColor: #{$sub-menu-color};
+
   --inputColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
+
+  --supportButtonBackgroundColor: #{$support-button};
+  --supportButtonColor: #{$white};
 
   font-family: $main-fonts;
   font-weight: $font-regular;
   color: var(--mainForegroundColor);
+  background-color: var(--mainBackgroundColor);
   font-size: 14px;
 }
 

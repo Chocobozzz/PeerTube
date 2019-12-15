@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body } from 'express-validator/check'
+import { body } from 'express-validator'
 import { isAvatarFile } from '../../helpers/custom-validators/users'
 import { areValidationErrors } from './utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'

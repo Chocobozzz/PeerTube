@@ -24,7 +24,7 @@ jobsRouter.get('/:state',
   jobsSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  asyncMiddleware(listJobsValidator),
+  listJobsValidator,
   asyncMiddleware(listJobs)
 )
 
@@ -36,11 +36,18 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function listJobs (req: express.Request, res: express.Response, next: express.NextFunction) {
-  const state: JobState = req.params.state
+async function listJobs (req: express.Request, res: express.Response) {
+  const state = req.params.state as JobState
   const asc = req.query.sort === 'createdAt'
+  const jobType = req.query.jobType
 
-  const jobs = await JobQueue.Instance.listForApi(state, req.query.start, req.query.count, asc)
+  const jobs = await JobQueue.Instance.listForApi({
+    state,
+    start: req.query.start,
+    count: req.query.count,
+    asc,
+    jobType
+  })
   const total = await JobQueue.Instance.count(state)
 
   const result: ResultList<any> = {

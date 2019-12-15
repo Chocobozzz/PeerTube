@@ -6,7 +6,7 @@ import {
   cleanupTests,
   createUser,
   flushAndRunServer,
-  makeDeleteRequest,
+  makeDeleteRequest, makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
@@ -131,6 +131,38 @@ describe('Test server follows API validators', function () {
       it('Should fail with an incorrect sort', async function () {
         await checkBadSortPagination(server.url, path)
       })
+
+      it('Should fail with an incorrect state', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          query: {
+            state: 'blabla'
+          }
+        })
+      })
+
+      it('Should fail with an incorrect actor type', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          query: {
+            actorType: 'blabla'
+          }
+        })
+      })
+
+      it('Should fail succeed with the correct params', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          statusCodeExpected: 200,
+          query: {
+            state: 'accepted',
+            actorType: 'Application'
+          }
+        })
+      })
     })
 
     describe('When listing followers', function () {
@@ -146,6 +178,38 @@ describe('Test server follows API validators', function () {
 
       it('Should fail with an incorrect sort', async function () {
         await checkBadSortPagination(server.url, path)
+      })
+
+      it('Should fail with an incorrect actor type', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          query: {
+            actorType: 'blabla'
+          }
+        })
+      })
+
+      it('Should fail with an incorrect state', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          query: {
+            state: 'blabla',
+            actorType: 'Application'
+          }
+        })
+      })
+
+      it('Should fail succeed with the correct params', async function () {
+        await makeGetRequest({
+          url: server.url,
+          path,
+          statusCodeExpected: 200,
+          query: {
+            state: 'accepted'
+          }
+        })
       })
     })
 

@@ -1,5 +1,7 @@
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 import { CustomConfig } from '../../models/server/custom-config.model'
+import { DeepPartial } from '@server/typings/utils'
+import { merge } from 'lodash'
 
 function getConfig (url: string) {
   const path = '/api/v1/config'
@@ -44,13 +46,25 @@ function updateCustomConfig (url: string, token: string, newCustomConfig: Custom
   })
 }
 
-function updateCustomSubConfig (url: string, token: string, newConfig: any) {
+function updateCustomSubConfig (url: string, token: string, newConfig: DeepPartial<CustomConfig>) {
   const updateParams: CustomConfig = {
     instance: {
       name: 'PeerTube updated',
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
+      codeOfConduct: 'my super coc',
+
+      creationReason: 'my super creation reason',
+      moderationInformation: 'my super moderation information',
+      administrator: 'Kuja',
+      maintenanceLifetime: 'forever',
+      businessModel: 'my super business model',
+      hardwareInformation: '2vCore 3GB RAM',
+
+      languages: [ 'en', 'es' ],
+      categories: [ 1, 2 ],
+
       defaultClientRoute: '/videos/recently-added',
       isNSFW: true,
       defaultNSFWPolicy: 'blur',
@@ -58,6 +72,9 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
       }
+    },
+    theme: {
+      default: 'default'
     },
     services: {
       twitter: {
@@ -94,12 +111,16 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
       allowAudioFiles: true,
       threads: 1,
       resolutions: {
+        '0p': false,
         '240p': false,
         '360p': true,
         '480p': true,
         '720p': false,
         '1080p': false,
         '2160p': false
+      },
+      webtorrent: {
+        enabled: true
       },
       hls: {
         enabled: false
@@ -127,10 +148,21 @@ function updateCustomSubConfig (url: string, token: string, newConfig: any) {
         enabled: true,
         manualApproval: false
       }
+    },
+    followings: {
+      instance: {
+        autoFollowBack: {
+          enabled: false
+        },
+        autoFollowIndex: {
+          indexUrl: 'https://instances.joinpeertube.org',
+          enabled: false
+        }
+      }
     }
   }
 
-  Object.assign(updateParams, newConfig)
+  merge(updateParams, newConfig)
 
   return updateCustomConfig(url, token, updateParams)
 }

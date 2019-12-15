@@ -14,12 +14,32 @@
         <span>{{ currentPlaylistPosition }}</span><span>{{ playlistPagination.totalItems }}</span>
       </div>
     </div>
+
+    <div class="playlist-controls">
+      <my-global-icon
+        iconName="videos"
+        [class.active]="autoPlayNextVideoPlaylist"
+        (click)="switchAutoPlayNextVideoPlaylist()"
+        [ngbTooltip]="autoPlayNextVideoPlaylistSwitchText"
+        placement="bottom auto"
+        container="body"
+      ></my-global-icon>
+
+      <my-global-icon
+        iconName="repeat"
+        [class.active]="loopPlaylist"
+        (click)="switchLoopPlaylist()"
+        [ngbTooltip]="'Loop playlist videos'"
+        placement="bottom auto"
+        container="body"
+      ></my-global-icon>
+    </div>
   </div>
 
-  <div *ngFor="let playlistVideo of playlistVideos">
+  <div *ngFor="let playlistElement of playlistElements">
     <my-video-playlist-element-miniature
-      [video]="playlistVideo" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
-      [playing]="currentPlaylistPosition === playlistVideo.playlistElement.position" [accountLink]="false" [position]="playlistVideo.playlistElement.position"
+      [playlistElement]="playlistElement" [playlist]="playlist" [owned]="isPlaylistOwned()" (elementRemoved)="onElementRemoved($event)"
+      [playing]="currentPlaylistPosition === playlistElement.position" [accountLink]="false" [position]="playlistElement.position"
     ></my-video-playlist-element-miniature>
   </div>
 </div>

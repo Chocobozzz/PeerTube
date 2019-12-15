@@ -27,7 +27,7 @@ export class AccountAboutComponent implements OnInit, OnDestroy {
     this.accountSub = this.accountService.accountLoaded
       .subscribe(async account => {
         this.account = account
-        this.descriptionHTML = await this.markdownService.textMarkdownToHTML(this.account.description)
+        this.descriptionHTML = await this.markdownService.textMarkdownToHTML(this.account.description, true)
       })
   }
 

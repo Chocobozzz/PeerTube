@@ -1,8 +1,24 @@
-div {
+.root {
   height: 100%;
   width: 100%;
   text-align: center;
   padding-top: 150px;
 
-  font-size: 32px;
+  img {
+    margin-bottom: 75px;
+    width: 220px;
+    height: auto;
+  }
+
+  .text {
+    font-size: 30px;
+  }
+
+  @media screen and (max-height: 600px) {
+    padding-top: 50px;
+
+    img {
+      width: 160px;
+    }
+  }
 }

@@ -14,6 +14,7 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
 
   // Put in the order we want to proceed jobs
   const resolutions = [
+    VideoResolution.H_NOVIDEO,
     VideoResolution.H_480P,
     VideoResolution.H_360P,
     VideoResolution.H_720P,
@@ -31,17 +32,53 @@ function computeResolutionsToTranscode (videoFileHeight: number) {
   return resolutionsEnabled
 }
 
-async function getVideoFileSize (path: string) {
+async function getVideoStreamSize (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
 
-  return {
-    width: videoStream.width,
-    height: videoStream.height
+  return videoStream === null
+    ? { width: 0, height: 0 }
+    : { width: videoStream.width, height: videoStream.height }
+}
+
+async function getVideoStreamCodec (path: string) {
+  const videoStream = await getVideoStreamFromFile(path)
+
+  if (!videoStream) return ''
+
+  const videoCodec = videoStream.codec_tag_string
+
+  const baseProfileMatrix = {
+    'High': '6400',
+    'Main': '4D40',
+    'Baseline': '42E0'
   }
+
+  let baseProfile = baseProfileMatrix[videoStream.profile]
+  if (!baseProfile) {
+    logger.warn('Cannot get video profile codec of %s.', path, { videoStream })
+    baseProfile = baseProfileMatrix['High'] // Fallback
+  }
+
+  const level = videoStream.level.toString(16)
+
+  return `${videoCodec}.${baseProfile}${level}`
+}
+
+async function getAudioStreamCodec (path: string) {
+  const { audioStream } = await audio.get(path)
+
+  if (!audioStream) return ''
+
+  const audioCodec = audioStream.codec_name
+  if (audioCodec === 'aac') return 'mp4a.40.2'
+
+  logger.warn('Cannot get audio codec of %s.', path, { audioStream })
+
+  return 'mp4a.40.2' // Fallback
 }
 
 async function getVideoFileResolution (path: string) {
-  const size = await getVideoFileSize(path)
+  const size = await getVideoStreamSize(path)
 
   return {
     videoFileResolution: Math.min(size.height, size.width),
@@ -51,9 +88,10 @@ async function getVideoFileResolution (path: string) {
 
 async function getVideoFileFPS (path: string) {
   const videoStream = await getVideoStreamFromFile(path)
+  if (videoStream === null) return 0
 
   for (const key of [ 'avg_frame_rate', 'r_frame_rate' ]) {
-    const valuesText: string = videoStream[key]
+    const valuesText: string = videoStream[ key ]
     if (!valuesText) continue
 
     const [ frames, seconds ] = valuesText.split('/')
@@ -118,7 +156,7 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
   }
 }
 
-type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio'
+type TranscodeOptionsType = 'hls' | 'quick-transcode' | 'video' | 'merge-audio' | 'only-audio'
 
 interface BaseTranscodeOptions {
   type: TranscodeOptionsType
@@ -130,6 +168,7 @@ interface BaseTranscodeOptions {
 
 interface HLSTranscodeOptions extends BaseTranscodeOptions {
   type: 'hls'
+  copyCodecs: boolean
   hlsPlaylist: {
     videoFilename: string
   }
@@ -148,7 +187,15 @@ interface MergeAudioTranscodeOptions extends BaseTranscodeOptions {
   audioPath: string
 }
 
-type TranscodeOptions = HLSTranscodeOptions | VideoTranscodeOptions | MergeAudioTranscodeOptions | QuickTranscodeOptions
+interface OnlyAudioTranscodeOptions extends BaseTranscodeOptions {
+  type: 'only-audio'
+}
+
+type TranscodeOptions = HLSTranscodeOptions
+  | VideoTranscodeOptions
+  | MergeAudioTranscodeOptions
+  | OnlyAudioTranscodeOptions
+  | QuickTranscodeOptions
 
 function transcode (options: TranscodeOptions) {
   return new Promise<void>(async (res, rej) => {
@@ -162,6 +209,8 @@ function transcode (options: TranscodeOptions) {
         command = await buildHLSCommand(command, options)
       } else if (options.type === 'merge-audio') {
         command = await buildAudioMergeCommand(command, options)
+      } else if (options.type === 'only-audio') {
+        command = await buildOnlyAudioCommand(command, options)
       } else {
         command = await buildx264Command(command, options)
       }
@@ -197,11 +246,13 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
   const resolution = await getVideoFileResolution(path)
 
   // check video params
+  if (videoStream == null) return false
   if (videoStream[ 'codec_name' ] !== 'h264') return false
+  if (videoStream[ 'pix_fmt' ] !== 'yuv420p') return false
   if (fps < VIDEO_TRANSCODING_FPS.MIN || fps > VIDEO_TRANSCODING_FPS.MAX) return false
   if (bitRate > getMaxBitrate(resolution.videoFileResolution, fps, VIDEO_TRANSCODING_FPS)) return false
 
-    // check audio params (if audio stream exists)
+  // check audio params (if audio stream exists)
   if (parsedAudio.audioStream) {
     if (parsedAudio.audioStream[ 'codec_name' ] !== 'aac') return false
 
@@ -215,7 +266,9 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
 // ---------------------------------------------------------------------------
 
 export {
-  getVideoFileSize,
+  getVideoStreamCodec,
+  getAudioStreamCodec,
+  getVideoStreamSize,
   getVideoFileResolution,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
@@ -231,7 +284,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function buildx264Command (command: ffmpeg.FfmpegCommand, options: VideoTranscodeOptions) {
+async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
   // On small/medium resolutions, limit FPS
   if (
@@ -274,6 +327,12 @@ async function buildAudioMergeCommand (command: ffmpeg.FfmpegCommand, options: M
   return command
 }
 
+async function buildOnlyAudioCommand (command: ffmpeg.FfmpegCommand, options: OnlyAudioTranscodeOptions) {
+  command = await presetOnlyAudio(command)
+
+  return command
+}
+
 async function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
   command = await presetCopy(command)
 
@@ -286,7 +345,8 @@ async function buildQuickTranscodeCommand (command: ffmpeg.FfmpegCommand) {
 async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: HLSTranscodeOptions) {
   const videoPath = getHLSVideoPath(options)
 
-  command = await presetCopy(command)
+  if (options.copyCodecs) command = await presetCopy(command)
+  else command = await buildx264Command(command, options)
 
   command = command.outputOption('-hls_time 4')
                    .outputOption('-hls_list_size 0')
@@ -324,9 +384,7 @@ function getVideoStreamFromFile (path: string) {
       if (err) return rej(err)
 
       const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      if (!videoStream) return rej(new Error('Cannot find video stream of ' + path))
-
-      return res(videoStream)
+      return res(videoStream || null)
     })
   })
 }
@@ -358,7 +416,7 @@ async function presetH264VeryFast (command: ffmpeg.FfmpegCommand, input: string,
  * A toolbox to play with audio
  */
 namespace audio {
-  export const get = (option: string) => {
+  export const get = (videoPath: string) => {
     // without position, ffprobe considers the last input only
     // we make it consider the first input only
     // if you pass a file path to pos, then ffprobe acts on that file directly
@@ -368,7 +426,7 @@ namespace audio {
         if (err) return rej(err)
 
         if ('streams' in data) {
-          const audioStream = data.streams.find(stream => stream['codec_type'] === 'audio')
+          const audioStream = data.streams.find(stream => stream[ 'codec_type' ] === 'audio')
           if (audioStream) {
             return res({
               absolutePath: data.format.filename,
@@ -380,21 +438,22 @@ namespace audio {
         return res({ absolutePath: data.format.filename })
       }
 
-      return ffmpeg.ffprobe(option, parseFfprobe)
+      return ffmpeg.ffprobe(videoPath, parseFfprobe)
     })
   }
 
   export namespace bitrate {
     const baseKbitrate = 384
 
-    const toBits = (kbits: number): number => { return kbits * 8000 }
+    const toBits = (kbits: number) => kbits * 8000
 
     export const aac = (bitrate: number): number => {
       switch (true) {
-      case bitrate > toBits(baseKbitrate):
-        return baseKbitrate
-      default:
-        return -1 // we interpret it as a signal to copy the audio stream as is
+        case bitrate > toBits(baseKbitrate):
+          return baseKbitrate
+
+        default:
+          return -1 // we interpret it as a signal to copy the audio stream as is
       }
     }
 
@@ -405,12 +464,14 @@ namespace audio {
       made here are not made to be accurate, especially with good mp3 encoders.
       */
       switch (true) {
-      case bitrate <= toBits(192):
-        return 128
-      case bitrate <= toBits(384):
-        return 256
-      default:
-        return baseKbitrate
+        case bitrate <= toBits(192):
+          return 128
+
+        case bitrate <= toBits(384):
+          return 256
+
+        default:
+          return baseKbitrate
       }
     }
   }
@@ -426,8 +487,8 @@ async function presetH264 (command: ffmpeg.FfmpegCommand, input: string, resolut
   let localCommand = command
     .format('mp4')
     .videoCodec('libx264')
-    .outputOption('-level 3.1') // 3.1 is the minimal ressource allocation for our highest supported resolution
-    .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorythm, 16 is optimal B-frames for it
+    .outputOption('-level 3.1') // 3.1 is the minimal resource allocation for our highest supported resolution
+    .outputOption('-b_strategy 1') // NOTE: b-strategy 1 - heuristic algorithm, 16 is optimal B-frames for it
     .outputOption('-bf 16') // NOTE: Why 16: https://github.com/Chocobozzz/PeerTube/pull/774. b-strategy 2 -> B-frames<16
     .outputOption('-pix_fmt yuv420p') // allows import of source material with incompatible pixel formats (e.g. MJPEG video)
     .outputOption('-map_metadata -1') // strip all metadata
@@ -475,4 +536,11 @@ async function presetCopy (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.Ffmpeg
     .format('mp4')
     .videoCodec('copy')
     .audioCodec('copy')
+}
+
+async function presetOnlyAudio (command: ffmpeg.FfmpegCommand): Promise<ffmpeg.FfmpegCommand> {
+  return command
+    .format('mp4')
+    .audioCodec('copy')
+    .noVideo()
 }

@@ -3,7 +3,6 @@ import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { UserVideoHistoryModel } from '../../models/account/user-video-history'
 import { CONFIG } from '../../initializers/config'
-import { isTestInstance } from '../../helpers/core-utils'
 
 export class RemoveOldHistoryScheduler extends AbstractScheduler {
 

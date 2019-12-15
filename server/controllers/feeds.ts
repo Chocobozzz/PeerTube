@@ -43,7 +43,7 @@ export {
 async function generateVideoCommentsFeed (req: express.Request, res: express.Response) {
   const start = 0
 
-  const video = res.locals.video
+  const video = res.locals.videoAll
   const videoId: number = video ? video.id : undefined
 
   const comments = await VideoCommentModel.listForFeed(start, FEEDS.COUNT, videoId)
@@ -56,17 +56,23 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   comments.forEach(comment => {
     const link = WEBSERVER.URL + comment.getCommentStaticPath()
 
+    let title = comment.Video.name
+    const author: { name: string, link: string }[] = []
+
+    if (comment.Account) {
+      title += ` - ${comment.Account.getDisplayName()}`
+      author.push({
+        name: comment.Account.getDisplayName(),
+        link: comment.Account.Actor.url
+      })
+    }
+
     feed.addItem({
-      title: `${comment.Video.name} - ${comment.Account.getDisplayName()}`,
+      title,
       id: comment.url,
       link,
       content: comment.text,
-      author: [
-        {
-          name: comment.Account.getDisplayName(),
-          link: comment.Account.Actor.url
-        }
-      ],
+      author,
       date: comment.createdAt
     })
   })
@@ -113,11 +119,36 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
   // Adding video items to the feed, one at a time
   resultList.data.forEach(video => {
     const formattedVideoFiles = video.getFormattedVideoFilesJSON()
+
     const torrents = formattedVideoFiles.map(videoFile => ({
       title: video.name,
       url: videoFile.torrentUrl,
       size_in_bytes: videoFile.size
     }))
+
+    const videos = formattedVideoFiles.map(videoFile => {
+      const result = {
+        type: 'video/mp4',
+        medium: 'video',
+        height: videoFile.resolution.label.replace('p', ''),
+        fileSize: videoFile.size,
+        url: videoFile.fileUrl,
+        framerate: videoFile.fps,
+        duration: video.duration
+      }
+
+      if (video.language) Object.assign(result, { lang: video.language })
+
+      return result
+    })
+
+    const categories: { value: number, label: string }[] = []
+    if (video.category) {
+      categories.push({
+        value: video.category,
+        label: VideoModel.getCategoryLabel(video.category)
+      })
+    }
 
     feed.addItem({
       title: video.name,
@@ -132,9 +163,22 @@ async function generateVideoFeed (req: express.Request, res: express.Response) {
         }
       ],
       date: video.publishedAt,
-      language: video.language,
       nsfw: video.nsfw,
       torrent: torrents,
+      videos,
+      embed: {
+        url: video.getEmbedStaticPath(),
+        allowFullscreen: true
+      },
+      player: {
+        url: video.getWatchStaticPath()
+      },
+      categories,
+      community: {
+        statistics: {
+          views: video.views
+        }
+      },
       thumbnail: [
         {
           url: WEBSERVER.URL + video.getMiniatureStaticPath(),

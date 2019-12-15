@@ -19,18 +19,17 @@ async function generateRandomString (size: number) {
   return raw.toString('hex')
 }
 
-interface FormattableToJSON { toFormattedJSON (args?: any) }
-function getFormattedObjects<U, T extends FormattableToJSON> (objects: T[], objectsTotal: number, formattedArg?: any) {
-  const formattedObjects: U[] = []
+interface FormattableToJSON<U, V> {
+  toFormattedJSON (args?: U): V
+}
 
-  objects.forEach(object => {
-    formattedObjects.push(object.toFormattedJSON(formattedArg))
-  })
+function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: T[], objectsTotal: number, formattedArg?: U) {
+  const formattedObjects = objects.map(o => o.toFormattedJSON(formattedArg))
 
   return {
     total: objectsTotal,
     data: formattedObjects
-  } as ResultList<U>
+  } as ResultList<V>
 }
 
 const getServerActor = memoizee(async function () {

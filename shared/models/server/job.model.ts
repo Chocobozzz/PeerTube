@@ -17,7 +17,7 @@ export interface Job {
   type: JobType
   data: any,
   error: any,
-  createdAt: Date
-  finishedOn: Date
-  processedOn: Date
+  createdAt: Date | string
+  finishedOn: Date | string
+  processedOn: Date | string
 }

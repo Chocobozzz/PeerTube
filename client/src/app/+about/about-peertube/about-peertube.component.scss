@@ -1,22 +1,69 @@
 @import '_variables';
 @import '_mixins';
 
+.root {
+  max-width: 1200px;
+  margin: auto;
+}
+
 .about-peertube-title {
   font-size: 25px;
-  font-weight: bold;
+  text-align: center;
+  font-weight: $font-semibold;
   margin-bottom: 15px;
 }
 
-.section-title {
+.mascot {
+  display: block;
+  margin: 20px auto;
+}
+
+/deep/ .section-title {
   font-weight: $font-semibold;
   font-size: 20px;
   margin-bottom: 5px;
 }
 
 .description {
-  margin-bottom: 30px;
+  text-align: center;
 }
 
-.p2p-privacy-title {
-  margin-top: 15px;
+.documentation {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 50px 0;
+  justify-content: center;
+
+  .card {
+    margin: 30px;
+    flex-basis: 300px;
+    font-size: 15px;
+  }
+}
+
+.description,
+.p2p-privacy,
+my-about-peertube-contributors {
+  /deep/ {
+    p, li {
+      font-size: 15px;
+    }
+  }
+}
+
+.privacy-contributors {
+  display: flex;
+  flex-direction: column;
+
+  .p2p-privacy {
+    .section-title {
+      margin: 50px 0 20px;
+      text-align: center;
+    }
+
+    h6 {
+      font-size: 20px;
+      margin-top: 15px;
+    }
+  }
 }

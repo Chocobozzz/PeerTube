@@ -15,7 +15,7 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -44,6 +44,18 @@
               "buildOptimizer": true,
               "serviceWorker": true,
               "ngswConfigPath": "src/ngsw-config.json",
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -66,13 +78,23 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ]
+            },
+            "fr_FR": {
+              "aot": true,
+              "outputPath": "dist/PeerTube-fr_FR",
+              "i18nFile": "src/i18n/messages.fr_FR.xlf",
+              "i18nFormat": "xlf",
+              "i18nLocale": "fr_FR"
             }
           }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "PeerTube:build"
+            "baseHref": "/",
+            "deployUrl": "client/",
+            "browserTarget": "PeerTube:build",
+            "proxyConfig": "proxy.config.json"
           },
           "configurations": {
             "production": {
@@ -82,7 +104,11 @@
               "browserTarget": "PeerTube:build:hmr"
             },
             "e2e": {
-              "browserTarget": "PeerTube:build:e2e"
+              "browserTarget": "PeerTube:build:e2e",
+              "proxyConfig": "e2e/proxy.config.json"
+            },
+            "fr_FR": {
+              "browserTarget": "PeerTube:build:fr_FR"
             }
           }
         },
@@ -113,12 +139,64 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "tsconfig.app.json"
             ],
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        },
+        "xliffmerge": {
+          "builder": "@ngx-i18nsupport/tooling:xliffmerge",
+          "options": {
+            "xliffmergeOptions": {
+              "i18nFormat": "xlf",
+              "srcDir": "src/locale",
+              "genDir": "src/locale",
+              "i18nBaseFile": "angular",
+              "defaultLanguage": "en-US",
+              "languages": [
+                "ar-001",
+                "ca-ES",
+                "cs-CZ",
+                "da-DK",
+                "de-DE",
+                "el-GR",
+                "en-GB",
+                "en-US",
+                "eo",
+                "es-ES",
+                "eu-ES",
+                "fa-IR",
+                "fi-FI",
+                "fr-FR",
+                "gd",
+                "gl-ES",
+                "hu-HU",
+                "it-IT",
+                "ja-JP",
+                "jbo",
+                "ko-KR",
+                "lt-LT",
+                "nb-NO",
+                "nl-NL",
+                "oc",
+                "pl-PL",
+                "pt-BR",
+                "pt-PT",
+                "ru-RU",
+                "sk-SK",
+                "sl-SI",
+                "sv-SE",
+                "ta",
+                "th-TH",
+                "tr-TR",
+                "uk-UA",
+                "vi-VN",
+                "zh-Hans-CN",
+                "zh-Hant-TW"
+              ]
+            }
           }
         }
       }

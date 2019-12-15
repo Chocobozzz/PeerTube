@@ -1,5 +1,4 @@
 import * as express from 'express'
-import 'express-validator'
 import { SortType } from '../models/utils'
 
 function setDefaultSort (req: express.Request, res: express.Response, next: express.NextFunction) {

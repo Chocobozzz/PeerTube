@@ -354,7 +354,14 @@ async function isTherePendingRequests (servers: ServerInfo[]) {
   // Check if each server has pending request
   for (const server of servers) {
     for (const state of states) {
-      const p = getJobsListPaginationAndSort(server.url, server.accessToken, state, 0, 10, '-createdAt')
+      const p = getJobsListPaginationAndSort({
+        url: server.url,
+        accessToken: server.accessToken,
+        state: state,
+        start: 0,
+        count: 10,
+        sort: '-createdAt'
+      })
         .then(res => {
           if (res.body.total > 0) pendingRequests = true
         })

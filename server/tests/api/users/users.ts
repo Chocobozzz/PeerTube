@@ -18,7 +18,7 @@ import {
   getUsersList,
   getUsersListPaginationAndSort,
   getVideoChannel,
-  getVideosList,
+  getVideosList, installPlugin,
   login,
   makePutBodyRequest,
   rateVideo,
@@ -57,6 +57,8 @@ describe('Test users', function () {
     server = await flushAndRunServer(1)
 
     await setAccessTokensToServers([ server ])
+
+    await installPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-theme-background-red' })
   })
 
   describe('OAuth client', function () {
@@ -115,6 +117,17 @@ describe('Test users', function () {
       const res = await login(server.url, server.client, server.user, 200)
 
       accessToken = res.body.access_token
+    })
+
+    it('Should be able to login with an insensitive username', async function () {
+      const user = { username: 'RoOt', password: server.user.password }
+      const res = await login(server.url, server.client, user, 200)
+
+      const user2 = { username: 'rOoT', password: server.user.password }
+      const res2 = await login(server.url, server.client, user2, 200)
+
+      const user3 = { username: 'ROOt', password: server.user.password }
+      const res3 = await login(server.url, server.client, user3, 200)
     })
   })
 
@@ -429,7 +442,7 @@ describe('Test users', function () {
         url: server.url,
         accessToken: accessTokenUser,
         currentPassword: 'super password',
-        newPassword: 'new password'
+        password: 'new password'
       })
       user.password = 'new password'
 
@@ -466,6 +479,19 @@ describe('Test users', function () {
       const user = res.body
 
       expect(user.autoPlayVideo).to.be.false
+    })
+
+    it('Should be able to change the autoPlayNextVideo attribute', async function () {
+      await updateMyUser({
+        url: server.url,
+        accessToken: accessTokenUser,
+        autoPlayNextVideo: true
+      })
+
+      const res = await getMyUserInformation(server.url, accessTokenUser)
+      const user = res.body
+
+      expect(user.autoPlayNextVideo).to.be.true
     })
 
     it('Should be able to change the email attribute', async function () {
@@ -530,7 +556,7 @@ describe('Test users', function () {
       })
 
       const res = await getMyUserInformation(server.url, accessTokenUser)
-      const user = res.body
+      const user: User = res.body
 
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('updated@example.com')
@@ -539,6 +565,38 @@ describe('Test users', function () {
       expect(user.id).to.be.a('number')
       expect(user.account.displayName).to.equal('new display name')
       expect(user.account.description).to.equal('my super description updated')
+      expect(user.noWelcomeModal).to.be.false
+      expect(user.noInstanceConfigWarningModal).to.be.false
+    })
+
+    it('Should be able to update my theme', async function () {
+      for (const theme of [ 'background-red', 'default', 'instance-default' ]) {
+        await updateMyUser({
+          url: server.url,
+          accessToken: accessTokenUser,
+          theme
+        })
+
+        const res = await getMyUserInformation(server.url, accessTokenUser)
+        const body: User = res.body
+
+        expect(body.theme).to.equal(theme)
+      }
+    })
+
+    it('Should be able to update my modal preferences', async function () {
+      await updateMyUser({
+        url: server.url,
+        accessToken: accessTokenUser,
+        noInstanceConfigWarningModal: true,
+        noWelcomeModal: true
+      })
+
+      const res = await getMyUserInformation(server.url, accessTokenUser)
+      const user: User = res.body
+
+      expect(user.noWelcomeModal).to.be.true
+      expect(user.noInstanceConfigWarningModal).to.be.true
     })
   })
 

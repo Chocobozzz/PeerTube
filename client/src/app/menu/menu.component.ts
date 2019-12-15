@@ -11,7 +11,7 @@ import { HotkeysService } from 'angular2-hotkeys'
   styleUrls: [ './menu.component.scss' ]
 })
 export class MenuComponent implements OnInit {
-  @ViewChild('languageChooserModal') languageChooserModal: LanguageChooserComponent
+  @ViewChild('languageChooserModal', { static: true }) languageChooserModal: LanguageChooserComponent
 
   user: User
   isLoggedIn: boolean
@@ -110,10 +110,6 @@ export class MenuComponent implements OnInit {
 
   openHotkeysCheatSheet () {
     this.hotkeysService.cheatSheetToggle.next(!this.helpVisible)
-  }
-
-  toggleDarkTheme () {
-    this.themeService.toggleDarkTheme()
   }
 
   private computeIsUserHasAdminAccess () {

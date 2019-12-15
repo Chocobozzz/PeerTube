@@ -1,0 +1,21 @@
+@import '_variables';
+@import '_mixins';
+
+.toggle-plugin-type {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+
+  p-selectButton {
+    ::ng-deep {
+      .ui-button-text {
+        font-size: 15px;
+      }
+
+      .ui-button.ui-state-active {
+        background-color: var(--mainColor);
+        border-color: var(--mainColor);
+      }
+    }
+  }
+}

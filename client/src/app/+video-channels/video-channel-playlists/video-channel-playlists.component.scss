@@ -1,8 +1,9 @@
 .video-playlist {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
 
-  my-video-playlist-miniature {
+  .playlist-miniature-container {
     margin-right: 15px;
     margin-bottom: 30px;
   }

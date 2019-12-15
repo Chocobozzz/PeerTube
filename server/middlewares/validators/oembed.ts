@@ -1,12 +1,12 @@
 import * as express from 'express'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { join } from 'path'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isIdOrUUIDValid } from '../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../helpers/custom-validators/videos'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { WEBSERVER } from '../../initializers/constants'
+import { doesVideoExist } from '../../helpers/middlewares'
 
 const urlShouldStartWith = WEBSERVER.SCHEME + '://' + join(WEBSERVER.HOST, 'videos', 'watch') + '/'
 const videoWatchRegex = new RegExp('([^/]+)$')

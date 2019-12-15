@@ -1,9 +1,9 @@
 import { Model, Sequelize } from 'sequelize-typescript'
 import * as validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
-import { OrderItem } from 'sequelize/types'
+import { literal, OrderItem } from 'sequelize'
 
-type SortType = { sortModel: any, sortValue: string }
+type SortType = { sortModel: string, sortValue: string }
 
 // Translate for example "-name" to [ [ 'name', 'DESC' ], [ 'id', 'ASC' ] ]
 function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
@@ -13,6 +13,8 @@ function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderIt
 
   if (field.toLowerCase() === 'match') { // Search
     finalField = Sequelize.col('similarity')
+  } else if (field === 'videoQuotaUsed') { // Users list
+    finalField = Sequelize.col('videoQuotaUsed')
   } else {
     finalField = field
   }
@@ -49,11 +51,24 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
   return [ firstSort, lastSort ]
 }
 
-function getSortOnModel (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+function getBlacklistSort (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const [ firstSort ] = getSort(value)
 
-  if (model) return [ [ model, firstSort[0], firstSort[1] ], lastSort ]
+  if (model) return [ [ literal(`"${model}.${firstSort[ 0 ]}" ${firstSort[ 1 ]}`) ], lastSort ] as any[] // FIXME: typings
   return [ firstSort, lastSort ]
+}
+
+function getFollowsSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
+
+  if (field === 'redundancyAllowed') {
+    return [
+      [ 'ActorFollowing', 'Server', 'redundancyAllowed', direction ],
+      lastSort
+    ]
+  }
+
+  return getSort(value, lastSort)
 }
 
 function isOutdated (model: { createdAt: Date, updatedAt: Date }, refreshInterval: number) {
@@ -127,19 +142,33 @@ function parseAggregateResult (result: any) {
   return total
 }
 
-const createSafeIn = (model: typeof Model, stringArr: string[]) => {
-  return stringArr.map(t => model.sequelize.escape(t))
+const createSafeIn = (model: typeof Model, stringArr: (string | number)[]) => {
+  return stringArr.map(t => model.sequelize.escape('' + t))
                   .join(', ')
+}
+
+function buildLocalAccountIdsIn () {
+  return literal(
+    '(SELECT "account"."id" FROM "account" INNER JOIN "actor" ON "actor"."id" = "account"."actorId" AND "actor"."serverId" IS NULL)'
+  )
+}
+
+function buildLocalActorIdsIn () {
+  return literal(
+    '(SELECT "actor"."id" FROM "actor" WHERE "actor"."serverId" IS NULL)'
+  )
 }
 
 // ---------------------------------------------------------------------------
 
 export {
   buildBlockedAccountSQL,
+  buildLocalActorIdsIn,
   SortType,
+  buildLocalAccountIdsIn,
   getSort,
   getVideoSort,
-  getSortOnModel,
+  getBlacklistSort,
   createSimilarityAttribute,
   throwIfNotValid,
   buildServerIdsFollowedBy,
@@ -147,6 +176,7 @@ export {
   buildWhereIdOrUUID,
   isOutdated,
   parseAggregateResult,
+  getFollowsSort,
   createSafeIn
 }
 

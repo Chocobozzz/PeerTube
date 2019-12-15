@@ -3,12 +3,6 @@ export interface ActivityIdentifierObject {
   name: string
 }
 
-export interface ActivityTagObject {
-  type: 'Hashtag' | 'Mention'
-  href?: string
-  name: string
-}
-
 export interface ActivityIconObject {
   type: 'Image'
   url: string
@@ -19,8 +13,6 @@ export interface ActivityIconObject {
 
 export type ActivityVideoUrlObject = {
   type: 'Link'
-  // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
-  mimeType?: 'video/mp4' | 'video/webm' | 'video/ogg'
   mediaType: 'video/mp4' | 'video/webm' | 'video/ogg'
   href: string
   height: number
@@ -31,8 +23,6 @@ export type ActivityVideoUrlObject = {
 export type ActivityPlaylistSegmentHashesObject = {
   type: 'Link'
   name: 'sha256'
-  // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
-  mimeType?: 'application/json'
   mediaType: 'application/json'
   href: string
 }
@@ -44,33 +34,71 @@ export type ActivityPlaylistInfohashesObject = {
 
 export type ActivityPlaylistUrlObject = {
   type: 'Link'
-  // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
-  mimeType?: 'application/x-mpegURL'
   mediaType: 'application/x-mpegURL'
   href: string
-  tag?: (ActivityPlaylistSegmentHashesObject | ActivityPlaylistInfohashesObject)[]
+  tag?: ActivityTagObject[]
 }
 
 export type ActivityBitTorrentUrlObject = {
   type: 'Link'
-  // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
-  mimeType?: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
   mediaType: 'application/x-bittorrent' | 'application/x-bittorrent;x-scheme-handler/magnet'
+  href: string
+  height: number
+}
+
+export type ActivityMagnetUrlObject = {
+  type: 'Link'
+  mediaType: 'application/x-bittorrent;x-scheme-handler/magnet'
   href: string
   height: number
 }
 
 export type ActivityHtmlUrlObject = {
   type: 'Link'
-  // TODO: remove mimeType (backward compatibility, introduced in v1.1.0)
-  mimeType?: 'text/html'
   mediaType: 'text/html'
   href: string
 }
 
-export type ActivityUrlObject = ActivityVideoUrlObject | ActivityPlaylistUrlObject | ActivityBitTorrentUrlObject | ActivityHtmlUrlObject
+export interface ActivityHashTagObject {
+  type: 'Hashtag' | 'Mention'
+  href?: string
+  name: string
+}
+
+export interface ActivityMentionObject {
+  type: 'Hashtag' | 'Mention'
+  href?: string
+  name: string
+}
+
+export type ActivityTagObject = ActivityPlaylistSegmentHashesObject |
+  ActivityPlaylistInfohashesObject |
+  ActivityVideoUrlObject |
+  ActivityHashTagObject |
+  ActivityMentionObject |
+  ActivityBitTorrentUrlObject |
+  ActivityMagnetUrlObject
+
+export type ActivityUrlObject = ActivityVideoUrlObject |
+  ActivityPlaylistUrlObject |
+  ActivityBitTorrentUrlObject |
+  ActivityMagnetUrlObject |
+  ActivityHtmlUrlObject
 
 export interface ActivityPubAttributedTo {
   type: 'Group' | 'Person'
   id: string
+}
+
+export interface ActivityTombstoneObject {
+  '@context'?: any
+  id: string
+  url?: string
+  type: 'Tombstone'
+  name?: string
+  formerType?: string
+  inReplyTo?: string
+  published: string
+  updated: string
+  deleted: string
 }

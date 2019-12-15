@@ -24,7 +24,7 @@ export class MyAccountDangerZoneComponent {
 
   async deleteMe () {
     const res = await this.confirmService.confirmWithInput(
-      this.i18n('Are you sure you want to delete your account? This will delete all you data, including channels, videos etc.'),
+      this.i18n('Are you sure you want to delete your account? This will delete all your data, including channels, videos etc.'),
       this.i18n('Type your username to confirm'),
       this.user.username,
       this.i18n('Delete your account'),

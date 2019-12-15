@@ -6,6 +6,18 @@ export interface CustomConfig {
     shortDescription: string
     description: string
     terms: string
+    codeOfConduct: string
+
+    creationReason: string
+    moderationInformation: string
+    administrator: string
+    maintenanceLifetime: string
+    businessModel: string
+    hardwareInformation: string
+
+    languages: string[]
+    categories: number[]
+
     isNSFW: boolean
     defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
@@ -13,6 +25,10 @@ export interface CustomConfig {
       javascript?: string
       css?: string
     }
+  }
+
+  theme: {
+    default: string
   }
 
   services: {
@@ -53,10 +69,13 @@ export interface CustomConfig {
 
   transcoding: {
     enabled: boolean
+
     allowAdditionalExtensions: boolean
     allowAudioFiles: boolean
+
     threads: number
     resolutions: {
+      '0p': boolean
       '240p': boolean
       '360p': boolean
       '480p': boolean
@@ -64,6 +83,11 @@ export interface CustomConfig {
       '1080p': boolean
       '2160p': boolean
     }
+
+    webtorrent: {
+      enabled: boolean
+    }
+
     hls: {
       enabled: boolean
     }
@@ -95,4 +119,16 @@ export interface CustomConfig {
     }
   }
 
+  followings: {
+    instance: {
+      autoFollowBack: {
+        enabled: boolean
+      }
+
+      autoFollowIndex: {
+        enabled: boolean
+        indexUrl: string
+      }
+    }
+  }
 }

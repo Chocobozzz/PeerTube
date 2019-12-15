@@ -5,13 +5,12 @@
   display: flex;
   justify-content: space-between;
 
-  & > div {
+  .title {
     font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 15px;
+    font-weight: $font-semibold;
   }
 
-  & > .contact-admin {
+  .contact-admin {
     @include peertube-button;
     @include orange-button;
 
@@ -19,14 +18,38 @@
   }
 }
 
-.section-title {
-  font-weight: $font-semibold;
-  font-size: 20px;
-  margin-bottom: 5px;
+.instance-badges {
+  font-size: 16px;
+
+  .badge {
+    font-size: 12px;
+    font-weight: $font-semibold;
+    margin-right: 5px;
+
+    &.category {
+      background-color: var(--mainColor);
+    }
+  }
 }
 
-.short-description, .description, .terms, .signup {
+.section-title {
+  font-weight: $font-semibold;
+  font-size: 16px;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.middle-title {
+  @include in-content-small-title;
+
+  margin-top: 45px;
+  margin-bottom: 25px;
+}
+
+.block {
   margin-bottom: 30px;
+  font-size: 15px;
 }
 
 .short-description .dedicated-to-nsfw {

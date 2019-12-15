@@ -3,6 +3,7 @@ import { Notifier } from '@app/core'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { UserSubscriptionService } from '@app/shared/user-subscription'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-account-subscriptions',
@@ -17,6 +18,8 @@ export class MyAccountSubscriptionsComponent implements OnInit {
     itemsPerPage: 10,
     totalItems: null
   }
+
+  onDataSubject = new Subject<any[]>()
 
   constructor (
     private userSubscriptionService: UserSubscriptionService,
@@ -33,6 +36,8 @@ export class MyAccountSubscriptionsComponent implements OnInit {
           res => {
             this.videoChannels = this.videoChannels.concat(res.data)
             this.pagination.totalItems = res.total
+
+            this.onDataSubject.next(res.data)
           },
 
           error => this.notifier.error(error.message)

@@ -13,7 +13,7 @@ import { filter } from 'rxjs/operators'
   styleUrls: [ './avatar-notification.component.scss' ]
 })
 export class AvatarNotificationComponent implements OnInit, OnDestroy {
-  @ViewChild('popover') popover: NgbPopover
+  @ViewChild('popover', { static: true }) popover: NgbPopover
   @Input() user: User
 
   unreadNotifications = 0

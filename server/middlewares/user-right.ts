@@ -1,5 +1,4 @@
 import * as express from 'express'
-import 'express-validator'
 import { UserRight } from '../../shared'
 import { logger } from '../helpers/logger'
 

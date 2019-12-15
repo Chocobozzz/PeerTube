@@ -4,5 +4,17 @@ export interface About {
     shortDescription: string
     description: string
     terms: string
+
+    codeOfConduct: string
+    hardwareInformation: string
+
+    creationReason: string
+    moderationInformation: string
+    administrator: string
+    maintenanceLifetime: string
+    businessModel: string
+
+    languages: string[]
+    categories: number[]
   }
 }

@@ -1,7 +1,12 @@
 <div>
   <div class="title-block">
-    <div i18n class="title-page title-page-single">
-      Comments
+    <div class="title-page title-page-single">
+      <ng-container *ngIf="comments.length > 0; then hasComments; else noComments"></ng-container>
+      <ng-template #hasComments>
+        <ng-container i18n *ngIf="comments.length === 1; else manyComments">1 Comment</ng-container>
+        <ng-template i18n #manyComments>{{ comments.length }} Comments</ng-template>
+      </ng-template>
+      <ng-template i18n #noComments>Comments</ng-template>
     </div>
 
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
@@ -21,6 +26,7 @@
       myInfiniteScroller
       [autoInit]="true"
       (nearOfBottom)="onNearOfBottom()"
+      [dataObservable]="onDataSubject.asObservable()"
     >
       <div #commentHighlightBlock id="highlighted-comment">
         <my-video-comment

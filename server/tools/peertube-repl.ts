@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as repl from 'repl'
 import * as path from 'path'
 import * as _ from 'lodash'

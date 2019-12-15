@@ -101,6 +101,17 @@ function checkConfig () {
     }
   }
 
+  // Transcoding
+  if (CONFIG.TRANSCODING.ENABLED) {
+    if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
+      return 'You need to enable at least WebTorrent transcoding or HLS transcoding.'
+    }
+  }
+
+  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
+    logger.warn('Redundancy directory should be different than the videos folder.')
+  }
+
   return null
 }
 

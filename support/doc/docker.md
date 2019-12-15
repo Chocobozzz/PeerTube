@@ -21,6 +21,8 @@ $ curl "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/doc
 $ touch ./docker-volume/traefik/acme.json && chmod 600 ./docker-volume/traefik/acme.json
 $ curl -s "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml" -o docker-compose.yml "https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/docker/production/.env" -o .env
 ```
+View the source of the files you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) and the [traefik.toml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/traefik.toml) and the [.env]
+(https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env)
 
 Update the reverse proxy configuration:
 
@@ -34,11 +36,13 @@ Tweak the `docker-compose.yml` file there according to your needs:
 $ vim ./docker-compose.yml
 ```
 
-Then tweak the `.env` file to change the enviromnent variables:
+Then tweak the `.env` file to change the environment variables:
 
 ```shell
 $ vim ./.env
 ```
+If you did not download the .env file above, here you can look at the variables that can be set:
+https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env
 
 Other environment variables are used in
 `support/docker/production/config/custom-environment-variables.yaml` and can be
@@ -49,9 +53,15 @@ You can use the regular `up` command to set it up:
 ```shell
 $ docker-compose up
 ```
+### Obtaining Your Automatically Generated Admin Credentials
+Now that you've installed your PeerTube instance you'll want to grep your peertube container's logs for the `root` password.
+You're going to want to run `docker-compose logs peertube | grep -A1 root` to search the log output for your new PeerTube's instance admin credentials which will look something like this.
+```BASH
+user@s:~/peertube|master⚡ ⇒  docker-compose logs peertube | grep -A1 root
 
-**Important**: note that you'll get the initial `root` user password from the
-program output, so check out your logs to find them.
+peertube_1  | [example.com:443] 2019-11-16 04:26:06.082 info: Username: root
+peertube_1  | [example.com:443] 2019-11-16 04:26:06.083 info: User password: abcdefghijklmnop
+```
 
 ### What now?
 
@@ -74,7 +84,7 @@ $ docker-compose up -d
 ```shell
 $ git clone https://github.com/chocobozzz/PeerTube /tmp/peertube
 $ cd /tmp/peertube
-$ docker build . -f ./support/docker/production/Dockerfile.stretch
+$ docker build . -f ./support/docker/production/Dockerfile.buster
 ```
 
 ## Development

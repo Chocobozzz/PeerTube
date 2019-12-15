@@ -1,6 +1,5 @@
 import * as AsyncLRU from 'async-lru'
 import * as jsonld from 'jsonld'
-import * as jsig from 'jsonld-signatures'
 import { logger } from './logger'
 
 const CACHE = {
@@ -79,6 +78,4 @@ jsonld.documentLoader = (url, cb) => {
   lru.get(url, cb)
 }
 
-jsig.use('jsonld', jsonld)
-
-export { jsig, jsonld }
+export { jsonld }

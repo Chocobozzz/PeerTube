@@ -1,40 +1,34 @@
 # Application localization documentation
 
-Source files are in `client/src/locale/source` and translated files pulled from [Zanata](https://trad.framasoft.org/zanata/iteration/view/peertube/develop/languages/fr?dswid=-1605) in `client/src/locale/target`.
+Source files are in `client/src/locale` and translated files merged from [Weblate](https://weblate.framasoft.org/translate/peertube).
+
 
 ## Generation
 
-Will generate XLIFF files for Angular and escape inner elements in `source` tag because Zanata does not support them.
+Will generate XLIFF base files for Angular (`angular.xlf`) and JSON files for the player (`player.en-US.json`) and the server (`server.en-US.json`).
+Then, it will merge new translation keys into localized Angular files (`angular.fr-FR.xlf` etc).
 
-This script will create `player_en_US.xml` XLIFF file using custom strings (VideoJS plugins) and strings from `videojs_en_US.json` file.
-
-It will also create `server_en_US.xml` and `iso639_en_US.xml` XLIFF file using server strings and custom strings (defined inside the script, we did not find a way to extract them from TypeScript server files).
+**Only generate new translations after a Weblate pull to avoid conflicts**
 
 ```
 $ npm run i18n:generate
 ```
 
-## Upload on Zanata
 
-Push source source files (en-US) on Zanata:
+## Upload on Weblate
 
-```
-$ zanata-cli push
-```
+Nothing to do here, Github will automatically send a webhook to Weblate that will pull changes.
+
 
 ## Pull translation
 
-Pull XLIFF files from Zanata, and unescape them (so we retrieve inner elements in `source` tag, used by Angular).
-A hook converts `player` and `server`, `iso639` translation files to JSON (needed by Video.JS, and our application to have efficient runtime translation).
-Then, `iso639` files will be merged in `server` files (so we have only one JSON file to serve server translations).
+ * First, save translations on Weblate so it commits changes.
+ * Then, fetch these commits: `git fetch weblate && git merge weblate/develop`
 
-```
-$ zanata-cli pull
-```
 
 ## Support a new language
 
  * Add it to [/shared/models/i18n/i18n.ts](/shared/models/i18n/i18n.ts)
  * Add it to [/scripts/build/client.sh](/scripts/build/client.sh)
- * Pull using zanata (that will execute hooks to correctly generate files of this new language)
+ * Add it to [/client/angular.json](/client/angular.json) in `xliffmergeOptions` section, then **pull** and **generate**
  * Build the application and check the new language correctly works

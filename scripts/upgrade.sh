@@ -32,14 +32,18 @@ if [ -x "$(command -v awk)" ] && [ -x "$(command -v sed)" ] ; then
 fi
 
 # Backup database
-SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
-DB_USER=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
-DB_PASS=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
-DB_HOST=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
-DB_SUFFIX=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
-mkdir -p $PEERTUBE_PATH/backup
-
-PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "peertube${DB_SUFFIX}" -f "$SQL_BACKUP_PATH"
+if [ -x "$(command -v pg_dump)" ]
+then 
+  SQL_BACKUP_PATH="$PEERTUBE_PATH/backup/sql-peertube_prod-$(date +"%Y%m%d-%H%M").bak" 
+  DB_USER=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['username'])")
+  DB_PASS=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['password'])")
+  DB_HOST=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['hostname'])")
+  DB_SUFFIX=$(node -e "console.log(require('js-yaml').safeLoad(fs.readFileSync('$PEERTUBE_PATH/config/production.yaml', 'utf8'))['database']['suffix'])")
+  mkdir -p $PEERTUBE_PATH/backup
+  PGPASSWORD=$DB_PASS pg_dump -U $DB_USER -h $DB_HOST -F c "peertube${DB_SUFFIX}" -f "$SQL_BACKUP_PATH"
+else
+  echo "pg_dump not found. Cannot make a SQL backup!"
+fi
 
 # If there is a pre-release, give the user a choice which one to install.
 RELEASE_VERSION=$(curl -s https://api.github.com/repos/chocobozzz/peertube/releases/latest | grep tag_name | cut -d '"' -f 4)

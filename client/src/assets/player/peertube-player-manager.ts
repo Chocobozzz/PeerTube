@@ -17,6 +17,8 @@ import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig } from '
 import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
+import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
+import { getStoredP2PEnabled } from './peertube-player-local-storage'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -61,7 +63,7 @@ export interface CommonOptions extends CustomizationOptions {
   inactivityTimeout: number
   poster: string
 
-  theaterMode: boolean
+  theaterButton: boolean
   captions: boolean
 
   videoViewUrl: string
@@ -86,6 +88,7 @@ export class PeertubePlayerManager {
 
   private static videojsLocaleCache: { [ path: string ]: any } = {}
   private static playerElementClassName: string
+  private static onPlayerChange: (player: any) => void
 
   static getServerTranslations (serverUrl: string, locale: string) {
     const path = PeertubePlayerManager.getLocalePath(serverUrl, locale)
@@ -100,9 +103,10 @@ export class PeertubePlayerManager {
       })
   }
 
-  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions) {
+  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: any) => void) {
     let p2pMediaLoader: any
 
+    this.onPlayerChange = onPlayerChange
     this.playerElementClassName = options.common.playerElement.className
 
     if (mode === 'webtorrent') await import('./webtorrent/webtorrent-plugin')
@@ -171,6 +175,8 @@ export class PeertubePlayerManager {
       const player = this
 
       self.addContextMenu(mode, player, options.common.embedUrl)
+
+      PeertubePlayerManager.onPlayerChange(player)
     })
   }
 
@@ -202,10 +208,8 @@ export class PeertubePlayerManager {
 
   private static getVideojsOptions (mode: PlayerMode, options: PeertubePlayerManagerOptions, p2pMediaLoaderModule?: any) {
     const commonOptions = options.common
-    const webtorrentOptions = options.webtorrent
-    const p2pMediaLoaderOptions = options.p2pMediaLoader
 
-    let autoplay = options.common.autoplay
+    let autoplay = commonOptions.autoplay
     let html5 = {}
 
     const plugins: VideoJSPluginOptions = {
@@ -221,59 +225,18 @@ export class PeertubePlayerManager {
       }
     }
 
+    if (commonOptions.enableHotkeys === true) {
+      PeertubePlayerManager.addHotkeysOptions(plugins)
+    }
+
     if (mode === 'p2p-media-loader') {
-      const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
-        redundancyBaseUrls: options.p2pMediaLoader.redundancyBaseUrls,
-        type: 'application/x-mpegURL',
-        startTime: commonOptions.startTime,
-        src: p2pMediaLoaderOptions.playlistUrl
-      }
+      const { streamrootHls } = PeertubePlayerManager.addP2PMediaLoaderOptions(plugins, options, p2pMediaLoaderModule)
 
-      const trackerAnnounce = p2pMediaLoaderOptions.trackerAnnounce
-        .filter(t => t.startsWith('ws'))
-
-      const p2pMediaLoaderConfig = {
-        loader: {
-          trackerAnnounce,
-          segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
-          rtcConfig: getRtcConfig(),
-          requiredSegmentsPriority: 5,
-          segmentUrlBuilder: segmentUrlBuilderFactory(options.p2pMediaLoader.redundancyBaseUrls)
-        },
-        segments: {
-          swarmId: p2pMediaLoaderOptions.playlistUrl
-        }
-      }
-      const streamrootHls = {
-        levelLabelHandler: (level: { height: number, width: number }) => {
-          const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === level.height)
-
-          let label = file.resolution.label
-          if (file.fps >= 50) label += file.fps
-
-          return label
-        },
-        html5: {
-          hlsjsConfig: {
-            liveSyncDurationCount: 7,
-            loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
-          }
-        }
-      }
-
-      Object.assign(plugins, { p2pMediaLoader, streamrootHls })
       html5 = streamrootHls.html5
     }
 
     if (mode === 'webtorrent') {
-      const webtorrent = {
-        autoplay,
-        videoDuration: commonOptions.videoDuration,
-        playerElement: commonOptions.playerElement,
-        videoFiles: webtorrentOptions.videoFiles,
-        startTime: commonOptions.startTime
-      }
-      Object.assign(plugins, { webtorrent })
+      PeertubePlayerManager.addWebTorrentOptions(plugins, options)
 
       // WebTorrent plugin handles autoplay, because we do some hackish stuff in there
       autoplay = false
@@ -291,75 +254,23 @@ export class PeertubePlayerManager {
         ? commonOptions.muted
         : undefined, // Undefined so the player knows it has to check the local storage
 
+      autoplay: autoplay === true
+        ? 'any' // Use 'any' instead of true to get notifier by videojs if autoplay fails
+        : autoplay,
+
       poster: commonOptions.poster,
-      autoplay: autoplay === true ? 'any' : autoplay, // Use 'any' instead of true to get notifier by videojs if autoplay fails
       inactivityTimeout: commonOptions.inactivityTimeout,
       playbackRates: [ 0.5, 0.75, 1, 1.25, 1.5, 2 ],
+
       plugins,
+
       controlBar: {
         children: this.getControlBarChildren(mode, {
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
-          theaterMode: commonOptions.theaterMode
+          theaterButton: commonOptions.theaterButton
         })
       }
-    }
-
-    if (commonOptions.enableHotkeys === true) {
-      Object.assign(videojsOptions.plugins, {
-        hotkeys: {
-          enableVolumeScroll: false,
-          enableModifiersForNumbers: false,
-
-          fullscreenKey: function (event: KeyboardEvent) {
-            // fullscreen with the f key or Ctrl+Enter
-            return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
-          },
-
-          seekStep: function (event: KeyboardEvent) {
-            // mimic VLC seek behavior, and default to 5 (original value is 5).
-            if (event.ctrlKey && event.altKey) {
-              return 5 * 60
-            } else if (event.ctrlKey) {
-              return 60
-            } else if (event.altKey) {
-              return 10
-            } else {
-              return 5
-            }
-          },
-
-          customKeys: {
-            increasePlaybackRateKey: {
-              key: function (event: KeyboardEvent) {
-                return event.key === '>'
-              },
-              handler: function (player: videojs.Player) {
-                player.playbackRate((player.playbackRate() + 0.1).toFixed(2))
-              }
-            },
-            decreasePlaybackRateKey: {
-              key: function (event: KeyboardEvent) {
-                return event.key === '<'
-              },
-              handler: function (player: videojs.Player) {
-                player.playbackRate((player.playbackRate() - 0.1).toFixed(2))
-              }
-            },
-            frameByFrame: {
-              key: function (event: KeyboardEvent) {
-                return event.key === '.'
-              },
-              handler: function (player: videojs.Player) {
-                player.pause()
-                // Calculate movement distance (assuming 30 fps)
-                const dist = 1 / 30
-                player.currentTime(player.currentTime() + dist)
-              }
-            }
-          }
-        }
-      })
     }
 
     if (commonOptions.language && !isDefaultLocale(commonOptions.language)) {
@@ -369,9 +280,90 @@ export class PeertubePlayerManager {
     return videojsOptions
   }
 
+  private static addP2PMediaLoaderOptions (
+    plugins: VideoJSPluginOptions,
+    options: PeertubePlayerManagerOptions,
+    p2pMediaLoaderModule: any
+  ) {
+    const p2pMediaLoaderOptions = options.p2pMediaLoader
+    const commonOptions = options.common
+
+    const trackerAnnounce = p2pMediaLoaderOptions.trackerAnnounce
+                                                 .filter(t => t.startsWith('ws'))
+
+    const redundancyUrlManager = new RedundancyUrlManager(options.p2pMediaLoader.redundancyBaseUrls)
+
+    const p2pMediaLoader: P2PMediaLoaderPluginOptions = {
+      redundancyUrlManager,
+      type: 'application/x-mpegURL',
+      startTime: commonOptions.startTime,
+      src: p2pMediaLoaderOptions.playlistUrl
+    }
+
+    let consumeOnly = false
+    // FIXME: typings
+    if (navigator && (navigator as any).connection && (navigator as any).connection.type === 'cellular') {
+      console.log('We are on a cellular connection: disabling seeding.')
+      consumeOnly = true
+    }
+
+    const p2pMediaLoaderConfig = {
+      loader: {
+        trackerAnnounce,
+        segmentValidator: segmentValidatorFactory(options.p2pMediaLoader.segmentsSha256Url),
+        rtcConfig: getRtcConfig(),
+        requiredSegmentsPriority: 5,
+        segmentUrlBuilder: segmentUrlBuilderFactory(redundancyUrlManager),
+        useP2P: getStoredP2PEnabled(),
+        consumeOnly
+      },
+      segments: {
+        swarmId: p2pMediaLoaderOptions.playlistUrl
+      }
+    }
+    const streamrootHls = {
+      levelLabelHandler: (level: { height: number, width: number }) => {
+        const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === level.height)
+
+        let label = file.resolution.label
+        if (file.fps >= 50) label += file.fps
+
+        return label
+      },
+      html5: {
+        hlsjsConfig: {
+          capLevelToPlayerSize: true,
+          autoStartLoad: false,
+          liveSyncDurationCount: 7,
+          loader: new p2pMediaLoaderModule.Engine(p2pMediaLoaderConfig).createLoaderClass()
+        }
+      }
+    }
+
+    const toAssign = { p2pMediaLoader, streamrootHls }
+    Object.assign(plugins, toAssign)
+
+    return toAssign
+  }
+
+  private static addWebTorrentOptions (plugins: VideoJSPluginOptions, options: PeertubePlayerManagerOptions) {
+    const commonOptions = options.common
+    const webtorrentOptions = options.webtorrent
+
+    const webtorrent = {
+      autoplay: commonOptions.autoplay,
+      videoDuration: commonOptions.videoDuration,
+      playerElement: commonOptions.playerElement,
+      videoFiles: webtorrentOptions.videoFiles,
+      startTime: commonOptions.startTime
+    }
+
+    Object.assign(plugins, { webtorrent })
+  }
+
   private static getControlBarChildren (mode: PlayerMode, options: {
     peertubeLink: boolean
-    theaterMode: boolean,
+    theaterButton: boolean,
     captions: boolean
   }) {
     const settingEntries = []
@@ -421,7 +413,7 @@ export class PeertubePlayerManager {
       })
     }
 
-    if (options.theaterMode === true) {
+    if (options.theaterButton === true) {
       Object.assign(children, {
         'theaterButton': {}
       })
@@ -468,6 +460,63 @@ export class PeertubePlayerManager {
     }
 
     player.contextmenuUI({ content })
+  }
+
+  private static addHotkeysOptions (plugins: VideoJSPluginOptions) {
+    Object.assign(plugins, {
+      hotkeys: {
+        enableVolumeScroll: false,
+        enableModifiersForNumbers: false,
+
+        fullscreenKey: function (event: KeyboardEvent) {
+          // fullscreen with the f key or Ctrl+Enter
+          return event.key === 'f' || (event.ctrlKey && event.key === 'Enter')
+        },
+
+        seekStep: function (event: KeyboardEvent) {
+          // mimic VLC seek behavior, and default to 5 (original value is 5).
+          if (event.ctrlKey && event.altKey) {
+            return 5 * 60
+          } else if (event.ctrlKey) {
+            return 60
+          } else if (event.altKey) {
+            return 10
+          } else {
+            return 5
+          }
+        },
+
+        customKeys: {
+          increasePlaybackRateKey: {
+            key: function (event: KeyboardEvent) {
+              return event.key === '>'
+            },
+            handler: function (player: videojs.Player) {
+              player.playbackRate((player.playbackRate() + 0.1).toFixed(2))
+            }
+          },
+          decreasePlaybackRateKey: {
+            key: function (event: KeyboardEvent) {
+              return event.key === '<'
+            },
+            handler: function (player: videojs.Player) {
+              player.playbackRate((player.playbackRate() - 0.1).toFixed(2))
+            }
+          },
+          frameByFrame: {
+            key: function (event: KeyboardEvent) {
+              return event.key === '.'
+            },
+            handler: function (player: videojs.Player) {
+              player.pause()
+              // Calculate movement distance (assuming 30 fps)
+              const dist = 1 / 30
+              player.currentTime(player.currentTime() + dist)
+            }
+          }
+        }
+      }
+    })
   }
 
   private static getLocalePath (serverUrl: string, locale: string) {

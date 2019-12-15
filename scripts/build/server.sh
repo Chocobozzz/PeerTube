@@ -5,4 +5,5 @@ set -eu
 rm -rf ./dist
 
 npm run tsc
-cp -r "./server/static" "./dist/server"
+cp "./tsconfig.json" "./dist"
+cp -r "./server/static" "./server/assets" "./dist/server"

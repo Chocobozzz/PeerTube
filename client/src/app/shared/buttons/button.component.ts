@@ -12,6 +12,7 @@ export class ButtonComponent {
   @Input() className = 'grey-button'
   @Input() icon: GlobalIconName = undefined
   @Input() title: string = undefined
+  @Input() loading = false
 
   getTitle () {
     return this.title || this.label

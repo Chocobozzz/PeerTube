@@ -1,7 +1,15 @@
 <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
 
 <div class="user-quota">
-  <span i18n class="user-quota-label">Video quota:</span> {{ userVideoQuotaUsed | bytes: 0 }} / {{ userVideoQuota }}
+  <div>
+    <span i18n class="user-quota-label">Total video quota:</span>
+    <ng-container i18n>{{ userVideoQuotaUsed | bytes: 0 }} used</ng-container> / {{ userVideoQuota }}
+  </div>
+
+  <div *ngIf="hasDailyQuota()">
+    <span i18n class="user-quota-label">Daily video quota:</span>
+    <ng-container>{{ userVideoQuotaUsedDaily | bytes: 0 }} used</ng-container> / {{ userVideoQuotaDaily }}
+  </div>
 </div>
 
 <div i18n class="account-title">Profile</div>
@@ -10,8 +18,11 @@
 <div i18n class="account-title">Video settings</div>
 <my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>
 
-<div i18n class="account-title" id="notifications">Notifications</div>
+<div i18n class="account-title">Notifications</div>
 <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
+
+<div i18n class="account-title">Interface</div>
+<my-account-interface-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-interface-settings>
 
 <div i18n class="account-title">Password</div>
 <my-account-change-password></my-account-change-password>

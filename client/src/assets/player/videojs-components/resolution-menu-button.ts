@@ -9,6 +9,8 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuButton')
 class ResolutionMenuButton extends MenuButton {
   label: HTMLElement
+  labelEl_: any
+  player: Player
 
   constructor (player: Player, options: any) {
     super(player, options)
@@ -73,11 +75,15 @@ class ResolutionMenuButton extends MenuButton {
       // Skip auto resolution, we'll add it ourselves
       if (d.id === -1) continue
 
+      const label = d.id === 0
+        ? this.player.localize('Audio-only')
+        : d.label
+
       this.menu.addChild(new ResolutionMenuItem(
         this.player_,
         {
           id: d.id,
-          label: d.label,
+          label,
           selected: d.selected,
           callback: data.qualitySwitchCallback
         })

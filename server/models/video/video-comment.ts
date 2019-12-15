@@ -1,36 +1,32 @@
-import {
-  AllowNull,
-  BeforeDestroy,
-  BelongsTo,
-  Column,
-  CreatedAt,
-  DataType,
-  ForeignKey,
-  Is,
-  Model,
-  Scopes,
-  Table,
-  UpdatedAt
-} from 'sequelize-typescript'
-import { ActivityTagObject } from '../../../shared/models/activitypub/objects/common-objects'
+import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { sendDeleteVideoComment } from '../../lib/activitypub/send'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
-import { AvatarModel } from '../avatar/avatar'
-import { ServerModel } from '../server/server'
-import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { getServerActor } from '../../helpers/utils'
-import { UserModel } from '../account/user'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { regexpCapture } from '../../helpers/regexp'
 import { uniq } from 'lodash'
 import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
+import * as Bluebird from 'bluebird'
+import {
+  MComment,
+  MCommentAP,
+  MCommentFormattable,
+  MCommentId,
+  MCommentOwner,
+  MCommentOwnerReplyVideoLight,
+  MCommentOwnerVideo,
+  MCommentOwnerVideoFeed,
+  MCommentOwnerVideoReply
+} from '../../typings/models/video'
+import { MUserAccountId } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -68,22 +64,7 @@ enum ScopeNames {
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
-        model: AccountModel,
-        include: [
-          {
-            model: ActorModel,
-            include: [
-              {
-                model: ServerModel,
-                required: false
-              },
-              {
-                model: AvatarModel,
-                required: false
-              }
-            ]
-          }
-        ]
+        model: AccountModel
       }
     ]
   },
@@ -102,18 +83,12 @@ enum ScopeNames {
         required: true,
         include: [
           {
-            model: VideoChannelModel.unscoped(),
+            model: VideoChannelModel,
             required: true,
             include: [
               {
                 model: AccountModel,
-                required: true,
-                include: [
-                  {
-                    model: ActorModel,
-                    required: true
-                  }
-                ]
+                required: true
               }
             ]
           }
@@ -146,6 +121,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   @UpdatedAt
   updatedAt: Date
+
+  @AllowNull(true)
+  @Column(DataType.DATE)
+  deletedAt: Date
 
   @AllowNull(false)
   @Is('VideoCommentUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
@@ -202,48 +181,13 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'CASCADE'
   })
   Account: AccountModel
 
-  @BeforeDestroy
-  static async sendDeleteIfOwned (instance: VideoCommentModel, options) {
-    if (!instance.Account || !instance.Account.Actor) {
-      instance.Account = await instance.$get('Account', {
-        include: [ ActorModel ],
-        transaction: options.transaction
-      }) as AccountModel
-    }
-
-    if (!instance.Video) {
-      instance.Video = await instance.$get('Video', {
-        include: [
-          {
-            model: VideoChannelModel,
-            include: [
-              {
-                model: AccountModel,
-                include: [
-                  {
-                    model: ActorModel
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        transaction: options.transaction
-      }) as VideoModel
-    }
-
-    if (instance.isOwned()) {
-      await sendDeleteVideoComment(instance, options.transaction)
-    }
-  }
-
-  static loadById (id: number, t?: Transaction) {
+  static loadById (id: number, t?: Transaction): Bluebird<MComment> {
     const query: FindOptions = {
       where: {
         id
@@ -255,7 +199,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findOne(query)
   }
 
-  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction) {
+  static loadByIdAndPopulateVideoAndAccountAndReply (id: number, t?: Transaction): Bluebird<MCommentOwnerVideoReply> {
     const query: FindOptions = {
       where: {
         id
@@ -269,7 +213,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string, t?: Transaction) {
+  static loadByUrlAndPopulateAccountAndVideo (url: string, t?: Transaction): Bluebird<MCommentOwnerVideo> {
     const query: FindOptions = {
       where: {
         url
@@ -278,22 +222,36 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
     if (t !== undefined) query.transaction = t
 
-    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT ]).findOne(query)
+    return VideoCommentModel.scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_VIDEO ]).findOne(query)
   }
 
-  static loadByUrlAndPopulateReplyAndVideo (url: string, t?: Transaction) {
+  static loadByUrlAndPopulateReplyAndVideoUrlAndAccount (url: string, t?: Transaction): Bluebird<MCommentOwnerReplyVideoLight> {
     const query: FindOptions = {
       where: {
         url
-      }
+      },
+      include: [
+        {
+          attributes: [ 'id', 'url' ],
+          model: VideoModel.unscoped()
+        }
+      ]
     }
 
     if (t !== undefined) query.transaction = t
 
-    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_VIDEO ]).findOne(query)
+    return VideoCommentModel.scope([ ScopeNames.WITH_IN_REPLY_TO, ScopeNames.WITH_ACCOUNT ]).findOne(query)
   }
 
-  static async listThreadsForApi (videoId: number, start: number, count: number, sort: string, user?: UserModel) {
+  static async listThreadsForApi (parameters: {
+    videoId: number,
+    start: number,
+    count: number,
+    sort: string,
+    user?: MUserAccountId
+  }) {
+    const { videoId, start, count, sort, user } = parameters
+
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
     const userAccountId = user ? user.Account.id : undefined
@@ -328,7 +286,13 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static async listThreadCommentsForApi (videoId: number, threadId: number, user?: UserModel) {
+  static async listThreadCommentsForApi (parameters: {
+    videoId: number,
+    threadId: number,
+    user?: MUserAccountId
+  }) {
+    const { videoId, threadId, user } = parameters
+
     const serverActor = await getServerActor()
     const serverAccountId = serverActor.Account.id
     const userAccountId = user ? user.Account.id : undefined
@@ -364,7 +328,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       })
   }
 
-  static listThreadParentComments (comment: VideoCommentModel, t: Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+  static listThreadParentComments (comment: MCommentId, t: Transaction, order: 'ASC' | 'DESC' = 'ASC'): Bluebird<MCommentOwner[]> {
     const query = {
       order: [ [ 'createdAt', order ] ] as Order,
       where: {
@@ -400,10 +364,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       transaction: t
     }
 
-    return VideoCommentModel.findAndCountAll(query)
+    return VideoCommentModel.findAndCountAll<MComment>(query)
   }
 
-  static listForFeed (start: number, count: number, videoId?: number) {
+  static listForFeed (start: number, count: number, videoId?: number): Bluebird<MCommentOwnerVideoFeed[]> {
     const query = {
       order: [ [ 'createdAt', 'DESC' ] ] as Order,
       offset: start,
@@ -457,7 +421,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         updatedAt: {
           [Op.lt]: beforeUpdatedAt
         },
-        videoId
+        videoId,
+        accountId: {
+          [Op.notIn]: buildLocalAccountIdsIn()
+        }
       }
     }
 
@@ -473,7 +440,15 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }
 
   isOwned () {
+    if (!this.Account) {
+      return false
+    }
+
     return this.Account.isOwned()
+  }
+
+  isDeleted () {
+    return null !== this.deletedAt
   }
 
   extractMentions () {
@@ -514,7 +489,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return uniq(result)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (this: MCommentFormattable) {
     return {
       id: this.id,
       url: this.url,
@@ -524,12 +499,14 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       videoId: this.videoId,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
+      isDeleted: this.isDeleted(),
       totalReplies: this.get('totalReplies') || 0,
-      account: this.Account.toFormattedJSON()
+      account: this.Account ? this.Account.toFormattedJSON() : null
     } as VideoComment
   }
 
-  toActivityPubObject (threadParentComments: VideoCommentModel[]): VideoCommentObject {
+  toActivityPubObject (this: MCommentAP, threadParentComments: MCommentOwner[]): VideoCommentObject | ActivityTombstoneObject {
     let inReplyTo: string
     // New thread, so in AS we reply to the video
     if (this.inReplyToCommentId === null) {
@@ -538,8 +515,22 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       inReplyTo = this.InReplyToVideoComment.url
     }
 
+    if (this.isDeleted()) {
+      return {
+        id: this.url,
+        type: 'Tombstone',
+        formerType: 'Note',
+        inReplyTo,
+        published: this.createdAt.toISOString(),
+        updated: this.updatedAt.toISOString(),
+        deleted: this.deletedAt.toISOString()
+      }
+    }
+
     const tag: ActivityTagObject[] = []
     for (const parentComment of threadParentComments) {
+      if (!parentComment.Account) continue
+
       const actor = parentComment.Account.Actor
 
       tag.push({

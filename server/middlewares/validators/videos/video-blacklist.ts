@@ -1,14 +1,10 @@
 import * as express from 'express'
-import { body, param, query } from 'express-validator/check'
-import { isBooleanValid, isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../../helpers/custom-validators/videos'
+import { body, param, query } from 'express-validator'
+import { isBooleanValid, isIdOrUUIDValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
-import {
-  doesVideoBlacklistExist,
-  isVideoBlacklistReasonValid,
-  isVideoBlacklistTypeValid
-} from '../../../helpers/custom-validators/video-blacklist'
+import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../../helpers/custom-validators/video-blacklist'
+import { doesVideoBlacklistExist, doesVideoExist } from '../../../helpers/middlewares'
 
 const videosBlacklistRemoveValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -18,7 +14,7 @@ const videosBlacklistRemoveValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoBlacklistExist(res.locals.video.id, res)) return
+    if (!await doesVideoBlacklistExist(res.locals.videoAll.id, res)) return
 
     return next()
   }
@@ -28,7 +24,7 @@ const videosBlacklistAddValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
   body('unfederate')
     .optional()
-    .toBoolean()
+    .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid unfederate boolean'),
   body('reason')
     .optional()
@@ -40,7 +36,7 @@ const videosBlacklistAddValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
+    const video = res.locals.videoAll
     if (req.body.unfederate === true && video.remote === true) {
       return res
         .status(409)
@@ -63,7 +59,7 @@ const videosBlacklistUpdateValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoBlacklistExist(res.locals.video.id, res)) return
+    if (!await doesVideoBlacklistExist(res.locals.videoAll.id, res)) return
 
     return next()
   }

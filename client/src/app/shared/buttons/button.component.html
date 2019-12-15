@@ -1,4 +1,6 @@
 <span class="action-button" [ngClass]="className" [title]="getTitle()">
-  <my-global-icon [iconName]="icon"></my-global-icon>
+  <my-global-icon *ngIf="!loading" [iconName]="icon"></my-global-icon>
+  <my-small-loader [loading]="loading"></my-small-loader>
+
   <span class="button-label">{{ label }}</span>
 </span>

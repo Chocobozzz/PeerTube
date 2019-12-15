@@ -9,7 +9,7 @@ import { sortBy } from '@app/shared/misc/utils'
   styleUrls: [ './language-chooser.component.scss' ]
 })
 export class LanguageChooserComponent {
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
   languages: { id: string, label: string }[] = []
 

@@ -121,11 +121,20 @@ class JobQueue {
     return queue.add(obj.payload, jobArgs)
   }
 
-  async listForApi (state: JobState, start: number, count: number, asc?: boolean): Promise<Bull.Job[]> {
+  async listForApi (options: {
+    state: JobState,
+    start: number,
+    count: number,
+    asc?: boolean,
+    jobType: JobType
+  }): Promise<Bull.Job[]> {
+    const { state, start, count, asc, jobType } = options
     let results: Bull.Job[] = []
 
+    const filteredJobTypes = this.filterJobTypes(jobType)
+
     // TODO: optimize
-    for (const jobType of jobTypes) {
+    for (const jobType of filteredJobTypes) {
       const queue = this.queues[ jobType ]
       if (queue === undefined) {
         logger.error('Unknown queue %s to list jobs.', jobType)
@@ -149,10 +158,12 @@ class JobQueue {
     return results.slice(start, start + count)
   }
 
-  async count (state: JobState): Promise<number> {
+  async count (state: JobState, jobType?: JobType): Promise<number> {
     let total = 0
 
-    for (const type of jobTypes) {
+    const filteredJobTypes = this.filterJobTypes(jobType)
+
+    for (const type of filteredJobTypes) {
       const queue = this.queues[ type ]
       if (queue === undefined) {
         logger.error('Unknown queue %s to count jobs.', type)
@@ -180,6 +191,12 @@ class JobQueue {
     })
   }
 
+  private filterJobTypes (jobType?: JobType) {
+    if (!jobType) return jobTypes
+
+    return jobTypes.filter(t => t === jobType)
+  }
+
   static get Instance () {
     return this.instance || (this.instance = new this())
   }
@@ -188,5 +205,6 @@ class JobQueue {
 // ---------------------------------------------------------------------------
 
 export {
+  jobTypes,
   JobQueue
 }

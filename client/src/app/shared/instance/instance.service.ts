@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestService } from '../rest'
 import { About } from '../../../../../shared/models/server'
+import { MarkdownService } from '@app/shared/renderer'
+import { peertubeTranslate } from '@shared/models'
+import { ServerService } from '@app/core'
 
 @Injectable()
 export class InstanceService {
@@ -13,7 +16,9 @@ export class InstanceService {
   constructor (
     private authHttp: HttpClient,
     private restService: RestService,
-    private restExtractor: RestExtractor
+    private restExtractor: RestExtractor,
+    private markdownService: MarkdownService,
+    private serverService: ServerService
   ) {
   }
 
@@ -33,5 +38,44 @@ export class InstanceService {
     return this.authHttp.post(InstanceService.BASE_SERVER_URL + '/contact', body)
                .pipe(catchError(res => this.restExtractor.handleError(res)))
 
+  }
+
+  async buildHtml (about: About) {
+    const html = {
+      description: '',
+      terms: '',
+      codeOfConduct: '',
+      moderationInformation: '',
+      administrator: '',
+      hardwareInformation: ''
+    }
+
+    for (const key of Object.keys(html)) {
+      html[ key ] = await this.markdownService.textMarkdownToHTML(about.instance[ key ])
+    }
+
+    return html
+  }
+
+  buildTranslatedLanguages (about: About, translations: any) {
+    const languagesArray = this.serverService.getVideoLanguages()
+
+    return about.instance.languages
+                .map(l => {
+                  const languageObj = languagesArray.find(la => la.id === l)
+
+                  return peertubeTranslate(languageObj.label, translations)
+                })
+  }
+
+  buildTranslatedCategories (about: About, translations: any) {
+    const categoriesArray = this.serverService.getVideoCategories()
+
+    return about.instance.categories
+                .map(c => {
+                  const categoryObj = categoriesArray.find(ca => ca.id === c)
+
+                  return peertubeTranslate(categoryObj.label, translations)
+                })
   }
 }

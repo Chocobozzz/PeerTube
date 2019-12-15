@@ -48,26 +48,31 @@ export class VideoCommentService {
                )
   }
 
-  getVideoCommentThreads (
+  getVideoCommentThreads (parameters: {
     videoId: number | string,
     componentPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ comments: VideoComment[], totalComments: number}> {
+  }): Observable<ResultList<VideoComment>> {
+    const { videoId, componentPagination, sort } = parameters
+
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     const url = VideoCommentService.BASE_VIDEO_URL + videoId + '/comment-threads'
-    return this.authHttp
-               .get(url, { params })
+    return this.authHttp.get<ResultList<VideoComment>>(url, { params })
                .pipe(
-                 map(this.extractVideoComments),
+                 map(result => this.extractVideoComments(result)),
                  catchError(err => this.restExtractor.handleError(err))
                )
   }
 
-  getVideoThreadComments (videoId: number | string, threadId: number): Observable<VideoCommentThreadTree> {
+  getVideoThreadComments (parameters: {
+    videoId: number | string,
+    threadId: number
+  }): Observable<VideoCommentThreadTree> {
+    const { videoId, threadId } = parameters
     const url = `${VideoCommentService.BASE_VIDEO_URL + videoId}/comment-threads/${threadId}`
 
     return this.authHttp
@@ -130,7 +135,7 @@ export class VideoCommentService {
       comments.push(new VideoComment(videoCommentJson))
     }
 
-    return { comments, totalComments }
+    return { data: comments, total: totalComments }
   }
 
   private extractVideoCommentTree (tree: VideoCommentThreadTree) {

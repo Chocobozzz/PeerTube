@@ -3,7 +3,19 @@
     "target": "http://localhost:9000",
     "secure": false
   },
+  "/plugins": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
+  "/themes": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
   "/static": {
+    "target": "http://localhost:9000",
+    "secure": false
+  },
+  "/lazy-static": {
     "target": "http://localhost:9000",
     "secure": false
   },
@@ -11,5 +23,15 @@
     "target": "ws://localhost:9000",
     "secure": false,
     "ws": true
+  },
+  "/!(client)**": {
+    "target": "http://localhost:3000/client/index.html",
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/!(client)**/**": {
+    "target": "http://localhost:3000/client/index.html",
+    "secure": false,
+    "logLevel": "debug"
   }
 }

@@ -10,6 +10,7 @@ import { federateVideoIfNeeded } from '../../../lib/activitypub'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { MVideoCaptionVideo } from '@server/typings/models'
 
 const reqVideoCaptionAdd = createReqFiles(
   [ 'captionfile' ],
@@ -46,19 +47,19 @@ export {
 // ---------------------------------------------------------------------------
 
 async function listVideoCaptions (req: express.Request, res: express.Response) {
-  const data = await VideoCaptionModel.listVideoCaptions(res.locals.video.id)
+  const data = await VideoCaptionModel.listVideoCaptions(res.locals.videoId.id)
 
   return res.json(getFormattedObjects(data, data.length))
 }
 
 async function addVideoCaption (req: express.Request, res: express.Response) {
   const videoCaptionPhysicalFile = req.files['captionfile'][0]
-  const video = res.locals.video
+  const video = res.locals.videoAll
 
   const videoCaption = new VideoCaptionModel({
     videoId: video.id,
     language: req.params.captionLanguage
-  })
+  }) as MVideoCaptionVideo
   videoCaption.Video = video
 
   // Move physical file
@@ -75,7 +76,7 @@ async function addVideoCaption (req: express.Request, res: express.Response) {
 }
 
 async function deleteVideoCaption (req: express.Request, res: express.Response) {
-  const video = res.locals.video
+  const video = res.locals.videoAll
   const videoCaption = res.locals.videoCaption
 
   await sequelizeTypescript.transaction(async t => {

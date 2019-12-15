@@ -9,6 +9,7 @@ import { FollowsRoutes } from './follows'
 import { UsersRoutes } from './users'
 import { ModerationRoutes } from '@app/+admin/moderation/moderation.routes'
 import { SystemRoutes } from '@app/+admin/system'
+import { PluginsRoutes } from '@app/+admin/plugins/plugins.routes'
 
 const adminRoutes: Routes = [
   {
@@ -26,7 +27,8 @@ const adminRoutes: Routes = [
       ...UsersRoutes,
       ...ModerationRoutes,
       ...SystemRoutes,
-      ...ConfigRoutes
+      ...ConfigRoutes,
+      ...PluginsRoutes
     ]
   }
 ]

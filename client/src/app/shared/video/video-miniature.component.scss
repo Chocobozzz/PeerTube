@@ -9,7 +9,7 @@ $more-margin-right: 10px;
   width: $video-miniature-width;
   display: inline-flex;
   flex-direction: column;
-  margin-bottom: 30px;
+  margin-bottom: $video-miniature-margin-bottom;
   height: 195px;
   vertical-align: top;
 
@@ -68,16 +68,16 @@ $more-margin-right: 10px;
       width: $more-button-width;
       height: 30px;
 
-      /deep/ .dropdown-root:not(.show) {
+      ::ng-deep .dropdown-root:not(.show) {
         opacity: 0;
       }
 
-      /deep/ .playlist-dropdown.show + my-action-dropdown .dropdown-root {
+      ::ng-deep .playlist-dropdown.show + my-action-dropdown .dropdown-root {
         opacity: 1;
       }
     }
 
-    &:hover .video-actions /deep/ .dropdown-root {
+    &:hover .video-actions ::ng-deep .dropdown-root {
       opacity: 1;
     }
 
@@ -90,7 +90,7 @@ $more-margin-right: 10px;
         margin: 0;
         top: -3px;
 
-        /deep/ .dropdown-root {
+        ::ng-deep .dropdown-root {
           opacity: 1 !important;
         }
       }
@@ -109,8 +109,10 @@ $more-margin-right: 10px;
 
     .video-bottom {
       .video-miniature-information {
-        width: auto;
-        min-width: 500px;
+        @media screen and (min-width: $small-view) {
+          width: auto;
+          min-width: 500px;
+        }
 
         .video-miniature-name {
           @include ellipsis-multiline(1.3em, 2);

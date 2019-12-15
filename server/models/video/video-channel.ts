@@ -24,7 +24,7 @@ import {
   isVideoChannelSupportValid
 } from '../../helpers/custom-validators/video-channels'
 import { sendDeleteActor } from '../../lib/activitypub/send'
-import { AccountModel, ScopeNames as AccountModelScopeNames } from '../account/account'
+import { AccountModel, ScopeNames as AccountModelScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttribute, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -33,6 +33,15 @@ import { ServerModel } from '../server/server'
 import { FindOptions, ModelIndexesOptions, Op } from 'sequelize'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from './video-playlist'
+import * as Bluebird from 'bluebird'
+import {
+  MChannelAccountDefault,
+  MChannelActor,
+  MChannelActorAccountDefaultVideos,
+  MChannelAP,
+  MChannelFormattable,
+  MChannelSummaryFormattable
+} from '../../typings/models/video'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: ModelIndexesOptions[] = [
@@ -47,7 +56,7 @@ const indexes: ModelIndexesOptions[] = [
 ]
 
 export enum ScopeNames {
-  AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
+  FOR_API = 'FOR_API',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
   WITH_VIDEOS = 'WITH_VIDEOS',
@@ -56,6 +65,11 @@ export enum ScopeNames {
 
 type AvailableForListOptions = {
   actorId: number
+}
+
+export type SummaryOptions = {
+  withAccount?: boolean // Default: false
+  withAccountBlockerIds?: number[]
 }
 
 @DefaultScope(() => ({
@@ -67,12 +81,12 @@ type AvailableForListOptions = {
   ]
 }))
 @Scopes(() => ({
-  [ScopeNames.SUMMARY]: (withAccount = false) => {
+  [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const base: FindOptions = {
-      attributes: [ 'name', 'description', 'id', 'actorId' ],
+      attributes: [ 'id', 'name', 'description', 'actorId' ],
       include: [
         {
-          attributes: [ 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
           required: true,
           include: [
@@ -90,16 +104,18 @@ type AvailableForListOptions = {
       ]
     }
 
-    if (withAccount === true) {
+    if (options.withAccount === true) {
       base.include.push({
-        model: AccountModel.scope(AccountModelScopeNames.SUMMARY),
+        model: AccountModel.scope({
+          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
+        }),
         required: true
       })
     }
 
     return base
   },
-  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
+  [ScopeNames.FOR_API]: (options: AvailableForListOptions) => {
     // Only list local channels OR channels that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
 
@@ -261,7 +277,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     }
 
     const scopes = {
-      method: [ ScopeNames.AVAILABLE_FOR_LIST, { actorId } as AvailableForListOptions ]
+      method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
     }
     return VideoChannelModel
       .scope(scopes)
@@ -271,7 +287,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static listLocalsForSitemap (sort: string) {
+  static listLocalsForSitemap (sort: string): Bluebird<MChannelActor[]> {
     const query = {
       attributes: [ ],
       offset: 0,
@@ -324,7 +340,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     }
 
     const scopes = {
-      method: [ ScopeNames.AVAILABLE_FOR_LIST, { actorId: options.actorId } as AvailableForListOptions ]
+      method: [ ScopeNames.FOR_API, { actorId: options.actorId } as AvailableForListOptions ]
     }
     return VideoChannelModel
       .scope(scopes)
@@ -362,13 +378,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       })
   }
 
-  static loadByIdAndPopulateAccount (id: number) {
+  static loadByIdAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByIdAndAccount (id: number, accountId: number) {
+  static loadByIdAndAccount (id: number, accountId: number): Bluebird<MChannelAccountDefault> {
     const query = {
       where: {
         id,
@@ -381,13 +397,13 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadAndPopulateAccount (id: number) {
+  static loadAndPopulateAccount (id: number): Bluebird<MChannelAccountDefault> {
     return VideoChannelModel.unscoped()
       .scope([ ScopeNames.WITH_ACTOR, ScopeNames.WITH_ACCOUNT ])
       .findByPk(id)
   }
 
-  static loadByUrlAndPopulateAccount (url: string) {
+  static loadByUrlAndPopulateAccount (url: string): Bluebird<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -413,7 +429,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.loadByNameAndHostAndPopulateAccount(name, host)
   }
 
-  static loadLocalByNameAndPopulateAccount (name: string) {
+  static loadLocalByNameAndPopulateAccount (name: string): Bluebird<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -432,7 +448,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadByNameAndHostAndPopulateAccount (name: string, host: string) {
+  static loadByNameAndHostAndPopulateAccount (name: string, host: string): Bluebird<MChannelAccountDefault> {
     const query = {
       include: [
         {
@@ -457,7 +473,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findOne(query)
   }
 
-  static loadAndPopulateAccountAndVideos (id: number) {
+  static loadAndPopulateAccountAndVideos (id: number): Bluebird<MChannelActorAccountDefaultVideos> {
     const options = {
       include: [
         VideoModel
@@ -469,7 +485,20 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       .findByPk(id, options)
   }
 
-  toFormattedJSON (): VideoChannel {
+  toFormattedSummaryJSON (this: MChannelSummaryFormattable): VideoChannelSummary {
+    const actor = this.Actor.toFormattedSummaryJSON()
+
+    return {
+      id: this.id,
+      name: actor.name,
+      displayName: this.getDisplayName(),
+      url: actor.url,
+      host: actor.host,
+      avatar: actor.avatar
+    }
+  }
+
+  toFormattedJSON (this: MChannelFormattable): VideoChannel {
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
@@ -487,21 +516,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return Object.assign(actor, videoChannel)
   }
 
-  toFormattedSummaryJSON (): VideoChannelSummary {
-    const actor = this.Actor.toFormattedJSON()
-
-    return {
-      id: this.id,
-      name: actor.name,
-      displayName: this.getDisplayName(),
-      url: actor.url,
-      host: actor.host,
-      avatar: actor.avatar
-    }
-  }
-
-  toActivityPubObject (): ActivityPubActor {
-    const obj = this.Actor.toActivityPubObject(this.name, 'VideoChannel')
+  toActivityPubObject (this: MChannelAP): ActivityPubActor {
+    const obj = this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description,

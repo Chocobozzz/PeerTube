@@ -1,6 +1,26 @@
 import { Injectable } from '@angular/core'
-
 import { MarkdownIt } from 'markdown-it'
+import { HtmlRendererService } from '@app/shared/renderer/html-renderer.service'
+
+type MarkdownParsers = {
+  textMarkdownIt: MarkdownIt
+  textWithHTMLMarkdownIt: MarkdownIt
+
+  enhancedMarkdownIt: MarkdownIt
+  enhancedWithHTMLMarkdownIt: MarkdownIt
+
+  completeMarkdownIt: MarkdownIt
+}
+
+type MarkdownConfig = {
+  rules: string[]
+  html: boolean
+  escape?: boolean
+}
+
+type MarkdownParserConfigs = {
+  [id in keyof MarkdownParsers]: MarkdownConfig
+}
 
 @Injectable()
 export class MarkdownService {
@@ -12,40 +32,71 @@ export class MarkdownService {
     'newline',
     'list'
   ]
+  static TEXT_WITH_HTML_RULES = MarkdownService.TEXT_RULES.concat([ 'html_inline', 'html_block' ])
+
   static ENHANCED_RULES = MarkdownService.TEXT_RULES.concat([ 'image' ])
+  static ENHANCED_WITH_HTML_RULES = MarkdownService.TEXT_WITH_HTML_RULES.concat([ 'image' ])
 
-  private textMarkdownIt: MarkdownIt
-  private enhancedMarkdownIt: MarkdownIt
+  static COMPLETE_RULES = MarkdownService.ENHANCED_WITH_HTML_RULES.concat([ 'block', 'inline', 'heading', 'paragraph' ])
 
-  async textMarkdownToHTML (markdown: string) {
-    if (!markdown) return ''
+  private markdownParsers: MarkdownParsers = {
+    textMarkdownIt: null,
+    textWithHTMLMarkdownIt: null,
+    enhancedMarkdownIt: null,
+    enhancedWithHTMLMarkdownIt: null,
+    completeMarkdownIt: null
+  }
+  private parsersConfig: MarkdownParserConfigs = {
+    textMarkdownIt: { rules: MarkdownService.TEXT_RULES, html: false },
+    textWithHTMLMarkdownIt: { rules: MarkdownService.TEXT_WITH_HTML_RULES, html: true, escape: true },
 
-    if (!this.textMarkdownIt) {
-      this.textMarkdownIt = await this.createMarkdownIt(MarkdownService.TEXT_RULES)
-    }
+    enhancedMarkdownIt: { rules: MarkdownService.ENHANCED_RULES, html: false },
+    enhancedWithHTMLMarkdownIt: { rules: MarkdownService.ENHANCED_WITH_HTML_RULES, html: true, escape: true },
 
-    const html = this.textMarkdownIt.render(markdown)
-    return this.avoidTruncatedTags(html)
+    completeMarkdownIt: { rules: MarkdownService.COMPLETE_RULES, html: true }
   }
 
-  async enhancedMarkdownToHTML (markdown: string) {
-    if (!markdown) return ''
+  constructor (private htmlRenderer: HtmlRendererService) {}
 
-    if (!this.enhancedMarkdownIt) {
-      this.enhancedMarkdownIt = await this.createMarkdownIt(MarkdownService.ENHANCED_RULES)
-    }
+  textMarkdownToHTML (markdown: string, withHtml = false) {
+    if (withHtml) return this.render('textWithHTMLMarkdownIt', markdown)
 
-    const html = this.enhancedMarkdownIt.render(markdown)
-    return this.avoidTruncatedTags(html)
+    return this.render('textMarkdownIt', markdown)
   }
 
-  private async createMarkdownIt (rules: string[]) {
-    // FIXME: import('..') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
+  enhancedMarkdownToHTML (markdown: string, withHtml = false) {
+    if (withHtml) return this.render('enhancedWithHTMLMarkdownIt', markdown)
+
+    return this.render('enhancedMarkdownIt', markdown)
+  }
+
+  completeMarkdownToHTML (markdown: string) {
+    return this.render('completeMarkdownIt', markdown)
+  }
+
+  private async render (name: keyof MarkdownParsers, markdown: string) {
+    if (!markdown) return ''
+
+    const config = this.parsersConfig[ name ]
+    if (!this.markdownParsers[ name ]) {
+      this.markdownParsers[ name ] = await this.createMarkdownIt(config)
+    }
+
+    let html = this.markdownParsers[ name ].render(markdown)
+    html = this.avoidTruncatedTags(html)
+
+    if (config.escape) return this.htmlRenderer.toSafeHtml(html)
+
+    return html
+  }
+
+  private async createMarkdownIt (config: MarkdownConfig) {
+    // FIXME: import('...') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
     const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
 
-    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true })
+    const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true, html: config.html })
 
-    for (const rule of rules) {
+    for (const rule of config.rules) {
       markdownIt.enable(rule)
     }
 
@@ -79,7 +130,7 @@ export class MarkdownService {
   private avoidTruncatedTags (html: string) {
     return html.replace(/\*\*?([^*]+)$/, '$1')
       .replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
-      .replace(/\[[^\]]+\]?\(?([^\)]+)$/, '$1')
-
+      .replace(/\[[^\]]+\]\(([^\)]+)$/m, '$1')
+      .replace(/\s?\[[^\]]+\]?[.]{3}<\/p>$/m, '...</p>')
   }
 }

@@ -1,0 +1,6 @@
+@import '_variables';
+@import '_mixins';
+
+.update-button[disabled="true"] ::ng-deep .action-button {
+  cursor: default !important;
+}

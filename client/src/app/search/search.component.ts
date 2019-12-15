@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
-import { forkJoin, Subscription } from 'rxjs'
+import { forkJoin, of, Subscription } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -10,6 +10,7 @@ import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { Video } from '@app/shared/video/video.model'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-search',
@@ -41,7 +42,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private metaService: MetaService,
     private notifier: Notifier,
     private searchService: SearchService,
-    private authService: AuthService
+    private authService: AuthService,
+    private hooks: HooksService
   ) { }
 
   get user () {
@@ -73,6 +75,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
       err => this.notifier.error(err.text)
     )
+
+    this.hooks.runAction('action:search.init', 'search')
   }
 
   ngOnDestroy () {
@@ -93,18 +97,18 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   search () {
     forkJoin([
-      this.searchService.searchVideos(this.currentSearch, this.pagination, this.advancedSearch),
-      this.searchService.searchVideoChannels(this.currentSearch, immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }))
+      this.getVideosObs(),
+      this.getVideoChannelObs()
     ])
       .subscribe(
         ([ videosResult, videoChannelsResult ]) => {
           this.results = this.results
                              .concat(videoChannelsResult.data)
-                             .concat(videosResult.videos)
-          this.pagination.totalItems = videosResult.totalVideos + videoChannelsResult.total
+                             .concat(videosResult.data)
+          this.pagination.totalItems = videosResult.total + videoChannelsResult.total
 
           // Focus on channels if there are no enough videos
-          if (this.firstSearch === true && videosResult.videos.length < this.pagination.itemsPerPage) {
+          if (this.firstSearch === true && videosResult.data.length < this.pagination.itemsPerPage) {
             this.resetPagination()
             this.firstSearch = false
 
@@ -117,7 +121,6 @@ export class SearchComponent implements OnInit, OnDestroy {
 
         err => this.notifier.error(err.message)
       )
-
   }
 
   onNearOfBottom () {
@@ -162,5 +165,38 @@ export class SearchComponent implements OnInit, OnDestroy {
       relativeTo: this.route,
       queryParams: Object.assign({}, this.advancedSearch.toUrlObject(), { search })
     })
+  }
+
+  private getVideosObs () {
+    const params = {
+      search: this.currentSearch,
+      componentPagination: this.pagination,
+      advancedSearch: this.advancedSearch
+    }
+
+    return this.hooks.wrapObsFun(
+      this.searchService.searchVideos.bind(this.searchService),
+      params,
+      'search',
+      'filter:api.search.videos.list.params',
+      'filter:api.search.videos.list.result'
+    )
+  }
+
+  private getVideoChannelObs () {
+    if (!this.currentSearch) return of({ data: [], total: 0 })
+
+    const params = {
+      search: this.currentSearch,
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage })
+    }
+
+    return this.hooks.wrapObsFun(
+      this.searchService.searchVideoChannels.bind(this.searchService),
+      params,
+      'search',
+      'filter:api.search.video-channels.list.params',
+      'filter:api.search.video-channels.list.result'
+    )
   }
 }

@@ -2,6 +2,9 @@ import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, Updat
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
+import { ServerBlocklistModel } from './server-blocklist'
+import * as Bluebird from 'bluebird'
+import { MServer, MServerFormattable } from '@server/typings/models/server'
 
 @Table({
   tableName: 'server',
@@ -40,7 +43,25 @@ export class ServerModel extends Model<ServerModel> {
   })
   Actors: ActorModel[]
 
-  static loadByHost (host: string) {
+  @HasMany(() => ServerBlocklistModel, {
+    foreignKey: {
+      allowNull: false
+    },
+    onDelete: 'CASCADE'
+  })
+  BlockedByAccounts: ServerBlocklistModel[]
+
+  static load (id: number): Bluebird<MServer> {
+    const query = {
+      where: {
+        id
+      }
+    }
+
+    return ServerModel.findOne(query)
+  }
+
+  static loadByHost (host: string): Bluebird<MServer> {
     const query = {
       where: {
         host
@@ -50,7 +71,11 @@ export class ServerModel extends Model<ServerModel> {
     return ServerModel.findOne(query)
   }
 
-  toFormattedJSON () {
+  isBlocked () {
+    return this.BlockedByAccounts && this.BlockedByAccounts.length !== 0
+  }
+
+  toFormattedJSON (this: MServerFormattable) {
     return {
       host: this.host
     }

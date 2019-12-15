@@ -23,8 +23,8 @@ import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
   styleUrls: [ './my-account-videos.component.scss' ]
 })
 export class MyAccountVideosComponent implements DisableForReuseHook {
-  @ViewChild('videosSelection') videosSelection: VideosSelectionComponent
-  @ViewChild('videoChangeOwnershipModal') videoChangeOwnershipModal: VideoChangeOwnershipComponent
+  @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
+  @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
 
   titlePage: string
   selection: SelectionType = {}

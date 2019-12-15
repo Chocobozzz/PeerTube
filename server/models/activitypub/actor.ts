@@ -1,6 +1,5 @@
 import { values } from 'lodash'
 import { extname } from 'path'
-import * as Sequelize from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -36,6 +35,19 @@ import { isOutdated, throwIfNotValid } from '../utils'
 import { VideoChannelModel } from '../video/video-channel'
 import { ActorFollowModel } from './actor-follow'
 import { VideoModel } from '../video/video'
+import {
+  MActor,
+  MActorAccountChannelId,
+  MActorAP,
+  MActorFormattable,
+  MActorFull,
+  MActorHost,
+  MActorServer,
+  MActorSummaryFormattable,
+  MActorWithInboxes
+} from '../../typings/models'
+import * as Bluebird from 'bluebird'
+import { Op, Transaction } from 'sequelize'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -103,8 +115,20 @@ export const unusedActorAttributesForAPI = [
     },
     {
       fields: [ 'preferredUsername', 'serverId' ],
-      unique: true
+      unique: true,
+      where: {
+        serverId: {
+          [Op.ne]: null
+        }
+      }
     },
+    // {
+    //   fields: [ 'preferredUsername' ],
+    //   unique: true,
+    //   where: {
+    //     serverId: null
+    //   }
+    // },
     {
       fields: [ 'inboxUrl', 'sharedInboxUrl' ]
     },
@@ -163,23 +187,23 @@ export class ActorModel extends Model<ActorModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   inboxUrl: string
 
-  @AllowNull(false)
-  @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url'))
+  @AllowNull(true)
+  @Is('ActorOutboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'outbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   outboxUrl: string
 
-  @AllowNull(false)
-  @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url'))
+  @AllowNull(true)
+  @Is('ActorSharedInboxUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'shared inbox url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   sharedInboxUrl: string
 
-  @AllowNull(false)
-  @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url'))
+  @AllowNull(true)
+  @Is('ActorFollowersUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'followers url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followersUrl: string
 
-  @AllowNull(false)
-  @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url'))
+  @AllowNull(true)
+  @Is('ActorFollowingUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'following url', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followingUrl: string
 
@@ -252,11 +276,15 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
-  static load (id: number) {
+  static load (id: number): Bluebird<MActor> {
     return ActorModel.unscoped().findByPk(id)
   }
 
-  static loadAccountActorByVideoId (videoId: number, transaction: Sequelize.Transaction) {
+  static loadFull (id: number): Bluebird<MActorFull> {
+    return ActorModel.scope(ScopeNames.FULL).findByPk(id)
+  }
+
+  static loadFromAccountByVideoId (videoId: number, transaction: Transaction): Bluebird<MActor> {
     const query = {
       include: [
         {
@@ -300,11 +328,11 @@ export class ActorModel extends Model<ActorModel> {
       .then(a => !!a)
   }
 
-  static listByFollowersUrls (followersUrls: string[], transaction?: Sequelize.Transaction) {
+  static listByFollowersUrls (followersUrls: string[], transaction?: Transaction): Bluebird<MActorFull[]> {
     const query = {
       where: {
         followersUrl: {
-          [ Sequelize.Op.in ]: followersUrls
+          [ Op.in ]: followersUrls
         }
       },
       transaction
@@ -313,7 +341,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findAll(query)
   }
 
-  static loadLocalByName (preferredUsername: string, transaction?: Sequelize.Transaction) {
+  static loadLocalByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername,
@@ -325,7 +353,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByNameAndHost (preferredUsername: string, host: string) {
+  static loadByNameAndHost (preferredUsername: string, host: string): Bluebird<MActorFull> {
     const query = {
       where: {
         preferredUsername
@@ -344,7 +372,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MActorAccountChannelId> {
     const query = {
       where: {
         url
@@ -367,7 +395,7 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.unscoped().findOne(query)
   }
 
-  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Sequelize.Transaction) {
+  static loadByUrlAndPopulateAccountAndChannel (url: string, transaction?: Transaction): Bluebird<MActorFull> {
     const query = {
       where: {
         url
@@ -387,36 +415,38 @@ export class ActorModel extends Model<ActorModel> {
     })
   }
 
-  toFormattedJSON () {
+  getSharedInbox (this: MActorWithInboxes) {
+    return this.sharedInboxUrl || this.inboxUrl
+  }
+
+  toFormattedSummaryJSON (this: MActorSummaryFormattable) {
     let avatar: Avatar = null
     if (this.Avatar) {
       avatar = this.Avatar.toFormattedJSON()
     }
 
     return {
-      id: this.id,
       url: this.url,
       name: this.preferredUsername,
       host: this.getHost(),
-      hostRedundancyAllowed: this.getRedundancyAllowed(),
-      followingCount: this.followingCount,
-      followersCount: this.followersCount,
-      avatar,
-      createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      avatar
     }
   }
 
-  toActivityPubObject (name: string, type: 'Account' | 'Application' | 'VideoChannel') {
-    let activityPubType
-    if (type === 'Account') {
-      activityPubType = 'Person' as 'Person'
-    } else if (type === 'Application') {
-      activityPubType = 'Application' as 'Application'
-    } else { // VideoChannel
-      activityPubType = 'Group' as 'Group'
-    }
+  toFormattedJSON (this: MActorFormattable) {
+    const base = this.toFormattedSummaryJSON()
 
+    return Object.assign(base, {
+      id: this.id,
+      hostRedundancyAllowed: this.getRedundancyAllowed(),
+      followingCount: this.followingCount,
+      followersCount: this.followersCount,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt
+    })
+  }
+
+  toActivityPubObject (this: MActorAP, name: string) {
     let icon = undefined
     if (this.avatarId) {
       const extension = extname(this.Avatar.filename)
@@ -428,7 +458,7 @@ export class ActorModel extends Model<ActorModel> {
     }
 
     const json = {
-      type: activityPubType,
+      type: this.type,
       id: this.url,
       following: this.getFollowingUrl(),
       followers: this.getFollowersUrl(),
@@ -452,7 +482,7 @@ export class ActorModel extends Model<ActorModel> {
     return activityPubContextify(json)
   }
 
-  getFollowerSharedInboxUrls (t: Sequelize.Transaction) {
+  getFollowerSharedInboxUrls (t: Transaction) {
     const query = {
       attributes: [ 'sharedInboxUrl' ],
       include: [
@@ -494,7 +524,7 @@ export class ActorModel extends Model<ActorModel> {
     return this.serverId === null
   }
 
-  getWebfingerUrl () {
+  getWebfingerUrl (this: MActorServer) {
     return 'acct:' + this.preferredUsername + '@' + this.getHost()
   }
 
@@ -502,7 +532,7 @@ export class ActorModel extends Model<ActorModel> {
     return this.Server ? `${this.preferredUsername}@${this.Server.host}` : this.preferredUsername
   }
 
-  getHost () {
+  getHost (this: MActorHost) {
     return this.Server ? this.Server.host : WEBSERVER.HOST
   }
 
@@ -513,7 +543,7 @@ export class ActorModel extends Model<ActorModel> {
   getAvatarUrl () {
     if (!this.avatarId) return undefined
 
-    return WEBSERVER.URL + this.Avatar.getWebserverPath()
+    return WEBSERVER.URL + this.Avatar.getStaticPath()
   }
 
   isOutdated () {

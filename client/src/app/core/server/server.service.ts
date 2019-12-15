@@ -1,7 +1,7 @@
 import { map, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { Observable, of, ReplaySubject } from 'rxjs'
 import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
@@ -42,6 +42,13 @@ export class ServerService {
         css: ''
       }
     },
+    plugin: {
+      registered: []
+    },
+    theme: {
+      registered: [],
+      default: 'default'
+    },
     email: {
       enabled: false
     },
@@ -58,6 +65,9 @@ export class ServerService {
       enabledResolutions: [],
       hls: {
         enabled: false
+      },
+      webtorrent: {
+        enabled: true
       }
     },
     avatar: {
@@ -162,6 +172,16 @@ export class ServerService {
 
   getConfig () {
     return cloneDeep(this.config)
+  }
+
+  getServerVersionAndCommit () {
+    const serverVersion = this.config.serverVersion
+    const commit = this.config.serverCommit || ''
+
+    let result = `v${serverVersion}`
+    if (commit) result += '...' + commit
+
+    return result
   }
 
   getVideoCategories () {

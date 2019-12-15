@@ -21,6 +21,8 @@ import { MessageService } from 'primeng/api'
 import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 import { ServerConfigResolver } from './routing/server-config-resolver.service'
 import { UnloggedGuard } from '@app/core/routing/unlogged-guard.service'
+import { PluginService } from '@app/core/plugins/plugin.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @NgModule({
   imports: [
@@ -60,6 +62,9 @@ import { UnloggedGuard } from '@app/core/routing/unlogged-guard.service'
     LoginGuard,
     UserRightGuard,
     UnloggedGuard,
+
+    PluginService,
+    HooksService,
 
     RedirectService,
     Notifier,

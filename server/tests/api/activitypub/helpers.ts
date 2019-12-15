@@ -53,19 +53,6 @@ describe('Test activity pub helpers', function () {
       expect(result).to.be.false
     })
 
-    it('Should fail with an invalid PeerTube URL', async function () {
-      const keys = require('./json/peertube/keys.json')
-      const body = require('./json/peertube/announce-without-context.json')
-
-      const actorSignature = { url: 'http://localhost:9002/accounts/peertube', privateKey: keys.privateKey }
-      const signedBody = await buildSignedActivity(actorSignature as any, body)
-
-      const fromActor = { publicKey: keys.publicKey, url: 'http://localhost:9003/accounts/peertube' }
-      const result = await isJsonLDSignatureVerified(fromActor as any, signedBody)
-
-      expect(result).to.be.false
-    })
-
     it('Should succeed with a valid PeerTube signature', async function () {
       const keys = require('./json/peertube/keys.json')
       const body = require('./json/peertube/announce-without-context.json')

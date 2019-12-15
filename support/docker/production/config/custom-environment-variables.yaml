@@ -103,11 +103,15 @@ transcoding:
     720p:
       __name: "PEERTUBE_TRANSCODING_720P"
       __format: "json"
-    1080:
+    1080p:
       __name: "PEERTUBE_TRANSCODING_1080P"
       __format: "json"
-    2160:
+    2160p:
       __name: "PEERTUBE_TRANSCODING_2160P"
+      __format: "json"
+  hls:
+    enabled:
+      __name: "PEERTUBE_TRANSCODING_HLS_ENABLED"
       __format: "json"
 
 instance:

@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../../../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import * as Promise from 'bluebird'
 import * as rimraf from 'rimraf'
 import { initDatabaseModels, sequelizeTypescript } from '../../../server/initializers'

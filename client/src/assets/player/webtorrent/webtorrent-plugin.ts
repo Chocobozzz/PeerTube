@@ -3,7 +3,6 @@
 import * as videojs from 'video.js'
 
 import * as WebTorrent from 'webtorrent'
-import { VideoFile } from '../../../../../shared/models/videos/video.model'
 import { renderVideo } from './video-renderer'
 import { LoadedQualityData, PlayerNetworkInfo, VideoJSComponentInterface, WebtorrentPluginOptions } from '../peertube-videojs-typings'
 import { getRtcConfig, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
@@ -12,9 +11,10 @@ import {
   getAverageBandwidthInStore,
   getStoredMute,
   getStoredVolume,
-  getStoredWebTorrentEnabled,
+  getStoredP2PEnabled,
   saveAverageBandwidth
 } from '../peertube-player-local-storage'
+import { VideoFile } from '@shared/models'
 
 const CacheChunkStore = require('cache-chunk-store')
 
@@ -77,7 +77,7 @@ class WebTorrentPlugin extends Plugin {
 
     // Disable auto play on iOS
     this.autoplay = options.autoplay && this.isIOS() === false
-    this.playerRefusedP2P = !getStoredWebTorrentEnabled()
+    this.playerRefusedP2P = !getStoredP2PEnabled()
 
     this.videoFiles = options.videoFiles
     this.videoDuration = options.videoDuration
@@ -181,12 +181,20 @@ class WebTorrentPlugin extends Plugin {
     const currentTime = this.player.currentTime()
     const isPaused = this.player.paused()
 
-    // Remove poster to have black background
-    this.playerElement.poster = ''
-
     // Hide bigPlayButton
     if (!isPaused) {
       this.player.bigPlayButton.hide()
+    }
+
+    // Audio-only (resolutionId === 0) gets special treatment
+    if (resolutionId === 0) {
+      // Audio-only: show poster, do not auto-hide controls
+      this.player.addClass('vjs-playing-audio-only-content')
+      this.player.posterImage.show()
+    } else {
+      // Hide poster to have black background
+      this.player.removeClass('vjs-playing-audio-only-content')
+      this.player.posterImage.hide()
     }
 
     const newVideoFile = this.videoFiles.find(f => f.resolution.id === resolutionId)
@@ -195,6 +203,7 @@ class WebTorrentPlugin extends Plugin {
       delay,
       seek: currentTime + (delay / 1000)
     }
+
     this.updateVideoFile(newVideoFile, options)
   }
 
@@ -224,6 +233,10 @@ class WebTorrentPlugin extends Plugin {
     return this.torrent
   }
 
+  getCurrentVideoFile () {
+    return this.currentVideoFile
+  }
+
   private addTorrent (
     magnetOrTorrentUrl: string,
     previousVideoFile: VideoFile,
@@ -234,9 +247,12 @@ class WebTorrentPlugin extends Plugin {
 
     const oldTorrent = this.torrent
     const torrentOptions = {
-      store: (chunkLength: number, storeOpts: any) => new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
-        max: 100
-      })
+      // Don't use arrow function: it breaks webtorrent (that uses `new` keyword)
+      store: function (chunkLength: number, storeOpts: any) {
+        return new CacheChunkStore(new PeertubeChunkStore(chunkLength, storeOpts), {
+          max: 100
+        })
+      }
     }
 
     this.torrent = this.webtorrent.add(magnetOrTorrentUrl, torrentOptions, torrent => {
@@ -324,6 +340,7 @@ class WebTorrentPlugin extends Plugin {
                           this.player.posterImage.show()
                           this.player.removeClass('vjs-has-autoplay')
                           this.player.removeClass('vjs-has-big-play-button-clicked')
+                          this.player.removeClass('vjs-playing-audio-only-content')
 
                           return done()
                         })

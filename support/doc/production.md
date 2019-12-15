@@ -195,6 +195,27 @@ Run:
 $ sudo service peertube start
 ```
 
+### OpenRC
+
+If your OS uses OpenRC, copy the service script:
+
+```
+$ sudo cp /var/www/peertube/peertube-latest/support/init.d/peertube /etc/init.d/
+```
+
+If you want to start PeerTube on boot:
+
+```
+$ sudo rc-update add peertube default
+```
+
+Run and print last logs:
+
+```
+$ sudo /etc/init.d/peertube start
+$ tail -f /var/log/peertube/peertube.log
+```
+
 ### Administrator
 
 The administrator password is automatically generated and can be found in the

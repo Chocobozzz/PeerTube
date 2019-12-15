@@ -7,6 +7,8 @@ class ActorFollowScoreCache {
 
   private static instance: ActorFollowScoreCache
   private pendingFollowsScore: { [ url: string ]: number } = {}
+  private pendingBadServer = new Set<number>()
+  private pendingGoodServer = new Set<number>()
 
   private constructor () {}
 
@@ -32,7 +34,31 @@ class ActorFollowScoreCache {
     }
   }
 
-  getPendingFollowsScoreCopy () {
+  addBadServerId (serverId: number) {
+    this.pendingBadServer.add(serverId)
+  }
+
+  getBadFollowingServerIds () {
+    return Array.from(this.pendingBadServer)
+  }
+
+  clearBadFollowingServerIds () {
+    this.pendingBadServer = new Set<number>()
+  }
+
+  addGoodServerId (serverId: number) {
+    this.pendingGoodServer.add(serverId)
+  }
+
+  getGoodFollowingServerIds () {
+    return Array.from(this.pendingGoodServer)
+  }
+
+  clearGoodFollowingServerIds () {
+    this.pendingGoodServer = new Set<number>()
+  }
+
+  getPendingFollowsScore () {
     return this.pendingFollowsScore
   }
 

@@ -19,15 +19,18 @@ import {
   followingSortValidator,
   followValidator,
   getFollowerValidator,
-  removeFollowingValidator
+  removeFollowingValidator,
+  listFollowsValidator
 } from '../../../middlewares/validators'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
 import { removeRedundancyOf } from '../../../lib/redundancy'
 import { sequelizeTypescript } from '../../../initializers/database'
+import { autoFollowBackIfNeeded } from '../../../lib/activitypub/follow'
 
 const serverFollowsRouter = express.Router()
 serverFollowsRouter.get('/following',
+  listFollowsValidator,
   paginationValidator,
   followingSortValidator,
   setDefaultSort,
@@ -51,6 +54,7 @@ serverFollowsRouter.delete('/following/:host',
 )
 
 serverFollowsRouter.get('/followers',
+  listFollowsValidator,
   paginationValidator,
   followersSortValidator,
   setDefaultSort,
@@ -91,26 +95,30 @@ export {
 
 async function listFollowing (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowingForApi(
-    serverActor.id,
-    req.query.start,
-    req.query.count,
-    req.query.sort,
-    req.query.search
-  )
+  const resultList = await ActorFollowModel.listFollowingForApi({
+    id: serverActor.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    actorType: req.query.actorType,
+    state: req.query.state
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
 
 async function listFollowers (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await ActorFollowModel.listFollowersForApi(
-    serverActor.id,
-    req.query.start,
-    req.query.count,
-    req.query.sort,
-    req.query.search
-  )
+  const resultList = await ActorFollowModel.listFollowersForApi({
+    actorId: serverActor.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    actorType: req.query.actorType,
+    state: req.query.state
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -171,6 +179,8 @@ async function acceptFollower (req: express.Request, res: express.Response) {
 
   follow.state = 'accepted'
   await follow.save()
+
+  await autoFollowBackIfNeeded(follow)
 
   return res.status(204).end()
 }

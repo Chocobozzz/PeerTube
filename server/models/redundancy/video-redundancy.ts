@@ -30,6 +30,7 @@ import * as Bluebird from 'bluebird'
 import { col, FindOptions, fn, literal, Op, Transaction } from 'sequelize'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
 import { CONFIG } from '../../initializers/config'
+import { MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/typings/models'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'
@@ -166,7 +167,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return undefined
   }
 
-  static async loadLocalByFileId (videoFileId: number) {
+  static async loadLocalByFileId (videoFileId: number): Promise<MVideoRedundancyVideo> {
     const actor = await getServerActor()
 
     const query = {
@@ -179,7 +180,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number) {
+  static async loadLocalByStreamingPlaylistId (videoStreamingPlaylistId: number): Promise<MVideoRedundancyVideo> {
     const actor = await getServerActor()
 
     const query = {
@@ -192,7 +193,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.scope(ScopeNames.WITH_VIDEO).findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MVideoRedundancy> {
     const query = {
       where: {
         url
@@ -237,6 +238,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async getVideoSample (p: Bluebird<VideoModel[]>) {
     const rows = await p
+    if (rows.length === 0) return undefined
+
     const ids = rows.map(r => r.id)
     const id = sample(ids)
 
@@ -304,7 +307,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return VideoRedundancyModel.getVideoSample(VideoModel.unscoped().findAll(query))
   }
 
-  static async loadOldestLocalThatAlreadyExpired (strategy: VideoRedundancyStrategy, expiresAfterMs: number) {
+  static async loadOldestLocalExpired (strategy: VideoRedundancyStrategy, expiresAfterMs: number): Promise<MVideoRedundancyVideo> {
     const expiredDate = new Date()
     expiredDate.setMilliseconds(expiredDate.getMilliseconds() - expiresAfterMs)
 
@@ -325,23 +328,46 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
   static async getTotalDuplicated (strategy: VideoRedundancyStrategy) {
     const actor = await getServerActor()
+    const redundancyInclude = {
+      attributes: [],
+      model: VideoRedundancyModel,
+      required: true,
+      where: {
+        actorId: actor.id,
+        strategy
+      }
+    }
 
-    const query: FindOptions = {
+    const queryFiles: FindOptions = {
+      include: [ redundancyInclude ]
+    }
+
+    const queryStreamingPlaylists: FindOptions = {
       include: [
         {
           attributes: [],
-          model: VideoRedundancyModel,
+          model: VideoModel.unscoped(),
           required: true,
-          where: {
-            actorId: actor.id,
-            strategy
-          }
+          include: [
+            {
+              required: true,
+              attributes: [],
+              model: VideoStreamingPlaylistModel.unscoped(),
+              include: [
+                redundancyInclude
+              ]
+            }
+          ]
         }
       ]
     }
 
-    return VideoFileModel.aggregate('size', 'SUM', query)
-      .then(result => parseAggregateResult(result))
+    return Promise.all([
+      VideoFileModel.aggregate('size', 'SUM', queryFiles),
+      VideoFileModel.aggregate('size', 'SUM', queryStreamingPlaylists)
+    ]).then(([ r1, r2 ]) => {
+      return parseAggregateResult(r1) + parseAggregateResult(r2)
+    })
   }
 
   static async listLocalExpired () {
@@ -462,7 +488,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     return !!this.strategy
   }
 
-  toActivityPubObject (): CacheFileObject {
+  toActivityPubObject (this: MVideoRedundancyAP): CacheFileObject {
     if (this.VideoStreamingPlaylist) {
       return {
         id: this.url,
@@ -471,7 +497,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
         expires: this.expiresOn.toISOString(),
         url: {
           type: 'Link',
-          mimeType: 'application/x-mpegURL',
           mediaType: 'application/x-mpegURL',
           href: this.fileUrl
         }
@@ -485,7 +510,6 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       expires: this.expiresOn.toISOString(),
       url: {
         type: 'Link',
-        mimeType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,

@@ -7,7 +7,6 @@ import {
   setDefaultPagination,
   userHistoryRemoveValidator
 } from '../../../middlewares'
-import { UserModel } from '../../../models/account/user'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
 import { sequelizeTypescript } from '../../../initializers'

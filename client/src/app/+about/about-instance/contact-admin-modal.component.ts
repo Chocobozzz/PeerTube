@@ -13,7 +13,7 @@ import { InstanceService } from '@app/shared/instance/instance.service'
   styleUrls: [ './contact-admin-modal.component.scss' ]
 })
 export class ContactAdminModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal') modal: NgbModal
+  @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string
 

@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import {
   version,
@@ -18,13 +21,10 @@ program
   .command('get-access-token', 'get a peertube access token', { noHelp: true }).alias('token')
   .command('watch', 'watch a video in the terminal ✩°｡⋆').alias('w')
   .command('repl', 'initiate a REPL to access internals')
+  .command('plugins [action]', 'manage instance plugins/themes').alias('p')
 
 /* Not Yet Implemented */
 program
-  .command('plugins [action]',
-           'manage plugins on a local instance',
-           { noHelp: true } as program.CommandOptions
-          ).alias('p')
   .command('diagnostic [action]',
            'like couple therapy, but for your instance',
            { noHelp: true } as program.CommandOptions

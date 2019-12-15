@@ -7,8 +7,9 @@ Interested in contributing? Awesome!
   * [Translate](#translate)
   * [Give your feedback](#give-your-feedback)
   * [Write documentation](#write-documentation)
-  * [Develop](#develop)
   * [Improve the website](#improve-the-website)
+  * [Develop](#develop)
+  * [Write a plugin or a theme](#plugins--themes)
 
 ## Translate
 
@@ -57,7 +58,7 @@ First, you should use a server or PC with at least 4GB of RAM. Less RAM may lead
 
 Make sure that you have followed
 [the steps](/support/doc/dependencies.md)
-to install the dependencies.
+to install the dependencies. You'll need to install **NodeJS 10**.
 
 Fork the github repository,
 and then clone the sources and install node modules:
@@ -181,13 +182,13 @@ Then, we can create the databases (if they don't already exist):
 
 ```
 $ sudo -u postgres createuser you_username --createdb --superuser
-$ createdb -O peertube peertube_test{1,2,3,4,5,6}
+$ npm run clean:server:test
 ```
 
 Build the application and run the unit/integration tests:
 
 ```
-$ npm run build
+$ npm run build -- --light
 $ npm test
 ```
 
@@ -199,3 +200,7 @@ $ npm run mocha -- --exit --require ts-node/register/type-check --bail server/te
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
+
+## Plugins & Themes
+
+See the dedicated documentation: https://docs.joinpeertube.org/#/contribute-plugins

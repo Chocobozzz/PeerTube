@@ -19,7 +19,7 @@ import {
 import * as validator from 'validator'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, loadLanguages, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
-import { dateIsValid, webtorrentAdd } from '../miscs/miscs'
+import { dateIsValid, webtorrentAdd, buildServerDirectory } from '../miscs/miscs'
 
 loadLanguages()
 
@@ -308,10 +308,8 @@ async function checkVideoFilesWereRemoved (
     join('redundancy', 'hls')
   ]
 ) {
-  const testDirectory = 'test' + serverNumber
-
   for (const directory of directories) {
-    const directoryPath = join(root(), testDirectory, directory)
+    const directoryPath = buildServerDirectory(serverNumber, directory)
 
     const directoryExists = await pathExists(directoryPath)
     if (directoryExists === false) continue
@@ -379,7 +377,8 @@ async function uploadVideo (url: string, accessToken: string, videoAttributesArg
     req.field('licence', attributes.licence.toString())
   }
 
-  for (let i = 0; i < attributes.tags.length; i++) {
+  const tags = attributes.tags || []
+  for (let i = 0; i < tags.length; i++) {
     req.field('tags[' + i + ']', attributes.tags[i])
   }
 
@@ -574,7 +573,6 @@ async function completeVideoCheck (
     // Transcoding enabled: extension will always be .mp4
     if (attributes.files.length > 1) extension = '.mp4'
 
-    const magnetUri = file.magnetUri
     expect(file.magnetUri).to.have.lengthOf.above(2)
     expect(file.torrentUrl).to.equal(`http://${attributes.account.host}/static/torrents/${videoDetails.uuid}-${file.resolution.id}.torrent`)
     expect(file.fileUrl).to.equal(`http://${attributes.account.host}/static/webseed/${videoDetails.uuid}-${file.resolution.id}${extension}`)
@@ -595,7 +593,7 @@ async function completeVideoCheck (
       await testImage(url, attributes.previewfile, videoDetails.previewPath)
     }
 
-    const torrent = await webtorrentAdd(magnetUri, true)
+    const torrent = await webtorrentAdd(file.magnetUri, true)
     expect(torrent.files).to.be.an('array')
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')

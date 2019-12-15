@@ -14,6 +14,18 @@ const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
 const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsButton extends Button {
+  playerComponent = videojs.Player
+  dialog: any
+  dialogEl: any
+  menu: any
+  panel: any
+  panelChild: any
+
+  addSettingsItemHandler: Function
+  disposeSettingsItemHandler: Function
+  playerClickHandler: Function
+  userInactiveHandler: Function
+
   constructor (player: videojs.Player, options: any) {
     super(player, options)
 
@@ -110,6 +122,8 @@ class SettingsButton extends Button {
   }
 
   showDialog () {
+    this.player_.peertube().onMenuOpen()
+
     this.menu.el_.style.opacity = '1'
     this.dialog.show()
 
@@ -117,6 +131,8 @@ class SettingsButton extends Button {
   }
 
   hideDialog () {
+    this.player_.peertube().onMenuClosed()
+
     this.dialog.hide()
     this.setDialogSize(this.getComponentSize(this.menu))
     this.menu.el_.style.opacity = '1'

@@ -45,7 +45,7 @@ $play-overlay-width: 18px;
     width: inherit;
     height: inherit;
     opacity: 0;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.3);
 
     &, .icon {
       transition: all $play-overlay-transition;
@@ -95,7 +95,7 @@ $play-overlay-width: 18px;
 }
 
 @mixin thumbnail-size-component ($width, $height) {
-  /deep/ .video-thumbnail {
+  ::ng-deep .video-thumbnail {
     width: $width;
     height: $height;
   }
@@ -110,7 +110,7 @@ $play-overlay-width: 18px;
 @mixin video-miniature-small-screen {
   text-align: center;
 
-  /deep/ .video-miniature {
+  ::ng-deep .video-miniature {
     padding-right: 0;
     height: auto;
     width: 100%;
@@ -140,12 +140,12 @@ $play-overlay-width: 18px;
 }
 
 @mixin miniature-rows {
-  max-height: 540px; // 2 rows max
-  overflow: hidden;
-  padding-top: 10px;
-
   &:first-child {
     padding-top: 30px;
+
+    .section-title {
+      border-top: none !important;
+    }
   }
 
   my-video-miniature {
@@ -155,9 +155,11 @@ $play-overlay-width: 18px;
   .section-title {
     font-size: 24px;
     font-weight: $font-semibold;
-    margin-bottom: 30px;
+    padding-top: 15px;
+    margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
+    border-top: 1px solid $separator-border-color;
 
     a {
       &:hover, &:focus:not(.focus-visible), &:active {
@@ -192,6 +194,18 @@ $play-overlay-width: 18px;
         top: 2px;
       }
     }
+  }
+
+  .show-more {
+    position: relative;
+    top: -5px;
+    display: inline-block;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: $grey-foreground-color;
+    margin-bottom: 10px;
+    font-weight: $font-semibold;
+    text-decoration: none;
   }
 
   @media screen and (max-width: $mobile-view) {

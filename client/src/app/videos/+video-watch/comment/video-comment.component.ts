@@ -4,7 +4,7 @@ import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/v
 import { AuthService } from '../../../core/auth'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
-import { HtmlRendererService } from '@app/shared/renderer'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-comment',
@@ -28,7 +28,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   newParentComments: VideoComment[] = []
 
   constructor (
-    private htmlRenderer: HtmlRendererService,
+    private markdownService: MarkdownService,
     private authService: AuthService
   ) {}
 
@@ -78,7 +78,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   isRemovableByUser () {
-    return this.isUserLoggedIn() &&
+    return this.comment.account && this.isUserLoggedIn() &&
       (
         this.user.account.id === this.comment.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
@@ -86,7 +86,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   private async init () {
-    this.sanitizedCommentHTML = await this.htmlRenderer.toSafeHtml(this.comment.text)
+    this.sanitizedCommentHTML = await this.markdownService.textMarkdownToHTML(this.comment.text, true)
 
     this.newParentComments = this.parentComments.concat([ this.comment ])
   }

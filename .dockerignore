@@ -1,5 +1,4 @@
 *.swp
-*.md
 .git
 .github
 support/doc

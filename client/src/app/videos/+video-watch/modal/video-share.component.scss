@@ -1,6 +1,18 @@
 @import '_mixins';
 @import '_variables';
 
+my-input-readonly-copy {
+  width: 100%;
+}
+
+.title-page.title-page-single {
+  margin-top: 0;
+}
+
+.playlist {
+  margin-bottom: 50px;
+}
+
 .peertube-select-container {
   @include peertube-select-container(200px);
 }
@@ -23,10 +35,6 @@
 
 .alert {
   margin-top: 20px;
-}
-
-input.readonly {
-  font-size: 15px;
 }
 
 .filters {

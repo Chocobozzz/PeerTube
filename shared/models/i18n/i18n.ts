@@ -8,16 +8,19 @@ export const I18N_LOCALES = {
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',
   'eo': 'Esperanto',
+  'el-GR': 'ελληνικά',
   'de-DE': 'Deutsch',
   'it-IT': 'Italiano',
   'nl-NL': 'Nederlands',
   'es-ES': 'Español',
   'oc': 'Occitan',
+  'gd': 'Gàidhlig',
   'zh-Hant-TW': '繁體中文（台灣）',
   'pt-BR': 'Português (Brasil)',
   'pt-PT': 'Português (Portugal)',
   'sv-SE': 'svenska',
   'pl-PL': 'Polski',
+  'fi-FI': 'suomi',
   'ru-RU': 'русский',
   'zh-Hans-CN': '简体中文（中国）'
 }
@@ -31,11 +34,14 @@ const I18N_LOCALE_ALIAS = {
   'de': 'de-DE',
   'es': 'es-ES',
   'pt': 'pt-PT',
+  'fi': 'fi-FI',
   'sv': 'sv-SE',
   'pl': 'pl-PL',
   'ru': 'ru-RU',
   'nl': 'nl-NL',
-  'zh': 'zh-Hans-CN'
+  'zh': 'zh-Hans-CN',
+  'zh-CN': 'zh-Hans-CN',
+  'zh-TW': 'zh-Hant-TW'
 }
 
 export const POSSIBLE_LOCALES = Object.keys(I18N_LOCALES)
@@ -77,7 +83,5 @@ export function getShortLocale (locale: string) {
 }
 
 export function buildFileLocale (locale: string) {
-  const completeLocale = getCompleteLocale(locale)
-
-  return completeLocale.replace(/-/g, '_')
+  return getCompleteLocale(locale)
 }

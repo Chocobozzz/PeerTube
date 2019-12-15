@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { values } from 'lodash'
+import { values, difference } from 'lodash'
 import {
   AfterCreate,
   AfterDestroy,
@@ -21,13 +21,21 @@ import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
-import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES } from '../../initializers/constants'
+import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { getSort } from '../utils'
+import { createSafeIn, getSort, getFollowsSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
-import { IncludeOptions, Op, Transaction, QueryTypes } from 'sequelize'
+import { IncludeOptions, Op, QueryTypes, Transaction, WhereOptions } from 'sequelize'
+import {
+  MActorFollowActorsDefault,
+  MActorFollowActorsDefaultSubscription,
+  MActorFollowFollowingHost,
+  MActorFollowFormattable,
+  MActorFollowSubscriptions
+} from '@server/typings/models'
+import { ActivityPubActorType } from '@shared/models'
 
 @Table({
   tableName: 'actorFollow',
@@ -113,6 +121,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     ])
   }
 
+  static removeFollowsOf (actorId: number, t?: Transaction) {
+    const query = {
+      where: {
+        [Op.or]: [
+          {
+            actorId
+          },
+          {
+            targetActorId: actorId
+          }
+        ]
+      },
+      transaction: t
+    }
+
+    return ActorFollowModel.destroy(query)
+  }
+
   // Remove actor follows with a score of 0 (too many requests where they were unreachable)
   static async removeBadActorFollows () {
     const actorFollows = await ActorFollowModel.listBadActorFollows()
@@ -125,7 +151,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
   }
 
-  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction) {
+  static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Bluebird<MActorFollowActorsDefault> {
     const query = {
       where: {
         actorId,
@@ -149,7 +175,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findOne(query)
   }
 
-  static loadByActorAndTargetNameAndHostForAPI (actorId: number, targetName: string, targetHost: string, t?: Transaction) {
+  static loadByActorAndTargetNameAndHostForAPI (
+    actorId: number,
+    targetName: string,
+    targetHost: string,
+    t?: Transaction
+  ): Bluebird<MActorFollowActorsDefaultSubscription> {
     const actorFollowingPartInclude: IncludeOptions = {
       model: ActorModel,
       required: true,
@@ -202,7 +233,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]) {
+  static listSubscribedIn (actorId: number, targets: { name: string, host?: string }[]): Bluebird<MActorFollowFollowingHost[]> {
     const whereTab = targets
       .map(t => {
         if (t.host) {
@@ -262,12 +293,39 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  static listFollowingForApi (id: number, start: number, count: number, sort: string, search?: string) {
+  static listFollowingForApi (options: {
+    id: number,
+    start: number,
+    count: number,
+    sort: string,
+    state?: FollowState,
+    actorType?: ActivityPubActorType,
+    search?: string
+  }) {
+    const { id, start, count, sort, search, state, actorType } = options
+
+    const followWhere = state ? { state } : {}
+    const followingWhere: WhereOptions = {}
+    const followingServerWhere: WhereOptions = {}
+
+    if (search) {
+      Object.assign(followingServerWhere, {
+        host: {
+          [ Op.iLike ]: '%' + search + '%'
+        }
+      })
+    }
+
+    if (actorType) {
+      Object.assign(followingWhere, { type: actorType })
+    }
+
     const query = {
       distinct: true,
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getFollowsSort(sort),
+      where: followWhere,
       include: [
         {
           model: ActorModel,
@@ -281,22 +339,19 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
           model: ActorModel,
           as: 'ActorFollowing',
           required: true,
+          where: followingWhere,
           include: [
             {
               model: ServerModel,
               required: true,
-              where: search ? {
-                host: {
-                  [Op.iLike]: '%' + search + '%'
-                }
-              } : undefined
+              where: followingServerWhere
             }
           ]
         }
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
       .then(({ rows, count }) => {
         return {
           data: rows,
@@ -305,26 +360,50 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       })
   }
 
-  static listFollowersForApi (actorId: number, start: number, count: number, sort: string, search?: string) {
+  static listFollowersForApi (options: {
+    actorId: number,
+    start: number,
+    count: number,
+    sort: string,
+    state?: FollowState,
+    actorType?: ActivityPubActorType,
+    search?: string
+  }) {
+    const { actorId, start, count, sort, search, state, actorType } = options
+
+    const followWhere = state ? { state } : {}
+    const followerWhere: WhereOptions = {}
+    const followerServerWhere: WhereOptions = {}
+
+    if (search) {
+      Object.assign(followerServerWhere, {
+        host: {
+          [ Op.iLike ]: '%' + search + '%'
+        }
+      })
+    }
+
+    if (actorType) {
+      Object.assign(followerWhere, { type: actorType })
+    }
+
     const query = {
       distinct: true,
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getFollowsSort(sort),
+      where: followWhere,
       include: [
         {
           model: ActorModel,
           required: true,
           as: 'ActorFollower',
+          where: followerWhere,
           include: [
             {
               model: ServerModel,
               required: true,
-              where: search ? {
-                host: {
-                  [ Op.iLike ]: '%' + search + '%'
-                }
-              } : undefined
+              where: followerServerWhere
             }
           ]
         },
@@ -339,7 +418,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowActorsDefault>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows,
@@ -396,13 +475,52 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       ]
     }
 
-    return ActorFollowModel.findAndCountAll(query)
+    return ActorFollowModel.findAndCountAll<MActorFollowSubscriptions>(query)
                            .then(({ rows, count }) => {
                              return {
                                data: rows.map(r => r.ActorFollowing.VideoChannel),
                                total: count
                              }
                            })
+  }
+
+  static async keepUnfollowedInstance (hosts: string[]) {
+    const followerId = (await getServerActor()).id
+
+    const query = {
+      attributes: [ 'id' ],
+      where: {
+        actorId: followerId
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          as: 'ActorFollowing',
+          where: {
+            preferredUsername: SERVER_ACTOR_NAME
+          },
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: true,
+              where: {
+                host: {
+                  [Op.in]: hosts
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    const res = await ActorFollowModel.findAll(query)
+    const followedHosts = res.map(row => row.ActorFollowing.Server.host)
+
+    return difference(hosts, followedHosts)
   }
 
   static listAcceptedFollowerUrlsForAP (actorIds: number[], t: Transaction, start?: number, count?: number) {
@@ -446,12 +564,34 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
   }
 
-  static updateFollowScore (inboxUrl: string, value: number, t?: Transaction) {
+  static updateScore (inboxUrl: string, value: number, t?: Transaction) {
     const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
       'WHERE id IN (' +
         'SELECT "actorFollow"."id" FROM "actorFollow" ' +
         'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."actorId" ' +
         `WHERE "actor"."inboxUrl" = '${inboxUrl}' OR "actor"."sharedInboxUrl" = '${inboxUrl}'` +
+      ')'
+
+    const options = {
+      type: QueryTypes.BULKUPDATE,
+      transaction: t
+    }
+
+    return ActorFollowModel.sequelize.query(query, options)
+  }
+
+  static async updateScoreByFollowingServers (serverIds: number[], value: number, t?: Transaction) {
+    if (serverIds.length === 0) return
+
+    const me = await getServerActor()
+    const serverIdsString = createSafeIn(ActorFollowModel, serverIds)
+
+    const query = `UPDATE "actorFollow" SET "score" = LEAST("score" + ${value}, ${ACTOR_FOLLOW_SCORE.MAX}) ` +
+      'WHERE id IN (' +
+        'SELECT "actorFollow"."id" FROM "actorFollow" ' +
+        'INNER JOIN "actor" ON "actor"."id" = "actorFollow"."targetActorId" ' +
+        `WHERE "actorFollow"."actorId" = ${me.Account.actorId} ` + // I'm the follower
+        `AND "actor"."serverId" IN (${serverIdsString})` + // Criteria on followings
       ')'
 
     const options = {
@@ -483,8 +623,8 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const selections: string[] = []
-    if (distinct === true) selections.push('DISTINCT("Follows"."' + columnUrl + '") AS "url"')
-    else selections.push('"Follows"."' + columnUrl + '" AS "url"')
+    if (distinct === true) selections.push(`DISTINCT("Follows"."${columnUrl}") AS "selectionUrl"`)
+    else selections.push(`"Follows"."${columnUrl}" AS "selectionUrl"`)
 
     selections.push('COUNT(*) AS "total"')
 
@@ -494,7 +634,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +
         'INNER JOIN "actorFollow" ON "actorFollow"."' + firstJoin + '" = "actor"."id" ' +
         'INNER JOIN "actor" AS "Follows" ON "actorFollow"."' + secondJoin + '" = "Follows"."id" ' +
-        'WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = \'accepted\' '
+        `WHERE "actor"."id" = ANY ($actorIds) AND "actorFollow"."state" = 'accepted' AND "Follows"."${columnUrl}" IS NOT NULL `
 
       if (count !== undefined) query += 'LIMIT ' + count
       if (start !== undefined) query += ' OFFSET ' + start
@@ -508,7 +648,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     }
 
     const [ followers, [ dataTotal ] ] = await Promise.all(tasks)
-    const urls: string[] = followers.map(f => f.url)
+    const urls: string[] = followers.map(f => f.selectionUrl)
 
     return {
       data: urls,
@@ -529,7 +669,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     return ActorFollowModel.findAll(query)
   }
 
-  toFormattedJSON (): ActorFollow {
+  toFormattedJSON (this: MActorFollowFormattable): ActorFollow {
     const follower = this.ActorFollower.toFormattedJSON()
     const following = this.ActorFollowing.toFormattedJSON()
 

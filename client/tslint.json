@@ -20,6 +20,14 @@
         "private-instance-method"
         ]}
     ],
+    "variable-name": [
+      true,
+      "ban-keywords",
+      "check-format",
+      "allow-leading-underscore",
+      "allow-pascal-case",
+      "allow-trailing-underscore"
+    ],
 
     "no-shadowed-variable": false,
     "no-bitwise": false,

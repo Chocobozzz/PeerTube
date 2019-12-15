@@ -13,7 +13,7 @@ import { VideoAbuse } from '../../../../../../shared/models/videos'
   styleUrls: [ './moderation-comment-modal.component.scss' ]
 })
 export class ModerationCommentModalComponent extends FormReactive implements OnInit {
-  @ViewChild('modal') modal: NgbModal
+  @ViewChild('modal', { static: true }) modal: NgbModal
   @Output() commentUpdated = new EventEmitter<string>()
 
   private abuseToComment: VideoAbuse

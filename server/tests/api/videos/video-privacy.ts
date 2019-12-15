@@ -16,14 +16,22 @@ import { userLogin } from '../../../../shared/extra-utils/users/login'
 import { createUser } from '../../../../shared/extra-utils/users/users'
 import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { Video } from '@shared/models'
 
 const expect = chai.expect
 
 describe('Test video privacy', function () {
   let servers: ServerInfo[] = []
+  let anotherUserToken: string
+
   let privateVideoId: number
   let privateVideoUUID: string
+
+  let internalVideoId: number
+  let internalVideoUUID: string
+
   let unlistedVideoUUID: string
+
   let now: number
 
   before(async function () {
@@ -39,39 +47,63 @@ describe('Test video privacy', function () {
     await doubleFollow(servers[0], servers[1])
   })
 
-  it('Should upload a private video on server 1', async function () {
+  it('Should upload a private and internal videos on server 1', async function () {
     this.timeout(10000)
 
-    const attributes = {
-      privacy: VideoPrivacy.PRIVATE
+    for (const privacy of [ VideoPrivacy.PRIVATE, VideoPrivacy.INTERNAL ]) {
+      const attributes = { privacy }
+      await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
     }
-    await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
 
     await waitJobs(servers)
   })
 
-  it('Should not have this private video on server 2', async function () {
+  it('Should not have these private and internal videos on server 2', async function () {
     const res = await getVideosList(servers[1].url)
 
     expect(res.body.total).to.equal(0)
     expect(res.body.data).to.have.lengthOf(0)
   })
 
-  it('Should list my (private) videos', async function () {
-    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 1)
+  it('Should not list the private and internal videos for an unauthenticated user on server 1', async function () {
+    const res = await getVideosList(servers[0].url)
+
+    expect(res.body.total).to.equal(0)
+    expect(res.body.data).to.have.lengthOf(0)
+  })
+
+  it('Should not list the private video and list the internal video for an authenticated user on server 1', async function () {
+    const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
 
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.have.lengthOf(1)
 
-    privateVideoId = res.body.data[0].id
-    privateVideoUUID = res.body.data[0].uuid
+    expect(res.body.data[0].privacy.id).to.equal(VideoPrivacy.INTERNAL)
   })
 
-  it('Should not be able to watch this video with non authenticated user', async function () {
+  it('Should list my (private and internal) videos', async function () {
+    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 10)
+
+    expect(res.body.total).to.equal(2)
+    expect(res.body.data).to.have.lengthOf(2)
+
+    const videos: Video[] = res.body.data
+
+    const privateVideo = videos.find(v => v.privacy.id === VideoPrivacy.PRIVATE)
+    privateVideoId = privateVideo.id
+    privateVideoUUID = privateVideo.uuid
+
+    const internalVideo = videos.find(v => v.privacy.id === VideoPrivacy.INTERNAL)
+    internalVideoId = internalVideo.id
+    internalVideoUUID = internalVideo.uuid
+  })
+
+  it('Should not be able to watch the private/internal video with non authenticated user', async function () {
     await getVideo(servers[0].url, privateVideoUUID, 401)
+    await getVideo(servers[0].url, internalVideoUUID, 401)
   })
 
-  it('Should not be able to watch this private video with another user', async function () {
+  it('Should not be able to watch the private video with another user', async function () {
     this.timeout(10000)
 
     const user = {
@@ -80,12 +112,16 @@ describe('Test video privacy', function () {
     }
     await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
 
-    const token = await userLogin(servers[0], user)
-    await getVideoWithToken(servers[0].url, token, privateVideoUUID, 403)
+    anotherUserToken = await userLogin(servers[0], user)
+    await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, 403)
   })
 
-  it('Should be able to watch this video with the correct user', async function () {
-    await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID)
+  it('Should be able to watch the internal video with another user', async function () {
+    await getVideoWithToken(servers[0].url, anotherUserToken, internalVideoUUID, 200)
+  })
+
+  it('Should be able to watch the private video with the correct user', async function () {
+    await getVideoWithToken(servers[0].url, servers[0].accessToken, privateVideoUUID, 200)
   })
 
   it('Should upload an unlisted video on server 2', async function () {
@@ -127,16 +163,27 @@ describe('Test video privacy', function () {
     }
   })
 
-  it('Should update the private video to public on server 1', async function () {
+  it('Should update the private and internal videos to public on server 1', async function () {
     this.timeout(10000)
 
-    const attribute = {
-      name: 'super video public',
-      privacy: VideoPrivacy.PUBLIC
+    now = Date.now()
+
+    {
+      const attribute = {
+        name: 'private video becomes public',
+        privacy: VideoPrivacy.PUBLIC
+      }
+
+      await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, privateVideoId, attribute)
     }
 
-    now = Date.now()
-    await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, attribute)
+    {
+      const attribute = {
+        name: 'internal video becomes public',
+        privacy: VideoPrivacy.PUBLIC
+      }
+      await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, internalVideoId, attribute)
+    }
 
     await waitJobs(servers)
   })
@@ -144,18 +191,30 @@ describe('Test video privacy', function () {
   it('Should have this new public video listed on server 1 and 2', async function () {
     for (const server of servers) {
       const res = await getVideosList(server.url)
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data).to.have.lengthOf(2)
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].name).to.equal('super video public')
-      expect(new Date(res.body.data[0].publishedAt).getTime()).to.be.at.least(now)
+      const videos: Video[] = res.body.data
+      const privateVideo = videos.find(v => v.name === 'private video becomes public')
+      const internalVideo = videos.find(v => v.name === 'internal video becomes public')
+
+      expect(privateVideo).to.not.be.undefined
+      expect(internalVideo).to.not.be.undefined
+
+      expect(new Date(privateVideo.publishedAt).getTime()).to.be.at.least(now)
+      // We don't change the publish date of internal videos
+      expect(new Date(internalVideo.publishedAt).getTime()).to.be.below(now)
+
+      expect(privateVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
+      expect(internalVideo.privacy.id).to.equal(VideoPrivacy.PUBLIC)
     }
   })
 
-  it('Should set this new video as private', async function () {
+  it('Should set these videos as private and internal', async function () {
     this.timeout(10000)
 
-    await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, { privacy: VideoPrivacy.PRIVATE })
+    await updateVideo(servers[0].url, servers[0].accessToken, internalVideoId, { privacy: VideoPrivacy.PRIVATE })
+    await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, { privacy: VideoPrivacy.INTERNAL })
 
     await waitJobs(servers)
 
@@ -168,10 +227,19 @@ describe('Test video privacy', function () {
 
     {
       const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 5)
+      const videos = res.body.data
 
-      expect(res.body.total).to.equal(1)
-      expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[0].name).to.equal('super video public')
+      expect(res.body.total).to.equal(2)
+      expect(videos).to.have.lengthOf(2)
+
+      const privateVideo = videos.find(v => v.name === 'private video becomes public')
+      const internalVideo = videos.find(v => v.name === 'internal video becomes public')
+
+      expect(privateVideo).to.not.be.undefined
+      expect(internalVideo).to.not.be.undefined
+
+      expect(privateVideo.privacy.id).to.equal(VideoPrivacy.INTERNAL)
+      expect(internalVideo.privacy.id).to.equal(VideoPrivacy.PRIVATE)
     }
   })
 

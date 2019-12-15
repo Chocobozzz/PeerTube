@@ -4,38 +4,44 @@ import { logger } from '../../../helpers/logger'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../job-queue'
-import { VideoModel } from '../../../models/video/video'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 import { getServerActor } from '../../../helpers/utils'
+import { afterCommitIfTransaction } from '../../../helpers/database-utils'
+import { MActorWithInboxes, MActor, MActorId, MActorLight, MVideo, MVideoAccountLight } from '../../../typings/models'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
-  byActor: ActorModel,
-  video: VideoModel,
+  byActor: MActorLight,
+  video: MVideoAccountLight,
   transaction?: Transaction
 }) {
-  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(options.video, options.transaction)
+  const { byActor, video, transaction } = options
+
+  const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
 
   // Send to origin
-  if (options.video.isOwned() === false) {
-    const audience = getRemoteVideoAudience(options.video, actorsInvolvedInVideo)
+  if (video.isOwned() === false) {
+    const audience = getRemoteVideoAudience(video, actorsInvolvedInVideo)
     const activity = activityBuilder(audience)
 
-    return unicastTo(activity, options.byActor, options.video.VideoChannel.Account.Actor.sharedInboxUrl)
+    return afterCommitIfTransaction(transaction, () => {
+      return unicastTo(activity, byActor, video.VideoChannel.Account.Actor.getSharedInbox())
+    })
   }
 
   // Send to followers
   const audience = getAudienceFromFollowersOf(actorsInvolvedInVideo)
   const activity = activityBuilder(audience)
 
-  const actorsException = [ options.byActor ]
-  return broadcastToFollowers(activity, options.byActor, actorsInvolvedInVideo, options.transaction, actorsException)
+  const actorsException = [ byActor ]
+
+  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, transaction, actorsException)
 }
 
 async function forwardVideoRelatedActivity (
   activity: Activity,
   t: Transaction,
-  followersException: ActorModel[] = [],
-  video: VideoModel
+  followersException: MActorWithInboxes[] = [],
+  video: MVideo
 ) {
   // Mastodon does not add our announces in audience, so we forward to them manually
   const additionalActors = await getActorsInvolvedInVideo(video, t)
@@ -47,7 +53,7 @@ async function forwardVideoRelatedActivity (
 async function forwardActivity (
   activity: Activity,
   t: Transaction,
-  followersException: ActorModel[] = [],
+  followersException: MActorWithInboxes[] = [],
   additionalFollowerUrls: string[] = []
 ) {
   logger.info('Forwarding activity %s.', activity.id)
@@ -76,31 +82,33 @@ async function forwardActivity (
     uris,
     body: activity
   }
-  return JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
+  return afterCommitIfTransaction(t, () => JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload }))
 }
 
 async function broadcastToFollowers (
   data: any,
-  byActor: ActorModel,
-  toFollowersOf: ActorModel[],
+  byActor: MActorId,
+  toFollowersOf: MActorId[],
   t: Transaction,
-  actorsException: ActorModel[] = []
+  actorsException: MActorWithInboxes[] = []
 ) {
   const uris = await computeFollowerUris(toFollowersOf, actorsException, t)
-  return broadcastTo(uris, data, byActor)
+
+  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor))
 }
 
 async function broadcastToActors (
   data: any,
-  byActor: ActorModel,
-  toActors: ActorModel[],
-  actorsException: ActorModel[] = []
+  byActor: MActorId,
+  toActors: MActor[],
+  t?: Transaction,
+  actorsException: MActorWithInboxes[] = []
 ) {
   const uris = await computeUris(toActors, actorsException)
-  return broadcastTo(uris, data, byActor)
+  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor))
 }
 
-async function broadcastTo (uris: string[], data: any, byActor: ActorModel) {
+function broadcastTo (uris: string[], data: any, byActor: MActorId) {
   if (uris.length === 0) return undefined
 
   logger.debug('Creating broadcast job.', { uris })
@@ -114,7 +122,7 @@ async function broadcastTo (uris: string[], data: any, byActor: ActorModel) {
   return JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
 }
 
-async function unicastTo (data: any, byActor: ActorModel, toActorUrl: string) {
+function unicastTo (data: any, byActor: MActorId, toActorUrl: string) {
   logger.debug('Creating unicast job.', { uri: toActorUrl })
 
   const payload = {
@@ -123,7 +131,7 @@ async function unicastTo (data: any, byActor: ActorModel, toActorUrl: string) {
     body: data
   }
 
-  return JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
+  JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })
 }
 
 // ---------------------------------------------------------------------------
@@ -139,7 +147,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function computeFollowerUris (toFollowersOf: ActorModel[], actorsException: ActorModel[], t: Transaction) {
+async function computeFollowerUris (toFollowersOf: MActorId[], actorsException: MActorWithInboxes[], t: Transaction) {
   const toActorFollowerIds = toFollowersOf.map(a => a.id)
 
   const result = await ActorFollowModel.listAcceptedFollowerSharedInboxUrls(toActorFollowerIds, t)
@@ -148,11 +156,11 @@ async function computeFollowerUris (toFollowersOf: ActorModel[], actorsException
   return result.data.filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
 }
 
-async function computeUris (toActors: ActorModel[], actorsException: ActorModel[] = []) {
+async function computeUris (toActors: MActor[], actorsException: MActorWithInboxes[] = []) {
   const serverActor = await getServerActor()
   const targetUrls = toActors
     .filter(a => a.id !== serverActor.id) // Don't send to ourselves
-    .map(a => a.sharedInboxUrl || a.inboxUrl)
+    .map(a => a.getSharedInbox())
 
   const toActorSharedInboxesSet = new Set(targetUrls)
 
@@ -161,10 +169,10 @@ async function computeUris (toActors: ActorModel[], actorsException: ActorModel[
               .filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
 }
 
-async function buildSharedInboxesException (actorsException: ActorModel[]) {
+async function buildSharedInboxesException (actorsException: MActorWithInboxes[]) {
   const serverActor = await getServerActor()
 
   return actorsException
-    .map(f => f.sharedInboxUrl || f.inboxUrl)
+    .map(f => f.getSharedInbox())
     .concat([ serverActor.sharedInboxUrl ])
 }

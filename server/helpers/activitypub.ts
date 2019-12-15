@@ -7,6 +7,7 @@ import { ActorModel } from '../models/activitypub/actor'
 import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
 import { parse } from 'url'
+import { MActor } from '../typings/models'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data, {
@@ -143,7 +144,7 @@ async function activityPubCollectionPagination (baseUrl: string, handler: Activi
 
 }
 
-function buildSignedActivity (byActor: ActorModel, data: Object) {
+function buildSignedActivity (byActor: MActor, data: Object) {
   const activity = activityPubContextify(data)
 
   return signJsonLDObject(byActor, activity) as Promise<Activity>

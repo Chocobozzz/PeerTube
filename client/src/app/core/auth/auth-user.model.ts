@@ -1,4 +1,4 @@
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-local-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { UserRight } from '../../../../../shared/models/users/user-right.enum'
 import { User as ServerUserModel } from '../../../../../shared/models/users/user.model'
 // Do not use the barrel (dependency loop)
@@ -137,6 +137,15 @@ export class AuthUser extends User {
 
   hasRight (right: UserRight) {
     return hasUserRight(this.role, right)
+  }
+
+  canManage (user: ServerUserModel) {
+    const myRole = this.role
+
+    if (myRole === UserRole.ADMINISTRATOR) return true
+
+    // I'm a moderator: I can only manage users
+    return user.role === UserRole.USER
   }
 
   save () {

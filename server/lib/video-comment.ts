@@ -1,17 +1,16 @@
 import * as Sequelize from 'sequelize'
 import { ResultList } from '../../shared/models'
 import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
-import { AccountModel } from '../models/account/account'
-import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { getVideoCommentActivityPubUrl } from './activitypub'
 import { sendCreateVideoComment } from './activitypub/send'
+import { MAccountDefault, MComment, MCommentOwnerVideoReply, MVideoFullLight } from '../typings/models'
 
 async function createVideoComment (obj: {
   text: string,
-  inReplyToComment: VideoCommentModel | null,
-  video: VideoModel
-  account: AccountModel
+  inReplyToComment: MComment | null,
+  video: MVideoFullLight,
+  account: MAccountDefault
 }, t: Sequelize.Transaction) {
   let originCommentId: number | null = null
   let inReplyToCommentId: number | null = null
@@ -27,12 +26,12 @@ async function createVideoComment (obj: {
     inReplyToCommentId,
     videoId: obj.video.id,
     accountId: obj.account.id,
-    url: 'fake url'
-  }, { transaction: t, validate: false } as any) // FIXME: sequelize typings
+    url: new Date().toISOString()
+  }, { transaction: t, validate: false })
 
-  comment.set('url', getVideoCommentActivityPubUrl(obj.video, comment))
+  comment.url = getVideoCommentActivityPubUrl(obj.video, comment)
 
-  const savedComment = await comment.save({ transaction: t })
+  const savedComment: MCommentOwnerVideoReply = await comment.save({ transaction: t })
   savedComment.InReplyToVideoComment = obj.inReplyToComment
   savedComment.Video = obj.video
   savedComment.Account = obj.account
@@ -74,9 +73,16 @@ function buildFormattedCommentTree (resultList: ResultList<VideoCommentModel>): 
   return thread
 }
 
+function markCommentAsDeleted (comment: MCommentOwnerVideoReply): void {
+  comment.text = ''
+  comment.deletedAt = new Date()
+  comment.accountId = null
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   createVideoComment,
-  buildFormattedCommentTree
+  buildFormattedCommentTree,
+  markCommentAsDeleted
 }

@@ -4,6 +4,7 @@ import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pa
 import { Notifier } from '@app/core'
 import { RestService } from '@app/shared'
 import { SortMeta } from 'primeng/api'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-about-follows',
@@ -17,13 +18,13 @@ export class AboutFollowsComponent implements OnInit {
 
   followersPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 40,
+    itemsPerPage: 20,
     totalItems: null
   }
 
   followingsPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 40,
+    itemsPerPage: 20,
     totalItems: null
   }
 
@@ -31,6 +32,8 @@ export class AboutFollowsComponent implements OnInit {
     field: 'createdAt',
     order: -1
   }
+
+  onDataSubject = new Subject<any[]>()
 
   constructor (
     private restService: RestService,
@@ -71,13 +74,15 @@ export class AboutFollowsComponent implements OnInit {
   private loadMoreFollowers () {
     const pagination = this.restService.componentPaginationToRestPagination(this.followersPagination)
 
-    this.followService.getFollowers(pagination, this.sort)
+    this.followService.getFollowers({ pagination: pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
             const newFollowers = resultList.data.map(r => r.follower.host)
             this.followers = this.followers.concat(newFollowers)
 
             this.followersPagination.totalItems = resultList.total
+
+            this.onDataSubject.next(newFollowers)
           },
 
           err => this.notifier.error(err.message)
@@ -87,13 +92,15 @@ export class AboutFollowsComponent implements OnInit {
   private loadMoreFollowings () {
     const pagination = this.restService.componentPaginationToRestPagination(this.followingsPagination)
 
-    this.followService.getFollowing(pagination, this.sort)
+    this.followService.getFollowing({ pagination, sort: this.sort, state: 'accepted' })
         .subscribe(
           resultList => {
             const newFollowings = resultList.data.map(r => r.following.host)
             this.followings = this.followings.concat(newFollowings)
 
             this.followingsPagination.totalItems = resultList.total
+
+            this.onDataSubject.next(newFollowings)
           },
 
           err => this.notifier.error(err.message)

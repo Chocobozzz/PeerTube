@@ -1,13 +1,12 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param } from 'express-validator/check'
-import { exists, isBooleanValid, isIdOrUUIDValid, toIntOrNull } from '../../helpers/custom-validators/misc'
-import { doesVideoExist } from '../../helpers/custom-validators/videos'
+import { body, param } from 'express-validator'
+import { exists, isBooleanValid, isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerModel } from '../../models/server/server'
+import { doesVideoExist } from '../../helpers/middlewares'
 
 const videoFileRedundancyGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
@@ -25,9 +24,13 @@ const videoFileRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
+    const video = res.locals.videoAll
+
+    const paramResolution = req.params.resolution as unknown as number // We casted to int above
+    const paramFPS = req.params.fps as unknown as number // We casted to int above
+
     const videoFile = video.VideoFiles.find(f => {
-      return f.resolution === req.params.resolution && (!req.params.fps || f.fps === req.params.fps)
+      return f.resolution === paramResolution && (!req.params.fps || paramFPS)
     })
 
     if (!videoFile) return res.status(404).json({ error: 'Video file not found.' })
@@ -42,8 +45,12 @@ const videoFileRedundancyGetValidator = [
 ]
 
 const videoPlaylistRedundancyGetValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
-  param('streamingPlaylistType').custom(exists).withMessage('Should have a valid streaming playlist type'),
+  param('videoId')
+    .custom(isIdOrUUIDValid)
+    .not().isEmpty().withMessage('Should have a valid video id'),
+  param('streamingPlaylistType')
+    .customSanitizer(toIntOrNull)
+    .custom(exists).withMessage('Should have a valid streaming playlist type'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoPlaylistRedundancyGetValidator parameters', { parameters: req.params })
@@ -51,8 +58,10 @@ const videoPlaylistRedundancyGetValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
 
-    const video = res.locals.video
-    const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p === req.params.streamingPlaylistType)
+    const video = res.locals.videoAll
+
+    const paramPlaylistType = req.params.streamingPlaylistType as unknown as number // We casted to int above
+    const videoStreamingPlaylist = video.VideoStreamingPlaylists.find(p => p.type === paramPlaylistType)
 
     if (!videoStreamingPlaylist) return res.status(404).json({ error: 'Video playlist not found.' })
     res.locals.videoStreamingPlaylist = videoStreamingPlaylist
@@ -68,7 +77,7 @@ const videoPlaylistRedundancyGetValidator = [
 const updateServerRedundancyValidator = [
   param('host').custom(isHostValid).withMessage('Should have a valid host'),
   body('redundancyAllowed')
-    .toBoolean()
+    .customSanitizer(toBooleanOrNull)
     .custom(isBooleanValid).withMessage('Should have a valid redundancyAllowed attribute'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {

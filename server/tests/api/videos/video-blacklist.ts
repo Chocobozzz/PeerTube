@@ -421,6 +421,8 @@ describe('Test video blacklist', function () {
     })
 
     it('Should auto blacklist a video on URL import', async function () {
+      this.timeout(15000)
+
       const attributes = {
         targetUrl: getYoutubeVideoUrl(),
         name: 'URL import',

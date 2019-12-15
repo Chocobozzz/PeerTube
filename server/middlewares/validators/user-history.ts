@@ -1,6 +1,5 @@
 import * as express from 'express'
-import 'express-validator'
-import { body } from 'express-validator/check'
+import { body } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isDateValid } from '../../helpers/custom-validators/misc'

@@ -1,0 +1,44 @@
+.title-page-container {
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+
+  .title-page.active, .title-page.title-page-single {
+    margin-bottom: unset;
+  }
+}
+
+.title-page-autoplay {
+  width: max-content;
+  height: max-content;
+  align-items: center;
+
+  span {
+    margin-right: 0.3rem;
+    text-transform: uppercase;
+    font-size: 85%;
+    font-weight: 600;
+  }
+}
+
+/* p-inputSwitch styles to reduce the switch size */
+
+::ng-deep {
+  p-inputswitch {
+    height: 20px;
+  }
+
+  .ui-inputswitch {
+    width: 2.5em !important;
+    height: 1.45em !important;
+
+    .ui-inputswitch-slider::before {
+      height: 1em !important;
+      width: 1em !important;
+    }
+  }
+
+  .ui-inputswitch-checked .ui-inputswitch-slider::before {
+    transform: translateX(1em) !important;
+  }
+}

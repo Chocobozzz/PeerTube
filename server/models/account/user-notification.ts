@@ -16,6 +16,7 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
+import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/typings/models/user'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'
@@ -134,13 +135,18 @@ function buildAccountInclude (required: boolean, withActor = false) {
             ]
           },
           {
-            attributes: [ 'preferredUsername' ],
+            attributes: [ 'preferredUsername', 'type' ],
             model: ActorModel.unscoped(),
             required: true,
             as: 'ActorFollowing',
             include: [
               buildChannelInclude(false),
-              buildAccountInclude(false)
+              buildAccountInclude(false),
+              {
+                attributes: [ 'host' ],
+                model: ServerModel.unscoped(),
+                required: false
+              }
             ]
           }
         ]
@@ -371,7 +377,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     return UserNotificationModel.update({ read: true }, query)
   }
 
-  toFormattedJSON (): UserNotification {
+  toFormattedJSON (this: UserNotificationModelForApi): UserNotification {
     const video = this.Video
       ? Object.assign(this.formatVideo(this.Video),{ channel: this.formatActor(this.Video.VideoChannel) })
       : undefined
@@ -403,6 +409,11 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
 
     const account = this.Account ? this.formatActor(this.Account) : undefined
 
+    const actorFollowingType = {
+      Application: 'instance' as 'instance',
+      Group: 'channel' as 'channel',
+      Person: 'account' as 'account'
+    }
     const actorFollow = this.ActorFollow ? {
       id: this.ActorFollow.id,
       state: this.ActorFollow.state,
@@ -410,13 +421,14 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
         id: this.ActorFollow.ActorFollower.Account.id,
         displayName: this.ActorFollow.ActorFollower.Account.getDisplayName(),
         name: this.ActorFollow.ActorFollower.preferredUsername,
-        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getWebserverPath() } : undefined,
+        avatar: this.ActorFollow.ActorFollower.Avatar ? { path: this.ActorFollow.ActorFollower.Avatar.getStaticPath() } : undefined,
         host: this.ActorFollow.ActorFollower.getHost()
       },
       following: {
-        type: this.ActorFollow.ActorFollowing.VideoChannel ? 'channel' as 'channel' : 'account' as 'account',
+        type: actorFollowingType[this.ActorFollow.ActorFollowing.type],
         displayName: (this.ActorFollow.ActorFollowing.VideoChannel || this.ActorFollow.ActorFollowing.Account).getDisplayName(),
-        name: this.ActorFollow.ActorFollowing.preferredUsername
+        name: this.ActorFollow.ActorFollowing.preferredUsername,
+        host: this.ActorFollow.ActorFollowing.getHost()
       }
     } : undefined
 
@@ -436,7 +448,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     }
   }
 
-  private formatVideo (video: VideoModel) {
+  formatVideo (this: UserNotificationModelForApi, video: UserNotificationIncludes.VideoInclude) {
     return {
       id: video.id,
       uuid: video.uuid,
@@ -444,9 +456,12 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
     }
   }
 
-  private formatActor (accountOrChannel: AccountModel | VideoChannelModel) {
+  formatActor (
+    this: UserNotificationModelForApi,
+    accountOrChannel: UserNotificationIncludes.AccountIncludeActor | UserNotificationIncludes.VideoChannelIncludeActor
+  ) {
     const avatar = accountOrChannel.Actor.Avatar
-      ? { path: accountOrChannel.Actor.Avatar.getWebserverPath() }
+      ? { path: accountOrChannel.Actor.Avatar.getStaticPath() }
       : undefined
 
     return {

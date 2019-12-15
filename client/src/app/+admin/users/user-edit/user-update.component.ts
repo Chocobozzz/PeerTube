@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Subscription } from 'rxjs'
-import { Notifier } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
 import { User, UserUpdate } from '../../../../../../shared'
@@ -29,6 +29,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
     protected configService: ConfigService,
+    protected auth: AuthService,
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
     private router: Router,

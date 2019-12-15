@@ -2,7 +2,7 @@ import { Component, HostListener, ViewChild } from '@angular/core'
 import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
 import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
 import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
-import { ServerService } from '@app/core'
+import { AuthService, ServerService } from '@app/core'
 import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-components/video-import-torrent.component'
 
 @Component({
@@ -11,14 +11,15 @@ import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-c
   styleUrls: [ './video-add.component.scss' ]
 })
 export class VideoAddComponent implements CanComponentDeactivate {
-  @ViewChild('videoUpload') videoUpload: VideoUploadComponent
-  @ViewChild('videoImportUrl') videoImportUrl: VideoImportUrlComponent
-  @ViewChild('videoImportTorrent') videoImportTorrent: VideoImportTorrentComponent
+  @ViewChild('videoUpload', { static: false }) videoUpload: VideoUploadComponent
+  @ViewChild('videoImportUrl', { static: false }) videoImportUrl: VideoImportUrlComponent
+  @ViewChild('videoImportTorrent', { static: false }) videoImportTorrent: VideoImportTorrentComponent
 
   secondStepType: 'upload' | 'import-url' | 'import-torrent'
   videoName: string
 
   constructor (
+    private auth: AuthService,
     private serverService: ServerService
   ) {}
 
@@ -56,5 +57,13 @@ export class VideoAddComponent implements CanComponentDeactivate {
 
   isVideoImportTorrentEnabled () {
     return this.serverService.getConfig().import.videos.torrent.enabled
+  }
+
+  isInSecondStep () {
+    return !!this.secondStepType
+  }
+
+  isRootUser () {
+    return this.auth.getUser().username === 'root'
   }
 }

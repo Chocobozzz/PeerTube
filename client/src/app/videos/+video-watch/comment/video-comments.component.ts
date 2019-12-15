@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination, hasMoreItems } from '../../../shared/rest/component-pagination.model'
@@ -12,6 +12,7 @@ import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Syndication } from '@app/shared/video/syndication.model'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-video-comments',
@@ -19,7 +20,7 @@ import { Syndication } from '@app/shared/video/syndication.model'
   styleUrls: ['./video-comments.component.scss']
 })
 export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('commentHighlightBlock') commentHighlightBlock: ElementRef
+  @ViewChild('commentHighlightBlock', { static: false }) commentHighlightBlock: ElementRef
   @Input() video: VideoDetails
   @Input() user: User
 
@@ -37,6 +38,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   syndicationItems: Syndication[] = []
 
+  onDataSubject = new Subject<any[]>()
+
   private sub: Subscription
 
   constructor (
@@ -45,7 +48,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     private confirmService: ConfirmService,
     private videoCommentService: VideoCommentService,
     private activatedRoute: ActivatedRoute,
-    private i18n: I18n
+    private i18n: I18n,
+    private hooks: HooksService
   ) {}
 
   ngOnInit () {
@@ -73,8 +77,20 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   viewReplies (commentId: number, highlightThread = false) {
     this.threadLoading[commentId] = true
 
-    this.videoCommentService.getVideoThreadComments(this.video.id, commentId)
-      .subscribe(
+    const params = {
+      videoId: this.video.id,
+      threadId: commentId
+    }
+
+    const obs = this.hooks.wrapObsFun(
+      this.videoCommentService.getVideoThreadComments.bind(this.videoCommentService),
+      params,
+      'video-watch',
+      'filter:api.video-watch.video-thread-replies.list.params',
+      'filter:api.video-watch.video-thread-replies.list.result'
+    )
+
+    obs.subscribe(
         res => {
           this.threadComments[commentId] = res
           this.threadLoading[commentId] = false
@@ -91,16 +107,31 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       )
   }
 
-  loadMoreComments () {
-    this.videoCommentService.getVideoCommentThreads(this.video.id, this.componentPagination, this.sort)
-      .subscribe(
-        res => {
-          this.comments = this.comments.concat(res.comments)
-          this.componentPagination.totalItems = res.totalComments
-        },
+  loadMoreThreads () {
+    const params = {
+      videoId: this.video.id,
+      componentPagination: this.componentPagination,
+      sort: this.sort
+    }
 
-        err => this.notifier.error(err.message)
-      )
+    const obs = this.hooks.wrapObsFun(
+      this.videoCommentService.getVideoCommentThreads.bind(this.videoCommentService),
+      params,
+      'video-watch',
+      'filter:api.video-watch.video-threads.list.params',
+      'filter:api.video-watch.video-threads.list.result'
+    )
+
+    obs.subscribe(
+      res => {
+        this.comments = this.comments.concat(res.data)
+        this.componentPagination.totalItems = res.total
+
+        this.onDataSubject.next(res.data)
+      },
+
+      err => this.notifier.error(err.message)
+    )
   }
 
   onCommentThreadCreated (comment: VideoComment) {
@@ -122,12 +153,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
 
-    if (commentToDelete.totalReplies !== 0) {
-      message += this.i18n(' {{totalReplies}} replies will be deleted too.', { totalReplies: commentToDelete.totalReplies })
-    }
-
     if (commentToDelete.isLocal) {
-      message += this.i18n(' The deletion will be sent to remote instances so they remove the comment too.')
+      message += this.i18n(' The deletion will be sent to remote instances, so they remove the comment too.')
     } else {
       message += this.i18n(' It is a remote comment, so the deletion will only be effective on your instance.')
     }
@@ -138,21 +165,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
       .subscribe(
         () => {
-          // Delete the comment in the tree
-          if (commentToDelete.inReplyToCommentId) {
-            const thread = this.threadComments[commentToDelete.threadId]
-            if (!thread) {
-              console.error(`Cannot find thread ${commentToDelete.threadId} of the comment to delete ${commentToDelete.id}`)
-              return
-            }
-
-            this.deleteLocalCommentThread(thread, commentToDelete)
-            return
-          }
-
-          // Delete the thread
-          this.comments = this.comments.filter(c => c.id !== commentToDelete.id)
-          this.componentPagination.totalItems--
+          // Mark the comment as deleted
+          this.softDeleteComment(commentToDelete)
 
           if (this.highlightedThread.id === commentToDelete.id) this.highlightedThread = undefined
         },
@@ -169,19 +183,15 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.componentPagination.currentPage++
 
     if (hasMoreItems(this.componentPagination)) {
-      this.loadMoreComments()
+      this.loadMoreThreads()
     }
   }
 
-  private deleteLocalCommentThread (parentComment: VideoCommentThreadTree, commentToDelete: VideoComment) {
-    for (const commentChild of parentComment.children) {
-      if (commentChild.comment.id === commentToDelete.id) {
-        parentComment.children = parentComment.children.filter(c => c.comment.id !== commentToDelete.id)
-        return
-      }
-
-      this.deleteLocalCommentThread(commentChild, commentToDelete)
-    }
+  private softDeleteComment (comment: VideoComment) {
+    comment.isDeleted = true
+    comment.deletedAt = new Date()
+    comment.text = ''
+    comment.account = null
   }
 
   private resetVideo () {
@@ -197,7 +207,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
 
-      this.loadMoreComments()
+      this.loadMoreThreads()
     }
   }
 

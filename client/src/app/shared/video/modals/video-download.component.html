@@ -9,7 +9,7 @@
       <div class="input-group input-group-sm">
         <div class="input-group-prepend peertube-select-container">
           <select [(ngModel)]="resolutionId">
-            <option *ngFor="let file of video?.files" [value]="file.resolution.id">{{ file.resolution.label }}</option>
+            <option *ngFor="let file of getVideoFiles()" [value]="file.resolution.id">{{ file.resolution.label }}</option>
           </select>
         </div>
         <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />

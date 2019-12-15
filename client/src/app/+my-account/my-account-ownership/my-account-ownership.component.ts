@@ -18,7 +18,7 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
-  @ViewChild('myAccountAcceptOwnershipComponent') myAccountAcceptOwnershipComponent: MyAccountAcceptOwnershipComponent
+  @ViewChild('myAccountAcceptOwnershipComponent', { static: true }) myAccountAcceptOwnershipComponent: MyAccountAcceptOwnershipComponent
 
   constructor (
     private notifier: Notifier,

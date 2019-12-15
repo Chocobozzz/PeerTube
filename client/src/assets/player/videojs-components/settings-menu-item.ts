@@ -12,6 +12,22 @@ const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuIte
 const component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
 
 class SettingsMenuItem extends MenuItem {
+  settingsButton: any
+  dialog: any
+  mainMenu: any
+  panel: any
+  panelChild: any
+  panelChildEl: any
+  size: any
+  menuToLoad: string
+  subMenu: any
+
+  submenuClickHandler: Function
+  transitionEndHandler: Function
+
+  settingsSubMenuTitleEl_: any
+  settingsSubMenuValueEl_: any
+  settingsSubMenuEl_: any
 
   constructor (player: videojs.Player, options: any, entry: string, menuButton: VideoJSComponentInterface) {
     super(player, options)
@@ -43,6 +59,9 @@ class SettingsMenuItem extends MenuItem {
     player.ready(() => {
       // Voodoo magic for IOS
       setTimeout(() => {
+        // Player was destroyed
+        if (!this.player_) return
+
         this.build()
 
         // Update on rate change
@@ -56,7 +75,6 @@ class SettingsMenuItem extends MenuItem {
               this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
               this.update()
               this.bindClickEvents()
-
             }, 0)
           })
         }
@@ -88,6 +106,10 @@ class SettingsMenuItem extends MenuItem {
     // To update the sub menu value on click, setTimeout is needed because
     // updating the value is not instant
     setTimeout(() => this.update(event), 0)
+
+    // Seems like videojs adds a vjs-hidden class on the caption menu after a click
+    // We don't need it
+    this.subMenu.menu.removeClass('vjs-hidden')
   }
 
   /**
@@ -307,6 +329,8 @@ class SettingsMenuItem extends MenuItem {
   }
 
   setMargin () {
+    if (!this.size) return
+
     const [ width ] = this.size
 
     this.settingsSubMenuEl_.style.marginRight = `-${width}px`

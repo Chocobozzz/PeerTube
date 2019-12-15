@@ -2,6 +2,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Ta
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { Op, Transaction } from 'sequelize'
+import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@server/typings/models'
 
 @Table({
   tableName: 'scheduleVideoUpdate',
@@ -25,7 +26,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
   @AllowNull(true)
   @Default(null)
   @Column
-  privacy: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED
+  privacy: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED | VideoPrivacy.INTERNAL
 
   @CreatedAt
   createdAt: Date
@@ -71,10 +72,12 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
         {
           model: VideoModel.scope(
             [
-              VideoScopeNames.WITH_FILES,
+              VideoScopeNames.WITH_WEBTORRENT_FILES,
+              VideoScopeNames.WITH_STREAMING_PLAYLISTS,
               VideoScopeNames.WITH_ACCOUNT_DETAILS,
               VideoScopeNames.WITH_BLACKLISTED,
-              VideoScopeNames.WITH_THUMBNAILS
+              VideoScopeNames.WITH_THUMBNAILS,
+              VideoScopeNames.WITH_TAGS
             ]
           )
         }
@@ -82,7 +85,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
       transaction: t
     }
 
-    return ScheduleVideoUpdateModel.findAll(query)
+    return ScheduleVideoUpdateModel.findAll<MScheduleVideoUpdateVideoAll>(query)
   }
 
   static deleteByVideoId (videoId: number, t: Transaction) {
@@ -96,7 +99,7 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
     return ScheduleVideoUpdateModel.destroy(query)
   }
 
-  toFormattedJSON () {
+  toFormattedJSON (this: MScheduleVideoUpdateFormattable) {
     return {
       updateAt: this.updateAt,
       privacy: this.privacy || undefined

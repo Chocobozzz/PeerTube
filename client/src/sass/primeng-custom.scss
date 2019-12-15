@@ -37,7 +37,7 @@ p-table {
   td {
     padding-left: 15px !important;
 
-    &:not(.action-cell) {
+    &:not(.action-cell):not(.expand-cell) {
       overflow: hidden !important;
       text-overflow: ellipsis !important;
       white-space: nowrap !important;

@@ -5,9 +5,9 @@ import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { Subject } from 'rxjs'
+import { forkJoin, Subject } from 'rxjs'
 import { SelectItem } from 'primeng/api'
-import { switchMap } from 'rxjs/operators'
+import { first } from 'rxjs/operators'
 
 @Component({
   selector: 'my-account-video-settings',
@@ -36,35 +36,39 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       nsfwPolicy: null,
       webTorrentEnabled: null,
       autoPlayVideo: null,
+      autoPlayNextVideo: null,
       videoLanguages: null
     })
 
-    this.serverService.videoLanguagesLoaded
-        .pipe(switchMap(() => this.userInformationLoaded))
-        .subscribe(() => {
-          const languages = this.serverService.getVideoLanguages()
+    forkJoin([
+      this.serverService.videoLanguagesLoaded.pipe(first()),
+      this.userInformationLoaded.pipe(first())
+    ]).subscribe(() => {
+      const languages = this.serverService.getVideoLanguages()
 
-          this.languageItems = [ { label: this.i18n('Unknown language'), value: '_unknown' } ]
-          this.languageItems = this.languageItems
-                                   .concat(languages.map(l => ({ label: l.label, value: l.id })))
+      this.languageItems = [ { label: this.i18n('Unknown language'), value: '_unknown' } ]
+      this.languageItems = this.languageItems
+                               .concat(languages.map(l => ({ label: l.label, value: l.id })))
 
-          const videoLanguages = this.user.videoLanguages
-            ? this.user.videoLanguages
-            : this.languageItems.map(l => l.value)
+      const videoLanguages = this.user.videoLanguages
+        ? this.user.videoLanguages
+        : this.languageItems.map(l => l.value)
 
-          this.form.patchValue({
-            nsfwPolicy: this.user.nsfwPolicy,
-            webTorrentEnabled: this.user.webTorrentEnabled,
-            autoPlayVideo: this.user.autoPlayVideo === true,
-            videoLanguages
-          })
-        })
+      this.form.patchValue({
+        nsfwPolicy: this.user.nsfwPolicy,
+        webTorrentEnabled: this.user.webTorrentEnabled,
+        autoPlayVideo: this.user.autoPlayVideo === true,
+        autoPlayNextVideo: this.user.autoPlayNextVideo,
+        videoLanguages
+      })
+    })
   }
 
   updateDetails () {
-    const nsfwPolicy = this.form.value['nsfwPolicy']
+    const nsfwPolicy = this.form.value[ 'nsfwPolicy' ]
     const webTorrentEnabled = this.form.value['webTorrentEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
+    const autoPlayNextVideo = this.form.value['autoPlayNextVideo']
 
     let videoLanguages: string[] = this.form.value['videoLanguages']
     if (Array.isArray(videoLanguages)) {
@@ -83,6 +87,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       nsfwPolicy,
       webTorrentEnabled,
       autoPlayVideo,
+      autoPlayNextVideo,
       videoLanguages
     }
 

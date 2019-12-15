@@ -1,12 +1,17 @@
 import * as validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { exists, isArray } from '../misc'
-import { truncate } from 'lodash'
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { isHostValid } from '../servers'
+import { peertubeTruncate } from '@server/helpers/core-utils'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
-  return isActivityPubUrlValid(endpointObject.sharedInbox)
+  if (endpointObject && endpointObject.sharedInbox) {
+    return isActivityPubUrlValid(endpointObject.sharedInbox)
+  }
+
+  // Shared inbox is optional
+  return true
 }
 
 function isActorPublicKeyObjectValid (publicKeyObject: any) {
@@ -16,7 +21,7 @@ function isActorPublicKeyObjectValid (publicKeyObject: any) {
 }
 
 function isActorTypeValid (type: string) {
-  return type === 'Person' || type === 'Application' || type === 'Group'
+  return type === 'Person' || type === 'Application' || type === 'Group' || type === 'Service' || type === 'Organization'
 }
 
 function isActorPublicKeyValid (publicKey: string) {
@@ -27,7 +32,7 @@ function isActorPublicKeyValid (publicKey: string) {
     validator.isLength(publicKey, CONSTRAINTS_FIELDS.ACTORS.PUBLIC_KEY)
 }
 
-const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.]'
+const actorNameAlphabet = '[ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\\-_.:]'
 const actorNameRegExp = new RegExp(`^${actorNameAlphabet}+$`)
 function isActorPreferredUsernameValid (preferredUsername: string) {
   return exists(preferredUsername) && validator.matches(preferredUsername, actorNameRegExp)
@@ -46,19 +51,20 @@ function isActorObjectValid (actor: any) {
   return exists(actor) &&
     isActivityPubUrlValid(actor.id) &&
     isActorTypeValid(actor.type) &&
-    isActivityPubUrlValid(actor.following) &&
-    isActivityPubUrlValid(actor.followers) &&
     isActivityPubUrlValid(actor.inbox) &&
-    isActivityPubUrlValid(actor.outbox) &&
     isActorPreferredUsernameValid(actor.preferredUsername) &&
     isActivityPubUrlValid(actor.url) &&
     isActorPublicKeyObjectValid(actor.publicKey) &&
     isActorEndpointsObjectValid(actor.endpoints) &&
-    setValidAttributedTo(actor) &&
 
-    // If this is not an account, it should be attributed to an account
+    (!actor.outbox || isActivityPubUrlValid(actor.outbox)) &&
+    (!actor.following || isActivityPubUrlValid(actor.following)) &&
+    (!actor.followers || isActivityPubUrlValid(actor.followers)) &&
+
+    setValidAttributedTo(actor) &&
+    // If this is a group (a channel), it should be attributed to an account
     // In PeerTube we use this to attach a video channel to a specific account
-    (actor.type === 'Person' || actor.attributedTo.length !== 0)
+    (actor.type !== 'Group' || actor.attributedTo.length !== 0)
 }
 
 function isActorFollowingCountValid (value: string) {
@@ -80,14 +86,16 @@ function sanitizeAndCheckActorObject (object: any) {
 }
 
 function normalizeActor (actor: any) {
-  if (!actor || !actor.url) return
+  if (!actor) return
 
-  if (typeof actor.url !== 'string') {
+  if (!actor.url) {
+    actor.url = actor.id
+  } else if (typeof actor.url !== 'string') {
     actor.url = actor.url.href || actor.url.url
   }
 
   if (actor.summary && typeof actor.summary === 'string') {
-    actor.summary = truncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
+    actor.summary = peertubeTruncate(actor.summary, { length: CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max })
 
     if (actor.summary.length < CONSTRAINTS_FIELDS.USERS.DESCRIPTION.min) {
       actor.summary = null

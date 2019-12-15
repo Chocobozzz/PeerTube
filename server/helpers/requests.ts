@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { createWriteStream, remove } from 'fs-extra'
 import * as request from 'request'
-import { ACTIVITY_PUB } from '../initializers/constants'
+import { ACTIVITY_PUB, PEERTUBE_VERSION, WEBSERVER } from '../initializers/constants'
 import { processImage } from './image-utils'
 import { join } from 'path'
 import { logger } from './logger'
@@ -11,8 +11,10 @@ function doRequest <T> (
   requestOptions: request.CoreOptions & request.UriOptions & { activityPub?: boolean },
   bodyKBLimit = 1000 // 1MB
 ): Bluebird<{ response: request.RequestResponse, body: T }> {
+  if (!(requestOptions.headers)) requestOptions.headers = {}
+  requestOptions.headers['User-Agent'] = getUserAgent()
+
   if (requestOptions.activityPub === true) {
-    if (!Array.isArray(requestOptions.headers)) requestOptions.headers = {}
     requestOptions.headers['accept'] = ACTIVITY_PUB.ACCEPT_HEADER
   }
 
@@ -27,6 +29,9 @@ function doRequestAndSaveToFile (
   destPath: string,
   bodyKBLimit = 10000 // 10MB
 ) {
+  if (!requestOptions.headers) requestOptions.headers = {}
+  requestOptions.headers['User-Agent'] = getUserAgent()
+
   return new Bluebird<void>((res, rej) => {
     const file = createWriteStream(destPath)
     file.on('finish', () => res())
@@ -58,6 +63,10 @@ async function downloadImage (url: string, destDir: string, destName: string, si
 
     throw err
   }
+}
+
+function getUserAgent () {
+  return `PeerTube/${PEERTUBE_VERSION} (+${WEBSERVER.URL})`
 }
 
 // ---------------------------------------------------------------------------

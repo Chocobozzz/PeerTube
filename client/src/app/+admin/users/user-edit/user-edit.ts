@@ -1,21 +1,33 @@
-import { ServerService } from '../../../core'
+import { AuthService, ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
-import { USER_ROLE_LABELS, VideoResolution } from '../../../../../../shared'
+import { USER_ROLE_LABELS, UserRole, VideoResolution } from '../../../../../../shared'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
 export abstract class UserEdit extends FormReactive {
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
-  roles = Object.keys(USER_ROLE_LABELS)
-                .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
   username: string
   userId: number
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
+  protected abstract auth: AuthService
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
+
+  getRoles () {
+    const authUser = this.auth.getUser()
+
+    if (authUser.role === UserRole.ADMINISTRATOR) {
+      return Object.keys(USER_ROLE_LABELS)
+            .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
+    }
+
+    return [
+      { value: UserRole.USER.toString(), label: USER_ROLE_LABELS[UserRole.USER] }
+    ]
+  }
 
   isTranscodingInformationDisplayed () {
     const formVideoQuota = parseInt(this.form.value['videoQuota'], 10)

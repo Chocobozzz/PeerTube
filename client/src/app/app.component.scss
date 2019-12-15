@@ -38,8 +38,9 @@
       }
     }
 
-    #peertube-title {
+    .peertube-title {
       @include disable-default-a-behaviour;
+
       font-size: 20px;
       font-weight: $font-bold;
       color: inherit !important;
@@ -64,7 +65,7 @@
     @media screen and (max-width: 500px) {
       width: 70px;
 
-      #peertube-title {
+      .peertube-title {
         display: none;
       }
     }

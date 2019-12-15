@@ -1,7 +1,8 @@
 import * as request from 'supertest'
-import { Job, JobState } from '../../models'
+import { Job, JobState, JobType } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
+import { makeGetRequest } from '@shared/extra-utils'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {
   const path = '/api/v1/jobs/' + state
@@ -14,18 +15,32 @@ function getJobsList (url: string, accessToken: string, state: JobState) {
           .expect('Content-Type', /json/)
 }
 
-function getJobsListPaginationAndSort (url: string, accessToken: string, state: JobState, start: number, count: number, sort: string) {
+function getJobsListPaginationAndSort (options: {
+  url: string,
+  accessToken: string,
+  state: JobState,
+  start: number,
+  count: number,
+  sort: string,
+  jobType?: JobType
+}) {
+  const { url, accessToken, state, start, count, sort, jobType } = options
   const path = '/api/v1/jobs/' + state
 
-  return request(url)
-          .get(path)
-          .query({ start })
-          .query({ count })
-          .query({ sort })
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + accessToken)
-          .expect(200)
-          .expect('Content-Type', /json/)
+  const query = {
+    start,
+    count,
+    sort,
+    jobType
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    token: accessToken,
+    statusCodeExpected: 200,
+    query
+  })
 }
 
 async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
@@ -36,20 +51,28 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   else servers = serversArg as ServerInfo[]
 
   const states: JobState[] = [ 'waiting', 'active', 'delayed' ]
-  let pendingRequests = false
+  let pendingRequests: boolean
 
   function tasksBuilder () {
     const tasks: Promise<any>[] = []
-    pendingRequests = false
 
     // Check if each server has pending request
     for (const server of servers) {
       for (const state of states) {
-        const p = getJobsListPaginationAndSort(server.url, server.accessToken, state, 0, 10, '-createdAt')
+        const p = getJobsListPaginationAndSort({
+          url: server.url,
+          accessToken: server.accessToken,
+          state: state,
+          start: 0,
+          count: 10,
+          sort: '-createdAt'
+        })
           .then(res => res.body.data)
           .then((jobs: Job[]) => jobs.filter(j => j.type !== 'videos-views'))
           .then(jobs => {
-            if (jobs.length !== 0) pendingRequests = true
+            if (jobs.length !== 0) {
+              pendingRequests = true
+            }
           })
         tasks.push(p)
       }
@@ -59,6 +82,7 @@ async function waitJobs (serversArg: ServerInfo[] | ServerInfo) {
   }
 
   do {
+    pendingRequests = false
     await Promise.all(tasksBuilder())
 
     // Retry, in case of new jobs were created

@@ -9,6 +9,7 @@ import { User, VideoAbuse, VideoChannel, VideoDetails, VideoImport } from '../..
 import { VideoComment } from '../../shared/models/videos/video-comment.model'
 import { CustomConfig } from '../../shared/models/server/custom-config.model'
 import { CONFIG } from '../initializers/config'
+import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
 
 function getAuditIdFromRes (res: express.Response) {
   return res.locals.oauth.token.User.username
@@ -29,7 +30,7 @@ const auditLogger = winston.createLogger({
   levels: { audit: 0 },
   transports: [
     new winston.transports.File({
-      filename: path.join(CONFIG.STORAGE.LOG_DIR, 'peertube-audit.log'),
+      filename: path.join(CONFIG.STORAGE.LOG_DIR, AUDIT_LOG_FILENAME),
       level: 'audit',
       maxsize: 5242880,
       maxFiles: 5,

@@ -31,14 +31,15 @@ $player-factor: 1.7; // 16/9
       width: 100%;
     }
 
-    /deep/ .video-js {
+    ::ng-deep .video-js {
       $height: calc(100vh - #{$header-height} - #{$theater-bottom-space});
 
       height: $height;
       width: 100%;
+      max-width: initial;
     }
 
-    my-video-watch-playlist /deep/ .playlist {
+    my-video-watch-playlist ::ng-deep .playlist {
       @include playlist-below-player;
     }
   }
@@ -81,8 +82,9 @@ $player-factor: 1.7; // 16/9
     }
   }
 
-  /deep/ .video-js {
-    width: getPlayerWidth(66vh);
+  ::ng-deep .video-js {
+    width: 100%;
+    max-width: getPlayerWidth(66vh);
     height: 66vh;
 
     // VideoJS create an inner video player
@@ -94,7 +96,7 @@ $player-factor: 1.7; // 16/9
 
   @media screen and (max-width: 600px) {
     .remote-server-down,
-    /deep/ .video-js {
+    ::ng-deep .video-js {
       width: 100vw;
       height: getPlayerHeight(100vw)
     }
@@ -104,6 +106,10 @@ $player-factor: 1.7; // 16/9
 .alert {
   text-align: center;
   border-radius: 0;
+}
+
+.flex-direction-column {
+  flex-direction: column;
 }
 
 #video-not-found {
@@ -140,6 +146,13 @@ $player-factor: 1.7; // 16/9
         flex-grow: 1;
       }
 
+      .video-info-first-row-bottom {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        width: 100%;
+      }
+
       .video-info-date-views {
         flex-grow: 1;
         margin-bottom: 10px;
@@ -163,7 +176,7 @@ $player-factor: 1.7; // 16/9
           img {
             @include avatar(18px);
 
-            margin: -2px 2px 0 5px;
+            margin: -2px 5px 0 0;
           }
         }
 
@@ -186,11 +199,14 @@ $player-factor: 1.7; // 16/9
             opacity: 0.8;
           }
 
+          span {
+            margin-left: 2px;
+          }
+
           img {
             @include avatar(18px);
 
-            margin-top: -2px;
-            margin-left: 7px;
+            margin: -2px 5px 0 0;
           }
         }
 
@@ -207,8 +223,9 @@ $player-factor: 1.7; // 16/9
       }
 
       .video-actions-rates {
-        margin: 20px 0 10px 0;
+        margin: 0 0 10px 0;
         align-items: start;
+        width: max-content;
 
         .video-actions {
           height: 40px; // Align with the title
@@ -237,8 +254,19 @@ $player-factor: 1.7; // 16/9
               display: none;
             }
 
+            .action-button-like,
+            .action-button-dislike {
+              .count {
+                margin-right: 5px;
+              }
+            }
+
             &.action-button-like.activated {
               background-color: $green;
+
+              .count {
+                color: #fff;
+              }
 
               my-global-icon {
                 @include apply-svg-color(#fff);
@@ -248,8 +276,25 @@ $player-factor: 1.7; // 16/9
             &.action-button-dislike.activated {
               background-color: $red;
 
+              .count {
+                color: #fff;
+              }
+
               my-global-icon {
                 @include apply-svg-color(#fff);
+              }
+            }
+
+            &.action-button-support {
+              color: var(--supportButtonColor);
+              background-color: var(--supportButtonBackgroundColor);
+
+              &:hover {
+                opacity: 0.9;
+              }
+
+              my-global-icon {
+                @include apply-svg-color(var(--supportButtonColor));
               }
             }
 
@@ -344,7 +389,7 @@ $player-factor: 1.7; // 16/9
     }
   }
 
-  /deep/ .other-videos {
+  ::ng-deep .other-videos {
     padding-left: 15px;
     flex-basis: $other-videos-width;
     min-width: $other-videos-width;
@@ -355,7 +400,7 @@ $player-factor: 1.7; // 16/9
 
     .video-miniature {
       display: flex;
-      width: $other-videos-width;
+      width: max-content;
       height: 100%;
       margin-bottom: 20px;
       flex-wrap: wrap;
@@ -456,7 +501,7 @@ my-video-comments {
     flex-direction: column;
     justify-content: center;
 
-    my-video-watch-playlist /deep/ .playlist {
+    my-video-watch-playlist ::ng-deep .playlist {
       @include playlist-below-player;
     }
   }
@@ -464,10 +509,10 @@ my-video-comments {
   .video-bottom {
     flex-direction: column;
 
-    /deep/ .other-videos {
+    ::ng-deep .other-videos {
       padding-left: 0 !important;
 
-      /deep/ .video-miniature  {
+      ::ng-deep .video-miniature  {
         flex-direction: row;
         width: auto;
       }
@@ -492,7 +537,7 @@ my-video-comments {
     }
   }
 
-  /deep/ .other-videos .video-miniature  {
+  ::ng-deep .other-videos .video-miniature  {
     flex-direction: column;
   }
 

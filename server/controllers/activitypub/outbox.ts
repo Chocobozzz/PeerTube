@@ -6,11 +6,9 @@ import { logger } from '../../helpers/logger'
 import { buildAnnounceActivity, buildCreateActivity } from '../../lib/activitypub/send'
 import { buildAudience } from '../../lib/activitypub/audience'
 import { asyncMiddleware, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
-import { AccountModel } from '../../models/account/account'
-import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { activityPubResponse } from './utils'
-import { VideoChannelModel } from '../../models/video/video-channel'
+import { MActorLight } from '@server/typings/models'
 
 const outboxRouter = express.Router()
 
@@ -45,13 +43,9 @@ async function outboxController (req: express.Request, res: express.Response) {
   return activityPubResponse(activityPubContextify(json), res)
 }
 
-async function buildActivities (actor: ActorModel, start: number, count: number) {
+async function buildActivities (actor: MActorLight, start: number, count: number) {
   const data = await VideoModel.listAllAndSharedByActorForOutbox(actor.id, start, count)
   const activities: Activity[] = []
-
-  // Avoid too many SQL requests
-  const actors = data.data.map(v => v.VideoChannel.Account.Actor)
-  actors.push(actor)
 
   for (const video of data.data) {
     const byActor = video.VideoChannel.Account.Actor

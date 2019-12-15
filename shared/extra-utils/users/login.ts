@@ -1,6 +1,7 @@
 import * as request from 'supertest'
 
 import { ServerInfo } from '../server/servers'
+import { getClient } from '../server/clients'
 
 type Client = { id: string, secret: string }
 type User = { username: string, password: string }
@@ -38,6 +39,23 @@ async function userLogin (server: Server, user: User, expectedStatus = 200) {
   return res.body.access_token as string
 }
 
+async function getAccessToken (url: string, username: string, password: string) {
+  const resClient = await getClient(url)
+  const client = {
+    id: resClient.body.client_id,
+    secret: resClient.body.client_secret
+  }
+
+  const user = { username, password }
+
+  try {
+    const res = await login(url, client, user)
+    return res.body.access_token
+  } catch (err) {
+    throw new Error('Cannot authenticate. Please check your username/password.')
+  }
+}
+
 function setAccessTokensToServers (servers: ServerInfo[]) {
   const tasks: Promise<any>[] = []
 
@@ -55,6 +73,7 @@ export {
   login,
   serverLogin,
   userLogin,
+  getAccessToken,
   setAccessTokensToServers,
   Server,
   Client,

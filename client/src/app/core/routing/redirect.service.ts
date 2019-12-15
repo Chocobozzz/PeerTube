@@ -43,7 +43,8 @@ export class RedirectService {
 
   redirectToPreviousRoute () {
     const exceptions = [
-      '/verify-account'
+      '/verify-account',
+      '/reset-password'
     ]
 
     if (this.previousUrl) {

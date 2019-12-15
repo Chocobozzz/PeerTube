@@ -1,8 +1,11 @@
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import * as prompt from 'prompt'
-import { getSettings, writeSettings, getNetrc } from './cli'
-import { isHostValid } from '../helpers/custom-validators/servers'
+import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
+import { getAccessToken, login } from '../../shared/extra-utils'
 
 const Table = require('cli-table')
 
@@ -39,7 +42,7 @@ async function setInstance (url: string, username: string, password: string, isD
 }
 
 function isURLaPeerTubeInstance (url: string) {
-  return isHostValid(url) || (url.includes('localhost'))
+  return url.startsWith('http://') || url.startsWith('https://')
 }
 
 program
@@ -61,6 +64,7 @@ program
         url: {
           description: 'instance url',
           conform: (value) => isURLaPeerTubeInstance(value),
+          message: 'It should be an URL (https://peertube.example.com)',
           required: true
         },
         username: {
@@ -75,6 +79,14 @@ program
         }
       }
     }, async (_, result) => {
+      // Check credentials
+      try {
+        await getAccessToken(result.url, result.username, result.password)
+      } catch (err) {
+        console.error(err.message)
+        process.exit(-1)
+      }
+
       await setInstance(result.url, result.username, result.password, program['default'])
 
       process.exit(0)
@@ -136,10 +148,10 @@ program
 program.on('--help', function () {
   console.log('  Examples:')
   console.log()
-  console.log('    $ peertube add -u peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
-  console.log('    $ peertube add -u peertube.cpy.re -U root')
+  console.log('    $ peertube add -u https://peertube.cpy.re -U "PEERTUBE_USER" --password "PEERTUBE_PASSWORD"')
+  console.log('    $ peertube add -u https://peertube.cpy.re -U root')
   console.log('    $ peertube list')
-  console.log('    $ peertube del peertube.cpy.re')
+  console.log('    $ peertube del https://peertube.cpy.re')
   console.log()
 })
 

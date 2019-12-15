@@ -3,6 +3,8 @@ import { AccountModel } from '../account/account'
 import { ServerModel } from './server'
 import { ServerBlock } from '../../../shared/models/blocklist'
 import { getSort } from '../utils'
+import * as Bluebird from 'bluebird'
+import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/typings/models'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -67,14 +69,13 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
 
   @BelongsTo(() => ServerModel, {
     foreignKey: {
-      name: 'targetServerId',
       allowNull: false
     },
     onDelete: 'CASCADE'
   })
   BlockedServer: ServerModel
 
-  static loadByAccountAndHost (accountId: number, host: string) {
+  static loadByAccountAndHost (accountId: number, host: string): Bluebird<MServerBlocklist> {
     const query = {
       where: {
         accountId
@@ -105,13 +106,13 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
 
     return ServerBlocklistModel
       .scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_SERVER ])
-      .findAndCountAll(query)
+      .findAndCountAll<MServerBlocklistAccountServer>(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
   }
 
-  toFormattedJSON (): ServerBlock {
+  toFormattedJSON (this: MServerBlocklistFormattable): ServerBlock {
     return {
       byAccount: this.ByAccount.toFormattedJSON(),
       blockedServer: this.BlockedServer.toFormattedJSON(),

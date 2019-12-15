@@ -23,7 +23,7 @@ async function userWatchVideo (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
   const body: UserWatchingVideo = req.body
-  const { id: videoId } = res.locals.video as { id: number }
+  const { id: videoId } = res.locals.videoId
 
   await UserVideoHistoryModel.upsert({
     videoId,

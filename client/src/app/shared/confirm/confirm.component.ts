@@ -3,6 +3,7 @@ import { ConfirmService } from '@app/core/confirm/confirm.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
+import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
 
 @Component({
   selector: 'my-confirm',
@@ -10,7 +11,7 @@ import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
   styleUrls: [ './confirm.component.scss' ]
 })
 export class ConfirmComponent implements OnInit {
-  @ViewChild('confirmModal') confirmModal: ElementRef
+  @ViewChild('confirmModal', { static: true }) confirmModal: ElementRef
 
   title = ''
   message = ''
@@ -63,6 +64,11 @@ export class ConfirmComponent implements OnInit {
 
     this.openedModal.result
         .then(() => this.confirmService.confirmResponse.next(true))
-        .catch(() => this.confirmService.confirmResponse.next(false))
+        .catch((reason: string) => {
+          // If the reason was that the user used the back button, we don't care about the confirm dialog result
+          if (!reason || reason !== POP_STATE_MODAL_DISMISS) {
+            this.confirmService.confirmResponse.next(false)
+          }
+        })
   }
 }

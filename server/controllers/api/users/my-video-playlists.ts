@@ -35,6 +35,7 @@ async function doVideosInPlaylistExist (req: express.Request, res: express.Respo
   for (const result of results) {
     for (const element of result.VideoPlaylistElements) {
       existObject[element.videoId].push({
+        playlistElementId: element.id,
         playlistId: result.id,
         startTimestamp: element.startTimestamp,
         stopTimestamp: element.stopTimestamp

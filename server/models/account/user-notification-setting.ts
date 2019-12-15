@@ -17,6 +17,7 @@ import { UserModel } from './user'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { clearCacheByUserId } from '../../lib/oauth-model'
+import { MNotificationSettingFormattable } from '@server/typings/models'
 
 @Table({
   tableName: 'userNotificationSetting',
@@ -113,6 +114,15 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
   @AllowNull(false)
   @Default(null)
   @Is(
+    'UserNotificationSettingNewInstanceFollower',
+    value => throwIfNotValid(value, isUserNotificationSettingValid, 'autoInstanceFollowing')
+  )
+  @Column
+  autoInstanceFollowing: UserNotificationSettingValue
+
+  @AllowNull(false)
+  @Default(null)
+  @Is(
     'UserNotificationSettingNewFollow',
     value => throwIfNotValid(value, isUserNotificationSettingValid, 'newFollow')
   )
@@ -152,7 +162,7 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
     return clearCacheByUserId(instance.userId)
   }
 
-  toFormattedJSON (): UserNotificationSetting {
+  toFormattedJSON (this: MNotificationSettingFormattable): UserNotificationSetting {
     return {
       newCommentOnMyVideo: this.newCommentOnMyVideo,
       newVideoFromSubscription: this.newVideoFromSubscription,
@@ -164,7 +174,8 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
       newUserRegistration: this.newUserRegistration,
       commentMention: this.commentMention,
       newFollow: this.newFollow,
-      newInstanceFollower: this.newInstanceFollower
+      newInstanceFollower: this.newInstanceFollower,
+      autoInstanceFollowing: this.autoInstanceFollowing
     }
   }
 }

@@ -2,15 +2,27 @@ import * as request from 'supertest'
 import { ServerInfo } from './servers'
 import { waitJobs } from './jobs'
 import { makePostBodyRequest } from '../requests/requests'
+import { ActivityPubActorType, FollowState } from '@shared/models'
 
-function getFollowersListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
+function getFollowersListPaginationAndSort (options: {
+  url: string,
+  start: number,
+  count: number,
+  sort: string,
+  search?: string,
+  actorType?: ActivityPubActorType,
+  state?: FollowState
+}) {
+  const { url, start, count, sort, search, state, actorType } = options
   const path = '/api/v1/server/followers'
 
   const query = {
     start,
     count,
     sort,
-    search
+    search,
+    state,
+    actorType
   }
 
   return request(url)
@@ -43,14 +55,25 @@ function rejectFollower (url: string, token: string, follower: string, statusCod
   })
 }
 
-function getFollowingListPaginationAndSort (url: string, start: number, count: number, sort: string, search?: string) {
+function getFollowingListPaginationAndSort (options: {
+  url: string,
+  start: number,
+  count: number,
+  sort: string,
+  search?: string,
+  actorType?: ActivityPubActorType,
+  state?: FollowState
+}) {
+  const { url, start, count, sort, search, state, actorType } = options
   const path = '/api/v1/server/following'
 
   const query = {
     start,
     count,
     sort,
-    search
+    search,
+    state,
+    actorType
   }
 
   return request(url)

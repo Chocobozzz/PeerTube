@@ -91,7 +91,7 @@ describe('Test video imports API validator', function () {
         support: 'my super support text',
         tags: [ 'tag1', 'tag2' ],
         privacy: VideoPrivacy.PUBLIC,
-        channelId: channelId
+        channelId
       }
     })
 

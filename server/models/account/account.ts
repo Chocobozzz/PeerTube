@@ -3,7 +3,8 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt, DataType,
+  CreatedAt,
+  DataType,
   Default,
   DefaultScope,
   ForeignKey,
@@ -27,10 +28,20 @@ import { UserModel } from './user'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { Op, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
+import { AccountBlocklistModel } from './account-blocklist'
+import { ServerBlocklistModel } from '../server/server-blocklist'
+import { ActorFollowModel } from '../activitypub/actor-follow'
+import { MAccountActor, MAccountDefault, MAccountSummaryFormattable, MAccountFormattable, MAccountAP } from '../../typings/models'
+import * as Bluebird from 'bluebird'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
+}
+
+export type SummaryOptions = {
+  whereActor?: WhereOptions
+  withAccountBlockerIds?: number[]
 }
 
 @DefaultScope(() => ({
@@ -42,8 +53,16 @@ export enum ScopeNames {
   ]
 }))
 @Scopes(() => ({
-  [ ScopeNames.SUMMARY ]: (whereActor?: WhereOptions) => {
-    return {
+  [ ScopeNames.SUMMARY ]: (options: SummaryOptions = {}) => {
+    const whereActor = options.whereActor || undefined
+
+    const serverInclude: IncludeOptions = {
+      attributes: [ 'host' ],
+      model: ServerModel.unscoped(),
+      required: false
+    }
+
+    const query: FindOptions = {
       attributes: [ 'id', 'name' ],
       include: [
         {
@@ -52,11 +71,8 @@ export enum ScopeNames {
           required: true,
           where: whereActor,
           include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
+            serverInclude,
+
             {
               model: AvatarModel.unscoped(),
               required: false
@@ -65,6 +81,35 @@ export enum ScopeNames {
         }
       ]
     }
+
+    if (options.withAccountBlockerIds) {
+      query.include.push({
+        attributes: [ 'id' ],
+        model: AccountBlocklistModel.unscoped(),
+        as: 'BlockedAccounts',
+        required: false,
+        where: {
+          accountId: {
+            [Op.in]: options.withAccountBlockerIds
+          }
+        }
+      })
+
+      serverInclude.include = [
+        {
+          attributes: [ 'id' ],
+          model: ServerBlocklistModel.unscoped(),
+          required: false,
+          where: {
+            accountId: {
+              [Op.in]: options.withAccountBlockerIds
+            }
+          }
+        }
+      ]
+    }
+
+    return query
   }
 }))
 @Table({
@@ -156,12 +201,22 @@ export class AccountModel extends Model<AccountModel> {
 
   @HasMany(() => VideoCommentModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
     onDelete: 'cascade',
     hooks: true
   })
   VideoComments: VideoCommentModel[]
+
+  @HasMany(() => AccountBlocklistModel, {
+    foreignKey: {
+      name: 'targetAccountId',
+      allowNull: false
+    },
+    as: 'BlockedAccounts',
+    onDelete: 'CASCADE'
+  })
+  BlockedAccounts: AccountBlocklistModel[]
 
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
@@ -169,6 +224,7 @@ export class AccountModel extends Model<AccountModel> {
       instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
     }
 
+    await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)
     if (instance.isOwned()) {
       return sendDeleteActor(instance.Actor, options.transaction)
     }
@@ -176,11 +232,11 @@ export class AccountModel extends Model<AccountModel> {
     return undefined
   }
 
-  static load (id: number, transaction?: Transaction) {
+  static load (id: number, transaction?: Transaction): Bluebird<MAccountDefault> {
     return AccountModel.findByPk(id, { transaction })
   }
 
-  static loadByNameWithHost (nameWithHost: string) {
+  static loadByNameWithHost (nameWithHost: string): Bluebird<MAccountDefault> {
     const [ accountName, host ] = nameWithHost.split('@')
 
     if (!host || host === WEBSERVER.HOST) return AccountModel.loadLocalByName(accountName)
@@ -188,7 +244,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.loadByNameAndHost(accountName, host)
   }
 
-  static loadLocalByName (name: string) {
+  static loadLocalByName (name: string): Bluebird<MAccountDefault> {
     const query = {
       where: {
         [ Op.or ]: [
@@ -218,7 +274,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByNameAndHost (name: string, host: string) {
+  static loadByNameAndHost (name: string, host: string): Bluebird<MAccountDefault> {
     const query = {
       include: [
         {
@@ -243,7 +299,7 @@ export class AccountModel extends Model<AccountModel> {
     return AccountModel.findOne(query)
   }
 
-  static loadByUrl (url: string, transaction?: Transaction) {
+  static loadByUrl (url: string, transaction?: Transaction): Bluebird<MAccountDefault> {
     const query = {
       include: [
         {
@@ -276,7 +332,7 @@ export class AccountModel extends Model<AccountModel> {
       })
   }
 
-  static listLocalsForSitemap (sort: string) {
+  static listLocalsForSitemap (sort: string): Bluebird<MAccountActor[]> {
     const query = {
       attributes: [ ],
       offset: 0,
@@ -297,7 +353,7 @@ export class AccountModel extends Model<AccountModel> {
       .findAll(query)
   }
 
-  toFormattedJSON (): Account {
+  toFormattedJSON (this: MAccountFormattable): Account {
     const actor = this.Actor.toFormattedJSON()
     const account = {
       id: this.id,
@@ -311,8 +367,8 @@ export class AccountModel extends Model<AccountModel> {
     return Object.assign(actor, account)
   }
 
-  toFormattedSummaryJSON (): AccountSummary {
-    const actor = this.Actor.toFormattedJSON()
+  toFormattedSummaryJSON (this: MAccountSummaryFormattable): AccountSummary {
+    const actor = this.Actor.toFormattedSummaryJSON()
 
     return {
       id: this.id,
@@ -324,8 +380,8 @@ export class AccountModel extends Model<AccountModel> {
     }
   }
 
-  toActivityPubObject () {
-    const obj = this.Actor.toActivityPubObject(this.name, 'Account')
+  toActivityPubObject (this: MAccountAP) {
+    const obj = this.Actor.toActivityPubObject(this.name)
 
     return Object.assign(obj, {
       summary: this.description
@@ -342,5 +398,9 @@ export class AccountModel extends Model<AccountModel> {
 
   getDisplayName () {
     return this.name
+  }
+
+  isBlocked () {
+    return this.BlockedAccounts && this.BlockedAccounts.length !== 0
   }
 }

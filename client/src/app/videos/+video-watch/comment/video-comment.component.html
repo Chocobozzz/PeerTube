@@ -1,42 +1,70 @@
 <div class="root-comment">
-  <img [src]="comment.accountAvatarUrl" alt="Avatar" />
+  <div class="left">
+    <img
+      *ngIf="!comment.isDeleted"
+      class="comment-avatar"
+      [src]="comment.accountAvatarUrl"
+      alt="Avatar"
+    />
 
-  <div class="comment">
-    <div *ngIf="highlightedComment === true" class="highlighted-comment" i18n>Highlighted comment</div>
+    <div class="vertical-border"></div>
+  </div>
 
-    <div class="comment-account-date">
-      <a [href]="comment.account.url"  target="_blank" rel="noopener noreferrer" class="comment-account">{{ comment.by }}</a>
-      <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]" class="comment-date">{{ comment.createdAt | myFromNow }}</a>
-    </div>
-    <div class="comment-html" [innerHTML]="sanitizedCommentHTML"></div>
+  <div class="right">
+    <span *ngIf="comment.isDeleted" class="comment-avatar"></span>
 
-    <div class="comment-actions">
-      <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply" i18n>Reply</div>
-      <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete" i18n>Delete</div>
-    </div>
+    <div class="comment">
+      <ng-container *ngIf="!comment.isDeleted">
+        <div *ngIf="highlightedComment === true" class="highlighted-comment" i18n>Highlighted comment</div>
 
-    <my-video-comment-add
-      *ngIf="isUserLoggedIn() && inReplyToCommentId === comment.id"
-      [user]="user"
-      [video]="video"
-      [parentComment]="comment"
-      [parentComments]="newParentComments"
-      [focusOnInit]="true"
-      (commentCreated)="onCommentReplyCreated($event)"
-    ></my-video-comment-add>
+        <div class="comment-account-date">
+          <a [href]="comment.account.url" target="_blank" rel="noopener noreferrer" class="comment-account">{{ comment.by }}</a>
+          <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]"
+             class="comment-date">{{ comment.createdAt | myFromNow }}</a>
+        </div>
+        <div class="comment-html" [innerHTML]="sanitizedCommentHTML"></div>
 
-    <div *ngIf="commentTree" class="children">
-      <div *ngFor="let commentChild of commentTree.children">
-        <my-video-comment
-          [comment]="commentChild.comment"
-          [video]="video"
-          [inReplyToCommentId]="inReplyToCommentId"
-          [commentTree]="commentChild"
-          [parentComments]="newParentComments"
-          (wantedToReply)="onWantToReply($event)"
-          (wantedToDelete)="onWantToDelete($event)"
-          (resetReply)="onResetReply()"
-        ></my-video-comment>
+        <div class="comment-actions">
+          <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply" i18n>Reply</div>
+          <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete" i18n>Delete</div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="comment.isDeleted">
+        <div class="comment-account-date">
+          <span class="comment-account" i18n>Deleted</span>
+          <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]"
+             class="comment-date">{{ comment.createdAt | myFromNow }}</a>
+        </div>
+
+        <div *ngIf="comment.isDeleted" class="comment-html comment-html-deleted">
+          <i i18n>This comment has been deleted</i>
+        </div>
+      </ng-container>
+
+      <my-video-comment-add
+        *ngIf="!comment.isDeleted && isUserLoggedIn() && inReplyToCommentId === comment.id"
+        [user]="user"
+        [video]="video"
+        [parentComment]="comment"
+        [parentComments]="newParentComments"
+        [focusOnInit]="true"
+        (commentCreated)="onCommentReplyCreated($event)"
+      ></my-video-comment-add>
+
+      <div *ngIf="commentTree" class="children">
+        <div *ngFor="let commentChild of commentTree.children">
+          <my-video-comment
+            [comment]="commentChild.comment"
+            [video]="video"
+            [inReplyToCommentId]="inReplyToCommentId"
+            [commentTree]="commentChild"
+            [parentComments]="newParentComments"
+            (wantedToReply)="onWantToReply($event)"
+            (wantedToDelete)="onWantToDelete($event)"
+            (resetReply)="onResetReply()"
+          ></my-video-comment>
+        </div>
       </div>
     </div>
   </div>

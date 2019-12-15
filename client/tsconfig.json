@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -12,45 +13,30 @@
     "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors":true,
     "alwaysStrict": true,
-    "target": "es5",
+    "strictBindCallApply": true,
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2017",
-      "es2016",
-      "es2015",
+      "es2018",
       "dom"
     ],
-    "types": [
-      "jasmine"
-    ],
-    "baseUrl": "src",
+    "baseUrl": "./",
     "paths": {
-      "@app/*": [ "app/*" ],
-      "@shared/*": [ "../../shared/*" ],
-      "video.js": [ "../node_modules/video.js/dist/alt/video.core.js" ],
-      "fs": [ "./shims/noop" ],
-      "http": [ "./shims/http" ],
-      "https": [ "./shims/https" ],
-      "path": [ "./shims/path" ],
-      "stream": [ "./shims/noop" ],
-      "crypto": [ "./shims/noop" ]
+      "@app/*": [ "src/app/*" ],
+      "@shared/*": [ "../shared/*" ],
+      "video.js": [ "node_modules/video.js/dist/alt/video.core.js" ],
+      "fs": [ "src/shims/noop" ],
+      "http": [ "src/shims/http" ],
+      "https": [ "src/shims/https" ],
+      "path": [ "src/shims/path" ],
+      "stream": [ "src/shims/noop" ],
+      "crypto": [ "src/shims/noop" ]
     }
   },
   "angularCompilerOptions": {
     "strictInjectionParameters": true,
     "fullTemplateTypeCheck": true
-  },
-  "include": [
-    "./src",
-    "../../shared"
-  ],
-  "exclude": [
-    "../../node_modules",
-    "../node_modules",
-    "../dist",
-    "../../server",
-    "../src/**/*.spec.ts"
-  ]
+  }
 }

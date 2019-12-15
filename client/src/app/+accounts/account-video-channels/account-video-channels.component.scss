@@ -9,7 +9,6 @@
 .section {
   @include miniature-rows;
 
-  overflow: visible; // For the subscribe dropdown
   padding-top: 0 !important;
 
   .section-title {
@@ -22,6 +21,11 @@
     .no-results {
       height: 50px;
     }
+  }
+
+  my-video-miniature ::ng-deep my-video-actions-dropdown > my-action-dropdown {
+    // Fix our overflow
+    position: absolute;
   }
 }
 

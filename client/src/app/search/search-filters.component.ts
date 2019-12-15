@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
+import { ValidatorFn } from '@angular/forms'
+import { VideoValidatorsService } from '@app/shared'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
@@ -18,6 +20,9 @@ export class SearchFiltersComponent implements OnInit {
   videoLicences: VideoConstant<number>[] = []
   videoLanguages: VideoConstant<string>[] = []
 
+  tagValidators: ValidatorFn[]
+  tagValidatorsMessages: { [ name: string ]: string }
+
   publishedDateRanges: { id: string, label: string }[] = []
   sorts: { id: string, label: string }[] = []
   durationRanges: { id: string, label: string }[] = []
@@ -30,9 +35,16 @@ export class SearchFiltersComponent implements OnInit {
 
   constructor (
     private i18n: I18n,
+    private videoValidatorsService: VideoValidatorsService,
     private serverService: ServerService
   ) {
+    this.tagValidators = this.videoValidatorsService.VIDEO_TAGS.VALIDATORS
+    this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
     this.publishedDateRanges = [
+      {
+        id: undefined,
+        label: this.i18n('Any')
+      },
       {
         id: 'today',
         label: this.i18n('Today')
@@ -52,6 +64,10 @@ export class SearchFiltersComponent implements OnInit {
     ]
 
     this.durationRanges = [
+      {
+        id: undefined,
+        label: this.i18n('Any')
+      },
       {
         id: 'short',
         label: this.i18n('Short (< 4 min)')
@@ -83,21 +99,46 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.videoCategories = this.serverService.getVideoCategories()
-    this.videoLicences = this.serverService.getVideoLicences()
-    this.videoLanguages = this.serverService.getVideoLanguages()
+    this.serverService.videoCategoriesLoaded.subscribe(() => this.videoCategories = this.serverService.getVideoCategories())
+    this.serverService.videoLicencesLoaded.subscribe(() => this.videoLicences = this.serverService.getVideoLicences())
+    this.serverService.videoLanguagesLoaded.subscribe(() => this.videoLanguages = this.serverService.getVideoLanguages())
 
     this.loadFromDurationRange()
     this.loadFromPublishedRange()
     this.loadOriginallyPublishedAtYears()
   }
 
-  formUpdated () {
+  inputUpdated () {
     this.updateModelFromDurationRange()
     this.updateModelFromPublishedRange()
     this.updateModelFromOriginallyPublishedAtYears()
+  }
 
+  formUpdated () {
+    this.inputUpdated()
     this.filtered.emit(this.advancedSearch)
+  }
+
+  reset () {
+    this.advancedSearch.reset()
+    this.durationRange = undefined
+    this.publishedDateRange = undefined
+    this.originallyPublishedStartYear = undefined
+    this.originallyPublishedEndYear = undefined
+    this.inputUpdated()
+  }
+
+  resetField (fieldName: string, value?: any) {
+    this.advancedSearch[fieldName] = value
+  }
+
+  resetLocalField (fieldName: string, value?: any) {
+    this[fieldName] = value
+    this.inputUpdated()
+  }
+
+  resetOriginalPublicationYears () {
+    this.originallyPublishedStartYear = this.originallyPublishedEndYear = undefined
   }
 
   private loadOriginallyPublishedAtYears () {
@@ -215,5 +256,4 @@ export class SearchFiltersComponent implements OnInit {
 
     this.advancedSearch.startDate = date.toISOString()
   }
-
 }

@@ -1,6 +1,4 @@
-import 'express-validator'
 import * as express from 'express'
-
 import { PAGINATION } from '../initializers/constants'
 
 function setDefaultPagination (req: express.Request, res: express.Response, next: express.NextFunction) {

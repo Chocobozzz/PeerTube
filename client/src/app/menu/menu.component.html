@@ -9,7 +9,7 @@
           <div class="logged-in-username">{{ user.username }}</div>
         </div>
 
-        <div class="logged-in-more" ngbDropdown placement="bottom-right">
+        <div class="logged-in-more" ngbDropdown placement="bottom-right auto">
           <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
 
           <div ngbDropdownMenu>
@@ -71,6 +71,11 @@
           <ng-container i18n>Trending</ng-container>
         </a>
 
+        <a routerLink="/videos/most-liked" routerLinkActive="active">
+          <my-global-icon iconName="like"></my-global-icon>
+          <ng-container i18n>Most liked</ng-container>
+        </a>
+
         <a routerLink="/videos/recently-added" routerLinkActive="active">
           <my-global-icon iconName="recently-added"></my-global-icon>
           <ng-container i18n>Recently added</ng-container>
@@ -99,13 +104,11 @@
 
     <div class="footer d-flex justify-content-between">
       <span class="language">
-        <span tabindex="0" (keyup.enter)="openLanguageChooser()" (click)="openLanguageChooser()" i18n-title title="Change the language" class="icon icon-language"></span>
+        <span tabindex="0" role="button" (keyup.enter)="openLanguageChooser()" (click)="openLanguageChooser()" i18n-title title="Change the language" class="icon icon-language"></span>
       </span>
+
       <span class="shortcuts">
-        <span tabindex="0" (keyup.enter)="openHotkeysCheatSheet()" (click)="openHotkeysCheatSheet()" i18n-title title="Show keyboard shortcuts" class="icon icon-shortcuts"></span>
-      </span>
-      <span class="color-palette">
-        <span tabindex="0" (keyup.enter)="toggleDarkTheme()" (click)="toggleDarkTheme()" i18n-title title="Toggle dark interface" class="icon icon-moonsun"></span>
+        <span tabindex="0" role="button" (keyup.enter)="openHotkeysCheatSheet()" (click)="openHotkeysCheatSheet()" i18n-title title="Show keyboard shortcuts" class="icon icon-shortcuts"></span>
       </span>
     </div>
   </menu>

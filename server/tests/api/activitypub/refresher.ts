@@ -106,7 +106,7 @@ describe('Test AP refresher', function () {
 
       await reRunServer(servers[ 1 ])
 
-      // Should not refresh the video, even if the last refresh failed (to avoir a loop on dead instances)
+      // Should not refresh the video, even if the last refresh failed (to avoid a loop on dead instances)
       await getVideo(servers[ 0 ].url, videoUUID3)
       await waitJobs(servers)
 

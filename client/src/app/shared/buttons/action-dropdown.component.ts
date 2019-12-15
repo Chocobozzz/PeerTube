@@ -38,7 +38,11 @@ export class ActionDropdownComponent<T> {
     return [ this.actions ]
   }
 
-  areActionsDisplayed (actions: DropdownAction<T>[], entry: T) {
-    return actions.some(a => a.isDisplayed === undefined || a.isDisplayed(entry))
+  areActionsDisplayed (actions: Array<DropdownAction<T> | DropdownAction<T>[]>, entry: T): boolean {
+    return actions.some(a => {
+      if (Array.isArray(a)) return this.areActionsDisplayed(a, entry)
+
+      return a.isDisplayed === undefined || a.isDisplayed(entry)
+    })
   }
 }

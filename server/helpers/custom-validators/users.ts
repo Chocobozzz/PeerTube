@@ -1,4 +1,3 @@
-import 'express-validator'
 import * as validator from 'validator'
 import { UserRole } from '../../../shared'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
@@ -66,6 +65,22 @@ function isUserBlockedValid (value: any) {
   return isBooleanValid(value)
 }
 
+function isUserAutoPlayNextVideoValid (value: any) {
+  return isBooleanValid(value)
+}
+
+function isUserAutoPlayNextVideoPlaylistValid (value: any) {
+  return isBooleanValid(value)
+}
+
+function isNoInstanceConfigWarningModal (value: any) {
+  return isBooleanValid(value)
+}
+
+function isNoWelcomeModal (value: any) {
+  return isBooleanValid(value)
+}
+
 function isUserBlockedReasonValid (value: any) {
   return value === null || (exists(value) && validator.isLength(value, CONSTRAINTS_FIELDS.USERS.BLOCKED_REASON))
 }
@@ -99,7 +114,11 @@ export {
   isUserNSFWPolicyValid,
   isUserWebTorrentEnabledValid,
   isUserAutoPlayVideoValid,
+  isUserAutoPlayNextVideoValid,
+  isUserAutoPlayNextVideoPlaylistValid,
   isUserDisplayNameValid,
   isUserDescriptionValid,
+  isNoInstanceConfigWarningModal,
+  isNoWelcomeModal,
   isAvatarFile
 }

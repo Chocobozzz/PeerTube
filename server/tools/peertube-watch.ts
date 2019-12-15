@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import { join } from 'path'
 import { execSync } from 'child_process'

@@ -18,6 +18,8 @@ import { VideosModule } from './videos'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { SearchModule } from '@app/search'
+import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
+import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -39,7 +41,10 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     MenuComponent,
     LanguageChooserComponent,
     AvatarNotificationComponent,
-    HeaderComponent
+    HeaderComponent,
+
+    WelcomeModalComponent,
+    InstanceConfigWarningModalComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +76,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
         // On dev mode, test localization
         if (isOnDevLocale()) {
           locale = buildFileLocale(getDevLocale())
-          return require(`raw-loader!../locale/target/angular_${locale}.xml`)
+          return require(`raw-loader!../locale/angular.${locale}.xlf`)
         }
 
         // Default locale, nothing to translate
@@ -79,7 +84,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
         if (isDefaultLocale(completeLocale)) return ''
 
         const fileLocale = buildFileLocale(locale)
-        return require(`raw-loader!../locale/target/angular_${fileLocale}.xml`)
+        return require(`raw-loader!../locale/angular.${fileLocale}.xlf`)
       },
       deps: [ LOCALE_ID ]
     },

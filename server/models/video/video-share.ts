@@ -1,13 +1,15 @@
-import * as Sequelize from 'sequelize'
 import * as Bluebird from 'bluebird'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
-import { throwIfNotValid } from '../utils'
+import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
+import { Op, Transaction } from 'sequelize'
+import { MVideoShareActor, MVideoShareFull } from '../../typings/models/video'
+import { MActorDefault } from '../../typings/models'
 
 enum ScopeNames {
   FULL = 'FULL',
@@ -88,7 +90,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
   })
   Video: VideoModel
 
-  static load (actorId: number, videoId: number, t?: Sequelize.Transaction) {
+  static load (actorId: number | string, videoId: number | string, t?: Transaction): Bluebird<MVideoShareActor> {
     return VideoShareModel.scope(ScopeNames.WITH_ACTOR).findOne({
       where: {
         actorId,
@@ -98,7 +100,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
     })
   }
 
-  static loadByUrl (url: string, t: Sequelize.Transaction) {
+  static loadByUrl (url: string, t: Transaction): Bluebird<MVideoShareFull> {
     return VideoShareModel.scope(ScopeNames.FULL).findOne({
       where: {
         url
@@ -107,7 +109,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
     })
   }
 
-  static loadActorsByShare (videoId: number, t: Sequelize.Transaction) {
+  static loadActorsByShare (videoId: number, t: Transaction): Bluebird<MActorDefault[]> {
     const query = {
       where: {
         videoId
@@ -122,10 +124,10 @@ export class VideoShareModel extends Model<VideoShareModel> {
     }
 
     return VideoShareModel.scope(ScopeNames.FULL).findAll(query)
-      .then(res => res.map(r => r.Actor))
+      .then((res: MVideoShareFull[]) => res.map(r => r.Actor))
   }
 
-  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
+  static loadActorsWhoSharedVideosOf (actorOwnerId: number, t: Transaction): Bluebird<MActorDefault[]> {
     const query = {
       attributes: [],
       include: [
@@ -163,7 +165,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .then(res => res.map(r => r.Actor))
   }
 
-  static loadActorsByVideoChannel (videoChannelId: number, t: Sequelize.Transaction): Bluebird<ActorModel[]> {
+  static loadActorsByVideoChannel (videoChannelId: number, t: Transaction): Bluebird<MActorDefault[]> {
     const query = {
       attributes: [],
       include: [
@@ -188,7 +190,7 @@ export class VideoShareModel extends Model<VideoShareModel> {
       .then(res => res.map(r => r.Actor))
   }
 
-  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Sequelize.Transaction) {
+  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Transaction) {
     const query = {
       offset: start,
       limit: count,
@@ -205,9 +207,12 @@ export class VideoShareModel extends Model<VideoShareModel> {
     const query = {
       where: {
         updatedAt: {
-          [Sequelize.Op.lt]: beforeUpdatedAt
+          [Op.lt]: beforeUpdatedAt
         },
-        videoId
+        videoId,
+        actorId: {
+          [Op.notIn]: buildLocalActorIdsIn()
+        }
       }
     }
 

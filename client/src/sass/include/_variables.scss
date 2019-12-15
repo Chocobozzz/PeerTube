@@ -14,6 +14,8 @@ $grey-foreground-hover-color: #303030;
 $orange-color: #F1680D;
 $orange-hover-color: #F97D46;
 
+$support-button: #38981a;
+
 $bg-color: #fff;
 $fg-color: #000;
 
@@ -47,6 +49,7 @@ $footer-border-color: $header-border-color;
 $separator-border-color: rgba(0, 0, 0, 0.10);
 
 $video-miniature-width: 238px;
+$video-miniature-margin-bottom: 30px;
 $video-thumbnail-height: 122px;
 $video-thumbnail-width: 223px;
 $video-thumbnail-ratio: $video-thumbnail-width / $video-thumbnail-height;
@@ -67,11 +70,17 @@ $variables: (
   --mainHoverColor: var(--mainHoverColor),
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
+
   --menuBackgroundColor: var(--menuBackgroundColor),
   --menuForegroundColor: var(--menuForegroundColor),
   --submenuColor: var(--submenuColor),
+
   --inputColor: var(--inputColor),
   --inputPlaceholderColor: var(--inputPlaceholderColor),
+
+  --supportButtonColor: var(--supportButtonColor),
+  --supportButtonBackgroundColor: var(--supportButtonBackgroundColor),
+
   --embedForegroundColor: var(--embedForegroundColor),
   --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
 );

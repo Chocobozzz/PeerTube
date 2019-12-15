@@ -1,0 +1,83 @@
+@import '_mixins';
+@import '_variables';
+
+.modal-body {
+  font-size: 15px;
+}
+
+.two-columns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+}
+
+.mascot {
+  display: block;
+  min-width: 170px;
+}
+
+.subtitle {
+  font-weight: $font-semibold;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.block-documentation {
+  .subtitle {
+    margin-bottom: 20px;
+  }
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.configure-instance {
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  margin: 20px 0 40px 0;
+}
+
+.columns {
+  display: flex;
+
+  .link-block {
+    @include disable-default-a-behaviour;
+
+    color: var(--mainForegroundColor);
+    padding: 10px;
+    transition: background-color 0.2s ease-in;
+    flex-basis: 33%;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .link-title {
+      font-size: 16px;
+      font-weight: $font-semibold;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 5px;
+    }
+
+    .link-title,
+    div {
+      text-align: center;
+    }
+  }
+}
+
+.configure-instance-button {
+  @include peertube-button;
+  @include orange-button;
+
+  display: inline-block;
+}
+
+.action-button-understood {
+  @include peertube-button;
+  @include grey-button;
+}

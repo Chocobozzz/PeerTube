@@ -51,7 +51,7 @@ function renderMedia (file: any, elem: HTMLVideoElement, opts: RenderMediaOption
       return callback(err)
     })
     preparedElem.addEventListener('loadstart', onLoadStart)
-    return videostream(file, preparedElem)
+    return new videostream(file, preparedElem)
   }
 
   function useMediaSource (useVP9 = false) {

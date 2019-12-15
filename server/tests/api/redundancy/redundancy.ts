@@ -66,7 +66,7 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy, additional
           immutableAssign({
             min_lifetime: '1 hour',
             strategy: strategy,
-            size: '200KB'
+            size: '400KB'
           }, additionalParams)
         ]
       }
@@ -224,8 +224,8 @@ async function checkStatsWith2Webseed (strategy: VideoRedundancyStrategy) {
   const stat = data.videosRedundancy[0]
 
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(204800)
-  expect(stat.totalUsed).to.be.at.least(1).and.below(204801)
+  expect(stat.totalSize).to.equal(409600)
+  expect(stat.totalUsed).to.be.at.least(1).and.below(409601)
   expect(stat.totalVideoFiles).to.equal(4)
   expect(stat.totalVideos).to.equal(1)
 }
@@ -238,7 +238,7 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategy) {
 
   const stat = data.videosRedundancy[0]
   expect(stat.strategy).to.equal(strategy)
-  expect(stat.totalSize).to.equal(204800)
+  expect(stat.totalSize).to.equal(409600)
   expect(stat.totalUsed).to.equal(0)
   expect(stat.totalVideoFiles).to.equal(0)
   expect(stat.totalVideos).to.equal(0)
@@ -247,7 +247,7 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategy) {
 async function enableRedundancyOnServer1 () {
   await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, true)
 
-  const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
+  const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: '-createdAt' })
   const follows: ActorFollow[] = res.body.data
   const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
   const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
@@ -262,7 +262,7 @@ async function enableRedundancyOnServer1 () {
 async function disableRedundancyOnServer1 () {
   await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, false)
 
-  const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 5, '-createdAt')
+  const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: '-createdAt' })
   const follows: ActorFollow[] = res.body.data
   const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
   const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)

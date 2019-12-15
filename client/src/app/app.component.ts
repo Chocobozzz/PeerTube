@@ -1,14 +1,23 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { debounceTime, filter, map, pairwise, skip } from 'rxjs/operators'
+import { debounceTime, filter, first, map, pairwise, skip, switchMap } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'
-import { ViewportScroller } from '@angular/common'
+import { PlatformLocation, ViewportScroller } from '@angular/common'
+import { PluginService } from '@app/core/plugins/plugin.service'
+import { HooksService } from '@app/core/plugins/hooks.service'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
+import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
+import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
+import { UserRole } from '@shared/models'
+import { User } from '@app/shared'
+import { InstanceService } from '@app/shared/instance/instance.service'
 
 @Component({
   selector: 'my-app',
@@ -16,6 +25,9 @@ import { ViewportScroller } from '@angular/common'
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
+  @ViewChild('welcomeModal', { static: false }) welcomeModal: WelcomeModalComponent
+  @ViewChild('instanceConfigWarningModal', { static: false }) instanceConfigWarningModal: InstanceConfigWarningModalComponent
+
   isMenuDisplayed = true
   isMenuChangedByUser = false
 
@@ -27,21 +39,17 @@ export class AppComponent implements OnInit {
     private router: Router,
     private authService: AuthService,
     private serverService: ServerService,
+    private pluginService: PluginService,
+    private instanceService: InstanceService,
     private domSanitizer: DomSanitizer,
     private redirectService: RedirectService,
     private screenService: ScreenService,
     private hotkeysService: HotkeysService,
-    private themeService: ThemeService
+    private themeService: ThemeService,
+    private hooks: HooksService,
+    private location: PlatformLocation,
+    private modalService: NgbModal
   ) { }
-
-  get serverVersion () {
-    return this.serverService.getConfig().serverVersion
-  }
-
-  get serverCommit () {
-    const commit = this.serverService.getConfig().serverCommit || ''
-    return (commit !== '') ? '...' + commit : commit
-  }
 
   get instanceName () {
     return this.serverService.getConfig().instance.name
@@ -53,6 +61,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
+
+    this.loadPlugins()
+    this.themeService.initialize()
 
     this.authService.loadClientCredentials()
 
@@ -83,6 +94,10 @@ export class AppComponent implements OnInit {
     fromEvent(window, 'resize')
       .pipe(debounceTime(200))
       .subscribe(() => this.onResize())
+
+    this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
+
+    this.openModalsIfNeeded()
   }
 
   isUserLoggedIn () {
@@ -98,12 +113,15 @@ export class AppComponent implements OnInit {
     this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 
+  getServerVersionAndCommit () {
+    return this.serverService.getServerVersionAndCommit()
+  }
+
   private initRouteEvents () {
     let resetScroll = true
     const eventsObs = this.router.events
 
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
-    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
 
     scrollEvent.subscribe(e => {
       if (e.position) {
@@ -118,6 +136,8 @@ export class AppComponent implements OnInit {
         return this.viewportScroller.scrollToPosition([ 0, 0 ])
       }
     })
+
+    const navigationEndEvent = eventsObs.pipe(filter((e: Event): e is NavigationEnd => e instanceof NavigationEnd))
 
     // When we add the a-state parameter, we don't want to alter the scroll
     navigationEndEvent.pipe(pairwise())
@@ -154,6 +174,10 @@ export class AppComponent implements OnInit {
       map(() => window.location.pathname),
       filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
     ).subscribe(() => this.redirectService.redirectToHomepage(true))
+
+    navigationEndEvent.subscribe(e => {
+      this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
+    })
 
     eventsObs.pipe(
       filter((e: Event): e is GuardsCheckStart => e instanceof GuardsCheckStart),
@@ -196,40 +220,77 @@ export class AppComponent implements OnInit {
         })
   }
 
+  private async loadPlugins () {
+    this.pluginService.initializePlugins()
+
+    this.hooks.runAction('action:application.init', 'common')
+  }
+
+  private async openModalsIfNeeded () {
+    this.serverService.configLoaded
+        .pipe(
+          first(),
+          switchMap(() => this.authService.userInformationLoaded),
+          map(() => this.authService.getUser()),
+          filter(user => user.role === UserRole.ADMINISTRATOR)
+        ).subscribe(user => setTimeout(() => this.openAdminModals(user))) // setTimeout because of ngIf in template
+  }
+
+  private async openAdminModals (user: User) {
+    if (user.noWelcomeModal !== true) return this.welcomeModal.show()
+
+    const config = this.serverService.getConfig()
+    if (user.noInstanceConfigWarningModal === true || !config.signup.allowed) return
+
+    this.instanceService.getAbout()
+      .subscribe(about => {
+        if (
+          config.instance.name.toLowerCase() === 'peertube' ||
+          !about.instance.terms ||
+          !about.instance.administrator ||
+          !about.instance.maintenanceLifetime
+        ) {
+          this.instanceConfigWarningModal.show(about)
+        }
+      })
+  }
+
   private initHotkeys () {
     this.hotkeysService.add([
       new Hotkey(['/', 's'], (event: KeyboardEvent): boolean => {
         document.getElementById('search-video').focus()
         return false
       }, undefined, this.i18n('Focus the search bar')),
+
       new Hotkey('b', (event: KeyboardEvent): boolean => {
         this.toggleMenu()
         return false
       }, undefined, this.i18n('Toggle the left menu')),
+
       new Hotkey('g o', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/overview' ])
         return false
-      }, undefined, this.i18n('Go to the videos overview page')),
+      }, undefined, this.i18n('Go to the discover videos page')),
+
       new Hotkey('g t', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/trending' ])
         return false
       }, undefined, this.i18n('Go to the trending videos page')),
+
       new Hotkey('g r', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/recently-added' ])
         return false
       }, undefined, this.i18n('Go to the recently added videos page')),
+
       new Hotkey('g l', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/local' ])
         return false
       }, undefined, this.i18n('Go to the local videos page')),
+
       new Hotkey('g u', (event: KeyboardEvent): boolean => {
         this.router.navigate([ '/videos/upload' ])
         return false
-      }, undefined, this.i18n('Go to the videos upload page')),
-      new Hotkey('shift+t', (event: KeyboardEvent): boolean => {
-        this.themeService.toggleDarkTheme()
-        return false
-      }, undefined, this.i18n('Toggle Dark theme'))
+      }, undefined, this.i18n('Go to the videos upload page'))
     ])
   }
 }

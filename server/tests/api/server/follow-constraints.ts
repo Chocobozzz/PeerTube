@@ -27,7 +27,7 @@ describe('Test follow constraints', function () {
   let userAccessToken: string
 
   before(async function () {
-    this.timeout(30000)
+    this.timeout(60000)
 
     servers = await flushAndRunMultipleServers(2)
 

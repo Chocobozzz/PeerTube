@@ -25,7 +25,7 @@ server {
   # Security hardening (as of 11/02/2018)
   ssl_protocols TLSv1.2; # TLSv1.3, TLSv1.2 if nginx >= 1.13.0
   ssl_prefer_server_ciphers on;
-  ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256';
+  ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256:AES256-SHA'; # AES256-SHA alias TLS_RSA_WITH_AES_256_CBC_SHA is neccessary for apps on older clients such as android 4.4.2, where more modern cipher suites are not supported.
   # ssl_ecdh_curve secp384r1; # Requires nginx >= 1.1.0, not compatible with import-videos script
   ssl_session_timeout  10m;
   ssl_session_cache shared:SSL:10m;
@@ -44,6 +44,10 @@ server {
   gzip_types text/css application/javascript;
   gzip_vary on;
 
+  # If you have a small /var/lib partition, it could be interesting to store temp nginx uploads in a different place
+  # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path
+  # client_body_temp_path /var/www/peertube/storage/nginx/;
+
   # Enable HSTS
   # Tells browsers to stick with HTTPS and never visit the insecure HTTP
   # version. Once a browser sees this header, it will only visit the site over
@@ -59,7 +63,7 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Could be removed
-  location ~ ^/client/(.*\.(js|css|woff2|otf|ttf|woff|eot))$ {
+  location ~ ^/client/(.*\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 
     alias /var/www/peertube/peertube-latest/client/dist/$1;
@@ -91,7 +95,7 @@ server {
   }
 
   location / {
-    proxy_pass http://localhost:9000;
+    proxy_pass http://127.0.0.1:9000;
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -115,9 +119,20 @@ server {
   }
 
   # Bypass PeerTube for performance reasons. Could be removed
-  location ~ ^/static/(webseed|redundancy)/ {
+  location ~ ^/static/(webseed|redundancy|streaming-playlists)/ {
     # Clients usually have 4 simultaneous webseed connections, so the real limit is 3MB/s per client
-    limit_rate 800k;
+    set $peertube_limit_rate 800k;
+
+    # Increase rate limit in HLS mode, because we don't have multiple simultaneous connections
+    if ($request_uri ~ -fragmented.mp4$) {
+      set $peertube_limit_rate 5000k;
+    }
+
+    # Use this with nginx >= 1.17.0
+    # limit_rate $peertube_limit_rate;
+    # Or this if your nginx < 1.17.0
+    set $limit_rate $peertube_limit_rate;
+    limit_rate_after 5000k;
 
     if ($request_method = 'OPTIONS') {
       add_header 'Access-Control-Allow-Origin' '*';
@@ -142,6 +157,7 @@ server {
 
     rewrite ^/static/webseed/(.*)$ /videos/$1 break;
     rewrite ^/static/redundancy/(.*)$ /redundancy/$1 break;
+    rewrite ^/static/streaming-playlists/(.*)$ /streaming-playlists/$1 break;
 
     try_files $uri /;
   }
@@ -156,14 +172,14 @@ server {
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $host;
-    proxy_pass http://localhost:9000;
+    proxy_pass http://127.0.0.1:9000;
   }
 
   location /socket.io {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $host;
 
-    proxy_pass http://localhost:9000;
+    proxy_pass http://127.0.0.1:9000;
 
     # enable WebSockets
     proxy_http_version 1.1;

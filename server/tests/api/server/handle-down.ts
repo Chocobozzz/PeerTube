@@ -19,8 +19,9 @@ import {
   setAccessTokensToServers,
   unfollow,
   updateVideo,
-  uploadVideo,
-  wait
+  uploadVideo, uploadVideoAndGetId,
+  wait,
+  setActorFollowScores, closeAllSequelize
 } from '../../../../shared/extra-utils'
 import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
 import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -42,6 +43,8 @@ describe('Test handle downs', function () {
   let missedVideo1: Video
   let missedVideo2: Video
   let unlistedVideo: Video
+
+  let videoIdsServer1: number[] = []
 
   const videoAttributes = {
     name: 'my super name for server 1',
@@ -109,7 +112,7 @@ describe('Test handle downs', function () {
   })
 
   it('Should remove followers that are often down', async function () {
-    this.timeout(60000)
+    this.timeout(240000)
 
     // Server 2 and 3 follow server 1
     await follow(servers[1].url, [ servers[0].url ], servers[1].accessToken)
@@ -171,7 +174,7 @@ describe('Test handle downs', function () {
     await wait(11000)
 
     // Only server 3 is still a follower of server 1
-    const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 2, 'createdAt')
+    const res = await getFollowersListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 2, sort: 'createdAt' })
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
     expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
@@ -181,7 +184,14 @@ describe('Test handle downs', function () {
     const states: JobState[] = [ 'waiting', 'active' ]
 
     for (const state of states) {
-      const res = await getJobsListPaginationAndSort(servers[ 0 ].url, servers[ 0 ].accessToken, state,0, 50, '-createdAt')
+      const res = await getJobsListPaginationAndSort({
+        url: servers[ 0 ].url,
+        accessToken: servers[ 0 ].accessToken,
+        state: state,
+        start: 0,
+        count: 50,
+        sort: '-createdAt'
+      })
       expect(res.body.data).to.have.length(0)
     }
   })
@@ -199,7 +209,7 @@ describe('Test handle downs', function () {
 
     await waitJobs(servers)
 
-    const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 2, 'createdAt')
+    const res = await getFollowersListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 2, sort: 'createdAt' })
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(2)
   })
@@ -299,7 +309,54 @@ describe('Test handle downs', function () {
     }
   })
 
+  it('Should upload many videos on server 1', async function () {
+    this.timeout(120000)
+
+    for (let i = 0; i < 10; i++) {
+      const uuid = (await uploadVideoAndGetId({ server: servers[ 0 ], videoName: 'video ' + i })).uuid
+      videoIdsServer1.push(uuid)
+    }
+
+    await waitJobs(servers)
+
+    for (const id of videoIdsServer1) {
+      await getVideo(servers[ 1 ].url, id)
+    }
+
+    await waitJobs(servers)
+    await setActorFollowScores(servers[1].internalServerNumber, 20)
+
+    // Wait video expiration
+    await wait(11000)
+
+    // Refresh video -> score + 10 = 30
+    await getVideo(servers[1].url, videoIdsServer1[0])
+
+    await waitJobs(servers)
+  })
+
+  it('Should remove followings that are down', async function () {
+    this.timeout(120000)
+
+    killallServers([ servers[0] ])
+
+    // Wait video expiration
+    await wait(11000)
+
+    for (let i = 0; i < 3; i++) {
+      await getVideo(servers[1].url, videoIdsServer1[i])
+      await wait(1000)
+      await waitJobs([ servers[1] ])
+    }
+
+    for (const id of videoIdsServer1) {
+      await getVideo(servers[1].url, id, 403)
+    }
+  })
+
   after(async function () {
+    await closeAllSequelize([ servers[1] ])
+
     await cleanupTests(servers)
   })
 })

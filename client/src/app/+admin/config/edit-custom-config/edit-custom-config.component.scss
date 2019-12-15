@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.form-group {
+  margin-bottom: 25px;
+}
+
 input[type=text] {
   @include peertube-input-text(340px);
   display: block;
@@ -40,7 +44,12 @@ textarea {
 
   display: block;
 
-  &#instanceShortDescription {
-    height: 100px;
+  &.small {
+    height: 75px;
   }
+}
+
+.label-small-info {
+  font-style: italic;
+  margin-bottom: 10px;
 }

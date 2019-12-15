@@ -38,6 +38,9 @@ export class VideoPlaylist implements ServerVideoPlaylist {
   videoChannelBy?: string
   videoChannelAvatarUrl?: string
 
+  private thumbnailVersion: number
+  private originThumbnailUrl: string
+
   constructor (hash: ServerVideoPlaylist, translations: {}) {
     const absoluteAPIUrl = getAbsoluteAPIUrl()
 
@@ -54,6 +57,7 @@ export class VideoPlaylist implements ServerVideoPlaylist {
 
     if (this.thumbnailPath) {
       this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
+      this.originThumbnailUrl = this.thumbnailUrl
     } else {
       this.thumbnailUrl = window.location.origin + '/client/assets/images/default-playlist.jpg'
     }
@@ -80,5 +84,14 @@ export class VideoPlaylist implements ServerVideoPlaylist {
     if (this.type.id === VideoPlaylistType.WATCH_LATER) {
       this.displayName = peertubeTranslate(this.displayName, translations)
     }
+  }
+
+  refreshThumbnail () {
+    if (!this.originThumbnailUrl) return
+
+    if (!this.thumbnailVersion) this.thumbnailVersion = 0
+    this.thumbnailVersion++
+
+    this.thumbnailUrl = this.originThumbnailUrl + '?v' + this.thumbnailVersion
   }
 }

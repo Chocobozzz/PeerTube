@@ -5,7 +5,7 @@
   @include create-button;
 }
 
-/deep/ .action-button {
+::ng-deep .action-button {
   &.action-button-delete {
     margin-right: 10px;
   }
@@ -17,7 +17,7 @@
   .miniature-wrapper {
     flex-grow: 1;
 
-    /deep/ .miniature {
+    ::ng-deep .miniature {
       display: flex;
 
       .miniature-info {
@@ -46,6 +46,18 @@
 
     .video-playlist-buttons {
       margin-top: 10px;
+    }
+  }
+
+  my-video-playlist-miniature ::ng-deep .miniature {
+    flex-direction: column;
+
+    .miniature-info {
+      margin-left: 0 !important;
+    }
+
+    .miniature-name {
+      max-width: $video-thumbnail-width;
     }
   }
 }

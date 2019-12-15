@@ -115,7 +115,7 @@
         my-video-thumbnail {
           margin-right: 0 !important;
 
-          /deep/ .video-thumbnail {
+          ::ng-deep .video-thumbnail {
             width: 100%;
             height: auto;
 

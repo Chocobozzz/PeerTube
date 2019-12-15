@@ -5,8 +5,16 @@ import 'mocha'
 import { CustomConfig } from '../../../../shared/models/server/custom-config.model'
 
 import {
-  createUser, flushTests, killallServers, makeDeleteRequest, makeGetRequest, makePutBodyRequest, flushAndRunServer, ServerInfo,
-  setAccessTokensToServers, userLogin, immutableAssign, cleanupTests
+  cleanupTests,
+  createUser,
+  flushAndRunServer,
+  immutableAssign,
+  makeDeleteRequest,
+  makeGetRequest,
+  makePutBodyRequest,
+  ServerInfo,
+  setAccessTokensToServers,
+  userLogin
 } from '../../../../shared/extra-utils'
 
 describe('Test config API validators', function () {
@@ -19,6 +27,18 @@ describe('Test config API validators', function () {
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
+      codeOfConduct: 'my super coc',
+
+      creationReason: 'my super reason',
+      moderationInformation: 'my super moderation information',
+      administrator: 'Kuja',
+      maintenanceLifetime: 'forever',
+      businessModel: 'my super business model',
+      hardwareInformation: '2vCore 3GB RAM',
+
+      languages: [ 'en', 'es' ],
+      categories: [ 1, 2 ],
+
       isNSFW: true,
       defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
@@ -26,6 +46,9 @@ describe('Test config API validators', function () {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
       }
+    },
+    theme: {
+      default: 'default'
     },
     services: {
       twitter: {
@@ -62,12 +85,16 @@ describe('Test config API validators', function () {
       allowAudioFiles: true,
       threads: 1,
       resolutions: {
+        '0p': false,
         '240p': false,
         '360p': true,
         '480p': true,
         '720p': false,
         '1080p': false,
         '2160p': false
+      },
+      webtorrent: {
+        enabled: true
       },
       hls: {
         enabled: false
@@ -94,6 +121,17 @@ describe('Test config API validators', function () {
       instance: {
         enabled: false,
         manualApproval: true
+      }
+    },
+    followings: {
+      instance: {
+        autoFollowBack: {
+          enabled: true
+        },
+        autoFollowIndex: {
+          enabled: true,
+          indexUrl: 'https://index.example.com'
+        }
       }
     }
   }
@@ -189,6 +227,27 @@ describe('Test config API validators', function () {
           enabled: true,
           limit: 5,
           requiresEmailVerification: true
+        }
+      })
+
+      await makePutBodyRequest({
+        url: server.url,
+        path,
+        fields: newUpdateParams,
+        token: server.accessToken,
+        statusCodeExpected: 400
+      })
+    })
+
+    it('Should fail with a disabled webtorrent & hls transcoding', async function () {
+      const newUpdateParams = immutableAssign(updateParams, {
+        transcoding: {
+          hls: {
+            enabled: false
+          },
+          webtorrent: {
+            enabled: false
+          }
         }
       })
 

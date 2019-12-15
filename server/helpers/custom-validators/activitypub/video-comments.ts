@@ -4,9 +4,18 @@ import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid } from './misc'
 
 function sanitizeAndCheckVideoCommentObject (comment: any) {
-  if (!comment || comment.type !== 'Note') return false
+  if (!comment) return false
+
+  if (!isCommentTypeValid(comment)) return false
 
   normalizeComment(comment)
+
+  if (comment.type === 'Tombstone') {
+    return isActivityPubUrlValid(comment.id) &&
+      isDateValid(comment.published) &&
+      isDateValid(comment.deleted) &&
+      isActivityPubUrlValid(comment.url)
+  }
 
   return isActivityPubUrlValid(comment.id) &&
     isCommentContentValid(comment.content) &&
@@ -41,4 +50,12 @@ function normalizeComment (comment: any) {
   }
 
   return
+}
+
+function isCommentTypeValid (comment: any): boolean {
+  if (comment.type === 'Note') return true
+
+  if (comment.type === 'Tombstone' && comment.formerType === 'Note') return true
+
+  return false
 }

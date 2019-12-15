@@ -1,10 +1,10 @@
 import { join } from 'path'
 import { CONFIG } from '../initializers/config'
-import { VideoCaptionModel } from '../models/video/video-caption'
 import * as srt2vtt from 'srt-to-vtt'
-import { createReadStream, createWriteStream, remove, move } from 'fs-extra'
+import { createReadStream, createWriteStream, move, remove } from 'fs-extra'
+import { MVideoCaptionFormattable } from '@server/typings/models'
 
-async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: VideoCaptionModel) {
+async function moveAndProcessCaptionFile (physicalFile: { filename: string, path: string }, videoCaption: MVideoCaptionFormattable) {
   const videoCaptionsDir = CONFIG.STORAGE.CAPTIONS_DIR
   const destination = join(videoCaptionsDir, videoCaption.getCaptionName())
 
@@ -12,7 +12,7 @@ async function moveAndProcessCaptionFile (physicalFile: { filename: string, path
   if (physicalFile.path.endsWith('.srt')) {
     await convertSrtToVtt(physicalFile.path, destination)
     await remove(physicalFile.path)
-  } else { // Just move the vtt file
+  } else if (physicalFile.path !== destination) { // Just move the vtt file
     await move(physicalFile.path, destination, { overwrite: true })
   }
 

@@ -116,7 +116,7 @@ export class PeerTubeEmbed {
     this.api.initialize()
   }
 
-  private loadParams () {
+  private loadParams (video: VideoDetails) {
     try {
       const params = new URL(window.location.toString()).searchParams
 
@@ -136,7 +136,15 @@ export class PeerTubeEmbed {
       this.bigPlayBackgroundColor = this.getParamString(params, 'bigPlayBackgroundColor')
       this.foregroundColor = this.getParamString(params, 'foregroundColor')
 
-      this.mode = this.getParamString(params, 'mode') === 'p2p-media-loader' ? 'p2p-media-loader' : 'webtorrent'
+      const modeParam = this.getParamString(params, 'mode')
+
+      if (modeParam) {
+        if (modeParam === 'p2p-media-loader') this.mode = 'p2p-media-loader'
+        else this.mode = 'webtorrent'
+      } else {
+        if (Array.isArray(video.streamingPlaylists) && video.streamingPlaylists.length !== 0) this.mode = 'p2p-media-loader'
+        else this.mode = 'webtorrent'
+      }
     } catch (err) {
       console.error('Cannot get params from URL.', err)
     }
@@ -162,7 +170,7 @@ export class PeerTubeEmbed {
     const videoInfo: VideoDetails = await videoResponse.json()
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
 
-    this.loadParams()
+    this.loadParams(videoInfo)
 
     const options: PeertubePlayerManagerOptions = {
       common: {
@@ -186,7 +194,7 @@ export class PeerTubeEmbed {
         enableHotkeys: true,
         peertubeLink: true,
         poster: window.location.origin + videoInfo.previewPath,
-        theaterMode: false,
+        theaterButton: false,
 
         serverUrl: window.location.origin,
         language: navigator.language,
@@ -207,12 +215,12 @@ export class PeerTubeEmbed {
           segmentsSha256Url: hlsPlaylist.segmentsSha256Url,
           redundancyBaseUrls: hlsPlaylist.redundancies.map(r => r.baseUrl),
           trackerAnnounce: videoInfo.trackerUrls,
-          videoFiles: videoInfo.files
+          videoFiles: hlsPlaylist.files
         } as P2PMediaLoaderOptions
       })
     }
 
-    this.player = await PeertubePlayerManager.initialize(this.mode, options)
+    this.player = await PeertubePlayerManager.initialize(this.mode, options, player => this.player = player)
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 
     window[ 'videojsPlayer' ] = this.player
@@ -239,7 +247,7 @@ export class PeerTubeEmbed {
 
       const config: ServerConfig = await configResponse.json()
       const description = config.tracker.enabled && this.warningTitle
-        ? '<span class="text">' + this.player.localize('Uses P2P, others may know your IP is downloading this video.') + '</span>'
+        ? '<span class="text">' + this.player.localize('Watching this video may reveal your IP address to others.') + '</span>'
         : undefined
 
       this.player.dock({

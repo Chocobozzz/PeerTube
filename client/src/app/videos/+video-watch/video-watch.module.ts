@@ -8,18 +8,20 @@ import { VideoCommentsComponent } from './comment/video-comments.component'
 import { VideoShareComponent } from './modal/video-share.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { VideoWatchComponent } from './video-watch.component'
-import { NgxQRCodeModule } from 'ngx-qrcode2'
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
+import { QRCodeModule } from 'angularx-qrcode'
+import { InputSwitchModule } from 'primeng/inputswitch'
 
 @NgModule({
   imports: [
     VideoWatchRoutingModule,
     SharedModule,
     NgbTooltipModule,
-    NgxQRCodeModule,
-    RecommendationsModule
+    QRCodeModule,
+    RecommendationsModule,
+    InputSwitchModule
   ],
 
   declarations: [

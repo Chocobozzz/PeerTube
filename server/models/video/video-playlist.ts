@@ -33,7 +33,7 @@ import {
   WEBSERVER
 } from '../../initializers/constants'
 import { VideoPlaylist } from '../../../shared/models/videos/playlist/video-playlist.model'
-import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
+import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions } from '../account/account'
 import { ScopeNames as VideoChannelScopeNames, VideoChannelModel } from './video-channel'
 import { join } from 'path'
 import { VideoPlaylistElementModel } from './video-playlist-element'
@@ -43,6 +43,15 @@ import { VideoPlaylistType } from '../../../shared/models/videos/playlist/video-
 import { ThumbnailModel } from './thumbnail'
 import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
+import * as Bluebird from 'bluebird'
+import {
+  MVideoPlaylistAccountThumbnail, MVideoPlaylistAP,
+  MVideoPlaylistFormattable,
+  MVideoPlaylistFull,
+  MVideoPlaylistFullSummary,
+  MVideoPlaylistIdWithElements
+} from '../../typings/models/video/video-playlist'
+import { MThumbnail } from '../../typings/models/video/thumbnail'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -115,7 +124,7 @@ type AvailableForListOptions = {
   [ ScopeNames.AVAILABLE_FOR_LIST ]: (options: AvailableForListOptions) => {
     // Only list local playlists OR playlists that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
-    const actorWhere = {
+    const whereActor = {
       [ Op.or ]: [
         {
           serverId: null
@@ -159,7 +168,7 @@ type AvailableForListOptions = {
     }
 
     const accountScope = {
-      method: [ AccountScopeNames.SUMMARY, actorWhere ]
+      method: [ AccountScopeNames.SUMMARY, { whereActor } as SummaryOptions ]
     }
 
     return {
@@ -265,7 +274,6 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
   VideoPlaylistElements: VideoPlaylistElementModel[]
 
   @HasOne(() => ThumbnailModel, {
-
     foreignKey: {
       name: 'videoPlaylistId',
       allowNull: true
@@ -333,7 +341,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
                              })
   }
 
-  static listPlaylistIdsOf (accountId: number, videoIds: number[]) {
+  static listPlaylistIdsOf (accountId: number, videoIds: number[]): Bluebird<MVideoPlaylistIdWithElements[]> {
     const query = {
       attributes: [ 'id' ],
       where: {
@@ -341,7 +349,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       },
       include: [
         {
-          attributes: [ 'videoId', 'startTimestamp', 'stopTimestamp' ],
+          attributes: [ 'id', 'videoId', 'startTimestamp', 'stopTimestamp' ],
           model: VideoPlaylistElementModel.unscoped(),
           where: {
             videoId: {
@@ -369,7 +377,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .then(e => !!e)
   }
 
-  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction) {
+  static loadWithAccountAndChannelSummary (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFullSummary> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -382,7 +390,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadWithAccountAndChannel (id: number | string, transaction: Transaction) {
+  static loadWithAccountAndChannel (id: number | string, transaction: Transaction): Bluebird<MVideoPlaylistFull> {
     const where = buildWhereIdOrUUID(id)
 
     const query = {
@@ -395,7 +403,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       .findOne(query)
   }
 
-  static loadByUrlAndPopulateAccount (url: string) {
+  static loadByUrlAndPopulateAccount (url: string): Bluebird<MVideoPlaylistAccountThumbnail> {
     const query = {
       where: {
         url
@@ -424,7 +432,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return VideoPlaylistModel.update({ privacy: VideoPlaylistPrivacy.PRIVATE, videoChannelId: null }, query)
   }
 
-  async setAndSaveThumbnail (thumbnail: ThumbnailModel, t: Transaction) {
+  async setAndSaveThumbnail (thumbnail: MThumbnail, t: Transaction) {
     thumbnail.videoPlaylistId = this.id
 
     this.Thumbnail = await thumbnail.save({ transaction: t })
@@ -432,6 +440,10 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   hasThumbnail () {
     return !!this.Thumbnail
+  }
+
+  hasGeneratedThumbnail () {
+    return this.hasThumbnail() && this.Thumbnail.automaticallyGenerated === true
   }
 
   generateThumbnailName () {
@@ -468,7 +480,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     return isOutdated(this, ACTIVITY_PUB.VIDEO_PLAYLIST_REFRESH_INTERVAL)
   }
 
-  toFormattedJSON (): VideoPlaylist {
+  toFormattedJSON (this: MVideoPlaylistFormattable): VideoPlaylist {
     return {
       id: this.id,
       uuid: this.uuid,
@@ -498,7 +510,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     }
   }
 
-  toActivityPubObject (page: number, t: Transaction): Promise<PlaylistObject> {
+  toActivityPubObject (this: MVideoPlaylistAP, page: number, t: Transaction): Promise<PlaylistObject> {
     const handler = (start: number, count: number) => {
       return VideoPlaylistElementModel.listUrlsOfForAP(this.id, start, count, t)
     }

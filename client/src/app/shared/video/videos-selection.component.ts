@@ -21,6 +21,7 @@ import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template
 import { VideoSortField } from '@app/shared/video/sort-field.type'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ResultList } from '@shared/models'
 
 export type SelectionType = { [ id: number ]: boolean }
 
@@ -33,8 +34,8 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   @Input() pagination: ComponentPagination
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
-  @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<{ videos: Video[], totalVideos: number }>
-  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective>
+  @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<ResultList<Video>>
+  @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'rowButtons' | 'globalButtons'>>
 
   @Output() selectionChange = new EventEmitter<SelectionType>()
   @Output() videosModelChange = new EventEmitter<Video[]>()

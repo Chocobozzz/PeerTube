@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body, param } from 'express-validator/check'
+import { body, param, query } from 'express-validator'
 import { isTestInstance } from '../../helpers/core-utils'
 import { isEachUniqueHostValid, isHostValid } from '../../helpers/custom-validators/servers'
 import { logger } from '../../helpers/logger'
@@ -9,7 +9,24 @@ import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
-import { isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
+import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
+import { MActorFollowActorsDefault } from '@server/typings/models'
+import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
+
+const listFollowsValidator = [
+  query('state')
+    .optional()
+    .custom(isFollowStateValid).withMessage('Should have a valid follow state'),
+  query('actorType')
+    .optional()
+    .custom(isActorTypeValid).withMessage('Should have a valid actor type'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
 
 const followValidator = [
   body('hosts').custom(isEachUniqueHostValid).withMessage('Should have an array of unique hosts'),
@@ -65,7 +82,7 @@ const getFollowerValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    let follow: ActorFollowModel
+    let follow: MActorFollowActorsDefault
     try {
       const actorUrl = await loadActorUrlOrGetFromWebfinger(req.params.nameWithHost)
       const actor = await ActorModel.loadByUrl(actorUrl)
@@ -109,5 +126,6 @@ export {
   followValidator,
   removeFollowingValidator,
   getFollowerValidator,
-  acceptOrRejectFollowerValidator
+  acceptOrRejectFollowerValidator,
+  listFollowsValidator
 }

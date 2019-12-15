@@ -1,20 +1,20 @@
 import * as express from 'express'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { UserRight } from '../../../../shared'
 import {
-  doesLocalVideoChannelNameExist,
-  doesVideoChannelNameWithHostExist,
   isVideoChannelDescriptionValid,
   isVideoChannelNameValid,
   isVideoChannelSupportValid
 } from '../../../helpers/custom-validators/video-channels'
 import { logger } from '../../../helpers/logger'
-import { UserModel } from '../../../models/account/user'
 import { VideoChannelModel } from '../../../models/video/video-channel'
 import { areValidationErrors } from '../utils'
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { isBooleanValid } from '../../../helpers/custom-validators/misc'
+import { doesLocalVideoChannelNameExist, doesVideoChannelNameWithHostExist } from '../../../helpers/middlewares'
+import { MChannelAccountDefault, MUser } from '@server/typings/models'
+import { VIDEO_CHANNELS } from '@server/initializers/constants'
 
 const videoChannelsAddValidator = [
   body('name').custom(isActorPreferredUsernameValid).withMessage('Should have a valid channel name'),
@@ -32,6 +32,14 @@ const videoChannelsAddValidator = [
       res.status(409)
          .send({ error: 'Another actor (account/channel) with this name on this instance already exists or has already existed.' })
          .end()
+      return false
+    }
+
+    const count = await VideoChannelModel.countByAccount(res.locals.oauth.token.User.Account.id)
+    if (count >= VIDEO_CHANNELS.MAX_PER_USER) {
+      res.status(400)
+        .send({ error: `You cannot create more than ${VIDEO_CHANNELS.MAX_PER_USER} channels` })
+        .end()
       return false
     }
 
@@ -132,7 +140,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserCanDeleteVideoChannel (user: UserModel, videoChannel: VideoChannelModel, res: express.Response) {
+function checkUserCanDeleteVideoChannel (user: MUser, videoChannel: MChannelAccountDefault, res: express.Response) {
   if (videoChannel.Actor.isOwned() === false) {
     res.status(403)
               .json({ error: 'Cannot remove video channel of another server.' })

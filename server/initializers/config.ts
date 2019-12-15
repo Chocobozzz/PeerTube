@@ -48,8 +48,8 @@ const CONFIG = {
     BODY: {
       SIGNATURE: config.get<string>('email.body.signature')
     },
-    OBJECT: {
-      PREFIX: config.get<string>('email.object.prefix') + ' '
+    SUBJECT: {
+      PREFIX: config.get<string>('email.subject.prefix') + ' '
     }
   },
   STORAGE: {
@@ -63,7 +63,8 @@ const CONFIG = {
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
-    CACHE_DIR: buildPath(config.get<string>('storage.cache'))
+    CACHE_DIR: buildPath(config.get<string>('storage.cache')),
+    PLUGINS_DIR: buildPath(config.get<string>('storage.plugins'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
@@ -72,6 +73,14 @@ const CONFIG = {
     PORT: config.get<number>('webserver.port')
   },
   RATES_LIMIT: {
+    API: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.api.window')),
+      MAX: config.get<number>('rates_limit.api.max')
+    },
+    SIGNUP: {
+      WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.signup.window')),
+      MAX: config.get<number>('rates_limit.signup.max')
+    },
     LOGIN: {
       WINDOW_MS: parseDurationToMs(config.get<string>('rates_limit.login.window')),
       MAX: config.get<number>('rates_limit.login.max')
@@ -84,7 +93,12 @@ const CONFIG = {
   TRUST_PROXY: config.get<string[]>('trust_proxy'),
   LOG: {
     LEVEL: config.get<string>('log.level'),
-    ROTATION: config.get<boolean>('log.rotation.enabled')
+    ROTATION: {
+      ENABLED: config.get<boolean>('log.rotation.enabled'),
+      MAX_FILE_SIZE: bytes.parse(config.get<string>('log.rotation.maxFileSize')),
+      MAX_FILES: config.get<number>('log.rotation.maxFiles')
+    },
+    ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP')
   },
   SEARCH: {
     REMOTE_URI: {
@@ -125,6 +139,13 @@ const CONFIG = {
       }
     }
   },
+  PLUGINS: {
+    INDEX: {
+      ENABLED: config.get<boolean>('plugins.index.enabled'),
+      CHECK_LATEST_VERSIONS_INTERVAL: parseDurationToMs(config.get<string>('plugins.index.check_latest_versions_interval')),
+      URL: config.get<string>('plugins.index.url')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },
@@ -152,6 +173,7 @@ const CONFIG = {
     get ALLOW_AUDIO_FILES () { return config.get<boolean>('transcoding.allow_audio_files') },
     get THREADS () { return config.get<number>('transcoding.threads') },
     RESOLUTIONS: {
+      get '0p' () { return config.get<boolean>('transcoding.resolutions.0p') },
       get '240p' () { return config.get<boolean>('transcoding.resolutions.240p') },
       get '360p' () { return config.get<boolean>('transcoding.resolutions.360p') },
       get '480p' () { return config.get<boolean>('transcoding.resolutions.480p') },
@@ -161,6 +183,9 @@ const CONFIG = {
     },
     HLS: {
       get ENABLED () { return config.get<boolean>('transcoding.hls.enabled') }
+    },
+    WEBTORRENT: {
+      get ENABLED () { return config.get<boolean>('transcoding.webtorrent.enabled') }
     }
   },
   IMPORT: {
@@ -193,6 +218,19 @@ const CONFIG = {
     get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
+    get CODE_OF_CONDUCT () { return config.get<string>('instance.code_of_conduct') },
+
+    get CREATION_REASON () { return config.get<string>('instance.creation_reason') },
+
+    get MODERATION_INFORMATION () { return config.get<string>('instance.moderation_information') },
+    get ADMINISTRATOR () { return config.get<string>('instance.administrator') },
+    get MAINTENANCE_LIFETIME () { return config.get<string>('instance.maintenance_lifetime') },
+    get BUSINESS_MODEL () { return config.get<string>('instance.business_model') },
+    get HARDWARE_INFORMATION () { return config.get<string>('instance.hardware_information') },
+
+    get LANGUAGES () { return config.get<string[]>('instance.languages') || [] },
+    get CATEGORIES () { return config.get<number[]>('instance.categories') || [] },
+
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
@@ -215,6 +253,26 @@ const CONFIG = {
       get ENABLED () { return config.get<boolean>('followers.instance.enabled') },
       get MANUAL_APPROVAL () { return config.get<boolean>('followers.instance.manual_approval') }
     }
+  },
+  FOLLOWINGS: {
+    INSTANCE: {
+      AUTO_FOLLOW_BACK: {
+        get ENABLED () {
+          return config.get<boolean>('followings.instance.auto_follow_back.enabled')
+        }
+      },
+      AUTO_FOLLOW_INDEX: {
+        get ENABLED () {
+          return config.get<boolean>('followings.instance.auto_follow_index.enabled')
+        },
+        get INDEX_URL () {
+          return config.get<string>('followings.instance.auto_follow_index.index_url')
+        }
+      }
+    }
+  },
+  THEME: {
+    get DEFAULT () { return config.get<string>('theme.default') }
   }
 }
 

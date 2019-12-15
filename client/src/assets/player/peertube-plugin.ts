@@ -36,12 +36,18 @@ class PeerTubePlugin extends Plugin {
   private userWatchingVideoInterval: any
   private lastResolutionChange: ResolutionUpdateData
 
+  private menuOpened = false
+  private mouseInControlBar = false
+  private readonly savedInactivityTimeout: number
+
   constructor (player: videojs.Player, options: PeerTubePluginOptions) {
     super(player, options)
 
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
     this.videoCaptions = options.videoCaptions
+
+    this.savedInactivityTimeout = player.options_.inactivityTimeout
 
     if (options.autoplay === true) this.player.addClass('vjs-has-autoplay')
 
@@ -124,6 +130,16 @@ class PeerTubePlugin extends Plugin {
     if (this.userWatchingVideoInterval) clearInterval(this.userWatchingVideoInterval)
   }
 
+  onMenuOpen () {
+    this.menuOpened = false
+    this.alterInactivity()
+  }
+
+  onMenuClosed () {
+    this.menuOpened = true
+    this.alterInactivity()
+  }
+
   private initializePlayer () {
     if (isMobile()) this.player.addClass('vjs-is-mobile')
 
@@ -131,7 +147,7 @@ class PeerTubePlugin extends Plugin {
 
     this.initCaptions()
 
-    this.alterInactivity()
+    this.listenControlBarMouse()
   }
 
   private runViewAdd () {
@@ -208,23 +224,25 @@ class PeerTubePlugin extends Plugin {
     this.trigger('resolutionChange', data)
   }
 
+  private listenControlBarMouse () {
+    this.player.controlBar.on('mouseenter', () => {
+      this.mouseInControlBar = true
+      this.alterInactivity()
+    })
+
+    this.player.controlBar.on('mouseleave', () => {
+      this.mouseInControlBar = false
+      this.alterInactivity()
+    })
+  }
+
   private alterInactivity () {
-    let saveInactivityTimeout: number
-
-    const disableInactivity = () => {
-      saveInactivityTimeout = this.player.options_.inactivityTimeout
-      this.player.options_.inactivityTimeout = 0
-    }
-    const enableInactivity = () => {
-      this.player.options_.inactivityTimeout = saveInactivityTimeout
+    if (this.menuOpened || this.mouseInControlBar) {
+      this.player.options_.inactivityTimeout = this.savedInactivityTimeout
+      return
     }
 
-    const settingsDialog = this.player.children_.find((c: any) => c.name_ === 'SettingsDialog')
-
-    this.player.controlBar.on('mouseenter', () => disableInactivity())
-    settingsDialog.on('mouseenter', () => disableInactivity())
-    this.player.controlBar.on('mouseleave', () => enableInactivity())
-    settingsDialog.on('mouseleave', () => enableInactivity())
+    this.player.options_.inactivityTimeout = 1
   }
 
   private initCaptions () {

@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { query } from 'express-validator/check'
+import { query } from 'express-validator'
 import { isWebfingerLocalResourceValid } from '../../helpers/custom-validators/webfinger'
 import { logger } from '../../helpers/logger'
 import { ActorModel } from '../../models/activitypub/actor'
@@ -18,6 +18,7 @@ const webfingerValidator = [
     const nameWithHost = getHostWithPort(req.query.resource.substr(5))
     const [ name ] = nameWithHost.split('@')
 
+    // FIXME: we don't need the full actor
     const actor = await ActorModel.loadLocalByName(name)
     if (!actor) {
       return res.status(404)
@@ -25,7 +26,7 @@ const webfingerValidator = [
         .end()
     }
 
-    res.locals.actor = actor
+    res.locals.actorFull = actor
     return next()
   }
 ]

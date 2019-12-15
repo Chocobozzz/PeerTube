@@ -1,8 +1,5 @@
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_LANGUAGES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
-import { Response } from 'express'
-import { VideoModel } from '../../models/video/video'
-import { VideoCaptionModel } from '../../models/video/video-caption'
 
 function isVideoCaptionLanguageValid (value: any) {
   return exists(value) && VIDEO_LANGUAGES[ value ] !== undefined
@@ -16,25 +13,9 @@ function isVideoCaptionFile (files: { [ fieldname: string ]: Express.Multer.File
   return isFileValid(files, videoCaptionTypesRegex, field, CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max)
 }
 
-async function doesVideoCaptionExist (video: VideoModel, language: string, res: Response) {
-  const videoCaption = await VideoCaptionModel.loadByVideoIdAndLanguage(video.id, language)
-
-  if (!videoCaption) {
-    res.status(404)
-       .json({ error: 'Video caption not found' })
-       .end()
-
-    return false
-  }
-
-  res.locals.videoCaption = videoCaption
-  return true
-}
-
 // ---------------------------------------------------------------------------
 
 export {
   isVideoCaptionFile,
-  isVideoCaptionLanguageValid,
-  doesVideoCaptionExist
+  isVideoCaptionLanguageValid
 }

@@ -9,8 +9,12 @@ import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
 import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
+import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
+import { MActorFollowActors, MActorSignature } from '../../../typings/models'
+import { autoFollowBackIfNeeded } from '../follow'
 
-async function processFollowActivity (activity: ActivityFollow, byActor: ActorModel) {
+async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
+  const { activity, byActor } = options
   const activityObject = getAPId(activity.object)
 
   return retryTransactionWrapper(processFollow, byActor, activityObject)
@@ -24,8 +28,8 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function processFollow (actor: ActorModel, targetActorURL: string) {
-  const { actorFollow, created, isFollowingInstance } = await sequelizeTypescript.transaction(async t => {
+async function processFollow (byActor: MActorSignature, targetActorURL: string) {
+  const { actorFollow, created, isFollowingInstance, targetActor } = await sequelizeTypescript.transaction(async t => {
     const targetActor = await ActorModel.loadByUrlAndPopulateAccountAndChannel(targetActorURL, t)
 
     if (!targetActor) throw new Error('Unknown actor')
@@ -37,18 +41,18 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
     if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
-      await sendReject(actor, targetActor)
+      await sendReject(byActor, targetActor)
 
-      return { actorFollow: undefined }
+      return { actorFollow: undefined as MActorFollowActors }
     }
 
-    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate({
+    const [ actorFollow, created ] = await ActorFollowModel.findOrCreate<MActorFollowActors>({
       where: {
-        actorId: actor.id,
+        actorId: byActor.id,
         targetActorId: targetActor.id
       },
       defaults: {
-        actorId: actor.id,
+        actorId: byActor.id,
         targetActorId: targetActor.id,
         state: CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL ? 'pending' : 'accepted'
       },
@@ -60,22 +64,31 @@ async function processFollow (actor: ActorModel, targetActorURL: string) {
       await actorFollow.save({ transaction: t })
     }
 
-    actorFollow.ActorFollower = actor
+    actorFollow.ActorFollower = byActor
     actorFollow.ActorFollowing = targetActor
 
     // Target sends to actor he accepted the follow request
-    if (actorFollow.state === 'accepted') await sendAccept(actorFollow)
+    if (actorFollow.state === 'accepted') {
+      await sendAccept(actorFollow)
+      await autoFollowBackIfNeeded(actorFollow)
+    }
 
-    return { actorFollow, created, isFollowingInstance }
+    return { actorFollow, created, isFollowingInstance, targetActor }
   })
 
   // Rejected
   if (!actorFollow) return
 
   if (created) {
-    if (isFollowingInstance) Notifier.Instance.notifyOfNewInstanceFollow(actorFollow)
-    else Notifier.Instance.notifyOfNewUserFollow(actorFollow)
+    const follower = await ActorModel.loadFull(byActor.id)
+    const actorFollowFull = Object.assign(actorFollow, { ActorFollowing: targetActor, ActorFollower: follower })
+
+    if (isFollowingInstance) {
+      Notifier.Instance.notifyOfNewInstanceFollow(actorFollowFull)
+    } else {
+      Notifier.Instance.notifyOfNewUserFollow(actorFollowFull)
+    }
   }
 
-  logger.info('Actor %s is followed by actor %s.', targetActorURL, actor.url)
+  logger.info('Actor %s is followed by actor %s.', targetActorURL, byActor.url)
 }

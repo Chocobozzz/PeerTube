@@ -1,0 +1,29 @@
+@import '_variables';
+@import '_mixins';
+
+.peertube-contributors {
+  .framasoft {
+    font-size: 18px;
+  }
+
+  > p {
+    text-align: center;
+  }
+
+  /deep/ h1 {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: $font-semibold;
+    margin-top: 20px;
+  }
+
+  /deep/ ul {
+    padding: 0;
+    text-align: center;
+
+    li {
+      display: inline-block;
+      margin-right: 10px;
+    }
+  }
+}

@@ -18,7 +18,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
 
   @Output() captionAdded = new EventEmitter<VideoCaptionEdit>()
 
-  @ViewChild('modal') modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: ElementRef
 
   videoCaptionLanguages: VideoConstant<string>[] = []
 

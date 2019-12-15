@@ -1,14 +1,14 @@
 import * as express from 'express'
-import 'express-validator'
-import { body, param, query } from 'express-validator/check'
+import { body, param, query } from 'express-validator'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
 import { isRatingValid } from '../../../helpers/custom-validators/video-rates'
-import { doesVideoExist, isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
+import { isVideoRatingTypeValid } from '../../../helpers/custom-validators/videos'
 import { logger } from '../../../helpers/logger'
 import { areValidationErrors } from '../utils'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoRateType } from '../../../../shared/models/videos'
 import { isAccountNameValid } from '../../../helpers/custom-validators/accounts'
+import { doesVideoExist } from '../../../helpers/middlewares'
 
 const videoUpdateRateValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),

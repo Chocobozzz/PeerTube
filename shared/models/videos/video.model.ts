@@ -5,23 +5,7 @@ import { VideoPrivacy } from './video-privacy.enum'
 import { VideoScheduleUpdate } from './video-schedule-update.model'
 import { VideoConstant } from './video-constant.model'
 import { VideoStreamingPlaylist } from './video-streaming-playlist.model'
-
-export interface VideoFile {
-  magnetUri: string
-  resolution: VideoConstant<VideoResolution>
-  size: number // Bytes
-  torrentUrl: string
-  torrentDownloadUrl: string
-  fileUrl: string
-  fileDownloadUrl: string
-  fps: number
-}
-
-export interface PlaylistElement {
-  position: number
-  startTimestamp: number
-  stopTimestamp: number
-}
+import { VideoFile } from './video-file.model'
 
 export interface Video {
   id: number
@@ -59,8 +43,6 @@ export interface Video {
   userHistory?: {
     currentTime: number
   }
-
-  playlistElement?: PlaylistElement
 }
 
 export interface VideoDetails extends Video {

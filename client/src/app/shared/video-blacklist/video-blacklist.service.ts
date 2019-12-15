@@ -34,7 +34,7 @@ export class VideoBlacklistService {
                )
   }
 
-  getAutoBlacklistedAsVideoList (videoPagination: ComponentPagination): Observable<{ videos: Video[], totalVideos: number}> {
+  getAutoBlacklistedAsVideoList (videoPagination: ComponentPagination): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     // prioritize first created since waiting longest
@@ -48,9 +48,10 @@ export class VideoBlacklistService {
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
               .pipe(
                 map(res => {
-                  const videos = res.data.map(videoBlacklist => new Video(videoBlacklist.video))
-                  const totalVideos = res.total
-                  return { videos, totalVideos }
+                  return {
+                    total: res.total,
+                    data: res.data.map(videoBlacklist => new Video(videoBlacklist.video))
+                  }
                 }),
                 catchError(res => this.restExtractor.handleError(res))
               )

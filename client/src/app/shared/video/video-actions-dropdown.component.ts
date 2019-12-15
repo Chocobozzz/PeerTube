@@ -29,12 +29,12 @@ export type VideoActionsDisplayType = {
   styleUrls: [ './video-actions-dropdown.component.scss' ]
 })
 export class VideoActionsDropdownComponent implements OnChanges {
-  @ViewChild('playlistDropdown') playlistDropdown: NgbDropdown
-  @ViewChild('playlistAdd') playlistAdd: VideoAddToPlaylistComponent
+  @ViewChild('playlistDropdown', { static: false }) playlistDropdown: NgbDropdown
+  @ViewChild('playlistAdd', { static: false }) playlistAdd: VideoAddToPlaylistComponent
 
-  @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
-  @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
-  @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
+  @ViewChild('videoDownloadModal', { static: false }) videoDownloadModal: VideoDownloadComponent
+  @ViewChild('videoReportModal', { static: false }) videoReportModal: VideoReportComponent
+  @ViewChild('videoBlacklistModal', { static: false }) videoBlacklistModal: VideoBlacklistComponent
 
   @Input() video: Video | VideoDetails
 
@@ -57,6 +57,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Output() videoRemoved = new EventEmitter()
   @Output() videoUnblacklisted = new EventEmitter()
   @Output() videoBlacklisted = new EventEmitter()
+  @Output() modalOpened = new EventEmitter()
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
 
@@ -102,14 +103,20 @@ export class VideoActionsDropdownComponent implements OnChanges {
   /* Show modals */
 
   showDownloadModal () {
+    this.modalOpened.emit()
+
     this.videoDownloadModal.show(this.video as VideoDetails)
   }
 
   showReportModal () {
+    this.modalOpened.emit()
+
     this.videoReportModal.show()
   }
 
   showBlacklistModal () {
+    this.modalOpened.emit()
+
     this.videoBlacklistModal.show()
   }
 
@@ -160,6 +167,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   }
 
   async removeVideo () {
+    this.modalOpened.emit()
+
     const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this video?'), this.i18n('Delete'))
     if (res === false) return
 

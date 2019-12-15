@@ -2,7 +2,7 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  
+**Table of Contents**
 
 - [Remote Tools](#remote-tools)
   - [Dependencies](#dependencies)
@@ -11,6 +11,7 @@
     - [peertube-import-videos.js](#peertube-import-videosjs)
     - [peertube-upload.js](#peertube-uploadjs)
     - [peertube-watch.js](#peertube-watchjs)
+    - [peertube-plugins.js](#peertube-pluginsjs)
 - [Server tools](#server-tools)
   - [parse-log](#parse-log)
   - [create-transcoding-job.js](#create-transcoding-jobjs)
@@ -19,6 +20,7 @@
   - [optimize-old-videos.js](#optimize-old-videosjs)
   - [update-host.js](#update-hostjs)
   - [reset-password.js](#reset-passwordjs)
+  - [plugin install/uninstall](#plugin-installuninstall)
   - [REPL (Read Eval Print Loop)](#repl-read-eval-print-loop)
     - [.help](#help)
     - [Lodash example](#lodash-example)
@@ -36,7 +38,7 @@ You need to follow all the following steps even if you are on a PeerTube server 
 ### Dependencies
 
 Install the [PeerTube dependencies](dependencies.md) except PostgreSQL and Redis.
-PeerTube only supports NodeJS 8.x or 10.x.
+PeerTube only supports NodeJS 10.x.
 
 ### Installation
 
@@ -75,6 +77,7 @@ You can access it as `peertube` via an alias in your `.bashrc` like `alias peert
     import-videos|import  import a video from a streaming platform
     watch|w               watch a video in the terminal ✩°｡⋆
     repl                  initiate a REPL to access internals
+    plugins|p [action]    manag instance plugins
     help [cmd]            display help for [cmd]
 ```
 
@@ -102,9 +105,18 @@ And now that your video is online, you can watch it from the confort of your ter
 $ peertube watch https://peertube.cpy.re/videos/watch/e8a1af4e-414a-4d58-bfe6-2146eed06d10
 ```
 
+To list, install, uninstall dynamically plugins/themes of an instance:
+
+```bash
+$ peertube plugins list
+$ peertube plugins install --path /local/plugin/path
+$ peertube plugins install --npm-name peertube-plugin-myplugin
+$ peertube plugins uninstall --npm-name peertube-plugin-myplugin
+```
+
 #### peertube-import-videos.js
 
-You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.  
+You can use this script to import videos from all [supported sites of youtube-dl](https://rg3.github.io/youtube-dl/supportedsites.html) into PeerTube.
 Be sure you own the videos or have the author's authorization to do so.
 
 ```sh
@@ -112,7 +124,7 @@ $ node dist/server/tools/peertube-import-videos.js \
     -u 'PEERTUBE_URL' \
     -U 'PEERTUBE_USER' \
     --password 'PEERTUBE_PASSWORD' \
-    -t 'TARGET_URL'
+    --target-url 'TARGET_URL'
 ```
 
 * `PEERTUBE_URL` : the full URL of your PeerTube server where you want to import, eg: https://peertube.cpy.re
@@ -131,6 +143,19 @@ Already downloaded videos will not be uploaded twice, so you can run and re-run 
 
 Videos will be publicly available after transcoding (you can see them before that in your account on the web interface).
 
+**NB**: If you want to synchronize a Youtube channel to your PeerTube instance (ensure you have the agreement from the author),
+you can add a [crontab rule](https://help.ubuntu.com/community/CronHowto) (or an equivalent of your OS) and insert
+these rules (ensure to customize them to your needs):
+
+```
+# Update youtube-dl every day at midnight
+0 0 * * * /usr/bin/npm rebuild youtube-dl --prefix /PATH/TO/PEERTUBE/
+
+# Synchronize the YT channel every sunday at 22:00 all the videos published since last monday included
+0 22 * * 0 /usr/bin/node /PATH/TO/PEERTUBE/dist/server/tools/peertube-import-videos.js -u '__PEERTUBE_URL__' -U '__USER__' --password '__PASSWORD__' --target-url 'https://www.youtube.com/channel/___CHANNEL__' --since $(date --date="-6 days" +%Y-%m-%d)
+```
+
+Also you may want to subscribe to the PeerTube channel in order to manually check the synchronization is successful.
 
 #### peertube-upload.js
 
@@ -159,6 +184,22 @@ It provides support for different players:
 - chromecast
 
 
+#### peertube-plugins.js
+
+Install/update/uninstall or list local or NPM PeerTube plugins:
+
+```
+$ cd ${CLONE}
+$ node dist/server/tools/peertube-plugins.js --help
+$ node dist/server/tools/peertube-plugins.js list --help
+$ node dist/server/tools/peertube-plugins.js install --help
+$ node dist/server/tools/peertube-plugins.js update --help
+$ node dist/server/tools/peertube-plugins.js uninstall --help
+
+$ node dist/server/tools/peertube-plugins.js install --path /my/plugin/path
+$ node dist/server/tools/peertube-plugins.js install --npm-name peertube-theme-example
+```
+
 ## Server tools
 
 These scripts should be run on the server, in `peertube-latest` directory.
@@ -185,7 +226,7 @@ Or to transcode to a specific resolution:
 ```
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
-   
+
 ### create-import-video-file-job.js
 
 You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video. PeerTube needs to be running.
@@ -233,7 +274,31 @@ To reset a user password from CLI, run:
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run reset-password -- -u target_username
 ```
 
-### REPL ([Read Eval Print Loop](https://nodejs.org/docs/latest-v8.x/api/repl.html))
+
+### plugin install/uninstall
+
+The difference with `peertube plugins` CLI is that these scripts can be used even if PeerTube is not running.
+If PeerTube is running, you need to restart it for the changes to take effect (whereas with `peertube plugins` CLI, plugins/themes are dynamically loaded on the server).
+
+To install/update a plugin or a theme from the disk:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --plugin-path /local/plugin/path
+```
+
+From NPM:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:install -- --npm-name peertube-plugin-myplugin
+```
+
+To uninstall a plugin or a theme:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run plugin:uninstall -- --npm-name peertube-plugin-myplugin
+```
+
+### REPL ([Read Eval Print Loop](https://nodejs.org/docs/latest-v10.x/api/repl.html))
 
 If you want to interact with the application libraries and objects even when PeerTube is not running, there is a REPL for that.
 

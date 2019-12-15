@@ -1,13 +1,13 @@
 import * as express from 'express'
 import { areValidationErrors } from '../utils'
-import { checkUserCanManageVideo, doesVideoExist } from '../../../helpers/custom-validators/videos'
 import { isIdOrUUIDValid } from '../../../helpers/custom-validators/misc'
-import { body, param } from 'express-validator/check'
+import { body, param } from 'express-validator'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { UserRight } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { doesVideoCaptionExist, isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
+import { isVideoCaptionFile, isVideoCaptionLanguageValid } from '../../../helpers/custom-validators/video-captions'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
+import { checkUserCanManageVideo, doesVideoCaptionExist, doesVideoExist } from '../../../helpers/middlewares'
 
 const addVideoCaptionValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
@@ -26,7 +26,7 @@ const addVideoCaptionValidator = [
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return cleanUpReqFiles(req)
 
     return next()
   }
@@ -41,11 +41,11 @@ const deleteVideoCaptionValidator = [
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoCaptionExist(res.locals.video, req.params.captionLanguage, res)) return
+    if (!await doesVideoCaptionExist(res.locals.videoAll, req.params.captionLanguage, res)) return
 
     // Check if the user who did the request is able to update the video
     const user = res.locals.oauth.token.User
-    if (!checkUserCanManageVideo(user, res.locals.video, UserRight.UPDATE_ANY_VIDEO, res)) return
+    if (!checkUserCanManageVideo(user, res.locals.videoAll, UserRight.UPDATE_ANY_VIDEO, res)) return
 
     return next()
   }

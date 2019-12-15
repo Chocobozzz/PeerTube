@@ -20,6 +20,7 @@ const expect = chai.expect
 describe('Test videos search', function () {
   let server: ServerInfo = null
   let startDate: string
+  let videoUUID: string
 
   before(async function () {
     this.timeout(30000)
@@ -46,6 +47,7 @@ describe('Test videos search', function () {
         const attributes3 = immutableAssign(attributes1, { name: attributes1.name + ' - 3', language: undefined })
         const res = await uploadVideo(server.url, server.accessToken, attributes3)
         const videoId = res.body.video.id
+        videoUUID = res.body.video.uuid
 
         await createVideoCaption({
           url: server.url,
@@ -206,7 +208,7 @@ describe('Test videos search', function () {
     const query = {
       search: '9999',
       categoryOneOf: [ 1 ],
-      tagsOneOf: [ 'aaaa', 'ffff' ]
+      tagsOneOf: [ 'aAaa', 'ffff' ]
     }
     const res1 = await advancedVideosSearch(server.url, query)
     expect(res1.body.total).to.equal(2)
@@ -219,15 +221,15 @@ describe('Test videos search', function () {
     const query = {
       search: '9999',
       categoryOneOf: [ 1 ],
-      tagsAllOf: [ 'cccc' ]
+      tagsAllOf: [ 'CCcc' ]
     }
     const res1 = await advancedVideosSearch(server.url, query)
     expect(res1.body.total).to.equal(2)
 
-    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'blabla' ] }))
+    const res2 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'blAbla' ] }))
     expect(res2.body.total).to.equal(0)
 
-    const res3 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'bbbb', 'cccc' ] }))
+    const res3 = await advancedVideosSearch(server.url, immutableAssign(query, { tagsAllOf: [ 'bbbb', 'CCCC' ] }))
     expect(res3.body.total).to.equal(1)
   })
 
@@ -437,6 +439,14 @@ describe('Test videos search', function () {
       expect(res.body.total).to.equal(1)
       expect(res.body.data[0].name).to.equal('1111 2222 3333 - 7')
     }
+  })
+
+  it('Should search by UUID', async function () {
+    const search = videoUUID
+    const res = await advancedVideosSearch(server.url, { search })
+
+    expect(res.body.total).to.equal(1)
+    expect(res.body.data[0].name).to.equal('1111 2222 3333 - 3')
   })
 
   after(async function () {

@@ -1,9 +1,11 @@
 import { Netrc } from 'netrc-parser'
 import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 import { join } from 'path'
-import { getVideoChannel, root } from '../../shared/extra-utils'
+import { root } from '../../shared/extra-utils/miscs/miscs'
+import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
 import { Command } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
+import { createLogger, format, transports } from 'winston'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -64,7 +66,11 @@ function deleteSettings () {
   })
 }
 
-function getRemoteObjectOrDie (program: any, settings: Settings, netrc: Netrc) {
+function getRemoteObjectOrDie (
+  program: any,
+  settings: Settings,
+  netrc: Netrc
+): { url: string, username: string, password: string } {
   if (!program['url'] || !program['username'] || !program['password']) {
     // No remote and we don't have program parameters: quit
     if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
@@ -114,9 +120,10 @@ function buildCommonVideoOptions (command: Command) {
     .option('-m, --comments-enabled', 'Enable comments')
     .option('-s, --support <support>', 'Video support text')
     .option('-w, --wait-transcoding', 'Wait transcoding before publishing the video')
+    .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
-async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any) {
+async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
   const defaultBooleanAttributes = {
     nsfw: false,
     commentsEnabled: true,
@@ -142,7 +149,9 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
     licence: command[ 'licence' ] || defaultAttributes.licence || undefined,
     language: command[ 'language' ] || defaultAttributes.language || undefined,
     privacy: command[ 'privacy' ] || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
-    support: command[ 'support' ] || defaultAttributes.support || undefined
+    support: command[ 'support' ] || defaultAttributes.support || undefined,
+    description: command[ 'videoDescription' ] || defaultAttributes.description || undefined,
+    tags: command[ 'tags' ] || defaultAttributes.tags || undefined
   }
 
   Object.assign(videoAttributes, booleanAttributes)
@@ -161,16 +170,56 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
   return videoAttributes
 }
 
+function getServerCredentials (program: any) {
+  return Promise.all([ getSettings(), getNetrc() ])
+         .then(([ settings, netrc ]) => {
+           return getRemoteObjectOrDie(program, settings, netrc)
+         })
+}
+
+function getLogger (logLevel = 'info') {
+  const logLevels = {
+    0: 0,
+    error: 0,
+    1: 1,
+    warn: 1,
+    2: 2,
+    info: 2,
+    3: 3,
+    verbose: 3,
+    4: 4,
+    debug: 4
+  }
+
+  const logger = createLogger({
+    levels: logLevels,
+    format: format.combine(
+      format.splat(),
+      format.simple()
+    ),
+    transports: [
+      new (transports.Console)({
+        level: logLevel
+      })
+    ]
+  })
+
+  return logger
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   version,
   config,
+  getLogger,
   getSettings,
   getNetrc,
   getRemoteObjectOrDie,
   writeSettings,
   deleteSettings,
+
+  getServerCredentials,
 
   buildCommonVideoOptions,
   buildVideoAttributesFromCommander

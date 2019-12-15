@@ -9,7 +9,7 @@ function getSequelize (internalServerNumber: number) {
   const dbname = 'peertube_test' + internalServerNumber
   const username = 'peertube'
   const password = 'peertube'
-  const host = 'localhost'
+  const host = process.env.GITLAB_CI ? 'postgres' : 'localhost'
   const port = 5432
 
   const seq = new Sequelize(dbname, username, password, {
@@ -72,10 +72,28 @@ async function closeAllSequelize (servers: ServerInfo[]) {
   }
 }
 
+function setPluginVersion (internalServerNumber: number, pluginName: string, newVersion: string) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "plugin" SET "version" = '${newVersion}' WHERE "name" = '${pluginName}'`, options)
+}
+
+function setActorFollowScores (internalServerNumber: number, newScore: number) {
+  const seq = getSequelize(internalServerNumber)
+
+  const options = { type: QueryTypes.UPDATE }
+
+  return seq.query(`UPDATE "actorFollow" SET "score" = ${newScore}`, options)
+}
+
 export {
   setVideoField,
   setPlaylistField,
   setActorField,
   countVideoViewsOf,
+  setPluginVersion,
+  setActorFollowScores,
   closeAllSequelize
 }

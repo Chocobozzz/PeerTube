@@ -4,22 +4,24 @@ import { downloadYoutubeDLVideo } from '../../../helpers/youtube-dl'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { VideoImportState } from '../../../../shared/models/videos'
 import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
-import { extname, join } from 'path'
+import { extname } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { VideoState } from '../../../../shared'
 import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
-import { downloadWebTorrentVideo } from '../../../helpers/webtorrent'
+import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
 import { move, remove, stat } from 'fs-extra'
 import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { ThumbnailModel } from '../../../models/video/thumbnail'
 import { createVideoMiniatureFromUrl, generateVideoMiniature } from '../../thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { MThumbnail } from '../../../typings/models/video/thumbnail'
+import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
+import { getVideoFilePath } from '@server/lib/video-paths'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -110,7 +112,7 @@ type ProcessFileOptions = {
   generateThumbnail: boolean
   generatePreview: boolean
 }
-async function processFile (downloader: () => Promise<string>, videoImport: VideoImportModel, options: ProcessFileOptions) {
+async function processFile (downloader: () => Promise<string>, videoImport: MVideoImportDefault, options: ProcessFileOptions) {
   let tempVideoPath: string
   let videoDestFile: string
   let videoFile: VideoFileModel
@@ -139,41 +141,44 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       videoId: videoImport.videoId
     }
     videoFile = new VideoFileModel(videoFileData)
+
+    const videoWithFiles = Object.assign(videoImport.Video, { VideoFiles: [ videoFile ], VideoStreamingPlaylists: [] })
     // To clean files if the import fails
-    videoImport.Video.VideoFiles = [ videoFile ]
+    const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
 
     // Move file
-    videoDestFile = join(CONFIG.STORAGE.VIDEOS_DIR, videoImport.Video.getVideoFilename(videoFile))
+    videoDestFile = getVideoFilePath(videoImportWithFiles.Video, videoFile)
     await move(tempVideoPath, videoDestFile)
     tempVideoPath = null // This path is not used anymore
 
     // Process thumbnail
-    let thumbnailModel: ThumbnailModel
+    let thumbnailModel: MThumbnail
     if (options.downloadThumbnail && options.thumbnailUrl) {
-      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.MINIATURE)
+      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.MINIATURE)
     } else if (options.generateThumbnail || options.downloadThumbnail) {
-      thumbnailModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.MINIATURE)
+      thumbnailModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.MINIATURE)
     }
 
     // Process preview
-    let previewModel: ThumbnailModel
+    let previewModel: MThumbnail
     if (options.downloadPreview && options.thumbnailUrl) {
-      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImport.Video, ThumbnailType.PREVIEW)
+      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.PREVIEW)
     } else if (options.generatePreview || options.downloadPreview) {
-      previewModel = await generateVideoMiniature(videoImport.Video, videoFile, ThumbnailType.PREVIEW)
+      previewModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.PREVIEW)
     }
 
     // Create torrent
-    await videoImport.Video.createTorrentAndSetInfoHash(videoFile)
+    await createTorrentAndSetInfoHash(videoImportWithFiles.Video, videoFile)
 
-    const videoImportUpdated: VideoImportModel = await sequelizeTypescript.transaction(async t => {
+    const { videoImportUpdated, video } = await sequelizeTypescript.transaction(async t => {
+      const videoImportToUpdate = videoImportWithFiles as MVideoImportVideo
+
       // Refresh video
-      const video = await VideoModel.load(videoImport.videoId, t)
-      if (!video) throw new Error('Video linked to import ' + videoImport.videoId + ' does not exist anymore.')
-      videoImport.Video = video
+      const video = await VideoModel.load(videoImportToUpdate.videoId, t)
+      if (!video) throw new Error('Video linked to import ' + videoImportToUpdate.videoId + ' does not exist anymore.')
 
       const videoFileCreated = await videoFile.save({ transaction: t })
-      video.VideoFiles = [ videoFileCreated ]
+      videoImportToUpdate.Video = Object.assign(video, { VideoFiles: [ videoFileCreated ] })
 
       // Update video DB object
       video.duration = duration
@@ -188,25 +193,27 @@ async function processFile (downloader: () => Promise<string>, videoImport: Vide
       await federateVideoIfNeeded(videoForFederation, true, t)
 
       // Update video import object
-      videoImport.state = VideoImportState.SUCCESS
-      const videoImportUpdated = await videoImport.save({ transaction: t })
+      videoImportToUpdate.state = VideoImportState.SUCCESS
+      const videoImportUpdated = await videoImportToUpdate.save({ transaction: t }) as MVideoImportVideo
+      videoImportUpdated.Video = video
 
       logger.info('Video %s imported.', video.uuid)
 
-      videoImportUpdated.Video = videoForFederation
-      return videoImportUpdated
+      return { videoImportUpdated, video: videoForFederation }
     })
 
     Notifier.Instance.notifyOnFinishedVideoImport(videoImportUpdated, true)
 
-    if (videoImportUpdated.Video.VideoBlacklist) {
-      Notifier.Instance.notifyOnVideoAutoBlacklist(videoImportUpdated.Video)
+    if (video.isBlacklisted()) {
+      const videoBlacklist = Object.assign(video.VideoBlacklist, { Video: video })
+
+      Notifier.Instance.notifyOnVideoAutoBlacklist(videoBlacklist)
     } else {
-      Notifier.Instance.notifyOnNewVideo(videoImportUpdated.Video)
+      Notifier.Instance.notifyOnNewVideoIfNeeded(video)
     }
 
     // Create transcoding jobs?
-    if (videoImportUpdated.Video.state === VideoState.TO_TRANSCODE) {
+    if (video.state === VideoState.TO_TRANSCODE) {
       // Put uuid because we don't have id auto incremented for now
       const dataInput = {
         type: 'optimize' as 'optimize',

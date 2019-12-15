@@ -1,5 +1,4 @@
 import * as express from 'express'
-import 'express-validator'
 import { getHostWithPort } from '../helpers/express-utils'
 
 function setBodyHostsPort (req: express.Request, res: express.Response, next: express.NextFunction) {

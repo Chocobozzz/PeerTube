@@ -37,6 +37,7 @@ import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-pla
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistElementModel } from '../models/video/video-playlist-element'
 import { ThumbnailModel } from '../models/video/thumbnail'
+import { PluginModel } from '../models/server/plugin'
 import { QueryTypes, Transaction } from 'sequelize'
 
 require('pg').defaults.parseInt8 = true // Avoid BIGINT to be converted to string
@@ -107,7 +108,8 @@ async function initDatabaseModels (silent: boolean) {
     VideoStreamingPlaylistModel,
     VideoPlaylistModel,
     VideoPlaylistElementModel,
-    ThumbnailModel
+    ThumbnailModel,
+    PluginModel
   ])
 
   // Check extensions exist in the database

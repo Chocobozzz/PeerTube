@@ -10,21 +10,29 @@ export interface User {
   username: string
   email: string
   pendingEmail: string | null
+
   emailVerified: boolean
   nsfwPolicy: NSFWPolicyType
 
   adminFlags?: UserAdminFlag
 
   autoPlayVideo: boolean
+  autoPlayNextVideo: boolean
+  autoPlayNextVideoPlaylist: boolean
   webTorrentEnabled: boolean
   videosHistoryEnabled: boolean
+  videoLanguages: string[]
 
   role: UserRole
   roleLabel: string
 
   videoQuota: number
   videoQuotaDaily: number
-  createdAt: Date
+  videoQuotaUsed?: number
+  videoQuotaUsedDaily?: number
+
+  theme: string
+
   account: Account
   notificationSettings?: UserNotificationSetting
   videoChannels?: VideoChannel[]
@@ -32,5 +40,8 @@ export interface User {
   blocked: boolean
   blockedReason?: string
 
-  videoQuotaUsed?: number
+  noInstanceConfigWarningModal: boolean
+  noWelcomeModal: boolean
+
+  createdAt: Date
 }

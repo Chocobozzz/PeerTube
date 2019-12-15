@@ -16,7 +16,7 @@
     flex-grow: 1;
   }
 
-  /deep/ {
+  ::ng-deep {
     .nav-link {
       display: flex !important;
       align-items: center;

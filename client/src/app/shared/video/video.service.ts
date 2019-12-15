@@ -31,8 +31,6 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 
 export interface VideosProvider {
   getVideos (parameters: {
@@ -41,7 +39,7 @@ export interface VideosProvider {
     filter?: VideoFilter,
     categoryOneOf?: number,
     languageOneOf?: string[]
-  }): Observable<{ videos: Video[], totalVideos: number }>
+  }): Observable<ResultList<Video>>
 }
 
 @Injectable()
@@ -65,11 +63,11 @@ export class VideoService implements VideosProvider {
     return VideoService.BASE_VIDEO_URL + uuid + '/watching'
   }
 
-  getVideo (uuid: string): Observable<VideoDetails> {
+  getVideo (options: { videoId: string }): Observable<VideoDetails> {
     return this.serverService.localeObservable
                .pipe(
                  switchMap(translations => {
-                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + uuid)
+                   return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + options.videoId)
                               .pipe(map(videoHash => ({ videoHash, translations })))
                  }),
                  map(({ videoHash, translations }) => new VideoDetails(videoHash, translations)),
@@ -123,7 +121,7 @@ export class VideoService implements VideosProvider {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<{ videos: Video[], totalVideos: number }> {
+  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -141,7 +139,7 @@ export class VideoService implements VideosProvider {
     account: Account,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -159,7 +157,7 @@ export class VideoService implements VideosProvider {
     videoChannel: VideoChannel,
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -173,27 +171,11 @@ export class VideoService implements VideosProvider {
                )
   }
 
-  getPlaylistVideos (
-    videoPlaylistId: number | string,
-    videoPagination: ComponentPagination
-  ): Observable<{ videos: Video[], totalVideos: number }> {
-    const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
-
-    let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination)
-
-    return this.authHttp
-               .get<ResultList<Video>>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos', { params })
-               .pipe(
-                 switchMap(res => this.extractVideos(res)),
-                 catchError(err => this.restExtractor.handleError(err))
-               )
-  }
-
-  getUserSubscriptionVideos (
+  getUserSubscriptionVideos (parameters: {
     videoPagination: ComponentPagination,
     sort: VideoSortField
-  ): Observable<{ videos: Video[], totalVideos: number }> {
+  }): Observable<ResultList<Video>> {
+    const { videoPagination, sort } = parameters
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -213,7 +195,7 @@ export class VideoService implements VideosProvider {
     filter?: VideoFilter,
     categoryOneOf?: number,
     languageOneOf?: string[]
-  }): Observable<{ videos: Video[], totalVideos: number }> {
+  }): Observable<ResultList<Video>> {
     const { videoPagination, sort, filter, categoryOneOf, languageOneOf } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
@@ -344,24 +326,32 @@ export class VideoService implements VideosProvider {
                      videos.push(new Video(videoJson, translations))
                    }
 
-                   return { videos, totalVideos }
+                   return { total: totalVideos, data: videos }
                  })
                )
   }
 
   explainedPrivacyLabels (privacies: VideoConstant<VideoPrivacy>[]) {
-    const newPrivacies = privacies.slice()
+    const base = [
+      {
+        id: VideoPrivacy.PRIVATE,
+        label: this.i18n('Only I can see this video')
+      },
+      {
+        id: VideoPrivacy.UNLISTED,
+        label: this.i18n('Only people with the private link can see this video')
+      },
+      {
+        id: VideoPrivacy.PUBLIC,
+        label: this.i18n('Anyone can see this video')
+      },
+      {
+        id: VideoPrivacy.INTERNAL,
+        label: this.i18n('Only users of this instance can see this video')
+      }
+    ]
 
-    const privatePrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PRIVATE)
-    if (privatePrivacy) privatePrivacy.label = this.i18n('Only I can see this video')
-
-    const unlistedPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.UNLISTED)
-    if (unlistedPrivacy) unlistedPrivacy.label = this.i18n('Only people with the private link can see this video')
-
-    const publicPrivacy = newPrivacies.find(p => p.id === VideoPrivacy.PUBLIC)
-    if (publicPrivacy) publicPrivacy.label = this.i18n('Anyone can see this video')
-
-    return privacies
+    return base.filter(o => !!privacies.find(p => p.id === o.id))
   }
 
   private setVideoRate (id: number, rateType: UserVideoRateType) {

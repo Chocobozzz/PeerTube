@@ -19,11 +19,14 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, USER_ROLE_LABELS, UserRight } from '../../../shared'
+import { hasUserRight, USER_ROLE_LABELS, UserRight, VideoPrivacy } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
+  isNoInstanceConfigWarningModal,
   isUserAdminFlagsValid,
   isUserAutoPlayVideoValid,
+  isUserAutoPlayNextVideoValid,
+  isUserAutoPlayNextVideoPlaylistValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
@@ -35,7 +38,8 @@ import {
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid,
-  isUserWebTorrentEnabledValid
+  isUserWebTorrentEnabledValid,
+  isNoWelcomeModal
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -44,7 +48,7 @@ import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
-import { NSFW_POLICY_TYPES } from '../../initializers/constants'
+import { DEFAULT_THEME_NAME, DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { clearCacheByUserId } from '../../lib/oauth-model'
 import { UserNotificationSettingModel } from './user-notification-setting'
 import { VideoModel } from '../video/video'
@@ -52,6 +56,16 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { VideoImportModel } from '../video/video-import'
 import { UserAdminFlag } from '../../../shared/models/users/user-flag.model'
+import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
+import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
+import * as Bluebird from 'bluebird'
+import {
+  MUserDefault,
+  MUserFormattable,
+  MUserId,
+  MUserNotifSettingChannelDefault,
+  MUserWithNotificationSetting, MVideoFullLight
+} from '@server/typings/models'
 
 enum ScopeNames {
   WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL'
@@ -148,6 +162,18 @@ export class UserModel extends Model<UserModel> {
   @Column
   autoPlayVideo: boolean
 
+  @AllowNull(false)
+  @Default(false)
+  @Is('UserAutoPlayNextVideo', value => throwIfNotValid(value, isUserAutoPlayNextVideoValid, 'auto play next video boolean'))
+  @Column
+  autoPlayNextVideo: boolean
+
+  @AllowNull(false)
+  @Default(true)
+  @Is('UserAutoPlayNextVideoPlaylist', value => throwIfNotValid(value, isUserAutoPlayNextVideoPlaylistValid, 'auto play next video for playlists boolean'))
+  @Column
+  autoPlayNextVideoPlaylist: boolean
+
   @AllowNull(true)
   @Default(null)
   @Is('UserVideoLanguages', value => throwIfNotValid(value, isUserVideoLanguages, 'video languages'))
@@ -186,6 +212,30 @@ export class UserModel extends Model<UserModel> {
   @Is('UserVideoQuotaDaily', value => throwIfNotValid(value, isUserVideoQuotaDailyValid, 'video quota daily'))
   @Column(DataType.BIGINT)
   videoQuotaDaily: number
+
+  @AllowNull(false)
+  @Default(DEFAULT_THEME_NAME)
+  @Is('UserTheme', value => throwIfNotValid(value, isThemeNameValid, 'theme'))
+  @Column
+  theme: string
+
+  @AllowNull(false)
+  @Default(false)
+  @Is(
+    'UserNoInstanceConfigWarningModal',
+    value => throwIfNotValid(value, isNoInstanceConfigWarningModal, 'no instance config warning modal')
+  )
+  @Column
+  noInstanceConfigWarningModal: boolean
+
+  @AllowNull(false)
+  @Default(false)
+  @Is(
+    'UserNoInstanceConfigWarningModal',
+    value => throwIfNotValid(value, isNoWelcomeModal, 'no welcome modal')
+  )
+  @Column
+  noWelcomeModal: boolean
 
   @CreatedAt
   createdAt: Date
@@ -295,7 +345,7 @@ export class UserModel extends Model<UserModel> {
       })
   }
 
-  static listWithRight (right: UserRight) {
+  static listWithRight (right: UserRight): Bluebird<MUserDefault[]> {
     const roles = Object.keys(USER_ROLE_LABELS)
       .map(k => parseInt(k, 10) as UserRole)
       .filter(role => hasUserRight(role, right))
@@ -311,7 +361,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static listUserSubscribersOf (actorId: number) {
+  static listUserSubscribersOf (actorId: number): Bluebird<MUserWithNotificationSetting[]> {
     const query = {
       include: [
         {
@@ -350,7 +400,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.unscoped().findAll(query)
   }
 
-  static listByUsernames (usernames: string[]) {
+  static listByUsernames (usernames: string[]): Bluebird<MUserDefault[]> {
     const query = {
       where: {
         username: usernames
@@ -360,31 +410,31 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static loadById (id: number) {
+  static loadById (id: number): Bluebird<MUserDefault> {
     return UserModel.findByPk(id)
   }
 
-  static loadByUsername (username: string) {
+  static loadByUsername (username: string): Bluebird<MUserDefault> {
     const query = {
       where: {
-        username
+        username: { [ Op.iLike ]: username }
       }
     }
 
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameAndPopulateChannels (username: string) {
+  static loadByUsernameAndPopulateChannels (username: string): Bluebird<MUserNotifSettingChannelDefault> {
     const query = {
       where: {
-        username
+        username: { [ Op.iLike ]: username }
       }
     }
 
     return UserModel.scope(ScopeNames.WITH_VIDEO_CHANNEL).findOne(query)
   }
 
-  static loadByEmail (email: string) {
+  static loadByEmail (email: string): Bluebird<MUserDefault> {
     const query = {
       where: {
         email
@@ -394,19 +444,19 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameOrEmail (username: string, email?: string) {
+  static loadByUsernameOrEmail (username: string, email?: string): Bluebird<MUserDefault> {
     if (!email) email = username
 
     const query = {
       where: {
-        [ Op.or ]: [ { username }, { email } ]
+        [ Op.or ]: [ { username: { [ Op.iLike ]: username } }, { email } ]
       }
     }
 
     return UserModel.findOne(query)
   }
 
-  static loadByVideoId (videoId: number) {
+  static loadByVideoId (videoId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -437,7 +487,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByVideoImportId (videoImportId: number) {
+  static loadByVideoImportId (videoImportId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -454,7 +504,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByChannelActorId (videoChannelActorId: number) {
+  static loadByChannelActorId (videoChannelActorId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -478,7 +528,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByAccountActorId (accountActorId: number) {
+  static loadByAccountActorId (accountActorId: number): Bluebird<MUserDefault> {
     const query = {
       include: [
         {
@@ -495,7 +545,7 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static getOriginalVideoFileTotalFromUser (user: UserModel) {
+  static getOriginalVideoFileTotalFromUser (user: MUserId) {
     // Don't use sequelize because we need to use a sub query
     const query = UserModel.generateUserQuotaBaseSQL()
 
@@ -503,7 +553,7 @@ export class UserModel extends Model<UserModel> {
   }
 
   // Returns cumulative size of all video files uploaded in the last 24 hours.
-  static getOriginalVideoFileTotalDailyFromUser (user: UserModel) {
+  static getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
     // Don't use sequelize because we need to use a sub query
     const query = UserModel.generateUserQuotaBaseSQL('"video"."createdAt" > now() - interval \'24 hours\'')
 
@@ -532,6 +582,20 @@ export class UserModel extends Model<UserModel> {
                     .then(u => u.map(u => u.username))
   }
 
+  canGetVideo (video: MVideoFullLight) {
+    if (video.privacy === VideoPrivacy.INTERNAL) return true
+
+    if (video.privacy === VideoPrivacy.PRIVATE) {
+      return video.VideoChannel && video.VideoChannel.Account.userId === this.id
+    }
+
+    if (video.isBlacklisted()) {
+      return this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+    }
+
+    return false
+  }
+
   hasRight (right: UserRight) {
     return hasUserRight(this.role, right)
   }
@@ -544,37 +608,54 @@ export class UserModel extends Model<UserModel> {
     return comparePassword(password, this.password)
   }
 
-  toFormattedJSON (parameters: { withAdminFlags?: boolean } = {}): User {
+  toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
 
-    const json = {
+    const json: User = {
       id: this.id,
       username: this.username,
       email: this.email,
+      theme: getThemeOrDefault(this.theme, DEFAULT_USER_THEME_NAME),
+
       pendingEmail: this.pendingEmail,
       emailVerified: this.emailVerified,
+
       nsfwPolicy: this.nsfwPolicy,
       webTorrentEnabled: this.webTorrentEnabled,
       videosHistoryEnabled: this.videosHistoryEnabled,
       autoPlayVideo: this.autoPlayVideo,
+      autoPlayNextVideo: this.autoPlayNextVideo,
+      autoPlayNextVideoPlaylist: this.autoPlayNextVideoPlaylist,
       videoLanguages: this.videoLanguages,
+
       role: this.role,
       roleLabel: USER_ROLE_LABELS[ this.role ],
+
       videoQuota: this.videoQuota,
       videoQuotaDaily: this.videoQuotaDaily,
-      createdAt: this.createdAt,
+      videoQuotaUsed: videoQuotaUsed !== undefined
+        ? parseInt(videoQuotaUsed + '', 10)
+        : undefined,
+      videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
+        ? parseInt(videoQuotaUsedDaily + '', 10)
+        : undefined,
+
+      noInstanceConfigWarningModal: this.noInstanceConfigWarningModal,
+      noWelcomeModal: this.noWelcomeModal,
+
       blocked: this.blocked,
       blockedReason: this.blockedReason,
+
       account: this.Account.toFormattedJSON(),
-      notificationSettings: this.NotificationSetting ? this.NotificationSetting.toFormattedJSON() : undefined,
+
+      notificationSettings: this.NotificationSetting
+        ? this.NotificationSetting.toFormattedJSON()
+        : undefined,
+
       videoChannels: [],
-      videoQuotaUsed: videoQuotaUsed !== undefined
-            ? parseInt(videoQuotaUsed + '', 10)
-            : undefined,
-      videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
-            ? parseInt(videoQuotaUsedDaily + '', 10)
-            : undefined
+
+      createdAt: this.createdAt
     }
 
     if (parameters.withAdminFlags) {

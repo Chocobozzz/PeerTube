@@ -67,6 +67,8 @@ describe('Test ActivityPub video channels search', function () {
   })
 
   it('Should not find a remote video channel', async function () {
+    this.timeout(15000)
+
     {
       const search = 'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server3'
       const res = await searchVideoChannel(servers[ 0 ].url, search, servers[ 0 ].accessToken)

@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { Video, VideoPrivacy } from '../../../../shared/models/videos'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
-import { cleanupTests, completeVideoCheck } from '../../../../shared/extra-utils'
+import { cleanupTests, completeVideoCheck, deleteVideoComment } from '../../../../shared/extra-utils'
 import {
   flushAndRunMultipleServers,
   getVideosList,
@@ -49,7 +49,7 @@ describe('Test follows', function () {
 
   it('Should not have followers', async function () {
     for (const server of servers) {
-      const res = await getFollowersListPaginationAndSort(server.url, 0, 5, 'createdAt')
+      const res = await getFollowersListPaginationAndSort({ url: server.url, start: 0, count: 5, sort: 'createdAt' })
       const follows = res.body.data
 
       expect(res.body.total).to.equal(0)
@@ -60,7 +60,7 @@ describe('Test follows', function () {
 
   it('Should not have following', async function () {
     for (const server of servers) {
-      const res = await getFollowingListPaginationAndSort(server.url, 0, 5, 'createdAt')
+      const res = await getFollowingListPaginationAndSort({ url: server.url, start: 0, count: 5, sort: 'createdAt' })
       const follows = res.body.data
 
       expect(res.body.total).to.equal(0)
@@ -78,14 +78,14 @@ describe('Test follows', function () {
   })
 
   it('Should have 2 followings on server 1', async function () {
-    let res = await getFollowingListPaginationAndSort(servers[0].url, 0, 1, 'createdAt')
+    let res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 1, sort: 'createdAt' })
     let follows = res.body.data
 
     expect(res.body.total).to.equal(2)
     expect(follows).to.be.an('array')
     expect(follows.length).to.equal(1)
 
-    res = await getFollowingListPaginationAndSort(servers[0].url, 1, 1, 'createdAt')
+    res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 1, count: 1, sort: 'createdAt' })
     follows = follows.concat(res.body.data)
 
     const server2Follow = follows.find(f => f.following.host === 'localhost:' + servers[1].port)
@@ -97,18 +97,59 @@ describe('Test follows', function () {
     expect(server3Follow.state).to.equal('accepted')
   })
 
-  it('Should search followings on server 1', async function () {
-    {
-      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', ':' + servers[1].port)
-      const follows = res.body.data
+  it('Should search/filter followings on server 1', async function () {
+    const sort = 'createdAt'
+    const start = 0
+    const count = 1
+    const url = servers[ 0 ].url
 
-      expect(res.body.total).to.equal(1)
-      expect(follows.length).to.equal(1)
-      expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[1].port)
+    {
+      const search = ':' + servers[1].port
+
+      {
+        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search })
+        const follows = res.body.data
+
+        expect(res.body.total).to.equal(1)
+        expect(follows.length).to.equal(1)
+        expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[ 1 ].port)
+      }
+
+      {
+        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search, state: 'accepted' })
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data).to.have.lengthOf(1)
+      }
+
+      {
+        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search, state: 'accepted', actorType: 'Person' })
+        expect(res.body.total).to.equal(0)
+        expect(res.body.data).to.have.lengthOf(0)
+      }
+
+      {
+        const res = await getFollowingListPaginationAndSort({
+          url,
+          start,
+          count,
+          sort,
+          search,
+          state: 'accepted',
+          actorType: 'Application'
+        })
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data).to.have.lengthOf(1)
+      }
+
+      {
+        const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search, state: 'pending' })
+        expect(res.body.total).to.equal(0)
+        expect(res.body.data).to.have.lengthOf(0)
+      }
     }
 
     {
-      const res = await getFollowingListPaginationAndSort(servers[ 0 ].url, 0, 1, 'createdAt', 'bla')
+      const res = await getFollowingListPaginationAndSort({ url, start, count, sort, search: 'bla' })
       const follows = res.body.data
 
       expect(res.body.total).to.equal(0)
@@ -118,7 +159,7 @@ describe('Test follows', function () {
 
   it('Should have 0 followings on server 2 and 3', async function () {
     for (const server of [ servers[1], servers[2] ]) {
-      const res = await getFollowingListPaginationAndSort(server.url, 0, 5, 'createdAt')
+      const res = await getFollowingListPaginationAndSort({ url: server.url, start: 0, count: 5, sort: 'createdAt' })
       const follows = res.body.data
 
       expect(res.body.total).to.equal(0)
@@ -129,7 +170,7 @@ describe('Test follows', function () {
 
   it('Should have 1 followers on server 2 and 3', async function () {
     for (const server of [ servers[1], servers[2] ]) {
-      let res = await getFollowersListPaginationAndSort(server.url, 0, 1, 'createdAt')
+      let res = await getFollowersListPaginationAndSort({ url: server.url, start: 0, count: 1, sort: 'createdAt' })
 
       let follows = res.body.data
       expect(res.body.total).to.equal(1)
@@ -139,18 +180,59 @@ describe('Test follows', function () {
     }
   })
 
-  it('Should search followers on server 2', async function () {
-    {
-      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', servers[0].port + '')
-      const follows = res.body.data
+  it('Should search/filter followers on server 2', async function () {
+    const url = servers[ 2 ].url
+    const start = 0
+    const count = 5
+    const sort = 'createdAt'
 
-      expect(res.body.total).to.equal(1)
-      expect(follows.length).to.equal(1)
-      expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[2].port)
+    {
+      const search = servers[0].port + ''
+
+      {
+        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search })
+        const follows = res.body.data
+
+        expect(res.body.total).to.equal(1)
+        expect(follows.length).to.equal(1)
+        expect(follows[ 0 ].following.host).to.equal('localhost:' + servers[ 2 ].port)
+      }
+
+      {
+        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search, state: 'accepted' })
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data).to.have.lengthOf(1)
+      }
+
+      {
+        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search, state: 'accepted', actorType: 'Person' })
+        expect(res.body.total).to.equal(0)
+        expect(res.body.data).to.have.lengthOf(0)
+      }
+
+      {
+        const res = await getFollowersListPaginationAndSort({
+          url,
+          start,
+          count,
+          sort,
+          search,
+          state: 'accepted',
+          actorType: 'Application'
+        })
+        expect(res.body.total).to.equal(1)
+        expect(res.body.data).to.have.lengthOf(1)
+      }
+
+      {
+        const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search, state: 'pending' })
+        expect(res.body.total).to.equal(0)
+        expect(res.body.data).to.have.lengthOf(0)
+      }
     }
 
     {
-      const res = await getFollowersListPaginationAndSort(servers[ 2 ].url, 0, 5, 'createdAt', 'bla')
+      const res = await getFollowersListPaginationAndSort({ url, start, count, sort, search: 'bla' })
       const follows = res.body.data
 
       expect(res.body.total).to.equal(0)
@@ -159,7 +241,7 @@ describe('Test follows', function () {
   })
 
   it('Should have 0 followers on server 1', async function () {
-    const res = await getFollowersListPaginationAndSort(servers[0].url, 0, 5, 'createdAt')
+    const res = await getFollowersListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: 'createdAt' })
     const follows = res.body.data
 
     expect(res.body.total).to.equal(0)
@@ -189,7 +271,7 @@ describe('Test follows', function () {
   })
 
   it('Should not follow server 3 on server 1 anymore', async function () {
-    const res = await getFollowingListPaginationAndSort(servers[0].url, 0, 2, 'createdAt')
+    const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 2, sort: 'createdAt' })
     let follows = res.body.data
 
     expect(res.body.total).to.equal(1)
@@ -200,7 +282,7 @@ describe('Test follows', function () {
   })
 
   it('Should not have server 1 as follower on server 3 anymore', async function () {
-    const res = await getFollowersListPaginationAndSort(servers[2].url, 0, 1, 'createdAt')
+    const res = await getFollowersListPaginationAndSort({ url: servers[ 2 ].url, start: 0, count: 1, sort: 'createdAt' })
 
     let follows = res.body.data
     expect(res.body.total).to.equal(0)
@@ -274,19 +356,40 @@ describe('Test follows', function () {
         }
 
         {
-          const text = 'my super first comment'
-          const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
-          const threadId = res.body.comment.id
+          {
+            const text = 'my super first comment'
+            const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
+            const threadId = res.body.comment.id
 
-          const text1 = 'my super answer to thread 1'
-          const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
-          const childCommentId = childCommentRes.body.comment.id
+            const text1 = 'my super answer to thread 1'
+            const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
+            const childCommentId = childCommentRes.body.comment.id
 
-          const text2 = 'my super answer to answer of thread 1'
-          await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
+            const text2 = 'my super answer to answer of thread 1'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text2)
 
-          const text3 = 'my second answer to thread 1'
-          await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+            const text3 = 'my second answer to thread 1'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text3)
+          }
+
+          {
+            const text = 'will be deleted'
+            const res = await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, text)
+            const threadId = res.body.comment.id
+
+            const text1 = 'answer to deleted'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text1)
+
+            const text2 = 'will also be deleted'
+            const childCommentRes = await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId, text2)
+            const childCommentId = childCommentRes.body.comment.id
+
+            const text3 = 'my second answer to deleted'
+            await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId, text3)
+
+            await deleteVideoComment(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, threadId)
+            await deleteVideoComment(servers[ 2 ].url, servers[ 2 ].accessToken, video4.id, childCommentId)
+          }
         }
 
         {
@@ -371,42 +474,80 @@ describe('Test follows', function () {
     })
 
     it('Should have propagated comments', async function () {
-      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5)
+      const res1 = await getVideoCommentThreads(servers[0].url, video4.id, 0, 5, 'createdAt')
 
-      expect(res1.body.total).to.equal(1)
+      expect(res1.body.total).to.equal(2)
       expect(res1.body.data).to.be.an('array')
-      expect(res1.body.data).to.have.lengthOf(1)
+      expect(res1.body.data).to.have.lengthOf(2)
 
-      const comment: VideoComment = res1.body.data[0]
-      expect(comment.inReplyToCommentId).to.be.null
-      expect(comment.text).equal('my super first comment')
-      expect(comment.videoId).to.equal(video4.id)
-      expect(comment.id).to.equal(comment.threadId)
-      expect(comment.account.name).to.equal('root')
-      expect(comment.account.host).to.equal('localhost:' + servers[2].port)
-      expect(comment.totalReplies).to.equal(3)
-      expect(dateIsValid(comment.createdAt as string)).to.be.true
-      expect(dateIsValid(comment.updatedAt as string)).to.be.true
+      {
+        const comment: VideoComment = res1.body.data[ 0 ]
+        expect(comment.inReplyToCommentId).to.be.null
+        expect(comment.text).equal('my super first comment')
+        expect(comment.videoId).to.equal(video4.id)
+        expect(comment.id).to.equal(comment.threadId)
+        expect(comment.account.name).to.equal('root')
+        expect(comment.account.host).to.equal('localhost:' + servers[ 2 ].port)
+        expect(comment.totalReplies).to.equal(3)
+        expect(dateIsValid(comment.createdAt as string)).to.be.true
+        expect(dateIsValid(comment.updatedAt as string)).to.be.true
 
-      const threadId = comment.threadId
+        const threadId = comment.threadId
 
-      const res2 = await getVideoThreadComments(servers[0].url, video4.id, threadId)
+        const res2 = await getVideoThreadComments(servers[ 0 ].url, video4.id, threadId)
 
-      const tree: VideoCommentThreadTree = res2.body
-      expect(tree.comment.text).equal('my super first comment')
-      expect(tree.children).to.have.lengthOf(2)
+        const tree: VideoCommentThreadTree = res2.body
+        expect(tree.comment.text).equal('my super first comment')
+        expect(tree.children).to.have.lengthOf(2)
 
-      const firstChild = tree.children[0]
-      expect(firstChild.comment.text).to.equal('my super answer to thread 1')
-      expect(firstChild.children).to.have.lengthOf(1)
+        const firstChild = tree.children[ 0 ]
+        expect(firstChild.comment.text).to.equal('my super answer to thread 1')
+        expect(firstChild.children).to.have.lengthOf(1)
 
-      const childOfFirstChild = firstChild.children[0]
-      expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
-      expect(childOfFirstChild.children).to.have.lengthOf(0)
+        const childOfFirstChild = firstChild.children[ 0 ]
+        expect(childOfFirstChild.comment.text).to.equal('my super answer to answer of thread 1')
+        expect(childOfFirstChild.children).to.have.lengthOf(0)
 
-      const secondChild = tree.children[1]
-      expect(secondChild.comment.text).to.equal('my second answer to thread 1')
-      expect(secondChild.children).to.have.lengthOf(0)
+        const secondChild = tree.children[ 1 ]
+        expect(secondChild.comment.text).to.equal('my second answer to thread 1')
+        expect(secondChild.children).to.have.lengthOf(0)
+      }
+
+      {
+        const deletedComment: VideoComment = res1.body.data[1]
+        expect(deletedComment).to.not.be.undefined
+        expect(deletedComment.isDeleted).to.be.true
+        expect(deletedComment.deletedAt).to.not.be.null
+        expect(deletedComment.text).to.equal('')
+        expect(deletedComment.inReplyToCommentId).to.be.null
+        expect(deletedComment.account).to.be.null
+        expect(deletedComment.totalReplies).to.equal(3)
+        expect(dateIsValid(deletedComment.deletedAt as string)).to.be.true
+
+        const res2 = await getVideoThreadComments(servers[0].url, video4.id, deletedComment.threadId)
+
+        const tree: VideoCommentThreadTree = res2.body
+        const [ commentRoot, deletedChildRoot ] = tree.children
+
+        expect(deletedChildRoot).to.not.be.undefined
+        expect(deletedChildRoot.comment.isDeleted).to.be.true
+        expect(deletedChildRoot.comment.deletedAt).to.not.be.null
+        expect(deletedChildRoot.comment.text).to.equal('')
+        expect(deletedChildRoot.comment.inReplyToCommentId).to.equal(deletedComment.id)
+        expect(deletedChildRoot.comment.account).to.be.null
+        expect(deletedChildRoot.children).to.have.lengthOf(1)
+
+        const answerToDeletedChild = deletedChildRoot.children[0]
+        expect(answerToDeletedChild.comment).to.not.be.undefined
+        expect(answerToDeletedChild.comment.inReplyToCommentId).to.equal(deletedChildRoot.comment.id)
+        expect(answerToDeletedChild.comment.text).to.equal('my second answer to deleted')
+        expect(answerToDeletedChild.comment.account.name).to.equal('root')
+
+        expect(commentRoot.comment).to.not.be.undefined
+        expect(commentRoot.comment.inReplyToCommentId).to.equal(deletedComment.id)
+        expect(commentRoot.comment.text).to.equal('answer to deleted')
+        expect(commentRoot.comment.account.name).to.equal('root')
+      }
     })
 
     it('Should have propagated captions', async function () {

@@ -2,10 +2,8 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { snakeCase, isNumber } from 'lodash'
-import {
-  parseBytes, objectConverter
-} from '../../helpers/core-utils'
+import { snakeCase } from 'lodash'
+import { objectConverter, parseBytes } from '../../helpers/core-utils'
 import { isNumeric } from 'validator'
 
 const expect = chai.expect

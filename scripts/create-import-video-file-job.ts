@@ -1,3 +1,6 @@
+import { registerTSPaths } from '../server/helpers/register-ts-paths'
+registerTSPaths()
+
 import * as program from 'commander'
 import { resolve } from 'path'
 import { VideoModel } from '../server/models/video/video'
@@ -25,7 +28,7 @@ run()
 async function run () {
   await initDatabaseModels(true)
 
-  const video = await VideoModel.loadByUUIDWithFile(program['video'])
+  const video = await VideoModel.loadByUUID(program['video'])
   if (!video) throw new Error('Video not found.')
   if (video.isOwned() === false) throw new Error('Cannot import files of a non owned video.')
 
