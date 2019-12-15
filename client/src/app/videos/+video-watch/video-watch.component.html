@@ -114,13 +114,19 @@
                   ></my-video-actions-dropdown>
                 </div>
 
-                <div
-                  class="video-info-likes-dislikes-bar"
-                  *ngIf="video.likes !== 0 || video.dislikes !== 0"
-                  [ngbTooltip]="likesBarTooltipText"
-                  placement="bottom"
-                >
-                  <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+                <div class="video-info-likes-dislikes-bar-outerContainer">
+                  <div
+                    class="video-info-likes-dislikes-bar-innerContainer"
+                    *ngIf="video.likes !== 0 || video.dislikes !== 0"
+                    [ngbTooltip]="likesBarTooltipText"
+                    placement="bottom"
+                  >
+                    <div
+                      class="video-info-likes-dislikes-bar"
+                    >
+                      <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
 

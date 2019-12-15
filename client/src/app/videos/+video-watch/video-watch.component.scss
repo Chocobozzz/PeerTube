@@ -209,6 +209,7 @@ $video-info-margin-left: 44px;
       .video-actions-rates {
         margin: 0 0 10px 0;
         align-items: start;
+        align-self: end;
         width: max-content;
 
         .video-actions {
@@ -293,6 +294,15 @@ $video-info-margin-left: 44px;
               margin-left: 3px;
             }
           }
+        }
+
+        .video-info-likes-dislikes-bar-outerContainer {
+          position: relative;
+        }
+
+        .video-info-likes-dislikes-bar-innerContainer {
+          position: absolute;
+          height: 30px;
         }
 
         .video-info-likes-dislikes-bar {
