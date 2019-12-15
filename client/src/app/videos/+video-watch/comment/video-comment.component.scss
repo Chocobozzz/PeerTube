@@ -19,6 +19,10 @@
     }
   }
 
+  .right {
+    width: 100%;
+  }
+
   .comment-avatar {
     @include avatar(36px);
 

@@ -16,9 +16,12 @@
     </div>
   </div>
 
-  <div class="submit-comment">
+  <div class="comment-buttons">
+    <button *ngIf="isAddButtonDisplayed()" class="cancel-button" (click)="cancelCommentReply()" i18n>
+      Cancel
+    </button>
     <button *ngIf="isAddButtonDisplayed()" [ngClass]="{ disabled: !form.valid || addingComment }" i18n>
-      Post comment
+      Reply
     </button>
   </div>
 </form>

@@ -30,18 +30,29 @@ form {
   }
 }
 
-.submit-comment {
+.cancel-button {
+  font-weight: $font-semibold;
+  display: inline-block;
+  padding: 0 10px 0 10px;
+  white-space: nowrap;
+  background: transparent;
+}
+
+.comment-buttons {
   display: flex;
   justify-content: flex-end;
 
   button {
     @include peertube-button;
-    @include orange-button;
+
+    &:last-child {
+      @include orange-button;
+    }
   }
 }
 
 @media screen and (max-width: 600px) {
-  textarea, .submit-comment button {
+  textarea, .comment-buttons button {
     font-size: 14px !important;
   }
 

@@ -50,6 +50,7 @@
         [parentComments]="newParentComments"
         [focusOnInit]="true"
         (commentCreated)="onCommentReplyCreated($event)"
+        (cancel)="onResetReply()"
       ></my-video-comment-add>
 
       <div *ngIf="commentTree" class="children">

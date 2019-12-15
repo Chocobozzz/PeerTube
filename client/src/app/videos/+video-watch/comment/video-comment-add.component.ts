@@ -26,6 +26,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   @Input() focusOnInit = false
 
   @Output() commentCreated = new EventEmitter<VideoCommentCreate>()
+  @Output() cancel = new EventEmitter()
 
   @ViewChild('visitorModal', { static: true }) visitorModal: NgbModal
   @ViewChild('textarea', { static: true }) textareaElement: ElementRef
@@ -144,5 +145,9 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentThread(this.video.id, commentCreate)
+  }
+
+  private cancelCommentReply () {
+    this.cancel.emit(null)
   }
 }
