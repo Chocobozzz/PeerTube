@@ -75,6 +75,14 @@ export class MarkdownService {
     return this.render('completeMarkdownIt', markdown)
   }
 
+  async processVideoTimestamps (html: string) {
+    return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
+      const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
+      const url = buildVideoLink({ startTime: t })
+      return `<a class="video-timestamp" href="${url}">${str}</a>`
+    })
+  }
+
   private async render (name: keyof MarkdownParsers, markdown: string) {
     if (!markdown) return ''
 
@@ -89,14 +97,6 @@ export class MarkdownService {
     if (config.escape) return this.htmlRenderer.toSafeHtml(html)
 
     return html
-  }
-
-  async processVideoTimestamps (html: string) {
-    return html.replace(/((\d{1,2}):)?(\d{1,2}):(\d{1,2})/g, function (str, _, h, m, s) {
-      const t = (3600 * +(h || 0)) + (60 * +(m || 0)) + (+(s || 0))
-      const url = buildVideoLink({ startTime: t })
-      return `<a href="${url}">${str}</a>`
-    })
   }
 
   private async createMarkdownIt (config: MarkdownConfig) {
@@ -139,7 +139,7 @@ export class MarkdownService {
   private avoidTruncatedTags (html: string) {
     return html.replace(/\*\*?([^*]+)$/, '$1')
       .replace(/<a[^>]+>([^<]+)<\/a>\s*...((<\/p>)|(<\/li>)|(<\/strong>))?$/mi, '$1...')
-      .replace(/\[[^\]]+\]?\(?([^\)]+)$/, '$1')
+      .replace(/\[[^\]]+\]\(([^\)]+)$/m, '$1')
       .replace(/\s?\[[^\]]+\]?[.]{3}<\/p>$/m, '...</p>')
   }
 }

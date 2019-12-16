@@ -4,7 +4,7 @@ import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/v
 import { AuthService } from '../../../core/auth'
 import { Video } from '../../../shared/video/video.model'
 import { VideoComment } from './video-comment.model'
-import { HtmlRendererService, MarkdownService } from '@app/shared/renderer'
+import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-comment',
@@ -23,12 +23,12 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   @Output() wantedToReply = new EventEmitter<VideoComment>()
   @Output() threadCreated = new EventEmitter<VideoCommentThreadTree>()
   @Output() resetReply = new EventEmitter()
+  @Output() timestampClicked = new EventEmitter<number>()
 
   sanitizedCommentHTML = ''
   newParentComments: VideoComment[] = []
 
   constructor (
-    private htmlRenderer: HtmlRendererService,
     private markdownService: MarkdownService,
     private authService: AuthService
   ) {}
@@ -78,8 +78,12 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     this.resetReply.emit()
   }
 
+  handleTimestampClicked (timestamp: number) {
+    this.timestampClicked.emit(timestamp)
+  }
+
   isRemovableByUser () {
-    return this.isUserLoggedIn() &&
+    return this.comment.account && this.isUserLoggedIn() &&
       (
         this.user.account.id === this.comment.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
@@ -87,8 +91,8 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   }
 
   private async init () {
-    const safeHTML = await this.htmlRenderer.toSafeHtml(this.comment.text)
-    this.sanitizedCommentHTML = await this.markdownService.processVideoTimestamps(safeHTML)
+    const html = await this.markdownService.textMarkdownToHTML(this.comment.text, true)
+    this.sanitizedCommentHTML = await this.markdownService.processVideoTimestamps(html)
     this.newParentComments = this.parentComments.concat([ this.comment ])
   }
 }

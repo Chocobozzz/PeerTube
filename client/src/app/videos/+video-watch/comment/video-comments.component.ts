@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core'
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
 import { Subject, Subscription } from 'rxjs'
@@ -23,6 +23,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('commentHighlightBlock', { static: false }) commentHighlightBlock: ElementRef
   @Input() video: VideoDetails
   @Input() user: User
+
+  @Output() timestampClicked = new EventEmitter<number>()
 
   comments: VideoComment[] = []
   highlightedThread: VideoComment
@@ -148,6 +150,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onThreadCreated (commentTree: VideoCommentThreadTree) {
     this.viewReplies(commentTree.comment.id)
+  }
+
+  handleTimestampClicked (timestamp: number) {
+    this.timestampClicked.emit(timestamp)
   }
 
   async onWantedToDelete (commentToDelete: VideoComment) {
