@@ -38,6 +38,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
 import { randomInt } from '@shared/core-utils/miscs/miscs'
 import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
+import { scrollToTop } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-watch',
@@ -138,9 +139,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       if (playlistId) this.loadPlaylist(playlistId)
     })
 
-    this.queryParamsSub = this.route.queryParams.subscribe(queryParams => {
+    this.queryParamsSub = this.route.queryParams.subscribe(async queryParams => {
       const videoId = queryParams[ 'videoId' ]
-      if (videoId) this.loadVideo(videoId)
+      if (videoId) await this.loadVideo(videoId)
+
+      const start = queryParams[ 'start' ]
+      if (this.player && start) this.player.currentTime(parseInt(start, 10))
     })
 
     this.initHotkeys()
@@ -282,6 +286,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       (this.user && this.user.autoPlayNextVideo) ||
       peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
     )
+  }
+
+  handleTimestampClicked (timestamp: number) {
+    if (this.player) this.player.currentTime(timestamp)
+    scrollToTop()
   }
 
   isPlaylistAutoPlayEnabled () {

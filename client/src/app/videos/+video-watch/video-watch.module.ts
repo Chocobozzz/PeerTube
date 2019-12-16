@@ -13,6 +13,7 @@ import { RecommendationsModule } from '@app/videos/recommendations/recommendatio
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 import { QRCodeModule } from 'angularx-qrcode'
 import { InputSwitchModule } from 'primeng/inputswitch'
+import { TimestampRouteTransformerDirective } from '@app/shared/angular/timestamp-route-transformer.directive'
 
 @NgModule({
   imports: [
@@ -32,11 +33,15 @@ import { InputSwitchModule } from 'primeng/inputswitch'
     VideoSupportComponent,
     VideoCommentsComponent,
     VideoCommentAddComponent,
-    VideoCommentComponent
+    VideoCommentComponent,
+
+    TimestampRouteTransformerDirective
   ],
 
   exports: [
-    VideoWatchComponent
+    VideoWatchComponent,
+
+    TimestampRouteTransformerDirective
   ],
 
   providers: [

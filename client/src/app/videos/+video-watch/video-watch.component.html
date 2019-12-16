@@ -162,7 +162,12 @@
       </div>
 
       <div class="video-info-description">
-        <div class="video-info-description-html" [innerHTML]="videoHTMLDescription"></div>
+        <div
+          class="video-info-description-html"
+          [innerHTML]="videoHTMLDescription" 
+          (timestampClicked)="handleTimestampClicked($event)"
+          timestampRouteTransformer
+        ></div>
 
         <div class="video-info-description-more" *ngIf="completeDescriptionShown === false && video.description?.length >= 250" (click)="showMoreDescription()">
           <ng-container i18n>Show more</ng-container>
@@ -223,7 +228,12 @@
         </div>
       </div>
 
-      <my-video-comments class="border-top" [video]="video" [user]="user"></my-video-comments>
+      <my-video-comments
+        class="border-top"
+        [video]="video"
+        [user]="user"
+        (timestampClicked)="handleTimestampClicked($event)"
+      ></my-video-comments>
     </div>
 
     <my-recommended-videos

@@ -330,6 +330,10 @@ $video-info-margin-left: 44px;
 
       .video-info-description-html {
         @include peertube-word-wrap;
+
+        /deep/ a {
+          text-decoration: none;
+        }
       }
 
       .glyphicon, .description-loading {

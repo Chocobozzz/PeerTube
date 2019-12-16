@@ -40,6 +40,7 @@
           (wantedToDelete)="onWantedToDelete($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
+          (timestampClicked)="handleTimestampClicked($event)"
         ></my-video-comment>
       </div>
 
@@ -54,6 +55,7 @@
           (wantedToDelete)="onWantedToDelete($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
+          (timestampClicked)="handleTimestampClicked($event)"
         ></my-video-comment>
 
         <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies">
