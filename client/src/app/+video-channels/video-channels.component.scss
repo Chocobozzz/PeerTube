@@ -10,5 +10,11 @@
 
   .actor-name {
     flex-grow: 1;
+
+    .copy-button {
+      border: none;
+      padding: 5px;
+      margin-top: -2px;
+    }
   }
 }

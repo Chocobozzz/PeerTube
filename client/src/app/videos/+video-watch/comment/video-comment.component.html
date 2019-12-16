@@ -1,11 +1,12 @@
 <div class="root-comment">
   <div class="left">
-    <img
-      *ngIf="!comment.isDeleted"
-      class="comment-avatar"
-      [src]="comment.accountAvatarUrl"
-      alt="Avatar"
-    />
+    <a *ngIf="!comment.isDeleted" [href]="comment.account.url" target="_blank" rel="noopener noreferrer">
+      <img
+        class="comment-avatar"
+        [src]="comment.accountAvatarUrl"
+        alt="Avatar"
+      />
+    </a>
 
     <div class="vertical-border"></div>
   </div>

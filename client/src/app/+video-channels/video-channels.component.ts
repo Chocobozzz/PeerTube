@@ -5,7 +5,7 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { RestExtractor } from '@app/shared'
 import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
-import { AuthService } from '@app/core'
+import { AuthService, Notifier } from '@app/core'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -25,6 +25,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
   constructor (
     private i18n: I18n,
     private route: ActivatedRoute,
+    private notifier: Notifier,
     private authService: AuthService,
     private videoChannelService: VideoChannelService,
     private restExtractor: RestExtractor,
@@ -61,5 +62,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  activateCopiedMessage () {
+    this.notifier.success(this.i18n('Username copied'))
   }
 }

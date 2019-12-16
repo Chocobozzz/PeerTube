@@ -7,7 +7,13 @@
       <div class="actor-info">
         <div class="actor-names">
           <div class="actor-display-name">{{ videoChannel.displayName }}</div>
-          <div class="actor-name">{{ videoChannel.nameWithHost }}</div>
+          <div class="actor-name">{{ videoChannel.nameWithHost }}
+            <button ngxClipboard [cbContent]="videoChannel.nameWithHost" (click)="activateCopiedMessage()"
+                    class="btn btn-outline-secondary btn-sm copy-button"
+            >
+              <span class="glyphicon glyphicon-copy"></span>
+            </button>
+          </div>
 
           <my-subscribe-button #subscribeButton [videoChannel]="videoChannel"></my-subscribe-button>
         </div>

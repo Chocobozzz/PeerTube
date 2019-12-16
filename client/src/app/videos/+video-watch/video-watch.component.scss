@@ -155,9 +155,10 @@ $video-info-margin-left: 44px;
 
       .video-info-date-views {
         flex-grow: 1;
+        align-self: start;
         margin-bottom: 10px;
         margin-right: 10px;
-        font-size: 16px;
+        font-size: 1em;
       }
 
       .video-info-channel {
