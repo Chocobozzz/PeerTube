@@ -636,7 +636,7 @@
       </trans-unit>
       <trans-unit id="2edccfda908b57c073dc0811eaa58818de2be2dc">
         <source>Edit starts/stops at</source>
-        <target>Éditer le début / la fin à</target>
+        <target>Modifier le début / la fin à</target>
         <context-group name="null">
           <context context-type="linenumber">48</context>
         </context-group>
@@ -3203,7 +3203,7 @@
       </trans-unit>
       <trans-unit id="2788d9a67ed2b6f35c85818e6af1871317c57a7e">
         <source>Edit user <x id="INTERPOLATION" equiv-text="{{ username }}"/></source>
-        <target>Éditer l'utilisateur <x id="INTERPOLATION" equiv-text="{{ username }}"/></target>
+        <target>Modifier l'utilisateur <x id="INTERPOLATION" equiv-text="{{ username }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
