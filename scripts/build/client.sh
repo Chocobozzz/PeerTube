@@ -62,7 +62,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     done
 fi
 
-NODE_ENV=production npm run webpack -- --config webpack/webpack.video-embed.js --mode production --json > "./dist/embed-stats.json"
+npm run build:embed
 
 # Copy runtime locales
 cp -r "./src/locale" "./dist/locale"

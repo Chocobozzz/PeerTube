@@ -13,6 +13,7 @@
     "peertube",
     "embed"
   ],
+  "main": "./player.ts",
   "author": "Chocobozzz",
   "license": "AGPL-3.0",
   "bugs": {
