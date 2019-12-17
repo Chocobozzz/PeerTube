@@ -120,3 +120,7 @@ Fired when playback transitions between states, such as `pausing` and `playing`.
 ## Event `resolutionUpdate`
 
 Fired when the available resolutions have changed, or when the currently selected resolution has changed. Listener should call `getResolutions()` to get the updated information.
+
+## Event `volumeChange`
+
+Fired when the player volume changed.

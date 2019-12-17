@@ -1,0 +1,22 @@
+{
+  "name": "@peertube/embed-api",
+  "version": "1.0.0",
+  "description": "API to communicate with the PeerTube player embed",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chocobozzz/PeerTube.git"
+  },
+  "keywords": [
+    "peertube",
+    "embed"
+  ],
+  "author": "Chocobozzz",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Chocobozzz/PeerTube/issues"
+  },
+  "homepage": "https://github.com/Chocobozzz/PeerTube#readme"
+}

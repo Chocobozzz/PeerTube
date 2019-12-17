@@ -2,7 +2,7 @@
   "name": "peertube-client",
   "version": "2.0.0",
   "private": true,
-  "licence": "GPLv3",
+  "license": "AGPL-3.0",
   "author": {
     "name": "Chocobozzz",
     "email": "chocobozzz@cpy.re",
@@ -22,7 +22,6 @@
     "webdriver-manager": "webdriver-manager",
     "ngx-extractor": "ngx-extractor"
   },
-  "license": "GPLv3",
   "typings": "*.d.ts",
   "resolutions": {
     "video.js": "^7",
