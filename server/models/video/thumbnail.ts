@@ -1,6 +1,18 @@
 import { join } from 'path'
-import { AfterDestroy, AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
+import {
+  AfterDestroy,
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  Model,
+  Table,
+  UpdatedAt
+} from 'sequelize-typescript'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
@@ -41,7 +53,7 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   type: ThumbnailType
 
   @AllowNull(true)
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
   fileUrl: string
 
   @AllowNull(true)

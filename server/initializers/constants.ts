@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 460
+const LAST_MIGRATION_VERSION = 465
 
 // ---------------------------------------------------------------------------
 
@@ -291,6 +291,9 @@ const CONSTRAINTS_FIELDS = {
   PLUGINS: {
     NAME: { min: 1, max: 214 }, // Length
     DESCRIPTION: { min: 1, max: 20000 } // Length
+  },
+  COMMONS: {
+    URL: { min: 5, max: 2000 } // Length
   }
 }
 
