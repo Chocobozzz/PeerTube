@@ -79,7 +79,7 @@
                     <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
                   </div>
 
-                  <div *ngIf="video.support" (click)="showSupportModal()" class="action-button"
+                  <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support"
                     [ngbTooltip]="tooltipSupport"
                     placement="bottom auto"
                   >
@@ -164,7 +164,7 @@
       <div class="video-info-description">
         <div
           class="video-info-description-html"
-          [innerHTML]="videoHTMLDescription" 
+          [innerHTML]="videoHTMLDescription"
           (timestampClicked)="handleTimestampClicked($event)"
           timestampRouteTransformer
         ></div>
