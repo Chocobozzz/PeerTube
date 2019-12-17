@@ -137,6 +137,10 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     this.router.navigate([ '/login' ])
   }
 
+  cancelCommentReply () {
+    this.cancel.emit(null)
+  }
+
   private addCommentReply (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentReply(this.video.id, this.parentComment.id, commentCreate)
@@ -145,9 +149,5 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
   private addCommentThread (commentCreate: VideoCommentCreate) {
     return this.videoCommentService
       .addCommentThread(this.video.id, commentCreate)
-  }
-
-  private cancelCommentReply () {
-    this.cancel.emit(null)
   }
 }

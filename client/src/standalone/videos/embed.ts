@@ -1,16 +1,24 @@
 import './embed.scss'
 
-import { peertubeTranslate, ResultList, ServerConfig, VideoDetails } from '../../../../shared'
+import {
+  getCompleteLocale,
+  is18nLocale,
+  isDefaultLocale,
+  peertubeTranslate,
+  ResultList,
+  ServerConfig,
+  VideoDetails
+} from '../../../../shared'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 import {
   P2PMediaLoaderOptions,
-  PeertubePlayerManager,
   PeertubePlayerManagerOptions,
   PlayerMode
 } from '../../assets/player/peertube-player-manager'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { PeerTubeEmbedApi } from './embed-api'
+import { TranslationsManager } from '../../assets/player/translations-manager'
 
 export class PeerTubeEmbed {
   videoElement: HTMLVideoElement
@@ -154,20 +162,30 @@ export class PeerTubeEmbed {
     const urlParts = window.location.pathname.split('/')
     const videoId = urlParts[ urlParts.length - 1 ]
 
-    const [ serverTranslations, videoResponse, captionsResponse, configResponse ] = await Promise.all([
-      PeertubePlayerManager.getServerTranslations(window.location.origin, navigator.language),
-      this.loadVideoInfo(videoId),
-      this.loadVideoCaptions(videoId),
-      this.loadConfig()
-    ])
+    const videoPromise = this.loadVideoInfo(videoId)
+    const captionsPromise = this.loadVideoCaptions(videoId)
+    const configPromise = this.loadConfig()
+
+    const translationsPromise = TranslationsManager.getServerTranslations(window.location.origin, navigator.language)
+    const videoResponse = await videoPromise
 
     if (!videoResponse.ok) {
+      const serverTranslations = await translationsPromise
+
       if (videoResponse.status === 404) return this.videoNotFound(serverTranslations)
 
       return this.videoFetchError(serverTranslations)
     }
 
     const videoInfo: VideoDetails = await videoResponse.json()
+    this.loadPlaceholder(videoInfo)
+
+    const PeertubePlayerManagerModulePromise = import('../../assets/player/peertube-player-manager')
+
+    const promises = [ translationsPromise, captionsPromise, configPromise, PeertubePlayerManagerModulePromise ]
+    const [ serverTranslations, captionsResponse, configResponse, PeertubePlayerManagerModule ] = await Promise.all(promises)
+
+    const PeertubePlayerManager = PeertubePlayerManagerModule.PeertubePlayerManager
     const videoCaptions = await this.buildCaptions(serverTranslations, captionsResponse)
 
     this.loadParams(videoInfo)
@@ -220,7 +238,7 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.player = await PeertubePlayerManager.initialize(this.mode, options, player => this.player = player)
+    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: any) => this.player = player)
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 
     window[ 'videojsPlayer' ] = this.player
@@ -230,6 +248,8 @@ export class PeerTubeEmbed {
     await this.buildDock(videoInfo, configResponse)
 
     this.initializeApi()
+
+    this.removePlaceholder()
   }
 
   private handleError (err: Error, translations?: { [ id: string ]: string }) {
@@ -281,6 +301,22 @@ export class PeerTubeEmbed {
     }
 
     return []
+  }
+
+  private loadPlaceholder (video: VideoDetails) {
+    const placeholder = this.getPlaceholderElement()
+
+    const url = window.location.origin + video.previewPath
+    placeholder.style.backgroundImage = `url("${url}")`
+  }
+
+  private removePlaceholder () {
+    const placeholder = this.getPlaceholderElement()
+    placeholder.parentElement.removeChild(placeholder)
+  }
+
+  private getPlaceholderElement () {
+    return document.getElementById('placeholder-preview')
   }
 }
 

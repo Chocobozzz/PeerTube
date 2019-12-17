@@ -43,7 +43,6 @@ export class PeerTubeEmbedApi {
     channel.bind('setPlaybackRate', (txn, playbackRate) => this.embed.player.playbackRate(playbackRate))
     channel.bind('getPlaybackRate', (txn, params) => this.embed.player.playbackRate())
     channel.bind('getPlaybackRates', (txn, params) => this.embed.playerOptions.playbackRates)
-
     this.channel = channel
   }
 

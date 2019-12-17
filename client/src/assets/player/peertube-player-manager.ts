@@ -15,11 +15,12 @@ import './videojs-components/peertube-load-progress-bar'
 import './videojs-components/theater-button'
 import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions, videojsUntyped } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig } from './utils'
-import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models/i18n/i18n'
+import { isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
+import { TranslationsManager } from './translations-manager'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
@@ -86,23 +87,8 @@ export type PeertubePlayerManagerOptions = {
 }
 
 export class PeertubePlayerManager {
-
-  private static videojsLocaleCache: { [ path: string ]: any } = {}
   private static playerElementClassName: string
   private static onPlayerChange: (player: any) => void
-
-  static getServerTranslations (serverUrl: string, locale: string) {
-    const path = PeertubePlayerManager.getLocalePath(serverUrl, locale)
-    // It is the default locale, nothing to translate
-    if (!path) return Promise.resolve(undefined)
-
-    return fetch(path + '/server.json')
-      .then(res => res.json())
-      .catch(err => {
-        console.error('Cannot get server translations', err)
-        return undefined
-      })
-  }
 
   static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: any) => void) {
     let p2pMediaLoader: any
@@ -120,7 +106,7 @@ export class PeertubePlayerManager {
 
     const videojsOptions = this.getVideojsOptions(mode, options, p2pMediaLoader)
 
-    await this.loadLocaleInVideoJS(options.common.serverUrl, options.common.language)
+    await TranslationsManager.loadLocaleInVideoJS(options.common.serverUrl, options.common.language, videojs)
 
     const self = this
     return new Promise(res => {
@@ -179,32 +165,6 @@ export class PeertubePlayerManager {
 
       PeertubePlayerManager.onPlayerChange(player)
     })
-  }
-
-  private static loadLocaleInVideoJS (serverUrl: string, locale: string) {
-    const path = PeertubePlayerManager.getLocalePath(serverUrl, locale)
-    // It is the default locale, nothing to translate
-    if (!path) return Promise.resolve(undefined)
-
-    let p: Promise<any>
-
-    if (PeertubePlayerManager.videojsLocaleCache[path]) {
-      p = Promise.resolve(PeertubePlayerManager.videojsLocaleCache[path])
-    } else {
-      p = fetch(path + '/player.json')
-        .then(res => res.json())
-        .then(json => {
-          PeertubePlayerManager.videojsLocaleCache[path] = json
-          return json
-        })
-        .catch(err => {
-          console.error('Cannot get player translations', err)
-          return undefined
-        })
-    }
-
-    const completeLocale = getCompleteLocale(locale)
-    return p.then(json => videojs.addLanguage(getShortLocale(completeLocale), json))
   }
 
   private static getVideojsOptions (mode: PlayerMode, options: PeertubePlayerManagerOptions, p2pMediaLoaderModule?: any) {
@@ -518,14 +478,6 @@ export class PeertubePlayerManager {
         }
       }
     })
-  }
-
-  private static getLocalePath (serverUrl: string, locale: string) {
-    const completeLocale = getCompleteLocale(locale)
-
-    if (!is18nLocale(completeLocale) || isDefaultLocale(completeLocale)) return undefined
-
-    return serverUrl + '/client/locales/' + completeLocale
   }
 }
 

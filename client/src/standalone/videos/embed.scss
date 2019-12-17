@@ -79,6 +79,16 @@ html, body {
   }
 }
 
+#placeholder-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-size: 100% auto;
+  width: 100%;
+  height: 100%;
+  background-position: 50% 50%;
+}
+
 @media screen and (max-width: 300px) {
   #error-block {
     font-size: 36px;
