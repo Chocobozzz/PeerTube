@@ -77,6 +77,10 @@ class P2pMediaLoaderPlugin extends Plugin {
     clearInterval(this.networkInfoInterval)
   }
 
+  getHLSJS () {
+    return this.hlsjs
+  }
+
   private initialize () {
     initHlsJsPlayer(this.hlsjs)
 

@@ -229,6 +229,10 @@ class WebTorrentPlugin extends Plugin {
     this.trigger('resolutionChange', { auto: this.autoResolution, resolutionId: this.getCurrentResolutionId() })
   }
 
+  isAutoResolutionPossible () {
+    return this.autoResolutionPossible
+  }
+
   getTorrent () {
     return this.torrent
   }

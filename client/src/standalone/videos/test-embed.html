@@ -25,6 +25,8 @@
         <button onclick="player.play()">Play</button>
         <button onclick="player.pause()">Pause</button>
         <button onclick="player.seek(parseInt(prompt('Enter position to seek to (in seconds)')))">Seek</button>
+        <button onclick="player.setVolume(0)">Mute</button>
+        <button onclick="player.setVolume(1)">Unmute</button>
       </div>
       <br/>
 
@@ -38,6 +40,11 @@
         <fieldset>
           <legend>Rates:</legend>
           <div id="rate-list"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Volume</legend>
+          <div id="volume"></div>
         </fieldset>
       </div>
 

@@ -9,6 +9,7 @@ window.addEventListener('load', async () => {
 
   const iframe = document.createElement('iframe')
   iframe.src = `/videos/embed/${videoId}?autoplay=1&controls=0&api=1`
+
   const mainElement = document.querySelector('#host')
   mainElement.appendChild(iframe)
 
@@ -93,4 +94,12 @@ window.addEventListener('load', async () => {
     resolutions => updateResolutions(resolutions))
   player.addEventListener('resolutionUpdate',
     resolutions => updateResolutions(resolutions))
+
+  const updateVolume = (volume: number) => {
+    const volumeEl = document.getElementById('volume')
+    volumeEl.innerText = (volume * 100) + '%'
+  }
+
+  player.getVolume().then(volume => updateVolume(volume))
+  player.addEventListener('volumeChange', volume => updateVolume(volume))
 })

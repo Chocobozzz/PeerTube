@@ -23,7 +23,6 @@ import { TranslationsManager } from '../../assets/player/translations-manager'
 export class PeerTubeEmbed {
   videoElement: HTMLVideoElement
   player: any
-  playerOptions: any
   api: PeerTubeEmbedApi = null
   autoplay: boolean
   controls: boolean

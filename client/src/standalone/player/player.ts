@@ -7,7 +7,8 @@ const PASSTHROUGH_EVENTS = [
   'play',
   'playbackStatusUpdate',
   'playbackStatusChange',
-  'resolutionUpdate'
+  'resolutionUpdate',
+  'volumeChange'
 ]
 
 /**
@@ -100,7 +101,7 @@ export class PeerTubePlayer {
    * @param value A number from 0 to 1
    */
   async getVolume (): Promise<number> {
-    return this.sendMessage<void, number>('setVolume')
+    return this.sendMessage<void, number>('getVolume')
   }
 
   /**

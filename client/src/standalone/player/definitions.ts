@@ -4,11 +4,15 @@ export type PlayerEventType =
   'pause' | 'play' |
   'playbackStatusUpdate' |
   'playbackStatusChange' |
-  'resolutionUpdate'
+  'resolutionUpdate' |
+  'volumeChange'
 
 export interface PeerTubeResolution {
   id: any
   label: string
-  src: string
   active: boolean
+  height: number
+
+  src?: string
+  width?: number
 }
