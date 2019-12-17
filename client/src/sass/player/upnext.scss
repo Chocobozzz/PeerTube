@@ -1,0 +1,108 @@
+$browser-context: 16;
+
+@function em($pixels, $context: $browser-context) {
+  @return #{$pixels/$context}em;
+}
+
+@mixin transition($string: $transition--default) {
+  transition: $string;
+}
+
+.video-js {
+
+  .vjs-upnext-content {
+    font-size: 1.8em;
+    pointer-events: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    width: 100%;
+
+    @include transition(opacity 0.1s);
+  }
+
+  .vjs-upnext-top {
+    width: 100%;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    bottom: 50%;
+    margin-bottom: 60px;
+  }
+
+  .vjs-upnext-bottom {
+    width: 100%;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    top: 50%;
+    margin-top: 52px;
+  }
+
+  .vjs-upnext-cancel {
+    display: block;
+    float: none;
+    text-align: center;
+  }
+
+  .vjs-upnext-headtext {
+    display: block;
+    font-size: 14px;
+    text-align: center;
+    padding-bottom: 7px;
+  }
+
+  .vjs-upnext-title {
+    display: block;
+    padding: 10px 10px 2px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    overflow: hidden;
+    white-space: nowrap;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+  }
+
+  .vjs-upnext-cancel-button {
+    cursor: pointer;
+    display: inline-block;
+    float: none;
+    padding: 10px !important;
+    font-size: 16px !important;
+    border: none;
+  }
+
+  .vjs-upnext-cancel-button,
+  .vjs-upnext-cancel-button:focus {
+    outline: 0;
+  }
+
+  .vjs-upnext-cancel-button:hover {
+    background-color: rgba(255,255,255,0.25);
+    border-radius: 2px;
+  }
+
+  &.vjs-no-flex .vjs-upnext-content {
+    padding-bottom: 1em;
+  }
+
+  .vjs-upnext-autoplay-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 98px;
+    height: 98px;
+    margin: -49px 0 0 -49px;
+    transition: stroke-dasharray 0.1s cubic-bezier(0.4,0,1,1);
+    cursor: pointer;
+  }
+
+}
+
+.video-js.vjs-upnext--showing {
+  .vjs-control-bar {
+    z-index: 1;
+  }
+}

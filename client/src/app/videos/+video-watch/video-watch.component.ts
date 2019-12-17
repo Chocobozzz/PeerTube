@@ -36,7 +36,6 @@ import { getStoredTheater } from '../../../assets/player/peertube-player-local-s
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
-import { randomInt } from '@shared/core-utils/miscs/miscs'
 import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
 import { scrollToTop } from '@app/shared/misc/utils'
 
@@ -79,6 +78,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   tooltipSaveToPlaylist = ''
 
   private nextVideoUuid = ''
+  private nextVideoTitle = ''
   private currentTime: number
   private paramsSub: Subscription
   private queryParamsSub: Subscription
@@ -247,8 +247,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   onRecommendations (videos: Video[]) {
     if (videos.length > 0) {
-      // Pick a random video until the recommendations are improved
-      this.nextVideoUuid = videos[randomInt(0,videos.length - 1)].uuid
+      // The recommended videos's first element should be the next video
+      const video = videos[0]
+      this.nextVideoUuid = video.uuid
+      this.nextVideoTitle = video.name
     }
   }
 
@@ -468,11 +470,26 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
         this.currentTime = Math.floor(this.player.currentTime())
       })
 
-      this.player.one('ended', () => {
-        if (this.playlist) {
-          if (this.isPlaylistAutoPlayEnabled()) this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
-        } else if (this.isAutoPlayEnabled()) {
-          this.zone.run(() => this.autoplayNext())
+      /**
+       * replaces this.player.one('ended')
+       * define 'condition(next)' to return true to wait, false to stop
+       */
+      this.player.upnext({
+        timeout: 1000000,
+        headText: this.i18n('Up Next'),
+        cancelText: this.i18n('Cancel'),
+        getTitle: () => this.nextVideoTitle,
+        next: () => this.zone.run(() => this.autoplayNext()),
+        condition: () => {
+          if (this.playlist) {
+            if (this.isPlaylistAutoPlayEnabled()) {
+              // upnext will not trigger, and instead the next video will play immediately
+              this.zone.run(() => this.videoWatchPlaylist.navigateToNextPlaylistVideo())
+            }
+          } else if (this.isAutoPlayEnabled()) {
+            return true // upnext will trigger
+          }
+          return false // upnext will not trigger, and instead leave the video stopping
         }
       })
 
