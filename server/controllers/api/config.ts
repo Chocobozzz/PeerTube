@@ -227,10 +227,40 @@ async function updateCustomConfig (req: express.Request, res: express.Response) 
   return res.json(data).end()
 }
 
+function getRegisteredThemes () {
+  return PluginManager.Instance.getRegisteredThemes()
+                      .map(t => ({
+                        name: t.name,
+                        version: t.version,
+                        description: t.description,
+                        css: t.css,
+                        clientScripts: t.clientScripts
+                      }))
+}
+
+function getEnabledResolutions () {
+  return Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
+               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[ key ] === true)
+               .map(r => parseInt(r, 10))
+}
+
+function getRegisteredPlugins () {
+  return PluginManager.Instance.getRegisteredPlugins()
+                      .map(p => ({
+                        name: p.name,
+                        version: p.version,
+                        description: p.description,
+                        clientScripts: p.clientScripts
+                      }))
+}
+
 // ---------------------------------------------------------------------------
 
 export {
-  configRouter
+  configRouter,
+  getEnabledResolutions,
+  getRegisteredPlugins,
+  getRegisteredThemes
 }
 
 // ---------------------------------------------------------------------------
@@ -369,31 +399,4 @@ function convertCustomConfigBody (body: CustomConfig) {
   }
 
   return objectConverter(body, keyConverter, valueConverter)
-}
-
-function getRegisteredThemes () {
-  return PluginManager.Instance.getRegisteredThemes()
-                      .map(t => ({
-                        name: t.name,
-                        version: t.version,
-                        description: t.description,
-                        css: t.css,
-                        clientScripts: t.clientScripts
-                      }))
-}
-
-function getEnabledResolutions () {
-  return Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[ key ] === true)
-               .map(r => parseInt(r, 10))
-}
-
-function getRegisteredPlugins () {
-  return PluginManager.Instance.getRegisteredPlugins()
-                      .map(p => ({
-                        name: p.name,
-                        version: p.version,
-                        description: p.description,
-                        clientScripts: p.clientScripts
-                      }))
 }

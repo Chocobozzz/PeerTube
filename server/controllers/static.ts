@@ -7,7 +7,9 @@ import {
   STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
-  WEBSERVER
+  WEBSERVER,
+  CONSTRAINTS_FIELDS,
+  DEFAULT_THEME_NAME
 } from '../initializers/constants'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
@@ -18,10 +20,13 @@ import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/node
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
 import { CONFIG } from '../initializers/config'
+import { Emailer } from '../lib/emailer'
 import { getPreview, getVideoCaption } from './lazy-static'
 import { VideoStreamingPlaylistType } from '@shared/models/videos/video-streaming-playlist.type'
 import { MVideoFile, MVideoFullLight } from '@server/typings/models'
 import { getTorrentFilePath, getVideoFilePath } from '@server/lib/video-paths'
+import { getThemeOrDefault } from '../lib/plugins/theme-utils'
+import { getEnabledResolutions, getRegisteredPlugins, getRegisteredThemes } from '@server/controllers/api/config'
 
 const staticRouter = express.Router()
 
@@ -228,7 +233,87 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
           postsName: 'Videos'
         },
         nodeName: CONFIG.INSTANCE.NAME,
-        nodeDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION
+        nodeDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
+        nodeConfig: {
+          plugin: {
+            registered: getRegisteredPlugins()
+          },
+          theme: {
+            registered: getRegisteredThemes(),
+            default: getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
+          },
+          email: {
+            enabled: Emailer.isEnabled()
+          },
+          contactForm: {
+            enabled: CONFIG.CONTACT_FORM.ENABLED
+          },
+          transcoding: {
+            hls: {
+              enabled: CONFIG.TRANSCODING.HLS.ENABLED
+            },
+            webtorrent: {
+              enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED
+            },
+            enabledResolutions: getEnabledResolutions()
+          },
+          import: {
+            videos: {
+              http: {
+                enabled: CONFIG.IMPORT.VIDEOS.HTTP.ENABLED
+              },
+              torrent: {
+                enabled: CONFIG.IMPORT.VIDEOS.TORRENT.ENABLED
+              }
+            }
+          },
+          autoBlacklist: {
+            videos: {
+              ofUsers: {
+                enabled: CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED
+              }
+            }
+          },
+          avatar: {
+            file: {
+              size: {
+                max: CONSTRAINTS_FIELDS.ACTORS.AVATAR.FILE_SIZE.max
+              },
+              extensions: CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME
+            }
+          },
+          video: {
+            image: {
+              extensions: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME,
+              size: {
+                max: CONSTRAINTS_FIELDS.VIDEOS.IMAGE.FILE_SIZE.max
+              }
+            },
+            file: {
+              extensions: CONSTRAINTS_FIELDS.VIDEOS.EXTNAME
+            }
+          },
+          videoCaption: {
+            file: {
+              size: {
+                max: CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE.max
+              },
+              extensions: CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.EXTNAME
+            }
+          },
+          user: {
+            videoQuota: CONFIG.USER.VIDEO_QUOTA,
+            videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY
+          },
+          trending: {
+            videos: {
+              intervalDays: CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+            }
+          },
+          tracker: {
+            enabled: CONFIG.TRACKER.ENABLED
+          }
+        }
       }
     } as HttpNodeinfoDiasporaSoftwareNsSchema20
     res.contentType('application/json; profile="http://nodeinfo.diaspora.software/ns/schema/2.0#"')
