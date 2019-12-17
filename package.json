@@ -46,7 +46,6 @@
     "dev:embed": "scripty",
     "dev:client": "scripty",
     "dev:cli": "scripty",
-    "dev:embed": "scripty",
     "start": "node dist/server",
     "start:server": "node dist/server --no-client",
     "update-host": "node ./dist/scripts/update-host.js",
@@ -73,6 +72,7 @@
     "mocha": "mocha",
     "ci": "scripty",
     "release": "scripty",
+    "release-embed-api": "scripty",
     "nightly": "scripty",
     "client-report": "scripty"
   },

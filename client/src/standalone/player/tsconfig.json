@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "removeComments": true,
+    "sourceMap": false,
+    "typeRoots": [
+      "../../../node_modules/@types"
+    ],
+    "outDir": "./dist",
+    "declaration": true,
+    "target": "es5",
+    "types": [],
+    "lib": [
+      "es2018",
+      "dom"
+    ]
+  },
+  "files": [ "./player.ts" ]
+}

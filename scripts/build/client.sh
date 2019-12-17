@@ -62,7 +62,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     done
 fi
 
-npm run build:embed
+cd ../ && npm run build:embed && cd client/
 
 # Copy runtime locales
 cp -r "./src/locale" "./dist/locale"

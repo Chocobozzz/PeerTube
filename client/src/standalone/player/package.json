@@ -1,6 +1,7 @@
 {
   "name": "@peertube/embed-api",
-  "version": "1.0.0",
+  "private": false,
+  "version": "0.0.1",
   "description": "API to communicate with the PeerTube player embed",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,11 +14,15 @@
     "peertube",
     "embed"
   ],
-  "main": "./player.ts",
+  "main": "./dist/player.js",
+  "types": "./dist/player.d.ts",
   "author": "Chocobozzz",
   "license": "AGPL-3.0",
   "bugs": {
     "url": "https://github.com/Chocobozzz/PeerTube/issues"
   },
-  "homepage": "https://github.com/Chocobozzz/PeerTube#readme"
+  "homepage": "https://github.com/Chocobozzz/PeerTube#readme",
+  "dependencies": {
+    "jschannel": "^1.0.2"
+  }
 }

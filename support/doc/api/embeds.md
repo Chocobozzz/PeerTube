@@ -21,6 +21,24 @@ Now just use the `PeerTubePlayer` class exported by the module:
 ```typescript
 import { PeerTubePlayer } from '@peertube/embed-api'
 
+...
+```
+
+Or use the minified build from NPM CDN in your HTML file:
+
+```
+<script src="https://unpkg.com/@peertube/embed-api@0.0.1/build/player.min.js"></script>
+
+<script>
+  const PeerTubePlayer = window['PeerTubePlayer']
+
+  ...
+</script>
+```
+
+Then you can instantiate the player:
+
+```typescript
 let player = new PeerTubePlayer(document.querySelector('iframe'))
 await player.ready // wait for the player to be ready
 
@@ -56,7 +74,7 @@ Get the available resolutions. A `PeerTubeResolution` looks like:
 {
     "id": 3,
     "label": "720p",
-    "src": "//src-url-here",
+    "height": "720",
     "active": true
 }
 ```
@@ -87,6 +105,7 @@ Set the playback volume. Value should be between `0` and `1`.
 ## `getVolume(): Promise<number>`
 
 Get the playback volume. Returns a value between `0` and `1`.
+
 # Events
 
 You can subscribe to events by using `addEventListener()`. See above for details.
