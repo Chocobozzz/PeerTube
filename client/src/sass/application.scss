@@ -142,10 +142,17 @@ label {
   @include disable-default-a-behaviour;
 
   &.active, &.title-page-single {
-    border-bottom: 2px solid var(--mainColor);
     font-weight: $font-bold;
     margin-top: 30px;
     margin-bottom: 25px;
+  }
+
+  &.active {
+    border-bottom: 2px solid var(--mainColor);
+  }
+
+  &.title-page-single {
+    font-size: 125%;
   }
 
   &:hover, &:active, &:focus {
