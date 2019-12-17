@@ -475,7 +475,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
        * define 'condition(next)' to return true to wait, false to stop
        */
       this.player.upnext({
-        timeout: 1000000,
+        timeout: 10000, // 10s
         headText: this.i18n('Up Next'),
         cancelText: this.i18n('Cancel'),
         getTitle: () => this.nextVideoTitle,
