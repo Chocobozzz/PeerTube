@@ -406,9 +406,11 @@ $video-info-margin-left: 44px;
       height: 100%;
       margin-bottom: 20px;
       flex-wrap: wrap;
+    }
 
-      .video-thumbnail {
-        margin-right: 10px
+    .video-bottom {
+      @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
+        margin-left: 1rem;
       }
     }
   }
