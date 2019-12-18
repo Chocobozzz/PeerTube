@@ -147,7 +147,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.queryParamsSub = this.route.queryParams.subscribe(async queryParams => {
       const videoId = queryParams[ 'videoId' ]
-      if (videoId) await this.loadVideo(videoId)
+      if (videoId) this.loadVideo(videoId)
 
       const start = queryParams[ 'start' ]
       if (this.player && start) this.player.currentTime(parseInt(start, 10))

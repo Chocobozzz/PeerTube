@@ -583,15 +583,17 @@ export class UserModel extends Model<UserModel> {
   }
 
   canGetVideo (video: MVideoFullLight) {
-    if (video.privacy === VideoPrivacy.INTERNAL) return true
-
-    if (video.privacy === VideoPrivacy.PRIVATE) {
-      return video.VideoChannel && video.VideoChannel.Account.userId === this.id
-    }
+    const videoUserId = video.VideoChannel.Account.userId
 
     if (video.isBlacklisted()) {
-      return this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+      return videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
     }
+
+    if (video.privacy === VideoPrivacy.PRIVATE) {
+      return video.VideoChannel && videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+    }
+
+    if (video.privacy === VideoPrivacy.INTERNAL) return true
 
     return false
   }
