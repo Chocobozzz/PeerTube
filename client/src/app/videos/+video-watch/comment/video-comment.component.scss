@@ -67,8 +67,12 @@
 
         word-break: break-all;
         color: var(--mainForegroundColor);
-        font-weight: $font-bold;
+        font-weight: 600;
         font-size: 90%;
+
+        .comment-account-fid {
+          opacity: .6;
+        }
       }
 
       .comment-date {
@@ -81,7 +85,6 @@
 
     .comment-html {
       @include peertube-word-wrap;
-      margin-bottom: 10px;
 
       // Mentions
       ::ng-deep a {
@@ -94,6 +97,11 @@
           font-weight: $font-semibold;
         }
 
+      }
+
+      // Paragraphs
+      ::ng-deep p {
+        margin-bottom: .3rem;
       }
 
       &.comment-html-deleted {

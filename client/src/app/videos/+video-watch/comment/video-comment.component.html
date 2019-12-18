@@ -19,12 +19,12 @@
         <div *ngIf="highlightedComment === true" class="highlighted-comment" i18n>Highlighted comment</div>
 
         <div class="comment-account-date">
-          <a [href]="comment.account.url" target="_blank" rel="noopener noreferrer"
-             class="comment-account"
-             [ngClass]="{ 'video-author': video.account.id === comment.account.id }"
-          >{{ comment.by }}</a>
+          <a [href]="comment.account.url" target="_blank" rel="noopener noreferrer" class="comment-account">
+            <span class="comment-account-name" [ngClass]="{ 'video-author': video.account.id === comment.account.id }">{{ comment.account.displayName }}</span>
+            <span class="comment-account-fid ml-1">{{ comment.by }}</span>
+          </a>
           <a [routerLink]="['/videos/watch', video.uuid, { 'threadId': comment.threadId }]"
-             class="comment-date">{{ comment.createdAt | myFromNow }}</a>
+             class="comment-date" [title]="comment.createdAt">{{ comment.createdAt | myFromNow }}</a>
         </div>
         <div
           class="comment-html"

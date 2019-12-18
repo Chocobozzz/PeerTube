@@ -25,7 +25,6 @@
     height: $header-height;
     display: flex;
     align-items: center;
-    flex: 1;
     min-width: 0;
 
     .icon {
@@ -81,6 +80,7 @@
     align-items: center;
     justify-content: flex-end;
     white-space: nowrap;
+    flex: 1;
   }
 }
 

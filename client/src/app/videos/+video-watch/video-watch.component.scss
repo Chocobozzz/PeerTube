@@ -412,6 +412,10 @@ $video-info-margin-left: 44px;
       @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
         margin-left: 1rem;
       }
+      @media screen and (max-width: 500px) {
+        margin-left: 0;
+        margin-top: .5rem;
+      }
     }
   }
 }
