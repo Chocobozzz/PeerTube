@@ -1,34 +1,36 @@
-import { map, shareReplay, switchMap, tap } from 'rxjs/operators'
+import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
-import { Observable, of, ReplaySubject } from 'rxjs'
+import { Observable, of, Subject } from 'rxjs'
 import { getCompleteLocale, ServerConfig } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
-import { VideoConstant, VideoPrivacy } from '../../../../../shared/models/videos'
+import { VideoConstant } from '../../../../../shared/models/videos'
 import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { sortBy } from '@app/shared/misc/utils'
-import { VideoPlaylistPrivacy } from '@shared/models/videos/playlist/video-playlist-privacy.model'
-import { cloneDeep } from 'lodash-es'
 
 @Injectable()
 export class ServerService {
-  private static BASE_SERVER_URL = environment.apiUrl + '/api/v1/server/'
   private static BASE_CONFIG_URL = environment.apiUrl + '/api/v1/config/'
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
-  configLoaded = new ReplaySubject<boolean>(1)
-  videoPrivaciesLoaded = new ReplaySubject<boolean>(1)
-  videoPlaylistPrivaciesLoaded = new ReplaySubject<boolean>(1)
-  videoCategoriesLoaded = new ReplaySubject<boolean>(1)
-  videoLicencesLoaded = new ReplaySubject<boolean>(1)
-  videoLanguagesLoaded = new ReplaySubject<boolean>(1)
-  localeObservable: Observable<any>
+  configReloaded = new Subject<void>()
 
+  private localeObservable: Observable<any>
+  private videoLicensesObservable: Observable<VideoConstant<number>[]>
+  private videoCategoriesObservable: Observable<VideoConstant<number>[]>
+  private videoPrivaciesObservable: Observable<VideoConstant<number>[]>
+  private videoPlaylistPrivaciesObservable: Observable<VideoConstant<number>[]>
+  private videoLanguagesObservable: Observable<VideoConstant<string>[]>
+  private configObservable: Observable<ServerConfig>
+
+  private configReset = false
+
+  private configLoaded = false
   private config: ServerConfig = {
     instance: {
       name: 'PeerTube',
@@ -121,132 +123,141 @@ export class ServerService {
       enabled: true
     }
   }
-  private videoCategories: Array<VideoConstant<number>> = []
-  private videoLicences: Array<VideoConstant<number>> = []
-  private videoLanguages: Array<VideoConstant<string>> = []
-  private videoPrivacies: Array<VideoConstant<VideoPrivacy>> = []
-  private videoPlaylistPrivacies: Array<VideoConstant<VideoPlaylistPrivacy>> = []
 
   constructor (
     private http: HttpClient,
     @Inject(LOCALE_ID) private localeId: string
   ) {
-    this.loadServerLocale()
     this.loadConfigLocally()
-  }
-
-  loadConfig () {
-    this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
-        .pipe(tap(this.saveConfigLocally))
-        .subscribe(data => {
-          this.config = data
-
-          this.configLoaded.next(true)
-        })
-  }
-
-  loadVideoCategories () {
-    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'categories', this.videoCategories, this.videoCategoriesLoaded, true)
-  }
-
-  loadVideoLicences () {
-    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'licences', this.videoLicences, this.videoLicencesLoaded)
-  }
-
-  loadVideoLanguages () {
-    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'languages', this.videoLanguages, this.videoLanguagesLoaded, true)
-  }
-
-  loadVideoPrivacies () {
-    return this.loadAttributeEnum(ServerService.BASE_VIDEO_URL, 'privacies', this.videoPrivacies, this.videoPrivaciesLoaded)
-  }
-
-  loadVideoPlaylistPrivacies () {
-    return this.loadAttributeEnum(
-      ServerService.BASE_VIDEO_PLAYLIST_URL,
-      'privacies',
-      this.videoPlaylistPrivacies,
-      this.videoPlaylistPrivaciesLoaded
-    )
-  }
-
-  getConfig () {
-    return cloneDeep(this.config)
   }
 
   getServerVersionAndCommit () {
     const serverVersion = this.config.serverVersion
     const commit = this.config.serverCommit || ''
 
-    let result = `v${serverVersion}`
+    let result = serverVersion
     if (commit) result += '...' + commit
 
     return result
   }
 
+  resetConfig () {
+    this.configLoaded = false
+    this.configReset = true
+  }
+
+  getConfig () {
+    if (this.configLoaded) return of(this.config)
+
+    if (!this.configObservable) {
+      this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
+                                  .pipe(
+                                    tap(this.saveConfigLocally),
+                                    tap(() => this.configLoaded = true),
+                                    tap(() => {
+                                      if (this.configReset) {
+                                        this.configReloaded.next()
+                                        this.configReset = false
+                                      }
+                                    }),
+                                    share()
+                                  )
+    }
+
+    return this.configObservable
+  }
+
+  getTmpConfig () {
+    return this.config
+  }
+
   getVideoCategories () {
-    return cloneDeep(this.videoCategories)
+    if (!this.videoCategoriesObservable) {
+      this.videoCategoriesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'categories', true)
+    }
+
+    return this.videoCategoriesObservable.pipe(first())
   }
 
   getVideoLicences () {
-    return cloneDeep(this.videoLicences)
+    if (!this.videoLicensesObservable) {
+      this.videoLicensesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'licences')
+    }
+
+    return this.videoLicensesObservable.pipe(first())
   }
 
   getVideoLanguages () {
-    return cloneDeep(this.videoLanguages)
+    if (!this.videoLanguagesObservable) {
+      this.videoLanguagesObservable = this.loadAttributeEnum<string>(ServerService.BASE_VIDEO_URL, 'languages', true)
+    }
+
+    return this.videoLanguagesObservable.pipe(first())
   }
 
   getVideoPrivacies () {
-    return cloneDeep(this.videoPrivacies)
+    if (!this.videoPrivaciesObservable) {
+      this.videoPrivaciesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_URL, 'privacies')
+    }
+
+    return this.videoPrivaciesObservable.pipe(first())
   }
 
   getVideoPlaylistPrivacies () {
-    return cloneDeep(this.videoPlaylistPrivacies)
-  }
-
-  private loadAttributeEnum (
-    baseUrl: string,
-    attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
-    hashToPopulate: VideoConstant<string | number>[],
-    notifier: ReplaySubject<boolean>,
-    sort = false
-  ) {
-    this.localeObservable
-        .pipe(
-          switchMap(translations => {
-            return this.http.get<{ [id: string]: string }>(baseUrl + attributeName)
-                       .pipe(map(data => ({ data, translations })))
-          })
-        )
-        .subscribe(({ data, translations }) => {
-          Object.keys(data)
-                .forEach(dataKey => {
-                  const label = data[ dataKey ]
-
-                  hashToPopulate.push({
-                    id: attributeName === 'languages' ? dataKey : parseInt(dataKey, 10),
-                    label: peertubeTranslate(label, translations)
-                  })
-                })
-
-          if (sort === true) sortBy(hashToPopulate, 'label')
-
-          notifier.next(true)
-        })
-  }
-
-  private loadServerLocale () {
-    const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
-
-    // Default locale, nothing to translate
-    if (isDefaultLocale(completeLocale)) {
-      this.localeObservable = of({}).pipe(shareReplay())
-      return
+    if (!this.videoPlaylistPrivaciesObservable) {
+      this.videoPlaylistPrivaciesObservable = this.loadAttributeEnum<number>(ServerService.BASE_VIDEO_PLAYLIST_URL, 'privacies')
     }
 
-    this.localeObservable = this.http
-                                  .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
-                                  .pipe(shareReplay())
+    return this.videoPlaylistPrivaciesObservable.pipe(first())
+  }
+
+  getServerLocale () {
+    if (!this.localeObservable) {
+      const completeLocale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
+
+      // Default locale, nothing to translate
+      if (isDefaultLocale(completeLocale)) {
+        this.localeObservable = of({}).pipe(shareReplay())
+      } else {
+        this.localeObservable = this.http
+                                    .get(ServerService.BASE_LOCALE_URL + completeLocale + '/server.json')
+                                    .pipe(shareReplay())
+      }
+    }
+
+    return this.localeObservable.pipe(first())
+  }
+
+  private loadAttributeEnum <T extends string | number> (
+    baseUrl: string,
+    attributeName: 'categories' | 'licences' | 'languages' | 'privacies',
+    sort = false
+  ) {
+    return this.getServerLocale()
+               .pipe(
+                 switchMap(translations => {
+                   return this.http.get<{ [ id: string ]: string }>(baseUrl + attributeName)
+                              .pipe(map(data => ({ data, translations })))
+                 }),
+                 map(({ data, translations }) => {
+                   const hashToPopulate: VideoConstant<T>[] = []
+
+                   Object.keys(data)
+                         .forEach(dataKey => {
+                           const label = data[ dataKey ]
+
+                           hashToPopulate.push({
+                             id: (attributeName === 'languages' ? dataKey : parseInt(dataKey, 10)) as T,
+                             label: peertubeTranslate(label, translations)
+                           })
+                         })
+
+                   if (sort === true) sortBy(hashToPopulate, 'label')
+
+                   return hashToPopulate
+                 }),
+                 shareReplay()
+               )
   }
 
   private saveConfigLocally (config: ServerConfig) {

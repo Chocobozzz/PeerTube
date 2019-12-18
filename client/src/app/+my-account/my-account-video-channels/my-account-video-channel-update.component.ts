@@ -9,6 +9,7 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoChannelValidatorsService } from '@app/shared/forms/form-validators/video-channel-validators.service'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-account-video-channel-update',
@@ -21,6 +22,7 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
 
   private paramsSub: Subscription
   private oldSupportField: string
+  private serverConfig: ServerConfig
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -37,6 +39,10 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
     this.buildForm({
       'display-name': this.videoChannelValidatorsService.VIDEO_CHANNEL_DISPLAY_NAME,
       description: this.videoChannelValidatorsService.VIDEO_CHANNEL_DESCRIPTION,
@@ -109,11 +115,11 @@ export class MyAccountVideoChannelUpdateComponent extends MyAccountVideoChannelE
   }
 
   get maxAvatarSize () {
-    return this.serverService.getConfig().avatar.file.size.max
+    return this.serverConfig.avatar.file.size.max
   }
 
   get avatarExtensions () {
-    return this.serverService.getConfig().avatar.file.extensions.join(',')
+    return this.serverConfig.avatar.file.extensions.join(',')
   }
 
   isCreation () {

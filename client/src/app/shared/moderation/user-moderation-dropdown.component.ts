@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 import { UserBanModalComponent } from '@app/shared/moderation/user-ban-modal.component'
@@ -7,12 +7,13 @@ import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { User, UserRight } from '../../../../../shared/models/users'
 import { Account } from '@app/shared/account/account.model'
 import { BlocklistService } from '@app/shared/blocklist'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-user-moderation-dropdown',
   templateUrl: './user-moderation-dropdown.component.html'
 })
-export class UserModerationDropdownComponent implements OnChanges {
+export class UserModerationDropdownComponent implements OnInit, OnChanges {
   @ViewChild('userBanModal', { static: false }) userBanModal: UserBanModalComponent
 
   @Input() user: User
@@ -26,6 +27,8 @@ export class UserModerationDropdownComponent implements OnChanges {
 
   userActions: DropdownAction<{ user: User, account: Account }>[][] = []
 
+  private serverConfig: ServerConfig
+
   constructor (
     private authService: AuthService,
     private notifier: Notifier,
@@ -38,7 +41,13 @@ export class UserModerationDropdownComponent implements OnChanges {
   ) { }
 
   get requiresEmailVerification () {
-    return this.serverService.getConfig().signup.requiresEmailVerification
+    return this.serverConfig.signup.requiresEmailVerification
+  }
+
+  ngOnInit (): void {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
   }
 
   ngOnChanges () {

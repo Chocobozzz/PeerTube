@@ -34,6 +34,8 @@ export class UserCreateComponent extends UserEdit implements OnInit {
   }
 
   ngOnInit () {
+    super.ngOnInit()
+
     const defaultValues = {
       role: UserRole.USER.toString(),
       videoQuota: '-1',

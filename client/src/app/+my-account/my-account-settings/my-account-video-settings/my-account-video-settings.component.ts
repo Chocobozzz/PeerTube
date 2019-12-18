@@ -41,11 +41,9 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
     })
 
     forkJoin([
-      this.serverService.videoLanguagesLoaded.pipe(first()),
+      this.serverService.getVideoLanguages(),
       this.userInformationLoaded.pipe(first())
-    ]).subscribe(() => {
-      const languages = this.serverService.getVideoLanguages()
-
+    ]).subscribe(([ languages ]) => {
       this.languageItems = [ { label: this.i18n('Unknown language'), value: '_unknown' } ]
       this.languageItems = this.languageItems
                                .concat(languages.map(l => ({ label: l.label, value: l.id })))

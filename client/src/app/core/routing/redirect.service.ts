@@ -16,15 +16,15 @@ export class RedirectService {
     private serverService: ServerService
   ) {
     // The config is first loaded from the cache so try to get the default route
-    const config = this.serverService.getConfig()
-    if (config && config.instance && config.instance.defaultClientRoute) {
-      RedirectService.DEFAULT_ROUTE = config.instance.defaultClientRoute
+    const tmpConfig = this.serverService.getTmpConfig()
+    if (tmpConfig && tmpConfig.instance && tmpConfig.instance.defaultClientRoute) {
+      RedirectService.DEFAULT_ROUTE = tmpConfig.instance.defaultClientRoute
     }
 
     // Load default route
-    this.serverService.configLoaded
-        .subscribe(() => {
-          const defaultRouteConfig = this.serverService.getConfig().instance.defaultClientRoute
+    this.serverService.getConfig()
+        .subscribe(config => {
+          const defaultRouteConfig = config.instance.defaultClientRoute
 
           if (defaultRouteConfig) {
             RedirectService.DEFAULT_ROUTE = defaultRouteConfig

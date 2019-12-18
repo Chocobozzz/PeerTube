@@ -70,9 +70,9 @@ export class PluginService implements ClientHook {
   }
 
   initializePlugins () {
-    this.server.configLoaded
-      .subscribe(() => {
-        this.plugins = this.server.getConfig().plugin.registered
+    this.server.getConfig()
+      .subscribe(config => {
+        this.plugins = config.plugin.registered
 
         this.buildScopeStruct()
 

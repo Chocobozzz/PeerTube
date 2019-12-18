@@ -33,11 +33,18 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
     private i18n: I18n
   ) {
     super()
+  }
 
-    // don't filter if auto-blacklist not enabled as this will be only list
-    if (this.serverService.getConfig().autoBlacklist.videos.ofUsers.enabled) {
-      this.listBlacklistTypeFilter = VideoBlacklistType.MANUAL
-    }
+  ngOnInit () {
+    this.serverService.getConfig()
+        .subscribe(config => {
+          // don't filter if auto-blacklist not enabled as this will be only list
+          if (config.autoBlacklist.videos.ofUsers.enabled) {
+            this.listBlacklistTypeFilter = VideoBlacklistType.MANUAL
+          }
+        })
+
+    this.initialize()
 
     this.videoBlacklistActions = [
       {
@@ -45,10 +52,6 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
         handler: videoBlacklist => this.removeVideoFromBlacklist(videoBlacklist)
       }
     ]
-  }
-
-  ngOnInit () {
-    this.initialize()
   }
 
   getVideoUrl (videoBlacklist: VideoBlacklist) {

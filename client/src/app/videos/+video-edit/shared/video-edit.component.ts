@@ -12,7 +12,7 @@ import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoCaptionAddModalComponent } from '@app/videos/+video-edit/shared/video-caption-add-modal.component'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { removeElementFromArray } from '@app/shared/misc/utils'
-import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
+import { ServerConfig, VideoConstant, VideoPrivacy } from '../../../../../../shared'
 import { VideoService } from '@app/shared/video/video.service'
 
 @Component({
@@ -50,6 +50,8 @@ export class VideoEditComponent implements OnInit, OnDestroy {
 
   calendarTimezone: string
   calendarDateFormat: string
+
+  serverConfig: ServerConfig
 
   private schedulerInterval: any
   private firstPatchDone = false
@@ -130,12 +132,19 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.updateForm()
 
-    this.videoCategories = this.serverService.getVideoCategories()
-    this.videoLicences = this.serverService.getVideoLicences()
-    this.videoLanguages = this.serverService.getVideoLanguages()
+    this.serverService.getVideoCategories()
+        .subscribe(res => this.videoCategories = res)
+    this.serverService.getVideoLicences()
+        .subscribe(res => this.videoLicences = res)
+    this.serverService.getVideoLanguages()
+      .subscribe(res => this.videoLanguages = res)
 
-    const privacies = this.serverService.getVideoPrivacies()
-    this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies)
+    this.serverService.getVideoPrivacies()
+      .subscribe(privacies => this.videoPrivacies = this.videoService.explainedPrivacyLabels(privacies))
+
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
 
     this.initialVideoCaptions = this.videoCaptions.map(c => c.language.id)
 

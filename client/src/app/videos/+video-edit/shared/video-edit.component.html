@@ -269,5 +269,5 @@
 </div>
 
 <my-video-caption-add-modal
-  #videoCaptionAddModal [existingCaptions]="existingCaptions" (captionAdded)="onCaptionAdded($event)"
+  #videoCaptionAddModal [existingCaptions]="existingCaptions" [serverConfig]="serverConfig" (captionAdded)="onCaptionAdded($event)"
 ></my-video-caption-add-modal>

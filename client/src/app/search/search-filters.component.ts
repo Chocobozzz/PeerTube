@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ValidatorFn } from '@angular/forms'
 import { VideoValidatorsService } from '@app/shared'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
-import { VideoConstant } from '../../../../shared'
+import { ServerConfig, VideoConstant } from '../../../../shared'
 
 @Component({
   selector: 'my-search-filters',
@@ -32,6 +32,8 @@ export class SearchFiltersComponent implements OnInit {
 
   originallyPublishedStartYear: string
   originallyPublishedEndYear: string
+
+  private serverConfig: ServerConfig
 
   constructor (
     private i18n: I18n,
@@ -99,9 +101,13 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   ngOnInit () {
-    this.serverService.videoCategoriesLoaded.subscribe(() => this.videoCategories = this.serverService.getVideoCategories())
-    this.serverService.videoLicencesLoaded.subscribe(() => this.videoLicences = this.serverService.getVideoLicences())
-    this.serverService.videoLanguagesLoaded.subscribe(() => this.videoLanguages = this.serverService.getVideoLanguages())
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
+    this.serverService.getVideoCategories().subscribe(categories => this.videoCategories = categories)
+    this.serverService.getVideoLicences().subscribe(licences => this.videoLicences = licences)
+    this.serverService.getVideoLanguages().subscribe(languages => this.videoLanguages = languages)
 
     this.loadFromDurationRange()
     this.loadFromPublishedRange()

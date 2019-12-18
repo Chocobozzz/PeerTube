@@ -5,7 +5,8 @@ import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-a
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { MarkdownService } from '@app/shared/renderer'
 import { forkJoin } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { map, switchMap } from 'rxjs/operators'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-about-instance',
@@ -33,6 +34,8 @@ export class AboutInstanceComponent implements OnInit {
   languages: string[] = []
   categories: string[] = []
 
+  serverConfig: ServerConfig
+
   constructor (
     private notifier: Notifier,
     private serverService: ServerService,
@@ -42,25 +45,35 @@ export class AboutInstanceComponent implements OnInit {
   ) {}
 
   get instanceName () {
-    return this.serverService.getConfig().instance.name
+    return this.serverConfig.instance.name
   }
 
   get isContactFormEnabled () {
-    return this.serverService.getConfig().email.enabled && this.serverService.getConfig().contactForm.enabled
+    return this.serverConfig.email.enabled && this.serverConfig.contactForm.enabled
   }
 
   get isNSFW () {
-    return this.serverService.getConfig().instance.isNSFW
+    return this.serverConfig.instance.isNSFW
   }
 
   ngOnInit () {
-    forkJoin([
-      this.instanceService.getAbout(),
-      this.serverService.localeObservable.pipe(first()),
-      this.serverService.videoLanguagesLoaded.pipe(first()),
-      this.serverService.videoCategoriesLoaded.pipe(first())
-    ]).subscribe(
-      async ([ about, translations ]) => {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
+    this.instanceService.getAbout()
+        .pipe(
+          switchMap(about => {
+            return forkJoin([
+              this.instanceService.buildTranslatedLanguages(about),
+              this.instanceService.buildTranslatedCategories(about)
+            ]).pipe(map(([ languages, categories ]) => ({ about, languages, categories })))
+          })
+        ).subscribe(
+      async ({ about, languages, categories }) => {
+        this.languages = languages
+        this.categories = categories
+
         this.shortDescription = about.instance.shortDescription
 
         this.creationReason = about.instance.creationReason
@@ -68,9 +81,6 @@ export class AboutInstanceComponent implements OnInit {
         this.businessModel = about.instance.businessModel
 
         this.html = await this.instanceService.buildHtml(about)
-
-        this.languages = this.instanceService.buildTranslatedLanguages(about, translations)
-        this.categories = this.instanceService.buildTranslatedCategories(about, translations)
       },
 
       () => this.notifier.error(this.i18n('Cannot get about information from server'))

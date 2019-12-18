@@ -8,7 +8,7 @@ import { MetaService } from '@ngx-meta/core'
 import { AuthUser, Notifier, ServerService } from '@app/core'
 import { forkJoin, Observable, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
+import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
 import { RestExtractor, VideoBlacklistService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
@@ -84,6 +84,8 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private queryParamsSub: Subscription
   private configSub: Subscription
 
+  private serverConfig: ServerConfig
+
   constructor (
     private elementRef: ElementRef,
     private changeDetector: ChangeDetectorRef,
@@ -120,11 +122,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit () {
-    this.configSub = this.serverService.configLoaded
-        .subscribe(() => {
+    this.serverConfig = this.serverService.getTmpConfig()
+
+    this.configSub = this.serverService.getConfig()
+        .subscribe(config => {
+          this.serverConfig = config
+
           if (
             isWebRTCDisabled() ||
-            this.serverService.getConfig().tracker.enabled === false ||
+            this.serverConfig.tracker.enabled === false ||
             peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
           ) {
             this.hasAlreadyAcceptedPrivacyConcern = true
@@ -280,7 +286,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   }
 
   isVideoBlur (video: Video) {
-    return video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
+    return video.isVideoNSFWForUser(this.user, this.serverConfig)
   }
 
   isAutoPlayEnabled () {

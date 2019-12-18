@@ -16,7 +16,7 @@ const registerRoutes: Routes = [
       }
     },
     resolve: {
-      serverConfigLoaded: ServerConfigResolver
+      serverConfig: ServerConfigResolver
     }
   }
 ]

@@ -13,7 +13,7 @@ import { Notifier, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
-import { ResultList } from '@shared/models'
+import { ResultList, ServerConfig } from '@shared/models'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -61,6 +61,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   onDataSubject = new Subject<any[]>()
 
+  protected serverConfig: ServerConfig
+
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
   protected abstract route: ActivatedRoute
@@ -85,6 +87,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
+
     this.groupedDateLabels = {
       [GroupDate.UNKNOWN]: null,
       [GroupDate.TODAY]: this.i18n('Today'),
@@ -251,7 +257,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     }
 
     let path = this.router.url
-    if (!path || path === '/') path = this.serverService.getConfig().instance.defaultClientRoute
+    if (!path || path === '/') path = this.serverConfig.instance.defaultClientRoute
 
     this.router.navigate([ path ], { queryParams, replaceUrl: true, queryParamsHandling: 'merge' })
   }

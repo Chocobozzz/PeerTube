@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
-import { UserUpdateMe } from '../../../../../../shared'
+import { ServerConfig, UserUpdateMe } from '../../../../../../shared'
 import { AuthService } from '../../../core'
 import { FormReactive, User, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -16,6 +16,8 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
   @Input() user: User = null
   @Input() userInformationLoaded: Subject<any>
 
+  private serverConfig: ServerConfig
+
   constructor (
     protected formValidatorService: FormValidatorService,
     private authService: AuthService,
@@ -28,11 +30,15 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
   }
 
   get availableThemes () {
-    return this.serverService.getConfig().theme.registered
+    return this.serverConfig.theme.registered
                .map(t => t.name)
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
     this.buildForm({
       theme: null
     })

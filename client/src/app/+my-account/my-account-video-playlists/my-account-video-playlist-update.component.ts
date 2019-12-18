@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { Subscription } from 'rxjs'
+import { forkJoin, Subscription } from 'rxjs'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { MyAccountVideoPlaylistEdit } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-edit'
@@ -56,13 +56,17 @@ export class MyAccountVideoPlaylistUpdateComponent extends MyAccountVideoPlaylis
     this.paramsSub = this.route.params
                          .pipe(
                            map(routeParams => routeParams['videoPlaylistId']),
-                           switchMap(videoPlaylistId => this.videoPlaylistService.getVideoPlaylist(videoPlaylistId)),
-                           delayWhen(() => this.serverService.videoPlaylistPrivaciesLoaded)
+                           switchMap(videoPlaylistId => {
+                             return forkJoin([
+                               this.videoPlaylistService.getVideoPlaylist(videoPlaylistId),
+                               this.serverService.getVideoPlaylistPrivacies()
+                             ])
+                           })
                          )
                          .subscribe(
-                           videoPlaylistToUpdate => {
-                             this.videoPlaylistPrivacies = this.serverService.getVideoPlaylistPrivacies()
+                           ([ videoPlaylistToUpdate, videoPlaylistPrivacies]) => {
                              this.videoPlaylistToUpdate = videoPlaylistToUpdate
+                             this.videoPlaylistPrivacies = videoPlaylistPrivacies
 
                              this.hydrateFormFromPlaylist()
                            },

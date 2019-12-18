@@ -1,20 +1,28 @@
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { TopMenuDropdownParam } from '@app/shared/menu/top-menu-dropdown.component'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-my-account',
   templateUrl: './my-account.component.html',
   styleUrls: [ './my-account.component.scss' ]
 })
-export class MyAccountComponent {
+export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
+
+  private serverConfig: ServerConfig
 
   constructor (
     private serverService: ServerService,
     private i18n: I18n
-  ) {
+  ) { }
+
+  ngOnInit (): void {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
 
     const libraryEntries: TopMenuDropdownParam = {
       label: this.i18n('My library'),
@@ -91,7 +99,7 @@ export class MyAccountComponent {
   }
 
   isVideoImportEnabled () {
-    const importConfig = this.serverService.getConfig().import.videos
+    const importConfig = this.serverConfig.import.videos
 
     return importConfig.http.enabled || importConfig.torrent.enabled
   }

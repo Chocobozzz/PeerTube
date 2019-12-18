@@ -7,7 +7,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-validators.service'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-login',
@@ -23,10 +24,12 @@ export class LoginComponent extends FormReactive implements OnInit {
   forgotPasswordEmail = ''
 
   private openedForgotPasswordModal: NgbModalRef
+  private serverConfig: ServerConfig
 
   constructor (
-    public router: Router,
     protected formValidatorService: FormValidatorService,
+    private router: Router,
+    private route: ActivatedRoute,
     private modalService: NgbModal,
     private loginValidatorsService: LoginValidatorsService,
     private authService: AuthService,
@@ -40,14 +43,16 @@ export class LoginComponent extends FormReactive implements OnInit {
   }
 
   get signupAllowed () {
-    return this.serverService.getConfig().signup.allowed === true
+    return this.serverConfig.signup.allowed === true
   }
 
   isEmailDisabled () {
-    return this.serverService.getConfig().email.enabled === false
+    return this.serverConfig.email.enabled === false
   }
 
   ngOnInit () {
+    this.serverConfig = this.route.snapshot.data.serverConfig
+
     this.buildForm({
       username: this.loginValidatorsService.LOGIN_USERNAME,
       password: this.loginValidatorsService.LOGIN_PASSWORD

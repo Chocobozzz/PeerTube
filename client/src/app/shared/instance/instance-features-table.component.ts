@@ -10,7 +10,7 @@ import { ServerConfig } from '@shared/models'
 })
 export class InstanceFeaturesTableComponent implements OnInit {
   quotaHelpIndication = ''
-  config: ServerConfig
+  serverConfig: ServerConfig
 
   constructor (
     private i18n: I18n,
@@ -19,27 +19,32 @@ export class InstanceFeaturesTableComponent implements OnInit {
   }
 
   get initialUserVideoQuota () {
-    return this.serverService.getConfig().user.videoQuota
+    return this.serverConfig.user.videoQuota
   }
 
   get dailyUserVideoQuota () {
-    return Math.min(this.initialUserVideoQuota, this.serverService.getConfig().user.videoQuotaDaily)
+    return Math.min(this.initialUserVideoQuota, this.serverConfig.user.videoQuotaDaily)
   }
 
   ngOnInit () {
-    this.serverService.configLoaded
-        .subscribe(() => {
-          this.config = this.serverService.getConfig()
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => {
+          this.serverConfig = config
           this.buildQuotaHelpIndication()
         })
   }
 
   buildNSFWLabel () {
-    const policy = this.serverService.getConfig().instance.defaultNSFWPolicy
+    const policy = this.serverConfig.instance.defaultNSFWPolicy
 
     if (policy === 'do_not_list') return this.i18n('Hidden')
     if (policy === 'blur') return this.i18n('Blurred with confirmation request')
     if (policy === 'display') return this.i18n('Displayed')
+  }
+
+  getServerVersionAndCommit () {
+    return this.serverService.getServerVersionAndCommit()
   }
 
   private getApproximateTime (seconds: number) {
@@ -51,10 +56,6 @@ export class InstanceFeaturesTableComponent implements OnInit {
     const minutes = Math.floor(seconds % 3600 / 60)
 
     return this.i18n('~ {{minutes}} {minutes, plural, =1 {minute} other {minutes}}', { minutes })
-  }
-
-  getServerVersionAndCommit () {
-    return this.serverService.getServerVersionAndCommit()
   }
 
   private buildQuotaHelpIndication () {

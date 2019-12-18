@@ -64,7 +64,7 @@ export class VideoService implements VideosProvider {
   }
 
   getVideo (options: { videoId: string }): Observable<VideoDetails> {
-    return this.serverService.localeObservable
+    return this.serverService.getServerLocale()
                .pipe(
                  switchMap(translations => {
                    return this.authHttp.get<VideoDetailsServerModel>(VideoService.BASE_VIDEO_URL + options.videoId)
@@ -315,7 +315,7 @@ export class VideoService implements VideosProvider {
   }
 
   extractVideos (result: ResultList<VideoServerModel>) {
-    return this.serverService.localeObservable
+    return this.serverService.getServerLocale()
                .pipe(
                  map(translations => {
                    const videosJson = result.data

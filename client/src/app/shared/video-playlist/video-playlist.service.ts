@@ -173,7 +173,7 @@ export class VideoPlaylistService {
   }
 
   extractPlaylists (result: ResultList<VideoPlaylistServerModel>) {
-    return this.serverService.localeObservable
+    return this.serverService.getServerLocale()
                .pipe(
                  map(translations => {
                    const playlistsJSON = result.data
@@ -190,12 +190,12 @@ export class VideoPlaylistService {
   }
 
   extractPlaylist (playlist: VideoPlaylistServerModel) {
-    return this.serverService.localeObservable
+    return this.serverService.getServerLocale()
                .pipe(map(translations => new VideoPlaylist(playlist, translations)))
   }
 
   extractVideoPlaylistElements (result: ResultList<ServerVideoPlaylistElement>) {
-    return this.serverService.localeObservable
+    return this.serverService.getServerLocale()
                .pipe(
                  map(translations => {
                    const elementsJson = result.data

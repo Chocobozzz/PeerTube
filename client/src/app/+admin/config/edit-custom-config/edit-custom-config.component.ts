@@ -8,7 +8,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { SelectItem } from 'primeng/api'
 import { forkJoin } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -23,6 +23,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   languageItems: SelectItem[] = []
   categoryItems: SelectItem[] = []
+
+  private serverConfig: ServerConfig
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -84,7 +86,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   get availableThemes () {
-    return this.serverService.getConfig().theme.registered
+    return this.serverConfig.theme.registered
       .map(t => t.name)
   }
 
@@ -93,6 +95,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
     const formGroupData: { [key in keyof CustomConfig ]: any } = {
       instance: {
         name: this.customConfigValidatorsService.INSTANCE_NAME,
@@ -218,16 +224,13 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
     forkJoin([
       this.configService.getCustomConfig(),
-      this.serverService.videoLanguagesLoaded.pipe(first()), // First so the observable completes
-      this.serverService.videoCategoriesLoaded.pipe(first())
+      this.serverService.getVideoLanguages(),
+      this.serverService.getVideoCategories()
     ]).subscribe(
-      ([ config ]) => {
+      ([ config, languages, categories ]) => {
         this.customConfig = config
 
-        const languages = this.serverService.getVideoLanguages()
         this.languageItems = languages.map(l => ({ label: l.label, value: l.id }))
-
-        const categories = this.serverService.getVideoCategories()
         this.categoryItems = categories.map(l => ({ label: l.label, value: l.id }))
 
         this.updateForm()
@@ -249,12 +252,14 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   async formValidated () {
     this.configService.updateCustomConfig(this.form.value)
+      .pipe(
+      )
       .subscribe(
         res => {
           this.customConfig = res
 
           // Reload general configuration
-          this.serverService.loadConfig()
+          this.serverService.resetConfig()
 
           this.updateForm()
 

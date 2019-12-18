@@ -5,7 +5,7 @@ import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validator
 import { ServerService } from '@app/core'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { VideoConstant } from '../../../../../../shared'
+import { ServerConfig, VideoConstant } from '../../../../../../shared'
 
 @Component({
   selector: 'my-video-caption-add-modal',
@@ -15,6 +15,7 @@ import { VideoConstant } from '../../../../../../shared'
 
 export class VideoCaptionAddModalComponent extends FormReactive implements OnInit {
   @Input() existingCaptions: string[]
+  @Input() serverConfig: ServerConfig
 
   @Output() captionAdded = new EventEmitter<VideoCaptionEdit>()
 
@@ -35,15 +36,16 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   }
 
   get videoCaptionExtensions () {
-    return this.serverService.getConfig().videoCaption.file.extensions
+    return this.serverConfig.videoCaption.file.extensions
   }
 
   get videoCaptionMaxSize () {
-    return this.serverService.getConfig().videoCaption.file.size.max
+    return this.serverConfig.videoCaption.file.size.max
   }
 
   ngOnInit () {
-    this.videoCaptionLanguages = this.serverService.getVideoLanguages()
+    this.serverService.getVideoLanguages()
+        .subscribe(languages => this.videoCaptionLanguages = languages)
 
     this.buildForm({
       language: this.videoCaptionsValidatorsService.VIDEO_CAPTION_LANGUAGE,

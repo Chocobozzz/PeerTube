@@ -25,10 +25,10 @@ export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
     pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
     pageTitleSeparator: ' - ',
-    get applicationName () { return serverService.getConfig().instance.name },
+    get applicationName () { return serverService.getTmpConfig().instance.name },
     defaults: {
-      get title () { return serverService.getConfig().instance.name },
-      get description () { return serverService.getConfig().instance.shortDescription }
+      get title () { return serverService.getTmpConfig().instance.name },
+      get description () { return serverService.getTmpConfig().instance.shortDescription }
     }
   })
 }

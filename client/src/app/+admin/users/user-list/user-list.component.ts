@@ -4,7 +4,7 @@ import { SortMeta } from 'primeng/components/common/sortmeta'
 import { ConfirmService, ServerService } from '../../../core'
 import { RestPagination, RestTable, UserService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { User } from '../../../../../../shared'
+import { ServerConfig, User } from '../../../../../../shared'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
 
@@ -25,6 +25,8 @@ export class UserListComponent extends RestTable implements OnInit {
   selectedUsers: User[] = []
   bulkUserActions: DropdownAction<User[]>[] = []
 
+  private serverConfig: ServerConfig
+
   constructor (
     private notifier: Notifier,
     private confirmService: ConfirmService,
@@ -41,10 +43,14 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   get requiresEmailVerification () {
-    return this.serverService.getConfig().signup.requiresEmailVerification
+    return this.serverConfig.signup.requiresEmailVerification
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
     this.initialize()
 
     this.bulkUserActions = [

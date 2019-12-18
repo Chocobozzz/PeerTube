@@ -4,10 +4,11 @@ import { UserService, UserValidatorsService } from '@app/shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRegister } from '@shared/models/users/user-register.model'
 import { FormGroup } from '@angular/forms'
-import { About } from '@shared/models/server'
+import { About, ServerConfig } from '@shared/models/server'
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
+import { ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'my-register',
@@ -34,7 +35,10 @@ export class RegisterComponent implements OnInit {
   formStepUser: FormGroup
   formStepChannel: FormGroup
 
+  private serverConfig: ServerConfig
+
   constructor (
+    private route: ActivatedRoute,
     private authService: AuthService,
     private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
@@ -48,10 +52,12 @@ export class RegisterComponent implements OnInit {
   }
 
   get requiresEmailVerification () {
-    return this.serverService.getConfig().signup.requiresEmailVerification
+    return this.serverConfig.signup.requiresEmailVerification
   }
 
   ngOnInit (): void {
+    this.serverConfig = this.route.snapshot.data.serverConfig
+
     this.instanceService.getAbout()
       .subscribe(
         async about => {

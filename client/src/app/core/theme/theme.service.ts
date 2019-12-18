@@ -3,7 +3,7 @@ import { AuthService } from '@app/core/auth'
 import { ServerService } from '@app/core/server'
 import { environment } from '../../../environments/environment'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { ServerConfigTheme } from '@shared/models'
+import { ServerConfig, ServerConfigTheme } from '@shared/models'
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { first } from 'rxjs/operators'
 
@@ -20,6 +20,8 @@ export class ThemeService {
   private themeFromLocalStorage: ServerConfigTheme
   private themeDOMLinksFromLocalStorage: HTMLLinkElement[] = []
 
+  private serverConfig: ServerConfig
+
   constructor (
     private auth: AuthService,
     private pluginService: PluginService,
@@ -30,9 +32,12 @@ export class ThemeService {
     // Try to load from local storage first, so we don't have to wait network requests
     this.loadAndSetFromLocalStorage()
 
-    this.server.configLoaded
-        .subscribe(() => {
-          const themes = this.server.getConfig().theme.registered
+    this.serverConfig = this.server.getTmpConfig()
+    this.server.getConfig()
+        .subscribe(config => {
+          this.serverConfig = config
+
+          const themes = this.serverConfig.theme.registered
 
           this.removeThemeFromLocalStorageIfNeeded(themes)
           this.injectThemes(themes)
@@ -77,7 +82,7 @@ export class ThemeService {
       if (theme !== 'instance-default') return theme
     }
 
-    return this.server.getConfig().theme.default
+    return this.serverConfig.theme.default
   }
 
   private loadTheme (name: string) {

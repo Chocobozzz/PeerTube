@@ -21,7 +21,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
   webNotifications: { [ id in keyof UserNotificationSetting ]: boolean } = {} as any
   labelNotifications: { [ id in keyof UserNotificationSetting ]: string } = {} as any
   rightNotifications: { [ id in keyof Partial<UserNotificationSetting> ]: UserRight } = {} as any
-  emailEnabled: boolean
+  emailEnabled = false
 
   private savePreferences = debounce(this.savePreferencesImpl.bind(this), 500)
 
@@ -31,7 +31,6 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     private serverService: ServerService,
     private notifier: Notifier
   ) {
-
     this.labelNotifications = {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
       newCommentOnMyVideo: this.i18n('New comment on your video'),
@@ -55,11 +54,14 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
       autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION
     }
-
-    this.emailEnabled = this.serverService.getConfig().email.enabled
   }
 
   ngOnInit () {
+    this.serverService.getConfig()
+        .subscribe(config => {
+          this.emailEnabled = config.email.enabled
+        })
+
     this.userInformationLoaded.subscribe(() => this.loadNotificationSettings())
   }
 

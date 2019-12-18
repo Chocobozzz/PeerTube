@@ -43,6 +43,8 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
+    super.ngOnInit()
+
     const defaultValues = { videoQuota: '-1', videoQuotaDaily: '-1' }
     this.buildForm({
       email: this.userValidatorsService.USER_EMAIL,

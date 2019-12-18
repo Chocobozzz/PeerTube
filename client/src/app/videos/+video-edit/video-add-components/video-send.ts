@@ -3,7 +3,7 @@ import { LoadingBarService } from '@ngx-loading-bar/core'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { catchError, switchMap, tap } from 'rxjs/operators'
 import { FormReactive } from '@app/shared'
-import { VideoConstant, VideoPrivacy } from '../../../../../../shared'
+import { ServerConfig, VideoConstant, VideoPrivacy } from '../../../../../../shared'
 import { VideoService } from '@app/shared/video/video.service'
 import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
 import { VideoCaptionService } from '@app/shared/video-caption'
@@ -29,6 +29,7 @@ export abstract class VideoSend extends FormReactive implements OnInit {
   protected serverService: ServerService
   protected videoService: VideoService
   protected videoCaptionService: VideoCaptionService
+  protected serverConfig: ServerConfig
 
   abstract canDeactivate (): CanComponentDeactivateResult
 
@@ -38,10 +39,14 @@ export abstract class VideoSend extends FormReactive implements OnInit {
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
       .then(() => this.firstStepChannelId = this.userVideoChannels[ 0 ].id)
 
-    this.serverService.videoPrivaciesLoaded
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
+    this.serverService.getVideoPrivacies()
         .subscribe(
-          () => {
-            this.videoPrivacies = this.serverService.getVideoPrivacies()
+          privacies => {
+            this.videoPrivacies = privacies
 
             this.firstStepPrivacyId = this.DEFAULT_VIDEO_PRIVACY
           })

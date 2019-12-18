@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, LOCALE
 import { User } from '../users'
 import { Video } from './video.model'
 import { ServerService } from '@app/core'
-import { VideoPrivacy, VideoState } from '../../../../../shared'
+import { ServerConfig, VideoPrivacy, VideoState } from '../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -55,6 +55,7 @@ export class VideoMiniatureComponent implements OnInit {
     report: true
   }
   showActions = false
+  serverConfig: ServerConfig
 
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
@@ -66,10 +67,14 @@ export class VideoMiniatureComponent implements OnInit {
   ) { }
 
   get isVideoBlur () {
-    return this.video.isVideoNSFWForUser(this.user, this.serverService.getConfig())
+    return this.video.isVideoNSFWForUser(this.user, this.serverConfig)
   }
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+
     this.setUpBy()
 
     // We rely on mouseenter to lazy load actions

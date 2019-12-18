@@ -1,4 +1,4 @@
-import { catchError } from 'rxjs/operators'
+import { catchError, map } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { environment } from '../../../environments/environment'
@@ -7,6 +7,7 @@ import { About } from '../../../../../shared/models/server'
 import { MarkdownService } from '@app/shared/renderer'
 import { peertubeTranslate } from '@shared/models'
 import { ServerService } from '@app/core'
+import { forkJoin } from 'rxjs'
 
 @Injectable()
 export class InstanceService {
@@ -57,25 +58,35 @@ export class InstanceService {
     return html
   }
 
-  buildTranslatedLanguages (about: About, translations: any) {
-    const languagesArray = this.serverService.getVideoLanguages()
+  buildTranslatedLanguages (about: About) {
+    return forkJoin([
+      this.serverService.getVideoLanguages(),
+      this.serverService.getServerLocale()
+    ]).pipe(
+      map(([ languagesArray, translations ]) => {
+        return about.instance.languages
+                    .map(l => {
+                      const languageObj = languagesArray.find(la => la.id === l)
 
-    return about.instance.languages
-                .map(l => {
-                  const languageObj = languagesArray.find(la => la.id === l)
-
-                  return peertubeTranslate(languageObj.label, translations)
-                })
+                      return peertubeTranslate(languageObj.label, translations)
+                    })
+      })
+    )
   }
 
-  buildTranslatedCategories (about: About, translations: any) {
-    const categoriesArray = this.serverService.getVideoCategories()
+  buildTranslatedCategories (about: About) {
+    return forkJoin([
+      this.serverService.getVideoCategories(),
+      this.serverService.getServerLocale()
+    ]).pipe(
+      map(([ categoriesArray, translations ]) => {
+        return about.instance.categories
+                    .map(c => {
+                      const categoryObj = categoriesArray.find(ca => ca.id === c)
 
-    return about.instance.categories
-                .map(c => {
-                  const categoryObj = categoriesArray.find(ca => ca.id === c)
-
-                  return peertubeTranslate(categoryObj.label, translations)
-                })
+                      return peertubeTranslate(categoryObj.label, translations)
+                    })
+      })
+    )
   }
 }

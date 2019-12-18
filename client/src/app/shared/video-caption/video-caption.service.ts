@@ -22,7 +22,7 @@ export class VideoCaptionService {
     return this.authHttp.get<ResultList<VideoCaption>>(VideoService.BASE_VIDEO_URL + videoId + '/captions')
                .pipe(
                  switchMap(captionsResult => {
-                   return this.serverService.localeObservable
+                   return this.serverService.getServerLocale()
                      .pipe(map(translations => ({ captionsResult, translations })))
                  }),
                  map(({ captionsResult, translations }) => {

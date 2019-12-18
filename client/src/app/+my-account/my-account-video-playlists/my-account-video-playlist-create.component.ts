@@ -47,15 +47,14 @@ export class MyAccountVideoPlaylistCreateComponent extends MyAccountVideoPlaylis
     populateAsyncUserVideoChannels(this.authService, this.userVideoChannels)
       .catch(err => console.error('Cannot populate user video channels.', err))
 
-    this.serverService.videoPlaylistPrivaciesLoaded.subscribe(
-      () => {
-        this.videoPlaylistPrivacies = this.serverService.getVideoPlaylistPrivacies()
+    this.serverService.getVideoPlaylistPrivacies()
+        .subscribe(videoPlaylistPrivacies => {
+          this.videoPlaylistPrivacies = videoPlaylistPrivacies
 
-        this.form.patchValue({
-          privacy: VideoPlaylistPrivacy.PRIVATE
+          this.form.patchValue({
+            privacy: VideoPlaylistPrivacy.PRIVATE
+          })
         })
-      }
-    )
   }
 
   formValidated () {

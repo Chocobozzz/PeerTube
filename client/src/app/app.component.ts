@@ -15,7 +15,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
-import { UserRole } from '@shared/models'
+import { ServerConfig, UserRole } from '@shared/models'
 import { User } from '@app/shared'
 import { InstanceService } from '@app/shared/instance/instance.service'
 
@@ -32,6 +32,8 @@ export class AppComponent implements OnInit {
   isMenuChangedByUser = false
 
   customCSS: SafeHtml
+
+  private serverConfig: ServerConfig
 
   constructor (
     private i18n: I18n,
@@ -52,7 +54,7 @@ export class AppComponent implements OnInit {
   ) { }
 
   get instanceName () {
-    return this.serverService.getConfig().instance.name
+    return this.serverConfig.instance.name
   }
 
   get defaultRoute () {
@@ -61,6 +63,10 @@ export class AppComponent implements OnInit {
 
   ngOnInit () {
     document.getElementById('incompatible-browser').className += ' browser-ok'
+
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
 
     this.loadPlugins()
     this.themeService.initialize()
@@ -71,14 +77,6 @@ export class AppComponent implements OnInit {
       // The service will automatically redirect to the login page if the token is not valid anymore
       this.authService.refreshUserInformation()
     }
-
-    // Load custom data from server
-    this.serverService.loadConfig()
-    this.serverService.loadVideoCategories()
-    this.serverService.loadVideoLanguages()
-    this.serverService.loadVideoLicences()
-    this.serverService.loadVideoPrivacies()
-    this.serverService.loadVideoPlaylistPrivacies()
 
     // Do not display menu on small screens
     if (this.screenService.isInSmallView()) {
@@ -187,10 +185,8 @@ export class AppComponent implements OnInit {
 
   private injectJS () {
     // Inject JS
-    this.serverService.configLoaded
-        .subscribe(() => {
-          const config = this.serverService.getConfig()
-
+    this.serverService.getConfig()
+        .subscribe(config => {
           if (config.instance.customizations.javascript) {
             try {
               // tslint:disable:no-eval
@@ -204,17 +200,14 @@ export class AppComponent implements OnInit {
 
   private injectCSS () {
     // Inject CSS if modified (admin config settings)
-    this.serverService.configLoaded
-        .pipe(skip(1)) // We only want to subscribe to reloads, because the CSS is already injected by the server
+    this.serverService.configReloaded
         .subscribe(() => {
           const headStyle = document.querySelector('style.custom-css-style')
           if (headStyle) headStyle.parentNode.removeChild(headStyle)
 
-          const config = this.serverService.getConfig()
-
           // We test customCSS if the admin removed the css
-          if (this.customCSS || config.instance.customizations.css) {
-            const styleTag = '<style>' + config.instance.customizations.css + '</style>'
+          if (this.customCSS || this.serverConfig.instance.customizations.css) {
+            const styleTag = '<style>' + this.serverConfig.instance.customizations.css + '</style>'
             this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
           }
         })
@@ -227,25 +220,22 @@ export class AppComponent implements OnInit {
   }
 
   private async openModalsIfNeeded () {
-    this.serverService.configLoaded
+    this.authService.userInformationLoaded
         .pipe(
-          first(),
-          switchMap(() => this.authService.userInformationLoaded),
           map(() => this.authService.getUser()),
           filter(user => user.role === UserRole.ADMINISTRATOR)
-        ).subscribe(user => setTimeout(() => this.openAdminModals(user))) // setTimeout because of ngIf in template
+        ).subscribe(user => setTimeout(() => this._openAdminModalsIfNeeded(user))) // setTimeout because of ngIf in template
   }
 
-  private async openAdminModals (user: User) {
+  private async _openAdminModalsIfNeeded (user: User) {
     if (user.noWelcomeModal !== true) return this.welcomeModal.show()
 
-    const config = this.serverService.getConfig()
-    if (user.noInstanceConfigWarningModal === true || !config.signup.allowed) return
+    if (user.noInstanceConfigWarningModal === true || !this.serverConfig.signup.allowed) return
 
     this.instanceService.getAbout()
       .subscribe(about => {
         if (
-          config.instance.name.toLowerCase() === 'peertube' ||
+          this.serverConfig.instance.name.toLowerCase() === 'peertube' ||
           !about.instance.terms ||
           !about.instance.administrator ||
           !about.instance.maintenanceLifetime

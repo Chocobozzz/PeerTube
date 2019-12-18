@@ -40,9 +40,9 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
 
     this.generateSyndicationList()
 
-    this.serverService.configLoaded.subscribe(
-      () => {
-        const trendingDays = this.serverService.getConfig().trending.videos.intervalDays
+    this.serverService.getConfig().subscribe(
+      config => {
+        const trendingDays = config.trending.videos.intervalDays
 
         if (trendingDays === 1) {
           this.titlePage = this.i18n('Trending for the last 24 hours')

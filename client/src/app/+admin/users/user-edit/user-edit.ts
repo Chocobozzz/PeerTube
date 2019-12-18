@@ -1,20 +1,29 @@
 import { AuthService, ServerService } from '../../../core'
 import { FormReactive } from '../../../shared'
-import { USER_ROLE_LABELS, UserRole, VideoResolution } from '../../../../../../shared'
+import { ServerConfig, USER_ROLE_LABELS, UserRole, VideoResolution } from '../../../../../../shared'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
+import { OnInit } from '@angular/core'
 
-export abstract class UserEdit extends FormReactive {
+export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
   username: string
   userId: number
+
+  protected serverConfig: ServerConfig
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
   protected abstract auth: AuthService
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
+
+  ngOnInit (): void {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => this.serverConfig = config)
+  }
 
   getRoles () {
     const authUser = this.auth.getUser()
@@ -32,12 +41,12 @@ export abstract class UserEdit extends FormReactive {
   isTranscodingInformationDisplayed () {
     const formVideoQuota = parseInt(this.form.value['videoQuota'], 10)
 
-    return this.serverService.getConfig().transcoding.enabledResolutions.length !== 0 &&
+    return this.serverConfig.transcoding.enabledResolutions.length !== 0 &&
            formVideoQuota > 0
   }
 
   computeQuotaWithTranscoding () {
-    const transcodingConfig = this.serverService.getConfig().transcoding
+    const transcodingConfig = this.serverConfig.transcoding
 
     const resolutions = transcodingConfig.enabledResolutions
     const higherResolution = VideoResolution.H_4K

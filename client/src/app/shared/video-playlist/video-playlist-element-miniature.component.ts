@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Video } from '@app/shared/video/video.model'
-import { VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
+import { ServerConfig, VideoPlaylistElementType, VideoPlaylistElementUpdate } from '@shared/models'
 import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { ActivatedRoute } from '@angular/router'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -17,7 +17,7 @@ import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-
   templateUrl: './video-playlist-element-miniature.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VideoPlaylistElementMiniatureComponent {
+export class VideoPlaylistElementMiniatureComponent implements OnInit {
   @ViewChild('moreDropdown', { static: false }) moreDropdown: NgbDropdown
 
   @Input() playlist: VideoPlaylist
@@ -39,6 +39,8 @@ export class VideoPlaylistElementMiniatureComponent {
     stopTimestamp: number
   } = {} as any
 
+  private serverConfig: ServerConfig
+
   constructor (
     private authService: AuthService,
     private serverService: ServerService,
@@ -50,6 +52,15 @@ export class VideoPlaylistElementMiniatureComponent {
     private videoPlaylistService: VideoPlaylistService,
     private cdr: ChangeDetectorRef
   ) {}
+
+  ngOnInit (): void {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+        .subscribe(config => {
+          this.serverConfig = config
+          this.cdr.detectChanges()
+        })
+  }
 
   isUnavailable (e: VideoPlaylistElement) {
     return e.type === VideoPlaylistElementType.UNAVAILABLE
@@ -80,7 +91,7 @@ export class VideoPlaylistElementMiniatureComponent {
   }
 
   isVideoBlur (video: Video) {
-    return video.isVideoNSFWForUser(this.authService.getUser(), this.serverService.getConfig())
+    return video.isVideoNSFWForUser(this.authService.getUser(), this.serverConfig)
   }
 
   removeFromPlaylist (playlistElement: VideoPlaylistElement) {

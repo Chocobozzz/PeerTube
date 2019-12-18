@@ -40,11 +40,8 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
 
     this.generateSyndicationList()
 
-    this.serverService.configLoaded.subscribe(
-      () => {
-        this.titlePage = this.i18n('Most liked videos')
-        this.titleTooltip = this.i18n('Videos that have the higher number of likes.')
-      })
+    this.titlePage = this.i18n('Most liked videos')
+    this.titleTooltip = this.i18n('Videos that have the higher number of likes.')
   }
 
   getVideosObservable (page: number) {

@@ -1,6 +1,6 @@
 <div class="feature-table">
 
-  <table class="table" *ngIf="config">
+  <table class="table" *ngIf="serverConfig">
     <tr>
       <td i18n class="label">PeerTube version</td>
 
@@ -19,7 +19,7 @@
     <tr>
       <td i18n class="label">User registration allowed</td>
       <td>
-        <my-feature-boolean [value]="config.signup.allowed"></my-feature-boolean>
+        <my-feature-boolean [value]="serverConfig.signup.allowed"></my-feature-boolean>
       </td>
     </tr>
 
@@ -30,15 +30,15 @@
     <tr>
       <td i18n class="sub-label">Transcoding in multiple resolutions</td>
       <td>
-        <my-feature-boolean [value]="config.transcoding.enabledResolutions.length !== 0"></my-feature-boolean>
+        <my-feature-boolean [value]="serverConfig.transcoding.enabledResolutions.length !== 0"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
       <td i18n class="sub-label">Video uploads</td>
       <td>
-        <span *ngIf="config.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
-        <span *ngIf="!config.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
+        <span *ngIf="serverConfig.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
+        <span *ngIf="!serverConfig.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
       </td>
     </tr>
 
@@ -69,14 +69,14 @@
     <tr>
       <td i18n class="sub-label">HTTP import (YouTube, Vimeo, direct URL...)</td>
       <td>
-        <my-feature-boolean [value]="config.import.videos.http.enabled"></my-feature-boolean>
+        <my-feature-boolean [value]="serverConfig.import.videos.http.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
       <td i18n class="sub-label">Torrent import</td>
       <td>
-        <my-feature-boolean [value]="config.import.videos.torrent.enabled"></my-feature-boolean>
+        <my-feature-boolean [value]="serverConfig.import.videos.torrent.enabled"></my-feature-boolean>
       </td>
     </tr>
 
@@ -88,7 +88,7 @@
     <tr>
       <td i18n class="sub-label">P2P enabled</td>
       <td>
-        <my-feature-boolean [value]="config.tracker.enabled"></my-feature-boolean>
+        <my-feature-boolean [value]="serverConfig.tracker.enabled"></my-feature-boolean>
       </td>
     </tr>
   </table>

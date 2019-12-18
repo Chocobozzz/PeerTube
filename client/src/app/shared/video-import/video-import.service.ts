@@ -91,7 +91,7 @@ export class VideoImportService {
   }
 
   private extractVideoImports (result: ResultList<VideoImport>): Observable<ResultList<VideoImport>> {
-    return this.serverService.localeObservable
+    return this.serverService.getServerLocale()
                .pipe(
                  map(translations => {
                    result.data.forEach(d =>

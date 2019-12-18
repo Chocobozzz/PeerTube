@@ -4,6 +4,7 @@ import { AuthService, AuthStatus, RedirectService, ServerService, ThemeService }
 import { User } from '../shared/users/user.model'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { HotkeysService } from 'angular2-hotkeys'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-menu',
@@ -18,6 +19,7 @@ export class MenuComponent implements OnInit {
   userHasAdminAccess = false
   helpVisible = false
 
+  private serverConfig: ServerConfig
   private routesPerRight: { [ role in UserRight ]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
@@ -36,6 +38,10 @@ export class MenuComponent implements OnInit {
   ) {}
 
   ngOnInit () {
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
+
     this.isLoggedIn = this.authService.isLoggedIn()
     if (this.isLoggedIn === true) this.user = this.authService.getUser()
     this.computeIsUserHasAdminAccess()
@@ -64,8 +70,8 @@ export class MenuComponent implements OnInit {
   }
 
   isRegistrationAllowed () {
-    return this.serverService.getConfig().signup.allowed &&
-           this.serverService.getConfig().signup.allowedForCurrentIP
+    return this.serverConfig.signup.allowed &&
+           this.serverConfig.signup.allowedForCurrentIP
   }
 
   getFirstAdminRightAvailable () {

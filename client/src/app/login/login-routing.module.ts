@@ -15,7 +15,7 @@ const loginRoutes: Routes = [
       }
     },
     resolve: {
-      serverConfigLoaded: ServerConfigResolver
+      serverConfig: ServerConfigResolver
     }
   }
 ]

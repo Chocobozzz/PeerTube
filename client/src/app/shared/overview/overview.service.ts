@@ -60,7 +60,7 @@ export class OverviewService {
       .pipe(
         // Translate categories
         switchMap(() => {
-          return this.serverService.localeObservable
+          return this.serverService.getServerLocale()
               .pipe(
                 tap(translations => {
                   for (const c of videosOverviewResult.categories) {

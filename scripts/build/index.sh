@@ -8,6 +8,6 @@ else
   clientCommand="npm run build:client"
 fi
 
-npm run concurrently -- --raw \
+npm run concurrently -- --raw \w
   "$clientCommand" \
   "npm run build:server"
