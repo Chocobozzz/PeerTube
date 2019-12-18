@@ -100,8 +100,8 @@ class EndCard extends Component {
     let now: number
     let newOffset: number
 
-    this.autoplayRing.setAttribute('stroke-dasharray', this.dashOffsetStart)
-    this.autoplayRing.setAttribute('stroke-dashoffset', -this.dashOffsetStart)
+    this.autoplayRing.setAttribute('stroke-dasharray', '' + this.dashOffsetStart)
+    this.autoplayRing.setAttribute('stroke-dashoffset', '' + -this.dashOffsetStart)
 
     this.title.innerHTML = this.getTitle()
 
@@ -127,8 +127,9 @@ class EndCard extends Component {
         clearTimeout(timeout)
         cb(false)
       } else {
-        newOffset = Math.max(-this.dashOffsetTotal, this.autoplayRing.getAttribute('stroke-dashoffset') - this.chunkSize)
-        this.autoplayRing.setAttribute('stroke-dashoffset', newOffset)
+        const strokeDashOffset = parseInt(this.autoplayRing.getAttribute('stroke-dashoffset'), 10)
+        newOffset = Math.max(-this.dashOffsetTotal, strokeDashOffset - this.chunkSize)
+        this.autoplayRing.setAttribute('stroke-dashoffset', '' + newOffset)
         timeout = setTimeout(update.bind(this), this.interval)
       }
 
