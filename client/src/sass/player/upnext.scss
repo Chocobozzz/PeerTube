@@ -95,8 +95,9 @@ $browser-context: 16;
     width: 98px;
     height: 98px;
     margin: -49px 0 0 -49px;
-    transition: stroke-dasharray 0.1s cubic-bezier(0.4,0,1,1);
     cursor: pointer;
+
+    @include transition(stroke-dasharray 0.1s cubic-bezier(0.4,0,1,1));
   }
 
 }
