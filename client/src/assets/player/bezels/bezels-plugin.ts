@@ -43,7 +43,7 @@ class PauseBezel extends Component {
     this.options_ = options
 
     player.on('pause', (_: any) => {
-      if (player.seeking()) return
+      if (player.seeking() || player.ended()) return
       this.container.innerHTML = getPauseBezel()
       this.showBezel()
     })

@@ -52,6 +52,7 @@ export interface CustomizationOptions {
   muted?: boolean
   loop?: boolean
   subtitle?: string
+  resume?: string
 
   peertubeLink: boolean
 }

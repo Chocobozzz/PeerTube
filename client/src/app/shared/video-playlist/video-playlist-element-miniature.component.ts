@@ -86,7 +86,8 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     return {
       videoId: this.playlistElement.video.uuid,
       start: this.playlistElement.startTimestamp,
-      stop: this.playlistElement.stopTimestamp
+      stop: this.playlistElement.stopTimestamp,
+      resume: true
     }
   }
 

@@ -619,7 +619,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     const { video, videoCaptions, urlOptions, user } = params
     const getStartTime = () => {
       const byUrl = urlOptions.startTime !== undefined
-      const byHistory = video.userHistory && !this.playlist
+      const byHistory = video.userHistory && (!this.playlist || urlOptions.resume !== undefined)
 
       if (byUrl) {
         return timeToInt(urlOptions.startTime)

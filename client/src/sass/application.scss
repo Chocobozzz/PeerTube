@@ -142,12 +142,12 @@ label {
   @include disable-default-a-behaviour;
 
   &.active, &.title-page-single {
-    font-weight: $font-bold;
     margin-top: 30px;
     margin-bottom: 25px;
   }
 
   &.active {
+    font-weight: $font-bold;
     border-bottom: 2px solid var(--mainColor);
   }
 
