@@ -75,11 +75,6 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
   })
   BlockedAccount: AccountModel
 
-  static isAccountMutedBy (accountId: number, targetAccountId: number) {
-    return AccountBlocklistModel.isAccountMutedByMulti([ accountId ], targetAccountId)
-      .then(result => result[accountId])
-  }
-
   static isAccountMutedByMulti (accountIds: number[], targetAccountId: number) {
     const query = {
       attributes: [ 'accountId', 'id' ],

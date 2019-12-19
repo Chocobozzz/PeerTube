@@ -2,10 +2,10 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { AccountBlock, ServerBlock, Video } from '../../../../shared/index'
+import { AccountBlock, ServerBlock, UserNotificationType, Video } from '../../../../shared/index'
 import {
   cleanupTests,
-  createUser,
+  createUser, deleteVideoComment,
   doubleFollow,
   flushAndRunMultipleServers,
   flushTests,
@@ -38,6 +38,7 @@ import {
   removeServerFromAccountBlocklist,
   removeServerFromServerBlocklist
 } from '../../../../shared/extra-utils/users/blocklist'
+import { getUserNotifications } from '@shared/extra-utils/users/user-notifications'
 
 const expect = chai.expect
 
@@ -56,9 +57,10 @@ async function checkAllVideos (url: string, token: string) {
 }
 
 async function checkAllComments (url: string, token: string, videoUUID: string) {
-  const resThreads = await getVideoCommentThreads(url, videoUUID, 0, 5, '-createdAt', token)
+  const resThreads = await getVideoCommentThreads(url, videoUUID, 0, 25, '-createdAt', token)
 
-  const threads: VideoComment[] = resThreads.body.data
+  const allThreads: VideoComment[] = resThreads.body.data
+  const threads = allThreads.filter(t => t.isDeleted === false)
   expect(threads).to.have.lengthOf(2)
 
   for (const thread of threads) {
@@ -67,6 +69,28 @@ async function checkAllComments (url: string, token: string, videoUUID: string) 
     const tree: VideoCommentThreadTree = res.body
     expect(tree.children).to.have.lengthOf(1)
   }
+}
+
+async function checkCommentNotification (
+  mainServer: ServerInfo,
+  comment: { server: ServerInfo, token: string, videoUUID: string, text: string },
+  check: 'presence' | 'absence'
+) {
+  const resComment = await addVideoCommentThread(comment.server.url, comment.token, comment.videoUUID, comment.text)
+  const threadId = resComment.body.comment.id
+
+  await waitJobs([ mainServer, comment.server])
+
+  const res = await getUserNotifications(mainServer.url, mainServer.accessToken, 0, 30)
+  const commentNotifications = res.body.data
+                                  .filter(n => n.comment && n.comment.id === threadId)
+
+  if (check === 'presence') expect(commentNotifications).to.have.lengthOf(1)
+  else expect(commentNotifications).to.have.lengthOf(0)
+
+  await deleteVideoComment(comment.server.url, comment.token, comment.videoUUID, threadId)
+
+  await waitJobs([ mainServer, comment.server])
 }
 
 describe('Test blocklist', function () {
@@ -189,6 +213,25 @@ describe('Test blocklist', function () {
         }
       })
 
+      it('Should not have notifications from blocked accounts', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 0 ], token: userToken1, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 0 ],
+            token: userToken1,
+            videoUUID: videoUUID2,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+      })
+
       it('Should list all the videos with another user', async function () {
         return checkAllVideos(servers[ 0 ].url, userToken1)
       })
@@ -248,6 +291,25 @@ describe('Test blocklist', function () {
       it('Should display its comments', function () {
         return checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
       })
+
+      it('Should have a notification from a non blocked account', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 0 ],
+            token: userToken1,
+            videoUUID: videoUUID2,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
+      })
     })
 
     describe('When managing server blocklist', function () {
@@ -280,7 +342,37 @@ describe('Test blocklist', function () {
         return checkAllVideos(servers[ 0 ].url, userToken1)
       })
 
-      it('Should hide its comments')
+      it('Should hide its comments', async function () {
+        this.timeout(10000)
+
+        const resThreads = await addVideoCommentThread(servers[ 1 ].url, userToken2, videoUUID1, 'hidden comment 2')
+        const threadId = resThreads.body.comment.id
+
+        await waitJobs(servers)
+
+        await checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+
+        await deleteVideoComment(servers[ 1 ].url, userToken2, videoUUID1, threadId)
+      })
+
+      it('Should not have notifications from blocked server', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 1 ],
+            token: userToken2,
+            videoUUID: videoUUID1,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+      })
 
       it('Should list blocked servers', async function () {
         const res = await getServerBlocklistByAccount(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
@@ -304,6 +396,25 @@ describe('Test blocklist', function () {
 
       it('Should display its comments', function () {
         return checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+      })
+
+      it('Should have notification from unblocked server', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 1 ],
+            token: userToken2,
+            videoUUID: videoUUID1,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
       })
     })
   })
@@ -375,6 +486,25 @@ describe('Test blocklist', function () {
         }
       })
 
+      it('Should not have notification from blocked accounts by instance', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 0 ], token: userToken1, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 1 ],
+            token: userToken2,
+            videoUUID: videoUUID1,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+      })
+
       it('Should list blocked accounts', async function () {
         {
           const res = await getAccountBlocklistByServer(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
@@ -430,6 +560,25 @@ describe('Test blocklist', function () {
           await checkAllComments(servers[ 0 ].url, token, videoUUID1)
         }
       })
+
+      it('Should have notifications from unblocked accounts', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 0 ], token: userToken1, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 1 ],
+            token: userToken2,
+            videoUUID: videoUUID1,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
+      })
     })
 
     describe('When managing server blocklist', function () {
@@ -467,7 +616,37 @@ describe('Test blocklist', function () {
         }
       })
 
-      it('Should hide its comments')
+      it('Should hide its comments', async function () {
+        this.timeout(10000)
+
+        const resThreads = await addVideoCommentThread(servers[ 1 ].url, userToken2, videoUUID1, 'hidden comment 2')
+        const threadId = resThreads.body.comment.id
+
+        await waitJobs(servers)
+
+        await checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+
+        await deleteVideoComment(servers[ 1 ].url, userToken2, videoUUID1, threadId)
+      })
+
+      it('Should not have notification from blocked instances by instance', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 1 ],
+            token: userToken2,
+            videoUUID: videoUUID1,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+        }
+      })
 
       it('Should list blocked servers', async function () {
         const res = await getServerBlocklistByServer(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
@@ -494,6 +673,25 @@ describe('Test blocklist', function () {
       it('Should list the comments', async function () {
         for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
           await checkAllComments(servers[ 0 ].url, token, videoUUID1)
+        }
+      })
+
+      it('Should have notification from unblocked instances', async function () {
+        this.timeout(20000)
+
+        {
+          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+        }
+
+        {
+          const comment = {
+            server: servers[ 1 ],
+            token: userToken2,
+            videoUUID: videoUUID1,
+            text: 'hello @root@localhost:' + servers[ 0 ].port
+          }
+          await checkCommentNotification(servers[ 0 ], comment, 'presence')
         }
       })
     })

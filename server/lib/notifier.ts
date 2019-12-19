@@ -17,14 +17,16 @@ import {
   MVideoFullLight
 } from '../typings/models/video'
 import {
-  MUser,
+  MUser, MUserAccount,
   MUserDefault,
   MUserNotifSettingAccount,
   MUserWithNotificationSetting,
   UserNotificationModelForApi
 } from '@server/typings/models/user'
-import { MActorFollowFull } from '../typings/models'
+import { MAccountDefault, MActorFollowFull } from '../typings/models'
 import { MVideoImportVideo } from '@server/typings/models/video/video-import'
+import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
+import { getServerActor } from '@server/helpers/utils'
 
 class Notifier {
 
@@ -164,8 +166,7 @@ class Notifier {
     // Not our user or user comments its own video
     if (!user || comment.Account.userId === user.id) return
 
-    const accountMuted = await AccountBlocklistModel.isAccountMutedBy(user.Account.id, comment.accountId)
-    if (accountMuted) return
+    if (await this.isBlockedByServerOrAccount(user, comment.Account)) return
 
     logger.info('Notifying user %s of new comment %s.', user.username, comment.url)
 
@@ -210,12 +211,22 @@ class Notifier {
 
     if (users.length === 0) return
 
-    const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(users.map(u => u.Account.id), comment.accountId)
+    const serverAccountId = (await getServerActor()).Account.id
+    const sourceAccounts = users.map(u => u.Account.id).concat([ serverAccountId ])
+
+    const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, comment.accountId)
+    const instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, comment.Account.Actor.serverId)
 
     logger.info('Notifying %d users of new comment %s.', users.length, comment.url)
 
     function settingGetter (user: MUserNotifSettingAccount) {
-      if (accountMutedHash[user.Account.id] === true) return UserNotificationSettingValue.NONE
+      const accountId = user.Account.id
+      if (
+        accountMutedHash[accountId] === true || instanceMutedHash[accountId] === true ||
+        accountMutedHash[serverAccountId] === true || instanceMutedHash[serverAccountId] === true
+      ) {
+        return UserNotificationSettingValue.NONE
+      }
 
       return user.NotificationSetting.commentMention
     }
@@ -254,9 +265,9 @@ class Notifier {
     if (!user) return
 
     const followerAccount = actorFollow.ActorFollower.Account
+    const followerAccountWithActor = Object.assign(followerAccount, { Actor: actorFollow.ActorFollower })
 
-    const accountMuted = await AccountBlocklistModel.isAccountMutedBy(user.Account.id, followerAccount.id)
-    if (accountMuted) return
+    if (await this.isBlockedByServerOrAccount(user, followerAccountWithActor)) return
 
     logger.info('Notifying user %s of new follower: %s.', user.username, followerAccount.getDisplayName())
 
@@ -570,6 +581,19 @@ class Notifier {
 
   private isWebNotificationEnabled (value: UserNotificationSettingValue) {
     return value & UserNotificationSettingValue.WEB
+  }
+
+  private async isBlockedByServerOrAccount (user: MUserAccount, targetAccount: MAccountDefault) {
+    const serverAccountId = (await getServerActor()).Account.id
+    const sourceAccounts = [ serverAccountId, user.Account.id ]
+
+    const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, targetAccount.id)
+    if (accountMutedHash[serverAccountId] || accountMutedHash[user.Account.id]) return true
+
+    const instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, targetAccount.Actor.serverId)
+    if (instanceMutedHash[serverAccountId] || instanceMutedHash[user.Account.id]) return true
+
+    return false
   }
 
   static get Instance () {

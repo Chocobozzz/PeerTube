@@ -5,6 +5,7 @@ import { ServerBlock } from '../../../shared/models/blocklist'
 import { getSort } from '../utils'
 import * as Bluebird from 'bluebird'
 import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/typings/models'
+import { Op } from 'sequelize'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -74,6 +75,31 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
     onDelete: 'CASCADE'
   })
   BlockedServer: ServerModel
+
+  static isServerMutedByMulti (accountIds: number[], targetServerId: number) {
+    const query = {
+      attributes: [ 'accountId', 'id' ],
+      where: {
+        accountId: {
+          [Op.in]: accountIds // FIXME: sequelize ANY seems broken
+        },
+        targetServerId
+      },
+      raw: true
+    }
+
+    return ServerBlocklistModel.unscoped()
+                                .findAll(query)
+                                .then(rows => {
+                                  const result: { [accountId: number]: boolean } = {}
+
+                                  for (const accountId of accountIds) {
+                                    result[accountId] = !!rows.find(r => r.accountId === accountId)
+                                  }
+
+                                  return result
+                                })
+  }
 
   static loadByAccountAndHost (accountId: number, host: string): Bluebird<MServerBlocklist> {
     const query = {
