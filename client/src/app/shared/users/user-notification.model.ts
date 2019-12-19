@@ -102,6 +102,7 @@ export class UserNotification implements UserNotificationServer {
 
         case UserNotificationType.NEW_COMMENT_ON_MY_VIDEO:
         case UserNotificationType.COMMENT_MENTION:
+          if (!this.comment) break
           this.accountUrl = this.buildAccountUrl(this.comment.account)
           this.commentUrl = [ this.buildVideoUrl(this.comment.video), { threadId: this.comment.threadId } ]
           break

@@ -5,11 +5,25 @@
 
     <ng-container [ngSwitch]="notification.type">
       <ng-container *ngSwitchCase="UserNotificationType.NEW_VIDEO_FROM_SUBSCRIPTION">
-        <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
+        <ng-container *ngIf="notification.video; then hasVideo; else noVideo"></ng-container>
 
-        <div class="message" i18n>
-          {{ notification.video.channel.displayName }} published a new video: <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
-        </div>
+        <ng-template #hasVideo>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.video.channel.avatarUrl" />
+          </a>
+
+          <div class="message" i18n>
+            {{ notification.video.channel.displayName }} published a new video: <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a>
+          </div>
+        </ng-template>
+
+        <ng-template #noVideo>
+          <my-global-icon iconName="alert"></my-global-icon>
+  
+          <div class="message" i18n>
+            The notification concerns a video now unavailable
+          </div>
+        </ng-template>
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.UNBLACKLIST_ON_MY_VIDEO">
@@ -45,11 +59,25 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_COMMENT_ON_MY_VIDEO">
-        <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+        <ng-container *ngIf="notification.comment; then hasComment; else noComment"></ng-container>
 
-        <div class="message" i18n>
-          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> commented your video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.comment.video.name }}</a>
-        </div>
+        <ng-template #hasComment>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+            <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+          </a>
+  
+          <div class="message" i18n>
+            <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> commented your video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.comment.video.name }}</a>
+          </div>
+        </ng-template>
+
+        <ng-template #noComment>
+          <my-global-icon iconName="alert"></my-global-icon>
+  
+          <div class="message" i18n>
+            The notification concerns a comment now unavailable
+          </div>
+        </ng-template>
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.MY_VIDEO_PUBLISHED">
@@ -80,12 +108,14 @@
         <my-global-icon iconName="user-add"></my-global-icon>
 
         <div class="message" i18n>
-          User <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.account.name }} registered</a> on your instance
+          User <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.account.name }}</a> registered on your instance
         </div>
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_FOLLOW">
-        <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.actorFollow.follower.avatarUrl" />
+        <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+          <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.actorFollow.follower.avatarUrl" />
+        </a>
 
         <div class="message" i18n>
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.actorFollow.follower.displayName }}</a> is following
@@ -96,7 +126,9 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.COMMENT_MENTION">
-        <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+        <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
+          <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
+        </a>
 
         <div class="message" i18n>
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> mentioned you on <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">video {{ notification.comment.video.name }}</a>
@@ -119,8 +151,16 @@
           Your instance automatically followed <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">{{ notification.actorFollow.following.host }}</a>
         </div>
       </ng-container>
+
+      <ng-container *ngSwitchDefault>
+        <my-global-icon iconName="alert"></my-global-icon>
+
+        <div class="message" i18n>
+          The notification points to a content now unavailable
+        </div>
+      </ng-container>
     </ng-container>
 
-    <div class="from-date">{{ notification.createdAt | myFromNow }}</div>
+    <div [title]="notification.createdAt" class="from-date">{{ notification.createdAt | myFromNow }}</div>
   </div>
 </div>

@@ -65,6 +65,13 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
 
   markAllAsRead () {
     this.userNotificationService.markAllAsRead()
+        .subscribe(
+          () => {
+            this.unreadNotifications = 0
+          },
+
+          err => this.notifier.error(err.message)
+        )
   }
 
   private async subscribeToNotifications () {

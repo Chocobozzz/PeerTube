@@ -2,6 +2,8 @@
 @import '_mixins';
 
 .video-feed {
+  width: min-content;
+
   a {
     color: black;
     display: block;

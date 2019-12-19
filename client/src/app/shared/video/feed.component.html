@@ -1,4 +1,8 @@
-<div class="video-feed">
+<div class="video-feed"
+  [ngbTooltip]="'Feeds available'"
+  placement="right auto"
+  container="body"
+>
   <my-global-icon
     *ngIf="syndicationItems.length !== 0" [ngbPopover]="feedsList" [autoClose]="true" placement="bottom"
     class="icon-syndication" role="button" iconName="syndication"
