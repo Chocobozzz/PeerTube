@@ -8,6 +8,7 @@ import 'videojs-contrib-quality-levels'
 import './upnext/upnext-plugin'
 import './bezels/bezels-plugin'
 import './peertube-plugin'
+import './videojs-components/next-video-button'
 import './videojs-components/peertube-link-button'
 import './videojs-components/resolution-menu-button'
 import './videojs-components/settings-menu-button'
@@ -62,6 +63,7 @@ export interface CommonOptions extends CustomizationOptions {
   onPlayerElementChange: (element: HTMLVideoElement) => void
 
   autoplay: boolean
+  nextVideo?: Function
   videoDuration: number
   enableHotkeys: boolean
   inactivityTimeout: number
@@ -233,7 +235,8 @@ export class PeertubePlayerManager {
         children: this.getControlBarChildren(mode, {
           captions: commonOptions.captions,
           peertubeLink: commonOptions.peertubeLink,
-          theaterButton: commonOptions.theaterButton
+          theaterButton: commonOptions.theaterButton,
+          nextVideo: commonOptions.nextVideo
         })
       }
     }
@@ -329,7 +332,8 @@ export class PeertubePlayerManager {
   private static getControlBarChildren (mode: PlayerMode, options: {
     peertubeLink: boolean
     theaterButton: boolean,
-    captions: boolean
+    captions: boolean,
+    nextVideo?: Function
   }) {
     const settingEntries = []
     const loadProgressBar = mode === 'webtorrent' ? 'peerTubeLoadProgressBar' : 'loadProgressBar'
@@ -340,7 +344,18 @@ export class PeertubePlayerManager {
     settingEntries.push('resolutionMenuButton')
 
     const children = {
-      'playToggle': {},
+      'playToggle': {}
+    }
+
+    if (options.nextVideo) {
+      Object.assign(children, {
+        'nextVideoButton': {
+          handler: options.nextVideo
+        }
+      })
+    }
+
+    Object.assign(children, {
       'currentTimeDisplay': {},
       'timeDivider': {},
       'durationDisplay': {},
@@ -370,7 +385,7 @@ export class PeertubePlayerManager {
         },
         entries: settingEntries
       }
-    }
+    })
 
     if (options.peertubeLink === true) {
       Object.assign(children, {

@@ -223,7 +223,8 @@ body {
 
       cursor: pointer;
       font-size: $font-size;
-      margin-right: 5px;
+      margin-left: 1em;
+      width: 3em;
     }
 
     .vjs-time-control {
@@ -233,6 +234,7 @@ body {
         font-size: $font-size;
         display: inline-block;
         padding: 0;
+        margin-left: .5em;
 
         .vjs-current-time-display {
           line-height: calc(#{$control-bar-height} + 1px);
@@ -262,6 +264,7 @@ body {
       width: 100%;
       line-height: $control-bar-height;
       text-align: right;
+      margin-right: 6px;
 
       .vjs-peertube-displayed {
         display: block;
@@ -280,16 +283,6 @@ body {
       }
 
       .icon {
-        display: inline-block;
-        width: 15px;
-        height: 15px;
-        background-size: contain;
-        vertical-align: middle;
-        background-repeat: no-repeat;
-        margin-right: 6px;
-        position: relative;
-        top: -1px;
-
         &.icon-download {
           background-image: url('#{$assets-path}/player/images/arrow-down.svg');
         }
@@ -297,6 +290,34 @@ body {
         &.icon-upload {
           background-image: url('#{$assets-path}/player/images/arrow-up.svg');
         }
+      }
+    }
+
+    .vjs-next-video {
+      line-height: $control-bar-height;
+      text-align: right;
+
+      .icon {
+        &.icon-next {
+          mask-image: url('#{$assets-path}/player/images/next.svg');
+          background-color: white;
+          mask-size: cover;
+          transform: scale(2.2);
+        }
+      }
+    }
+
+    .vjs-peertube,
+    .vjs-next-video {
+      .icon {
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        background-size: contain;
+        vertical-align: middle;
+        background-repeat: no-repeat;
+        position: relative;
+        top: -1px;
       }
     }
 
