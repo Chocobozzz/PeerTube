@@ -129,6 +129,8 @@ export class PeertubePlayerManager {
 
         self.addContextMenu(mode, player, options.common.embedUrl)
 
+        player.bezels()
+
         return res(player)
       })
     })

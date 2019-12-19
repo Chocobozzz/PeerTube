@@ -4,12 +4,12 @@
 ::ng-deep {
   .popover-notifications.popover {
     max-width: none;
+    left: 7px !important;
 
     .popover-body {
       padding: 0;
       font-size: 14px;
       font-family: $main-fonts;
-      overflow-y: scroll;
       width: 400px;
       box-shadow: 0 6px 14px rgba(0, 0, 0, 0.30);
 
@@ -24,9 +24,16 @@
       .content {
         max-height: 150px;
         transition: max-height 0.15s ease-out;
+        display: flex;
+        height: 500px;
+        flex-direction: column;
 
         &.loaded {
           max-height: 500px;
+        }
+
+        & > my-user-notifications:nth-child(2) {
+          overflow-y: auto;
         }
       }
 
@@ -42,10 +49,19 @@
 
         a {
           @include disable-default-a-behaviour;
+        }
+        
+        button {
+          @include peertube-button;
+        
+          padding: 0;
+          background: transparent;
+        }
 
+        a, button {
           color: rgba(20, 20, 20, 0.5);
 
-          &:hover {
+          &:hover:not(:disabled) {
             color: rgba(20, 20, 20, 0.8);
           }
         }
@@ -58,6 +74,8 @@
         font-weight: $font-semibold;
         color: $fg-color;
         padding: 7px 0;
+        margin-top: auto;
+        text-decoration: none;
       }
     }
   }
@@ -100,8 +118,16 @@
 
 @media screen and (max-width: $mobile-view) {
   ::ng-deep {
-    .popover-notifications.popover .popover-body {
-      width: 400px;
+    .popover-notifications.popover {
+      left: unset !important;
+
+      .arrow {
+        left: calc(2em + 7px);
+      }
+
+      .popover-body {
+        width: 100vw;
+      }
     }
   }
 }

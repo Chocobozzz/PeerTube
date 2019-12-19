@@ -469,7 +469,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.zone.runOutsideAngular(async () => {
       this.player = await PeertubePlayerManager.initialize(playerMode, playerOptions, player => this.player = player)
       this.player.focus()
-      this.player.bezels()
 
       this.player.on('customError', ({ err }: { err: any }) => this.handleError(err))
 

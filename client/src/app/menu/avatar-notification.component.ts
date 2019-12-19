@@ -63,6 +63,10 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
     this.loaded = true
   }
 
+  markAllAsRead () {
+    this.userNotificationService.markAllAsRead()
+  }
+
   private async subscribeToNotifications () {
     const obs = await this.userNotificationSocket.getMyNotificationsSocket()
 

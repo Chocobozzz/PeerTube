@@ -395,6 +395,7 @@ $video-info-margin-left: 44px;
 
   ::ng-deep .other-videos {
     padding-left: 15px;
+    min-width: $video-miniature-width;
 
     .title-page {
       margin: 0 !important;

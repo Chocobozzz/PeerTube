@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard-4" transform="translate(-356.000000, -1046.000000)">
+            <g id="Extras" transform="translate(48.000000, 1046.000000)">
+                <g id="inbox-full" transform="translate(308.000000, 0.000000)">
+                    <path d="M7.41604369,14 L3,14 L2,14 L2,15 L2,20.009222 C2,21.1033032 2.89446021,22 3.99339768,22 L20.0066023,22 C21.1067838,22 22,21.1092551 22,20.009222 L22,15 L22,14 L21,14 L16.5839563,14 L15.9295922,14 L15.6676034,14.5996284 C15.0357833,16.0457106 13.6054999,17 12,17 C10.3945001,17 8.96421673,16.0457106 8.33239655,14.5996284 L8.07040776,14 L7.41604369,14 Z" id="Front" stroke="#333333" stroke-width="2" stroke-linejoin="round"></path>
+                    <path d="M2,15.5000001 L2,13.0001355 L5.63085938,3.9134128 C5.83473011,3.40319837 6.44341249,2.98958785 7.00723108,2.98958785 L17.0497215,2.98958785 C17.6059998,2.98958785 18.223735,3.40698372 18.4260932,3.91341276 L22.0569525,13.000135 L22,15" id="Back" stroke="#333333" stroke-width="2" stroke-linejoin="round"></path>
+                    <path d="M6,9 L18,9 L18,10 L6,10 L6,9 Z M5,11 L19,11 L19,12 L5,12 L5,11 Z M7,7 L17,7 L17,8 L7,8 L7,7 Z M8,5 L16,5 L16,6 L8,6 L8,5 Z" id="Combined-Shape" fill="#333333"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
