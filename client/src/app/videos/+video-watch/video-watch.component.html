@@ -43,7 +43,7 @@
             <h1 class="video-info-name">{{ video.name }}</h1>
 
             <div i18n class="video-info-date-views">
-              Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> - {{ video.views | myNumberFormatter }} views</span>
+              Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> • {{ video.views | myNumberFormatter }} views</span>
             </div>
           </div>
 
@@ -54,7 +54,7 @@
 
             <div class="video-info-first-row-bottom">
               <div i18n class="d-none d-md-block video-info-date-views">
-                Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> - {{ video.views | myNumberFormatter }} views</span>
+                Published <my-date-toggle [date]="video.publishedAt"></my-date-toggle> <span class="views"> • {{ video.views | myNumberFormatter }} views</span>
               </div>
 
               <div class="video-actions-rates">

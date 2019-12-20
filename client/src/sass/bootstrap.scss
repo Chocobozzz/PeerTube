@@ -37,7 +37,28 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
+
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+
+  .modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+    min-width: 500px;
+    width: 40vw;
+    max-width: 900px;
+  }
+}
+
 .modal {
+  text-align: center;
+
   .modal-content {
     background-color: var(--mainBackgroundColor);
   }

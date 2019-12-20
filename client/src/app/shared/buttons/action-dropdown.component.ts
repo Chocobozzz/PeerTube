@@ -23,7 +23,7 @@ export class ActionDropdownComponent<T> {
   @Input() actions: DropdownAction<T>[] | DropdownAction<T>[][] = []
   @Input() entry: T
 
-  @Input() placement = 'bottom-left'
+  @Input() placement = 'bottom-left auto'
 
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'horizontal'

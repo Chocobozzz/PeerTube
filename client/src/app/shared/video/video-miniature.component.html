@@ -20,7 +20,7 @@
         <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
 
         <span class="views">
-          <ng-container *ngIf="displayOptions.date && displayOptions.views"> - </ng-container>
+          <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
           <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} views</ng-container>
         </span>
       </span>
