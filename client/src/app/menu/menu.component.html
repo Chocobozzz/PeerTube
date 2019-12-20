@@ -5,8 +5,10 @@
         <my-avatar-notification [user]="user"></my-avatar-notification>
 
         <div class="logged-in-info">
-          <a routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
-          <div class="logged-in-username">{{ user.username }}</div>
+          <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
+          <a *ngIf="!user.account" routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
+
+          <div ngxClipboard [cbContent]="user.account?.nameWithHost" class="logged-in-username">{{ user.username }}</div>
         </div>
 
         <div class="logged-in-more" ngbDropdown placement="bottom-right auto">
@@ -14,12 +16,20 @@
 
           <div ngbDropdownMenu>
             <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="dropdown-item">
-              <my-global-icon iconName="go"></my-global-icon> <ng-container i18n>My public profile</ng-container>
+              <my-global-icon iconName="go"></my-global-icon> <ng-container i18n>Public profile</ng-container>
             </a>
 
+            <div class="dropdown-divider"></div>
+
             <a routerLink="/my-account" class="dropdown-item">
-              <my-global-icon iconName="user"></my-global-icon> <ng-container i18n>My account</ng-container>
+              <my-global-icon iconName="user"></my-global-icon> <ng-container i18n>Account settings</ng-container>
             </a>
+
+            <a routerLink="/my-account/video-channels" class="dropdown-item">
+              <my-global-icon iconName="folder"></my-global-icon> <ng-container i18n>Channels settings</ng-container>
+            </a>
+
+            <div class="dropdown-divider"></div>
 
             <a (click)="logout($event)" class="dropdown-item" href="#">
               <my-global-icon iconName="sign-out"></my-global-icon> <ng-container i18n>Log out</ng-container>

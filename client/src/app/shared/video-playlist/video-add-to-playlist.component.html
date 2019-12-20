@@ -41,14 +41,16 @@
     </div>
   </div>
 
-  <div class="playlist dropdown-item" *ngFor="let playlist of videoPlaylists" (click)="togglePlaylist($event, playlist)">
-    <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist" [onPushWorkaround]="true"></my-peertube-checkbox>
+  <div class="playlists">
+    <div class="playlist dropdown-item" *ngFor="let playlist of videoPlaylists" (click)="togglePlaylist($event, playlist)">
+      <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist" [onPushWorkaround]="true"></my-peertube-checkbox>
 
-    <div class="display-name">
-      {{ playlist.displayName }}
+      <div class="display-name">
+        {{ playlist.displayName }}
 
-      <div *ngIf="playlist.inPlaylist && (playlist.startTimestamp || playlist.stopTimestamp)" class="timestamp-info">
-        {{ formatTimestamp(playlist) }}
+        <div *ngIf="playlist.inPlaylist && (playlist.startTimestamp || playlist.stopTimestamp)" class="timestamp-info">
+          {{ formatTimestamp(playlist) }}
+        </div>
       </div>
     </div>
   </div>

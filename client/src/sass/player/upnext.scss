@@ -40,10 +40,16 @@ $browser-context: 16;
     margin-top: 52px;
   }
 
+  .vjs-upnext-suspended,
   .vjs-upnext-cancel {
     display: block;
     float: none;
     text-align: center;
+  }
+
+  .vjs-upnext-suspended {
+    font-size: 50%;
+    margin-top: 1rem;
   }
 
   .vjs-upnext-headtext {

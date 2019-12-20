@@ -18,6 +18,7 @@ function getMainTemplate (options: any) {
       <span class="vjs-upnext-cancel">
         <button class="vjs-upnext-cancel-button" tabindex="0" aria-label="Cancel autoplay">${options.cancelText}</button>
       </span>
+      <span class="vjs-upnext-suspended">${options.suspendedText}</span>
     </span>
   `
 }
@@ -26,40 +27,34 @@ function getMainTemplate (options: any) {
 const Component = videojs.getComponent('Component')
 class EndCard extends Component {
   options_: any
-  getTitle: Function
-  next: Function
-  condition: Function
   dashOffsetTotal = 586
   dashOffsetStart = 293
   interval = 50
   upNextEvents = new videojs.EventTarget()
-  chunkSize: number
+  ticks = 0
+  totalTicks: number
 
   container: HTMLElement
   title: HTMLElement
   autoplayRing: HTMLElement
   cancelButton: HTMLElement
+  suspendedMessage: HTMLElement
   nextButton: HTMLElement
 
   constructor (player: videojs.Player, options: any) {
     super(player, options)
-    this.options_ = options
 
-    this.getTitle = this.options_.getTitle
-    this.next = this.options_.next
-    this.condition = this.options_.condition
-
-    this.chunkSize = (this.dashOffsetTotal - this.dashOffsetStart) / (this.options_.timeout / this.interval)
+    this.totalTicks = this.options_.timeout / this.interval
 
     player.on('ended', (_: any) => {
-      if (!this.condition()) return
+      if (!this.options_.condition()) return
 
       player.addClass('vjs-upnext--showing')
       this.showCard((canceled: boolean) => {
         player.removeClass('vjs-upnext--showing')
         this.container.style.display = 'none'
         if (!canceled) {
-          this.next()
+          this.options_.next()
         }
       })
     })
@@ -81,6 +76,7 @@ class EndCard extends Component {
     this.autoplayRing = container.getElementsByClassName('vjs-upnext-svg-autoplay-ring')[0]
     this.title = container.getElementsByClassName('vjs-upnext-title')[0]
     this.cancelButton = container.getElementsByClassName('vjs-upnext-cancel-button')[0]
+    this.suspendedMessage = container.getElementsByClassName('vjs-upnext-suspended')[0]
     this.nextButton = container.getElementsByClassName('vjs-upnext-autoplay-icon')[0]
 
     this.cancelButton.onclick = () => {
@@ -96,14 +92,11 @@ class EndCard extends Component {
 
   showCard (cb: Function) {
     let timeout: any
-    let start: number
-    let now: number
-    let newOffset: number
 
     this.autoplayRing.setAttribute('stroke-dasharray', '' + this.dashOffsetStart)
     this.autoplayRing.setAttribute('stroke-dashoffset', '' + -this.dashOffsetStart)
 
-    this.title.innerHTML = this.getTitle()
+    this.title.innerHTML = this.options_.getTitle()
 
     this.upNextEvents.one('cancel', () => {
       clearTimeout(timeout)
@@ -120,23 +113,32 @@ class EndCard extends Component {
       cb(false)
     })
 
-    const update = () => {
-      now = this.options_.timeout - (new Date().getTime() - start)
+    const goToPercent = (percent: number) => {
+      const newOffset = Math.max(-this.dashOffsetTotal, - this.dashOffsetStart - percent * this.dashOffsetTotal / 2 / 100)
+      this.autoplayRing.setAttribute('stroke-dashoffset', '' + newOffset)
+    }
 
-      if (now <= 0) {
+    const tick = () => {
+      goToPercent((this.ticks++) * 100 / this.totalTicks)
+    }
+
+    const update = () => {
+      if (this.options_.suspended()) {
+        this.suspendedMessage.innerText = this.options_.suspendedText
+        goToPercent(0)
+        this.ticks = 0
+        timeout = setTimeout(update.bind(this), 300) // checks once supsended can be a bit longer
+      } else if (this.ticks >= this.totalTicks) {
         clearTimeout(timeout)
         cb(false)
       } else {
-        const strokeDashOffset = parseInt(this.autoplayRing.getAttribute('stroke-dashoffset'), 10)
-        newOffset = Math.max(-this.dashOffsetTotal, strokeDashOffset - this.chunkSize)
-        this.autoplayRing.setAttribute('stroke-dashoffset', '' + newOffset)
+        this.suspendedMessage.innerText = ''
+        tick()
         timeout = setTimeout(update.bind(this), this.interval)
       }
-
     }
 
     this.container.style.display = 'block'
-    start = new Date().getTime()
     timeout = setTimeout(update.bind(this), this.interval)
   }
 }
@@ -153,7 +155,9 @@ class UpNextPlugin extends Plugin {
       timeout: options.timeout || 5000,
       cancelText: options.cancelText || 'Cancel',
       headText: options.headText || 'Up Next',
-      condition: options.condition
+      suspendedText: options.suspendedText || 'Autoplay is suspended',
+      condition: options.condition,
+      suspended: options.suspended
     }
 
     super(player, settings)

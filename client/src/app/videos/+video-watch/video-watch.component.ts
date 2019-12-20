@@ -37,7 +37,7 @@ import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
 import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
-import { scrollToTop } from '@app/shared/misc/utils'
+import { scrollToTop, isInViewport, isXPercentInViewport } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-watch',
@@ -478,12 +478,18 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
       /**
        * replaces this.player.one('ended')
-       * define 'condition(next)' to return true to wait, false to stop
+       * 'condition()': true to make the upnext functionality trigger,
+       *                false to disable the upnext functionality
+       * go to the next video in 'condition()' if you don't want of the timer.
+       * 'next': function triggered at the end of the timer.
+       * 'suspended': function used at each clic of the timer checking if we need
+       * to reset progress and wait until 'suspended' becomes truthy again.
        */
       this.player.upnext({
         timeout: 10000, // 10s
         headText: this.i18n('Up Next'),
         cancelText: this.i18n('Cancel'),
+        suspendedText: this.i18n('Autoplay is suspended'),
         getTitle: () => this.nextVideoTitle,
         next: () => this.zone.run(() => this.autoplayNext()),
         condition: () => {
@@ -496,6 +502,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
             return true // upnext will trigger
           }
           return false // upnext will not trigger, and instead leave the video stopping
+        },
+        suspended: () => {
+          return (
+            !isXPercentInViewport(this.player.el(), 80) ||
+            !document.getElementById('content').contains(document.activeElement)
+          )
         }
       })
 
