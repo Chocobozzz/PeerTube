@@ -826,7 +826,7 @@
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
         <source>PeerTube version</source>
-        <target state="new">PeerTube version</target>
+        <target state="translated">PeerTube Version</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1727,9 +1727,7 @@ Hilf mit PeerTube zu übersetzen!</target>
       </trans-unit>
       <trans-unit id="a57adbb9bc3ecbc397157af25f96fc2123c9c383" datatype="html">
         <source>Reset</source>
-        <target state="new">
-            Reset
-          </target>
+        <target state="translated">Reset</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">8</context>
@@ -5513,10 +5511,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="new">
-          An HTTP request has to be sent on each tracker for each video to spy.
-          If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-        </target>
+        <target state="translated">Ein HTTP Request muss von jedem Tracker für jedes zu überwachende Video gesendet werden. Wenn also alle Peertube Videos überwacht werden sollen, müssen so viele Requests wie Videos geschickt werden (und das sind ziemlich viele)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">84</context>
@@ -5524,11 +5519,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="bf2148ec3190556873bd0ca0c805de3a608b10cc" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peers in the swarm</source>
-        <target state="new">
-          For each request sent, the tracker returns random peers at a limited number.
-          For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-          requests sent to know every peers in the swarm
-        </target>
+        <target state="translated">Für jeden eingehende Anfrage antwortet der Tracker mit einer zufälligen und begrenzten Anzahl von Peers. Als Beispiel: gäbe es 1000 Peers im Schwarm und der Tracker antwortet auf jede Anfrage mit nur 20 Peers, dann müssten mindestens 50 Anfragen geschickt werden um alle Peers im Schwarm zu kennen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">89</context>
@@ -5536,9 +5527,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="new">
-          Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour
-        </target>
+        <target state="translated">Diese Anfragen müssten regelmäßig abgesendet werden um zu wissen, wer welche Videos zu schauen beginnt / aufhört. Es ist leicht dieses Verhalten zu entdecken</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">95</context>
@@ -5546,10 +5535,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="a5089b43b2fd8a2639bc7a4cdfaa90e869f51cc3" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="new">
-          If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the
-          video
-        </target>
+        <target state="translated">Wenn eine IP auf dem Tracker gespeichert wurde, heißt das nicht das die Person hinter der IP (falls es die Person gibt) das Video gesehen hat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">99</context>
@@ -5557,9 +5543,7 @@ Wenn du ein Video in diesen Kanal hochlädst, wird das entsprechende Feld automa
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="new">
-          The IP address is a vague information: usually, it regularly changes and can represent many persons or entities
-        </target>
+        <target state="translated">Die IP Adresse ist eine sehr ungenaue Information. Sie ändert sich regelmäßig und kann diverse Menschen oder Organisationen repräsentieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">104</context>
