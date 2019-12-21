@@ -8,6 +8,7 @@ import { User } from '@app/shared'
 import { AuthService, Notifier } from '@app/core'
 import { UserService } from '@app/shared/users/user.service'
 import { peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-recommended-videos',
@@ -23,6 +24,7 @@ export class RecommendedVideosComponent implements OnChanges {
   @Output() gotRecommendations = new EventEmitter<Video[]>()
 
   autoPlayNextVideo: boolean
+  autoPlayNextVideoTooltip: string
 
   readonly hasVideos$: Observable<boolean>
   readonly videos$: Observable<Video[]>
@@ -31,6 +33,7 @@ export class RecommendedVideosComponent implements OnChanges {
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier,
+    private i18n: I18n,
     private store: RecommendedVideosStore
   ) {
     this.videos$ = this.store.recommendations$
@@ -40,6 +43,8 @@ export class RecommendedVideosComponent implements OnChanges {
     this.autoPlayNextVideo = this.authService.isLoggedIn()
       ? this.authService.getUser().autoPlayNextVideo
       : peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true' || false
+
+    this.autoPlayNextVideoTooltip = this.i18n('When active, the next video is automatically played after the current one.')
   }
 
   public ngOnChanges (): void {

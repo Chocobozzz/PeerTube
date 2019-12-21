@@ -1,10 +1,12 @@
 <div class="other-videos">
   <ng-container *ngIf="hasVideos$ | async">
-    <div class="d-flex title-page-container">
+    <div class="title-page-container">
       <div i18n class="title-page title-page-single">
         Other videos
       </div>
-      <div *ngIf="!playlist" class="d-flex title-page-autoplay">
+      <div *ngIf="!playlist" class="title-page-autoplay"
+        [ngbTooltip]="autoPlayNextVideoTooltip" placement="bottom-right auto"
+      >
         <span i18n>Autoplay</span>
         <p-inputSwitch [(ngModel)]="autoPlayNextVideo" (ngModelChange)="switchAutoPlayNextVideo()"></p-inputSwitch>
       </div>

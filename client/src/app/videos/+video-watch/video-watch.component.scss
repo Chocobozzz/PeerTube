@@ -147,14 +147,13 @@ $video-info-margin-left: 44px;
       }
 
       .video-info-first-row-bottom {
-        display: grid;
-        grid-template-columns: 1fr auto;
+        display: flex;
+        flex-wrap: wrap;
         align-items: center;
         width: 100%;
       }
 
       .video-info-date-views {
-        flex-grow: 1;
         align-self: start;
         margin-bottom: 10px;
         margin-right: 10px;
@@ -210,8 +209,8 @@ $video-info-margin-left: 44px;
       .video-actions-rates {
         margin: 0 0 10px 0;
         align-items: start;
-        align-self: end;
         width: max-content;
+        margin-left: auto;
 
         .video-actions {
           height: 40px; // Align with the title
@@ -396,6 +395,10 @@ $video-info-margin-left: 44px;
   ::ng-deep .other-videos {
     padding-left: 15px;
     min-width: $video-miniature-width;
+
+    @media screen and (min-width: 1800px - (3* $video-miniature-width)) {
+      width: min-content;
+    }
 
     .title-page {
       margin: 0 !important;
