@@ -316,7 +316,7 @@ export type AvailableForListIDsOptions = {
     return query
   },
   [ ScopeNames.AVAILABLE_FOR_LIST_IDS ]: (options: AvailableForListIDsOptions) => {
-    const whereAnd = options.baseWhere ? options.baseWhere : []
+    const whereAnd = options.baseWhere ? [].concat(options.baseWhere) : []
 
     const query: FindOptions = {
       raw: true,
