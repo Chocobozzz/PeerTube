@@ -143,7 +143,6 @@ import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import * as validator from 'validator'
-import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -216,7 +215,6 @@ export enum ScopeNames {
   WITH_WEBTORRENT_FILES = 'WITH_WEBTORRENT_FILES',
   WITH_SCHEDULED_UPDATE = 'WITH_SCHEDULED_UPDATE',
   WITH_BLACKLISTED = 'WITH_BLACKLISTED',
-  WITH_BLOCKLIST = 'WITH_BLOCKLIST',
   WITH_USER_HISTORY = 'WITH_USER_HISTORY',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
   WITH_USER_ID = 'WITH_USER_ID',
@@ -399,7 +397,13 @@ export type AvailableForListIDsOptions = {
       query.subQuery = false
     }
 
-    if (options.filter || options.accountId || options.videoChannelId) {
+    if (options.filter && (options.filter === 'local' || options.filter === 'all-local')) {
+      whereAnd.push({
+        remote: false
+      })
+    }
+
+    if (options.accountId || options.videoChannelId) {
       const videoChannelInclude: IncludeOptions = {
         attributes: [],
         model: VideoChannelModel.unscoped(),
@@ -412,28 +416,14 @@ export type AvailableForListIDsOptions = {
         }
       }
 
-      if (options.filter || options.accountId) {
+      if (options.accountId) {
         const accountInclude: IncludeOptions = {
           attributes: [],
           model: AccountModel.unscoped(),
           required: true
         }
 
-        if (options.filter) {
-          accountInclude.include = [
-            {
-              attributes: [],
-              model: ActorModel.unscoped(),
-              required: true,
-              where: VideoModel.buildActorWhereWithFilter(options.filter)
-            }
-          ]
-        }
-
-        if (options.accountId) {
-          accountInclude.where = { id: options.accountId }
-        }
-
+        accountInclude.where = { id: options.accountId }
         videoChannelInclude.include = [ accountInclude ]
       }
 
@@ -592,9 +582,6 @@ export type AvailableForListIDsOptions = {
     }
 
     return query
-  },
-  [ScopeNames.WITH_BLOCKLIST]: {
-
   },
   [ ScopeNames.WITH_THUMBNAILS ]: {
     include: [
@@ -1711,16 +1698,6 @@ export class VideoModel extends Model<VideoModel> {
         }
       }
     }
-  }
-
-  private static buildActorWhereWithFilter (filter?: VideoFilter) {
-    if (filter && (filter === 'local' || filter === 'all-local')) {
-      return {
-        serverId: null
-      }
-    }
-
-    return {}
   }
 
   private static async getAvailableForApi (
