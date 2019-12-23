@@ -149,7 +149,12 @@ const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
   buildTrigramSearchIndex('video_name_trigram', 'name'),
 
   { fields: [ 'createdAt' ] },
-  { fields: [ 'publishedAt' ] },
+  {
+    fields: [
+      { name: 'publishedAt', order: 'DESC' },
+      { name: 'id', order: 'ASC' }
+    ]
+  },
   { fields: [ 'duration' ] },
   { fields: [ 'views' ] },
   { fields: [ 'channelId' ] },
