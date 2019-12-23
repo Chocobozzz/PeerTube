@@ -143,6 +143,7 @@ import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import * as validator from 'validator'
+import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
@@ -440,36 +441,35 @@ export type AvailableForListIDsOptions = {
     }
 
     if (options.followerActorId) {
-      let localVideosReq = ''
+      let localVideosReq: WhereOptions = {}
       if (options.includeLocalVideos === true) {
-        localVideosReq = ' UNION ALL ' +
-          'SELECT "video"."id" AS "id" FROM "video" ' +
-          'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-          'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-          'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-          'WHERE "actor"."serverId" IS NULL'
+        localVideosReq = { remote: false }
       }
 
       // Force actorId to be a number to avoid SQL injections
       const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
       whereAnd.push({
-        id: {
-          [ Op.in ]: Sequelize.literal(
-            '(' +
-            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            ' UNION ALL ' +
-            'SELECT "video"."id" AS "id" FROM "video" ' +
-            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            localVideosReq +
-            ')'
-          )
-        }
+        [Op.or]: [
+          {
+            id: {
+              [ Op.in ]: Sequelize.literal(
+                '(' +
+                'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+                'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+                'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+                ' UNION ALL ' +
+                'SELECT "video"."id" AS "id" FROM "video" ' +
+                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+                'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+                'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+                'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+                'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+                ')'
+              )
+            }
+          },
+          localVideosReq
+        ]
       })
     }
 
