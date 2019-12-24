@@ -124,7 +124,7 @@
                     <div
                       class="video-info-likes-dislikes-bar"
                     >
-                      <div class="likes-bar" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
+                      <div class="likes-bar" [ngClass]="{ 'liked': userRating !== 'none' }" [ngStyle]="{ 'width.%': video.likesPercent }"></div>
                     </div>
                   </div>
                 </div>

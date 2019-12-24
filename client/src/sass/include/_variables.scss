@@ -14,7 +14,8 @@ $grey-foreground-hover-color: #303030;
 $orange-color: #F1680D;
 $orange-hover-color: #F97D46;
 
-$support-button: #38981a;
+$support-button: inherit;
+$support-button-heart: #e83e8c;
 
 $bg-color: #fff;
 $fg-color: #000;
@@ -61,6 +62,8 @@ $input-placeholder-color: #898989;
 
 $sub-menu-margin-bottom: 30px;
 
+$activated-action-button-color: black;
+
 /*** map theme ***/
 
 // pass variables into a sass map,
@@ -78,8 +81,10 @@ $variables: (
   --inputColor: var(--inputColor),
   --inputPlaceholderColor: var(--inputPlaceholderColor),
 
+  --actionButtonColor: var(--actionButtonColor),
   --supportButtonColor: var(--supportButtonColor),
   --supportButtonBackgroundColor: var(--supportButtonBackgroundColor),
+  --supportButtonHeartColor: var(--supportButtonHeartColor),
 
   --embedForegroundColor: var(--embedForegroundColor),
   --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)

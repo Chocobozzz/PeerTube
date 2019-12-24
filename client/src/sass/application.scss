@@ -34,8 +34,10 @@ body {
   --inputColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
 
-  --supportButtonBackgroundColor: #{$support-button};
-  --supportButtonColor: #{$white};
+  --actionButtonColor: #{$grey-foreground-color};
+  --supportButtonBackgroundColor: #{transparent};
+  --supportButtonColor: #{var(--actionButtonColor)};
+  --supportButtonHeartColor: #{$support-button-heart};
 
   font-family: $main-fonts;
   font-weight: $font-regular;

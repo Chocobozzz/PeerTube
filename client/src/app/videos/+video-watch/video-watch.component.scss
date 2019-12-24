@@ -220,66 +220,73 @@ $video-info-margin-left: 44px;
           .action-button:not(:first-child),
           .action-dropdown,
           my-video-actions-dropdown {
-            margin-left: 10px;
+            margin-left: 5px;
           }
 
-          .action-button {
+          ::ng-deep.action-button {
             @include peertube-button;
-            @include grey-button;
             @include button-with-icon(21px, 0, -1px);
-            @include apply-svg-color($grey-foreground-color);
+            @include apply-svg-color(var(--actionButtonColor));
 
-            font-size: 15px;
+            font-size: 100%;
             font-weight: $font-semibold;
             display: inline-block;
             padding: 0 10px 0 10px;
             white-space: nowrap;
+            background-color: transparent !important;
+            color: var(--actionButtonColor);
+            text-transform: uppercase;
 
             &::after {
               display: none;
             }
 
-            .action-button-like,
-            .action-button-dislike {
+            &:hover {
+              opacity: 0.9;
+            }
+
+            &.action-button-like,
+            &.action-button-dislike {
+              filter: brightness(120%);
+
               .count {
                 margin-right: 5px;
               }
             }
 
             &.action-button-like.activated {
-              background-color: $green;
-
               .count {
-                color: #fff;
+                color: $activated-action-button-color;
               }
 
               my-global-icon {
-                @include apply-svg-color(#fff);
+                @include apply-svg-color($activated-action-button-color);
               }
             }
 
             &.action-button-dislike.activated {
-              background-color: $red;
-
               .count {
-                color: #fff;
+                color: $activated-action-button-color;
               }
 
               my-global-icon {
-                @include apply-svg-color(#fff);
+                @include apply-svg-color($activated-action-button-color);
               }
             }
 
             &.action-button-support {
               color: var(--supportButtonColor);
-              background-color: var(--supportButtonBackgroundColor);
-
-              &:hover {
-                opacity: 0.9;
-              }
 
               my-global-icon {
                 @include apply-svg-color(var(--supportButtonColor));
+              }
+            }
+
+            &.action-button-support {
+              my-global-icon {
+                ::ng-deep path:first-child {
+                  fill: var(--supportButtonHeartColor) !important;
+                }
               }
             }
 
@@ -309,14 +316,18 @@ $video-info-margin-left: 44px;
           $likes-bar-height: 2px;
           height: $likes-bar-height;
           margin-top: -$likes-bar-height;
-          width: 186px;
-          background-color: $red;
+          width: 120px;
+          background-color: #ccc;
           position: relative;
           top: 10px;
 
           .likes-bar {
             height: 100%;
-            background-color: $green;
+            background-color: #909090;
+
+            &.liked {
+              background-color: $activated-action-button-color;
+            }
           }
         }
       }
