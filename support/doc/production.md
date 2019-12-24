@@ -100,7 +100,7 @@ Then set the domain for the webserver configuration file.
 <br/>Replace `[peertube-domain]` with the domain for the peertube server. 
 
 ```
-sed -i 's/peertube.example.com/[peertube-domain]/g' /etc/nginx/sites-available/peertube
+$ sudo sed -i 's/peertube.example.com/[peertube-domain]/g' /etc/nginx/sites-available/peertube
 ```
 
 Then modify the webserver configuration file. Please pay attention to the `alias` keys of the static locations.
