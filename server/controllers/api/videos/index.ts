@@ -253,19 +253,6 @@ async function addVideo (req: express.Request, res: express.Response) {
     await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
     await videoCreated.addAndSaveThumbnail(previewModel, t)
 
-    // Process timecoded thumbnails from the video (small thumbnails bound to a timecode range, used for player scrubbing preview)
-    // We do not wait for it to finish as that non-critical task could impede the task length
-    generateVideoTimecodeThumbnails(video, videoFile, ThumbnailType.TIMECODE)
-      .then(res => {
-        sequelizeTypescript.transaction(async t2 => {
-          res.thumbnails.forEach(thumbnail => {
-            videoCreated.addAndSaveThumbnail(thumbnail, t2)
-          })
-          videoCreated.addAndSaveTimecodeThumbnailManifest(res.manifest, t2)
-        })
-      })
-      .catch(err => logger.error(err))
-
     // Do not forget to add video channel information to the created video
     videoCreated.VideoChannel = res.locals.videoChannel
 
@@ -305,6 +292,19 @@ async function addVideo (req: express.Request, res: express.Response) {
 
     return { videoCreated }
   })
+
+  // Process timecoded thumbnails from the video (small thumbnails bound to a timecode range, used for player scrubbing preview)
+  // We do not wait for it to finish as that non-critical task could impede the task length
+  generateVideoTimecodeThumbnails(video, videoFile, ThumbnailType.TIMECODE)
+    .then(res => {
+      sequelizeTypescript.transaction(async t2 => {
+        await Promise.all(res.thumbnails.map(thumbnail => {
+          videoCreated.addAndSaveThumbnail(thumbnail, t2)
+        }))
+        await videoCreated.addAndSaveTimecodeThumbnailManifest(res.manifest, t2)
+      })
+    })
+    .catch(err => logger.error(err))
 
   Notifier.Instance.notifyOnNewVideoIfNeeded(videoCreated)
 

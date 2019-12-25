@@ -7,7 +7,7 @@ import { processImage } from '../helpers/image-utils'
 import { join } from 'path'
 import { downloadImage } from '../helpers/requests'
 import { MVideoPlaylistThumbnail } from '../typings/models/video/video-playlist'
-import { MVideoFile, MVideoThumbnail, MVideoFullLight } from '../typings/models'
+import { MVideoFile, MVideoThumbnail } from '../typings/models'
 import { MThumbnail } from '../typings/models/video/thumbnail'
 import { getVideoFilePath } from './video-paths'
 
@@ -71,7 +71,7 @@ function generateVideoTimecodeThumbnails (video: MVideoThumbnail, videoFile: MVi
 
   const input = getVideoFilePath(video, videoFile)
 
-  const { filename, basePath, height, width, existingThumbnail, outputPath } = buildMetadataFromVideo(video, type)
+  const { filename, basePath, existingThumbnail, outputPath, height, width } = buildMetadataFromVideo(video, type)
   return generateTimecodeThumbnailsFromVideoFile(input, basePath, filename, { height, width })
 }
 
@@ -90,18 +90,18 @@ function createPlaceholderThumbnail (fileUrl: string, video: MVideoThumbnail, ty
 }
 
 async function createThumbnailFromFunction (parameters: {
-  thumbnailCreator: () => Promise<any>,
-  filename: string,
-  height: number,
-  width: number,
-  type: ThumbnailType,
-  automaticallyGenerated?: boolean,
-  fileUrl?: string,
+  thumbnailCreator: () => Promise<any>
+  filename: string
+  height: number
+  width: number
+  type: ThumbnailType
+  automaticallyGenerated?: boolean
+  fileUrl?: string
   existingThumbnail?: MThumbnail
 }) {
   const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
 
-  const thumbnail = existingThumbnail ? existingThumbnail : new ThumbnailModel()
+  const thumbnail = existingThumbnail || new ThumbnailModel()
 
   thumbnail.filename = filename
   thumbnail.height = height
@@ -147,7 +147,7 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     ? video.Thumbnails.find(t => t.type === type)
     : undefined
 
-  if (type === ThumbnailType.MINIATURE || type === ThumbnailType.TIMECODE) {
+  if (type === ThumbnailType.MINIATURE) {
     const filename = video.generateThumbnailName()
     const basePath = CONFIG.STORAGE.THUMBNAILS_DIR
 
@@ -175,31 +175,19 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     }
   }
 
+  if (type === ThumbnailType.TIMECODE) {
+    const filename = join(video.uuid, video.generateThumbnailName())
+    const basePath = CONFIG.STORAGE.TIMECODE_THUMBNAILS_DIR
+
+    return {
+      filename,
+      basePath,
+      existingThumbnail: undefined,
+      outputPath: join(basePath, filename),
+      height: size ? size.height : THUMBNAILS_SIZE.height,
+      width: size ? size.width : THUMBNAILS_SIZE.width
+    }
+  }
+
   return undefined
-}
-
-async function createThumbnailFromFunction (parameters: {
-  thumbnailCreator: () => Promise<any>
-  filename: string
-  height: number
-  width: number
-  type: ThumbnailType
-  automaticallyGenerated?: boolean
-  fileUrl?: string
-  existingThumbnail?: MThumbnail
-}) {
-  const { thumbnailCreator, filename, width, height, type, existingThumbnail, automaticallyGenerated = null, fileUrl = null } = parameters
-
-  const thumbnail = existingThumbnail || new ThumbnailModel()
-
-  thumbnail.filename = filename
-  thumbnail.height = height
-  thumbnail.width = width
-  thumbnail.type = type
-  thumbnail.fileUrl = fileUrl
-  thumbnail.automaticallyGenerated = automaticallyGenerated
-
-  await thumbnailCreator()
-
-  return thumbnail
 }

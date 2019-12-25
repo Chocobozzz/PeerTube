@@ -122,6 +122,7 @@ import {
 } from '../../typings/models'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
+import { MTimecodeThumbnailManifest } from '../../typings/models/video/timecode-thumbnail-manifest'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { ModelCache } from '@server/models/model-cache'
@@ -1275,6 +1276,7 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_ACCOUNT_DETAILS,
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_WEBTORRENT_FILES,
+      ScopeNames.WITH_THUMBNAILS,
       ScopeNames.WITH_STREAMING_PLAYLISTS
     ]
 
@@ -1718,7 +1720,7 @@ export class VideoModel extends Model<VideoModel> {
     const manifest = this.TimecodeThumbnailManifest
     if (!manifest) return null
 
-    return join(STATIC_PATHS.THUMBNAILS, manifest.filename)
+    return join(STATIC_PATHS.TIMECODE_THUMBNAILS, manifest.filename)
   }
 
   getPreviewStaticPath () {

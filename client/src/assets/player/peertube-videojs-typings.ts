@@ -34,6 +34,8 @@ declare module 'video.js' {
 
     bezels (): void
 
+    vttThumbnails (options: { src: string, baseUrl?: string, preloadStrategy?: string }): void
+
     qualityLevels (): QualityLevels
 
     textTracks (): TextTrackList & {

@@ -32,6 +32,10 @@ import { TimecodeThumbnailManifestModel } from './timecode-thumbnail-manifest'
     {
       fields: [ 'videoPlaylistId' ],
       unique: true
+    },
+    {
+      fields: [ 'timecodeThumbnailManifestId' ],
+      unique: true
     }
   ]
 })
@@ -89,7 +93,7 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
 
   @ForeignKey(() => TimecodeThumbnailManifestModel)
   @Column
-  manifestId: number
+  timecodeThumbnailManifestId: number
 
   @BelongsTo(() => TimecodeThumbnailManifestModel, {
     foreignKey: {
@@ -97,7 +101,7 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     },
     onDelete: 'CASCADE'
   })
-  Manifest: TimecodeThumbnailManifestModel
+  TimecodeThumbnailManifest: TimecodeThumbnailManifestModel
 
   @CreatedAt
   createdAt: Date
@@ -118,8 +122,8 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     },
     [ThumbnailType.TIMECODE]: {
       label: 'timecode',
-      directory: CONFIG.STORAGE.THUMBNAILS_DIR,
-      staticPath: STATIC_PATHS.THUMBNAILS
+      directory: CONFIG.STORAGE.TIMECODE_THUMBNAILS_DIR,
+      staticPath: STATIC_PATHS.TIMECODE_THUMBNAILS
     }
   }
 

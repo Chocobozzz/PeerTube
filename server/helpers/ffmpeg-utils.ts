@@ -245,21 +245,22 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
  * @param folder destination folder
  * @param imageName base image name
  * @param size dimensions to which the images should be resized
- * @param count images/video, always capped at 1 image/sec
+ * @param count images/video, always capped at 1 image/sec || 200 images
  */
 async function generateTimecodeThumbnailsFromVideoFile (
   fromPath: string,
   folder: string,
   imageName: string,
   size: {
-    width: number,
+    width: number
     height: number
   },
   count = 50
 ) {
   // cap thumbnails at 1 image/sec max
-  let duration = await getDurationFromVideoFile(fromPath)
+  const duration = await getDurationFromVideoFile(fromPath)
   if (count > duration) count = duration
+  if (count > 200) count = 200
 
   imageName = TimecodeThumbnailManifestModel.generateManifestName().replace(/\.[^.]+$/, extname(imageName))
   const pendingImagePattern = 'pending-' + insertBeforeExtension(imageName, '-%00i')
@@ -271,7 +272,7 @@ async function generateTimecodeThumbnailsFromVideoFile (
     folder
   }
 
-  let thumbnails = []
+  const thumbnails = []
 
   try {
     await new Promise<void>((res, rej) => {
@@ -317,6 +318,7 @@ async function generateTimecodeThumbnailsFromVideoFile (
   const manifest = new TimecodeThumbnailManifestModel()
 
   manifest.filename = imageName.replace(/\.[^.]+$/, '.vtt')
+  manifest.thumbnailsCount = count
 
   const manifestContent = webvtt.compile({
     valid: true,
@@ -324,7 +326,7 @@ async function generateTimecodeThumbnailsFromVideoFile (
       identifier: '',
       start: (i * duration / count),
       end: ((i + 1) * duration / count),
-      text: join(STATIC_PATHS.THUMBNAILS, pendingImageName(i + 1).replace('pending-', '')),
+      text: join(STATIC_PATHS.TIMECODE_THUMBNAILS, pendingImageName(i + 1).replace('pending-', '')),
       styles: ''
     }))
   })

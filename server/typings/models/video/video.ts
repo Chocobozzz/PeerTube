@@ -18,6 +18,7 @@ import {
 } from './video-streaming-playlist'
 import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
 import { MThumbnail } from './thumbnail'
+import { MTimecodeThumbnailManifest } from './timecode-thumbnail-manifest'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
 import { MScheduleVideoUpdate } from './schedule-video-update'
 import { MUserVideoHistoryTime } from '../user/user-video-history'
@@ -165,7 +166,8 @@ export type MVideoAP =
   Use<'VideoCaptions', MVideoCaptionLanguageUrl[]> &
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
-  Use<'Thumbnails', MThumbnail[]>
+  Use<'Thumbnails', MThumbnail[]> &
+  Use<'TimecodeThumbnailManifest', MTimecodeThumbnailManifest>
 
 export type MVideoAPWithoutCaption = Omit<MVideoAP, 'VideoCaptions'>
 
@@ -176,6 +178,7 @@ export type MVideoDetails =
   Use<'VideoChannel', MChannelAccountLight> &
   Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
   Use<'Thumbnails', MThumbnail[]> &
+  Use<'TimecodeThumbnailManifest', MTimecodeThumbnailManifest> &
   Use<'UserVideoHistories', MUserVideoHistoryTime[]> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundancies[]> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]>

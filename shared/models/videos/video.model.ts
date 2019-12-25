@@ -24,7 +24,7 @@ export interface Video {
   name: string
   thumbnailPath: string
   previewPath: string
-  manifestPath: string
+  vttThumbnailsPath: string
   embedPath: string
   views: number
   likes: number

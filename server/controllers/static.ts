@@ -90,6 +90,13 @@ staticRouter.use(
   express.static(thumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
 )
 
+// Timecode Thumbnails path for express
+const timecodeThumbnailsPhysicalPath = CONFIG.STORAGE.TIMECODE_THUMBNAILS_DIR
+staticRouter.use(
+  STATIC_PATHS.TIMECODE_THUMBNAILS,
+  express.static(timecodeThumbnailsPhysicalPath, { maxAge: STATIC_MAX_AGE.SERVER, fallthrough: false }) // 404 if the file does not exist
+)
+
 // DEPRECATED: use lazy-static route instead
 const avatarsPhysicalPath = CONFIG.STORAGE.AVATARS_DIR
 staticRouter.use(

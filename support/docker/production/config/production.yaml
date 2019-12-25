@@ -50,6 +50,7 @@ storage:
   logs: '../data/logs/'
   previews: '../data/previews/'
   thumbnails: '../data/thumbnails/'
+  timecode_thumbnails: 'storage/timecode-thumbnails'
   torrents: '../data/torrents/'
   captions: '../data/captions/'
   cache: '../data/cache/'

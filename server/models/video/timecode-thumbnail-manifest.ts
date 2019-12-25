@@ -31,6 +31,10 @@ export class TimecodeThumbnailManifestModel extends Model<TimecodeThumbnailManif
   @Column
   fileUrl: string
 
+  @AllowNull(false)
+  @Column
+  thumbnailsCount: number
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
@@ -75,12 +79,12 @@ export class TimecodeThumbnailManifestModel extends Model<TimecodeThumbnailManif
   getFileUrl () {
     if (this.fileUrl) return this.fileUrl
 
-    const staticPath = STATIC_PATHS.THUMBNAILS
+    const staticPath = STATIC_PATHS.TIMECODE_THUMBNAILS
     return WEBSERVER.URL + staticPath + this.filename
   }
 
   getPath () {
-    const directory = CONFIG.STORAGE.THUMBNAILS_DIR
+    const directory = CONFIG.STORAGE.TIMECODE_THUMBNAILS_DIR
     return join(directory, this.filename)
   }
 

@@ -60,6 +60,7 @@ const CONFIG = {
     STREAMING_PLAYLISTS_DIR: buildPath(config.get<string>('storage.streaming_playlists')),
     REDUNDANCY_DIR: buildPath(config.get<string>('storage.redundancy')),
     THUMBNAILS_DIR: buildPath(config.get<string>('storage.thumbnails')),
+    TIMECODE_THUMBNAILS_DIR: buildPath(config.get<string>('storage.timecode_thumbnails')),
     PREVIEWS_DIR: buildPath(config.get<string>('storage.previews')),
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),

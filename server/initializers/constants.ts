@@ -515,6 +515,7 @@ const NSFW_POLICY_TYPES: { [ id: string ]: NSFWPolicyType } = {
 const STATIC_PATHS = {
   PREVIEWS: '/static/previews/',
   THUMBNAILS: '/static/thumbnails/',
+  TIMECODE_THUMBNAILS: '/static/timecode-thumbnails/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',

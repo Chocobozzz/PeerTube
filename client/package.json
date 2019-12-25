@@ -104,6 +104,7 @@
     "primeng": "^9.0.0-rc.4",
     "process": "^0.11.10",
     "protractor": "^5.4.3",
+    "pthumbnails": "1.1.4",
     "purify-css": "^1.2.5",
     "purifycss-webpack": "^0.7.0",
     "raw-loader": "^4.0.0",

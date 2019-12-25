@@ -1,9 +1,9 @@
 import * as Sequelize from 'sequelize'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
   {
@@ -11,8 +11,9 @@ async function up (utils: {
 CREATE TABLE IF NOT EXISTS "timecodeThumbnailManifest"
 (
   "id"              SERIAL,
-  "filename"        VARCHAR(255)             NOT NULL,
-  "fileUrl"             VARCHAR(255),
+  "filename"        VARCHAR(255) NOT NULL,
+  "fileUrl"         VARCHAR(255),
+  "thumbnailsCount" INTEGER NOT NULL,
   "videoId"         INTEGER REFERENCES "video" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   "createdAt"       TIMESTAMP WITH TIME ZONE NOT NULL,
   "updatedAt"       TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -33,7 +34,17 @@ CREATE TABLE IF NOT EXISTS "timecodeThumbnailManifest"
       onDelete: 'CASCADE'
     }
 
-    await utils.queryInterface.addColumn('thumbnail', 'manifestId', data)
+    await utils.queryInterface.addColumn('thumbnail', 'timecodeThumbnailManifestId', data)
+  }
+
+  {
+    const data = {
+      type: Sequelize.STRING(2000),
+      allowNull: true,
+      defaultValue: null
+    }
+
+    await utils.queryInterface.changeColumn('thumbnail', 'fileUrl', data)
   }
 }
 

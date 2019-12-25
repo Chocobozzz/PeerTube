@@ -71,7 +71,7 @@ function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFor
     thumbnailPath: video.getMiniatureStaticPath(),
     previewPath: video.getPreviewStaticPath(),
     embedPath: video.getEmbedStaticPath(),
-    manifestPath: video.getThumbnailsVTTStaticPath(),
+    vttThumbnailsPath: video.getThumbnailsVTTStaticPath(),
     createdAt: video.createdAt,
     updatedAt: video.updatedAt,
     publishedAt: video.publishedAt,
@@ -330,7 +330,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     url.push({
       type: 'Link',
       mediaType: 'text/vtt',
-      href: WEBSERVER.URL + STATIC_PATHS.THUMBNAILS + video.TimecodeThumbnailManifest.filename
+      href: video.TimecodeThumbnailManifest.getFileUrl()
     })
   }
 
