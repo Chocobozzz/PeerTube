@@ -534,10 +534,11 @@
 }
 
 @mixin dropdown-with-icon-item {
-  padding: 6px 24px;
+  padding: 6px 15px;
 
   my-global-icon {
-    width: 24px;
+    width: 22px;
+    opacity: .7;
 
     margin-right: 10px;
     position: relative;
