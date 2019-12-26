@@ -34,6 +34,7 @@
 
         & > my-user-notifications:nth-child(2) {
           overflow-y: auto;
+          flex-grow: 1;
         }
       }
 

@@ -59,7 +59,12 @@ export class VideoPlaylistService {
                )
   }
 
-  listAccountPlaylists (account: Account, componentPagination: ComponentPagination, sort: string): Observable<ResultList<VideoPlaylist>> {
+  listAccountPlaylists (
+    account: Account,
+    componentPagination: ComponentPagination,
+    sort: string,
+    search?: string
+  ): Observable<ResultList<VideoPlaylist>> {
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-playlists'
     const pagination = componentPagination
       ? this.restService.componentPaginationToRestPagination(componentPagination)
@@ -67,6 +72,7 @@ export class VideoPlaylistService {
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+    if (search) params = this.restService.addObjectParams(params, { search })
 
     return this.authHttp.get<ResultList<VideoPlaylist>>(url, { params })
                .pipe(
@@ -213,8 +219,8 @@ export class VideoPlaylistService {
 
   private doVideosExistInPlaylist (videoIds: number[]): Observable<VideoExistInPlaylist> {
     const url = VideoPlaylistService.MY_VIDEO_PLAYLIST_URL + 'videos-exist'
-    let params = new HttpParams()
 
+    let params = new HttpParams()
     params = this.restService.addObjectParams(params, { videoIds })
 
     return this.authHttp.get<VideoExistInPlaylist>(url, { params })

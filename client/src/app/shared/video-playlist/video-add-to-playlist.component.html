@@ -41,6 +41,10 @@
     </div>
   </div>
 
+  <div class="input-container">
+    <input type="text" placeholder="Search playlists" [(ngModel)]="videoPlaylistSearch" (ngModelChange)="onVideoPlaylistSearchChanged()" />
+  </div>
+
   <div class="playlists">
     <div class="playlist dropdown-item" *ngFor="let playlist of videoPlaylists" (click)="togglePlaylist($event, playlist)">
       <my-peertube-checkbox [inputName]="'in-playlist-' + playlist.id" [(ngModel)]="playlist.inPlaylist" [onPushWorkaround]="true"></my-peertube-checkbox>

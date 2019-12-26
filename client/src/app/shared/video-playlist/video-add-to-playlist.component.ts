@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { AuthService, Notifier } from '@app/core'
-import { forkJoin } from 'rxjs'
+import { forkJoin, Subject } from 'rxjs'
+import { debounceTime } from 'rxjs/operators'
 import { Video, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPrivacy } from '@shared/models'
 import { FormReactive, FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/forms'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -29,6 +30,8 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   @Input() lazyLoad = false
 
   isNewPlaylistBlockOpened = false
+  videoPlaylistSearch: string
+  videoPlaylistSearchChanged = new Subject<string>()
   videoPlaylists: PlaylistSummary[] = []
   timestampOptions: {
     startTimestampEnabled: boolean
@@ -58,6 +61,13 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     this.buildForm({
       displayName: this.videoPlaylistValidatorsService.VIDEO_PLAYLIST_DISPLAY_NAME
     })
+
+    this.videoPlaylistSearchChanged
+      .pipe(
+        debounceTime(500))
+      .subscribe(() => {
+        this.load()
+      })
   }
 
   ngOnChanges (simpleChanges: SimpleChanges) {
@@ -74,6 +84,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   reload () {
     this.videoPlaylists = []
+    this.videoPlaylistSearch = undefined
 
     this.init()
 
@@ -82,11 +93,12 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
 
   load () {
     forkJoin([
-      this.videoPlaylistService.listAccountPlaylists(this.user.account, undefined,'-updatedAt'),
+      this.videoPlaylistService.listAccountPlaylists(this.user.account, undefined, '-updatedAt', this.videoPlaylistSearch),
       this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
     ])
       .subscribe(
         ([ playlistsResult, existResult ]) => {
+          this.videoPlaylists = []
           for (const playlist of playlistsResult.data) {
             const existingPlaylist = existResult[ this.video.id ].find(p => p.playlistId === playlist.id)
 
@@ -176,6 +188,10 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
     const stop = playlist.stopTimestamp ? secondsToTime(playlist.stopTimestamp) : ''
 
     return `(${start}-${stop})`
+  }
+
+  onVideoPlaylistSearchChanged () {
+    this.videoPlaylistSearchChanged.next()
   }
 
   private removeVideoFromPlaylist (playlist: PlaylistSummary) {

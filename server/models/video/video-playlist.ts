@@ -13,10 +13,11 @@ import {
   Model,
   Scopes,
   Table,
-  UpdatedAt
+  UpdatedAt,
+  Sequelize
 } from 'sequelize-typescript'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
+import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid, createSimilarityAttribute } from '../utils'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -67,7 +68,8 @@ type AvailableForListOptions = {
   type?: VideoPlaylistType
   accountId?: number
   videoChannelId?: number
-  privateAndUnlisted?: boolean
+  privateAndUnlisted?: boolean,
+  search?: string
 }
 
 @Scopes(() => ({
@@ -160,6 +162,23 @@ type AvailableForListOptions = {
     if (options.type) {
       whereAnd.push({
         type: options.type
+      })
+    }
+
+    if (options.search) {
+      const escapedSearch = VideoPlaylistModel.sequelize.escape(options.search)
+      const escapedLikeSearch = VideoPlaylistModel.sequelize.escape('%' + options.search + '%')
+      whereAnd.push({
+        id: {
+          [ Op.in ]: Sequelize.literal(
+            '(' +
+            'SELECT "videoPlaylist"."id" FROM "videoPlaylist" ' +
+            'WHERE ' +
+            'lower(immutable_unaccent("videoPlaylist"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
+            'lower(immutable_unaccent("videoPlaylist"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
+            ')'
+          )
+        }
       })
     }
 
@@ -291,7 +310,8 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     type?: VideoPlaylistType,
     accountId?: number,
     videoChannelId?: number,
-    privateAndUnlisted?: boolean
+    privateAndUnlisted?: boolean,
+    search?: string
   }) {
     const query = {
       offset: options.start,
@@ -308,7 +328,8 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
             followerActorId: options.followerActorId,
             accountId: options.accountId,
             videoChannelId: options.videoChannelId,
-            privateAndUnlisted: options.privateAndUnlisted
+            privateAndUnlisted: options.privateAndUnlisted,
+            search: options.search
           } as AvailableForListOptions
         ]
       },

@@ -53,6 +53,15 @@
   overflow-y: auto;
 }
 
+.input-container {
+  display: flex;
+
+  input {
+    flex-grow: 1;
+    margin: 0 15px 10px 15px;
+  }
+}
+
 .playlist {
   display: flex;
   cursor: pointer;
@@ -76,7 +85,6 @@
 .new-playlist-button,
 .new-playlist-block {
   padding-top: 10px;
-  margin-top: 10px;
   border-top: 1px solid $separator-border-color;
 }
 

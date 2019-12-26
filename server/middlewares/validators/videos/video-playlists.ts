@@ -166,6 +166,18 @@ const videoPlaylistsGetValidator = (fetchType: VideoPlaylistFetchType) => {
   ]
 }
 
+const videoPlaylistsSearchValidator = [
+  query('search').optional().not().isEmpty().withMessage('Should have a valid search'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoPlaylists search query', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 const videoPlaylistsAddVideoValidator = [
   param('playlistId')
     .custom(isIdOrUUIDValid).withMessage('Should have a valid playlist id/uuid'),
@@ -354,6 +366,7 @@ export {
   videoPlaylistsUpdateValidator,
   videoPlaylistsDeleteValidator,
   videoPlaylistsGetValidator,
+  videoPlaylistsSearchValidator,
 
   videoPlaylistsAddVideoValidator,
   videoPlaylistsUpdateOrRemoveVideoValidator,

@@ -27,7 +27,10 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../../lib/job-queue'
 import { logger } from '../../helpers/logger'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
+import {
+  commonVideoPlaylistFiltersValidator,
+  videoPlaylistsSearchValidator
+} from '../../middlewares/validators/videos/video-playlists'
 
 const accountsRouter = express.Router()
 
@@ -72,6 +75,7 @@ accountsRouter.get('/:accountName/video-playlists',
   setDefaultSort,
   setDefaultPagination,
   commonVideoPlaylistFiltersValidator,
+  videoPlaylistsSearchValidator,
   asyncMiddleware(listAccountPlaylists)
 )
 
@@ -135,6 +139,7 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
   }
 
   const resultList = await VideoPlaylistModel.listForApi({
+    search: req.query.search,
     followerActorId: serverActor.id,
     start: req.query.start,
     count: req.query.count,
