@@ -27,7 +27,7 @@ import {
   isActorPublicKeyValid
 } from '../../helpers/custom-validators/activitypub/actor'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
+import { ACTIVITY_PUB, ACTIVITY_PUB_ACTOR_TYPES, CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
@@ -276,6 +276,8 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
+  private static cache: { [ id: string ]: any } = {}
+
   static load (id: number): Bluebird<MActor> {
     return ActorModel.unscoped().findByPk(id)
   }
@@ -342,6 +344,11 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   static loadLocalByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorFull> {
+    // The server actor never change, so we can easily cache it
+    if (preferredUsername === SERVER_ACTOR_NAME && ActorModel.cache[preferredUsername]) {
+      return Bluebird.resolve(ActorModel.cache[preferredUsername])
+    }
+
     const query = {
       where: {
         preferredUsername,
@@ -350,7 +357,15 @@ export class ActorModel extends Model<ActorModel> {
       transaction
     }
 
-    return ActorModel.scope(ScopeNames.FULL).findOne(query)
+    return ActorModel.scope(ScopeNames.FULL)
+                     .findOne(query)
+                     .then(actor => {
+                       if (preferredUsername === SERVER_ACTOR_NAME) {
+                         ActorModel.cache[ preferredUsername ] = actor
+                       }
+
+                       return actor
+                     })
   }
 
   static loadByNameAndHost (preferredUsername: string, host: string): Bluebird<MActorFull> {

@@ -27,7 +27,7 @@ import { VideoCommentModel } from '../video/video-comment'
 import { UserModel } from './user'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from '../video/video-playlist'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, SERVER_ACTOR_NAME, WEBSERVER } from '../../initializers/constants'
 import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequelize'
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
@@ -218,6 +218,8 @@ export class AccountModel extends Model<AccountModel> {
   })
   BlockedAccounts: AccountBlocklistModel[]
 
+  private static cache: { [ id: string ]: any } = {}
+
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
     if (!instance.Actor) {
@@ -245,6 +247,11 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   static loadLocalByName (name: string): Bluebird<MAccountDefault> {
+    // The server actor never change, so we can easily cache it
+    if (name === SERVER_ACTOR_NAME && AccountModel.cache[name]) {
+      return Bluebird.resolve(AccountModel.cache[name])
+    }
+
     const query = {
       where: {
         [ Op.or ]: [
@@ -272,6 +279,13 @@ export class AccountModel extends Model<AccountModel> {
     }
 
     return AccountModel.findOne(query)
+      .then(account => {
+        if (name === SERVER_ACTOR_NAME) {
+          AccountModel.cache[name] = account
+        }
+
+        return account
+      })
   }
 
   static loadByNameAndHost (name: string, host: string): Bluebird<MAccountDefault> {
