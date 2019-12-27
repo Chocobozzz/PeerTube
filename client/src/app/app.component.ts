@@ -111,10 +111,6 @@ export class AppComponent implements OnInit {
     this.isMenuDisplayed = window.innerWidth >= 800 && !this.isMenuChangedByUser
   }
 
-  getServerVersionAndCommit () {
-    return this.serverService.getServerVersionAndCommit()
-  }
-
   private initRouteEvents () {
     let resetScroll = true
     const eventsObs = this.router.events
