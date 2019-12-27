@@ -6,7 +6,7 @@ import { isActivityPubUrlValid } from '../../helpers/custom-validators/activityp
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
-import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 import { getServerActor } from '../../helpers/utils'
@@ -259,7 +259,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const query = {
       offset: start,
       limit: count,
-      order: getSort(sort),
+      order: getCommentSort(sort),
       where: {
         videoId,
         inReplyToCommentId: null,

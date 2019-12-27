@@ -5,3 +5,6 @@ export type VideoSortField = 'name' | '-name'
                       | 'views' | '-views'
                       | 'likes' | '-likes'
                       | 'trending' | '-trending'
+
+export type CommentSortField = 'createdAt' | '-createdAt'
+                          | 'totalReplies' | '-totalReplies'

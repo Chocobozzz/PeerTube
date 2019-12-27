@@ -12,7 +12,7 @@ import {
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestService } from '../../../shared/rest'
 import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
-import { VideoSortField } from '../../../shared/video/sort-field.type'
+import { CommentSortField } from '../../../shared/video/sort-field.type'
 import { VideoComment } from './video-comment.model'
 
 @Injectable()
@@ -51,7 +51,7 @@ export class VideoCommentService {
   getVideoCommentThreads (parameters: {
     videoId: number | string,
     componentPagination: ComponentPagination,
-    sort: VideoSortField
+    sort: CommentSortField
   }): Observable<ResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters
 

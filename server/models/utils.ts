@@ -22,6 +22,19 @@ function getSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderIt
   return [ [ finalField, direction ], lastSort ]
 }
 
+function getCommentSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
+  const { direction, field } = buildDirectionAndField(value)
+
+  if (field === 'totalReplies') {
+    return [
+      [ Sequelize.literal('"totalReplies"'), direction ],
+      lastSort
+    ]
+  }
+
+  return getSort(value, lastSort)
+}
+
 function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const { direction, field } = buildDirectionAndField(value)
 
@@ -167,6 +180,7 @@ export {
   SortType,
   buildLocalAccountIdsIn,
   getSort,
+  getCommentSort,
   getVideoSort,
   getBlacklistSort,
   createSimilarityAttribute,

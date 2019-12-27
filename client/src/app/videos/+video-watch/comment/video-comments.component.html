@@ -10,6 +10,16 @@
     </div>
 
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
+
+    <div ngbDropdown class="d-inline-block ml-4">
+      <button class="btn btn-sm btn-outline-secondary" id="dropdownSortComments" ngbDropdownToggle i18n>
+        Sort by
+      </button>
+      <div ngbDropdownMenu aria-labelledby="dropdownSortComments">
+        <button (click)="handleSortChange('-createdAt')" ngbDropdownItem i18n>Most recent first (default)</button>
+        <button (click)="handleSortChange('-totalReplies')" ngbDropdownItem i18n>Most replies first</button>
+      </div>
+    </div>
   </div>
 
   <ng-template [ngIf]="video.commentsEnabled === true">
