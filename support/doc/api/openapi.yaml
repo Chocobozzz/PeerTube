@@ -76,6 +76,10 @@ tags:
     description: >
       Operations dealing with comments to a video. Comments are organized in
       threads.
+  - name: Video Playlist
+    description: >
+      Operations dealing with playlists of videos. Playlists are bound to users
+      and/or channels.
   - name: Video Channel
     description: >
       Operations dealing with creation, modification and video listing of a
@@ -1390,6 +1394,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+  /video-playlists:
+    get:
+      summary: Get list of video playlists
+      tags:
+        - Video Playlist
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoPlaylist'
   '/accounts/{name}/video-channels':
     get:
       summary: Get video channels of an account by its name
@@ -1445,7 +1467,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/commentsSort'
       responses:
         '200':
           description: successful operation
@@ -1606,6 +1628,16 @@ components:
         - -views
         - -likes
         - -match
+    commentsSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort comments by criteria
+      schema:
+        type: string
+        enum:
+        - -createdAt
+        - -totalReplies
     blacklistsSort:
       name: sort
       in: query
@@ -2159,6 +2191,53 @@ components:
             id:
               type: number
             uuid:
+              type: string
+    VideoPlaylist:
+      properties:
+        id:
+          type: number
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        description:
+          type: string
+        uuid:
+          type: string
+        displayName:
+          type: string
+        isLocal:
+          type: boolean
+        videoLength:
+          type: number
+        thumbnailPath:
+          type: string
+        privacy:
+          type: object
+          properties:
+            id:
+              type: number
+            label:
+              type: string
+        type:
+          type: object
+          properties:
+            id:
+              type: number
+            label:
+              type: string
+        ownerAccount:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            displayName:
+              type: string
+            url:
+              type: string
+            host:
               type: string
     VideoComment:
       properties:
