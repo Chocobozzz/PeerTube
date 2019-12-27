@@ -1,10 +1,14 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { UserRight } from '../../../../../../shared/models/users'
+import { User, UserRight } from '../../../../../../shared/models/users'
 import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
-import { AuthService } from '../../../core/auth'
-import { Video } from '../../../shared/video/video.model'
+import { AuthService } from '@app/core/auth'
+import { AccountService } from '@app/shared/account/account.service'
+import { Video } from '@app/shared/video/video.model'
 import { VideoComment } from './video-comment.model'
 import { MarkdownService } from '@app/shared/renderer'
+import { Account } from '@app/shared/account/account.model'
+import { Notifier } from '@app/core'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-video-comment',
@@ -28,9 +32,15 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   sanitizedCommentHTML = ''
   newParentComments: VideoComment[] = []
 
+  commentAccount: Account
+  commentUser: User
+
   constructor (
     private markdownService: MarkdownService,
-    private authService: AuthService
+    private authService: AuthService,
+    private accountService: AccountService,
+    private userService: UserService,
+    private notifier: Notifier
   ) {}
 
   get user () {
@@ -90,9 +100,26 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       )
   }
 
+  private getUserIfNeeded (account: Account) {
+    if (!account.userId) return
+    if (!this.authService.isLoggedIn()) return
+
+    const user = this.authService.getUser()
+    if (user.hasRight(UserRight.MANAGE_USERS)) {
+      this.userService.getUser(account.userId)
+          .subscribe(
+            user => this.commentUser = user,
+
+            err => this.notifier.error(err.message)
+          )
+    }
+  }
+
   private async init () {
     const html = await this.markdownService.textMarkdownToHTML(this.comment.text, true)
     this.sanitizedCommentHTML = await this.markdownService.processVideoTimestamps(html)
     this.newParentComments = this.parentComments.concat([ this.comment ])
+    this.commentAccount = new Account(this.comment.account)
+    this.getUserIfNeeded(this.commentAccount)
   }
 }

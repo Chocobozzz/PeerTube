@@ -21,6 +21,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
 
   @Input() buttonSize: 'normal' | 'small' = 'normal'
   @Input() placement = 'left'
+  @Input() label: string
 
   @Output() userChanged = new EventEmitter()
   @Output() userDeleted = new EventEmitter()
@@ -36,7 +37,6 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     private serverService: ServerService,
     private userService: UserService,
     private blocklistService: BlocklistService,
-    private auth: AuthService,
     private i18n: I18n
   ) { }
 
@@ -243,20 +243,20 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       if (this.user && authUser.hasRight(UserRight.MANAGE_USERS) && authUser.canManage(this.user)) {
         this.userActions.push([
           {
-            label: this.i18n('Edit'),
+            label: this.i18n('Edit user'),
             linkBuilder: ({ user }) => this.getRouterUserEditLink(user)
           },
           {
-            label: this.i18n('Delete'),
+            label: this.i18n('Delete user'),
             handler: ({ user }) => this.removeUser(user)
           },
           {
-            label: this.i18n('Ban'),
+            label: this.i18n('Ban user'),
             handler: ({ user }) => this.openBanUserModal(user),
             isDisplayed: ({ user }) => !user.blocked
           },
           {
-            label: this.i18n('Unban'),
+            label: this.i18n('Unban user'),
             handler: ({ user }) => this.unbanUser(user),
             isDisplayed: ({ user }) => user.blocked
           },
