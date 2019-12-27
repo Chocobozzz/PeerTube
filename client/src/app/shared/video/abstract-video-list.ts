@@ -159,7 +159,12 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
         this.onDataSubject.next(data)
       },
 
-      error => this.notifier.error(error.message)
+      error => {
+        const message = this.i18n('Cannot load more videos. Try again later.')
+
+        console.error(message, { error })
+        this.notifier.error(message)
+      }
     )
   }
 
