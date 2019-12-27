@@ -248,28 +248,32 @@ export class VideoEditComponent implements OnInit, OnDestroy {
       .subscribe(
         newChannelId => {
           const oldChannelId = parseInt(this.form.value[ 'channelId' ], 10)
-          const currentSupport = this.form.value[ 'support' ]
 
           // Not initialized yet
           if (isNaN(newChannelId)) return
           const newChannel = this.userVideoChannels.find(c => c.id === newChannelId)
           if (!newChannel) return
 
-          // First time we set the channel?
-          if (isNaN(oldChannelId)) return this.updateSupportField(newChannel.support)
-          const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
+          // Wait support field update
+          setTimeout(() => {
+            const currentSupport = this.form.value[ 'support' ]
 
-          if (!newChannel || !oldChannel) {
-            console.error('Cannot find new or old channel.')
-            return
-          }
+            // First time we set the channel?
+            if (isNaN(oldChannelId) && !currentSupport) return this.updateSupportField(newChannel.support)
 
-          // If the current support text is not the same than the old channel, the user updated it.
-          // We don't want the user to lose his text, so stop here
-          if (currentSupport && currentSupport !== oldChannel.support) return
+            const oldChannel = this.userVideoChannels.find(c => c.id === oldChannelId)
+            if (!newChannel || !oldChannel) {
+              console.error('Cannot find new or old channel.')
+              return
+            }
 
-          // Update the support text with our new channel
-          this.updateSupportField(newChannel.support)
+            // If the current support text is not the same than the old channel, the user updated it.
+            // We don't want the user to lose his text, so stop here
+            if (currentSupport && currentSupport !== oldChannel.support) return
+
+            // Update the support text with our new channel
+            this.updateSupportField(newChannel.support)
+          })
         }
       )
   }
