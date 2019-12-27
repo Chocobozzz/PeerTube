@@ -1371,7 +1371,7 @@ export class VideoModel extends Model<VideoModel> {
             'UNION ALL ' +
             'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
             'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-            'WHERE "tag"."name" = ' + escapedSearch +
+            'WHERE lower("tag"."name") = lower(' + escapedSearch + ')' +
             ')'
           )
         }
