@@ -1,12 +1,12 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 i18n class="modal-title">Support</h4>
+    <h4 i18n class="modal-title">Support {{ user?.account?.displayName }}</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body" [innerHTML]="videoHTMLSupport"></div>
 
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-cancel" (click)="hide()">Cancel</span>
+    <span i18n class="action-button action-button-cancel" (click)="hide()">Maybe later</span>
   </div>
 </ng-template>
