@@ -124,7 +124,7 @@ function secondsToTime (seconds: number, full = false, symbol?: string) {
 
 function buildVideoEmbed (embedUrl: string) {
   return '<iframe width="560" height="315" ' +
-    'sandbox="allow-same-origin allow-scripts" ' +
+    'sandbox="allow-same-origin allow-scripts allow-popups" ' +
     'src="' + embedUrl + '" ' +
     'frameborder="0" allowfullscreen>' +
     '</iframe>'
