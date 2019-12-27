@@ -2,7 +2,7 @@
   <div i18n class="form-sub-title">Jobs list</div>
 
   <div class="select-filter-block">
-    <label for="jobType">Job type</label>
+    <label for="jobType" i18n>Job type</label>
     <div class="peertube-select-container">
       <select id="jobType" name="jobType" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()">
         <option *ngFor="let jobType of jobTypes" [value]="jobType">{{ jobType }}</option>
@@ -11,7 +11,7 @@
   </div>
 
   <div class="select-filter-block">
-    <label for="jobState">Job state</label>
+    <label for="jobState" i18n>Job state</label>
     <div class="peertube-select-container">
       <select id="jobState" name="jobState" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()">
         <option *ngFor="let state of jobStates" [value]="state">{{ state }}</option>
@@ -23,43 +23,48 @@
 <p-table
   [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="uniqId"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [first]="pagination.start"
+  [tableStyle]="{'table-layout':'auto'}"
 >
   <ng-template pTemplate="header">
     <tr>
-      <th style="width: 27px"></th>
-      <th i18n style="width: 60px">ID</th>
-      <th i18n style="width: 210px">Type</th>
-      <th i18n style="width: 130px">State</th>
-      <th i18n style="width: 250px" pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th i18n style="width: 250px">Processed on</th>
-      <th i18n style="width: 250px">Finished on</th>
+      <th i18n style="max-width: 60px;">ID</th>
+      <th i18n style="max-width: 120px;">Type</th>
+      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th i18n>State</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
-    <tr>
-      <td class="expand-cell">
-        <span class="expander" [pRowToggler]="job">
-          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
-        </span>
-      </td>
-      <td>{{ job.id }}</td>
-      <td>{{ job.type }}</td>
-      <td>{{ job.state }}</td>
+    <tr class="expander" [pRowToggler]="job">
+      <td style="max-width: 60px;">{{ job.id }}</td>
+      <td style="max-width: 120px;">{{ job.type }}</td>
       <td>{{ job.createdAt }}</td>
-      <td>{{ job.processedOn }}</td>
-      <td>{{ job.finishedOn }}</td>
+      <td *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed.</span></td>
+      <td *ngIf="job.state === 'waiting'" class="text-warning"><span class="glyphicon glyphicon-hourglass"></span> <span i18n>Will start soon...</span></td>
+      <td *ngIf="job.state === 'active'" class="text-warning"><span class="glyphicon glyphicon-cog"></span> <span i18n>Running...</span></td>
+      <td *ngIf="job.state === 'completed'" class="text-success"><span class="glyphicon glyphicon-ok"></span> <span i18n>Finished</span></td>
+      <td *ngIf="job.state === 'failed'" class="text-danger"><span class="glyphicon glyphicon-remove"></span> <span i18n>Failed</span></td>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-job>
     <tr>
-      <td colspan="7">
+      <td colspan="4">
+        <pre>{{ [
+          'Job: ' + job.id,
+          'Type: ' + job.type,
+          'Processed on ' + (job.processedOn || '-'),
+          'Finished on ' + (job.finishedOn || '-')
+        ].join('\n') }}</pre>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">
         <pre>{{ job.data }}</pre>
       </td>
     </tr>
     <tr class="job-error" *ngIf="job.error">
-      <td colspan="7">
+      <td colspan="4">
         <pre>{{ job.error }}</pre>
       </td>
     </tr>
