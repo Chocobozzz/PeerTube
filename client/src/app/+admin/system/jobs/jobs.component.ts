@@ -7,6 +7,7 @@ import { JobState } from '../../../../../../shared/models'
 import { RestPagination, RestTable } from '../../../shared'
 import { JobService } from './job.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { JobStateClient } from '../../../../types/job-state-client.type'
 import { JobTypeClient } from '../../../../types/job-type-client.type'
 
 @Component({
@@ -18,8 +19,8 @@ export class JobsComponent extends RestTable implements OnInit {
   private static JOB_STATE_LOCAL_STORAGE_STATE = 'jobs-list-state'
   private static JOB_STATE_LOCAL_STORAGE_TYPE = 'jobs-list-type'
 
-  jobState: JobState = 'waiting'
-  jobStates: JobState[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
+  jobState: JobStateClient = 'waiting'
+  jobStates: JobStateClient[] = [ 'active', 'completed', 'failed', 'waiting', 'delayed' ]
 
   jobType: JobTypeClient = 'all'
   jobTypes: JobTypeClient[] = [
