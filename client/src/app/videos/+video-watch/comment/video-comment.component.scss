@@ -114,6 +114,7 @@
       margin-bottom: 10px;
       display: flex;
 
+      ::ng-deep .dropdown-toggle,
       .comment-action-reply,
       .comment-action-delete {
         color: $grey-foreground-color;
@@ -123,6 +124,12 @@
         &:hover {
           color: var(--mainForegroundColor);
         }
+      }
+
+      ::ng-deep .action-button {
+        background-color: transparent;
+        padding: 0;
+        font-weight: unset;
       }
     }
   }

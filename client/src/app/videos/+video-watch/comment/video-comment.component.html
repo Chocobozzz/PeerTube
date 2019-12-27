@@ -36,6 +36,9 @@
         <div class="comment-actions">
           <div *ngIf="isUserLoggedIn()" (click)="onWantToReply()" class="comment-action-reply" i18n>Reply</div>
           <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete" i18n>Delete</div>
+          <my-user-moderation-dropdown
+            buttonSize="small" [account]="commentAccount" [user]="commentUser" label="Options" placement="bottom-left auto"
+          ></my-user-moderation-dropdown>
         </div>
       </ng-container>
 
