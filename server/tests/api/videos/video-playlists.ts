@@ -407,6 +407,25 @@ describe('Test video playlists', function () {
         expect(data).to.have.lengthOf(1)
         expect(data[ 0 ].displayName).to.equal('playlist 3')
       }
+
+      {
+        const res = await getAccountPlaylistsList(servers[ 1 ].url, 'root', 0, 10, 'createdAt', '3')
+
+        expect(res.body.total).to.equal(1)
+
+        const data: VideoPlaylist[] = res.body.data
+        expect(data).to.have.lengthOf(1)
+        expect(data[ 0 ].displayName).to.equal('playlist 3')
+      }
+
+      {
+        const res = await getAccountPlaylistsList(servers[ 1 ].url, 'root', 0, 10, 'createdAt', '4')
+
+        expect(res.body.total).to.equal(0)
+
+        const data: VideoPlaylist[] = res.body.data
+        expect(data).to.have.lengthOf(0)
+      }
     })
 
     it('Should not list unlisted or private playlists', async function () {

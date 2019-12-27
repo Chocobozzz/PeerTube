@@ -45,13 +45,14 @@ function getVideoChannelPlaylistsList (url: string, videoChannelName: string, st
   })
 }
 
-function getAccountPlaylistsList (url: string, accountName: string, start: number, count: number, sort?: string) {
+function getAccountPlaylistsList (url: string, accountName: string, start: number, count: number, sort?: string, search?: string) {
   const path = '/api/v1/accounts/' + accountName + '/video-playlists'
 
   const query = {
     start,
     count,
-    sort
+    sort,
+    search
   }
 
   return makeGetRequest({

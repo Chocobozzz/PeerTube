@@ -13,11 +13,10 @@ import {
   Model,
   Scopes,
   Table,
-  UpdatedAt,
-  Sequelize
+  UpdatedAt
 } from 'sequelize-typescript'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid, createSimilarityAttribute } from '../utils'
+import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
 import {
   isVideoPlaylistDescriptionValid,
   isVideoPlaylistNameValid,
@@ -46,7 +45,8 @@ import { ActivityIconObject } from '../../../shared/models/activitypub/objects'
 import { FindOptions, literal, Op, ScopeOptions, Transaction, WhereOptions } from 'sequelize'
 import * as Bluebird from 'bluebird'
 import {
-  MVideoPlaylistAccountThumbnail, MVideoPlaylistAP,
+  MVideoPlaylistAccountThumbnail,
+  MVideoPlaylistAP,
   MVideoPlaylistFormattable,
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
@@ -166,18 +166,9 @@ type AvailableForListOptions = {
     }
 
     if (options.search) {
-      const escapedSearch = VideoPlaylistModel.sequelize.escape(options.search)
-      const escapedLikeSearch = VideoPlaylistModel.sequelize.escape('%' + options.search + '%')
       whereAnd.push({
-        id: {
-          [ Op.in ]: Sequelize.literal(
-            '(' +
-            'SELECT "videoPlaylist"."id" FROM "videoPlaylist" ' +
-            'WHERE ' +
-            'lower(immutable_unaccent("videoPlaylist"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
-            'lower(immutable_unaccent("videoPlaylist"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-            ')'
-          )
+        name: {
+          [ Op.iLike ]: '%' + options.search + '%'
         }
       })
     }
