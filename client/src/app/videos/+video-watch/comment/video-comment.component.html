@@ -11,7 +11,7 @@
     <div class="vertical-border"></div>
   </div>
 
-  <div class="right">
+  <div class="right" [ngClass]="{ 'mb-3': firstInThread }">
     <span *ngIf="comment.isDeleted" class="comment-avatar"></span>
 
     <div class="comment">
@@ -81,5 +81,7 @@
         </div>
       </div>
     </div>
+
+    <ng-content></ng-content>
   </div>
 </div>

@@ -22,6 +22,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   @Input() commentTree: VideoCommentThreadTree
   @Input() inReplyToCommentId: number
   @Input() highlightedComment = false
+  @Input() firstInThread = false
 
   @Output() wantedToDelete = new EventEmitter<VideoComment>()
   @Output() wantedToReply = new EventEmitter<VideoComment>()

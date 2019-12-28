@@ -46,6 +46,7 @@
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[highlightedThread.id]"
           [highlightedComment]="true"
+          [firstInThread]="true"
           (wantedToReply)="onWantedToReply($event)"
           (wantedToDelete)="onWantedToDelete($event)"
           (threadCreated)="onThreadCreated($event)"
@@ -54,36 +55,38 @@
         ></my-video-comment>
       </div>
 
-      <div *ngFor="let comment of comments">
+      <div *ngFor="let comment of comments; index as i">
         <my-video-comment
           *ngIf="!highlightedThread || comment.id !== highlightedThread.id"
           [comment]="comment"
           [video]="video"
           [inReplyToCommentId]="inReplyToCommentId"
           [commentTree]="threadComments[comment.id]"
+          [firstInThread]="i + 1 !== comments.length"
           (wantedToReply)="onWantedToReply($event)"
           (wantedToDelete)="onWantedToDelete($event)"
           (threadCreated)="onThreadCreated($event)"
           (resetReply)="onResetReply()"
           (timestampClicked)="handleTimestampClicked($event)"
-        ></my-video-comment>
-
-        <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies">
-          <span *ngIf="!threadLoading[comment.id]" class="glyphicon glyphicon-menu-down"></span>
-
-          <ng-container *ngIf="comment.totalRepliesFromVideoAuthor > 0; then hasAuthorComments; else noAuthorComments"></ng-container>
-          <ng-template #hasAuthorComments>
-            <ng-container *ngIf="comment.totalReplies !== comment.totalRepliesFromVideoAuthor; else onlyAuthorComments" i18n>
-              View {{ comment.totalReplies }} replies from {{ video?.account?.displayName || 'the author' }} and others
-            </ng-container>
-            <ng-template i18n #onlyAuthorComments>
-              View {{ comment.totalReplies }} replies from {{ video?.account?.displayName || 'the author' }}
+        >
+          <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies mb-2">
+            <span class="glyphicon glyphicon-menu-down"></span>
+  
+            <ng-container *ngIf="comment.totalRepliesFromVideoAuthor > 0; then hasAuthorComments; else noAuthorComments"></ng-container>
+            <ng-template #hasAuthorComments>
+              <ng-container *ngIf="comment.totalReplies !== comment.totalRepliesFromVideoAuthor; else onlyAuthorComments" i18n>
+                View {{ comment.totalReplies }} replies from {{ video?.account?.displayName || 'the author' }} and others
+              </ng-container>
+              <ng-template i18n #onlyAuthorComments>
+                View {{ comment.totalReplies }} replies from {{ video?.account?.displayName || 'the author' }}
+              </ng-template>
             </ng-template>
-          </ng-template>
-          <ng-template i18n #noAuthorComments>View {{ comment.totalReplies }} replies</ng-template>
+            <ng-template i18n #noAuthorComments>View {{ comment.totalReplies }} replies</ng-template>
+  
+            <my-small-loader class="comment-thread-loading ml-1" [loading]="threadLoading[comment.id]"></my-small-loader>
+          </div>
+        </my-video-comment>
 
-          <my-small-loader class="comment-thread-loading" [loading]="threadLoading[comment.id]"></my-small-loader>
-        </div>
       </div>
     </div>
   </ng-template>
