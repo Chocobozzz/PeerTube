@@ -97,7 +97,7 @@ $ sudo cp /var/www/peertube/peertube-latest/support/nginx/peertube /etc/nginx/si
 ```
 
 Then set the domain for the webserver configuration file. 
-<br/>Replace `[peertube-domain]` with the domain for the peertube server. 
+Replace `[peertube-domain]` with the domain for the peertube server. 
 
 ```
 $ sudo sed -i 's/peertube.example.com/[peertube-domain]/g' /etc/nginx/sites-available/peertube
