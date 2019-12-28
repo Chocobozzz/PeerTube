@@ -88,7 +88,7 @@ export class UserService {
   }
 
   getMyVideoQuotaUsed () {
-    const url = UserService.BASE_USERS_URL + '/me/video-quota-used'
+    const url = UserService.BASE_USERS_URL + 'me/video-quota-used'
 
     return this.authHttp.get<UserVideoQuota>(url)
                .pipe(catchError(err => this.restExtractor.handleError(err)))

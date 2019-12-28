@@ -1196,9 +1196,15 @@ export class VideoModel extends Model<VideoModel> {
     })
   }
 
-  static listUserVideosForApi (accountId: number, start: number, count: number, sort: string) {
+  static listUserVideosForApi (
+    accountId: number,
+    start: number,
+    count: number,
+    sort: string,
+    search?: string
+  ) {
     function buildBaseQuery (): FindOptions {
-      return {
+      let baseQuery = {
         offset: start,
         limit: count,
         order: getVideoSort(sort),
@@ -1218,12 +1224,24 @@ export class VideoModel extends Model<VideoModel> {
           }
         ]
       }
+
+      if (search) {
+        baseQuery = Object.assign(baseQuery, {
+          where: {
+            name: {
+              [ Op.iLike ]: '%' + search + '%'
+            }
+          }
+        })
+      }
+
+      return baseQuery
     }
 
     const countQuery = buildBaseQuery()
     const findQuery = buildBaseQuery()
 
-    const findScopes = [
+    const findScopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_SCHEDULED_UPDATE,
       ScopeNames.WITH_BLACKLISTED,
       ScopeNames.WITH_THUMBNAILS

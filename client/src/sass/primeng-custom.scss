@@ -10,6 +10,12 @@
   color: var(--mainForegroundColor) !important;
 }
 
+my-edit-button,
+my-delete-button,
+my-button {
+  height: max-content;
+}
+
 // data table customizations
 p-table {
   .ui-table-caption {

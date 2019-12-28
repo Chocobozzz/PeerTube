@@ -1,6 +1,17 @@
 @import '_variables';
 @import '_mixins';
 
+.videos-header {
+  display: flex;
+  justify-content: space-between;
+  text-align: right;
+  margin: 20px 0 50px;
+
+  input[type=text] {
+    @include peertube-input-text(300px);
+  }
+}
+
 .action-button-delete-selection {
   display: inline-block;
 

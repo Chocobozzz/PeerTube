@@ -99,7 +99,8 @@ async function getUserVideos (req: express.Request, res: express.Response) {
     user.Account.id,
     req.query.start as number,
     req.query.count as number,
-    req.query.sort as VideoSortField
+    req.query.sort as VideoSortField,
+    req.query.search as string
   )
 
   const additionalAttributes = {

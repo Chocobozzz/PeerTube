@@ -121,14 +121,15 @@ export class VideoService implements VideosProvider {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField): Observable<ResultList<Video>> {
+  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField, search?: string): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+    params = this.restService.addObjectParams(params, { search })
 
     return this.authHttp
-               .get<ResultList<Video>>(UserService.BASE_USERS_URL + '/me/videos', { params })
+               .get<ResultList<Video>>(UserService.BASE_USERS_URL + 'me/videos', { params })
                .pipe(
                  switchMap(res => this.extractVideos(res)),
                  catchError(err => this.restExtractor.handleError(err))

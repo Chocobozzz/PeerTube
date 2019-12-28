@@ -1,6 +1,6 @@
-import { concat, Observable } from 'rxjs'
-import { tap, toArray } from 'rxjs/operators'
-import { Component, ViewChild } from '@angular/core'
+import { concat, Observable, Subject } from 'rxjs'
+import { tap, toArray, debounceTime } from 'rxjs/operators'
+import { Component, ViewChild, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -22,7 +22,7 @@ import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
   templateUrl: './my-account-videos.component.html',
   styleUrls: [ './my-account-videos.component.scss' ]
 })
-export class MyAccountVideosComponent implements DisableForReuseHook {
+export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
   @ViewChild('videosSelection', { static: true }) videosSelection: VideosSelectionComponent
   @ViewChild('videoChangeOwnershipModal', { static: true }) videoChangeOwnershipModal: VideoChangeOwnershipComponent
 
@@ -43,6 +43,8 @@ export class MyAccountVideosComponent implements DisableForReuseHook {
     blacklistInfo: true
   }
   videos: Video[] = []
+  videosSearch: string
+  videosSearchChanged = new Subject<string>()
   getVideosObservableFunction = this.getVideosObservable.bind(this)
 
   constructor (
@@ -59,6 +61,19 @@ export class MyAccountVideosComponent implements DisableForReuseHook {
     this.titlePage = this.i18n('My videos')
   }
 
+  ngOnInit () {
+    this.videosSearchChanged
+      .pipe(
+        debounceTime(500))
+      .subscribe(() => {
+        this.videosSelection.reloadVideos()
+      })
+  }
+
+  onVideosSearchChanged () {
+    this.videosSearchChanged.next()
+  }
+
   disableForReuse () {
     this.videosSelection.disableForReuse()
   }
@@ -70,7 +85,7 @@ export class MyAccountVideosComponent implements DisableForReuseHook {
   getVideosObservable (page: number, sort: VideoSortField) {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
-    return this.videoService.getMyVideos(newPagination, sort)
+    return this.videoService.getMyVideos(newPagination, sort, this.videosSearch)
   }
 
   async deleteSelectedVideos () {

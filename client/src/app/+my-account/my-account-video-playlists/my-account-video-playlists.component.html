@@ -1,4 +1,6 @@
 <div class="video-playlists-header">
+  <input type="text" placeholder="Search your playlists" i18n-placeholder [(ngModel)]="videoPlaylistsSearch" (ngModelChange)="onVideoPlaylistSearchChanged()" />
+
   <a class="create-button" routerLink="create">
     <my-global-icon iconName="add"></my-global-icon>
     <ng-container i18n>Create a new playlist</ng-container>

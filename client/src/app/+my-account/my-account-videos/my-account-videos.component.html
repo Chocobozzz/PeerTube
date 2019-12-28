@@ -1,3 +1,7 @@
+<div class="videos-header">
+  <input type="text" placeholder="Search your videos" i18n-placeholder [(ngModel)]="videosSearch" (ngModelChange)="onVideosSearchChanged()" />
+</div>
+
 <my-videos-selection
   [pagination]="pagination"
   [(selection)]="selection"

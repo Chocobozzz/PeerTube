@@ -3,7 +3,7 @@ import { Notifier } from '@app/core'
 import { AuthService } from '../../core/auth'
 import { ConfirmService } from '../../core/confirm'
 import { User } from '@app/shared'
-import { flatMap } from 'rxjs/operators'
+import { flatMap, debounceTime } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
@@ -17,7 +17,9 @@ import { Subject } from 'rxjs'
   styleUrls: [ './my-account-video-playlists.component.scss' ]
 })
 export class MyAccountVideoPlaylistsComponent implements OnInit {
+  videoPlaylistsSearch: string
   videoPlaylists: VideoPlaylist[] = []
+  videoPlaylistSearchChanged = new Subject<string>()
 
   pagination: ComponentPagination = {
     currentPage: 1,
@@ -41,6 +43,13 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
     this.user = this.authService.getUser()
 
     this.loadVideoPlaylists()
+
+    this.videoPlaylistSearchChanged
+      .pipe(
+        debounceTime(500))
+      .subscribe(() => {
+        this.loadVideoPlaylists()
+      })
   }
 
   async deleteVideoPlaylist (videoPlaylist: VideoPlaylist) {
@@ -80,12 +89,17 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
     this.loadVideoPlaylists()
   }
 
+  onVideoPlaylistSearchChanged () {
+    this.videoPlaylistSearchChanged.next()
+  }
+
   private loadVideoPlaylists () {
     this.authService.userInformationLoaded
         .pipe(flatMap(() => {
-          return this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt')
+          return this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt', this.videoPlaylistsSearch)
         }))
         .subscribe(res => {
+          this.videoPlaylists = []
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
 
