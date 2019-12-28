@@ -2257,6 +2257,8 @@ components:
           type: string
         updatedAt:
           type: string
+        totalRepliesFromVideoAuthor:
+          type: number
         totalReplies:
           type: number
         account:

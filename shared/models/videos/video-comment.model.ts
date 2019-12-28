@@ -11,6 +11,7 @@ export interface VideoComment {
   updatedAt: Date | string
   deletedAt: Date | string
   isDeleted: boolean
+  totalRepliesFromVideoAuthor: number
   totalReplies: number
   account: Account
 }

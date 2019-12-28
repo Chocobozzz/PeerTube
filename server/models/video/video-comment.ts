@@ -56,6 +56,17 @@ enum ScopeNames {
               ')'
             ),
             'totalReplies'
+          ],
+          [
+            Sequelize.literal(
+              '(' +
+                'SELECT COUNT("replies"."id") ' +
+                'FROM "videoComment" AS "replies" ' +
+                'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
+                'AND "accountId" = ' + userAccountId +
+              ')'
+            ),
+            'totalRepliesFromVideoAuthor'
           ]
         ]
       }
@@ -501,6 +512,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
       isDeleted: this.isDeleted(),
+      totalRepliesFromVideoAuthor: this.get('totalRepliesFromVideoAuthor') || 0,
       totalReplies: this.get('totalReplies') || 0,
       account: this.Account ? this.Account.toFormattedJSON() : null
     } as VideoComment
