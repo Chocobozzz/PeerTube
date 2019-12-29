@@ -146,11 +146,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.loadMoreVideos()
   }
 
-  loadMoreVideos () {
+  loadMoreVideos (reset = false) {
     this.getVideosObservable(this.pagination.currentPage).subscribe(
       ({ data, total }) => {
         this.pagination.totalItems = total
-        this.videos = []
+        if (reset) this.videos = []
         this.videos = this.videos.concat(data)
 
         if (this.groupByDate) this.buildGroupedDateLabels()
@@ -171,7 +171,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   reloadVideos () {
     this.pagination.currentPage = 1
-    this.loadMoreVideos()
+    this.loadMoreVideos(true)
   }
 
   toggleModerationDisplay () {

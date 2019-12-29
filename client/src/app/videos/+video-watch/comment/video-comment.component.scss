@@ -132,6 +132,13 @@
         font-weight: unset;
       }
     }
+
+    my-video-comment-add {
+      ::ng-deep form {
+        margin-top: 1rem;
+        margin-bottom: 0;
+      }
+    }
   }
 
   .children {

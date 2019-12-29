@@ -54,7 +54,7 @@ describe('Test video playlists API validator', function () {
     videoId2 = (await uploadVideoAndGetId({ server, videoName: 'video 2' })).id
 
     {
-      const res = await getAccountPlaylistsListWithToken(server.url, server.accessToken, 'root',0, 5, VideoPlaylistType.WATCH_LATER)
+      const res = await getAccountPlaylistsListWithToken(server.url, server.accessToken, 'root', 0, 5, VideoPlaylistType.WATCH_LATER)
       watchLaterPlaylistId = res.body.data[0].id
     }
 

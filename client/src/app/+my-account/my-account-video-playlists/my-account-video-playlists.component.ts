@@ -48,7 +48,7 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
       .pipe(
         debounceTime(500))
       .subscribe(() => {
-        this.loadVideoPlaylists()
+        this.loadVideoPlaylists(true)
       })
   }
 
@@ -93,13 +93,13 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
     this.videoPlaylistSearchChanged.next()
   }
 
-  private loadVideoPlaylists () {
+  private loadVideoPlaylists (reset = false) {
     this.authService.userInformationLoaded
         .pipe(flatMap(() => {
           return this.videoPlaylistService.listAccountPlaylists(this.user.account, this.pagination, '-updatedAt', this.videoPlaylistsSearch)
         }))
         .subscribe(res => {
-          this.videoPlaylists = []
+          if (reset) this.videoPlaylists = []
           this.videoPlaylists = this.videoPlaylists.concat(res.data)
           this.pagination.totalItems = res.total
 

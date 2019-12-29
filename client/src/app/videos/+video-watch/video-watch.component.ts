@@ -10,7 +10,7 @@ import { forkJoin, Observable, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
-import { RestExtractor, VideoBlacklistService } from '../../shared'
+import { RestExtractor } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoShareComponent } from './modal/video-share.component'
@@ -33,11 +33,10 @@ import { Video } from '@app/shared/video/video.model'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
-import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
 import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
-import { scrollToTop, isInViewport, isXPercentInViewport } from '@app/shared/misc/utils'
+import { scrollToTop, isXPercentInViewport } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-watch',
@@ -93,14 +92,12 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private router: Router,
     private videoService: VideoService,
     private playlistService: VideoPlaylistService,
-    private videoBlacklistService: VideoBlacklistService,
     private confirmService: ConfirmService,
     private metaService: MetaService,
     private authService: AuthService,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
     private notifier: Notifier,
-    private pluginService: PluginService,
     private markdownService: MarkdownService,
     private zone: NgZone,
     private redirectService: RedirectService,
