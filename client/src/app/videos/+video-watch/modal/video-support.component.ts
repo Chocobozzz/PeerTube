@@ -2,7 +2,6 @@ import { Component, Input, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { MarkdownService } from '@app/shared/renderer'
-import { User } from '@app/shared'
 
 @Component({
   selector: 'my-video-support',
@@ -11,7 +10,6 @@ import { User } from '@app/shared'
 })
 export class VideoSupportComponent {
   @Input() video: VideoDetails = null
-  @Input() user: User = null
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 
