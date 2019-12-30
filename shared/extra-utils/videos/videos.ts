@@ -161,13 +161,14 @@ function getLocalVideos (url: string) {
     .expect('Content-Type', /json/)
 }
 
-function getMyVideos (url: string, accessToken: string, start: number, count: number, sort?: string) {
+function getMyVideos (url: string, accessToken: string, start: number, count: number, sort?: string, search?: string) {
   const path = '/api/v1/users/me/videos'
 
   const req = request(url)
     .get(path)
     .query({ start: start })
     .query({ count: count })
+    .query({ search: search })
 
   if (sort) req.query({ sort })
 

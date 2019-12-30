@@ -309,6 +309,24 @@ describe('Test users', function () {
       expect(video.thumbnailPath).to.not.be.null
       expect(video.previewPath).to.not.be.null
     })
+
+    it('Should be able to search in my videos', async function () {
+      {
+        const res = await getMyVideos(server.url, accessTokenUser, 0, 5, '-createdAt', 'user video')
+        expect(res.body.total).to.equal(1)
+
+        const videos = res.body.data
+        expect(videos).to.have.lengthOf(1)
+      }
+
+      {
+        const res = await getMyVideos(server.url, accessTokenUser, 0, 5, '-createdAt', 'toto')
+        expect(res.body.total).to.equal(0)
+
+        const videos = res.body.data
+        expect(videos).to.have.lengthOf(0)
+      }
+    })
   })
 
   describe('Users listing', function () {
