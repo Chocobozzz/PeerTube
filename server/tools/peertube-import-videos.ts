@@ -333,7 +333,7 @@ function isNSFW (info: any) {
 function normalizeTargetUrl (url: string) {
   let normalizedUrl = url.replace(/\/+$/, '')
 
-  if (!normalizedUrl.startsWith('http://') || !normalizedUrl.startsWith('https://')) {
+  if (!normalizedUrl.startsWith('http://') && !normalizedUrl.startsWith('https://')) {
     normalizedUrl = 'https://' + normalizedUrl
   }
 
