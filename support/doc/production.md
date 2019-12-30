@@ -96,6 +96,13 @@ Copy the nginx configuration template:
 $ sudo cp /var/www/peertube/peertube-latest/support/nginx/peertube /etc/nginx/sites-available/peertube
 ```
 
+Then set the domain for the webserver configuration file. 
+Replace `[peertube-domain]` with the domain for the peertube server. 
+
+```
+$ sudo sed -i 's/peertube.example.com/[peertube-domain]/g' /etc/nginx/sites-available/peertube
+```
+
 Then modify the webserver configuration file. Please pay attention to the `alias` keys of the static locations.
 It should correspond to the paths of your storage directories (set in the configuration file inside the `storage` key).
 
