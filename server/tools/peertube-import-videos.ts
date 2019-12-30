@@ -1,4 +1,5 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
+
 registerTSPaths()
 
 // FIXME: https://github.com/nodejs/node/pull/16853
@@ -57,8 +58,8 @@ getServerCredentials(command)
       exitError('--tmpdir %s: directory does not exist or is not accessible', program[ 'tmpdir' ])
     }
 
-    url = removeEndSlashes(url)
-    program[ 'targetUrl' ] = removeEndSlashes(program[ 'targetUrl' ])
+    url = normalizeTargetUrl(url)
+    program[ 'targetUrl' ] = normalizeTargetUrl(program[ 'targetUrl' ])
 
     const user = { username, password }
 
@@ -84,11 +85,11 @@ async function run (url: string, user: UserInfo) {
     let infoArray: any[]
 
     // Normalize utf8 fields
-    infoArray = [].concat(info);
+    infoArray = [].concat(info)
     if (program[ 'first' ]) {
       infoArray = infoArray.slice(0, program[ 'first' ])
     } else if (program[ 'last' ]) {
-      infoArray = infoArray.slice(- program[ 'last' ])
+      infoArray = infoArray.slice(-program[ 'last' ])
     }
     infoArray = infoArray.map(i => normalizeObject(i))
 
@@ -125,15 +126,15 @@ function processVideo (parameters: {
     if (program[ 'since' ]) {
       if (buildOriginallyPublishedAt(videoInfo).getTime() < program[ 'since' ].getTime()) {
         log.info('Video "%s" has been published before "%s", don\'t upload it.\n',
-          videoInfo.title, formatDate(program[ 'since' ]));
-        return res();
+          videoInfo.title, formatDate(program[ 'since' ]))
+        return res()
       }
     }
     if (program[ 'until' ]) {
       if (buildOriginallyPublishedAt(videoInfo).getTime() > program[ 'until' ].getTime()) {
         log.info('Video "%s" has been published after "%s", don\'t upload it.\n',
-          videoInfo.title, formatDate(program[ 'until' ]));
-        return res();
+          videoInfo.title, formatDate(program[ 'until' ]))
+        return res()
       }
     }
 
@@ -329,8 +330,14 @@ function isNSFW (info: any) {
   return info.age_limit && info.age_limit >= 16
 }
 
-function removeEndSlashes (url: string) {
-  return url.replace(/\/+$/, '')
+function normalizeTargetUrl (url: string) {
+  let normalizedUrl = url.replace(/\/+$/, '')
+
+  if (!normalizedUrl.startsWith('http://') || !normalizedUrl.startsWith('https://')) {
+    normalizedUrl = 'https://' + normalizedUrl
+  }
+
+  return normalizedUrl
 }
 
 async function promptPassword () {
@@ -370,21 +377,21 @@ async function getAccessTokenOrDie (url: string, user: UserInfo) {
 
 function parseDate (dateAsStr: string): Date {
   if (!/\d{4}-\d{2}-\d{2}/.test(dateAsStr)) {
-    exitError(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`);
+    exitError(`Invalid date passed: ${dateAsStr}. Expected format: YYYY-MM-DD. See help for usage.`)
   }
-  const date = new Date(dateAsStr);
-  date.setHours(0, 0, 0);
+  const date = new Date(dateAsStr)
+  date.setHours(0, 0, 0)
   if (isNaN(date.getTime())) {
-    exitError(`Invalid date passed: ${dateAsStr}. See help for usage.`);
+    exitError(`Invalid date passed: ${dateAsStr}. See help for usage.`)
   }
-  return date;
+  return date
 }
 
 function formatDate (date: Date): string {
-  return date.toISOString().split('T')[0];
+  return date.toISOString().split('T')[ 0 ]
 }
 
-function exitError (message:string, ...meta: any[]) {
+function exitError (message: string, ...meta: any[]) {
   // use console.error instead of log.error here
   console.error(message, ...meta)
   process.exit(-1)
