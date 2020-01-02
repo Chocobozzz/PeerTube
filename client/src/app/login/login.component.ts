@@ -28,13 +28,11 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private router: Router,
     private route: ActivatedRoute,
     private modalService: NgbModal,
     private loginValidatorsService: LoginValidatorsService,
     private authService: AuthService,
     private userService: UserService,
-    private serverService: ServerService,
     private redirectService: RedirectService,
     private notifier: Notifier,
     private i18n: I18n

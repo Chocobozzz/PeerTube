@@ -1,5 +1,6 @@
 import { Account } from '../actors'
 import { VideoChannel } from '../videos/channel/video-channel.model'
+import { VideoPlaylist } from '../videos/playlist/video-playlist.model'
 import { UserRole } from './user-role'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { UserNotificationSetting } from './user-notification-setting.model'
@@ -44,4 +45,8 @@ export interface User {
   noWelcomeModal: boolean
 
   createdAt: Date
+}
+
+export interface MyUser extends User {
+  specialPlaylists: Partial<VideoPlaylist>[]
 }

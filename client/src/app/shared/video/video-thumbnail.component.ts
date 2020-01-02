@@ -1,6 +1,14 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core'
 import { Video } from './video.model'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { AuthService, ThemeService } from '@app/core'
+import { VideoPlaylistService } from '../video-playlist/video-playlist.service'
+import { VideoPlaylistType } from '@shared/models'
+import { forkJoin } from 'rxjs'
+import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
+import { VideoPlaylist } from '../video-playlist/video-playlist.model'
+import { VideoPlaylistElementCreate } from '../../../../../shared'
+import { VideoExistInPlaylist } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
 
 @Component({
   selector: 'my-video-thumbnail',
@@ -13,7 +21,44 @@ export class VideoThumbnailComponent {
   @Input() routerLink: any[]
   @Input() queryParams: any[]
 
-  constructor (private screenService: ScreenService) {
+  addToWatchLaterText = 'Add to watch later'
+  addedToWatchLaterText = 'Added to watch later'
+  addedToWatchLater: boolean
+
+  watchLaterPlaylist: any
+
+  constructor (
+    private screenService: ScreenService,
+    private authService: AuthService,
+    private videoPlaylistService: VideoPlaylistService,
+    private cd: ChangeDetectorRef
+  ) {}
+
+  load () {
+    if (this.addedToWatchLater !== undefined) return
+
+    this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
+      .subscribe(
+        existResult => {
+          for (const playlist of this.authService.getUser().specialPlaylists) {
+            const existingPlaylist = existResult[ this.video.id ].find(p => p.playlistId === playlist.id)
+            this.addedToWatchLater = !!existingPlaylist
+
+            if (existingPlaylist) {
+              this.watchLaterPlaylist = {
+                playlistId: existingPlaylist.playlistId,
+                playlistElementId: existingPlaylist.playlistElementId
+              }
+            } else {
+              this.watchLaterPlaylist = {
+                playlistId: playlist.id
+              }
+            }
+
+            this.cd.markForCheck()
+          }
+        }
+      )
   }
 
   getImageUrl () {
@@ -38,5 +83,38 @@ export class VideoThumbnailComponent {
     if (this.routerLink) return this.routerLink
 
     return [ '/videos/watch', this.video.uuid ]
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
+  }
+
+  addToWatchLater () {
+    if (this.addedToWatchLater === undefined) return
+    this.addedToWatchLater = true
+
+    this.videoPlaylistService.addVideoInPlaylist(
+      this.watchLaterPlaylist.playlistId,
+      { videoId: this.video.id } as VideoPlaylistElementCreate
+    ).subscribe(
+      res => {
+        this.addedToWatchLater = true
+        this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
+      }
+    )
+  }
+
+  removeFromWatchLater () {
+    if (this.addedToWatchLater === undefined) return
+    this.addedToWatchLater = false
+
+    this.videoPlaylistService.removeVideoFromPlaylist(
+      this.watchLaterPlaylist.playlistId,
+      this.watchLaterPlaylist.playlistElementId
+    ).subscribe(
+      _ => {
+        this.addedToWatchLater = false
+      }
+    )
   }
 }

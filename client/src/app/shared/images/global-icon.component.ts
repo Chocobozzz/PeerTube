@@ -10,6 +10,7 @@ const icons = {
   'sparkle': require('!!raw-loader?!../../../assets/images/global/sparkle.svg'),
   'alert': require('!!raw-loader?!../../../assets/images/global/alert.svg'),
   'cloud-error': require('!!raw-loader?!../../../assets/images/global/cloud-error.svg'),
+  'clock': require('!!raw-loader?!../../../assets/images/global/clock.svg'),
   'user-add': require('!!raw-loader?!../../../assets/images/global/user-add.svg'),
   'no': require('!!raw-loader?!../../../assets/images/global/no.svg'),
   'cloud-download': require('!!raw-loader?!../../../assets/images/global/cloud-download.svg'),

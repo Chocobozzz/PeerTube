@@ -1,8 +1,22 @@
 <a
   [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" [attr.title]="video.name"
   class="video-thumbnail"
+  (mouseenter)="load()"
 >
   <img alt="" [attr.aria-labelledby]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
+
+  <div *ngIf="isUserLoggedIn()" class="video-thumbnail-actions-overlay">
+    <ng-container *ngIf="addedToWatchLater !== true">
+      <div class="video-thumbnail-watch-later-overlay" placement="left" [ngbTooltip]="addToWatchLaterText" container="body" (click)="addToWatchLater();$event.stopPropagation();false">
+        <my-global-icon iconName="clock" [attr.aria-label]="addToWatchLaterText" role="button"></my-global-icon>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="addedToWatchLater === true">
+      <div class="video-thumbnail-watch-later-overlay" placement="left" [ngbTooltip]="addedToWatchLaterText" container="body" (click)="removeFromWatchLater();$event.stopPropagation();false">
+        <my-global-icon iconName="tick" [attr.aria-label]="addedToWatchLaterText" role="button"></my-global-icon>
+      </div>
+    </ng-container>
+  </div>
 
   <div class="video-thumbnail-duration-overlay">{{ video.durationLabel }}</div>
 

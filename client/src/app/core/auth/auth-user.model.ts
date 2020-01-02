@@ -5,6 +5,7 @@ import { User as ServerUserModel } from '../../../../../shared/models/users/user
 import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
 import { User } from '../../shared/users/user.model'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
+import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 
 export type TokenOptions = {
   accessToken: string
@@ -79,6 +80,7 @@ export class AuthUser extends User {
   }
 
   tokens: Tokens
+  specialPlaylists: Partial<VideoPlaylist>[]
 
   static load () {
     const usernameLocalStorage = peertubeLocalStorage.getItem(this.KEYS.USERNAME)

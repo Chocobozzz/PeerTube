@@ -18,16 +18,50 @@
     }
   }
 
+  .video-thumbnail-watch-later-overlay,
   .video-thumbnail-duration-overlay {
     @include static-thumbnail-overlay;
 
-    position: absolute;
-    right: 5px;
-    bottom: 5px;
-    padding: 0 5px;
     border-radius: 3px;
     font-size: 12px;
     font-weight: $font-bold;
     z-index: 1;
+  }
+
+  .video-thumbnail-duration-overlay {
+    position: absolute;
+    padding: 0 5px;
+    right: 5px;
+    bottom: 5px;
+  }
+
+  &:hover {
+    .video-thumbnail-actions-overlay {
+      opacity: 1;
+    }
+  }
+
+  .video-thumbnail-actions-overlay {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    right: 5px;
+    top: 5px;
+    opacity: 0;
+
+    div:not(:first-child) {
+      margin-top: 2px;
+    }
+
+    .video-thumbnail-watch-later-overlay {
+      padding: 3px;
+
+      my-global-icon {
+        width: 22px;
+        height: 22px;
+
+        @include apply-svg-color(#fff);
+      }
+    }
   }
 }

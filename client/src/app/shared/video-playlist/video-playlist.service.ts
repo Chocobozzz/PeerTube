@@ -30,6 +30,7 @@ export class VideoPlaylistService {
   // Use a replay subject because we "next" a value before subscribing
   private videoExistsInPlaylistSubject: Subject<number> = new ReplaySubject(1)
   private readonly videoExistsInPlaylistObservable: Observable<VideoExistInPlaylist>
+  private cachedWatchLaterPlaylists: VideoPlaylist[]
 
   constructor (
     private authHttp: HttpClient,
