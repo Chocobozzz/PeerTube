@@ -5740,7 +5740,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="translated"/>
+        <target state="translated">IP-adressen ger mycket lite information: för det mesta byts den ut regelbundet och kan dessutom representera många personer och entiteter</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">104</context>
@@ -5748,7 +5748,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the WebTorrent library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information </source>
-        <target state="translated"/>
+        <target state="translated">Webbserventer är inte åtkomliga offentligt. Eftersom vi använder WebRTC i webbläsaren (med <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>WebTorrent-biblioteket<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>) är protokollet inte detsamma som vanlig BitTorrent. När du använder webbläsaren skickar du en signal till hanteraren som slumpmässigt utser andra serventer att skicka informationen till. Se <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>det här dokumentet<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> för mer information </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">108</context>
@@ -5756,7 +5756,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target state="translated"/>
+        <target state="translated">Det värsta som kan hända, att en person spionerar på sina vänner, är mycket osannolikt. Det finns mycket enklare sätt att få tag på den sortens information.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">117</context>
@@ -5772,7 +5772,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="1a834063d0b70b0e4f29fd9d685838fee7034099" datatype="html">
         <source>The threats to privacy in YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="translated"/>
+        <target state="translated">Det som inskränker privatlivet på YouTube är av ett helt annat slag än det på PeerTube. Vad gäller YouTube, samlar plattformen enorma mängder personlig information (inte bara din IP-adress) för att analysera den och spåra dig. Dessutom ägs YouTube av Google / Alphabet, ett företag som spårar dig på en uppsjö webbplatser (via AdSense och Google Analytics).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">124</context>
@@ -5788,7 +5788,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="301e86f807ed659ff42d3b4bba6e03b88bff7907" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="translated"/>
+        <target state="translated">Din IP-adress är offentlig så varje gång du använder en webbplats, kommer ett antal aktörer (utöver den efterfrågade webbplatsen) se din IP-adress i sina anslutningsloggar: internetleveratörer, routrar, spårare, innehållsleveransnätverk (CDN) och många fler. PeerTube försöker inte dölja detta: vi varnar dig att om du vill hålla din IP-adress för dig själv, måste du använda ett virtuellt privat nätverk (VPN) eller Tor-webbläsare. Därför är det inte sant att du får tillbaka din anonymitet genom att ta bort P2P från PeerTube.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">132</context>
@@ -5804,7 +5804,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="9e3dbfc740e16e7ba825649779271ef987619d06" datatype="html">
         <source>PeerTube is in its early stages, and want to deliver the best countermeasures possible by the time the stable is released. In the meantime, we want to test different ideas related to this issue:</source>
-        <target state="translated"/>
+        <target state="translated">PeerTube står i ännu startgroparna och siktar på att kunna leverera de bästa lösningarna när den stabila versionen släpps. Under tiden vill vi testa några olika idéer som har med det här att göra:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">141</context>
@@ -5844,7 +5844,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="7572e6867edf041215b9986a272e5db7967e94d6" datatype="html">
         <source>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the automatized program</source>
-        <target state="translated"/>
+        <target state="translated">Ett automatiskt redundansprogram för videor: vi kan inte se om IP-adressen laddade ner videon medvetet eller om det var det automatiserade programmet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">151</context>
@@ -5860,7 +5860,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target state="translated"/>
+        <target state="translated">Den här instansen följs inte av någon annan instans.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5876,7 +5876,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
         <source>This instance does not have instances followings.</source>
-        <target state="translated"/>
+        <target state="translated">Den här instansen följer inte några andra instanser.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">15</context>
@@ -9764,7 +9764,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="1d9b6c0c66a4a5baa73617b1106c3746bc13f003" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="translated"></target>
+        <target state="translated">Nästa video kommer börja automatiskt om den här funktionen är aktiverad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.ts</context>
           <context context-type="linenumber">1</context>
