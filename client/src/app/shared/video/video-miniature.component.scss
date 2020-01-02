@@ -74,10 +74,14 @@ $more-margin-right: 15px;
       ::ng-deep .playlist-dropdown.show + my-action-dropdown .dropdown-root {
         opacity: 1;
       }
-    }
 
-    &:hover .video-actions ::ng-deep .dropdown-root {
-      opacity: 1;
+      ::ng-deep .more-icon {
+        opacity: .6;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
 
     @media screen and (max-width: $small-view) {
@@ -94,6 +98,11 @@ $more-margin-right: 15px;
         }
       }
     }
+  }
+
+  &:hover ::ng-deep .video-thumbnail .video-thumbnail-actions-overlay,
+  &:hover .video-bottom .video-actions ::ng-deep .dropdown-root {
+    opacity: 1;
   }
 
   &.display-as-row {

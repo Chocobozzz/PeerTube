@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, ViewChild } from '@angular/core'
 import { User } from '../users'
 import { Video } from './video.model'
 import { ServerService } from '@app/core'
@@ -6,6 +6,7 @@ import { ServerConfig, VideoPrivacy, VideoState } from '../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { VideoThumbnailComponent } from './video-thumbnail.component'
 
 export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 export type MiniatureDisplayOptions = {
@@ -45,6 +46,8 @@ export class VideoMiniatureComponent implements OnInit {
   @Output() videoBlacklisted = new EventEmitter()
   @Output() videoUnblacklisted = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
+
+  @ViewChild('thumbnail', { static: true }) thumbnail: VideoThumbnailComponent
 
   videoActionsDisplayOptions: VideoActionsDisplayType = {
     playlist: true,
@@ -128,6 +131,7 @@ export class VideoMiniatureComponent implements OnInit {
 
   loadActions () {
     if (this.displayVideoActions) this.showActions = true
+    this.thumbnail.load()
   }
 
   onVideoBlacklisted () {

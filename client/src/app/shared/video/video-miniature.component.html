@@ -1,5 +1,5 @@
 <div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow }" (mouseenter)="loadActions()">
-  <my-video-thumbnail [video]="video" [nsfw]="isVideoBlur"></my-video-thumbnail>
+  <my-video-thumbnail #thumbnail [video]="video" [nsfw]="isVideoBlur"></my-video-thumbnail>
 
   <div class="video-bottom">
     <div class="video-miniature-information">

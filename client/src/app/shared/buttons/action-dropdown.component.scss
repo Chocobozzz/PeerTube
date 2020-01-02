@@ -34,7 +34,7 @@
     width: 21px;
 
     ::ng-deep {
-      @include apply-svg-color(var(--mainForegroundColor));
+      @include apply-svg-color(var(--actionButtonColor));
     }
   }
 

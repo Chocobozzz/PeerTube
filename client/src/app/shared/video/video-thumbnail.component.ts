@@ -3,12 +3,7 @@ import { Video } from './video.model'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { AuthService, ThemeService } from '@app/core'
 import { VideoPlaylistService } from '../video-playlist/video-playlist.service'
-import { VideoPlaylistType } from '@shared/models'
-import { forkJoin } from 'rxjs'
-import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
-import { VideoPlaylist } from '../video-playlist/video-playlist.model'
 import { VideoPlaylistElementCreate } from '../../../../../shared'
-import { VideoExistInPlaylist } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
 
 @Component({
   selector: 'my-video-thumbnail',
@@ -36,6 +31,7 @@ export class VideoThumbnailComponent {
 
   load () {
     if (this.addedToWatchLater !== undefined) return
+    if (!this.isUserLoggedIn()) return
 
     this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
       .subscribe(

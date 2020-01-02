@@ -35,6 +35,7 @@
     bottom: 5px;
   }
 
+  &:focus,
   &:hover {
     .video-thumbnail-actions-overlay {
       opacity: 1;
