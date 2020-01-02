@@ -66,7 +66,7 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
 <p align="center">
   <a href="https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3">
-    <img src="https://lutim.cpy.re/8cZDRIEF.png" alt="screenshot" />
+    <img src="https://user-images.githubusercontent.com/6329880/71676499-ac6b5300-2d80-11ea-93c8-e0a07fa7de7f.png" alt="screenshot" />
   </a>
 </p>
 
