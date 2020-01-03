@@ -126,14 +126,13 @@ async function getUserVideoImports (req: express.Request, res: express.Response)
 
 async function getUserInformation (req: express.Request, res: express.Response) {
   // We did not load channels in res.locals.user
-  const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
+  const user = await UserModel.loadForMeAPI(res.locals.oauth.token.user.username)
 
-  return res.json(user.toFormattedJSON({ me: true }))
+  return res.json(user.toMeFormattedJSON())
 }
 
 async function getUserVideoQuotaUsed (req: express.Request, res: express.Response) {
-  // We did not load channels in res.locals.user
-  const user = await UserModel.loadByUsernameAndPopulateChannels(res.locals.oauth.token.user.username)
+  const user = res.locals.oauth.token.user
   const videoQuotaUsed = await UserModel.getOriginalVideoFileTotalFromUser(user)
   const videoQuotaUsedDaily = await UserModel.getOriginalVideoFileTotalDailyFromUser(user)
 

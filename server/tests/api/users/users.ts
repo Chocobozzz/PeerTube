@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, UserRole, Video, MyUser } from '../../../../shared/index'
+import { User, UserRole, Video, MyUser, VideoPlaylistType } from '../../../../shared/index'
 import {
   blockUser,
   cleanupTests,
@@ -251,7 +251,7 @@ describe('Test users', function () {
 
     it('Should be able to get user information', async function () {
       const res1 = await getMyUserInformation(server.url, accessTokenUser)
-      const userMe: User & MyUser = res1.body
+      const userMe: MyUser = res1.body
 
       const res2 = await getUserInformation(server.url, server.accessToken, userMe.id)
       const userGet: User = res2.body
@@ -271,6 +271,7 @@ describe('Test users', function () {
       expect(userGet.adminFlags).to.equal(UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST)
 
       expect(userMe.specialPlaylists).to.have.lengthOf(1)
+      expect(userMe.specialPlaylists[0].type).to.equal(VideoPlaylistType.WATCH_LATER)
     })
   })
 

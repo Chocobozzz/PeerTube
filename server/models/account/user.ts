@@ -19,14 +19,15 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, USER_ROLE_LABELS, UserRight, VideoPrivacy, MyUser } from '../../../shared'
+import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isNoInstanceConfigWarningModal,
+  isNoWelcomeModal,
   isUserAdminFlagsValid,
-  isUserAutoPlayVideoValid,
-  isUserAutoPlayNextVideoValid,
   isUserAutoPlayNextVideoPlaylistValid,
+  isUserAutoPlayNextVideoValid,
+  isUserAutoPlayVideoValid,
   isUserBlockedReasonValid,
   isUserBlockedValid,
   isUserEmailVerifiedValid,
@@ -38,8 +39,7 @@ import {
   isUserVideoQuotaDailyValid,
   isUserVideoQuotaValid,
   isUserVideosHistoryEnabledValid,
-  isUserWebTorrentEnabledValid,
-  isNoWelcomeModal
+  isUserWebTorrentEnabledValid
 } from '../../helpers/custom-validators/users'
 import { comparePassword, cryptPassword } from '../../helpers/peertube-crypto'
 import { OAuthTokenModel } from '../oauth/oauth-token'
@@ -61,16 +61,17 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import * as Bluebird from 'bluebird'
 import {
+  MMyUserFormattable,
   MUserDefault,
   MUserFormattable,
   MUserId,
   MUserNotifSettingChannelDefault,
-  MUserWithNotificationSetting, MVideoFullLight
+  MUserWithNotificationSetting,
+  MVideoFullLight
 } from '@server/typings/models'
 
 enum ScopeNames {
-  WITH_VIDEO_CHANNEL = 'WITH_VIDEO_CHANNEL',
-  WITH_SPECIAL_PLAYLISTS = 'WITH_SPECIAL_PLAYLISTS'
+  FOR_ME_API = 'FOR_ME_API'
 }
 
 @DefaultScope(() => ({
@@ -86,28 +87,31 @@ enum ScopeNames {
   ]
 }))
 @Scopes(() => ({
-  [ScopeNames.WITH_VIDEO_CHANNEL]: {
+  [ScopeNames.FOR_ME_API]: {
     include: [
       {
         model: AccountModel,
-        required: true,
-        include: [ VideoChannelModel ]
+        include: [
+          {
+            model: VideoChannelModel
+          },
+          {
+            attributes: [ 'id', 'name', 'type' ],
+            model: VideoPlaylistModel.unscoped(),
+            required: true,
+            where: {
+              type: {
+                [ Op.ne ]: VideoPlaylistType.REGULAR
+              }
+            }
+          }
+        ]
       },
       {
         model: UserNotificationSettingModel,
         required: true
       }
     ]
-  },
-  [ScopeNames.WITH_SPECIAL_PLAYLISTS]: {
-    attributes: {
-      include: [
-        [
-          literal('(select array(select "id" from "videoPlaylist" where "ownerAccountId" in (select id from public.account where "userId" = "UserModel"."id") and name LIKE \'Watch later\'))'),
-          'specialPlaylists'
-        ]
-      ]
-    }
   }
 }))
 @Table({
@@ -436,17 +440,14 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findOne(query)
   }
 
-  static loadByUsernameAndPopulateChannels (username: string): Bluebird<MUserNotifSettingChannelDefault> {
+  static loadForMeAPI (username: string): Bluebird<MUserNotifSettingChannelDefault> {
     const query = {
       where: {
         username: { [ Op.iLike ]: username }
       }
     }
 
-    return UserModel.scope([
-      ScopeNames.WITH_VIDEO_CHANNEL,
-      ScopeNames.WITH_SPECIAL_PLAYLISTS
-    ]).findOne(query)
+    return UserModel.scope(ScopeNames.FOR_ME_API).findOne(query)
   }
 
   static loadByEmail (email: string): Bluebird<MUserDefault> {
@@ -625,11 +626,11 @@ export class UserModel extends Model<UserModel> {
     return comparePassword(password, this.password)
   }
 
-  toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean, me?: boolean } = {}): User | MyUser {
+  toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
 
-    const json: User | MyUser = {
+    const json: User = {
       id: this.id,
       username: this.username,
       email: this.email,
@@ -690,13 +691,16 @@ export class UserModel extends Model<UserModel> {
         })
     }
 
-    if (parameters.me) {
-      Object.assign(json, {
-        specialPlaylists: (this.get('specialPlaylists') as Array<number>).map(p => ({ id: p }))
-      })
-    }
-
     return json
+  }
+
+  toMeFormattedJSON (this: MMyUserFormattable): MyUser {
+    const formatted = this.toFormattedJSON()
+
+    const specialPlaylists = this.Account.VideoPlaylists
+      .map(p => ({ id: p.id, name: p.name, type: p.type }))
+
+    return Object.assign(formatted, { specialPlaylists })
   }
 
   async isAbleToUploadVideo (videoFile: { size: number }) {

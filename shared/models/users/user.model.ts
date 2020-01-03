@@ -5,6 +5,7 @@ import { UserRole } from './user-role'
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { UserNotificationSetting } from './user-notification-setting.model'
 import { UserAdminFlag } from './user-flag.model'
+import { VideoPlaylistType } from '@shared/models'
 
 export interface User {
   id: number
@@ -47,6 +48,14 @@ export interface User {
   createdAt: Date
 }
 
-export interface MyUser extends User {
-  specialPlaylists: Partial<VideoPlaylist>[]
+export interface MyUserSpecialPlaylist {
+  id: number
+  name: string
+  type: VideoPlaylistType
 }
+
+export interface MyUser extends User {
+  specialPlaylists: MyUserSpecialPlaylist[]
+}
+
+

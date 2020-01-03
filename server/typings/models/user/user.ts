@@ -12,6 +12,7 @@ import {
 import { MNotificationSetting, MNotificationSettingFormattable } from './user-notification-setting'
 import { AccountModel } from '@server/models/account/account'
 import { MChannelFormattable } from '../video/video-channels'
+import { MVideoPlaylist } from '@server/typings/models'
 
 type Use<K extends keyof UserModel, M> = PickWith<UserModel, K, M>
 
@@ -65,6 +66,13 @@ export type MUserDefault = MUser &
 
 // Format for API or AP object
 
+type MAccountWithChannels = MAccountFormattable & PickWithOpt<AccountModel, 'VideoChannels', MChannelFormattable[]>
+type MAccountWithChannelsAndSpecialPlaylists = MAccountWithChannels &
+  PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
+
 export type MUserFormattable = MUserQuotaUsed &
-  Use<'Account', MAccountFormattable & PickWithOpt<AccountModel, 'VideoChannels', MChannelFormattable[]>> &
+  Use<'Account', MAccountWithChannels> &
   PickWithOpt<UserModel, 'NotificationSetting', MNotificationSettingFormattable>
+
+export type MMyUserFormattable = MUserFormattable &
+  Use<'Account', MAccountWithChannelsAndSpecialPlaylists>
