@@ -32,7 +32,7 @@ import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.
 import { Video } from '@app/shared/video/video.model'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
-import { getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
+import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
 import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
@@ -128,6 +128,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
           if (
             isWebRTCDisabled() ||
             this.serverConfig.tracker.enabled === false ||
+            getStoredP2PEnabled() === false ||
             peertubeLocalStorage.getItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY) === 'true'
           ) {
             this.hasAlreadyAcceptedPrivacyConcern = true
