@@ -38,7 +38,7 @@ import {
   removeServerFromAccountBlocklist,
   removeServerFromServerBlocklist
 } from '../../../../shared/extra-utils/users/blocklist'
-import { getUserNotifications } from '@shared/extra-utils/users/user-notifications'
+import { getUserNotifications } from '../../../../shared/extra-utils/users/user-notifications'
 
 const expect = chai.expect
 

@@ -2,7 +2,7 @@ import * as request from 'supertest'
 import { Job, JobState, JobType } from '../../models'
 import { wait } from '../miscs/miscs'
 import { ServerInfo } from './servers'
-import { makeGetRequest } from '@shared/extra-utils'
+import { makeGetRequest } from '../../../shared/extra-utils'
 
 function getJobsList (url: string, accessToken: string, state: JobState) {
   const path = '/api/v1/jobs/' + state

@@ -10,6 +10,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateMyAvatar,
+  getAccessToken,
+  createUser,
   uploadVideo
 } from '../../../../shared/extra-utils/index'
 import {
@@ -29,6 +31,8 @@ describe('Test video comments', function () {
   let threadId
   let replyToDeleteId: number
 
+  let userAccessTokenServer1: string
+
   before(async function () {
     this.timeout(30000)
 
@@ -45,6 +49,14 @@ describe('Test video comments', function () {
       accessToken: server.accessToken,
       fixture: 'avatar.png'
     })
+
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: 'user1',
+      password: 'password'
+    })
+    userAccessTokenServer1 = await getAccessToken(server.url, 'user1', 'password')
   })
 
   it('Should not have threads on this video', async function () {
@@ -69,6 +81,7 @@ describe('Test video comments', function () {
     expect(comment.account.host).to.equal('localhost:' + server.port)
     expect(comment.account.url).to.equal('http://localhost:' + server.port + '/accounts/root')
     expect(comment.totalReplies).to.equal(0)
+    expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
     expect(dateIsValid(comment.createdAt as string)).to.be.true
     expect(dateIsValid(comment.updatedAt as string)).to.be.true
   })
@@ -91,6 +104,7 @@ describe('Test video comments', function () {
     await testImage(server.url, 'avatar-resized', comment.account.avatar.path, '.png')
 
     expect(comment.totalReplies).to.equal(0)
+    expect(comment.totalRepliesFromVideoAuthor).to.equal(0)
     expect(dateIsValid(comment.createdAt as string)).to.be.true
     expect(dateIsValid(comment.updatedAt as string)).to.be.true
 
@@ -207,6 +221,24 @@ describe('Test video comments', function () {
     expect(res.body.data[1].totalReplies).to.equal(0)
     expect(res.body.data[2].text).to.equal('super thread 3')
     expect(res.body.data[2].totalReplies).to.equal(0)
+  })
+
+  it('Should count replies from the video author correctly', async function () {
+    const text = 'my super first comment'
+    await addVideoCommentThread(server.url, server.accessToken, videoUUID, text)
+    let res = await getVideoCommentThreads(server.url, videoUUID, 0, 5)
+    const comment: VideoComment = res.body.data[0]
+    const threadId2 = comment.threadId
+
+    const text2 = 'a first answer to thread 4 by a third party'
+    await addVideoCommentReply(server.url, userAccessTokenServer1, videoId, threadId2, text2)
+
+    const text3 = 'my second answer to thread 4'
+    await addVideoCommentReply(server.url, server.accessToken, videoId, threadId2, text3)
+
+    res = await getVideoThreadComments(server.url, videoUUID, threadId2)
+    const tree: VideoCommentThreadTree = res.body
+    expect(tree.comment.totalReplies).to.equal(tree.comment.totalRepliesFromVideoAuthor + 1)
   })
 
   after(async function () {
