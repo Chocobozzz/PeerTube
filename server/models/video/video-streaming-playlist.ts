@@ -5,7 +5,14 @@ import { VideoModel } from './video'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, P2P_MEDIA_LOADER_PEER_VERSION, STATIC_DOWNLOAD_PATHS, STATIC_PATHS } from '../../initializers/constants'
+import {
+  CONSTRAINTS_FIELDS,
+  MEMOIZE_LENGTH,
+  MEMOIZE_TTL,
+  P2P_MEDIA_LOADER_PEER_VERSION,
+  STATIC_DOWNLOAD_PATHS,
+  STATIC_PATHS
+} from '../../initializers/constants'
 import { join } from 'path'
 import { sha1 } from '../../helpers/core-utils'
 import { isArrayOf } from '../../helpers/custom-validators/misc'
@@ -13,6 +20,7 @@ import { Op, QueryTypes } from 'sequelize'
 import { MStreamingPlaylist, MVideoFile } from '@server/typings/models'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { getTorrentFileName, getVideoFilename } from '@server/lib/video-paths'
+import * as memoizee from 'memoizee'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -88,6 +96,12 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
     hooks: true
   })
   RedundancyVideos: VideoRedundancyModel[]
+
+  static doesInfohashExistCached = memoizee(VideoStreamingPlaylistModel.doesInfohashExist, {
+    promise: true,
+    max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
+    maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS
+  })
 
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoStreamingPlaylist" WHERE $infoHash = ANY("p2pMediaLoaderInfohashes") LIMIT 1'

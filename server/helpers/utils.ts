@@ -40,7 +40,7 @@ const getServerActor = memoizee(async function () {
   actor.Account = application.Account
 
   return actor
-})
+}, { promise: true })
 
 function generateVideoImportTmpPath (target: string | ParseTorrent) {
   const id = typeof target === 'string' ? target : target.infoHash

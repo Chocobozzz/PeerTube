@@ -24,9 +24,10 @@ import { VideoModel } from './video'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
 import { FindOptions, Op, QueryTypes, Transaction } from 'sequelize'
-import { MIMETYPES } from '../../initializers/constants'
+import { MIMETYPES, MEMOIZE_LENGTH, MEMOIZE_TTL } from '../../initializers/constants'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../typings/models/video/video-file'
 import { MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
+import * as memoizee from 'memoizee'
 
 @Table({
   tableName: 'videoFile',
@@ -137,6 +138,12 @@ export class VideoFileModel extends Model<VideoFileModel> {
     hooks: true
   })
   RedundancyVideos: VideoRedundancyModel[]
+
+  static doesInfohashExistCached = memoizee(VideoFileModel.doesInfohashExist, {
+    promise: true,
+    max: MEMOIZE_LENGTH.INFO_HASH_EXISTS,
+    maxAge: MEMOIZE_TTL.INFO_HASH_EXISTS
+  })
 
   static doesInfohashExist (infoHash: string) {
     const query = 'SELECT 1 FROM "videoFile" WHERE "infoHash" = $infoHash LIMIT 1'

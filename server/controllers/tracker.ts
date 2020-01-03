@@ -48,7 +48,7 @@ const trackerServer = new TrackerServer({
     try {
       if (CONFIG.TRACKER.PRIVATE === false) return cb()
 
-      const videoFileExists = await VideoFileModel.doesInfohashExist(infoHash)
+      const videoFileExists = await VideoFileModel.doesInfohashExistCached(infoHash)
       if (videoFileExists === true) return cb()
 
       const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExist(infoHash)
