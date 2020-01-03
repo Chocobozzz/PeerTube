@@ -62,8 +62,10 @@ enum ScopeNames {
               '(' +
                 'SELECT COUNT("replies"."id") ' +
                 'FROM "videoComment" AS "replies" ' +
+                'INNER JOIN "video" ON "video"."id" = "replies"."videoId" ' +
+                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
                 'WHERE "replies"."originCommentId" = "VideoCommentModel"."id" ' +
-                'AND "accountId" = ' + userAccountId +
+                'AND "replies"."accountId" = "videoChannel"."accountId"' +
               ')'
             ),
             'totalRepliesFromVideoAuthor'
