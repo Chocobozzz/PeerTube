@@ -14,7 +14,6 @@ import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.
 import { FormValidatorService, UserService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { scrollToTop } from '@app/shared/misc/utils'
-import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-video-upload',

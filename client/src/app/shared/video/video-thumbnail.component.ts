@@ -1,9 +1,7 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { Video } from './video.model'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { AuthService, ThemeService } from '@app/core'
-import { VideoPlaylistService } from '../video-playlist/video-playlist.service'
-import { VideoPlaylistElementCreate } from '../../../../../shared'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-thumbnail',
@@ -16,45 +14,20 @@ export class VideoThumbnailComponent {
   @Input() routerLink: any[]
   @Input() queryParams: any[]
 
-  addToWatchLaterText = 'Add to watch later'
-  addedToWatchLaterText = 'Added to watch later'
-  addedToWatchLater: boolean
+  @Input() displayWatchLaterPlaylist: boolean
+  @Input() inWatchLaterPlaylist: boolean
 
-  watchLaterPlaylist: any
+  @Output() watchLaterClick = new EventEmitter<boolean>()
+
+  addToWatchLaterText: string
+  addedToWatchLaterText: string
 
   constructor (
     private screenService: ScreenService,
-    private authService: AuthService,
-    private videoPlaylistService: VideoPlaylistService,
-    private cd: ChangeDetectorRef
-  ) {}
-
-  load () {
-    if (this.addedToWatchLater !== undefined) return
-    if (!this.isUserLoggedIn()) return
-
-    this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id)
-      .subscribe(
-        existResult => {
-          for (const playlist of this.authService.getUser().specialPlaylists) {
-            const existingPlaylist = existResult[ this.video.id ].find(p => p.playlistId === playlist.id)
-            this.addedToWatchLater = !!existingPlaylist
-
-            if (existingPlaylist) {
-              this.watchLaterPlaylist = {
-                playlistId: existingPlaylist.playlistId,
-                playlistElementId: existingPlaylist.playlistElementId
-              }
-            } else {
-              this.watchLaterPlaylist = {
-                playlistId: playlist.id
-              }
-            }
-
-            this.cd.markForCheck()
-          }
-        }
-      )
+    private i18n: I18n
+  ) {
+    this.addToWatchLaterText = this.i18n('Add to watch later')
+    this.addedToWatchLaterText = this.i18n('Remove from watch later')
   }
 
   getImageUrl () {
@@ -81,36 +54,10 @@ export class VideoThumbnailComponent {
     return [ '/videos/watch', this.video.uuid ]
   }
 
-  isUserLoggedIn () {
-    return this.authService.isLoggedIn()
-  }
+  onWatchLaterClick (event: Event) {
+    this.watchLaterClick.emit(this.inWatchLaterPlaylist)
 
-  addToWatchLater () {
-    if (this.addedToWatchLater === undefined) return
-    this.addedToWatchLater = true
-
-    this.videoPlaylistService.addVideoInPlaylist(
-      this.watchLaterPlaylist.playlistId,
-      { videoId: this.video.id } as VideoPlaylistElementCreate
-    ).subscribe(
-      res => {
-        this.addedToWatchLater = true
-        this.watchLaterPlaylist.playlistElementId = res.videoPlaylistElement.id
-      }
-    )
-  }
-
-  removeFromWatchLater () {
-    if (this.addedToWatchLater === undefined) return
-    this.addedToWatchLater = false
-
-    this.videoPlaylistService.removeVideoFromPlaylist(
-      this.watchLaterPlaylist.playlistId,
-      this.watchLaterPlaylist.playlistElementId
-    ).subscribe(
-      _ => {
-        this.addedToWatchLater = false
-      }
-    )
+    event.stopPropagation()
+    return false
   }
 }

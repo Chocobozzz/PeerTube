@@ -1,4 +1,4 @@
-import { bufferTime, catchError, filter, first, map, share, switchMap } from 'rxjs/operators'
+import { bufferTime, catchError, distinctUntilChanged, filter, first, map, share, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { Observable, ReplaySubject, Subject } from 'rxjs'
 import { RestExtractor } from '../rest/rest-extractor.service'
@@ -30,7 +30,6 @@ export class VideoPlaylistService {
   // Use a replay subject because we "next" a value before subscribing
   private videoExistsInPlaylistSubject: Subject<number> = new ReplaySubject(1)
   private readonly videoExistsInPlaylistObservable: Observable<VideoExistInPlaylist>
-  private cachedWatchLaterPlaylists: VideoPlaylist[]
 
   constructor (
     private authHttp: HttpClient,
@@ -39,6 +38,7 @@ export class VideoPlaylistService {
     private restService: RestService
   ) {
     this.videoExistsInPlaylistObservable = this.videoExistsInPlaylistSubject.pipe(
+      distinctUntilChanged(),
       bufferTime(500),
       filter(videoIds => videoIds.length !== 0),
       switchMap(videoIds => this.doVideosExistInPlaylist(videoIds)),
@@ -224,7 +224,7 @@ export class VideoPlaylistService {
     let params = new HttpParams()
     params = this.restService.addObjectParams(params, { videoIds })
 
-    return this.authHttp.get<VideoExistInPlaylist>(url, { params })
+    return this.authHttp.get<VideoExistInPlaylist>(url, { params, headers: { ignoreLoadingBar: '' } })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 }

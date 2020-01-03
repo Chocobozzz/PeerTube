@@ -35,13 +35,6 @@
     bottom: 5px;
   }
 
-  &:focus,
-  &:hover {
-    .video-thumbnail-actions-overlay {
-      opacity: 1;
-    }
-  }
-
   .video-thumbnail-actions-overlay {
     position: absolute;
     display: flex;

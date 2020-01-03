@@ -1,11 +1,10 @@
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { UserRight } from '../../../../../shared/models/users/user-right.enum'
-import { User as ServerUserModel } from '../../../../../shared/models/users/user.model'
+import { MyUser as ServerMyUserModel, MyUserSpecialPlaylist } from '../../../../../shared/models/users/user.model'
 // Do not use the barrel (dependency loop)
 import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
 import { User } from '../../shared/users/user.model'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 
 export type TokenOptions = {
   accessToken: string
@@ -67,7 +66,7 @@ class Tokens {
   }
 }
 
-export class AuthUser extends User {
+export class AuthUser extends User implements ServerMyUserModel {
   private static KEYS = {
     ID: 'id',
     ROLE: 'role',
@@ -80,7 +79,7 @@ export class AuthUser extends User {
   }
 
   tokens: Tokens
-  specialPlaylists: Partial<VideoPlaylist>[]
+  specialPlaylists: MyUserSpecialPlaylist[]
 
   static load () {
     const usernameLocalStorage = peertubeLocalStorage.getItem(this.KEYS.USERNAME)
@@ -115,9 +114,11 @@ export class AuthUser extends User {
     Tokens.flush()
   }
 
-  constructor (userHash: Partial<ServerUserModel>, hashTokens: TokenOptions) {
+  constructor (userHash: Partial<ServerMyUserModel>, hashTokens: TokenOptions) {
     super(userHash)
+
     this.tokens = new Tokens(hashTokens)
+    this.specialPlaylists = userHash.specialPlaylists
   }
 
   getAccessToken () {
@@ -141,7 +142,7 @@ export class AuthUser extends User {
     return hasUserRight(this.role, right)
   }
 
-  canManage (user: ServerUserModel) {
+  canManage (user: ServerMyUserModel) {
     const myRole = this.role
 
     if (myRole === UserRole.ADMINISTRATOR) return true
