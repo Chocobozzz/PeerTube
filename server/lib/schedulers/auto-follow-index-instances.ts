@@ -25,7 +25,7 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
   }
 
   private async autoFollow () {
-    if (CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.ENABLED === false) return
+    if (CONFIG.INSTANCE.PRIVATE_MODE === true || CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.ENABLED === false) return
 
     const indexUrl = CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
 

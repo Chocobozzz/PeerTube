@@ -338,7 +338,7 @@
 
         <div i18n class="inner-form-title">Instance followers</div>
 
-        <ng-container formGroupName="followers">
+        <ng-container formGroupName="followers" *ngIf="!isPrivateMode(); else isPrivateFollowers">
           <ng-container formGroupName="instance">
 
             <div class="form-group">
@@ -356,10 +356,13 @@
             </div>
           </ng-container>
         </ng-container>
+        <ng-template #isPrivateFollowers>
+          <p i18n class="label-small-info">This instance is private, so other instances can't follow you</p>
+        </ng-template>
 
         <div i18n class="inner-form-title">Instance followings</div>
 
-        <ng-container formGroupName="followings">
+        <ng-container formGroupName="followings" *ngIf="!isPrivateMode(); else isPrivateFollowing">
           <ng-container formGroupName="instance">
 
             <ng-container formGroupName="autoFollowBack">
@@ -391,7 +394,9 @@
             </ng-container>
           </ng-container>
         </ng-container>
-
+        <ng-template #isPrivateFollowing>
+          <p i18n class="label-small-info">This instance is private, so you can't follow others instances</p>
+        </ng-template>
 
         <div i18n class="inner-form-title">Administrator</div>
 

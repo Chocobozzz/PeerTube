@@ -38,7 +38,7 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
     const serverActor = await getServerActor()
     const isFollowingInstance = targetActor.id === serverActor.id
 
-    if (isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
+    if (CONFIG.INSTANCE.PRIVATE_MODE === true || isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.ENABLED === false) {
       logger.info('Rejecting %s because instance followers are disabled.', targetActor.url)
 
       await sendReject(byActor, targetActor)

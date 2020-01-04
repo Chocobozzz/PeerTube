@@ -7,7 +7,7 @@ import { getServerActor } from '../../helpers/utils'
 import { ServerModel } from '../../models/server/server'
 
 async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors) {
-  if (!CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_BACK.ENABLED) return
+  if (CONFIG.INSTANCE.PRIVATE_MODE || !CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_BACK.ENABLED) return
 
   const follower = actorFollow.ActorFollower
 

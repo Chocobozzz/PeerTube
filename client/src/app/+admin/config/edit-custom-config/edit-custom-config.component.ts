@@ -241,6 +241,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     return this.form.value['signup']['enabled'] === true
   }
 
+  isPrivateMode () {
+    return this.form.value['instance']['privateMode']
+  }
+
   async formValidated () {
     this.configService.updateCustomConfig(this.form.value)
       .subscribe(
