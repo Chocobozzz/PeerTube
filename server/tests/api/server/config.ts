@@ -46,6 +46,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.instance.defaultNSFWPolicy).to.equal('display')
   expect(data.instance.customizations.css).to.be.empty
   expect(data.instance.customizations.javascript).to.be.empty
+  expect(data.instance.privateMode).to.be.false
 
   expect(data.services.twitter.username).to.equal('@Chocobozzz')
   expect(data.services.twitter.whitelisted).to.be.false
@@ -108,6 +109,7 @@ function checkUpdatedConfig (data: CustomConfig) {
   expect(data.instance.defaultNSFWPolicy).to.equal('blur')
   expect(data.instance.customizations.javascript).to.equal('alert("coucou")')
   expect(data.instance.customizations.css).to.equal('body { background-color: red; }')
+  expect(data.instance.privateMode).to.equal(false)
 
   expect(data.services.twitter.username).to.equal('@Kuja')
   expect(data.services.twitter.whitelisted).to.be.true
@@ -232,7 +234,8 @@ describe('Test config', function () {
         customizations: {
           javascript: 'alert("coucou")',
           css: 'body { background-color: red; }'
-        }
+        },
+        privateMode: false
       },
       theme: {
         default: 'default'

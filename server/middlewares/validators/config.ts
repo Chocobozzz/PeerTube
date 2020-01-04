@@ -17,6 +17,7 @@ const customConfigUpdateValidator = [
   body('instance.defaultNSFWPolicy').custom(isUserNSFWPolicyValid).withMessage('Should have a valid NSFW policy'),
   body('instance.customizations.css').exists().withMessage('Should have a valid instance CSS customization'),
   body('instance.customizations.javascript').exists().withMessage('Should have a valid instance JavaScript customization'),
+  body('instance.privateMode').exists().withMessage('Should have a valid instance private mode'),
 
   body('services.twitter.username').exists().withMessage('Should have a valid twitter username'),
   body('services.twitter.whitelisted').isBoolean().withMessage('Should have a valid twitter whitelisted boolean'),

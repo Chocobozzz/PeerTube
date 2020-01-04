@@ -45,7 +45,8 @@ describe('Test config API validators', function () {
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
-      }
+      },
+      privateMode: false
     },
     theme: {
       default: 'default'

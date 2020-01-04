@@ -69,7 +69,8 @@ async function getConfig (req: express.Request, res: express.Response) {
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
-      }
+      },
+      privateMode: CONFIG.INSTANCE.PRIVATE_MODE
     },
     plugin: {
       registered: getRegisteredPlugins()
@@ -257,7 +258,8 @@ function customConfig (): CustomConfig {
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
-      }
+      },
+      privateMode: CONFIG.INSTANCE.PRIVATE_MODE
     },
     theme: {
       default: CONFIG.THEME.DEFAULT

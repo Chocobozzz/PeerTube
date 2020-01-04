@@ -31,7 +31,8 @@ function checkMissedConfig () {
     'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',
     'history.videos.max_age', 'views.videos.remote.max_age',
     'rates_limit.login.window', 'rates_limit.login.max', 'rates_limit.ask_send_email.window', 'rates_limit.ask_send_email.max',
-    'theme.default'
+    'theme.default',
+    'instance.private_mode'
   ]
   const requiredAlternatives = [
     [ // set

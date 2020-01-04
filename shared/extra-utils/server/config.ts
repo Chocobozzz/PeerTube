@@ -71,7 +71,8 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
-      }
+      },
+      privateMode: false
     },
     theme: {
       default: 'default'

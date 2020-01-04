@@ -25,7 +25,8 @@ export interface ServerConfig {
     customizations: {
       javascript: string
       css: string
-    }
+    },
+    privateMode: boolean
   }
 
   plugin: {

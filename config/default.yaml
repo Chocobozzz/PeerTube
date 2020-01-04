@@ -309,6 +309,8 @@ instance:
   # Security.txt rules. To discourage researchers from testing your instance and disable security.txt integration, set this to an empty string.
   securitytxt:
     "# If you would like to report a security issue\n# you may report it to:\nContact: https://github.com/Chocobozzz/PeerTube/blob/develop/SECURITY.md\nContact: mailto:"
+  # Enabling it will make your instance private and users will need to authenticate to access to videos.
+  private_mode: false
 
 services:
   # Cards configuration to format video in Twitter

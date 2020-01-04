@@ -24,7 +24,8 @@ export interface CustomConfig {
     customizations: {
       javascript?: string
       css?: string
-    }
+    },
+    privateMode: boolean
   }
 
   theme: {
