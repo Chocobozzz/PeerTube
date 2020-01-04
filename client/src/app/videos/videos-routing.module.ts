@@ -8,12 +8,13 @@ import { VideoMostLikedComponent } from './video-list/video-most-liked.component
 import { VideosComponent } from './videos.component'
 import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
 import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
+import { PrivateGuard } from '../core/routing/private-guard.service'
 
 const videosRoutes: Routes = [
   {
     path: 'videos',
     component: VideosComponent,
-    canActivateChild: [ MetaGuard ],
+    canActivateChild: [ MetaGuard, PrivateGuard ],
     children: [
       {
         path: 'overview',

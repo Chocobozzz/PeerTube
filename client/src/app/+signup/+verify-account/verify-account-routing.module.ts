@@ -3,11 +3,12 @@ import { RouterModule, Routes } from '@angular/router'
 import { MetaGuard } from '@ngx-meta/core'
 import { VerifyAccountEmailComponent } from './verify-account-email/verify-account-email.component'
 import { VerifyAccountAskSendEmailComponent } from './verify-account-ask-send-email/verify-account-ask-send-email.component'
+import { PrivateGuard } from '../../core/routing/private-guard.service'
 
 const verifyAccountRoutes: Routes = [
   {
     path: '',
-    canActivateChild: [ MetaGuard ],
+    canActivateChild: [ MetaGuard, PrivateGuard ],
     children: [
       {
         path: 'email',

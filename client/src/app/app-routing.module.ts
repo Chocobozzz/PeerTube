@@ -4,6 +4,7 @@ import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
 import { PreloadSelectedModulesList } from './core'
 import { AppComponent } from '@app/app.component'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
+import { PrivateGuard } from './core/routing/private-guard.service'
 
 const routes: Routes = [
   {
@@ -36,7 +37,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    component: AppComponent // Avoid 404, app component will redirect dynamically
+    component: AppComponent, // Avoid 404, app component will redirect dynamically
+    canActivate: [ PrivateGuard ]
   },
   {
     path: '**',

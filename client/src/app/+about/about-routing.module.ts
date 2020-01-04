@@ -5,12 +5,13 @@ import { AboutComponent } from './about.component'
 import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.component'
+import { PrivateGuard } from '../core/routing/private-guard.service'
 
 const aboutRoutes: Routes = [
   {
     path: '',
     component: AboutComponent,
-    canActivateChild: [ MetaGuard ],
+    canActivateChild: [ MetaGuard, PrivateGuard ],
     children: [
       {
         path: '',

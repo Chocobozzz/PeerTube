@@ -117,7 +117,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
         customizations: {
           javascript: null,
           css: null
-        }
+        },
+        privateMode: false
       },
       theme: {
         default: null

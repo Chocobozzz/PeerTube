@@ -113,6 +113,10 @@ export class AppComponent implements OnInit {
     return this.authService.isLoggedIn()
   }
 
+  isPrivateMode () {
+    return this.serverService.getConfig().instance.privateMode
+  }
+
   toggleMenu () {
     this.isMenuDisplayed = !this.isMenuDisplayed
     this.isMenuChangedByUser = true

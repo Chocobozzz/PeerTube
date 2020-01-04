@@ -40,7 +40,8 @@ export class ServerService {
       customizations: {
         javascript: '',
         css: ''
-      }
+      },
+      privateMode: false
     },
     plugin: {
       registered: []

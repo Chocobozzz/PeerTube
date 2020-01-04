@@ -10,7 +10,7 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router'
 import { AuthService } from './auth'
 import { ConfirmService } from './confirm'
 import { throwIfAlreadyLoaded } from './module-import-guard'
-import { LoginGuard, RedirectService, UserRightGuard } from './routing'
+import { PrivateGuard, LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
 import { ThemeService } from './theme'
 import { HotkeyModule } from 'angular2-hotkeys'
@@ -62,6 +62,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
     LoginGuard,
     UserRightGuard,
     UnloggedGuard,
+    PrivateGuard,
 
     PluginService,
     HooksService,

@@ -5,6 +5,7 @@ import { AccountsComponent } from './accounts.component'
 import { AccountVideosComponent } from './account-videos/account-videos.component'
 import { AccountAboutComponent } from './account-about/account-about.component'
 import { AccountVideoChannelsComponent } from './account-video-channels/account-video-channels.component'
+import { PrivateGuard } from '../core/routing/private-guard.service'
 
 const accountsRoutes: Routes = [
   {
@@ -14,7 +15,7 @@ const accountsRoutes: Routes = [
   {
     path: ':accountId',
     component: AccountsComponent,
-    canActivateChild: [ MetaGuard ],
+    canActivateChild: [ MetaGuard, PrivateGuard ],
     children: [
       {
         path: '',

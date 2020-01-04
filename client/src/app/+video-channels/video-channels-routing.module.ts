@@ -5,12 +5,13 @@ import { VideoChannelsComponent } from './video-channels.component'
 import { VideoChannelVideosComponent } from './video-channel-videos/video-channel-videos.component'
 import { VideoChannelAboutComponent } from './video-channel-about/video-channel-about.component'
 import { VideoChannelPlaylistsComponent } from '@app/+video-channels/video-channel-playlists/video-channel-playlists.component'
+import { PrivateGuard } from '../core/routing/private-guard.service'
 
 const videoChannelsRoutes: Routes = [
   {
     path: ':videoChannelName',
     component: VideoChannelsComponent,
-    canActivateChild: [ MetaGuard ],
+    canActivateChild: [ MetaGuard, PrivateGuard ],
     children: [
       {
         path: '',

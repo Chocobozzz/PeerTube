@@ -254,6 +254,18 @@
         </ng-container>
 
 
+        <div i18n class="inner-form-title">Access mode</div>
+
+        <ng-container formGroupName="instance">
+          <div class="form-group">
+            <my-peertube-checkbox
+              inputName="privateModeEnabled" formControlName="privateMode"
+              i18n-labelText labelText="Private mode enabled"
+            ></my-peertube-checkbox>
+          </div>
+        </ng-container>
+
+
         <div i18n class="inner-form-title">Users</div>
 
         <ng-container formGroupName="user">

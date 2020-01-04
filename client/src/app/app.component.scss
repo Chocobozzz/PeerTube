@@ -36,6 +36,10 @@
         mask-image: url('../assets/images/header/menu.svg');
         margin: 0 18px 0 20px;
       }
+
+      & + .peertube-title {
+        margin-left: 0;
+      }
     }
 
     .peertube-title {
@@ -47,6 +51,7 @@
       display: flex;
       align-items: center;
       overflow: hidden;
+      margin-left: 18px;
 
       .instance-name {
         @include ellipsis;
