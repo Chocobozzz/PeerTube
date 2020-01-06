@@ -1,10 +1,14 @@
 @import '_variables';
 @import '_mixins';
 
+.header,
+.dropdown-item,
+.input-container {
+  padding: 6px 24px 10px 24px;
+}
+
 .header {
   min-width: 240px;
-  padding: 6px 24px 10px 24px;
-
   margin-bottom: 10px;
   border-bottom: 1px solid $separator-border-color;
 
@@ -44,22 +48,9 @@
   }
 }
 
-.dropdown-item {
-  padding: 6px 24px;
-}
-
 .playlists {
   max-height: 180px;
   overflow-y: auto;
-}
-
-.input-container {
-  display: flex;
-
-  input {
-    flex-grow: 1;
-    margin: 0 15px 10px 15px;
-  }
 }
 
 .playlist {

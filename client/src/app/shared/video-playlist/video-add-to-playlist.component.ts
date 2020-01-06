@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
+import { CachedPlaylist, VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { AuthService, Notifier } from '@app/core'
 import { Subject, Subscription } from 'rxjs'
 import { debounceTime, filter } from 'rxjs/operators'
@@ -7,7 +7,6 @@ import { Video, VideoPlaylistCreate, VideoPlaylistElementCreate, VideoPlaylistPr
 import { FormReactive, FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/forms'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { secondsToTime } from '../../../assets/player/utils'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 import * as debug from 'debug'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { VideoExistInPlaylist } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
@@ -50,7 +49,7 @@ export class VideoAddToPlaylistComponent extends FormReactive implements OnInit,
   private disabled = false
 
   private listenToPlaylistChangeSub: Subscription
-  private playlistsData: VideoPlaylist[] = []
+  private playlistsData: CachedPlaylist[] = []
 
   constructor (
     protected formValidatorService: FormValidatorService,

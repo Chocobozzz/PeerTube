@@ -26,7 +26,7 @@ import * as debug from 'debug'
 
 const logger = debug('peertube:playlists:VideoPlaylistService')
 
-type CachedPlaylist = VideoPlaylist | { id: number, displayName: string }
+export type CachedPlaylist = VideoPlaylist | { id: number, displayName: string }
 
 @Injectable()
 export class VideoPlaylistService {
