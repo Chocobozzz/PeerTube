@@ -1,5 +1,5 @@
-import { from, Observable } from 'rxjs'
-import { catchError, concatMap, map, toArray } from 'rxjs/operators'
+import { from, Observable, of } from 'rxjs'
+import { catchError, concatMap, map, share, shareReplay, tap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ResultList, User, UserCreate, UserRole, UserUpdate, UserUpdateMe, UserVideoQuota } from '../../../../../shared'
@@ -16,6 +16,8 @@ export class UserService {
   static BASE_USERS_URL = environment.apiUrl + '/api/v1/users/'
 
   private bytesPipe = new BytesPipe()
+
+  private userCache: { [ id: number ]: Observable<User> } = {}
 
   constructor (
     private authHttp: HttpClient,
@@ -192,6 +194,14 @@ export class UserService {
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
+  }
+
+  getUserWithCache (userId: number) {
+    if (!this.userCache[userId]) {
+      this.userCache[ userId ] = this.getUser(userId).pipe(shareReplay())
+    }
+
+    return this.userCache[userId]
   }
 
   getUser (userId: number) {
