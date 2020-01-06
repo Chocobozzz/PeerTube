@@ -27,23 +27,23 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th i18n style="max-width: 60px;">ID</th>
-      <th i18n style="max-width: 120px;">Type</th>
-      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th i18n>State</th>
+      <th class="job-id" i18n>ID</th>
+      <th class="job-type" i18n>Type</th>
+      <th class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th class="job-state" i18n>State</th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
     <tr class="expander" [pRowToggler]="job">
-      <td style="max-width: 60px;">{{ job.id }}</td>
-      <td style="max-width: 120px;">{{ job.type }}</td>
-      <td>{{ job.createdAt }}</td>
-      <td *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed.</span></td>
-      <td *ngIf="job.state === 'waiting'" class="text-warning"><span class="glyphicon glyphicon-hourglass"></span> <span i18n>Will start soon...</span></td>
-      <td *ngIf="job.state === 'active'" class="text-warning"><span class="glyphicon glyphicon-cog"></span> <span i18n>Running...</span></td>
-      <td *ngIf="job.state === 'completed'" class="text-success"><span class="glyphicon glyphicon-ok"></span> <span i18n>Finished</span></td>
-      <td *ngIf="job.state === 'failed'" class="text-danger"><span class="glyphicon glyphicon-remove"></span> <span i18n>Failed</span></td>
+      <td class="job-id" [title]="job.id">{{ job.id }}</td>
+      <td class="job-type">{{ job.type }}</td>
+      <td class="job-date">{{ job.createdAt }}</td>
+      <td class="job-state" *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed.</span></td>
+      <td class="job-state" *ngIf="job.state === 'waiting'" class="text-warning"><span class="glyphicon glyphicon-hourglass"></span> <span i18n>Will start soon...</span></td>
+      <td class="job-state" *ngIf="job.state === 'active'" class="text-warning"><span class="glyphicon glyphicon-cog"></span> <span i18n>Running...</span></td>
+      <td class="job-state" *ngIf="job.state === 'completed'" class="text-success"><span class="glyphicon glyphicon-ok"></span> <span i18n>Finished</span></td>
+      <td class="job-state" *ngIf="job.state === 'failed'" class="text-danger"><span class="glyphicon glyphicon-remove"></span> <span i18n>Failed</span></td>
     </tr>
   </ng-template>
 

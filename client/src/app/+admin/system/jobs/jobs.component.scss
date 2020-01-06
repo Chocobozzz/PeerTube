@@ -1,6 +1,22 @@
 @import '_variables';
 @import '_mixins';
 
+.job-id {
+  max-width: 30vw !important;
+}
+
+.job-type {
+  width: 150px !important;
+}
+
+.job-date {
+  width: 170px !important;
+}
+
+.job-state {
+  max-width: 60px;
+}
+
 .admin-sub-header {
   align-items: flex-end;
 
