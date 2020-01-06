@@ -41,7 +41,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
       {
         id: '0p',
         label: this.i18n('Audio-only'),
-        description: `A <code>.mp4</code> that keeps the original audio track, with no video`
+        description: this.i18n('A <code>.mp4</code> that keeps the original audio track, with no video')
       },
       {
         id: '240p',
