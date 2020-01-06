@@ -1,11 +1,12 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { User } from '../shared/users/user.model'
 import { UserNotificationService } from '@app/shared/users/user-notification.service'
-import { Subscription } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 import { Notifier, UserNotificationSocket } from '@app/core'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { NavigationEnd, Router } from '@angular/router'
 import { filter } from 'rxjs/operators'
+import { UserNotificationsComponent } from '@app/shared'
 
 @Component({
   selector: 'my-avatar-notification',
@@ -14,10 +15,13 @@ import { filter } from 'rxjs/operators'
 })
 export class AvatarNotificationComponent implements OnInit, OnDestroy {
   @ViewChild('popover', { static: true }) popover: NgbPopover
+
   @Input() user: User
 
   unreadNotifications = 0
   loaded = false
+
+  markAllAsReadSubject = new Subject<boolean>()
 
   private notificationSub: Subscription
   private routeSub: Subscription
@@ -64,14 +68,7 @@ export class AvatarNotificationComponent implements OnInit, OnDestroy {
   }
 
   markAllAsRead () {
-    this.userNotificationService.markAllAsRead()
-        .subscribe(
-          () => {
-            this.unreadNotifications = 0
-          },
-
-          err => this.notifier.error(err.message)
-        )
+    this.markAllAsReadSubject.next(true)
   }
 
   private async subscribeToNotifications () {

@@ -12,7 +12,7 @@ export class MyAccountNotificationsComponent {
     this.userNotification.markAllAsRead()
   }
 
-  getUnreadNotifications () {
-    return this.userNotification.notifications.filter(n => n.read === false).length
+  hasUnreadNotifications () {
+    return this.userNotification.notifications.filter(n => n.read === false).length !== 0
   }
 }

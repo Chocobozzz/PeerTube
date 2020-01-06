@@ -15,6 +15,7 @@ export class UserNotificationsComponent implements OnInit {
   @Input() ignoreLoadingBar = false
   @Input() infiniteScroll = true
   @Input() itemsPerPage = 20
+  @Input() markAllAsReadSubject: Subject<boolean>
 
   @Output() notificationsLoaded = new EventEmitter()
 
@@ -40,6 +41,10 @@ export class UserNotificationsComponent implements OnInit {
     }
 
     this.loadMoreNotifications()
+
+    if (this.markAllAsReadSubject) {
+      this.markAllAsReadSubject.subscribe(() => this.markAllAsRead())
+    }
   }
 
   loadMoreNotifications () {

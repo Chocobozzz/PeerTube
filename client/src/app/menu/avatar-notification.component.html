@@ -31,7 +31,7 @@
 
     <my-user-notifications
       [ignoreLoadingBar]="true" [infiniteScroll]="false" itemsPerPage="10"
-      (notificationsLoaded)="onNotificationLoaded()"
+      [markAllAsReadSubject]="markAllAsReadSubject" (notificationsLoaded)="onNotificationLoaded()"
     ></my-user-notifications>
 
     <a *ngIf="loaded" class="all-notifications" routerLink="/my-account/notifications">

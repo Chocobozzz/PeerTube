@@ -4,12 +4,18 @@
     Notification preferences
   </a>
 
-  <button class="btn" [disabled]="!getUnreadNotifications()" (click)="markAllAsRead()">
-    <my-global-icon *ngIf="getUnreadNotifications()" iconName="inbox-full"></my-global-icon>
-    <span i18n *ngIf="getUnreadNotifications()">Mark all as read</span>
+  <button class="btn" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
+    <ng-container *ngIf="hasUnreadNotifications()">
+      <my-global-icon iconName="inbox-full"></my-global-icon>
 
-    <my-global-icon *ngIf="!getUnreadNotifications()" iconName="circle-tick"></my-global-icon>
-    <span i18n *ngIf="!getUnreadNotifications()">All read</span>
+      <span i18n>Mark all as read</span>
+    </ng-container>
+
+    <ng-container *ngIf="!hasUnreadNotifications()">
+      <my-global-icon iconName="circle-tick"></my-global-icon>
+
+      <span i18n>All read</span>
+    </ng-container>
   </button>
 </div>
 
