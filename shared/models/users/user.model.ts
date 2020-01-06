@@ -57,5 +57,3 @@ export interface MyUserSpecialPlaylist {
 export interface MyUser extends User {
   specialPlaylists: MyUserSpecialPlaylist[]
 }
-
-

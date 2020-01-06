@@ -96,7 +96,9 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
   }
 
   removeFromPlaylist (playlistElement: VideoPlaylistElement) {
-    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id)
+    const videoId = this.playlistElement.video ? this.playlistElement.video.id : undefined
+
+    this.videoPlaylistService.removeVideoFromPlaylist(this.playlist.id, playlistElement.id, videoId)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Video removed from {{name}}', { name: this.playlist.displayName }))
@@ -116,7 +118,7 @@ export class VideoPlaylistElementMiniatureComponent implements OnInit {
     body.startTimestamp = this.timestampOptions.startTimestampEnabled ? this.timestampOptions.startTimestamp : null
     body.stopTimestamp = this.timestampOptions.stopTimestampEnabled ? this.timestampOptions.stopTimestamp : null
 
-    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body)
+    this.videoPlaylistService.updateVideoOfPlaylist(this.playlist.id, playlistElement.id, body, this.playlistElement.video.id)
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Timestamps updated'))

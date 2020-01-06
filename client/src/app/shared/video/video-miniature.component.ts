@@ -17,8 +17,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { forkJoin } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { switchMap } from 'rxjs/operators'
 
 export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 export type MiniatureDisplayOptions = {
@@ -193,7 +192,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   removeFromWatchLater () {
-    this.videoPlaylistService.removeVideoFromPlaylist(this.watchLaterPlaylist.id, this.watchLaterPlaylist.playlistElementId)
+    this.videoPlaylistService.removeVideoFromPlaylist(this.watchLaterPlaylist.id, this.watchLaterPlaylist.playlistElementId, this.video.id)
         .subscribe(
           _ => { /* empty */ }
         )
@@ -222,27 +221,27 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   private loadWatchLater () {
-    if (!this.isUserLoggedIn()) return
+    if (!this.isUserLoggedIn() || this.inWatchLaterPlaylist !== undefined) return
 
-    forkJoin([
-      this.videoPlaylistService.doesVideoExistInPlaylist(this.video.id),
-      this.authService.userInformationLoaded.pipe(first())
-    ]).subscribe(
-      ([ existResult ]) => {
-        const watchLaterPlaylist = this.authService.getUser().specialPlaylists.find(p => p.type === VideoPlaylistType.WATCH_LATER)
-        const existsInWatchLater = existResult[ this.video.id ].find(r => r.playlistId === watchLaterPlaylist.id)
-        this.inWatchLaterPlaylist = false
+    this.authService.userInformationLoaded
+        .pipe(switchMap(() => this.videoPlaylistService.listenToVideoPlaylistChange(this.video.id)))
+        .subscribe(existResult => {
+          const watchLaterPlaylist = this.authService.getUser().specialPlaylists.find(p => p.type === VideoPlaylistType.WATCH_LATER)
+          const existsInWatchLater = existResult.find(r => r.playlistId === watchLaterPlaylist.id)
+          this.inWatchLaterPlaylist = false
 
-        this.watchLaterPlaylist = {
-          id: watchLaterPlaylist.id
-        }
+          this.watchLaterPlaylist = {
+            id: watchLaterPlaylist.id
+          }
 
-        if (existsInWatchLater) {
-          this.inWatchLaterPlaylist = true
-          this.watchLaterPlaylist.playlistElementId = existsInWatchLater.playlistElementId
-        }
+          if (existsInWatchLater) {
+            this.inWatchLaterPlaylist = true
+            this.watchLaterPlaylist.playlistElementId = existsInWatchLater.playlistElementId
+          }
 
-        this.cd.markForCheck()
-      })
+          this.cd.markForCheck()
+        })
+
+    this.videoPlaylistService.runPlaylistCheck(this.video.id)
   }
 }

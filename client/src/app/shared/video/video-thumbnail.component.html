@@ -2,7 +2,7 @@
   [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" [attr.title]="video.name"
   class="video-thumbnail"
 >
-  <img alt="" [attr.aria-labelledby]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" loading="lazy" />
+  <img alt="" [attr.aria-labelledby]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 
   <div *ngIf="displayWatchLaterPlaylist" class="video-thumbnail-actions-overlay">
     <ng-container *ngIf="inWatchLaterPlaylist !== true">

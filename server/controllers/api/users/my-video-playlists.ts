@@ -2,7 +2,7 @@ import * as express from 'express'
 import { asyncMiddleware, authenticate } from '../../../middlewares'
 import { doVideosInPlaylistExistValidator } from '../../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-import { VideoExistInPlaylist } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
+import { VideosExistInPlaylists } from '../../../../shared/models/videos/playlist/video-exist-in-playlist.model'
 
 const myVideoPlaylistsRouter = express.Router()
 
@@ -26,7 +26,7 @@ async function doVideosInPlaylistExist (req: express.Request, res: express.Respo
 
   const results = await VideoPlaylistModel.listPlaylistIdsOf(user.Account.id, videoIds)
 
-  const existObject: VideoExistInPlaylist = {}
+  const existObject: VideosExistInPlaylists = {}
 
   for (const videoId of videoIds) {
     existObject[videoId] = []

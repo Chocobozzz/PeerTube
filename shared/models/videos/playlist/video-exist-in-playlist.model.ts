@@ -1,8 +1,10 @@
+export type VideosExistInPlaylists = {
+  [videoId: number ]: VideoExistInPlaylist[]
+}
+
 export type VideoExistInPlaylist = {
-  [videoId: number ]: {
-    playlistElementId: number
-    playlistId: number
-    startTimestamp?: number
-    stopTimestamp?: number
-  }[]
+  playlistElementId: number
+  playlistId: number
+  startTimestamp?: number
+  stopTimestamp?: number
 }
