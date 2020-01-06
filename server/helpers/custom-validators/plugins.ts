@@ -20,7 +20,7 @@ function isPluginNameValid (value: string) {
 function isNpmPluginNameValid (value: string) {
   return exists(value) &&
     validator.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
-    validator.matches(value, /^[a-z\-]+$/) &&
+    validator.matches(value, /^[a-z\-._0-9]+$/) &&
     (value.startsWith('peertube-plugin-') || value.startsWith('peertube-theme-'))
 }
 
