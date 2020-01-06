@@ -45,7 +45,7 @@ const customConfigUpdateValidator = [
   body('transcoding.resolutions.1080p').isBoolean().withMessage('Should have a valid transcoding 1080p resolution enabled boolean'),
 
   body('transcoding.webtorrent.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
-  body('transcoding.hls.enabled').isBoolean().withMessage('Should have a valid webtorrent transcoding enabled boolean'),
+  body('transcoding.hls.enabled').isBoolean().withMessage('Should have a valid hls transcoding enabled boolean'),
 
   body('import.videos.http.enabled').isBoolean().withMessage('Should have a valid import video http enabled boolean'),
   body('import.videos.torrent.enabled').isBoolean().withMessage('Should have a valid import video torrent enabled boolean'),

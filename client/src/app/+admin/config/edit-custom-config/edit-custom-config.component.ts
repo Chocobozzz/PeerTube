@@ -222,25 +222,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     }
 
     this.buildForm(formGroupData)
-
-    forkJoin([
-      this.configService.getCustomConfig(),
-      this.serverService.getVideoLanguages(),
-      this.serverService.getVideoCategories()
-    ]).subscribe(
-      ([ config, languages, categories ]) => {
-        this.customConfig = config
-
-        this.languageItems = languages.map(l => ({ label: l.label, value: l.id }))
-        this.categoryItems = categories.map(l => ({ label: l.label, value: l.id }))
-
-        this.updateForm()
-        // Force form validation
-        this.forceCheck()
-      },
-
-      err => this.notifier.error(err.message)
-    )
+    this.loadForm()
+    this.checkTranscodingFields()
   }
 
   isTranscodingEnabled () {
@@ -252,9 +235,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   }
 
   async formValidated () {
-    this.configService.updateCustomConfig(this.form.value)
-      .pipe(
-      )
+    this.configService.updateCustomConfig(this.form.getRawValue())
       .subscribe(
         res => {
           this.customConfig = res
@@ -289,5 +270,53 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   private updateForm () {
     this.form.patchValue(this.customConfig)
+  }
+
+  private loadForm () {
+    forkJoin([
+      this.configService.getCustomConfig(),
+      this.serverService.getVideoLanguages(),
+      this.serverService.getVideoCategories()
+    ]).subscribe(
+      ([ config, languages, categories ]) => {
+        this.customConfig = config
+
+        this.languageItems = languages.map(l => ({ label: l.label, value: l.id }))
+        this.categoryItems = categories.map(l => ({ label: l.label, value: l.id }))
+
+        this.updateForm()
+        // Force form validation
+        this.forceCheck()
+      },
+
+      err => this.notifier.error(err.message)
+    )
+  }
+
+  private checkTranscodingFields () {
+    const hlsControl = this.form.get('transcoding.hls.enabled')
+    const webtorrentControl = this.form.get('transcoding.webtorrent.enabled')
+
+    webtorrentControl.valueChanges
+                     .subscribe(newValue => {
+                       if (newValue === false && !hlsControl.disabled) {
+                         hlsControl.disable()
+                       }
+
+                       if (newValue === true && !hlsControl.enabled) {
+                         hlsControl.enable()
+                       }
+                     })
+
+    hlsControl.valueChanges
+              .subscribe(newValue => {
+                if (newValue === false && !webtorrentControl.disabled) {
+                  webtorrentControl.disable()
+                }
+
+                if (newValue === true && !webtorrentControl.enabled) {
+                  webtorrentControl.enable()
+                }
+              })
   }
 }
