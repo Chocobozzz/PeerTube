@@ -18,7 +18,7 @@ import { ServerConfig } from '@shared/models'
 export class EditCustomConfigComponent extends FormReactive implements OnInit {
   customConfig: CustomConfig
 
-  resolutions: { id: string, label: string }[] = []
+  resolutions: { id: string, label: string, description?: string }[] = []
   transcodingThreadOptions: { label: string, value: number }[] = []
 
   languageItems: SelectItem[] = []
@@ -40,7 +40,8 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     this.resolutions = [
       {
         id: '0p',
-        label: this.i18n('Audio-only')
+        label: this.i18n('Audio-only'),
+        description: `A <code>.mp4</code> that keeps the original audio track, with no video`
       },
       {
         id: '240p',

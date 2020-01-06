@@ -6,6 +6,7 @@
 
   .form-group-checkbox {
     display: flex;
+    align-items: center;
 
     .label-text {
       font-weight: $font-regular;
@@ -23,6 +24,6 @@
 
   my-help {
     position: relative;
-    top: -2px;
+    top: 2px;
   }
 }

@@ -337,7 +337,7 @@
   position: absolute;
 
   &:focus + span {
-    outline: 1px solid #1e5180;
+    box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
   }
 
   & + span {

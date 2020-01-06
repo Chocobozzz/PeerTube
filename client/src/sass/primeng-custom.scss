@@ -330,6 +330,10 @@ p-calendar .ui-datepicker {
   }
 }
 
+p-tablecheckbox:hover div .ui-chkbox-box {
+  box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
+}
+
 .ui-chkbox {
 
   &, .ui-chkbox-box {
