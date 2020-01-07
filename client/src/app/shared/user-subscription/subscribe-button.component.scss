@@ -69,3 +69,16 @@
     @include peertube-input-text(100%);
   }
 }
+
+.extra-text {
+  display: flex;
+  flex-direction: column;
+
+  span:first-child {
+    line-height: 75%;
+  }
+
+  span:not(:first-child) {
+    font-size: 60%;
+  }
+}

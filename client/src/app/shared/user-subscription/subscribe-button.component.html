@@ -2,10 +2,15 @@
     [ngClass]="{'subscribe-button': !isAllChannelsSubscribed(), 'unsubscribe-button': isAllChannelsSubscribed()}">
 
   <ng-template #userLoggedOut>
-    <span>
+    <span [ngClass]="{ 'extra-text': subscribeStatus(true).length > 0 }">
       <ng-container *ngIf="account; then multiple; else single"></ng-container>
       <ng-template i18n #single>Subscribe</ng-template>
-      <ng-template i18n #multiple>Subscribe to all channels</ng-template>
+      <ng-template #multiple>
+        <span i18n>Subscribe to all channels</span>
+        <span *ngIf="subscribeStatus(true).length > 0">{{subscribeStatus(true).length}}/{{subscribed.size}} 
+          <ng-container i18n>channels subscribed</ng-container>
+        </span>
+      </ng-template>
     </span>
     <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
       {{ videoChannel.followersCount | myNumberFormatter }}
@@ -24,9 +29,11 @@
       class="btn btn-sm" role="button"
       (click)="unsubscribe()" i18n
     >
-      <ng-container *ngIf="account; then multiple; else single"></ng-container>
-      <ng-template i18n #single>Unsubscribe</ng-template>
-      <ng-template i18n #multiple>Unsubscribe from all channels</ng-template>
+      <span>
+        <ng-container *ngIf="account; then multiple; else single"></ng-container>
+        <ng-template i18n #single>Unsubscribe</ng-template>
+        <ng-template i18n #multiple>Unsubscribe from all channels</ng-template>
+      </span>
     </button>
   </ng-template>
 

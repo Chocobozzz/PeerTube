@@ -15,6 +15,12 @@ import { forkJoin } from 'rxjs'
   styleUrls: [ './subscribe-button.component.scss' ]
 })
 export class SubscribeButtonComponent implements OnInit {
+  /**
+   * SubscribeButtonComponent can be used with a single VideoChannel passed as [VideoChannel],
+   * or with an account and a full list of that account's videoChannels. The latter is intended
+   * to allow mass un/subscription from an account's page, while keeping the channel-centric
+   * subscription model.
+   */
   @Input() account: Account
   @Input() videoChannels: VideoChannel[]
   @Input() displayFollowers = false
