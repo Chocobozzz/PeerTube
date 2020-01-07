@@ -1,5 +1,5 @@
 import { exists } from './misc'
-import * as validator from 'validator'
+import validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers/constants'
 import * as express from 'express'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'

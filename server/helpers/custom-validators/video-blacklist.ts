@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { exists } from './misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { VideoBlacklistType } from '../../../shared/models/videos'

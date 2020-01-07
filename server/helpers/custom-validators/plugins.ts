@@ -1,5 +1,5 @@
 import { exists, isArray, isSafePath } from './misc'
-import * as validator from 'validator'
+import validator from 'validator'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { PluginPackageJson } from '../../../shared/models/plugins/plugin-package-json.model'

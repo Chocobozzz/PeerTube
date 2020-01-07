@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { ACTIVITY_PUB, CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { peertubeTruncate } from '../../core-utils'
 import { exists, isArray, isBooleanValid, isDateValid, isUUIDValid } from '../misc'

@@ -1,5 +1,5 @@
 import 'multer'
-import * as validator from 'validator'
+import validator from 'validator'
 import { CONSTRAINTS_FIELDS, MIMETYPES, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { exists, isFileValid } from './misc'
 import * as express from 'express'

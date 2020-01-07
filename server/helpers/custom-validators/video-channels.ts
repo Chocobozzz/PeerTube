@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { exists } from './misc'
 

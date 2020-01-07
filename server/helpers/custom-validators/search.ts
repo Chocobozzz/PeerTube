@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { isArray } from './misc'
 
 function isNumberArray (value: any) {

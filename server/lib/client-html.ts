@@ -4,7 +4,7 @@ import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER
 import { join } from 'path'
 import { escapeHTML, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
-import * as validator from 'validator'
+import validator from 'validator'
 import { VideoPrivacy } from '../../shared/models/videos'
 import { readFile } from 'fs-extra'
 import { getActivityStreamDuration } from '../models/video/video-format-utils'

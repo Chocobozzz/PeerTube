@@ -1,5 +1,5 @@
 import 'multer'
-import * as validator from 'validator'
+import validator from 'validator'
 import { sep } from 'path'
 
 function exists (value: any) {

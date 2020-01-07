@@ -12,7 +12,7 @@ import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '..
 import { remove, writeJSON } from 'fs-extra'
 import { getServerCommit } from '../../helpers/utils'
 import { Emailer } from '../../lib/emailer'
-import { isNumeric } from 'validator'
+import validator from 'validator'
 import { objectConverter } from '../../helpers/core-utils'
 import { CONFIG, reloadConfig } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
@@ -393,7 +393,7 @@ function convertCustomConfigBody (body: CustomConfig) {
   }
 
   function valueConverter (v: any) {
-    if (isNumeric(v + '')) return parseInt('' + v, 10)
+    if (validator.isNumeric(v + '')) return parseInt('' + v, 10)
 
     return v
   }

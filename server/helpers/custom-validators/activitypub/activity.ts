@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { Activity, ActivityType } from '../../../../shared/models/activitypub'
 import { sanitizeAndCheckActorObject } from './actor'
 import { isActivityPubUrlValid, isBaseActivityValid, isObjectValid } from './misc'

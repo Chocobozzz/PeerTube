@@ -16,7 +16,7 @@ import {
   ServerInfo,
   testImage
 } from '../'
-import * as validator from 'validator'
+import validator from 'validator'
 import { VideoDetails, VideoPrivacy } from '../../models/videos'
 import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, loadLanguages, VIDEO_LICENCES, VIDEO_PRIVACIES } from '../../../server/initializers/constants'
 import { dateIsValid, webtorrentAdd, buildServerDirectory } from '../miscs/miscs'

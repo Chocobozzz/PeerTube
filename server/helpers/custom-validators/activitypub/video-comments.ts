@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { ACTIVITY_PUB } from '../../../initializers/constants'
 import { exists, isArray, isDateValid } from '../misc'
 import { isActivityPubUrlValid } from './misc'

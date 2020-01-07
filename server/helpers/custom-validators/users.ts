@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { UserRole } from '../../../shared'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { exists, isArray, isBooleanValid, isFileValid } from './misc'

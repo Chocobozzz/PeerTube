@@ -1,4 +1,4 @@
-import * as validator from 'validator'
+import validator from 'validator'
 import { exists, isArray } from './misc'
 import { isTestInstance } from '../core-utils'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'

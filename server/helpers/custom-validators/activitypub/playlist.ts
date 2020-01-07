@@ -1,6 +1,6 @@
 import { exists, isDateValid } from '../misc'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
-import * as validator from 'validator'
+import validator from 'validator'
 import { PlaylistElementObject } from '../../../../shared/models/activitypub/objects/playlist-element-object'
 import { isActivityPubUrlValid } from './misc'
 

@@ -1,5 +1,5 @@
 import { values } from 'lodash'
-import * as validator from 'validator'
+import validator from 'validator'
 import { VideoFilter, VideoPrivacy, VideoRateType } from '../../../shared'
 import {
   CONSTRAINTS_FIELDS,

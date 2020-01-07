@@ -142,7 +142,7 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/mode
 import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
-import * as validator from 'validator'
+import validator from 'validator'
 
 // FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
 const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [

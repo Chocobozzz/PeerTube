@@ -1,5 +1,5 @@
 import { exists } from './misc'
-import * as validator from 'validator'
+import validator from 'validator'
 import { UserNotificationType } from '../../../shared/models/users'
 import { UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 

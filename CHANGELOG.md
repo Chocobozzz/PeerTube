@@ -15,7 +15,7 @@
  * We now use Buster for the docker image, so the image name changed:
    * `production-stretch` becomes `production-buster`
    * `v2.x.x-stretch` becomes `v2.x.x-buster`
- * Users cannot create more than 20 channels now
+ * Users cannot create more than 20 channels now to avoid UX and actor name squatting issues
  * We added a warning if the `videos` directory is the same than the `redundancy` one in your configuration file: it can create some bugs
  
 ### Documentation

@@ -1,5 +1,5 @@
 import { Model, Sequelize } from 'sequelize-typescript'
-import * as validator from 'validator'
+import validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
 import { literal, OrderItem } from 'sequelize'
 
