@@ -85,6 +85,7 @@ import { TimestampInputComponent } from '@app/shared/forms/timestamp-input.compo
 import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playlist/video-playlist-element-miniature.component'
 import { VideosSelectionComponent } from '@app/shared/video/videos-selection.component'
 import { NumberFormatterPipe } from '@app/shared/angular/number-formatter.pipe'
+import { VideoDurationPipe } from '@app/shared/angular/video-duration-formatter.pipe'
 import { ObjectLengthPipe } from '@app/shared/angular/object-length.pipe'
 import { FromNowPipe } from '@app/shared/angular/from-now.pipe'
 import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
@@ -147,6 +148,7 @@ import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-cop
     ObjectLengthPipe,
     FromNowPipe,
     PeerTubeTemplateDirective,
+    VideoDurationPipe,
 
     ActionDropdownComponent,
     MarkdownTextareaComponent,
@@ -248,7 +250,8 @@ import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-cop
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
-    PeerTubeTemplateDirective
+    PeerTubeTemplateDirective,
+    VideoDurationPipe
   ],
 
   providers: [
