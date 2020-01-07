@@ -1,9 +1,6 @@
 import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core'
 import { Router } from '@angular/router'
-
-type ElementEvent = Omit<Event, 'target'> & {
-  target: HTMLInputElement
-}
+import { ElementEvent } from '@app/shared/misc/utils'
 
 @Directive({
   selector: '[timestampRouteTransformer]'

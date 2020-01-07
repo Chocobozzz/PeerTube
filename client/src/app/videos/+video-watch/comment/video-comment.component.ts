@@ -9,6 +9,7 @@ import { MarkdownService } from '@app/shared/renderer'
 import { Account } from '@app/shared/account/account.model'
 import { Notifier } from '@app/core'
 import { UserService } from '@app/shared'
+import { Actor } from '@app/shared/actor/actor.model'
 
 @Component({
   selector: 'my-video-comment',
@@ -99,6 +100,10 @@ export class VideoCommentComponent implements OnInit, OnChanges {
         this.user.account.id === this.comment.account.id ||
         this.user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)
       )
+  }
+
+  switchToDefaultAvatar ($event: Event) {
+    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
 
   private getUserIfNeeded (account: Account) {
