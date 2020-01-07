@@ -13,6 +13,7 @@ import { VideoReportComponent } from '@app/shared/video/modals/video-report.comp
 import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklist.component'
 import { VideoBlacklistService } from '@app/shared/video-blacklist'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { VideoCaption } from '@shared/models'
 
 export type VideoActionsDisplayType = {
   playlist?: boolean
@@ -37,6 +38,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @ViewChild('videoBlacklistModal', { static: false }) videoBlacklistModal: VideoBlacklistComponent
 
   @Input() video: Video | VideoDetails
+  @Input() videoCaptions: VideoCaption[] = []
 
   @Input() displayOptions: VideoActionsDisplayType = {
     playlist: false,
@@ -105,7 +107,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
   showDownloadModal () {
     this.modalOpened.emit()
 
-    this.videoDownloadModal.show(this.video as VideoDetails)
+    this.videoDownloadModal.show(this.video as VideoDetails, this.videoCaptions)
   }
 
   showReportModal () {
