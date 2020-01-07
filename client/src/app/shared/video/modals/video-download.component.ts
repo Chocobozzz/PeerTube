@@ -3,7 +3,9 @@ import { VideoDetails } from '../../../shared/video/video-details.model'
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AuthService, Notifier } from '@app/core'
-import { VideoPrivacy } from '@shared/models'
+import { VideoPrivacy, VideoCaption } from '@shared/models'
+
+type DownloadType = 'video' | 'subtitles'
 
 @Component({
   selector: 'my-video-download',
@@ -15,9 +17,13 @@ export class VideoDownloadComponent {
 
   downloadType: 'direct' | 'torrent' = 'torrent'
   resolutionId: number | string = -1
+  subtitleLanguageId: string
 
   video: VideoDetails
+  videoCaptions: VideoCaption[]
   activeModal: NgbActiveModal
+
+  type: DownloadType = 'video'
 
   constructor (
     private notifier: Notifier,
@@ -26,22 +32,31 @@ export class VideoDownloadComponent {
     private i18n: I18n
   ) { }
 
+  get typeText () {
+    return this.type === 'video'
+      ? this.i18n('video')
+      : this.i18n('subtitles')
+  }
+
   getVideoFiles () {
     if (!this.video) return []
 
     return this.video.getFiles()
   }
 
-  show (video: VideoDetails) {
+  show (video: VideoDetails, videoCaptions?: VideoCaption[]) {
     this.video = video
+    this.videoCaptions = videoCaptions && videoCaptions.length ? videoCaptions : undefined
 
     this.activeModal = this.modalService.open(this.modal)
 
     this.resolutionId = this.getVideoFiles()[0].resolution.id
+    if (this.videoCaptions) this.subtitleLanguageId = this.videoCaptions[0].language.id
   }
 
   onClose () {
     this.video = undefined
+    this.videoCaptions = undefined
   }
 
   download () {
@@ -50,6 +65,12 @@ export class VideoDownloadComponent {
   }
 
   getLink () {
+    return this.type === 'subtitles' && this.videoCaptions
+      ? this.getSubtitlesLink()
+      : this.getVideoLink()
+  }
+
+  getVideoLink () {
     // HTML select send us a string, so convert it to a number
     this.resolutionId = parseInt(this.resolutionId.toString(), 10)
 
@@ -72,7 +93,15 @@ export class VideoDownloadComponent {
     }
   }
 
+  getSubtitlesLink () {
+    return window.location.origin + this.videoCaptions.find(caption => caption.language.id === this.subtitleLanguageId).captionPath
+  }
+
   activateCopiedMessage () {
     this.notifier.success(this.i18n('Copied'))
+  }
+
+  switchToType (type: DownloadType) {
+    this.type = type
   }
 }

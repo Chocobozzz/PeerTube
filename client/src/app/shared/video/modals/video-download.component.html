@@ -1,6 +1,17 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 i18n class="modal-title">Download video</h4>
+    <h4 i18n class="modal-title">Download 
+      <span *ngIf="!videoCaptions" i18n>video</span>
+      <div *ngIf="videoCaptions" ngbDropdown class="d-inline-block">
+        <span id="dropdownDownloadType" ngbDropdownToggle i18n>
+          {{ type }}
+        </span>
+        <div ngbDropdownMenu aria-labelledby="dropdownDownloadType">
+          <button *ngIf="type === 'video'" (click)="switchToType('subtitles')" ngbDropdownItem i18n>subtitles</button>
+          <button *ngIf="type === 'subtitles'" (click)="switchToType('video')" ngbDropdownItem i18n>video</button>
+        </div>
+      </div>
+    </h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
@@ -8,8 +19,11 @@
     <div class="form-group">
       <div class="input-group input-group-sm">
         <div class="input-group-prepend peertube-select-container">
-          <select [(ngModel)]="resolutionId">
+          <select *ngIf="type === 'video'" [(ngModel)]="resolutionId">
             <option *ngFor="let file of getVideoFiles()" [value]="file.resolution.id">{{ file.resolution.label }}</option>
+          </select>
+          <select *ngIf="type === 'subtitles'" [(ngModel)]="subtitleLanguageId">
+            <option *ngFor="let caption of videoCaptions" [value]="caption.language.id">{{ caption.language.label }}</option>
           </select>
         </div>
         <input #urlInput (click)="urlInput.select()" type="text" class="form-control input-sm readonly" readonly [value]="getLink()" />
@@ -21,7 +35,7 @@
       </div>
     </div>
 
-    <div class="download-type">
+    <div class="download-type" *ngIf="type === 'video'">
       <div class="peertube-radio-container">
         <input type="radio" name="download" id="download-direct" [(ngModel)]="downloadType" value="direct">
         <label i18n for="download-direct">Direct download</label>
