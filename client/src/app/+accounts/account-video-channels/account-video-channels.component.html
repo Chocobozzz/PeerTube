@@ -9,14 +9,18 @@
           <img [src]="videoChannel.avatarUrl" alt="Avatar" />
 
           <div>{{ videoChannel.displayName }}</div>
-          <div i18n class="followers">{{ videoChannel.followersCount }} subscribers</div>
+          <div class="followers">{{ videoChannel.followersCount }} 
+            <ng-container *ngIf="videoChannel.followersCount === 1; then single; else multiple"></ng-container>
+            <ng-template i18n #single>subscriber</ng-template>
+            <ng-template i18n #multiple>subscribers</ng-template>
+          </div>
         </a>
 
-        <my-subscribe-button [videoChannel]="videoChannel"></my-subscribe-button>
+        <my-subscribe-button [videoChannels]="[videoChannel]"></my-subscribe-button>
       </div>
 
       <div *ngIf="getVideosOf(videoChannel)" class="videos">
-        <div class="no-results" i18n *ngIf="getVideosOf(videoChannel).length === 0">This channel does not have videos.</div>
+        <div class="no-results my-5" i18n *ngIf="getVideosOf(videoChannel).length === 0">This channel doesn't have any videos.</div>
 
         <my-video-miniature
           *ngFor="let video of getVideosOf(videoChannel)"

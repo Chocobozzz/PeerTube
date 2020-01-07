@@ -3,6 +3,16 @@
 
 .sub-menu {
   @include sub-menu-with-actor;
+
+  .actor {
+    width: 100%;
+  }
+}
+
+my-subscribe-button {
+  height: max-content;
+  margin-left: auto;
+  margin-top: 20px;
 }
 
 my-user-moderation-dropdown,
