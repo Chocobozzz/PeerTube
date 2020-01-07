@@ -5,7 +5,7 @@
 ### IMPORTANT NOTES
 
  * **/!\ VERY IMPORTANT /!\\** You need to execute manually a script (can be executed after your upgrade, while your PeerTube instance is running) to create HLS video torrents:
-  * `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-2.1.js`
+   * `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-2.1.js`
  * **/!\ VERY IMPORTANT /!\\** In the next PeerTube release (v2.2.0), we'll add a unique index on actors usernames to fix some federation bugs.
  Please check now if you have conflicts using:
     * Go inside your database using `psql` and run `select "preferredUsername" from actor where "serverId" is null group by "preferredUsername" having count(*) > 0`
@@ -13,8 +13,8 @@
   For every entry, you'll have to change the preferredUsername of the entry you want (so they are unique).
   The updated actors could have some federations issues
  * We now use Buster for the docker image, so the image name changed:
-  * `production-stretch` becomes `production-buster`
-  * `v2.x.x-stretch` becomes `v2.x.x-buster`
+   * `production-stretch` becomes `production-buster`
+   * `v2.x.x-stretch` becomes `v2.x.x-buster`
  * Users cannot create more than 20 channels now
  * We added a warning if the `videos` directory is the same than the `redundancy` one in your configuration file: it can create some bugs
  
@@ -38,8 +38,8 @@ We added some sections in the documentation website:
 
 ### Plugins/Themes API
 
- * Add checkbox and textarea as possible input types for settings ([@rigelk](https://github.com/rigelk)
- * Add `isLoggedIn` helper to client plugins ([@rigelk](https://github.com/rigelk)
+ * Add checkbox and textarea as possible input types for settings ([@rigelk](https://github.com/rigelk))
+ * Add `isLoggedIn` helper to client plugins ([@rigelk](https://github.com/rigelk))
  * Add client plugin hooks:
    * `action:video-watch.player.loaded` with player instance
    * `action:video-watch.video.loaded` with a videojs instance
@@ -63,7 +63,7 @@ We added some sections in the documentation website:
 
  * PeerTube moved translations from Zanata to Weblate. Here is the new translations website URL: https://weblate.framasoft.org/projects/peertube/
  * We now provide a JavaScript library to control a PeerTube embed: https://www.npmjs.com/package/@peertube/embed-api
- * Add ability to generate HLS using `create-transcoding-job` script (see [the documentation](https://docs.joinpeertube.org/#/maintain-tools?id=create-transcoding-jobjs))
+ * Add ability to generate HLS videos using `create-transcoding-job` script (see [the documentation](https://docs.joinpeertube.org/#/maintain-tools?id=create-transcoding-jobjs))
  * Update nginx template: (you need to [update manually](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/production.md#nginx))
    * Add streaming playlists endpoint
    * Add `client_body_temp_path` hint
@@ -73,12 +73,12 @@ We added some sections in the documentation website:
 ### Features
 
  * :tada: Add *internal* video privacy mode. *Internal* videos are only available to other logged in users of your instance, and are not federated
- * :tada: Add hyperlink video timestamps in description ([@Lesterpig](https://github.com/lesterpig) & @rigelk](https://github.com/rigelk))
+ * :tada: Add hyperlink video timestamps in comments & video descriptions ([@Lesterpig](https://github.com/lesterpig) & [@rigelk](https://github.com/rigelk))
  * :tada: Comments improvements:
    * Support basic markdown
    * Soft delete video comments instead of destroying them ([@alcalyn](https://github.com/alcalyn))
    * Add commentator name alongside fid for video comments ([@rigelk](https://github.com/rigelk))
-   * Add a cancel button in the comment form ([@rigelk](https://github.com/rigelk))
+   * Add a cancel button in comment form ([@rigelk](https://github.com/rigelk))
    * Show number of comments under a video in watch page ([@rigelk](https://github.com/rigelk))
    * Add user moderation dropdown ([@rigelk](https://github.com/rigelk))
    * Add ability to sort comments by *total replies* or *created date* ([@rigelk](https://github.com/rigelk))
@@ -97,20 +97,20 @@ We added some sections in the documentation website:
    * Improve dropdown box shadow ([@rigelk](https://github.com/rigelk))
    * Add channel avatar to watch view ([@rigelk](https://github.com/rigelk))
    * Improve likes-dislikes bar usability
-   * Alter .title-page section header style ([@rigelk](https://github.com/rigelk))
-   * Enhance jobs list displaying on smaller screens ([@alcalyn](https://github.com/alcalyn))
+   * Alter titles section header style ([@rigelk](https://github.com/rigelk))
+   * Enhance jobs list display on smaller screens ([@alcalyn](https://github.com/alcalyn))
  * Performances improvements:
-   * Lazy load categories, licences, languages and video/playlist privacies on client
+   * Lazy load categories, licences, languages and video/playlist privacies in the client
    * Only update remote actor avatar if the filename changed
    * Optimize transcoding by using the lowest resolution as input file
    * Speedup embed first paint
    * Small videos list SQL query optimization
    * Optimize local videos list SQL query
-   * Cache local peertube instance actor SQL result
+   * Cache `peertube` instance actor SQL result
    * Cache HLS/WebTorrent InfoHash SQL result
  * Improve search filters: ([@rigelk](https://github.com/rigelk))
    * Add ability to sort results
-   * Improve tags filter input
+   * Improve tags filter inputs
    * Add a button to reset filters
  * Improve autoplay: ([@rigelk](https://github.com/rigelk))
    * Autoplay next video switch for both user and visitors 
