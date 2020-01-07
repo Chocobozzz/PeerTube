@@ -24,6 +24,28 @@
   }
 }
 
+::ng-deep {
+  .action-button span {
+    white-space: nowrap;
+  }
+
+  .video-miniature {
+    &.display-as-row {
+      // width: min-content !important;
+      width: 100% !important;
+
+      .video-bottom .video-miniature-information {
+        width: max-content !important;
+        min-width: unset !important;
+      }
+    }
+
+    .video-bottom {
+      max-width: 350px;
+    }
+  }
+}
+
 my-delete-button,
 my-edit-button {
   margin-right: 10px;
