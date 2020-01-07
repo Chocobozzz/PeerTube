@@ -59,6 +59,12 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     blacklistInfo: false
   }
 
+  actions: {
+    routerLink: string
+    iconName: string
+    label: string
+  }[] = []
+
   onDataSubject = new Subject<any[]>()
 
   protected serverConfig: ServerConfig

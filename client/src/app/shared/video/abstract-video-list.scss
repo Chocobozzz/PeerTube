@@ -3,17 +3,27 @@
 
 .videos-header {
   display: flex;
+  justify-content: space-between;
   height: 80px;
-  align-items: center;
+  align-items: baseline;
 
   .title-page.title-page-single {
-    margin: 0 5px 0 0;
+    display: flex;
+
+    my-feed {
+      display: inline-block;
+      top: 1px;
+      margin-left: 5px;
+      width: max-content;
+    }
   }
 
-  my-feed {
-    display: inline-block;
-    top: 1px;
-    min-width: 60px;
+  .action-block {
+    a button {
+      @include peertube-button;
+      @include grey-button;
+      @include button-with-icon(18px, 3px, -1px);
+    }
   }
 
   .moderation-block {

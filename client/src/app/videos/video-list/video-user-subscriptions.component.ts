@@ -36,6 +36,11 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     super()
 
     this.titlePage = i18n('Videos from your subscriptions')
+    this.actions.push({
+      routerLink: '/my-account/subscriptions',
+      label: i18n('Subscriptions'),
+      iconName: 'cog'
+    })
   }
 
   ngOnInit () {

@@ -4,9 +4,17 @@
       <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
         {{ titlePage }}
       </div>
+      <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
     </div>
 
-    <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
+    <div class="action-block" *ngIf="actions.length > 0">
+      <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
+        <button class="btn">
+          <my-global-icon [iconName]="action.iconName"></my-global-icon>
+          <span i18n>{{ action.label }}</span>
+        </button>
+      </a>
+    </div>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
       <my-peertube-checkbox
