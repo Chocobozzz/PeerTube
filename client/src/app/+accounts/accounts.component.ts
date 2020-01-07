@@ -8,6 +8,8 @@ import { Subscription } from 'rxjs'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { User, UserRight } from '../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
+import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -16,6 +18,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class AccountsComponent implements OnInit, OnDestroy {
   account: Account
   user: User
+  videoChannels: VideoChannel[]
 
   private routeSub: Subscription
 
@@ -23,6 +26,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private userService: UserService,
     private accountService: AccountService,
+    private videoChannelService: VideoChannelService,
     private notifier: Notifier,
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
@@ -40,7 +44,11 @@ export class AccountsComponent implements OnInit, OnDestroy {
         catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
       )
       .subscribe(
-        account => this.account = account,
+        account => {
+          this.account = account
+          this.videoChannelService.listAccountVideoChannels(account)
+            .subscribe(videoChannels => this.videoChannels = videoChannels.data)
+        },
 
         err => this.notifier.error(err.message)
       )

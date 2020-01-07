@@ -44,7 +44,7 @@
         <div i18n class="video-channel-followers">{{ result.followersCount }} subscribers</div>
       </div>
 
-      <my-subscribe-button [videoChannel]="result"></my-subscribe-button>
+      <my-subscribe-button [videoChannels]="[result]"></my-subscribe-button>
     </div>
 
     <div *ngIf="isVideo(result)" class="entry video">

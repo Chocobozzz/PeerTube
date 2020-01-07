@@ -1,34 +1,46 @@
 <div class="btn-group-subscribe btn-group"
-    [ngClass]="{'subscribe-button': subscribed !== true, 'unsubscribe-button': subscribed === true}">
-  <button *ngIf="subscribed === false && isUserLoggedIn()" type="button"
-          class="btn btn-sm" role="button"
-          (click)="subscribe()">
-    <span i18n>
-      Subscribe
+    [ngClass]="{'subscribe-button': !isAllChannelsSubscribed(), 'unsubscribe-button': isAllChannelsSubscribed()}">
+
+  <ng-template #userLoggedOut>
+    <span>
+      <ng-container *ngIf="account; then multiple; else single"></ng-container>
+      <ng-template i18n #single>Subscribe</ng-template>
+      <ng-template i18n #multiple>Subscribe to all channels</ng-template>
     </span>
     <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
       {{ videoChannel.followersCount | myNumberFormatter }}
     </span>
-  </button>
+  </ng-template>
 
-  <button
-    *ngIf="subscribed === true" type="button"
-    class="btn btn-sm" role="button"
-    (click)="unsubscribe()" i18n
-  >
-    Unsubscribe
-  </button>
+  <ng-template #userLoggedIn>
+    <button *ngIf="!isAllChannelsSubscribed()" type="button"
+            class="btn btn-sm" role="button"
+            (click)="subscribe()">
+      <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
+    </button>
+  
+    <button
+      *ngIf="isAllChannelsSubscribed()" type="button"
+      class="btn btn-sm" role="button"
+      (click)="unsubscribe()" i18n
+    >
+      <ng-container *ngIf="account; then multiple; else single"></ng-container>
+      <ng-template i18n #single>Unsubscribe</ng-template>
+      <ng-template i18n #multiple>Unsubscribe from all channels</ng-template>
+    </button>
+  </ng-template>
+
+  <ng-container
+    *ngIf="isUserLoggedIn(); then userLoggedIn">
+  </ng-container>
 
   <div class="btn-group" ngbDropdown autoClose="outside"
        placement="bottom-right" role="group"
        aria-label="Multiple ways to subscribe to the current channel">
     <button class="btn btn-sm dropdown-toggle-split" ngbDropdownToggle>
-      <span *ngIf="!isUserLoggedIn()" i18n>
-        Subscribe
-      </span>
-      <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
-        {{ videoChannel.followersCount | myNumberFormatter }}
-      </span>
+      <ng-container
+        *ngIf="!isUserLoggedIn(); then userLoggedOut">
+      </ng-container>
     </button>
 
     <div class="dropdown-menu" ngbDropdownMenu>

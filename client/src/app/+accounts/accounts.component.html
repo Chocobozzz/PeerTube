@@ -28,8 +28,15 @@
           >
           </my-user-moderation-dropdown>
         </div>
-        <div i18n class="actor-followers">{{ account.followersCount }} subscribers</div>
+        <div class="actor-followers">
+          {{ account.followersCount }} 
+          <ng-container *ngIf="account.followersCount === 1; then single; else multiple"></ng-container>
+          <ng-template i18n #single>subscriber</ng-template>
+          <ng-template i18n #multiple>subscribers</ng-template>
+        </div>
       </div>
+
+      <my-subscribe-button *ngIf="videoChannels" [account]="account" [videoChannels]="videoChannels"></my-subscribe-button>
     </div>
 
     <div class="links">
