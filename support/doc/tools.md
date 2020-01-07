@@ -227,6 +227,12 @@ Or to transcode to a specific resolution:
 $ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- -v [videoUUID] -r [resolution]
 ```
 
+To generate an HLS playlist for a video:
+
+```
+$ sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production npm run create-transcoding-job -- --generate-hls -v [videoUUID]
+```
+
 ### create-import-video-file-job.js
 
 You can use this script to import a video file to replace an already uploaded file or to add a new resolution to a video. PeerTube needs to be running.
