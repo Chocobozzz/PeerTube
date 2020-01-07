@@ -4,6 +4,7 @@
       <img
         class="comment-avatar"
         [src]="comment.accountAvatarUrl"
+        (error)="switchToDefaultAvatar($event)"
         alt="Avatar"
       />
     </a>
