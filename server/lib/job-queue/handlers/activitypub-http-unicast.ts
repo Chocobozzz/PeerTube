@@ -20,6 +20,8 @@ async function processActivityPubHttpUnicast (job: Bull.Job) {
   const body = await computeBody(payload)
   const httpSignatureOptions = await buildSignedRequestOptions(payload)
 
+  logger.info('hello', { httpSignatureOptions })
+
   const options = {
     method: 'POST',
     uri,

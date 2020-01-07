@@ -70,12 +70,20 @@ const lru = new AsyncLRU({
       })
     }
 
-    nodeDocumentLoader(url, cb)
+    nodeDocumentLoader(url)
+      .then(value => cb(null, value))
+      .catch(err => cb(err))
   }
 })
 
-jsonld.documentLoader = (url, cb) => {
-  lru.get(url, cb)
+jsonld.documentLoader = (url) => {
+  return new Promise((res, rej) => {
+    lru.get(url, (err, value) => {
+      if (err) return rej(err)
+
+      return res(value)
+    })
+  })
 }
 
 export { jsonld }

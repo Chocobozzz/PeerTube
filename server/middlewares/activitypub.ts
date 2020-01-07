@@ -51,10 +51,11 @@ export {
 // ---------------------------------------------------------------------------
 
 async function checkHttpSignature (req: Request, res: Response) {
-  // FIXME: mastodon does not include the Signature scheme
+  // FIXME: compatibility with http-signature < v1.3
   const sig = req.headers[HTTP_SIGNATURE.HEADER_NAME] as string
-  if (sig && sig.startsWith('Signature ') === false) req.headers[HTTP_SIGNATURE.HEADER_NAME] = 'Signature ' + sig
+  if (sig && sig.startsWith('Signature ') === true) req.headers[HTTP_SIGNATURE.HEADER_NAME] = sig.replace(/^Signature /, '')
 
+  logger.info('coucou', { signature: req.headers[HTTP_SIGNATURE.HEADER_NAME] })
   const parsed = parseHTTPSignature(req, HTTP_SIGNATURE.CLOCK_SKEW_SECONDS)
 
   const keyId = parsed.keyId
