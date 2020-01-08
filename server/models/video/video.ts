@@ -1750,17 +1750,25 @@ export class VideoModel extends Model<VideoModel> {
       ]
     }
 
-    const [ count, ids ] = await Promise.all([
+    const [ count, rows ] = await Promise.all([
       countVideos
         ? VideoModel.scope(countScope).count(countQuery)
         : Promise.resolve<number>(undefined),
 
       VideoModel.scope(idsScope)
-                .findAll(query)
+                .findAll(Object.assign({}, query, { raw: true }))
                 .then(rows => rows.map(r => r.id))
+                .then(ids => VideoModel.loadCompleteVideosForApi(ids, query, options))
     ])
 
-    if (ids.length === 0) return { data: [], total: count }
+    return {
+      data: rows,
+      total: count
+    }
+  }
+
+  private static loadCompleteVideosForApi (ids: number[], query: FindOptions, options: AvailableForListIDsOptions) {
+    if (ids.length === 0) return []
 
     const secondQuery: FindOptions = {
       offset: 0,
@@ -1789,12 +1797,7 @@ export class VideoModel extends Model<VideoModel> {
       ]
     })
 
-    const rows = await VideoModel.scope(apiScope).findAll(secondQuery)
-
-    return {
-      data: rows,
-      total: count
-    }
+    return VideoModel.scope(apiScope).findAll(secondQuery)
   }
 
   private static isPrivacyForFederation (privacy: VideoPrivacy) {
