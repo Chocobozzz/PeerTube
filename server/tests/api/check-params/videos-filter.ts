@@ -40,7 +40,6 @@ describe('Test videos filters', function () {
   let server: ServerInfo
   let userAccessToken: string
   let moderatorAccessToken: string
-  let playlistUUID: string
 
   // ---------------------------------------------------------------
 

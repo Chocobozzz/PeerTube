@@ -61,17 +61,18 @@ async function getSitemapAccountUrls () {
 }
 
 async function getSitemapLocalVideoUrls () {
-  const resultList = await VideoModel.listForApi({
+  const { data } = await VideoModel.listForApi({
     start: 0,
     count: undefined,
     sort: 'createdAt',
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(),
     filter: 'local',
-    withFiles: false
+    withFiles: false,
+    countVideos: false
   })
 
-  return resultList.data.map(v => ({
+  return data.map(v => ({
     url: WEBSERVER.URL + '/videos/watch/' + v.uuid,
     video: [
       {

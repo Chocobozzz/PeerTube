@@ -15,7 +15,7 @@ import {
 } from '../../../middlewares'
 import { areSubscriptionsExistValidator, userSubscriptionsSortValidator, videosSortValidator } from '../../../middlewares/validators'
 import { VideoModel } from '../../../models/video/video'
-import { buildNSFWFilter } from '../../../helpers/express-utils'
+import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
@@ -149,6 +149,8 @@ async function getUserSubscriptions (req: express.Request, res: express.Response
 
 async function getUserSubscriptionVideos (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
+  const countVideos = getCountVideos(req)
+
   const resultList = await VideoModel.listForApi({
     start: req.query.start,
     count: req.query.count,
@@ -163,7 +165,8 @@ async function getUserSubscriptionVideos (req: express.Request, res: express.Res
     filter: req.query.filter as VideoFilter,
     withFiles: false,
     followerActorId: user.Account.Actor.id,
-    user
+    user,
+    countVideos
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

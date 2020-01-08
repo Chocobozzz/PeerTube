@@ -381,6 +381,10 @@ const commonVideosFiltersValidator = [
   query('filter')
     .optional()
     .custom(isVideoFilterValid).withMessage('Should have a valid filter attribute'),
+  query('skipCount')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .custom(isBooleanValid).withMessage('Should have a valid skip count boolean'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking commons video filters query', { parameters: req.query })

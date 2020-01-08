@@ -20,7 +20,7 @@ import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../m
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
-import { buildNSFWFilter, createReqFiles, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { setAsyncActorKeys } from '../../lib/activitypub'
 import { AccountModel } from '../../models/account/account'
 import { MIMETYPES } from '../../initializers/constants'
@@ -256,6 +256,7 @@ async function listVideoChannelPlaylists (req: express.Request, res: express.Res
 async function listVideoChannelVideos (req: express.Request, res: express.Response) {
   const videoChannelInstance = res.locals.videoChannel
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const countVideos = getCountVideos(req)
 
   const resultList = await VideoModel.listForApi({
     followerActorId,
@@ -272,7 +273,8 @@ async function listVideoChannelVideos (req: express.Request, res: express.Respon
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
     videoChannelId: videoChannelInstance.id,
-    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
+    countVideos
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

@@ -48,7 +48,7 @@ import { videoCommentRouter } from './comment'
 import { rateVideoRouter } from './rate'
 import { ownershipVideoRouter } from './ownership'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
-import { buildNSFWFilter, createReqFiles } from '../../../helpers/express-utils'
+import { buildNSFWFilter, createReqFiles, getCountVideos } from '../../../helpers/express-utils'
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
 import { videoCaptionsRouter } from './captions'
 import { videoImportsRouter } from './import'
@@ -495,6 +495,8 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {
+  const countVideos = getCountVideos(req)
+
   const apiOptions = await Hooks.wrapObject({
     start: req.query.start,
     count: req.query.count,
@@ -508,7 +510,8 @@ async function listVideos (req: express.Request, res: express.Response) {
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     filter: req.query.filter as VideoFilter,
     withFiles: false,
-    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
+    countVideos
   }, 'filter:api.videos.list.params')
 
   const resultList = await Hooks.wrapPromiseFun(

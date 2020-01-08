@@ -22,7 +22,7 @@ import {
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
-import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
+import { buildNSFWFilter, isUserAbleToSearchRemoteURI, getCountVideos } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../../lib/job-queue'
 import { logger } from '../../helpers/logger'
@@ -155,6 +155,7 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
 async function listAccountVideos (req: express.Request, res: express.Response) {
   const account = res.locals.account
   const followerActorId = isUserAbleToSearchRemoteURI(res) ? null : undefined
+  const countVideos = getCountVideos(req)
 
   const resultList = await VideoModel.listForApi({
     followerActorId,
@@ -171,7 +172,8 @@ async function listAccountVideos (req: express.Request, res: express.Response) {
     nsfw: buildNSFWFilter(res, req.query.nsfw),
     withFiles: false,
     accountId: account.id,
-    user: res.locals.oauth ? res.locals.oauth.token.User : undefined
+    user: res.locals.oauth ? res.locals.oauth.token.User : undefined,
+    countVideos
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))

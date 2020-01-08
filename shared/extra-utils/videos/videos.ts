@@ -248,7 +248,7 @@ function getPlaylistVideos (
   })
 }
 
-function getVideosListPagination (url: string, start: number, count: number, sort?: string) {
+function getVideosListPagination (url: string, start: number, count: number, sort?: string, skipCount?: boolean) {
   const path = '/api/v1/videos'
 
   const req = request(url)
@@ -257,6 +257,7 @@ function getVideosListPagination (url: string, start: number, count: number, sor
               .query({ count: count })
 
   if (sort) req.query({ sort })
+  if (skipCount) req.query({ skipCount })
 
   return req.set('Accept', 'application/json')
            .expect(200)

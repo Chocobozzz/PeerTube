@@ -117,6 +117,10 @@ function isUserAbleToSearchRemoteURI (res: express.Response) {
     (CONFIG.SEARCH.REMOTE_URI.USERS === true && user !== undefined)
 }
 
+function getCountVideos (req: express.Request) {
+  return req.query.skipCount !== true
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -125,5 +129,6 @@ export {
   isUserAbleToSearchRemoteURI,
   badRequest,
   createReqFiles,
-  cleanUpReqFiles
+  cleanUpReqFiles,
+  getCountVideos
 }

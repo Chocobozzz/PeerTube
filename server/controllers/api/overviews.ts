@@ -98,10 +98,11 @@ async function getVideos (
     sort: '-createdAt',
     includeLocalVideos: true,
     nsfw: buildNSFWFilter(res),
-    withFiles: false
+    withFiles: false,
+    countVideos: false
   }, where)
 
-  const { data } = await VideoModel.listForApi(query, false)
+  const { data } = await VideoModel.listForApi(query)
 
   return data.map(d => d.toFormattedJSON())
 }

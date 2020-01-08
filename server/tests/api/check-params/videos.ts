@@ -75,8 +75,12 @@ describe('Test videos API validator', function () {
       await checkBadSortPagination(server.url, path)
     })
 
+    it('Should fail with a bad skipVideos query', async function () {
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200, query: { skipCount: 'toto' } })
+    })
+
     it('Should success with the correct parameters', async function () {
-      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200 })
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 200, query: { skipCount: false } })
     })
   })
 

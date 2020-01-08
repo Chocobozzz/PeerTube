@@ -1284,8 +1284,9 @@ export class VideoModel extends Model<VideoModel> {
     videoPlaylistId?: number,
     trendingDays?: number,
     user?: MUserAccountId,
-    historyOfUser?: MUserId
-  }, countVideos = true) {
+    historyOfUser?: MUserId,
+    countVideos?: boolean
+  }) {
     if (options.filter && options.filter === 'all-local' && !options.user.hasRight(UserRight.SEE_ALL_VIDEOS)) {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
@@ -1328,7 +1329,7 @@ export class VideoModel extends Model<VideoModel> {
       trendingDays
     }
 
-    return VideoModel.getAvailableForApi(query, queryOptions, countVideos)
+    return VideoModel.getAvailableForApi(query, queryOptions, options.countVideos)
   }
 
   static async searchAndPopulateAccountAndServer (options: {
