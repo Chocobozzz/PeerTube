@@ -3,7 +3,7 @@ import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { fromEvent, Observable, of, Subject, Subscription } from 'rxjs'
 import { AuthService } from '../../core/auth'
-import { ComponentPagination } from '../rest/component-pagination.model'
+import { ComponentPaginationLight } from '../rest/component-pagination.model'
 import { VideoSortField } from './sort-field.type'
 import { Video } from './video.model'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -13,7 +13,7 @@ import { Notifier, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
-import { ResultList, ServerConfig } from '@shared/models'
+import { ServerConfig } from '@shared/models'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -25,10 +25,9 @@ enum GroupDate {
 }
 
 export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableForReuseHook {
-  pagination: ComponentPagination = {
+  pagination: ComponentPaginationLight = {
     currentPage: 1,
-    itemsPerPage: 25,
-    totalItems: null
+    itemsPerPage: 25
   }
   sort: VideoSortField = '-publishedAt'
 
@@ -47,6 +46,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   groupByDate = false
 
   videos: Video[] = []
+  hasDoneFirstQuery = false
   disabled = false
 
   displayOptions: MiniatureDisplayOptions = {
@@ -84,7 +84,9 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   private groupedDateLabels: { [id in GroupDate]: string }
   private groupedDates: { [id: number]: GroupDate } = {}
 
-  abstract getVideosObservable (page: number): Observable<ResultList<Video>>
+  private lastQueryLength: number
+
+  abstract getVideosObservable (page: number): Observable<{ data: Video[] }>
 
   abstract generateSyndicationList (): void
 
@@ -142,8 +144,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   onNearOfBottom () {
     if (this.disabled) return
 
-    // Last page
-    if (this.pagination.totalItems <= (this.pagination.currentPage * this.pagination.itemsPerPage)) return
+    // No more results
+    if (this.lastQueryLength !== undefined && this.lastQueryLength < this.pagination.itemsPerPage) return
 
     this.pagination.currentPage += 1
 
@@ -154,8 +156,10 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   loadMoreVideos (reset = false) {
     this.getVideosObservable(this.pagination.currentPage).subscribe(
-      ({ data, total }) => {
-        this.pagination.totalItems = total
+      ({ data }) => {
+        this.hasDoneFirstQuery = true
+        this.lastQueryLength = data.length
+
         if (reset) this.videos = []
         this.videos = this.videos.concat(data)
 

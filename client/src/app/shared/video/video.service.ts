@@ -15,7 +15,7 @@ import {
 } from '../../../../../shared/models/videos'
 import { FeedFormat } from '../../../../../shared/models/feeds/feed-format.enum'
 import { environment } from '../../../environments/environment'
-import { ComponentPagination } from '../rest/component-pagination.model'
+import { ComponentPaginationLight } from '../rest/component-pagination.model'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { RestService } from '../rest/rest.service'
 import { UserService } from '../users/user.service'
@@ -34,7 +34,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 
 export interface VideosProvider {
   getVideos (parameters: {
-    videoPagination: ComponentPagination,
+    videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     filter?: VideoFilter,
     categoryOneOf?: number,
@@ -121,7 +121,7 @@ export class VideoService implements VideosProvider {
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  getMyVideos (videoPagination: ComponentPagination, sort: VideoSortField, search?: string): Observable<ResultList<Video>> {
+  getMyVideos (videoPagination: ComponentPaginationLight, sort: VideoSortField, search?: string): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
@@ -138,7 +138,7 @@ export class VideoService implements VideosProvider {
 
   getAccountVideos (
     account: Account,
-    videoPagination: ComponentPagination,
+    videoPagination: ComponentPaginationLight,
     sort: VideoSortField
   ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
@@ -156,7 +156,7 @@ export class VideoService implements VideosProvider {
 
   getVideoChannelVideos (
     videoChannel: VideoChannel,
-    videoPagination: ComponentPagination,
+    videoPagination: ComponentPaginationLight,
     sort: VideoSortField
   ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
@@ -173,14 +173,17 @@ export class VideoService implements VideosProvider {
   }
 
   getUserSubscriptionVideos (parameters: {
-    videoPagination: ComponentPagination,
-    sort: VideoSortField
+    videoPagination: ComponentPaginationLight,
+    sort: VideoSortField,
+    skipCount?: boolean
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort } = parameters
+    const { videoPagination, sort, skipCount } = parameters
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (skipCount) params = params.set('skipCount', skipCount + '')
 
     return this.authHttp
                .get<ResultList<Video>>(UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL + '/videos', { params })
@@ -191,26 +194,23 @@ export class VideoService implements VideosProvider {
   }
 
   getVideos (parameters: {
-    videoPagination: ComponentPagination,
+    videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     filter?: VideoFilter,
     categoryOneOf?: number,
-    languageOneOf?: string[]
+    languageOneOf?: string[],
+    skipCount?: boolean
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf } = parameters
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (filter) {
-      params = params.set('filter', filter)
-    }
-
-    if (categoryOneOf) {
-      params = params.set('categoryOneOf', categoryOneOf + '')
-    }
+    if (filter) params = params.set('filter', filter)
+    if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
+    if (skipCount) params = params.set('skipCount', skipCount + '')
 
     if (languageOneOf) {
       for (const l of languageOneOf) {

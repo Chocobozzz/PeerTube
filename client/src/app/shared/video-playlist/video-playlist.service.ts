@@ -18,7 +18,7 @@ import { Account } from '@app/shared/account/account.model'
 import { RestService } from '@app/shared/rest'
 import { VideoExistInPlaylist, VideosExistInPlaylists } from '@shared/models/videos/playlist/video-exist-in-playlist.model'
 import { VideoPlaylistReorder } from '@shared/models/videos/playlist/video-playlist-reorder.model'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 import { VideoPlaylistElement as ServerVideoPlaylistElement } from '@shared/models/videos/playlist/video-playlist-element.model'
 import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 import { uniq } from 'lodash-es'
@@ -63,7 +63,7 @@ export class VideoPlaylistService {
     )
   }
 
-  listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPagination): Observable<ResultList<VideoPlaylist>> {
+  listChannelPlaylists (videoChannel: VideoChannel, componentPagination: ComponentPaginationLight): Observable<ResultList<VideoPlaylist>> {
     const url = VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/video-playlists'
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
 
@@ -90,7 +90,7 @@ export class VideoPlaylistService {
 
   listAccountPlaylists (
     account: Account,
-    componentPagination: ComponentPagination,
+    componentPagination: ComponentPaginationLight,
     sort: string,
     search?: string
   ): Observable<ResultList<VideoPlaylist>> {
@@ -236,7 +236,7 @@ export class VideoPlaylistService {
 
   getPlaylistVideos (
     videoPlaylistId: number | string,
-    componentPagination: ComponentPagination
+    componentPagination: ComponentPaginationLight
   ): Observable<ResultList<VideoPlaylistElement>> {
     const path = VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL + videoPlaylistId + '/videos'
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)

@@ -10,7 +10,7 @@ import { VideoChannel } from './video-channel.model'
 import { environment } from '../../../environments/environment'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 import { RestService } from '@app/shared/rest'
 
 @Injectable()
@@ -44,7 +44,7 @@ export class VideoChannelService {
                )
   }
 
-  listAccountVideoChannels (account: Account, componentPagination?: ComponentPagination): Observable<ResultList<VideoChannel>> {
+  listAccountVideoChannels (account: Account, componentPagination?: ComponentPaginationLight): Observable<ResultList<VideoChannel>> {
     const pagination = componentPagination
       ? this.restService.componentPaginationToRestPagination(componentPagination)
       : { start: 0, count: 20 }

@@ -25,7 +25,8 @@ export class PluginListInstalledComponent implements OnInit {
 
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 10
+    itemsPerPage: 10,
+    totalItems: null
   }
   sort = 'name'
 

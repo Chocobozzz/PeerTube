@@ -2,7 +2,7 @@ import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { RestExtractor, RestService } from '@app/shared'
 import { environment } from '../../environments/environment'
@@ -25,7 +25,7 @@ export class SearchService {
 
   searchVideos (parameters: {
     search: string,
-    componentPagination: ComponentPagination,
+    componentPagination: ComponentPaginationLight,
     advancedSearch: AdvancedSearch
   }): Observable<ResultList<Video>> {
     const { search, componentPagination, advancedSearch } = parameters
@@ -51,7 +51,7 @@ export class SearchService {
 
   searchVideoChannels (parameters: {
     search: string,
-    componentPagination: ComponentPagination
+    componentPagination: ComponentPaginationLight
   }): Observable<ResultList<VideoChannel>> {
     const { search, componentPagination } = parameters
 

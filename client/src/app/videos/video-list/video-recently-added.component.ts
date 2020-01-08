@@ -54,7 +54,8 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
       videoPagination: newPagination,
       sort: this.sort,
       categoryOneOf: this.categoryOneOf,
-      languageOneOf: this.languageOneOf
+      languageOneOf: this.languageOneOf,
+      skipCount: true
     }
 
     return this.hooks.wrapObsFun(

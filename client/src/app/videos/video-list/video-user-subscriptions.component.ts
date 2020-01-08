@@ -55,7 +55,8 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
     const params = {
       videoPagination: newPagination,
-      sort: this.sort
+      sort: this.sort,
+      skipCount: true
     }
 
     return this.hooks.wrapObsFun(

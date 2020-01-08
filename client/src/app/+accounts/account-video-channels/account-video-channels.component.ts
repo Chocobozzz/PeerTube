@@ -25,12 +25,14 @@ export class AccountVideoChannelsComponent implements OnInit, OnDestroy {
 
   channelPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 2
+    itemsPerPage: 2,
+    totalItems: null
   }
 
   videosPagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 12
+    itemsPerPage: 12,
+    totalItems: null
   }
   videosSort: VideoSortField = '-publishedAt'
 

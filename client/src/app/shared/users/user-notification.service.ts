@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment'
 import { ResultList, UserNotification as UserNotificationServer, UserNotificationSetting } from '../../../../../shared'
 import { UserNotification } from './user-notification.model'
 import { AuthService } from '../../core'
-import { ComponentPagination } from '../rest/component-pagination.model'
+import { ComponentPaginationLight } from '../rest/component-pagination.model'
 import { User } from '../users/user.model'
 import { UserNotificationSocket } from '@app/core/notification/user-notification-socket.service'
 
@@ -23,7 +23,7 @@ export class UserNotificationService {
     private userNotificationSocket: UserNotificationSocket
   ) {}
 
-  listMyNotifications (pagination: ComponentPagination, unread?: boolean, ignoreLoadingBar = false) {
+  listMyNotifications (pagination: ComponentPaginationLight, unread?: boolean, ignoreLoadingBar = false) {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, this.restService.componentPaginationToRestPagination(pagination))
 

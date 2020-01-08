@@ -62,7 +62,8 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
       sort: this.sort,
       filter: this.filter,
       categoryOneOf: this.categoryOneOf,
-      languageOneOf: this.languageOneOf
+      languageOneOf: this.languageOneOf,
+      skipCount: true
     }
 
     return this.hooks.wrapObsFun(

@@ -1,8 +1,10 @@
 export interface ComponentPagination {
   currentPage: number
   itemsPerPage: number
-  totalItems?: number
+  totalItems: number
 }
+
+export type ComponentPaginationLight = Omit<ComponentPagination, 'totalItems'>
 
 export function hasMoreItems (componentPagination: ComponentPagination) {
   // No results

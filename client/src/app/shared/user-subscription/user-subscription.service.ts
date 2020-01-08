@@ -8,7 +8,7 @@ import { Observable, ReplaySubject, Subject } from 'rxjs'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel as VideoChannelServer } from '../../../../../shared/models/videos'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 
 type SubscriptionExistResult = { [ uri: string ]: boolean }
 
@@ -54,7 +54,7 @@ export class UserSubscriptionService {
                )
   }
 
-  listSubscriptions (componentPagination: ComponentPagination): Observable<ResultList<VideoChannel>> {
+  listSubscriptions (componentPagination: ComponentPaginationLight): Observable<ResultList<VideoChannel>> {
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL
 
     const pagination = this.restService.componentPaginationToRestPagination(componentPagination)

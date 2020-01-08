@@ -7,7 +7,7 @@ import { VideoBlacklist, VideoBlacklistType, ResultList } from '../../../../../s
 import { Video } from '../video/video.model'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
-import { ComponentPagination } from '../rest/component-pagination.model'
+import { ComponentPaginationLight } from '../rest/component-pagination.model'
 
 @Injectable()
 export class VideoBlacklistService {
@@ -34,7 +34,7 @@ export class VideoBlacklistService {
                )
   }
 
-  getAutoBlacklistedAsVideoList (videoPagination: ComponentPagination): Observable<ResultList<Video>> {
+  getAutoBlacklistedAsVideoList (videoPagination: ComponentPaginationLight): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     // prioritize first created since waiting longest

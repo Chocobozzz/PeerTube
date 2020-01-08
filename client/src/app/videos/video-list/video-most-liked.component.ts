@@ -50,7 +50,8 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
       videoPagination: newPagination,
       sort: this.sort,
       categoryOneOf: this.categoryOneOf,
-      languageOneOf: this.languageOneOf
+      languageOneOf: this.languageOneOf,
+      skipCount: true
     }
 
     return this.hooks.wrapObsFun(

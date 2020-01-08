@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { objectLineFeedToHtml } from '@app/shared/misc/utils'
 import { Observable } from 'rxjs'
-import { ResultList, FeedFormat } from '../../../../../../shared/models'
+import { FeedFormat, ResultList } from '../../../../../../shared/models'
 import {
   VideoComment as VideoCommentServerModel,
   VideoCommentCreate,
@@ -11,7 +11,7 @@ import {
 } from '../../../../../../shared/models/videos/video-comment.model'
 import { environment } from '../../../../environments/environment'
 import { RestExtractor, RestService } from '../../../shared/rest'
-import { ComponentPagination } from '../../../shared/rest/component-pagination.model'
+import { ComponentPaginationLight } from '../../../shared/rest/component-pagination.model'
 import { CommentSortField } from '../../../shared/video/sort-field.type'
 import { VideoComment } from './video-comment.model'
 
@@ -50,7 +50,7 @@ export class VideoCommentService {
 
   getVideoCommentThreads (parameters: {
     videoId: number | string,
-    componentPagination: ComponentPagination,
+    componentPagination: ComponentPaginationLight,
     sort: CommentSortField
   }): Observable<ResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters

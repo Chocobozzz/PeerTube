@@ -5,7 +5,7 @@ import { RestExtractor } from '../rest/rest-extractor.service'
 import { RestService } from '../rest/rest.service'
 import { Video } from '../video/video.model'
 import { catchError, map, switchMap } from 'rxjs/operators'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { ResultList } from '../../../../../shared'
 
@@ -20,7 +20,7 @@ export class UserHistoryService {
     private videoService: VideoService
   ) {}
 
-  getUserVideosHistory (historyPagination: ComponentPagination) {
+  getUserVideosHistory (historyPagination: ComponentPaginationLight) {
     const pagination = this.restService.componentPaginationToRestPagination(historyPagination)
 
     let params = new HttpParams()
