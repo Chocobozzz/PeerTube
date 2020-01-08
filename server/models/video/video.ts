@@ -452,7 +452,14 @@ export type AvailableForListIDsOptions = {
                 'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
                 'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
                 'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-                ' UNION ALL ' +
+                ')'
+              )
+            }
+          },
+          {
+            id: {
+              [ Op.in ]: Sequelize.literal(
+                '(' +
                 'SELECT "video"."id" AS "id" FROM "video" ' +
                 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
                 'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
