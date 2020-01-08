@@ -447,7 +447,7 @@
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">sous-titres</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1596,7 +1596,7 @@
       </trans-unit>
       <trans-unit id="85b79c9064aed1ead31ace985f31aa1363f6bdaf" datatype="html">
         <source>Help</source>
-        <target state="new">Help</target>
+        <target state="translated">Aide</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">35</context>
