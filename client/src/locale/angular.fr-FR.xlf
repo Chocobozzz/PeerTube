@@ -435,7 +435,7 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="translated">video</target>
+        <target state="translated">vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">4</context>
