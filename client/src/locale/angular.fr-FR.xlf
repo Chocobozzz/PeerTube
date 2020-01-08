@@ -9300,7 +9300,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Inscrivez-vous à <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vous serez avertis de toutes leurs nouvelles vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9496,7 +9496,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="b41da527dd2f804519e13b78b5dae42897213545" datatype="html">
         <source>Add to watch later</source>
-        <target state="new">Add to watch later</target>
+        <target state="translated">Ajouter pour regarder plus tard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
