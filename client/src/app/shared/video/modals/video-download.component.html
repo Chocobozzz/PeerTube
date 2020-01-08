@@ -1,9 +1,10 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
-    <h4 i18n class="modal-title">Download 
+    <h4 class="modal-title">Download
       <span *ngIf="!videoCaptions" i18n>video</span>
+
       <div *ngIf="videoCaptions" ngbDropdown class="d-inline-block">
-        <span id="dropdownDownloadType" ngbDropdownToggle i18n>
+        <span id="dropdownDownloadType" ngbDropdownToggle>
           {{ type }}
         </span>
         <div ngbDropdownMenu aria-labelledby="dropdownDownloadType">

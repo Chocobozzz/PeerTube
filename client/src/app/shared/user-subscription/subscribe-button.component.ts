@@ -70,9 +70,7 @@ export class SubscribeButtonComponent implements OnInit {
           this.subscribed = true
 
           this.notifier.success(
-            this.i18n(
-              'Subscribed to {{nameWithHost}}. ' +
-              'You will be notified of all their new videos.',
+            this.i18n('Subscribed to {{nameWithHost}}. You will be notified of all their new videos.',
               { nameWithHost: this.videoChannel.displayName }
             ),
             this.i18n('Subscribed')
