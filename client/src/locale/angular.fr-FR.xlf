@@ -2000,7 +2000,7 @@
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/abstract-video-list.html</context>
           <context context-type="linenumber">14</context>
