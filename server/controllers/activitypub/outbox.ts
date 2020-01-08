@@ -9,15 +9,18 @@ import { asyncMiddleware, localAccountValidator, localVideoChannelValidator } fr
 import { VideoModel } from '../../models/video/video'
 import { activityPubResponse } from './utils'
 import { MActorLight } from '@server/typings/models'
+import { apPaginationValidator } from '../../middlewares/validators/activitypub'
 
 const outboxRouter = express.Router()
 
 outboxRouter.get('/accounts/:name/outbox',
+  apPaginationValidator,
   localAccountValidator,
   asyncMiddleware(outboxController)
 )
 
 outboxRouter.get('/video-channels/:name/outbox',
+  apPaginationValidator,
   localVideoChannelValidator,
   asyncMiddleware(outboxController)
 )
@@ -38,7 +41,7 @@ async function outboxController (req: express.Request, res: express.Response) {
   logger.info('Receiving outbox request for %s.', actorOutboxUrl)
 
   const handler = (start: number, count: number) => buildActivities(actor, start, count)
-  const json = await activityPubCollectionPagination(actorOutboxUrl, handler, req.query.page)
+  const json = await activityPubCollectionPagination(actorOutboxUrl, handler, req.query.page, req.query.size)
 
   return activityPubResponse(activityPubContextify(json), res)
 }

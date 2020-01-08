@@ -100,7 +100,12 @@ function activityPubContextify <T> (data: T) {
 }
 
 type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Bluebird<ResultList<any>> | Promise<ResultList<any>>
-async function activityPubCollectionPagination (baseUrl: string, handler: ActivityPubCollectionPaginationHandler, page?: any) {
+async function activityPubCollectionPagination (
+  baseUrl: string,
+  handler: ActivityPubCollectionPaginationHandler,
+  page?: any,
+  size = ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE
+) {
   if (!page || !validator.isInt(page)) {
     // We just display the first page URL, we only need the total items
     const result = await handler(0, 1)
@@ -113,7 +118,7 @@ async function activityPubCollectionPagination (baseUrl: string, handler: Activi
     }
   }
 
-  const { start, count } = pageToStartAndCount(page, ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE)
+  const { start, count } = pageToStartAndCount(page, size)
   const result = await handler(start, count)
 
   let next: string | undefined
@@ -123,7 +128,7 @@ async function activityPubCollectionPagination (baseUrl: string, handler: Activi
   page = parseInt(page, 10)
 
   // There are more results
-  if (result.total > page * ACTIVITY_PUB.COLLECTION_ITEMS_PER_PAGE) {
+  if (result.total > page * size) {
     next = baseUrl + '?page=' + (page + 1)
   }
 
