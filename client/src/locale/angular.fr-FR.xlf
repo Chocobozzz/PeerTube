@@ -5082,7 +5082,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="c860c88df9ad58b1187084251340b232cdf0a7f9">
         <source>(extensions: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, max size: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</source>
-        <target>(extensions: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, taille maximale: <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</target>
+        <target>(extensions: <x id="INTERPOLATION" equiv-text="{{ avatarExtensions }}"/>, taille maximale : <x id="INTERPOLATION_1" equiv-text="{{ maxAvatarSize | bytes }}"/>)</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -9292,7 +9292,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Abonnez-vous à <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vous serez averti de toutes leurs nouvelles vidéos.</target>
+        <target state="translated">Vous êtes abonné à <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vous serez averti de toutes leurs nouvelles vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9496,7 +9496,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="2660edf82b9bf5d6ee25fbefd3bbb23172687ccc" datatype="html">
         <source>Remove from watch later</source>
-        <target state="translated">Enlever de la liste "à regarder plus tard"</target>
+        <target state="translated">Ne pas regarder plus tard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
