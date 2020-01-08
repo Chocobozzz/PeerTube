@@ -3264,7 +3264,7 @@
       </trans-unit>
       <trans-unit id="029bd95d7fe7f3660953c216bf96f6b5243b30ec" datatype="html">
         <source>Delayed.</source>
-        <target state="translated">Retardé</target>
+        <target state="translated">Retardé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">42</context>
@@ -3272,7 +3272,7 @@
       </trans-unit>
       <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
         <source>Will start soon...</source>
-        <target state="translated">Commence bientôt</target>
+        <target state="translated">Commence bientôt...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3970,7 +3970,7 @@
       </trans-unit>
       <trans-unit id="555ae4dbd23d5056aeafc8f3f31ebbab170bb917" datatype="html">
         <source>Job type</source>
-        <target state="translated">type de poste</target>
+        <target state="translated">type de tâche</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3978,7 +3978,7 @@
       </trans-unit>
       <trans-unit id="723c95b5d673a557fa120aa65814a9f05c03e610" datatype="html">
         <source>Job state</source>
-        <target state="new">Job state</target>
+        <target state="translated">État des tâches</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">14</context>
@@ -6170,7 +6170,7 @@ Quand vous mettrez en ligne une vidéo sur cette chaîne, la vidéo affichera au
       </trans-unit>
       <trans-unit id="b867165f9a29f4af6d0c37bcb1f48e53850a0d2d" datatype="html">
         <source>A <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> that keeps the original audio track, with no video</source>
-        <target state="new">A <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> that keeps the original audio track, with no video</target>
+        <target state="translated">A <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> Conserve le son original, sans la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
