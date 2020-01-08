@@ -3296,7 +3296,7 @@
       </trans-unit>
       <trans-unit id="64b582e0d8e3a28331a14d2a1017fa5d6ffb8d93" datatype="html">
         <source>Failed</source>
-        <target state="new">Failed</target>
+        <target state="translated">Echoué</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">46</context>
@@ -3970,7 +3970,7 @@
       </trans-unit>
       <trans-unit id="555ae4dbd23d5056aeafc8f3f31ebbab170bb917" datatype="html">
         <source>Job type</source>
-        <target state="new">Job type</target>
+        <target state="translated">type de poste</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">5</context>
