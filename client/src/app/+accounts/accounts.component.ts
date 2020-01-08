@@ -40,15 +40,15 @@ export class AccountsComponent implements OnInit, OnDestroy {
         map(params => params[ 'accountId' ]),
         distinctUntilChanged(),
         switchMap(accountId => this.accountService.getAccount(accountId)),
-        tap(account => this.getUserIfNeeded(account)),
+        tap(account => {
+          this.account = account
+          this.getUserIfNeeded(account)
+        }),
+        switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
         catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
       )
       .subscribe(
-        account => {
-          this.account = account
-          this.videoChannelService.listAccountVideoChannels(account)
-            .subscribe(videoChannels => this.videoChannels = videoChannels.data)
-        },
+        videoChannels => this.videoChannels = videoChannels.data,
 
         err => this.notifier.error(err.message)
       )

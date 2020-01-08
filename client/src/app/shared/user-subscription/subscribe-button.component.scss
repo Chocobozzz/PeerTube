@@ -13,6 +13,20 @@
     font-size: 15px;
   }
 
+  &.big {
+    height: 35px;
+
+    button .extra-text {
+      span:first-child {
+        line-height: 80%;
+      }
+    
+      span:not(:first-child) {
+        font-size: 75%;
+      }
+    }
+  }
+
   // Unlogged
   & > .dropdown > .dropdown-toggle span {
     padding-right: 3px;
@@ -80,5 +94,6 @@
 
   span:not(:first-child) {
     font-size: 60%;
+    text-align: left;
   }
 }

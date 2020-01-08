@@ -9,11 +9,7 @@
           <img [src]="videoChannel.avatarUrl" alt="Avatar" />
 
           <div>{{ videoChannel.displayName }}</div>
-          <div class="followers">{{ videoChannel.followersCount }} 
-            <ng-container *ngIf="videoChannel.followersCount === 1; then single; else multiple"></ng-container>
-            <ng-template i18n #single>subscriber</ng-template>
-            <ng-template i18n #multiple>subscribers</ng-template>
-          </div>
+          <div class="followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
         </a>
 
         <my-subscribe-button [videoChannels]="[videoChannel]"></my-subscribe-button>
