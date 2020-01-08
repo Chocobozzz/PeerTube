@@ -35,7 +35,7 @@ async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction
 
   // Needed to build the AP object
   if (!video.VideoCaptions) {
-    video.VideoCaptions = await video.$get('VideoCaptions', { transaction: t }) as VideoCaptionModel[]
+    video.VideoCaptions = await video.$get('VideoCaptions', { transaction: t })
   }
 
   const videoObject = video.toActivityPubObject()

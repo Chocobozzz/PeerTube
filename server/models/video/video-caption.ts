@@ -79,7 +79,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
   @BeforeDestroy
   static async removeFiles (instance: VideoCaptionModel) {
     if (!instance.Video) {
-      instance.Video = await instance.$get('Video') as VideoModel
+      instance.Video = await instance.$get('Video')
     }
 
     if (instance.isOwned()) {

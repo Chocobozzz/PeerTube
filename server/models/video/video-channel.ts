@@ -249,7 +249,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: VideoChannelModel, options) {
     if (!instance.Actor) {
-      instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
+      instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
     }
 
     if (instance.Actor.isOwned()) {

@@ -86,7 +86,7 @@ async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVid
       video.VideoCaptions = await video.$get('VideoCaptions', {
         attributes: [ 'language' ],
         transaction
-      }) as VideoCaptionModel[]
+      })
     }
 
     if (isNewVideo) {

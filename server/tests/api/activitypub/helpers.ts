@@ -76,7 +76,6 @@ describe('Test activity pub helpers', function () {
       const mastodonObject = cloneDeep(require('./json/mastodon/bad-http-signature.json'))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
-      req.headers.signature = 'Signature ' + req.headers.signature
 
       const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       const publicKey = require('./json/mastodon/public-key.json').publicKey
@@ -95,7 +94,6 @@ describe('Test activity pub helpers', function () {
       const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
-      req.headers.signature = 'Signature ' + req.headers.signature
 
       const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       const publicKey = require('./json/mastodon/bad-public-key.json').publicKey
@@ -114,7 +112,6 @@ describe('Test activity pub helpers', function () {
       const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
-      req.headers.signature = 'Signature ' + req.headers.signature
 
       let errored = false
       try {
@@ -126,7 +123,7 @@ describe('Test activity pub helpers', function () {
       expect(errored).to.be.true
     })
 
-    it('Should fail without scheme', async function () {
+    it('Should with a scheme', async function () {
       const req = buildRequestStub()
       req.method = 'POST'
       req.url = '/accounts/ronan/inbox'
@@ -134,6 +131,7 @@ describe('Test activity pub helpers', function () {
       const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
+      req.headers = 'Signature ' + mastodonObject.headers
 
       let errored = false
       try {
@@ -153,7 +151,6 @@ describe('Test activity pub helpers', function () {
       const mastodonObject = cloneDeep(require('./json/mastodon/http-signature.json'))
       req.body = mastodonObject.body
       req.headers = mastodonObject.headers
-      req.headers.signature = 'Signature ' + req.headers.signature
 
       const parsed = parseHTTPSignature(req, 3600 * 1000 * 365 * 10)
       const publicKey = require('./json/mastodon/public-key.json').publicKey

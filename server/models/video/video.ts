@@ -1061,7 +1061,7 @@ export class VideoModel extends Model<VideoModel> {
 
     if (instance.isOwned()) {
       if (!Array.isArray(instance.VideoFiles)) {
-        instance.VideoFiles = await instance.$get('VideoFiles') as VideoFileModel[]
+        instance.VideoFiles = await instance.$get('VideoFiles')
       }
 
       // Remove physical files and torrents

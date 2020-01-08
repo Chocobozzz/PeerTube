@@ -223,7 +223,7 @@ export class AccountModel extends Model<AccountModel> {
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
     if (!instance.Actor) {
-      instance.Actor = await instance.$get('Actor', { transaction: options.transaction }) as ActorModel
+      instance.Actor = await instance.$get('Actor', { transaction: options.transaction })
     }
 
     await ActorFollowModel.removeFollowsOf(instance.Actor.id, options.transaction)

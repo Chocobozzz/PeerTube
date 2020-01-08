@@ -36,6 +36,7 @@ import {
   MActorFollowSubscriptions
 } from '@server/typings/models'
 import { ActivityPubActorType } from '@shared/models'
+import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 
 @Table({
   tableName: 'actorFollow',
@@ -104,20 +105,20 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
   @AfterCreate
   @AfterUpdate
-  static incrementFollowerAndFollowingCount (instance: ActorFollowModel) {
+  static incrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
     if (instance.state !== 'accepted') return undefined
 
     return Promise.all([
-      ActorModel.incrementFollows(instance.actorId, 'followingCount', 1),
-      ActorModel.incrementFollows(instance.targetActorId, 'followersCount', 1)
+      ActorModel.rebuildFollowsCount(instance.actorId, 'following', options.transaction),
+      ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers', options.transaction)
     ])
   }
 
   @AfterDestroy
-  static decrementFollowerAndFollowingCount (instance: ActorFollowModel) {
+  static decrementFollowerAndFollowingCount (instance: ActorFollowModel, options: any) {
     return Promise.all([
-      ActorModel.incrementFollows(instance.actorId, 'followingCount',-1),
-      ActorModel.incrementFollows(instance.targetActorId, 'followersCount', -1)
+      ActorModel.rebuildFollowsCount(instance.actorId, 'following', options.transaction),
+      ActorModel.rebuildFollowsCount(instance.targetActorId, 'followers', options.transaction)
     ])
   }
 

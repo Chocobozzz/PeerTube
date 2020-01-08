@@ -47,7 +47,7 @@ import {
   MActorWithInboxes
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
-import { Op, Transaction } from 'sequelize'
+import { Op, Transaction, literal } from 'sequelize'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -421,13 +421,24 @@ export class ActorModel extends Model<ActorModel> {
     return ActorModel.scope(ScopeNames.FULL).findOne(query)
   }
 
-  static incrementFollows (id: number, column: 'followersCount' | 'followingCount', by: number) {
-    return ActorModel.increment(column, {
-      by,
-      where: {
-        id
-      }
-    })
+  static rebuildFollowsCount (ofId: number, type: 'followers' | 'following', transaction?: Transaction) {
+    const sanitizedOfId = parseInt(ofId + '', 10)
+    const where = { id: sanitizedOfId }
+
+    let columnToUpdate: string
+    let columnOfCount: string
+
+    if (type === 'followers') {
+      columnToUpdate = 'followersCount'
+      columnOfCount = 'targetActorId'
+    } else {
+      columnToUpdate = 'followingCount'
+      columnOfCount = 'actorId'
+    }
+
+    return ActorModel.update({
+      [columnToUpdate]: literal(`(SELECT COUNT(*) FROM "actorFollow" WHERE "${columnOfCount}" = ${sanitizedOfId})`)
+    }, { where, transaction })
   }
 
   getSharedInbox (this: MActorWithInboxes) {
