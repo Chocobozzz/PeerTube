@@ -3264,7 +3264,7 @@
       </trans-unit>
       <trans-unit id="029bd95d7fe7f3660953c216bf96f6b5243b30ec" datatype="html">
         <source>Delayed.</source>
-        <target state="translated">Delayed.</target>
+        <target state="translated">Retardé</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">42</context>
@@ -3272,7 +3272,7 @@
       </trans-unit>
       <trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
         <source>Will start soon...</source>
-        <target state="new">Will start soon...</target>
+        <target state="translated">Commence bientôt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">43</context>
