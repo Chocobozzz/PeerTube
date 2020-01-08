@@ -24,11 +24,7 @@
 
         <span class="views">
           <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
-          <ng-container i18n *ngIf="displayOptions.views">{{ video.views | myNumberFormatter }} 
-            <ng-container *ngIf="video.views === 1; then single; else multiple"></ng-container>
-            <ng-template i18n #single>view</ng-template>
-            <ng-template i18n #multiple>views</ng-template>
-          </ng-container>
+          <ng-container i18n *ngIf="displayOptions.views">{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
         </span>
       </span>
 

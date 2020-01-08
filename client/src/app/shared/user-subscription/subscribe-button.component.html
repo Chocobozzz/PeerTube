@@ -1,13 +1,13 @@
 <div class="btn-group-subscribe btn-group"
-    [ngClass]="{'subscribe-button': !isAllChannelsSubscribed(), 'unsubscribe-button': isAllChannelsSubscribed()}">
+    [ngClass]="{'subscribe-button': !isAllChannelsSubscribed(), 'unsubscribe-button': isAllChannelsSubscribed(), 'big': isBigButton() }">
 
   <ng-template #userLoggedOut>
-    <span [ngClass]="{ 'extra-text': subscribeStatus(true).length > 0 }">
+    <span [ngClass]="{ 'extra-text': isAtLeastOneChannelSubscribed() }">
       <ng-container *ngIf="account; then multiple; else single"></ng-container>
       <ng-template i18n #single>Subscribe</ng-template>
       <ng-template #multiple>
         <span i18n>Subscribe to all channels</span>
-        <span *ngIf="subscribeStatus(true).length > 0">{{subscribeStatus(true).length}}/{{subscribed.size}} 
+        <span *ngIf="isAtLeastOneChannelSubscribed()">{{subscribeStatus(true).length}}/{{subscribed.size}} 
           <ng-container i18n>channels subscribed</ng-container>
         </span>
       </ng-template>
@@ -27,13 +27,8 @@
     <button
       *ngIf="isAllChannelsSubscribed()" type="button"
       class="btn btn-sm" role="button"
-      (click)="unsubscribe()" i18n
-    >
-      <span>
-        <ng-container *ngIf="account; then multiple; else single"></ng-container>
-        <ng-template i18n #single>Unsubscribe</ng-template>
-        <ng-template i18n #multiple>Unsubscribe from all channels</ng-template>
-      </span>
+      (click)="unsubscribe()">
+      <ng-container i18n>{account + "", select, undefined {Unsubscribe} other {Unsubscribe from all channels}}</ng-container>
     </button>
   </ng-template>
 
