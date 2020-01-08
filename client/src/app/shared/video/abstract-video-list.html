@@ -11,7 +11,7 @@
       <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
         <button class="btn">
           <my-global-icon [iconName]="action.iconName"></my-global-icon>
-          <span i18n>{{ action.label }}</span>
+          <span>{{ action.label }}</span>
         </button>
       </a>
     </div>
