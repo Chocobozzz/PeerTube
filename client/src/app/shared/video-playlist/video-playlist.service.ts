@@ -42,7 +42,7 @@ export class VideoPlaylistService {
   private videoExistsCache: { [ id: number ]: VideoExistInPlaylist[] } = {}
 
   private myAccountPlaylistCache: ResultList<CachedPlaylist> = undefined
-  private myAccountPlaylistCacheRunning = false
+  private myAccountPlaylistCacheRunning: Observable<ResultList<CachedPlaylist>>
   private myAccountPlaylistCacheSubject = new Subject<ResultList<CachedPlaylist>>()
 
   constructor (
@@ -80,21 +80,23 @@ export class VideoPlaylistService {
 
   listMyPlaylistWithCache (user: AuthUser, search?: string) {
     if (!search) {
-      if (this.myAccountPlaylistCacheRunning) return
+      if (this.myAccountPlaylistCacheRunning) return this.myAccountPlaylistCacheRunning
       if (this.myAccountPlaylistCache) return of(this.myAccountPlaylistCache)
     }
 
-    this.myAccountPlaylistCacheRunning = true
-
-    return this.listAccountPlaylists(user.account, undefined, '-updatedAt', search)
+    const obs = this.listAccountPlaylists(user.account, undefined, '-updatedAt', search)
                .pipe(
                  tap(result => {
                    if (!search) {
-                     this.myAccountPlaylistCacheRunning = false
+                     this.myAccountPlaylistCacheRunning = undefined
                      this.myAccountPlaylistCache = result
                    }
-                 })
+                 }),
+                 share()
                )
+
+    if (!search) this.myAccountPlaylistCacheRunning = obs
+    return obs
   }
 
   listAccountPlaylists (
