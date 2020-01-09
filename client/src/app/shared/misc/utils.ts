@@ -1,13 +1,8 @@
-// Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-
 import { DatePipe } from '@angular/common'
 import { environment } from '../../../environments/environment'
 import { AuthService } from '../../core/auth'
 
-type ElementEvent = Omit<Event, 'target'> & {
-  target: HTMLElement
-}
-
+// Thanks: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
 function getParameterByName (name: string, url: string) {
   if (!url) url = window.location.href
   name = name.replace(/[\[\]]/g, '\\$&')
@@ -194,7 +189,6 @@ function isXPercentInViewport (el: HTMLElement, percentVisible: number) {
 }
 
 export {
-  ElementEvent,
   sortBy,
   durationToString,
   lineFeedToHtml,

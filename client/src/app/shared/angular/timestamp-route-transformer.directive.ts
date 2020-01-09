@@ -1,6 +1,4 @@
-import { Directive, ElementRef, HostListener, Output, EventEmitter } from '@angular/core'
-import { Router } from '@angular/router'
-import { ElementEvent } from '@app/shared/misc/utils'
+import { Directive, EventEmitter, HostListener, Output } from '@angular/core'
 
 @Directive({
   selector: '[timestampRouteTransformer]'
@@ -8,13 +6,13 @@ import { ElementEvent } from '@app/shared/misc/utils'
 export class TimestampRouteTransformerDirective {
   @Output() timestampClicked = new EventEmitter<number>()
 
-  constructor (private el: ElementRef, private router: Router) { }
-
   @HostListener('click', ['$event'])
-  public onClick ($event: ElementEvent) {
-    if ($event.target.hasAttribute('href')) {
+  public onClick ($event: Event) {
+    const target = $event.target as HTMLLinkElement
+
+    if (target.hasAttribute('href')) {
       const ngxLink = document.createElement('a')
-      ngxLink.href = $event.target.getAttribute('href')
+      ngxLink.href = target.getAttribute('href')
 
       // we only care about reflective links
       if (ngxLink.host !== window.location.host) return
