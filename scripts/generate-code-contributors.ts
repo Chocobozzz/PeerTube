@@ -169,7 +169,7 @@ function getZanataContributors () {
 
 function getContributorsBlacklist () {
   return {
-    'Florian Bigard': true,
+    'Bigard Florian': true,
     'chocobozzz': true,
     'Rigel': true
   }

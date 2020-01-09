@@ -1,4 +1,4 @@
-import { FindOptions, literal, Op, QueryTypes } from 'sequelize'
+import { FindOptions, literal, Op, QueryTypes, where, fn, col } from 'sequelize'
 import {
   AfterDestroy,
   AfterUpdate,
@@ -465,7 +465,11 @@ export class UserModel extends Model<UserModel> {
 
     const query = {
       where: {
-        [ Op.or ]: [ { username: { [ Op.iLike ]: username } }, { email } ]
+        [ Op.or ]: [
+          where(fn('lower', col('username')), fn('lower', username)),
+
+          { email }
+        ]
       }
     }
 
