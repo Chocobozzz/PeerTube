@@ -1292,7 +1292,7 @@ paths:
                   format: binary
             encoding:
               captionfile:
-                contentType: text/vtt, application/x-subrip
+                contentType: text/vtt, application/x-subrip, text/plain
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
