@@ -37,6 +37,7 @@ export class ClientHtml {
   static async getWatchHTMLPage (videoId: string, req: express.Request, res: express.Response) {
     // Let Angular application handle errors
     if (!validator.isInt(videoId) && !validator.isUUID(videoId, 4)) {
+      res.status(404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
@@ -47,7 +48,8 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!video || video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL || video.VideoBlacklist) {
-      return ClientHtml.getIndexHTML(req, res)
+      res.status(404)
+      return html
     }
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
@@ -77,6 +79,7 @@ export class ClientHtml {
 
     // Let Angular application handle errors
     if (!entity) {
+      res.status(404)
       return ClientHtml.getIndexHTML(req, res)
     }
 
