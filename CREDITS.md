@@ -1,262 +1,314 @@
-# Code contributors
+# Code & Translators contributors
 
- * [Chocobozzz](https://github.com/Chocobozzz)
- * [rigelk](https://github.com/rigelk)
- * [Nutomic](https://github.com/Nutomic)
- * [gegeweb](https://github.com/gegeweb)
- * [joshmorel](https://github.com/joshmorel)
- * [Jorropo](https://github.com/Jorropo)
- * [frankstrater](https://github.com/frankstrater)
- * [buoyantair](https://github.com/buoyantair)
- * [fflorent](https://github.com/fflorent)
- * [bnjbvr](https://github.com/bnjbvr)
- * [alcalyn](https://github.com/alcalyn)
- * [jankeromnes](https://github.com/jankeromnes)
- * [lucas-dclrcq](https://github.com/lucas-dclrcq)
- * [JohnXLivingston](https://github.com/JohnXLivingston)
- * [DavidLibeau](https://github.com/DavidLibeau)
- * [kaiyou](https://github.com/kaiyou)
- * [ldidry](https://github.com/ldidry)
- * [McFlat](https://github.com/McFlat)
- * [DimitriGilbert](https://github.com/DimitriGilbert)
- * [floSoX](https://github.com/floSoX)
- * [Green-Star](https://github.com/Green-Star)
- * [NassimBounouas](https://github.com/NassimBounouas)
- * [thomaskuntzz](https://github.com/thomaskuntzz)
- * [rezonant](https://github.com/rezonant)
- * [Wirebrass](https://github.com/Wirebrass)
- * [clementbrizard](https://github.com/clementbrizard)
- * [LecygneNoir](https://github.com/LecygneNoir)
- * [angristan](https://github.com/angristan)
- * [okhin](https://github.com/okhin)
- * [daftaupe](https://github.com/daftaupe)
- * [tcitworld](https://github.com/tcitworld)
- * [dedesite](https://github.com/dedesite)
- * [Nautigsam](https://github.com/Nautigsam)
- * [scanlime](https://github.com/scanlime)
- * [am97](https://github.com/am97)
- * [dadall](https://github.com/dadall)
- * [jonathanraes](https://github.com/jonathanraes)
- * [yohanboniface](https://github.com/yohanboniface)
- * [anoadragon453](https://github.com/anoadragon453)
- * [auberanger](https://github.com/auberanger)
- * [darnuria](https://github.com/darnuria)
- * [rhaamo](https://github.com/rhaamo)
- * [mrflos](https://github.com/mrflos)
- * [Yetangitu](https://github.com/Yetangitu)
- * [jocelynj](https://github.com/jocelynj)
- * [lucaspontoexe](https://github.com/lucaspontoexe)
- * [Findus23](https://github.com/Findus23)
- * [flyingrub](https://github.com/flyingrub)
- * [valvin1](https://github.com/valvin1)
- * [taziden](https://github.com/taziden)
- * [AutomCoding](https://github.com/AutomCoding)
- * [sticmac](https://github.com/sticmac)
- * [barbeque](https://github.com/barbeque)
- * [luzpaz](https://github.com/luzpaz)
- * [acid-chicken](https://github.com/acid-chicken)
- * [louistio](https://github.com/louistio)
- * [qsypoq](https://github.com/qsypoq)
- * [daker](https://github.com/daker)
- * [xyproto](https://github.com/xyproto)
- * [NaPs](https://github.com/NaPs)
- * [Anton-Latukha](https://github.com/Anton-Latukha)
- * [noplanman](https://github.com/noplanman)
- * [austinheap](https://github.com/austinheap)
- * [BO41](https://github.com/BO41)
- * [benabbottnz](https://github.com/benabbottnz)
- * [ewft](https://github.com/ewft)
- * [bradsk88](https://github.com/bradsk88)
- * [trosel](https://github.com/trosel)
- * [Ealhad](https://github.com/Ealhad)
- * [claudehohl](https://github.com/claudehohl)
- * [DeeJayBro](https://github.com/DeeJayBro)
- * [dirkkelly](https://github.com/dirkkelly)
- * [Edznux](https://github.com/Edznux)
- * [ebrehault](https://github.com/ebrehault)
- * [DatBewar](https://github.com/DatBewar)
- * [ReK2Fernandez](https://github.com/ReK2Fernandez)
- * [grizio](https://github.com/grizio)
- * [Glandos](https://github.com/Glandos)
- * [lanodan](https://github.com/lanodan)
- * [HesioZ](https://github.com/HesioZ)
- * [jacen92](https://github.com/jacen92)
- * [realityfabric](https://github.com/realityfabric)
- * [jlebras](https://github.com/jlebras)
- * [Knackie](https://github.com/Knackie)
- * [mkody](https://github.com/mkody)
- * [pichouk](https://github.com/pichouk)
- * [LeoMouyna](https://github.com/LeoMouyna)
- * [Leopere](https://github.com/Leopere)
- * [LiPeK](https://github.com/LiPeK)
- * [radiantly](https://github.com/radiantly)
- * [LoveIsGrief](https://github.com/LoveIsGrief)
- * [zapashcanon](https://github.com/zapashcanon)
- * [mart-e](https://github.com/mart-e)
- * [0mp](https://github.com/0mp)
- * [magopian](https://github.com/magopian)
- * [mkoppmann](https://github.com/mkoppmann)
- * [1000i100](https://github.com/1000i100)
- * [roipoussiere](https://github.com/roipoussiere)
- * [zallek](https://github.com/zallek)
- * [zeograd](https://github.com/zeograd)
- * [pjoubert-](https://github.com/pjoubert-)
- * [gbip](https://github.com/gbip)
- * [PhieF](https://github.com/PhieF)
- * [pdurbin](https://github.com/pdurbin)
- * [quentinDupont](https://github.com/quentinDupont)
- * [Quenty31](https://github.com/Quenty31)
- * [sundowndev](https://github.com/sundowndev)
- * [robinkooli](https://github.com/robinkooli)
- * [sesn](https://github.com/sesn)
- * [ALSai](https://github.com/ALSai)
- * [Simounet](https://github.com/Simounet)
- * [sschueller](https://github.com/sschueller)
- * [TrashMacNugget](https://github.com/TrashMacNugget)
- * [FrozenDroid](https://github.com/FrozenDroid)
- * [fallen](https://github.com/fallen)
- * [melongbob](https://github.com/melongbob)
- * [anmol26s](https://github.com/anmol26s)
- * [imbsky](https://github.com/imbsky)
- * [ctlaltdefeat](https://github.com/ctlaltdefeat)
- * [jomo](https://github.com/jomo)
- * [libertysoft3](https://github.com/libertysoft3)
- * [lsde](https://github.com/lsde)
- * [brain-zhang](https://github.com/brain-zhang)
- * [norrist](https://github.com/norrist)
- * [osauzet](https://github.com/osauzet)
- * [SansPseudoFix](https://github.com/SansPseudoFix)
- * [tomamplius](https://github.com/tomamplius)
- * [tuxayo](https://github.com/tuxayo)
- * [victor-long](https://github.com/victor-long)
- * [zacharystenger](https://github.com/zacharystenger)
- * [ewasion](https://github.com/ewasion)
-
-
-# Translation contributors
-
- * [abdhessuk](https://trad.framasoft.org/zanata/profile/view/abdhessuk)
- * [abidin24](https://trad.framasoft.org/zanata/profile/view/abidin24)
- * [aditoo](https://trad.framasoft.org/zanata/profile/view/aditoo)
- * [alice](https://trad.framasoft.org/zanata/profile/view/alice)
- * [anastasia](https://trad.framasoft.org/zanata/profile/view/anastasia)
- * [autom](https://trad.framasoft.org/zanata/profile/view/autom)
- * [balaji](https://trad.framasoft.org/zanata/profile/view/balaji)
- * [bristow](https://trad.framasoft.org/zanata/profile/view/bristow)
- * [butterflyoffire](https://trad.framasoft.org/zanata/profile/view/butterflyoffire)
- * [chocobozzz](https://trad.framasoft.org/zanata/profile/view/chocobozzz)
- * [claichou](https://trad.framasoft.org/zanata/profile/view/claichou)
- * [degrange](https://trad.framasoft.org/zanata/profile/view/degrange)
- * [dibek](https://trad.framasoft.org/zanata/profile/view/dibek)
- * [edu](https://trad.framasoft.org/zanata/profile/view/edu)
- * [ehsaan](https://trad.framasoft.org/zanata/profile/view/ehsaan)
- * [esoforte](https://trad.framasoft.org/zanata/profile/view/esoforte)
- * [fkohrt](https://trad.framasoft.org/zanata/profile/view/fkohrt)
- * [giqtaqisi](https://trad.framasoft.org/zanata/profile/view/giqtaqisi)
- * [goofy](https://trad.framasoft.org/zanata/profile/view/goofy)
- * [gorkaazk](https://trad.framasoft.org/zanata/profile/view/gorkaazk)
- * [gwendald](https://trad.framasoft.org/zanata/profile/view/gwendald)
- * [h3zjp](https://trad.framasoft.org/zanata/profile/view/h3zjp)
- * [jfblanc](https://trad.framasoft.org/zanata/profile/view/jfblanc)
- * [jhertel](https://trad.framasoft.org/zanata/profile/view/jhertel)
- * [jmf](https://trad.framasoft.org/zanata/profile/view/jmf)
- * [jorropo](https://trad.framasoft.org/zanata/profile/view/jorropo)
- * [kairozen](https://trad.framasoft.org/zanata/profile/view/kairozen)
- * [kedemferre](https://trad.framasoft.org/zanata/profile/view/kedemferre)
- * [kousha](https://trad.framasoft.org/zanata/profile/view/kousha)
- * [krkk](https://trad.framasoft.org/zanata/profile/view/krkk)
- * [landrok](https://trad.framasoft.org/zanata/profile/view/landrok)
- * [leeroyepold48](https://trad.framasoft.org/zanata/profile/view/leeroyepold48)
- * [m4sk1n](https://trad.framasoft.org/zanata/profile/view/m4sk1n)
- * [matograine](https://trad.framasoft.org/zanata/profile/view/matograine)
- * [medow](https://trad.framasoft.org/zanata/profile/view/medow)
- * [mhu](https://trad.framasoft.org/zanata/profile/view/mhu)
- * [midgard](https://trad.framasoft.org/zanata/profile/view/midgard)
- * [nbrucy](https://trad.framasoft.org/zanata/profile/view/nbrucy)
- * [nitai](https://trad.framasoft.org/zanata/profile/view/nitai)
- * [noncommutativegeo](https://trad.framasoft.org/zanata/profile/view/noncommutativegeo)
- * [nopsidy](https://trad.framasoft.org/zanata/profile/view/nopsidy)
- * [nvivant](https://trad.framasoft.org/zanata/profile/view/nvivant)
- * [osoitz](https://trad.framasoft.org/zanata/profile/view/osoitz)
- * [outloudvi](https://trad.framasoft.org/zanata/profile/view/outloudvi)
- * [quentin](https://trad.framasoft.org/zanata/profile/view/quentin)
- * [quentind](https://trad.framasoft.org/zanata/profile/view/quentind)
- * [rafaelff](https://trad.framasoft.org/zanata/profile/view/rafaelff)
- * [rigelk](https://trad.framasoft.org/zanata/profile/view/rigelk)
- * [s8321414](https://trad.framasoft.org/zanata/profile/view/s8321414)
- * [sato_ss](https://trad.framasoft.org/zanata/profile/view/sato_ss)
- * [sercom_kc](https://trad.framasoft.org/zanata/profile/view/sercom_kc)
- * [severo](https://trad.framasoft.org/zanata/profile/view/severo)
- * [silkevicious](https://trad.framasoft.org/zanata/profile/view/silkevicious)
- * [sosha](https://trad.framasoft.org/zanata/profile/view/sosha)
- * [spla](https://trad.framasoft.org/zanata/profile/view/spla)
- * [strubbl](https://trad.framasoft.org/zanata/profile/view/strubbl)
- * [swedneck](https://trad.framasoft.org/zanata/profile/view/swedneck)
- * [tagomago](https://trad.framasoft.org/zanata/profile/view/tagomago)
- * [talone](https://trad.framasoft.org/zanata/profile/view/talone)
- * [thibaultmartin](https://trad.framasoft.org/zanata/profile/view/thibaultmartin)
- * [tirifto](https://trad.framasoft.org/zanata/profile/view/tirifto)
- * [tuxayo](https://trad.framasoft.org/zanata/profile/view/tuxayo)
- * [unextro](https://trad.framasoft.org/zanata/profile/view/unextro)
- * [unzarida](https://trad.framasoft.org/zanata/profile/view/unzarida)
- * [vincent](https://trad.framasoft.org/zanata/profile/view/vincent)
- * [wanhua](https://trad.framasoft.org/zanata/profile/view/wanhua)
- * [xinayder](https://trad.framasoft.org/zanata/profile/view/xinayder)
- * [xosem](https://trad.framasoft.org/zanata/profile/view/xosem)
- * [zveryok](https://trad.framasoft.org/zanata/profile/view/zveryok)
- * [6543](https://trad.framasoft.org/zanata/profile/view/6543)
- * [aasami](https://trad.framasoft.org/zanata/profile/view/aasami)
- * [alidemirtas](https://trad.framasoft.org/zanata/profile/view/alidemirtas)
- * [alpha](https://trad.framasoft.org/zanata/profile/view/alpha)
- * [ariasuni](https://trad.framasoft.org/zanata/profile/view/ariasuni)
- * [bfonton](https://trad.framasoft.org/zanata/profile/view/bfonton)
- * [c0dr](https://trad.framasoft.org/zanata/profile/view/c0dr)
- * [canony](https://trad.framasoft.org/zanata/profile/view/canony)
- * [cat](https://trad.framasoft.org/zanata/profile/view/cat)
- * [clerie](https://trad.framasoft.org/zanata/profile/view/clerie)
- * [curupira](https://trad.framasoft.org/zanata/profile/view/curupira)
- * [dhsets](https://trad.framasoft.org/zanata/profile/view/dhsets)
- * [digitalkiller](https://trad.framasoft.org/zanata/profile/view/digitalkiller)
- * [dwsage](https://trad.framasoft.org/zanata/profile/view/dwsage)
- * [flauta](https://trad.framasoft.org/zanata/profile/view/flauta)
- * [frankstrater](https://trad.framasoft.org/zanata/profile/view/frankstrater)
- * [gillux](https://trad.framasoft.org/zanata/profile/view/gillux)
- * [gunchleoc](https://trad.framasoft.org/zanata/profile/view/gunchleoc)
- * [jaidedtd](https://trad.framasoft.org/zanata/profile/view/jaidedtd)
- * [joss2lyon](https://trad.framasoft.org/zanata/profile/view/joss2lyon)
- * [kekkotranslates](https://trad.framasoft.org/zanata/profile/view/kekkotranslates)
- * [kingu](https://trad.framasoft.org/zanata/profile/view/kingu)
- * [kittybecca](https://trad.framasoft.org/zanata/profile/view/kittybecca)
- * [knuxify](https://trad.framasoft.org/zanata/profile/view/knuxify)
- * [lapor](https://trad.framasoft.org/zanata/profile/view/lapor)
- * [laufor](https://trad.framasoft.org/zanata/profile/view/laufor)
- * [lstamellos](https://trad.framasoft.org/zanata/profile/view/lstamellos)
- * [lw1](https://trad.framasoft.org/zanata/profile/view/lw1)
- * [mablr](https://trad.framasoft.org/zanata/profile/view/mablr)
- * [marcinmalecki](https://trad.framasoft.org/zanata/profile/view/marcinmalecki)
- * [mayana](https://trad.framasoft.org/zanata/profile/view/mayana)
- * [mikeorlov](https://trad.framasoft.org/zanata/profile/view/mikeorlov)
- * [nin](https://trad.framasoft.org/zanata/profile/view/nin)
- * [norbipeti](https://trad.framasoft.org/zanata/profile/view/norbipeti)
- * [ppnplus](https://trad.framasoft.org/zanata/profile/view/ppnplus)
- * [predatorix](https://trad.framasoft.org/zanata/profile/view/predatorix)
- * [robin](https://trad.framasoft.org/zanata/profile/view/robin)
- * [rond](https://trad.framasoft.org/zanata/profile/view/rond)
- * [secreet](https://trad.framasoft.org/zanata/profile/view/secreet)
- * [sftblw](https://trad.framasoft.org/zanata/profile/view/sftblw)
- * [sporiff](https://trad.framasoft.org/zanata/profile/view/sporiff)
- * [tekuteku](https://trad.framasoft.org/zanata/profile/view/tekuteku)
- * [thecatjustmeow](https://trad.framasoft.org/zanata/profile/view/thecatjustmeow)
- * [tmota](https://trad.framasoft.org/zanata/profile/view/tmota)
- * [uranix](https://trad.framasoft.org/zanata/profile/view/uranix)
- * [wakutiteo](https://trad.framasoft.org/zanata/profile/view/wakutiteo)
- * [wonderingdane](https://trad.framasoft.org/zanata/profile/view/wonderingdane)
- * [zeynepeliacik](https://trad.framasoft.org/zanata/profile/view/zeynepeliacik)
+ * Chocobozzz
+ * Rigel Kent
+ * Bigard Florian
+ * Felix Ableitner
+ * Gérald Niel
+ * Jorropo
+ * Josh Morel
+ * BO41
+ * Julien Maulny
+ * Filip Bengtsson
+ * Frank Sträter
+ * buoyantair
+ * Attila F
+ * Benjamin Bouvier
+ * Jan Keromnes
+ * John Livingston
+ * Lucas Declercq
+ * David Libeau
+ * Florent F
+ * Francesc
+ * Luc Didry
+ * Nassim Bounouas
+ * BRAINS YUM
+ * Dimitri Gilbert
+ * Florent Poinsaut
+ * Green-Star
+ * Micah Elizabeth Scott
+ * Phongpanot
+ * SVNET Libre
+ * Thomas Kuntz
+ * William Lahti
+ * Wirebrass
+ * Angristan
+ * GunChleoc
+ * Okhin
+ * Pierre-Alain TORET
+ * Thomas Citharel
+ * clementbrizard
+ * kaiyou
+ * Andréas Livet
+ * Andrés Maldonado
+ * Aurélien Bertron
+ * Hans Meiser
+ * Jefferson Hernandez
+ * Kemal Oktay Aktoğan
+ * LecygneNoir
+ * Leopere
+ * Marcin Mikołajczak
+ * Yohan Boniface
+ * am97
+ * anotheranonymoususer
+ * dada
+ * frankdelange
+ * jonathanraes
+ * Andrew Morgan
+ * Aurélien Béranger
+ * Axel Viala
+ * ButterflyOfFire
+ * Dashie
+ * Dirk Kelly
+ * Florent Fayolle
+ * Florian
+ * Frank de Lange
+ * Gaëtan Rizio
+ * Jocelyn Jaubert
+ * Julien Lemaire
+ * Lucas Teixeira
+ * Lukas Winkler
+ * Millicent Billette
+ * NorbiPeti
+ * Pierre Jaury
+ * Quentin
+ * Ronan
+ * SerCom_KC
+ * Valvin
+ * ahmadsharifian
+ * taziden
+ * victor héry
+ * Acid Chicken (硫酸鶏)
+ * Adam Gauthier
+ * Adam Magnier
+ * Adnane Belmadiaf
+ * Alexander F. Rødseth
+ * Antoine Millet
+ * Anton Latukha
+ * Armando Lüscher
+ * Artem Prosvetov
+ * Asier Iturralde Sarasola
+ * Austin Heap
+ * Autom
+ * Ben Abbott
+ * Ben Lubar
+ * Benjamin EWFT
+ * Brad Johnson
+ * Cale
+ * Ch
+ * Charles de Lacombe
+ * Claude
+ * Clément Brizard
+ * DeeJayBro
+ * DontUseGithub
+ * Edouard SCHWEISGUTH
+ * Edwin Alberto Amado Baron
+ * Eric Brehault
+ * Erwan Croze
+ * Fabio Agreles Bezerra
+ * Fernandez, ReK2
+ * Glandos
+ * Haelwenn (lanodan) Monnier
+ * HesioZ
+ * Jacen
+ * Jacob
+ * Jacques Foucry
+ * Jagannath Bhat
+ * Jarosław Maciejewski
+ * Jeff Huang
+ * Jessica Fairchild
+ * Julien Le Bras
+ * Knackie
+ * Kody
+ * Kyâne Pichou
+ * Leo Mouyna
+ * Lesterpig
+ * LiPeK
+ * Lint
+ * LoveIsGrief
+ * Léo Andrès
+ * ManMade-cube42
+ * Manuel Viens
+ * Marco Zehe
+ * Markus Richter
+ * Martin Trigaux
+ * Mateusz Piotrowski
+ * Mathieu Agopian
+ * Matthieu De Beule
+ * Michael Koppmann
+ * Mike
+ * MrGiga
+ * Mélanie Pin
+ * Nathanaël J
+ * Nicolas Fortin
+ * Niklas Reimer
+ * Nitesh Sawant
+ * Olivier Jolly
+ * Pablo Joubert
+ * Paul FLORENCE
+ * PhieF
+ * Philip Durbin
+ * Predatorix Phoenix
+ * Quentin Dupont
+ * Quentí
+ * Raphael
+ * Robin
+ * Sankar
+ * Simon Gilliot
+ * Simounet
+ * Stefan Schüller
+ * Tomás Sebastián Romero
+ * TrashMacNugget
+ * Vincent Stakenburg
+ * Yann Sionneau
+ * Yorwba
+ * Yun
+ * Zig-03
+ * anmol26s
+ * augier
+ * bikepunk
+ * bsky
+ * ctlaltdefeat
+ * jomo
+ * libertysoft3
+ * lsde
+ * luz.paz
+ * luzpaz
+ * memorybox
+ * mike stedman
+ * morteza
+ * norrist
+ * numéro6
+ * osauzet
+ * potedeo
+ * spf
+ * tilllt
+ * tomamplius
+ * tuxayo
+ * victor-long
+ * zacharystenger
+ * ‮noisawe
+ * abdhessuk
+ * abidin24
+ * aditoo
+ * alice
+ * anastasia
+ * autom
+ * balaji
+ * bristow
+ * butterflyoffire
+ * claichou
+ * degrange
+ * dibek
+ * edu
+ * ehsaan
+ * esoforte
+ * fkohrt
+ * giqtaqisi
+ * goofy
+ * gorkaazk
+ * gwendald
+ * h3zjp
+ * jfblanc
+ * jhertel
+ * jmf
+ * jorropo
+ * kairozen
+ * kedemferre
+ * kousha
+ * krkk
+ * landrok
+ * leeroyepold48
+ * m4sk1n
+ * matograine
+ * medow
+ * mhu
+ * midgard
+ * nbrucy
+ * nitai
+ * noncommutativegeo
+ * nopsidy
+ * nvivant
+ * osoitz
+ * outloudvi
+ * quentin
+ * quentind
+ * rafaelff
+ * rigelk
+ * s8321414
+ * sato_ss
+ * sercom_kc
+ * severo
+ * silkevicious
+ * sosha
+ * spla
+ * strubbl
+ * swedneck
+ * tagomago
+ * talone
+ * thibaultmartin
+ * tirifto
+ * tuxayo
+ * unextro
+ * unzarida
+ * vincent
+ * wanhua
+ * xinayder
+ * xosem
+ * zveryok
+ * 6543
+ * aasami
+ * alidemirtas
+ * alpha
+ * ariasuni
+ * bfonton
+ * c0dr
+ * canony
+ * cat
+ * clerie
+ * curupira
+ * dhsets
+ * digitalkiller
+ * dwsage
+ * flauta
+ * frankstrater
+ * gillux
+ * gunchleoc
+ * jaidedtd
+ * joss2lyon
+ * kekkotranslates
+ * kingu
+ * kittybecca
+ * knuxify
+ * lapor
+ * laufor
+ * lstamellos
+ * lw1
+ * mablr
+ * marcinmalecki
+ * mayana
+ * mikeorlov
+ * nin
+ * norbipeti
+ * ppnplus
+ * predatorix
+ * robin
+ * rond
+ * secreet
+ * sftblw
+ * sporiff
+ * tekuteku
+ * thecatjustmeow
+ * tmota
+ * uranix
+ * wakutiteo
+ * wonderingdane
+ * zeynepeliacik
 
 
 # Design
 
- * [Olivier Massain](https://twitter.com/omassain)
+ * [Olivier Massain](https://dribbble.com/omassain)
 
 
 # Icons
