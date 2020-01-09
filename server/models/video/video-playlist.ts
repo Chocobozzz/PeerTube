@@ -68,7 +68,7 @@ type AvailableForListOptions = {
   type?: VideoPlaylistType
   accountId?: number
   videoChannelId?: number
-  privateAndUnlisted?: boolean,
+  listMyPlaylists?: boolean,
   search?: string
 }
 
@@ -124,27 +124,31 @@ type AvailableForListOptions = {
     ]
   },
   [ ScopeNames.AVAILABLE_FOR_LIST ]: (options: AvailableForListOptions) => {
-    // Only list local playlists OR playlists that are on an instance followed by actorId
-    const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
-    const whereActor = {
-      [ Op.or ]: [
-        {
-          serverId: null
-        },
-        {
-          serverId: {
-            [ Op.in ]: literal(inQueryInstanceFollow)
-          }
-        }
-      ]
-    }
+
+    let whereActor: WhereOptions = {}
 
     const whereAnd: WhereOptions[] = []
 
-    if (options.privateAndUnlisted !== true) {
+    if (options.listMyPlaylists !== true) {
       whereAnd.push({
         privacy: VideoPlaylistPrivacy.PUBLIC
       })
+
+      // Only list local playlists OR playlists that are on an instance followed by actorId
+      const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
+
+      whereActor = {
+        [ Op.or ]: [
+          {
+            serverId: null
+          },
+          {
+            serverId: {
+              [ Op.in ]: literal(inQueryInstanceFollow)
+            }
+          }
+        ]
+      }
     }
 
     if (options.accountId) {
@@ -301,7 +305,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
     type?: VideoPlaylistType,
     accountId?: number,
     videoChannelId?: number,
-    privateAndUnlisted?: boolean,
+    listMyPlaylists?: boolean,
     search?: string
   }) {
     const query = {
@@ -319,7 +323,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
             followerActorId: options.followerActorId,
             accountId: options.accountId,
             videoChannelId: options.videoChannelId,
-            privateAndUnlisted: options.privateAndUnlisted,
+            listMyPlaylists: options.listMyPlaylists,
             search: options.search
           } as AvailableForListOptions
         ]

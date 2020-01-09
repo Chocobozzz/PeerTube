@@ -42,6 +42,7 @@ export class VideoPlaylistService {
   private videoExistsCache: { [ id: number ]: VideoExistInPlaylist[] } = {}
 
   private myAccountPlaylistCache: ResultList<CachedPlaylist> = undefined
+  private myAccountPlaylistCacheRunning = false
   private myAccountPlaylistCacheSubject = new Subject<ResultList<CachedPlaylist>>()
 
   constructor (
@@ -78,12 +79,20 @@ export class VideoPlaylistService {
   }
 
   listMyPlaylistWithCache (user: AuthUser, search?: string) {
-    if (!search && this.myAccountPlaylistCache) return of(this.myAccountPlaylistCache)
+    if (!search) {
+      if (this.myAccountPlaylistCacheRunning) return
+      if (this.myAccountPlaylistCache) return of(this.myAccountPlaylistCache)
+    }
+
+    this.myAccountPlaylistCacheRunning = true
 
     return this.listAccountPlaylists(user.account, undefined, '-updatedAt', search)
                .pipe(
                  tap(result => {
-                   if (!search) this.myAccountPlaylistCache = result
+                   if (!search) {
+                     this.myAccountPlaylistCacheRunning = false
+                     this.myAccountPlaylistCache = result
+                   }
                  })
                )
   }

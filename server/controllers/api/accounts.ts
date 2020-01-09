@@ -133,9 +133,9 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
   const serverActor = await getServerActor()
 
   // Allow users to see their private/unlisted video playlists
-  let privateAndUnlisted = false
+  let listMyPlaylists = false
   if (res.locals.oauth && res.locals.oauth.token.User.Account.id === res.locals.account.id) {
-    privateAndUnlisted = true
+    listMyPlaylists = true
   }
 
   const resultList = await VideoPlaylistModel.listForApi({
@@ -145,7 +145,7 @@ async function listAccountPlaylists (req: express.Request, res: express.Response
     count: req.query.count,
     sort: req.query.sort,
     accountId: res.locals.account.id,
-    privateAndUnlisted,
+    listMyPlaylists,
     type: req.query.playlistType
   })
 
