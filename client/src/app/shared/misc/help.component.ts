@@ -11,7 +11,7 @@ import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template
 
 export class HelpComponent implements OnInit, OnChanges, AfterContentInit {
   @Input() helpType: 'custom' | 'markdownText' | 'markdownEnhanced' = 'custom'
-  @Input() tooltipPlacement = 'right'
+  @Input() tooltipPlacement = 'right auto'
 
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'preHtml' | 'customHtml' | 'postHtml'>>
 
