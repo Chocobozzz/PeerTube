@@ -112,7 +112,7 @@ staticRouter.use(
 
 // robots.txt service
 staticRouter.get('/robots.txt',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ROBOTS)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ROBOTS)),
   (_, res: express.Response) => {
     res.type('text/plain')
     return res.send(CONFIG.INSTANCE.ROBOTS)
@@ -127,7 +127,7 @@ staticRouter.get('/security.txt',
 )
 
 staticRouter.get('/.well-known/security.txt',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.SECURITYTXT)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.SECURITYTXT)),
   (_, res: express.Response) => {
     res.type('text/plain')
     return res.send(CONFIG.INSTANCE.SECURITYTXT + CONFIG.INSTANCE.SECURITYTXT_CONTACT)
@@ -136,7 +136,7 @@ staticRouter.get('/.well-known/security.txt',
 
 // nodeinfo service
 staticRouter.use('/.well-known/nodeinfo',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.NODEINFO)),
   (_, res: express.Response) => {
     return res.json({
       links: [
@@ -149,13 +149,13 @@ staticRouter.use('/.well-known/nodeinfo',
   }
 )
 staticRouter.use('/nodeinfo/:version.json',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.NODEINFO)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.NODEINFO)),
   asyncMiddleware(generateNodeinfo)
 )
 
 // dnt-policy.txt service (see https://www.eff.org/dnt-policy)
 staticRouter.use('/.well-known/dnt-policy.txt',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.DNT_POLICY)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.DNT_POLICY)),
   (_, res: express.Response) => {
     res.type('text/plain')
 

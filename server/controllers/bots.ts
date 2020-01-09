@@ -14,7 +14,7 @@ const botsRouter = express.Router()
 // Special route that add OpenGraph and oEmbed tags
 // Do not use a template engine for a so little thing
 botsRouter.use('/sitemap.xml',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.SITEMAP)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.SITEMAP)),
   asyncMiddleware(getSitemap)
 )
 

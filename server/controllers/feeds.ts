@@ -6,7 +6,9 @@ import {
   setDefaultSort,
   videoCommentsFeedsValidator,
   videoFeedsValidator,
-  videosSortValidator
+  videosSortValidator,
+  feedsFormatValidator,
+  setFeedFormatContentType
 } from '../middlewares'
 import { VideoModel } from '../models/video/video'
 import * as Feed from 'pfeed'
@@ -18,7 +20,13 @@ import { CONFIG } from '../initializers/config'
 const feedsRouter = express.Router()
 
 feedsRouter.get('/feeds/video-comments.:format',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  feedsFormatValidator,
+  setFeedFormatContentType,
+  asyncMiddleware(cacheRoute({
+    headerBlacklist: [
+      'Content-Type'
+    ]
+  })(ROUTE_CACHE_LIFETIME.FEEDS)),
   asyncMiddleware(videoCommentsFeedsValidator),
   asyncMiddleware(generateVideoCommentsFeed)
 )
@@ -26,7 +34,13 @@ feedsRouter.get('/feeds/video-comments.:format',
 feedsRouter.get('/feeds/videos.:format',
   videosSortValidator,
   setDefaultSort,
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.FEEDS)),
+  feedsFormatValidator,
+  setFeedFormatContentType,
+  asyncMiddleware(cacheRoute({
+    headerBlacklist: [
+      'Content-Type'
+    ]
+  })(ROUTE_CACHE_LIFETIME.FEEDS)),
   commonVideosFiltersValidator,
   asyncMiddleware(videoFeedsValidator),
   asyncMiddleware(generateVideoFeed)
@@ -224,26 +238,21 @@ function sendFeed (feed, req: express.Request, res: express.Response) {
   const format = req.params.format
 
   if (format === 'atom' || format === 'atom1') {
-    res.set('Content-Type', 'application/atom+xml')
     return res.send(feed.atom1()).end()
   }
 
   if (format === 'json' || format === 'json1') {
-    res.set('Content-Type', 'application/json')
     return res.send(feed.json1()).end()
   }
 
   if (format === 'rss' || format === 'rss2') {
-    res.set('Content-Type', 'application/rss+xml')
     return res.send(feed.rss2()).end()
   }
 
   // We're in the ambiguous '.xml' case and we look at the format query parameter
   if (req.query.format === 'atom' || req.query.format === 'atom1') {
-    res.set('Content-Type', 'application/atom+xml')
     return res.send(feed.atom1()).end()
   }
 
-  res.set('Content-Type', 'application/rss+xml')
   return res.send(feed.rss2()).end()
 }

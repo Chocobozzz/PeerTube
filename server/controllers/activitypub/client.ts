@@ -74,7 +74,7 @@ activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
 
 activityPubClientRouter.get('/videos/watch/:id',
   executeIfActivityPub,
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.ACTIVITY_PUB.VIDEOS)),
   asyncMiddleware(videosCustomGetValidator('only-video-with-rights')),
   asyncMiddleware(videoController)
 )
