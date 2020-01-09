@@ -11,7 +11,7 @@ import * as memoizee from 'memoizee'
 const overviewsRouter = express.Router()
 
 overviewsRouter.get('/videos',
-  asyncMiddleware(cacheRoute(ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS)),
+  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS)),
   asyncMiddleware(getVideosOverview)
 )
 

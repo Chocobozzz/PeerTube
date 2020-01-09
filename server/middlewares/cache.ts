@@ -4,12 +4,18 @@ import * as apicache from 'apicache'
 // Ensure Redis is initialized
 Redis.Instance.init()
 
-const options = {
+const defaultOptions = {
   redisClient: Redis.Instance.getClient(),
-  appendKey: () => Redis.Instance.getPrefix()
+  appendKey: () => Redis.Instance.getPrefix(),
+  statusCodes: {
+    exclude: [ 404, 403 ]
+  }
 }
 
-const cacheRoute = apicache.options(options).middleware
+const cacheRoute = (extraOptions = {}) => apicache.options({
+  ...defaultOptions,
+  ...extraOptions
+}).middleware
 
 // ---------------------------------------------------------------------------
 
