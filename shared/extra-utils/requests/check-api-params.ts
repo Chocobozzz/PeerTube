@@ -11,12 +11,20 @@ function checkBadStartPagination (url: string, path: string, token?: string, que
   })
 }
 
-function checkBadCountPagination (url: string, path: string, token?: string, query = {}) {
-  return makeGetRequest({
+async function checkBadCountPagination (url: string, path: string, token?: string, query = {}) {
+  await makeGetRequest({
     url,
     path,
     token,
     query: immutableAssign(query, { count: 'hello' }),
+    statusCodeExpected: 400
+  })
+
+  await makeGetRequest({
+    url,
+    path,
+    token,
+    query: immutableAssign(query, { count: 2000 }),
     statusCodeExpected: 400
   })
 }

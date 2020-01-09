@@ -22,9 +22,16 @@ const API_VERSION = 'v1'
 const PEERTUBE_VERSION = require(join(root(), 'package.json')).version
 
 const PAGINATION = {
-  COUNT: {
-    DEFAULT: 15,
-    MAX: 100
+  GLOBAL: {
+    COUNT: {
+      DEFAULT: 15,
+      MAX: 100
+    }
+  },
+  OUTBOX: {
+    COUNT: {
+      MAX: 50
+    }
   }
 }
 
