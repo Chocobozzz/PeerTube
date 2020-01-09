@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month" datatype="html">
         <source>Previous month</source>
-        <target state="new">Previous month</target>
+        <target state="translated">Mes anterior</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts</context>
           <context context-type="linenumber">4</context>
@@ -41,7 +41,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
-        <target state="new">Next month</target>
+        <target state="translated">Mes següent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts</context>
           <context context-type="linenumber">26</context>
@@ -53,7 +53,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month" datatype="html">
         <source>Select month</source>
-        <target state="new">Select month</target>
+        <target state="translated">Selecciona un mes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts</context>
           <context context-type="linenumber">6</context>
@@ -65,7 +65,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year" datatype="html">
         <source>Select year</source>
-        <target state="new">Select year</target>
+        <target state="translated">Selecciona un any</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation-select.d.ts</context>
           <context context-type="linenumber">15</context>
@@ -77,7 +77,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first" datatype="html">
         <source>««</source>
-        <target state="new">««</target>
+        <target state="translated">««</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">2</context>
@@ -85,7 +85,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.previous" datatype="html">
         <source>«</source>
-        <target state="new">«</target>
+        <target state="translated">«</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">3</context>
@@ -93,7 +93,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.next" datatype="html">
         <source>»</source>
-        <target state="new">»</target>
+        <target state="translated">»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">4</context>
@@ -101,7 +101,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.last" datatype="html">
         <source>»»</source>
-        <target state="new">»»</target>
+        <target state="translated">»»</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">5</context>
@@ -109,7 +109,7 @@
       </trans-unit>
       <trans-unit id="ngb.pagination.first-aria" datatype="html">
         <source>First</source>
-        <target state="new">First</target>
+        <target state="translated">Primer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/pagination/pagination.d.ts</context>
           <context context-type="linenumber">14</context>
@@ -141,7 +141,7 @@
       </trans-unit>
       <trans-unit id="ngb.progressbar.value" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{getPercentValue()}}"/>%</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/progressbar/progressbar.d.ts</context>
           <context context-type="linenumber">6</context>
@@ -157,7 +157,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.HH" datatype="html">
         <source>HH</source>
-        <target state="new">HH</target>
+        <target state="translated">HH</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">12</context>
@@ -165,7 +165,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.hours" datatype="html">
         <source>Hours</source>
-        <target state="new">Hours</target>
+        <target state="translated">Hores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">14</context>
@@ -189,7 +189,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.MM" datatype="html">
         <source>MM</source>
-        <target state="new">MM</target>
+        <target state="translated">MM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">33</context>
@@ -197,7 +197,7 @@
       </trans-unit>
       <trans-unit id="ngb.timepicker.minutes" datatype="html">
         <source>Minutes</source>
-        <target state="new">Minutes</target>
+        <target state="translated">Minuts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/timepicker/timepicker.d.ts</context>
           <context context-type="linenumber">35</context>
@@ -478,7 +478,7 @@
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
         <source>Direct download</source>
-        <target>Descàrrega directe</target>
+        <target>Baixada directa</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
@@ -486,7 +486,7 @@
       </trans-unit>
       <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d" datatype="html">
         <source>Torrent (.torrent file)</source>
-        <target state="new">Torrent (.torrent file)</target>
+        <target state="translated">Torrent (fitxer .torrent)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="da44efc7b658c318651866454d258bbbe57ff21c" datatype="html">
@@ -500,7 +500,7 @@
       </trans-unit>
       <trans-unit id="dc75033a5238fdc4f462212c847a45ba8018a3fd">
         <source>Download</source>
-        <target>Descàrrega</target>
+        <target>Baixa</target>
         <context-group name="null">
           <context context-type="linenumber">43</context>
         </context-group>
@@ -617,7 +617,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Cap vídeo} =1 {1 vídeo} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> vídeos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1165,7 +1165,7 @@
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
-        <target>Iniciar sessió</target>
+        <target>Inicia sessió</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
@@ -1217,7 +1217,7 @@
       </trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55">
         <source>Send me an email to reset my password</source>
-        <target>Envia'm un correu per reiniciar la meva contrasenya</target>
+        <target>Envia'm un correu per a restablir la contrasenya</target>
         <context-group name="null">
           <context context-type="linenumber">82</context>
         </context-group>
@@ -1563,7 +1563,7 @@
       </trans-unit>
       <trans-unit id="608d7164ed2d996dc827b17cd7b6f5915c617be4" datatype="html">
         <source>Public profile</source>
-        <target state="new">Public profile</target>
+        <target state="translated">Perfil públic</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1742,7 +1742,7 @@
       </trans-unit>
       <trans-unit id="4b3972c3e9485218508a95f7a4ce7758e3f09ced">
         <source>Upload</source>
-        <target>Pujar</target>
+        <target>Puja</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
@@ -2006,7 +2006,7 @@
       </trans-unit>
       <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8" datatype="html">
         <source>Select the caption file</source>
-        <target state="new">Select the caption file</target>
+        <target state="translated">Trieu un fitxer de subtítols</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2205,7 +2205,7 @@
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed" datatype="html">
         <source>See the subtitle file</source>
-        <target state="new">See the subtitle file</target>
+        <target state="translated">Mostra el fitxer de subtítols</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">176</context></context-group>
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee" datatype="html">
@@ -2287,7 +2287,7 @@
       </trans-unit>
       <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0" datatype="html">
         <source>Enable download</source>
-        <target state="new">Enable download</target>
+        <target state="translated">Habilita la baixada</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">260</context></context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
@@ -2337,9 +2337,7 @@
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2" datatype="html">
         <source>Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video. </source>
-        <target state="new">
-  Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video.
-</target>
+        <target state="translated">Enhorabona, s'importarà el vídeo allotjat en <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/>! Ja podeu afegir informació sobre aquest vídeo. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">52</context>
@@ -2357,7 +2355,7 @@
       </trans-unit>
       <trans-unit id="21add64f0f3ebbedf1150ca822c6e149494ab7a9">
         <source>Select the file to upload</source>
-        <target>Selecciona el fitxer a pujar</target>
+        <target>Trieu el fitxer a pujar</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -2486,7 +2484,7 @@
       </trans-unit>
       <trans-unit id="4faf57baebf0fb754a91af0c39521a30cbb1def3" datatype="html">
         <source>Upload a file</source>
-        <target state="new">Upload a file</target>
+        <target state="translated">Puja un fitxer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/video-add.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="fc865859d33eab6fa0a8015233e4686cd544d470" datatype="html">
@@ -2511,9 +2509,7 @@
       </trans-unit>
       <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>Other videos</source>
-        <target state="new">
-        Other videos
-      </target>
+        <target state="translated">Altres vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4</context>
@@ -2764,7 +2760,7 @@
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
-        <target>Veure més</target>
+        <target>Mostra més</target>
         <context-group name="null">
           <context context-type="linenumber">141</context>
         </context-group>
@@ -2919,7 +2915,7 @@
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
         <source>Add comment...</source>
-        <target>Afegir comentari...</target>
+        <target>Afegeix un comentari...</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -3105,7 +3101,7 @@
       </trans-unit>
       <trans-unit id="456c6383d8e7cd15aadbcdc196d4ae7a70092437">
         <source>Add following</source>
-        <target>Afegir seguiment</target>
+        <target>Afegeix un seguiment</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -3244,7 +3240,7 @@
       </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">
         <source>Create user</source>
-        <target>Afegir usuari</target>
+        <target>Afegeix un usuari</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -4077,7 +4073,7 @@
       </trans-unit>
       <trans-unit id="06119c0230042048f8a3fd6aa9260934b6fa5878" datatype="html">
         <source>Moderation information</source>
-        <target state="new">Moderation information</target>
+        <target state="translated">Informació de moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">120</context>
@@ -4133,7 +4129,7 @@
       </trans-unit>
       <trans-unit id="34c4e700f4ef721fe991fc4f383bc75fa9b77885" datatype="html">
         <source>Other information</source>
-        <target state="new">Other information</target>
+        <target state="translated">Més informació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">177</context>
@@ -4149,7 +4145,7 @@
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
         <source>Instance information</source>
-        <target state="new">Instance information</target>
+        <target state="translated">Informació de la instància</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4293,7 +4289,7 @@
       </trans-unit>
       <trans-unit id="05fdf7b5be1c3a7126e3c06d81da3134981b0a9e" datatype="html">
         <source>Video import with a torrent file or a magnet URI enabled</source>
-        <target state="new">Video import with a torrent file or a magnet URI enabled</target>
+        <target state="translated">S'ha habilitat la importació de vídeo amb un fitxer torrent o URI magnet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">301</context>
@@ -4507,7 +4503,7 @@
       </trans-unit>
       <trans-unit id="88cfa6e185dd938361d1d9c04314bbd3afb54fb6" datatype="html">
         <source>Allow audio files upload</source>
-        <target state="new">Allow audio files upload</target>
+        <target state="translated">Permet la pujada de fitxers d'àudio</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">486</context>
@@ -4581,7 +4577,7 @@
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0" datatype="html">
         <source>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</source>
-        <target state="new">Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</target>
+        <target state="translated">Alguns fitxers no són federats (previsualitzacions, subtítols). Els obtenim directament de la instància original i els emmagatzemem en la memòria cau.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">572</context></context-group>
       </trans-unit>
       <trans-unit id="d00f6c2dcb426440a0a8cd8eec12d094fbfaf6f7">
@@ -5554,9 +5550,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="e2fc82c4d461726d7b2b0754e55441b9e30ebf80" datatype="html">
         <source>Information</source>
-        <target state="new">
-      Information
-    </target>
+        <target state="translated">Informació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">50</context>
@@ -5564,9 +5558,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="e225eef43c0ea66a5ec06e67f553c6dd5f519823" datatype="html">
         <source>Other information</source>
-        <target state="new">
-      Other information
-    </target>
+        <target state="translated">Més informació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">82</context>
@@ -5574,7 +5566,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="3624f527ba5d5ed005a4ff2540d1a210233aa320" datatype="html">
         <source>Hardware information</source>
-        <target state="new">Hardware information</target>
+        <target state="translated">Informació del maquinari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">87</context>
@@ -5635,9 +5627,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="7b85d0debc419e6c9c390ce02686b57d256cd139" datatype="html">
         <source>For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-      For more information, please visit <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    </target>
+        <target state="translated">Per a més informació, visiteu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">18</context>
@@ -5710,10 +5700,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="0dcd37e1600ea24299e1c2daa14869568ea33785" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users. This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.</source>
-        <target state="new">
-        PeerTube uses the BitTorrent protocol to share bandwidth between users.
-        This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
-      </target>
+        <target state="translated">PeerTube usa el protocol BitTorrent per a compartir l'amplada de banda entre els usuaris. Això implica que la vostra adreça IP s'emmagatzema en la instància del rastrejador BiTorrent mentre baixeu o visualitzeu el vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">71</context>
@@ -5729,10 +5716,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="14d3bc3dafb4a09f3c79daac07ebf30e76457f63" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="new">
-        In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
-        In practice, this is much more difficult because:
-      </target>
+        <target state="translated">En teoria, algú amb els coneixements tècnics suficients podria crear un script que rastregés des de quina IP es baixa quin vídeo. A la pràctica, això és més difícil perquè:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">78</context>
@@ -7262,7 +7246,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="db4ff52375f6a25ad0472e92754c8c265ae47c6b">
         <source>Profile updated.</source>
-        <target>Perfil actualitzat.</target>
+        <target>S'ha actualitzat el perfil.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8408,7 +8392,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="new">Video caption file is required.</target>
+        <target state="translated">Es requereix un fitxer de subtítols de vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-captions-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8624,7 +8608,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="3b7ed22d0730d03b38c254332829d855ee7256c4" datatype="html">
         <source>This file is too large.</source>
-        <target state="new">This file is too large.</target>
+        <target state="translated">Aquest fitxer és massa gran.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/reactive-file.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8632,7 +8616,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="2f5f2093f14679fed82ff76a0cd2a28145a83ca9" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
+        <target state="translated">PeerTube no pot gestionar aquest tipus de fitxer. Les extensions admeses són <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/reactive-file.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9670,7 +9654,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="bef4ec92fa80e7b7ac03f8ad2b49d2a126f0cc71" datatype="html">
         <source>Upload <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></source>
-        <target state="new">Upload <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></target>
+        <target state="translated">Puja <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">1</context>
