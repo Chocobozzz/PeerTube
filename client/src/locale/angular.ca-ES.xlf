@@ -1639,12 +1639,12 @@
       </trans-unit>
       <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db" datatype="html">
         <source>Discover</source>
-        <target state="new">Discover</target>
+        <target state="translated">Descobreix</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
         <source>Trending</source>
-        <target>Tendència</target>
+        <target>Tendències</target>
         <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
@@ -4185,7 +4185,7 @@
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Descobreix vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">219</context>
@@ -4193,7 +4193,7 @@
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">Vídeos tendència</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">220</context>
@@ -5644,9 +5644,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="80c7532b45374a38b6c5f3bd5576464660b95b89" datatype="html">
         <source>Discover how to setup your account, what is a channel, how to create a playlist and more!</source>
-        <target state="new">
-          Discover how to setup your account, what is a channel, how to create a playlist and more!
-        </target>
+        <target state="translated">Descobriu com configurar el compte, què és un canal, com crear una llista de reproducció i moltes coses més!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5663,9 +5661,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="41d3c1ad1b83498b20d96d74bc14e0a1e9749529" datatype="html">
         <source>Discover unofficial Android applications or browser addons!</source>
-        <target state="new">
-          Discover unofficial Android applications or browser addons!
-        </target>
+        <target state="translated">Descobriu aplicacions no oficials per a l'Android o extensions de navegador!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">45</context>
@@ -6122,7 +6118,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="e0e3a472479c8ce1b78f682ffadbe59daf04d331" datatype="html">
         <source>Cannot get about information from server</source>
-        <target state="new">Cannot get about information from server</target>
+        <target state="translated">No es pot obtenir informació del servidor</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7542,7 +7538,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">Vés a la pàgina de descobrir vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7550,7 +7546,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="new">Go to the trending videos page</target>
+        <target state="translated">Vés a la pàgina de vídeos tendència</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9926,7 +9922,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054" datatype="html">
         <source>Trending for the last 24 hours</source>
-        <target state="new">Trending for the last 24 hours</target>
+        <target state="translated">Tendències de les últimes 24 hores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9934,7 +9930,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="6e9cb0b3b38312870471954abec8690170429a4e" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
-        <target state="new">Trending videos are those totalizing the greatest number of views during the last 24 hours</target>
+        <target state="translated">Els vídeos tendència són el que tenen el nombre més gran de visualitzacions durant les últimes 24 hores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9942,7 +9938,7 @@ Quan pugis un vídeo en aquest canal, el camp d'assistència de vídeo s'omplir�
       </trans-unit>
       <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df" datatype="html">
         <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target state="new">Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</target>
+        <target state="translated">Les tendències dels últims <x id="INTERPOLATION" equiv-text="{{days}}"/> dies</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
