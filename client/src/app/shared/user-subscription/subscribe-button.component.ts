@@ -7,7 +7,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoService } from '@app/shared/video/video.service'
 import { FeedFormat } from '../../../../../shared/models/feeds'
 import { Account } from '@app/shared/account/account.model'
-import { forkJoin, merge } from 'rxjs'
+import { concat, forkJoin, merge } from 'rxjs'
+import { toArray } from 'rxjs/operators'
 
 @Component({
   selector: 'my-subscribe-button',
@@ -82,12 +83,14 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   localSubscribe () {
+    const subscribedStatus = this.subscribeStatus(false)
+
     const observableBatch = this.videoChannels
       .map(videoChannel => this.getChannelHandler(videoChannel))
-      .filter(handle => this.subscribeStatus(false).includes(handle))
+      .filter(handle => subscribedStatus.includes(handle))
       .map(handle => this.userSubscriptionService.addSubscription(handle))
 
-    merge(observableBatch, 2)
+    forkJoin(observableBatch)
       .subscribe(
         () => {
           this.notifier.success(
@@ -116,25 +119,27 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   localUnsubscribe () {
+    const subscribeStatus = this.subscribeStatus(true)
+
     const observableBatch = this.videoChannels
-      .map(videoChannel => this.getChannelHandler(videoChannel))
-      .filter(handle => this.subscribeStatus(true).includes(handle))
-      .map(handle => this.userSubscriptionService.deleteSubscription(handle))
+                                .map(videoChannel => this.getChannelHandler(videoChannel))
+                                .filter(handle => subscribeStatus.includes(handle))
+                                .map(handle => this.userSubscriptionService.deleteSubscription(handle))
 
-    forkJoin(observableBatch)
-        .subscribe(
-          () => {
-            this.notifier.success(
-              this.account
-                ? this.i18n('Unsubscribed from all channels of {{nameWithHost}}', { nameWithHost: this.account.nameWithHost })
-                : this.i18n('Unsubscribed from {{nameWithHost}}', { nameWithHost: this.videoChannels[0].nameWithHost })
-              ,
-              this.i18n('Unsubscribed')
-            )
-          },
+    concat(...observableBatch)
+      .subscribe({
+        complete: () => {
+          this.notifier.success(
+            this.account
+              ? this.i18n('Unsubscribed from all channels of {{nameWithHost}}', { nameWithHost: this.account.nameWithHost })
+              : this.i18n('Unsubscribed from {{nameWithHost}}', { nameWithHost: this.videoChannels[ 0 ].nameWithHost })
+            ,
+            this.i18n('Unsubscribed')
+          )
+        },
 
-          err => this.notifier.error(err.message)
-        )
+        error: err => this.notifier.error(err.message)
+      })
   }
 
   isUserLoggedIn () {
@@ -176,15 +181,15 @@ export class SubscribeButtonComponent implements OnInit {
     for (const videoChannel of this.videoChannels) {
       const handle = this.getChannelHandler(videoChannel)
       this.subscribed.set(handle, false)
+
       merge(
         this.userSubscriptionService.listenToSubscriptionCacheChange(handle),
         this.userSubscriptionService.doesSubscriptionExist(handle)
-      )
-          .subscribe(
-            res => this.subscribed.set(handle, res),
+      ).subscribe(
+        res => this.subscribed.set(handle, res),
 
-            err => this.notifier.error(err.message)
-          )
+        err => this.notifier.error(err.message)
+      )
     }
   }
 }
