@@ -40,11 +40,11 @@ export class SubscribeButtonComponent implements OnInit {
   get handle () {
     return this.account
       ? this.account.nameWithHost
-      : this.videoChannels[0].name + '@' + this.videoChannels[0].host
+      : this.videoChannel.name + '@' + this.videoChannel.host
   }
 
   get channelHandle () {
-    return this.getChannelHandler(this.videoChannels[0])
+    return this.getChannelHandler(this.videoChannel)
   }
 
   get uri () {
@@ -65,6 +65,10 @@ export class SubscribeButtonComponent implements OnInit {
     return rssFeed.url
   }
 
+  get videoChannel () {
+    return this.videoChannels[0]
+  }
+
   ngOnInit () {
     this.loadSubscribedStatus()
   }
@@ -83,7 +87,7 @@ export class SubscribeButtonComponent implements OnInit {
       .filter(handle => this.subscribeStatus(false).includes(handle))
       .map(handle => this.userSubscriptionService.addSubscription(handle))
 
-    forkJoin(observableBatch)
+    merge(observableBatch, 2)
       .subscribe(
         () => {
           this.notifier.success(
@@ -153,16 +157,17 @@ export class SubscribeButtonComponent implements OnInit {
     this.router.navigate([ '/login' ])
   }
 
-  private getChannelHandler (videoChannel: VideoChannel) {
-    return videoChannel.name + '@' + videoChannel.host
-  }
-
-  private subscribeStatus (subscribed: boolean) {
+  subscribeStatus (subscribed: boolean) {
     const accumulator: string[] = []
     for (const [key, value] of this.subscribed.entries()) {
       if (value === subscribed) accumulator.push(key)
     }
+
     return accumulator
+  }
+
+  private getChannelHandler (videoChannel: VideoChannel) {
+    return videoChannel.name + '@' + videoChannel.host
   }
 
   private loadSubscribedStatus () {

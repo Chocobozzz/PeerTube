@@ -7,12 +7,12 @@
       <ng-template i18n #single>Subscribe</ng-template>
       <ng-template #multiple>
         <span i18n>Subscribe to all channels</span>
-        <span *ngIf="isAtLeastOneChannelSubscribed()">{{subscribeStatus(true).length}}/{{subscribed.size}} 
+        <span *ngIf="isAtLeastOneChannelSubscribed()">{{ subscribeStatus(true).length }}/{{ subscribed.size }}
           <ng-container i18n>channels subscribed</ng-container>
         </span>
       </ng-template>
     </span>
-    <span *ngIf="!isBigButton() && displayFollowers && videoChannels.length > 1 && videoChannels[0].followersCount !== 0" class="followers-count">
+    <span *ngIf="!isBigButton() && displayFollowers && videoChannels.length > 1 && videoChannel.followersCount !== 0" class="followers-count">
       {{ videoChannels[0].followersCount | myNumberFormatter }}
     </span>
   </ng-template>
@@ -23,7 +23,7 @@
             (click)="subscribe()">
       <ng-template [ngTemplateOutlet]="userLoggedOut"></ng-template>
     </button>
-  
+
     <button
       *ngIf="isAllChannelsSubscribed()" type="button"
       class="btn btn-sm" role="button"
@@ -55,7 +55,7 @@
       </button>
 
       <button class="dropdown-item" i18n>Subscribe with a Mastodon account:</button>
-      <my-remote-subscribe showHelp="true" [uri]="channelUri"></my-remote-subscribe>
+      <my-remote-subscribe showHelp="true" [uri]="uri"></my-remote-subscribe>
 
       <div class="dropdown-divider"></div>
 
