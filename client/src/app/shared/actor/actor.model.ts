@@ -20,7 +20,7 @@ export abstract class Actor implements ActorServer {
 
     if (actor && actor.avatar) return absoluteAPIUrl + actor.avatar.path
 
-    this.GET_DEFAULT_AVATAR_URL()
+    return this.GET_DEFAULT_AVATAR_URL()
   }
 
   static GET_DEFAULT_AVATAR_URL () {

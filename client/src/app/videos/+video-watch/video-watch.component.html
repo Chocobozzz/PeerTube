@@ -145,6 +145,7 @@
           <div class="pt-3 border-top video-info-channel d-flex">
             <div class="video-info-channel-left d-flex">
               <avatar-channel [video]="video"></avatar-channel>
+
               <div class="video-info-channel-left-links ml-1">
                 <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Go the channel page">
                   {{ video.channel.displayName }}
@@ -230,7 +231,7 @@
         <div class="video-attribute">
           <span i18n class="video-attribute-label">Duration</span>
           <span class="video-attribute-value">{{ video.duration | myVideoDurationFormatter }}</span>
-        </div>  
+        </div>
       </div>
 
       <my-video-comments
