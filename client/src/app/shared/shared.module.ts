@@ -98,6 +98,7 @@ import { FollowService } from '@app/shared/instance/follow.service'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.component'
 import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-copy.component'
+import { RedundancyService } from '@app/shared/video/redundancy.service'
 
 @NgModule({
   imports: [
@@ -300,6 +301,7 @@ import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-cop
     UserNotificationService,
 
     FollowService,
+    RedundancyService,
 
     I18n
   ]

@@ -3,21 +3,25 @@
 import 'mocha'
 
 import {
+  checkBadCountPagination,
+  checkBadSortPagination,
+  checkBadStartPagination,
   cleanupTests,
   createUser,
   doubleFollow,
-  flushAndRunMultipleServers,
-  flushTests,
-  killallServers,
+  flushAndRunMultipleServers, makeDeleteRequest,
+  makeGetRequest, makePostBodyRequest,
   makePutBodyRequest,
   ServerInfo,
-  setAccessTokensToServers,
-  userLogin
+  setAccessTokensToServers, uploadVideoAndGetId,
+  userLogin, waitJobs
 } from '../../../../shared/extra-utils'
 
 describe('Test server redundancy API validators', function () {
   let servers: ServerInfo[]
   let userAccessToken = null
+  let videoIdLocal: number
+  let videoIdRemote: number
 
   // ---------------------------------------------------------------
 
@@ -36,9 +40,134 @@ describe('Test server redundancy API validators', function () {
 
     await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(servers[0], user)
+
+    videoIdLocal = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })).id
+    videoIdRemote = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video' })).id
+
+    await waitJobs(servers)
   })
 
-  describe('When updating redundancy', function () {
+  describe('When listing redundancies', function () {
+    const path = '/api/v1/server/redundancy/videos'
+
+    let url: string
+    let token: string
+
+    before(function () {
+      url = servers[0].url
+      token = servers[0].accessToken
+    })
+
+    it('Should fail with an invalid token', async function () {
+      await makeGetRequest({ url, path, token: 'fake_token', statusCodeExpected: 401 })
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      await makeGetRequest({ url, path, token: userAccessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should fail with a bad start pagination', async function () {
+      await checkBadStartPagination(url, path, servers[0].accessToken)
+    })
+
+    it('Should fail with a bad count pagination', async function () {
+      await checkBadCountPagination(url, path, servers[0].accessToken)
+    })
+
+    it('Should fail with an incorrect sort', async function () {
+      await checkBadSortPagination(url, path, servers[0].accessToken)
+    })
+
+    it('Should fail with a bad target', async function () {
+      await makeGetRequest({ url, path, token, query: { target: 'bad target' } })
+    })
+
+    it('Should fail without target', async function () {
+      await makeGetRequest({ url, path, token })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url, path, token, query: { target: 'my-videos' }, statusCodeExpected: 200 })
+    })
+  })
+
+  describe('When manually adding a redundancy', function () {
+    const path = '/api/v1/server/redundancy/videos'
+
+    let url: string
+    let token: string
+
+    before(function () {
+      url = servers[0].url
+      token = servers[0].accessToken
+    })
+
+    it('Should fail with an invalid token', async function () {
+      await makePostBodyRequest({ url, path, token: 'fake_token', statusCodeExpected: 401 })
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      await makePostBodyRequest({ url, path, token: userAccessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should fail without a video id', async function () {
+      await makePostBodyRequest({ url, path, token })
+    })
+
+    it('Should fail with an incorrect video id', async function () {
+      await makePostBodyRequest({ url, path, token, fields: { videoId: 'peertube' } })
+    })
+
+    it('Should fail with a not found video id', async function () {
+      await makePostBodyRequest({ url, path, token, fields: { videoId: 6565 }, statusCodeExpected: 404 })
+    })
+
+    it('Should fail with a local a video id', async function () {
+      await makePostBodyRequest({ url, path, token, fields: { videoId: videoIdLocal } })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makePostBodyRequest({ url, path, token, fields: { videoId: videoIdRemote }, statusCodeExpected: 204 })
+    })
+
+    it('Should fail if the video is already duplicated', async function () {
+      this.timeout(30000)
+
+      await waitJobs(servers)
+
+      await makePostBodyRequest({ url, path, token, fields: { videoId: videoIdRemote }, statusCodeExpected: 409 })
+    })
+  })
+
+  describe('When manually removing a redundancy', function () {
+    const path = '/api/v1/server/redundancy/videos/'
+
+    let url: string
+    let token: string
+
+    before(function () {
+      url = servers[0].url
+      token = servers[0].accessToken
+    })
+
+    it('Should fail with an invalid token', async function () {
+      await makeDeleteRequest({ url, path: path + '1', token: 'fake_token', statusCodeExpected: 401 })
+    })
+
+    it('Should fail if the user is not an administrator', async function () {
+      await makeDeleteRequest({ url, path: path + '1', token: userAccessToken, statusCodeExpected: 403 })
+    })
+
+    it('Should fail with an incorrect video id', async function () {
+      await makeDeleteRequest({ url, path: path + 'toto', token })
+    })
+
+    it('Should fail with a not found video redundancy', async function () {
+      await makeDeleteRequest({ url, path: path + '454545', token, statusCodeExpected: 404 })
+    })
+  })
+
+  describe('When updating server redundancy', function () {
     const path = '/api/v1/server/redundancy'
 
     it('Should fail with an invalid token', async function () {

@@ -1,6 +1,6 @@
 import { VideoStreamingPlaylistModel } from '../../../models/video/video-streaming-playlist'
 import { PickWith, PickWithOpt } from '../../utils'
-import { MVideoRedundancyFileUrl } from './video-redundancy'
+import { MVideoRedundancyFileUrl, MVideoRedundancy } from './video-redundancy'
 import { MVideo } from './video'
 import { MVideoFile } from './video-file'
 
@@ -19,6 +19,10 @@ export type MStreamingPlaylistVideo = MStreamingPlaylist &
 export type MStreamingPlaylistFilesVideo = MStreamingPlaylist &
   Use<'VideoFiles', MVideoFile[]> &
   Use<'Video', MVideo>
+
+export type MStreamingPlaylistRedundanciesAll = MStreamingPlaylist &
+  Use<'VideoFiles', MVideoFile[]> &
+  Use<'RedundancyVideos', MVideoRedundancy[]>
 
 export type MStreamingPlaylistRedundancies = MStreamingPlaylist &
   Use<'VideoFiles', MVideoFile[]> &

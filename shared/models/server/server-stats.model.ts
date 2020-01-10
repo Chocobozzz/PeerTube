@@ -1,4 +1,4 @@
-import { VideoRedundancyStrategy } from '../redundancy'
+import { VideoRedundancyStrategyWithManual } from '../redundancy'
 
 export interface ServerStats {
   totalUsers: number
@@ -13,11 +13,13 @@ export interface ServerStats {
   totalInstanceFollowers: number
   totalInstanceFollowing: number
 
-  videosRedundancy: {
-    strategy: VideoRedundancyStrategy
-    totalSize: number
-    totalUsed: number
-    totalVideoFiles: number
-    totalVideos: number
-  }[]
+  videosRedundancy: VideosRedundancyStats[]
+}
+
+export interface VideosRedundancyStats {
+  strategy: VideoRedundancyStrategyWithManual
+  totalSize: number
+  totalUsed: number
+  totalVideoFiles: number
+  totalVideos: number
 }

@@ -10,6 +10,7 @@ import { ROUTE_CACHE_LIFETIME } from '../../../initializers/constants'
 import { cacheRoute } from '../../../middlewares/cache'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { CONFIG } from '../../../initializers/config'
+import { VideoRedundancyStrategyWithManual } from '@shared/models'
 
 const statsRouter = express.Router()
 
@@ -25,8 +26,15 @@ async function getStats (req: express.Request, res: express.Response) {
   const { totalInstanceFollowers, totalInstanceFollowing } = await ActorFollowModel.getStats()
   const { totalLocalVideoFilesSize } = await VideoFileModel.getStats()
 
+  const strategies: { strategy: VideoRedundancyStrategyWithManual, size: number }[] = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
+                                                                                            .map(r => ({
+                                                                                              strategy: r.strategy,
+                                                                                              size: r.size
+                                                                                            }))
+  strategies.push({ strategy: 'manual', size: null })
+
   const videosRedundancyStats = await Promise.all(
-    CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.map(r => {
+    strategies.map(r => {
       return VideoRedundancyModel.getStats(r.strategy)
         .then(stats => Object.assign(stats, { strategy: r.strategy, totalSize: r.size }))
     })

@@ -10,8 +10,13 @@ import {
 } from './video-channels'
 import { MTag } from './tag'
 import { MVideoCaptionLanguage } from './video-caption'
-import { MStreamingPlaylistFiles, MStreamingPlaylistRedundancies, MStreamingPlaylistRedundanciesOpt } from './video-streaming-playlist'
-import { MVideoFile, MVideoFileRedundanciesOpt } from './video-file'
+import {
+  MStreamingPlaylistFiles,
+  MStreamingPlaylistRedundancies,
+  MStreamingPlaylistRedundanciesAll,
+  MStreamingPlaylistRedundanciesOpt
+} from './video-streaming-playlist'
+import { MVideoFile, MVideoFileRedundanciesAll, MVideoFileRedundanciesOpt } from './video-file'
 import { MThumbnail } from './thumbnail'
 import { MVideoBlacklist, MVideoBlacklistLight, MVideoBlacklistUnfederated } from './video-blacklist'
 import { MScheduleVideoUpdate } from './schedule-video-update'
@@ -157,6 +162,10 @@ export type MVideoForUser = MVideo &
   Use<'ScheduleVideoUpdate', MScheduleVideoUpdate> &
   Use<'VideoBlacklist', MVideoBlacklistLight> &
   Use<'Thumbnails', MThumbnail[]>
+
+export type MVideoForRedundancyAPI = MVideo &
+  Use<'VideoFiles', MVideoFileRedundanciesAll[]> &
+  Use<'VideoStreamingPlaylists', MStreamingPlaylistRedundanciesAll[]>
 
 // ############################################################################
 

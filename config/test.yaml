@@ -40,18 +40,18 @@ contact_form:
 
 redundancy:
   videos:
-    check_interval: '10 minutes'
+    check_interval: '1 minute'
     strategies:
       -
-        size: '10MB'
+        size: '1000MB'
         min_lifetime: '10 minutes'
         strategy: 'most-views'
       -
-        size: '10MB'
+        size: '1000MB'
         min_lifetime: '10 minutes'
         strategy: 'trending'
       -
-        size: '10MB'
+        size: '1000MB'
         min_lifetime: '10 minutes'
         strategy: 'recently-added'
         min_views: 1

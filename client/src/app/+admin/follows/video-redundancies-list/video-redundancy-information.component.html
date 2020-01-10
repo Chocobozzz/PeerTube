@@ -1,0 +1,24 @@
+<div>
+  <span class="label">Url</span>
+  <a target="_blank" rel="noopener noreferrer" [href]="redundancyElement.fileUrl">{{ redundancyElement.fileUrl }}</a>
+</div>
+
+<div>
+  <span class="label">Created on</span>
+  <span>{{ redundancyElement.createdAt | date: 'medium' }}</span>
+</div>
+
+<div>
+  <span class="label">Expires on</span>
+  <span>{{ redundancyElement.expiresOn | date: 'medium' }}</span>
+</div>
+
+<div>
+  <span class="label">Size</span>
+  <span>{{ redundancyElement.size | bytes: 1 }}</span>
+</div>
+
+<div *ngIf="redundancyElement.strategy">
+  <span class="label">Strategy</span>
+  <span>{{ redundancyElement.strategy }}</span>
+</div>

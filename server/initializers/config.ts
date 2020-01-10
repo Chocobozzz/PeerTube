@@ -1,6 +1,6 @@
 import { IConfig } from 'config'
 import { dirname, join } from 'path'
-import { VideosRedundancy } from '../../shared/models'
+import { VideosRedundancyStrategy } from '../../shared/models'
 // Do not use barrels, remain constants as independent as possible
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
@@ -304,7 +304,7 @@ function getLocalConfigFilePath () {
   return join(dirname(configSources[ 0 ].name), filename + '.json')
 }
 
-function buildVideosRedundancy (objs: any[]): VideosRedundancy[] {
+function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
   if (!objs) return []
 
   if (!Array.isArray(objs)) return objs
