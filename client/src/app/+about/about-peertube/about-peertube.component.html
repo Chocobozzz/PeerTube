@@ -69,8 +69,14 @@
       <h3 i18n class="section-title">P2P & Privacy</h3>
 
       <p i18n>
-        PeerTube uses the BitTorrent protocol to share bandwidth between users.
-        This implies that your IP address is stored in the instance's BitTorrent tracker as long as you download or watch the video.
+        PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server,
+        but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What
+        follows applies only if you want to keep using the P2P mode of PeerTube.
+      </p>
+
+      <p>
+        The main threat to your privacy induced by BitTorrent lies in your IP address being stored in the instance's BitTorrent 
+        tracker as long as you download or watch the video.
       </p>
 
       <h6 i18n class="p2p-privacy-title">What are the consequences?</h6>
@@ -122,7 +128,7 @@
       <h6 i18n class="p2p-privacy-title">How does PeerTube compare with YouTube?</h6>
 
       <p i18n>
-        The threats to privacy in YouTube are different from PeerTube's.
+        The threats to privacy with YouTube are different from PeerTube's.
         In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
         Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
       </p>
@@ -139,19 +145,21 @@
       <h6 i18n class="p2p-privacy-title">What will be done to mitigate this problem?</h6>
 
       <p i18n>
-        PeerTube is in its early stages, and want to deliver the best countermeasures possible by the time the stable is released.
-        In the meantime, we want to test different ideas related to this issue:
+        PeerTube wants to deliver the best countermeasures possible, to give you more choice
+        and render attacks less likely. Here is what we put in place so far:
       </p>
 
       <ul>
-        <li i18n>Set a limit to the number of peers sent by the tracker</li>
-        <li i18n>Set a limit on the request frequency received by the tracker (being tested)</li>
-        <li i18n>Ring a bell if there are unusual requests (being tested)</li>
-        <li i18n>Disable P2P from the administration interface</li>
-        <li i18n>An automatic video redundancy program: we wouldn't know if the IP downloaded the video on purpose or if it was the
-          automatized program
-        </li>
+        <li i18n>We set a limit to the number of peers sent by the tracker</li>
+        <li i18n>We set a limit on the request frequency received by the tracker</li>
+        <li i18n>Allow instance admins to disable P2P from the administration interface</li>
+        <li i18n>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</li>
       </ul>
+
+      <p i18n>
+        Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
+        WebRTC in your browser.
+      </p>
     </div>
 
   </div>
