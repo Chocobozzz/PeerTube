@@ -51,7 +51,7 @@
       <label i18n for="password">Password</label>
       <div>
         <input
-          type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2"
+          type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2" autocomplete="current-password"
           formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
         >
         <a i18n class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>

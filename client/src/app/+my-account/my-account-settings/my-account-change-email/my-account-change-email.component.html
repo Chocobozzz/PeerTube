@@ -24,7 +24,7 @@
 
   <div class="form-group">
     <input
-      type="password" id="password" i18n-placeholder placeholder="Your password"
+      type="password" id="password" i18n-placeholder placeholder="Your password" autocomplete="off"
       formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
     >
     <div *ngIf="formErrors['password']" class="form-error">

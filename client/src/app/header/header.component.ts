@@ -5,6 +5,7 @@ import { getParameterByName } from '../shared/misc/utils'
 import { AuthService, ServerService, Notifier } from '@app/core'
 import { of } from 'rxjs'
 import { ServerConfig } from '@shared/models'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-header',
@@ -14,6 +15,7 @@ import { ServerConfig } from '@shared/models'
 
 export class HeaderComponent implements OnInit {
   searchValue = ''
+  ariaLabelTextForSearch = ''
 
   private serverConfig: ServerConfig
 
@@ -23,10 +25,13 @@ export class HeaderComponent implements OnInit {
     private auth: AuthService,
     private serverService: ServerService,
     private authService: AuthService,
-    private notifier: Notifier
+    private notifier: Notifier,
+    private i18n: I18n
   ) {}
 
   ngOnInit () {
+    this.ariaLabelTextForSearch = this.i18n('Search videos, channels')
+
     this.router.events
         .pipe(
           filter(e => e instanceof NavigationEnd),
