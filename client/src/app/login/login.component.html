@@ -3,6 +3,18 @@
     Login
   </div>
 
+  <div class="alert alert-warning" *ngIf="from.upload" role="alert">
+    <h6 class="alert-heading" i18n>
+      If you are looking for an account…
+    </h6>
+    <div i18n>
+      Currently this instance doesn't allow for user registration, but you can find an instance 
+      that gives you the possibility to sign up for an account and upload your videos there.
+      Find yours among multiple instances at <a class="alert-link" [href]="instancesIndexUrl" target="_blank" rel="noopener noreferrer">{{ instancesIndexUrl }}</a>
+      , a directory of instances recommended by this instance.
+    </div>
+  </div>
+
   <div *ngIf="error" class="alert alert-danger">{{ error }}
     <span *ngIf="error === 'User email is not verified.'"> <a i18n routerLink="/verify-account/ask-send-email">Request new verification email.</a></span>
   </div>

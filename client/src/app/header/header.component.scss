@@ -53,6 +53,7 @@
   @include orange-button;
   @include button-with-icon(22px, 3px, -1px);
 
+  color: var(--mainBackgroundColor) !important;
   margin-right: 25px;
 
   @media screen and (max-width: 800px) {

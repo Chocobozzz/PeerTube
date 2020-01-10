@@ -33,7 +33,6 @@ export class MenuComponent implements OnInit {
     private authService: AuthService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private themeService: ThemeService,
     private hotkeysService: HotkeysService
   ) {}
 

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { Notifier, RedirectService, ServerService } from '@app/core'
+import { Notifier, RedirectService } from '@app/core'
 import { UserService } from '@app/shared'
 import { AuthService } from '../core'
 import { FormReactive } from '../shared'
@@ -7,8 +7,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-validators.service'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { ActivatedRoute, Router } from '@angular/router'
-import { ServerConfig } from '@shared/models'
+import { ActivatedRoute } from '@angular/router'
+import { ServerConfig } from '@shared/models/server/server-config.model'
 
 @Component({
   selector: 'my-login',
@@ -22,6 +22,9 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   error: string = null
   forgotPasswordEmail = ''
+  from = {
+    upload: false
+  }
 
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
@@ -44,12 +47,17 @@ export class LoginComponent extends FormReactive implements OnInit {
     return this.serverConfig.signup.allowed === true
   }
 
+  get instancesIndexUrl () {
+    return this.serverConfig.followings.instance.autoFollowIndex.indexUrl || 'https://instances.joinpeertube.org'
+  }
+
   isEmailDisabled () {
     return this.serverConfig.email.enabled === false
   }
 
   ngOnInit () {
     this.serverConfig = this.route.snapshot.data.serverConfig
+    this.from.upload = Boolean(this.route.snapshot.paramMap.get('fromUpload'))
 
     this.buildForm({
       username: this.loginValidatorsService.LOGIN_USERNAME,

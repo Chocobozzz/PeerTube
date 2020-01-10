@@ -126,4 +126,12 @@ export interface ServerConfig {
   tracker: {
     enabled: boolean
   }
+
+  followings: {
+    instance: {
+      autoFollowIndex: {
+        indexUrl: string
+      }
+    }
+  }
 }

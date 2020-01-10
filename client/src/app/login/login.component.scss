@@ -20,8 +20,10 @@ input[type=submit] {
 .create-an-account, .forgot-password-button {
   color: var(--mainForegroundColor);
   cursor: pointer;
+  transition: opacity cubic-bezier(0.39, 0.575, 0.565, 1);
   
   &:hover {
-    text-decoration: underline !important;
+    text-decoration: none !important;
+    opacity: .7 !important;
   }
 }

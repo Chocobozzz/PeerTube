@@ -166,3 +166,7 @@ ngb-tabset.bootstrap {
 .dropdown-divider {
   margin: 0.3rem 0;
 }
+
+ngb-modal-backdrop {
+  z-index: 10000 !important;
+}

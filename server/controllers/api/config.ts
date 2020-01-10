@@ -155,6 +155,14 @@ async function getConfig (req: express.Request, res: express.Response) {
     },
     tracker: {
       enabled: CONFIG.TRACKER.ENABLED
+    },
+
+    followings: {
+      instance: {
+        autoFollowIndex: {
+          indexUrl: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
+        }
+      }
     }
   }
 

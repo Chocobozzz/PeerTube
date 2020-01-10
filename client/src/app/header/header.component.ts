@@ -2,8 +2,9 @@ import { filter, first, map, tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router'
 import { getParameterByName } from '../shared/misc/utils'
-import { AuthService } from '@app/core'
+import { AuthService, ServerService, Notifier } from '@app/core'
 import { of } from 'rxjs'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-header',
@@ -14,10 +15,15 @@ import { of } from 'rxjs'
 export class HeaderComponent implements OnInit {
   searchValue = ''
 
+  private serverConfig: ServerConfig
+
   constructor (
     private router: Router,
     private route: ActivatedRoute,
-    private auth: AuthService
+    private auth: AuthService,
+    private serverService: ServerService,
+    private authService: AuthService,
+    private notifier: Notifier
   ) {}
 
   ngOnInit () {
@@ -27,6 +33,13 @@ export class HeaderComponent implements OnInit {
           map(() => getParameterByName('search', window.location.href))
         )
         .subscribe(searchQuery => this.searchValue = searchQuery || '')
+
+    this.serverConfig = this.serverService.getTmpConfig()
+    this.serverService.getConfig().subscribe(
+      config => this.serverConfig = config,
+
+      err => this.notifier.error(err.message)
+    )
   }
 
   doSearch () {
@@ -43,6 +56,25 @@ export class HeaderComponent implements OnInit {
       : of(true)
 
     o.subscribe(() => this.router.navigate([ '/search' ], { queryParams }))
+  }
+
+  isUserLoggedIn () {
+    return this.authService.isLoggedIn()
+  }
+
+  isRegistrationAllowed () {
+    return this.serverConfig.signup.allowed &&
+           this.serverConfig.signup.allowedForCurrentIP
+  }
+
+  goToUpload () {
+    if (this.isUserLoggedIn()) {
+      this.router.navigate([ '/videos/upload' ])
+    } else if (this.isRegistrationAllowed()) {
+      this.router.navigate([ '/signup' ])
+    } else {
+      this.router.navigate([ '/login', { fromUpload: true } ])
+    }
   }
 
   private loadUserLanguagesIfNeeded (queryParams: any) {
