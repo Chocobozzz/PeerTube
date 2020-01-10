@@ -42,6 +42,16 @@ export class HeaderComponent implements OnInit {
     )
   }
 
+  get routerLink () {
+    if (this.isUserLoggedIn()) {
+      return [ '/videos/upload' ]
+    } else if (this.isRegistrationAllowed()) {
+      return [ '/signup' ]
+    } else {
+      return [ '/login', { fromUpload: true } ]
+    }
+  }
+
   doSearch () {
     const queryParams: Params = {}
 
@@ -65,16 +75,6 @@ export class HeaderComponent implements OnInit {
   isRegistrationAllowed () {
     return this.serverConfig.signup.allowed &&
            this.serverConfig.signup.allowedForCurrentIP
-  }
-
-  goToUpload () {
-    if (this.isUserLoggedIn()) {
-      this.router.navigate([ '/videos/upload' ])
-    } else if (this.isRegistrationAllowed()) {
-      this.router.navigate([ '/signup' ])
-    } else {
-      this.router.navigate([ '/login', { fromUpload: true } ])
-    }
   }
 
   private loadUserLanguagesIfNeeded (queryParams: any) {
