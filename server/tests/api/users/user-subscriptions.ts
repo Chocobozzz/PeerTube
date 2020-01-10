@@ -102,7 +102,7 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const res = await listUserSubscriptions(servers[0].url, users[0].accessToken)
+      const res = await listUserSubscriptions(servers[0].url, users[0].accessToken, 'createdAt')
       expect(res.body.total).to.equal(2)
 
       const subscriptions: VideoChannel[] = res.body.data
