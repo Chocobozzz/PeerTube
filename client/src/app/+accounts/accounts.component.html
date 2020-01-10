@@ -28,7 +28,9 @@
           >
           </my-user-moderation-dropdown>
         </div>
-        <div class="actor-followers" i18n>{account.followersCount, plural, =1 {1 subscriber} other {{{ account.followersCount }} subscribers}}</div>
+        <div class="actor-followers" i18n-title [title]="subscribersDisplayFor(account.followersCount) + ' to the account actor'">
+          {{ subscribersDisplayFor(naiveAggregatedSubscribers) }}
+        </div>
       </div>
 
       <my-subscribe-button *ngIf="videoChannels" [account]="account" [videoChannels]="videoChannels"></my-subscribe-button>

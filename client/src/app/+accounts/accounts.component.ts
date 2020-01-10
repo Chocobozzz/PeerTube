@@ -18,7 +18,7 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 export class AccountsComponent implements OnInit, OnDestroy {
   account: Account
   user: User
-  videoChannels: VideoChannel[]
+  videoChannels: VideoChannel[] = []
 
   private routeSub: Subscription
 
@@ -58,6 +58,13 @@ export class AccountsComponent implements OnInit, OnDestroy {
     if (this.routeSub) this.routeSub.unsubscribe()
   }
 
+  get naiveAggregatedSubscribers () {
+    return this.videoChannels.reduce(
+      (acc, val) => acc + val.followersCount,
+      this.account.followersCount // accumulator starts with the base number of subscribers the account has
+    )
+  }
+
   onUserChanged () {
     this.getUserIfNeeded(this.account)
   }
@@ -68,6 +75,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   activateCopiedMessage () {
     this.notifier.success(this.i18n('Username copied'))
+  }
+
+  subscribersDisplayFor (count: number) {
+    return this.i18n(`{count, plural, =1 {1 subscriber} other {${count} subscribers}}`, { count })
   }
 
   private getUserIfNeeded (account: Account) {
