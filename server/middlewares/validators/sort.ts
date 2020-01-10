@@ -23,6 +23,7 @@ const SORTABLE_USER_NOTIFICATIONS_COLUMNS = createSortableColumns(SORTABLE_COLUM
 const SORTABLE_VIDEO_PLAYLISTS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_PLAYLISTS)
 const SORTABLE_PLUGINS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.PLUGINS)
 const SORTABLE_AVAILABLE_PLUGINS_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.AVAILABLE_PLUGINS)
+const SORTABLE_VIDEO_REDUNDANCIES_COLUMNS = createSortableColumns(SORTABLE_COLUMNS.VIDEO_REDUNDANCIES)
 
 const usersSortValidator = checkSort(SORTABLE_USERS_COLUMNS)
 const accountsSortValidator = checkSort(SORTABLE_ACCOUNTS_COLUMNS)
@@ -45,6 +46,7 @@ const userNotificationsSortValidator = checkSort(SORTABLE_USER_NOTIFICATIONS_COL
 const videoPlaylistsSortValidator = checkSort(SORTABLE_VIDEO_PLAYLISTS_COLUMNS)
 const pluginsSortValidator = checkSort(SORTABLE_PLUGINS_COLUMNS)
 const availablePluginsSortValidator = checkSort(SORTABLE_AVAILABLE_PLUGINS_COLUMNS)
+const videoRedundanciesSortValidator = checkSort(SORTABLE_VIDEO_REDUNDANCIES_COLUMNS)
 
 // ---------------------------------------------------------------------------
 
@@ -69,5 +71,6 @@ export {
   serversBlocklistSortValidator,
   userNotificationsSortValidator,
   videoPlaylistsSortValidator,
+  videoRedundanciesSortValidator,
   pluginsSortValidator
 }

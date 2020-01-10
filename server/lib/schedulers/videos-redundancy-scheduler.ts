@@ -1,7 +1,7 @@
 import { AbstractScheduler } from './abstract-scheduler'
 import { HLS_REDUNDANCY_DIRECTORY, REDUNDANCY, VIDEO_IMPORT_TIMEOUT, WEBSERVER } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
-import { VideosRedundancy } from '../../../shared/models/redundancy'
+import { VideosRedundancyStrategy } from '../../../shared/models/redundancy'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { downloadWebTorrentVideo, generateMagnetUri } from '../../helpers/webtorrent'
 import { join } from 'path'
@@ -25,9 +25,10 @@ import {
   MVideoWithAllFiles
 } from '@server/typings/models'
 import { getVideoFilename } from '../video-paths'
+import { VideoModel } from '@server/models/video/video'
 
 type CandidateToDuplicate = {
-  redundancy: VideosRedundancy,
+  redundancy: VideosRedundancyStrategy,
   video: MVideoWithAllFiles,
   files: MVideoFile[],
   streamingPlaylists: MStreamingPlaylistFiles[]
@@ -41,12 +42,28 @@ function isMVideoRedundancyFileVideo (
 
 export class VideosRedundancyScheduler extends AbstractScheduler {
 
-  private static instance: AbstractScheduler
+  private static instance: VideosRedundancyScheduler
 
   protected schedulerIntervalMs = CONFIG.REDUNDANCY.VIDEOS.CHECK_INTERVAL
 
   private constructor () {
     super()
+  }
+
+  async createManualRedundancy (videoId: number) {
+    const videoToDuplicate = await VideoModel.loadWithFiles(videoId)
+
+    if (!videoToDuplicate) {
+      logger.warn('Video to manually duplicate %d does not exist anymore.', videoId)
+      return
+    }
+
+    return this.createVideoRedundancies({
+      video: videoToDuplicate,
+      redundancy: null,
+      files: videoToDuplicate.VideoFiles,
+      streamingPlaylists: videoToDuplicate.VideoStreamingPlaylists
+    })
   }
 
   protected async internalExecute () {
@@ -94,7 +111,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     for (const redundancyModel of expired) {
       try {
         const redundancyConfig = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES.find(s => s.strategy === redundancyModel.strategy)
-        const candidate = {
+        const candidate: CandidateToDuplicate = {
           redundancy: redundancyConfig,
           video: null,
           files: [],
@@ -140,7 +157,7 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
   }
 
-  private findVideoToDuplicate (cache: VideosRedundancy) {
+  private findVideoToDuplicate (cache: VideosRedundancyStrategy) {
     if (cache.strategy === 'most-views') {
       return VideoRedundancyModel.findMostViewToDuplicate(REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR)
     }
@@ -187,13 +204,21 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     }
   }
 
-  private async createVideoFileRedundancy (redundancy: VideosRedundancy, video: MVideoAccountLight, fileArg: MVideoFile) {
+  private async createVideoFileRedundancy (redundancy: VideosRedundancyStrategy | null, video: MVideoAccountLight, fileArg: MVideoFile) {
+    let strategy = 'manual'
+    let expiresOn: Date = null
+
+    if (redundancy) {
+      strategy = redundancy.strategy
+      expiresOn = this.buildNewExpiration(redundancy.minLifetime)
+    }
+
     const file = fileArg as MVideoFileVideo
     file.Video = video
 
     const serverActor = await getServerActor()
 
-    logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, redundancy.strategy)
+    logger.info('Duplicating %s - %d in videos redundancy with "%s" strategy.', video.url, file.resolution, strategy)
 
     const { baseUrlHttp, baseUrlWs } = video.getBaseUrls()
     const magnetUri = generateMagnetUri(video, file, baseUrlHttp, baseUrlWs)
@@ -204,10 +229,10 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
     await move(tmpPath, destPath, { overwrite: true })
 
     const createdModel: MVideoRedundancyFileVideo = await VideoRedundancyModel.create({
-      expiresOn: this.buildNewExpiration(redundancy.minLifetime),
+      expiresOn,
       url: getVideoCacheFileActivityPubUrl(file),
       fileUrl: video.getVideoRedundancyUrl(file, WEBSERVER.URL),
-      strategy: redundancy.strategy,
+      strategy,
       videoFileId: file.id,
       actorId: serverActor.id
     })
@@ -220,25 +245,33 @@ export class VideosRedundancyScheduler extends AbstractScheduler {
   }
 
   private async createStreamingPlaylistRedundancy (
-    redundancy: VideosRedundancy,
+    redundancy: VideosRedundancyStrategy,
     video: MVideoAccountLight,
     playlistArg: MStreamingPlaylist
   ) {
+    let strategy = 'manual'
+    let expiresOn: Date = null
+
+    if (redundancy) {
+      strategy = redundancy.strategy
+      expiresOn = this.buildNewExpiration(redundancy.minLifetime)
+    }
+
     const playlist = playlistArg as MStreamingPlaylistVideo
     playlist.Video = video
 
     const serverActor = await getServerActor()
 
-    logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, redundancy.strategy)
+    logger.info('Duplicating %s streaming playlist in videos redundancy with "%s" strategy.', video.url, strategy)
 
     const destDirectory = join(HLS_REDUNDANCY_DIRECTORY, video.uuid)
     await downloadPlaylistSegments(playlist.playlistUrl, destDirectory, VIDEO_IMPORT_TIMEOUT)
 
     const createdModel: MVideoRedundancyStreamingPlaylistVideo = await VideoRedundancyModel.create({
-      expiresOn: this.buildNewExpiration(redundancy.minLifetime),
+      expiresOn,
       url: getVideoCacheStreamingPlaylistActivityPubUrl(video, playlist),
       fileUrl: playlist.getVideoRedundancyUrl(WEBSERVER.URL),
-      strategy: redundancy.strategy,
+      strategy,
       videoStreamingPlaylistId: playlist.id,
       actorId: serverActor.id
     })

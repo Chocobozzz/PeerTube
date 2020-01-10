@@ -1,12 +1,13 @@
 import * as express from 'express'
-import { body, param } from 'express-validator'
-import { exists, isBooleanValid, isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
+import { body, param, query } from 'express-validator'
+import { exists, isBooleanValid, isIdOrUUIDValid, isIdValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ServerModel } from '../../models/server/server'
 import { doesVideoExist } from '../../helpers/middlewares'
+import { isVideoRedundancyTarget } from '@server/helpers/custom-validators/video-redundancies'
 
 const videoFileRedundancyGetValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
@@ -101,10 +102,77 @@ const updateServerRedundancyValidator = [
   }
 ]
 
+const listVideoRedundanciesValidator = [
+  query('target')
+    .custom(isVideoRedundancyTarget).withMessage('Should have a valid video redundancies target'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking listVideoRedundanciesValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
+const addVideoRedundancyValidator = [
+  body('videoId')
+    .custom(isIdValid)
+    .withMessage('Should have a valid video id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking addVideoRedundancyValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    if (!await doesVideoExist(req.body.videoId, res, 'only-video')) return
+
+    if (res.locals.onlyVideo.remote === false) {
+      return res.status(400)
+        .json({ error: 'Cannot create a redundancy on a local video' })
+        .end()
+    }
+
+    const alreadyExists = await VideoRedundancyModel.isLocalByVideoUUIDExists(res.locals.onlyVideo.uuid)
+    if (alreadyExists) {
+      return res.status(409)
+        .json({ error: 'This video is already duplicated by your instance.' })
+    }
+
+    return next()
+  }
+]
+
+const removeVideoRedundancyValidator = [
+  param('redundancyId')
+    .custom(isIdValid)
+    .withMessage('Should have a valid redundancy id'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking removeVideoRedundancyValidator parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    const redundancy = await VideoRedundancyModel.loadByIdWithVideo(parseInt(req.params.redundancyId, 10))
+    if (!redundancy) {
+      return res.status(404)
+                .json({ error: 'Video redundancy not found' })
+                .end()
+    }
+
+    res.locals.videoRedundancy = redundancy
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
   videoFileRedundancyGetValidator,
   videoPlaylistRedundancyGetValidator,
-  updateServerRedundancyValidator
+  updateServerRedundancyValidator,
+  listVideoRedundanciesValidator,
+  addVideoRedundancyValidator,
+  removeVideoRedundancyValidator
 }

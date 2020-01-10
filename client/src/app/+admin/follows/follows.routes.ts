@@ -6,6 +6,7 @@ import { FollowingAddComponent } from './following-add'
 import { FollowersListComponent } from './followers-list'
 import { UserRight } from '../../../../../shared'
 import { FollowingListComponent } from './following-list/following-list.component'
+import { VideoRedundanciesListComponent } from '@app/+admin/follows/video-redundancies-list'
 
 export const FollowsRoutes: Routes = [
   {
@@ -47,6 +48,10 @@ export const FollowsRoutes: Routes = [
             title: 'Add follow'
           }
         }
+      },
+      {
+        path: 'video-redundancies-list',
+        component: VideoRedundanciesListComponent
       }
     ]
   }

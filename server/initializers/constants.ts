@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 470
+const LAST_MIGRATION_VERSION = 475
 
 // ---------------------------------------------------------------------------
 
@@ -73,7 +73,9 @@ const SORTABLE_COLUMNS = {
 
   PLUGINS: [ 'name', 'createdAt', 'updatedAt' ],
 
-  AVAILABLE_PLUGINS: [ 'npmName', 'popularity' ]
+  AVAILABLE_PLUGINS: [ 'npmName', 'popularity' ],
+
+  VIDEO_REDUNDANCIES: [ 'name' ]
 }
 
 const OAUTH_LIFETIME = {
@@ -117,45 +119,44 @@ const REMOTE_SCHEME = {
   WS: 'wss'
 }
 
-// TODO: remove 'video-file'
-const JOB_ATTEMPTS: { [id in (JobType | 'video-file')]: number } = {
+const JOB_ATTEMPTS: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 5,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 5,
   'activitypub-follow': 5,
   'video-file-import': 1,
   'video-transcoding': 1,
-  'video-file': 1,
   'video-import': 1,
   'email': 5,
   'videos-views': 1,
-  'activitypub-refresher': 1
+  'activitypub-refresher': 1,
+  'video-redundancy': 1
 }
-const JOB_CONCURRENCY: { [id in (JobType | 'video-file')]: number } = {
+const JOB_CONCURRENCY: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 1,
   'activitypub-http-unicast': 5,
   'activitypub-http-fetcher': 1,
   'activitypub-follow': 1,
   'video-file-import': 1,
   'video-transcoding': 1,
-  'video-file': 1,
   'video-import': 1,
   'email': 5,
   'videos-views': 1,
-  'activitypub-refresher': 1
+  'activitypub-refresher': 1,
+  'video-redundancy': 1
 }
-const JOB_TTL: { [id in (JobType | 'video-file')]: number } = {
+const JOB_TTL: { [id in JobType]: number } = {
   'activitypub-http-broadcast': 60000 * 10, // 10 minutes
   'activitypub-http-unicast': 60000 * 10, // 10 minutes
   'activitypub-http-fetcher': 60000 * 10, // 10 minutes
   'activitypub-follow': 60000 * 10, // 10 minutes
   'video-file-import': 1000 * 3600, // 1 hour
   'video-transcoding': 1000 * 3600 * 48, // 2 days, transcoding could be long
-  'video-file': 1000 * 3600 * 48, // 2 days, transcoding could be long
   'video-import': 1000 * 3600 * 2, //  hours
   'email': 60000 * 10, // 10 minutes
   'videos-views': undefined, // Unlimited
-  'activitypub-refresher': 60000 * 10 // 10 minutes
+  'activitypub-refresher': 60000 * 10, // 10 minutes
+  'video-redundancy': 1000 * 3600 * 3 // 3 hours
 }
 const REPEAT_JOBS: { [ id: string ]: EveryRepeatOptions | CronRepeatOptions } = {
   'videos-views': {

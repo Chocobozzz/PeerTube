@@ -607,13 +607,26 @@ async function videoUUIDToId (url: string, id: number | string) {
   return res.body.id
 }
 
-async function uploadVideoAndGetId (options: { server: ServerInfo, videoName: string, nsfw?: boolean, token?: string }) {
+async function uploadVideoAndGetId (options: {
+  server: ServerInfo,
+  videoName: string,
+  nsfw?: boolean,
+  privacy?: VideoPrivacy,
+  token?: string
+}) {
   const videoAttrs: any = { name: options.videoName }
   if (options.nsfw) videoAttrs.nsfw = options.nsfw
+  if (options.privacy) videoAttrs.privacy = options.privacy
 
   const res = await uploadVideo(options.server.url, options.token || options.server.accessToken, videoAttrs)
 
   return { id: res.body.video.id, uuid: res.body.video.uuid }
+}
+
+async function getLocalIdByUUID (url: string, uuid: string) {
+  const res = await getVideo(url, uuid)
+
+  return res.body.id
 }
 
 // ---------------------------------------------------------------------------
@@ -645,5 +658,6 @@ export {
   completeVideoCheck,
   checkVideoFilesWereRemoved,
   getPlaylistVideos,
-  uploadVideoAndGetId
+  uploadVideoAndGetId,
+  getLocalIdByUUID
 }

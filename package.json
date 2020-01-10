@@ -41,7 +41,7 @@
     "i18n:create-custom-files": "node ./dist/scripts/i18n/create-custom-files.js",
     "reset-password": "node ./dist/scripts/reset-password.js",
     "play": "scripty",
-    "dev": "scripty",
+    "dev": "sh ./scripts/dev/index.sh",
     "dev:server": "sh ./scripts/dev/server.sh",
     "dev:embed": "scripty",
     "dev:client": "sh ./scripts/dev/client.sh",

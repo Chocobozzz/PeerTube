@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit } from '@angular/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 
 const icons = {
   'add': require('!!raw-loader?!../../../assets/images/global/add.svg'),

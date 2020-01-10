@@ -1,0 +1,82 @@
+<div class="admin-sub-header">
+  <div i18n class="form-sub-title">Video redundancies list</div>
+
+  <div class="select-filter-block">
+    <label for="displayType" i18n>Display</label>
+
+    <div class="peertube-select-container">
+      <select id="displayType" name="displayType" [(ngModel)]="displayType" (ngModelChange)="onDisplayTypeChanged()">
+        <option value="my-videos">My videos duplicated by remote instances</option>
+        <option value="remote-videos">Remote videos duplicated by my instance</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<p-table
+  [value]="videoRedundancies" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th i18n *ngIf="isDisplayingRemoteVideos()">Strategy</th>
+      <th i18n pSortableColumn="name">Video name <p-sortIcon field="name"></p-sortIcon></th>
+      <th i18n>Video URL</th>
+      <th i18n *ngIf="isDisplayingRemoteVideos()">Total size</th>
+      <th></th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-redundancy>
+    <tr class="expander" [pRowToggler]="redundancy">
+      <td *ngIf="isDisplayingRemoteVideos()">{{ getRedundancyStrategy(redundancy) }}</td>
+
+      <td>{{ redundancy.name }}</td>
+
+      <td>
+        <a target="_blank" rel="noopener noreferrer" [href]="redundancy.url">{{ redundancy.url }}</a>
+      </td>
+
+      <td *ngIf="isDisplayingRemoteVideos()">{{ getTotalSize(redundancy) | bytes: 1 }}</td>
+
+      <td class="action-cell">
+        <my-delete-button (click)="removeRedundancy(redundancy)"></my-delete-button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="rowexpansion" let-redundancy>
+    <tr>
+      <td colspan="2">
+        <div *ngFor="let file of redundancy.redundancies.files" class="expansion-block">
+          <my-video-redundancy-information [redundancyElement]="file"></my-video-redundancy-information>
+        </div>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
+          <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
+
+<div class="redundancies-charts" *ngIf="isDisplayingRemoteVideos()">
+  <div class="form-sub-title" i18n>Enabled strategies stats</div>
+
+  <div class="chart-blocks">
+
+    <div *ngIf="noRedundancies" i18n class="no-results">
+      No redundancy strategy is enabled on your instance.
+    </div>
+
+    <div class="chart-block" *ngFor="let r of redundanciesGraphsData">
+      <p-chart type="pie" [data]="r.graphData" [options]="r.options" width="300px" height="300px"></p-chart>
+    </div>
+
+  </div>
+</div>

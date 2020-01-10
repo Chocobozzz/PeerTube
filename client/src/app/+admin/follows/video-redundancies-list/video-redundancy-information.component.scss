@@ -1,0 +1,8 @@
+@import '_variables';
+@import '_mixins';
+
+.label {
+  display: inline-block;
+  min-width: 100px;
+  font-weight: $font-semibold;
+}

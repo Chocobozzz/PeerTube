@@ -1,17 +1,11 @@
 import * as express from 'express'
 import { SortType } from '../models/utils'
 
-function setDefaultSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-createdAt'
+const setDefaultSort = setDefaultSortFactory('-createdAt')
 
-  return next()
-}
+const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
 
-function setDefaultSearchSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  if (!req.query.sort) req.query.sort = '-match'
-
-  return next()
-}
+const setDefaultSearchSort = setDefaultSortFactory('-match')
 
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
   let newSort: SortType = { sortModel: undefined, sortValue: '' }
@@ -39,5 +33,16 @@ function setBlacklistSort (req: express.Request, res: express.Response, next: ex
 export {
   setDefaultSort,
   setDefaultSearchSort,
+  setDefaultVideoRedundanciesSort,
   setBlacklistSort
+}
+
+// ---------------------------------------------------------------------------
+
+function setDefaultSortFactory (sort: string) {
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (!req.query.sort) req.query.sort = sort
+
+    return next()
+  }
 }

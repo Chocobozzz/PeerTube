@@ -13,6 +13,7 @@ import { processVideoImport, VideoImportPayload } from './handlers/video-import'
 import { processVideosViews } from './handlers/video-views'
 import { refreshAPObject, RefreshPayload } from './handlers/activitypub-refresher'
 import { processVideoFileImport, VideoFileImportPayload } from './handlers/video-file-import'
+import { processVideoRedundancy, VideoRedundancyPayload } from '@server/lib/job-queue/handlers/video-redundancy'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -24,20 +25,21 @@ type CreateJobArgument =
   { type: 'email', payload: EmailPayload } |
   { type: 'video-import', payload: VideoImportPayload } |
   { type: 'activitypub-refresher', payload: RefreshPayload } |
-  { type: 'videos-views', payload: {} }
+  { type: 'videos-views', payload: {} } |
+  { type: 'video-redundancy', payload: VideoRedundancyPayload }
 
-const handlers: { [ id in (JobType | 'video-file') ]: (job: Bull.Job) => Promise<any>} = {
+const handlers: { [ id in JobType ]: (job: Bull.Job) => Promise<any>} = {
   'activitypub-http-broadcast': processActivityPubHttpBroadcast,
   'activitypub-http-unicast': processActivityPubHttpUnicast,
   'activitypub-http-fetcher': processActivityPubHttpFetcher,
   'activitypub-follow': processActivityPubFollow,
   'video-file-import': processVideoFileImport,
   'video-transcoding': processVideoTranscoding,
-  'video-file': processVideoTranscoding, // TODO: remove it (changed in 1.3)
   'email': processEmail,
   'video-import': processVideoImport,
   'videos-views': processVideosViews,
-  'activitypub-refresher': refreshAPObject
+  'activitypub-refresher': refreshAPObject,
+  'video-redundancy': processVideoRedundancy
 }
 
 const jobTypes: JobType[] = [
@@ -50,7 +52,8 @@ const jobTypes: JobType[] = [
   'video-file-import',
   'video-import',
   'videos-views',
-  'activitypub-refresher'
+  'activitypub-refresher',
+  'video-redundancy'
 ]
 
 class JobQueue {

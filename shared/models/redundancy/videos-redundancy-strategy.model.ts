@@ -1,4 +1,5 @@
 export type VideoRedundancyStrategy = 'most-views' | 'trending' | 'recently-added'
+export type VideoRedundancyStrategyWithManual = VideoRedundancyStrategy | 'manual'
 
 export type MostViewsRedundancyStrategy = {
   strategy: 'most-views'
@@ -19,4 +20,4 @@ export type RecentlyAddedStrategy = {
   minLifetime: number
 }
 
-export type VideosRedundancy = MostViewsRedundancyStrategy | TrendingRedundancyStrategy | RecentlyAddedStrategy
+export type VideosRedundancyStrategy = MostViewsRedundancyStrategy | TrendingRedundancyStrategy | RecentlyAddedStrategy

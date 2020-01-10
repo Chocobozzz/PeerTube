@@ -1,0 +1,37 @@
+@import '_variables';
+@import '_mixins';
+
+.expansion-block {
+  margin-bottom: 20px;
+}
+
+.admin-sub-header {
+  align-items: flex-end;
+
+  .select-filter-block {
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
+
+    label {
+      margin-bottom: 2px;
+    }
+
+    .peertube-select-container {
+      @include peertube-select-container(auto);
+    }
+  }
+}
+
+.redundancies-charts {
+  margin-top: 50px;
+
+  .chart-blocks {
+    display: flex;
+    justify-content: center;
+
+    .chart-block {
+      margin: 0 20px;
+    }
+  }
+}

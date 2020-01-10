@@ -9,6 +9,7 @@ import { VideoConstant } from '../../../../../shared/models/videos'
 import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { sortBy } from '@app/shared/misc/utils'
+import { ServerStats } from '@shared/models/server'
 
 @Injectable()
 export class ServerService {
@@ -16,6 +17,8 @@ export class ServerService {
   private static BASE_VIDEO_URL = environment.apiUrl + '/api/v1/videos/'
   private static BASE_VIDEO_PLAYLIST_URL = environment.apiUrl + '/api/v1/video-playlists/'
   private static BASE_LOCALE_URL = environment.apiUrl + '/client/locales/'
+  private static BASE_STATS_URL = environment.apiUrl + '/api/v1/server/stats'
+
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
   configReloaded = new Subject<void>()
@@ -233,6 +236,10 @@ export class ServerService {
     }
 
     return this.localeObservable.pipe(first())
+  }
+
+  getServerStats () {
+    return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
   }
 
   private loadAttributeEnum <T extends string | number> (

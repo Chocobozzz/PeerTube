@@ -9,12 +9,12 @@ import { promisify2 } from './core-utils'
 import { MVideo } from '@server/typings/models/video/video'
 import { MVideoFile, MVideoFileRedundanciesOpt } from '@server/typings/models/video/video-file'
 import { isStreamingPlaylist, MStreamingPlaylistVideo } from '@server/typings/models/video/video-streaming-playlist'
-import { STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'
+import { WEBSERVER } from '@server/initializers/constants'
 import * as parseTorrent from 'parse-torrent'
 import * as magnetUtil from 'magnet-uri'
 import { isArray } from '@server/helpers/custom-validators/misc'
 import { extractVideo } from '@server/lib/videos'
-import { getTorrentFileName, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { getTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 

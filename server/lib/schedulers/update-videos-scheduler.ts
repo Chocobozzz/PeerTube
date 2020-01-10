@@ -4,7 +4,6 @@ import { ScheduleVideoUpdateModel } from '../../models/video/schedule-video-upda
 import { retryTransactionWrapper } from '../../helpers/database-utils'
 import { federateVideoIfNeeded } from '../activitypub'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
-import { VideoPrivacy } from '../../../shared/models/videos'
 import { Notifier } from '../notifier'
 import { sequelizeTypescript } from '../../initializers/database'
 import { MVideoFullLight } from '@server/typings/models'

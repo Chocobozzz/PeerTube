@@ -152,4 +152,8 @@ export class Video implements VideoServerModel {
   isUpdatableBy (user: AuthUser) {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.UPDATE_ANY_VIDEO))
   }
+
+  canBeDuplicatedBy (user: AuthUser) {
+    return user && this.isLocal === false && user.hasRight(UserRight.MANAGE_VIDEOS_REDUNDANCIES)
+  }
 }

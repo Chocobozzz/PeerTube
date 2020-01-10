@@ -3,5 +3,5 @@
 set -eu
 
 NODE_ENV=test npm run concurrently -- -k \
-  "npm run dev:client -- --skip-server" \
-  "npm run dev:server"
+  "sh scripts/dev/client.sh --skip-server" \
+  "sh scripts/dev/server.sh"
