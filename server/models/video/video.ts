@@ -1802,7 +1802,9 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static isPrivacyForFederation (privacy: VideoPrivacy) {
-    return privacy === VideoPrivacy.PUBLIC || privacy === VideoPrivacy.UNLISTED
+    const castedPrivacy = parseInt(privacy + '', 10)
+
+    return castedPrivacy === VideoPrivacy.PUBLIC || castedPrivacy === VideoPrivacy.UNLISTED
   }
 
   static getCategoryLabel (id: number) {
