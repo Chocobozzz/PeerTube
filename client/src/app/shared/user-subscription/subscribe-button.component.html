@@ -12,8 +12,8 @@
         </span>
       </ng-template>
     </span>
-    <span *ngIf="displayFollowers && videoChannel.followersCount !== 0" class="followers-count">
-      {{ videoChannel.followersCount | myNumberFormatter }}
+    <span *ngIf="!isBigButton() && displayFollowers && videoChannels.length > 1 && videoChannels[0].followersCount !== 0" class="followers-count">
+      {{ videoChannels[0].followersCount | myNumberFormatter }}
     </span>
   </ng-template>
 
@@ -50,7 +50,7 @@
       <h6 class="dropdown-header" i18n>Using an ActivityPub account</h6>
 
       <button class="dropdown-item" (click)="subscribe()">
-        <span *ngIf="!isUserLoggedIn()" i18n>Subscribe with an account on {{ videoChannel.host }}</span>
+        <span *ngIf="!isUserLoggedIn()" i18n>Subscribe with an account on this instance</span>
         <span *ngIf="isUserLoggedIn()" i18n>Subscribe with your local account</span>
       </button>
 

@@ -146,7 +146,7 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   isBigButton () {
-    return this.videoChannels.length > 1 && this.isAtLeastOneChannelSubscribed()
+    return this.isUserLoggedIn() && this.videoChannels.length > 1 && this.isAtLeastOneChannelSubscribed()
   }
 
   gotoLogin () {
