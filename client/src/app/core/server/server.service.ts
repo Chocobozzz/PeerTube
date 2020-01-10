@@ -121,6 +121,13 @@ export class ServerService {
     },
     tracker: {
       enabled: true
+    },
+    followings: {
+      instance: {
+        autoFollowIndex: {
+          indexUrl: 'https://instances.joinpeertube.org'
+        }
+      }
     }
   }
 
