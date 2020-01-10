@@ -30,7 +30,7 @@
   <div class="form-group" *ngIf="isCreation()">
     <label i18n for="password">Password</label>
     <input
-      type="password" id="password"
+      type="password" id="password" autocomplete="new-password"
       formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
     >
     <div *ngIf="formErrors.password" class="form-error">

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, ElementRef, Input, OnInit } from '@angular/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 const icons = {
   'add': require('!!raw-loader?!../../../assets/images/global/add.svg'),
@@ -70,8 +71,7 @@ export class GlobalIconComponent implements OnInit {
   ) { }
 
   async ngOnInit () {
-    const nativeElement = this.el.nativeElement
-
+    const nativeElement = this.el.nativeElement as HTMLElement
     nativeElement.innerHTML = await this.hooks.wrapFun(
       this.getSVGContent.bind(this),
       { name: this.iconName },

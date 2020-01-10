@@ -26,7 +26,9 @@ export class ClientHtml {
   }
 
   static async getDefaultHTMLPage (req: express.Request, res: express.Response, paramLang?: string) {
-    const html = await ClientHtml.getIndexHTML(req, res, paramLang)
+    const html = paramLang
+      ? await ClientHtml.getIndexHTML(req, res, paramLang)
+      : await ClientHtml.getIndexHTML(req, res)
 
     let customHtml = ClientHtml.addTitleTag(html)
     customHtml = ClientHtml.addDescriptionTag(customHtml)
@@ -98,6 +100,7 @@ export class ClientHtml {
 
     let html = buffer.toString()
 
+    if (paramLang) html = ClientHtml.addHtmlLang(html, paramLang)
     html = ClientHtml.addCustomCSS(html)
     html = await ClientHtml.addAsyncPluginCSS(html)
 
@@ -106,7 +109,7 @@ export class ClientHtml {
     return html
   }
 
-  private static getIndexPath (req: express.Request, res: express.Response, paramLang?: string) {
+  private static getIndexPath (req: express.Request, res: express.Response, paramLang: string) {
     let lang: string
 
     // Check param lang validity
@@ -127,6 +130,10 @@ export class ClientHtml {
     }
 
     return join(__dirname, '../../../client/dist/' + buildFileLocale(lang) + '/index.html')
+  }
+
+  private static addHtmlLang (htmlStringPage: string, paramLang: string) {
+    return htmlStringPage.replace('<html>', `<html lang="${paramLang}">`)
   }
 
   private static addTitleTag (htmlStringPage: string, title?: string) {
