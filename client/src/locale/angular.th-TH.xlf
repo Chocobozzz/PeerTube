@@ -442,7 +442,7 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">วิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">4</context>
@@ -454,7 +454,7 @@
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">คำบรรยายใต้ภาพ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1291,7 +1291,7 @@
       </trans-unit>
       <trans-unit id="5cf92a1d527e65908c75633e8484cdd3b6d16b9b" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target state="new">Welcome to PeerTube, dear administrator!</target>
+        <target state="translated">ยินดีต้อนรับสู่ PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -3783,7 +3783,7 @@
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {result} other {results} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {ผลลัพธ์} other {ผลลัพธ์} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
@@ -7207,7 +7207,7 @@
       </trans-unit>
       <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645" datatype="html">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
-        <target state="new">Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</target>
+        <target state="translated">ช่องวิดีโอ <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> ถูกสร้างแล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7215,7 +7215,7 @@
       </trans-unit>
       <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47" datatype="html">
         <source>This name already exists on this instance.</source>
-        <target state="new">This name already exists on this instance.</target>
+        <target state="translated">ชื่อนี้มีอยู่ในระบบนี้แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7223,7 +7223,7 @@
       </trans-unit>
       <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559" datatype="html">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
-        <target state="new">Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</target>
+        <target state="translated">อัปเดตช่องวิดีโอ <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7231,7 +7231,7 @@
       </trans-unit>
       <trans-unit id="4e613272923d6f1976e3c73e8b857ac45c37b791" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</target>
+        <target state="translated">คุณต้องการลบ <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/> จริง ๆ หรือไม่ ทุกวิดีโอที่เคยอัปโหลดในช่องนี้จะถูกลบ และคุณจะไม่สามารถสร้างช่องใหม่ด้วยชื่อเดิม (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>) อีก</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7239,7 +7239,7 @@
       </trans-unit>
       <trans-unit id="3859ca2a7577ba8797058d7d97eb8054bc56ec99" datatype="html">
         <source>Please type the display name of the video channel (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) to confirm</source>
-        <target state="new">Please type the display name of the video channel (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) to confirm</target>
+        <target state="translated">กรุณาพิมพ์ชื่อแสดงของช่อง (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) เพื่อยืนยัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7247,7 +7247,7 @@
       </trans-unit>
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2" datatype="html">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
-        <target state="new">Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</target>
+        <target state="translated">ลบช่องวิดีโอ <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7255,7 +7255,7 @@
       </trans-unit>
       <trans-unit id="c7e4d8688bd06d723e512ab063c0c4fdf4a9804d" datatype="html">
         <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> created.</source>
-        <target state="new">Playlist <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> created.</target>
+        <target state="translated">สร้างเพลย์ลิสต์ <x id="INTERPOLATION" equiv-text="{{playlistName}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-create.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7263,7 +7263,7 @@
       </trans-unit>
       <trans-unit id="3222e26b41803055328d893a73df485ec8a0328d" datatype="html">
         <source>Playlist <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> updated.</source>
-        <target state="new">Playlist <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> updated.</target>
+        <target state="translated">อัปเดตเพลย์ลิสต์ <x id="INTERPOLATION" equiv-text="{{videoPlaylistName}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7271,7 +7271,7 @@
       </trans-unit>
       <trans-unit id="082d28149b07cd5178cad0fdaf2cd8963833b783" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/>?</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/>?</target>
+        <target state="translated">คุณต้องการลบ <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> จริง ๆ หรือไม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlists.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7279,7 +7279,7 @@
       </trans-unit>
       <trans-unit id="d6c948062aa2a0482332d4f7de420a39ac253a86" datatype="html">
         <source>Playlist <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> deleted.</source>
-        <target state="new">Playlist <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> deleted.</target>
+        <target state="translated">ลบเพลย์ลิสต์ <x id="INTERPOLATION" equiv-text="{{playlistDisplayName}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlists.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7287,7 +7287,7 @@
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894" datatype="html">
         <source>My videos</source>
-        <target state="new">My videos</target>
+        <target state="translated">วิดีโอของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7299,7 +7299,7 @@
       </trans-unit>
       <trans-unit id="00e16d1f1c5cc936ec0881cd02cbf66aa1b4cddd" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos?</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos?</target>
+        <target state="translated">คุณต้องการลบ <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> วิดีโอจริง ๆ หรือไม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7307,7 +7307,7 @@
       </trans-unit>
       <trans-unit id="dff7d4574cfaa785cbd4c0a5ffb5befec19a5d83" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos deleted.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos deleted.</target>
+        <target state="translated">ลบ <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> วิดีโอแล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7315,7 +7315,7 @@
       </trans-unit>
       <trans-unit id="4ec5852c869b2fb4ae0e564b51278d7be8013fc7" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{videoName}}"/>?</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{videoName}}"/>?</target>
+        <target state="translated">คุณต้องการลบ <x id="INTERPOLATION" equiv-text="{{videoName}}"/> จริง ๆ หรือไม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7323,7 +7323,7 @@
       </trans-unit>
       <trans-unit id="d39a0bfa616a9a8473b2e379eefe17d8ed1af118" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> deleted.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> deleted.</target>
+        <target state="translated">ลบวิดีโอ <x id="INTERPOLATION" equiv-text="{{videoName}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7335,7 +7335,7 @@
       </trans-unit>
       <trans-unit id="740c53a50a618bf5c7a5bd5c3f7321f0bd1840dd" datatype="html">
         <source>Ownership change request sent.</source>
-        <target state="new">Ownership change request sent.</target>
+        <target state="translated">ส่งคำขอเปลี่ยนเจ้าของแล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7343,7 +7343,7 @@
       </trans-unit>
       <trans-unit id="8dd18d9047c4b2dc9786550dfd8fa99f3b14e17f" datatype="html">
         <source>My channels</source>
-        <target state="new">My channels</target>
+        <target state="translated">ช่องของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7351,7 +7351,7 @@
       </trans-unit>
       <trans-unit id="1d3408919f4d08414721cc22c4be39d93d6691d2" datatype="html">
         <source>My playlists</source>
-        <target state="new">My playlists</target>
+        <target state="translated">เพลย์ลิสต์ของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7359,7 +7359,7 @@
       </trans-unit>
       <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9" datatype="html">
         <source>My subscriptions</source>
-        <target state="new">My subscriptions</target>
+        <target state="translated">การติดตามของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7367,7 +7367,7 @@
       </trans-unit>
       <trans-unit id="4f953496ca94b4f83af049ff715172df2729fb79" datatype="html">
         <source>My history</source>
-        <target state="new">My history</target>
+        <target state="translated">ประวัติของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7375,7 +7375,7 @@
       </trans-unit>
       <trans-unit id="46aa32e581922d6d2c3d7bc4c87209ad5808b029" datatype="html">
         <source>Misc</source>
-        <target state="new">Misc</target>
+        <target state="translated">อื่น ๆ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7383,7 +7383,7 @@
       </trans-unit>
       <trans-unit id="73022f1676784c4f9b8cdbb322e52b02ccc800b7" datatype="html">
         <source>Ownership changes</source>
-        <target state="new">Ownership changes</target>
+        <target state="translated">การเปลี่ยนเจ้าของ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7391,7 +7391,7 @@
       </trans-unit>
       <trans-unit id="efad4be364b8fb5c73cbfcc7acccd542f9d84ad6" datatype="html">
         <source>My settings</source>
-        <target state="new">My settings</target>
+        <target state="translated">การตั้งค่าของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7399,7 +7399,7 @@
       </trans-unit>
       <trans-unit id="0e2434e7d84145c4e8a930ccc4c26c3cb2887e0d" datatype="html">
         <source>My notifications</source>
-        <target state="new">My notifications</target>
+        <target state="translated">การแจ้งเตือนของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7407,7 +7407,7 @@
       </trans-unit>
       <trans-unit id="e58f5785ae64f23cd6a5e010b045511853ed84fa" datatype="html">
         <source>Now please check your emails to verify your account and complete signup.</source>
-        <target state="new">Now please check your emails to verify your account and complete signup.</target>
+        <target state="translated">กรุณาตรวจสอบอีเมลของคุณเพื่อยืนยันบัญชีและเสร็จสิ้นการลงทะเบียน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7415,7 +7415,7 @@
       </trans-unit>
       <trans-unit id="14200e26888a07633c0f177020dce8f3ec7311a6" datatype="html">
         <source>You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</source>
-        <target state="new">You are now logged in as <x id="INTERPOLATION" equiv-text="{{username}}"/>!</target>
+        <target state="translated">คุณเข้าสู่ระบบในชื่อ <x id="INTERPOLATION" equiv-text="{{username}}"/> แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7423,7 +7423,7 @@
       </trans-unit>
       <trans-unit id="af55337b4032d675ab6b2081af797ca9c979b706" datatype="html">
         <source>An email with verification link will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</source>
-        <target state="new">An email with verification link will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>.</target>
+        <target state="translated">อีเมลที่มีลิงก์ยืนยันจะถูกส่งไปยัง <x id="INTERPOLATION" equiv-text="{{email}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7431,7 +7431,7 @@
       </trans-unit>
       <trans-unit id="ccbf0490fb6b60d21e03bb2c9003df0ce1a58752" datatype="html">
         <source>Unable to find user id or verification string.</source>
-        <target state="new">Unable to find user id or verification string.</target>
+        <target state="translated">ไม่พบไอดีผู้ใช้หรือรหัสลิงก์ยืนยัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7443,7 +7443,7 @@
       </trans-unit>
       <trans-unit id="2f03e577e8f81a9f8be0095f93e1f9376c6eedc9" datatype="html">
         <source>Published videos</source>
-        <target state="new">Published videos</target>
+        <target state="translated">วิดีโอที่เผยแพร่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7451,7 +7451,7 @@
       </trans-unit>
       <trans-unit id="ff6becacbce7fc0943b0af0df4dd67e5e11bf598" datatype="html">
         <source>Subscribe to the account</source>
-        <target state="new">Subscribe to the account</target>
+        <target state="translated">ติดตามบัญชี</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7463,7 +7463,7 @@
       </trans-unit>
       <trans-unit id="1c95cc372311830f936b39f73c5d6d20c0b16013" datatype="html">
         <source>Focus the search bar</source>
-        <target state="new">Focus the search bar</target>
+        <target state="translated">โฟกัสไปที่แถบค้นหา</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7471,7 +7471,7 @@
       </trans-unit>
       <trans-unit id="b19ee83cbd2b735fd081b9aa483a890578019099" datatype="html">
         <source>Toggle the left menu</source>
-        <target state="new">Toggle the left menu</target>
+        <target state="translated">เปิด/ปิดเมนูด้านซ้าย</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7479,7 +7479,7 @@
       </trans-unit>
       <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">ไปที่หน้าสำรวจวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7487,7 +7487,7 @@
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0" datatype="html">
         <source>Go to the trending videos page</source>
-        <target state="new">Go to the trending videos page</target>
+        <target state="translated">ไปที่หน้าวิดีโอมาแรง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7495,7 +7495,7 @@
       </trans-unit>
       <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="new">Go to the recently added videos page</target>
+        <target state="translated">ไปที่หน้าวิดีโอที่เพิ่งเพิ่ม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7503,7 +7503,7 @@
       </trans-unit>
       <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="new">Go to the local videos page</target>
+        <target state="translated">ไปที่หน้าวิดีโอในเว็บนี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7511,7 +7511,7 @@
       </trans-unit>
       <trans-unit id="f1fb6204f39a7338e5110b2f113643c9288496ba" datatype="html">
         <source>Go to the videos upload page</source>
-        <target state="new">Go to the videos upload page</target>
+        <target state="translated">ไปที่หน้าอัปโหลดวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7519,7 +7519,7 @@
       </trans-unit>
       <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2" datatype="html">
         <source>Go to my subscriptions</source>
-        <target state="new">Go to my subscriptions</target>
+        <target state="translated">ไปที่การติดตามของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7527,7 +7527,7 @@
       </trans-unit>
       <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1" datatype="html">
         <source>Go to my videos</source>
-        <target state="new">Go to my videos</target>
+        <target state="translated">ไปที่วิดีโอของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7535,7 +7535,7 @@
       </trans-unit>
       <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7" datatype="html">
         <source>Go to my imports</source>
-        <target state="new">Go to my imports</target>
+        <target state="translated">ไปที่การนำเข้าของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7543,7 +7543,7 @@
       </trans-unit>
       <trans-unit id="cfe3c51f0ae9385dc2ce6df740d87e5514aa9390" datatype="html">
         <source>Go to my channels</source>
-        <target state="new">Go to my channels</target>
+        <target state="translated">ไปที่ช่องของฉัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7551,8 +7551,7 @@
       </trans-unit>
       <trans-unit id="edeaa933b09690523e46977e11064e9c655d77d7" datatype="html">
         <source>Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>. </source>
-        <target state="new">Cannot retrieve OAuth Client credentials: <x id="INTERPOLATION" equiv-text="{{errorText}}"/>.
-</target>
+        <target state="translated">ไม่สามารถรับรหัสไคลเอนต์ OAuth: <x id="INTERPOLATION" equiv-text="{{errorText}}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7560,7 +7559,7 @@
       </trans-unit>
       <trans-unit id="8d9b4f4b69108c3c9aa0f3b0dbde87786ba9b319" datatype="html">
         <source>Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</source>
-        <target state="new">Ensure you have correctly configured PeerTube (config/ directory), in particular the "webserver" section.</target>
+        <target state="translated">ตรวจสอบว่าคุณได้ตั้งค่า PeerTube อย่างถูกต้อง (ในไดเรกทอรี config/) โดยเฉพาะในส่วน "webserver"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7568,7 +7567,7 @@
       </trans-unit>
       <trans-unit id="e31bbf15d6ba5c7c0f17f89a98029cff0bd40b87" datatype="html">
         <source>You need to reconnect.</source>
-        <target state="new">You need to reconnect.</target>
+        <target state="translated">คุณต้องเชื่อมต่อใหม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/auth/auth.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7576,7 +7575,7 @@
       </trans-unit>
       <trans-unit id="5c0c574151dc8671d9199980ee04bf65aec3b452" datatype="html">
         <source>Keyboard Shortcuts:</source>
-        <target state="new">Keyboard Shortcuts:</target>
+        <target state="translated">ปุ่มลัดคีย์บอร์ด:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/hotkeys/hotkeys.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7584,7 +7583,7 @@
       </trans-unit>
       <trans-unit id="1e035e6ccfab771cad4226b2ad230cb0d4a88cba" datatype="html">
         <source>Success</source>
-        <target state="new">Success</target>
+        <target state="translated">สำเร็จ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/core/notification/notifier.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7592,7 +7591,7 @@
       </trans-unit>
       <trans-unit id="247071f6c9233b7e5bc1d8f46795ab6b032f1fbe" datatype="html">
         <source>Incorrect username or password.</source>
-        <target state="new">Incorrect username or password.</target>
+        <target state="translated">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7600,7 +7599,7 @@
       </trans-unit>
       <trans-unit id="39980cc1cf8df621d43f5480d001bdf5d4139338" datatype="html">
         <source>You account is blocked.</source>
-        <target state="new">You account is blocked.</target>
+        <target state="translated">บัญชีของคุณถูกบล็อก</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7608,7 +7607,7 @@
       </trans-unit>
       <trans-unit id="4bd9c01837da35babbbe3c7585161268e0ece095" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>. The link will expire within 1 hour.</target>
+        <target state="translated">อีเมลวิธีรีเซ็ตรหัสผ่านได้ถูกส่งไปยัง <x id="INTERPOLATION" equiv-text="{{email}}"/> ลิงก์จะหมดอายุใน 1 ชั่วโมง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7616,7 +7615,7 @@
       </trans-unit>
       <trans-unit id="b0f24b7136e551a0deba831f1525711245b31a26" datatype="html">
         <source>Your password has been successfully reset!</source>
-        <target state="new">Your password has been successfully reset!</target>
+        <target state="translated">รีเซ็ตรหัสผ่านเรียบร้อย</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/reset-password/reset-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7624,7 +7623,7 @@
       </trans-unit>
       <trans-unit id="16d449549ab7bc61caf3d636372a4a56b5870383" datatype="html">
         <source>Any</source>
-        <target state="new">Any</target>
+        <target state="translated">ใด ๆ ก็ได้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7636,7 +7635,7 @@
       </trans-unit>
       <trans-unit id="7fb1099e29660162f9154d5b2feee7743a423df6" datatype="html">
         <source>Today</source>
-        <target state="new">Today</target>
+        <target state="translated">วันนี้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7648,7 +7647,7 @@
       </trans-unit>
       <trans-unit id="02e0243b60007368f87dc01e083f232dd025096d" datatype="html">
         <source>Last 7 days</source>
-        <target state="new">Last 7 days</target>
+        <target state="translated">7 วันที่ผ่านมา</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7656,7 +7655,7 @@
       </trans-unit>
       <trans-unit id="7668986b9f753fcd72ad4a00b1a0c4861d1f7fb8" datatype="html">
         <source>Last 30 days</source>
-        <target state="new">Last 30 days</target>
+        <target state="translated">30 วันที่ผ่านมา</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7664,7 +7663,7 @@
       </trans-unit>
       <trans-unit id="a77b663fd9b94c38bc9c6493a51b5f3acacb9bca" datatype="html">
         <source>Last 365 days</source>
-        <target state="new">Last 365 days</target>
+        <target state="translated">365 วันที่ผ่านมา</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7672,7 +7671,7 @@
       </trans-unit>
       <trans-unit id="d2f3bf121699ff08a25fa4859bfdf3996bf821cc" datatype="html">
         <source>Short (&lt; 4 min)</source>
-        <target state="new">Short (&lt; 4 min)</target>
+        <target state="translated">สั้น (&lt; 4 นาที)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7680,7 +7679,7 @@
       </trans-unit>
       <trans-unit id="f24d368d6be0fee70fb4503d2ad37a612e1b0889" datatype="html">
         <source>Medium (4-10 min)</source>
-        <target state="new">Medium (4-10 min)</target>
+        <target state="translated">ปานกลาง (4-10 นาที)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7688,7 +7687,7 @@
       </trans-unit>
       <trans-unit id="ac0fa1039f09ec0d917303658c5bb1ee813a4225" datatype="html">
         <source>Long (&gt; 10 min)</source>
-        <target state="new">Long (&gt; 10 min)</target>
+        <target state="translated">ยาว (&gt; 10 นาที)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7696,7 +7695,7 @@
       </trans-unit>
       <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca" datatype="html">
         <source>Relevance</source>
-        <target state="new">Relevance</target>
+        <target state="translated">ความเหมาะสม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7704,7 +7703,7 @@
       </trans-unit>
       <trans-unit id="1aee80ab35aa99508802cdec6306e110b2feaf9e" datatype="html">
         <source>Publish date</source>
-        <target state="new">Publish date</target>
+        <target state="translated">วันที่เผยแพร่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7712,7 +7711,7 @@
       </trans-unit>
       <trans-unit id="b7641aed03492978b4ec6843b1e53f30464294d9" datatype="html">
         <source>Views</source>
-        <target state="new">Views</target>
+        <target state="translated">จำนวนครั้งการรับชม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7720,7 +7719,7 @@
       </trans-unit>
       <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> ปีที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7728,7 +7727,7 @@
       </trans-unit>
       <trans-unit id="e622d3813449fe36371ea258281059306819199d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> เดือนที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7736,7 +7735,7 @@
       </trans-unit>
       <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> เดือนที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7744,7 +7743,7 @@
       </trans-unit>
       <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> สัปดาห์ที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7752,7 +7751,7 @@
       </trans-unit>
       <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> สัปดาห์ที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7760,7 +7759,7 @@
       </trans-unit>
       <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> วันที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7768,7 +7767,7 @@
       </trans-unit>
       <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> วันที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7776,7 +7775,7 @@
       </trans-unit>
       <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> ชั่วโมงที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7784,7 +7783,7 @@
       </trans-unit>
       <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> ชั่วโมงที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7792,7 +7791,7 @@
       </trans-unit>
       <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> นาทีที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7800,7 +7799,7 @@
       </trans-unit>
       <trans-unit id="7a158a7555a44ea7eff9fa4988df9aa24d262ceb" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> วินาทีที่แล้ว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -7808,7 +7807,7 @@
       </trans-unit>
       <trans-unit id="68e710782ccb5398b3acb8844caf0b199da2c3da" datatype="html">
         <source>Confirm</source>
-        <target state="new">Confirm</target>
+        <target state="translated">ยืนยัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/confirm/confirm.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7816,7 +7815,7 @@
       </trans-unit>
       <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323" datatype="html">
         <source>Instance name is required.</source>
-        <target state="new">Instance name is required.</target>
+        <target state="translated">ต้องใส่ชื่อของระบบ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7972,7 +7971,7 @@
       </trans-unit>
       <trans-unit id="bef8a36c3dffff15fb5faf3d20bdbbbc1af824c1" datatype="html">
         <source>Email must be valid.</source>
-        <target state="new">Email must be valid.</target>
+        <target state="translated">ต้องเป็นอีเมลที่ถูกต้อง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7984,7 +7983,7 @@
       </trans-unit>
       <trans-unit id="ac451f128840b34804ea69c820dc3566f476fb33" datatype="html">
         <source>Your name is required.</source>
-        <target state="new">Your name is required.</target>
+        <target state="translated">จำเป็นต้องใส่ชื่อของคุณ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7992,7 +7991,7 @@
       </trans-unit>
       <trans-unit id="1fc4633008a2431fdec891d58efcc8b865d7de1a" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="new">Your name must be at least 1 character long.</target>
+        <target state="translated">ชื่อของคุณต้องมีความยาวอย่างน้อย 1 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8000,7 +7999,7 @@
       </trans-unit>
       <trans-unit id="c7b44b92c0ce3ccd2f804d001e13da399524e11b" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="new">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">ชื่อของคุณไม่สามารถยาวเกิน 120 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8008,7 +8007,7 @@
       </trans-unit>
       <trans-unit id="73417de6b009e361996f9cd0e3b83d88bed368b6" datatype="html">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">จำเป็นต้องกรอกหัวข้อ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8016,7 +8015,7 @@
       </trans-unit>
       <trans-unit id="4f049fd004313524afeaf0ae25f98583a0ffd29b" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">หัวข้อต้องมีความยาวอย่างน้อย 1 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8024,7 +8023,7 @@
       </trans-unit>
       <trans-unit id="d82f880ea1d0ee03c47bf1212a0fbcb23b3edf18" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">หัวข้อไม่สามารถยาวเกิน 120 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8032,7 +8031,7 @@
       </trans-unit>
       <trans-unit id="40b35cf927f9f9a59404a6c914ec4632690b69b2" datatype="html">
         <source>A message is required.</source>
-        <target state="new">A message is required.</target>
+        <target state="translated">จำเป็นต้องใส่ข้อความ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8040,7 +8039,7 @@
       </trans-unit>
       <trans-unit id="d8d4a23f467ee3e93ca0edb1198c233ed633cf64" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">ข้อความต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8048,7 +8047,7 @@
       </trans-unit>
       <trans-unit id="07422f6141cfcabaf3c2ce77e3e063222849ef60" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">ข้อความไม่สามารถยาวเกิน 5000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8056,7 +8055,7 @@
       </trans-unit>
       <trans-unit id="5db300f6fba918a35597160183205ede13e8e149" datatype="html">
         <source>Username is required.</source>
-        <target state="new">Username is required.</target>
+        <target state="translated">ต้องใส่ชื่อผู้ใช้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/login-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8068,7 +8067,7 @@
       </trans-unit>
       <trans-unit id="4eb39d69b74d7a56652ec84fa6826994ee26c0e5" datatype="html">
         <source>Password is required.</source>
-        <target state="new">Password is required.</target>
+        <target state="translated">ต้องใส่รหัสผ่าน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/login-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8080,7 +8079,7 @@
       </trans-unit>
       <trans-unit id="c90872a06666a51c2957c4b29724e68df5c67154" datatype="html">
         <source>Confirmation of the password is required.</source>
-        <target state="new">Confirmation of the password is required.</target>
+        <target state="translated">ต้องยืนยันรหัสผ่าน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/reset-password-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8088,7 +8087,7 @@
       </trans-unit>
       <trans-unit id="6330d25a3bc6f55dfd5177da6e681d1d3b1a2b1a" datatype="html">
         <source>Username must be at least 1 character long.</source>
-        <target state="new">Username must be at least 1 character long.</target>
+        <target state="translated">ชื่อผู้ใช้ต้องมีความยาวอย่างน้อย 1 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8096,7 +8095,7 @@
       </trans-unit>
       <trans-unit id="aaaf3d00c35f809eebc7fd68a3f7b8b0230b197a" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="new">Username cannot be more than 50 characters long.</target>
+        <target state="translated">ชื่อผู้ใช้ไม่สามารถยาวเกิน 50 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8104,7 +8103,7 @@
       </trans-unit>
       <trans-unit id="6f3e95be2538a22da07beaefc39bb2195683990c" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">ชื่อผู้ใช้สามารถใช้ได้เฉพาะตัวอักษรพิมพ์เล็ก ตัวเลข รวมถึงสัญลักษณ์จุดและอันเดอร์สกอร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8112,7 +8111,7 @@
       </trans-unit>
       <trans-unit id="1fe26e49476ac701885abc59127e96a3760847f0" datatype="html">
         <source>Password must be at least 6 characters long.</source>
-        <target state="new">Password must be at least 6 characters long.</target>
+        <target state="translated">รหัสผ่านต้องมีความยาวอย่างน้อย 6 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8120,7 +8119,7 @@
       </trans-unit>
       <trans-unit id="0a154031f3e66985af96d5f903441cf84f0dc75e" datatype="html">
         <source>Password cannot be more than 255 characters long.</source>
-        <target state="new">Password cannot be more than 255 characters long.</target>
+        <target state="translated">รหัสผ่านไม่สามารถยาวเกิน 255 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8128,7 +8127,7 @@
       </trans-unit>
       <trans-unit id="2db8f1f93a5485c32267762a3bf4da499832e732" datatype="html">
         <source>The new password and the confirmed password do not correspond.</source>
-        <target state="new">The new password and the confirmed password do not correspond.</target>
+        <target state="translated">รหัสผ่านในช่องรหัสผ่านใหม่และยืนยันรหัสผ่านไม่ตรงกัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8136,7 +8135,7 @@
       </trans-unit>
       <trans-unit id="abede840116d58f04a55d99a6cbd68da8a3e1bbf" datatype="html">
         <source>Video quota is required.</source>
-        <target state="new">Video quota is required.</target>
+        <target state="translated">ต้องกำหนดโควต้าวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8144,7 +8143,7 @@
       </trans-unit>
       <trans-unit id="93a6dc1d3aa0d3201c86ef1ec8adf5cf0ada3c80" datatype="html">
         <source>Quota must be greater than -1.</source>
-        <target state="new">Quota must be greater than -1.</target>
+        <target state="translated">โควต้าต้องมากกว่า -1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8152,7 +8151,7 @@
       </trans-unit>
       <trans-unit id="7e58d1fb4e86af94f5199660ef349d55811888bb" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="new">Daily upload limit is required.</target>
+        <target state="translated">ต้องกำหนดโควต้าวิดีโอต่อวัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8160,7 +8159,7 @@
       </trans-unit>
       <trans-unit id="e283cbc4469959ea664f9d545f15278e089a6f1e" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="new">Daily upload limit must be greater than -1.</target>
+        <target state="translated">โควต้าวิดีโอต่อวันต้องมากกว่า -1</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8168,7 +8167,7 @@
       </trans-unit>
       <trans-unit id="545e77fd5d9526228a2133109447c23225ed9c85" datatype="html">
         <source>User role is required.</source>
-        <target state="new">User role is required.</target>
+        <target state="translated">ต้องกำหนดบทบาทผู้ใช้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8176,7 +8175,7 @@
       </trans-unit>
       <trans-unit id="d531c2261dc0c2739bd7cbb2bb175946b7eeb3ae" datatype="html">
         <source>Description must be at least 3 characters long.</source>
-        <target state="new">Description must be at least 3 characters long.</target>
+        <target state="translated">คำอธิบายต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8192,7 +8191,7 @@
       </trans-unit>
       <trans-unit id="a4179e366d4aa335f1ddd0a13e9109c71a9338d0" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="new">Description cannot be more than 1000 characters long.</target>
+        <target state="translated">คำอธิบายไม่สามารถยาวเกิน 1000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8208,7 +8207,7 @@
       </trans-unit>
       <trans-unit id="1d973f9ee250b94d31ceb5c763edcd9b255ea524" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">คุณต้องยอมรับข้อกำหนดของระบบเพื่อลงทะเบียน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8216,7 +8215,7 @@
       </trans-unit>
       <trans-unit id="6d2c3ebffd49b8933200a6d4e5b74712be49bf00" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target state="new">Ban reason must be at least 3 characters long.</target>
+        <target state="translated">เหตุผลในการแบนต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8224,7 +8223,7 @@
       </trans-unit>
       <trans-unit id="be32ff1dd6e464c5c085dd7d128316f476d2e0fd" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target state="new">Ban reason cannot be more than 250 characters long.</target>
+        <target state="translated">เหตุผลในการแบนไม่สามารถยาวกว่า 250 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8232,7 +8231,7 @@
       </trans-unit>
       <trans-unit id="1c417b7aef730d6ef5d62fa8a0a7e25e3a2393e4" datatype="html">
         <source>Display name is required.</source>
-        <target state="new">Display name is required.</target>
+        <target state="translated">ต้องใส่ชื่อแสดง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8248,7 +8247,7 @@
       </trans-unit>
       <trans-unit id="085b2d6f79819a72a2b56cada4ef5085ba51d90c" datatype="html">
         <source>Display name must be at least 1 character long.</source>
-        <target state="new">Display name must be at least 1 character long.</target>
+        <target state="translated">ชื่อแสดงต้องมีความยาวอย่างน้อย 1 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8264,7 +8263,7 @@
       </trans-unit>
       <trans-unit id="5a920575b8e1067f5b11c66a4a36d3ced87756f1" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target state="new">Display name cannot be more than 50 characters long.</target>
+        <target state="translated">ชื่อแสดงไม่สามารถยาวเกิน 50 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8276,7 +8275,7 @@
       </trans-unit>
       <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6" datatype="html">
         <source>Report reason is required.</source>
-        <target state="new">Report reason is required.</target>
+        <target state="translated">ต้องใส่เหตุผลที่รายงาน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8284,7 +8283,7 @@
       </trans-unit>
       <trans-unit id="993f9f5703d449a1d467243db75253d288a2947e" datatype="html">
         <source>Report reason must be at least 2 characters long.</source>
-        <target state="new">Report reason must be at least 2 characters long.</target>
+        <target state="translated">เหตุผลที่รายงานต้องมีความยาวอย่างน้อย 2 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8292,7 +8291,7 @@
       </trans-unit>
       <trans-unit id="8c7d4c82b057aea5dbae811e16935f9bcae4c2aa" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target state="new">Report reason cannot be more than 3000 characters long.</target>
+        <target state="translated">เหตุผลที่รายงานไม่สามารถยาวกว่า 3000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8324,7 +8323,7 @@
       </trans-unit>
       <trans-unit id="94b831c7e3684258f88e099c6cd3b8f73f8a2de6" datatype="html">
         <source>The channel is required.</source>
-        <target state="new">The channel is required.</target>
+        <target state="translated">ต้องระบุช่อง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-accept-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8332,7 +8331,7 @@
       </trans-unit>
       <trans-unit id="0776b05d442a0a16f083a5eefa52a166b9d514ca" datatype="html">
         <source>Blacklist reason must be at least 2 characters long.</source>
-        <target state="new">Blacklist reason must be at least 2 characters long.</target>
+        <target state="translated">เหตุผลที่แบล็กลิสต์ต้องมีความยาวอย่างน้อย 2 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-blacklist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8340,7 +8339,7 @@
       </trans-unit>
       <trans-unit id="5009443905b0b152915247799492bf5e164e7626" datatype="html">
         <source>Blacklist reason cannot be more than 300 characters long.</source>
-        <target state="new">Blacklist reason cannot be more than 300 characters long.</target>
+        <target state="translated">เหตุผลที่แบล็กลิสต์ไม่สามารถยาวเกิน 300 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-blacklist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8348,7 +8347,7 @@
       </trans-unit>
       <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="new">Video caption language is required.</target>
+        <target state="translated">ต้องระบุภาษาคำบรรยายวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-captions-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8356,7 +8355,7 @@
       </trans-unit>
       <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="new">Video caption file is required.</target>
+        <target state="translated">ต้องระบุไฟล์คำบรรยายวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-captions-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8364,7 +8363,7 @@
       </trans-unit>
       <trans-unit id="bd7fc070c728dc6dbf3959d49fe5bb27ce15d294" datatype="html">
         <source>The username is required.</source>
-        <target state="new">The username is required.</target>
+        <target state="translated">ต้องระบุชื่อผู้ใช้</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-change-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8372,7 +8371,7 @@
       </trans-unit>
       <trans-unit id="c8465c3773699dd075e0147e264d2e232f605803" datatype="html">
         <source>You can only transfer ownership to a local account</source>
-        <target state="new">You can only transfer ownership to a local account</target>
+        <target state="translated">คุณสามารถโอนเจ้าของได้เฉพาะบัญชีที่อยู่ในระบบนี้เท่านั้น</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-change-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8380,7 +8379,7 @@
       </trans-unit>
       <trans-unit id="541087322c34e8b26954fd67ff4fc80d1a6c1b33" datatype="html">
         <source>Name is required.</source>
-        <target state="new">Name is required.</target>
+        <target state="translated">ต้องระบุชื่อ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8388,7 +8387,7 @@
       </trans-unit>
       <trans-unit id="b8b59b6284a14fc71268cf722ed98c62c5af4a76" datatype="html">
         <source>Name must be at least 1 character long.</source>
-        <target state="new">Name must be at least 1 character long.</target>
+        <target state="translated">ชื่อต้องมีความยาวอย่างน้อย 1 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8396,7 +8395,7 @@
       </trans-unit>
       <trans-unit id="e14cd37d29f13eac7384c339e4f1df58d96e4e3d" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="new">Name cannot be more than 50 characters long.</target>
+        <target state="translated">ชื่อไม่สามารถยาวเกิน 50 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8404,7 +8403,7 @@
       </trans-unit>
       <trans-unit id="135185da003b14cbb69521f570fa617a00bbbe18" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">ชื่อสามารถใช้ได้เฉพาะตัวอักษรพิมพ์เล็ก ตัวเลข รวมถึงสัญลักษณ์จุดและอันเดอร์สกอร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8412,7 +8411,7 @@
       </trans-unit>
       <trans-unit id="e7182e21e9566cc81c83f92727461322f71fd69b" datatype="html">
         <source>Support text must be at least 3 characters long.</source>
-        <target state="new">Support text must be at least 3 characters long.</target>
+        <target state="translated">ข้อความสนับสนุนต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8420,7 +8419,7 @@
       </trans-unit>
       <trans-unit id="15ec53d9ee65cb930c5f5d10ae2e8dd3fd44fc85" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">ข้อความสนับสนุนไม่สามารถยาวเกิน 1000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8428,7 +8427,7 @@
       </trans-unit>
       <trans-unit id="6ca60e0f6dfbc0073b0514bce7d273150b0b9e79" datatype="html">
         <source>Comment is required.</source>
-        <target state="new">Comment is required.</target>
+        <target state="translated">ต้องระบุความคิดเห็น</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-comment-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8436,7 +8435,7 @@
       </trans-unit>
       <trans-unit id="f5a94cae76685e72f33541b977efdd7845cb0ed6" datatype="html">
         <source>Comment must be at least 2 characters long.</source>
-        <target state="new">Comment must be at least 2 characters long.</target>
+        <target state="translated">ความคิดเห็นต้องมีความยาวอย่างน้อย 2 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-comment-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8444,7 +8443,7 @@
       </trans-unit>
       <trans-unit id="7c194080446ee6901fd17a8b8648534ffe98b123" datatype="html">
         <source>Comment cannot be more than 3000 characters long.</source>
-        <target state="new">Comment cannot be more than 3000 characters long.</target>
+        <target state="translated">ความคิดเห็นไม่สามารถยาวเกิน 3000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-comment-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8452,7 +8451,7 @@
       </trans-unit>
       <trans-unit id="e81bda510399d52f26a44a15c3dbf4d6205d90a9" datatype="html">
         <source>Display name cannot be more than 120 characters long.</source>
-        <target state="new">Display name cannot be more than 120 characters long.</target>
+        <target state="translated">ชื่อแสดงไม่สามารถยาวเกิน 120 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-playlist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8460,7 +8459,7 @@
       </trans-unit>
       <trans-unit id="e8c50a2e0b9a6eec54a983a3284839d81739f18c" datatype="html">
         <source>Privacy is required.</source>
-        <target state="new">Privacy is required.</target>
+        <target state="translated">ต้องระบุความเป็นส่วนตัว</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-playlist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8468,7 +8467,7 @@
       </trans-unit>
       <trans-unit id="3499ad3f4da49c7373332c5052d543929b94dc9c" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="new">The channel is required when the playlist is public.</target>
+        <target state="translated">ต้องระบุช่องหากเป็นเพลย์ลิสต์สาธารณะ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-playlist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8476,7 +8475,7 @@
       </trans-unit>
       <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1" datatype="html">
         <source>Video name is required.</source>
-        <target state="new">Video name is required.</target>
+        <target state="translated">ต้องระบุชื่อวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8484,7 +8483,7 @@
       </trans-unit>
       <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c" datatype="html">
         <source>Video name must be at least 3 characters long.</source>
-        <target state="new">Video name must be at least 3 characters long.</target>
+        <target state="translated">ชื่อวิดีโอต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8492,7 +8491,7 @@
       </trans-unit>
       <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695" datatype="html">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target state="new">Video name cannot be more than 120 characters long.</target>
+        <target state="translated">ชื่อวิดีโอไม่สามารถยาวเกิน 120 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8500,7 +8499,7 @@
       </trans-unit>
       <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4" datatype="html">
         <source>Video privacy is required.</source>
-        <target state="new">Video privacy is required.</target>
+        <target state="translated">ต้องระบุความเป็นส่วนตัวของวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8508,7 +8507,7 @@
       </trans-unit>
       <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16" datatype="html">
         <source>Video channel is required.</source>
-        <target state="new">Video channel is required.</target>
+        <target state="translated">ต้องระบุช่องวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8516,7 +8515,7 @@
       </trans-unit>
       <trans-unit id="af5e2d5f3ac817c735fb7ff9ca16322789f66fef" datatype="html">
         <source>Video description must be at least 3 characters long.</source>
-        <target state="new">Video description must be at least 3 characters long.</target>
+        <target state="translated">คำอธิบายวิดีโอต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8524,7 +8523,7 @@
       </trans-unit>
       <trans-unit id="ce28a9403c2d7e5da2e59af27118f8b6d109e906" datatype="html">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target state="new">Video description cannot be more than 10000 characters long.</target>
+        <target state="translated">คำอธิบายวิดีโอไม่สามารถยาวเกิน 10000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8532,7 +8531,7 @@
       </trans-unit>
       <trans-unit id="f1cffdc2e156716cd9880201d65ba457d11464f8" datatype="html">
         <source>A tag should be more than 2 characters long.</source>
-        <target state="new">A tag should be more than 2 characters long.</target>
+        <target state="translated">แท็กต้องยาวกว่า 2 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8540,7 +8539,7 @@
       </trans-unit>
       <trans-unit id="34a0811f9a2a7366cc9efcdad52ea59b105326ea" datatype="html">
         <source>A tag should be less than 30 characters long.</source>
-        <target state="new">A tag should be less than 30 characters long.</target>
+        <target state="translated">แท็กต้องสั้นกว่า 30 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8548,7 +8547,7 @@
       </trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6" datatype="html">
         <source>Video support must be at least 3 characters long.</source>
-        <target state="new">Video support must be at least 3 characters long.</target>
+        <target state="translated">ข้อมูลการสนับสนุนของวิดีโอต้องมีความยาวอย่างน้อย 3 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8556,7 +8555,7 @@
       </trans-unit>
       <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target state="new">Video support cannot be more than 1000 characters long.</target>
+        <target state="translated">ข้อมูลการสนับสนุนของวิดีโอไม่สามารถยาวเกิน 1000 ตัวอักษร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8564,7 +8563,7 @@
       </trans-unit>
       <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0" datatype="html">
         <source>A date is required to schedule video update.</source>
-        <target state="new">A date is required to schedule video update.</target>
+        <target state="translated">ต้องระบุวันที่เพื่อกำหนดเวลาอัปเดตวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8572,7 +8571,7 @@
       </trans-unit>
       <trans-unit id="3b7ed22d0730d03b38c254332829d855ee7256c4" datatype="html">
         <source>This file is too large.</source>
-        <target state="new">This file is too large.</target>
+        <target state="translated">ขนาดไฟล์ใหญ่เกินไป</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/reactive-file.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8580,7 +8579,7 @@
       </trans-unit>
       <trans-unit id="2f5f2093f14679fed82ff76a0cd2a28145a83ca9" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
+        <target state="translated">PeerTube ไม่รองรับไฟล์ชนิดนี้ รองรับเฉพาะนามสกุล <x id="INTERPOLATION" equiv-text="{{extensions}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/reactive-file.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8588,7 +8587,7 @@
       </trans-unit>
       <trans-unit id="0bf41abaa85526711f7952b4600e4044bc7f04a4" datatype="html">
         <source>All unsaved data will be lost, are you sure you want to leave this page?</source>
-        <target state="new">All unsaved data will be lost, are you sure you want to leave this page?</target>
+        <target state="translated">ข้อมูลที่ยังไม่ได้บันทึกจะถูกลบ คุณต้องการออกจากหน้านี้หรือไม่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/guards/can-deactivate-guard.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8596,7 +8595,7 @@
       </trans-unit>
       <trans-unit id="8339364b054610983b7f2334bb807fff7613bddf" datatype="html">
         <source>Sunday</source>
-        <target state="new">Sunday</target>
+        <target state="translated">วันอาทิตย์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8604,7 +8603,7 @@
       </trans-unit>
       <trans-unit id="a43c57a7cbebf57eb33a2eae5e994c91d9887596" datatype="html">
         <source>Monday</source>
-        <target state="new">Monday</target>
+        <target state="translated">วันจันทร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8612,7 +8611,7 @@
       </trans-unit>
       <trans-unit id="48a2a35957ce394eb2c59ae35c99642360af70ee" datatype="html">
         <source>Tuesday</source>
-        <target state="new">Tuesday</target>
+        <target state="translated">วันอังคาร</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8620,7 +8619,7 @@
       </trans-unit>
       <trans-unit id="b0af441f9ba8b82952b9ec10fb8c62e8fec67df9" datatype="html">
         <source>Wednesday</source>
-        <target state="new">Wednesday</target>
+        <target state="translated">วันพุธ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8628,7 +8627,7 @@
       </trans-unit>
       <trans-unit id="55c583b99c809818ec27df065ccf05357a6ac10b" datatype="html">
         <source>Thursday</source>
-        <target state="new">Thursday</target>
+        <target state="translated">วันพฤหัสบดี</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8636,7 +8635,7 @@
       </trans-unit>
       <trans-unit id="e91b54925dc5f490753f60f53ef6f8b4609e6215" datatype="html">
         <source>Friday</source>
-        <target state="new">Friday</target>
+        <target state="translated">วันศุกร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8644,7 +8643,7 @@
       </trans-unit>
       <trans-unit id="c0d2dd391a3eca8e841a5d0e035cd268280eb68e" datatype="html">
         <source>Saturday</source>
-        <target state="new">Saturday</target>
+        <target state="translated">วันเสาร์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8652,7 +8651,7 @@
       </trans-unit>
       <trans-unit id="6549890cd0d6b59fb0e1aa383b00483a68a55eef" datatype="html">
         <source>Sun</source>
-        <target state="new">Sun</target>
+        <target state="translated">อา.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8661,7 +8660,7 @@
       </trans-unit>
       <trans-unit id="3382aa5d7f520e197fb59a4995fe1beffca2d0ff" datatype="html">
         <source>Mon</source>
-        <target state="new">Mon</target>
+        <target state="translated">จ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8670,7 +8669,7 @@
       </trans-unit>
       <trans-unit id="f883ec926274974df0fc46c037cbffd6a863ebc9" datatype="html">
         <source>Tue</source>
-        <target state="new">Tue</target>
+        <target state="translated">อ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8679,7 +8678,7 @@
       </trans-unit>
       <trans-unit id="242b4f4b5651e24f9a9007ef153a57981e4b989d" datatype="html">
         <source>Wed</source>
-        <target state="new">Wed</target>
+        <target state="translated">พ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8688,7 +8687,7 @@
       </trans-unit>
       <trans-unit id="5a2c39d56b8f00a6a4670a63b53caacbda953be6" datatype="html">
         <source>Thu</source>
-        <target state="new">Thu</target>
+        <target state="translated">พฤ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8697,7 +8696,7 @@
       </trans-unit>
       <trans-unit id="4cdf23d523a0e52e0dec9cd650ffd9bd6952792c" datatype="html">
         <source>Fri</source>
-        <target state="new">Fri</target>
+        <target state="translated">ศ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8706,7 +8705,7 @@
       </trans-unit>
       <trans-unit id="1283d165a942d7f4c469ba34f99dbb9e927d0261" datatype="html">
         <source>Sat</source>
-        <target state="new">Sat</target>
+        <target state="translated">ส.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8715,7 +8714,7 @@
       </trans-unit>
       <trans-unit id="2fba8448ff13105c57665a9a6ffcfe9615d855dd" datatype="html">
         <source>Su</source>
-        <target state="new">Su</target>
+        <target state="translated">อา.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8724,7 +8723,7 @@
       </trans-unit>
       <trans-unit id="388144af7ac7651d2615b9be0e84f43ae71d9fb3" datatype="html">
         <source>Mo</source>
-        <target state="new">Mo</target>
+        <target state="translated">จ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8733,7 +8732,7 @@
       </trans-unit>
       <trans-unit id="d96313e42b5f0751ce2676a31d309b4d322ab462" datatype="html">
         <source>Tu</source>
-        <target state="new">Tu</target>
+        <target state="translated">อ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8742,7 +8741,7 @@
       </trans-unit>
       <trans-unit id="06cc3d39f78c0615b707cef39cd4875599611fef" datatype="html">
         <source>We</source>
-        <target state="new">We</target>
+        <target state="translated">พ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8751,7 +8750,7 @@
       </trans-unit>
       <trans-unit id="790894436cca9d675d59be9a8aafd58acccde2cd" datatype="html">
         <source>Th</source>
-        <target state="new">Th</target>
+        <target state="translated">พฤ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8760,7 +8759,7 @@
       </trans-unit>
       <trans-unit id="42dfe37169f8471367c31489155229bbe1747ea5" datatype="html">
         <source>Fr</source>
-        <target state="new">Fr</target>
+        <target state="translated">ศ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8769,7 +8768,7 @@
       </trans-unit>
       <trans-unit id="1b64ea3e04ceeb512e8974eb0019dee4f211c7a0" datatype="html">
         <source>Sa</source>
-        <target state="new">Sa</target>
+        <target state="translated">ส.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8778,7 +8777,7 @@
       </trans-unit>
       <trans-unit id="e7815f1c4a6d3cc157a16407a48865023cc35ec0" datatype="html">
         <source>January</source>
-        <target state="new">January</target>
+        <target state="translated">มกราคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8786,7 +8785,7 @@
       </trans-unit>
       <trans-unit id="0393a96b58df82af39a2ec83deec624749e42036" datatype="html">
         <source>February</source>
-        <target state="new">February</target>
+        <target state="translated">กุมภาพันธ์</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8794,7 +8793,7 @@
       </trans-unit>
       <trans-unit id="ea41ee3743ec5bdbbf863ab793bbdd6e6d9af96e" datatype="html">
         <source>March</source>
-        <target state="new">March</target>
+        <target state="translated">มีนาคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8802,7 +8801,7 @@
       </trans-unit>
       <trans-unit id="b87ee784d9e93b5557aca9bdc9464dbd4328920a" datatype="html">
         <source>April</source>
-        <target state="new">April</target>
+        <target state="translated">เมษายน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8810,7 +8809,7 @@
       </trans-unit>
       <trans-unit id="862da1034ac2707cc44123ed963b2f42109b6b3e" datatype="html">
         <source>May</source>
-        <target state="new">May</target>
+        <target state="translated">พฤษภาคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8822,7 +8821,7 @@
       </trans-unit>
       <trans-unit id="2f234249d4c3c39e27c0f05d4a6b73a7959caeb2" datatype="html">
         <source>June</source>
-        <target state="new">June</target>
+        <target state="translated">มิถุนายน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8830,7 +8829,7 @@
       </trans-unit>
       <trans-unit id="11447f95e83c8de675ab6c492150f88e4d9bd15e" datatype="html">
         <source>July</source>
-        <target state="new">July</target>
+        <target state="translated">กรกฎาคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8838,7 +8837,7 @@
       </trans-unit>
       <trans-unit id="ddd9a3d59a8db4e822e54e9473c05b571aca9829" datatype="html">
         <source>August</source>
-        <target state="new">August</target>
+        <target state="translated">สิงหาคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8846,7 +8845,7 @@
       </trans-unit>
       <trans-unit id="e21dc41f9b3fdaf35ab6b2d9e2e5e8a926fb1938" datatype="html">
         <source>September</source>
-        <target state="new">September</target>
+        <target state="translated">กันยายน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8854,7 +8853,7 @@
       </trans-unit>
       <trans-unit id="71f49c502d13e22079a958a5532afa28dbe98b3b" datatype="html">
         <source>October</source>
-        <target state="new">October</target>
+        <target state="translated">ตุลาคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8862,7 +8861,7 @@
       </trans-unit>
       <trans-unit id="64b5ce921faa5e3d277d6d528ddcfc8c2bfe9f52" datatype="html">
         <source>November</source>
-        <target state="new">November</target>
+        <target state="translated">พฤศจิกายน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8870,7 +8869,7 @@
       </trans-unit>
       <trans-unit id="2006e2aabb31714ebc684dc382539649f690ed5c" datatype="html">
         <source>December</source>
-        <target state="new">December</target>
+        <target state="translated">ธันวาคม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8878,7 +8877,7 @@
       </trans-unit>
       <trans-unit id="8270e687cfb5624b3f6fbb7991a2e916c96464b7" datatype="html">
         <source>Jan</source>
-        <target state="new">Jan</target>
+        <target state="translated">ม.ค.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8887,7 +8886,7 @@
       </trans-unit>
       <trans-unit id="23544170afbb981dd52750b641576841cf5dcf60" datatype="html">
         <source>Feb</source>
-        <target state="new">Feb</target>
+        <target state="translated">ก.พ.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8896,7 +8895,7 @@
       </trans-unit>
       <trans-unit id="1f14355742459b7d6a0126a1564e1c18f39f86e7" datatype="html">
         <source>Mar</source>
-        <target state="new">Mar</target>
+        <target state="translated">มี.ค.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8905,7 +8904,7 @@
       </trans-unit>
       <trans-unit id="964a5f032bc846d32806a4838580a4f81cf14463" datatype="html">
         <source>Apr</source>
-        <target state="new">Apr</target>
+        <target state="translated">เม.ย.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8914,7 +8913,7 @@
       </trans-unit>
       <trans-unit id="8f7274f606f71d9290ed01c5683092d701632d7f" datatype="html">
         <source>Jun</source>
-        <target state="new">Jun</target>
+        <target state="translated">มิ.ย.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8923,7 +8922,7 @@
       </trans-unit>
       <trans-unit id="7c3d8318d6d8d9920ae0a80350616732c33a3211" datatype="html">
         <source>Jul</source>
-        <target state="new">Jul</target>
+        <target state="translated">ก.ค.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8932,7 +8931,7 @@
       </trans-unit>
       <trans-unit id="be1335ffd1c606321e2c020b638dd3c84b434212" datatype="html">
         <source>Aug</source>
-        <target state="new">Aug</target>
+        <target state="translated">ส.ค.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8941,7 +8940,7 @@
       </trans-unit>
       <trans-unit id="4f739d03be1c936c58978739c317d91566348204" datatype="html">
         <source>Sep</source>
-        <target state="new">Sep</target>
+        <target state="translated">ก.ย.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8950,7 +8949,7 @@
       </trans-unit>
       <trans-unit id="6607cacb987a588530a13de7018d959240d19153" datatype="html">
         <source>Oct</source>
-        <target state="new">Oct</target>
+        <target state="translated">ต.ค.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8959,7 +8958,7 @@
       </trans-unit>
       <trans-unit id="e597400ded12a366855615e18fcc8f9ac05b72e0" datatype="html">
         <source>Nov</source>
-        <target state="new">Nov</target>
+        <target state="translated">พ.ย.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8968,7 +8967,7 @@
       </trans-unit>
       <trans-unit id="adf2dfa2a9cb490d6a4a74510b7b0846b62d429e" datatype="html">
         <source>Dec</source>
-        <target state="new">Dec</target>
+        <target state="translated">ธ.ค.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8977,7 +8976,7 @@
       </trans-unit>
       <trans-unit id="99ee4faa69cd2ea8e3678c1f557c0ff1f05aae46" datatype="html">
         <source>Clear</source>
-        <target state="new">Clear</target>
+        <target state="translated">ล้าง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8985,7 +8984,7 @@
       </trans-unit>
       <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5" datatype="html">
         <source>yy-mm-dd</source>
-        <target state="new">yy-mm-dd </target>
+        <target state="translated">dd/mm/yy</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/i18n/i18n-primeng-calendar.ts</context>
           <context context-type="linenumber">1</context>
@@ -8994,7 +8993,7 @@
       </trans-unit>
       <trans-unit id="c09a68321f26f058b547021e6e2c167ae22c6e24" datatype="html">
         <source>Hidden</source>
-        <target state="new">Hidden</target>
+        <target state="translated">ซ่อน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9002,7 +9001,7 @@
       </trans-unit>
       <trans-unit id="75cc14815746a90d424157080fc7efd3e2631654" datatype="html">
         <source>Blurred with confirmation request</source>
-        <target state="new">Blurred with confirmation request</target>
+        <target state="translated">ถูกเบลอและมีหน้าต่างยืนยัน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9010,7 +9009,7 @@
       </trans-unit>
       <trans-unit id="1e89bd0d46ef7d90b5f98b24f83afc312c6ef105" datatype="html">
         <source>Displayed</source>
-        <target state="new">Displayed</target>
+        <target state="translated">แสดง</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9026,7 +9025,7 @@
       </trans-unit>
       <trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {minute} other {minutes} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {นาที} other {นาที} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9034,7 +9033,7 @@
       </trans-unit>
       <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> สำหรับวิดีโอ Full HD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9042,7 +9041,7 @@
       </trans-unit>
       <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> สำหรับวิดีโอ HD</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9050,7 +9049,7 @@
       </trans-unit>
       <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> สำหรับวิดีโอคุณภาพมาตรฐาน</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
