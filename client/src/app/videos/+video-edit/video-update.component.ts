@@ -35,7 +35,6 @@ export class VideoUpdateComponent extends FormReactive implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
-    private serverService: ServerService,
     private videoService: VideoService,
     private loadingBar: LoadingBarService,
     private videoCaptionService: VideoCaptionService,

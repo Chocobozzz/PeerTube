@@ -1,6 +1,7 @@
 <div class="margin-content">
-  <div i18n class="title-page title-page-single">
-    Update {{ video?.name }}
+  <div class="title-page title-page-single">
+    <span class="mr-1" i18n>Update</span>
+    <a [routerLink]="[ '/videos/watch', video.uuid ]">{{ video?.name }}</a>
   </div>
 
   <form novalidate [formGroup]="form">
