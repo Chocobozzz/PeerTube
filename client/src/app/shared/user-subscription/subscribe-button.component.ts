@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, OnChanges } from '@angular/core'
 import { Router } from '@angular/router'
 import { AuthService, Notifier } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
@@ -8,14 +8,13 @@ import { VideoService } from '@app/shared/video/video.service'
 import { FeedFormat } from '../../../../../shared/models/feeds'
 import { Account } from '@app/shared/account/account.model'
 import { concat, forkJoin, merge } from 'rxjs'
-import { toArray } from 'rxjs/operators'
 
 @Component({
   selector: 'my-subscribe-button',
   templateUrl: './subscribe-button.component.html',
   styleUrls: [ './subscribe-button.component.scss' ]
 })
-export class SubscribeButtonComponent implements OnInit {
+export class SubscribeButtonComponent implements OnInit, OnChanges {
   /**
    * SubscribeButtonComponent can be used with a single VideoChannel passed as [VideoChannel],
    * or with an account and a full list of that account's videoChannels. The latter is intended
@@ -70,8 +69,24 @@ export class SubscribeButtonComponent implements OnInit {
     return this.videoChannels[0]
   }
 
+  get isAllChannelsSubscribed () {
+    return this.subscribeStatus(true).length === this.videoChannels.length
+  }
+
+  get isAtLeastOneChannelSubscribed () {
+    return this.subscribeStatus(true).length > 0
+  }
+
+  get isBigButton () {
+    return this.isUserLoggedIn() && this.videoChannels.length > 1 && this.isAtLeastOneChannelSubscribed
+  }
+
   ngOnInit () {
     this.loadSubscribedStatus()
+  }
+
+  ngOnChanges () {
+    this.ngOnInit()
   }
 
   subscribe () {
@@ -144,18 +159,6 @@ export class SubscribeButtonComponent implements OnInit {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
-  }
-
-  isAllChannelsSubscribed () {
-    return !Array.from(this.subscribed.values()).includes(false)
-  }
-
-  isAtLeastOneChannelSubscribed () {
-    return this.subscribeStatus(true).length > 0
-  }
-
-  isBigButton () {
-    return this.isUserLoggedIn() && this.videoChannels.length > 1 && this.isAtLeastOneChannelSubscribed()
   }
 
   gotoLogin () {
