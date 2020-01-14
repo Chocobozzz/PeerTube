@@ -376,9 +376,7 @@
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target state="new">
-          Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">La vostra instància va seguir automàticament <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
@@ -419,7 +417,7 @@
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
         <source>Search playlists</source>
-        <target state="new">Search playlists</target>
+        <target state="translated">La llista de reproducció de la cerca</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">45</context>
@@ -449,7 +447,7 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">4</context>
@@ -461,7 +459,7 @@
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">subtítols</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -482,9 +480,7 @@
       </trans-unit>
       <trans-unit id="da44efc7b658c318651866454d258bbbe57ff21c" datatype="html">
         <source>Cancel</source>
-        <target state="new">
-      Cancel
-    </target>
+        <target state="translated">Cancel·lar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">20</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">50</context></context-group>
@@ -528,9 +524,7 @@
       </trans-unit>
       <trans-unit id="fb8aad312b72bbb7e5a1e2cc0b55fae8962bf0fb" datatype="html">
         <source>Cancel</source>
-        <target state="new">
-          Cancel
-        </target>
+        <target state="translated">Cancel·lar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">24</context>
@@ -562,7 +556,7 @@
       </trans-unit>
       <trans-unit id="f672385c803647b063687d3c912e2ce5738b51c8" datatype="html">
         <source>Blacklist video</source>
-        <target state="new">Blacklist video</target>
+        <target state="translated">Blacklist vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">3</context>
@@ -570,7 +564,7 @@
       </trans-unit>
       <trans-unit id="9849bf6a9e45a9a91d13a419afbb5176f9b2367d" datatype="html">
         <source>Unfederate the video (ask for its deletion from the remote instances)</source>
-        <target state="new">Unfederate the video (ask for its deletion from the remote instances)</target>
+        <target state="translated">D'esfera el vídeo (sol·liciteu la seva supressió de les instàncies remotes)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">21</context>
@@ -578,32 +572,30 @@
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081" datatype="html">
         <source>Unlisted</source>
-        <target state="new">Unlisted</target>
+        <target state="translated">No llistat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">15</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="ddd8a4986d2d1717a274a5a0fbed04988a819e69" datatype="html">
         <source>Private</source>
-        <target state="new">Private</target>
+        <target state="translated">Privat</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">16</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">33</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="6aec8cb024acc333218d72f279caa8ea623bb628" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> visualitzacions</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">27</context></context-group>
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d" datatype="html">
         <source>Blacklisted</source>
-        <target state="new">Blacklisted</target>
+        <target state="translated">A la llista negra</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87" datatype="html">
         <source>Sensitive</source>
-        <target state="new">
-        Sensitive
-      </target>
+        <target state="translated">Sensible</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
@@ -3512,7 +3504,7 @@
       </trans-unit>
       <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a" datatype="html">
         <source>Sensitive</source>
-        <target state="new">Sensitive</target>
+        <target state="translated">Sensible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">9</context>
@@ -3520,7 +3512,7 @@
       </trans-unit>
       <trans-unit id="b748c96a1ee98d2fa9a645fb71838f5d4938855b" datatype="html">
         <source>Unfederated</source>
-        <target state="new">Unfederated</target>
+        <target state="translated">Desfederat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">10</context>
@@ -3528,7 +3520,7 @@
       </trans-unit>
       <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99" datatype="html">
         <source>Date <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="new">Date <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Data <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3546,7 +3538,7 @@
       </trans-unit>
       <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c" datatype="html">
         <source>Actions</source>
-        <target state="new">Actions</target>
+        <target state="translated">Accions</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">35</context>
@@ -3558,7 +3550,7 @@
       </trans-unit>
       <trans-unit id="7963019b5535b51efa399e6a62b163f3e04d296f" datatype="html">
         <source>Blacklist reason:</source>
-        <target state="new">Blacklist reason:</target>
+        <target state="translated">Motius per ser a la llista negra:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">43</context>
@@ -3566,7 +3558,7 @@
       </trans-unit>
       <trans-unit id="bb863c794307735652d8695143e116eaee8a3c4f" datatype="html">
         <source>Moderation comment</source>
-        <target state="new">Moderation comment</target>
+        <target state="translated">Comentari de moderació</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context>
           <context context-type="linenumber">3</context>
