@@ -81,7 +81,7 @@ const videosAddValidator = getCommonVideoEditAttributes().concat([
       duration = await getDurationFromVideoFile(videoFile.path)
     } catch (err) {
       logger.error('Invalid input file in videosAddValidator.', { err })
-      res.status(400)
+      res.status(422)
          .json({ error: 'Invalid input file.' })
 
       return cleanUpReqFiles(req)

@@ -12,7 +12,8 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
-  VIDEO_PRIVACIES
+  VIDEO_PRIVACIES,
+  VIDEO_TRANSCODING_FPS
 } from '../../../initializers/constants'
 import {
   changeVideoChannelShare,

@@ -977,6 +977,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoUploadResponse'
+        '403':
+          description: 'The user video quota is exceeded with this video.'
+        '408':
+          description: 'Upload has timed out'
+        '422':
+          description: 'Invalid input file.'
       requestBody:
         content:
           multipart/form-data:

@@ -286,13 +286,16 @@ export {
 
 async function buildx264Command (command: ffmpeg.FfmpegCommand, options: TranscodeOptions) {
   let fps = await getVideoFileFPS(options.inputPath)
-  // On small/medium resolutions, limit FPS
   if (
+    // On small/medium resolutions, limit FPS
     options.resolution !== undefined &&
     options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-    fps > VIDEO_TRANSCODING_FPS.AVERAGE
+    fps > VIDEO_TRANSCODING_FPS.AVERAGE ||
+    // If the video is doesn't match had standard
+    !VIDEO_TRANSCODING_FPS.HD_STANDARD.map(value => fps % value).includes(0)
   ) {
-    fps = VIDEO_TRANSCODING_FPS.AVERAGE
+    // Get closest standard framerate by modulo: downsampling has to be done to a divisor of the nominal fps value
+    fps = VIDEO_TRANSCODING_FPS.STANDARD.sort((a, b) => fps % a - fps % b)[0]
   }
 
   command = await presetH264(command, options.inputPath, options.resolution, fps)
@@ -305,7 +308,7 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
 
   if (fps) {
     // Hard FPS limits
-    if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = VIDEO_TRANSCODING_FPS.MAX
+    if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = VIDEO_TRANSCODING_FPS.HD_STANDARD.sort((a, b) => fps % a - fps % b)[0]
     else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
 
     command = command.withFPS(fps)
