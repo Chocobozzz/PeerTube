@@ -383,9 +383,7 @@
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
         <source>The notification points to a content now unavailable</source>
-        <target state="new">
-          The notification points to a content now unavailable
-        </target>
+        <target state="translated">La notificació dirigeix a un contingut actualment no disponible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">158</context>
@@ -393,7 +391,7 @@
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566" datatype="html">
         <source>Save to</source>
-        <target state="new">Save to</target>
+        <target state="translated">Guardar a</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">4</context>
@@ -401,20 +399,20 @@
       </trans-unit>
       <trans-unit id="24813b8a3e45f0b57136c18d003027262cfe2d1f" datatype="html">
         <source>Options</source>
-        <target state="new">Options</target>
+        <target state="translated">Opcions</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="85e5d1de15d23cde43c530e3740a2a61aed24c2d" datatype="html">
         <source>Start at</source>
-        <target state="new">Start at</target>
+        <target state="translated">Comença a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">55</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="4d20563f7e338a1d09eb756054564ccf7c6a30ef" datatype="html">
         <source>Stop at</source>
-        <target state="new">Stop at</target>
+        <target state="translated">Atura a</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context><context context-type="linenumber">31</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">120</context></context-group>
