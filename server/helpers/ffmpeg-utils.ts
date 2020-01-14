@@ -169,24 +169,27 @@ async function getVideoFileFPS (path: string) {
   return 0
 }
 
-async function getVideoFileBitrate (path: string) {
-  return new Promise<number>((res, rej) => {
+async function getMetadataFromFile<T> (path: string, cb = metadata => metadata) {
+  return new Promise<T>((res, rej) => {
     ffmpeg.ffprobe(path, (err, metadata) => {
       if (err) return rej(err)
 
-      return res(metadata.format.bit_rate)
+      delete metadata.format.filename // we want to remove information about the filesystem
+      return res(cb(metadata))
     })
   })
 }
 
-function getDurationFromVideoFile (path: string) {
-  return new Promise<number>((res, rej) => {
-    ffmpeg.ffprobe(path, (err, metadata) => {
-      if (err) return rej(err)
+async function getVideoFileBitrate (path: string) {
+  return getMetadataFromFile<number>(path, metadata => metadata.format.bit_rate)
+}
 
-      return res(Math.floor(metadata.format.duration))
-    })
-  })
+function getDurationFromVideoFile (path: string) {
+  return getMetadataFromFile<number>(path, metadata => Math.floor(metadata.format.duration))
+}
+
+function getVideoStreamFromFile (path: string) {
+  return getMetadataFromFile<any>(path, metadata => metadata.streams.find(s => s.codec_type === 'video') || null)
 }
 
 async function generateImageFromVideoFile (fromPath: string, folder: string, imageName: string, size: { width: number, height: number }) {
@@ -341,6 +344,7 @@ export {
   getAudioStreamCodec,
   getVideoStreamSize,
   getVideoFileResolution,
+  getMetadataFromFile,
   getDurationFromVideoFile,
   generateImageFromVideoFile,
   TranscodeOptions,
@@ -448,17 +452,6 @@ async function fixHLSPlaylistIfNeeded (options: TranscodeOptions) {
                                 .replace(`#EXT-X-MAP:URI="${videoFilePath}",`, `#EXT-X-MAP:URI="${videoFileName}",`)
 
   await writeFile(options.outputPath, newContent)
-}
-
-function getVideoStreamFromFile (path: string) {
-  return new Promise<any>((res, rej) => {
-    ffmpeg.ffprobe(path, (err, metadata) => {
-      if (err) return rej(err)
-
-      const videoStream = metadata.streams.find(s => s.codec_type === 'video')
-      return res(videoStream || null)
-    })
-  })
 }
 
 /**

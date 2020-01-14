@@ -193,7 +193,8 @@ function videoFilesModelToFormattedJSON (
         torrentUrl: model.getTorrentUrl(videoFile, baseUrlHttp),
         torrentDownloadUrl: model.getTorrentDownloadUrl(videoFile, baseUrlHttp),
         fileUrl: model.getVideoFileUrl(videoFile, baseUrlHttp),
-        fileDownloadUrl: model.getVideoFileDownloadUrl(videoFile, baseUrlHttp)
+        fileDownloadUrl: model.getVideoFileDownloadUrl(videoFile, baseUrlHttp),
+        metadata: videoFile.metadata
       } as VideoFile
     })
     .sort((a, b) => {

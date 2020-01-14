@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { extname } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
-import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getVideoFileFPS, getVideoFileResolution, getMetadataFromFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
@@ -206,7 +206,8 @@ async function addVideo (req: express.Request, res: express.Response) {
   const videoFile = new VideoFileModel({
     extname: extname(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,
-    videoStreamingPlaylistId: null
+    videoStreamingPlaylistId: null,
+    metadata: await getMetadataFromFile<any>(videoPhysicalFile.path)
   })
 
   if (videoFile.isAudio()) {

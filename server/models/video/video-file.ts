@@ -106,6 +106,10 @@ export class VideoFileModel extends Model<VideoFileModel> {
   @Column
   fps: number
 
+  @AllowNull(true)
+  @Column(DataType.JSON)
+  metadata: any
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number

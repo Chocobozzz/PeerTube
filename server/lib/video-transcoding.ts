@@ -2,6 +2,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSER
 import { basename, extname as extnameUtil, join } from 'path'
 import {
   canDoQuickTranscode,
+  getMetadataFromFile,
   getDurationFromVideoFile,
   getVideoFileFPS,
   transcode,
@@ -230,11 +231,13 @@ export {
 async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoFile, transcodingPath: string, outputPath: string) {
   const stats = await stat(transcodingPath)
   const fps = await getVideoFileFPS(transcodingPath)
+  const metadata = await getMetadataFromFile(transcodingPath)
 
   await move(transcodingPath, outputPath)
 
   videoFile.size = stats.size
   videoFile.fps = fps
+  videoFile.metadata = metadata
 
   await createTorrentAndSetInfoHash(video, videoFile)
 
