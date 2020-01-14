@@ -3890,7 +3890,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="8fc026bb4b317bf3a6159c364818202f5bb95a4e">
         <source>Popular</source>
-        <target>Populär</target>
+        <target>Populära</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
