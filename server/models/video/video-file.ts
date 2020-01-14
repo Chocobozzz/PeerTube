@@ -10,7 +10,9 @@ import {
   Is,
   Model,
   Table,
-  UpdatedAt
+  UpdatedAt,
+  Scopes,
+  DefaultScope
 } from 'sequelize-typescript'
 import {
   isVideoFileExtnameValid,
@@ -29,6 +31,33 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '.
 import { MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
 import * as memoizee from 'memoizee'
 
+export enum ScopeNames {
+  WITH_VIDEO = 'WITH_VIDEO',
+  WITH_METADATA = 'WITH_METADATA'
+}
+
+const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
+
+@DefaultScope(() => ({
+  attributes: {
+    exclude: METADATA_FIELDS
+  }
+}))
+@Scopes(() => ({
+  [ ScopeNames.WITH_VIDEO ]: {
+    include: [
+      {
+        model: VideoModel.unscoped(),
+        required: true
+      }
+    ]
+  },
+  [ ScopeNames.WITH_METADATA ]: {
+    attributes: {
+      include: METADATA_FIELDS
+    }
+  }
+}))
 @Table({
   tableName: 'videoFile',
   indexes: [
@@ -107,8 +136,12 @@ export class VideoFileModel extends Model<VideoFileModel> {
   fps: number
 
   @AllowNull(true)
-  @Column(DataType.JSON)
+  @Column(DataType.JSONB)
   metadata: any
+
+  @AllowNull(true)
+  @Column
+  metadataUrl: string
 
   @ForeignKey(() => VideoModel)
   @Column
@@ -161,17 +194,12 @@ export class VideoFileModel extends Model<VideoFileModel> {
               .then(results => results.length === 1)
   }
 
-  static loadWithVideo (id: number) {
-    const options = {
-      include: [
-        {
-          model: VideoModel.unscoped(),
-          required: true
-        }
-      ]
-    }
+  static loadWithMetadata (id: number) {
+    return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk(id)
+  }
 
-    return VideoFileModel.findByPk(id, options)
+  static loadWithVideo (id: number) {
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk(id)
   }
 
   static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {

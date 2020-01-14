@@ -6,11 +6,17 @@ async function up (utils: {
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
 
-  const data = {
-    type: Sequelize.JSON,
+  const metadata = {
+    type: Sequelize.JSONB,
     allowNull: true
   }
-  await utils.queryInterface.addColumn('videoFile', 'metadata', data)
+  await utils.queryInterface.addColumn('videoFile', 'metadata', metadata)
+
+  const metadataUrl = {
+    type: Sequelize.STRING,
+    allowNull: true
+  }
+  await utils.queryInterface.addColumn('videoFile', 'metadataUrl', metadataUrl)
 
 }
 

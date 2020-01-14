@@ -78,8 +78,11 @@ export class VideoDownloadComponent {
       : this.getVideoFileLink()
   }
 
-  onResolutionIdChange () {
-    this.videoFile = this.getVideoFile()
+  async onResolutionIdChange () {
+    this.videoFile = await this.getVideoFile()
+    await this.hydrateMetadataFromMetadataUrl(this.videoFile)
+
+    if (!this.videoFile.metadata) return
     this.videoFileMetadataFormat = this.videoFile
       ? this.getMetadataFormat(this.videoFile.metadata.format)
       : undefined
@@ -159,7 +162,7 @@ export class VideoDownloadComponent {
 
     let keyToTranslateFunction = {
       'codec_long_name': (value: any) => ({ label: this.i18n('Codec'), value }),
-      'profile': (value: any) => ({ label: this.i18n('Profile'), value }),
+      'profile': (value: any) => ({ label: this.i18n('Profile'), value })
     }
 
     if (type === 'video') {
@@ -180,5 +183,15 @@ export class VideoDownloadComponent {
       pick(stream, Object.keys(keyToTranslateFunction)),
       (val, key) => keyToTranslateFunction[key](val)
     )
+  }
+
+  private hydrateMetadataFromMetadataUrl (file: VideoFile) {
+    if (file.metadata || !file.metadataUrl) return
+
+    return fetch(file.metadataUrl)
+      .then(response => response.json())
+      .then(data => {
+        file.metadata = data
+      })
   }
 }

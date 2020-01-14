@@ -20,6 +20,7 @@ import { CONFIG } from '../initializers/config'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
+import { pick } from 'lodash'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.
@@ -203,6 +204,7 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
 
   newVideoFile.size = stats.size
   newVideoFile.fps = await getVideoFileFPS(videoFilePath)
+  newVideoFile.metadata = await getMetadataFromFile(videoFilePath)
 
   await createTorrentAndSetInfoHash(videoStreamingPlaylist, newVideoFile)
 
@@ -237,7 +239,7 @@ async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoF
 
   videoFile.size = stats.size
   videoFile.fps = fps
-  videoFile.metadata = metadata
+  videoFile.metadata = pick(metadata, [ 'streams', 'format', 'chapters' ])
 
   await createTorrentAndSetInfoHash(video, videoFile)
 

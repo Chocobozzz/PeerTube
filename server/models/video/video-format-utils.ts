@@ -23,6 +23,7 @@ import {
 import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
+import { extractVideo } from '@server/lib/videos'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
@@ -194,7 +195,8 @@ function videoFilesModelToFormattedJSON (
         torrentDownloadUrl: model.getTorrentDownloadUrl(videoFile, baseUrlHttp),
         fileUrl: model.getVideoFileUrl(videoFile, baseUrlHttp),
         fileDownloadUrl: model.getVideoFileDownloadUrl(videoFile, baseUrlHttp),
-        metadata: videoFile.metadata
+        metadata: videoFile.metadata,
+        metadataUrl: videoFile.metadataUrl
       } as VideoFile
     })
     .sort((a, b) => {
@@ -220,6 +222,17 @@ function addVideoFilesInAPAcc (
       size: file.size,
       fps: file.fps
     })
+
+    if (file.metadata) {
+      acc.push({
+        type: 'Link',
+        rel: [ 'metadata', MIMETYPES.VIDEO.EXT_MIMETYPE[ file.extname ] ],
+        mediaType: 'application/json' as 'application/json',
+        href: extractVideo(model).getVideoFileMetadataUrl(file, baseUrlHttp),
+        height: file.resolution,
+        fps: file.fps
+      })
+    }
 
     acc.push({
       type: 'Link',

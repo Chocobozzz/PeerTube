@@ -198,6 +198,20 @@ const videosCustomGetValidator = (
 const videosGetValidator = videosCustomGetValidator('all')
 const videosDownloadValidator = videosCustomGetValidator('all', true)
 
+const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('videoFileId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoFileId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoExist(req.params.id, res)) return
+
+    return next()
+  }
+])
+
 const videosRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 
@@ -411,6 +425,7 @@ export {
   videosAddValidator,
   videosUpdateValidator,
   videosGetValidator,
+  videoFileMetadataGetValidator,
   videosDownloadValidator,
   checkVideoFollowConstraints,
   videosCustomGetValidator,

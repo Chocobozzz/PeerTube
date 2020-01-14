@@ -11,4 +11,5 @@ export interface VideoFile {
   fileDownloadUrl: string
   fps: number
   metadata?: FfprobeData
+  metadataUrl?: string
 }

@@ -2133,6 +2133,13 @@ export class VideoModel extends Model<VideoModel> {
     return baseUrlHttp + STATIC_PATHS.WEBSEED + getVideoFilename(this, videoFile)
   }
 
+  getVideoFileMetadataUrl (videoFile: MVideoFile, baseUrlHttp: string) {
+    const path = '/api/v1/videos/'
+    return videoFile.metadata
+      ? baseUrlHttp + path + this.uuid + '/metadata/' + videoFile.id
+      : videoFile.metadataUrl
+  }
+
   getVideoRedundancyUrl (videoFile: MVideoFile, baseUrlHttp: string) {
     return baseUrlHttp + STATIC_PATHS.REDUNDANCY + getVideoFilename(this, videoFile)
   }

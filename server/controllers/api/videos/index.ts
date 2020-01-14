@@ -37,7 +37,8 @@ import {
   videosGetValidator,
   videosRemoveValidator,
   videosSortValidator,
-  videosUpdateValidator
+  videosUpdateValidator,
+  videoFileMetadataGetValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
@@ -127,6 +128,10 @@ videosRouter.post('/upload',
 videosRouter.get('/:id/description',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
+)
+videosRouter.get('/:id/metadata/:videoFileId',
+  asyncMiddleware(videoFileMetadataGetValidator),
+  asyncMiddleware(getVideoFileMetadata)
 )
 videosRouter.get('/:id',
   optionalAuthenticate,
@@ -492,6 +497,11 @@ async function getVideoDescription (req: express.Request, res: express.Response)
   }
 
   return res.json({ description })
+}
+
+async function getVideoFileMetadata (req: express.Request, res: express.Response) {
+  const videoFile = await VideoFileModel.loadWithMetadata(Number(req.params.videoFileId))
+  return res.json(videoFile.metadata)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {

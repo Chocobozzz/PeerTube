@@ -28,6 +28,15 @@ export type ActivityPlaylistSegmentHashesObject = {
   href: string
 }
 
+export type ActivityVideoFileMetadataObject = {
+  type: 'Link'
+  rel: [ 'metadata', any ]
+  mediaType: 'application/json'
+  height: number
+  href: string
+  fps: number
+}
+
 export type ActivityPlaylistInfohashesObject = {
   type: 'Infohash'
   name: string
@@ -80,6 +89,7 @@ export type ActivityTagObject =
   | ActivityMentionObject
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject
+  | ActivityVideoFileMetadataObject
 
 export type ActivityUrlObject =
   ActivityVideoUrlObject
@@ -87,6 +97,7 @@ export type ActivityUrlObject =
   | ActivityBitTorrentUrlObject
   | ActivityMagnetUrlObject
   | ActivityHtmlUrlObject
+  | ActivityVideoFileMetadataObject
 
 export interface ActivityPubAttributedTo {
   type: 'Group' | 'Person'
