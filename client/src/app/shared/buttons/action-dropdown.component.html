@@ -15,17 +15,23 @@
       <ng-container *ngFor="let action of actions">
         <ng-container *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
 
-          <a *ngIf="action.linkBuilder" [ngClass]="{ 'with-icon': !!action.iconName }" class="dropdown-item" [routerLink]="action.linkBuilder(entry)">
+          <ng-template #templateActionLabel let-action>
             <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName"></my-global-icon>
-            {{ action.label }}
+            <div class="d-flex flex-column">
+              <span i18n>{{ action.label }}</span>
+              <small class="text-muted" *ngIf="action.description">{{ action.description }}</small>
+            </div>
+          </ng-template>
+
+          <a *ngIf="action.linkBuilder" [ngClass]="{ 'with-icon': !!action.iconName }" class="dropdown-item" [routerLink]="action.linkBuilder(entry)" [title]="action.title || ''">
+            <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </a>
 
           <span
             *ngIf="!action.linkBuilder" [ngClass]="{ 'with-icon': !!action.iconName }" (click)="action.handler(entry)"
-            class="custom-action dropdown-item" role="button"
+            class="custom-action dropdown-item" role="button" [title]="action.title || ''"
           >
-            <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName"></my-global-icon>
-            {{ action.label }}
+            <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </span>
 
         </ng-container>

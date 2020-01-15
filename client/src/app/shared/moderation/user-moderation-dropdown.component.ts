@@ -243,20 +243,24 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       if (this.user && authUser.hasRight(UserRight.MANAGE_USERS) && authUser.canManage(this.user)) {
         this.userActions.push([
           {
-            label: this.i18n('Edit user'),
+            label: this.i18n('Edit'),
+            description: this.i18n('Change quota, role, and more.'),
             linkBuilder: ({ user }) => this.getRouterUserEditLink(user)
           },
           {
-            label: this.i18n('Delete user'),
+            label: this.i18n('Delete'),
+            description: this.i18n('Videos will be deleted, comments will be tombstoned.'),
             handler: ({ user }) => this.removeUser(user)
           },
           {
-            label: this.i18n('Ban user'),
+            label: this.i18n('Ban'),
+            description: this.i18n('Videos will be kept as private, comments will be kept as is.'),
             handler: ({ user }) => this.openBanUserModal(user),
             isDisplayed: ({ user }) => !user.blocked
           },
           {
             label: this.i18n('Unban user'),
+            description: this.i18n('Allow the user to login and create videos/comments again'),
             handler: ({ user }) => this.unbanUser(user),
             isDisplayed: ({ user }) => user.blocked
           },
@@ -274,21 +278,25 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
         this.userActions.push([
           {
             label: this.i18n('Mute this account'),
+            description: this.i18n('Hide any content from that user for you.'),
             isDisplayed: ({ account }) => account.mutedByUser === false,
             handler: ({ account }) => this.blockAccountByUser(account)
           },
           {
             label: this.i18n('Unmute this account'),
+            description: this.i18n('Show back content from that user for you.'),
             isDisplayed: ({ account }) => account.mutedByUser === true,
             handler: ({ account }) => this.unblockAccountByUser(account)
           },
           {
             label: this.i18n('Mute the instance'),
+            description: this.i18n('Hide any content from that instance for you.'),
             isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
             handler: ({ account }) => this.blockServerByUser(account.host)
           },
           {
             label: this.i18n('Unmute the instance'),
+            description: this.i18n('Show back content from that instance for you.'),
             isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
             handler: ({ account }) => this.unblockServerByUser(account.host)
           }
@@ -301,11 +309,13 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute this account by your instance'),
+              description: this.i18n('Hide any content from that user for you, your instance and its users.'),
               isDisplayed: ({ account }) => account.mutedByInstance === false,
               handler: ({ account }) => this.blockAccountByInstance(account)
             },
             {
               label: this.i18n('Unmute this account by your instance'),
+              description: this.i18n('Show back content from that user for you, your instance and its users.'),
               isDisplayed: ({ account }) => account.mutedByInstance === true,
               handler: ({ account }) => this.unblockAccountByInstance(account)
             }
@@ -317,11 +327,13 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           instanceActions = instanceActions.concat([
             {
               label: this.i18n('Mute the instance by your instance'),
+              description: this.i18n('Hide any content from that instance for you, your instance and its users.'),
               isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === false,
               handler: ({ account }) => this.blockServerByInstance(account.host)
             },
             {
               label: this.i18n('Unmute the instance by your instance'),
+              description: this.i18n('Show back content from that instance for you, your instance and its users.'),
               isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
               handler: ({ account }) => this.unblockServerByInstance(account.host)
             }
