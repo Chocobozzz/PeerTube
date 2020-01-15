@@ -4,6 +4,8 @@ import { GlobalIconName } from '@app/shared/images/global-icon.component'
 export type DropdownAction<T> = {
   label?: string
   iconName?: GlobalIconName
+  description?: string
+  title?: string
   handler?: (a: T) => any
   linkBuilder?: (a: T) => (string | number)[]
   isDisplayed?: (a: T) => boolean

@@ -374,6 +374,8 @@ p-tablecheckbox:hover div .ui-chkbox-box {
 }
 
 p-inputswitch {
+  height: 26px;
+
   .ui-inputswitch-checked .ui-inputswitch-slider {
     background-color: var(--mainColor) !important;
   }

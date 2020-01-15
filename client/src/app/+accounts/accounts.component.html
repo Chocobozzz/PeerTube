@@ -23,7 +23,7 @@
           <span *ngIf="account.mutedServerByInstance" class="badge badge-danger" i18n>Instance muted by your instance</span>
 
           <my-user-moderation-dropdown
-            buttonSize="small" [account]="account" [user]="user" placement="bottom-right auto"
+            buttonSize="small" [account]="account" [user]="user" placement="bottom-left auto"
             (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
           ></my-user-moderation-dropdown>
         </div>

@@ -10,14 +10,7 @@
         tabindex="-1"
         class="video-miniature-name"
         [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
-      >
-        <ng-container *ngIf="displayOptions.privacyLabel">
-          <span *ngIf="isUnlistedVideo()" class="badge badge-warning" i18n>Unlisted</span>
-          <span *ngIf="isPrivateVideo()" class="badge badge-danger" i18n>Private</span>
-        </ng-container>
-
-        {{ video.name }}
-      </a>
+      >{{ video.name }}</a>
 
       <span class="video-miniature-created-at-views">
         <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
@@ -26,6 +19,11 @@
           <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
           <ng-container i18n *ngIf="displayOptions.views">{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
         </span>
+
+        <ng-container *ngIf="displayOptions.privacyLabel">
+          <span *ngIf="isUnlistedVideo()" class="badge badge-warning ml-1" i18n>Unlisted</span>
+          <span *ngIf="isPrivateVideo()" class="badge badge-danger ml-1" i18n>Private</span>
+        </ng-container>
       </span>
 
       <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">

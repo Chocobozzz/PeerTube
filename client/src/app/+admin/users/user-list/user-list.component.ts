@@ -23,7 +23,7 @@ export class UserListComponent extends RestTable implements OnInit {
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   selectedUsers: User[] = []
-  bulkUserActions: DropdownAction<User[]>[] = []
+  bulkUserActions: DropdownAction<User[]>[][] = []
 
   private serverConfig: ServerConfig
 
@@ -54,29 +54,35 @@ export class UserListComponent extends RestTable implements OnInit {
     this.initialize()
 
     this.bulkUserActions = [
-      {
-        label: this.i18n('Delete'),
-        handler: users => this.removeUsers(users),
-        isDisplayed: users => users.every(u => this.authUser.canManage(u))
-      },
-      {
-        label: this.i18n('Ban'),
-        handler: users => this.openBanUserModal(users),
-        isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === false)
-      },
-      {
-        label: this.i18n('Unban'),
-        handler: users => this.unbanUsers(users),
-        isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === true)
-      },
-      {
-        label: this.i18n('Set Email as Verified'),
-        handler: users => this.setEmailsAsVerified(users),
-        isDisplayed: users => {
-          return this.requiresEmailVerification &&
-            users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified === false)
+      [
+        {
+          label: this.i18n('Delete'),
+          description: this.i18n('Videos will be deleted, comments will be tombstoned.'),
+          handler: users => this.removeUsers(users),
+          isDisplayed: users => users.every(u => this.authUser.canManage(u))
+        },
+        {
+          label: this.i18n('Ban'),
+          description: this.i18n('Videos will be kept as private, comments will be kept as is.'),
+          handler: users => this.openBanUserModal(users),
+          isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === false)
+        },
+        {
+          label: this.i18n('Unban'),
+          handler: users => this.unbanUsers(users),
+          isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === true)
         }
-      }
+      ],
+      [
+        {
+          label: this.i18n('Set Email as Verified'),
+          handler: users => this.setEmailsAsVerified(users),
+          isDisplayed: users => {
+            return this.requiresEmailVerification &&
+              users.every(u => this.authUser.canManage(u) && !u.blocked && u.emailVerified === false)
+          }
+        }
+      ]
     ]
   }
 

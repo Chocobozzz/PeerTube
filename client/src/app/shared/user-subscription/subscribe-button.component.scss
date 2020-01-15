@@ -69,6 +69,15 @@
     button {
       cursor: pointer;
     }
+
+    .dropdown-item-neutral {
+      cursor: default;
+
+      &:hover,
+      &:focus {
+        background-color: inherit;
+      }
+    }
   }
 
   .dropdown-header {

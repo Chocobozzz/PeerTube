@@ -66,7 +66,7 @@
         </a>
       </td>
 
-      <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus">{{ user.email }}</td>
+      <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus" [title]="user.email">{{ user.email }}</td>
 
       <ng-template #emailWithVerificationStatus>
         <td *ngIf="user.emailVerified === false; else emailVerifiedNotFalse" i18n-title title="User's email must be verified to login">
@@ -81,7 +81,7 @@
 
       <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
       <td>{{ user.roleLabel }}</td>
-      <td>{{ user.createdAt }}</td>
+      <td [title]="user.createdAt">{{ user.createdAt }}</td>
       <td class="action-cell">
         <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
         </my-user-moderation-dropdown>

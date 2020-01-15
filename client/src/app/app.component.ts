@@ -4,7 +4,7 @@ import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { debounceTime, filter, first, map, pairwise, skip, switchMap } from 'rxjs/operators'
+import { debounceTime, filter, map, pairwise } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { fromEvent } from 'rxjs'

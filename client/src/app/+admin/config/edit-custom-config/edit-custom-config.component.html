@@ -118,7 +118,7 @@
 
           <div class="form-group">
             <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
-            <div class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
+            <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
 
             <my-markdown-textarea
               name="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px" [previewColumn]="true"
@@ -131,7 +131,7 @@
 
           <div class="form-group">
             <label i18n for="instanceAdministrator">Who is behind the instance?</label>
-            <div class="label-small-info">A single person? A non-profit? A company?</div>
+            <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
 
             <my-markdown-textarea
               name="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
@@ -143,7 +143,7 @@
 
           <div class="form-group">
             <label i18n for="instanceCreationReason">Why did you create this instance?</label>
-            <div class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
+            <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
             <textarea
               id="instanceCreationReason" formControlName="creationReason" class="small"
@@ -154,7 +154,7 @@
 
           <div class="form-group">
             <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label>
-            <div class="label-small-info">It's important to know for users who want to register on your instance</div>
+            <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
 
             <textarea
               id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="small"
@@ -165,7 +165,7 @@
 
           <div class="form-group">
             <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label>
-            <div class="label-small-info">With your own funds? With users donations? Advertising?</div>
+            <div i18n class="label-small-info">With your own funds? With users donations? Advertising?</div>
 
             <textarea
               id="instanceBusinessModel" formControlName="businessModel" class="small"
@@ -178,7 +178,7 @@
 
           <div class="form-group">
             <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
-            <div class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
+            <div i18n class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
 
             <my-markdown-textarea
               name="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
