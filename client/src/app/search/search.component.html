@@ -2,7 +2,7 @@
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
-        <span i18n>{{ pagination.totalItems | myNumberFormatter }} results</span>
+        <span i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
         <span *ngIf="currentSearch" i18n>
           for <span class="search-value">{{ currentSearch }}</span>
         </span>

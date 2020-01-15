@@ -26,4 +26,12 @@
     position: relative;
     top: 2px;
   }
+
+  small {
+    font-size: 90%;
+  }
+
+  .wrapper:empty {
+    display: none;
+  }
 }

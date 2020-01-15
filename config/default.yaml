@@ -262,7 +262,7 @@ instance:
   # How long do you plan to maintain this instance?
   maintenance_lifetime: ''
 
-  # How will you pay the PeerTube instance server? With you own funds? With users donations? Advertising?
+  # How will you pay the PeerTube instance server? With your own funds? With users donations? Advertising?
   business_model: ''
 
   # If you want to explain on what type of hardware your PeerTube instance runs

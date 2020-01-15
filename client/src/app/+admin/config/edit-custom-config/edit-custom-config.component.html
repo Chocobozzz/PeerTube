@@ -165,7 +165,7 @@
 
           <div class="form-group">
             <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label>
-            <div class="label-small-info">With you own funds? With users donations? Advertising?</div>
+            <div class="label-small-info">With your own funds? With users donations? Advertising?</div>
 
             <textarea
               id="instanceBusinessModel" formControlName="businessModel" class="small"
@@ -233,23 +233,23 @@
             <my-peertube-checkbox
               inputName="signupEnabled" formControlName="enabled"
               i18n-labelText labelText="Signup enabled"
-            ></my-peertube-checkbox>
-          </div>
-
-          <div class="form-group">
-            <my-peertube-checkbox *ngIf="isSignupEnabled()"
-              inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
-              i18n-labelText labelText="Signup requires email verification"
-            ></my-peertube-checkbox>
-          </div>
-
-          <div *ngIf="isSignupEnabled()" class="form-group">
-            <label i18n for="signupLimit">Signup limit</label>
-            <input
-              type="text" id="signupLimit"
-              formControlName="limit" [ngClass]="{ 'input-error': formErrors['signup.limit'] }"
             >
-            <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
+              <ng-container ngProjectAs="extra">
+                <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }"
+                  inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
+                  i18n-labelText labelText="Signup requires email verification"
+                ></my-peertube-checkbox>
+      
+                <div [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }" class="mt-3">
+                  <label i18n for="signupLimit">Signup limit</label>
+                  <input
+                    type="text" id="signupLimit"
+                    formControlName="limit" [ngClass]="{ 'input-error': formErrors['signup.limit'] }"
+                  >
+                  <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
+                </div>
+              </ng-container>
+            </my-peertube-checkbox>
           </div>
         </ng-container>
 
@@ -291,14 +291,14 @@
             <div class="form-group" formGroupName="http">
               <my-peertube-checkbox
                 inputName="importVideosHttpEnabled" formControlName="enabled"
-                i18n-labelText labelText="Video import with HTTP URL (i.e. YouTube) enabled"
+                i18n-labelText labelText="Allow import with HTTP URL (i.e. YouTube)"
               ></my-peertube-checkbox>
             </div>
 
             <div class="form-group" formGroupName="torrent">
               <my-peertube-checkbox
                 inputName="importVideosTorrentEnabled" formControlName="enabled"
-                i18n-labelText labelText="Video import with a torrent file or a magnet URI enabled"
+                i18n-labelText labelText="Allow import with a torrent file or a magnet URI"
               ></my-peertube-checkbox>
             </div>
 
@@ -315,8 +315,12 @@
               <div class="form-group">
                 <my-peertube-checkbox
                   inputName="autoBlacklistVideosOfUsersEnabled" formControlName="enabled"
-                  i18n-labelText labelText="New videos of users automatically blacklisted enabled"
-                ></my-peertube-checkbox>
+                  i18n-labelText labelText="Blacklist new videos automatically"
+                >
+                <ng-container ngProjectAs="description">
+                  <span i18n>Videos of regular users will stay private until a moderator reviews them. Can be overriden per user.</span>
+                </ng-container>
+              </my-peertube-checkbox>
               </div>
 
             </ng-container>
@@ -339,7 +343,7 @@
             <div class="form-group">
               <my-peertube-checkbox
                 inputName="followersInstanceManualApproval" formControlName="manualApproval"
-                i18n-labelText labelText="Manually approve new instance follower"
+                i18n-labelText labelText="Manually approve new instance followers"
               ></my-peertube-checkbox>
             </div>
           </ng-container>
@@ -355,7 +359,11 @@
                 <my-peertube-checkbox
                   inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
                   i18n-labelText labelText="Automatically follow other instances that follow you"
-                ></my-peertube-checkbox>
+                >
+                  <ng-container ngProjectAs="description">
+                    <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
+                  </ng-container>
+                </my-peertube-checkbox>
               </div>
             </ng-container>
 
@@ -363,17 +371,24 @@
               <div class="form-group">
                 <my-peertube-checkbox
                   inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
-                  i18n-labelText labelText="Automatically follow instance of the public index (below)"
-                ></my-peertube-checkbox>
-              </div>
-
-              <div class="form-group">
-                <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
-                <input
-                  type="text" id="followingsInstanceAutoFollowIndexUrl"
-                  formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
+                  i18n-labelText labelText="Automatically follow instances of the public index"
+                  [(ngModel)]="isAutoFollowIndexEnabled"
                 >
-                <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+                  <ng-container ngProjectAs="description">
+                    <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
+                  </ng-container>
+
+                  <ng-container ngProjectAs="extra">
+                    <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled }">
+                      <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
+                      <input
+                        type="text" id="followingsInstanceAutoFollowIndexUrl"
+                        formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
+                      >
+                      <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+                    </div>
+                  </ng-container>
+                </my-peertube-checkbox>
               </div>
 
             </ng-container>

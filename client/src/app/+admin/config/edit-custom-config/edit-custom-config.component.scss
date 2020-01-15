@@ -53,3 +53,8 @@ textarea {
   font-style: italic;
   margin-bottom: 10px;
 }
+
+.disabled-checkbox-extra {
+  opacity: .5;
+  pointer-events: none;
+}

@@ -1,18 +1,43 @@
-<div class="root">
-  <label class="form-group-checkbox">
-    <input type="checkbox" [(ngModel)]="checked" (ngModelChange)="onModelChange()" [id]="inputName" [disabled]="disabled" />
-    <span role="checkbox" [attr.aria-checked]="checked"></span>
-    <span *ngIf="labelText">{{ labelText }}</span>
-    <span *ngIf="!labelText && labelInnerHTML" [innerHTML]="labelInnerHTML"></span>
+<div class="root flex-column">
+  <div class="d-flex">
+    <label class="form-group-checkbox">
+      <input
+        type="checkbox"
+        [(ngModel)]="checked"
+        (ngModelChange)="onModelChange()"
+        [id]="inputName"
+        [disabled]="disabled"
+      />
+      <span role="checkbox" [attr.aria-checked]="checked"></span>
+      <span *ngIf="labelText">{{ labelText }}</span>
+      <span
+        *ngIf="!labelText && labelInnerHTML"
+        [innerHTML]="labelInnerHTML"
+      ></span>
 
-    <span *ngIf="labelTemplate">
-      <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
+      <span *ngIf="labelTemplate">
+        <ng-container *ngTemplateOutlet="labelTemplate"></ng-container>
+      </span>
+    </label>
+
+    <my-help
+      *ngIf="helpTemplate"
+      [tooltipPlacement]="helpPlacement"
+      helpType="custom"
+    >
+      <ng-template ptTemplate="customHtml">
+        <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
+      </ng-template>
+    </my-help>
+  </div>
+
+  <div class="ml-4 d-flex flex-column">
+    <small class="wrapper mt-2 text-muted">
+      <ng-content select="description"></ng-content>
+    </small>
+
+    <span class="wrapper mt-3">
+      <ng-content select="extra"></ng-content>
     </span>
-  </label>
-
-  <my-help *ngIf="helpTemplate" [tooltipPlacement]="helpPlacement" helpType="custom">
-    <ng-template ptTemplate="customHtml">
-      <ng-template *ngTemplateOutlet="helpTemplate"></ng-template>
-    </ng-template>
-  </my-help>
+  </div>
 </div>
