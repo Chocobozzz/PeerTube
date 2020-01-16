@@ -50,7 +50,9 @@ let serverCommit: string
 async function getConfig (req: express.Request, res: express.Response) {
   const { allowed } = await Hooks.wrapPromiseFun(
     isSignupAllowed,
-    {},
+    {
+      ip: req.ip
+    },
     'filter:api.user.signup.allowed.result'
   )
 
