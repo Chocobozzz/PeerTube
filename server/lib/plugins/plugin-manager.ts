@@ -194,7 +194,7 @@ export class PluginManager implements ServerHook {
 
       // Remove hooks of this plugin
       for (const key of Object.keys(this.hooks)) {
-        this.hooks[key] = this.hooks[key].filter(h => h.pluginName !== npmName)
+        this.hooks[key] = this.hooks[key].filter(h => h.npmName !== npmName)
       }
 
       this.reinitVideoConstants(plugin.npmName)
