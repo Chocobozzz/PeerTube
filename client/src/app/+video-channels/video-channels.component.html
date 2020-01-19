@@ -15,7 +15,10 @@
             </button>
           </div>
 
-          <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+          <div class="right-buttons">
+            <a *ngIf="isManageable" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-primary mr-2" i18n>Manage</a>
+            <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+          </div>
         </div>
         <div i18n class="actor-followers">{{ videoChannel.followersCount }} subscribers</div>
 

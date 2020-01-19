@@ -18,3 +18,19 @@
     }
   }
 }
+
+.right-buttons {
+  display: flex;
+  height: max-content;
+  margin-left: auto;
+  margin-top: 20px;
+
+  a {
+    @include peertube-button-outline;
+    line-height: 1.8;
+  }
+
+  my-subscribe-button {
+    height: min-content;
+  }
+}

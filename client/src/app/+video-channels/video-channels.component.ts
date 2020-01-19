@@ -64,6 +64,11 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  get isManageable () {
+    if (!this.isUserLoggedIn()) return false
+    return this.videoChannel.ownerAccount.userId === this.authService.getUser().id
+  }
+
   activateCopiedMessage () {
     this.notifier.success(this.i18n('Username copied'))
   }

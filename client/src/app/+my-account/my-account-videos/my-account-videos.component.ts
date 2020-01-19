@@ -86,6 +86,9 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
     return this.videoService.getMyVideos(newPagination, sort, this.videosSearch)
+      .pipe(
+        tap(res => this.pagination.totalItems = res.total)
+      )
   }
 
   async deleteSelectedVideos () {

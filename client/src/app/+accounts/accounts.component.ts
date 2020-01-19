@@ -65,6 +65,11 @@ export class AccountsComponent implements OnInit, OnDestroy {
     )
   }
 
+  get isManageable () {
+    if (!this.authService.isLoggedIn()) return false
+    return this.user.id === this.authService.getUser().id
+  }
+
   onUserChanged () {
     this.getUserIfNeeded(this.account)
   }
