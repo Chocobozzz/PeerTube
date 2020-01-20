@@ -16,7 +16,7 @@
           </div>
 
           <div class="right-buttons">
-            <a *ngIf="isManageable" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-primary mr-2" i18n>Manage</a>
+            <a *ngIf="isManageable" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
             <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
           </div>
         </div>

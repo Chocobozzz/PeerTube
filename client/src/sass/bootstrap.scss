@@ -170,3 +170,13 @@ ngb-tabset.bootstrap {
 ngb-modal-backdrop {
   z-index: 10000 !important;
 }
+
+.btn-outline-tertiary {
+	color: var(--secondaryColor);
+  border-color: var(--secondaryColor);
+  
+  &:hover {
+    color: var(--mainBackgroundColor);
+    background-color: var(--secondaryColor);
+  }
+}

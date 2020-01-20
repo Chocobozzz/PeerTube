@@ -14,6 +14,8 @@ $grey-foreground-hover-color: #303030;
 $orange-color: #F1680D;
 $orange-hover-color: #F97D46;
 
+$cyan-color: hsl(187, 77%, 34%);
+
 $support-button: inherit;
 $support-button-heart: #e83e8c;
 
@@ -73,6 +75,7 @@ $variables: (
   --mainHoverColor: var(--mainHoverColor),
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
+  --secondaryColor: var(--secondaryColor),
 
   --menuBackgroundColor: var(--menuBackgroundColor),
   --menuForegroundColor: var(--menuForegroundColor),
