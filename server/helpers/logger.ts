@@ -5,7 +5,7 @@ import * as winston from 'winston'
 import { FileTransportOptions } from 'winston/lib/winston/transports'
 import { CONFIG } from '../initializers/config'
 import { omit } from 'lodash'
-import { LOG_FILENAME } from '@server/initializers/constants'
+import { LOG_FILENAME } from '../initializers/constants'
 
 const label = CONFIG.WEBSERVER.HOSTNAME + ':' + CONFIG.WEBSERVER.PORT
 

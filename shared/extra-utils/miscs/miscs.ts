@@ -104,6 +104,28 @@ async function generateHighBitrateVideo () {
   return tempFixturePath
 }
 
+async function generateVideoWithFramerate (fps = 60) {
+  const tempFixturePath = buildAbsoluteFixturePath(`video_${fps}fps.mp4`, true)
+
+  await ensureDir(dirname(tempFixturePath))
+
+  const exists = await pathExists(tempFixturePath)
+  if (!exists) {
+    return new Promise<string>(async (res, rej) => {
+      ffmpeg()
+        .outputOptions([ '-f rawvideo', '-video_size 320x240', '-i /dev/urandom' ])
+        .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])
+        .outputOptions([ `-r ${fps}` ])
+        .output(tempFixturePath)
+        .on('error', rej)
+        .on('end', () => res(tempFixturePath))
+        .run()
+    })
+  }
+
+  return tempFixturePath
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -115,5 +137,6 @@ export {
   testImage,
   buildAbsoluteFixturePath,
   root,
-  generateHighBitrateVideo
+  generateHighBitrateVideo,
+  generateVideoWithFramerate
 }
