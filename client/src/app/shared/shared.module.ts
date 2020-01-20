@@ -89,6 +89,7 @@ import { NumberFormatterPipe } from '@app/shared/angular/number-formatter.pipe'
 import { VideoDurationPipe } from '@app/shared/angular/video-duration-formatter.pipe'
 import { ObjectLengthPipe } from '@app/shared/angular/object-length.pipe'
 import { FromNowPipe } from '@app/shared/angular/from-now.pipe'
+import { HighlightPipe }from '@app/shared/angular/highlight.pipe'
 import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
 import { VideoActionsDropdownComponent } from '@app/shared/video/video-actions-dropdown.component'
 import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklist.component'
@@ -149,6 +150,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
+    HighlightPipe,
     PeerTubeTemplateDirective,
     VideoDurationPipe,
 
@@ -254,6 +256,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     NumberFormatterPipe,
     ObjectLengthPipe,
     FromNowPipe,
+    HighlightPipe,
     PeerTubeTemplateDirective,
     VideoDurationPipe
   ],

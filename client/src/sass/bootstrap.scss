@@ -9,6 +9,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   animation: spin .7s infinite linear;
 }
 
+.flex-auto {
+  flex: auto;
+}
+
 @keyframes spin {
   from {
     transform: scale(1) rotate(0deg);

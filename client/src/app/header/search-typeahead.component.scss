@@ -1,0 +1,121 @@
+@import '_mixins';
+
+.jump-to-suggestions {
+  top: 100%;
+  left: 0;
+  z-index: 35;
+  width: 100%;
+}
+
+#typeahead-instructions,
+#jump-to-results {
+  border: 1px solid var(--mainBackgroundColor);
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  background: var(--mainBackgroundColor);
+  transition: .3s ease;
+  transition-property: box-shadow;
+}
+
+#typeahead-instructions {
+  margin-top: 10px;
+  width: 100%;
+  padding: .5rem 1rem;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: .5rem;
+
+    em {
+      font-weight: 600;
+      margin-right: 0.2rem;
+      font-style: normal;
+    }
+  }
+}
+
+#typeahead-container {
+  ::ng-deep input {
+    border: 1px solid var(--mainBackgroundColor) !important;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 20px 0px;
+    flex-grow: 1;
+    transition: box-shadow .3s ease, width .2s ease;
+  }
+
+  ::ng-deep span {
+    right: 10px;
+  }
+
+  & > div:last-child {
+    // we have to switch the display and not the opacity, 
+    // to avoid clashing with the rest of the interface.
+    display: none;
+  }
+
+  &:focus,
+  ::ng-deep &:focus-within {
+    & > div:last-child {
+      display: initial !important;
+      
+      #typeahead-instructions,
+      #jump-to-results {
+        box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 20px -5px;
+      }
+    }
+
+    ::ng-deep input {
+      box-shadow: rgba(0, 0, 0, 0.2) 0px 1px 20px 0px;
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+
+      @media screen and (min-width: 900px) {
+        width: 500px;
+      }
+    }
+  }
+}
+
+a.focus-visible {
+  background-color: var(--mainHoverColor);
+}
+
+a {
+  @include disable-default-a-behaviour;
+  width: 100%;
+
+  &, &:hover {
+    color: var(--mainForegroundColor);
+  }
+}
+
+.bg-gray {
+  background-color: var(--mainBackgroundColor);
+}
+
+.text-gray-light {
+  color: var(--mainForegroundColor);
+}
+
+.glyphicon {
+  top: 3px;
+}
+
+.advanced-search-status {
+  cursor: help;
+}
+
+.small-title {
+  @include in-content-small-title;
+
+  margin-bottom: .5rem;
+}
+
+my-global-icon {
+  width: 17px;
+  position: relative;
+  top: -2px;
+  margin: 5px;
+
+  @include apply-svg-color(var(--mainForegroundColor))
+}

@@ -1,8 +1,10 @@
-<input
-  type="text" id="search-video" name="search-video" [attr.aria-label]="ariaLabelTextForSearch" i18n-placeholder placeholder="Search videos, channels…"
-  [(ngModel)]="searchValue" (keyup.enter)="doSearch()"
->
-<span (click)="doSearch()" class="icon icon-search"></span>
+<my-search-typeahead>
+  <input
+    type="text" id="search-video" name="search-video" [attr.aria-label]="ariaLabelTextForSearch" i18n-placeholder placeholder="Search videos, channels…"
+    [(ngModel)]="searchValue" (keyup.enter)="doSearch()"
+  >
+  <span (click)="doSearch()" class="icon icon-search"></span>
+</my-search-typeahead>
 
 <a class="upload-button" routerLink="/videos/upload">
   <my-global-icon iconName="upload"></my-global-icon>

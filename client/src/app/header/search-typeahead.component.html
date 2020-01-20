@@ -1,0 +1,69 @@
+<div class="d-inline-flex position-relative" id="typeahead-container" #contentWrapper>
+  <ng-content></ng-content>
+
+  <div class="position-absolute jump-to-suggestions">
+    <!-- suggestions -->
+    <ul id="jump-to-results" role="listbox" class="p-0 m-0" #optionsList>
+      <li *ngFor="let res of results" class="d-flex flex-justify-start flex-items-center p-0 f5" role="option" aria-selected="true">
+        <ng-container *ngTemplateOutlet="result; context: {$implicit: res}"></ng-container>
+      </li>
+    </ul>
+
+    <!-- search instructions, when search input is empty -->
+    <div *ngIf="!hasSearch" id="typeahead-instructions" class="overflow-hidden">
+      <div class="d-flex justify-content-between">
+        <label class="small-title" i18n>Advanced search</label>
+        <div class="advanced-search-status">
+          <span [ngClass]="URIPolicy === 'any' ? 'text-success' : 'text-muted'" [title]="URIPolicyText">
+            <span class="mr-1" i18n>{URIPolicy, select, only-followed {only followed instances} other {any instance}} </span>
+            <i [ngClass]="URIPolicy === 'any' ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
+          </span>
+        </div>
+      </div>
+      <ul>
+        <li>
+          <em>@username@domain</em> <span class="flex-auto text-muted" i18n>account or channel</span>
+        </li>
+        <li>
+          <em>URL</em> <span class="text-muted" i18n>account or channel</span>
+        </li>
+        <li>
+          <em>URL</em> <span class="text-muted" i18n>video</span>
+        </li>
+      </ul>
+      <span class="text-muted" i18n>Any other text will return matching video, channel or account names.</span>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #result let-result>
+  <a tabindex="0" class="d-flex flex-auto flex-items-center p-2"
+    data-target-type="Repository"
+    [routerLink]="result.routerLink"
+  >
+    <div class="flex-shrink-0 mr-2 text-center">
+      <my-global-icon *ngIf="result.type !== 'channel'" iconName="search"></my-global-icon>
+      <my-global-icon *ngIf="result.type === 'channel'" iconName="folder"></my-global-icon>
+    </div>
+
+    <img class="avatar mr-2 flex-shrink-0 d-none" alt="" aria-label="Team" src="" width="28" height="28">
+
+    <div class="flex-auto overflow-hidden text-left no-wrap css-truncate css-truncate-target" [attr.aria-label]="result.text" [innerHTML]="result.text | highlight : searchInput.value"></div>
+
+    <div *ngIf="result.type !== 'channel' && result.type !== 'suggestion'" class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ml-1 f6">
+      <span *ngIf="result.type === 'search-channel'" [attr.aria-label]="inThisChannelText">
+        {{ inThisChannelText }}
+      </span>
+      <span *ngIf="result.type === 'search-global'" [attr.aria-label]="inAllText">
+        {{ inAllText }}
+      </span>
+      <span *ngIf="result.type === 'search-any'" aria-hidden="true" class="d-inline-block ml-1 v-align-middle">↵</span>
+    </div>
+
+    <div *ngIf="result.type === 'channel'" aria-hidden="true" class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ml-1 f6 d-on-nav-focus" i18n>
+      Jump to channel
+      <span class="d-inline-block ml-1 v-align-middle">↵</span>
+    </div>
+  </a>
+</ng-template>

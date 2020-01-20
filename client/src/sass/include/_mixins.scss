@@ -11,11 +11,6 @@
   &:focus:not(.focus-visible) {
     outline: none;
   }
-
-  &::-moz-focus-inner {
-    border: 0;
-    padding: 0
-  }
 }
 
 
