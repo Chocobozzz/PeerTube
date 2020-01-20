@@ -134,7 +134,7 @@ async function doesVideoCommentThreadExist (idArg: number | string, video: MVide
 
   if (videoComment.videoId !== video.id) {
     res.status(400)
-      .json({ error: 'Video comment is associated to this video.' })
+      .json({ error: 'Video comment is not associated to this video.' })
       .end()
 
     return false
@@ -166,7 +166,7 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
 
   if (videoComment.videoId !== video.id) {
     res.status(400)
-      .json({ error: 'Video comment is associated to this video.' })
+      .json({ error: 'Video comment is not associated to this video.' })
       .end()
 
     return false
