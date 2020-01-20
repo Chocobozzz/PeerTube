@@ -11,6 +11,7 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   generateHighBitrateVideo,
+  generateVideoWithFramerate,
   getMyVideos,
   getVideo,
   getVideosList,
@@ -413,6 +414,39 @@ describe('Test video transcoding', function () {
 
       const magnetUri = videoDetails.files[ 0 ].magnetUri
       expect(magnetUri).to.contain('.mp4')
+    }
+  })
+
+  it('Should downscale to the closest divisor standard framerate', async function () {
+    this.timeout(160000)
+
+    let tempFixturePath: string
+
+    {
+      tempFixturePath = await generateVideoWithFramerate()
+
+      const fps = await getVideoFileFPS(tempFixturePath)
+      expect(fps).to.be.equal(59)
+    }
+
+    const videoAttributes = {
+      name: '59fps video',
+      description: '59fps video',
+      fixture: tempFixturePath
+    }
+
+    await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+
+    await waitJobs(servers)
+
+    for (const server of servers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
+      const fps = await getVideoFileFPS(path)
+
+      expect(fps).to.be.equal(25)
     }
   })
 
