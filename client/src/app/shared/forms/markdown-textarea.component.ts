@@ -28,6 +28,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() truncate: number
   @Input() markdownType: 'text' | 'enhanced' = 'text'
   @Input() markdownVideo = false
+  @Input() name = 'description'
 
   textareaMarginRight = '0'
   flexDirection = 'column'

@@ -30,7 +30,7 @@
           <div class="form-group">
             <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
             <my-markdown-textarea
-              id="instanceDescription" formControlName="description" textareaWidth="500px" [previewColumn]="true"
+              name="instanceDescription" formControlName="description" textareaWidth="500px" [previewColumn]="true"
               [classes]="{ 'input-error': formErrors['instance.description'] }"
             ></my-markdown-textarea>
             <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
@@ -101,7 +101,7 @@
           <div class="form-group">
             <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
             <my-markdown-textarea
-              id="instanceTerms" formControlName="terms" textareaWidth="500px" [previewColumn]="true"
+              name="instanceTerms" formControlName="terms" textareaWidth="500px" [previewColumn]="true"
               [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
             ></my-markdown-textarea>
             <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
@@ -110,7 +110,7 @@
           <div class="form-group">
             <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
             <my-markdown-textarea
-              id="instanceCodeOfConduct" formControlName="codeOfConduct" textareaWidth="500px" [previewColumn]="true"
+              name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaWidth="500px" [previewColumn]="true"
               [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
             ></my-markdown-textarea>
             <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
@@ -121,7 +121,7 @@
             <div class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
 
             <my-markdown-textarea
-              id="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px" [previewColumn]="true"
+              name="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px" [previewColumn]="true"
               [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
             ></my-markdown-textarea>
             <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
@@ -134,7 +134,7 @@
             <div class="label-small-info">A single person? A non-profit? A company?</div>
 
             <my-markdown-textarea
-              id="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
+              name="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
               [classes]="{ 'input-error': formErrors['instance.administrator'] }"
             ></my-markdown-textarea>
 
@@ -181,7 +181,7 @@
             <div class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
 
             <my-markdown-textarea
-              id="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
+              name="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
               [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
             ></my-markdown-textarea>
 
@@ -239,7 +239,7 @@
                   inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
                   i18n-labelText labelText="Signup requires email verification"
                 ></my-peertube-checkbox>
-      
+
                 <div [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }" class="mt-3">
                   <label i18n for="signupLimit">Signup limit</label>
                   <input
@@ -372,14 +372,13 @@
                 <my-peertube-checkbox
                   inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
                   i18n-labelText labelText="Automatically follow instances of the public index"
-                  [(ngModel)]="isAutoFollowIndexEnabled"
                 >
                   <ng-container ngProjectAs="description">
                     <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
                   </ng-container>
 
                   <ng-container ngProjectAs="extra">
-                    <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled }">
+                    <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
                       <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
                       <input
                         type="text" id="followingsInstanceAutoFollowIndexUrl"

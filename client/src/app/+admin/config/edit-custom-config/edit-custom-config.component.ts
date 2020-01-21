@@ -24,8 +24,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   languageItems: SelectItem[] = []
   categoryItems: SelectItem[] = []
 
-  isAutoFollowIndexEnabled = false
-
   private serverConfig: ServerConfig
 
   constructor (
@@ -234,6 +232,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   isSignupEnabled () {
     return this.form.value['signup']['enabled'] === true
+  }
+
+  isAutoFollowIndexEnabled () {
+    return this.form.value['followings']['instance']['autoFollowIndex']['enabled'] === true
   }
 
   async formValidated () {

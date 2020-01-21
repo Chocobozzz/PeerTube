@@ -2,7 +2,7 @@
   <textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     [ngClass]="classes" [ngStyle]="{ width: textareaWidth, height: textareaHeight, 'margin-right': textareaMarginRight }"
-    id="description" name="description">
+    [id]="name" [name]="name">
   </textarea>
 
   <ngb-tabset *ngIf="arePreviewsDisplayed()" class="previews" type="pills">
