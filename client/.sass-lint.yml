@@ -1,9 +1,9 @@
 files:
-  include: "**/*.s+(a|c)ss"
-  ignore: [
-    "node_modules/**/*.*",
-    "client/node_modules/**/*.*"
-  ]
+  include:
+    - "src/app/**/*.scss"
+    - "src/assets/**/*.scss"
+    - "src/sass/**/*.scss"
+    - "src/standalone/**/*.scss"
 syntax:
     include:
       - scss

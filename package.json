@@ -74,26 +74,9 @@
     "release": "scripty",
     "release-embed-api": "scripty",
     "nightly": "scripty",
-    "client-report": "scripty"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.scss": [
-      "sass-lint -c client/.sass-lint.yml",
-      "git add"
-    ],
-    "support/doc/api/*.yaml": [
-      "node ./node_modules/swagger-cli/bin/swagger-cli.js validate support/doc/api/openapi.yaml",
-      "git add"
-    ],
-    "server/tools/README.md": [
-      "npm run generate-cli-doc",
-      "git add"
-    ]
+    "client-report": "scripty",
+    "swagger-cli": "swagger-cli",
+    "sass-lint": "sass-lint"
   },
   "resolutions": {
     "@types/bluebird": "3.5.27"
@@ -205,7 +188,6 @@
     "chai-json-schema": "^1.5.0",
     "chai-xml": "^0.3.2",
     "concurrently": "^5.0.0",
-    "husky": "^4.0.0",
     "libxmljs": "0.19.7",
     "lint-staged": "^9.2.0",
     "maildev": "^1.0.0-rc3",
@@ -213,7 +195,6 @@
     "mocha": "^7.0.0",
     "mocha-parallel-tests": "^2.2.1",
     "nodemon": "^2.0.1",
-    "sass-lint": "^1.12.1",
     "source-map-support": "^0.5.0",
     "supertest": "^4.0.2",
     "swagger-cli": "^2.2.0",

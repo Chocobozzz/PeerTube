@@ -13,14 +13,17 @@
     "url": "git+https://github.com/Chocobozzz/PeerTube.git"
   },
   "scripts": {
-    "lint": "tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts' 'src/standalone/**/*.ts'",
+    "lint": "npm run lint-ts && npm run lint-scss",
+    "lint-ts": "tslint --project ./tsconfig.json -c ./tslint.json 'src/app/**/*.ts' 'src/standalone/**/*.ts'",
+    "lint-scss": "sass-lint -c .sass-lint.yml",
     "webpack": "webpack",
     "tslint": "tslint",
     "ng": "ng",
     "postinstall": "npm rebuild node-sass",
     "webpack-bundle-analyzer": "webpack-bundle-analyzer",
     "webdriver-manager": "webdriver-manager",
-    "ngx-extractor": "ngx-extractor"
+    "ngx-extractor": "ngx-extractor",
+    "sass-lint": "sass-lint"
   },
   "typings": "*.d.ts",
   "resolutions": {
@@ -112,6 +115,7 @@
     "raw-loader": "^1",
     "rxjs": "^6.5.2",
     "sanitize-html": "^1.18.4",
+    "sass-lint": "^1.13.1",
     "sass-loader": "7",
     "sass-resources-loader": "^2.0.0",
     "socket.io-client": "^2.2.0",

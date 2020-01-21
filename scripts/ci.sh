@@ -34,6 +34,7 @@ elif [ "$1" = "api-4" ]; then
     sh ./server/tests/api/ci-4.sh 2
 elif [ "$1" = "lint" ]; then
     npm run tslint -- --project ./tsconfig.json -c ./tslint.json server.ts "server/**/*.ts" "shared/**/*.ts"
+    npm run swagger-cli -- validate support/doc/api/openapi.yaml
 
     ( cd client
       npm run lint

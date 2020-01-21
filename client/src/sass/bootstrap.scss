@@ -10,8 +10,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 @keyframes spin {
-  from { transform: scale(1) rotate(0deg);}
-  to { transform: scale(1) rotate(360deg);}
+  from {
+    transform: scale(1) rotate(0deg);
+  }
+  to {
+    transform: scale(1) rotate(360deg);
+  }
 }
 
 .dropdown-menu {
@@ -38,7 +42,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 
-@media screen and (min-width: 768px) { 
+@media screen and (min-width: 768px) {
   .modal:before {
     display: inline-block;
     vertical-align: middle;
@@ -172,9 +176,9 @@ ngb-modal-backdrop {
 }
 
 .btn-outline-tertiary {
-	color: var(--secondaryColor);
+  color: var(--secondaryColor);
   border-color: var(--secondaryColor);
-  
+
   &:hover {
     color: var(--mainBackgroundColor);
     background-color: var(--secondaryColor);
