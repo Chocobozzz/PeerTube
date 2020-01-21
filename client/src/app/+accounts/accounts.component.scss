@@ -9,10 +9,21 @@
   }
 }
 
-my-subscribe-button {
+.right-buttons {
+  display: flex;
   height: max-content;
   margin-left: auto;
   margin-top: 20px;
+
+  a {
+    @include peertube-button-outline;
+    height: auto;
+    line-height: 32px;
+  }
+
+  my-subscribe-button {
+    height: min-content;
+  }
 }
 
 my-user-moderation-dropdown,

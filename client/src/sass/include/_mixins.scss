@@ -179,6 +179,15 @@
   @include peertube-button;
 }
 
+@mixin peertube-button-outline {
+  display: inline-block;
+
+  @include disable-default-a-behaviour;
+  @include peertube-button;
+
+  border: 1px solid;
+}
+
 @mixin button-with-icon($width: 20px, $margin-right: 3px, $top: -1px) {
   my-global-icon {
     position: relative;
@@ -453,7 +462,7 @@
 }
 
 @mixin sub-menu-with-actor {
-  height: 160px;
+  height: max-content;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
