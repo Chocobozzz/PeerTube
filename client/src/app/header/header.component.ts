@@ -2,9 +2,8 @@ import { filter, first, map, tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router'
 import { getParameterByName } from '../shared/misc/utils'
-import { AuthService, ServerService, Notifier } from '@app/core'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { of } from 'rxjs'
-import { ServerConfig } from '@shared/models'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
@@ -16,8 +15,6 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class HeaderComponent implements OnInit {
   searchValue = ''
   ariaLabelTextForSearch = ''
-
-  private serverConfig: ServerConfig
 
   constructor (
     private router: Router,
@@ -38,23 +35,6 @@ export class HeaderComponent implements OnInit {
           map(() => getParameterByName('search', window.location.href))
         )
         .subscribe(searchQuery => this.searchValue = searchQuery || '')
-
-    this.serverConfig = this.serverService.getTmpConfig()
-    this.serverService.getConfig().subscribe(
-      config => this.serverConfig = config,
-
-      err => this.notifier.error(err.message)
-    )
-  }
-
-  get routerLink () {
-    if (this.isUserLoggedIn()) {
-      return [ '/videos/upload' ]
-    } else if (this.isRegistrationAllowed()) {
-      return [ '/signup' ]
-    } else {
-      return [ '/login', { fromUpload: true } ]
-    }
   }
 
   doSearch () {
@@ -71,15 +51,6 @@ export class HeaderComponent implements OnInit {
       : of(true)
 
     o.subscribe(() => this.router.navigate([ '/search' ], { queryParams }))
-  }
-
-  isUserLoggedIn () {
-    return this.authService.isLoggedIn()
-  }
-
-  isRegistrationAllowed () {
-    return this.serverConfig.signup.allowed &&
-           this.serverConfig.signup.allowedForCurrentIP
   }
 
   private loadUserLanguagesIfNeeded (queryParams: any) {

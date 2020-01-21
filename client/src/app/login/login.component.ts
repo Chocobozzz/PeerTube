@@ -22,9 +22,6 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   error: string = null
   forgotPasswordEmail = ''
-  from = {
-    upload: false
-  }
 
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
@@ -47,17 +44,12 @@ export class LoginComponent extends FormReactive implements OnInit {
     return this.serverConfig.signup.allowed === true
   }
 
-  get instancesIndexUrl () {
-    return this.serverConfig.followings.instance.autoFollowIndex.indexUrl || 'https://instances.joinpeertube.org'
-  }
-
   isEmailDisabled () {
     return this.serverConfig.email.enabled === false
   }
 
   ngOnInit () {
     this.serverConfig = this.route.snapshot.data.serverConfig
-    this.from.upload = Boolean(this.route.snapshot.paramMap.get('fromUpload'))
 
     this.buildForm({
       username: this.loginValidatorsService.LOGIN_USERNAME,
