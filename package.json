@@ -191,6 +191,7 @@
     "libxmljs": "0.19.7",
     "lint-staged": "^9.2.0",
     "maildev": "^1.0.0-rc3",
+    "marked": "^0.8.0",
     "marked-man": "^0.7.0",
     "mocha": "^7.0.0",
     "mocha-parallel-tests": "^2.2.1",
