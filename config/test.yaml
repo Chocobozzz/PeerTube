@@ -86,6 +86,9 @@ import:
   videos:
     http:
       enabled: true
+    proxy:
+      enabled: false
+      url: ""
     torrent:
       enabled: true
 

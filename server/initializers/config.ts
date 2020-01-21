@@ -191,7 +191,11 @@ const CONFIG = {
   IMPORT: {
     VIDEOS: {
       HTTP: {
-        get ENABLED () { return config.get<boolean>('import.videos.http.enabled') }
+        get ENABLED () { return config.get<boolean>('import.videos.http.enabled') },
+        PROXY: {
+          get ENABLED () { return config.get<boolean>('import.videos.http.proxy.enabled') },
+          get URL () { return config.get<string>('import.videos.http.proxy.url') }
+        }
       },
       TORRENT: {
         get ENABLED () { return config.get<boolean>('import.videos.torrent.enabled') }

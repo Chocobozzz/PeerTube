@@ -9,6 +9,8 @@ fi
 
 killall -q peertube || true
 
+perl -0777 -i  -pe 's#(proxy:\n\s+enabled: false\n\s+)url: ""#$1url: "'"$PROXY_URL"'"#' config/test.yaml
+
 if [ "$1" = "misc" ]; then
     npm run build -- --light-fr
     mocha --timeout 5000 --exit --require ts-node/register --require tsconfig-paths/register --bail server/tests/client.ts \
@@ -40,3 +42,5 @@ elif [ "$1" = "lint" ]; then
       npm run lint
     )
 fi
+
+git checkout -- config/test.yaml

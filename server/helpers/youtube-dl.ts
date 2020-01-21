@@ -6,6 +6,7 @@ import { peertubeTruncate, root } from './core-utils'
 import { ensureDir, remove, writeFile } from 'fs-extra'
 import * as request from 'request'
 import { createWriteStream } from 'fs'
+import { CONFIG } from '@server/initializers/config'
 
 export type YoutubeDLInfo = {
   name?: string
@@ -45,11 +46,16 @@ function downloadYoutubeDLVideo (url: string, timeout: number) {
 
   logger.info('Importing youtubeDL video %s', url)
 
-  const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
+  let options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
+
+  if (CONFIG.IMPORT.VIDEOS.HTTP.PROXY.ENABLED) {
+    logger.debug('Using proxy for YoutubeDL')
+
+    options = [ '--proxy', CONFIG.IMPORT.VIDEOS.HTTP.PROXY.URL ].concat(options)
+  }
 
   if (process.env.FFMPEG_PATH) {
-    options.push('--ffmpeg-location')
-    options.push(process.env.FFMPEG_PATH)
+    options = options.concat([ '--ffmpeg-location', process.env.FFMPEG_PATH ])
   }
 
   return new Promise<string>(async (res, rej) => {
