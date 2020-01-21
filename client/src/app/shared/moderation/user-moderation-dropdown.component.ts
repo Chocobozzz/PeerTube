@@ -243,18 +243,18 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
       if (this.user && authUser.hasRight(UserRight.MANAGE_USERS) && authUser.canManage(this.user)) {
         this.userActions.push([
           {
-            label: this.i18n('Edit'),
+            label: this.i18n('Edit user'),
             description: this.i18n('Change quota, role, and more.'),
             linkBuilder: ({ user }) => this.getRouterUserEditLink(user)
           },
           {
-            label: this.i18n('Delete'),
+            label: this.i18n('Delete user'),
             description: this.i18n('Videos will be deleted, comments will be tombstoned.'),
             handler: ({ user }) => this.removeUser(user)
           },
           {
             label: this.i18n('Ban'),
-            description: this.i18n('Videos will be kept as private, comments will be kept as is.'),
+            description: this.i18n('User won\'t be able to login anymore, but videos and comments will be kept as is.'),
             handler: ({ user }) => this.openBanUserModal(user),
             isDisplayed: ({ user }) => !user.blocked
           },

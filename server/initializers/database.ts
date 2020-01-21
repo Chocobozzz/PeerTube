@@ -163,7 +163,7 @@ async function checkPostgresExtension (extension: string) {
   }
 }
 
-async function createFunctions () {
+function createFunctions () {
   const query = `CREATE OR REPLACE FUNCTION immutable_unaccent(text)
   RETURNS text AS
 $func$

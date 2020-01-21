@@ -17,6 +17,7 @@
 
           <ng-template #templateActionLabel let-action>
             <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName"></my-global-icon>
+
             <div class="d-flex flex-column">
               <span i18n>{{ action.label }}</span>
               <small class="text-muted" *ngIf="action.description">{{ action.description }}</small>

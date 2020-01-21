@@ -39,6 +39,7 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
     const address = this.form.value['text']
     const [ username, hostname ] = address.split('@')
 
+    // Should not have CORS error because https://tools.ietf.org/html/rfc7033#section-5
     fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
       .then(response => response.json())
       .then(data => new Promise((resolve, reject) => {

@@ -63,7 +63,7 @@ export class UserListComponent extends RestTable implements OnInit {
         },
         {
           label: this.i18n('Ban'),
-          description: this.i18n('Videos will be kept as private, comments will be kept as is.'),
+          description: this.i18n('User won\'t be able to login anymore, but videos and comments will be kept as is.'),
           handler: users => this.openBanUserModal(users),
           isDisplayed: users => users.every(u => this.authUser.canManage(u) && u.blocked === false)
         },
