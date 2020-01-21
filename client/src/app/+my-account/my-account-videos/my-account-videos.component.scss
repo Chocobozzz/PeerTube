@@ -4,8 +4,12 @@
 .videos-header {
   display: flex;
   justify-content: space-between;
-  text-align: right;
   margin: 20px 0 50px;
+
+  h4,
+  .fake-element {
+    flex: 1;
+  }
 
   input[type=text] {
     @include peertube-input-text(300px);

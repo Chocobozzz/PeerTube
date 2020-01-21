@@ -1,9 +1,9 @@
-<div>
-  <h4 i18n>Videos <span class="badge badge-secondary">{{ pagination.totalItems }}</span></h4>
-</div>
-
 <div class="videos-header">
+  <h4 i18n>Videos <span class="badge badge-secondary">{{ pagination.totalItems }}</span></h4>
+
   <input type="text" placeholder="Search your videos" i18n-placeholder [(ngModel)]="videosSearch" (ngModelChange)="onVideosSearchChanged()" />
+
+  <div class="fake-element"></div>
 </div>
 
 <my-videos-selection

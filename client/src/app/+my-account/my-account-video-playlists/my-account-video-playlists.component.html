@@ -1,8 +1,6 @@
-<div>
-  <h4 i18n>Playlists <span class="badge badge-secondary">{{ pagination.totalItems }}</span></h4>
-</div>
-
 <div class="video-playlists-header">
+  <h4 i18n>Playlists <span class="badge badge-secondary">{{ pagination.totalItems }}</span></h4>
+
   <input type="text" placeholder="Search your playlists" i18n-placeholder [(ngModel)]="videoPlaylistsSearch" (ngModelChange)="onVideoPlaylistSearchChanged()" />
 
   <a class="create-button" routerLink="create">
