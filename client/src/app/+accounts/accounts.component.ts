@@ -35,34 +35,41 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private redirectService: RedirectService,
     private authService: AuthService,
     private i18n: I18n
-  ) {}
+  ) {
+  }
 
   ngOnInit () {
     this.routeSub = this.route.params
-      .pipe(
-        map(params => params[ 'accountId' ]),
-        distinctUntilChanged(),
-        switchMap(accountId => this.accountService.getAccount(accountId)),
-        tap(account => {
-          this.account = account
+                        .pipe(
+                          map(params => params[ 'accountId' ]),
+                          distinctUntilChanged(),
+                          switchMap(accountId => this.accountService.getAccount(accountId)),
+                          tap(account => {
+                            this.account = account
 
-          this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
+                            if (this.authService.isLoggedIn()) {
+                              this.authService.userInformationLoaded.subscribe(
+                                () => {
+                                  this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
 
-          this.accountFollowerTitle = this.i18n(
-            '{{followers}} direct account followers',
-            { followers: this.subscribersDisplayFor(account.followersCount) }
-          )
+                                  this.accountFollowerTitle = this.i18n(
+                                    '{{followers}} direct account followers',
+                                    { followers: this.subscribersDisplayFor(account.followersCount) }
+                                  )
+                                }
+                              )
+                            }
 
-          this.getUserIfNeeded(account)
-        }),
-        switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
-        catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
-      )
-      .subscribe(
-        videoChannels => this.videoChannels = videoChannels.data,
+                            this.getUserIfNeeded(account)
+                          }),
+                          switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
+                          catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
+                        )
+                        .subscribe(
+                          videoChannels => this.videoChannels = videoChannels.data,
 
-        err => this.notifier.error(err.message)
-      )
+                          err => this.notifier.error(err.message)
+                        )
   }
 
   ngOnDestroy () {
@@ -97,11 +104,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
     const user = this.authService.getUser()
     if (user.hasRight(UserRight.MANAGE_USERS)) {
-      forkJoin([
-        this.userService.getUser(account.userId),
-        this.authService.userInformationLoaded.pipe(first())
-      ]).subscribe(
-        ([ accountUser ]) => this.accountUser = accountUser,
+      this.userService.getUser(account.userId).subscribe(
+        accountUser => this.accountUser = accountUser,
 
         err => this.notifier.error(err.message)
       )

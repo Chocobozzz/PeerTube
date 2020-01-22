@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { RestExtractor } from '@app/shared'
-import { catchError, distinctUntilChanged, map, switchMap } from 'rxjs/operators'
+import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { Subscription } from 'rxjs'
 import { AuthService, Notifier } from '@app/core'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
@@ -19,6 +19,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   videoChannel: VideoChannel
   hotkeys: Hotkey[]
+  isChannelManageable = false
 
   private routeSub: Subscription
 
@@ -40,7 +41,17 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
                           switchMap(videoChannelName => this.videoChannelService.getVideoChannel(videoChannelName)),
                           catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
                         )
-                        .subscribe(videoChannel => this.videoChannel = videoChannel)
+                        .subscribe(videoChannel => {
+                          this.videoChannel = videoChannel
+
+                          if (this.authService.isLoggedIn()) {
+                            this.authService.userInformationLoaded
+                              .subscribe(() => {
+                                const channelUserId = this.videoChannel.ownerAccount.userId
+                                this.isChannelManageable = channelUserId && channelUserId === this.authService.getUser().id
+                              })
+                          }
+                        })
 
     this.hotkeys = [
       new Hotkey('S', (event: KeyboardEvent): boolean => {
