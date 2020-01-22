@@ -87,7 +87,7 @@ We added some sections in the documentation website:
  * Add "Watch later" button in video miniature overlay ([@rigelk](https://github.com/rigelk))
  * Add ability to transcode videos in an audio only video container ([@Yetangitu](https://github.com/Yetangitu))
  * Add playlist search input in *add to playlist* dropdown ([@rigelk](https://github.com/rigelk))
- * Add search bars for a user's videos and playlist library ([@rigelk](https://github.com/rigelk))
+ * Add search bars for a user's videos and playlists ([@rigelk](https://github.com/rigelk))
  * Support playlists in share modal
  * Better UI for a better world:
    * Add play/pause bezels to the video player ([@rigelk](https://github.com/rigelk))
@@ -99,15 +99,23 @@ We added some sections in the documentation website:
    * Improve likes-dislikes bar usability
    * Alter titles section header style ([@rigelk](https://github.com/rigelk))
    * Enhance jobs list display on smaller screens ([@alcalyn](https://github.com/alcalyn))
+   * Add a button in the videos from subscriptions page to manage subscriptions ([@rigelk](https://github.com/rigelk))
+   * Add duration to video attributes in watch view ([@rigelk](https://github.com/rigelk))
+   * Add a message in the login form when signup is disabled for people that are looking for an account ([@rigelk](https://github.com/rigelk))
+   * Add "Manage" button in owned account and channels pages ([@rigelk](https://github.com/rigelk))
+   * Improve password input accessibility ([@rigelk](https://github.com/rigelk))
+   * Add descriptions in moderation dropdown ([@rigelk](https://github.com/rigelk))
  * Performances improvements:
    * Lazy load categories, licences, languages and video/playlist privacies in the client
    * Only update remote actor avatar if the filename changed
    * Optimize transcoding by using the lowest resolution as input file
    * Speedup embed first paint
-   * Small videos list SQL query optimization
+   * Optimize videos list SQL query
    * Optimize local videos list SQL query
    * Cache `peertube` instance actor SQL result
    * Cache HLS/WebTorrent InfoHash SQL result
+   * Optimize notification endpoint on specific cases
+   * Optimize "list my playlists" SQL query
  * Improve search filters: ([@rigelk](https://github.com/rigelk))
    * Add ability to sort results
    * Improve tags filter inputs
@@ -118,6 +126,8 @@ We added some sections in the documentation website:
    * Autoplay next video support for playlists
    * Add *next* video button to the player
    * Add loop setting when watching a playlist
+ * Add option to download subtitles in download modal ([@rigelk](https://github.com/rigelk))
+ * Add a button in account page to follow all account channels ([@rigelk](https://github.com/rigelk))
  * Add ability to search a video directly by its UUID
  * Case insensitive tags search
  * Add ability to disable WebTorrent (and only enable HLS) (**experimental and breaks federation with PeerTube instances < 2.1**)
@@ -159,6 +169,9 @@ We added some sections in the documentation website:
  * Fix dropdown on video miniature for unlogged users
  * Fix video support field in update form
  * Fix video import having a long thumbnail url (Facebook for example)
+ * Add correct HTTP status on not found video
+ * Fix bug on login when username has a special character (`_` for example)
+ * Fix plugin unregistration that did not remove properly its hooks ([@JohnXLivingston](https://github.com/JohnXLivingston))
 
 
 ## v2.0.0
