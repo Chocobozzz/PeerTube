@@ -25,7 +25,8 @@ const processOptions = {
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
   return new Promise<YoutubeDLInfo>(async (res, rej) => {
-    const args = opts || [ '-j', '--flat-playlist' ]
+    let args = opts || [ '-j', '--flat-playlist' ]
+    args = wrapWithProxyOptions(args)
 
     const youtubeDL = await safeGetYoutubeDL()
     youtubeDL.getInfo(url, args, processOptions, (err, info) => {
@@ -47,12 +48,7 @@ function downloadYoutubeDLVideo (url: string, timeout: number) {
   logger.info('Importing youtubeDL video %s', url)
 
   let options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
-
-  if (CONFIG.IMPORT.VIDEOS.HTTP.PROXY.ENABLED) {
-    logger.debug('Using proxy for YoutubeDL')
-
-    options = [ '--proxy', CONFIG.IMPORT.VIDEOS.HTTP.PROXY.URL ].concat(options)
-  }
+  options = wrapWithProxyOptions(options)
 
   if (process.env.FFMPEG_PATH) {
     options = options.concat([ '--ffmpeg-location', process.env.FFMPEG_PATH ])
@@ -269,4 +265,14 @@ function getCategory (categories: string[]) {
   }
 
   return undefined
+}
+
+function wrapWithProxyOptions (options: string[]) {
+  if (CONFIG.IMPORT.VIDEOS.HTTP.PROXY.ENABLED) {
+    logger.debug('Using proxy for YoutubeDL')
+
+    return [ '--proxy', CONFIG.IMPORT.VIDEOS.HTTP.PROXY.URL ].concat(options)
+  }
+
+  return options
 }
