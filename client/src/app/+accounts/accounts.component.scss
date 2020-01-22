@@ -17,12 +17,10 @@
 
   a {
     @include peertube-button-outline;
-    height: auto;
-    line-height: 32px;
   }
 
   my-subscribe-button {
-    height: min-content;
+    min-height: 30px;
   }
 }
 

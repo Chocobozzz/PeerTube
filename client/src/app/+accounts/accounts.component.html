@@ -16,24 +16,24 @@
           </button>
 
           </div>
-          <span *ngIf="user?.blocked" [ngbTooltip]="user.blockedReason" class="badge badge-danger" i18n>Banned</span>
+          <span *ngIf="accountUser?.blocked" [ngbTooltip]="accountUser.blockedReason" class="badge badge-danger" i18n>Banned</span>
           <span *ngIf="account.mutedByUser" class="badge badge-danger" i18n>Muted</span>
           <span *ngIf="account.mutedServerByUser" class="badge badge-danger" i18n>Instance muted</span>
           <span *ngIf="account.mutedByInstance" class="badge badge-danger" i18n>Muted by your instance</span>
           <span *ngIf="account.mutedServerByInstance" class="badge badge-danger" i18n>Instance muted by your instance</span>
 
           <my-user-moderation-dropdown
-            buttonSize="small" [account]="account" [user]="user" placement="bottom-left auto"
+            buttonSize="small" [account]="account" [user]="accountUser" placement="bottom-left auto"
             (userChanged)="onUserChanged()" (userDeleted)="onUserDeleted()"
           ></my-user-moderation-dropdown>
         </div>
-        <div class="actor-followers" i18n-title [title]="subscribersDisplayFor(account.followersCount) + ' to the account actor'">
+        <div class="actor-followers" [title]="accountFollowerTitle">
           {{ subscribersDisplayFor(naiveAggregatedSubscribers) }}
         </div>
       </div>
 
       <div class="right-buttons">
-        <a *ngIf="isManageable" routerLink="/my-account" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
+        <a *ngIf="isAccountManageable" routerLink="/my-account" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
         <my-subscribe-button *ngIf="videoChannels" [account]="account" [videoChannels]="videoChannels"></my-subscribe-button>
       </div>
     </div>

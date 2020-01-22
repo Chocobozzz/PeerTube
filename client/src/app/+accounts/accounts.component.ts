@@ -3,8 +3,8 @@ import { ActivatedRoute } from '@angular/router'
 import { AccountService } from '@app/shared/account/account.service'
 import { Account } from '@app/shared/account/account.model'
 import { RestExtractor, UserService } from '@app/shared'
-import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
-import { Subscription } from 'rxjs'
+import { catchError, distinctUntilChanged, first, map, switchMap, tap } from 'rxjs/operators'
+import { forkJoin, Subscription } from 'rxjs'
 import { AuthService, Notifier, RedirectService } from '@app/core'
 import { User, UserRight } from '../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
@@ -17,8 +17,11 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 })
 export class AccountsComponent implements OnInit, OnDestroy {
   account: Account
-  user: User
+  accountUser: User
   videoChannels: VideoChannel[] = []
+
+  isAccountManageable = false
+  accountFollowerTitle = ''
 
   private routeSub: Subscription
 
@@ -42,6 +45,14 @@ export class AccountsComponent implements OnInit, OnDestroy {
         switchMap(accountId => this.accountService.getAccount(accountId)),
         tap(account => {
           this.account = account
+
+          this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
+
+          this.accountFollowerTitle = this.i18n(
+            '{{followers}} direct account followers',
+            { followers: this.subscribersDisplayFor(account.followersCount) }
+          )
+
           this.getUserIfNeeded(account)
         }),
         switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
@@ -65,11 +76,6 @@ export class AccountsComponent implements OnInit, OnDestroy {
     )
   }
 
-  get isManageable () {
-    if (!this.authService.isLoggedIn()) return false
-    return this.user.id === this.authService.getUser().id
-  }
-
   onUserChanged () {
     this.getUserIfNeeded(this.account)
   }
@@ -87,17 +93,18 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   private getUserIfNeeded (account: Account) {
-    if (!account.userId) return
-    if (!this.authService.isLoggedIn()) return
+    if (!account.userId || !this.authService.isLoggedIn()) return
 
     const user = this.authService.getUser()
     if (user.hasRight(UserRight.MANAGE_USERS)) {
-      this.userService.getUser(account.userId)
-          .subscribe(
-            user => this.user = user,
+      forkJoin([
+        this.userService.getUser(account.userId),
+        this.authService.userInformationLoaded.pipe(first())
+      ]).subscribe(
+        ([ accountUser ]) => this.accountUser = accountUser,
 
-            err => this.notifier.error(err.message)
-          )
+        err => this.notifier.error(err.message)
+      )
     }
   }
 }
