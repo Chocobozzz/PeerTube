@@ -20,6 +20,6 @@ cp "./tsconfig.json" "./dist"
 npm run tsc -- --incremental --sourceMap
 cp -r ./server/static ./server/assets ./dist/server
 
-NODE_ENV=test npm run concurrently -- -k \
-  "npm run nodemon -- --delay 1 --watch ./dist dist/server" \
-  "npm run tsc -- --incremental --sourceMap --preserveWatchOutput -w"
+NODE_ENV=test node node_modules/.bin/concurrently -k \
+  "node_modules/.bin/nodemon --delay 1 --watch ./dist dist/server" \
+  "node_modules/.bin/tsc --incremental --sourceMap --preserveWatchOutput -w"

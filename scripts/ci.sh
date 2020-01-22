@@ -9,7 +9,7 @@ fi
 
 killall -q peertube || true
 
-perl -0777 -i  -pe 's#proxy:(\n\s+)enabled: false\n\s+url: ""#proxy:$1enabled: true$1url: "https://cpy.re:7899"#' config/test.yaml
+perl -0777 -i  -pe 's#proxy:(\n\s+)enabled: false\n\s+url: ""#proxy:$1enabled: true$1url: "http://188.165.225.149:7899"#' config/test.yaml
 
 if [ "$1" = "misc" ]; then
     npm run build -- --light-fr
