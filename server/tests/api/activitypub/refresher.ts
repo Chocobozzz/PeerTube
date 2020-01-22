@@ -91,7 +91,7 @@ describe('Test AP refresher', function () {
     })
 
     it('Should not update a remote video if the remote instance is down', async function () {
-      this.timeout(60000)
+      this.timeout(70000)
 
       killallServers([ servers[ 1 ] ])
 
@@ -105,10 +105,6 @@ describe('Test AP refresher', function () {
       await waitJobs([ servers[ 0 ] ])
 
       await reRunServer(servers[ 1 ])
-
-      // Should not refresh the video, even if the last refresh failed (to avoid a loop on dead instances)
-      await getVideo(servers[ 0 ].url, videoUUID3)
-      await waitJobs(servers)
 
       await getVideo(servers[ 0 ].url, videoUUID3, 200)
     })

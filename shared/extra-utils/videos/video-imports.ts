@@ -3,7 +3,7 @@ import { VideoImportCreate } from '../../models/videos'
 import { makeGetRequest, makeUploadRequest } from '../requests/requests'
 
 function getYoutubeVideoUrl () {
-  return 'https://youtu.be/msX3jv1XdvM'
+  return 'http://www.youtube.com/watch?v=msX3jv1XdvM'
 }
 
 function getMagnetURI () {
