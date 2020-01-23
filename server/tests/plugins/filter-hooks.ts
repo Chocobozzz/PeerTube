@@ -145,6 +145,8 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on import', async function () {
+      this.timeout(15000)
+
       const attributes = {
         name: 'video please blacklist me',
         targetUrl: getYoutubeVideoUrl(),
