@@ -587,18 +587,16 @@ async function completeVideoCheck (
            'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')')
       .to.be.above(minSize).and.below(maxSize)
 
-    {
-      await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
-    }
-
-    if (attributes.previewfile) {
-      await testImage(url, attributes.previewfile, videoDetails.previewPath)
-    }
-
     const torrent = await webtorrentAdd(file.magnetUri, true)
     expect(torrent.files).to.be.an('array')
     expect(torrent.files.length).to.equal(1)
     expect(torrent.files[0].path).to.exist.and.to.not.equal('')
+  }
+
+  await testImage(url, attributes.thumbnailfile || attributes.fixture, videoDetails.thumbnailPath)
+
+  if (attributes.previewfile) {
+    await testImage(url, attributes.previewfile, videoDetails.previewPath)
   }
 }
 

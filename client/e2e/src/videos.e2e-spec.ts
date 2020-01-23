@@ -4,6 +4,7 @@ import { LoginPage } from './po/login.po'
 import { browser } from 'protractor'
 import { VideoUpdatePage } from './po/video-update.po'
 import { MyAccountPage } from './po/my-account'
+import { AppPage } from './po/app.po'
 
 async function skipIfUploadNotSupported () {
   if (await isMobileDevice() || await isSafari()) {
@@ -30,6 +31,7 @@ describe('Videos workflow', () => {
   let videoUpdatePage: VideoUpdatePage
   let myAccountPage: MyAccountPage
   let loginPage: LoginPage
+  let appPage: AppPage
 
   let videoName = new Date().getTime() + ' video'
   const video2Name = new Date().getTime() + ' second video'
@@ -42,6 +44,7 @@ describe('Videos workflow', () => {
     videoUpdatePage = new VideoUpdatePage()
     myAccountPage = new MyAccountPage()
     loginPage = new LoginPage()
+    appPage = new AppPage()
 
     if (await isMobileDevice()) {
       console.log('Mobile device detected.')
@@ -59,6 +62,12 @@ describe('Videos workflow', () => {
     }
 
     return loginPage.loginAsRootUser()
+  })
+
+  it('Should close the welcome modal', async () => {
+    if (await skipIfUploadNotSupported()) return
+
+    await appPage.closeWelcomeModal()
   })
 
   it('Should upload a video', async () => {

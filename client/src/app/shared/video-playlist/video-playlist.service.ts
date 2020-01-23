@@ -1,6 +1,6 @@
-import { bufferTime, catchError, filter, map, share, switchMap, tap } from 'rxjs/operators'
-import { Injectable } from '@angular/core'
-import { merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
+import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap } from 'rxjs/operators'
+import { Injectable, NgZone } from '@angular/core'
+import { asyncScheduler, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { RestExtractor } from '../rest/rest-extractor.service'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { ResultList, VideoPlaylistElementCreate, VideoPlaylistElementUpdate } from '../../../../../shared'
@@ -23,6 +23,7 @@ import { VideoPlaylistElement as ServerVideoPlaylistElement } from '@shared/mode
 import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 import { uniq } from 'lodash-es'
 import * as debug from 'debug'
+import { enterZone, leaveZone } from '@app/shared/rxjs/zone'
 
 const logger = debug('peertube:playlists:VideoPlaylistService')
 
@@ -49,13 +50,16 @@ export class VideoPlaylistService {
     private authHttp: HttpClient,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
-    private restService: RestService
+    private restService: RestService,
+    private ngZone: NgZone
   ) {
     this.videoExistsInPlaylistObservable = merge(
       this.videoExistsInPlaylistNotifier.pipe(
-        bufferTime(500),
+        // We leave Angular zone so Protractor does not get stuck
+        bufferTime(500, leaveZone(this.ngZone, asyncScheduler)),
         filter(videoIds => videoIds.length !== 0),
         map(videoIds => uniq(videoIds)),
+        observeOn(enterZone(this.ngZone, asyncScheduler)),
         switchMap(videoIds => this.doVideosExistInPlaylist(videoIds)),
         share()
       ),

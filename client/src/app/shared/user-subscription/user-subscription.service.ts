@@ -1,7 +1,7 @@
-import { bufferTime, catchError, filter, map, tap, share, switchMap } from 'rxjs/operators'
-import { Observable, ReplaySubject, Subject, of, merge } from 'rxjs'
+import { bufferTime, catchError, filter, map, observeOn, share, switchMap, tap } from 'rxjs/operators'
+import { asyncScheduler, merge, Observable, of, ReplaySubject, Subject } from 'rxjs'
 import { HttpClient, HttpParams } from '@angular/common/http'
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { ResultList } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestService } from '../rest'
@@ -11,6 +11,7 @@ import { VideoChannel as VideoChannelServer } from '../../../../../shared/models
 import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 import { uniq } from 'lodash-es'
 import * as debug from 'debug'
+import { enterZone, leaveZone } from '@app/shared/rxjs/zone'
 
 const logger = debug('peertube:subscriptions:UserSubscriptionService')
 
@@ -32,13 +33,16 @@ export class UserSubscriptionService {
   constructor (
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
-    private restService: RestService
+    private restService: RestService,
+    private ngZone: NgZone
   ) {
     this.existsObservable = merge(
       this.existsSubject.pipe(
-        bufferTime(500),
+        // We leave Angular zone so Protractor does not get stuck
+        bufferTime(500, leaveZone(this.ngZone, asyncScheduler)),
         filter(uris => uris.length !== 0),
         map(uris => uniq(uris)),
+        observeOn(enterZone(this.ngZone, asyncScheduler)),
         switchMap(uris => this.doSubscriptionsExist(uris)),
         share()
       ),
