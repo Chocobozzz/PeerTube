@@ -318,7 +318,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ 'videos', join('playlists', 'hls') ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ 'videos', join('playlists', 'hls') ])
     })
 
     after(async function () {
@@ -368,7 +368,7 @@ describe('Test videos redundancy', function () {
       await check1WebSeed()
       await check0PlaylistRedundancies()
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ 'videos' ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ 'videos' ])
     })
 
     after(async function () {
@@ -437,7 +437,7 @@ describe('Test videos redundancy', function () {
       await waitJobs(servers)
 
       for (const server of servers) {
-        await checkVideoFilesWereRemoved(video1Server2UUID, server.serverNumber)
+        await checkVideoFilesWereRemoved(video1Server2UUID, server.internalServerNumber)
       }
     })
 
@@ -572,7 +572,7 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].serverNumber, [ join('redundancy', 'hls') ])
+      await checkVideoFilesWereRemoved(video1Server2UUID, servers[0].internalServerNumber, [ join('redundancy', 'hls') ])
     })
 
     after(async function () {

@@ -17,10 +17,12 @@ import { join } from 'path'
 import { sha1 } from '../../helpers/core-utils'
 import { isArrayOf } from '../../helpers/custom-validators/misc'
 import { Op, QueryTypes } from 'sequelize'
-import { MStreamingPlaylist, MVideoFile } from '@server/typings/models'
+import { MStreamingPlaylist, MStreamingPlaylistVideo, MVideoFile } from '@server/typings/models'
 import { VideoFileModel } from '@server/models/video/video-file'
-import { getTorrentFileName, getVideoFilename } from '@server/lib/video-paths'
+import { getTorrentFileName, getTorrentFilePath, getVideoFilename } from '@server/lib/video-paths'
 import * as memoizee from 'memoizee'
+import { remove } from 'fs-extra'
+import { logger } from '@server/helpers/logger'
 
 @Table({
   tableName: 'videoStreamingPlaylist',
@@ -208,5 +210,11 @@ export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistMod
   hasSameUniqueKeysThan (other: MStreamingPlaylist) {
     return this.type === other.type &&
       this.videoId === other.videoId
+  }
+
+  removeTorrent (this: MStreamingPlaylistVideo, videoFile: MVideoFile) {
+    const torrentPath = getTorrentFilePath(this, videoFile)
+    return remove(torrentPath)
+      .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 }

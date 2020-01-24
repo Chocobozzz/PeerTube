@@ -465,7 +465,7 @@ function rateVideo (url: string, accessToken: string, id: number, rating: string
 function parseTorrentVideo (server: ServerInfo, videoUUID: string, resolution: number) {
   return new Promise<any>((res, rej) => {
     const torrentName = videoUUID + '-' + resolution + '.torrent'
-    const torrentPath = join(root(), 'test' + server.serverNumber, 'torrents', torrentName)
+    const torrentPath = join(root(), 'test' + server.internalServerNumber, 'torrents', torrentName)
     readFile(torrentPath, (err, data) => {
       if (err) return rej(err)
 

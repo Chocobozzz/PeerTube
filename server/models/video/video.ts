@@ -136,7 +136,8 @@ import {
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
   MVideoWithFile,
-  MVideoWithRights
+  MVideoWithRights,
+  MStreamingPlaylistFiles
 } from '../../typings/models'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
@@ -1071,7 +1072,13 @@ export class VideoModel extends Model<VideoModel> {
       })
 
       // Remove playlists file
-      tasks.push(instance.removeStreamingPlaylist())
+      if (!Array.isArray(instance.VideoStreamingPlaylists)) {
+        instance.VideoStreamingPlaylists = await instance.$get('VideoStreamingPlaylists')
+      }
+
+      for (const p of instance.VideoStreamingPlaylists) {
+        tasks.push(instance.removeStreamingPlaylistFiles(p))
+      }
     }
 
     // Do not wait video deletion because we could be in a transaction
@@ -2001,11 +2008,24 @@ export class VideoModel extends Model<VideoModel> {
       .catch(err => logger.warn('Cannot delete torrent %s.', torrentPath, { err }))
   }
 
-  removeStreamingPlaylist (isRedundancy = false) {
+  async removeStreamingPlaylistFiles (streamingPlaylist: MStreamingPlaylist, isRedundancy = false) {
     const directoryPath = getHLSDirectory(this, isRedundancy)
 
-    return remove(directoryPath)
-      .catch(err => logger.warn('Cannot delete playlist directory %s.', directoryPath, { err }))
+    await remove(directoryPath)
+
+    if (isRedundancy !== true) {
+      let streamingPlaylistWithFiles = streamingPlaylist as MStreamingPlaylistFilesVideo
+      streamingPlaylistWithFiles.Video = this
+
+      if (!Array.isArray(streamingPlaylistWithFiles.VideoFiles)) {
+        streamingPlaylistWithFiles.VideoFiles = await streamingPlaylistWithFiles.$get('VideoFiles')
+      }
+
+      // Remove physical files and torrents
+      await Promise.all(
+        streamingPlaylistWithFiles.VideoFiles.map(file => streamingPlaylistWithFiles.removeTorrent(file))
+      )
+    }
   }
 
   isOutdated () {

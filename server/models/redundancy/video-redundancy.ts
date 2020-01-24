@@ -160,7 +160,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       const videoUUID = videoStreamingPlaylist.Video.uuid
       logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
 
-      videoStreamingPlaylist.Video.removeStreamingPlaylist(true)
+      videoStreamingPlaylist.Video.removeStreamingPlaylistFiles(videoStreamingPlaylist, true)
                .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
     }
 
