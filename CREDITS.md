@@ -2,32 +2,34 @@
 
  * Chocobozzz
  * Rigel Kent
- * Bigard Florian
  * Felix Ableitner
  * Gérald Niel
  * Jorropo
  * Josh Morel
- * BO41
  * Julien Maulny
+ * BO41
  * Filip Bengtsson
+ * Francesc
  * Frank Sträter
  * buoyantair
+ * John Livingston
  * Attila F
  * Benjamin Bouvier
  * Jan Keromnes
- * John Livingston
  * Lucas Declercq
+ * Phongpanot
+ * matograine
  * David Libeau
  * Florent F
- * Francesc
  * Luc Didry
  * Nassim Bounouas
+ * Anne-Gaelle Moulun
  * BRAINS YUM
+ * Côme 744
  * Dimitri Gilbert
  * Florent Poinsaut
  * Green-Star
  * Micah Elizabeth Scott
- * Phongpanot
  * SVNET Libre
  * Thomas Kuntz
  * William Lahti
@@ -47,6 +49,7 @@
  * Kemal Oktay Aktoğan
  * LecygneNoir
  * Leopere
+ * Manuela Silva
  * Marcin Mikołajczak
  * Yohan Boniface
  * am97
@@ -64,6 +67,7 @@
  * Florian
  * Frank de Lange
  * Gaëtan Rizio
+ * Joan Montané
  * Jocelyn Jaubert
  * Julien Lemaire
  * Lucas Teixeira
@@ -151,6 +155,7 @@
  * Predatorix Phoenix
  * Quentin Dupont
  * Quentí
+ * ROPEDE
  * Raphael
  * Robin
  * Sankar
