@@ -2214,7 +2214,7 @@
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7" datatype="html">
         <source>Sorry, but something went wrong</source>
-        <target state="new">Sorry, but something went wrong</target>
+        <target state="translated">Ens sap greu, però quelcom va malament</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-url.component.html</context>
           <context context-type="linenumber">48</context>
@@ -2257,7 +2257,7 @@
       </trans-unit>
       <trans-unit id="5e420747842373fa99a75a7a18df068cc81e46fb" datatype="html">
         <source>Scheduled</source>
-        <target state="new">Scheduled</target>
+        <target state="translated">Programat</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">25</context>
@@ -2265,7 +2265,7 @@
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d" datatype="html">
         <source>Video background image</source>
-        <target state="new">Video background image</target>
+        <target state="translated">Imatge de fons del vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">32</context>
