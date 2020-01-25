@@ -7,8 +7,9 @@
   width: 100%;
 }
 
+#typeahead-help,
 #typeahead-instructions,
-#jump-to-results {
+my-suggestions ::ng-deep ul {
   border: 1px solid var(--mainBackgroundColor);
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -17,10 +18,12 @@
   transition-property: box-shadow;
 }
 
+#typeahead-help,
 #typeahead-instructions {
   margin-top: 10px;
   width: 100%;
   padding: .5rem 1rem;
+  white-space: normal;
 
   ul {
     list-style: none;
@@ -58,8 +61,9 @@
     & > div:last-child {
       display: initial !important;
       
+      #typeahead-help,
       #typeahead-instructions,
-      #jump-to-results {
+      my-suggestions ::ng-deep ul {
         box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 20px -5px;
       }
     }
@@ -76,33 +80,17 @@
   }
 }
 
-a.focus-visible {
-  background-color: var(--mainHoverColor);
-}
-
-a {
-  @include disable-default-a-behaviour;
-  width: 100%;
-
-  &, &:hover {
-    color: var(--mainForegroundColor);
-  }
-}
-
-.bg-gray {
-  background-color: var(--mainBackgroundColor);
-}
-
-.text-gray-light {
-  color: var(--mainForegroundColor);
-}
-
 .glyphicon {
   top: 3px;
 }
 
 .advanced-search-status {
-  cursor: help;
+  height: max-content;
+  cursor: default;
+
+  &.c-help {
+    cursor: help;
+  }
 }
 
 .small-title {
@@ -111,11 +99,6 @@ a {
   margin-bottom: .5rem;
 }
 
-my-global-icon {
-  width: 17px;
-  position: relative;
-  top: -2px;
-  margin: 5px;
-
-  @include apply-svg-color(var(--mainForegroundColor))
+::ng-deep my-suggestion {
+  width: 100%;
 }

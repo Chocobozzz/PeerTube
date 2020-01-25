@@ -1,0 +1,32 @@
+@import '_mixins';
+
+a {
+  @include disable-default-a-behaviour;
+  width: 100%;
+
+  &, &:hover {
+    color: var(--mainForegroundColor);
+
+    &.focus-visible {
+      background-color: var(--mainHoverColor);
+      color: var(--mainBackgroundColor);
+    }
+  }
+}
+
+.bg-gray {
+  background-color: var(--mainBackgroundColor);
+}
+
+.text-gray-light {
+  color: var(--mainForegroundColor);
+}
+
+my-global-icon {
+  width: 17px;
+  position: relative;
+  top: -2px;
+  margin: 5px;
+
+  @include apply-svg-color(var(--mainForegroundColor));
+}

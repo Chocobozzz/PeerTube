@@ -2,7 +2,7 @@ import { filter, first, map, tap } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, NavigationEnd, Params, Router } from '@angular/router'
 import { getParameterByName } from '../shared/misc/utils'
-import { AuthService, Notifier, ServerService } from '@app/core'
+import { AuthService } from '@app/core'
 import { of } from 'rxjs'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 
@@ -20,9 +20,6 @@ export class HeaderComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private auth: AuthService,
-    private serverService: ServerService,
-    private authService: AuthService,
-    private notifier: Notifier,
     private i18n: I18n
   ) {}
 

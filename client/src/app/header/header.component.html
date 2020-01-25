@@ -1,6 +1,6 @@
 <my-search-typeahead>
   <input
-    type="text" id="search-video" name="search-video" [attr.aria-label]="ariaLabelTextForSearch" i18n-placeholder placeholder="Search videos, channels…"
+    type="text" id="search-video" name="search-video" [attr.aria-label]="ariaLabelTextForSearch" i18n-placeholder placeholder="Search locally videos, channels…"
     [(ngModel)]="searchValue" (keyup.enter)="doSearch()"
   >
   <span (click)="doSearch()" class="icon icon-search"></span>

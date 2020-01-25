@@ -1,23 +1,31 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core'
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnInit,
+  OnDestroy,
+  QueryList
+} from '@angular/core'
 import { Router, NavigationEnd } from '@angular/router'
 import { AuthService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { filter } from 'rxjs/operators'
-import { ListKeyManager, ListKeyManagerOption } from '@angular/cdk/a11y'
-import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes'
+import { ListKeyManager } from '@angular/cdk/a11y'
+import { UP_ARROW, DOWN_ARROW, ENTER, TAB } from '@angular/cdk/keycodes'
+import { SuggestionComponent } from './suggestion.component'
 
 @Component({
   selector: 'my-search-typeahead',
   templateUrl: './search-typeahead.component.html',
   styleUrls: [ './search-typeahead.component.scss' ]
 })
-export class SearchTypeaheadComponent implements OnInit, AfterViewInit {
+export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('contentWrapper', { static: true }) contentWrapper: ElementRef
-  @ViewChild('optionsList', { static: true }) optionsList: ElementRef
 
   hasChannel = false
   inChannel = false
-  keyboardEventsManager: ListKeyManager<ListKeyManagerOption>
+  newSearch = true
 
   searchInput: HTMLInputElement
   URIPolicy: 'only-followed' | 'any' = 'any'
@@ -25,7 +33,9 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit {
   URIPolicyText: string
   inAllText: string
   inThisChannelText: string
+  globalSearchIndex = 'https://index.joinpeertube.org'
 
+  keyboardEventsManager: ListKeyManager<SuggestionComponent>
   results: any[] = []
 
   constructor (
@@ -33,7 +43,7 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit {
     private router: Router,
     private i18n: I18n
   ) {
-    this.URIPolicyText = this.i18n('Determines whether you can resolve any distant content from its URL, or if your instance only allows doing so for instances it follows.')
+    this.URIPolicyText = this.i18n('Determines whether you can resolve any distant content, or if your instance only allows doing so for instances it follows.')
     this.inAllText = this.i18n('In all PeerTube')
     this.inThisChannelText = this.i18n('In this channel')
   }
@@ -48,16 +58,30 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit {
       })
   }
 
+  ngOnDestroy () {
+    if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
+  }
+
   ngAfterViewInit () {
     this.searchInput = this.contentWrapper.nativeElement.childNodes[0]
     this.searchInput.addEventListener('input', this.computeResults.bind(this))
+    this.searchInput.addEventListener('keyup', this.handleKeyUp.bind(this))
   }
 
   get hasSearch () {
     return !!this.searchInput && !!this.searchInput.value
   }
 
+  get activeResult () {
+    return this.keyboardEventsManager && this.keyboardEventsManager.activeItem && this.keyboardEventsManager.activeItem.result
+  }
+
+  get showHelp () {
+    return this.hasSearch && this.newSearch && this.activeResult && this.activeResult.type === 'search-global' || false
+  }
+
   computeResults () {
+    this.newSearch = true
     let results = [
       {
         text: 'Maître poney',
@@ -70,6 +94,10 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit {
         {
           text: this.searchInput.value,
           type: 'search-channel'
+        },
+        {
+          text: this.searchInput.value,
+          type: 'search-instance'
         },
         {
           text: this.searchInput.value,
@@ -90,20 +118,38 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit {
     )
   }
 
+  initKeyboardEventsManager (event: { items: QueryList<SuggestionComponent>, index?: number }) {
+    if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
+    this.keyboardEventsManager = new ListKeyManager(event.items)
+    if (event.index !== undefined) {
+      this.keyboardEventsManager.setActiveItem(event.index)
+      event.items.forEach(e => e.active = false)
+      this.keyboardEventsManager.activeItem.active = true
+    }
+    this.keyboardEventsManager.change.subscribe(
+      val => {
+        event.items.forEach(e => e.active = false)
+        this.keyboardEventsManager.activeItem.active = true
+      }
+    )
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
 
-  handleKeyUp (event: KeyboardEvent) {
+  handleKeyUp (event: KeyboardEvent, indexSelected?: number) {
     event.stopImmediatePropagation()
     if (this.keyboardEventsManager) {
-      if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
-        // passing the event to key manager so we get a change fired
+      if (event.keyCode === TAB) {
+        this.keyboardEventsManager.setNextItemActive()
+        return false
+      } else if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
         this.keyboardEventsManager.onKeydown(event)
         return false
       } else if (event.keyCode === ENTER) {
-        // when we hit enter, the keyboardManager should call the selectItem method of the `ListItemComponent`
-        // this.keyboardEventsManager.activeItem
+        this.newSearch = false
+        // this.router.navigate(this.keyboardEventsManager.activeItem.result)
         return false
       }
     }

@@ -9,7 +9,7 @@ import 'focus-visible'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CoreModule } from './core'
-import { HeaderComponent, SearchTypeaheadComponent } from './header'
+import { HeaderComponent, SearchTypeaheadComponent, SuggestionsComponent, SuggestionComponent } from './header'
 import { LoginModule } from './login'
 import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
 import { SharedModule } from './shared'
@@ -42,6 +42,8 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     AvatarNotificationComponent,
     HeaderComponent,
     SearchTypeaheadComponent,
+    SuggestionsComponent,
+    SuggestionComponent,
 
     WelcomeModalComponent,
     InstanceConfigWarningModalComponent

@@ -1,0 +1,28 @@
+<a tabindex="-1" class="d-flex flex-auto flex-items-center p-2" [class.focus-visible]="active" [routerLink]="result.routerLink">
+  <div class="flex-shrink-0 mr-2 text-center">
+    <my-global-icon *ngIf="result.type !== 'channel'" iconName="search"></my-global-icon>
+    <my-global-icon *ngIf="result.type === 'channel'" iconName="folder"></my-global-icon>
+  </div>
+
+  <img class="avatar mr-2 flex-shrink-0 d-none" alt="" aria-label="Team" src="" width="28" height="28">
+
+  <div class="flex-auto overflow-hidden text-left no-wrap css-truncate css-truncate-target" [attr.aria-label]="result.text" [innerHTML]="result.text | highlight : highlight"></div>
+
+  <div *ngIf="result.type !== 'channel' && result.type !== 'suggestion'" class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ml-1 f6">
+    <span *ngIf="result.type === 'search-channel'" [attr.aria-label]="inThisChannelText">
+      {{ inThisChannelText }}
+    </span>
+    <span *ngIf="result.type === 'search-instance'" [attr.aria-label]="inThisInstanceText">
+      {{ inThisInstanceText }}
+    </span>
+    <span *ngIf="result.type === 'search-global'" [attr.aria-label]="inAllText">
+      {{ inAllText }}
+    </span>
+    <span *ngIf="result.type === 'search-any'" aria-hidden="true" class="d-inline-block ml-1 v-align-middle">↵</span>
+  </div>
+
+  <div *ngIf="result.type === 'channel'" aria-hidden="true" class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ml-1 f6 d-on-nav-focus" i18n>
+    Jump to channel
+    <span class="d-inline-block ml-1 v-align-middle">↵</span>
+  </div>
+</a>
