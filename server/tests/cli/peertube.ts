@@ -277,6 +277,12 @@ describe('Test CLI wrapper', function () {
         expect(stdout).to.not.contain('super video')
       }
     })
+
+    after(async function () {
+      this.timeout(10000)
+
+      await cleanupTests([ anotherServer ])
+    })
   })
 
   after(async function () {
