@@ -27,7 +27,7 @@ module.exports = function () {
       modules: [ helpers.root('src'), helpers.root('node_modules') ],
 
       alias: {
-        'video.js$': path.resolve('node_modules/video.js/dist/alt/video.core.js')
+        'video.js$': path.resolve('node_modules/video.js/dist/alt/video.core.novtt.js')
       }
     },
 

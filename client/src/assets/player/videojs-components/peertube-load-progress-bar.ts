@@ -1,16 +1,12 @@
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import { Player } from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
 
-const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
+const Component = videojs.getComponent('Component')
 
 class PeerTubeLoadProgressBar extends Component {
-  partEls_: any[]
 
-  constructor (player: Player, options: any) {
+  constructor (player: VideoJsPlayer, options?: videojs.ComponentOptions) {
     super(player, options)
-    this.partEls_ = []
+
     this.on(player, 'progress', this.update)
   }
 
@@ -22,8 +18,6 @@ class PeerTubeLoadProgressBar extends Component {
   }
 
   dispose () {
-    this.partEls_ = null
-
     super.dispose()
   }
 
@@ -31,7 +25,8 @@ class PeerTubeLoadProgressBar extends Component {
     const torrent = this.player().webtorrent().getTorrent()
     if (!torrent) return
 
-    this.el_.style.width = (torrent.progress * 100) + '%'
+    // FIXME: typings
+    (this.el() as HTMLElement).style.width = (torrent.progress * 100) + '%'
   }
 
 }

@@ -1157,10 +1157,10 @@
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
 
-"@types/video.js@^7.2.5":
-  version "7.2.15"
-  resolved "https://registry.yarnpkg.com/@types/video.js/-/video.js-7.2.15.tgz#03d950f01c985a5082ead4d1b73064455a1c8c6f"
-  integrity sha512-NsojVfvTwdVqDe0+vJaoHOO2iuLm0sp/u8jEsZeLGsM3gNfg5WIOFd6NC0cQR9JHUuDPPSPF70jxdklGWm5jhQ==
+"@types/video.js@^7.3.3":
+  version "7.3.3"
+  resolved "https://registry.yarnpkg.com/@types/video.js/-/video.js-7.3.3.tgz#b6870d954473dfd694e10b55a90c0f3be8522da3"
+  integrity sha512-yAb46+4A0dKFxOQRVLoLyfC/S/BmHLE10MxPXt/t88+7R4GWLHosHelVtYpKBRykjptdkqfQXNRXoQzDeKm6MA==
 
 "@types/webpack-sources@^0.1.5":
   version "0.1.5"
@@ -10841,6 +10841,11 @@ void-elements@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/void-elements/-/void-elements-2.0.1.tgz#c066afb582bb1cb4128d60ea92392e94d5e9dbec"
   integrity sha1-wGavtYK7HLQSjWDqkjkulNXp2+w=
+
+vtt.js@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/vtt.js/-/vtt.js-0.13.0.tgz#955c667b34d5325b2012cb9e8ba9bad6e0b11ff8"
+  integrity sha1-lVxmezTVMlsgEsuei6m61uCxH/g=
 
 watchpack@^1.6.0:
   version "1.6.0"

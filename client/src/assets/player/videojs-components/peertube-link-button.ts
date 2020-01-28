@@ -1,13 +1,10 @@
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
 import { buildVideoLink } from '../utils'
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import { Player } from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
 
-const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
+const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  constructor (player: Player, options: any) {
+  constructor (player: VideoJsPlayer, options?: videojs.ComponentOptions) {
     super(player, options)
   }
 
@@ -20,21 +17,22 @@ class PeerTubeLinkButton extends Button {
   }
 
   handleClick () {
-    this.player_.pause()
+    this.player().pause()
   }
 
   private buildElement () {
-    const el = videojsUntyped.dom.createEl('a', {
+    const el = videojs.dom.createEl('a', {
       href: buildVideoLink(),
       innerHTML: 'PeerTube',
-      title: this.player_.localize('Go to the video page'),
+      title: this.player().localize('Go to the video page'),
       className: 'vjs-peertube-link',
       target: '_blank'
     })
 
     el.addEventListener('mouseenter', () => this.updateHref())
 
-    return el
+    return el as HTMLButtonElement
   }
 }
-Button.registerComponent('PeerTubeLinkButton', PeerTubeLinkButton)
+
+videojs.registerComponent('PeerTubeLinkButton', PeerTubeLinkButton)

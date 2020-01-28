@@ -1,26 +1,24 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
-
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import videojs, { VideoJsPlayer } from 'video.js'
 import { saveTheaterInStore, getStoredTheater } from '../peertube-player-local-storage'
 
-const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
+const Button = videojs.getComponent('Button')
 class TheaterButton extends Button {
 
   private static readonly THEATER_MODE_CLASS = 'vjs-theater-enabled'
 
-  constructor (player: videojs.Player, options: any) {
+  constructor (player: VideoJsPlayer, options: videojs.ComponentOptions) {
     super(player, options)
 
     const enabled = getStoredTheater()
     if (enabled === true) {
-      this.player_.addClass(TheaterButton.THEATER_MODE_CLASS)
+      this.player().addClass(TheaterButton.THEATER_MODE_CLASS)
 
       this.handleTheaterChange()
     }
 
-    this.player_.theaterEnabled = enabled
+    this.controlText('Theater mode')
+
+    this.player().theaterEnabled = enabled
   }
 
   buildCSSClass () {
@@ -52,6 +50,4 @@ class TheaterButton extends Button {
   }
 }
 
-TheaterButton.prototype.controlText_ = 'Theater mode'
-
-TheaterButton.registerComponent('TheaterButton', TheaterButton)
+videojs.registerComponent('TheaterButton', TheaterButton)

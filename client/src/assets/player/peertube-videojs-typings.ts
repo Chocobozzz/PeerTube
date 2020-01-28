@@ -1,7 +1,4 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
-
+import videojs from 'video.js'
 import { PeerTubePlugin } from './peertube-plugin'
 import { WebTorrentPlugin } from './webtorrent/webtorrent-plugin'
 import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin'
@@ -9,20 +6,44 @@ import { PlayerMode } from './peertube-player-manager'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { VideoFile } from '@shared/models'
 
-declare namespace videojs {
-  interface Player {
+declare module 'video.js' {
+  export interface VideoJsPlayer {
+    theaterEnabled: boolean
+
+    // FIXME: add it to upstream typings
+    posterImage: {
+      show (): void
+      hide (): void
+    }
+
+    handleTechSeeked_ (): void
+
+    // Plugins
+
     peertube (): PeerTubePlugin
     webtorrent (): WebTorrentPlugin
     p2pMediaLoader (): P2pMediaLoaderPlugin
+
+    contextmenuUI (options: any): any
+
+    bezels (): void
+
+    qualityLevels (): { height: number, id: number }[] & {
+      selectedIndex: number
+
+      addQualityLevel (representation: {
+        id: number
+        label: string
+        height: number,
+        _enabled: boolean
+      }): void
+    }
+
+    textTracks (): TextTrackList & {
+      on: Function
+      tracks_: { kind: string, mode: string, language: string }[]
+    }
   }
-}
-
-interface VideoJSComponentInterface {
-  _player: videojs.Player
-
-  new (player: videojs.Player, options?: any): any
-
-  registerComponent (name: string, obj: any): any
 }
 
 type VideoJSCaption = {
@@ -78,9 +99,6 @@ type VideoJSPluginOptions = {
   p2pMediaLoader?: P2PMediaLoaderPluginOptions
 }
 
-// videojs typings don't have some method we need
-const videojsUntyped = videojs as any
-
 type LoadedQualityData = {
   qualitySwitchCallback: Function,
   qualityData: {
@@ -123,8 +141,6 @@ export {
   PlayerNetworkInfo,
   ResolutionUpdateData,
   AutoResolutionUpdateData,
-  VideoJSComponentInterface,
-  videojsUntyped,
   VideoJSCaption,
   UserWatching,
   PeerTubePluginOptions,

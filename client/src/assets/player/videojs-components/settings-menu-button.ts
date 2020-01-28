@@ -1,43 +1,52 @@
-// Author: Yanko Shterev
-// Thanks https://github.com/yshterev/videojs-settings-menu
-
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
-
+// Thanks to Yanko Shterev: https://github.com/yshterev/videojs-settings-menu
 import { SettingsMenuItem } from './settings-menu-item'
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
 import { toTitleCase } from '../utils'
+import videojs, { VideoJsPlayer } from 'video.js'
 
-const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
-const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
-const Component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
+import { SettingsDialog } from './settings-dialog'
+import { SettingsPanel } from './settings-panel'
+import { SettingsPanelChild } from './settings-panel-child'
+
+const Button = videojs.getComponent('Button')
+const Menu = videojs.getComponent('Menu')
+const Component = videojs.getComponent('Component')
+
+export interface SettingsButtonOptions extends videojs.ComponentOptions {
+  entries: any[]
+  setup?: {
+    maxHeightOffset: number
+  }
+}
 
 class SettingsButton extends Button {
-  playerComponent = videojs.Player
-  dialog: any
-  dialogEl: any
-  menu: any
-  panel: any
-  panelChild: any
+  dialog: SettingsDialog
+  dialogEl: HTMLElement
+  menu: videojs.Menu
+  panel: SettingsPanel
+  panelChild: SettingsPanelChild
 
-  addSettingsItemHandler: Function
-  disposeSettingsItemHandler: Function
-  playerClickHandler: Function
-  userInactiveHandler: Function
+  addSettingsItemHandler: typeof SettingsButton.prototype.onAddSettingsItem
+  disposeSettingsItemHandler: typeof SettingsButton.prototype.onDisposeSettingsItem
+  playerClickHandler: typeof SettingsButton.prototype.onPlayerClick
+  userInactiveHandler: typeof SettingsButton.prototype.onUserInactive
 
-  constructor (player: videojs.Player, options: any) {
+  private settingsButtonOptions: SettingsButtonOptions
+
+  constructor (player: VideoJsPlayer, options?: SettingsButtonOptions) {
     super(player, options)
 
-    this.playerComponent = player
-    this.dialog = this.playerComponent.addChild('settingsDialog')
-    this.dialogEl = this.dialog.el_
+    this.settingsButtonOptions = options
+
+    this.controlText('Settings')
+
+    this.dialog = this.player().addChild('settingsDialog')
+    this.dialogEl = this.dialog.el() as HTMLElement
     this.menu = null
     this.panel = this.dialog.addChild('settingsPanel')
     this.panelChild = this.panel.addChild('settingsPanelChild')
 
     this.addClass('vjs-settings')
-    this.el_.setAttribute('aria-label', 'Settings Button')
+    this.el().setAttribute('aria-label', 'Settings Button')
 
     // Event handlers
     this.addSettingsItemHandler = this.onAddSettingsItem.bind(this)
@@ -84,7 +93,7 @@ class SettingsButton extends Button {
 
     this.hideDialog()
 
-    if (this.options_.entries.length === 0) {
+    if (this.settingsButtonOptions.entries.length === 0) {
       this.addClass('vjs-hidden')
     }
   }
@@ -103,10 +112,10 @@ class SettingsButton extends Button {
   }
 
   bindEvents () {
-    this.playerComponent.on('click', this.playerClickHandler)
-    this.playerComponent.on('addsettingsitem', this.addSettingsItemHandler)
-    this.playerComponent.on('disposesettingsitem', this.disposeSettingsItemHandler)
-    this.playerComponent.on('userinactive', this.userInactiveHandler)
+    this.player().on('click', this.playerClickHandler)
+    this.player().on('addsettingsitem', this.addSettingsItemHandler)
+    this.player().on('disposesettingsitem', this.disposeSettingsItemHandler)
+    this.player().on('userinactive', this.userInactiveHandler)
   }
 
   buildCSSClass () {
@@ -122,9 +131,9 @@ class SettingsButton extends Button {
   }
 
   showDialog () {
-    this.player_.peertube().onMenuOpen()
+    this.player().peertube().onMenuOpen();
 
-    this.menu.el_.style.opacity = '1'
+    (this.menu.el() as HTMLElement).style.opacity = '1'
     this.dialog.show()
 
     this.setDialogSize(this.getComponentSize(this.menu))
@@ -134,23 +143,24 @@ class SettingsButton extends Button {
     this.player_.peertube().onMenuClosed()
 
     this.dialog.hide()
-    this.setDialogSize(this.getComponentSize(this.menu))
-    this.menu.el_.style.opacity = '1'
+    this.setDialogSize(this.getComponentSize(this.menu));
+    (this.menu.el() as HTMLElement).style.opacity = '1'
     this.resetChildren()
   }
 
-  getComponentSize (element: any) {
+  getComponentSize (element: videojs.Component | HTMLElement) {
     let width: number = null
     let height: number = null
 
     // Could be component or just DOM element
     if (element instanceof Component) {
-      width = element.el_.offsetWidth
-      height = element.el_.offsetHeight
+      const el = element.el() as HTMLElement
 
-      // keep width/height as properties for direct use
-      element.width = width
-      element.height = height
+      width = el.offsetWidth
+      height = el.offsetHeight;
+
+      (element as any).width = width;
+      (element as any).height = height
     } else {
       width = element.offsetWidth
       height = element.offsetHeight
@@ -164,15 +174,17 @@ class SettingsButton extends Button {
       return
     }
 
-    const offset = this.options_.setup.maxHeightOffset
-    const maxHeight = this.playerComponent.el_.offsetHeight - offset
+    const offset = this.settingsButtonOptions.setup.maxHeightOffset
+    const maxHeight = (this.player().el() as HTMLElement).offsetHeight - offset // FIXME: typings
+
+    const panelEl = this.panel.el() as HTMLElement
 
     if (height > maxHeight) {
       height = maxHeight
       width += 17
-      this.panel.el_.style.maxHeight = `${height}px`
-    } else if (this.panel.el_.style.maxHeight !== '') {
-      this.panel.el_.style.maxHeight = ''
+      panelEl.style.maxHeight = `${height}px`
+    } else if (panelEl.style.maxHeight !== '') {
+      panelEl.style.maxHeight = ''
     }
 
     this.dialogEl.style.width = `${width}px`
@@ -182,7 +194,7 @@ class SettingsButton extends Button {
   buildMenu () {
     this.menu = new Menu(this.player())
     this.menu.addClass('vjs-main-menu')
-    const entries = this.options_.entries
+    const entries = this.settingsButtonOptions.entries
 
     if (entries.length === 0) {
       this.addClass('vjs-hidden')
@@ -191,7 +203,7 @@ class SettingsButton extends Button {
     }
 
     for (const entry of entries) {
-      this.addMenuItem(entry, this.options_)
+      this.addMenuItem(entry, this.settingsButtonOptions)
     }
 
     this.panelChild.addChild(this.menu)
@@ -199,15 +211,17 @@ class SettingsButton extends Button {
 
   addMenuItem (entry: any, options: any) {
     const openSubMenu = function (this: any) {
-      if (videojsUntyped.dom.hasClass(this.el_, 'open')) {
-        videojsUntyped.dom.removeClass(this.el_, 'open')
+      if (videojs.dom.hasClass(this.el_, 'open')) {
+        videojs.dom.removeClass(this.el_, 'open')
       } else {
-        videojsUntyped.dom.addClass(this.el_, 'open')
+        videojs.dom.addClass(this.el_, 'open')
       }
     }
 
     options.name = toTitleCase(entry)
-    const settingsMenuItem = new SettingsMenuItem(this.player(), options, entry, this as any)
+
+    const newOptions = Object.assign({}, options, { entry, menuButton: this })
+    const settingsMenuItem = new SettingsMenuItem(this.player(), newOptions)
 
     this.menu.addChild(settingsMenuItem)
 
@@ -221,7 +235,7 @@ class SettingsButton extends Button {
 
   resetChildren () {
     for (const menuChild of this.menu.children()) {
-      menuChild.reset()
+      (menuChild as SettingsMenuItem).reset()
     }
   }
 
@@ -230,75 +244,12 @@ class SettingsButton extends Button {
    */
   hideChildren () {
     for (const menuChild of this.menu.children()) {
-      menuChild.hideSubMenu()
+      (menuChild as SettingsMenuItem).hideSubMenu()
     }
   }
 
 }
 
-class SettingsPanel extends Component {
-  constructor (player: videojs.Player, options: any) {
-    super(player, options)
-  }
-
-  createEl () {
-    return super.createEl('div', {
-      className: 'vjs-settings-panel',
-      innerHTML: '',
-      tabIndex: -1
-    })
-  }
-}
-
-class SettingsPanelChild extends Component {
-  constructor (player: videojs.Player, options: any) {
-    super(player, options)
-  }
-
-  createEl () {
-    return super.createEl('div', {
-      className: 'vjs-settings-panel-child',
-      innerHTML: '',
-      tabIndex: -1
-    })
-  }
-}
-
-class SettingsDialog extends Component {
-  constructor (player: videojs.Player, options: any) {
-    super(player, options)
-    this.hide()
-  }
-
-  /**
-   * Create the component's DOM element
-   *
-   * @return {Element}
-   * @method createEl
-   */
-  createEl () {
-    const uniqueId = this.id_
-    const dialogLabelId = 'TTsettingsDialogLabel-' + uniqueId
-    const dialogDescriptionId = 'TTsettingsDialogDescription-' + uniqueId
-
-    return super.createEl('div', {
-      className: 'vjs-settings-dialog vjs-modal-overlay',
-      innerHTML: '',
-      tabIndex: -1
-    }, {
-      'role': 'dialog',
-      'aria-labelledby': dialogLabelId,
-      'aria-describedby': dialogDescriptionId
-    })
-  }
-
-}
-
-SettingsButton.prototype.controlText_ = 'Settings'
-
 Component.registerComponent('SettingsButton', SettingsButton)
-Component.registerComponent('SettingsDialog', SettingsDialog)
-Component.registerComponent('SettingsPanel', SettingsPanel)
-Component.registerComponent('SettingsPanelChild', SettingsPanelChild)
 
-export { SettingsButton, SettingsDialog, SettingsPanel, SettingsPanelChild }
+export { SettingsButton }

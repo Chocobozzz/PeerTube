@@ -1,12 +1,16 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import { Player } from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
+import { AutoResolutionUpdateData, ResolutionUpdateData } from '../peertube-videojs-typings'
 
-import { AutoResolutionUpdateData, ResolutionUpdateData, VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+const MenuItem = videojs.getComponent('MenuItem')
 
-const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
+export interface ResolutionMenuItemOptions extends videojs.MenuItemOptions {
+  labels?: { [id: number]: string }
+  id: number
+  callback: Function
+}
+
 class ResolutionMenuItem extends MenuItem {
-  private readonly id: number
+  private readonly resolutionId: number
   private readonly label: string
   // Only used for the automatic item
   private readonly labels: { [id: number]: string }
@@ -15,7 +19,7 @@ class ResolutionMenuItem extends MenuItem {
   private autoResolutionPossible: boolean
   private currentResolutionLabel: string
 
-  constructor (player: Player, options: any) {
+  constructor (player: VideoJsPlayer, options?: ResolutionMenuItemOptions) {
     options.selectable = true
 
     super(player, options)
@@ -23,40 +27,40 @@ class ResolutionMenuItem extends MenuItem {
     this.autoResolutionPossible = true
     this.currentResolutionLabel = ''
 
+    this.resolutionId = options.id
     this.label = options.label
     this.labels = options.labels
-    this.id = options.id
     this.callback = options.callback
 
     player.peertube().on('resolutionChange', (_: any, data: ResolutionUpdateData) => this.updateSelection(data))
 
     // We only want to disable the "Auto" item
-    if (this.id === -1) {
+    if (this.resolutionId === -1) {
       player.peertube().on('autoResolutionChange', (_: any, data: AutoResolutionUpdateData) => this.updateAutoResolution(data))
     }
   }
 
   handleClick (event: any) {
     // Auto button disabled?
-    if (this.autoResolutionPossible === false && this.id === -1) return
+    if (this.autoResolutionPossible === false && this.resolutionId === -1) return
 
     super.handleClick(event)
 
-    this.callback(this.id, 'video')
+    this.callback(this.resolutionId, 'video')
   }
 
   updateSelection (data: ResolutionUpdateData) {
-    if (this.id === -1) {
+    if (this.resolutionId === -1) {
       this.currentResolutionLabel = this.labels[data.id]
     }
 
     // Automatic resolution only
     if (data.auto === true) {
-      this.selected(this.id === -1)
+      this.selected(this.resolutionId === -1)
       return
     }
 
-    this.selected(this.id === data.id)
+    this.selected(this.resolutionId === data.id)
   }
 
   updateAutoResolution (data: AutoResolutionUpdateData) {
@@ -71,13 +75,13 @@ class ResolutionMenuItem extends MenuItem {
   }
 
   getLabel () {
-    if (this.id === -1) {
+    if (this.resolutionId === -1) {
       return this.label + ' <small>' + this.currentResolutionLabel + '</small>'
     }
 
     return this.label
   }
 }
-MenuItem.registerComponent('ResolutionMenuItem', ResolutionMenuItem)
+videojs.registerComponent('ResolutionMenuItem', ResolutionMenuItem)
 
 export { ResolutionMenuItem }

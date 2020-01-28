@@ -1,17 +1,15 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
 
 import * as WebTorrent from 'webtorrent'
 import { renderVideo } from './video-renderer'
-import { LoadedQualityData, PlayerNetworkInfo, VideoJSComponentInterface, WebtorrentPluginOptions } from '../peertube-videojs-typings'
+import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
 import { getRtcConfig, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
   getStoredMute,
-  getStoredVolume,
   getStoredP2PEnabled,
+  getStoredVolume,
   saveAverageBandwidth
 } from '../peertube-player-local-storage'
 import { VideoFile } from '@shared/models'
@@ -24,13 +22,14 @@ type PlayOptions = {
   delay?: number
 }
 
-const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin')
+
 class WebTorrentPlugin extends Plugin {
   private readonly playerElement: HTMLVideoElement
 
   private readonly autoplay: boolean = false
   private readonly startTime: number = 0
-  private readonly savePlayerSrcFunction: Function
+  private readonly savePlayerSrcFunction: VideoJsPlayer['src']
   private readonly videoFiles: VideoFile[]
   private readonly videoDuration: number
   private readonly CONSTANTS = {
@@ -49,7 +48,6 @@ class WebTorrentPlugin extends Plugin {
     dht: false
   })
 
-  private player: any
   private currentVideoFile: VideoFile
   private torrent: WebTorrent.Torrent
 
@@ -70,8 +68,8 @@ class WebTorrentPlugin extends Plugin {
 
   private downloadSpeeds: number[] = []
 
-  constructor (player: videojs.Player, options: WebtorrentPluginOptions) {
-    super(player, options)
+  constructor (player: VideoJsPlayer, options?: WebtorrentPluginOptions) {
+    super(player)
 
     this.startTime = timeToInt(options.startTime)
 
@@ -147,12 +145,12 @@ class WebTorrentPlugin extends Plugin {
     }
 
     // Do not display error to user because we will have multiple fallback
-    this.disableErrorDisplay()
+    this.disableErrorDisplay();
 
     // Hack to "simulate" src link in video.js >= 6
     // Without this, we can't play the video after pausing it
     // https://github.com/videojs/video.js/blob/master/src/js/player.js#L1633
-    this.player.src = () => true
+    (this.player as any).src = () => true
     const oldPlaybackRate = this.player.playbackRate()
 
     const previousVideoFile = this.currentVideoFile
@@ -333,7 +331,7 @@ class WebTorrentPlugin extends Plugin {
 
     const playPromise = this.player.play()
     if (playPromise !== undefined) {
-      return playPromise.then(done)
+      return playPromise.then(() => done())
                         .catch((err: Error) => {
                           if (err.message.indexOf('The play() request was interrupted by a call to pause()') !== -1) {
                             return
@@ -426,8 +424,8 @@ class WebTorrentPlugin extends Plugin {
     }
 
     // Proxy first play
-    const oldPlay = this.player.play.bind(this.player)
-    this.player.play = () => {
+    const oldPlay = this.player.play.bind(this.player);
+    (this.player as any).play = () => {
       this.player.addClass('vjs-has-big-play-button-clicked')
       this.player.play = oldPlay
 
@@ -619,7 +617,7 @@ class WebTorrentPlugin extends Plugin {
         video: qualityLevelsPayload
       }
     }
-    this.player.tech_.trigger('loadedqualitydata', payload)
+    this.player.tech(true).trigger('loadedqualitydata', payload)
   }
 
   private buildQualityLabel (file: VideoFile) {
@@ -651,7 +649,7 @@ class WebTorrentPlugin extends Plugin {
       return
     }
 
-    for (let i = 0; i < qualityLevels; i++) {
+    for (let i = 0; i < qualityLevels.length; i++) {
       const q = this.player.qualityLevels[i]
       if (q.height === resolutionId) qualityLevels.selectedIndex = i
     }

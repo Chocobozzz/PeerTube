@@ -1,22 +1,19 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import { Player } from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
 
-import { LoadedQualityData, VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import { LoadedQualityData } from '../peertube-videojs-typings'
 import { ResolutionMenuItem } from './resolution-menu-item'
 
-const Menu: VideoJSComponentInterface = videojsUntyped.getComponent('Menu')
-const MenuButton: VideoJSComponentInterface = videojsUntyped.getComponent('MenuButton')
+const Menu = videojs.getComponent('Menu')
+const MenuButton = videojs.getComponent('MenuButton')
 class ResolutionMenuButton extends MenuButton {
-  label: HTMLElement
-  labelEl_: any
-  player: Player
+  labelEl_: HTMLElement
 
-  constructor (player: Player, options: any) {
+  constructor (player: VideoJsPlayer, options?: videojs.MenuButtonOptions) {
     super(player, options)
-    this.player = player
 
-    player.tech_.on('loadedqualitydata', (e: any, data: any) => this.buildQualities(data))
+    this.controlText('Quality')
+
+    player.tech(true).on('loadedqualitydata', (e: any, data: any) => this.buildQualities(data))
 
     player.peertube().on('resolutionChange', () => setTimeout(() => this.trigger('updateLabel'), 0))
   }
@@ -24,9 +21,9 @@ class ResolutionMenuButton extends MenuButton {
   createEl () {
     const el = super.createEl()
 
-    this.labelEl_ = videojsUntyped.dom.createEl('div', {
+    this.labelEl_ = videojs.dom.createEl('div', {
       className: 'vjs-resolution-value'
-    })
+    }) as HTMLElement
 
     el.appendChild(this.labelEl_)
 
@@ -55,7 +52,7 @@ class ResolutionMenuButton extends MenuButton {
 
       for (const child of children) {
         if (component !== child) {
-          child.selected(false)
+          (child as videojs.MenuItem).selected(false)
         }
       }
     })
@@ -76,7 +73,7 @@ class ResolutionMenuButton extends MenuButton {
       if (d.id === -1) continue
 
       const label = d.id === 0
-        ? this.player.localize('Audio-only')
+        ? this.player().localize('Audio-only')
         : d.label
 
       this.menu.addChild(new ResolutionMenuItem(
@@ -110,6 +107,5 @@ class ResolutionMenuButton extends MenuButton {
     this.trigger('menuChanged')
   }
 }
-ResolutionMenuButton.prototype.controlText_ = 'Quality'
 
-MenuButton.registerComponent('ResolutionMenuButton', ResolutionMenuButton)
+videojs.registerComponent('ResolutionMenuButton', ResolutionMenuButton)

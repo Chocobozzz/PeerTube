@@ -1,14 +1,10 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
 import './videojs-components/settings-menu-button'
 import {
   PeerTubePluginOptions,
   ResolutionUpdateData,
   UserWatching,
-  VideoJSCaption,
-  VideoJSComponentInterface,
-  videojsUntyped
+  VideoJSCaption
 } from './peertube-videojs-typings'
 import { isMobile, timeToInt } from './utils'
 import {
@@ -20,7 +16,8 @@ import {
   saveVolumeInStore
 } from './peertube-player-local-storage'
 
-const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin')
+
 class PeerTubePlugin extends Plugin {
   private readonly videoViewUrl: string
   private readonly videoDuration: number
@@ -28,7 +25,6 @@ class PeerTubePlugin extends Plugin {
     USER_WATCHING_VIDEO_INTERVAL: 5000 // Every 5 seconds, notify the user is watching the video
   }
 
-  private player: any
   private videoCaptions: VideoJSCaption[]
   private defaultSubtitle: string
 
@@ -40,8 +36,8 @@ class PeerTubePlugin extends Plugin {
   private mouseInControlBar = false
   private readonly savedInactivityTimeout: number
 
-  constructor (player: videojs.Player, options: PeerTubePluginOptions) {
-    super(player, options)
+  constructor (player: VideoJsPlayer, options?: PeerTubePluginOptions) {
+    super(player)
 
     this.videoViewUrl = options.videoViewUrl
     this.videoDuration = options.videoDuration
@@ -67,7 +63,7 @@ class PeerTubePlugin extends Plugin {
         this.player.p2pMediaLoader().on('resolutionChange', (_: any, d: any) => this.handleResolutionChange(d))
       }
 
-      this.player.tech_.on('loadedqualitydata', () => {
+      this.player.tech(true).on('loadedqualitydata', () => {
         setTimeout(() => {
           // Replay a resolution change, now we loaded all quality data
           if (this.lastResolutionChange) this.handleResolutionChange(this.lastResolutionChange)
@@ -102,7 +98,7 @@ class PeerTubePlugin extends Plugin {
       }
 
       this.player.textTracks().on('change', () => {
-        const showing = this.player.textTracks().tracks_.find((t: { kind: string, mode: string }) => {
+        const showing = this.player.textTracks().tracks_.find(t => {
           return t.kind === 'captions' && t.mode === 'showing'
         })
 
@@ -262,7 +258,7 @@ class PeerTubePlugin extends Plugin {
 
   // Thanks: https://github.com/videojs/video.js/issues/4460#issuecomment-312861657
   private initSmoothProgressBar () {
-    const SeekBar = videojsUntyped.getComponent('SeekBar')
+    const SeekBar = videojs.getComponent('SeekBar') as any
     SeekBar.prototype.getPercent = function getPercent () {
       // Allows for smooth scrubbing, when player can't keep up.
       // const time = (this.player_.scrubbing()) ?

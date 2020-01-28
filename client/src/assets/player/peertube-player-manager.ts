@@ -1,21 +1,26 @@
 import { VideoFile } from '../../../../shared/models/videos'
-// @ts-ignore
-import * as videojs from 'video.js'
+import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
 import 'videojs-hotkeys'
 import 'videojs-dock'
 import 'videojs-contextmenu-ui'
 import 'videojs-contrib-quality-levels'
+import './upnext/end-card'
 import './upnext/upnext-plugin'
 import './bezels/bezels-plugin'
 import './peertube-plugin'
 import './videojs-components/next-video-button'
-import './videojs-components/peertube-link-button'
-import './videojs-components/resolution-menu-button'
-import './videojs-components/settings-menu-button'
 import './videojs-components/p2p-info-button'
+import './videojs-components/peertube-link-button'
 import './videojs-components/peertube-load-progress-bar'
+import './videojs-components/resolution-menu-button'
+import './videojs-components/resolution-menu-item'
+import './videojs-components/settings-dialog'
+import './videojs-components/settings-menu-button'
+import './videojs-components/settings-menu-item'
+import './videojs-components/settings-panel'
+import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
-import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions, videojsUntyped } from './peertube-videojs-typings'
+import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions } from './peertube-videojs-typings'
 import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig } from './utils'
 import { isDefaultLocale } from '../../../../shared/models/i18n/i18n'
 import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
@@ -24,12 +29,17 @@ import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
 import { TranslationsManager } from './translations-manager'
 
+// For VideoJS
+(window as any).WebVTT = require('vtt.js/lib/vtt.js').WebVTT;
+
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
-videojsUntyped.getComponent('PlaybackRateMenuButton').prototype.controlText_ = 'Speed'
+(videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
+
+const CaptionsButton = videojs.getComponent('CaptionsButton') as any
 // Change Captions to Subtitles/CC
-videojsUntyped.getComponent('CaptionsButton').prototype.controlText_ = 'Subtitles/CC'
+CaptionsButton.prototype.controlText_ = 'Subtitles/CC'
 // We just want to display 'Off' instead of 'captions off', keep a space so the variable == true (hacky I know)
-videojsUntyped.getComponent('CaptionsButton').prototype.label_ = ' '
+CaptionsButton.prototype.label_ = ' '
 
 export type PlayerMode = 'webtorrent' | 'p2p-media-loader'
 
@@ -92,9 +102,9 @@ export type PeertubePlayerManagerOptions = {
 
 export class PeertubePlayerManager {
   private static playerElementClassName: string
-  private static onPlayerChange: (player: any) => void
+  private static onPlayerChange: (player: VideoJsPlayer) => void
 
-  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: any) => void) {
+  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: VideoJsPlayer) => void) {
     let p2pMediaLoader: any
 
     this.onPlayerChange = onPlayerChange
@@ -114,12 +124,12 @@ export class PeertubePlayerManager {
 
     const self = this
     return new Promise(res => {
-      videojs(options.common.playerElement, videojsOptions, function (this: any) {
+      videojs(options.common.playerElement, videojsOptions, function (this: VideoJsPlayer) {
         const player = this
 
         let alreadyFallback = false
 
-        player.tech_.one('error', () => {
+        player.tech(true).one('error', () => {
           if (!alreadyFallback) self.maybeFallbackToWebTorrent(mode, player, options)
           alreadyFallback = true
         })
@@ -164,7 +174,7 @@ export class PeertubePlayerManager {
     const videojsOptions = this.getVideojsOptions(mode, options)
 
     const self = this
-    videojs(newVideoElement, videojsOptions, function (this: any) {
+    videojs(newVideoElement, videojsOptions, function (this: VideoJsPlayer) {
       const player = this
 
       self.addContextMenu(mode, player, options.common.embedUrl)
@@ -173,7 +183,11 @@ export class PeertubePlayerManager {
     })
   }
 
-  private static getVideojsOptions (mode: PlayerMode, options: PeertubePlayerManagerOptions, p2pMediaLoaderModule?: any) {
+  private static getVideojsOptions (
+    mode: PlayerMode,
+    options: PeertubePlayerManagerOptions,
+    p2pMediaLoaderModule?: any
+  ): VideoJsPlayerOptions {
     const commonOptions = options.common
 
     let autoplay = commonOptions.autoplay
@@ -213,7 +227,7 @@ export class PeertubePlayerManager {
       html5,
 
       // We don't use text track settings for now
-      textTrackSettings: false,
+      textTrackSettings: false as any, // FIXME: typings
       controls: commonOptions.controls !== undefined ? commonOptions.controls : true,
       loop: commonOptions.loop !== undefined ? commonOptions.loop : false,
 
@@ -237,7 +251,7 @@ export class PeertubePlayerManager {
           peertubeLink: commonOptions.peertubeLink,
           theaterButton: commonOptions.theaterButton,
           nextVideo: commonOptions.nextVideo
-        })
+        }) as any // FIXME: typings
       }
     }
 
@@ -406,7 +420,7 @@ export class PeertubePlayerManager {
     return children
   }
 
-  private static addContextMenu (mode: PlayerMode, player: any, videoEmbedUrl: string) {
+  private static addContextMenu (mode: PlayerMode, player: VideoJsPlayer, videoEmbedUrl: string) {
     const content = [
       {
         label: player.localize('Copy the video URL'),
@@ -416,9 +430,8 @@ export class PeertubePlayerManager {
       },
       {
         label: player.localize('Copy the video URL at the current time'),
-        listener: function () {
-          const player = this as videojs.Player
-          copyToClipboard(buildVideoLink({ startTime: player.currentTime() }))
+        listener: function (this: VideoJsPlayer) {
+          copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
         }
       },
       {
@@ -432,9 +445,8 @@ export class PeertubePlayerManager {
     if (mode === 'webtorrent') {
       content.push({
         label: player.localize('Copy magnet URI'),
-        listener: function () {
-          const player = this as videojs.Player
-          copyToClipboard(player.webtorrent().getCurrentVideoFile().magnetUri)
+        listener: function (this: VideoJsPlayer) {
+          copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
         }
       })
     }
@@ -472,7 +484,8 @@ export class PeertubePlayerManager {
               return event.key === '>'
             },
             handler: function (player: videojs.Player) {
-              player.playbackRate((player.playbackRate() + 0.1).toFixed(2))
+              const newValue = Math.min(player.playbackRate() + 0.1, 5)
+              player.playbackRate(parseFloat(newValue.toFixed(2)))
             }
           },
           decreasePlaybackRateKey: {
@@ -480,7 +493,8 @@ export class PeertubePlayerManager {
               return event.key === '<'
             },
             handler: function (player: videojs.Player) {
-              player.playbackRate((player.playbackRate() - 0.1).toFixed(2))
+              const newValue = Math.max(player.playbackRate() - 0.1, 0.10)
+              player.playbackRate(parseFloat(newValue.toFixed(2)))
             }
           },
           frameByFrame: {

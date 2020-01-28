@@ -1,57 +1,63 @@
-// Author: Yanko Shterev
-// Thanks https://github.com/yshterev/videojs-settings-menu
-
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
-
+// Thanks to Yanko Shterev: https://github.com/yshterev/videojs-settings-menu
 import { toTitleCase } from '../utils'
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
+import videojs, { VideoJsPlayer } from 'video.js'
+import { SettingsButton } from './settings-menu-button'
+import { SettingsDialog } from './settings-dialog'
+import { SettingsPanel } from './settings-panel'
+import { SettingsPanelChild } from './settings-panel-child'
 
-const MenuItem: VideoJSComponentInterface = videojsUntyped.getComponent('MenuItem')
-const component: VideoJSComponentInterface = videojsUntyped.getComponent('Component')
+const MenuItem = videojs.getComponent('MenuItem')
+const component = videojs.getComponent('Component')
+
+export interface SettingsMenuItemOptions extends videojs.MenuItemOptions {
+  entry: string
+  menuButton: SettingsButton
+}
 
 class SettingsMenuItem extends MenuItem {
-  settingsButton: any
-  dialog: any
-  mainMenu: any
-  panel: any
-  panelChild: any
-  panelChildEl: any
-  size: any
+  settingsButton: SettingsButton
+  dialog: SettingsDialog
+  mainMenu: videojs.Menu
+  panel: SettingsPanel
+  panelChild: SettingsPanelChild
+  panelChildEl: HTMLElement
+  size: number[]
   menuToLoad: string
-  subMenu: any
+  subMenu: SettingsButton
 
-  submenuClickHandler: Function
-  transitionEndHandler: Function
+  submenuClickHandler: typeof SettingsMenuItem.prototype.onSubmenuClick
+  transitionEndHandler: typeof SettingsMenuItem.prototype.onTransitionEnd
 
-  settingsSubMenuTitleEl_: any
-  settingsSubMenuValueEl_: any
-  settingsSubMenuEl_: any
+  settingsSubMenuTitleEl_: HTMLElement
+  settingsSubMenuValueEl_: HTMLElement
+  settingsSubMenuEl_: HTMLElement
 
-  constructor (player: videojs.Player, options: any, entry: string, menuButton: VideoJSComponentInterface) {
+  constructor (player: VideoJsPlayer, options?: SettingsMenuItemOptions) {
     super(player, options)
 
-    this.settingsButton = menuButton
+    this.settingsButton = options.menuButton
     this.dialog = this.settingsButton.dialog
     this.mainMenu = this.settingsButton.menu
     this.panel = this.dialog.getChild('settingsPanel')
     this.panelChild = this.panel.getChild('settingsPanelChild')
-    this.panelChildEl = this.panelChild.el_
+    this.panelChildEl = this.panelChild.el() as HTMLElement
 
     this.size = null
 
     // keep state of what menu type is loading next
     this.menuToLoad = 'mainmenu'
 
-    const subMenuName = toTitleCase(entry)
-    const SubMenuComponent = videojsUntyped.getComponent(subMenuName)
+    const subMenuName = toTitleCase(options.entry)
+    const SubMenuComponent = videojs.getComponent(subMenuName)
 
     if (!SubMenuComponent) {
       throw new Error(`Component ${subMenuName} does not exist`)
     }
-    this.subMenu = new SubMenuComponent(this.player(), options, menuButton, this)
-    const subMenuClass = this.subMenu.buildCSSClass().split(' ')[0]
+
+    const newOptions = Object.assign({}, options, { entry: options.menuButton, menuButton: this })
+
+    this.subMenu = new SubMenuComponent(this.player(), newOptions) as any // FIXME: typings
+    const subMenuClass = this.subMenu.buildCSSClass().split(' ')[ 0 ]
     this.settingsSubMenuEl_.className += ' ' + subMenuClass
 
     this.eventHandlers()
@@ -72,7 +78,7 @@ class SettingsMenuItem extends MenuItem {
           player.on('captionsChanged', () => {
             setTimeout(() => {
               this.settingsSubMenuEl_.innerHTML = ''
-              this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
+              this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el())
               this.update()
               this.bindClickEvents()
             }, 0)
@@ -119,27 +125,27 @@ class SettingsMenuItem extends MenuItem {
    * @method createEl
    */
   createEl () {
-    const el = videojsUntyped.dom.createEl('li', {
+    const el = videojs.dom.createEl('li', {
       className: 'vjs-menu-item'
     })
 
-    this.settingsSubMenuTitleEl_ = videojsUntyped.dom.createEl('div', {
+    this.settingsSubMenuTitleEl_ = videojs.dom.createEl('div', {
       className: 'vjs-settings-sub-menu-title'
-    })
+    }) as HTMLElement
 
     el.appendChild(this.settingsSubMenuTitleEl_)
 
-    this.settingsSubMenuValueEl_ = videojsUntyped.dom.createEl('div', {
+    this.settingsSubMenuValueEl_ = videojs.dom.createEl('div', {
       className: 'vjs-settings-sub-menu-value'
-    })
+    }) as HTMLElement
 
     el.appendChild(this.settingsSubMenuValueEl_)
 
-    this.settingsSubMenuEl_ = videojsUntyped.dom.createEl('div', {
+    this.settingsSubMenuEl_ = videojs.dom.createEl('div', {
       className: 'vjs-settings-sub-menu'
-    })
+    }) as HTMLElement
 
-    return el
+    return el as HTMLLIElement
   }
 
   /**
@@ -147,17 +153,17 @@ class SettingsMenuItem extends MenuItem {
    *
    * @method handleClick
    */
-  handleClick () {
+  handleClick (event: videojs.EventTarget.Event) {
     this.menuToLoad = 'submenu'
     // Remove open class to ensure only the open submenu gets this class
-    videojsUntyped.dom.removeClass(this.el_, 'open')
+    videojs.dom.removeClass(this.el(), 'open')
 
-    super.handleClick()
+    super.handleClick(event);
 
-    this.mainMenu.el_.style.opacity = '0'
+    (this.mainMenu.el() as HTMLElement).style.opacity = '0'
     // Whether to add or remove vjs-hidden class on the settingsSubMenuEl element
-    if (videojsUntyped.dom.hasClass(this.settingsSubMenuEl_, 'vjs-hidden')) {
-      videojsUntyped.dom.removeClass(this.settingsSubMenuEl_, 'vjs-hidden')
+    if (videojs.dom.hasClass(this.settingsSubMenuEl_, 'vjs-hidden')) {
+      videojs.dom.removeClass(this.settingsSubMenuEl_, 'vjs-hidden')
 
       // animation not played without timeout
       setTimeout(() => {
@@ -167,7 +173,7 @@ class SettingsMenuItem extends MenuItem {
 
       this.settingsButton.setDialogSize(this.size)
     } else {
-      videojsUntyped.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
+      videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
     }
   }
 
@@ -178,9 +184,9 @@ class SettingsMenuItem extends MenuItem {
    */
   createBackButton () {
     const button = this.subMenu.menu.addChild('MenuItem', {}, 0)
-    button.name_ = 'BackButton'
-    button.addClass('vjs-back-button')
-    button.el_.innerHTML = this.player_.localize(this.subMenu.controlText_)
+
+    button.addClass('vjs-back-button');
+    (button.el() as HTMLElement).innerHTML = this.player().localize(this.subMenu.controlText())
   }
 
   /**
@@ -189,17 +195,17 @@ class SettingsMenuItem extends MenuItem {
    * @method PrefixedEvent
    */
   PrefixedEvent (element: any, type: any, callback: any, action = 'addEvent') {
-    const prefix = ['webkit', 'moz', 'MS', 'o', '']
+    const prefix = [ 'webkit', 'moz', 'MS', 'o', '' ]
 
     for (let p = 0; p < prefix.length; p++) {
-      if (!prefix[p]) {
+      if (!prefix[ p ]) {
         type = type.toLowerCase()
       }
 
       if (action === 'addEvent') {
-        element.addEventListener(prefix[p] + type, callback, false)
+        element.addEventListener(prefix[ p ] + type, callback, false)
       } else if (action === 'removeEvent') {
-        element.removeEventListener(prefix[p] + type, callback, false)
+        element.removeEventListener(prefix[ p ] + type, callback, false)
       }
     }
   }
@@ -211,7 +217,7 @@ class SettingsMenuItem extends MenuItem {
 
     if (this.menuToLoad === 'mainmenu') {
       // hide submenu
-      videojsUntyped.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
+      videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
 
       // reset opacity to 0
       this.settingsSubMenuEl_.style.opacity = '0'
@@ -219,25 +225,27 @@ class SettingsMenuItem extends MenuItem {
   }
 
   reset () {
-    videojsUntyped.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
+    videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
     this.settingsSubMenuEl_.style.opacity = '0'
     this.setMargin()
   }
 
   loadMainMenu () {
+    const mainMenuEl = this.mainMenu.el() as HTMLElement
     this.menuToLoad = 'mainmenu'
     this.mainMenu.show()
-    this.mainMenu.el_.style.opacity = '0'
+    mainMenuEl.style.opacity = '0'
 
     // back button will always take you to main menu, so set dialog sizes
-    this.settingsButton.setDialogSize([this.mainMenu.width, this.mainMenu.height])
+    const mainMenuAny = this.mainMenu as any
+    this.settingsButton.setDialogSize([ mainMenuAny.width, mainMenuAny.height ])
 
     // animation not triggered without timeout (some async stuff ?!?)
     setTimeout(() => {
       // animate margin and opacity before hiding the submenu
       // this triggers CSS Transition event
       this.setMargin()
-      this.mainMenu.el_.style.opacity = '1'
+      mainMenuEl.style.opacity = '1'
     }, 0)
   }
 
@@ -251,8 +259,8 @@ class SettingsMenuItem extends MenuItem {
       this.update()
     })
 
-    this.settingsSubMenuTitleEl_.innerHTML = this.player_.localize(this.subMenu.controlText_)
-    this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el_)
+    this.settingsSubMenuTitleEl_.innerHTML = this.player().localize(this.subMenu.controlText())
+    this.settingsSubMenuEl_.appendChild(this.subMenu.menu.el())
     this.panelChildEl.appendChild(this.settingsSubMenuEl_)
     this.update()
 
@@ -283,7 +291,8 @@ class SettingsMenuItem extends MenuItem {
     // or sets options_['selected'] on the selected playback rate.
     // Thus we get the submenu value based on the labelEl of playbackRateMenuButton
     if (subMenu === 'PlaybackRateMenuButton') {
-      setTimeout(() => this.settingsSubMenuValueEl_.innerHTML = this.subMenu.labelEl_.innerHTML, 250)
+      const html = (this.subMenu as any).labelEl_.innerHTML
+      setTimeout(() => this.settingsSubMenuValueEl_.innerHTML = html, 250)
     } else {
       // Loop trough the submenu items to find the selected child
       for (const subMenuItem of this.subMenu.menu.children_) {
@@ -292,13 +301,15 @@ class SettingsMenuItem extends MenuItem {
         }
 
         if (subMenuItem.hasClass('vjs-selected')) {
+          const subMenuItemUntyped = subMenuItem as any
+
           // Prefer to use the function
-          if (typeof subMenuItem.getLabel === 'function') {
-            this.settingsSubMenuValueEl_.innerHTML = subMenuItem.getLabel()
+          if (typeof subMenuItemUntyped.getLabel === 'function') {
+            this.settingsSubMenuValueEl_.innerHTML = subMenuItemUntyped.getLabel()
             break
           }
 
-          this.settingsSubMenuValueEl_.innerHTML = subMenuItem.options_.label
+          this.settingsSubMenuValueEl_.innerHTML = subMenuItemUntyped.options_.label
         }
       }
     }
@@ -313,7 +324,7 @@ class SettingsMenuItem extends MenuItem {
       if (!(item instanceof component)) {
         continue
       }
-      item.on(['tap', 'click'], this.submenuClickHandler)
+      item.on([ 'tap', 'click' ], this.submenuClickHandler)
     }
   }
 
@@ -321,11 +332,11 @@ class SettingsMenuItem extends MenuItem {
   // if number of submenu items change dynamically more logic will be needed
   setSize () {
     this.dialog.removeClass('vjs-hidden')
-    videojsUntyped.dom.removeClass(this.settingsSubMenuEl_, 'vjs-hidden')
+    videojs.dom.removeClass(this.settingsSubMenuEl_, 'vjs-hidden')
     this.size = this.settingsButton.getComponentSize(this.settingsSubMenuEl_)
     this.setMargin()
     this.dialog.addClass('vjs-hidden')
-    videojsUntyped.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
+    videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
   }
 
   setMargin () {
@@ -341,19 +352,19 @@ class SettingsMenuItem extends MenuItem {
    */
   hideSubMenu () {
     // after removing settings item this.el_ === null
-    if (!this.el_) {
+    if (!this.el()) {
       return
     }
 
-    if (videojsUntyped.dom.hasClass(this.el_, 'open')) {
-      videojsUntyped.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
-      videojsUntyped.dom.removeClass(this.el_, 'open')
+    if (videojs.dom.hasClass(this.el(), 'open')) {
+      videojs.dom.addClass(this.settingsSubMenuEl_, 'vjs-hidden')
+      videojs.dom.removeClass(this.el(), 'open')
     }
   }
 
 }
 
-SettingsMenuItem.prototype.contentElType = 'button'
-videojsUntyped.registerComponent('SettingsMenuItem', SettingsMenuItem)
+(SettingsMenuItem as any).prototype.contentElType = 'button'
+videojs.registerComponent('SettingsMenuItem', SettingsMenuItem)
 
 export { SettingsMenuItem }

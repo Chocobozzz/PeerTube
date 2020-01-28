@@ -1,7 +1,5 @@
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import * as videojs from 'video.js'
-import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo, VideoJSComponentInterface } from '../peertube-videojs-typings'
+import videojs, { VideoJsPlayer } from 'video.js'
+import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../peertube-videojs-typings'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
 import { Events, Segment } from 'p2p-media-loader-core'
 import { timeToInt } from '../utils'
@@ -10,7 +8,7 @@ import { timeToInt } from '../utils'
 window['videojs'] = videojs
 require('@streamroot/videojs-hlsjs-plugin')
 
-const Plugin: VideoJSComponentInterface = videojs.getPlugin('plugin')
+const Plugin = videojs.getPlugin('plugin')
 class P2pMediaLoaderPlugin extends Plugin {
 
   private readonly CONSTANTS = {
@@ -37,12 +35,13 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private networkInfoInterval: any
 
-  constructor (player: videojs.Player, options: P2PMediaLoaderPluginOptions) {
-    super(player, options)
+  constructor (player: VideoJsPlayer, options?: P2PMediaLoaderPluginOptions) {
+    super(player)
 
     this.options = options
 
-    if (!videojs.Html5Hlsjs) {
+    // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
+    if (!(videojs as any).Html5Hlsjs) {
       const message = 'HLS.js does not seem to be supported.'
       console.warn(message)
 
@@ -50,7 +49,8 @@ class P2pMediaLoaderPlugin extends Plugin {
       return
     }
 
-    videojs.Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
+    // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
+    (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
       this.hlsjs = hlsjs
     })
 
@@ -84,8 +84,9 @@ class P2pMediaLoaderPlugin extends Plugin {
   private initialize () {
     initHlsJsPlayer(this.hlsjs)
 
-    const tech = this.player.tech_
-    this.p2pEngine = tech.options_.hlsjsConfig.loader.getEngine()
+    // FIXME: typings
+    const options = this.player.tech(true).options_ as any
+    this.p2pEngine = options.hlsjsConfig.loader.getEngine()
 
     // Avoid using constants to not import hls.hs
     // https://github.com/video-dev/hls.js/blob/master/src/events.js#L37

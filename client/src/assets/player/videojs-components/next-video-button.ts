@@ -1,21 +1,25 @@
-import { VideoJSComponentInterface, videojsUntyped } from '../peertube-videojs-typings'
-// FIXME: something weird with our path definition in tsconfig and typings
-// @ts-ignore
-import { Player } from 'video.js'
+import videojs, { VideoJsPlayer } from 'video.js'
 
-const Button: VideoJSComponentInterface = videojsUntyped.getComponent('Button')
+const Button = videojs.getComponent('Button')
+
+export interface NextVideoButtonOptions extends videojs.ComponentOptions {
+  handler: Function
+}
 
 class NextVideoButton extends Button {
+  private readonly nextVideoButtonOptions: NextVideoButtonOptions
 
-  constructor (player: Player, options: any) {
+  constructor (player: VideoJsPlayer, options?: NextVideoButtonOptions) {
     super(player, options)
+
+    this.nextVideoButtonOptions = options
   }
 
   createEl () {
-    const button = videojsUntyped.dom.createEl('button', {
+    const button = videojs.dom.createEl('button', {
       className: 'vjs-next-video'
-    })
-    const nextIcon = videojsUntyped.dom.createEl('span', {
+    }) as HTMLButtonElement
+    const nextIcon = videojs.dom.createEl('span', {
       className: 'icon icon-next'
     })
     button.appendChild(nextIcon)
@@ -26,11 +30,8 @@ class NextVideoButton extends Button {
   }
 
   handleClick () {
-    this.options_.handler()
+    this.nextVideoButtonOptions.handler()
   }
-
 }
 
-NextVideoButton.prototype.controlText_ = 'Next video'
-
-NextVideoButton.registerComponent('NextVideoButton', NextVideoButton)
+videojs.registerComponent('NextVideoButton', NextVideoButton)
