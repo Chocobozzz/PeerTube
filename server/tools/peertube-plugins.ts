@@ -3,15 +3,11 @@ registerTSPaths()
 
 import * as program from 'commander'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
-import { getAccessToken } from '../../shared/extra-utils/users/login'
-import { getMyUserInformation } from '../../shared/extra-utils/users/users'
 import { installPlugin, listPlugins, uninstallPlugin, updatePlugin } from '../../shared/extra-utils/server/plugins'
-import { getServerCredentials } from './cli'
-import { User, UserRole } from '../../shared/models/users'
+import { getAdminTokenOrDie, getServerCredentials } from './cli'
 import { PeerTubePlugin } from '../../shared/models/plugins/peertube-plugin.model'
 import { isAbsolute } from 'path'
-
-const Table = require('cli-table')
+import * as CliTable3 from 'cli-table3'
 
 program
   .name('plugins')
@@ -82,10 +78,10 @@ async function pluginsListCLI () {
   })
   const plugins: PeerTubePlugin[] = res.body.data
 
-  const table = new Table({
+  const table = new CliTable3({
     head: ['name', 'version', 'homepage'],
     colWidths: [ 50, 10, 50 ]
-  })
+  }) as CliTable3.HorizontalTable
 
   for (const plugin of plugins) {
     const npmName = plugin.type === PluginType.PLUGIN
@@ -191,17 +187,4 @@ async function uninstallPluginCLI (options: any) {
 
   console.log('Plugin uninstalled.')
   process.exit(0)
-}
-
-async function getAdminTokenOrDie (url: string, username: string, password: string) {
-  const accessToken = await getAccessToken(url, username, password)
-  const resMe = await getMyUserInformation(url, accessToken)
-  const me: User = resMe.body
-
-  if (me.role !== UserRole.ADMINISTRATOR) {
-    console.error('Cannot list plugins if you are not administrator.')
-    process.exit(-1)
-  }
-
-  return accessToken
 }

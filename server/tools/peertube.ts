@@ -22,6 +22,7 @@ program
   .command('watch', 'watch a video in the terminal ✩°｡⋆').alias('w')
   .command('repl', 'initiate a REPL to access internals')
   .command('plugins [action]', 'manage instance plugins/themes').alias('p')
+  .command('redundancy [action]', 'manage instance redundancies').alias('r')
 
 /* Not Yet Implemented */
 program

@@ -6,8 +6,7 @@ import * as prompt from 'prompt'
 import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
 import { getAccessToken, login } from '../../shared/extra-utils'
-
-const Table = require('cli-table')
+import * as CliTable3 from 'cli-table3'
 
 async function delInstance (url: string) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
@@ -108,10 +107,10 @@ program
   .action(async () => {
     const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
-    const table = new Table({
+    const table = new CliTable3({
       head: ['instance', 'login'],
       colWidths: [30, 30]
-    })
+    }) as CliTable3.HorizontalTable
 
     settings.remotes.forEach(element => {
       if (!netrc.machines[element]) return

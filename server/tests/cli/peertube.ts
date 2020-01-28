@@ -6,15 +6,15 @@ import {
   addVideoChannel,
   buildAbsoluteFixturePath,
   cleanupTests,
-  createUser,
+  createUser, doubleFollow,
   execCLI,
   flushAndRunServer,
-  getEnvCli,
+  getEnvCli, getLocalIdByUUID,
   getVideo,
   getVideosList,
   getVideosListWithToken, removeVideo,
   ServerInfo,
-  setAccessTokensToServers,
+  setAccessTokensToServers, uploadVideo, uploadVideoAndGetId,
   userLogin,
   waitJobs
 } from '../../../shared/extra-utils'
@@ -207,6 +207,75 @@ describe('Test CLI wrapper', function () {
       const res = await execCLI(`${env} ${cmd} plugins uninstall --npm-name peertube-plugin-hello-world`)
 
       expect(res).to.not.contain('peertube-plugin-hello-world')
+    })
+  })
+
+  describe('Manage video redundancies', function () {
+    let anotherServer: ServerInfo
+    let video1Server2: number
+    let servers: ServerInfo[]
+
+    before(async function () {
+      this.timeout(120000)
+
+      anotherServer = await flushAndRunServer(2)
+      await setAccessTokensToServers([ anotherServer ])
+
+      await doubleFollow(server, anotherServer)
+
+      servers = [ server, anotherServer ]
+      await waitJobs(servers)
+
+      const uuid = (await uploadVideoAndGetId({ server: anotherServer, videoName: 'super video' })).uuid
+      await waitJobs(servers)
+
+      video1Server2 = await getLocalIdByUUID(server.url, uuid)
+    })
+
+    it('Should add a redundancy', async function () {
+      this.timeout(60000)
+
+      const env = getEnvCli(server)
+
+      const params = `add --video ${video1Server2}`
+
+      await execCLI(`${env} ${cmd} redundancy ${params}`)
+
+      await waitJobs(servers)
+    })
+
+    it('Should list redundancies', async function () {
+      this.timeout(60000)
+
+      {
+        const env = getEnvCli(server)
+
+        const params = `list-my-redundancies`
+        const stdout = await execCLI(`${env} ${cmd} redundancy ${params}`)
+
+        expect(stdout).to.contain('super video')
+        expect(stdout).to.contain(`localhost:${server.port}`)
+      }
+    })
+
+    it('Should remove a redundancy', async function () {
+      this.timeout(60000)
+
+      const env = getEnvCli(server)
+
+      const params = `remove --video ${video1Server2}`
+
+      await execCLI(`${env} ${cmd} redundancy ${params}`)
+
+      await waitJobs(servers)
+
+      {
+        const env = getEnvCli(server)
+        const params = `list-my-redundancies`
+        const stdout = await execCLI(`${env} ${cmd} redundancy ${params}`)
+
+        expect(stdout).to.not.contain('super video')
+      }
     })
   })
 
