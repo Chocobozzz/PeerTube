@@ -6,6 +6,8 @@ import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
 import { Command } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 import { createLogger, format, transports } from 'winston'
+import { getAccessToken, getMyUserInformation } from '@shared/extra-utils'
+import { User, UserRole } from '@shared/models'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
@@ -13,6 +15,19 @@ if (isTestInstance()) configName += `-${getAppNumber()}`
 const config = require('application-config')(configName)
 
 const version = require('../../../package.json').version
+
+async function getAdminTokenOrDie (url: string, username: string, password: string) {
+  const accessToken = await getAccessToken(url, username, password)
+  const resMe = await getMyUserInformation(url, accessToken)
+  const me: User = resMe.body
+
+  if (me.role !== UserRole.ADMINISTRATOR) {
+    console.error('You must be an administrator.')
+    process.exit(-1)
+  }
+
+  return accessToken
+}
 
 interface Settings {
   remotes: any[],
@@ -222,5 +237,7 @@ export {
   getServerCredentials,
 
   buildCommonVideoOptions,
-  buildVideoAttributesFromCommander
+  buildVideoAttributesFromCommander,
+
+  getAdminTokenOrDie
 }
