@@ -363,7 +363,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       where: {
         userId,
         id: {
-          [Op.in]: notificationIds // FIXME: sequelize ANY seems broken
+          [Op.in]: notificationIds
         }
       }
     }

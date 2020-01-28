@@ -369,7 +369,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
           model: VideoPlaylistElementModel.unscoped(),
           where: {
             videoId: {
-              [Op.in]: videoIds // FIXME: sequelize ANY seems broken
+              [Op.in]: videoIds
             }
           },
           required: true

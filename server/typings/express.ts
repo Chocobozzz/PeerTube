@@ -21,7 +21,7 @@ import {
 } from './models'
 import { MVideoPlaylistFull, MVideoPlaylistFullSummary } from './models/video/video-playlist'
 import { MVideoImportDefault } from '@server/typings/models/video/video-import'
-import { MAccountBlocklist, MStreamingPlaylist, MVideoFile } from '@server/typings/models'
+import { MAccountBlocklist, MActorUrl, MStreamingPlaylist, MVideoFile } from '@server/typings/models'
 import { MVideoPlaylistElement, MVideoPlaylistElementVideoUrlPlaylistPrivacy } from '@server/typings/models/video/video-playlist-element'
 import { MAccountVideoRateAccountVideo } from '@server/typings/models/video/video-rate'
 import { MVideoChangeOwnershipFull } from './models/video/video-change-ownership'
@@ -74,6 +74,7 @@ declare module 'express' {
 
       account?: MAccountDefault
 
+      actorUrl?: MActorUrl
       actorFull?: MActorFull
 
       user?: MUserDefault

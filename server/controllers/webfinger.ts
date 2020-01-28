@@ -18,7 +18,7 @@ export {
 // ---------------------------------------------------------------------------
 
 function webfingerController (req: express.Request, res: express.Response) {
-  const actor = res.locals.actorFull
+  const actor = res.locals.actorUrl
 
   const json = {
     subject: req.query.resource,
@@ -32,5 +32,5 @@ function webfingerController (req: express.Request, res: express.Response) {
     ]
   }
 
-  return res.json(json).end()
+  return res.json(json)
 }

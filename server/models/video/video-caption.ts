@@ -120,7 +120,7 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
       language
     }
 
-    return (VideoCaptionModel.upsert<VideoCaptionModel>(values, { transaction, returning: true }) as any) // FIXME: typings
+    return VideoCaptionModel.upsert(values, { transaction, returning: true })
       .then(([ caption ]) => caption)
   }
 

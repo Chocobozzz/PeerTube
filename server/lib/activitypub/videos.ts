@@ -639,7 +639,6 @@ async function videoActivityObjectToDBAttributes (videoChannel: MChannelId, vide
     createdAt: new Date(videoObject.published),
     publishedAt: new Date(videoObject.published),
     originallyPublishedAt: videoObject.originallyPublishedAt ? new Date(videoObject.originallyPublishedAt) : null,
-    // FIXME: updatedAt does not seems to be considered by Sequelize
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
     likes: 0,

@@ -43,7 +43,7 @@ import {
   MActorFull,
   MActorHost,
   MActorServer,
-  MActorSummaryFormattable,
+  MActorSummaryFormattable, MActorUrl,
   MActorWithInboxes
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
@@ -276,7 +276,8 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
-  private static cache: { [ id: string ]: any } = {}
+  private static localNameCache: { [ id: string ]: any } = {}
+  private static localUrlCache: { [ id: string ]: any } = {}
 
   static load (id: number): Bluebird<MActor> {
     return ActorModel.unscoped().findByPk(id)
@@ -345,8 +346,8 @@ export class ActorModel extends Model<ActorModel> {
 
   static loadLocalByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorFull> {
     // The server actor never change, so we can easily cache it
-    if (preferredUsername === SERVER_ACTOR_NAME && ActorModel.cache[preferredUsername]) {
-      return Bluebird.resolve(ActorModel.cache[preferredUsername])
+    if (preferredUsername === SERVER_ACTOR_NAME && ActorModel.localNameCache[preferredUsername]) {
+      return Bluebird.resolve(ActorModel.localNameCache[preferredUsername])
     }
 
     const query = {
@@ -361,7 +362,33 @@ export class ActorModel extends Model<ActorModel> {
                      .findOne(query)
                      .then(actor => {
                        if (preferredUsername === SERVER_ACTOR_NAME) {
-                         ActorModel.cache[ preferredUsername ] = actor
+                         ActorModel.localNameCache[ preferredUsername ] = actor
+                       }
+
+                       return actor
+                     })
+  }
+
+  static loadLocalUrlByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorUrl> {
+    // The server actor never change, so we can easily cache it
+    if (preferredUsername === SERVER_ACTOR_NAME && ActorModel.localUrlCache[preferredUsername]) {
+      return Bluebird.resolve(ActorModel.localUrlCache[preferredUsername])
+    }
+
+    const query = {
+      attributes: [ 'url' ],
+      where: {
+        preferredUsername,
+        serverId: null
+      },
+      transaction
+    }
+
+    return ActorModel.unscoped()
+                     .findOne(query)
+                     .then(actor => {
+                       if (preferredUsername === SERVER_ACTOR_NAME) {
+                         ActorModel.localUrlCache[ preferredUsername ] = actor
                        }
 
                        return actor

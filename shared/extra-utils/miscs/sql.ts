@@ -59,7 +59,6 @@ async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
 
   if (!total) return 0
 
-  // FIXME: check if we really need parseInt
   return parseInt(total + '', 10)
 }
 

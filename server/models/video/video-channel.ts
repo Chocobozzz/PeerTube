@@ -43,18 +43,6 @@ import {
   MChannelSummaryFormattable
 } from '../../typings/models/video'
 
-// FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
-const indexes: ModelIndexesOptions[] = [
-  buildTrigramSearchIndex('video_channel_name_trigram', 'name'),
-
-  {
-    fields: [ 'accountId' ]
-  },
-  {
-    fields: [ 'actorId' ]
-  }
-]
-
 export enum ScopeNames {
   FOR_API = 'FOR_API',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -176,7 +164,16 @@ export type SummaryOptions = {
 }))
 @Table({
   tableName: 'videoChannel',
-  indexes
+  indexes: [
+    buildTrigramSearchIndex('video_channel_name_trigram', 'name'),
+
+    {
+      fields: [ 'accountId' ]
+    },
+    {
+      fields: [ 'actorId' ]
+    }
+  ]
 })
 export class VideoChannelModel extends Model<VideoChannelModel> {
 

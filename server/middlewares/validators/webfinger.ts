@@ -18,15 +18,14 @@ const webfingerValidator = [
     const nameWithHost = getHostWithPort(req.query.resource.substr(5))
     const [ name ] = nameWithHost.split('@')
 
-    // FIXME: we don't need the full actor
-    const actor = await ActorModel.loadLocalByName(name)
+    const actor = await ActorModel.loadLocalUrlByName(name)
     if (!actor) {
       return res.status(404)
         .send({ error: 'Actor not found' })
         .end()
     }
 
-    res.locals.actorFull = actor
+    res.locals.actorUrl = actor
     return next()
   }
 ]

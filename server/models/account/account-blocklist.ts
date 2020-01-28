@@ -80,7 +80,7 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       attributes: [ 'accountId', 'id' ],
       where: {
         accountId: {
-          [Op.in]: accountIds // FIXME: sequelize ANY seems broken
+          [Op.in]: accountIds
         },
         targetAccountId
       },

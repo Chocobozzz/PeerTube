@@ -144,8 +144,7 @@ class JobQueue {
         continue
       }
 
-      // FIXME: Bull queue typings does not have getJobs method
-      const jobs = await (queue as any).getJobs(state, 0, start + count, asc)
+      const jobs = await queue.getJobs([ state ], 0, start + count, asc)
       results = results.concat(jobs)
     }
 

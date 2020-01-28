@@ -1,18 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import { join } from 'path'
-import {
-  CountOptions,
-  FindOptions,
-  IncludeOptions,
-  ModelIndexesOptions,
-  Op,
-  QueryTypes,
-  ScopeOptions,
-  Sequelize,
-  Transaction,
-  WhereOptions
-} from 'sequelize'
+import { CountOptions, FindOptions, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -136,82 +125,13 @@ import {
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
   MVideoWithFile,
-  MVideoWithRights,
-  MStreamingPlaylistFiles
+  MVideoWithRights
 } from '../../typings/models'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import validator from 'validator'
-
-// FIXME: Define indexes here because there is an issue with TS and Sequelize.literal when called directly in the annotation
-const indexes: (ModelIndexesOptions & { where?: WhereOptions })[] = [
-  buildTrigramSearchIndex('video_name_trigram', 'name'),
-
-  { fields: [ 'createdAt' ] },
-  {
-    fields: [
-      { name: 'publishedAt', order: 'DESC' },
-      { name: 'id', order: 'ASC' }
-    ]
-  },
-  { fields: [ 'duration' ] },
-  { fields: [ 'views' ] },
-  { fields: [ 'channelId' ] },
-  {
-    fields: [ 'originallyPublishedAt' ],
-    where: {
-      originallyPublishedAt: {
-        [Op.ne]: null
-      }
-    }
-  },
-  {
-    fields: [ 'category' ], // We don't care videos with an unknown category
-    where: {
-      category: {
-        [Op.ne]: null
-      }
-    }
-  },
-  {
-    fields: [ 'licence' ], // We don't care videos with an unknown licence
-    where: {
-      licence: {
-        [Op.ne]: null
-      }
-    }
-  },
-  {
-    fields: [ 'language' ], // We don't care videos with an unknown language
-    where: {
-      language: {
-        [Op.ne]: null
-      }
-    }
-  },
-  {
-    fields: [ 'nsfw' ], // Most of the videos are not NSFW
-    where: {
-      nsfw: true
-    }
-  },
-  {
-    fields: [ 'remote' ], // Only index local videos
-    where: {
-      remote: false
-    }
-  },
-  {
-    fields: [ 'uuid' ],
-    unique: true
-  },
-  {
-    fields: [ 'url' ],
-    unique: true
-  }
-]
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -292,7 +212,7 @@ export type AvailableForListIDsOptions = {
     if (options.ids) {
       query.where = {
         id: {
-          [ Op.in ]: options.ids // FIXME: sequelize ANY seems broken
+          [ Op.in ]: options.ids
         }
       }
     }
@@ -760,7 +680,72 @@ export type AvailableForListIDsOptions = {
 }))
 @Table({
   tableName: 'video',
-  indexes
+  indexes: [
+    buildTrigramSearchIndex('video_name_trigram', 'name'),
+
+    { fields: [ 'createdAt' ] },
+    {
+      fields: [
+        { name: 'publishedAt', order: 'DESC' },
+        { name: 'id', order: 'ASC' }
+      ]
+    },
+    { fields: [ 'duration' ] },
+    { fields: [ 'views' ] },
+    { fields: [ 'channelId' ] },
+    {
+      fields: [ 'originallyPublishedAt' ],
+      where: {
+        originallyPublishedAt: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'category' ], // We don't care videos with an unknown category
+      where: {
+        category: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'licence' ], // We don't care videos with an unknown licence
+      where: {
+        licence: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'language' ], // We don't care videos with an unknown language
+      where: {
+        language: {
+          [Op.ne]: null
+        }
+      }
+    },
+    {
+      fields: [ 'nsfw' ], // Most of the videos are not NSFW
+      where: {
+        nsfw: true
+      }
+    },
+    {
+      fields: [ 'remote' ], // Only index local videos
+      where: {
+        remote: false
+      }
+    },
+    {
+      fields: [ 'uuid' ],
+      unique: true
+    },
+    {
+      fields: [ 'url' ],
+      unique: true
+    }
+  ]
 })
 export class VideoModel extends Model<VideoModel> {
 
