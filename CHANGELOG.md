@@ -8,7 +8,7 @@
    * `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-2.1.js`
  * **/!\ VERY IMPORTANT /!\\** In the next PeerTube release (v2.2.0), we'll add a unique index on actors usernames to fix some federation bugs.
  Please check now if you have conflicts using:
-    * Go inside your database using `psql` and run `select "preferredUsername" from actor where "serverId" is null group by "preferredUsername" having count(*) > 1`
+    * Go inside your database using `sudo -u postgres psql peertube_prod` and run `select "preferredUsername" from actor where "serverId" is null group by "preferredUsername" having count(*) > 1;`
     * If you have some results, it seems you have duplicate channels/accounts.
   For every entry, you'll have to change the preferredUsername of the entry you want (so they are unique).
   The updated actors could have some federations issues
