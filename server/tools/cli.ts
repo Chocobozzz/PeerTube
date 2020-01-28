@@ -6,8 +6,9 @@ import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
 import { Command } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 import { createLogger, format, transports } from 'winston'
-import { getAccessToken, getMyUserInformation } from '@shared/extra-utils'
+import { getMyUserInformation } from '@shared/extra-utils/users/users'
 import { User, UserRole } from '@shared/models'
+import { getAccessToken } from '@shared/extra-utils/users/login'
 
 let configName = 'PeerTube/CLI'
 if (isTestInstance()) configName += `-${getAppNumber()}`
