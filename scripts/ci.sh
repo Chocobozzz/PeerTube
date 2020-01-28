@@ -12,7 +12,7 @@ killall -q peertube || true
 perl -0777 -i  -pe 's#proxy:(\n\s+)enabled: false\n\s+url: ""#proxy:$1enabled: true$1url: "http://188.165.225.149:7899"#' config/test.yaml
 
 if [ "$1" = "misc" ]; then
-    npm run build -- --light-fr
+    npm run build -- --light
     mocha --timeout 5000 --exit --require ts-node/register --require tsconfig-paths/register --bail server/tests/client.ts \
         server/tests/feeds/index.ts \
         server/tests/misc-endpoints.ts \
