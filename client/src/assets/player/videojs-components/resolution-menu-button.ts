@@ -75,7 +75,7 @@ class ResolutionMenuButton extends MenuButton {
       // Skip auto resolution, we'll add it ourselves
       if (d.id === -1) continue
 
-      const label = d.id === 0
+      const label = d.label === '0p'
         ? this.player.localize('Audio-only')
         : d.label
 
