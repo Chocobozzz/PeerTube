@@ -23,7 +23,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
     return next()
   } catch (err) {
-    logger.error('Error in ActivityPub signature checker.', err)
+    logger.warn('Error in ActivityPub signature checker.', err)
     return res.sendStatus(403)
   }
 }
