@@ -12,6 +12,7 @@ yarn-error.log
 /test5/
 /test6/
 /server/tests/fixtures/video_high_bitrate_1080p.mp4
+/server/tests/fixtures/video_59fps.mp4
 
 # Production
 /storage/

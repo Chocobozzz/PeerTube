@@ -263,8 +263,9 @@ async function canDoQuickTranscode (path: string): Promise<boolean> {
   return true
 }
 
-function getClosestFramerateStandard (fps: number, hd = false): number {
-  return VIDEO_TRANSCODING_FPS[hd ? 'HD_STANDARD' : 'STANDARD'].slice(0).sort((a, b) => fps % a - fps % b)[0]
+function getClosestFramerateStandard (fps: number, type: 'HD_STANDARD' | 'STANDARD'): number {
+  return VIDEO_TRANSCODING_FPS[type].slice(0)
+                                    .sort((a, b) => fps % a - fps % b)[0]
 }
 
 // ---------------------------------------------------------------------------
@@ -294,12 +295,10 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
     // On small/medium resolutions, limit FPS
     options.resolution !== undefined &&
     options.resolution < VIDEO_TRANSCODING_FPS.KEEP_ORIGIN_FPS_RESOLUTION_MIN &&
-    fps > VIDEO_TRANSCODING_FPS.AVERAGE ||
-    // If the video is doesn't match hd standard
-    !VIDEO_TRANSCODING_FPS.HD_STANDARD.some(value => fps % value === 0)
+    fps > VIDEO_TRANSCODING_FPS.AVERAGE
   ) {
     // Get closest standard framerate by modulo: downsampling has to be done to a divisor of the nominal fps value
-    fps = getClosestFramerateStandard(fps)
+    fps = getClosestFramerateStandard(fps, 'STANDARD')
   }
 
   command = await presetH264(command, options.inputPath, options.resolution, fps)
@@ -312,7 +311,7 @@ async function buildx264Command (command: ffmpeg.FfmpegCommand, options: Transco
 
   if (fps) {
     // Hard FPS limits
-    if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, true)
+    if (fps > VIDEO_TRANSCODING_FPS.MAX) fps = getClosestFramerateStandard(fps, 'HD_STANDARD')
     else if (fps < VIDEO_TRANSCODING_FPS.MIN) fps = VIDEO_TRANSCODING_FPS.MIN
 
     command = command.withFPS(fps)

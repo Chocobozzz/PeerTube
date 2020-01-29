@@ -423,7 +423,7 @@ describe('Test video transcoding', function () {
     let tempFixturePath: string
 
     {
-      tempFixturePath = await generateVideoWithFramerate()
+      tempFixturePath = await generateVideoWithFramerate(59)
 
       const fps = await getVideoFileFPS(tempFixturePath)
       expect(fps).to.be.equal(59)
@@ -443,10 +443,18 @@ describe('Test video transcoding', function () {
       const res = await getVideosList(server.url)
 
       const video = res.body.data.find(v => v.name === videoAttributes.name)
-      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
-      const fps = await getVideoFileFPS(path)
 
-      expect(fps).to.be.equal(25)
+      {
+        const path = join(root(), 'test' + servers[ 1 ].internalServerNumber, 'videos', video.uuid + '-240.mp4')
+        const fps = await getVideoFileFPS(path)
+        expect(fps).to.be.equal(25)
+      }
+
+      {
+        const path = join(root(), 'test' + servers[ 1 ].internalServerNumber, 'videos', video.uuid + '-720.mp4')
+        const fps = await getVideoFileFPS(path)
+        expect(fps).to.be.equal(59)
+      }
     }
   })
 

@@ -113,7 +113,7 @@ async function generateVideoWithFramerate (fps = 60) {
   if (!exists) {
     return new Promise<string>(async (res, rej) => {
       ffmpeg()
-        .outputOptions([ '-f rawvideo', '-video_size 320x240', '-i /dev/urandom' ])
+        .outputOptions([ '-f rawvideo', '-video_size 1280x720', '-i /dev/urandom' ])
         .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])
         .outputOptions([ `-r ${fps}` ])
         .output(tempFixturePath)
