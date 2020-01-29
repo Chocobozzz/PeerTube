@@ -30,11 +30,12 @@ declare module 'video.js' {
 
     qualityLevels (): { height: number, id: number }[] & {
       selectedIndex: number
+      selectedIndex_: number
 
       addQualityLevel (representation: {
         id: number
         label: string
-        height: number,
+        height: number
         _enabled: boolean
       }): void
     }

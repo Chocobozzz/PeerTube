@@ -650,8 +650,8 @@ class WebTorrentPlugin extends Plugin {
     }
 
     for (let i = 0; i < qualityLevels.length; i++) {
-      const q = this.player.qualityLevels[i]
-      if (q.height === resolutionId) qualityLevels.selectedIndex = i
+      const q = qualityLevels[i]
+      if (q.height === resolutionId) qualityLevels.selectedIndex_ = i
     }
   }
 }
