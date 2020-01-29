@@ -56,6 +56,7 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
   if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
   if (!isBooleanValid(video.waitTranscoding)) video.waitTranscoding = false
   if (!isBooleanValid(video.downloadEnabled)) video.downloadEnabled = true
+  if (!isBooleanValid(video.commentsEnabled)) video.commentsEnabled = false
 
   return isActivityPubUrlValid(video.id) &&
     isVideoNameValid(video.name) &&
