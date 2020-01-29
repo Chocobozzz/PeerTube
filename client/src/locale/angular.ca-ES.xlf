@@ -2273,11 +2273,7 @@
       </trans-unit>
       <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc" datatype="html">
         <source>Image that will be merged with your audio file. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> The chosen image will be definitive and cannot be modified. </source>
-        <target state="new">
-          Image that will be merged with your audio file.
-          <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          The chosen image will be definitive and cannot be modified.
-        </target>
+        <target state="translated">La imatge es fusionarà amb el vostre fitxer d’àudio. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> La imatge escollida serà definitiva i no es podrà modificar. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">34</context>
@@ -2285,9 +2281,7 @@
       </trans-unit>
       <trans-unit id="6357683911e256c566259880de43ea9403de00d3" datatype="html">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target state="new">
-  Congratulations! Your video is now available in your private library.
-</target>
+        <target state="translated">Felicitats! El teu vídeo ja està disponible a la biblioteca privada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context>
           <context context-type="linenumber">66</context>
@@ -2311,7 +2305,7 @@
       </trans-unit>
       <trans-unit id="2fcbf437e001f47974d45bd03a19e0d9245fdb3b" datatype="html">
         <source>Select the torrent to import</source>
-        <target state="new">Select the torrent to import</target>
+        <target state="translated">Selecciona el torrent per importar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">6</context>
@@ -2319,7 +2313,7 @@
       </trans-unit>
       <trans-unit id="1b518e7f8c067fa55ea797bb1b35b4a2d31dccbc" datatype="html">
         <source>Or</source>
-        <target state="new">Or</target>
+        <target state="translated">O</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-torrent.component.html</context>
           <context context-type="linenumber">11</context>
