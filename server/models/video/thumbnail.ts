@@ -126,8 +126,8 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     return videoUUID + '.jpg'
   }
 
-  getFileUrl () {
-    if (this.fileUrl) return this.fileUrl
+  getFileUrl (isLocal: boolean) {
+    if (isLocal === false) return this.fileUrl
 
     const staticPath = ThumbnailModel.types[this.type].staticPath
     return WEBSERVER.URL + staticPath + this.filename

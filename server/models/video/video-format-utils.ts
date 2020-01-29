@@ -338,7 +338,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     subtitleLanguage,
     icon: {
       type: 'Image',
-      url: miniature.getFileUrl(),
+      url: miniature.getFileUrl(video.isOwned()),
       mediaType: 'image/jpeg',
       width: miniature.width,
       height: miniature.height
