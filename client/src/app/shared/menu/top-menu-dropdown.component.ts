@@ -49,8 +49,7 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
       e => e.children && e.children.some(c => !!c.iconName)
     )
 
-    // FIXME: We have to set body for the container to avoid because of scroll overflow on mobile view
-    // But this break our hovering system
+    // We have to set body for the container to avoid scroll overflow on mobile view
     if (this.screen.isInMobileView()) {
       this.container = 'body'
     }

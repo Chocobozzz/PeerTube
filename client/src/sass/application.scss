@@ -32,7 +32,7 @@ body {
   --menuForegroundColor: #{$menu-color};
   --submenuColor: #{$sub-menu-color};
 
-  --inputColor: #{$input-background-color};
+  --inputBackgroundColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
 
   --actionButtonColor: #{$grey-foreground-color};
@@ -61,7 +61,7 @@ strong {
 
 input.readonly {
   /* Force blank on readonly inputs */
-  background-color: var(--inputColor) !important;
+  background-color: var(--inputBackgroundColor) !important;
 }
 
 input, textarea {
@@ -200,26 +200,6 @@ label {
 @keyframes spin {
   from { transform: scale(1) rotate(0deg);}
   to { transform: scale(1) rotate(360deg);}
-}
-
-.orange-button {
-  @include peertube-button;
-  @include orange-button;
-}
-
-.orange-button-link {
-  @include peertube-button-link;
-  @include orange-button;
-}
-
-.grey-button {
-  @include peertube-button;
-  @include grey-button;
-}
-
-.grey-button-link {
-  @include peertube-button-link;
-  @include grey-button;
 }
 
 // In tables, don't have a hover different background

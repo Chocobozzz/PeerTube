@@ -48,8 +48,6 @@ export function metaFactory (serverService: ServerService): MetaLoader {
   ],
   imports: [
     BrowserModule,
-    // FIXME: https://github.com/maxisam/ngx-clipboard/issues/133
-    ClipboardModule,
 
     CoreModule,
     SharedModule,

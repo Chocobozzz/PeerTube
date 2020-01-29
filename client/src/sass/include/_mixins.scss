@@ -81,7 +81,7 @@
   display: inline-block;
   height: $button-height;
   width: $width;
-  background: var(--inputColor);
+  background: var(--inputBackgroundColor);
   border: 1px solid #C6C6C6;
   border-radius: 3px;
   padding-left: 15px;
@@ -254,7 +254,7 @@
   width: $width;
   border-radius: 3px;
   overflow: hidden;
-  background: var(--inputColor);
+  background: var(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
 

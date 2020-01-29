@@ -10,11 +10,26 @@ my-small-loader ::ng-deep .root {
 .action-button {
   @include peertube-button-link;
   @include button-with-icon(21px, 0, -2px);
+}
 
-  // FIXME: Firefox does not apply global .orange-button icon color
-  &.orange-button {
-    @include apply-svg-color(#fff)
-  }
+.orange-button {
+  @include peertube-button;
+  @include orange-button;
+}
+
+.orange-button-link {
+  @include peertube-button-link;
+  @include orange-button;
+}
+
+.grey-button {
+  @include peertube-button;
+  @include grey-button;
+}
+
+.grey-button-link {
+  @include peertube-button-link;
+  @include grey-button;
 }
 
 // In a table, try to minimize the space taken by this button

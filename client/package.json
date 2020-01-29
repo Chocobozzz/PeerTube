@@ -65,7 +65,7 @@
     "@types/jschannel": "^1.0.0",
     "@types/linkifyjs": "^2.1.2",
     "@types/lodash-es": "^4.17.0",
-    "@types/markdown-it": "^0.0.5",
+    "@types/markdown-it": "^0.0.9",
     "@types/node": "^10.9.2",
     "@types/sanitize-html": "1.18.0",
     "@types/socket.io-client": "^1.4.32",

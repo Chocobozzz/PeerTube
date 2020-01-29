@@ -7,7 +7,7 @@ textarea {
 
 .form-control {
   &, &:focus {
-    background-color: var(--inputColor);
+    background-color: var(--inputBackgroundColor);
     color: var(--mainForegroundColor);
   }
 }

@@ -1045,6 +1045,11 @@
   resolved "https://registry.yarnpkg.com/@types/jschannel/-/jschannel-1.0.1.tgz#79d582ccf42554c8457230526a3054d018d559f0"
   integrity sha512-S34NuOoOOKXbft3f9GDeLKp777ABCGArZaqUWOuu1Xn+1S75Osmk8kCeqmw5x2TuASyjE082DwDAuoaXNIRCTw==
 
+"@types/linkify-it@*":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-2.1.0.tgz#ea3dd64c4805597311790b61e872cbd1ed2cd806"
+  integrity sha512-Q7DYAOi9O/+cLLhdaSvKdaumWyHbm7HAk/bFwwyTuU0arR5yyCeW5GOoqt4tJTpDRxhpx9Q8kQL6vMpuw9hDSw==
+
 "@types/linkifyjs@^2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@types/linkifyjs/-/linkifyjs-2.1.2.tgz#8244f4e6d7be65359cc25a34da8977fce87a7b2e"
@@ -1071,10 +1076,12 @@
   dependencies:
     "@types/node" "*"
 
-"@types/markdown-it@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-0.0.5.tgz#5cdcbe08e81075d5dbf15466b311359b02a30c2b"
-  integrity sha512-Bhc4jTJ3g+WU+dBvyhwwssHifjqapauyjV+0cTWVWRjwDAaK9PebZBFpLJmoOCp47qlkDeeT1Y9sV9LyyaG02w==
+"@types/markdown-it@^0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@types/markdown-it/-/markdown-it-0.0.9.tgz#a5d552f95216c478e0a27a5acc1b28dcffd989ce"
+  integrity sha512-IFSepyZXbF4dgSvsk8EsgaQ/8Msv1I5eTL0BZ0X3iGO9jw6tCVtPG8HchIPm3wrkmGdqZOD42kE0zplVi1gYDA==
+  dependencies:
+    "@types/linkify-it" "*"
 
 "@types/minimatch@*":
   version "3.0.3"

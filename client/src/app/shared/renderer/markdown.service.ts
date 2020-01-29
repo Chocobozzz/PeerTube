@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
-import { MarkdownIt } from 'markdown-it'
 import { buildVideoLink } from '../../../assets/player/utils'
 import { HtmlRendererService } from '@app/shared/renderer/html-renderer.service'
+import * as MarkdownIt from 'markdown-it'
 
 type MarkdownParsers = {
   textMarkdownIt: MarkdownIt
@@ -100,7 +100,7 @@ export class MarkdownService {
   }
 
   private async createMarkdownIt (config: MarkdownConfig) {
-    // FIXME: import('...') returns a struct module, containing a "default" field corresponding to our sanitizeHtml function
+    // FIXME: import('...') returns a struct module, containing a "default" field
     const MarkdownItClass: typeof import ('markdown-it') = (await import('markdown-it') as any).default
 
     const markdownIt = new MarkdownItClass('zero', { linkify: true, breaks: true, html: config.html })

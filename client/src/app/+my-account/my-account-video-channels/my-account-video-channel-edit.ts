@@ -9,7 +9,7 @@ export abstract class MyAccountVideoChannelEdit extends FormReactive {
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
 
-  // FIXME: We need this method so angular does not complain in the child template
+  // We need this method so angular does not complain in child template that doesn't need this
   onAvatarChange (formData: FormData) { /* empty */ }
 
   // Should be implemented by the child

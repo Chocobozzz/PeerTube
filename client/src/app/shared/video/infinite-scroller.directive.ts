@@ -1,4 +1,4 @@
-import { distinctUntilChanged, filter, map, share, startWith, tap, throttleTime } from 'rxjs/operators'
+import { distinctUntilChanged, filter, map, share, startWith, throttleTime } from 'rxjs/operators'
 import { AfterContentChecked, Directive, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core'
 import { fromEvent, Observable, Subscription } from 'rxjs'
 
@@ -53,7 +53,7 @@ export class InfiniteScrollerDirective implements OnInit, OnDestroy, AfterConten
     const scrollableElement = this.onItself ? this.container : window
     const scrollObservable = fromEvent(scrollableElement, 'scroll')
       .pipe(
-        startWith(null as string), // FIXME: typings
+        startWith(true),
         throttleTime(200, undefined, throttleOptions),
         map(() => this.getScrollInfo()),
         distinctUntilChanged((o1, o2) => o1.current === o2.current),
