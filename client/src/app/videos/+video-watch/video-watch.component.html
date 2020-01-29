@@ -188,6 +188,11 @@
           <span class="video-attribute-value">{{ video.privacy.label }}</span>
         </div>
 
+        <div *ngIf="video.isLocal === false" class="video-attribute">
+          <span i18n class="video-attribute-label">Origin instance</span>
+          <a class="video-attribute-value" target="_blank" rel="noopener noreferrer" [href]="video.originInstanceUrl">{{ video.originInstanceHost }}</a>
+        </div>
+
         <div *ngIf="!!video.originallyPublishedAt" class="video-attribute">
           <span i18n class="video-attribute-label">Originally published</span>
           <span class="video-attribute-value">{{ video.originallyPublishedAt | date: 'dd MMMM yyyy' }}</span>

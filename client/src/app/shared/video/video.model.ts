@@ -42,6 +42,9 @@ export class Video implements VideoServerModel {
   dislikes: number
   nsfw: boolean
 
+  originInstanceUrl: string
+  originInstanceHost: string
+
   waitTranscoding?: boolean
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
@@ -86,22 +89,31 @@ export class Video implements VideoServerModel {
     this.waitTranscoding = hash.waitTranscoding
     this.state = hash.state
     this.description = hash.description
+
     this.duration = hash.duration
     this.durationLabel = durationToString(hash.duration)
+
     this.id = hash.id
     this.uuid = hash.uuid
+
     this.isLocal = hash.isLocal
     this.name = hash.name
+
     this.thumbnailPath = hash.thumbnailPath
     this.thumbnailUrl = absoluteAPIUrl + hash.thumbnailPath
+
     this.previewPath = hash.previewPath
     this.previewUrl = absoluteAPIUrl + hash.previewPath
+
     this.embedPath = hash.embedPath
     this.embedUrl = absoluteAPIUrl + hash.embedPath
+
     this.views = hash.views
     this.likes = hash.likes
     this.dislikes = hash.dislikes
+
     this.nsfw = hash.nsfw
+
     this.account = hash.account
     this.channel = hash.channel
 
@@ -124,6 +136,9 @@ export class Video implements VideoServerModel {
     this.blacklistedReason = hash.blacklistedReason
 
     this.userHistory = hash.userHistory
+
+    this.originInstanceHost = this.account.host
+    this.originInstanceUrl = 'https://' + this.originInstanceHost
   }
 
   isVideoNSFWForUser (user: User, serverConfig: ServerConfig) {
