@@ -39,7 +39,7 @@ Create the production database and a peertube user inside PostgreSQL:
 
 ```
 $ sudo -u postgres createuser -P peertube
-$ sudo -u postgres createdb -O peertube peertube_prod
+$ sudo -u postgres createdb -O peertube -E UTF8 -T template0 peertube_prod
 ```
 
 Then enable extensions PeerTube needs:
