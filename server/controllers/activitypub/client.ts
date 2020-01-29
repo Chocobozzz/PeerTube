@@ -14,7 +14,7 @@ import {
   videosCustomGetValidator,
   videosShareValidator
 } from '../../middlewares'
-import { getAccountVideoRateValidator, videoCommentGetValidator } from '../../middlewares/validators'
+import { getAccountVideoRateValidatorFactory, videoCommentGetValidator } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { ActorFollowModel } from '../../models/activitypub/actor-follow'
 import { VideoModel } from '../../models/video/video'
@@ -63,13 +63,13 @@ activityPubClientRouter.get('/accounts?/:name/playlists',
 )
 activityPubClientRouter.get('/accounts?/:name/likes/:videoId',
   executeIfActivityPub,
-  asyncMiddleware(getAccountVideoRateValidator('like')),
-  getAccountVideoRate('like')
+  asyncMiddleware(getAccountVideoRateValidatorFactory('like')),
+  getAccountVideoRateFactory('like')
 )
 activityPubClientRouter.get('/accounts?/:name/dislikes/:videoId',
   executeIfActivityPub,
-  asyncMiddleware(getAccountVideoRateValidator('dislike')),
-  getAccountVideoRate('dislike')
+  asyncMiddleware(getAccountVideoRateValidatorFactory('dislike')),
+  getAccountVideoRateFactory('dislike')
 )
 
 activityPubClientRouter.get('/videos/watch/:id',
@@ -192,7 +192,7 @@ async function accountPlaylistsController (req: express.Request, res: express.Re
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
 
-function getAccountVideoRate (rateType: VideoRateType) {
+function getAccountVideoRateFactory (rateType: VideoRateType) {
   return (req: express.Request, res: express.Response) => {
     const accountVideoRate = res.locals.accountVideoRate
 

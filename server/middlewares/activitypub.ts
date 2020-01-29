@@ -1,10 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
-import { ActivityPubSignature } from '../../shared'
+import { ActivityDelete, ActivityPubSignature } from '../../shared'
 import { logger } from '../helpers/logger'
 import { isHTTPSignatureVerified, isJsonLDSignatureVerified, parseHTTPSignature } from '../helpers/peertube-crypto'
 import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/constants'
 import { getOrCreateActorAndServerAndModel } from '../lib/activitypub'
 import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
+import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {
@@ -23,7 +24,13 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
     return next()
   } catch (err) {
-    logger.warn('Error in ActivityPub signature checker.', err)
+    const activity: ActivityDelete = req.body
+    if (isActorDeleteActivityValid(activity) && activity.object === activity.actor) {
+      logger.debug('Handling signature error on actor delete activity', { err })
+      return res.sendStatus(204)
+    }
+
+    logger.warn('Error in ActivityPub signature checker.', { err })
     return res.sendStatus(403)
   }
 }

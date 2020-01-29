@@ -50,7 +50,7 @@ const inboxQueue = queue<QueueParam, Error>((task, cb) => {
 
 function inboxController (req: express.Request, res: express.Response) {
   const rootActivity: RootActivity = req.body
-  let activities: Activity[] = []
+  let activities: Activity[]
 
   if ([ 'Collection', 'CollectionPage' ].indexOf(rootActivity.type) !== -1) {
     activities = (rootActivity as ActivityPubCollection).items

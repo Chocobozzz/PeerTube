@@ -24,7 +24,7 @@ const videoUpdateRateValidator = [
   }
 ]
 
-const getAccountVideoRateValidator = function (rateType: VideoRateType) {
+const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
   return [
     param('name').custom(isAccountNameValid).withMessage('Should have a valid account name'),
     param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -64,6 +64,6 @@ const videoRatingValidator = [
 
 export {
   videoUpdateRateValidator,
-  getAccountVideoRateValidator,
+  getAccountVideoRateValidatorFactory,
   videoRatingValidator
 }
