@@ -199,8 +199,6 @@ function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') 
   return createHash('sha1').update(str).digest(encoding)
 }
 
-
-
 function execShell (command: string, options?: ExecOptions) {
   return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
     exec(command, options, (err, stdout, stderr) => {
