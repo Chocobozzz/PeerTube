@@ -56,7 +56,7 @@ export class CustomConfigValidatorsService {
     }
 
     this.SIGNUP_LIMIT = {
-      VALIDATORS: [ Validators.required, Validators.min(1), Validators.pattern('[0-9]+') ],
+      VALIDATORS: [ Validators.required, Validators.min(-1), Validators.pattern('-?[0-9]+') ],
       MESSAGES: {
         'required': this.i18n('Signup limit is required.'),
         'min': this.i18n('Signup limit must be greater than 1.'),

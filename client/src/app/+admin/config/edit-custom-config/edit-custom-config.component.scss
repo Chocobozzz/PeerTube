@@ -10,6 +10,11 @@ input[type=text] {
   display: block;
 }
 
+input[type=number] {
+  @include peertube-input-text(315px);
+  display: block;
+}
+
 input[type=checkbox] {
   @include peertube-checkbox(1px);
 }

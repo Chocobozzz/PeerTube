@@ -77,6 +77,12 @@
   }
 }
 
+@mixin button-focus-visible-shadow($color) {
+  &.focus-visible {
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px $color;
+  }
+}
+
 @mixin peertube-input-text($width) {
   display: inline-block;
   height: $button-height;
@@ -118,6 +124,8 @@
 }
 
 @mixin orange-button {
+  @include button-focus-visible-shadow(var(--mainHoverColor));
+
   &, &:active, &:focus {
     color: #fff;
     background-color: var(--mainColor);
@@ -169,7 +177,6 @@
   text-align: center;
   padding: 0 17px 0 13px;
   cursor: pointer;
-  outline: 0;
 }
 
 @mixin peertube-button-link {
