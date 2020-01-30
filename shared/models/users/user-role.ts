@@ -7,15 +7,13 @@ export enum UserRole {
   USER = 2
 }
 
-// TODO: use UserRole for key once https://github.com/Microsoft/TypeScript/issues/13042 is fixed
-export const USER_ROLE_LABELS: { [ id: number ]: string } = {
+export const USER_ROLE_LABELS: { [ id in UserRole ]: string } = {
   [UserRole.USER]: 'User',
   [UserRole.MODERATOR]: 'Moderator',
   [UserRole.ADMINISTRATOR]: 'Administrator'
 }
 
-// TODO: use UserRole for key once https://github.com/Microsoft/TypeScript/issues/13042 is fixed
-const userRoleRights: { [ id: number ]: UserRight[] } = {
+const userRoleRights: { [ id in UserRole ]: UserRight[] } = {
   [UserRole.ADMINISTRATOR]: [
     UserRight.ALL
   ],

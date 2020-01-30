@@ -1,6 +1,7 @@
 export interface ActivityIdentifierObject {
   identifier: string
   name: string
+  url?: string
 }
 
 export interface ActivityIconObject {

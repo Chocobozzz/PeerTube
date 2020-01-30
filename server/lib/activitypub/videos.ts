@@ -6,7 +6,8 @@ import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
-  ActivityPlaylistUrlObject, ActivityTagObject,
+  ActivityPlaylistUrlObject,
+  ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
   VideoState
@@ -17,14 +18,14 @@ import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validat
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
-import { doRequest, doRequestAndSaveToFile } from '../../helpers/requests'
+import { doRequest } from '../../helpers/requests'
 import {
   ACTIVITY_PUB,
   MIMETYPES,
   P2P_MEDIA_LOADER_PEER_VERSION,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
-  STATIC_PATHS
+  STATIC_PATHS, THUMBNAILS_SIZE
 } from '../../initializers/constants'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -40,7 +41,7 @@ import { ActivitypubHttpFetcherPayload } from '../job-queue/handlers/activitypub
 import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'
-import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
+import { buildRemoteVideoBaseUrl, checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { Notifier } from '../notifier'
 import { VideoStreamingPlaylistModel } from '../../models/video/video-streaming-playlist'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
@@ -71,6 +72,7 @@ import {
   MVideoThumbnail
 } from '../../typings/models'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
+import { maxBy, minBy } from 'lodash'
 
 async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {
   const video = videoArg as MVideoAP
@@ -131,19 +133,6 @@ async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
   return body.description ? body.description : ''
 }
 
-function fetchRemoteVideoStaticFile (video: MVideoAccountLight, path: string, destPath: string) {
-  const url = buildRemoteBaseUrl(video, path)
-
-  // We need to provide a callback, if no we could have an uncaught exception
-  return doRequestAndSaveToFile({ uri: url }, destPath)
-}
-
-function buildRemoteBaseUrl (video: MVideoAccountLight, path: string) {
-  const host = video.VideoChannel.Account.Actor.Server.host
-
-  return REMOTE_SCHEME.HTTP + '://' + host + path
-}
-
 function getOrCreateVideoChannelFromVideoObject (videoObject: VideoTorrentObject) {
   const channel = videoObject.attributedTo.find(a => a.type === 'Group')
   if (!channel) throw new Error('Cannot find associated video channel to video ' + videoObject.url)
@@ -173,7 +162,7 @@ async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTo
     const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'like' as 'like', crawlStartDate)
 
     await crawlCollectionPage<string>(fetchedVideo.likes, handler, cleaner)
-      .catch(err => logger.error('Cannot add likes of video %s.', video.uuid, { err }))
+      .catch(err => logger.error('Cannot add likes of video %s.', video.uuid, { err, rootUrl: fetchedVideo.likes }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.likes, videoId: video.id, type: 'video-likes' as 'video-likes' })
   }
@@ -183,7 +172,7 @@ async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTo
     const cleaner = crawlStartDate => AccountVideoRateModel.cleanOldRatesOf(video.id, 'dislike' as 'dislike', crawlStartDate)
 
     await crawlCollectionPage<string>(fetchedVideo.dislikes, handler, cleaner)
-      .catch(err => logger.error('Cannot add dislikes of video %s.', video.uuid, { err }))
+      .catch(err => logger.error('Cannot add dislikes of video %s.', video.uuid, { err, rootUrl: fetchedVideo.dislikes }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.dislikes, videoId: video.id, type: 'video-dislikes' as 'video-dislikes' })
   }
@@ -193,7 +182,7 @@ async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTo
     const cleaner = crawlStartDate => VideoShareModel.cleanOldSharesOf(video.id, crawlStartDate)
 
     await crawlCollectionPage<string>(fetchedVideo.shares, handler, cleaner)
-      .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err }))
+      .catch(err => logger.error('Cannot add shares of video %s.', video.uuid, { err, rootUrl: fetchedVideo.shares }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.shares, videoId: video.id, type: 'video-shares' as 'video-shares' })
   }
@@ -203,7 +192,7 @@ async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTo
     const cleaner = crawlStartDate => VideoCommentModel.cleanOldCommentsOf(video.id, crawlStartDate)
 
     await crawlCollectionPage<string>(fetchedVideo.comments, handler, cleaner)
-      .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err }))
+      .catch(err => logger.error('Cannot add comments of video %s.', video.uuid, { err, rootUrl: fetchedVideo.comments }))
   } else {
     jobPayloads.push({ uri: fetchedVideo.comments, videoId: video.id, type: 'video-comments' as 'video-comments' })
   }
@@ -284,7 +273,7 @@ async function updateVideoFromAP (options: {
     let thumbnailModel: MThumbnail
 
     try {
-      thumbnailModel = await createVideoMiniatureFromUrl(videoObject.icon.url, video, ThumbnailType.MINIATURE)
+      thumbnailModel = await createVideoMiniatureFromUrl(getThumbnailFromIcons(videoObject).url, video, ThumbnailType.MINIATURE)
     } catch (err) {
       logger.warn('Cannot generate thumbnail of %s.', videoObject.id, { err })
     }
@@ -327,8 +316,7 @@ async function updateVideoFromAP (options: {
 
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
-      // FIXME: use icon URL instead
-      const previewUrl = buildRemoteBaseUrl(videoUpdated, join(STATIC_PATHS.PREVIEWS, videoUpdated.getPreview().filename))
+      const previewUrl = videoUpdated.getPreview().getFileUrl(videoUpdated)
       const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
       await videoUpdated.addAndSaveThumbnail(previewModel, t)
 
@@ -391,7 +379,7 @@ async function updateVideoFromAP (options: {
         await VideoCaptionModel.deleteAllCaptionsOfRemoteVideo(videoUpdated.id, t)
 
         const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-          return VideoCaptionModel.insertOrReplaceLanguage(videoUpdated.id, c.identifier, t)
+          return VideoCaptionModel.insertOrReplaceLanguage(videoUpdated.id, c.identifier, c.url, t)
         })
         await Promise.all(videoCaptionsPromises)
       }
@@ -483,7 +471,6 @@ export {
   federateVideoIfNeeded,
   fetchRemoteVideo,
   getOrCreateVideoAndAccountAndChannel,
-  fetchRemoteVideoStaticFile,
   fetchRemoteVideoDescription,
   getOrCreateVideoChannelFromVideoObject
 }
@@ -519,7 +506,7 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
   const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, videoObject.to)
   const video = VideoModel.build(videoData) as MVideoThumbnail
 
-  const promiseThumbnail = createVideoMiniatureFromUrl(videoObject.icon.url, video, ThumbnailType.MINIATURE)
+  const promiseThumbnail = createVideoMiniatureFromUrl(getThumbnailFromIcons(videoObject).url, video, ThumbnailType.MINIATURE)
 
   let thumbnailModel: MThumbnail
   if (waitThumbnail === true) {
@@ -534,9 +521,12 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
 
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(thumbnailModel, t)
 
-    // FIXME: use icon URL instead
-    const previewUrl = buildRemoteBaseUrl(videoCreated, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
-    const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
+    const previewIcon = getPreviewFromIcons(videoObject)
+    const previewUrl = previewIcon
+      ? previewIcon.url
+      : buildRemoteVideoBaseUrl(videoCreated, join(STATIC_PATHS.PREVIEWS, video.generatePreviewName()))
+    const previewModel = createPlaceholderThumbnail(previewUrl, videoCreated, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
+
     if (thumbnailModel) await videoCreated.addAndSaveThumbnail(previewModel, t)
 
     // Process files
@@ -567,7 +557,7 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
 
     // Process captions
     const videoCaptionsPromises = videoObject.subtitleLanguage.map(c => {
-      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, t)
+      return VideoCaptionModel.insertOrReplaceLanguage(videoCreated.id, c.identifier, c.url, t)
     })
     await Promise.all(videoCaptionsPromises)
 
@@ -720,4 +710,20 @@ function streamingPlaylistActivityUrlToDBAttributes (video: MVideoId, videoObjec
   }
 
   return attributes
+}
+
+function getThumbnailFromIcons (videoObject: VideoTorrentObject) {
+  let validIcons = videoObject.icon.filter(i => i.width > THUMBNAILS_SIZE.minWidth)
+  // Fallback if there are not valid icons
+  if (validIcons.length === 0) validIcons = videoObject.icon
+
+  return minBy(validIcons, 'width')
+}
+
+function getPreviewFromIcons (videoObject: VideoTorrentObject) {
+  const validIcons = videoObject.icon.filter(i => i.width > PREVIEWS_SIZE.minWidth)
+
+  // FIXME: don't put a fallback here for compatibility with PeerTube <2.2
+
+  return maxBy(validIcons, 'width')
 }

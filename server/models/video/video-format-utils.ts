@@ -307,11 +307,12 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
   for (const caption of video.VideoCaptions) {
     subtitleLanguage.push({
       identifier: caption.language,
-      name: VideoCaptionModel.getLanguageLabel(caption.language)
+      name: VideoCaptionModel.getLanguageLabel(caption.language),
+      url: caption.getFileUrl(video)
     })
   }
 
-  const miniature = video.getMiniature()
+  const icons = [ video.getMiniature(), video.getPreview() ]
 
   return {
     type: 'Video' as 'Video',
@@ -336,13 +337,13 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     content: video.getTruncatedDescription(),
     support: video.support,
     subtitleLanguage,
-    icon: {
+    icon: icons.map(i => ({
       type: 'Image',
-      url: miniature.getFileUrl(video.isOwned()),
+      url: i.getFileUrl(video),
       mediaType: 'image/jpeg',
-      width: miniature.width,
-      height: miniature.height
-    },
+      width: i.width,
+      height: i.height
+    })),
     url,
     likes: getVideoLikesActivityPubUrl(video),
     dislikes: getVideoDislikesActivityPubUrl(video),

@@ -19,6 +19,8 @@ import { CONFIG } from '../../initializers/config'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
+import { MVideoAccountLight } from '@server/typings/models'
+import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 @Table({
   tableName: 'thumbnail',
@@ -126,11 +128,14 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     return videoUUID + '.jpg'
   }
 
-  getFileUrl (isLocal: boolean) {
-    if (isLocal === false) return this.fileUrl
+  getFileUrl (video: MVideoAccountLight) {
+    const staticPath = ThumbnailModel.types[this.type].staticPath + this.filename
 
-    const staticPath = ThumbnailModel.types[this.type].staticPath
-    return WEBSERVER.URL + staticPath + this.filename
+    if (video.isOwned()) return WEBSERVER.URL + staticPath
+    if (this.fileUrl) return this.fileUrl
+
+    // Fallback if we don't have a file URL
+    return buildRemoteVideoBaseUrl(video, staticPath)
   }
 
   getPath () {

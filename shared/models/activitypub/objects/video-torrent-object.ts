@@ -30,7 +30,9 @@ export interface VideoTorrentObject {
   mediaType: 'text/markdown'
   content: string
   support: string
-  icon: ActivityIconObject
+
+  icon: ActivityIconObject[]
+
   url: ActivityUrlObject[]
   likes: string
   dislikes: string

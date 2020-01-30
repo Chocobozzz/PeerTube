@@ -66,7 +66,7 @@ async function addVideoCaption (req: express.Request, res: express.Response) {
   await moveAndProcessCaptionFile(videoCaptionPhysicalFile, videoCaption)
 
   await sequelizeTypescript.transaction(async t => {
-    await VideoCaptionModel.insertOrReplaceLanguage(video.id, req.params.captionLanguage, t)
+    await VideoCaptionModel.insertOrReplaceLanguage(video.id, req.params.captionLanguage, null, t)
 
     // Update video update
     await federateVideoIfNeeded(video, false, t)

@@ -2,11 +2,11 @@ import * as Bluebird from 'bluebird'
 import validator from 'validator'
 import { ResultList } from '../../shared/models'
 import { Activity } from '../../shared/models/activitypub'
-import { ACTIVITY_PUB } from '../initializers/constants'
+import { ACTIVITY_PUB, REMOTE_SCHEME } from '../initializers/constants'
 import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
 import { parse } from 'url'
-import { MActor } from '../typings/models'
+import { MActor, MVideoAccountLight } from '../typings/models'
 
 function activityPubContextify <T> (data: T) {
   return Object.assign(data, {
@@ -167,6 +167,12 @@ function checkUrlsSameHost (url1: string, url2: string) {
   return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
 }
 
+function buildRemoteVideoBaseUrl (video: MVideoAccountLight, path: string) {
+  const host = video.VideoChannel.Account.Actor.Server.host
+
+  return REMOTE_SCHEME.HTTP + '://' + host + path
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -174,5 +180,6 @@ export {
   getAPId,
   activityPubContextify,
   activityPubCollectionPagination,
-  buildSignedActivity
+  buildSignedActivity,
+  buildRemoteVideoBaseUrl
 }

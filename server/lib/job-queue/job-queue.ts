@@ -136,7 +136,6 @@ class JobQueue {
 
     const filteredJobTypes = this.filterJobTypes(jobType)
 
-    // TODO: optimize
     for (const jobType of filteredJobTypes) {
       const queue = this.queues[ jobType ]
       if (queue === undefined) {

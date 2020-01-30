@@ -4,7 +4,7 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt,
+  CreatedAt, DataType,
   ForeignKey,
   Is,
   Model,
@@ -16,13 +16,14 @@ import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
-import { LAZY_STATIC_PATHS, VIDEO_LANGUAGES } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
 import * as Bluebird from 'bluebird'
-import { MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/typings/models'
+import { MVideo, MVideoAccountLight, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/typings/models'
+import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 export enum ScopeNames {
   WITH_VIDEO_UUID_AND_REMOTE = 'WITH_VIDEO_UUID_AND_REMOTE'
@@ -63,6 +64,10 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
   @Is('VideoCaptionLanguage', value => throwIfNotValid(value, isVideoCaptionLanguageValid, 'language'))
   @Column
   language: string
+
+  @AllowNull(true)
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.COMMONS.URL.max))
+  fileUrl: string
 
   @ForeignKey(() => VideoModel)
   @Column
@@ -114,10 +119,11 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
     return VideoCaptionModel.findOne(query)
   }
 
-  static insertOrReplaceLanguage (videoId: number, language: string, transaction: Transaction) {
+  static insertOrReplaceLanguage (videoId: number, language: string, fileUrl: string, transaction: Transaction) {
     const values = {
       videoId,
-      language
+      language,
+      fileUrl
     }
 
     return VideoCaptionModel.upsert(values, { transaction, returning: true })
@@ -174,5 +180,15 @@ export class VideoCaptionModel extends Model<VideoCaptionModel> {
 
   removeCaptionFile (this: MVideoCaptionFormattable) {
     return remove(CONFIG.STORAGE.CAPTIONS_DIR + this.getCaptionName())
+  }
+
+  getFileUrl (video: MVideoAccountLight) {
+    if (!this.Video) this.Video = video as VideoModel
+
+    if (video.isOwned()) return WEBSERVER.URL + this.getCaptionStaticPath()
+    if (this.fileUrl) return this.fileUrl
+
+    // Fallback if we don't have a file URL
+    return buildRemoteVideoBaseUrl(video, this.getCaptionStaticPath())
   }
 }

@@ -14,7 +14,7 @@ import { CONFIG, registerConfigChangedHandler } from './config'
 
 // ---------------------------------------------------------------------------
 
-const LAST_MIGRATION_VERSION = 475
+const LAST_MIGRATION_VERSION = 480
 
 // ---------------------------------------------------------------------------
 
@@ -541,11 +541,13 @@ let STATIC_MAX_AGE = {
 // Videos thumbnail size
 const THUMBNAILS_SIZE = {
   width: 223,
-  height: 122
+  height: 122,
+  minWidth: 150
 }
 const PREVIEWS_SIZE = {
   width: 850,
-  height: 480
+  height: 480,
+  minWidth: 400
 }
 const AVATARS_SIZE = {
   width: 120,

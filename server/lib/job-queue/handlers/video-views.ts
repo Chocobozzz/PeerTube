@@ -23,6 +23,8 @@ async function processVideosViews () {
   for (const videoId of videoIds) {
     try {
       const views = await Redis.Instance.getVideoViews(videoId, hour)
+      await Redis.Instance.deleteVideoViews(videoId, hour)
+
       if (views) {
         logger.debug('Adding %d views to video %d in hour %d.', views, videoId, hour)
 
@@ -52,8 +54,6 @@ async function processVideosViews () {
           logger.error('Cannot create video views for video %d in hour %d.', videoId, hour, { err })
         }
       }
-
-      await Redis.Instance.deleteVideoViews(videoId, hour)
     } catch (err) {
       logger.error('Cannot update video views of video %d in hour %d.', videoId, hour, { err })
     }

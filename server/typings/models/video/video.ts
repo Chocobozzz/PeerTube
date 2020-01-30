@@ -9,7 +9,7 @@ import {
   MChannelUserId
 } from './video-channels'
 import { MTag } from './tag'
-import { MVideoCaptionLanguage } from './video-caption'
+import { MVideoCaptionLanguage, MVideoCaptionLanguageUrl } from './video-caption'
 import {
   MStreamingPlaylistFiles,
   MStreamingPlaylistRedundancies,
@@ -140,7 +140,7 @@ export type MVideoAP = MVideo &
   Use<'Tags', MTag[]> &
   Use<'VideoChannel', MChannelAccountLight> &
   Use<'VideoStreamingPlaylists', MStreamingPlaylistFiles[]> &
-  Use<'VideoCaptions', MVideoCaptionLanguage[]> &
+  Use<'VideoCaptions', MVideoCaptionLanguageUrl[]> &
   Use<'VideoBlacklist', MVideoBlacklistUnfederated> &
   Use<'VideoFiles', MVideoFileRedundanciesOpt[]> &
   Use<'Thumbnails', MThumbnail[]>

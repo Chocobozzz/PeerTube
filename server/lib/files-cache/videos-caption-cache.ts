@@ -5,7 +5,7 @@ import { VideoCaptionModel } from '../../models/video/video-caption'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
 import { CONFIG } from '../../initializers/config'
 import { logger } from '../../helpers/logger'
-import { fetchRemoteVideoStaticFile } from '../activitypub'
+import { doRequestAndSaveToFile } from '@server/helpers/requests'
 
 type GetPathParam = { videoId: string, language: string }
 
@@ -46,11 +46,10 @@ class VideosCaptionCache extends AbstractVideoStaticFileCache <GetPathParam> {
     const video = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoId)
     if (!video) return undefined
 
-    // FIXME: use URL
-    const remoteStaticPath = videoCaption.getCaptionStaticPath()
+    const remoteUrl = videoCaption.getFileUrl(video)
     const destPath = join(FILES_CACHE.VIDEO_CAPTIONS.DIRECTORY, videoCaption.getCaptionName())
 
-    await fetchRemoteVideoStaticFile(video, remoteStaticPath, destPath)
+    await doRequestAndSaveToFile({ uri: remoteUrl }, destPath)
 
     return { isOwned: false, path: destPath }
   }

@@ -1121,7 +1121,7 @@ export class VideoModel extends Model<VideoModel> {
       },
       include: [
         {
-          attributes: [ 'language' ],
+          attributes: [ 'language', 'fileUrl' ],
           model: VideoCaptionModel.unscoped(),
           required: false
         },

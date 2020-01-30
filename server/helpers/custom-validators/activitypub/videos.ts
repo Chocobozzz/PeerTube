@@ -51,6 +51,10 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     logger.debug('Video has invalid captions', { video })
     return false
   }
+  if (!setValidRemoteIcon(video)) {
+    logger.debug('Video has invalid icons', { video })
+    return false
+  }
 
   // Default attributes
   if (!isVideoStateValid(video.state)) video.state = VideoState.PUBLISHED
@@ -73,7 +77,6 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
     isDateValid(video.updated) &&
     (!video.originallyPublishedAt || isDateValid(video.originallyPublishedAt)) &&
     (!video.content || isRemoteVideoContentValid(video.mediaType, video.content)) &&
-    isRemoteVideoIconValid(video.icon) &&
     video.url.length !== 0 &&
     video.attributedTo.length !== 0
 }
@@ -132,6 +135,8 @@ function setValidRemoteCaptions (video: any) {
   if (Array.isArray(video.subtitleLanguage) === false) return false
 
   video.subtitleLanguage = video.subtitleLanguage.filter(caption => {
+    if (!isActivityPubUrlValid(caption.url)) caption.url = null
+
     return isRemoteStringIdentifierValid(caption)
   })
 
@@ -150,12 +155,19 @@ function isRemoteVideoContentValid (mediaType: string, content: string) {
   return mediaType === 'text/markdown' && isVideoTruncatedDescriptionValid(content)
 }
 
-function isRemoteVideoIconValid (icon: any) {
-  return icon.type === 'Image' &&
-    isActivityPubUrlValid(icon.url) &&
-    icon.mediaType === 'image/jpeg' &&
-    validator.isInt(icon.width + '', { min: 0 }) &&
-    validator.isInt(icon.height + '', { min: 0 })
+function setValidRemoteIcon (video: any) {
+  if (video.icon && !isArray(video.icon)) video.icon = [ video.icon ]
+  if (!video.icon) video.icon = []
+
+  video.icon = video.icon.filter(icon => {
+    return icon.type === 'Image' &&
+      isActivityPubUrlValid(icon.url) &&
+      icon.mediaType === 'image/jpeg' &&
+      validator.isInt(icon.width + '', { min: 0 }) &&
+      validator.isInt(icon.height + '', { min: 0 })
+  })
+
+  return video.icon.length !== 0
 }
 
 function setValidRemoteVideoUrls (video: any) {
