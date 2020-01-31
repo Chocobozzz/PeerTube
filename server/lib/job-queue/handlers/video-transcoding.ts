@@ -6,7 +6,6 @@ import { JobQueue } from '../job-queue'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
-import * as Bluebird from 'bluebird'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 import { generateHlsPlaylist, mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewResolution } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
@@ -40,8 +39,11 @@ interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
   type: 'optimize'
 }
 
-export type VideoTranscodingPayload = HLSTranscodingPayload | NewResolutionTranscodingPayload
-  | OptimizeTranscodingPayload | MergeAudioTranscodingPayload
+export type VideoTranscodingPayload =
+  HLSTranscodingPayload
+  | NewResolutionTranscodingPayload
+  | OptimizeTranscodingPayload
+  | MergeAudioTranscodingPayload
 
 async function processVideoTranscoding (job: Bull.Job) {
   const payload = job.data as VideoTranscodingPayload
@@ -105,7 +107,7 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
 
   const { videoDatabase, videoPublished } = await sequelizeTypescript.transaction(async t => {
     // Maybe the video changed in database, refresh it
-    let videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
+    const videoDatabase = await VideoModel.loadAndPopulateAccountAndServerAndTags(videoArg.uuid, t)
     // Video does not exist anymore
     if (!videoDatabase) return undefined
 
@@ -122,8 +124,6 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
     await createHlsJobIfEnabled(hlsPayload)
 
     if (resolutionsEnabled.length !== 0) {
-      const tasks: (Bluebird<Bull.Job<any>> | Promise<Bull.Job<any>>)[] = []
-
       for (const resolution of resolutionsEnabled) {
         let dataInput: VideoTranscodingPayload
 
@@ -143,11 +143,8 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
           }
         }
 
-        const p = JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
-        tasks.push(p)
+        JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
       }
-
-      await Promise.all(tasks)
 
       logger.info('Transcoding jobs created for uuid %s.', videoDatabase.uuid, { resolutionsEnabled })
     } else {

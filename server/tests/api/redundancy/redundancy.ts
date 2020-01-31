@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -92,21 +92,21 @@ async function flushAndRunServers (strategy: VideoRedundancyStrategy | null, add
   await setAccessTokensToServers(servers)
 
   {
-    const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video 1 server 2' })
+    const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
     video1Server2UUID = res.body.video.uuid
     video1Server2Id = res.body.video.id
 
-    await viewVideo(servers[ 1 ].url, video1Server2UUID)
+    await viewVideo(servers[1].url, video1Server2UUID)
   }
 
   await waitJobs(servers)
 
   // Server 1 and server 2 follow each other
-  await doubleFollow(servers[ 0 ], servers[ 1 ])
+  await doubleFollow(servers[0], servers[1])
   // Server 1 and server 3 follow each other
-  await doubleFollow(servers[ 0 ], servers[ 2 ])
+  await doubleFollow(servers[0], servers[2])
   // Server 2 and server 3 follow each other
-  await doubleFollow(servers[ 1 ], servers[ 2 ])
+  await doubleFollow(servers[1], servers[2])
 
   await waitJobs(servers)
 }
@@ -115,7 +115,7 @@ async function check1WebSeed (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2UUID
 
   const webseeds = [
-    `http://localhost:${servers[ 1 ].port}/static/webseed/${videoUUID}`
+    `http://localhost:${servers[1].port}/static/webseed/${videoUUID}`
   ]
 
   for (const server of servers) {
@@ -133,8 +133,8 @@ async function check2Webseeds (videoUUID?: string) {
   if (!videoUUID) videoUUID = video1Server2UUID
 
   const webseeds = [
-    `http://localhost:${servers[ 0 ].port}/static/redundancy/${videoUUID}`,
-    `http://localhost:${servers[ 1 ].port}/static/webseed/${videoUUID}`
+    `http://localhost:${servers[0].port}/static/redundancy/${videoUUID}`,
+    `http://localhost:${servers[1].port}/static/webseed/${videoUUID}`
   ]
 
   for (const server of servers) {
@@ -269,12 +269,12 @@ async function checkStatsWith1Webseed (strategy: VideoRedundancyStrategyWithManu
 }
 
 async function enableRedundancyOnServer1 () {
-  await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, true)
+  await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, true)
 
-  const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: '-createdAt' })
+  const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: '-createdAt' })
   const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
+  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
+  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -284,12 +284,12 @@ async function enableRedundancyOnServer1 () {
 }
 
 async function disableRedundancyOnServer1 () {
-  await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, false)
+  await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, false)
 
-  const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: '-createdAt' })
+  const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: '-createdAt' })
   const follows: ActorFollow[] = res.body.data
-  const server2 = follows.find(f => f.following.host === `localhost:${servers[ 1 ].port}`)
-  const server3 = follows.find(f => f.following.host === `localhost:${servers[ 2 ].port}`)
+  const server2 = follows.find(f => f.following.host === `localhost:${servers[1].port}`)
+  const server3 = follows.find(f => f.following.host === `localhost:${servers[2].port}`)
 
   expect(server3).to.not.be.undefined
   expect(server3.following.hostRedundancyAllowed).to.be.false
@@ -434,8 +434,8 @@ describe('Test videos redundancy', function () {
     it('Should view 2 times the first video to have > min_views config', async function () {
       this.timeout(80000)
 
-      await viewVideo(servers[ 0 ].url, video1Server2UUID)
-      await viewVideo(servers[ 2 ].url, video1Server2UUID)
+      await viewVideo(servers[0].url, video1Server2UUID)
+      await viewVideo(servers[2].url, video1Server2UUID)
 
       await wait(10000)
       await waitJobs(servers)
@@ -620,7 +620,7 @@ describe('Test videos redundancy', function () {
       await check1PlaylistRedundancies()
       await checkStatsWith2Webseed(strategy)
 
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video 2 server 2' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2' })
       video2Server2UUID = res.body.video.uuid
     })
 
@@ -652,8 +652,8 @@ describe('Test videos redundancy', function () {
 
       await waitJobs(servers)
 
-      killallServers([ servers[ 0 ] ])
-      await reRunServer(servers[ 0 ], {
+      killallServers([ servers[0] ])
+      await reRunServer(servers[0], {
         redundancy: {
           videos: {
             check_interval: '1 second',

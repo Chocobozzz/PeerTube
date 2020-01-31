@@ -10,9 +10,9 @@ import { checkUrlsSameHost } from '../../helpers/activitypub'
 import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../typings/models/video'
 
 type ResolveThreadParams = {
-  url: string,
-  comments?: MCommentOwner[],
-  isVideo?: boolean,
+  url: string
+  comments?: MCommentOwner[]
+  isVideo?: boolean
   commentCreated?: boolean
 }
 type ResolveThreadResult = Promise<{ video: MVideoAccountLightBlacklistAllFiles, comment: MCommentOwnerVideo, commentCreated: boolean }>
@@ -28,7 +28,7 @@ async function resolveThread (params: ResolveThreadParams): ResolveThreadResult 
   if (params.commentCreated === undefined) params.commentCreated = false
   if (params.comments === undefined) params.comments = []
 
-   // Already have this comment?
+  // Already have this comment?
   if (isVideo !== true) {
     const result = await resolveCommentFromDB(params)
     if (result) return result
@@ -87,7 +87,7 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
 
   let resultComment: MCommentOwnerVideo
   if (comments.length !== 0) {
-    const firstReply = comments[ comments.length - 1 ] as MCommentOwnerVideo
+    const firstReply = comments[comments.length - 1] as MCommentOwnerVideo
     firstReply.inReplyToCommentId = null
     firstReply.originCommentId = null
     firstReply.videoId = video.id
@@ -97,9 +97,9 @@ async function tryResolveThreadFromVideo (params: ResolveThreadParams) {
     comments[comments.length - 1] = await firstReply.save()
 
     for (let i = comments.length - 2; i >= 0; i--) {
-      const comment = comments[ i ] as MCommentOwnerVideo
+      const comment = comments[i] as MCommentOwnerVideo
       comment.originCommentId = firstReply.id
-      comment.inReplyToCommentId = comments[ i + 1 ].id
+      comment.inReplyToCommentId = comments[i + 1].id
       comment.videoId = video.id
       comment.changed('updatedAt', true)
       comment.Video = video

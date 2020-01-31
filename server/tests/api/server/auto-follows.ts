@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -59,9 +59,10 @@ async function server1Follows2 (servers: ServerInfo[]) {
 
 async function resetFollows (servers: ServerInfo[]) {
   try {
-    await unfollow(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ])
-    await unfollow(servers[ 1 ].url, servers[ 1 ].accessToken, servers[ 0 ])
-  } catch { /* empty */ }
+    await unfollow(servers[0].url, servers[0].accessToken, servers[1])
+    await unfollow(servers[1].url, servers[1].accessToken, servers[0])
+  } catch { /* empty */
+  }
 
   await waitJobs(servers)
 
@@ -163,8 +164,8 @@ describe('Test auto follows', function () {
       await wait(5000)
       await waitJobs(servers)
 
-      await checkFollow(servers[ 0 ], servers[ 1 ], false)
-      await checkFollow(servers[ 1 ], servers[ 0 ], false)
+      await checkFollow(servers[0], servers[1], false)
+      await checkFollow(servers[1], servers[0], false)
     })
 
     it('Should auto follow the index', async function () {
@@ -187,7 +188,7 @@ describe('Test auto follows', function () {
       await wait(5000)
       await waitJobs(servers)
 
-      await checkFollow(servers[ 0 ], servers[ 1 ], true)
+      await checkFollow(servers[0], servers[1], true)
 
       await resetFollows(servers)
     })
@@ -200,8 +201,8 @@ describe('Test auto follows', function () {
       await wait(5000)
       await waitJobs(servers)
 
-      await checkFollow(servers[ 0 ], servers[ 1 ], false)
-      await checkFollow(servers[ 0 ], servers[ 2 ], true)
+      await checkFollow(servers[0], servers[1], false)
+      await checkFollow(servers[0], servers[2], true)
     })
   })
 

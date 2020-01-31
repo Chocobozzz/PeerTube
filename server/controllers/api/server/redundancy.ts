@@ -84,7 +84,7 @@ async function addVideoRedundancy (req: express.Request, res: express.Response) 
     videoId: res.locals.onlyVideo.id
   }
 
-  await JobQueue.Instance.createJob({
+  await JobQueue.Instance.createJobWithPromise({
     type: 'video-redundancy',
     payload
   })

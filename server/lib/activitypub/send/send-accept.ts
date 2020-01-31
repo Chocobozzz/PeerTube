@@ -5,7 +5,7 @@ import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
 import { MActor, MActorFollowActors } from '../../../typings/models'
 
-async function sendAccept (actorFollow: MActorFollowActors) {
+function sendAccept (actorFollow: MActorFollowActors) {
   const follower = actorFollow.ActorFollower
   const me = actorFollow.ActorFollowing
 

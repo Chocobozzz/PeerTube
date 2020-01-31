@@ -4,7 +4,8 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt, DataType,
+  CreatedAt,
+  DataType,
   ForeignKey,
   Is,
   Model,
@@ -16,13 +17,13 @@ import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { isVideoCaptionLanguageValid } from '../../helpers/custom-validators/video-captions'
 import { VideoCaption } from '../../../shared/models/videos/caption/video-caption.model'
-import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants'
+import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, VIDEO_LANGUAGES, WEBSERVER } from '../../initializers/constants'
 import { join } from 'path'
 import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
 import * as Bluebird from 'bluebird'
-import { MVideo, MVideoAccountLight, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/typings/models'
+import { MVideoAccountLight, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/typings/models'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 export enum ScopeNames {

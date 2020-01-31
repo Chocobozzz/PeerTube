@@ -50,7 +50,7 @@ async function listJobs (req: express.Request, res: express.Response) {
   })
   const total = await JobQueue.Instance.count(state)
 
-  const result: ResultList<any> = {
+  const result: ResultList<Job> = {
     total,
     data: jobs.map(j => formatJob(j, state))
   }

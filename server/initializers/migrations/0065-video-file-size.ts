@@ -5,9 +5,9 @@ import { VideoModel } from '../../models/video/video'
 import { getVideoFilePath } from '@server/lib/video-paths'
 
 function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
   return utils.db.Video.listOwnedAndPopulateAuthorAndTags()

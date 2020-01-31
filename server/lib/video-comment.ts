@@ -7,9 +7,9 @@ import { sendCreateVideoComment } from './activitypub/send'
 import { MAccountDefault, MComment, MCommentOwnerVideoReply, MVideoFullLight } from '../typings/models'
 
 async function createVideoComment (obj: {
-  text: string,
-  inReplyToComment: MComment | null,
-  video: MVideoFullLight,
+  text: string
+  inReplyToComment: MComment | null
+  video: MVideoFullLight
   account: MAccountDefault
 }, t: Sequelize.Transaction) {
   let originCommentId: number | null = null

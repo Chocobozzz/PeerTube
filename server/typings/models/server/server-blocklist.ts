@@ -11,7 +11,8 @@ export type MServerBlocklist = Omit<ServerBlocklistModel, 'ByAccount' | 'Blocked
 
 // ############################################################################
 
-export type MServerBlocklistAccountServer = MServerBlocklist &
+export type MServerBlocklistAccountServer =
+  MServerBlocklist &
   Use<'ByAccount', MAccountDefault> &
   Use<'BlockedServer', MServer>
 
@@ -19,6 +20,7 @@ export type MServerBlocklistAccountServer = MServerBlocklist &
 
 // Format for API or AP object
 
-export type MServerBlocklistFormattable = Pick<MServerBlocklist, 'createdAt'> &
+export type MServerBlocklistFormattable =
+  Pick<MServerBlocklist, 'createdAt'> &
   Use<'ByAccount', MAccountFormattable> &
   Use<'BlockedServer', MServerFormattable>

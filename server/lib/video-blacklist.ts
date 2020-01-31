@@ -9,15 +9,15 @@ import { Notifier } from './notifier'
 import { MUser, MVideoBlacklistVideo, MVideoWithBlacklistLight } from '@server/typings/models'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
-  video: MVideoWithBlacklistLight,
-  user?: MUser,
-  isRemote: boolean,
-  isNew: boolean,
-  notify?: boolean,
+  video: MVideoWithBlacklistLight
+  user?: MUser
+  isRemote: boolean
+  isNew: boolean
+  notify?: boolean
   transaction?: Transaction
 }) {
   const { video, user, isRemote, isNew, notify = true, transaction } = parameters
-  const doAutoBlacklist = await Hooks.wrapPromiseFun(
+  const doAutoBlacklist = await Hooks.wrapFun(
     autoBlacklistNeeded,
     { video, user, isRemote, isNew },
     'filter:video.auto-blacklist.result'
@@ -49,10 +49,10 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   return true
 }
 
-async function autoBlacklistNeeded (parameters: {
-  video: MVideoWithBlacklistLight,
-  isRemote: boolean,
-  isNew: boolean,
+function autoBlacklistNeeded (parameters: {
+  video: MVideoWithBlacklistLight
+  isRemote: boolean
+  isNew: boolean
   user?: MUser
 }) {
   const { user, video, isRemote, isNew } = parameters

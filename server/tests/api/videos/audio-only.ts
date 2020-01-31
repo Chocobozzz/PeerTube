@@ -1,28 +1,21 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
 import {
-  checkDirectoryIsEmpty,
-  checkSegmentHash,
-  checkTmpIsEmpty,
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  getPlaylist,
-  getVideo, makeGetRequest, makeRawRequest,
-  removeVideo, root,
+  getVideo,
+  root,
   ServerInfo,
-  setAccessTokensToServers, updateCustomSubConfig,
-  updateVideo,
+  setAccessTokensToServers,
   uploadVideo,
-  waitJobs, webtorrentAdd
+  waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoDetails } from '../../../../shared/models/videos'
-import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { join } from 'path'
-import { DEFAULT_AUDIO_RESOLUTION } from '../../../initializers/constants'
-import { getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution, audio, getVideoStreamSize } from '@server/helpers/ffmpeg-utils'
+import { audio, getVideoStreamSize } from '@server/helpers/ffmpeg-utils'
 
 const expect = chai.expect
 
@@ -87,14 +80,14 @@ describe('Test audio only video transcoding', function () {
 
   it('0p transcoded video should not have video', async function () {
     const paths = [
-      join(root(), 'test' + servers[ 0 ].internalServerNumber, 'videos', videoUUID + '-0.mp4'),
-      join(root(), 'test' + servers[ 0 ].internalServerNumber, 'streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4')
+      join(root(), 'test' + servers[0].internalServerNumber, 'videos', videoUUID + '-0.mp4'),
+      join(root(), 'test' + servers[0].internalServerNumber, 'streaming-playlists', 'hls', videoUUID, videoUUID + '-0-fragmented.mp4')
     ]
 
     for (const path of paths) {
       const { audioStream } = await audio.get(path)
-      expect(audioStream[ 'codec_name' ]).to.be.equal('aac')
-      expect(audioStream[ 'bit_rate' ]).to.be.at.most(384 * 8000)
+      expect(audioStream['codec_name']).to.be.equal('aac')
+      expect(audioStream['bit_rate']).to.be.at.most(384 * 8000)
 
       const size = await getVideoStreamSize(path)
       expect(size.height).to.equal(0)

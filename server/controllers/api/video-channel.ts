@@ -119,7 +119,7 @@ async function listVideoChannels (req: express.Request, res: express.Response) {
 }
 
 async function updateVideoChannelAvatar (req: express.Request, res: express.Response) {
-  const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
+  const avatarPhysicalFile = req.files['avatarfile'][0]
   const videoChannel = res.locals.videoChannel
   const oldVideoChannelAuditKeys = new VideoChannelAuditView(videoChannel.toFormattedJSON())
 
@@ -232,7 +232,6 @@ async function getVideoChannel (req: express.Request, res: express.Response) {
 
   if (videoChannelWithVideos.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: videoChannelWithVideos.Actor.url } })
-            .catch(err => logger.error('Cannot create AP refresher job for actor %s.', videoChannelWithVideos.Actor.url, { err }))
   }
 
   return res.json(videoChannelWithVideos.toFormattedJSON())

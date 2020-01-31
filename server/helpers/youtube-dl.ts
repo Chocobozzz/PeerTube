@@ -24,20 +24,23 @@ const processOptions = {
 }
 
 function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo> {
-  return new Promise<YoutubeDLInfo>(async (res, rej) => {
+  return new Promise<YoutubeDLInfo>((res, rej) => {
     let args = opts || [ '-j', '--flat-playlist' ]
     args = wrapWithProxyOptions(args)
 
-    const youtubeDL = await safeGetYoutubeDL()
-    youtubeDL.getInfo(url, args, processOptions, (err, info) => {
-      if (err) return rej(err)
-      if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
+    safeGetYoutubeDL()
+      .then(youtubeDL => {
+        youtubeDL.getInfo(url, args, processOptions, (err, info) => {
+          if (err) return rej(err)
+          if (info.is_live === true) return rej(new Error('Cannot download a live streaming.'))
 
-      const obj = buildVideoInfo(normalizeObject(info))
-      if (obj.name && obj.name.length < CONSTRAINTS_FIELDS.VIDEOS.NAME.min) obj.name += ' video'
+          const obj = buildVideoInfo(normalizeObject(info))
+          if (obj.name && obj.name.length < CONSTRAINTS_FIELDS.VIDEOS.NAME.min) obj.name += ' video'
 
-      return res(obj)
-    })
+          return res(obj)
+        })
+      })
+      .catch(err => rej(err))
   })
 }
 
@@ -54,26 +57,34 @@ function downloadYoutubeDLVideo (url: string, timeout: number) {
     options = options.concat([ '--ffmpeg-location', process.env.FFMPEG_PATH ])
   }
 
-  return new Promise<string>(async (res, rej) => {
-    const youtubeDL = await safeGetYoutubeDL()
-    youtubeDL.exec(url, options, processOptions, err => {
-      clearTimeout(timer)
+  return new Promise<string>((res, rej) => {
+    safeGetYoutubeDL()
+      .then(youtubeDL => {
+        youtubeDL.exec(url, options, processOptions, err => {
+          clearTimeout(timer)
 
-      if (err) {
-        remove(path)
-          .catch(err => logger.error('Cannot delete path on YoutubeDL error.', { err }))
+          if (err) {
+            remove(path)
+              .catch(err => logger.error('Cannot delete path on YoutubeDL error.', { err }))
 
-        return rej(err)
-      }
+            return rej(err)
+          }
 
-      return res(path)
-    })
+          return res(path)
+        })
 
-    timer = setTimeout(async () => {
-      await remove(path)
+        timer = setTimeout(() => {
+          const err = new Error('YoutubeDL download timeout.')
 
-      return rej(new Error('YoutubeDL download timeout.'))
-    }, timeout)
+          remove(path)
+            .finally(() => rej(err))
+            .catch(err => {
+              logger.error('Cannot remove %s in youtubeDL timeout.', path, { err })
+              return rej(err)
+            })
+        }, timeout)
+      })
+      .catch(err => rej(err))
   })
 }
 
@@ -103,7 +114,7 @@ async function updateYoutubeDLBinary () {
 
       const url = result.headers.location
       const downloadFile = request.get(url)
-      const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(url)[ 1 ]
+      const newVersion = /yt-dl\.org\/downloads\/(\d{4}\.\d\d\.\d\d(\.\d)?)\/youtube-dl/.exec(url)[1]
 
       downloadFile.on('response', result => {
         if (result.statusCode !== 200) {

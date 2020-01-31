@@ -46,6 +46,10 @@ const inboxQueue = queue<QueueParam, Error>((task, cb) => {
 
   processActivities(task.activities, options)
     .then(() => cb())
+    .catch(err => {
+      logger.error('Error in process activities.', { err })
+      cb()
+    })
 })
 
 function inboxController (req: express.Request, res: express.Response) {

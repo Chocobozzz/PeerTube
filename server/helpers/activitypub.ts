@@ -5,7 +5,7 @@ import { Activity } from '../../shared/models/activitypub'
 import { ACTIVITY_PUB, REMOTE_SCHEME } from '../initializers/constants'
 import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
-import { parse } from 'url'
+import { URL } from 'url'
 import { MActor, MVideoAccountLight } from '../typings/models'
 
 function activityPubContextify <T> (data: T) {
@@ -161,8 +161,8 @@ function getAPId (activity: string | { id: string }) {
 }
 
 function checkUrlsSameHost (url1: string, url2: string) {
-  const idHost = parse(url1).host
-  const actorHost = parse(url2).host
+  const idHost = new URL(url1).host
+  const actorHost = new URL(url2).host
 
   return idHost && actorHost && idHost.toLowerCase() === actorHost.toLowerCase()
 }

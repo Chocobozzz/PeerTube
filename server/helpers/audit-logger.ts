@@ -81,7 +81,8 @@ function auditLoggerFactory (domain: string) {
 }
 
 abstract class EntityAuditView {
-  constructor (private keysToKeep: Array<string>, private prefix: string, private entityInfos: object) { }
+  constructor (private readonly keysToKeep: string[], private readonly prefix: string, private readonly entityInfos: object) { }
+
   toLogKeys (): object {
     return chain(flatten(this.entityInfos, { delimiter: '-', safe: true }))
       .pick(this.keysToKeep)
@@ -121,7 +122,7 @@ const videoKeysToKeep = [
   'downloadEnabled'
 ]
 class VideoAuditView extends EntityAuditView {
-  constructor (private video: VideoDetails) {
+  constructor (private readonly video: VideoDetails) {
     super(videoKeysToKeep, 'video', video)
   }
 }
@@ -132,7 +133,7 @@ const videoImportKeysToKeep = [
   'video-name'
 ]
 class VideoImportAuditView extends EntityAuditView {
-  constructor (private videoImport: VideoImport) {
+  constructor (private readonly videoImport: VideoImport) {
     super(videoImportKeysToKeep, 'video-import', videoImport)
   }
 }
@@ -151,7 +152,7 @@ const commentKeysToKeep = [
   'account-name'
 ]
 class CommentAuditView extends EntityAuditView {
-  constructor (private comment: VideoComment) {
+  constructor (private readonly comment: VideoComment) {
     super(commentKeysToKeep, 'comment', comment)
   }
 }
@@ -180,7 +181,7 @@ const userKeysToKeep = [
   'videoChannels'
 ]
 class UserAuditView extends EntityAuditView {
-  constructor (private user: User) {
+  constructor (private readonly user: User) {
     super(userKeysToKeep, 'user', user)
   }
 }
@@ -206,7 +207,7 @@ const channelKeysToKeep = [
   'ownerAccount-displayedName'
 ]
 class VideoChannelAuditView extends EntityAuditView {
-  constructor (private channel: VideoChannel) {
+  constructor (private readonly channel: VideoChannel) {
     super(channelKeysToKeep, 'channel', channel)
   }
 }
@@ -221,7 +222,7 @@ const videoAbuseKeysToKeep = [
   'createdAt'
 ]
 class VideoAbuseAuditView extends EntityAuditView {
-  constructor (private videoAbuse: VideoAbuse) {
+  constructor (private readonly videoAbuse: VideoAbuse) {
     super(videoAbuseKeysToKeep, 'abuse', videoAbuse)
   }
 }
@@ -253,9 +254,12 @@ class CustomConfigAuditView extends EntityAuditView {
     const infos: any = customConfig
     const resolutionsDict = infos.transcoding.resolutions
     const resolutionsArray = []
-    Object.entries(resolutionsDict).forEach(([resolution, isEnabled]) => {
-      if (isEnabled) resolutionsArray.push(resolution)
-    })
+
+    Object.entries(resolutionsDict)
+          .forEach(([ resolution, isEnabled ]) => {
+            if (isEnabled) resolutionsArray.push(resolution)
+          })
+
     Object.assign({}, infos, { transcoding: { resolutions: resolutionsArray } })
     super(customConfigKeysToKeep, 'config', infos)
   }

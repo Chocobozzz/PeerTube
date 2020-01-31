@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -34,12 +34,12 @@ describe('Test ActivityPub videos search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video 1 on server 1' })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1 on server 1' })
       videoServer1UUID = res.body.video.uuid
     }
 
     {
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video 1 on server 2' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 on server 2' })
       videoServer2UUID = res.body.video.uuid
     }
 
@@ -49,7 +49,7 @@ describe('Test ActivityPub videos search', function () {
   it('Should not find a remote video', async function () {
     {
       const search = 'http://localhost:' + servers[1].port + '/videos/watch/43'
-      const res = await searchVideoWithToken(servers[ 0 ].url, search, servers[ 0 ].accessToken)
+      const res = await searchVideoWithToken(servers[0].url, search, servers[0].accessToken)
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')

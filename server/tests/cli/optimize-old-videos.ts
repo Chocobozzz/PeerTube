@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import * as chai from 'chai'
@@ -28,7 +28,9 @@ const expect = chai.expect
 
 describe('Test optimize old videos', function () {
   let servers: ServerInfo[] = []
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let video1UUID: string
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let video2UUID: string
 
   before(async function () {

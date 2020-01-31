@@ -20,7 +20,7 @@ function isVideoImportTargetUrlValid (url: string) {
 }
 
 function isVideoImportStateValid (value: any) {
-  return exists(value) && VIDEO_IMPORT_STATES[ value ] !== undefined
+  return exists(value) && VIDEO_IMPORT_STATES[value] !== undefined
 }
 
 const videoTorrentImportTypes = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT).map(m => `(${m})`)

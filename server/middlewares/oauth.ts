@@ -51,6 +51,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
 
       return next()
     })
+    .catch(err => logger.error('Cannot get access token.', { err }))
 }
 
 function authenticatePromiseIfNeeded (req: express.Request, res: express.Response, authenticateInQuery = false) {

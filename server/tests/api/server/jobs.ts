@@ -1,8 +1,8 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { cleanupTests, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { getJobsList, getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { flushAndRunMultipleServers } from '../../../../shared/extra-utils/server/servers'
@@ -44,8 +44,8 @@ describe('Test jobs', function () {
   it('Should list jobs with sort, pagination and job type', async function () {
     {
       const res = await getJobsListPaginationAndSort({
-        url: servers[ 1 ].url,
-        accessToken: servers[ 1 ].accessToken,
+        url: servers[1].url,
+        accessToken: servers[1].accessToken,
         state: 'completed',
         start: 1,
         count: 2,
@@ -54,9 +54,9 @@ describe('Test jobs', function () {
       expect(res.body.total).to.be.above(2)
       expect(res.body.data).to.have.lengthOf(2)
 
-      let job: Job = res.body.data[ 0 ]
+      let job: Job = res.body.data[0]
       // Skip repeat jobs
-      if (job.type === 'videos-views') job = res.body.data[ 1 ]
+      if (job.type === 'videos-views') job = res.body.data[1]
 
       expect(job.state).to.equal('completed')
       expect(job.type.startsWith('activitypub-')).to.be.true
@@ -67,8 +67,8 @@ describe('Test jobs', function () {
 
     {
       const res = await getJobsListPaginationAndSort({
-        url: servers[ 1 ].url,
-        accessToken: servers[ 1 ].accessToken,
+        url: servers[1].url,
+        accessToken: servers[1].accessToken,
         state: 'completed',
         start: 0,
         count: 100,

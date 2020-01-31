@@ -39,7 +39,7 @@ meRouter.get('/me',
 )
 meRouter.delete('/me',
   authenticate,
-  asyncMiddleware(deleteMeValidator),
+  deleteMeValidator,
   asyncMiddleware(deleteMe)
 )
 
@@ -214,7 +214,7 @@ async function updateMe (req: express.Request, res: express.Response) {
 }
 
 async function updateMyAvatar (req: express.Request, res: express.Response) {
-  const avatarPhysicalFile = req.files[ 'avatarfile' ][ 0 ]
+  const avatarPhysicalFile = req.files['avatarfile'][0]
   const user = res.locals.oauth.token.user
 
   const userAccount = await AccountModel.load(user.Account.id)

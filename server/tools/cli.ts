@@ -31,7 +31,7 @@ async function getAdminTokenOrDie (url: string, username: string, password: stri
 }
 
 interface Settings {
-  remotes: any[],
+  remotes: any[]
   default: number
 }
 
@@ -90,9 +90,9 @@ function getRemoteObjectOrDie (
   if (!program['url'] || !program['username'] || !program['password']) {
     // No remote and we don't have program parameters: quit
     if (settings.remotes.length === 0 || Object.keys(netrc.machines).length === 0) {
-      if (!program[ 'url' ]) console.error('--url field is required.')
-      if (!program[ 'username' ]) console.error('--username field is required.')
-      if (!program[ 'password' ]) console.error('--password field is required.')
+      if (!program['url']) console.error('--url field is required.')
+      if (!program['username']) console.error('--username field is required.')
+      if (!program['password']) console.error('--password field is required.')
 
       return process.exit(-1)
     }
@@ -112,9 +112,9 @@ function getRemoteObjectOrDie (
   }
 
   return {
-    url: program[ 'url' ],
-    username: program[ 'username' ],
-    password: program[ 'password' ]
+    url: program['url'],
+    username: program['username'],
+    password: program['password']
   }
 }
 
@@ -150,8 +150,8 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
   const booleanAttributes: { [id in keyof typeof defaultBooleanAttributes]: boolean } | {} = {}
 
   for (const key of Object.keys(defaultBooleanAttributes)) {
-    if (command[ key ] !== undefined) {
-      booleanAttributes[key] = command[ key ]
+    if (command[key] !== undefined) {
+      booleanAttributes[key] = command[key]
     } else if (defaultAttributes[key] !== undefined) {
       booleanAttributes[key] = defaultAttributes[key]
     } else {
@@ -160,19 +160,19 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
   }
 
   const videoAttributes = {
-    name: command[ 'videoName' ] || defaultAttributes.name,
-    category: command[ 'category' ] || defaultAttributes.category || undefined,
-    licence: command[ 'licence' ] || defaultAttributes.licence || undefined,
-    language: command[ 'language' ] || defaultAttributes.language || undefined,
-    privacy: command[ 'privacy' ] || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
-    support: command[ 'support' ] || defaultAttributes.support || undefined,
-    description: command[ 'videoDescription' ] || defaultAttributes.description || undefined,
-    tags: command[ 'tags' ] || defaultAttributes.tags || undefined
+    name: command['videoName'] || defaultAttributes.name,
+    category: command['category'] || defaultAttributes.category || undefined,
+    licence: command['licence'] || defaultAttributes.licence || undefined,
+    language: command['language'] || defaultAttributes.language || undefined,
+    privacy: command['privacy'] || defaultAttributes.privacy || VideoPrivacy.PUBLIC,
+    support: command['support'] || defaultAttributes.support || undefined,
+    description: command['videoDescription'] || defaultAttributes.description || undefined,
+    tags: command['tags'] || defaultAttributes.tags || undefined
   }
 
   Object.assign(videoAttributes, booleanAttributes)
 
-  if (command[ 'channelName' ]) {
+  if (command['channelName']) {
     const res = await getVideoChannel(url, command['channelName'])
     const videoChannel: VideoChannel = res.body
 
@@ -188,9 +188,9 @@ async function buildVideoAttributesFromCommander (url: string, command: Command,
 
 function getServerCredentials (program: any) {
   return Promise.all([ getSettings(), getNetrc() ])
-         .then(([ settings, netrc ]) => {
-           return getRemoteObjectOrDie(program, settings, netrc)
-         })
+                .then(([ settings, netrc ]) => {
+                  return getRemoteObjectOrDie(program, settings, netrc)
+                })
 }
 
 function getLogger (logLevel = 'info') {

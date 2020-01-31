@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -12,12 +12,11 @@ import {
   getVideo,
   getVideosList,
   immutableAssign,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { getMagnetURI, getYoutubeVideoUrl, importVideo, getMyVideoImports } from '../../../../shared/extra-utils/videos/video-imports'
+import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 
 const expect = chai.expect
 
@@ -88,12 +87,12 @@ describe('Test video imports', function () {
 
     {
       const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
-      channelIdServer1 = res.body.videoChannels[ 0 ].id
+      channelIdServer1 = res.body.videoChannels[0].id
     }
 
     {
       const res = await getMyUserInformation(servers[1].url, servers[1].accessToken)
-      channelIdServer2 = res.body.videoChannels[ 0 ].id
+      channelIdServer2 = res.body.videoChannels[0].id
     }
 
     await doubleFollow(servers[0], servers[1])
@@ -214,7 +213,7 @@ describe('Test video imports', function () {
 
       await checkVideoServer2(server.url, res.body.data[0].uuid)
 
-      const [ ,videoHttp, videoMagnet, videoTorrent ] = res.body.data
+      const [ , videoHttp, videoMagnet, videoTorrent ] = res.body.data
       await checkVideosServer1(server.url, videoHttp.uuid, videoMagnet.uuid, videoTorrent.uuid)
     }
   })

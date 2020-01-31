@@ -1,9 +1,8 @@
 import { join } from 'path'
-import { FILES_CACHE, STATIC_PATHS } from '../../initializers/constants'
+import { FILES_CACHE } from '../../initializers/constants'
 import { VideoModel } from '../../models/video/video'
 import { AbstractVideoStaticFileCache } from './abstract-video-static-file-cache'
 import { doRequestAndSaveToFile } from '@server/helpers/requests'
-import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 class VideosPreviewCache extends AbstractVideoStaticFileCache <string> {
 

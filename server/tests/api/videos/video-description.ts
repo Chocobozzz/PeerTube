@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -8,7 +8,6 @@ import {
   getVideo,
   getVideoDescription,
   getVideosList,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   updateVideo,
@@ -23,7 +22,7 @@ describe('Test video description', function () {
   let servers: ServerInfo[] = []
   let videoUUID = ''
   let videoId: number
-  let longDescription = 'my super description for server 1'.repeat(50)
+  const longDescription = 'my super description for server 1'.repeat(50)
 
   before(async function () {
     this.timeout(40000)
@@ -61,7 +60,7 @@ describe('Test video description', function () {
 
       // 30 characters * 6 -> 240 characters
       const truncatedDescription = 'my super description for server 1'.repeat(7) +
-                                   'my super descrip...'
+        'my super descrip...'
 
       expect(video.description).to.equal(truncatedDescription)
     }

@@ -5,9 +5,9 @@ import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
 import { readdir, rename } from 'fs-extra'
 
 function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
   const torrentDir = CONFIG.STORAGE.TORRENTS_DIR

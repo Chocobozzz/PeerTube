@@ -135,7 +135,6 @@ async function followInstance (req: express.Request, res: express.Response) {
     }
 
     JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
-      .catch(err => logger.error('Cannot create follow job for %s.', host, err))
   }
 
   return res.status(204).end()

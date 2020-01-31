@@ -2,8 +2,8 @@ import * as Sequelize from 'sequelize'
 import * as Promise from 'bluebird'
 
 function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
   const q = utils.queryInterface

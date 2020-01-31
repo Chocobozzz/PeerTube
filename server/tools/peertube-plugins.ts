@@ -1,3 +1,5 @@
+// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
+
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
@@ -79,9 +81,9 @@ async function pluginsListCLI () {
   const plugins: PeerTubePlugin[] = res.body.data
 
   const table = new CliTable3({
-    head: ['name', 'version', 'homepage'],
+    head: [ 'name', 'version', 'homepage' ],
     colWidths: [ 50, 10, 50 ]
-  }) as CliTable3.HorizontalTable
+  }) as any
 
   for (const plugin of plugins) {
     const npmName = plugin.type === PluginType.PLUGIN
@@ -124,7 +126,6 @@ async function installPluginCLI (options: any) {
   } catch (err) {
     console.error('Cannot install plugin.', err)
     process.exit(-1)
-    return
   }
 
   console.log('Plugin installed.')
@@ -156,7 +157,6 @@ async function updatePluginCLI (options: any) {
   } catch (err) {
     console.error('Cannot update plugin.', err)
     process.exit(-1)
-    return
   }
 
   console.log('Plugin updated.')
@@ -177,12 +177,11 @@ async function uninstallPluginCLI (options: any) {
     await uninstallPlugin({
       url,
       accessToken,
-      npmName: options[ 'npmName' ]
+      npmName: options['npmName']
     })
   } catch (err) {
     console.error('Cannot uninstall plugin.', err)
     process.exit(-1)
-    return
   }
 
   console.log('Plugin uninstalled.')

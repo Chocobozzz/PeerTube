@@ -53,7 +53,7 @@ export type SummaryOptions = {
   ]
 }))
 @Scopes(() => ({
-  [ ScopeNames.SUMMARY ]: (options: SummaryOptions = {}) => {
+  [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
     const whereActor = options.whereActor || undefined
 
     const serverInclude: IncludeOptions = {
@@ -254,15 +254,15 @@ export class AccountModel extends Model<AccountModel> {
 
     const query = {
       where: {
-        [ Op.or ]: [
+        [Op.or]: [
           {
             userId: {
-              [ Op.ne ]: null
+              [Op.ne]: null
             }
           },
           {
             applicationId: {
-              [ Op.ne ]: null
+              [Op.ne]: null
             }
           }
         ]

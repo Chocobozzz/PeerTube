@@ -22,13 +22,13 @@ function setFeedFormatContentType (req: express.Request, res: express.Response, 
 
   let acceptableContentTypes: string[]
   if (format === 'atom' || format === 'atom1') {
-    acceptableContentTypes = ['application/atom+xml', 'application/xml', 'text/xml']
+    acceptableContentTypes = [ 'application/atom+xml', 'application/xml', 'text/xml' ]
   } else if (format === 'json' || format === 'json1') {
-    acceptableContentTypes = ['application/json']
+    acceptableContentTypes = [ 'application/json' ]
   } else if (format === 'rss' || format === 'rss2') {
-    acceptableContentTypes = ['application/rss+xml', 'application/xml', 'text/xml']
+    acceptableContentTypes = [ 'application/rss+xml', 'application/xml', 'text/xml' ]
   } else {
-    acceptableContentTypes = ['application/xml', 'text/xml']
+    acceptableContentTypes = [ 'application/xml', 'text/xml' ]
   }
 
   if (req.accepts(acceptableContentTypes)) {

@@ -55,30 +55,30 @@ export interface HookInformationValue {
 }
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category'
-type VideoConstant = { [ key in number | string ]: string }
+type VideoConstant = { [key in number | string]: string }
 type UpdatedVideoConstant = {
-  [ name in AlterableVideoConstant ]: {
-    [ npmName: string ]: {
-      added: { key: number | string, label: string }[],
+  [name in AlterableVideoConstant]: {
+    [npmName: string]: {
+      added: { key: number | string, label: string }[]
       deleted: { key: number | string, label: string }[]
     }
   }
 }
 
 type PluginLocalesTranslations = {
-  [ locale: string ]: PluginTranslation
+  [locale: string]: PluginTranslation
 }
 
 export class PluginManager implements ServerHook {
 
   private static instance: PluginManager
 
-  private registeredPlugins: { [ name: string ]: RegisteredPlugin } = {}
-  private settings: { [ name: string ]: RegisterServerSettingOptions[] } = {}
-  private hooks: { [ name: string ]: HookInformationValue[] } = {}
+  private registeredPlugins: { [name: string]: RegisteredPlugin } = {}
+  private settings: { [name: string]: RegisterServerSettingOptions[] } = {}
+  private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
 
-  private updatedVideoConstants: UpdatedVideoConstant = {
+  private readonly updatedVideoConstants: UpdatedVideoConstant = {
     language: {},
     licence: {},
     category: {}
@@ -133,7 +133,7 @@ export class PluginManager implements ServerHook {
 
   // ###################### Hooks ######################
 
-  async runHook <T> (hookName: ServerHookName, result?: T, params?: any): Promise<T> {
+  async runHook<T> (hookName: ServerHookName, result?: T, params?: any): Promise<T> {
     if (!this.hooks[hookName]) return Promise.resolve(result)
 
     const hookType = getHookType(hookName)
@@ -312,7 +312,7 @@ export class PluginManager implements ServerHook {
       clientScripts[c.script] = c
     }
 
-    this.registeredPlugins[ npmName ] = {
+    this.registeredPlugins[npmName] = {
       npmName,
       name: plugin.name,
       type: plugin.type,
@@ -438,7 +438,7 @@ export class PluginManager implements ServerHook {
     const plugins: RegisteredPlugin[] = []
 
     for (const npmName of Object.keys(this.registeredPlugins)) {
-      const plugin = this.registeredPlugins[ npmName ]
+      const plugin = this.registeredPlugins[npmName]
       if (plugin.type !== type) continue
 
       plugins.push(plugin)
@@ -518,11 +518,11 @@ export class PluginManager implements ServerHook {
     }
   }
 
-  private addConstant <T extends string | number> (parameters: {
-    npmName: string,
-    type: AlterableVideoConstant,
-    obj: VideoConstant,
-    key: T,
+  private addConstant<T extends string | number> (parameters: {
+    npmName: string
+    type: AlterableVideoConstant
+    obj: VideoConstant
+    key: T
     label: string
   }) {
     const { npmName, type, obj, key, label } = parameters
@@ -545,10 +545,10 @@ export class PluginManager implements ServerHook {
     return true
   }
 
-  private deleteConstant <T extends string | number> (parameters: {
-    npmName: string,
-    type: AlterableVideoConstant,
-    obj: VideoConstant,
+  private deleteConstant<T extends string | number> (parameters: {
+    npmName: string
+    type: AlterableVideoConstant
+    obj: VideoConstant
     key: T
   }) {
     const { npmName, type, obj, key } = parameters
@@ -604,7 +604,7 @@ export class PluginManager implements ServerHook {
     const { result: packageJSONValid, badFields } = isPackageJSONValid(packageJSON, pluginType)
     if (!packageJSONValid) {
       const formattedFields = badFields.map(f => `"${f}"`)
-                              .join(', ')
+                                       .join(', ')
 
       throw new Error(`PackageJSON is invalid (invalid fields: ${formattedFields}).`)
     }

@@ -23,10 +23,10 @@ import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
 
 export type OAuthTokenInfo = {
   refreshToken: string
-  refreshTokenExpiresAt: Date,
+  refreshTokenExpiresAt: Date
   client: {
     id: number
-  },
+  }
   user: {
     id: number
   }

@@ -27,12 +27,13 @@ import { generateMagnetUri } from '@server/helpers/webtorrent'
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
   additionalAttributes: {
-    state?: boolean,
-    waitTranscoding?: boolean,
-    scheduledUpdate?: boolean,
+    state?: boolean
+    waitTranscoding?: boolean
+    scheduledUpdate?: boolean
     blacklistInfo?: boolean
   }
 }
+
 function videoModelToFormattedJSON (video: MVideoFormattable, options?: VideoFormattingJSONOptions): Video {
   const userHistory = isArray(video.UserVideoHistories) ? video.UserVideoHistories[0] : undefined
 
@@ -181,12 +182,10 @@ function videoFilesModelToFormattedJSON (
 ): VideoFile[] {
   return videoFiles
     .map(videoFile => {
-      let resolutionLabel = videoFile.resolution + 'p'
-
       return {
         resolution: {
           id: videoFile.resolution,
-          label: resolutionLabel
+          label: videoFile.resolution + 'p'
         },
         magnetUri: generateMagnetUri(model, videoFile, baseUrlHttp, baseUrlWs),
         size: videoFile.size,
@@ -214,7 +213,7 @@ function addVideoFilesInAPAcc (
   for (const file of files) {
     acc.push({
       type: 'Link',
-      mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ file.extname ] as any,
+      mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[file.extname] as any,
       href: model.getVideoFileUrl(file, baseUrlHttp),
       height: file.resolution,
       size: file.size,
@@ -274,10 +273,8 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
   addVideoFilesInAPAcc(url, video, baseUrlHttp, baseUrlWs, video.VideoFiles || [])
 
   for (const playlist of (video.VideoStreamingPlaylists || [])) {
-    let tag: ActivityTagObject[]
-
-    tag = playlist.p2pMediaLoaderInfohashes
-                  .map(i => ({ type: 'Infohash' as 'Infohash', name: i }))
+    const tag = playlist.p2pMediaLoaderInfohashes
+                  .map(i => ({ type: 'Infohash' as 'Infohash', name: i })) as ActivityTagObject[]
     tag.push({
       type: 'Link',
       name: 'sha256',

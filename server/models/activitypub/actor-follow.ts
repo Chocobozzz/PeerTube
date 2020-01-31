@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { values, difference } from 'lodash'
+import { difference, values } from 'lodash'
 import {
   AfterCreate,
   AfterDestroy,
@@ -23,7 +23,7 @@ import { logger } from '../../helpers/logger'
 import { getServerActor } from '../../helpers/utils'
 import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { createSafeIn, getSort, getFollowsSort } from '../utils'
+import { createSafeIn, getFollowsSort, getSort } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
@@ -36,7 +36,6 @@ import {
   MActorFollowSubscriptions
 } from '@server/typings/models'
 import { ActivityPubActorType } from '@shared/models'
-import { afterCommitIfTransaction } from '@server/helpers/database-utils'
 
 @Table({
   tableName: 'actorFollow',
@@ -226,7 +225,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
     return ActorFollowModel.findOne(query)
       .then(result => {
-        if (result && result.ActorFollowing.VideoChannel) {
+        if (result?.ActorFollowing.VideoChannel) {
           result.ActorFollowing.VideoChannel.Actor = result.ActorFollowing
         }
 
@@ -239,24 +238,24 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
       .map(t => {
         if (t.host) {
           return {
-            [ Op.and ]: [
+            [Op.and]: [
               {
-                '$preferredUsername$': t.name
+                $preferredUsername$: t.name
               },
               {
-                '$host$': t.host
+                $host$: t.host
               }
             ]
           }
         }
 
         return {
-          [ Op.and ]: [
+          [Op.and]: [
             {
-              '$preferredUsername$': t.name
+              $preferredUsername$: t.name
             },
             {
-              '$serverId$': null
+              $serverId$: null
             }
           ]
         }
@@ -265,9 +264,9 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     const query = {
       attributes: [],
       where: {
-        [ Op.and ]: [
+        [Op.and]: [
           {
-            [ Op.or ]: whereTab
+            [Op.or]: whereTab
           },
           {
             actorId
@@ -295,12 +294,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   }
 
   static listFollowingForApi (options: {
-    id: number,
-    start: number,
-    count: number,
-    sort: string,
-    state?: FollowState,
-    actorType?: ActivityPubActorType,
+    id: number
+    start: number
+    count: number
+    sort: string
+    state?: FollowState
+    actorType?: ActivityPubActorType
     search?: string
   }) {
     const { id, start, count, sort, search, state, actorType } = options
@@ -312,7 +311,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (search) {
       Object.assign(followingServerWhere, {
         host: {
-          [ Op.iLike ]: '%' + search + '%'
+          [Op.iLike]: '%' + search + '%'
         }
       })
     }
@@ -362,12 +361,12 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   }
 
   static listFollowersForApi (options: {
-    actorId: number,
-    start: number,
-    count: number,
-    sort: string,
-    state?: FollowState,
-    actorType?: ActivityPubActorType,
+    actorId: number
+    start: number
+    count: number
+    sort: string
+    state?: FollowState
+    actorType?: ActivityPubActorType
     search?: string
   }) {
     const { actorId, start, count, sort, search, state, actorType } = options
@@ -379,7 +378,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     if (search) {
       Object.assign(followerServerWhere, {
         host: {
-          [ Op.iLike ]: '%' + search + '%'
+          [Op.iLike]: '%' + search + '%'
         }
       })
     }
@@ -631,7 +630,7 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
 
     const tasks: Bluebird<any>[] = []
 
-    for (let selection of selections) {
+    for (const selection of selections) {
       let query = 'SELECT ' + selection + ' FROM "actor" ' +
         'INNER JOIN "actorFollow" ON "actorFollow"."' + firstJoin + '" = "actor"."id" ' +
         'INNER JOIN "actor" AS "Follows" ON "actorFollow"."' + secondJoin + '" = "Follows"."id" ' +

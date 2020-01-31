@@ -5,12 +5,12 @@ import { makePostBodyRequest } from '../requests/requests'
 import { ActivityPubActorType, FollowState } from '@shared/models'
 
 function getFollowersListPaginationAndSort (options: {
-  url: string,
-  start: number,
-  count: number,
-  sort: string,
-  search?: string,
-  actorType?: ActivityPubActorType,
+  url: string
+  start: number
+  count: number
+  sort: string
+  search?: string
+  actorType?: ActivityPubActorType
   state?: FollowState
 }) {
   const { url, start, count, sort, search, state, actorType } = options
@@ -56,12 +56,12 @@ function rejectFollower (url: string, token: string, follower: string, statusCod
 }
 
 function getFollowingListPaginationAndSort (options: {
-  url: string,
-  start: number,
-  count: number,
-  sort: string,
-  search?: string,
-  actorType?: ActivityPubActorType,
+  url: string
+  start: number
+  count: number
+  sort: string
+  search?: string
+  actorType?: ActivityPubActorType
   state?: FollowState
 }) {
   const { url, start, count, sort, search, state, actorType } = options
@@ -92,7 +92,7 @@ function follow (follower: string, following: string[], accessToken: string, exp
     .post(path)
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
-    .send({ 'hosts': followingHosts })
+    .send({ hosts: followingHosts })
     .expect(expectedStatus)
 }
 

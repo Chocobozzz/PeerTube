@@ -16,21 +16,17 @@ import {
   accountNameWithHostGetValidator,
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
-  videosSortValidator,
-  videoChannelsSortValidator
+  videoChannelsSortValidator,
+  videosSortValidator
 } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import { VideoModel } from '../../models/video/video'
-import { buildNSFWFilter, isUserAbleToSearchRemoteURI, getCountVideos } from '../../helpers/express-utils'
+import { buildNSFWFilter, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../../lib/job-queue'
-import { logger } from '../../helpers/logger'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import {
-  commonVideoPlaylistFiltersValidator,
-  videoPlaylistsSearchValidator
-} from '../../middlewares/validators/videos/video-playlists'
+import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists'
 
 const accountsRouter = express.Router()
 
@@ -104,7 +100,6 @@ function getAccount (req: express.Request, res: express.Response) {
 
   if (account.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'actor', url: account.Actor.url } })
-            .catch(err => logger.error('Cannot create AP refresher job for actor %s.', account.Actor.url, { err }))
   }
 
   return res.json(account.toFormattedJSON())

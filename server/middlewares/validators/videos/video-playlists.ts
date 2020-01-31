@@ -384,10 +384,11 @@ export {
 function getCommonPlaylistEditAttributes () {
   return [
     body('thumbnailfile')
-      .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.EXTNAME.join(', ')
-    ),
+      .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile'))
+      .withMessage(
+        'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
+        CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.IMAGE.EXTNAME.join(', ')
+      ),
 
     body('description')
       .optional()

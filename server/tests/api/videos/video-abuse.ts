@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -183,9 +183,9 @@ describe('Test video abuses', function () {
     const accountToBlock = 'root@localhost:' + servers[1].port
 
     {
-      await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, accountToBlock)
+      await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, accountToBlock)
 
-      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
       expect(res.body.total).to.equal(2)
 
       const abuse = res.body.data.find(a => a.reason === 'will mute this')
@@ -193,9 +193,9 @@ describe('Test video abuses', function () {
     }
 
     {
-      await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, accountToBlock)
+      await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, accountToBlock)
 
-      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
       expect(res.body.total).to.equal(3)
     }
   })
@@ -204,9 +204,9 @@ describe('Test video abuses', function () {
     const serverToBlock = servers[1].host
 
     {
-      await addServerToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, servers[1].host)
+      await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, servers[1].host)
 
-      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
       expect(res.body.total).to.equal(2)
 
       const abuse = res.body.data.find(a => a.reason === 'will mute this')
@@ -214,9 +214,9 @@ describe('Test video abuses', function () {
     }
 
     {
-      await removeServerFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, serverToBlock)
+      await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, serverToBlock)
 
-      const res = await getVideoAbusesList(servers[ 0 ].url, servers[ 0 ].accessToken)
+      const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
       expect(res.body.total).to.equal(3)
     }
   })

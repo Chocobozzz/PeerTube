@@ -257,10 +257,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }
 
   static async listThreadsForApi (parameters: {
-    videoId: number,
-    start: number,
-    count: number,
-    sort: string,
+    videoId: number
+    start: number
+    count: number
+    sort: string
     user?: MUserAccountId
   }) {
     const { videoId, start, count, sort, user } = parameters
@@ -300,8 +300,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }
 
   static async listThreadCommentsForApi (parameters: {
-    videoId: number,
-    threadId: number,
+    videoId: number
+    threadId: number
     user?: MUserAccountId
   }) {
     const { videoId, threadId, user } = parameters
@@ -314,7 +314,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
       where: {
         videoId,
-        [ Op.or ]: [
+        [Op.or]: [
           { id: threadId },
           { originCommentId: threadId }
         ],
@@ -346,7 +346,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       order: [ [ 'createdAt', order ] ] as Order,
       where: {
         id: {
-          [ Op.in ]: Sequelize.literal('(' +
+          [Op.in]: Sequelize.literal('(' +
             'WITH RECURSIVE children (id, "inReplyToCommentId") AS ( ' +
               `SELECT id, "inReplyToCommentId" FROM "videoComment" WHERE id = ${comment.id} ` +
               'UNION ' +
@@ -355,7 +355,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
             ') ' +
             'SELECT id FROM children' +
           ')'),
-          [ Op.ne ]: comment.id
+          [Op.ne]: comment.id
         }
       },
       transaction: t
@@ -461,7 +461,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
   }
 
   isDeleted () {
-    return null !== this.deletedAt
+    return this.deletedAt !== null
   }
 
   extractMentions () {

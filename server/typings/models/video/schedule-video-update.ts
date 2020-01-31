@@ -10,7 +10,8 @@ export type MScheduleVideoUpdate = Omit<ScheduleVideoUpdateModel, 'Video'>
 
 // ############################################################################
 
-export type MScheduleVideoUpdateVideoAll = MScheduleVideoUpdate &
+export type MScheduleVideoUpdateVideoAll =
+  MScheduleVideoUpdate &
   Use<'Video', MVideoAPWithoutCaption & MVideoWithBlacklistLight>
 
 // Format for API or AP object

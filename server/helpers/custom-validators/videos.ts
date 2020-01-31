@@ -20,15 +20,15 @@ function isVideoFilterValid (filter: VideoFilter) {
 }
 
 function isVideoCategoryValid (value: any) {
-  return value === null || VIDEO_CATEGORIES[ value ] !== undefined
+  return value === null || VIDEO_CATEGORIES[value] !== undefined
 }
 
 function isVideoStateValid (value: any) {
-  return exists(value) && VIDEO_STATES[ value ] !== undefined
+  return exists(value) && VIDEO_STATES[value] !== undefined
 }
 
 function isVideoLicenceValid (value: any) {
-  return value === null || VIDEO_LICENCES[ value ] !== undefined
+  return value === null || VIDEO_LICENCES[value] !== undefined
 }
 
 function isVideoLanguageValid (value: any) {
@@ -98,7 +98,7 @@ function isVideoImage (files: { [ fieldname: string ]: Express.Multer.File[] } |
 }
 
 function isVideoPrivacyValid (value: number) {
-  return VIDEO_PRIVACIES[ value ] !== undefined
+  return VIDEO_PRIVACIES[value] !== undefined
 }
 
 function isScheduleVideoUpdatePrivacyValid (value: number) {

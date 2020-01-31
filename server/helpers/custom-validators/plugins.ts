@@ -14,7 +14,7 @@ function isPluginTypeValid (value: any) {
 function isPluginNameValid (value: string) {
   return exists(value) &&
     validator.isLength(value, PLUGINS_CONSTRAINTS_FIELDS.NAME) &&
-    validator.matches(value, /^[a-z\-]+$/)
+    validator.matches(value, /^[a-z-]+$/)
 }
 
 function isNpmPluginNameValid (value: string) {
@@ -146,8 +146,8 @@ function isPackageJSONValid (packageJSON: PluginPackageJson, pluginType: PluginT
 }
 
 function isLibraryCodeValid (library: any) {
-  return typeof library.register === 'function'
-    && typeof library.unregister === 'function'
+  return typeof library.register === 'function' &&
+    typeof library.unregister === 'function'
 }
 
 export {

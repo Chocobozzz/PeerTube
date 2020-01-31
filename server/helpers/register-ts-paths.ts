@@ -1,5 +1,5 @@
 import { resolve } from 'path'
-const tsConfigPaths = require('tsconfig-paths')
+import tsConfigPaths = require('tsconfig-paths')
 
 const tsConfig = require('../../tsconfig.json')
 

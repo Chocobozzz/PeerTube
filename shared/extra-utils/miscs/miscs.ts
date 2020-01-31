@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import { basename, dirname, isAbsolute, join, resolve } from 'path'
@@ -10,11 +10,11 @@ import * as ffmpeg from 'fluent-ffmpeg'
 const expect = chai.expect
 let webtorrent: WebTorrent.Instance
 
-function immutableAssign <T, U> (target: T, source: U) {
+function immutableAssign<T, U> (target: T, source: U) {
   return Object.assign<{}, T, U>({}, target, source)
 }
 
-  // Default interval -> 5 minutes
+// Default interval -> 5 minutes
 function dateIsValid (dateString: string, interval = 300000) {
   const dateToCheck = new Date(dateString)
   const now = new Date()
@@ -89,7 +89,7 @@ async function generateHighBitrateVideo () {
     // a large file in the repo. The video needs to have a certain minimum length so
     // that FFmpeg properly applies bitrate limits.
     // https://stackoverflow.com/a/15795112
-    return new Promise<string>(async (res, rej) => {
+    return new Promise<string>((res, rej) => {
       ffmpeg()
         .outputOptions([ '-f rawvideo', '-video_size 1920x1080', '-i /dev/urandom' ])
         .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])
@@ -111,7 +111,7 @@ async function generateVideoWithFramerate (fps = 60) {
 
   const exists = await pathExists(tempFixturePath)
   if (!exists) {
-    return new Promise<string>(async (res, rej) => {
+    return new Promise<string>((res, rej) => {
       ffmpeg()
         .outputOptions([ '-f rawvideo', '-video_size 1280x720', '-i /dev/urandom' ])
         .outputOptions([ '-ac 2', '-f s16le', '-i /dev/urandom', '-t 10' ])

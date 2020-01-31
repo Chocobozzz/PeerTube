@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -7,8 +7,6 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
-  killallServers,
   makeGetRequest,
   ServerInfo,
   setAccessTokensToServers,
@@ -98,7 +96,7 @@ describe('Test videos filter validator', function () {
         const namesResults = await getVideosNames(server, server.accessToken, 'local')
         for (const names of namesResults) {
           expect(names).to.have.lengthOf(1)
-          expect(names[ 0 ]).to.equal('public ' + server.serverNumber)
+          expect(names[0]).to.equal('public ' + server.serverNumber)
         }
       }
     })
@@ -111,9 +109,9 @@ describe('Test videos filter validator', function () {
           for (const names of namesResults) {
             expect(names).to.have.lengthOf(3)
 
-            expect(names[ 0 ]).to.equal('public ' + server.serverNumber)
-            expect(names[ 1 ]).to.equal('unlisted ' + server.serverNumber)
-            expect(names[ 2 ]).to.equal('private ' + server.serverNumber)
+            expect(names[0]).to.equal('public ' + server.serverNumber)
+            expect(names[1]).to.equal('unlisted ' + server.serverNumber)
+            expect(names[2]).to.equal('private ' + server.serverNumber)
           }
         }
       }

@@ -17,10 +17,12 @@ export type MVideoPlaylistElementLight = Pick<MVideoPlaylistElement, 'id' | 'vid
 
 // ############################################################################
 
-export type MVideoPlaylistVideoThumbnail = MVideoPlaylistElement &
+export type MVideoPlaylistVideoThumbnail =
+  MVideoPlaylistElement &
   Use<'Video', MVideoThumbnail>
 
-export type MVideoPlaylistElementVideoUrlPlaylistPrivacy = MVideoPlaylistElement &
+export type MVideoPlaylistElementVideoUrlPlaylistPrivacy =
+  MVideoPlaylistElement &
   Use<'Video', MVideoUrl> &
   Use<'VideoPlaylist', MVideoPlaylistPrivacy>
 
@@ -28,8 +30,10 @@ export type MVideoPlaylistElementVideoUrlPlaylistPrivacy = MVideoPlaylistElement
 
 // Format for API or AP object
 
-export type MVideoPlaylistElementFormattable = MVideoPlaylistElement &
+export type MVideoPlaylistElementFormattable =
+  MVideoPlaylistElement &
   Use<'Video', MVideoFormattable>
 
-export type MVideoPlaylistElementAP = MVideoPlaylistElement &
+export type MVideoPlaylistElementAP =
+  MVideoPlaylistElement &
   Use<'Video', MVideoUrl>

@@ -2,7 +2,7 @@ import { ActivityVideoUrlObject, ActivityPlaylistUrlObject } from './common-obje
 
 export interface CacheFileObject {
   id: string
-  type: 'CacheFile',
+  type: 'CacheFile'
   object: string
   expires: string
   url: ActivityVideoUrlObject | ActivityPlaylistUrlObject

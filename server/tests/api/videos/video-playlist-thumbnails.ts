@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -8,14 +8,15 @@ import {
   createVideoPlaylist,
   doubleFollow,
   flushAndRunMultipleServers,
-  getVideoPlaylistsList, removeVideoFromPlaylist,
+  getVideoPlaylistsList,
+  removeVideoFromPlaylist,
+  reorderVideosPlaylist,
   ServerInfo,
   setAccessTokensToServers,
   setDefaultVideoChannel,
   testImage,
   uploadVideoAndGetId,
-  waitJobs,
-  reorderVideosPlaylist
+  waitJobs
 } from '../../../../shared/extra-utils'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 
@@ -69,19 +70,19 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     const res = await createVideoPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistAttrs: {
         displayName: 'playlist without thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[ 1 ].videoChannel.id
+        videoChannelId: servers[1].videoChannel.id
       }
     })
     playlistWithoutThumbnail = res.body.videoPlaylist.id
 
     const res2 = await addVideoInPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithoutThumbnail,
       elementAttrs: { videoId: video1 }
     })
@@ -99,20 +100,20 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     const res = await createVideoPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistAttrs: {
         displayName: 'playlist with thumbnail',
         privacy: VideoPlaylistPrivacy.PUBLIC,
-        videoChannelId: servers[ 1 ].videoChannel.id,
+        videoChannelId: servers[1].videoChannel.id,
         thumbnailfile: 'thumbnail.jpg'
       }
     })
     playlistWithThumbnail = res.body.videoPlaylist.id
 
     const res2 = await addVideoInPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithThumbnail,
       elementAttrs: { videoId: video1 }
     })
@@ -130,8 +131,8 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     const res = await addVideoInPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithoutThumbnail,
       elementAttrs: { videoId: video2 }
     })
@@ -159,8 +160,8 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     const res = await addVideoInPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithThumbnail,
       elementAttrs: { videoId: video2 }
     })
@@ -188,8 +189,8 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     await removeVideoFromPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithoutThumbnail,
       playlistElementId: withoutThumbnailE1
     })
@@ -206,8 +207,8 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     await removeVideoFromPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithThumbnail,
       playlistElementId: withThumbnailE1
     })
@@ -224,8 +225,8 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     await removeVideoFromPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithoutThumbnail,
       playlistElementId: withoutThumbnailE2
     })
@@ -242,8 +243,8 @@ describe('Playlist thumbnail', function () {
     this.timeout(30000)
 
     await removeVideoFromPlaylist({
-      url: servers[ 1 ].url,
-      token: servers[ 1 ].accessToken,
+      url: servers[1].url,
+      token: servers[1].accessToken,
       playlistId: playlistWithThumbnail,
       playlistElementId: withThumbnailE2
     })

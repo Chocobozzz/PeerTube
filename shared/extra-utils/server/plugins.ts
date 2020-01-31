@@ -7,13 +7,13 @@ import { root } from '../miscs/miscs'
 import { join } from 'path'
 
 function listPlugins (parameters: {
-  url: string,
-  accessToken: string,
-  start?: number,
-  count?: number,
-  sort?: string,
-  pluginType?: PluginType,
-  uninstalled?: boolean,
+  url: string
+  accessToken: string
+  start?: number
+  count?: number
+  sort?: string
+  pluginType?: PluginType
+  uninstalled?: boolean
   expectedStatus?: number
 }) {
   const { url, accessToken, start, count, sort, pluginType, uninstalled, expectedStatus = 200 } = parameters
@@ -35,13 +35,13 @@ function listPlugins (parameters: {
 }
 
 function listAvailablePlugins (parameters: {
-  url: string,
-  accessToken: string,
-  start?: number,
-  count?: number,
-  sort?: string,
-  pluginType?: PluginType,
-  currentPeerTubeEngine?: string,
+  url: string
+  accessToken: string
+  start?: number
+  count?: number
+  sort?: string
+  pluginType?: PluginType
+  currentPeerTubeEngine?: string
   search?: string
   expectedStatus?: number
 }) {
@@ -67,9 +67,9 @@ function listAvailablePlugins (parameters: {
 }
 
 function getPlugin (parameters: {
-  url: string,
-  accessToken: string,
-  npmName: string,
+  url: string
+  accessToken: string
+  npmName: string
   expectedStatus?: number
 }) {
   const { url, accessToken, npmName, expectedStatus = 200 } = parameters
@@ -84,10 +84,10 @@ function getPlugin (parameters: {
 }
 
 function updatePluginSettings (parameters: {
-  url: string,
-  accessToken: string,
-  npmName: string,
-  settings: any,
+  url: string
+  accessToken: string
+  npmName: string
+  settings: any
   expectedStatus?: number
 }) {
   const { url, accessToken, npmName, settings, expectedStatus = 204 } = parameters
@@ -103,9 +103,9 @@ function updatePluginSettings (parameters: {
 }
 
 function getPluginRegisteredSettings (parameters: {
-  url: string,
-  accessToken: string,
-  npmName: string,
+  url: string
+  accessToken: string
+  npmName: string
   expectedStatus?: number
 }) {
   const { url, accessToken, npmName, expectedStatus = 200 } = parameters
@@ -120,8 +120,8 @@ function getPluginRegisteredSettings (parameters: {
 }
 
 function getPublicSettings (parameters: {
-  url: string,
-  npmName: string,
+  url: string
+  npmName: string
   expectedStatus?: number
 }) {
   const { url, npmName, expectedStatus = 200 } = parameters
@@ -135,8 +135,8 @@ function getPublicSettings (parameters: {
 }
 
 function getPluginTranslations (parameters: {
-  url: string,
-  locale: string,
+  url: string
+  locale: string
   expectedStatus?: number
 }) {
   const { url, locale, expectedStatus = 200 } = parameters
@@ -150,9 +150,9 @@ function getPluginTranslations (parameters: {
 }
 
 function installPlugin (parameters: {
-  url: string,
-  accessToken: string,
-  path?: string,
+  url: string
+  accessToken: string
+  path?: string
   npmName?: string
   expectedStatus?: number
 }) {
@@ -169,9 +169,9 @@ function installPlugin (parameters: {
 }
 
 function updatePlugin (parameters: {
-  url: string,
-  accessToken: string,
-  path?: string,
+  url: string
+  accessToken: string
+  path?: string
   npmName?: string
   expectedStatus?: number
 }) {
@@ -188,8 +188,8 @@ function updatePlugin (parameters: {
 }
 
 function uninstallPlugin (parameters: {
-  url: string,
-  accessToken: string,
+  url: string
+  accessToken: string
   npmName: string
   expectedStatus?: number
 }) {

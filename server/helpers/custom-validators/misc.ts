@@ -94,13 +94,13 @@ function isFileValid (
   if (isArray(files)) return optional
 
   // Should have a file
-  const fileArray = files[ field ]
+  const fileArray = files[field]
   if (!fileArray || fileArray.length === 0) {
     return optional
   }
 
   // The file should exist
-  const file = fileArray[ 0 ]
+  const file = fileArray[0]
   if (!file || !file.originalname) return false
 
   // Check size

@@ -1,38 +1,15 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
+import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
 import {
-  cleanupTests,
-  flushAndRunMultipleServers,
-  flushAndRunServer, killallServers, reRunServer,
-  ServerInfo,
-  waitUntilLog
-} from '../../../shared/extra-utils/server/servers'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  deleteVideoComment,
   getPluginTestPath,
-  getVideosList,
+  getPluginTranslations,
   installPlugin,
-  removeVideo,
   setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
-  getVideosListPagination,
-  getVideo,
-  getVideoCommentThreads,
-  getVideoThreadComments,
-  getVideoWithToken,
-  setDefaultVideoChannel,
-  waitJobs,
-  doubleFollow, getVideoLanguages, getVideoLicences, getVideoCategories, uninstallPlugin, getPluginTranslations
+  uninstallPlugin
 } from '../../../shared/extra-utils'
-import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
-import { VideoDetails } from '../../../shared/models/videos'
-import { getYoutubeVideoUrl, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 
 const expect = chai.expect
 
@@ -69,7 +46,7 @@ describe('Test plugin translations', function () {
 
     expect(res.body).to.deep.equal({
       'peertube-plugin-test': {
-        'Hi': 'Coucou'
+        Hi: 'Coucou'
       },
       'peertube-plugin-test-two': {
         'Hello world': 'Bonjour le monde'
@@ -95,7 +72,7 @@ describe('Test plugin translations', function () {
 
       expect(res.body).to.deep.equal({
         'peertube-plugin-test': {
-          'Hi': 'Coucou'
+          Hi: 'Coucou'
         }
       })
     }

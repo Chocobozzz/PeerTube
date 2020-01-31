@@ -28,9 +28,9 @@ import { getVideoFilename } from '../video-paths'
 import { VideoModel } from '@server/models/video/video'
 
 type CandidateToDuplicate = {
-  redundancy: VideosRedundancyStrategy,
-  video: MVideoWithAllFiles,
-  files: MVideoFile[],
+  redundancy: VideosRedundancyStrategy
+  video: MVideoWithAllFiles
+  files: MVideoFile[]
   streamingPlaylists: MStreamingPlaylistFiles[]
 }
 

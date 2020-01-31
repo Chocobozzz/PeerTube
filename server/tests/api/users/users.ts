@@ -1,8 +1,8 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, UserRole, Video, MyUser, VideoPlaylistType } from '../../../../shared/index'
+import { MyUser, User, UserRole, Video, VideoPlaylistType } from '../../../../shared/index'
 import {
   blockUser,
   cleanupTests,
@@ -18,7 +18,8 @@ import {
   getUsersList,
   getUsersListPaginationAndSort,
   getVideoChannel,
-  getVideosList, installPlugin,
+  getVideosList,
+  installPlugin,
   login,
   makePutBodyRequest,
   rateVideo,
@@ -121,13 +122,13 @@ describe('Test users', function () {
 
     it('Should be able to login with an insensitive username', async function () {
       const user = { username: 'RoOt', password: server.user.password }
-      const res = await login(server.url, server.client, user, 200)
+      await login(server.url, server.client, user, 200)
 
       const user2 = { username: 'rOoT', password: server.user.password }
-      const res2 = await login(server.url, server.client, user2, 200)
+      await login(server.url, server.client, user2, 200)
 
       const user3 = { username: 'ROOt', password: server.user.password }
-      const res3 = await login(server.url, server.client, user3, 200)
+      await login(server.url, server.client, user3, 200)
     })
   })
 
@@ -137,7 +138,7 @@ describe('Test users', function () {
       const videoAttributes = {}
       await uploadVideo(server.url, accessToken, videoAttributes)
       const res = await getVideosList(server.url)
-      const video = res.body.data[ 0 ]
+      const video = res.body.data[0]
 
       expect(video.account.name).to.equal('root')
       videoId = video.id
@@ -167,8 +168,8 @@ describe('Test users', function () {
       const ratings = res.body
 
       expect(ratings.total).to.equal(1)
-      expect(ratings.data[ 0 ].video.id).to.equal(videoId)
-      expect(ratings.data[ 0 ].rating).to.equal('like')
+      expect(ratings.data[0].video.id).to.equal(videoId)
+      expect(ratings.data[0].rating).to.equal('like')
     })
 
     it('Should retrieve ratings list by rating type', async function () {
@@ -307,7 +308,7 @@ describe('Test users', function () {
       const videos = res.body.data
       expect(videos).to.have.lengthOf(1)
 
-      const video: Video = videos[ 0 ]
+      const video: Video = videos[0]
       expect(video.name).to.equal('super user video')
       expect(video.thumbnailPath).to.not.be.null
       expect(video.previewPath).to.not.be.null
@@ -344,12 +345,12 @@ describe('Test users', function () {
       expect(users).to.be.an('array')
       expect(users.length).to.equal(2)
 
-      const user = users[ 0 ]
+      const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
-      const rootUser = users[ 1 ]
+      const rootUser = users[1]
       expect(rootUser.username).to.equal('root')
       expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.nsfwPolicy).to.equal('display')
@@ -367,7 +368,7 @@ describe('Test users', function () {
       expect(total).to.equal(2)
       expect(users.length).to.equal(1)
 
-      const user = users[ 0 ]
+      const user = users[0]
       expect(user.username).to.equal('root')
       expect(user.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.roleLabel).to.equal('Administrator')
@@ -383,7 +384,7 @@ describe('Test users', function () {
       expect(total).to.equal(2)
       expect(users.length).to.equal(1)
 
-      const user = users[ 0 ]
+      const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
@@ -398,7 +399,7 @@ describe('Test users', function () {
       expect(total).to.equal(2)
       expect(users.length).to.equal(1)
 
-      const user = users[ 0 ]
+      const user = users[0]
       expect(user.username).to.equal('user_1')
       expect(user.email).to.equal('user_1@example.com')
       expect(user.nsfwPolicy).to.equal('display')
@@ -413,13 +414,13 @@ describe('Test users', function () {
       expect(total).to.equal(2)
       expect(users.length).to.equal(2)
 
-      expect(users[ 0 ].username).to.equal('root')
-      expect(users[ 0 ].email).to.equal('admin' + server.internalServerNumber + '@example.com')
-      expect(users[ 0 ].nsfwPolicy).to.equal('display')
+      expect(users[0].username).to.equal('root')
+      expect(users[0].email).to.equal('admin' + server.internalServerNumber + '@example.com')
+      expect(users[0].nsfwPolicy).to.equal('display')
 
-      expect(users[ 1 ].username).to.equal('user_1')
-      expect(users[ 1 ].email).to.equal('user_1@example.com')
-      expect(users[ 1 ].nsfwPolicy).to.equal('display')
+      expect(users[1].username).to.equal('user_1')
+      expect(users[1].email).to.equal('user_1@example.com')
+      expect(users[1].nsfwPolicy).to.equal('display')
     })
 
     it('Should search user by username', async function () {
@@ -429,7 +430,7 @@ describe('Test users', function () {
       expect(res.body.total).to.equal(1)
       expect(users.length).to.equal(1)
 
-      expect(users[ 0 ].username).to.equal('root')
+      expect(users[0].username).to.equal('root')
     })
 
     it('Should search user by email', async function () {
@@ -440,8 +441,8 @@ describe('Test users', function () {
         expect(res.body.total).to.equal(1)
         expect(users.length).to.equal(1)
 
-        expect(users[ 0 ].username).to.equal('user_1')
-        expect(users[ 0 ].email).to.equal('user_1@example.com')
+        expect(users[0].username).to.equal('user_1')
+        expect(users[0].email).to.equal('user_1@example.com')
       }
 
       {
@@ -451,8 +452,8 @@ describe('Test users', function () {
         expect(res.body.total).to.equal(2)
         expect(users.length).to.equal(2)
 
-        expect(users[ 0 ].username).to.equal('root')
-        expect(users[ 1 ].username).to.equal('user_1')
+        expect(users[0].username).to.equal('root')
+        expect(users[1].username).to.equal('user_1')
       }
     })
   })
@@ -691,7 +692,7 @@ describe('Test users', function () {
 
       expect(res.body.total).to.equal(1)
 
-      const video = res.body.data[ 0 ]
+      const video = res.body.data[0]
       expect(video.account.name).to.equal('root')
     })
   })

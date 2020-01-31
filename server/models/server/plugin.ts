@@ -189,10 +189,10 @@ export class PluginModel extends Model<PluginModel> {
   }
 
   static listForApi (options: {
-    pluginType?: PluginType,
-    uninstalled?: boolean,
-    start: number,
-    count: number,
+    pluginType?: PluginType
+    uninstalled?: boolean
+    start: number
+    count: number
     sort: string
   }) {
     const { uninstalled = false } = options

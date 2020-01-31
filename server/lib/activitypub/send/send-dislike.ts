@@ -6,7 +6,7 @@ import { sendVideoRelatedActivity } from './utils'
 import { audiencify, getAudience } from '../audience'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../typings/models'
 
-async function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
+function sendDislike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to dislike %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {

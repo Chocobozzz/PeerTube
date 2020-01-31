@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import * as chai from 'chai'
@@ -11,11 +11,14 @@ import {
   getAbout,
   getConfig,
   getCustomConfig,
-  killallServers, parallelTests,
+  killallServers,
+  parallelTests,
   registerUser,
-  reRunServer, ServerInfo,
+  reRunServer,
+  ServerInfo,
   setAccessTokensToServers,
-  updateCustomConfig, uploadVideo
+  updateCustomConfig,
+  uploadVideo
 } from '../../../../shared/extra-utils'
 import { ServerConfig } from '../../../../shared/models'
 

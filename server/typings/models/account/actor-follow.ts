@@ -20,22 +20,26 @@ export type MActorFollow = Omit<ActorFollowModel, 'ActorFollower' | 'ActorFollow
 
 // ############################################################################
 
-export type MActorFollowFollowingHost = MActorFollow &
+export type MActorFollowFollowingHost =
+  MActorFollow &
   Use<'ActorFollowing', MActorUsername & MActorHost>
 
 // ############################################################################
 
 // With actors or actors default
 
-export type MActorFollowActors = MActorFollow &
+export type MActorFollowActors =
+  MActorFollow &
   Use<'ActorFollower', MActor> &
   Use<'ActorFollowing', MActor>
 
-export type MActorFollowActorsDefault = MActorFollow &
+export type MActorFollowActorsDefault =
+  MActorFollow &
   Use<'ActorFollower', MActorDefault> &
   Use<'ActorFollowing', MActorDefault>
 
-export type MActorFollowFull = MActorFollow &
+export type MActorFollowFull =
+  MActorFollow &
   Use<'ActorFollower', MActorDefaultAccountChannel> &
   Use<'ActorFollowing', MActorDefaultAccountChannel>
 
@@ -43,20 +47,24 @@ export type MActorFollowFull = MActorFollow &
 
 // For subscriptions
 
-type SubscriptionFollowing = MActorDefault &
+type SubscriptionFollowing =
+  MActorDefault &
   PickWith<ActorModel, 'VideoChannel', MChannelDefault>
 
-export type MActorFollowActorsDefaultSubscription = MActorFollow &
+export type MActorFollowActorsDefaultSubscription =
+  MActorFollow &
   Use<'ActorFollower', MActorDefault> &
   Use<'ActorFollowing', SubscriptionFollowing>
 
-export type MActorFollowSubscriptions = MActorFollow &
+export type MActorFollowSubscriptions =
+  MActorFollow &
   Use<'ActorFollowing', MActorChannelAccountActor>
 
 // ############################################################################
 
 // Format for API or AP object
 
-export type MActorFollowFormattable = Pick<MActorFollow, 'id' | 'score' | 'state' | 'createdAt' | 'updatedAt'> &
+export type MActorFollowFormattable =
+  Pick<MActorFollow, 'id' | 'score' | 'state' | 'createdAt' | 'updatedAt'> &
   Use<'ActorFollower', MActorFormattable> &
   Use<'ActorFollowing', MActorFormattable>

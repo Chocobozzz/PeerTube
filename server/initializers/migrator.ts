@@ -20,7 +20,7 @@ async function migrate () {
   }
 
   const rows = await sequelizeTypescript.query<{ migrationVersion: number }>(query, options)
-  if (rows && rows[0] && rows[0].migrationVersion) {
+  if (rows?.[0]?.migrationVersion) {
     actualVersion = rows[0].migrationVersion
   }
 
@@ -60,7 +60,7 @@ export {
 async function getMigrationScripts () {
   const files = await readdir(path.join(__dirname, 'migrations'))
   const filesToMigrate: {
-    version: string,
+    version: string
     script: string
   }[] = []
 

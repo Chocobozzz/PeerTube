@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -8,6 +8,7 @@ import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-c
 
 import {
   cleanupTests,
+  closeAllSequelize,
   completeVideoCheck,
   flushAndRunMultipleServers,
   getVideo,
@@ -17,11 +18,12 @@ import {
   reRunServer,
   ServerInfo,
   setAccessTokensToServers,
+  setActorFollowScores,
   unfollow,
   updateVideo,
-  uploadVideo, uploadVideoAndGetId,
-  wait,
-  setActorFollowScores, closeAllSequelize
+  uploadVideo,
+  uploadVideoAndGetId,
+  wait
 } from '../../../../shared/extra-utils'
 import { follow, getFollowersListPaginationAndSort } from '../../../../shared/extra-utils/server/follows'
 import { getJobsListPaginationAndSort, waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -44,7 +46,7 @@ describe('Test handle downs', function () {
   let missedVideo2: Video
   let unlistedVideo: Video
 
-  let videoIdsServer1: number[] = []
+  const videoIdsServer1: number[] = []
 
   const videoAttributes = {
     name: 'my super name for server 1',
@@ -137,7 +139,7 @@ describe('Test handle downs', function () {
 
     // Remove server 2 follower
     for (let i = 0; i < 10; i++) {
-      await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributes)
+      await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
     }
 
     await waitJobs(servers[0])
@@ -145,14 +147,14 @@ describe('Test handle downs', function () {
     // Kill server 3
     killallServers([ servers[2] ])
 
-    const resLastVideo1 = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributes)
+    const resLastVideo1 = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
     missedVideo1 = resLastVideo1.body.video
 
-    const resLastVideo2 = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributes)
+    const resLastVideo2 = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
     missedVideo2 = resLastVideo2.body.video
 
     // Unlisted video
-    let resVideo = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, unlistedVideoAttributes)
+    const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, unlistedVideoAttributes)
     unlistedVideo = resVideo.body.video
 
     // Add comments to video 2
@@ -174,7 +176,7 @@ describe('Test handle downs', function () {
     await wait(11000)
 
     // Only server 3 is still a follower of server 1
-    const res = await getFollowersListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 2, sort: 'createdAt' })
+    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(1)
     expect(res.body.data[0].follower.host).to.equal('localhost:' + servers[2].port)
@@ -185,8 +187,8 @@ describe('Test handle downs', function () {
 
     for (const state of states) {
       const res = await getJobsListPaginationAndSort({
-        url: servers[ 0 ].url,
-        accessToken: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
         state: state,
         start: 0,
         count: 50,
@@ -209,7 +211,7 @@ describe('Test handle downs', function () {
 
     await waitJobs(servers)
 
-    const res = await getFollowersListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 2, sort: 'createdAt' })
+    const res = await getFollowersListPaginationAndSort({ url: servers[0].url, start: 0, count: 2, sort: 'createdAt' })
     expect(res.body.data).to.be.an('array')
     expect(res.body.data).to.have.lengthOf(2)
   })
@@ -221,8 +223,8 @@ describe('Test handle downs', function () {
     expect(res1.body.data).to.be.an('array')
     expect(res1.body.data).to.have.lengthOf(11)
 
-    await updateVideo(servers[0].url, servers[0].accessToken, missedVideo1.uuid, { })
-    await updateVideo(servers[0].url, servers[0].accessToken, unlistedVideo.uuid, { })
+    await updateVideo(servers[0].url, servers[0].accessToken, missedVideo1.uuid, {})
+    await updateVideo(servers[0].url, servers[0].accessToken, unlistedVideo.uuid, {})
 
     await waitJobs(servers)
 
@@ -313,14 +315,14 @@ describe('Test handle downs', function () {
     this.timeout(120000)
 
     for (let i = 0; i < 10; i++) {
-      const uuid = (await uploadVideoAndGetId({ server: servers[ 0 ], videoName: 'video ' + i })).uuid
+      const uuid = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video ' + i })).uuid
       videoIdsServer1.push(uuid)
     }
 
     await waitJobs(servers)
 
     for (const id of videoIdsServer1) {
-      await getVideo(servers[ 1 ].url, id)
+      await getVideo(servers[1].url, id)
     }
 
     await waitJobs(servers)

@@ -1,5 +1,5 @@
 export interface PeertubePluginLatestVersionRequest {
-  currentPeerTubeEngine?: string,
+  currentPeerTubeEngine?: string
 
   npmNames: string[]
 }

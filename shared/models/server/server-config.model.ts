@@ -46,7 +46,7 @@ export interface ServerConfig {
   }
 
   signup: {
-    allowed: boolean,
+    allowed: boolean
     allowedForCurrentIP: boolean
     requiresEmailVerification: boolean
   }
@@ -97,7 +97,7 @@ export interface ServerConfig {
         max: number
       }
       extensions: string[]
-    },
+    }
     file: {
       extensions: string[]
     }
@@ -107,7 +107,7 @@ export interface ServerConfig {
     file: {
       size: {
         max: number
-      },
+      }
       extensions: string[]
     }
   }

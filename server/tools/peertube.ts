@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-useless-escape */
+
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
 import * as program from 'commander'
-import {
-  version,
-  getSettings
-} from './cli'
+import { getSettings, version } from './cli'
 
 program
   .version(version, '-v, --version')
@@ -26,14 +25,15 @@ program
 
 /* Not Yet Implemented */
 program
-  .command('diagnostic [action]',
-           'like couple therapy, but for your instance',
-           { noHelp: true } as program.CommandOptions
-          ).alias('d')
+  .command(
+    'diagnostic [action]',
+    'like couple therapy, but for your instance',
+    { noHelp: true } as program.CommandOptions
+  ).alias('d')
   .command('admin',
-           'manage an instance where you have elevated rights',
-          { noHelp: true } as program.CommandOptions
-          ).alias('a')
+    'manage an instance where you have elevated rights',
+    { noHelp: true } as program.CommandOptions
+  ).alias('a')
 
 // help on no command
 if (!process.argv.slice(2).length) {
@@ -82,3 +82,4 @@ getSettings()
       })
       .parse(process.argv)
   })
+  .catch(err => console.error(err))

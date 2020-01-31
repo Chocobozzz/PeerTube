@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -57,17 +57,17 @@ describe('Test users with multiple servers', function () {
         password: 'password'
       }
       const res = await createUser({
-        url: servers[ 0 ].url,
-        accessToken: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
         username: user.username,
         password: user.password
       })
       userId = res.body.user.id
-      userAccessToken = await userLogin(servers[ 0 ], user)
+      userAccessToken = await userLogin(servers[0], user)
     }
 
     {
-      const resVideo = await uploadVideo(servers[ 0 ].url, userAccessToken, {})
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, {})
       videoUUID = resVideo.body.video.uuid
     }
 
@@ -86,7 +86,6 @@ describe('Test users with multiple servers', function () {
     const res = await getMyUserInformation(servers[0].url, servers[0].accessToken)
     user = res.body
 
-    const account: Account = user.account
     expect(user.account.displayName).to.equal('my super display name')
 
     await waitJobs(servers)

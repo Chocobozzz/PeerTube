@@ -130,10 +130,10 @@ export {
 // ---------------------------------------------------------------------------
 
 async function sendVideoRelatedCreateActivity (options: {
-  byActor: MActorLight,
-  video: MVideoAccountLight,
-  url: string,
-  object: any,
+  byActor: MActorLight
+  video: MVideoAccountLight
+  url: string
+  object: any
   transaction?: Transaction
 }) {
   const activityBuilder = (audience: ActivityAudience) => {

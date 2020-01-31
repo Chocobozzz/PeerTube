@@ -1,3 +1,5 @@
+// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
+
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
@@ -5,7 +7,7 @@ import * as program from 'commander'
 import * as prompt from 'prompt'
 import { getNetrc, getSettings, writeSettings } from './cli'
 import { isUserUsernameValid } from '../helpers/custom-validators/users'
-import { getAccessToken, login } from '../../shared/extra-utils'
+import { getAccessToken } from '../../shared/extra-utils'
 import * as CliTable3 from 'cli-table3'
 
 async function delInstance (url: string) {
@@ -108,9 +110,9 @@ program
     const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
     const table = new CliTable3({
-      head: ['instance', 'login'],
-      colWidths: [30, 30]
-    }) as CliTable3.HorizontalTable
+      head: [ 'instance', 'login' ],
+      colWidths: [ 30, 30 ]
+    }) as any
 
     settings.remotes.forEach(element => {
       if (!netrc.machines[element]) return

@@ -1,34 +1,27 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
-import {
-  cleanupTests,
-  flushAndRunMultipleServers,
-  flushAndRunServer, killallServers, reRunServer,
-  ServerInfo,
-  waitUntilLog
-} from '../../../shared/extra-utils/server/servers'
+import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
-  deleteVideoComment,
+  doubleFollow,
+  getConfig,
   getPluginTestPath,
-  getVideosList,
-  installPlugin,
-  removeVideo,
-  setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
-  getVideosListPagination,
   getVideo,
   getVideoCommentThreads,
+  getVideosList,
+  getVideosListPagination,
   getVideoThreadComments,
   getVideoWithToken,
+  installPlugin,
+  registerUser,
+  setAccessTokensToServers,
   setDefaultVideoChannel,
-  waitJobs,
-  doubleFollow, getConfig, registerUser
+  updateVideo,
+  uploadVideo,
+  waitJobs
 } from '../../../shared/extra-utils'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 import { VideoDetails } from '../../../shared/models/videos'
@@ -140,7 +133,7 @@ describe('Test plugin filter hooks', function () {
     }
 
     it('Should blacklist on upload', async function () {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video please blacklist me' })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video please blacklist me' })
       await checkIsBlacklisted(res, true)
     })
 
@@ -157,18 +150,18 @@ describe('Test plugin filter hooks', function () {
     })
 
     it('Should blacklist on update', async function () {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video' })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' })
       const videoId = res.body.video.uuid
       await checkIsBlacklisted(res, false)
 
-      await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoId, { name: 'please blacklist me' })
+      await updateVideo(servers[0].url, servers[0].accessToken, videoId, { name: 'please blacklist me' })
       await checkIsBlacklisted(res, true)
     })
 
     it('Should blacklist on remote upload', async function () {
       this.timeout(45000)
 
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'remote please blacklist me' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'remote please blacklist me' })
       await waitJobs(servers)
 
       await checkIsBlacklisted(res, true)
@@ -177,7 +170,7 @@ describe('Test plugin filter hooks', function () {
     it('Should blacklist on remote update', async function () {
       this.timeout(45000)
 
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video' })
       await waitJobs(servers)
 
       const videoId = res.body.video.uuid

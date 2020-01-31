@@ -7,7 +7,7 @@ import { Transaction } from 'sequelize'
 import { MActor, MVideoFullLight } from '../../../typings/models'
 import { MVideoAbuseVideo } from '../../../typings/models/video'
 
-async function sendVideoAbuse (byActor: MActor, videoAbuse: MVideoAbuseVideo, video: MVideoFullLight, t: Transaction) {
+function sendVideoAbuse (byActor: MActor, videoAbuse: MVideoAbuseVideo, video: MVideoFullLight, t: Transaction) {
   if (!video.VideoChannel.Account.Actor.serverId) return // Local user
 
   const url = getVideoAbuseActivityPubUrl(videoAbuse)

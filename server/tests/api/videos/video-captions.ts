@@ -1,16 +1,17 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
 import {
-  checkVideoFilesWereRemoved, cleanupTests,
+  checkVideoFilesWereRemoved,
+  cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
   removeVideo,
   uploadVideo,
   wait
 } from '../../../../shared/extra-utils'
-import { flushTests, killallServers, ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { ServerInfo, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   createVideoCaption,
@@ -36,7 +37,7 @@ describe('Test video captions', function () {
 
     await waitJobs(servers)
 
-    const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'my video name' })
+    const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'my video name' })
     videoUUID = res.body.video.uuid
 
     await waitJobs(servers)

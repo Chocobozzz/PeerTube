@@ -6,12 +6,12 @@ import { buildAbsoluteFixturePath } from '../miscs/miscs'
 const expect = chai.expect
 
 function createVideoCaption (args: {
-  url: string,
+  url: string
   accessToken: string
   videoId: string | number
   language: string
-  fixture: string,
-  mimeType?: string,
+  fixture: string
+  mimeType?: string
   statusCodeExpected?: number
 }) {
   const path = '/api/v1/videos/' + args.videoId + '/captions/' + args.language

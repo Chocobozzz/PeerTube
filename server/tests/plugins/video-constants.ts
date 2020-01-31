@@ -1,38 +1,20 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
+import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
 import {
-  cleanupTests,
-  flushAndRunMultipleServers,
-  flushAndRunServer, killallServers, reRunServer,
-  ServerInfo,
-  waitUntilLog
-} from '../../../shared/extra-utils/server/servers'
-import {
-  addVideoCommentReply,
-  addVideoCommentThread,
-  deleteVideoComment,
   getPluginTestPath,
-  getVideosList,
-  installPlugin,
-  removeVideo,
-  setAccessTokensToServers,
-  updateVideo,
-  uploadVideo,
-  viewVideo,
-  getVideosListPagination,
   getVideo,
-  getVideoCommentThreads,
-  getVideoThreadComments,
-  getVideoWithToken,
-  setDefaultVideoChannel,
-  waitJobs,
-  doubleFollow, getVideoLanguages, getVideoLicences, getVideoCategories, uninstallPlugin
+  getVideoCategories,
+  getVideoLanguages,
+  getVideoLicences,
+  installPlugin,
+  setAccessTokensToServers,
+  uninstallPlugin,
+  uploadVideo
 } from '../../../shared/extra-utils'
-import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
 import { VideoDetails } from '../../../shared/models/videos'
-import { getYoutubeVideoUrl, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 
 const expect = chai.expect
 
@@ -104,33 +86,33 @@ describe('Test plugin altering video constants', function () {
       const res = await getVideoLanguages(server.url)
       const languages = res.body
 
-      expect(languages[ 'en' ]).to.equal('English')
-      expect(languages[ 'fr' ]).to.equal('French')
+      expect(languages['en']).to.equal('English')
+      expect(languages['fr']).to.equal('French')
 
-      expect(languages[ 'al_bhed' ]).to.not.exist
-      expect(languages[ 'al_bhed2' ]).to.not.exist
+      expect(languages['al_bhed']).to.not.exist
+      expect(languages['al_bhed2']).to.not.exist
     }
 
     {
       const res = await getVideoCategories(server.url)
       const categories = res.body
 
-      expect(categories[ 1 ]).to.equal('Music')
-      expect(categories[ 2 ]).to.equal('Films')
+      expect(categories[1]).to.equal('Music')
+      expect(categories[2]).to.equal('Films')
 
-      expect(categories[ 42 ]).to.not.exist
-      expect(categories[ 43 ]).to.not.exist
+      expect(categories[42]).to.not.exist
+      expect(categories[43]).to.not.exist
     }
 
     {
       const res = await getVideoLicences(server.url)
       const licences = res.body
 
-      expect(licences[ 1 ]).to.equal('Attribution')
-      expect(licences[ 7 ]).to.equal('Public Domain Dedication')
+      expect(licences[1]).to.equal('Attribution')
+      expect(licences[7]).to.equal('Public Domain Dedication')
 
-      expect(licences[ 42 ]).to.not.exist
-      expect(licences[ 43 ]).to.not.exist
+      expect(licences[42]).to.not.exist
+      expect(licences[43]).to.not.exist
     }
   })
 

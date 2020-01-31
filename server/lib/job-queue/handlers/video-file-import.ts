@@ -11,7 +11,7 @@ import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
 
 export type VideoFileImportPayload = {
-  videoUUID: string,
+  videoUUID: string
   filePath: string
 }
 

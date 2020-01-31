@@ -1,17 +1,17 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
 import { VideoComment, VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'
 import { cleanupTests, testImage } from '../../../../shared/extra-utils'
 import {
+  createUser,
   dateIsValid,
   flushAndRunServer,
+  getAccessToken,
   ServerInfo,
   setAccessTokensToServers,
   updateMyAvatar,
-  getAccessToken,
-  createUser,
   uploadVideo
 } from '../../../../shared/extra-utils/index'
 import {

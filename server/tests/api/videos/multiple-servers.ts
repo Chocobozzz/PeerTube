@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -63,9 +63,9 @@ describe('Test multiple servers', function () {
         displayName: 'my channel',
         description: 'super channel'
       }
-      await addVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, videoChannel)
-      const channelRes = await getVideoChannelsList(servers[ 0 ].url, 0, 1)
-      videoChannelId = channelRes.body.data[ 0 ].id
+      await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
+      const channelRes = await getVideoChannelsList(servers[0].url, 0, 1)
+      videoChannelId = channelRes.body.data[0].id
     }
 
     // Server 1 and server 2 follow each other
@@ -163,7 +163,7 @@ describe('Test multiple servers', function () {
         username: 'user1',
         password: 'super_password'
       }
-      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
+      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
       const userAccessToken = await userLogin(servers[1], user)
 
       const videoAttributes = {
@@ -762,12 +762,12 @@ describe('Test multiple servers', function () {
 
       {
         const text = 'my super first comment'
-        await addVideoCommentThread(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, text)
+        await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, text)
       }
 
       {
         const text = 'my super second comment'
-        await addVideoCommentThread(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, text)
+        await addVideoCommentThread(servers[2].url, servers[2].accessToken, videoUUID, text)
       }
 
       await waitJobs(servers)
@@ -777,7 +777,7 @@ describe('Test multiple servers', function () {
         const threadId = res.body.data.find(c => c.text === 'my super first comment').id
 
         const text = 'my super answer to thread 1'
-        await addVideoCommentReply(servers[ 1 ].url, servers[ 1 ].accessToken, videoUUID, threadId, text)
+        await addVideoCommentReply(servers[1].url, servers[1].accessToken, videoUUID, threadId, text)
       }
 
       await waitJobs(servers)
@@ -790,10 +790,10 @@ describe('Test multiple servers', function () {
         const childCommentId = res2.body.children[0].comment.id
 
         const text3 = 'my second answer to thread 1'
-        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, threadId, text3)
+        await addVideoCommentReply(servers[2].url, servers[2].accessToken, videoUUID, threadId, text3)
 
         const text2 = 'my super answer to answer of thread 1'
-        await addVideoCommentReply(servers[ 2 ].url, servers[ 2 ].accessToken, videoUUID, childCommentId, text2)
+        await addVideoCommentReply(servers[2].url, servers[2].accessToken, videoUUID, childCommentId, text2)
       }
 
       await waitJobs(servers)
@@ -900,9 +900,9 @@ describe('Test multiple servers', function () {
     it('Should delete the thread comments', async function () {
       this.timeout(10000)
 
-      const res = await getVideoCommentThreads(servers[ 0 ].url, videoUUID, 0, 5)
+      const res = await getVideoCommentThreads(servers[0].url, videoUUID, 0, 5)
       const threadId = res.body.data.find(c => c.text === 'my super first comment').id
-      await deleteVideoComment(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, threadId)
+      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
 
       await waitJobs(servers)
     })
@@ -945,9 +945,9 @@ describe('Test multiple servers', function () {
     it('Should delete a remote thread by the origin server', async function () {
       this.timeout(5000)
 
-      const res = await getVideoCommentThreads(servers[ 0 ].url, videoUUID, 0, 5)
+      const res = await getVideoCommentThreads(servers[0].url, videoUUID, 0, 5)
       const threadId = res.body.data.find(c => c.text === 'my super second comment').id
-      await deleteVideoComment(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, threadId)
+      await deleteVideoComment(servers[0].url, servers[0].accessToken, videoUUID, threadId)
 
       await waitJobs(servers)
     })
@@ -1021,7 +1021,7 @@ describe('Test multiple servers', function () {
       const filePath = join(__dirname, '..', '..', 'fixtures', 'video_short.webm')
 
       await req.attach('videofile', filePath)
-        .expect(200)
+               .expect(200)
 
       await waitJobs(servers)
 
@@ -1046,7 +1046,7 @@ describe('Test multiple servers', function () {
           duration: 5,
           commentsEnabled: true,
           downloadEnabled: true,
-          tags: [ ],
+          tags: [],
           privacy: VideoPrivacy.PUBLIC,
           channel: {
             displayName: 'Main root channel',

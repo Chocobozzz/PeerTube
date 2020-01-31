@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -24,7 +24,7 @@ const expect = chai.expect
 
 async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'accepted') {
   {
-    const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: 'createdAt' })
+    const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: 'createdAt' })
     expect(res.body.total).to.equal(1)
 
     const follow = res.body.data[0] as ActorFollow
@@ -34,7 +34,7 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
   }
 
   {
-    const res = await getFollowersListPaginationAndSort({ url: servers[ 1 ].url, start: 0, count: 5, sort: 'createdAt' })
+    const res = await getFollowersListPaginationAndSort({ url: servers[1].url, start: 0, count: 5, sort: 'createdAt' })
     expect(res.body.total).to.equal(1)
 
     const follow = res.body.data[0] as ActorFollow
@@ -46,12 +46,12 @@ async function checkServer1And2HasFollowers (servers: ServerInfo[], state = 'acc
 
 async function checkNoFollowers (servers: ServerInfo[]) {
   {
-    const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: 'createdAt' })
+    const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: 'createdAt' })
     expect(res.body.total).to.equal(0)
   }
 
   {
-    const res = await getFollowersListPaginationAndSort({ url: servers[ 1 ].url, start: 0, count: 5, sort: 'createdAt' })
+    const res = await getFollowersListPaginationAndSort({ url: servers[1].url, start: 0, count: 5, sort: 'createdAt' })
     expect(res.body.total).to.equal(0)
   }
 }
@@ -164,17 +164,17 @@ describe('Test follows moderation', function () {
     await waitJobs(servers)
 
     {
-      const res = await getFollowingListPaginationAndSort({ url: servers[ 0 ].url, start: 0, count: 5, sort: 'createdAt' })
+      const res = await getFollowingListPaginationAndSort({ url: servers[0].url, start: 0, count: 5, sort: 'createdAt' })
       expect(res.body.total).to.equal(2)
     }
 
     {
-      const res = await getFollowersListPaginationAndSort({ url: servers[ 1 ].url, start: 0, count: 5, sort: 'createdAt' })
+      const res = await getFollowersListPaginationAndSort({ url: servers[1].url, start: 0, count: 5, sort: 'createdAt' })
       expect(res.body.total).to.equal(1)
     }
 
     {
-      const res = await getFollowersListPaginationAndSort({ url: servers[ 2 ].url, start: 0, count: 5, sort: 'createdAt' })
+      const res = await getFollowersListPaginationAndSort({ url: servers[2].url, start: 0, count: 5, sort: 'createdAt' })
       expect(res.body.total).to.equal(1)
     }
 
@@ -184,7 +184,7 @@ describe('Test follows moderation', function () {
     await checkServer1And2HasFollowers(servers)
 
     {
-      const res = await getFollowersListPaginationAndSort({ url: servers[ 2 ].url, start: 0, count: 5, sort: 'createdAt' })
+      const res = await getFollowersListPaginationAndSort({ url: servers[2].url, start: 0, count: 5, sort: 'createdAt' })
       expect(res.body.total).to.equal(0)
     }
   })

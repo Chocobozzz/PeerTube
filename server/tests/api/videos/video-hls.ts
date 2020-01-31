@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -10,13 +10,16 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   getPlaylist,
-  getVideo, makeGetRequest, makeRawRequest,
+  getVideo,
+  makeRawRequest,
   removeVideo,
   ServerInfo,
-  setAccessTokensToServers, updateCustomSubConfig,
+  setAccessTokensToServers,
+  updateCustomSubConfig,
   updateVideo,
   uploadVideo,
-  waitJobs, webtorrentAdd
+  waitJobs,
+  webtorrentAdd
 } from '../../../../shared/extra-utils'
 import { VideoDetails } from '../../../../shared/models/videos'
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
@@ -48,7 +51,9 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
 
       expect(file.magnetUri).to.have.lengthOf.above(2)
       expect(file.torrentUrl).to.equal(`${baseUrl}/static/torrents/${videoDetails.uuid}-${file.resolution.id}-hls.torrent`)
-      expect(file.fileUrl).to.equal(`${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${videoDetails.uuid}-${file.resolution.id}-fragmented.mp4`)
+      expect(file.fileUrl).to.equal(
+        `${baseUrl}/static/streaming-playlists/hls/${videoDetails.uuid}/${videoDetails.uuid}-${file.resolution.id}-fragmented.mp4`
+      )
       expect(file.resolution.label).to.equal(resolution + 'p')
 
       await makeRawRequest(file.torrentUrl, 200)
@@ -66,7 +71,9 @@ async function checkHlsPlaylist (servers: ServerInfo[], videoUUID: string, hlsOn
       const masterPlaylist = res.text
 
       for (const resolution of resolutions) {
-        const reg = new RegExp('#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',FRAME-RATE=\\d+,CODECS="avc1.64001f,mp4a.40.2"')
+        const reg = new RegExp(
+          '#EXT-X-STREAM-INF:BANDWIDTH=\\d+,RESOLUTION=\\d+x' + resolution + ',FRAME-RATE=\\d+,CODECS="avc1.64001f,mp4a.40.2"'
+        )
 
         expect(masterPlaylist).to.match(reg)
         expect(masterPlaylist).to.contain(`${resolution}.m3u8`)
@@ -102,7 +109,7 @@ describe('Test HLS videos', function () {
     it('Should upload a video and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video 1', fixture: 'video_short.webm' })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video 1', fixture: 'video_short.webm' })
       videoUUID = res.body.video.uuid
 
       await waitJobs(servers)
@@ -113,7 +120,7 @@ describe('Test HLS videos', function () {
     it('Should upload an audio file and transcode it to HLS', async function () {
       this.timeout(120000)
 
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video audio', fixture: 'sample.ogg' })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video audio', fixture: 'sample.ogg' })
       videoAudioUUID = res.body.video.uuid
 
       await waitJobs(servers)
@@ -124,7 +131,7 @@ describe('Test HLS videos', function () {
     it('Should update the video', async function () {
       this.timeout(10000)
 
-      await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID, { name: 'video 1 updated' })
+      await updateVideo(servers[0].url, servers[0].accessToken, videoUUID, { name: 'video 1 updated' })
 
       await waitJobs(servers)
 
@@ -134,8 +141,8 @@ describe('Test HLS videos', function () {
     it('Should delete videos', async function () {
       this.timeout(10000)
 
-      await removeVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID)
-      await removeVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAudioUUID)
+      await removeVideo(servers[0].url, servers[0].accessToken, videoUUID)
+      await removeVideo(servers[0].url, servers[0].accessToken, videoAudioUUID)
 
       await waitJobs(servers)
 

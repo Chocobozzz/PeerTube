@@ -22,10 +22,11 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     .optional()
     .custom(isVideoMagnetUriValid).withMessage('Should have a valid video magnet URI'),
   body('torrentfile')
-    .custom((value, { req }) => isVideoImportTorrentFile(req.files)).withMessage(
-    'This torrent file is not supported or too large. Please, make sure it is of the following type: '
-    + CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.EXTNAME.join(', ')
-  ),
+    .custom((value, { req }) => isVideoImportTorrentFile(req.files))
+    .withMessage(
+      'This torrent file is not supported or too large. Please, make sure it is of the following type: ' +
+      CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.EXTNAME.join(', ')
+    ),
   body('name')
     .optional()
     .custom(isVideoNameValid).withMessage('Should have a valid name'),

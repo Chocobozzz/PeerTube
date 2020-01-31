@@ -21,7 +21,7 @@ async function isSignupAllowed (): Promise<{ allowed: boolean, errorMessage?: st
 
 function isSignupAllowedForCurrentIP (ip: string) {
   const addr = ipaddr.parse(ip)
-  let excludeList = [ 'blacklist' ]
+  const excludeList = [ 'blacklist' ]
   let matched = ''
 
   // if there is a valid, non-empty whitelist, we exclude all unknown adresses too

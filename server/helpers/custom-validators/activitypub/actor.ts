@@ -6,7 +6,7 @@ import { isHostValid } from '../servers'
 import { peertubeTruncate } from '@server/helpers/core-utils'
 
 function isActorEndpointsObjectValid (endpointObject: any) {
-  if (endpointObject && endpointObject.sharedInbox) {
+  if (endpointObject?.sharedInbox) {
     return isActivityPubUrlValid(endpointObject.sharedInbox)
   }
 
@@ -101,8 +101,6 @@ function normalizeActor (actor: any) {
       actor.summary = null
     }
   }
-
-  return
 }
 
 function isValidActorHandle (handle: string) {

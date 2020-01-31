@@ -144,7 +144,6 @@ function getVideoPlaylist (req: express.Request, res: express.Response) {
 
   if (videoPlaylist.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video-playlist', url: videoPlaylist.url } })
-            .catch(err => logger.error('Cannot create AP refresher job for playlist %s.', videoPlaylist.url, { err }))
   }
 
   return res.json(videoPlaylist.toFormattedJSON())

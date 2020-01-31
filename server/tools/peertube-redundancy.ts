@@ -1,3 +1,5 @@
+// eslint-disable @typescript-eslint/no-unnecessary-type-assertion
+
 import { registerTSPaths } from '../helpers/register-ts-paths'
 registerTSPaths()
 
@@ -6,10 +8,11 @@ import { getAdminTokenOrDie, getServerCredentials } from './cli'
 import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
 import { addVideoRedundancy, listVideoRedundancies, removeVideoRedundancy } from '@shared/extra-utils/server/redundancy'
 import validator from 'validator'
-import bytes = require('bytes')
 import * as CliTable3 from 'cli-table3'
-import { parse } from 'url'
+import { URL } from 'url'
 import { uniq } from 'lodash'
+
+import bytes = require('bytes')
 
 program
   .name('plugins')
@@ -65,7 +68,7 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
 
   const table = new CliTable3({
     head: [ 'video id', 'video name', 'video url', 'files', 'playlists', 'by instances', 'total size' ]
-  }) as CliTable3.HorizontalTable
+  }) as any
 
   for (const redundancy of redundancies) {
     const webtorrentFiles = redundancy.redundancies.files
@@ -82,7 +85,7 @@ async function listRedundanciesCLI (target: VideoRedundanciesTarget) {
     const instances = uniq(
       webtorrentFiles.concat(streamingPlaylists)
                      .map(r => r.fileUrl)
-                     .map(u => parse(u).host)
+                     .map(u => new URL(u).host)
     )
 
     table.push([
@@ -104,7 +107,7 @@ async function addRedundancyCLI (options: { videoId: number }) {
   const { url, username, password } = await getServerCredentials(program)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
-  if (!options[ 'video' ] || validator.isInt('' + options[ 'video' ]) === false) {
+  if (!options['video'] || validator.isInt('' + options['video']) === false) {
     console.error('You need to specify the video id to duplicate and it should be a number.\n')
     program.outputHelp()
     process.exit(-1)
@@ -114,7 +117,7 @@ async function addRedundancyCLI (options: { videoId: number }) {
     await addVideoRedundancy({
       url,
       accessToken,
-      videoId: options[ 'video' ]
+      videoId: options['video']
     })
 
     console.log('Video will be duplicated by your instance!')
@@ -137,13 +140,13 @@ async function removeRedundancyCLI (options: { videoId: number }) {
   const { url, username, password } = await getServerCredentials(program)
   const accessToken = await getAdminTokenOrDie(url, username, password)
 
-  if (!options[ 'video' ] || validator.isInt('' + options[ 'video' ]) === false) {
+  if (!options['video'] || validator.isInt('' + options['video']) === false) {
     console.error('You need to specify the video id to remove from your redundancies.\n')
     program.outputHelp()
     process.exit(-1)
   }
 
-  const videoId = parseInt(options[ 'video' ] + '', 10)
+  const videoId = parseInt(options['video'] + '', 10)
 
   let redundancies = await listVideoRedundanciesData(url, accessToken, 'my-videos')
   let videoRedundancy = redundancies.find(r => videoId === r.id)

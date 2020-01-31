@@ -4,8 +4,8 @@ import * as uuidv4 from 'uuid/v4'
 import { WEBSERVER } from '../constants'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
   const transaction = utils.transaction

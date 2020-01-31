@@ -2,11 +2,11 @@ import * as request from 'supertest'
 import { ContactForm } from '../../models/server'
 
 function sendContactForm (options: {
-  url: string,
-  fromEmail: string,
-  fromName: string,
-  subject: string,
-  body: string,
+  url: string
+  fromEmail: string
+  fromName: string
+  subject: string
+  body: string
   expectedStatus?: number
 }) {
   const path = '/api/v1/server/contact'

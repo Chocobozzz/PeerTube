@@ -3,8 +3,8 @@ import { DataType } from 'sequelize-typescript'
 import { createPrivateAndPublicKeys } from '../../helpers/peertube-crypto'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
   // Create actor table
@@ -64,10 +64,10 @@ async function up (utils: {
           type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
           "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
         )
-        SELECT 
+        SELECT
           'Application', uuid, name, url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
-          "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt" 
-        FROM account 
+          "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
+        FROM account
         WHERE "applicationId" IS NOT NULL
         `
     await utils.sequelize.query(query1)
@@ -79,10 +79,10 @@ async function up (utils: {
           type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
           "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
         )
-        SELECT 
+        SELECT
           'Person', uuid, name, url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
-          "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt" 
-        FROM account 
+          "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
+        FROM account
         WHERE "applicationId" IS NULL
         `
     await utils.sequelize.query(query2)
@@ -108,17 +108,17 @@ async function up (utils: {
   }
 
   {
-    const query = `  
-    INSERT INTO actor 
+    const query = `
+    INSERT INTO actor
     (
-    type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl", 
+    type, uuid, "preferredUsername", url, "publicKey", "privateKey", "followersCount", "followingCount", "inboxUrl", "outboxUrl",
     "sharedInboxUrl", "followersUrl", "followingUrl", "avatarId", "serverId", "createdAt", "updatedAt"
     )
-    SELECT 
-    'Group', "videoChannel".uuid, "videoChannel".uuid, "videoChannel".url, null, null, 0, 0, "videoChannel".url || '/inbox', 
+    SELECT
+    'Group', "videoChannel".uuid, "videoChannel".uuid, "videoChannel".url, null, null, 0, 0, "videoChannel".url || '/inbox',
     "videoChannel".url || '/outbox', "videoChannel".url || '/inbox', "videoChannel".url || '/followers', "videoChannel".url || '/following',
-     null, account."serverId", "videoChannel"."createdAt", "videoChannel"."updatedAt" 
-     FROM "videoChannel" 
+     null, account."serverId", "videoChannel"."createdAt", "videoChannel"."updatedAt"
+     FROM "videoChannel"
      INNER JOIN "account" on "videoChannel"."accountId" = "account".id
     `
     await utils.sequelize.query(query)
@@ -157,13 +157,13 @@ async function up (utils: {
     }
 
     {
-      const query1 = `UPDATE "actorFollow" 
-      SET "actorId" = 
+      const query1 = `UPDATE "actorFollow"
+      SET "actorId" =
       (SELECT "account"."actorId" FROM account WHERE "account"."id" = "actorFollow"."actorId")`
       await utils.sequelize.query(query1)
 
-      const query2 = `UPDATE "actorFollow" 
-      SET "targetActorId" = 
+      const query2 = `UPDATE "actorFollow"
+      SET "targetActorId" =
       (SELECT "account"."actorId" FROM account WHERE "account"."id" = "actorFollow"."targetActorId")`
 
       await utils.sequelize.query(query2)
@@ -189,8 +189,8 @@ async function up (utils: {
       await utils.queryInterface.removeConstraint('videoShare', 'videoShare_accountId_fkey')
     }
 
-    const query = `UPDATE "videoShare" 
-      SET "actorId" = 
+    const query = `UPDATE "videoShare"
+      SET "actorId" =
       (SELECT "actorId" FROM account WHERE id = "videoShare"."actorId")`
     await utils.sequelize.query(query)
 

@@ -120,10 +120,10 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
   }
 
   static listForApi (options: {
-    start: number,
-    count: number,
-    videoPlaylistId: number,
-    serverAccount: AccountModel,
+    start: number
+    count: number
+    videoPlaylistId: number
+    serverAccount: AccountModel
     user?: MUserAccountId
   }) {
     const accountIds = [ options.serverAccount.id ]

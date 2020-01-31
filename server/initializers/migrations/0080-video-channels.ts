@@ -2,9 +2,9 @@ import * as Sequelize from 'sequelize'
 import * as uuidv4 from 'uuid/v4'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
   const q = utils.queryInterface

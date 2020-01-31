@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -39,7 +39,7 @@ describe('Test ActivityPub video channels search', function () {
     await setAccessTokensToServers(servers)
 
     {
-      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: 'user1_server1', password: 'password' })
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: 'user1_server1', password: 'password' })
       const channel = {
         name: 'channel1_server1',
         displayName: 'Channel 1 server 1'
@@ -49,7 +49,7 @@ describe('Test ActivityPub video channels search', function () {
 
     {
       const user = { username: 'user1_server2', password: 'password' }
-      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
+      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
       userServer2Token = await userLogin(servers[1], user)
 
       const channel = {
@@ -70,8 +70,8 @@ describe('Test ActivityPub video channels search', function () {
     this.timeout(15000)
 
     {
-      const search = 'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server3'
-      const res = await searchVideoChannel(servers[ 0 ].url, search, servers[ 0 ].accessToken)
+      const search = 'http://localhost:' + servers[1].port + '/video-channels/channel1_server3'
+      const res = await searchVideoChannel(servers[0].url, search, servers[0].accessToken)
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.be.an('array')
@@ -80,7 +80,7 @@ describe('Test ActivityPub video channels search', function () {
 
     {
       // Without token
-      const search = 'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server2'
+      const search = 'http://localhost:' + servers[1].port + '/video-channels/channel1_server2'
       const res = await searchVideoChannel(servers[0].url, search)
 
       expect(res.body.total).to.equal(0)
@@ -91,35 +91,35 @@ describe('Test ActivityPub video channels search', function () {
 
   it('Should search a local video channel', async function () {
     const searches = [
-      'http://localhost:' + servers[ 0 ].port + '/video-channels/channel1_server1',
-      'channel1_server1@localhost:' + servers[ 0 ].port
+      'http://localhost:' + servers[0].port + '/video-channels/channel1_server1',
+      'channel1_server1@localhost:' + servers[0].port
     ]
 
     for (const search of searches) {
-      const res = await searchVideoChannel(servers[ 0 ].url, search)
+      const res = await searchVideoChannel(servers[0].url, search)
 
       expect(res.body.total).to.equal(1)
       expect(res.body.data).to.be.an('array')
       expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[ 0 ].name).to.equal('channel1_server1')
-      expect(res.body.data[ 0 ].displayName).to.equal('Channel 1 server 1')
+      expect(res.body.data[0].name).to.equal('channel1_server1')
+      expect(res.body.data[0].displayName).to.equal('Channel 1 server 1')
     }
   })
 
   it('Should search a remote video channel with URL or handle', async function () {
     const searches = [
-      'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server2',
-      'channel1_server2@localhost:' + servers[ 1 ].port
+      'http://localhost:' + servers[1].port + '/video-channels/channel1_server2',
+      'channel1_server2@localhost:' + servers[1].port
     ]
 
     for (const search of searches) {
-      const res = await searchVideoChannel(servers[ 0 ].url, search, servers[ 0 ].accessToken)
+      const res = await searchVideoChannel(servers[0].url, search, servers[0].accessToken)
 
       expect(res.body.total).to.equal(1)
       expect(res.body.data).to.be.an('array')
       expect(res.body.data).to.have.lengthOf(1)
-      expect(res.body.data[ 0 ].name).to.equal('channel1_server2')
-      expect(res.body.data[ 0 ].displayName).to.equal('Channel 1 server 2')
+      expect(res.body.data[0].name).to.equal('channel1_server2')
+      expect(res.body.data[0].displayName).to.equal('Channel 1 server 2')
     }
   })
 
@@ -137,13 +137,13 @@ describe('Test ActivityPub video channels search', function () {
 
     await waitJobs(servers)
 
-    const res = await getVideoChannelVideos(servers[0].url, null, 'channel1_server2@localhost:' + servers[ 1 ].port, 0, 5)
+    const res = await getVideoChannelVideos(servers[0].url, null, 'channel1_server2@localhost:' + servers[1].port, 0, 5)
     expect(res.body.total).to.equal(0)
     expect(res.body.data).to.have.lengthOf(0)
   })
 
   it('Should list video channel videos of server 2 with token', async function () {
-    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'channel1_server2@localhost:' + servers[ 1 ].port, 0, 5)
+    const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, 'channel1_server2@localhost:' + servers[1].port, 0, 5)
 
     expect(res.body.total).to.equal(1)
     expect(res.body.data[0].name).to.equal('video 1 server 2')
@@ -159,7 +159,7 @@ describe('Test ActivityPub video channels search', function () {
     // Expire video channel
     await wait(10000)
 
-    const search = 'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server2'
+    const search = 'http://localhost:' + servers[1].port + '/video-channels/channel1_server2'
     const res = await searchVideoChannel(servers[0].url, search, servers[0].accessToken)
     expect(res.body.total).to.equal(1)
     expect(res.body.data).to.have.lengthOf(1)
@@ -182,12 +182,12 @@ describe('Test ActivityPub video channels search', function () {
     // Expire video channel
     await wait(10000)
 
-    const search = 'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server2'
+    const search = 'http://localhost:' + servers[1].port + '/video-channels/channel1_server2'
     await searchVideoChannel(servers[0].url, search, servers[0].accessToken)
 
     await waitJobs(servers)
 
-    const videoChannelName = 'channel1_server2@localhost:' + servers[ 1 ].port
+    const videoChannelName = 'channel1_server2@localhost:' + servers[1].port
     const res = await getVideoChannelVideos(servers[0].url, servers[0].accessToken, videoChannelName, 0, 5, '-createdAt')
 
     expect(res.body.total).to.equal(2)
@@ -204,7 +204,7 @@ describe('Test ActivityPub video channels search', function () {
     // Expire video
     await wait(10000)
 
-    const search = 'http://localhost:' + servers[ 1 ].port + '/video-channels/channel1_server2'
+    const search = 'http://localhost:' + servers[1].port + '/video-channels/channel1_server2'
     const res = await searchVideoChannel(servers[0].url, search, servers[0].accessToken)
     expect(res.body.total).to.equal(0)
     expect(res.body.data).to.have.lengthOf(0)

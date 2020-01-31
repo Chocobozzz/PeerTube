@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import {
@@ -50,7 +50,7 @@ describe('Test video captions API validator', function () {
   describe('When adding video caption', function () {
     const fields = { }
     const attaches = {
-      'captionfile': join(__dirname, '..', '..', 'fixtures', 'subtitle-good1.vtt')
+      captionfile: join(__dirname, '..', '..', 'fixtures', 'subtitle-good1.vtt')
     }
 
     it('Should fail without a valid uuid', async function () {

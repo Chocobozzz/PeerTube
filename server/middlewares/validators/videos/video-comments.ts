@@ -50,7 +50,7 @@ const addVideoCommentThreadValidator = [
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.videoId, res)) return
     if (!isVideoCommentsEnabled(res.locals.videoAll, res)) return
-    if (!await isVideoCommentAccepted(req, res, res.locals.videoAll,false)) return
+    if (!await isVideoCommentAccepted(req, res, res.locals.videoAll, false)) return
 
     return next()
   }

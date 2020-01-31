@@ -13,15 +13,18 @@ export type MVideoBlacklistUnfederated = Pick<MVideoBlacklist, 'unfederated'>
 
 // ############################################################################
 
-export type MVideoBlacklistLightVideo = MVideoBlacklistLight &
+export type MVideoBlacklistLightVideo =
+  MVideoBlacklistLight &
   Use<'Video', MVideo>
 
-export type MVideoBlacklistVideo = MVideoBlacklist &
+export type MVideoBlacklistVideo =
+  MVideoBlacklist &
   Use<'Video', MVideo>
 
 // ############################################################################
 
 // Format for API or AP object
 
-export type MVideoBlacklistFormattable = MVideoBlacklist &
+export type MVideoBlacklistFormattable =
+  MVideoBlacklist &
   Use<'Video', MVideoFormattable>

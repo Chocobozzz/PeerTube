@@ -9,7 +9,8 @@ function isUserNotificationTypeValid (value: any) {
 
 function isUserNotificationSettingValid (value: any) {
   return exists(value) &&
-    validator.isInt('' + value) && (
+    validator.isInt('' + value) &&
+    (
       value === UserNotificationSettingValue.NONE ||
       value === UserNotificationSettingValue.WEB ||
       value === UserNotificationSettingValue.EMAIL ||

@@ -63,7 +63,7 @@
     "ng": "ng",
     "nodemon": "nodemon",
     "ts-node": "ts-node",
-    "tslint": "tslint",
+    "eslint": "eslint",
     "concurrently": "concurrently",
     "mocha-parallel-tests": "mocha-parallel-tests",
     "sasslint": "sass-lint --verbose --no-exit",
@@ -96,7 +96,7 @@
     "express": "^4.12.4",
     "express-oauth-server": "^2.0.0",
     "express-rate-limit": "^4.0.4",
-    "express-validator": "^6.1.1",
+    "express-validator": "^6.4.0",
     "flat": "^5.0.0",
     "fluent-ffmpeg": "^2.1.0",
     "fs-extra": "^8.0.1",
@@ -139,7 +139,7 @@
     "webtorrent": "^0.107.16",
     "winston": "3.2.1",
     "ws": "^7.0.0",
-    "youtube-dl": "^3.0.1"
+    "youtube-dl": "^3.0.2"
   },
   "devDependencies": {
     "@types/apicache": "^1.2.0",
@@ -180,10 +180,17 @@
     "@types/validator": "^12.0.1",
     "@types/webtorrent": "^0.107.0",
     "@types/ws": "^7.2.1",
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
     "chai": "^4.1.1",
     "chai-json-schema": "^1.5.0",
     "chai-xml": "^0.3.2",
     "concurrently": "^5.0.0",
+    "eslint": "^6.8.0",
+    "eslint-config-standard-with-typescript": "^12.0.1",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-node": "^11.0.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
     "libxmljs": "0.19.7",
     "maildev": "^1.0.0-rc3",
     "marked": "^0.8.0",
@@ -195,8 +202,6 @@
     "supertest": "^4.0.2",
     "swagger-cli": "^3.0.1",
     "ts-node": "8.6.2",
-    "tslint": "^6.0.0",
-    "tslint-config-standard": "^9.0.0",
     "typescript": "^3.7.2"
   },
   "scripty": {

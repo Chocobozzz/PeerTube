@@ -197,25 +197,25 @@ async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTo
     jobPayloads.push({ uri: fetchedVideo.comments, videoId: video.id, type: 'video-comments' as 'video-comments' })
   }
 
-  await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload }))
+  await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload }))
 }
 
 function getOrCreateVideoAndAccountAndChannel (options: {
-  videoObject: { id: string } | string,
-  syncParam?: SyncParam,
-  fetchType?: 'all',
+  videoObject: { id: string } | string
+  syncParam?: SyncParam
+  fetchType?: 'all'
   allowRefresh?: boolean
 }): Promise<{ video: MVideoAccountLightBlacklistAllFiles, created: boolean, autoBlacklisted?: boolean }>
 function getOrCreateVideoAndAccountAndChannel (options: {
-  videoObject: { id: string } | string,
-  syncParam?: SyncParam,
-  fetchType?: VideoFetchByUrlType,
+  videoObject: { id: string } | string
+  syncParam?: SyncParam
+  fetchType?: VideoFetchByUrlType
   allowRefresh?: boolean
 }): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }>
 async function getOrCreateVideoAndAccountAndChannel (options: {
-  videoObject: { id: string } | string,
-  syncParam?: SyncParam,
-  fetchType?: VideoFetchByUrlType,
+  videoObject: { id: string } | string
+  syncParam?: SyncParam
+  fetchType?: VideoFetchByUrlType
   allowRefresh?: boolean // true by default
 }): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }> {
   // Default params
@@ -235,8 +235,14 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
         syncParam
       }
 
-      if (syncParam.refreshVideo === true) videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
-      else await JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: videoFromDatabase.url } })
+      if (syncParam.refreshVideo === true) {
+        videoFromDatabase = await refreshVideoIfNeeded(refreshOptions)
+      } else {
+        await JobQueue.Instance.createJobWithPromise({
+          type: 'activitypub-refresher',
+          payload: { type: 'video', url: videoFromDatabase.url }
+        })
+      }
     }
 
     return { video: videoFromDatabase, created: false }
@@ -255,10 +261,10 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 }
 
 async function updateVideoFromAP (options: {
-  video: MVideoAccountLightBlacklistAllFiles,
-  videoObject: VideoTorrentObject,
-  account: MAccountIdActor,
-  channel: MChannelDefault,
+  video: MVideoAccountLightBlacklistAllFiles
+  videoObject: VideoTorrentObject
+  account: MAccountIdActor
+  channel: MChannelDefault
   overrideTo?: string[]
 }) {
   const { video, videoObject, account, channel, overrideTo } = options
@@ -289,7 +295,7 @@ async function updateVideoFromAP (options: {
         throw new Error('Account ' + account.Actor.url + ' does not own video channel ' + videoChannel.Actor.url)
       }
 
-      const to = overrideTo ? overrideTo : videoObject.to
+      const to = overrideTo || videoObject.to
       const videoData = await videoActivityObjectToDBAttributes(channel, videoObject, to)
       video.name = videoData.name
       video.uuid = videoData.uuid
@@ -412,8 +418,8 @@ async function updateVideoFromAP (options: {
 }
 
 async function refreshVideoIfNeeded (options: {
-  video: MVideoThumbnail,
-  fetchedType: VideoFetchByUrlType,
+  video: MVideoThumbnail
+  fetchedType: VideoFetchByUrlType
   syncParam: SyncParam
 }): Promise<MVideoThumbnail> {
   if (!options.video.isOutdated()) return options.video
@@ -582,13 +588,13 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
       thumbnailModel = videoCreated.id
 
       return thumbnailModel.save()
-    })
+    }).catch(err => logger.error('Cannot create miniature from url.', { err }))
   }
 
   return { autoBlacklisted, videoCreated }
 }
 
-async function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoTorrentObject, to: string[] = []) {
+function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoTorrentObject, to: string[] = []) {
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
   const duration = videoObject.duration.replace(/[^\d]+/, '')
 
@@ -661,7 +667,7 @@ function videoFileActivityUrlToDBAttributes (
 
     const mediaType = fileUrl.mediaType
     const attribute = {
-      extname: MIMETYPES.VIDEO.MIMETYPE_EXT[ mediaType ],
+      extname: MIMETYPES.VIDEO.MIMETYPE_EXT[mediaType],
       infoHash: parsed.infoHash,
       resolution: fileUrl.height,
       size: fileUrl.size,

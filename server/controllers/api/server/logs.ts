@@ -59,9 +59,9 @@ async function getLogs (req: express.Request, res: express.Response) {
 }
 
 async function generateOutput (options: {
-  startDateQuery: string,
-  endDateQuery?: string,
-  level: LogLevel,
+  startDateQuery: string
+  endDateQuery?: string
+  level: LogLevel
   nameFilter: RegExp
 }) {
   const { startDateQuery, level, nameFilter } = options
@@ -111,7 +111,7 @@ async function getOutputFromFile (path: string, startDate: Date, endDate: Date, 
   const output: any[] = []
 
   for (let i = lines.length - 1; i >= 0; i--) {
-    const line = lines[ i ]
+    const line = lines[i]
     let log: any
 
     try {
@@ -122,7 +122,7 @@ async function getOutputFromFile (path: string, startDate: Date, endDate: Date, 
     }
 
     logTime = new Date(log.timestamp).getTime()
-    if (logTime >= startTime && logTime <= endTime && logsLevel[ log.level ] >= logsLevel[ level ]) {
+    if (logTime >= startTime && logTime <= endTime && logsLevel[log.level] >= logsLevel[level]) {
       output.push(log)
 
       currentSize += line.length

@@ -13,10 +13,12 @@ const addVideoCaptionValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid video id'),
   param('captionLanguage').custom(isVideoCaptionLanguageValid).not().isEmpty().withMessage('Should have a valid caption language'),
   body('captionfile')
-    .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile')).withMessage(
-    `This caption file is not supported or too large. Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE} and one of the following mimetypes: `
-    + Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
-  ),
+    .custom((_, { req }) => isVideoCaptionFile(req.files, 'captionfile'))
+    .withMessage(
+      'This caption file is not supported or too large. ' +
+      `Please, make sure it is under ${CONSTRAINTS_FIELDS.VIDEO_CAPTIONS.CAPTION_FILE.FILE_SIZE} and one of the following mimetypes: ` +
+      Object.keys(MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT).map(key => `${key} (${MIMETYPES.VIDEO_CAPTIONS.MIMETYPE_EXT[key]})`).join(', ')
+    ),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking addVideoCaption parameters', { parameters: req.body })

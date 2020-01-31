@@ -18,9 +18,9 @@ import { MUser, MUserDefault, MUserId } from '../typings/models/user'
 type ChannelNames = { name: string, displayName: string }
 
 async function createUserAccountAndChannelAndPlaylist (parameters: {
-  userToCreate: MUser,
-  userDisplayName?: string,
-  channelNames?: ChannelNames,
+  userToCreate: MUser
+  userDisplayName?: string
+  channelNames?: ChannelNames
   validateUser?: boolean
 }): Promise<{ user: MUserDefault, account: MAccountDefault, videoChannel: MChannelActor }> {
   const { userToCreate, userDisplayName, channelNames, validateUser = true } = parameters
@@ -63,11 +63,11 @@ async function createUserAccountAndChannelAndPlaylist (parameters: {
 }
 
 async function createLocalAccountWithoutKeys (parameters: {
-  name: string,
-  displayName?: string,
-  userId: number | null,
-  applicationId: number | null,
-  t: Transaction | undefined,
+  name: string
+  displayName?: string
+  userId: number | null
+  applicationId: number | null
+  t: Transaction | undefined
   type?: ActivityPubActorType
 }) {
   const { name, displayName, userId, applicationId, t, type = 'Person' } = parameters

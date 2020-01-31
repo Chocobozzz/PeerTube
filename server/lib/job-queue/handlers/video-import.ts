@@ -221,7 +221,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
         isNewVideo: true
       }
 
-      await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
+      await JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput })
     }
 
   } catch (err) {

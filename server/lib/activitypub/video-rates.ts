@@ -58,8 +58,6 @@ async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateTy
     const field = rate === 'like' ? 'likes' : 'dislikes'
     await video.increment(field, { by: rateCounts })
   }
-
-  return
 }
 
 async function sendVideoRateChange (

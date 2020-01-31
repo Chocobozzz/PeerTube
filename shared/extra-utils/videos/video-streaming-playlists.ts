@@ -37,7 +37,7 @@ async function checkSegmentHash (
 
   const resSha = await getSegmentSha256(hlsPlaylist.segmentsSha256Url)
 
-  const sha256Server = resSha.body[ videoName ][range]
+  const sha256Server = resSha.body[videoName][range]
   expect(sha256(res2.body)).to.equal(sha256Server)
 }
 

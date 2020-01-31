@@ -3,8 +3,8 @@ import * as Promise from 'bluebird'
 import { Migration } from '../../models/migrations'
 
 function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
   const q = utils.queryInterface

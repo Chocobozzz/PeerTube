@@ -1,6 +1,5 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
 import {
   cleanupTests,
@@ -17,17 +16,17 @@ import {
   createUser,
   deleteVideoComment,
   getPluginTestPath,
-  installPlugin, login,
-  registerUser, removeUser,
+  installPlugin,
+  registerUser,
+  removeUser,
   setAccessTokensToServers,
-  unblockUser, updateUser,
+  unblockUser,
+  updateUser,
   updateVideo,
   uploadVideo,
-  viewVideo,
-  userLogin
+  userLogin,
+  viewVideo
 } from '../../../shared/extra-utils'
-
-const expect = chai.expect
 
 describe('Test plugin action hooks', function () {
   let servers: ServerInfo[]

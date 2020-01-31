@@ -87,9 +87,9 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   static listForApi (parameters: {
-    start: number,
-    count: number,
-    sort: string,
+    start: number
+    count: number
+    sort: string
     serverAccountId: number
     user?: MUserAccountId
   }) {

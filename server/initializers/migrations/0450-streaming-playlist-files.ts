@@ -1,15 +1,9 @@
 import * as Sequelize from 'sequelize'
-import { join } from 'path'
-import { HLS_STREAMING_PLAYLIST_DIRECTORY, WEBSERVER } from '@server/initializers/constants'
-import { CONFIG } from '@server/initializers/config'
-import { pathExists, stat, writeFile } from 'fs-extra'
-import * as parseTorrent from 'parse-torrent'
-import { createTorrentPromise } from '@server/helpers/webtorrent'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
   {
@@ -42,8 +36,8 @@ async function up (utils: {
   {
     const query = 'insert into "videoFile" ' +
       '(resolution, size, "infoHash", "videoId", "createdAt", "updatedAt", fps, extname, "videoStreamingPlaylistId")' +
-      '(SELECT "videoFile".resolution, "videoFile".size, \'fake\', NULL, "videoFile"."createdAt", "videoFile"."updatedAt", "videoFile"."fps", ' +
-      '"videoFile".extname, "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ' +
+      '(SELECT "videoFile".resolution, "videoFile".size, \'fake\', NULL, "videoFile"."createdAt", "videoFile"."updatedAt", ' +
+      '"videoFile"."fps", "videoFile".extname, "videoStreamingPlaylist".id FROM "videoStreamingPlaylist" ' +
       'inner join video ON video.id = "videoStreamingPlaylist"."videoId" inner join "videoFile" ON "videoFile"."videoId" = video.id)'
 
     await utils.sequelize.query(query, { transaction: utils.transaction })

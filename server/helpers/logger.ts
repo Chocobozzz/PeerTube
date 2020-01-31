@@ -27,7 +27,7 @@ function getLoggerReplacer () {
     if (value instanceof Error) {
       const error = {}
 
-      Object.getOwnPropertyNames(value).forEach(key => error[ key ] = value[ key ])
+      Object.getOwnPropertyNames(value).forEach(key => { error[key] = value[key] })
 
       return error
     }
@@ -98,19 +98,20 @@ function bunyanLogFactory (level: string) {
     let args: any[] = []
     args.concat(arguments)
 
-    if (arguments[ 0 ] instanceof Error) {
-      meta = arguments[ 0 ].toString()
+    if (arguments[0] instanceof Error) {
+      meta = arguments[0].toString()
       args = Array.prototype.slice.call(arguments, 1)
       args.push(meta)
-    } else if (typeof (args[ 0 ]) !== 'string') {
-      meta = arguments[ 0 ]
+    } else if (typeof (args[0]) !== 'string') {
+      meta = arguments[0]
       args = Array.prototype.slice.call(arguments, 1)
       args.push(meta)
     }
 
-    logger[ level ].apply(logger, args)
+    logger[level].apply(logger, args)
   }
 }
+
 const bunyanLogger = {
   trace: bunyanLogFactory('debug'),
   debug: bunyanLogFactory('debug'),

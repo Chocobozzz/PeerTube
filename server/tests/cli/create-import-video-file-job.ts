@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import * as chai from 'chai'
@@ -71,7 +71,7 @@ describe('Test create import video jobs', function () {
       const videoDetail: VideoDetails = (await getVideo(server.url, video.uuid)).body
 
       expect(videoDetail.files).to.have.lengthOf(2)
-      const [originalVideo, transcodedVideo] = videoDetail.files
+      const [ originalVideo, transcodedVideo ] = videoDetail.files
       assertVideoProperties(originalVideo, 720, 'webm', 218910)
       assertVideoProperties(transcodedVideo, 480, 'webm', 69217)
 
@@ -95,7 +95,7 @@ describe('Test create import video jobs', function () {
       const videoDetail: VideoDetails = (await getVideo(server.url, video.uuid)).body
 
       expect(videoDetail.files).to.have.lengthOf(4)
-      const [originalVideo, transcodedVideo420, transcodedVideo320, transcodedVideo240] = videoDetail.files
+      const [ originalVideo, transcodedVideo420, transcodedVideo320, transcodedVideo240 ] = videoDetail.files
       assertVideoProperties(originalVideo, 720, 'ogv', 140849)
       assertVideoProperties(transcodedVideo420, 480, 'mp4')
       assertVideoProperties(transcodedVideo320, 360, 'mp4')

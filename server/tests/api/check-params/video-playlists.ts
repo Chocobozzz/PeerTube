@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import {
@@ -36,6 +36,7 @@ describe('Test video playlists API validator', function () {
   let privatePlaylistUUID: string
   let watchLaterPlaylistId: number
   let videoId: number
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let videoId2: number
   let playlistElementId: number
 
@@ -449,7 +450,7 @@ describe('Test video playlists API validator', function () {
       videoId3 = (await uploadVideoAndGetId({ server, videoName: 'video 3' })).id
       videoId4 = (await uploadVideoAndGetId({ server, videoName: 'video 4' })).id
 
-      for (let id of [ videoId3, videoId4 ]) {
+      for (const id of [ videoId3, videoId4 ]) {
         await addVideoInPlaylist({
           url: server.url,
           token: server.accessToken,
@@ -476,7 +477,7 @@ describe('Test video playlists API validator', function () {
       }
 
       {
-        const params = getBase({}, {  playlistId: 42, expectedStatus: 404 })
+        const params = getBase({}, { playlistId: 42, expectedStatus: 404 })
         await reorderVideosPlaylist(params)
       }
     })

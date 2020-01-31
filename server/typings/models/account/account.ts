@@ -21,7 +21,8 @@ type Use<K extends keyof AccountModel, M> = PickWith<AccountModel, K, M>
 
 // ############################################################################
 
-export type MAccount = Omit<AccountModel, 'Actor' | 'User' | 'Application' | 'VideoChannels' | 'VideoPlaylists' |
+export type MAccount =
+  Omit<AccountModel, 'Actor' | 'User' | 'Application' | 'VideoChannels' | 'VideoPlaylists' |
   'VideoComments' | 'BlockedAccounts'>
 
 // ############################################################################
@@ -34,62 +35,75 @@ export type MAccountUserId = Pick<MAccount, 'userId'>
 export type MAccountUrl = Use<'Actor', MActorUrl>
 export type MAccountAudience = Use<'Actor', MActorAudience>
 
-export type MAccountIdActor = MAccountId &
+export type MAccountIdActor =
+  MAccountId &
   Use<'Actor', MActor>
 
-export type MAccountIdActorId = MAccountId &
+export type MAccountIdActorId =
+  MAccountId &
   Use<'Actor', MActorId>
 
 // ############################################################################
 
 // Default scope
-export type MAccountDefault = MAccount &
+export type MAccountDefault =
+  MAccount &
   Use<'Actor', MActorDefault>
 
 // Default with default association scopes
-export type MAccountDefaultChannelDefault = MAccount &
+export type MAccountDefaultChannelDefault =
+  MAccount &
   Use<'Actor', MActorDefault> &
   Use<'VideoChannels', MChannelDefault[]>
 
 // We don't need some actors attributes
-export type MAccountLight = MAccount &
+export type MAccountLight =
+  MAccount &
   Use<'Actor', MActorDefaultLight>
 
 // ############################################################################
 
 // Full actor
-export type MAccountActor = MAccount &
+export type MAccountActor =
+  MAccount &
   Use<'Actor', MActor>
 
 // Full actor with server
-export type MAccountServer = MAccount &
+export type MAccountServer =
+  MAccount &
   Use<'Actor', MActorServer>
 
 // ############################################################################
 
 // For API
 
-export type MAccountSummary = FunctionProperties<MAccount> &
+export type MAccountSummary =
+  FunctionProperties<MAccount> &
   Pick<MAccount, 'id' | 'name'> &
   Use<'Actor', MActorSummary>
 
-export type MAccountSummaryBlocks = MAccountSummary &
+export type MAccountSummaryBlocks =
+  MAccountSummary &
   Use<'BlockedAccounts', MAccountBlocklistId[]>
 
-export type MAccountAPI = MAccount &
+export type MAccountAPI =
+  MAccount &
   Use<'Actor', MActorAPI>
 
 // ############################################################################
 
 // Format for API or AP object
 
-export type MAccountSummaryFormattable = FunctionProperties<MAccount> &
+export type MAccountSummaryFormattable =
+  FunctionProperties<MAccount> &
   Pick<MAccount, 'id' | 'name'> &
   Use<'Actor', MActorSummaryFormattable>
 
-export type MAccountFormattable = FunctionProperties<MAccount> &
+export type MAccountFormattable =
+  FunctionProperties<MAccount> &
   Pick<MAccount, 'id' | 'name' | 'description' | 'createdAt' | 'updatedAt' | 'userId'> &
   Use<'Actor', MActorFormattable>
 
-export type MAccountAP = Pick<MAccount, 'name' | 'description'> &
+export type MAccountAP =
+  Pick<MAccount, 'name' | 'description'> &
   Use<'Actor', MActorAP>

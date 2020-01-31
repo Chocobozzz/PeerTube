@@ -60,7 +60,7 @@ function setAccessTokensToServers (servers: ServerInfo[]) {
   const tasks: Promise<any>[] = []
 
   for (const server of servers) {
-    const p = serverLogin(server).then(t => server.accessToken = t)
+    const p = serverLogin(server).then(t => { server.accessToken = t })
     tasks.push(p)
   }
 

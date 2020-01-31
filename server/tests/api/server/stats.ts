@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -9,13 +9,12 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   follow,
-  killallServers,
   ServerInfo,
   uploadVideo,
   viewVideo,
   wait
 } from '../../../../shared/extra-utils'
-import { flushTests, setAccessTokensToServers } from '../../../../shared/extra-utils/index'
+import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
 import { addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -36,7 +35,7 @@ describe('Test stats (excluding redundancy)', function () {
       username: 'user1',
       password: 'super_password'
     }
-    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
+    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
     const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
     const videoUUID = resVideo.body.video.uuid

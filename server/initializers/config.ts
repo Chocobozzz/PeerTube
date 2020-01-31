@@ -301,7 +301,7 @@ function getLocalConfigFilePath () {
   if (process.env.NODE_ENV) filename += `-${process.env.NODE_ENV}`
   if (process.env.NODE_APP_INSTANCE) filename += `-${process.env.NODE_APP_INSTANCE}`
 
-  return join(dirname(configSources[ 0 ].name), filename + '.json')
+  return join(dirname(configSources[0].name), filename + '.json')
 }
 
 function buildVideosRedundancy (objs: any[]): VideosRedundancyStrategy[] {
@@ -330,7 +330,7 @@ export function reloadConfig () {
 
   function purge () {
     for (const fileName in require.cache) {
-      if (-1 === fileName.indexOf(directory())) {
+      if (fileName.indexOf(directory()) === -1) {
         continue
       }
 

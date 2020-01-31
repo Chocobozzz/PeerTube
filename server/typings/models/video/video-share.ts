@@ -9,9 +9,11 @@ type Use<K extends keyof VideoShareModel, M> = PickWith<VideoShareModel, K, M>
 
 export type MVideoShare = Omit<VideoShareModel, 'Actor' | 'Video'>
 
-export type MVideoShareActor = MVideoShare &
+export type MVideoShareActor =
+  MVideoShare &
   Use<'Actor', MActorDefault>
 
-export type MVideoShareFull = MVideoShare &
+export type MVideoShareFull =
+  MVideoShare &
   Use<'Actor', MActorDefault> &
   Use<'Video', MVideo>

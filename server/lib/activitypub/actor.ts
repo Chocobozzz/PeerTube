@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
-import * as url from 'url'
+import { URL } from 'url'
 import * as uuidv4 from 'uuid/v4'
 import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
@@ -33,8 +33,7 @@ import {
   MActorFull,
   MActorFullActor,
   MActorId,
-  MChannel,
-  MChannelAccountDefault
+  MChannel
 } from '../../typings/models'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
@@ -121,13 +120,13 @@ async function getOrCreateActorAndServerAndModel (
 
   if ((created === true || refreshed === true) && updateCollections === true) {
     const payload = { uri: actor.outboxUrl, type: 'activity' as 'activity' }
-    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+    await JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
   }
 
   // We created a new account: fetch the playlists
   if (created === true && actor.Account && accountPlaylistsUrl) {
     const payload = { uri: accountPlaylistsUrl, accountId: actor.Account.id, type: 'account-playlists' as 'account-playlists' }
-    await JobQueue.Instance.createJob({ type: 'activitypub-http-fetcher', payload })
+    await JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload })
   }
 
   return actorRefreshed
@@ -215,7 +214,7 @@ async function fetchActorTotalItems (url: string) {
   }
 }
 
-async function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
+function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
   if (
     actorJSON.icon && actorJSON.icon.type === 'Image' && MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
     isActivityPubUrlValid(actorJSON.icon.url)
@@ -271,7 +270,10 @@ async function refreshActorIfNeeded <T extends MActorFull | MActorAccountChannel
 
     if (statusCode === 404) {
       logger.info('Deleting actor %s because there is a 404 in refresh actor.', actor.url)
-      actor.Account ? actor.Account.destroy() : actor.VideoChannel.destroy()
+      actor.Account
+        ? await actor.Account.destroy()
+        : await actor.VideoChannel.destroy()
+
       return { actor: undefined, refreshed: false }
     }
 
@@ -337,14 +339,14 @@ function saveActorAndServerAndModelIfNotExist (
   ownerActor?: MActorFullActor,
   t?: Transaction
 ): Bluebird<MActorFullActor> | Promise<MActorFullActor> {
-  let actor = result.actor
+  const actor = result.actor
 
   if (t !== undefined) return save(t)
 
   return sequelizeTypescript.transaction(t => save(t))
 
   async function save (t: Transaction) {
-    const actorHost = url.parse(actor.url).host
+    const actorHost = new URL(actor.url).host
 
     const serverOptions = {
       where: {
@@ -402,7 +404,7 @@ type FetchRemoteActorResult = {
   support?: string
   playlists?: string
   avatar?: {
-    name: string,
+    name: string
     fileUrl: string
   }
   attributedTo: ActivityPubAttributedTo[]

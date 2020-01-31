@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -6,8 +6,6 @@ import {
   cleanupTests,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
-  killallServers,
   makeActivityPubGetRequest,
   ServerInfo,
   setAccessTokensToServers,

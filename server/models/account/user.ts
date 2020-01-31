@@ -1,4 +1,4 @@
-import { FindOptions, literal, Op, QueryTypes, where, fn, col } from 'sequelize'
+import { FindOptions, literal, Op, QueryTypes, where, fn, col, WhereOptions } from 'sequelize'
 import {
   AfterDestroy,
   AfterUpdate,
@@ -101,7 +101,7 @@ enum ScopeNames {
             required: true,
             where: {
               type: {
-                [ Op.ne ]: VideoPlaylistType.REGULAR
+                [Op.ne]: VideoPlaylistType.REGULAR
               }
             }
           }
@@ -186,7 +186,10 @@ export class UserModel extends Model<UserModel> {
 
   @AllowNull(false)
   @Default(true)
-  @Is('UserAutoPlayNextVideoPlaylist', value => throwIfNotValid(value, isUserAutoPlayNextVideoPlaylistValid, 'auto play next video for playlists boolean'))
+  @Is(
+    'UserAutoPlayNextVideoPlaylist',
+    value => throwIfNotValid(value, isUserAutoPlayNextVideoPlaylistValid, 'auto play next video for playlists boolean')
+  )
   @Column
   autoPlayNextVideoPlaylist: boolean
 
@@ -308,7 +311,8 @@ export class UserModel extends Model<UserModel> {
   }
 
   static listForApi (start: number, count: number, sort: string, search?: string) {
-    let where = undefined
+    let where: WhereOptions
+
     if (search) {
       where = {
         [Op.or]: [
@@ -319,7 +323,7 @@ export class UserModel extends Model<UserModel> {
           },
           {
             username: {
-              [ Op.iLike ]: '%' + search + '%'
+              [Op.iLike]: '%' + search + '%'
             }
           }
         ]
@@ -332,14 +336,14 @@ export class UserModel extends Model<UserModel> {
           [
             literal(
               '(' +
-                'SELECT COALESCE(SUM("size"), 0) ' +
-                'FROM (' +
-                  'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-                  'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-                  'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                  'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-                  'WHERE "account"."userId" = "UserModel"."id" GROUP BY "video"."id"' +
-                ') t' +
+              'SELECT COALESCE(SUM("size"), 0) ' +
+              'FROM (' +
+              'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+              'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+              'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+              'WHERE "account"."userId" = "UserModel"."id" GROUP BY "video"."id"' +
+              ') t' +
               ')'
             ),
             'videoQuotaUsed'
@@ -353,18 +357,18 @@ export class UserModel extends Model<UserModel> {
     }
 
     return UserModel.findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return {
-          data: rows,
-          total: count
-        }
-      })
+                    .then(({ rows, count }) => {
+                      return {
+                        data: rows,
+                        total: count
+                      }
+                    })
   }
 
   static listWithRight (right: UserRight): Bluebird<MUserDefault[]> {
     const roles = Object.keys(USER_ROLE_LABELS)
-      .map(k => parseInt(k, 10) as UserRole)
-      .filter(role => hasUserRight(role, right))
+                        .map(k => parseInt(k, 10) as UserRole)
+                        .filter(role => hasUserRight(role, right))
 
     const query = {
       where: {
@@ -390,7 +394,7 @@ export class UserModel extends Model<UserModel> {
           required: true,
           include: [
             {
-              attributes: [ ],
+              attributes: [],
               model: ActorModel.unscoped(),
               required: true,
               where: {
@@ -398,7 +402,7 @@ export class UserModel extends Model<UserModel> {
               },
               include: [
                 {
-                  attributes: [ ],
+                  attributes: [],
                   as: 'ActorFollowings',
                   model: ActorFollowModel.unscoped(),
                   required: true,
@@ -433,7 +437,7 @@ export class UserModel extends Model<UserModel> {
   static loadByUsername (username: string): Bluebird<MUserDefault> {
     const query = {
       where: {
-        username: { [ Op.iLike ]: username }
+        username: { [Op.iLike]: username }
       }
     }
 
@@ -443,7 +447,7 @@ export class UserModel extends Model<UserModel> {
   static loadForMeAPI (username: string): Bluebird<MUserNotifSettingChannelDefault> {
     const query = {
       where: {
-        username: { [ Op.iLike ]: username }
+        username: { [Op.iLike]: username }
       }
     }
 
@@ -465,7 +469,7 @@ export class UserModel extends Model<UserModel> {
 
     const query = {
       where: {
-        [ Op.or ]: [
+        [Op.or]: [
           where(fn('lower', col('username')), fn('lower', username)),
 
           { email }
@@ -592,7 +596,7 @@ export class UserModel extends Model<UserModel> {
     const query = {
       where: {
         username: {
-          [ Op.like ]: `%${search}%`
+          [Op.like]: `%${search}%`
         }
       },
       limit: 10
@@ -652,7 +656,7 @@ export class UserModel extends Model<UserModel> {
       videoLanguages: this.videoLanguages,
 
       role: this.role,
-      roleLabel: USER_ROLE_LABELS[ this.role ],
+      roleLabel: USER_ROLE_LABELS[this.role],
 
       videoQuota: this.videoQuota,
       videoQuotaDaily: this.videoQuotaDaily,
@@ -686,13 +690,13 @@ export class UserModel extends Model<UserModel> {
 
     if (Array.isArray(this.Account.VideoChannels) === true) {
       json.videoChannels = this.Account.VideoChannels
-        .map(c => c.toFormattedJSON())
-        .sort((v1, v2) => {
-          if (v1.createdAt < v2.createdAt) return -1
-          if (v1.createdAt === v2.createdAt) return 0
+                               .map(c => c.toFormattedJSON())
+                               .sort((v1, v2) => {
+                                 if (v1.createdAt < v2.createdAt) return -1
+                                 if (v1.createdAt === v2.createdAt) return 0
 
-          return 1
-        })
+                                 return 1
+                               })
     }
 
     return json
@@ -702,7 +706,7 @@ export class UserModel extends Model<UserModel> {
     const formatted = this.toFormattedJSON()
 
     const specialPlaylists = this.Account.VideoPlaylists
-      .map(p => ({ id: p.id, name: p.name, type: p.type }))
+                                 .map(p => ({ id: p.id, name: p.name, type: p.type }))
 
     return Object.assign(formatted, { specialPlaylists })
   }
@@ -729,12 +733,12 @@ export class UserModel extends Model<UserModel> {
 
     return 'SELECT SUM("size") AS "total" ' +
       'FROM (' +
-        'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-        'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-        'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-        'WHERE "account"."userId" = $userId ' + andWhere +
-        'GROUP BY "video"."id"' +
+      'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+      'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+      'WHERE "account"."userId" = $userId ' + andWhere +
+      'GROUP BY "video"."id"' +
       ') t'
   }
 

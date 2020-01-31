@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -74,7 +74,7 @@ async function uploadVideoByRemoteAccount (servers: ServerInfo[], additionalPara
   const name = 'remote video ' + uuidv4()
 
   const data = Object.assign({ name }, additionalParams)
-  const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, data)
+  const res = await uploadVideo(servers[1].url, servers[1].accessToken, data)
 
   await waitJobs(servers)
 
@@ -85,7 +85,7 @@ async function uploadVideoByLocalAccount (servers: ServerInfo[], additionalParam
   const name = 'local video ' + uuidv4()
 
   const data = Object.assign({ name }, additionalParams)
-  const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, data)
+  const res = await uploadVideo(servers[0].url, servers[0].accessToken, data)
 
   await waitJobs(servers)
 
@@ -95,9 +95,9 @@ async function uploadVideoByLocalAccount (servers: ServerInfo[], additionalParam
 describe('Test users notifications', function () {
   let servers: ServerInfo[] = []
   let userAccessToken: string
-  let userNotifications: UserNotification[] = []
-  let adminNotifications: UserNotification[] = []
-  let adminNotificationsServer2: UserNotification[] = []
+  const userNotifications: UserNotification[] = []
+  const adminNotifications: UserNotification[] = []
+  const adminNotificationsServer2: UserNotification[] = []
   const emails: object[] = []
   let channelId: number
 
@@ -142,8 +142,8 @@ describe('Test users notifications', function () {
       password: 'super password'
     }
     await createUser({
-      url: servers[ 0 ].url,
-      accessToken: servers[ 0 ].accessToken,
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
       username: user.username,
       password: user.password,
       videoQuota: 10 * 1000 * 1000
@@ -155,15 +155,15 @@ describe('Test users notifications', function () {
     await updateMyNotificationSettings(servers[1].url, servers[1].accessToken, allNotificationSettings)
 
     {
-      const socket = getUserNotificationSocket(servers[ 0 ].url, userAccessToken)
+      const socket = getUserNotificationSocket(servers[0].url, userAccessToken)
       socket.on('new-notification', n => userNotifications.push(n))
     }
     {
-      const socket = getUserNotificationSocket(servers[ 0 ].url, servers[0].accessToken)
+      const socket = getUserNotificationSocket(servers[0].url, servers[0].accessToken)
       socket.on('new-notification', n => adminNotifications.push(n))
     }
     {
-      const socket = getUserNotificationSocket(servers[ 1 ].url, servers[1].accessToken)
+      const socket = getUserNotificationSocket(servers[1].url, servers[1].accessToken)
       socket.on('new-notification', n => adminNotificationsServer2.push(n))
     }
 
@@ -190,7 +190,7 @@ describe('Test users notifications', function () {
 
       await uploadVideoByLocalAccount(servers)
 
-      const notification = await getLastNotification(servers[ 0 ].url, userAccessToken)
+      const notification = await getLastNotification(servers[0].url, userAccessToken)
       expect(notification).to.be.undefined
 
       expect(emails).to.have.lengthOf(0)
@@ -221,7 +221,7 @@ describe('Test users notifications', function () {
       this.timeout(20000)
 
       // In 2 seconds
-      let updateAt = new Date(new Date().getTime() + 2000)
+      const updateAt = new Date(new Date().getTime() + 2000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -240,7 +240,7 @@ describe('Test users notifications', function () {
       this.timeout(50000)
 
       // In 2 seconds
-      let updateAt = new Date(new Date().getTime() + 2000)
+      const updateAt = new Date(new Date().getTime() + 2000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -259,7 +259,7 @@ describe('Test users notifications', function () {
     it('Should not send a notification before the video is published', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 1000000)
+      const updateAt = new Date(new Date().getTime() + 1000000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -386,7 +386,7 @@ describe('Test users notifications', function () {
     it('Should not send a new comment notification if the account is muted', async function () {
       this.timeout(10000)
 
-      await addAccountToAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
+      await addAccountToAccountBlocklist(servers[0].url, userAccessToken, 'root')
 
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -397,7 +397,7 @@ describe('Test users notifications', function () {
       await wait(500)
       await checkNewCommentOnMyVideo(baseParams, uuid, commentId, commentId, 'absence')
 
-      await removeAccountFromAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
+      await removeAccountFromAccountBlocklist(servers[0].url, userAccessToken, 'root')
     })
 
     it('Should send a new comment notification after a local comment on my video', async function () {
@@ -456,9 +456,9 @@ describe('Test users notifications', function () {
       await waitJobs(servers)
 
       {
-        const resThread = await addVideoCommentThread(servers[ 1 ].url, servers[ 1 ].accessToken, uuid, 'comment')
+        const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, 'comment')
         const threadId = resThread.body.comment.id
-        await addVideoCommentReply(servers[ 1 ].url, servers[ 1 ].accessToken, uuid, threadId, 'reply')
+        await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, threadId, 'reply')
       }
 
       await waitJobs(servers)
@@ -530,7 +530,7 @@ describe('Test users notifications', function () {
     it('Should not send a new mention notification if the account is muted', async function () {
       this.timeout(10000)
 
-      await addAccountToAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
+      await addAccountToAccountBlocklist(servers[0].url, userAccessToken, 'root')
 
       const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'super video' })
       const uuid = resVideo.body.video.uuid
@@ -541,7 +541,7 @@ describe('Test users notifications', function () {
       await wait(500)
       await checkCommentMention(baseParams, uuid, commentId, commentId, 'super root name', 'absence')
 
-      await removeAccountFromAccountBlocklist(servers[ 0 ].url, userAccessToken, 'root')
+      await removeAccountFromAccountBlocklist(servers[0].url, userAccessToken, 'root')
     })
 
     it('Should not send a new mention notification if the remote account mention a local account', async function () {
@@ -585,7 +585,7 @@ describe('Test users notifications', function () {
 
       await waitJobs(servers)
 
-      const text1 = `hello @user_1@localhost:${servers[ 0 ].port} 1`
+      const text1 = `hello @user_1@localhost:${servers[0].port} 1`
       const resThread = await addVideoCommentThread(servers[1].url, servers[1].accessToken, uuid, text1)
       const server2ThreadId = resThread.body.comment.id
 
@@ -596,7 +596,7 @@ describe('Test users notifications', function () {
       const server1ThreadId = resThread2.body.data[0].id
       await checkCommentMention(baseParams, uuid, server1ThreadId, server1ThreadId, 'super root 2 name', 'presence')
 
-      const text2 = `@user_1@localhost:${servers[ 0 ].port} hello 2 @root@localhost:${servers[ 0 ].port}`
+      const text2 = `@user_1@localhost:${servers[0].port} hello 2 @root@localhost:${servers[0].port}`
       await addVideoCommentReply(servers[1].url, servers[1].accessToken, uuid, server2ThreadId, text2)
 
       await waitJobs(servers)
@@ -611,7 +611,7 @@ describe('Test users notifications', function () {
     })
   })
 
-  describe('Video abuse for moderators notification' , function () {
+  describe('Video abuse for moderators notification', function () {
     let baseParams: CheckerBaseParams
 
     before(() => {
@@ -722,7 +722,7 @@ describe('Test users notifications', function () {
       await uploadVideoByRemoteAccount(servers, { waitTranscoding: false })
       await waitJobs(servers)
 
-      const notification = await getLastNotification(servers[ 0 ].url, userAccessToken)
+      const notification = await getLastNotification(servers[0].url, userAccessToken)
       if (notification) {
         expect(notification.type).to.not.equal(UserNotificationType.MY_VIDEO_PUBLISHED)
       }
@@ -769,7 +769,7 @@ describe('Test users notifications', function () {
       this.timeout(70000)
 
       // In 2 seconds
-      let updateAt = new Date(new Date().getTime() + 2000)
+      const updateAt = new Date(new Date().getTime() + 2000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -787,7 +787,7 @@ describe('Test users notifications', function () {
     it('Should not send a notification before the video is published', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 1000000)
+      const updateAt = new Date(new Date().getTime() + 1000000)
 
       const data = {
         privacy: VideoPrivacy.PRIVATE,
@@ -970,8 +970,8 @@ describe('Test users notifications', function () {
 
   describe('New actor follow', function () {
     let baseParams: CheckerBaseParams
-    let myChannelName = 'super channel name'
-    let myUserName = 'super user name'
+    const myChannelName = 'super channel name'
+    const myUserName = 'super user name'
 
     before(async () => {
       baseParams = {
@@ -1143,7 +1143,7 @@ describe('Test users notifications', function () {
     it('Should send unblacklist but not published/subscription notes after unblacklisted if scheduled update pending', async function () {
       this.timeout(20000)
 
-      let updateAt = new Date(new Date().getTime() + 1000000)
+      const updateAt = new Date(new Date().getTime() + 1000000)
 
       const name = 'video with auto-blacklist and future schedule ' + uuidv4()
 
@@ -1176,7 +1176,7 @@ describe('Test users notifications', function () {
       this.timeout(20000)
 
       // In 2 seconds
-      let updateAt = new Date(new Date().getTime() + 2000)
+      const updateAt = new Date(new Date().getTime() + 2000)
 
       const name = 'video with schedule done and still auto-blacklisted ' + uuidv4()
 
@@ -1221,26 +1221,26 @@ describe('Test users notifications', function () {
 
   describe('Mark as read', function () {
     it('Should mark as read some notifications', async function () {
-      const res = await getUserNotifications(servers[ 0 ].url, userAccessToken, 2, 3)
+      const res = await getUserNotifications(servers[0].url, userAccessToken, 2, 3)
       const ids = res.body.data.map(n => n.id)
 
-      await markAsReadNotifications(servers[ 0 ].url, userAccessToken, ids)
+      await markAsReadNotifications(servers[0].url, userAccessToken, ids)
     })
 
     it('Should have the notifications marked as read', async function () {
-      const res = await getUserNotifications(servers[ 0 ].url, userAccessToken, 0, 10)
+      const res = await getUserNotifications(servers[0].url, userAccessToken, 0, 10)
 
       const notifications = res.body.data as UserNotification[]
-      expect(notifications[ 0 ].read).to.be.false
-      expect(notifications[ 1 ].read).to.be.false
-      expect(notifications[ 2 ].read).to.be.true
-      expect(notifications[ 3 ].read).to.be.true
-      expect(notifications[ 4 ].read).to.be.true
-      expect(notifications[ 5 ].read).to.be.false
+      expect(notifications[0].read).to.be.false
+      expect(notifications[1].read).to.be.false
+      expect(notifications[2].read).to.be.true
+      expect(notifications[3].read).to.be.true
+      expect(notifications[4].read).to.be.true
+      expect(notifications[5].read).to.be.false
     })
 
     it('Should only list read notifications', async function () {
-      const res = await getUserNotifications(servers[ 0 ].url, userAccessToken, 0, 10, false)
+      const res = await getUserNotifications(servers[0].url, userAccessToken, 0, 10, false)
 
       const notifications = res.body.data as UserNotification[]
       for (const notification of notifications) {
@@ -1249,7 +1249,7 @@ describe('Test users notifications', function () {
     })
 
     it('Should only list unread notifications', async function () {
-      const res = await getUserNotifications(servers[ 0 ].url, userAccessToken, 0, 10, true)
+      const res = await getUserNotifications(servers[0].url, userAccessToken, 0, 10, true)
 
       const notifications = res.body.data as UserNotification[]
       for (const notification of notifications) {
@@ -1258,9 +1258,9 @@ describe('Test users notifications', function () {
     })
 
     it('Should mark as read all notifications', async function () {
-      await markAsReadAllNotifications(servers[ 0 ].url, userAccessToken)
+      await markAsReadAllNotifications(servers[0].url, userAccessToken)
 
-      const res = await getUserNotifications(servers[ 0 ].url, userAccessToken, 0, 10, true)
+      const res = await getUserNotifications(servers[0].url, userAccessToken, 0, 10, true)
 
       expect(res.body.total).to.equal(0)
       expect(res.body.data).to.have.lengthOf(0)

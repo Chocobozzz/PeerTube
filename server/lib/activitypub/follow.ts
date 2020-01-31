@@ -27,7 +27,6 @@ async function autoFollowBackIfNeeded (actorFollow: MActorFollowActors) {
     }
 
     JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
-            .catch(err => logger.error('Cannot create auto follow back job for %s.', host, err))
   }
 }
 

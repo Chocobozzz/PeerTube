@@ -1,0 +1,88 @@
+{
+  "extends": "standard-with-typescript",
+  "rules": {
+    "eol-last": [
+      "error",
+      "always"
+    ],
+    "indent": "off",
+    "no-lone-blocks": "off",
+    "no-mixed-operators": "off",
+    "max-len": [
+      "error",
+      {
+        "code": 140
+      }
+    ],
+    "array-bracket-spacing": [
+      "error",
+      "always"
+    ],
+    "quote-props": [
+      "error",
+      "consistent-as-needed"
+    ],
+    "padded-blocks": "off",
+    "no-async-promise-executor": "off",
+    "dot-notation": "off",
+    "promise/param-names": "off",
+    "import/first": "off",
+    "operator-linebreak": [
+      "error",
+      "after",
+      {
+        "overrides": {
+          "?": "before",
+          ":": "before"
+        }
+      }
+    ],
+    "@typescript-eslint/indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1,
+        "MemberExpression": "off"
+      }
+    ],
+    "@typescript-eslint/consistent-type-assertions": [
+      "error",
+      {
+        "assertionStyle": "as"
+      }
+    ],
+    "@typescript-eslint/array-type": [
+      "error",
+      {
+        "default": "array"
+      }
+    ],
+    "@typescript-eslint/restrict-template-expressions": [
+      "off",
+      {
+        "allowNumber": "true"
+      }
+    ],
+    "@typescript-eslint/quotes": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/promise-function-async": "off",
+    "@typescript-eslint/no-dynamic-delete": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/consistent-type-definitions": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-extraneous-class": "off",
+    // bugged but useful
+    "@typescript-eslint/restrict-plus-operands": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/"
+  ],
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json",
+      "./server/tools/tsconfig.json"
+    ]
+  }
+}

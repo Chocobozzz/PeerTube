@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 
@@ -126,6 +126,7 @@ describe('Test video abuses API validators', function () {
 
   describe('When updating a video abuse', function () {
     const basePath = '/api/v1/videos/'
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let path: string
 
     before(() => {
@@ -163,6 +164,7 @@ describe('Test video abuses API validators', function () {
 
   describe('When deleting a video abuse', function () {
     const basePath = '/api/v1/videos/'
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let path: string
 
     before(() => {

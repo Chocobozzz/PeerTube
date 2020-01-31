@@ -98,7 +98,7 @@ export interface HttpNodeinfoDiasporaSoftwareNsSchema20 {
        * The amount of users that signed in at least once in the last 30 days.
        */
       activeMonth?: number
-    };
+    }
     /**
      * The amount of posts that were made by users that are registered on this server.
      */

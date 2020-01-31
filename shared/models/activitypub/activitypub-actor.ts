@@ -1,4 +1,4 @@
-import { ActivityPubAttributedTo } from './objects/common-objects'
+import { ActivityIconObject, ActivityPubAttributedTo } from './objects/common-objects'
 
 export type ActivityPubActorType = 'Person' | 'Application' | 'Group' | 'Service' | 'Organization'
 
@@ -27,9 +27,5 @@ export interface ActivityPubActor {
     publicKeyPem: string
   }
 
-  icon: {
-    type: 'Image'
-    mediaType: 'image/png'
-    url: string
-  }
+  icon: ActivityIconObject
 }

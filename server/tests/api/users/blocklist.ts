@@ -1,21 +1,20 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
-import { AccountBlock, ServerBlock, UserNotificationType, Video } from '../../../../shared/index'
+import { AccountBlock, ServerBlock, Video } from '../../../../shared/index'
 import {
   cleanupTests,
-  createUser, deleteVideoComment,
+  createUser,
+  deleteVideoComment,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
-  killallServers,
   ServerInfo,
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils/index'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
-import { getVideosListWithToken, getVideosList } from '../../../../shared/extra-utils/videos/videos'
+import { getVideosList, getVideosListWithToken } from '../../../../shared/extra-utils/videos/videos'
 import {
   addVideoCommentReply,
   addVideoCommentThread,
@@ -79,7 +78,7 @@ async function checkCommentNotification (
   const resComment = await addVideoCommentThread(comment.server.url, comment.token, comment.videoUUID, comment.text)
   const threadId = resComment.body.comment.id
 
-  await waitJobs([ mainServer, comment.server])
+  await waitJobs([ mainServer, comment.server ])
 
   const res = await getUserNotifications(mainServer.url, mainServer.accessToken, 0, 30)
   const commentNotifications = res.body.data
@@ -90,7 +89,7 @@ async function checkCommentNotification (
 
   await deleteVideoComment(comment.server.url, comment.token, comment.videoUUID, threadId)
 
-  await waitJobs([ mainServer, comment.server])
+  await waitJobs([ mainServer, comment.server ])
 }
 
 describe('Test blocklist', function () {
@@ -109,7 +108,7 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'user1', password: 'password' }
-      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
       userToken1 = await userLogin(servers[0], user)
       await uploadVideo(servers[0].url, userToken1, { name: 'video user 1' })
@@ -117,14 +116,14 @@ describe('Test blocklist', function () {
 
     {
       const user = { username: 'moderator', password: 'password' }
-      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
       userModeratorToken = await userLogin(servers[0], user)
     }
 
     {
       const user = { username: 'user2', password: 'password' }
-      await createUser({ url: servers[ 1 ].url, accessToken: servers[ 1 ].accessToken, username: user.username, password: user.password })
+      await createUser({ url: servers[1].url, accessToken: servers[1].accessToken, username: user.username, password: user.password })
 
       userToken2 = await userLogin(servers[1], user)
       await uploadVideo(servers[1].url, userToken2, { name: 'video user 2' })
@@ -143,14 +142,14 @@ describe('Test blocklist', function () {
     await doubleFollow(servers[0], servers[1])
 
     {
-      const resComment = await addVideoCommentThread(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1, 'comment root 1')
-      const resReply = await addVideoCommentReply(servers[ 0 ].url, userToken1, videoUUID1, resComment.body.comment.id, 'comment user 1')
-      await addVideoCommentReply(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1, resReply.body.comment.id, 'comment root 1')
+      const resComment = await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID1, 'comment root 1')
+      const resReply = await addVideoCommentReply(servers[0].url, userToken1, videoUUID1, resComment.body.comment.id, 'comment user 1')
+      await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID1, resReply.body.comment.id, 'comment root 1')
     }
 
     {
-      const resComment = await addVideoCommentThread(servers[ 0 ].url, userToken1, videoUUID1, 'comment user 1')
-      await addVideoCommentReply(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1, resComment.body.comment.id, 'comment root 1')
+      const resComment = await addVideoCommentThread(servers[0].url, userToken1, videoUUID1, 'comment user 1')
+      await addVideoCommentReply(servers[0].url, servers[0].accessToken, videoUUID1, resComment.body.comment.id, 'comment root 1')
     }
 
     await waitJobs(servers)
@@ -160,19 +159,19 @@ describe('Test blocklist', function () {
 
     describe('When managing account blocklist', function () {
       it('Should list all videos', function () {
-        return checkAllVideos(servers[ 0 ].url, servers[ 0 ].accessToken)
+        return checkAllVideos(servers[0].url, servers[0].accessToken)
       })
 
       it('Should list the comments', function () {
-        return checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+        return checkAllComments(servers[0].url, servers[0].accessToken, videoUUID1)
       })
 
       it('Should block a remote account', async function () {
-        await addAccountToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
+        await addAccountToAccountBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
-        const res = await getVideosListWithToken(servers[ 0 ].url, servers[ 0 ].accessToken)
+        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
 
         const videos: Video[] = res.body.data
         expect(videos).to.have.lengthOf(3)
@@ -182,11 +181,11 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a local account', async function () {
-        await addAccountToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user1')
+        await addAccountToAccountBlocklist(servers[0].url, servers[0].accessToken, 'user1')
       })
 
       it('Should hide its videos', async function () {
-        const res = await getVideosListWithToken(servers[ 0 ].url, servers[ 0 ].accessToken)
+        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
 
         const videos: Video[] = res.body.data
         expect(videos).to.have.lengthOf(2)
@@ -196,17 +195,17 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its comments', async function () {
-        const resThreads = await getVideoCommentThreads(servers[ 0 ].url, videoUUID1, 0, 5, '-createdAt', servers[ 0 ].accessToken)
+        const resThreads = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 5, '-createdAt', servers[0].accessToken)
 
         const threads: VideoComment[] = resThreads.body.data
         expect(threads).to.have.lengthOf(1)
-        expect(threads[ 0 ].totalReplies).to.equal(0)
+        expect(threads[0].totalReplies).to.equal(0)
 
         const t = threads.find(t => t.text === 'comment user 1')
         expect(t).to.be.undefined
 
         for (const thread of threads) {
-          const res = await getVideoThreadComments(servers[ 0 ].url, videoUUID1, thread.id, servers[ 0 ].accessToken)
+          const res = await getVideoThreadComments(servers[0].url, videoUUID1, thread.id, servers[0].accessToken)
 
           const tree: VideoCommentThreadTree = res.body
           expect(tree.children).to.have.lengthOf(0)
@@ -217,37 +216,37 @@ describe('Test blocklist', function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 0 ], token: userToken1, videoUUID: videoUUID1, text: 'hidden comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          const comment = { server: servers[0], token: userToken1, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
 
         {
           const comment = {
-            server: servers[ 0 ],
+            server: servers[0],
             token: userToken1,
             videoUUID: videoUUID2,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
       })
 
       it('Should list all the videos with another user', async function () {
-        return checkAllVideos(servers[ 0 ].url, userToken1)
+        return checkAllVideos(servers[0].url, userToken1)
       })
 
       it('Should list all the comments with another user', async function () {
-        return checkAllComments(servers[ 0 ].url, userToken1, videoUUID1)
+        return checkAllComments(servers[0].url, userToken1, videoUUID1)
       })
 
       it('Should list blocked accounts', async function () {
         {
-          const res = await getAccountBlocklistByAccount(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
+          const res = await getAccountBlocklistByAccount(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
           const blocks: AccountBlock[] = res.body.data
 
           expect(res.body.total).to.equal(2)
 
-          const block = blocks[ 0 ]
+          const block = blocks[0]
           expect(block.byAccount.displayName).to.equal('root')
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user2')
@@ -256,12 +255,12 @@ describe('Test blocklist', function () {
         }
 
         {
-          const res = await getAccountBlocklistByAccount(servers[ 0 ].url, servers[ 0 ].accessToken, 1, 2, 'createdAt')
+          const res = await getAccountBlocklistByAccount(servers[0].url, servers[0].accessToken, 1, 2, 'createdAt')
           const blocks: AccountBlock[] = res.body.data
 
           expect(res.body.total).to.equal(2)
 
-          const block = blocks[ 0 ]
+          const block = blocks[0]
           expect(block.byAccount.displayName).to.equal('root')
           expect(block.byAccount.name).to.equal('root')
           expect(block.blockedAccount.displayName).to.equal('user1')
@@ -271,11 +270,11 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await removeAccountFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
+        await removeAccountFromAccountBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should display its videos', async function () {
-        const res = await getVideosListWithToken(servers[ 0 ].url, servers[ 0 ].accessToken)
+        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
 
         const videos: Video[] = res.body.data
         expect(videos).to.have.lengthOf(3)
@@ -285,48 +284,48 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the local account', async function () {
-        await removeAccountFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user1')
+        await removeAccountFromAccountBlocklist(servers[0].url, servers[0].accessToken, 'user1')
       })
 
       it('Should display its comments', function () {
-        return checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+        return checkAllComments(servers[0].url, servers[0].accessToken, videoUUID1)
       })
 
       it('Should have a notification from a non blocked account', async function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          const comment = { server: servers[1], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
 
         {
           const comment = {
-            server: servers[ 0 ],
+            server: servers[0],
             token: userToken1,
             videoUUID: videoUUID2,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
       })
     })
 
     describe('When managing server blocklist', function () {
       it('Should list all videos', function () {
-        return checkAllVideos(servers[ 0 ].url, servers[ 0 ].accessToken)
+        return checkAllVideos(servers[0].url, servers[0].accessToken)
       })
 
       it('Should list the comments', function () {
-        return checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+        return checkAllComments(servers[0].url, servers[0].accessToken, videoUUID1)
       })
 
       it('Should block a remote server', async function () {
-        await addServerToAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
+        await addServerToAccountBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
-        const res = await getVideosListWithToken(servers[ 0 ].url, servers[ 0 ].accessToken)
+        const res = await getVideosListWithToken(servers[0].url, servers[0].accessToken)
 
         const videos: Video[] = res.body.data
         expect(videos).to.have.lengthOf(2)
@@ -339,81 +338,81 @@ describe('Test blocklist', function () {
       })
 
       it('Should list all the videos with another user', async function () {
-        return checkAllVideos(servers[ 0 ].url, userToken1)
+        return checkAllVideos(servers[0].url, userToken1)
       })
 
       it('Should hide its comments', async function () {
         this.timeout(10000)
 
-        const resThreads = await addVideoCommentThread(servers[ 1 ].url, userToken2, videoUUID1, 'hidden comment 2')
+        const resThreads = await addVideoCommentThread(servers[1].url, userToken2, videoUUID1, 'hidden comment 2')
         const threadId = resThreads.body.comment.id
 
         await waitJobs(servers)
 
-        await checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+        await checkAllComments(servers[0].url, servers[0].accessToken, videoUUID1)
 
-        await deleteVideoComment(servers[ 1 ].url, userToken2, videoUUID1, threadId)
+        await deleteVideoComment(servers[1].url, userToken2, videoUUID1, threadId)
       })
 
       it('Should not have notifications from blocked server', async function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'hidden comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          const comment = { server: servers[1], token: userToken2, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
 
         {
           const comment = {
-            server: servers[ 1 ],
+            server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
       })
 
       it('Should list blocked servers', async function () {
-        const res = await getServerBlocklistByAccount(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
+        const res = await getServerBlocklistByAccount(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
         const blocks: ServerBlock[] = res.body.data
 
         expect(res.body.total).to.equal(1)
 
-        const block = blocks[ 0 ]
+        const block = blocks[0]
         expect(block.byAccount.displayName).to.equal('root')
         expect(block.byAccount.name).to.equal('root')
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
       it('Should unblock the remote server', async function () {
-        await removeServerFromAccountBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
+        await removeServerFromAccountBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should display its videos', function () {
-        return checkAllVideos(servers[ 0 ].url, servers[ 0 ].accessToken)
+        return checkAllVideos(servers[0].url, servers[0].accessToken)
       })
 
       it('Should display its comments', function () {
-        return checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+        return checkAllComments(servers[0].url, servers[0].accessToken, videoUUID1)
       })
 
       it('Should have notification from unblocked server', async function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          const comment = { server: servers[1], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
 
         {
           const comment = {
-            server: servers[ 1 ],
+            server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
       })
     })
@@ -423,24 +422,24 @@ describe('Test blocklist', function () {
 
     describe('When managing account blocklist', function () {
       it('Should list all videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllVideos(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllVideos(servers[0].url, token)
         }
       })
 
       it('Should list the comments', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllComments(servers[ 0 ].url, token, videoUUID1)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllComments(servers[0].url, token, videoUUID1)
         }
       })
 
       it('Should block a remote account', async function () {
-        await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
+        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          const res = await getVideosListWithToken(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          const res = await getVideosListWithToken(servers[0].url, token)
 
           const videos: Video[] = res.body.data
           expect(videos).to.have.lengthOf(3)
@@ -451,12 +450,12 @@ describe('Test blocklist', function () {
       })
 
       it('Should block a local account', async function () {
-        await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user1')
+        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'user1')
       })
 
       it('Should hide its videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          const res = await getVideosListWithToken(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          const res = await getVideosListWithToken(servers[0].url, token)
 
           const videos: Video[] = res.body.data
           expect(videos).to.have.lengthOf(2)
@@ -467,18 +466,18 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its comments', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          const resThreads = await getVideoCommentThreads(servers[ 0 ].url, videoUUID1, 0, 5, '-createdAt', token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          const resThreads = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 5, '-createdAt', token)
 
           const threads: VideoComment[] = resThreads.body.data
           expect(threads).to.have.lengthOf(1)
-          expect(threads[ 0 ].totalReplies).to.equal(0)
+          expect(threads[0].totalReplies).to.equal(0)
 
           const t = threads.find(t => t.text === 'comment user 1')
           expect(t).to.be.undefined
 
           for (const thread of threads) {
-            const res = await getVideoThreadComments(servers[ 0 ].url, videoUUID1, thread.id, token)
+            const res = await getVideoThreadComments(servers[0].url, videoUUID1, thread.id, token)
 
             const tree: VideoCommentThreadTree = res.body
             expect(tree.children).to.have.lengthOf(0)
@@ -490,29 +489,29 @@ describe('Test blocklist', function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 0 ], token: userToken1, videoUUID: videoUUID1, text: 'hidden comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          const comment = { server: servers[0], token: userToken1, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
 
         {
           const comment = {
-            server: servers[ 1 ],
+            server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
       })
 
       it('Should list blocked accounts', async function () {
         {
-          const res = await getAccountBlocklistByServer(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
+          const res = await getAccountBlocklistByServer(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
           const blocks: AccountBlock[] = res.body.data
 
           expect(res.body.total).to.equal(2)
 
-          const block = blocks[ 0 ]
+          const block = blocks[0]
           expect(block.byAccount.displayName).to.equal('peertube')
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user2')
@@ -521,12 +520,12 @@ describe('Test blocklist', function () {
         }
 
         {
-          const res = await getAccountBlocklistByServer(servers[ 0 ].url, servers[ 0 ].accessToken, 1, 2, 'createdAt')
+          const res = await getAccountBlocklistByServer(servers[0].url, servers[0].accessToken, 1, 2, 'createdAt')
           const blocks: AccountBlock[] = res.body.data
 
           expect(res.body.total).to.equal(2)
 
-          const block = blocks[ 0 ]
+          const block = blocks[0]
           expect(block.byAccount.displayName).to.equal('peertube')
           expect(block.byAccount.name).to.equal('peertube')
           expect(block.blockedAccount.displayName).to.equal('user1')
@@ -536,12 +535,12 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the remote account', async function () {
-        await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user2@localhost:' + servers[1].port)
+        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'user2@localhost:' + servers[1].port)
       })
 
       it('Should display its videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          const res = await getVideosListWithToken(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          const res = await getVideosListWithToken(servers[0].url, token)
 
           const videos: Video[] = res.body.data
           expect(videos).to.have.lengthOf(3)
@@ -552,12 +551,12 @@ describe('Test blocklist', function () {
       })
 
       it('Should unblock the local account', async function () {
-        await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'user1')
+        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'user1')
       })
 
       it('Should display its comments', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllComments(servers[ 0 ].url, token, videoUUID1)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllComments(servers[0].url, token, videoUUID1)
         }
       })
 
@@ -565,43 +564,43 @@ describe('Test blocklist', function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 0 ], token: userToken1, videoUUID: videoUUID1, text: 'displayed comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          const comment = { server: servers[0], token: userToken1, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
 
         {
           const comment = {
-            server: servers[ 1 ],
+            server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
       })
     })
 
     describe('When managing server blocklist', function () {
       it('Should list all videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllVideos(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllVideos(servers[0].url, token)
         }
       })
 
       it('Should list the comments', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllComments(servers[ 0 ].url, token, videoUUID1)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllComments(servers[0].url, token, videoUUID1)
         }
       })
 
       it('Should block a remote server', async function () {
-        await addServerToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
+        await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should hide its videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          const res1 = await getVideosList(servers[ 0 ].url)
-          const res2 = await getVideosListWithToken(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          const res1 = await getVideosList(servers[0].url)
+          const res2 = await getVideosListWithToken(servers[0].url, token)
 
           for (const res of [ res1, res2 ]) {
             const videos: Video[] = res.body.data
@@ -619,60 +618,60 @@ describe('Test blocklist', function () {
       it('Should hide its comments', async function () {
         this.timeout(10000)
 
-        const resThreads = await addVideoCommentThread(servers[ 1 ].url, userToken2, videoUUID1, 'hidden comment 2')
+        const resThreads = await addVideoCommentThread(servers[1].url, userToken2, videoUUID1, 'hidden comment 2')
         const threadId = resThreads.body.comment.id
 
         await waitJobs(servers)
 
-        await checkAllComments(servers[ 0 ].url, servers[ 0 ].accessToken, videoUUID1)
+        await checkAllComments(servers[0].url, servers[0].accessToken, videoUUID1)
 
-        await deleteVideoComment(servers[ 1 ].url, userToken2, videoUUID1, threadId)
+        await deleteVideoComment(servers[1].url, userToken2, videoUUID1, threadId)
       })
 
       it('Should not have notification from blocked instances by instance', async function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'hidden comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          const comment = { server: servers[1], token: userToken2, videoUUID: videoUUID1, text: 'hidden comment' }
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
 
         {
           const comment = {
-            server: servers[ 1 ],
+            server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'absence')
+          await checkCommentNotification(servers[0], comment, 'absence')
         }
       })
 
       it('Should list blocked servers', async function () {
-        const res = await getServerBlocklistByServer(servers[ 0 ].url, servers[ 0 ].accessToken, 0, 1, 'createdAt')
+        const res = await getServerBlocklistByServer(servers[0].url, servers[0].accessToken, 0, 1, 'createdAt')
         const blocks: ServerBlock[] = res.body.data
 
         expect(res.body.total).to.equal(1)
 
-        const block = blocks[ 0 ]
+        const block = blocks[0]
         expect(block.byAccount.displayName).to.equal('peertube')
         expect(block.byAccount.name).to.equal('peertube')
         expect(block.blockedServer.host).to.equal('localhost:' + servers[1].port)
       })
 
       it('Should unblock the remote server', async function () {
-        await removeServerFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
+        await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
       })
 
       it('Should list all videos', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllVideos(servers[ 0 ].url, token)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllVideos(servers[0].url, token)
         }
       })
 
       it('Should list the comments', async function () {
-        for (const token of [ userModeratorToken, servers[ 0 ].accessToken ]) {
-          await checkAllComments(servers[ 0 ].url, token, videoUUID1)
+        for (const token of [ userModeratorToken, servers[0].accessToken ]) {
+          await checkAllComments(servers[0].url, token, videoUUID1)
         }
       })
 
@@ -680,18 +679,18 @@ describe('Test blocklist', function () {
         this.timeout(20000)
 
         {
-          const comment = { server: servers[ 1 ], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          const comment = { server: servers[1], token: userToken2, videoUUID: videoUUID1, text: 'displayed comment' }
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
 
         {
           const comment = {
-            server: servers[ 1 ],
+            server: servers[1],
             token: userToken2,
             videoUUID: videoUUID1,
-            text: 'hello @root@localhost:' + servers[ 0 ].port
+            text: 'hello @root@localhost:' + servers[0].port
           }
-          await checkCommentNotification(servers[ 0 ], comment, 'presence')
+          await checkCommentNotification(servers[0], comment, 'presence')
         }
       })
     })

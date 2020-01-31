@@ -97,7 +97,7 @@ export interface CustomConfig {
     videos: {
       http: {
         enabled: boolean
-      },
+      }
       torrent: {
         enabled: boolean
       }
@@ -114,7 +114,7 @@ export interface CustomConfig {
 
   followers: {
     instance: {
-      enabled: boolean,
+      enabled: boolean
       manualApproval: boolean
     }
   }

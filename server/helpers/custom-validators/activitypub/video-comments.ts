@@ -48,8 +48,6 @@ function normalizeComment (comment: any) {
     if (typeof comment.url === 'object') comment.url = comment.url.href || comment.url.url
     else comment.url = comment.id
   }
-
-  return
 }
 
 function isCommentTypeValid (comment: any): boolean {

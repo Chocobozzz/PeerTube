@@ -1,5 +1,5 @@
 export interface VideoAbuseObject {
-  type: 'Flag',
+  type: 'Flag'
   content: string
   object: string | string[]
 }

@@ -1,5 +1,5 @@
 export interface ViewObject {
-  type: 'View',
+  type: 'View'
   actor: string
   object: string
 }

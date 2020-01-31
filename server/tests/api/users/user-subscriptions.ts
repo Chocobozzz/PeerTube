@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -13,16 +13,17 @@ import {
   updateVideo,
   userLogin
 } from '../../../../shared/extra-utils'
-import { killallServers, ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
+import { ServerInfo, uploadVideo } from '../../../../shared/extra-utils/index'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { Video, VideoChannel } from '../../../../shared/models/videos'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   addUserSubscription,
+  areSubscriptionsExist,
+  getUserSubscription,
   listUserSubscriptions,
   listUserSubscriptionVideos,
-  removeUserSubscription,
-  getUserSubscription, areSubscriptionsExist
+  removeUserSubscription
 } from '../../../../shared/extra-utils/users/user-subscriptions'
 
 const expect = chai.expect
@@ -116,7 +117,7 @@ describe('Test users subscriptions', function () {
 
   it('Should get subscription', async function () {
     {
-      const res = await getUserSubscription(servers[ 0 ].url, users[ 0 ].accessToken, 'user3_channel@localhost:' + servers[2].port)
+      const res = await getUserSubscription(servers[0].url, users[0].accessToken, 'user3_channel@localhost:' + servers[2].port)
       const videoChannel: VideoChannel = res.body
 
       expect(videoChannel.name).to.equal('user3_channel')
@@ -127,7 +128,7 @@ describe('Test users subscriptions', function () {
     }
 
     {
-      const res = await getUserSubscription(servers[ 0 ].url, users[ 0 ].accessToken, 'root_channel@localhost:' + servers[0].port)
+      const res = await getUserSubscription(servers[0].url, users[0].accessToken, 'root_channel@localhost:' + servers[0].port)
       const videoChannel: VideoChannel = res.body
 
       expect(videoChannel.name).to.equal('root_channel')
@@ -146,7 +147,7 @@ describe('Test users subscriptions', function () {
       'user3_channel@localhost:' + servers[0].port
     ]
 
-    const res = await areSubscriptionsExist(servers[ 0 ].url, users[ 0 ].accessToken, uris)
+    const res = await areSubscriptionsExist(servers[0].url, users[0].accessToken, uris)
     const body = res.body
 
     expect(body['user3_channel@localhost:' + servers[2].port]).to.be.true

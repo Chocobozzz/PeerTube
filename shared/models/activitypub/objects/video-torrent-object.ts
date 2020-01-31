@@ -20,8 +20,8 @@ export interface VideoTorrentObject {
   subtitleLanguage: ActivityIdentifierObject[]
   views: number
   sensitive: boolean
-  commentsEnabled: boolean,
-  downloadEnabled: boolean,
+  commentsEnabled: boolean
+  downloadEnabled: boolean
   waitTranscoding: boolean
   state: VideoState
   published: string

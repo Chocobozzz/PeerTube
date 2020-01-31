@@ -45,12 +45,12 @@ staticRouter.use(
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.TORRENTS + ':id-:resolution([0-9]+).torrent',
   asyncMiddleware(videosDownloadValidator),
-  asyncMiddleware(downloadTorrent)
+  downloadTorrent
 )
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.TORRENTS + ':id-:resolution([0-9]+)-hls.torrent',
   asyncMiddleware(videosDownloadValidator),
-  asyncMiddleware(downloadHLSVideoFileTorrent)
+  downloadHLSVideoFileTorrent
 )
 
 // Videos path for webseeding
@@ -68,13 +68,13 @@ staticRouter.use(
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.VIDEOS + ':id-:resolution([0-9]+).:extension',
   asyncMiddleware(videosDownloadValidator),
-  asyncMiddleware(downloadVideoFile)
+  downloadVideoFile
 )
 
 staticRouter.use(
   STATIC_DOWNLOAD_PATHS.HLS_VIDEOS + ':id-:resolution([0-9]+)-fragmented.:extension',
   asyncMiddleware(videosDownloadValidator),
-  asyncMiddleware(downloadHLSVideoFile)
+  downloadHLSVideoFile
 )
 
 // HLS
@@ -325,7 +325,7 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
   return res.send(json).end()
 }
 
-async function downloadTorrent (req: express.Request, res: express.Response) {
+function downloadTorrent (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const videoFile = getVideoFile(req, video.VideoFiles)
@@ -334,7 +334,7 @@ async function downloadTorrent (req: express.Request, res: express.Response) {
   return res.download(getTorrentFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p.torrent`)
 }
 
-async function downloadHLSVideoFileTorrent (req: express.Request, res: express.Response) {
+function downloadHLSVideoFileTorrent (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const playlist = getHLSPlaylist(video)
@@ -346,7 +346,7 @@ async function downloadHLSVideoFileTorrent (req: express.Request, res: express.R
   return res.download(getTorrentFilePath(playlist, videoFile), `${video.name}-${videoFile.resolution}p-hls.torrent`)
 }
 
-async function downloadVideoFile (req: express.Request, res: express.Response) {
+function downloadVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
 
   const videoFile = getVideoFile(req, video.VideoFiles)
@@ -355,7 +355,7 @@ async function downloadVideoFile (req: express.Request, res: express.Response) {
   return res.download(getVideoFilePath(video, videoFile), `${video.name}-${videoFile.resolution}p${videoFile.extname}`)
 }
 
-async function downloadHLSVideoFile (req: express.Request, res: express.Response) {
+function downloadHLSVideoFile (req: express.Request, res: express.Response) {
   const video = res.locals.videoAll
   const playlist = getHLSPlaylist(video)
   if (!playlist) return res.status(404).end

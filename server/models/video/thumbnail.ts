@@ -92,7 +92,7 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
   @UpdatedAt
   updatedAt: Date
 
-  private static types: { [ id in ThumbnailType ]: { label: string, directory: string, staticPath: string } } = {
+  private static readonly types: { [ id in ThumbnailType ]: { label: string, directory: string, staticPath: string } } = {
     [ThumbnailType.MINIATURE]: {
       label: 'miniature',
       directory: CONFIG.STORAGE.THUMBNAILS_DIR,

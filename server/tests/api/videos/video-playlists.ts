@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -141,12 +141,12 @@ describe('Test video playlists', function () {
       servers[2].videos = await Promise.all(serverPromises[2])
     }
 
-    nsfwVideoServer1 = (await uploadVideoAndGetId({ server: servers[ 0 ], videoName: 'NSFW video', nsfw: true })).id
+    nsfwVideoServer1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'NSFW video', nsfw: true })).id
 
     {
       await createUser({
-        url: servers[ 0 ].url,
-        accessToken: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
         username: 'user1',
         password: 'password'
       })
@@ -158,17 +158,17 @@ describe('Test video playlists', function () {
 
   describe('Get default playlists', function () {
     it('Should list video playlist privacies', async function () {
-      const res = await getVideoPlaylistPrivacies(servers[ 0 ].url)
+      const res = await getVideoPlaylistPrivacies(servers[0].url)
 
       const privacies = res.body
       expect(Object.keys(privacies)).to.have.length.at.least(3)
 
-      expect(privacies[ 3 ]).to.equal('Private')
+      expect(privacies[3]).to.equal('Private')
     })
 
     it('Should list watch later playlist', async function () {
-      const url = servers[ 0 ].url
-      const accessToken = servers[ 0 ].accessToken
+      const url = servers[0].url
+      const accessToken = servers[0].accessToken
 
       {
         const res = await getAccountPlaylistsListWithToken(url, accessToken, 'root', 0, 5, VideoPlaylistType.WATCH_LATER)
@@ -176,7 +176,7 @@ describe('Test video playlists', function () {
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
 
-        const playlist: VideoPlaylist = res.body.data[ 0 ]
+        const playlist: VideoPlaylist = res.body.data[0]
         expect(playlist.displayName).to.equal('Watch later')
         expect(playlist.type.id).to.equal(VideoPlaylistType.WATCH_LATER)
         expect(playlist.type.label).to.equal('Watch later')
@@ -197,15 +197,15 @@ describe('Test video playlists', function () {
     })
 
     it('Should get private playlist for a classic user', async function () {
-      const token = await generateUserAccessToken(servers[ 0 ], 'toto')
+      const token = await generateUserAccessToken(servers[0], 'toto')
 
-      const res = await getAccountPlaylistsListWithToken(servers[ 0 ].url, token, 'toto', 0, 5)
+      const res = await getAccountPlaylistsListWithToken(servers[0].url, token, 'toto', 0, 5)
 
       expect(res.body.total).to.equal(1)
       expect(res.body.data).to.have.lengthOf(1)
 
-      const playlistId = res.body.data[ 0 ].id
-      await getPlaylistVideos(servers[ 0 ].url, token, playlistId, 0, 5)
+      const playlistId = res.body.data[0].id
+      await getPlaylistVideos(servers[0].url, token, playlistId, 0, 5)
     })
   })
 
@@ -215,14 +215,14 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       await createVideoPlaylist({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistAttrs: {
           displayName: 'my super playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
           description: 'my super description',
           thumbnailfile: 'thumbnail.jpg',
-          videoChannelId: servers[ 0 ].videoChannel.id
+          videoChannelId: servers[0].videoChannel.id
         }
       })
 
@@ -233,7 +233,7 @@ describe('Test video playlists', function () {
         expect(res.body.total).to.equal(1)
         expect(res.body.data).to.have.lengthOf(1)
 
-        const playlistFromList = res.body.data[ 0 ] as VideoPlaylist
+        const playlistFromList = res.body.data[0] as VideoPlaylist
 
         const res2 = await getVideoPlaylist(server.url, playlistFromList.uuid)
         const playlistFromGet = res2.body
@@ -266,12 +266,12 @@ describe('Test video playlists', function () {
 
       {
         const res = await createVideoPlaylist({
-          url: servers[ 1 ].url,
-          token: servers[ 1 ].accessToken,
+          url: servers[1].url,
+          token: servers[1].accessToken,
           playlistAttrs: {
             displayName: 'playlist 2',
             privacy: VideoPlaylistPrivacy.PUBLIC,
-            videoChannelId: servers[ 1 ].videoChannel.id
+            videoChannelId: servers[1].videoChannel.id
           }
         })
         playlistServer2Id1 = res.body.videoPlaylist.id
@@ -279,13 +279,13 @@ describe('Test video playlists', function () {
 
       {
         const res = await createVideoPlaylist({
-          url: servers[ 1 ].url,
-          token: servers[ 1 ].accessToken,
+          url: servers[1].url,
+          token: servers[1].accessToken,
           playlistAttrs: {
             displayName: 'playlist 3',
             privacy: VideoPlaylistPrivacy.PUBLIC,
             thumbnailfile: 'thumbnail.jpg',
-            videoChannelId: servers[ 1 ].videoChannel.id
+            videoChannelId: servers[1].videoChannel.id
           }
         })
 
@@ -293,24 +293,24 @@ describe('Test video playlists', function () {
         playlistServer2UUID2 = res.body.videoPlaylist.uuid
       }
 
-      for (let id of [ playlistServer2Id1, playlistServer2Id2 ]) {
+      for (const id of [ playlistServer2Id1, playlistServer2Id2 ]) {
         await addVideoInPlaylist({
-          url: servers[ 1 ].url,
-          token: servers[ 1 ].accessToken,
+          url: servers[1].url,
+          token: servers[1].accessToken,
           playlistId: id,
-          elementAttrs: { videoId: servers[ 1 ].videos[ 0 ].id, startTimestamp: 1, stopTimestamp: 2 }
+          elementAttrs: { videoId: servers[1].videos[0].id, startTimestamp: 1, stopTimestamp: 2 }
         })
         await addVideoInPlaylist({
-          url: servers[ 1 ].url,
-          token: servers[ 1 ].accessToken,
+          url: servers[1].url,
+          token: servers[1].accessToken,
           playlistId: id,
-          elementAttrs: { videoId: servers[ 1 ].videos[ 1 ].id }
+          elementAttrs: { videoId: servers[1].videos[1].id }
         })
       }
 
       await waitJobs(servers)
 
-      for (const server of [ servers[ 0 ], servers[ 1 ] ]) {
+      for (const server of [ servers[0], servers[1] ]) {
         const res = await getVideoPlaylistsList(server.url, 0, 5)
 
         const playlist2 = res.body.data.find(p => p.displayName === 'playlist 2')
@@ -322,7 +322,7 @@ describe('Test video playlists', function () {
         await testImage(server.url, 'thumbnail', playlist3.thumbnailPath)
       }
 
-      const res = await getVideoPlaylistsList(servers[ 2 ].url, 0, 5)
+      const res = await getVideoPlaylistsList(servers[2].url, 0, 5)
       expect(res.body.data.find(p => p.displayName === 'playlist 2')).to.be.undefined
       expect(res.body.data.find(p => p.displayName === 'playlist 3')).to.be.undefined
     })
@@ -331,13 +331,13 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       // Server 2 and server 3 follow each other
-      await doubleFollow(servers[ 1 ], servers[ 2 ])
+      await doubleFollow(servers[1], servers[2])
 
-      const res = await getVideoPlaylistsList(servers[ 2 ].url, 0, 5)
+      const res = await getVideoPlaylistsList(servers[2].url, 0, 5)
 
       const playlist2 = res.body.data.find(p => p.displayName === 'playlist 2')
       expect(playlist2).to.not.be.undefined
-      await testImage(servers[ 2 ].url, 'thumbnail-playlist', playlist2.thumbnailPath)
+      await testImage(servers[2].url, 'thumbnail-playlist', playlist2.thumbnailPath)
 
       expect(res.body.data.find(p => p.displayName === 'playlist 3')).to.not.be.undefined
     })
@@ -349,25 +349,25 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       {
-        const res = await getVideoPlaylistsList(servers[ 2 ].url, 1, 2, 'createdAt')
+        const res = await getVideoPlaylistsList(servers[2].url, 1, 2, 'createdAt')
 
         expect(res.body.total).to.equal(3)
 
         const data: VideoPlaylist[] = res.body.data
         expect(data).to.have.lengthOf(2)
-        expect(data[ 0 ].displayName).to.equal('playlist 2')
-        expect(data[ 1 ].displayName).to.equal('playlist 3')
+        expect(data[0].displayName).to.equal('playlist 2')
+        expect(data[1].displayName).to.equal('playlist 3')
       }
 
       {
-        const res = await getVideoPlaylistsList(servers[ 2 ].url, 1, 2, '-createdAt')
+        const res = await getVideoPlaylistsList(servers[2].url, 1, 2, '-createdAt')
 
         expect(res.body.total).to.equal(3)
 
         const data: VideoPlaylist[] = res.body.data
         expect(data).to.have.lengthOf(2)
-        expect(data[ 0 ].displayName).to.equal('playlist 2')
-        expect(data[ 1 ].displayName).to.equal('my super playlist')
+        expect(data[0].displayName).to.equal('playlist 2')
+        expect(data[1].displayName).to.equal('my super playlist')
       }
     })
 
@@ -375,13 +375,13 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       {
-        const res = await getVideoChannelPlaylistsList(servers[ 0 ].url, 'root_channel', 0, 2, '-createdAt')
+        const res = await getVideoChannelPlaylistsList(servers[0].url, 'root_channel', 0, 2, '-createdAt')
 
         expect(res.body.total).to.equal(1)
 
         const data: VideoPlaylist[] = res.body.data
         expect(data).to.have.lengthOf(1)
-        expect(data[ 0 ].displayName).to.equal('my super playlist')
+        expect(data[0].displayName).to.equal('my super playlist')
       }
     })
 
@@ -389,37 +389,37 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       {
-        const res = await getAccountPlaylistsList(servers[ 1 ].url, 'root', 1, 2, '-createdAt')
+        const res = await getAccountPlaylistsList(servers[1].url, 'root', 1, 2, '-createdAt')
 
         expect(res.body.total).to.equal(2)
 
         const data: VideoPlaylist[] = res.body.data
         expect(data).to.have.lengthOf(1)
-        expect(data[ 0 ].displayName).to.equal('playlist 2')
+        expect(data[0].displayName).to.equal('playlist 2')
       }
 
       {
-        const res = await getAccountPlaylistsList(servers[ 1 ].url, 'root', 1, 2, 'createdAt')
+        const res = await getAccountPlaylistsList(servers[1].url, 'root', 1, 2, 'createdAt')
 
         expect(res.body.total).to.equal(2)
 
         const data: VideoPlaylist[] = res.body.data
         expect(data).to.have.lengthOf(1)
-        expect(data[ 0 ].displayName).to.equal('playlist 3')
+        expect(data[0].displayName).to.equal('playlist 3')
       }
 
       {
-        const res = await getAccountPlaylistsList(servers[ 1 ].url, 'root', 0, 10, 'createdAt', '3')
+        const res = await getAccountPlaylistsList(servers[1].url, 'root', 0, 10, 'createdAt', '3')
 
         expect(res.body.total).to.equal(1)
 
         const data: VideoPlaylist[] = res.body.data
         expect(data).to.have.lengthOf(1)
-        expect(data[ 0 ].displayName).to.equal('playlist 3')
+        expect(data[0].displayName).to.equal('playlist 3')
       }
 
       {
-        const res = await getAccountPlaylistsList(servers[ 1 ].url, 'root', 0, 10, 'createdAt', '4')
+        const res = await getAccountPlaylistsList(servers[1].url, 'root', 0, 10, 'createdAt', '4')
 
         expect(res.body.total).to.equal(0)
 
@@ -432,8 +432,8 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       await createVideoPlaylist({
-        url: servers[ 1 ].url,
-        token: servers[ 1 ].accessToken,
+        url: servers[1].url,
+        token: servers[1].accessToken,
         playlistAttrs: {
           displayName: 'playlist unlisted',
           privacy: VideoPlaylistPrivacy.UNLISTED
@@ -441,8 +441,8 @@ describe('Test video playlists', function () {
       })
 
       await createVideoPlaylist({
-        url: servers[ 1 ].url,
-        token: servers[ 1 ].accessToken,
+        url: servers[1].url,
+        token: servers[1].accessToken,
         playlistAttrs: {
           displayName: 'playlist private',
           privacy: VideoPlaylistPrivacy.PRIVATE
@@ -453,18 +453,18 @@ describe('Test video playlists', function () {
 
       for (const server of servers) {
         const results = [
-          await getAccountPlaylistsList(server.url, 'root@localhost:' + servers[ 1 ].port, 0, 5, '-createdAt'),
+          await getAccountPlaylistsList(server.url, 'root@localhost:' + servers[1].port, 0, 5, '-createdAt'),
           await getVideoPlaylistsList(server.url, 0, 2, '-createdAt')
         ]
 
-        expect(results[ 0 ].body.total).to.equal(2)
-        expect(results[ 1 ].body.total).to.equal(3)
+        expect(results[0].body.total).to.equal(2)
+        expect(results[1].body.total).to.equal(3)
 
         for (const res of results) {
           const data: VideoPlaylist[] = res.body.data
           expect(data).to.have.lengthOf(2)
-          expect(data[ 0 ].displayName).to.equal('playlist 3')
-          expect(data[ 1 ].displayName).to.equal('playlist 2')
+          expect(data[0].displayName).to.equal('playlist 3')
+          expect(data[1].displayName).to.equal('playlist 2')
         }
       }
     })
@@ -519,32 +519,32 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       const addVideo = (elementAttrs: any) => {
-        return addVideoInPlaylist({ url: servers[ 0 ].url, token: servers[ 0 ].accessToken, playlistId: playlistServer1Id, elementAttrs })
+        return addVideoInPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistId: playlistServer1Id, elementAttrs })
       }
 
       const res = await createVideoPlaylist({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistAttrs: {
           displayName: 'playlist 4',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: servers[ 0 ].videoChannel.id
+          videoChannelId: servers[0].videoChannel.id
         }
       })
 
       playlistServer1Id = res.body.videoPlaylist.id
       playlistServer1UUID = res.body.videoPlaylist.uuid
 
-      await addVideo({ videoId: servers[ 0 ].videos[ 0 ].uuid, startTimestamp: 15, stopTimestamp: 28 })
-      await addVideo({ videoId: servers[ 2 ].videos[ 1 ].uuid, startTimestamp: 35 })
-      await addVideo({ videoId: servers[ 2 ].videos[ 2 ].uuid })
+      await addVideo({ videoId: servers[0].videos[0].uuid, startTimestamp: 15, stopTimestamp: 28 })
+      await addVideo({ videoId: servers[2].videos[1].uuid, startTimestamp: 35 })
+      await addVideo({ videoId: servers[2].videos[2].uuid })
       {
-        const res = await addVideo({ videoId: servers[ 0 ].videos[ 3 ].uuid, stopTimestamp: 35 })
+        const res = await addVideo({ videoId: servers[0].videos[3].uuid, stopTimestamp: 35 })
         playlistElementServer1Video4 = res.body.videoPlaylistElement.id
       }
 
       {
-        const res = await addVideo({ videoId: servers[ 0 ].videos[ 4 ].uuid, startTimestamp: 45, stopTimestamp: 60 })
+        const res = await addVideo({ videoId: servers[0].videos[4].uuid, startTimestamp: 45, stopTimestamp: 60 })
         playlistElementServer1Video5 = res.body.videoPlaylistElement.id
       }
 
@@ -567,35 +567,35 @@ describe('Test video playlists', function () {
         const videoElements: VideoPlaylistElement[] = res.body.data
         expect(videoElements).to.have.lengthOf(6)
 
-        expect(videoElements[ 0 ].video.name).to.equal('video 0 server 1')
-        expect(videoElements[ 0 ].position).to.equal(1)
-        expect(videoElements[ 0 ].startTimestamp).to.equal(15)
-        expect(videoElements[ 0 ].stopTimestamp).to.equal(28)
+        expect(videoElements[0].video.name).to.equal('video 0 server 1')
+        expect(videoElements[0].position).to.equal(1)
+        expect(videoElements[0].startTimestamp).to.equal(15)
+        expect(videoElements[0].stopTimestamp).to.equal(28)
 
-        expect(videoElements[ 1 ].video.name).to.equal('video 1 server 3')
-        expect(videoElements[ 1 ].position).to.equal(2)
-        expect(videoElements[ 1 ].startTimestamp).to.equal(35)
-        expect(videoElements[ 1 ].stopTimestamp).to.be.null
+        expect(videoElements[1].video.name).to.equal('video 1 server 3')
+        expect(videoElements[1].position).to.equal(2)
+        expect(videoElements[1].startTimestamp).to.equal(35)
+        expect(videoElements[1].stopTimestamp).to.be.null
 
-        expect(videoElements[ 2 ].video.name).to.equal('video 2 server 3')
-        expect(videoElements[ 2 ].position).to.equal(3)
-        expect(videoElements[ 2 ].startTimestamp).to.be.null
-        expect(videoElements[ 2 ].stopTimestamp).to.be.null
+        expect(videoElements[2].video.name).to.equal('video 2 server 3')
+        expect(videoElements[2].position).to.equal(3)
+        expect(videoElements[2].startTimestamp).to.be.null
+        expect(videoElements[2].stopTimestamp).to.be.null
 
-        expect(videoElements[ 3 ].video.name).to.equal('video 3 server 1')
-        expect(videoElements[ 3 ].position).to.equal(4)
-        expect(videoElements[ 3 ].startTimestamp).to.be.null
-        expect(videoElements[ 3 ].stopTimestamp).to.equal(35)
+        expect(videoElements[3].video.name).to.equal('video 3 server 1')
+        expect(videoElements[3].position).to.equal(4)
+        expect(videoElements[3].startTimestamp).to.be.null
+        expect(videoElements[3].stopTimestamp).to.equal(35)
 
-        expect(videoElements[ 4 ].video.name).to.equal('video 4 server 1')
-        expect(videoElements[ 4 ].position).to.equal(5)
-        expect(videoElements[ 4 ].startTimestamp).to.equal(45)
-        expect(videoElements[ 4 ].stopTimestamp).to.equal(60)
+        expect(videoElements[4].video.name).to.equal('video 4 server 1')
+        expect(videoElements[4].position).to.equal(5)
+        expect(videoElements[4].startTimestamp).to.equal(45)
+        expect(videoElements[4].stopTimestamp).to.equal(60)
 
-        expect(videoElements[ 5 ].video.name).to.equal('NSFW video')
-        expect(videoElements[ 5 ].position).to.equal(6)
-        expect(videoElements[ 5 ].startTimestamp).to.equal(5)
-        expect(videoElements[ 5 ].stopTimestamp).to.be.null
+        expect(videoElements[5].video.name).to.equal('NSFW video')
+        expect(videoElements[5].position).to.equal(6)
+        expect(videoElements[5].startTimestamp).to.equal(5)
+        expect(videoElements[5].stopTimestamp).to.be.null
 
         const res3 = await getPlaylistVideos(server.url, server.accessToken, playlistServer1UUID, 0, 2)
         expect(res3.body.data).to.have.lengthOf(2)
@@ -616,18 +616,18 @@ describe('Test video playlists', function () {
     before(async function () {
       this.timeout(30000)
 
-      groupUser1 = [ Object.assign({}, servers[ 0 ], { accessToken: userAccessTokenServer1 }) ]
-      groupWithoutToken1 = [ Object.assign({}, servers[ 0 ], { accessToken: undefined }) ]
-      group1 = [ servers[ 0 ] ]
-      group2 = [ servers[ 1 ], servers[ 2 ] ]
+      groupUser1 = [ Object.assign({}, servers[0], { accessToken: userAccessTokenServer1 }) ]
+      groupWithoutToken1 = [ Object.assign({}, servers[0], { accessToken: undefined }) ]
+      group1 = [ servers[0] ]
+      group2 = [ servers[1], servers[2] ]
 
       const res = await createVideoPlaylist({
-        url: servers[ 0 ].url,
+        url: servers[0].url,
         token: userAccessTokenServer1,
         playlistAttrs: {
           displayName: 'playlist 56',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: servers[ 0 ].videoChannel.id
+          videoChannelId: servers[0].videoChannel.id
         }
       })
 
@@ -635,7 +635,7 @@ describe('Test video playlists', function () {
       playlistServer1UUID2 = res.body.videoPlaylist.uuid
 
       const addVideo = (elementAttrs: any) => {
-        return addVideoInPlaylist({ url: servers[ 0 ].url, token: userAccessTokenServer1, playlistId: playlistServer1Id2, elementAttrs })
+        return addVideoInPlaylist({ url: servers[0].url, token: userAccessTokenServer1, playlistId: playlistServer1Id2, elementAttrs })
       }
 
       video1 = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video 89', token: userAccessTokenServer1 })).uuid
@@ -656,7 +656,7 @@ describe('Test video playlists', function () {
       const position = 1
 
       {
-        await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, video1, { privacy: VideoPrivacy.PRIVATE })
+        await updateVideo(servers[0].url, servers[0].accessToken, video1, { privacy: VideoPrivacy.PRIVATE })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -666,7 +666,7 @@ describe('Test video playlists', function () {
       }
 
       {
-        await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, video1, { privacy: VideoPrivacy.PUBLIC })
+        await updateVideo(servers[0].url, servers[0].accessToken, video1, { privacy: VideoPrivacy.PUBLIC })
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -684,7 +684,7 @@ describe('Test video playlists', function () {
       const position = 1
 
       {
-        await addVideoToBlacklist(servers[ 0 ].url, servers[ 0 ].accessToken, video1, 'reason', true)
+        await addVideoToBlacklist(servers[0].url, servers[0].accessToken, video1, 'reason', true)
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -694,7 +694,7 @@ describe('Test video playlists', function () {
       }
 
       {
-        await removeVideoFromBlacklist(servers[ 0 ].url, servers[ 0 ].accessToken, video1)
+        await removeVideoFromBlacklist(servers[0].url, servers[0].accessToken, video1)
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -712,52 +712,52 @@ describe('Test video playlists', function () {
       const position = 2
 
       {
-        await addAccountToAccountBlocklist(servers[ 0 ].url, userAccessTokenServer1, 'root@localhost:' + servers[1].port)
+        await addAccountToAccountBlocklist(servers[0].url, userAccessTokenServer1, 'root@localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeAccountFromAccountBlocklist(servers[ 0 ].url, userAccessTokenServer1, 'root@localhost:' + servers[1].port)
+        await removeAccountFromAccountBlocklist(servers[0].url, userAccessTokenServer1, 'root@localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
 
       {
-        await addServerToAccountBlocklist(servers[ 0 ].url, userAccessTokenServer1, 'localhost:' + servers[1].port)
+        await addServerToAccountBlocklist(servers[0].url, userAccessTokenServer1, 'localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeServerFromAccountBlocklist(servers[ 0 ].url, userAccessTokenServer1, 'localhost:' + servers[1].port)
+        await removeServerFromAccountBlocklist(servers[0].url, userAccessTokenServer1, 'localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
 
       {
-        await addAccountToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'root@localhost:' + servers[1].port)
+        await addAccountToServerBlocklist(servers[0].url, servers[0].accessToken, 'root@localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeAccountFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'root@localhost:' + servers[1].port)
+        await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, 'root@localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
       }
 
       {
-        await addServerToServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
+        await addServerToServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(groupUser1, playlistServer1UUID2, VideoPlaylistElementType.UNAVAILABLE, position, name, 3)
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
 
-        await removeServerFromServerBlocklist(servers[ 0 ].url, servers[ 0 ].accessToken, 'localhost:' + servers[1].port)
+        await removeServerFromServerBlocklist(servers[0].url, servers[0].accessToken, 'localhost:' + servers[1].port)
         await waitJobs(servers)
 
         await checkPlaylistElementType(group2, playlistServer1UUID2, VideoPlaylistElementType.REGULAR, position, name, 3)
@@ -785,8 +785,8 @@ describe('Test video playlists', function () {
 
       {
         await reorderVideosPlaylist({
-          url: servers[ 0 ].url,
-          token: servers[ 0 ].accessToken,
+          url: servers[0].url,
+          token: servers[0].accessToken,
           playlistId: playlistServer1Id,
           elementAttrs: {
             startPosition: 2,
@@ -813,8 +813,8 @@ describe('Test video playlists', function () {
 
       {
         await reorderVideosPlaylist({
-          url: servers[ 0 ].url,
-          token: servers[ 0 ].accessToken,
+          url: servers[0].url,
+          token: servers[0].accessToken,
           playlistId: playlistServer1Id,
           elementAttrs: {
             startPosition: 1,
@@ -842,8 +842,8 @@ describe('Test video playlists', function () {
 
       {
         await reorderVideosPlaylist({
-          url: servers[ 0 ].url,
-          token: servers[ 0 ].accessToken,
+          url: servers[0].url,
+          token: servers[0].accessToken,
           playlistId: playlistServer1Id,
           elementAttrs: {
             startPosition: 6,
@@ -868,7 +868,7 @@ describe('Test video playlists', function () {
           ])
 
           for (let i = 1; i <= elements.length; i++) {
-            expect(elements[ i - 1 ].position).to.equal(i)
+            expect(elements[i - 1].position).to.equal(i)
           }
         }
       }
@@ -878,8 +878,8 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       await updateVideoPlaylistElement({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistId: playlistServer1Id,
         playlistElementId: playlistElementServer1Video4,
         elementAttrs: {
@@ -888,8 +888,8 @@ describe('Test video playlists', function () {
       })
 
       await updateVideoPlaylistElement({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistId: playlistServer1Id,
         playlistElementId: playlistElementServer1Video5,
         elementAttrs: {
@@ -903,62 +903,62 @@ describe('Test video playlists', function () {
         const res = await getPlaylistVideos(server.url, server.accessToken, playlistServer1UUID, 0, 10)
         const elements: VideoPlaylistElement[] = res.body.data
 
-        expect(elements[ 0 ].video.name).to.equal('video 3 server 1')
-        expect(elements[ 0 ].position).to.equal(1)
-        expect(elements[ 0 ].startTimestamp).to.equal(1)
-        expect(elements[ 0 ].stopTimestamp).to.equal(35)
+        expect(elements[0].video.name).to.equal('video 3 server 1')
+        expect(elements[0].position).to.equal(1)
+        expect(elements[0].startTimestamp).to.equal(1)
+        expect(elements[0].stopTimestamp).to.equal(35)
 
-        expect(elements[ 5 ].video.name).to.equal('video 4 server 1')
-        expect(elements[ 5 ].position).to.equal(6)
-        expect(elements[ 5 ].startTimestamp).to.equal(45)
-        expect(elements[ 5 ].stopTimestamp).to.be.null
+        expect(elements[5].video.name).to.equal('video 4 server 1')
+        expect(elements[5].position).to.equal(6)
+        expect(elements[5].startTimestamp).to.equal(45)
+        expect(elements[5].stopTimestamp).to.be.null
       }
     })
 
     it('Should check videos existence in my playlist', async function () {
       const videoIds = [
-        servers[ 0 ].videos[ 0 ].id,
+        servers[0].videos[0].id,
         42000,
-        servers[ 0 ].videos[ 3 ].id,
+        servers[0].videos[3].id,
         43000,
-        servers[ 0 ].videos[ 4 ].id
+        servers[0].videos[4].id
       ]
-      const res = await doVideosExistInMyPlaylist(servers[ 0 ].url, servers[ 0 ].accessToken, videoIds)
+      const res = await doVideosExistInMyPlaylist(servers[0].url, servers[0].accessToken, videoIds)
       const obj = res.body as VideoExistInPlaylist
 
       {
-        const elem = obj[ servers[ 0 ].videos[ 0 ].id ]
+        const elem = obj[servers[0].videos[0].id]
         expect(elem).to.have.lengthOf(1)
-        expect(elem[ 0 ].playlistElementId).to.exist
-        expect(elem[ 0 ].playlistId).to.equal(playlistServer1Id)
-        expect(elem[ 0 ].startTimestamp).to.equal(15)
-        expect(elem[ 0 ].stopTimestamp).to.equal(28)
+        expect(elem[0].playlistElementId).to.exist
+        expect(elem[0].playlistId).to.equal(playlistServer1Id)
+        expect(elem[0].startTimestamp).to.equal(15)
+        expect(elem[0].stopTimestamp).to.equal(28)
       }
 
       {
-        const elem = obj[ servers[ 0 ].videos[ 3 ].id ]
+        const elem = obj[servers[0].videos[3].id]
         expect(elem).to.have.lengthOf(1)
-        expect(elem[ 0 ].playlistElementId).to.equal(playlistElementServer1Video4)
-        expect(elem[ 0 ].playlistId).to.equal(playlistServer1Id)
-        expect(elem[ 0 ].startTimestamp).to.equal(1)
-        expect(elem[ 0 ].stopTimestamp).to.equal(35)
+        expect(elem[0].playlistElementId).to.equal(playlistElementServer1Video4)
+        expect(elem[0].playlistId).to.equal(playlistServer1Id)
+        expect(elem[0].startTimestamp).to.equal(1)
+        expect(elem[0].stopTimestamp).to.equal(35)
       }
 
       {
-        const elem = obj[ servers[ 0 ].videos[ 4 ].id ]
+        const elem = obj[servers[0].videos[4].id]
         expect(elem).to.have.lengthOf(1)
-        expect(elem[ 0 ].playlistId).to.equal(playlistServer1Id)
-        expect(elem[ 0 ].startTimestamp).to.equal(45)
-        expect(elem[ 0 ].stopTimestamp).to.equal(null)
+        expect(elem[0].playlistId).to.equal(playlistServer1Id)
+        expect(elem[0].startTimestamp).to.equal(45)
+        expect(elem[0].stopTimestamp).to.equal(null)
       }
 
-      expect(obj[ 42000 ]).to.have.lengthOf(0)
-      expect(obj[ 43000 ]).to.have.lengthOf(0)
+      expect(obj[42000]).to.have.lengthOf(0)
+      expect(obj[43000]).to.have.lengthOf(0)
     })
 
     it('Should automatically update updatedAt field of playlists', async function () {
-      const server = servers[ 1 ]
-      const videoId = servers[ 1 ].videos[ 5 ].id
+      const server = servers[1]
+      const videoId = servers[1].videos[5].id
 
       async function getPlaylistNames () {
         const res = await getAccountPlaylistsListWithToken(server.url, server.accessToken, 'root', 0, 5, undefined, '-updatedAt')
@@ -974,8 +974,8 @@ describe('Test video playlists', function () {
       const element2 = res2.body.videoPlaylistElement.id
 
       const names1 = await getPlaylistNames()
-      expect(names1[ 0 ]).to.equal('playlist 3 updated')
-      expect(names1[ 1 ]).to.equal('playlist 2')
+      expect(names1[0]).to.equal('playlist 3 updated')
+      expect(names1[1]).to.equal('playlist 2')
 
       await removeVideoFromPlaylist({
         url: server.url,
@@ -985,8 +985,8 @@ describe('Test video playlists', function () {
       })
 
       const names2 = await getPlaylistNames()
-      expect(names2[ 0 ]).to.equal('playlist 2')
-      expect(names2[ 1 ]).to.equal('playlist 3 updated')
+      expect(names2[0]).to.equal('playlist 2')
+      expect(names2[1]).to.equal('playlist 3 updated')
 
       await removeVideoFromPlaylist({
         url: server.url,
@@ -996,23 +996,23 @@ describe('Test video playlists', function () {
       })
 
       const names3 = await getPlaylistNames()
-      expect(names3[ 0 ]).to.equal('playlist 3 updated')
-      expect(names3[ 1 ]).to.equal('playlist 2')
+      expect(names3[0]).to.equal('playlist 3 updated')
+      expect(names3[1]).to.equal('playlist 2')
     })
 
     it('Should delete some elements', async function () {
       this.timeout(30000)
 
       await removeVideoFromPlaylist({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistId: playlistServer1Id,
         playlistElementId: playlistElementServer1Video4
       })
 
       await removeVideoFromPlaylist({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistId: playlistServer1Id,
         playlistElementId: playlistElementNSFW
       })
@@ -1027,17 +1027,17 @@ describe('Test video playlists', function () {
         const elements: VideoPlaylistElement[] = res.body.data
         expect(elements).to.have.lengthOf(4)
 
-        expect(elements[ 0 ].video.name).to.equal('video 0 server 1')
-        expect(elements[ 0 ].position).to.equal(1)
+        expect(elements[0].video.name).to.equal('video 0 server 1')
+        expect(elements[0].position).to.equal(1)
 
-        expect(elements[ 1 ].video.name).to.equal('video 2 server 3')
-        expect(elements[ 1 ].position).to.equal(2)
+        expect(elements[1].video.name).to.equal('video 2 server 3')
+        expect(elements[1].position).to.equal(2)
 
-        expect(elements[ 2 ].video.name).to.equal('video 1 server 3')
-        expect(elements[ 2 ].position).to.equal(3)
+        expect(elements[2].video.name).to.equal('video 1 server 3')
+        expect(elements[2].position).to.equal(3)
 
-        expect(elements[ 3 ].video.name).to.equal('video 4 server 1')
-        expect(elements[ 3 ].position).to.equal(4)
+        expect(elements[3].video.name).to.equal('video 4 server 1')
+        expect(elements[3].position).to.equal(4)
       }
     })
 
@@ -1045,12 +1045,12 @@ describe('Test video playlists', function () {
       this.timeout(30000)
 
       const res = await createVideoPlaylist({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistAttrs: {
           displayName: 'my super public playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
-          videoChannelId: servers[ 0 ].videoChannel.id
+          videoChannelId: servers[0].videoChannel.id
         }
       })
       const videoPlaylistIds = res.body.videoPlaylist
@@ -1062,16 +1062,16 @@ describe('Test video playlists', function () {
       }
 
       const playlistAttrs = { privacy: VideoPlaylistPrivacy.PRIVATE }
-      await updateVideoPlaylist({ url: servers[ 0 ].url, token: servers[ 0 ].accessToken, playlistId: videoPlaylistIds.id, playlistAttrs })
+      await updateVideoPlaylist({ url: servers[0].url, token: servers[0].accessToken, playlistId: videoPlaylistIds.id, playlistAttrs })
 
       await waitJobs(servers)
 
-      for (const server of [ servers[ 1 ], servers[ 2 ] ]) {
+      for (const server of [ servers[1], servers[2] ]) {
         await getVideoPlaylist(server.url, videoPlaylistIds.uuid, 404)
       }
-      await getVideoPlaylist(servers[ 0 ].url, videoPlaylistIds.uuid, 401)
+      await getVideoPlaylist(servers[0].url, videoPlaylistIds.uuid, 401)
 
-      await getVideoPlaylistWithToken(servers[ 0 ].url, servers[ 0 ].accessToken, videoPlaylistIds.uuid, 200)
+      await getVideoPlaylistWithToken(servers[0].url, servers[0].accessToken, videoPlaylistIds.uuid, 200)
     })
   })
 
@@ -1080,7 +1080,7 @@ describe('Test video playlists', function () {
     it('Should delete the playlist on server 1 and delete on server 2 and 3', async function () {
       this.timeout(30000)
 
-      await deleteVideoPlaylist(servers[ 0 ].url, servers[ 0 ].accessToken, playlistServer1Id)
+      await deleteVideoPlaylist(servers[0].url, servers[0].accessToken, playlistServer1Id)
 
       await waitJobs(servers)
 
@@ -1103,15 +1103,15 @@ describe('Test video playlists', function () {
       const finder = data => data.find(p => p.displayName === 'my super playlist')
 
       {
-        const res = await getVideoPlaylistsList(servers[ 2 ].url, 0, 5)
+        const res = await getVideoPlaylistsList(servers[2].url, 0, 5)
         expect(res.body.total).to.equal(3)
         expect(finder(res.body.data)).to.not.be.undefined
       }
 
-      await unfollow(servers[ 2 ].url, servers[ 2 ].accessToken, servers[ 0 ])
+      await unfollow(servers[2].url, servers[2].accessToken, servers[0])
 
       {
-        const res = await getVideoPlaylistsList(servers[ 2 ].url, 0, 5)
+        const res = await getVideoPlaylistsList(servers[2].url, 0, 5)
         expect(res.body.total).to.equal(1)
 
         expect(finder(res.body.data)).to.be.undefined
@@ -1121,12 +1121,12 @@ describe('Test video playlists', function () {
     it('Should delete a channel and put the associated playlist in private mode', async function () {
       this.timeout(30000)
 
-      const res = await addVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'super_channel', displayName: 'super channel' })
+      const res = await addVideoChannel(servers[0].url, servers[0].accessToken, { name: 'super_channel', displayName: 'super channel' })
       const videoChannelId = res.body.videoChannel.id
 
       const res2 = await createVideoPlaylist({
-        url: servers[ 0 ].url,
-        token: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        token: servers[0].accessToken,
         playlistAttrs: {
           displayName: 'channel playlist',
           privacy: VideoPlaylistPrivacy.PUBLIC,
@@ -1137,15 +1137,15 @@ describe('Test video playlists', function () {
 
       await waitJobs(servers)
 
-      await deleteVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, 'super_channel')
+      await deleteVideoChannel(servers[0].url, servers[0].accessToken, 'super_channel')
 
       await waitJobs(servers)
 
-      const res3 = await getVideoPlaylistWithToken(servers[ 0 ].url, servers[ 0 ].accessToken, videoPlaylistUUID)
+      const res3 = await getVideoPlaylistWithToken(servers[0].url, servers[0].accessToken, videoPlaylistUUID)
       expect(res3.body.displayName).to.equal('channel playlist')
       expect(res3.body.privacy.id).to.equal(VideoPlaylistPrivacy.PRIVATE)
 
-      await getVideoPlaylist(servers[ 1 ].url, videoPlaylistUUID, 404)
+      await getVideoPlaylist(servers[1].url, videoPlaylistUUID, 404)
     })
 
     it('Should delete an account and delete its playlists', async function () {
@@ -1153,20 +1153,20 @@ describe('Test video playlists', function () {
 
       const user = { username: 'user_1', password: 'password' }
       const res = await createUser({
-        url: servers[ 0 ].url,
-        accessToken: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
         username: user.username,
         password: user.password
       })
 
       const userId = res.body.user.id
-      const userAccessToken = await userLogin(servers[ 0 ], user)
+      const userAccessToken = await userLogin(servers[0], user)
 
-      const resChannel = await getMyUserInformation(servers[ 0 ].url, userAccessToken)
-      const userChannel = (resChannel.body as User).videoChannels[ 0 ]
+      const resChannel = await getMyUserInformation(servers[0].url, userAccessToken)
+      const userChannel = (resChannel.body as User).videoChannels[0]
 
       await createVideoPlaylist({
-        url: servers[ 0 ].url,
+        url: servers[0].url,
         token: userAccessToken,
         playlistAttrs: {
           displayName: 'playlist to be deleted',
@@ -1180,17 +1180,17 @@ describe('Test video playlists', function () {
       const finder = data => data.find(p => p.displayName === 'playlist to be deleted')
 
       {
-        for (const server of [ servers[ 0 ], servers[ 1 ] ]) {
+        for (const server of [ servers[0], servers[1] ]) {
           const res = await getVideoPlaylistsList(server.url, 0, 15)
           expect(finder(res.body.data)).to.not.be.undefined
         }
       }
 
-      await removeUser(servers[ 0 ].url, userId, servers[ 0 ].accessToken)
+      await removeUser(servers[0].url, userId, servers[0].accessToken)
       await waitJobs(servers)
 
       {
-        for (const server of [ servers[ 0 ], servers[ 1 ] ]) {
+        for (const server of [ servers[0], servers[1] ]) {
           const res = await getVideoPlaylistsList(server.url, 0, 15)
           expect(finder(res.body.data)).to.be.undefined
         }

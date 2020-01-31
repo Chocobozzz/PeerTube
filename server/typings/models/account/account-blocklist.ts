@@ -12,7 +12,8 @@ export type MAccountBlocklist = Omit<AccountBlocklistModel, 'ByAccount' | 'Block
 
 export type MAccountBlocklistId = Pick<AccountBlocklistModel, 'id'>
 
-export type MAccountBlocklistAccounts = MAccountBlocklist &
+export type MAccountBlocklistAccounts =
+  MAccountBlocklist &
   Use<'ByAccount', MAccountDefault> &
   Use<'BlockedAccount', MAccountDefault>
 
@@ -20,6 +21,7 @@ export type MAccountBlocklistAccounts = MAccountBlocklist &
 
 // Format for API or AP object
 
-export type MAccountBlocklistFormattable = Pick<MAccountBlocklist, 'createdAt'> &
+export type MAccountBlocklistFormattable =
+  Pick<MAccountBlocklist, 'createdAt'> &
   Use<'ByAccount', MAccountFormattable> &
   Use<'BlockedAccount', MAccountFormattable>

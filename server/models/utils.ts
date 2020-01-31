@@ -67,7 +67,7 @@ function getVideoSort (value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): Or
 function getBlacklistSort (model: any, value: string, lastSort: OrderItem = [ 'id', 'ASC' ]): OrderItem[] {
   const [ firstSort ] = getSort(value)
 
-  if (model) return [ [ literal(`"${model}.${firstSort[ 0 ]}" ${firstSort[ 1 ]}`) ], lastSort ] as any[] // FIXME: typings
+  if (model) return [ [ literal(`"${model}.${firstSort[0]}" ${firstSort[1]}`) ], lastSort ] as any[] // FIXME: typings
   return [ firstSort, lastSort ]
 }
 
@@ -139,7 +139,7 @@ function buildServerIdsFollowedBy (actorId: any) {
     'SELECT "actor"."serverId" FROM "actorFollow" ' +
     'INNER JOIN "actor" ON actor.id = "actorFollow"."targetActorId" ' +
     'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-  ')'
+    ')'
 }
 
 function buildWhereIdOrUUID (id: number | string) {

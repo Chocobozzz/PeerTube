@@ -28,7 +28,7 @@ import {
   MVideoShare
 } from '../../../typings/models'
 
-async function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
+function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower
   const following = actorFollow.ActorFollowing
 
@@ -118,10 +118,10 @@ function undoActivityData (
 }
 
 async function sendUndoVideoRelatedActivity (options: {
-  byActor: MActor,
-  video: MVideoAccountLight,
-  url: string,
-  activity: ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate | ActivityAnnounce,
+  byActor: MActor
+  video: MVideoAccountLight
+  url: string
+  activity: ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate | ActivityAnnounce
   transaction: Transaction
 }) {
   const activityBuilder = (audience: ActivityAudience) => {

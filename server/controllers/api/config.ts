@@ -31,12 +31,12 @@ configRouter.get('/',
 configRouter.get('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-  asyncMiddleware(getCustomConfig)
+  getCustomConfig
 )
 configRouter.put('/custom',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_CONFIGURATION),
-  asyncMiddleware(customConfigUpdateValidator),
+  customConfigUpdateValidator,
   asyncMiddleware(updateCustomConfig)
 )
 configRouter.delete('/custom',
@@ -196,7 +196,7 @@ function getAbout (req: express.Request, res: express.Response) {
   return res.json(about).end()
 }
 
-async function getCustomConfig (req: express.Request, res: express.Response) {
+function getCustomConfig (req: express.Request, res: express.Response) {
   const data = customConfig()
 
   return res.json(data).end()
@@ -250,7 +250,7 @@ function getRegisteredThemes () {
 
 function getEnabledResolutions () {
   return Object.keys(CONFIG.TRANSCODING.RESOLUTIONS)
-               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[ key ] === true)
+               .filter(key => CONFIG.TRANSCODING.ENABLED && CONFIG.TRANSCODING.RESOLUTIONS[key] === true)
                .map(r => parseInt(r, 10))
 }
 
@@ -340,13 +340,13 @@ function customConfig (): CustomConfig {
       allowAudioFiles: CONFIG.TRANSCODING.ALLOW_AUDIO_FILES,
       threads: CONFIG.TRANSCODING.THREADS,
       resolutions: {
-        '0p': CONFIG.TRANSCODING.RESOLUTIONS[ '0p' ],
-        '240p': CONFIG.TRANSCODING.RESOLUTIONS[ '240p' ],
-        '360p': CONFIG.TRANSCODING.RESOLUTIONS[ '360p' ],
-        '480p': CONFIG.TRANSCODING.RESOLUTIONS[ '480p' ],
-        '720p': CONFIG.TRANSCODING.RESOLUTIONS[ '720p' ],
-        '1080p': CONFIG.TRANSCODING.RESOLUTIONS[ '1080p' ],
-        '2160p': CONFIG.TRANSCODING.RESOLUTIONS[ '2160p' ]
+        '0p': CONFIG.TRANSCODING.RESOLUTIONS['0p'],
+        '240p': CONFIG.TRANSCODING.RESOLUTIONS['240p'],
+        '360p': CONFIG.TRANSCODING.RESOLUTIONS['360p'],
+        '480p': CONFIG.TRANSCODING.RESOLUTIONS['480p'],
+        '720p': CONFIG.TRANSCODING.RESOLUTIONS['720p'],
+        '1080p': CONFIG.TRANSCODING.RESOLUTIONS['1080p'],
+        '2160p': CONFIG.TRANSCODING.RESOLUTIONS['2160p']
       },
       webtorrent: {
         enabled: CONFIG.TRANSCODING.WEBTORRENT.ENABLED

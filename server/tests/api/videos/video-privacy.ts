@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -6,7 +6,8 @@ import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enu
 import {
   cleanupTests,
   flushAndRunMultipleServers,
-  getVideosList, getVideosListWithToken,
+  getVideosList,
+  getVideosListWithToken,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo
@@ -110,7 +111,7 @@ describe('Test video privacy', function () {
       username: 'hello',
       password: 'super password'
     }
-    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
+    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
     anotherUserToken = await userLogin(servers[0], user)
     await getVideoWithToken(servers[0].url, anotherUserToken, privateVideoUUID, 403)
@@ -174,7 +175,7 @@ describe('Test video privacy', function () {
         privacy: VideoPrivacy.PUBLIC
       }
 
-      await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, privateVideoId, attribute)
+      await updateVideo(servers[0].url, servers[0].accessToken, privateVideoId, attribute)
     }
 
     {
@@ -182,7 +183,7 @@ describe('Test video privacy', function () {
         name: 'internal video becomes public',
         privacy: VideoPrivacy.PUBLIC
       }
-      await updateVideo(servers[ 0 ].url, servers[ 0 ].accessToken, internalVideoId, attribute)
+      await updateVideo(servers[0].url, servers[0].accessToken, internalVideoId, attribute)
     }
 
     await waitJobs(servers)

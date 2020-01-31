@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import { expect } from 'chai'
@@ -6,15 +6,18 @@ import {
   addVideoChannel,
   buildAbsoluteFixturePath,
   cleanupTests,
-  createUser, doubleFollow,
+  createUser,
+  doubleFollow,
   execCLI,
   flushAndRunServer,
-  getEnvCli, getLocalIdByUUID,
+  getEnvCli,
+  getLocalIdByUUID,
   getVideo,
   getVideosList,
-  getVideosListWithToken, removeVideo,
+  removeVideo,
   ServerInfo,
-  setAccessTokensToServers, uploadVideo, uploadVideoAndGetId,
+  setAccessTokensToServers,
+  uploadVideoAndGetId,
   userLogin,
   waitJobs
 } from '../../../shared/extra-utils'
@@ -101,7 +104,7 @@ describe('Test CLI wrapper', function () {
 
       const videos: Video[] = res.body.data
 
-      const video: VideoDetails = (await getVideo(server.url, videos[ 0 ].uuid)).body
+      const video: VideoDetails = (await getVideo(server.url, videos[0].uuid)).body
 
       expect(video.name).to.equal('test upload')
       expect(video.support).to.equal('support_text')
@@ -250,7 +253,7 @@ describe('Test CLI wrapper', function () {
       {
         const env = getEnvCli(server)
 
-        const params = `list-my-redundancies`
+        const params = 'list-my-redundancies'
         const stdout = await execCLI(`${env} ${cmd} redundancy ${params}`)
 
         expect(stdout).to.contain('super video')
@@ -271,7 +274,7 @@ describe('Test CLI wrapper', function () {
 
       {
         const env = getEnvCli(server)
-        const params = `list-my-redundancies`
+        const params = 'list-my-redundancies'
         const stdout = await execCLI(`${env} ${cmd} redundancy ${params}`)
 
         expect(stdout).to.not.contain('super video')

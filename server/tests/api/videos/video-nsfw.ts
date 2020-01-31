@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -89,8 +89,8 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(2)
-        expect(videos[ 0 ].name).to.equal('normal')
-        expect(videos[ 1 ].name).to.equal('nsfw')
+        expect(videos[0].name).to.equal('normal')
+        expect(videos[1].name).to.equal('nsfw')
       }
     })
 
@@ -107,7 +107,7 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(1)
-        expect(videos[ 0 ].name).to.equal('normal')
+        expect(videos[0].name).to.equal('normal')
       }
     })
 
@@ -124,8 +124,8 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(2)
-        expect(videos[ 0 ].name).to.equal('normal')
-        expect(videos[ 1 ].name).to.equal('nsfw')
+        expect(videos[0].name).to.equal('normal')
+        expect(videos[1].name).to.equal('nsfw')
       }
     })
   })
@@ -154,8 +154,8 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(2)
-        expect(videos[ 0 ].name).to.equal('normal')
-        expect(videos[ 1 ].name).to.equal('nsfw')
+        expect(videos[0].name).to.equal('normal')
+        expect(videos[1].name).to.equal('nsfw')
       }
     })
 
@@ -171,8 +171,8 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(2)
-        expect(videos[ 0 ].name).to.equal('normal')
-        expect(videos[ 1 ].name).to.equal('nsfw')
+        expect(videos[0].name).to.equal('normal')
+        expect(videos[1].name).to.equal('nsfw')
       }
     })
 
@@ -188,7 +188,7 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(1)
-        expect(videos[ 0 ].name).to.equal('normal')
+        expect(videos[0].name).to.equal('normal')
       }
     })
 
@@ -198,8 +198,8 @@ describe('Test video NSFW policy', function () {
 
       const videos = res.body.data
       expect(videos).to.have.lengthOf(2)
-      expect(videos[ 0 ].name).to.equal('normal')
-      expect(videos[ 1 ].name).to.equal('nsfw')
+      expect(videos[0].name).to.equal('normal')
+      expect(videos[1].name).to.equal('nsfw')
     })
 
     it('Should display NSFW videos when the nsfw param === true', async function () {
@@ -208,7 +208,7 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(1)
-        expect(videos[ 0 ].name).to.equal('nsfw')
+        expect(videos[0].name).to.equal('nsfw')
       }
     })
 
@@ -218,7 +218,7 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(1)
-        expect(videos[ 0 ].name).to.equal('normal')
+        expect(videos[0].name).to.equal('normal')
       }
     })
 
@@ -228,8 +228,8 @@ describe('Test video NSFW policy', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(2)
-        expect(videos[ 0 ].name).to.equal('normal')
-        expect(videos[ 1 ].name).to.equal('nsfw')
+        expect(videos[0].name).to.equal('normal')
+        expect(videos[1].name).to.equal('nsfw')
       }
     })
   })

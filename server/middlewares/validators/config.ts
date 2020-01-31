@@ -55,7 +55,7 @@ const customConfigUpdateValidator = [
 
   body('theme.default').custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return

@@ -10,8 +10,8 @@ import { afterCommitIfTransaction } from '../../../helpers/database-utils'
 import { MActorWithInboxes, MActor, MActorId, MActorLight, MVideo, MVideoAccountLight } from '../../../typings/models'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
-  byActor: MActorLight,
-  video: MVideoAccountLight,
+  byActor: MActorLight
+  video: MVideoAccountLight
   transaction?: Transaction
 }) {
   const { byActor, video, transaction } = options

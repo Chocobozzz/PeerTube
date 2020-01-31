@@ -5,7 +5,7 @@ export type PluginTranslationPaths = {
 }
 
 export type ClientScript = {
-  script: string,
+  script: string
   scopes: PluginClientScope[]
 }
 
@@ -13,12 +13,12 @@ export type PluginPackageJson = {
   name: string
   version: string
   description: string
-  engine: { peertube: string },
+  engine: { peertube: string }
 
-  homepage: string,
-  author: string,
-  bugs: string,
-  library: string,
+  homepage: string
+  author: string
+  bugs: string
+  library: string
 
   staticDirs: { [ name: string ]: string }
   css: string[]

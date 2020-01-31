@@ -6,7 +6,7 @@ import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../typings/models'
 
-async function sendLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
+function sendLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to like %s.', video.url)
 
   const activityBuilder = (audience: ActivityAudience) => {

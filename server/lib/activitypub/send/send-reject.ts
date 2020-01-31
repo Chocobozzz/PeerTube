@@ -5,7 +5,7 @@ import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
 import { MActor } from '../../../typings/models'
 
-async function sendReject (follower: MActor, following: MActor) {
+function sendReject (follower: MActor, following: MActor) {
   if (!follower.serverId) { // This should never happen
     logger.warn('Do not sending reject to local follower.')
     return

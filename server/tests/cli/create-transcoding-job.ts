@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import * as chai from 'chai'
@@ -8,14 +8,13 @@ import {
   doubleFollow,
   execCLI,
   flushAndRunMultipleServers,
-  flushTests,
   getEnvCli,
   getVideo,
   getVideosList,
-  killallServers,
   ServerInfo,
-  setAccessTokensToServers, updateCustomSubConfig,
-  uploadVideo, wait
+  setAccessTokensToServers,
+  updateCustomSubConfig,
+  uploadVideo
 } from '../../../shared/extra-utils'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 
@@ -23,7 +22,7 @@ const expect = chai.expect
 
 describe('Test create transcoding jobs', function () {
   let servers: ServerInfo[] = []
-  let videosUUID: string[] = []
+  const videosUUID: string[] = []
 
   const config = {
     transcoding: {
@@ -54,7 +53,7 @@ describe('Test create transcoding jobs', function () {
     await doubleFollow(servers[0], servers[1])
 
     for (let i = 1; i <= 5; i++) {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video' + i })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video' + i })
       videosUUID.push(res.body.video.uuid)
     }
 
@@ -90,7 +89,7 @@ describe('Test create transcoding jobs', function () {
       const res = await getVideosList(server.url)
       const videos = res.body.data
 
-      let infoHashes: { [ id: number ]: string }
+      let infoHashes: { [id: number]: string }
 
       for (const video of videos) {
         const res2 = await getVideo(server.url, video.uuid)

@@ -1,8 +1,8 @@
 // Thanks to https://regex101.com
 function regexpCapture (str: string, regex: RegExp, maxIterations = 100) {
+  const result: RegExpExecArray[] = []
   let m: RegExpExecArray
   let i = 0
-  let result: RegExpExecArray[] = []
 
   // tslint:disable:no-conditional-assignment
   while ((m = regex.exec(str)) !== null && i < maxIterations) {

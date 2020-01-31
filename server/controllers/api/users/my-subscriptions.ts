@@ -19,7 +19,6 @@ import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { JobQueue } from '../../../lib/job-queue'
-import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
 
 const mySubscriptionsRouter = express.Router()
@@ -52,7 +51,7 @@ mySubscriptionsRouter.get('/me/subscriptions',
 mySubscriptionsRouter.post('/me/subscriptions',
   authenticate,
   userSubscriptionAddValidator,
-  asyncMiddleware(addUserSubscription)
+  addUserSubscription
 )
 
 mySubscriptionsRouter.get('/me/subscriptions/:uri',
@@ -106,7 +105,7 @@ async function areSubscriptionsExist (req: express.Request, res: express.Respons
   return res.json(existObject)
 }
 
-async function addUserSubscription (req: express.Request, res: express.Response) {
+function addUserSubscription (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
   const [ name, host ] = req.body.uri.split('@')
 
@@ -117,7 +116,6 @@ async function addUserSubscription (req: express.Request, res: express.Response)
   }
 
   JobQueue.Instance.createJob({ type: 'activitypub-follow', payload })
-          .catch(err => logger.error('Cannot create follow job for subscription %s.', req.body.uri, err))
 
   return res.status(204).end()
 }

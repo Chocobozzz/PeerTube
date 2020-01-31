@@ -32,7 +32,8 @@ class Emailer {
   private initialized = false
   private transporter: Transporter
 
-  private constructor () {}
+  private constructor () {
+  }
 
   init () {
     // Already initialized
@@ -97,12 +98,12 @@ class Emailer {
     const channelName = video.VideoChannel.getDisplayName()
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `Your subscription ${channelName} just published a new video: ${video.name}` +
-      `\n\n` +
+      '\n\n' +
       `You can view it on ${videoUrl} ` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -118,10 +119,10 @@ class Emailer {
     const followerName = actorFollow.ActorFollower.Account.getDisplayName()
     const followingName = (actorFollow.ActorFollowing.VideoChannel || actorFollow.ActorFollowing.Account).getDisplayName()
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `Your ${followType} ${followingName} has a new subscriber: ${followerName}` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -136,10 +137,10 @@ class Emailer {
   addNewInstanceFollowerNotification (to: string[], actorFollow: MActorFollowActors) {
     const awaitingApproval = actorFollow.state === 'pending' ? ' awaiting manual approval.' : ''
 
-    const text = `Hi dear admin,\n\n` +
+    const text = 'Hi dear admin,\n\n' +
       `Your instance has a new follower: ${actorFollow.ActorFollower.url}${awaitingApproval}` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -152,10 +153,10 @@ class Emailer {
   }
 
   addAutoInstanceFollowingNotification (to: string[], actorFollow: MActorFollowActors) {
-    const text = `Hi dear admin,\n\n` +
+    const text = 'Hi dear admin,\n\n' +
       `Your instance automatically followed a new instance: ${actorFollow.ActorFollowing.url}` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -170,12 +171,12 @@ class Emailer {
   myVideoPublishedNotification (to: string[], video: MVideo) {
     const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `Your video ${video.name} has been published.` +
-      `\n\n` +
+      '\n\n' +
       `You can view it on ${videoUrl} ` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -190,12 +191,12 @@ class Emailer {
   myVideoImportSuccessNotification (to: string[], videoImport: MVideoImportVideo) {
     const videoUrl = WEBSERVER.URL + videoImport.Video.getWatchStaticPath()
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `Your video import ${videoImport.getTargetIdentifier()} is finished.` +
-      `\n\n` +
+      '\n\n' +
       `You can view the imported video on ${videoUrl} ` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -210,12 +211,12 @@ class Emailer {
   myVideoImportErrorNotification (to: string[], videoImport: MVideoImport) {
     const importUrl = WEBSERVER.URL + '/my-account/video-imports'
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `Your video import ${videoImport.getTargetIdentifier()} encountered an error.` +
-      `\n\n` +
+      '\n\n' +
       `See your videos import dashboard for more information: ${importUrl}` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -232,12 +233,12 @@ class Emailer {
     const video = comment.Video
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `A new comment has been posted by ${accountName} on your video ${video.name}` +
-      `\n\n` +
+      '\n\n' +
       `You can view it on ${commentUrl} ` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -254,12 +255,12 @@ class Emailer {
     const video = comment.Video
     const commentUrl = WEBSERVER.URL + comment.getCommentStaticPath()
 
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `${accountName} mentioned you on video ${video.name}` +
-      `\n\n` +
+      '\n\n' +
       `You can view the comment on ${commentUrl} ` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -274,9 +275,9 @@ class Emailer {
   addVideoAbuseModeratorsNotification (to: string[], videoAbuse: MVideoAbuseVideo) {
     const videoUrl = WEBSERVER.URL + videoAbuse.Video.getWatchStaticPath()
 
-    const text = `Hi,\n\n` +
+    const text = 'Hi,\n\n' +
       `${WEBSERVER.HOST} received an abuse for the following video ${videoUrl}\n\n` +
-      `Cheers,\n` +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -292,14 +293,14 @@ class Emailer {
     const VIDEO_AUTO_BLACKLIST_URL = WEBSERVER.URL + '/admin/moderation/video-auto-blacklist/list'
     const videoUrl = WEBSERVER.URL + videoBlacklist.Video.getWatchStaticPath()
 
-    const text = `Hi,\n\n` +
-      `A recently added video was auto-blacklisted and requires moderator review before publishing.` +
-      `\n\n` +
+    const text = 'Hi,\n\n' +
+      'A recently added video was auto-blacklisted and requires moderator review before publishing.' +
+      '\n\n' +
       `You can view it and take appropriate action on ${videoUrl}` +
-      `\n\n` +
+      '\n\n' +
       `A full list of auto-blacklisted videos can be reviewed here: ${VIDEO_AUTO_BLACKLIST_URL}` +
-      `\n\n` +
-      `Cheers,\n` +
+      '\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -312,9 +313,9 @@ class Emailer {
   }
 
   addNewUserRegistrationNotification (to: string[], user: MUser) {
-    const text = `Hi,\n\n` +
+    const text = 'Hi,\n\n' +
       `User ${user.username} just registered on ${WEBSERVER.HOST} PeerTube instance.\n\n` +
-      `Cheers,\n` +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -367,11 +368,11 @@ class Emailer {
   }
 
   addPasswordResetEmailJob (to: string, resetPasswordUrl: string) {
-    const text = `Hi dear user,\n\n` +
+    const text = 'Hi dear user,\n\n' +
       `A reset password procedure for your account ${to} has been requested on ${WEBSERVER.HOST} ` +
       `Please follow this link to reset it: ${resetPasswordUrl}  (the link will expire within 1 hour)\n\n` +
-      `If you are not the person who initiated this request, please ignore this email.\n\n` +
-      `Cheers,\n` +
+      'If you are not the person who initiated this request, please ignore this email.\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
@@ -384,11 +385,11 @@ class Emailer {
   }
 
   addVerifyEmailJob (to: string, verifyEmailUrl: string) {
-    const text = `Welcome to PeerTube,\n\n` +
+    const text = 'Welcome to PeerTube,\n\n' +
       `To start using PeerTube on ${WEBSERVER.HOST} you must  verify your email! ` +
       `Please follow this link to verify this email belongs to you: ${verifyEmailUrl}\n\n` +
-      `If you are not the person who initiated this request, please ignore this email.\n\n` +
-      `Cheers,\n` +
+      'If you are not the person who initiated this request, please ignore this email.\n\n' +
+      'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {

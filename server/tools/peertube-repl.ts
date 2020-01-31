@@ -1,6 +1,4 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
-registerTSPaths()
-
 import * as repl from 'repl'
 import * as path from 'path'
 import * as _ from 'lodash'
@@ -23,6 +21,8 @@ import * as signupUtils from '../helpers/signup'
 import * as utils from '../helpers/utils'
 import * as YoutubeDLUtils from '../helpers/youtube-dl'
 
+registerTSPaths()
+
 const start = async () => {
   await initDatabaseModels(true)
 
@@ -31,22 +31,39 @@ const start = async () => {
   const initContext = (replServer) => {
     return (context) => {
       const properties = {
-        context, repl: replServer, env: process.env,
-        lodash: _, path,
-        uuidv1, uuidv3, uuidv4, uuidv5,
-        cli, logger, constants,
-        Sequelize, sequelizeTypescript, modelsUtils,
-        models: sequelizeTypescript.models, transaction: sequelizeTypescript.transaction,
-        query: sequelizeTypescript.query, queryInterface: sequelizeTypescript.getQueryInterface(),
+        context,
+        repl: replServer,
+        env: process.env,
+        lodash: _,
+        path,
+        uuidv1,
+        uuidv3,
+        uuidv4,
+        uuidv5,
+        cli,
+        logger,
+        constants,
+        Sequelize,
+        sequelizeTypescript,
+        modelsUtils,
+        models: sequelizeTypescript.models,
+        transaction: sequelizeTypescript.transaction,
+        query: sequelizeTypescript.query,
+        queryInterface: sequelizeTypescript.getQueryInterface(),
         YoutubeDL,
-        coreUtils, ffmpegUtils, peertubeCryptoUtils, signupUtils, utils, YoutubeDLUtils
+        coreUtils,
+        ffmpegUtils,
+        peertubeCryptoUtils,
+        signupUtils,
+        utils,
+        YoutubeDLUtils
       }
 
-      for (let prop in properties) {
+      for (const prop in properties) {
         Object.defineProperty(context, prop, {
           configurable: false,
           enumerable: true,
-          value: properties[ prop ]
+          value: properties[prop]
         })
       }
     }

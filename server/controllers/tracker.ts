@@ -6,7 +6,6 @@ import * as proxyAddr from 'proxy-addr'
 import { Server as WebSocketServer } from 'ws'
 import { TRACKER_RATE_LIMITS } from '../initializers/constants'
 import { VideoFileModel } from '../models/video/video-file'
-import { parse } from 'url'
 import { VideoStreamingPlaylistModel } from '../models/video/video-streaming-playlist'
 import { CONFIG } from '../initializers/config'
 
@@ -38,11 +37,11 @@ const trackerServer = new TrackerServer({
 
     const key = ip + '-' + infoHash
 
-    peersIps[ ip ] = peersIps[ ip ] ? peersIps[ ip ] + 1 : 1
-    peersIpInfoHash[ key ] = peersIpInfoHash[ key ] ? peersIpInfoHash[ key ] + 1 : 1
+    peersIps[ip] = peersIps[ip] ? peersIps[ip] + 1 : 1
+    peersIpInfoHash[key] = peersIpInfoHash[key] ? peersIpInfoHash[key] + 1 : 1
 
-    if (CONFIG.TRACKER.REJECT_TOO_MANY_ANNOUNCES && peersIpInfoHash[ key ] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
-      return cb(new Error(`Too many requests (${peersIpInfoHash[ key ]} of ip ${ip} for torrent ${infoHash}`))
+    if (CONFIG.TRACKER.REJECT_TOO_MANY_ANNOUNCES && peersIpInfoHash[key] > TRACKER_RATE_LIMITS.ANNOUNCES_PER_IP_PER_INFOHASH) {
+      return cb(new Error(`Too many requests (${peersIpInfoHash[key]} of ip ${ip} for torrent ${infoHash}`))
     }
 
     try {
@@ -87,10 +86,8 @@ function createWebsocketTrackerServer (app: express.Application) {
     trackerServer.onWebSocketConnection(ws)
   })
 
-  server.on('upgrade', (request, socket, head) => {
-    const pathname = parse(request.url).pathname
-
-    if (pathname === '/tracker/socket') {
+  server.on('upgrade', (request: express.Request, socket, head) => {
+    if (request.path === '/tracker/socket') {
       wss.handleUpgrade(request, socket, head, ws => wss.emit('connection', ws, request))
     }
 

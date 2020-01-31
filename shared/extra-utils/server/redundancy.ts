@@ -15,11 +15,11 @@ function updateRedundancy (url: string, accessToken: string, host: string, redun
 
 function listVideoRedundancies (options: {
   url: string
-  accessToken: string,
-  target: VideoRedundanciesTarget,
-  start?: number,
-  count?: number,
-  sort?: string,
+  accessToken: string
+  target: VideoRedundanciesTarget
+  start?: number
+  count?: number
+  sort?: string
   statusCodeExpected?: number
 }) {
   const path = '/api/v1/server/redundancy/videos'
@@ -41,8 +41,8 @@ function listVideoRedundancies (options: {
 }
 
 function addVideoRedundancy (options: {
-  url: string,
-  accessToken: string,
+  url: string
+  accessToken: string
   videoId: number
 }) {
   const path = '/api/v1/server/redundancy/videos'
@@ -58,8 +58,8 @@ function addVideoRedundancy (options: {
 }
 
 function removeVideoRedundancy (options: {
-  url: string,
-  accessToken: string,
+  url: string
+  accessToken: string
   redundancyId: number
 }) {
   const { url, accessToken, redundancyId } = options

@@ -49,8 +49,8 @@ import { getVideoWithAttributes } from '../../../helpers/video'
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
     .custom((value, { req }) => isVideoFile(req.files)).withMessage(
-      'This file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
+      'This file is not supported or too large. Please, make sure it is of the following type: ' +
+      CONSTRAINTS_FIELDS.VIDEOS.EXTNAME.join(', ')
     ),
   body('name').custom(isVideoNameValid).withMessage('Should have a valid name'),
   body('channelId')
@@ -245,19 +245,15 @@ const videosTerminateChangeOwnershipValidator = [
     // Check if the user who did the request is able to change the ownership of the video
     if (!checkUserCanTerminateOwnershipChange(res.locals.oauth.token.User, res.locals.videoChangeOwnership, res)) return
 
-    return next()
-  },
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     const videoChangeOwnership = res.locals.videoChangeOwnership
 
-    if (videoChangeOwnership.status === VideoChangeOwnershipStatus.WAITING) {
-      return next()
-    } else {
+    if (videoChangeOwnership.status !== VideoChangeOwnershipStatus.WAITING) {
       res.status(403)
-        .json({ error: 'Ownership already accepted or refused' })
-
+         .json({ error: 'Ownership already accepted or refused' })
       return
     }
+
+    return next()
   }
 ]
 
@@ -284,14 +280,14 @@ function getCommonVideoEditAttributes () {
   return [
     body('thumbnailfile')
       .custom((value, { req }) => isVideoImage(req.files, 'thumbnailfile')).withMessage(
-      'This thumbnail file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-    ),
+        'This thumbnail file is not supported or too large. Please, make sure it is of the following type: ' +
+        CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+      ),
     body('previewfile')
       .custom((value, { req }) => isVideoImage(req.files, 'previewfile')).withMessage(
-      'This preview file is not supported or too large. Please, make sure it is of the following type: '
-      + CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
-    ),
+        'This preview file is not supported or too large. Please, make sure it is of the following type: ' +
+        CONSTRAINTS_FIELDS.VIDEOS.IMAGE.EXTNAME.join(', ')
+      ),
 
     body('category')
       .optional()

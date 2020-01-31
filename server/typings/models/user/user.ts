@@ -29,36 +29,44 @@ export type MUserId = Pick<UserModel, 'id'>
 
 // With account
 
-export type MUserAccountId = MUser &
+export type MUserAccountId =
+  MUser &
   Use<'Account', MAccountId>
 
-export type MUserAccountUrl = MUser &
+export type MUserAccountUrl =
+  MUser &
   Use<'Account', MAccountUrl & MAccountIdActorId>
 
-export type MUserAccount = MUser &
+export type MUserAccount =
+  MUser &
   Use<'Account', MAccount>
 
-export type MUserAccountDefault = MUser &
+export type MUserAccountDefault =
+  MUser &
   Use<'Account', MAccountDefault>
 
 // With channel
 
-export type MUserNotifSettingChannelDefault = MUser &
+export type MUserNotifSettingChannelDefault =
+  MUser &
   Use<'NotificationSetting', MNotificationSetting> &
   Use<'Account', MAccountDefaultChannelDefault>
 
 // With notification settings
 
-export type MUserWithNotificationSetting = MUser &
+export type MUserWithNotificationSetting =
+  MUser &
   Use<'NotificationSetting', MNotificationSetting>
 
-export type MUserNotifSettingAccount = MUser &
+export type MUserNotifSettingAccount =
+  MUser &
   Use<'NotificationSetting', MNotificationSetting> &
   Use<'Account', MAccount>
 
 // Default scope
 
-export type MUserDefault = MUser &
+export type MUserDefault =
+  MUser &
   Use<'NotificationSetting', MNotificationSetting> &
   Use<'Account', MAccountDefault>
 
@@ -67,12 +75,15 @@ export type MUserDefault = MUser &
 // Format for API or AP object
 
 type MAccountWithChannels = MAccountFormattable & PickWithOpt<AccountModel, 'VideoChannels', MChannelFormattable[]>
-type MAccountWithChannelsAndSpecialPlaylists = MAccountWithChannels &
+type MAccountWithChannelsAndSpecialPlaylists =
+  MAccountWithChannels &
   PickWithOpt<AccountModel, 'VideoPlaylists', MVideoPlaylist[]>
 
-export type MUserFormattable = MUserQuotaUsed &
+export type MUserFormattable =
+  MUserQuotaUsed &
   Use<'Account', MAccountWithChannels> &
   PickWithOpt<UserModel, 'NotificationSetting', MNotificationSettingFormattable>
 
-export type MMyUserFormattable = MUserFormattable &
+export type MMyUserFormattable =
+  MUserFormattable &
   Use<'Account', MAccountWithChannelsAndSpecialPlaylists>

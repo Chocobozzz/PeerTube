@@ -4,7 +4,7 @@ import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
 import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
 // Do not use barrels, remain constants as independent as possible
-import { isTestInstance, sanitizeHost, sanitizeUrl, root, parseDurationToMs } from '../helpers/core-utils'
+import { isTestInstance, sanitizeHost, sanitizeUrl, root } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import { invert } from 'lodash'
 import { CronRepeatOptions, EveryRepeatOptions } from 'bull'
@@ -310,8 +310,8 @@ let CONTACT_FORM_LIFETIME = 60000 * 60 // 1 hour
 
 const VIDEO_TRANSCODING_FPS: VideoTranscodingFPS = {
   MIN: 10,
-  STANDARD: [24, 25, 30],
-  HD_STANDARD: [50, 60],
+  STANDARD: [ 24, 25, 30 ],
+  HD_STANDARD: [ 50, 60 ],
   AVERAGE: 30,
   MAX: 60,
   KEEP_ORIGIN_FPS_RESOLUTION_MIN: 720 // We keep the original FPS on high resolutions (720 minimum)
@@ -361,42 +361,42 @@ const VIDEO_LICENCES = {
   7: 'Public Domain Dedication'
 }
 
-let VIDEO_LANGUAGES: { [id: string]: string } = {}
+const VIDEO_LANGUAGES: { [id: string]: string } = {}
 
 const VIDEO_PRIVACIES = {
-  [ VideoPrivacy.PUBLIC ]: 'Public',
-  [ VideoPrivacy.UNLISTED ]: 'Unlisted',
-  [ VideoPrivacy.PRIVATE ]: 'Private',
-  [ VideoPrivacy.INTERNAL ]: 'Internal'
+  [VideoPrivacy.PUBLIC]: 'Public',
+  [VideoPrivacy.UNLISTED]: 'Unlisted',
+  [VideoPrivacy.PRIVATE]: 'Private',
+  [VideoPrivacy.INTERNAL]: 'Internal'
 }
 
 const VIDEO_STATES = {
-  [ VideoState.PUBLISHED ]: 'Published',
-  [ VideoState.TO_TRANSCODE ]: 'To transcode',
-  [ VideoState.TO_IMPORT ]: 'To import'
+  [VideoState.PUBLISHED]: 'Published',
+  [VideoState.TO_TRANSCODE]: 'To transcode',
+  [VideoState.TO_IMPORT]: 'To import'
 }
 
 const VIDEO_IMPORT_STATES = {
-  [ VideoImportState.FAILED ]: 'Failed',
-  [ VideoImportState.PENDING ]: 'Pending',
-  [ VideoImportState.SUCCESS ]: 'Success'
+  [VideoImportState.FAILED]: 'Failed',
+  [VideoImportState.PENDING]: 'Pending',
+  [VideoImportState.SUCCESS]: 'Success'
 }
 
 const VIDEO_ABUSE_STATES = {
-  [ VideoAbuseState.PENDING ]: 'Pending',
-  [ VideoAbuseState.REJECTED ]: 'Rejected',
-  [ VideoAbuseState.ACCEPTED ]: 'Accepted'
+  [VideoAbuseState.PENDING]: 'Pending',
+  [VideoAbuseState.REJECTED]: 'Rejected',
+  [VideoAbuseState.ACCEPTED]: 'Accepted'
 }
 
 const VIDEO_PLAYLIST_PRIVACIES = {
-  [ VideoPlaylistPrivacy.PUBLIC ]: 'Public',
-  [ VideoPlaylistPrivacy.UNLISTED ]: 'Unlisted',
-  [ VideoPlaylistPrivacy.PRIVATE ]: 'Private'
+  [VideoPlaylistPrivacy.PUBLIC]: 'Public',
+  [VideoPlaylistPrivacy.UNLISTED]: 'Unlisted',
+  [VideoPlaylistPrivacy.PRIVATE]: 'Private'
 }
 
 const VIDEO_PLAYLIST_TYPES = {
-  [ VideoPlaylistType.REGULAR ]: 'Regular',
-  [ VideoPlaylistType.WATCH_LATER ]: 'Watch later'
+  [VideoPlaylistType.REGULAR]: 'Regular',
+  [VideoPlaylistType.WATCH_LATER]: 'Watch later'
 }
 
 const MIMETYPES = {
@@ -533,7 +533,7 @@ const LAZY_STATIC_PATHS = {
 }
 
 // Cache control
-let STATIC_MAX_AGE = {
+const STATIC_MAX_AGE = {
   SERVER: '2h',
   CLIENT: '30d'
 }
@@ -671,14 +671,14 @@ if (isTestInstance() === true) {
   SCHEDULER_INTERVALS_MS.removeOldViews = 5000
   SCHEDULER_INTERVALS_MS.updateVideos = 5000
   SCHEDULER_INTERVALS_MS.autoFollowIndexInstances = 5000
-  REPEAT_JOBS[ 'videos-views' ] = { every: 5000 }
+  REPEAT_JOBS['videos-views'] = { every: 5000 }
 
   REDUNDANCY.VIDEOS.RANDOMIZED_FACTOR = 1
 
   VIDEO_VIEW_LIFETIME = 1000 // 1 second
   CONTACT_FORM_LIFETIME = 1000 // 1 second
 
-  JOB_ATTEMPTS[ 'email' ] = 1
+  JOB_ATTEMPTS['email'] = 1
 
   FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
   MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
@@ -838,42 +838,42 @@ function loadLanguages () {
 function buildLanguages () {
   const iso639 = require('iso-639-3')
 
-  const languages: { [ id: string ]: string } = {}
+  const languages: { [id: string]: string } = {}
 
   const additionalLanguages = {
-    'sgn': true, // Sign languages (macro language)
-    'ase': true, // American sign language
-    'sdl': true, // Arabian sign language
-    'bfi': true, // British sign language
-    'bzs': true, // Brazilian sign language
-    'csl': true, // Chinese sign language
-    'cse': true, // Czech sign language
-    'dsl': true, // Danish sign language
-    'fsl': true, // French sign language
-    'gsg': true, // German sign language
-    'pks': true, // Pakistan sign language
-    'jsl': true, // Japanese sign language
-    'sfs': true, // South African sign language
-    'swl': true, // Swedish sign language
-    'rsl': true, // Russian sign language: true
+    sgn: true, // Sign languages (macro language)
+    ase: true, // American sign language
+    sdl: true, // Arabian sign language
+    bfi: true, // British sign language
+    bzs: true, // Brazilian sign language
+    csl: true, // Chinese sign language
+    cse: true, // Czech sign language
+    dsl: true, // Danish sign language
+    fsl: true, // French sign language
+    gsg: true, // German sign language
+    pks: true, // Pakistan sign language
+    jsl: true, // Japanese sign language
+    sfs: true, // South African sign language
+    swl: true, // Swedish sign language
+    rsl: true, // Russian sign language: true
 
-    'epo': true, // Esperanto
-    'tlh': true, // Klingon
-    'jbo': true, // Lojban
-    'avk': true // Kotava
+    epo: true, // Esperanto
+    tlh: true, // Klingon
+    jbo: true, // Lojban
+    avk: true // Kotava
   }
 
   // Only add ISO639-1 languages and some sign languages (ISO639-3)
   iso639
     .filter(l => {
       return (l.iso6391 !== null && l.type === 'living') ||
-        additionalLanguages[ l.iso6393 ] === true
+        additionalLanguages[l.iso6393] === true
     })
-    .forEach(l => languages[ l.iso6391 || l.iso6393 ] = l.name)
+    .forEach(l => { languages[l.iso6391 || l.iso6393] = l.name })
 
   // Override Occitan label
-  languages[ 'oc' ] = 'Occitan'
-  languages[ 'el' ] = 'Greek'
+  languages['oc'] = 'Occitan'
+  languages['el'] = 'Greek'
 
   return languages
 }

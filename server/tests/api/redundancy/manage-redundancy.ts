@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -56,20 +56,20 @@ describe('Test manage videos redundancy', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video 1 server 2' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 1 server 2' })
       video1Server2UUID = res.body.video.uuid
     }
 
     {
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video 2 server 2' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video 2 server 2' })
       video2Server2UUID = res.body.video.uuid
     }
 
     await waitJobs(servers)
 
     // Server 1 and server 2 follow each other
-    await doubleFollow(servers[ 0 ], servers[ 1 ])
-    await updateRedundancy(servers[ 0 ].url, servers[ 0 ].accessToken, servers[ 1 ].host, true)
+    await doubleFollow(servers[0], servers[1])
+    await updateRedundancy(servers[0].url, servers[0].accessToken, servers[1].host, true)
 
     await waitJobs(servers)
   })
@@ -195,8 +195,8 @@ describe('Test manage videos redundancy', function () {
       })
 
       const videos = res.body.data
-      expect(videos[ 0 ].name).to.equal('video 1 server 2')
-      expect(videos[ 1 ].name).to.equal('video 2 server 2')
+      expect(videos[0].name).to.equal('video 1 server 2')
+      expect(videos[1].name).to.equal('video 2 server 2')
     }
 
     {
@@ -210,8 +210,8 @@ describe('Test manage videos redundancy', function () {
       })
 
       const videos = res.body.data
-      expect(videos[ 0 ].name).to.equal('video 2 server 2')
-      expect(videos[ 1 ].name).to.equal('video 1 server 2')
+      expect(videos[0].name).to.equal('video 2 server 2')
+      expect(videos[1].name).to.equal('video 1 server 2')
     }
 
     {
@@ -225,14 +225,14 @@ describe('Test manage videos redundancy', function () {
       })
 
       const videos = res.body.data
-      expect(videos[ 0 ].name).to.equal('video 1 server 2')
+      expect(videos[0].name).to.equal('video 1 server 2')
     }
   })
 
   it('Should manually add a redundancy and list it', async function () {
     this.timeout(120000)
 
-    const uuid = (await uploadVideoAndGetId({ server: servers[ 1 ], videoName: 'video 3 server 2', privacy: VideoPrivacy.UNLISTED })).uuid
+    const uuid = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video 3 server 2', privacy: VideoPrivacy.UNLISTED })).uuid
     await waitJobs(servers)
     const videoId = await getLocalIdByUUID(servers[0].url, uuid)
 
@@ -257,9 +257,9 @@ describe('Test manage videos redundancy', function () {
       })
 
       const videos = res.body.data
-      expect(videos[ 0 ].name).to.equal('video 3 server 2')
+      expect(videos[0].name).to.equal('video 3 server 2')
 
-      const video = videos[ 0 ]
+      const video = videos[0]
       expect(video.redundancies.files).to.have.lengthOf(4)
       expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
@@ -286,9 +286,9 @@ describe('Test manage videos redundancy', function () {
     })
 
     const videos = res.body.data
-    expect(videos[ 0 ].name).to.equal('video 3 server 2')
+    expect(videos[0].name).to.equal('video 3 server 2')
 
-    const video = videos[ 0 ]
+    const video = videos[0]
     expect(video.redundancies.files).to.have.lengthOf(4)
     expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
@@ -308,8 +308,8 @@ describe('Test manage videos redundancy', function () {
 
     for (const redundancyId of redundanciesToRemove) {
       await removeVideoRedundancy({
-        url: servers[ 0 ].url,
-        accessToken: servers[ 0 ].accessToken,
+        url: servers[0].url,
+        accessToken: servers[0].accessToken,
         redundancyId
       })
     }
@@ -327,10 +327,10 @@ describe('Test manage videos redundancy', function () {
       const videos = res.body.data
       expect(videos).to.have.lengthOf(2)
 
-      expect(videos[ 0 ].name).to.equal('video 2 server 2')
+      expect(videos[0].name).to.equal('video 2 server 2')
 
       redundanciesToRemove = []
-      const video = videos[ 0 ]
+      const video = videos[0]
       expect(video.redundancies.files).to.have.lengthOf(4)
       expect(video.redundancies.streamingPlaylists).to.have.lengthOf(1)
 
@@ -346,8 +346,8 @@ describe('Test manage videos redundancy', function () {
     {
       for (const redundancyId of redundanciesToRemove) {
         await removeVideoRedundancy({
-          url: servers[ 0 ].url,
-          accessToken: servers[ 0 ].accessToken,
+          url: servers[0].url,
+          accessToken: servers[0].accessToken,
           redundancyId
         })
       }
@@ -362,7 +362,7 @@ describe('Test manage videos redundancy', function () {
       })
 
       const videos = res.body.data
-      expect(videos[ 0 ].name).to.equal('video 1 server 2')
+      expect(videos[0].name).to.equal('video 1 server 2')
       expect(videos).to.have.lengthOf(1)
     }
   })

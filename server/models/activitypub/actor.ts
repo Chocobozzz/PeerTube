@@ -16,7 +16,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { ActivityPubActorType } from '../../../shared/models/activitypub'
+import { ActivityIconObject, ActivityPubActorType } from '../../../shared/models/activitypub'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { activityPubContextify } from '../../helpers/activitypub'
 import {
@@ -335,7 +335,7 @@ export class ActorModel extends Model<ActorModel> {
     const query = {
       where: {
         followersUrl: {
-          [ Op.in ]: followersUrls
+          [Op.in]: followersUrls
         }
       },
       transaction
@@ -362,7 +362,7 @@ export class ActorModel extends Model<ActorModel> {
                      .findOne(query)
                      .then(actor => {
                        if (preferredUsername === SERVER_ACTOR_NAME) {
-                         ActorModel.localNameCache[ preferredUsername ] = actor
+                         ActorModel.localNameCache[preferredUsername] = actor
                        }
 
                        return actor
@@ -388,7 +388,7 @@ export class ActorModel extends Model<ActorModel> {
                      .findOne(query)
                      .then(actor => {
                        if (preferredUsername === SERVER_ACTOR_NAME) {
-                         ActorModel.localUrlCache[ preferredUsername ] = actor
+                         ActorModel.localUrlCache[preferredUsername] = actor
                        }
 
                        return actor
@@ -500,9 +500,11 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   toActivityPubObject (this: MActorAP, name: string) {
-    let icon = undefined
+    let icon: ActivityIconObject
+
     if (this.avatarId) {
       const extension = extname(this.Avatar.filename)
+
       icon = {
         type: 'Image',
         mediaType: extension === '.png' ? 'image/png' : 'image/jpeg',

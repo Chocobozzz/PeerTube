@@ -66,7 +66,7 @@ export {
 
 // ---------------------------------------------------------------------------
 
-async function serveServerTranslations (req: express.Request, res: express.Response) {
+function serveServerTranslations (req: express.Request, res: express.Response) {
   const locale = req.params.locale
   const file = req.params.file
 

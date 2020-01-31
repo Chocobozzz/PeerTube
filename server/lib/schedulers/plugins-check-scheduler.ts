@@ -43,7 +43,7 @@ export class PluginsCheckScheduler extends AbstractScheduler {
         const results = await getLatestPluginsVersion(npmNames)
 
         for (const result of results) {
-          const plugin = pluginIndex[ result.npmName ]
+          const plugin = pluginIndex[result.npmName]
           if (!result.latestVersion) continue
 
           if (

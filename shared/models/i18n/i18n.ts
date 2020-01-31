@@ -56,6 +56,8 @@ export function isDefaultLocale (locale: string) {
 }
 
 export function peertubeTranslate (str: string, translations?: { [ id: string ]: string }) {
+  // FIXME: remove disable rule when the client is upgraded to typescript 3.7
+  // eslint-disable-next-line
   return translations && translations[str] ? translations[str] : str
 }
 

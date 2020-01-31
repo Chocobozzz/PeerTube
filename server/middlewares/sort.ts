@@ -8,7 +8,7 @@ const setDefaultVideoRedundanciesSort = setDefaultSortFactory('name')
 const setDefaultSearchSort = setDefaultSortFactory('-match')
 
 function setBlacklistSort (req: express.Request, res: express.Response, next: express.NextFunction) {
-  let newSort: SortType = { sortModel: undefined, sortValue: '' }
+  const newSort: SortType = { sortModel: undefined, sortValue: '' }
 
   if (!req.query.sort) req.query.sort = '-createdAt'
 

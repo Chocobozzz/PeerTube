@@ -6,6 +6,7 @@ import { ACCEPT_HEADERS, ACTIVITY_PUB, HTTP_SIGNATURE } from '../initializers/co
 import { getOrCreateActorAndServerAndModel } from '../lib/activitypub'
 import { loadActorUrlOrGetFromWebfinger } from '../helpers/webfinger'
 import { isActorDeleteActivityValid } from '@server/helpers/custom-validators/activitypub/actor'
+import { getAPId } from '@server/helpers/activitypub'
 
 async function checkSignature (req: Request, res: Response, next: NextFunction) {
   try {
@@ -16,7 +17,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
     // Forwarded activity
     const bodyActor = req.body.actor
-    const bodyActorId = bodyActor && bodyActor.id ? bodyActor.id : bodyActor
+    const bodyActorId = getAPId(bodyActor)
     if (bodyActorId && bodyActorId !== actor.url) {
       const jsonLDSignatureChecked = await checkJsonLDSignature(req, res)
       if (jsonLDSignatureChecked !== true) return

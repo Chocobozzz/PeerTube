@@ -68,12 +68,12 @@ type AvailableForListOptions = {
   type?: VideoPlaylistType
   accountId?: number
   videoChannelId?: number
-  listMyPlaylists?: boolean,
+  listMyPlaylists?: boolean
   search?: string
 }
 
 @Scopes(() => ({
-  [ ScopeNames.WITH_THUMBNAIL ]: {
+  [ScopeNames.WITH_THUMBNAIL]: {
     include: [
       {
         model: ThumbnailModel,
@@ -81,7 +81,7 @@ type AvailableForListOptions = {
       }
     ]
   },
-  [ ScopeNames.WITH_VIDEOS_LENGTH ]: {
+  [ScopeNames.WITH_VIDEOS_LENGTH]: {
     attributes: {
       include: [
         [
@@ -91,7 +91,7 @@ type AvailableForListOptions = {
       ]
     }
   } as FindOptions,
-  [ ScopeNames.WITH_ACCOUNT ]: {
+  [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
         model: AccountModel,
@@ -99,7 +99,7 @@ type AvailableForListOptions = {
       }
     ]
   },
-  [ ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY ]: {
+  [ScopeNames.WITH_ACCOUNT_AND_CHANNEL_SUMMARY]: {
     include: [
       {
         model: AccountModel.scope(AccountScopeNames.SUMMARY),
@@ -111,7 +111,7 @@ type AvailableForListOptions = {
       }
     ]
   },
-  [ ScopeNames.WITH_ACCOUNT_AND_CHANNEL ]: {
+  [ScopeNames.WITH_ACCOUNT_AND_CHANNEL]: {
     include: [
       {
         model: AccountModel,
@@ -123,7 +123,7 @@ type AvailableForListOptions = {
       }
     ]
   },
-  [ ScopeNames.AVAILABLE_FOR_LIST ]: (options: AvailableForListOptions) => {
+  [ScopeNames.AVAILABLE_FOR_LIST]: (options: AvailableForListOptions) => {
 
     let whereActor: WhereOptions = {}
 
@@ -138,13 +138,13 @@ type AvailableForListOptions = {
       const inQueryInstanceFollow = buildServerIdsFollowedBy(options.followerActorId)
 
       whereActor = {
-        [ Op.or ]: [
+        [Op.or]: [
           {
             serverId: null
           },
           {
             serverId: {
-              [ Op.in ]: literal(inQueryInstanceFollow)
+              [Op.in]: literal(inQueryInstanceFollow)
             }
           }
         ]
@@ -172,7 +172,7 @@ type AvailableForListOptions = {
     if (options.search) {
       whereAnd.push({
         name: {
-          [ Op.iLike ]: '%' + options.search + '%'
+          [Op.iLike]: '%' + options.search + '%'
         }
       })
     }
@@ -299,13 +299,13 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   static listForApi (options: {
     followerActorId: number
-    start: number,
-    count: number,
-    sort: string,
-    type?: VideoPlaylistType,
-    accountId?: number,
-    videoChannelId?: number,
-    listMyPlaylists?: boolean,
+    start: number
+    count: number
+    sort: string
+    type?: VideoPlaylistType
+    accountId?: number
+    videoChannelId?: number
+    listMyPlaylists?: boolean
     search?: string
   }) {
     const query = {

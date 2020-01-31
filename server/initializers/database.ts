@@ -119,8 +119,6 @@ async function initDatabaseModels (silent: boolean) {
   await createFunctions()
 
   if (!silent) logger.info('Database %s is ready.', dbname)
-
-  return
 }
 
 // ---------------------------------------------------------------------------

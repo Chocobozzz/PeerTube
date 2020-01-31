@@ -1,16 +1,8 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
-import {
-  flushTests,
-  killallServers,
-  flushAndRunServer,
-  ServerInfo,
-  setAccessTokensToServers,
-  wait,
-  cleanupTests
-} from '../../../../shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, wait } from '../../../../shared/extra-utils'
 import { MockSmtpServer } from '../../../../shared/extra-utils/miscs/email'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { sendContactForm } from '../../../../shared/extra-utils/server/contact-form'

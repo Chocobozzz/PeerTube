@@ -88,12 +88,12 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     const buf = await readFile(torrentfile.path)
     const parsedTorrent = parseTorrent(buf)
 
-    videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[ 0 ] : parsedTorrent.name as string
+    videoName = isArray(parsedTorrent.name) ? parsedTorrent.name[0] : parsedTorrent.name as string
   } else {
     magnetUri = body.magnetUri
 
     const parsed = magnetUtil.decode(magnetUri)
-    videoName = isArray(parsed.name) ? parsed.name[ 0 ] : parsed.name as string
+    videoName = isArray(parsed.name) ? parsed.name[0] : parsed.name as string
   }
 
   const video = buildVideo(res.locals.videoChannel.id, body, { name: videoName })
@@ -124,7 +124,7 @@ async function addTorrentImport (req: express.Request, res: express.Response, to
     videoImportId: videoImport.id,
     magnetUri
   }
-  await JobQueue.Instance.createJob({ type: 'video-import', payload })
+  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
@@ -176,7 +176,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     downloadThumbnail: !thumbnailModel,
     downloadPreview: !previewModel
   }
-  await JobQueue.Instance.createJob({ type: 'video-import', payload })
+  await JobQueue.Instance.createJobWithPromise({ type: 'video-import', payload })
 
   auditLogger.create(getAuditIdFromRes(res), new VideoImportAuditView(videoImport.toFormattedJSON()))
 
@@ -211,7 +211,7 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
 async function processThumbnail (req: express.Request, video: VideoModel) {
   const thumbnailField = req.files ? req.files['thumbnailfile'] : undefined
   if (thumbnailField) {
-    const thumbnailPhysicalFile = thumbnailField[ 0 ]
+    const thumbnailPhysicalFile = thumbnailField[0]
 
     return createVideoMiniatureFromExisting(thumbnailPhysicalFile.path, video, ThumbnailType.MINIATURE, false)
   }
@@ -231,12 +231,12 @@ async function processPreview (req: express.Request, video: VideoModel) {
 }
 
 function insertIntoDB (parameters: {
-  video: MVideoThumbnailAccountDefault,
-  thumbnailModel: MThumbnail,
-  previewModel: MThumbnail,
-  videoChannel: MChannelAccountDefault,
-  tags: string[],
-  videoImportAttributes: Partial<MVideoImport>,
+  video: MVideoThumbnailAccountDefault
+  thumbnailModel: MThumbnail
+  previewModel: MThumbnail
+  videoChannel: MChannelAccountDefault
+  tags: string[]
+  videoImportAttributes: Partial<MVideoImport>
   user: MUser
 }): Bluebird<MVideoImportFormattable> {
   const { video, thumbnailModel, previewModel, videoChannel, tags, videoImportAttributes, user } = parameters

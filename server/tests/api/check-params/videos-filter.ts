@@ -1,10 +1,9 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import {
   cleanupTests,
   createUser,
-  createVideoPlaylist,
   flushAndRunServer,
   makeGetRequest,
   ServerInfo,
@@ -13,7 +12,6 @@ import {
   userLogin
 } from '../../../../shared/extra-utils'
 import { UserRole } from '../../../../shared/models/users'
-import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 
 async function testEndpoints (server: ServerInfo, token: string, filter: string, statusCodeExpected: number) {
   const paths = [
@@ -77,7 +75,7 @@ describe('Test videos filters', function () {
     })
 
     it('Should succeed with a good filter', async function () {
-      await testEndpoints(server, server.accessToken,'local', 200)
+      await testEndpoints(server, server.accessToken, 'local', 200)
     })
 
     it('Should fail to list all-local with a simple user', async function () {

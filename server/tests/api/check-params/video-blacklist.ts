@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 
@@ -7,25 +7,24 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   getBlacklistedVideosList,
   getVideo,
   getVideoWithToken,
-  killallServers,
   makePostBodyRequest,
   makePutBodyRequest,
   removeVideoFromBlacklist,
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
-  userLogin, waitJobs
+  userLogin,
+  waitJobs
 } from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoDetails, VideoBlacklistType } from '../../../../shared/models/videos'
+import { VideoBlacklistType, VideoDetails } from '../../../../shared/models/videos'
 import { expect } from 'chai'
 
 describe('Test video blacklist API validators', function () {
@@ -48,14 +47,14 @@ describe('Test video blacklist API validators', function () {
     {
       const username = 'user1'
       const password = 'my super password'
-      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: username, password: password })
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: username, password: password })
       userAccessToken1 = await userLogin(servers[0], { username, password })
     }
 
     {
       const username = 'user2'
       const password = 'my super password'
-      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: username, password: password })
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: username, password: password })
       userAccessToken2 = await userLogin(servers[0], { username, password })
     }
 
@@ -120,7 +119,7 @@ describe('Test video blacklist API validators', function () {
 
     it('Should succeed with the correct params', async function () {
       const path = basePath + servers[0].video.uuid + '/blacklist'
-      const fields = { }
+      const fields = {}
 
       await makePostBodyRequest({ url: servers[0].url, path, token: servers[0].accessToken, fields, statusCodeExpected: 204 })
     })

@@ -3,7 +3,7 @@ import { doRequest } from '../../helpers/requests'
 import { logger } from '../../helpers/logger'
 import * as Bluebird from 'bluebird'
 import { ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
-import { parse } from 'url'
+import { URL } from 'url'
 
 type HandlerFunction<T> = (items: T[]) => (Promise<any> | Bluebird<any>)
 type CleanerFunction = (startedDate: Date) => (Promise<any> | Bluebird<any>)
@@ -24,7 +24,7 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
   const response = await doRequest<ActivityPubOrderedCollection<T>>(options)
   const firstBody = response.body
 
-  let limit = ACTIVITY_PUB.FETCH_PAGE_LIMIT
+  const limit = ACTIVITY_PUB.FETCH_PAGE_LIMIT
   let i = 0
   let nextLink = firstBody.first
   while (nextLink && i < limit) {
@@ -32,7 +32,7 @@ async function crawlCollectionPage <T> (uri: string, handler: HandlerFunction<T>
 
     if (typeof nextLink === 'string') {
       // Don't crawl ourselves
-      const remoteHost = parse(nextLink).host
+      const remoteHost = new URL(nextLink).host
       if (remoteHost === WEBSERVER.HOST) continue
 
       options.uri = nextLink

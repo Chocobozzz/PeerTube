@@ -15,41 +15,41 @@ export type AcceptResult = {
 
 // Can be filtered by plugins
 function isLocalVideoAccepted (object: {
-  videoBody: VideoCreate,
-  videoFile: Express.Multer.File & { duration?: number },
+  videoBody: VideoCreate
+  videoFile: Express.Multer.File & { duration?: number }
   user: UserModel
 }): AcceptResult {
   return { accepted: true }
 }
 
 function isLocalVideoThreadAccepted (_object: {
-  commentBody: VideoCommentCreate,
-  video: VideoModel,
+  commentBody: VideoCommentCreate
+  video: VideoModel
   user: UserModel
 }): AcceptResult {
   return { accepted: true }
 }
 
 function isLocalVideoCommentReplyAccepted (_object: {
-  commentBody: VideoCommentCreate,
-  parentComment: VideoCommentModel,
-  video: VideoModel,
+  commentBody: VideoCommentCreate
+  parentComment: VideoCommentModel
+  video: VideoModel
   user: UserModel
 }): AcceptResult {
   return { accepted: true }
 }
 
 function isRemoteVideoAccepted (_object: {
-  activity: ActivityCreate,
-  videoAP: VideoTorrentObject,
+  activity: ActivityCreate
+  videoAP: VideoTorrentObject
   byActor: ActorModel
 }): AcceptResult {
   return { accepted: true }
 }
 
 function isRemoteVideoCommentAccepted (_object: {
-  activity: ActivityCreate,
-  commentAP: VideoCommentObject,
+  activity: ActivityCreate
+  commentAP: VideoCommentObject
   byActor: ActorModel
 }): AcceptResult {
   return { accepted: true }

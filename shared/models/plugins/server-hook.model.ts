@@ -70,7 +70,7 @@ export const serverActionHookObject = {
   // Fired when a user is updated by an admin/moderator
   'action:api.user.updated': true,
 
-   // Fired when a user got a new oauth2 token
+  // Fired when a user got a new oauth2 token
   'action:api.user.oauth2-got-token': true
 }
 

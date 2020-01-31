@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { expect } from 'chai'
 import { pathExists, readdir, readFile } from 'fs-extra'
@@ -488,7 +488,7 @@ async function completeVideoCheck (
     description: string
     publishedAt?: string
     support: string
-    originallyPublishedAt?: string,
+    originallyPublishedAt?: string
     account: {
       name: string
       host: string
@@ -509,7 +509,7 @@ async function completeVideoCheck (
     files: {
       resolution: number
       size: number
-    }[],
+    }[]
     thumbnailfile?: string
     previewfile?: string
   }
@@ -583,9 +583,10 @@ async function completeVideoCheck (
 
     const minSize = attributeFile.size - ((10 * attributeFile.size) / 100)
     const maxSize = attributeFile.size + ((10 * attributeFile.size) / 100)
-    expect(file.size,
-           'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')')
-      .to.be.above(minSize).and.below(maxSize)
+    expect(
+      file.size,
+      'File size for resolution ' + file.resolution.label + ' outside confidence interval (' + minSize + '> size <' + maxSize + ')'
+    ).to.be.above(minSize).and.below(maxSize)
 
     const torrent = await webtorrentAdd(file.magnetUri, true)
     expect(torrent.files).to.be.an('array')
@@ -608,10 +609,10 @@ async function videoUUIDToId (url: string, id: number | string) {
 }
 
 async function uploadVideoAndGetId (options: {
-  server: ServerInfo,
-  videoName: string,
-  nsfw?: boolean,
-  privacy?: VideoPrivacy,
+  server: ServerInfo
+  videoName: string
+  nsfw?: boolean
+  privacy?: VideoPrivacy
   token?: string
 }) {
   const videoAttrs: any = { name: options.videoName }

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import * as request from 'supertest'
 import { makeDeleteRequest } from '../requests/requests'
 

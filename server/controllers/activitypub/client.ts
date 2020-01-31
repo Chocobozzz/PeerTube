@@ -122,7 +122,7 @@ activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId/activity
 activityPubClientRouter.get('/video-channels/:name',
   executeIfActivityPub,
   asyncMiddleware(localVideoChannelValidator),
-  asyncMiddleware(videoChannelController)
+  videoChannelController
 )
 activityPubClientRouter.get('/video-channels/:name/followers',
   executeIfActivityPub,
@@ -154,7 +154,7 @@ activityPubClientRouter.get('/video-playlists/:playlistId',
 activityPubClientRouter.get('/video-playlists/:playlistId/:videoId',
   executeIfActivityPub,
   asyncMiddleware(videoPlaylistElementAPGetValidator),
-  asyncMiddleware(videoPlaylistElementController)
+  videoPlaylistElementController
 )
 
 // ---------------------------------------------------------------------------
@@ -281,7 +281,7 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   return activityPubResponse(activityPubContextify(json), res)
 }
 
-async function videoChannelController (req: express.Request, res: express.Response) {
+function videoChannelController (req: express.Request, res: express.Response) {
   const videoChannel = res.locals.videoChannel
 
   return activityPubResponse(activityPubContextify(videoChannel.toActivityPubObject()), res)
@@ -353,7 +353,7 @@ async function videoPlaylistController (req: express.Request, res: express.Respo
   return activityPubResponse(activityPubContextify(object), res)
 }
 
-async function videoPlaylistElementController (req: express.Request, res: express.Response) {
+function videoPlaylistElementController (req: express.Request, res: express.Response) {
   const videoPlaylistElement = res.locals.videoPlaylistElementAP
 
   const json = videoPlaylistElement.toActivityPubObject()

@@ -9,14 +9,14 @@ import { UserUpdateMe } from '../../models/users'
 import { omit } from 'lodash'
 
 type CreateUserArgs = {
-  url: string,
-  accessToken: string,
-  username: string,
-  password: string,
-  videoQuota?: number,
-  videoQuotaDaily?: number,
-  role?: UserRole,
-  adminFlags?: UserAdminFlag,
+  url: string
+  accessToken: string
+  username: string
+  password: string
+  videoQuota?: number
+  videoQuotaDaily?: number
+  role?: UserRole
+  adminFlags?: UserAdminFlag
   specialStatus?: number
 }
 function createUser (parameters: CreateUserArgs) {
@@ -74,8 +74,8 @@ function registerUser (url: string, username: string, password: string, specialS
 }
 
 function registerUserWithChannel (options: {
-  url: string,
-  user: { username: string, password: string, displayName?: string },
+  url: string
+  user: { username: string, password: string, displayName?: string }
   channel: { name: string, displayName: string }
 }) {
   const path = '/api/v1/users/register'
@@ -230,8 +230,8 @@ function updateMyUser (options: { url: string, accessToken: string } & UserUpdat
 }
 
 function updateMyAvatar (options: {
-  url: string,
-  accessToken: string,
+  url: string
+  accessToken: string
   fixture: string
 }) {
   const path = '/api/v1/users/me/avatar/pick'
@@ -241,14 +241,14 @@ function updateMyAvatar (options: {
 
 function updateUser (options: {
   url: string
-  userId: number,
-  accessToken: string,
-  email?: string,
-  emailVerified?: boolean,
-  videoQuota?: number,
-  videoQuotaDaily?: number,
-  password?: string,
-  adminFlags?: UserAdminFlag,
+  userId: number
+  accessToken: string
+  email?: string
+  emailVerified?: boolean
+  videoQuota?: number
+  videoQuotaDaily?: number
+  password?: string
+  adminFlags?: UserAdminFlag
   role?: UserRole
 }) {
   const path = '/api/v1/users/' + options.userId

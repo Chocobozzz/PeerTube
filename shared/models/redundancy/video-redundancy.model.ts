@@ -24,10 +24,12 @@ interface RedundancyInformation {
   size: number
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface FileRedundancyInformation extends RedundancyInformation {
 
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface StreamingPlaylistRedundancyInformation extends RedundancyInformation {
 
 }

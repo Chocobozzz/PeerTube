@@ -99,7 +99,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   static loadByAccountAndVideoOrUrl (accountId: number, videoId: number, url: string, t?: Transaction): Bluebird<MAccountVideoRate> {
     const options: FindOptions = {
       where: {
-        [ Op.or]: [
+        [Op.or]: [
           {
             accountId,
             videoId
@@ -116,10 +116,10 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   }
 
   static listByAccountForApi (options: {
-    start: number,
-    count: number,
-    sort: string,
-    type?: string,
+    start: number
+    count: number
+    sort: string
+    type?: string
     accountId: number
   }) {
     const query: FindOptions = {
@@ -135,7 +135,7 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
           required: true,
           include: [
             {
-              model: VideoChannelModel.scope({ method: [VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
+              model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
               required: true
             }
           ]

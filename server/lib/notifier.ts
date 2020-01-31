@@ -6,7 +6,6 @@ import { UserModel } from '../models/account/user'
 import { PeerTubeSocket } from './peertube-socket'
 import { CONFIG } from '../initializers/config'
 import { VideoPrivacy, VideoState } from '../../shared/models/videos'
-import * as Bluebird from 'bluebird'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import {
   MCommentOwnerVideo,
@@ -17,7 +16,8 @@ import {
   MVideoFullLight
 } from '../typings/models/video'
 import {
-  MUser, MUserAccount,
+  MUser,
+  MUserAccount,
   MUserDefault,
   MUserNotifSettingAccount,
   MUserWithNotificationSetting,
@@ -32,14 +32,15 @@ class Notifier {
 
   private static instance: Notifier
 
-  private constructor () {}
+  private constructor () {
+  }
 
   notifyOnNewVideoIfNeeded (video: MVideoAccountLight): void {
     // Only notify on public and published videos which are not blacklisted
     if (video.privacy !== VideoPrivacy.PUBLIC || video.state !== VideoState.PUBLISHED || video.isBlacklisted()) return
 
     this.notifySubscribersOfNewVideo(video)
-      .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
+        .catch(err => logger.error('Cannot notify subscribers of new video %s.', video.url, { err }))
   }
 
   notifyOnVideoPublishedAfterTranscoding (video: MVideoFullLight): void {
@@ -63,7 +64,9 @@ class Notifier {
     if (video.ScheduleVideoUpdate || (video.waitTranscoding && video.state !== VideoState.PUBLISHED)) return
 
     this.notifyOwnedVideoHasBeenPublished(video)
-        .catch(err => logger.error('Cannot notify owner that its video %s has been published after removed from auto-blacklist.', video.url, { err })) // tslint:disable-line:max-line-length
+        .catch(err => {
+          logger.error('Cannot notify owner that its video %s has been published after removed from auto-blacklist.', video.url, { err })
+        })
   }
 
   notifyOnNewComment (comment: MCommentOwnerVideo): void {
@@ -76,17 +79,17 @@ class Notifier {
 
   notifyOnNewVideoAbuse (videoAbuse: MVideoAbuseVideo): void {
     this.notifyModeratorsOfNewVideoAbuse(videoAbuse)
-      .catch(err => logger.error('Cannot notify of new video abuse of video %s.', videoAbuse.Video.url, { err }))
+        .catch(err => logger.error('Cannot notify of new video abuse of video %s.', videoAbuse.Video.url, { err }))
   }
 
   notifyOnVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo): void {
     this.notifyModeratorsOfVideoAutoBlacklist(videoBlacklist)
-      .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', videoBlacklist.Video.url, { err }))
+        .catch(err => logger.error('Cannot notify of auto-blacklist of video %s.', videoBlacklist.Video.url, { err }))
   }
 
   notifyOnVideoBlacklist (videoBlacklist: MVideoBlacklistVideo): void {
     this.notifyVideoOwnerOfBlacklist(videoBlacklist)
-      .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
+        .catch(err => logger.error('Cannot notify video owner of new video blacklist of %s.', videoBlacklist.Video.url, { err }))
   }
 
   notifyOnVideoUnblacklist (video: MVideoFullLight): void {
@@ -96,7 +99,7 @@ class Notifier {
 
   notifyOnFinishedVideoImport (videoImport: MVideoImportVideo, success: boolean): void {
     this.notifyOwnerVideoImportIsFinished(videoImport, success)
-      .catch(err => logger.error('Cannot notify owner that its video import %s is finished.', videoImport.getTargetIdentifier(), { err }))
+        .catch(err => logger.error('Cannot notify owner that its video import %s is finished.', videoImport.getTargetIdentifier(), { err }))
   }
 
   notifyOnNewUserRegistration (user: MUserDefault): void {
@@ -106,14 +109,14 @@ class Notifier {
 
   notifyOfNewUserFollow (actorFollow: MActorFollowFull): void {
     this.notifyUserOfNewActorFollow(actorFollow)
-      .catch(err => {
-        logger.error(
-          'Cannot notify owner of channel %s of a new follow by %s.',
-          actorFollow.ActorFollowing.VideoChannel.getDisplayName(),
-          actorFollow.ActorFollower.Account.getDisplayName(),
-          { err }
-        )
-      })
+        .catch(err => {
+          logger.error(
+            'Cannot notify owner of channel %s of a new follow by %s.',
+            actorFollow.ActorFollowing.VideoChannel.getDisplayName(),
+            actorFollow.ActorFollower.Account.getDisplayName(),
+            { err }
+          )
+        })
   }
 
   notifyOfNewInstanceFollow (actorFollow: MActorFollowFull): void {
@@ -548,10 +551,10 @@ class Notifier {
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })
   }
 
-  private async notify <T extends MUserWithNotificationSetting> (options: {
-    users: T[],
-    notificationCreator: (user: T) => Promise<UserNotificationModelForApi>,
-    emailSender: (emails: string[]) => Promise<any> | Bluebird<any>,
+  private async notify<T extends MUserWithNotificationSetting> (options: {
+    users: T[]
+    notificationCreator: (user: T) => Promise<UserNotificationModelForApi>
+    emailSender: (emails: string[]) => void
     settingGetter: (user: T) => UserNotificationSettingValue
   }) {
     const emails: string[] = []
@@ -569,7 +572,7 @@ class Notifier {
     }
 
     if (emails.length !== 0) {
-      await options.emailSender(emails)
+      options.emailSender(emails)
     }
   }
 

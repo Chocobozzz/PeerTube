@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -38,7 +38,7 @@ describe('Test video change ownership - nominal', function () {
   }
   let firstUserAccessToken = ''
   let secondUserAccessToken = ''
-  let lastRequestChangeOwnershipId = undefined
+  let lastRequestChangeOwnershipId = ''
 
   before(async function () {
     this.timeout(50000)
@@ -48,15 +48,15 @@ describe('Test video change ownership - nominal', function () {
 
     const videoQuota = 42000000
     await createUser({
-      url: servers[ 0 ].url,
-      accessToken: servers[ 0 ].accessToken,
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
       username: firstUser.username,
       password: firstUser.password,
       videoQuota: videoQuota
     })
     await createUser({
-      url: servers[ 0 ].url,
-      accessToken: servers[ 0 ].accessToken,
+      url: servers[0].url,
+      accessToken: servers[0].accessToken,
       username: secondUser.username,
       password: secondUser.password,
       videoQuota: videoQuota
@@ -209,7 +209,7 @@ describe('Test video change ownership - nominal', function () {
 })
 
 describe('Test video change ownership - quota too small', function () {
-  let server: ServerInfo = undefined
+  let server: ServerInfo
   const firstUser = {
     username: 'first',
     password: 'My great password'
@@ -220,14 +220,14 @@ describe('Test video change ownership - quota too small', function () {
   }
   let firstUserAccessToken = ''
   let secondUserAccessToken = ''
-  let lastRequestChangeOwnershipId = undefined
+  let lastRequestChangeOwnershipId = ''
 
   before(async function () {
     this.timeout(50000)
 
     // Run one server
     server = await flushAndRunServer(1)
-    await setAccessTokensToServers([server])
+    await setAccessTokensToServers([ server ])
 
     const videoQuota = 42000000
     const limitedVideoQuota = 10

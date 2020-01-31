@@ -1,7 +1,7 @@
 import { QueryTypes, Sequelize } from 'sequelize'
 import { ServerInfo } from '../server/servers'
 
-let sequelizes: { [ id: number ]: Sequelize } = {}
+const sequelizes: { [ id: number ]: Sequelize } = {}
 
 function getSequelize (internalServerNumber: number) {
   if (sequelizes[internalServerNumber]) return sequelizes[internalServerNumber]
@@ -52,7 +52,8 @@ async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
   const seq = getSequelize(internalServerNumber)
 
   // tslint:disable
-  const query = `SELECT SUM("videoView"."views") AS "total" FROM "videoView" INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
+  const query = 'SELECT SUM("videoView"."views") AS "total" FROM "videoView" ' +
+    `INNER JOIN "video" ON "video"."id" = "videoView"."videoId" WHERE "video"."uuid" = '${uuid}'`
 
   const options = { type: QueryTypes.SELECT as QueryTypes.SELECT }
   const [ { total } ] = await seq.query<{ total: number }>(query, options)
@@ -64,9 +65,10 @@ async function countVideoViewsOf (internalServerNumber: number, uuid: string) {
 
 async function closeAllSequelize (servers: ServerInfo[]) {
   for (const server of servers) {
-    if (sequelizes[ server.internalServerNumber ]) {
-      await sequelizes[ server.internalServerNumber ].close()
-      delete sequelizes[ server.internalServerNumber ]
+    if (sequelizes[server.internalServerNumber]) {
+      await sequelizes[server.internalServerNumber].close()
+      // eslint-disable-next-line
+      delete sequelizes[server.internalServerNumber]
     }
   }
 }

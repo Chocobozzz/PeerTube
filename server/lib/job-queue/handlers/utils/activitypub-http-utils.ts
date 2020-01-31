@@ -42,7 +42,7 @@ async function buildSignedRequestOptions (payload: Payload) {
 
 function buildGlobalHeaders (body: any) {
   return {
-    'Digest': buildDigest(body)
+    Digest: buildDigest(body)
   }
 }
 

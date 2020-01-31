@@ -31,18 +31,23 @@ export type MActorLight = Omit<MActor, 'privateKey' | 'privateKey'>
 export type MActorHost = Use<'Server', MServerHost>
 export type MActorRedundancyAllowedOpt = PickWithOpt<ActorModel, 'Server', MServerRedundancyAllowed>
 
-export type MActorDefaultLight = MActorLight &
+export type MActorDefaultLight =
+  MActorLight &
   Use<'Server', MServerHost> &
   Use<'Avatar', MAvatar>
 
-export type MActorAccountId = MActor &
+export type MActorAccountId =
+  MActor &
   Use<'Account', MAccountId>
-export type MActorAccountIdActor = MActor &
+export type MActorAccountIdActor =
+  MActor &
   Use<'Account', MAccountIdActor>
 
-export type MActorChannelId = MActor &
+export type MActorChannelId =
+  MActor &
   Use<'VideoChannel', MChannelId>
-export type MActorChannelIdActor = MActor &
+export type MActorChannelIdActor =
+  MActor &
   Use<'VideoChannel', MChannelIdActor>
 
 export type MActorAccountChannelId = MActorAccountId & MActorChannelId
@@ -52,38 +57,45 @@ export type MActorAccountChannelIdActor = MActorAccountIdActor & MActorChannelId
 
 // Include raw account/channel/server
 
-export type MActorAccount = MActor &
+export type MActorAccount =
+  MActor &
   Use<'Account', MAccount>
 
-export type MActorChannel = MActor &
+export type MActorChannel =
+  MActor &
   Use<'VideoChannel', MChannel>
 
 export type MActorDefaultAccountChannel = MActorDefault & MActorAccount & MActorChannel
 
-export type MActorServer = MActor &
+export type MActorServer =
+  MActor &
   Use<'Server', MServer>
 
 // ############################################################################
 
 // Complex actor associations
 
-export type MActorDefault = MActor &
+export type MActorDefault =
+  MActor &
   Use<'Server', MServer> &
   Use<'Avatar', MAvatar>
 
 // Actor with channel that is associated to an account and its actor
 // Actor -> VideoChannel -> Account -> Actor
-export type MActorChannelAccountActor = MActor &
+export type MActorChannelAccountActor =
+  MActor &
   Use<'VideoChannel', MChannelAccountActor>
 
-export type MActorFull = MActor &
+export type MActorFull =
+  MActor &
   Use<'Server', MServer> &
   Use<'Avatar', MAvatar> &
   Use<'Account', MAccount> &
   Use<'VideoChannel', MChannelAccountActor>
 
 // Same than ActorFull, but the account and the channel have their actor
-export type MActorFullActor = MActor &
+export type MActorFullActor =
+  MActor &
   Use<'Server', MServer> &
   Use<'Avatar', MAvatar> &
   Use<'Account', MAccountDefault> &
@@ -93,29 +105,35 @@ export type MActorFullActor = MActor &
 
 // API
 
-export type MActorSummary = FunctionProperties<MActor> &
+export type MActorSummary =
+  FunctionProperties<MActor> &
   Pick<MActor, 'id' | 'preferredUsername' | 'url' | 'serverId' | 'avatarId'> &
   Use<'Server', MServerHost> &
   Use<'Avatar', MAvatar>
 
-export type MActorSummaryBlocks = MActorSummary &
+export type MActorSummaryBlocks =
+  MActorSummary &
   Use<'Server', MServerHostBlocks>
 
-export type MActorAPI = Omit<MActorDefault, 'publicKey' | 'privateKey' | 'inboxUrl' | 'outboxUrl' | 'sharedInboxUrl' |
+export type MActorAPI =
+  Omit<MActorDefault, 'publicKey' | 'privateKey' | 'inboxUrl' | 'outboxUrl' | 'sharedInboxUrl' |
   'followersUrl' | 'followingUrl' | 'url' | 'createdAt' | 'updatedAt'>
 
 // ############################################################################
 
 // Format for API or AP object
 
-export type MActorSummaryFormattable = FunctionProperties<MActor> &
+export type MActorSummaryFormattable =
+  FunctionProperties<MActor> &
   Pick<MActor, 'url' | 'preferredUsername'> &
   Use<'Server', MServerHost> &
   Use<'Avatar', MAvatarFormattable>
 
-export type MActorFormattable = MActorSummaryFormattable &
+export type MActorFormattable =
+  MActorSummaryFormattable &
   Pick<MActor, 'id' | 'followingCount' | 'followersCount' | 'createdAt' | 'updatedAt'> &
   Use<'Server', MServerHost & Partial<Pick<MServer, 'redundancyAllowed'>>>
 
-export type MActorAP = MActor &
+export type MActorAP =
+  MActor &
   Use<'Avatar', MAvatar>

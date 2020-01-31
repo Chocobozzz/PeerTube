@@ -31,7 +31,7 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
 
     logger.debug('Got result from PeerTube index.', { body })
 
-    await addInstanceInformation(body)
+    addInstanceInformation(body)
 
     return body as ResultList<PeerTubePluginIndex>
   } catch (err) {
@@ -40,7 +40,7 @@ async function listAvailablePluginsFromIndex (options: PeertubePluginIndexList) 
   }
 }
 
-async function addInstanceInformation (result: ResultList<PeerTubePluginIndex>) {
+function addInstanceInformation (result: ResultList<PeerTubePluginIndex>) {
   for (const d of result.data) {
     d.installed = PluginManager.Instance.isRegistered(d.npmName)
     d.name = PluginModel.normalizePluginName(d.npmName)

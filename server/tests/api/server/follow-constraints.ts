@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -35,11 +35,11 @@ describe('Test follow constraints', function () {
     await setAccessTokensToServers(servers)
 
     {
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, { name: 'video server 1' })
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video server 1' })
       video1UUID = res.body.video.uuid
     }
     {
-      const res = await uploadVideo(servers[ 1 ].url, servers[ 1 ].accessToken, { name: 'video server 2' })
+      const res = await uploadVideo(servers[1].url, servers[1].accessToken, { name: 'video server 2' })
       video2UUID = res.body.video.uuid
     }
 
@@ -47,7 +47,7 @@ describe('Test follow constraints', function () {
       username: 'user1',
       password: 'super_password'
     }
-    await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: user.username, password: user.password })
+    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
     userAccessToken = await userLogin(servers[0], user)
 
     await doubleFollow(servers[0], servers[1])

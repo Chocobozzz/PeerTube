@@ -8,12 +8,33 @@ import { ViewObject } from './objects/view-object'
 import { APObject } from './objects/object.model'
 import { PlaylistObject } from './objects/playlist-object'
 
-export type Activity = ActivityCreate | ActivityUpdate |
-  ActivityDelete | ActivityFollow | ActivityAccept | ActivityAnnounce |
-  ActivityUndo | ActivityLike | ActivityReject | ActivityView | ActivityDislike | ActivityFlag
+export type Activity =
+  ActivityCreate |
+  ActivityUpdate |
+  ActivityDelete |
+  ActivityFollow |
+  ActivityAccept |
+  ActivityAnnounce |
+  ActivityUndo |
+  ActivityLike |
+  ActivityReject |
+  ActivityView |
+  ActivityDislike |
+  ActivityFlag
 
-export type ActivityType = 'Create' | 'Update' | 'Delete' | 'Follow' | 'Accept' | 'Announce' | 'Undo' | 'Like' | 'Reject' |
-  'View' | 'Dislike' | 'Flag'
+export type ActivityType =
+  'Create' |
+  'Update' |
+  'Delete' |
+  'Follow' |
+  'Accept' |
+  'Announce' |
+  'Undo' |
+  'Like' |
+  'Reject' |
+  'View' |
+  'Dislike' |
+  'Flag'
 
 export interface ActivityAudience {
   to: string[]
@@ -66,17 +87,17 @@ export interface ActivityAnnounce extends BaseActivity {
 }
 
 export interface ActivityUndo extends BaseActivity {
-  type: 'Undo',
+  type: 'Undo'
   object: ActivityFollow | ActivityLike | ActivityDislike | ActivityCreate | ActivityAnnounce
 }
 
 export interface ActivityLike extends BaseActivity {
-  type: 'Like',
+  type: 'Like'
   object: APObject
 }
 
 export interface ActivityView extends BaseActivity {
-  type: 'View',
+  type: 'View'
   actor: string
   object: APObject
 }
@@ -89,7 +110,7 @@ export interface ActivityDislike extends BaseActivity {
 }
 
 export interface ActivityFlag extends BaseActivity {
-  type: 'Flag',
-  content: string,
+  type: 'Flag'
+  content: string
   object: APObject | APObject[]
 }

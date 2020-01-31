@@ -1,20 +1,22 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
 import {
+  cleanupTests,
+  closeAllSequelize,
+  countVideoViewsOf,
+  doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   killallServers,
   reRunServer,
-  flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  uploadVideo, uploadVideoAndGetId, viewVideo, wait, countVideoViewsOf, doubleFollow, waitJobs, cleanupTests, closeAllSequelize
+  uploadVideoAndGetId,
+  viewVideo,
+  wait,
+  waitJobs
 } from '../../../../shared/extra-utils'
-import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
-import { VideosOverview } from '../../../../shared/models/overviews'
-import { listMyVideosHistory } from '../../../../shared/extra-utils/videos/video-history'
 
 const expect = chai.expect
 

@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import { omit } from 'lodash'
@@ -243,7 +243,7 @@ describe('Test video channels API validator', function () {
     it('Should fail with an incorrect input file', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
+        avatarfile: join(__dirname, '..', '..', 'fixtures', 'video_short.mp4')
       }
       await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -251,7 +251,7 @@ describe('Test video channels API validator', function () {
     it('Should fail with a big file', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
       await makeUploadRequest({ url: server.url, path: path + '/avatar/pick', token: server.accessToken, fields, attaches })
     })
@@ -259,7 +259,7 @@ describe('Test video channels API validator', function () {
     it('Should fail with an unauthenticated user', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
       await makeUploadRequest({
         url: server.url,
@@ -273,7 +273,7 @@ describe('Test video channels API validator', function () {
     it('Should succeed with the correct params', async function () {
       const fields = {}
       const attaches = {
-        'avatarfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        avatarfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
       await makeUploadRequest({
         url: server.url,
@@ -324,7 +324,7 @@ describe('Test video channels API validator', function () {
     })
 
     it('Should fail with an unknown video channel id', async function () {
-      await deleteVideoChannel(server.url, server.accessToken,'super_channel2', 404)
+      await deleteVideoChannel(server.url, server.accessToken, 'super_channel2', 404)
     })
 
     it('Should succeed with the correct parameters', async function () {

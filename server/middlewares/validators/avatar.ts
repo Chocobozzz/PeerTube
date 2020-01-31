@@ -8,8 +8,8 @@ import { cleanUpReqFiles } from '../../helpers/express-utils'
 
 const updateAvatarValidator = [
   body('avatarfile').custom((value, { req }) => isAvatarFile(req.files)).withMessage(
-    'This file is not supported or too large. Please, make sure it is of the following type : '
-    + CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME.join(', ')
+    'This file is not supported or too large. Please, make sure it is of the following type : ' +
+    CONSTRAINTS_FIELDS.ACTORS.AVATAR.EXTNAME.join(', ')
   ),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {

@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 import { UserNotification, UserNotificationSetting, UserNotificationType } from '../../models/users'
@@ -54,6 +54,7 @@ function markAsReadNotifications (url: string, token: string, ids: number[], sta
     statusCodeExpected
   })
 }
+
 function markAsReadAllNotifications (url: string, token: string, statusCodeExpected = 204) {
   const path = '/api/v1/users/me/notifications/read-all'
 
@@ -77,7 +78,7 @@ type CheckerBaseParams = {
   server: ServerInfo
   emails: object[]
   socketNotifications: UserNotification[]
-  token: string,
+  token: string
   check?: { web: boolean, mail: boolean }
 }
 
@@ -172,7 +173,7 @@ async function checkNewVideoFromSubscription (base: CheckerBaseParams, videoName
   }
 
   function emailFinder (email: object) {
-    const text = email[ 'text' ]
+    const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf('Your subscription') !== -1
   }
 
@@ -195,7 +196,7 @@ async function checkVideoIsPublished (base: CheckerBaseParams, videoName: string
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
     return text.includes(videoUUID) && text.includes('Your video')
   }
 
@@ -226,7 +227,7 @@ async function checkMyVideoImportIsFinished (
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
     const toFind = success ? ' finished' : ' error'
 
     return text.includes(url) && text.includes(toFind)
@@ -251,7 +252,7 @@ async function checkUserRegistered (base: CheckerBaseParams, username: string, t
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
 
     return text.includes(' registered ') && text.includes(username)
   }
@@ -291,7 +292,7 @@ async function checkNewActorFollow (
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
 
     return text.includes('Your ' + followType) && text.includes(followingDisplayName) && text.includes(followerDisplayName)
   }
@@ -320,7 +321,7 @@ async function checkNewInstanceFollower (base: CheckerBaseParams, followerHost: 
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
 
     return text.includes('instance has a new follower') && text.includes(followerHost)
   }
@@ -351,7 +352,7 @@ async function checkAutoInstanceFollowing (base: CheckerBaseParams, followerHost
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
 
     return text.includes(' automatically followed a new instance') && text.includes(followingHost)
   }
@@ -385,7 +386,7 @@ async function checkCommentMention (
   }
 
   function emailFinder (email: object) {
-    const text: string = email[ 'text' ]
+    const text: string = email['text']
 
     return text.includes(' mentioned ') && text.includes(uuid) && text.includes(byAccountDisplayName)
   }
@@ -394,6 +395,7 @@ async function checkCommentMention (
 }
 
 let lastEmailCount = 0
+
 async function checkNewCommentOnMyVideo (base: CheckerBaseParams, uuid: string, commentId: number, threadId: number, type: CheckerType) {
   const notificationType = UserNotificationType.NEW_COMMENT_ON_MY_VIDEO
 
@@ -413,8 +415,9 @@ async function checkNewCommentOnMyVideo (base: CheckerBaseParams, uuid: string, 
   }
 
   const commentUrl = `http://localhost:${base.server.port}/videos/watch/${uuid};threadId=${threadId}`
+
   function emailFinder (email: object) {
-    return email[ 'text' ].indexOf(commentUrl) !== -1
+    return email['text'].indexOf(commentUrl) !== -1
   }
 
   await checkNotification(base, notificationChecker, emailFinder, type)
@@ -444,7 +447,7 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
   }
 
   function emailFinder (email: object) {
-    const text = email[ 'text' ]
+    const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf('abuse') !== -1
   }
 
@@ -469,8 +472,8 @@ async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, vi
   }
 
   function emailFinder (email: object) {
-    const text = email[ 'text' ]
-    return text.indexOf(videoUUID) !== -1 && email[ 'text' ].indexOf('video-auto-blacklist/list') !== -1
+    const text = email['text']
+    return text.indexOf(videoUUID) !== -1 && email['text'].indexOf('video-auto-blacklist/list') !== -1
   }
 
   await checkNotification(base, notificationChecker, emailFinder, type)
@@ -496,7 +499,7 @@ async function checkNewBlacklistOnMyVideo (
   }
 
   function emailFinder (email: object) {
-    const text = email[ 'text' ]
+    const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf(' ' + blacklistType) !== -1
   }
 

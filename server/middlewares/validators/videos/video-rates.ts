@@ -51,7 +51,7 @@ const getAccountVideoRateValidatorFactory = function (rateType: VideoRateType) {
 const videoRatingValidator = [
   query('rating').optional().custom(isRatingValid).withMessage('Value must be one of "like" or "dislike"'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking rating parameter', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return

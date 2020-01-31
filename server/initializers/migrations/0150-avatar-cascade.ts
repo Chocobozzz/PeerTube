@@ -1,8 +1,8 @@
 import * as Sequelize from 'sequelize'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
   await utils.queryInterface.removeConstraint('actor', 'actor_avatarId_fkey')

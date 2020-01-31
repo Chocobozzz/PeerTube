@@ -30,7 +30,7 @@ import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttr
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { FindOptions, ModelIndexesOptions, Op } from 'sequelize'
+import { FindOptions, Op } from 'sequelize'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from './video-playlist'
 import * as Bluebird from 'bluebird'
@@ -121,7 +121,7 @@ export type SummaryOptions = {
               },
               {
                 serverId: {
-                  [ Op.in ]: Sequelize.literal(inQueryInstanceFollow)
+                  [Op.in]: Sequelize.literal(inQueryInstanceFollow)
                 }
               }
             ]
@@ -348,9 +348,9 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   static listByAccount (options: {
-    accountId: number,
-    start: number,
-    count: number,
+    accountId: number
+    start: number
+    count: number
     sort: string
   }) {
     const query = {

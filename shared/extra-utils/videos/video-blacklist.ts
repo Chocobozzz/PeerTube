@@ -13,11 +13,11 @@ function addVideoToBlacklist (
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)
-          .post(path)
-          .send({ reason, unfederate })
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .expect(specialStatus)
+    .post(path)
+    .send({ reason, unfederate })
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + token)
+    .expect(specialStatus)
 }
 
 function updateVideoBlacklist (url: string, token: string, videoId: number, reason?: string, specialStatus = 204) {
@@ -35,20 +35,20 @@ function removeVideoFromBlacklist (url: string, token: string, videoId: number |
   const path = '/api/v1/videos/' + videoId + '/blacklist'
 
   return request(url)
-          .delete(path)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .expect(specialStatus)
+    .delete(path)
+    .set('Accept', 'application/json')
+    .set('Authorization', 'Bearer ' + token)
+    .expect(specialStatus)
 }
 
 function getBlacklistedVideosList (parameters: {
-  url: string,
-  token: string,
-  sort?: string,
-  type?: VideoBlacklistType,
+  url: string
+  token: string
+  sort?: string
+  type?: VideoBlacklistType
   specialStatus?: number
 }) {
-  let { url, token, sort, type, specialStatus = 200 } = parameters
+  const { url, token, sort, type, specialStatus = 200 } = parameters
   const path = '/api/v1/videos/blacklist/'
 
   const query = { sort, type }

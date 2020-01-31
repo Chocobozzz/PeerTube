@@ -1,15 +1,14 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 
 import {
+  cleanupTests,
   createUser,
-  flushTests,
-  killallServers,
   flushAndRunServer,
   ServerInfo,
   setAccessTokensToServers,
-  userLogin, cleanupTests
+  userLogin
 } from '../../../../shared/extra-utils'
 import { makeGetRequest } from '../../../../shared/extra-utils/requests/requests'
 

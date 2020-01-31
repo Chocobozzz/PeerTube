@@ -1,6 +1,6 @@
 export interface ActivityPubSignature {
-  type: 'GraphSignature2012'
-  created: Date,
+  type: string
+  created: Date
   creator: string
   signatureValue: string
 }

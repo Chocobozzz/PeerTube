@@ -9,7 +9,8 @@ type Use<K extends keyof VideoChangeOwnershipModel, M> = PickWith<VideoChangeOwn
 
 export type MVideoChangeOwnership = Omit<VideoChangeOwnershipModel, 'Initiator' | 'NextOwner' | 'Video'>
 
-export type MVideoChangeOwnershipFull = MVideoChangeOwnership &
+export type MVideoChangeOwnershipFull =
+  MVideoChangeOwnership &
   Use<'Initiator', MAccountDefault> &
   Use<'NextOwner', MAccountDefault> &
   Use<'Video', MVideoWithAllFiles>
@@ -18,7 +19,8 @@ export type MVideoChangeOwnershipFull = MVideoChangeOwnership &
 
 // Format for API or AP object
 
-export type MVideoChangeOwnershipFormattable = Pick<MVideoChangeOwnership, 'id' | 'status' | 'createdAt'> &
+export type MVideoChangeOwnershipFormattable =
+  Pick<MVideoChangeOwnership, 'id' | 'status' | 'createdAt'> &
   Use<'Initiator', MAccountFormattable> &
   Use<'NextOwner', MAccountFormattable> &
   Use<'Video', Pick<MVideo, 'id' | 'uuid' | 'url' | 'name'>>

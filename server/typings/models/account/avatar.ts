@@ -7,5 +7,6 @@ export type MAvatar = AvatarModel
 
 // Format for API or AP object
 
-export type MAvatarFormattable = FunctionProperties<MAvatar> &
+export type MAvatarFormattable =
+  FunctionProperties<MAvatar> &
   Pick<MAvatar, 'filename' | 'createdAt' | 'updatedAt'>

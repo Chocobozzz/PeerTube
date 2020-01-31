@@ -17,7 +17,7 @@ import { MAccountActor, MChannelActor, MVideo } from '../typings/models'
 
 export class ClientHtml {
 
-  private static htmlCache: { [ path: string ]: string } = {}
+  private static htmlCache: { [path: string]: string } = {}
 
   static invalidCache () {
     logger.info('Cleaning HTML cache.')
@@ -94,7 +94,7 @@ export class ClientHtml {
 
   private static async getIndexHTML (req: express.Request, res: express.Response, paramLang?: string) {
     const path = ClientHtml.getIndexPath(req, res, paramLang)
-    if (ClientHtml.htmlCache[ path ]) return ClientHtml.htmlCache[ path ]
+    if (ClientHtml.htmlCache[path]) return ClientHtml.htmlCache[path]
 
     const buffer = await readFile(path)
 
@@ -104,7 +104,7 @@ export class ClientHtml {
     html = ClientHtml.addCustomCSS(html)
     html = await ClientHtml.addAsyncPluginCSS(html)
 
-    ClientHtml.htmlCache[ path ] = html
+    ClientHtml.htmlCache[path] = html
 
     return html
   }
@@ -214,21 +214,21 @@ export class ClientHtml {
     const schemaTags = {
       '@context': 'http://schema.org',
       '@type': 'VideoObject',
-      name: videoNameEscaped,
-      description: videoDescriptionEscaped,
-      thumbnailUrl: previewUrl,
-      uploadDate: video.createdAt.toISOString(),
-      duration: getActivityStreamDuration(video.duration),
-      contentUrl: videoUrl,
-      embedUrl: embedUrl,
-      interactionCount: video.views
+      'name': videoNameEscaped,
+      'description': videoDescriptionEscaped,
+      'thumbnailUrl': previewUrl,
+      'uploadDate': video.createdAt.toISOString(),
+      'duration': getActivityStreamDuration(video.duration),
+      'contentUrl': videoUrl,
+      'embedUrl': embedUrl,
+      'interactionCount': video.views
     }
 
     let tagsString = ''
 
     // Opengraph
     Object.keys(openGraphMetaTags).forEach(tagName => {
-      const tagValue = openGraphMetaTags[ tagName ]
+      const tagValue = openGraphMetaTags[tagName]
 
       tagsString += `<meta property="${tagName}" content="${tagValue}" />`
     })

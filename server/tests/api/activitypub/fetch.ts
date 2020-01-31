@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 
@@ -8,9 +8,7 @@ import {
   createUser,
   doubleFollow,
   flushAndRunMultipleServers,
-  flushTests,
   getVideosListSort,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   setActorField,

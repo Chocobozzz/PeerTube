@@ -43,7 +43,7 @@ export enum ScopeNames {
 }
 
 @Scopes(() => ({
-  [ ScopeNames.WITH_VIDEO ]: {
+  [ScopeNames.WITH_VIDEO]: {
     include: [
       {
         model: VideoFileModel,
@@ -167,7 +167,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       logger.info('Removing duplicated video streaming playlist %s.', videoUUID)
 
       videoStreamingPlaylist.Video.removeStreamingPlaylistFiles(videoStreamingPlaylist, true)
-               .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
+                            .catch(err => logger.error('Cannot delete video streaming playlist files of %s.', videoUUID, { err }))
     }
 
     return undefined
@@ -230,12 +230,12 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       },
       include: [
         {
-          attributes: [ ],
+          attributes: [],
           model: VideoFileModel,
           required: true,
           include: [
             {
-              attributes: [ ],
+              attributes: [],
               model: VideoModel,
               required: true,
               where: {
@@ -248,7 +248,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
 
     return VideoRedundancyModel.findOne(query)
-      .then(r => !!r)
+                               .then(r => !!r)
   }
 
   static async getVideoSample (p: Bluebird<VideoModel[]>) {
@@ -310,7 +310,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       where: {
         privacy: VideoPrivacy.PUBLIC,
         views: {
-          [ Op.gte ]: minViews
+          [Op.gte]: minViews
         }
       },
       include: [
@@ -333,7 +333,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
         actorId: actor.id,
         strategy,
         createdAt: {
-          [ Op.lt ]: expiredDate
+          [Op.lt]: expiredDate
         }
       }
     }
@@ -392,7 +392,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       where: {
         actorId: actor.id,
         expiresOn: {
-          [ Op.lt ]: new Date()
+          [Op.lt]: new Date()
         }
       }
     }
@@ -409,8 +409,8 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
           [Op.ne]: actor.id
         },
         expiresOn: {
-          [ Op.lt ]: new Date(),
-          [ Op.ne ]: null
+          [Op.lt]: new Date(),
+          [Op.ne]: null
         }
       }
     }
@@ -464,15 +464,15 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
   }
 
   static listForApi (options: {
-    start: number,
-    count: number,
-    sort: string,
-    target: VideoRedundanciesTarget,
+    start: number
+    count: number
+    sort: string
+    target: VideoRedundanciesTarget
     strategy?: string
   }) {
     const { start, count, sort, target, strategy } = options
-    let redundancyWhere: WhereOptions = {}
-    let videosWhere: WhereOptions = {}
+    const redundancyWhere: WhereOptions = {}
+    const videosWhere: WhereOptions = {}
     let redundancySqlSuffix = ''
 
     if (target === 'my-videos') {
@@ -490,10 +490,10 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     const videoFilterWhere = {
       [Op.and]: [
         {
-          [ Op.or ]: [
+          [Op.or]: [
             {
               id: {
-                [ Op.in ]: literal(
+                [Op.in]: literal(
                   '(' +
                   'SELECT "videoId" FROM "videoFile" ' +
                   'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoFileId" = "videoFile".id' +
@@ -504,7 +504,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
             },
             {
               id: {
-                [ Op.in ]: literal(
+                [Op.in]: literal(
                   '(' +
                   'select "videoId" FROM "videoStreamingPlaylist" ' +
                   'INNER JOIN "videoRedundancy" ON "videoRedundancy"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id' +
@@ -592,16 +592,16 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
     }
 
     return VideoRedundancyModel.findOne(query)
-      .then((r: any) => ({
-        totalUsed: parseAggregateResult(r.totalUsed),
-        totalVideos: r.totalVideos,
-        totalVideoFiles: r.totalVideoFiles
-      }))
+                               .then((r: any) => ({
+                                 totalUsed: parseAggregateResult(r.totalUsed),
+                                 totalVideos: r.totalVideos,
+                                 totalVideoFiles: r.totalVideoFiles
+                               }))
   }
 
   static toFormattedJSONStatic (video: MVideoForRedundancyAPI): VideoRedundancy {
-    let filesRedundancies: FileRedundancyInformation[] = []
-    let streamingPlaylistsRedundancies: StreamingPlaylistRedundancyInformation[] = []
+    const filesRedundancies: FileRedundancyInformation[] = []
+    const streamingPlaylistsRedundancies: StreamingPlaylistRedundancyInformation[] = []
 
     for (const file of video.VideoFiles) {
       for (const redundancy of file.RedundancyVideos) {
@@ -678,7 +678,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       expires: this.expiresOn ? this.expiresOn.toISOString() : null,
       url: {
         type: 'Link',
-        mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[ this.VideoFile.extname ] as any,
+        mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[this.VideoFile.extname] as any,
         href: this.fileUrl,
         height: this.VideoFile.resolution,
         size: this.VideoFile.size,
@@ -693,7 +693,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
     const notIn = literal(
       '(' +
-        `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "videoFileId" IS NOT NULL` +
+      `SELECT "videoFileId" FROM "videoRedundancy" WHERE "actorId" = ${actor.id} AND "videoFileId" IS NOT NULL` +
       ')'
     )
 
@@ -703,7 +703,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       required: true,
       where: {
         id: {
-          [ Op.notIn ]: notIn
+          [Op.notIn]: notIn
         }
       }
     }

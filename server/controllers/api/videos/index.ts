@@ -12,8 +12,7 @@ import {
   VIDEO_CATEGORIES,
   VIDEO_LANGUAGES,
   VIDEO_LICENCES,
-  VIDEO_PRIVACIES,
-  VIDEO_TRANSCODING_FPS
+  VIDEO_PRIVACIES
 } from '../../../initializers/constants'
 import {
   changeVideoChannelShare,
@@ -308,7 +307,7 @@ async function addVideo (req: express.Request, res: express.Response) {
       }
     }
 
-    await JobQueue.Instance.createJob({ type: 'video-transcoding', payload: dataInput })
+    await JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput })
   }
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })
@@ -453,7 +452,6 @@ async function getVideo (req: express.Request, res: express.Response) {
 
   if (video.isOutdated()) {
     JobQueue.Instance.createJob({ type: 'activitypub-refresher', payload: { type: 'video', url: video.url } })
-      .catch(err => logger.error('Cannot create AP refresher job for video %s.', video.url, { err }))
   }
 
   return res.json(video.toFormattedDetailsJSON())

@@ -1,7 +1,7 @@
 import * as express from 'express'
 
 export class MockInstancesIndex {
-  private indexInstances: { host: string, createdAt: string }[] = []
+  private readonly indexInstances: { host: string, createdAt: string }[] = []
 
   initialize () {
     return new Promise(res => {

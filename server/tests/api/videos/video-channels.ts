@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -7,7 +7,8 @@ import {
   cleanupTests,
   createUser,
   doubleFollow,
-  flushAndRunMultipleServers, getVideo,
+  flushAndRunMultipleServers,
+  getVideo,
   getVideoChannelVideos,
   testImage,
   updateVideo,
@@ -73,14 +74,14 @@ describe('Test video channels', function () {
         description: 'super video channel description',
         support: 'super video channel support text'
       }
-      const res = await addVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, videoChannel)
+      const res = await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
       secondVideoChannelId = res.body.videoChannel.id
     }
 
     // The channel is 1 is propagated to servers 2
     {
       const videoAttributesArg = { name: 'my video name', channelId: secondVideoChannelId, support: 'video support field' }
-      const res = await uploadVideo(servers[ 0 ].url, servers[ 0 ].accessToken, videoAttributesArg)
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributesArg)
       videoUUID = res.body.video.uuid
     }
 
@@ -106,7 +107,7 @@ describe('Test video channels', function () {
 
   it('Should have two video channels when getting account channels on server 1', async function () {
     const res = await getAccountVideoChannelsList({
-      url: servers[ 0 ].url,
+      url: servers[0].url,
       accountName: userInfo.account.name + '@' + userInfo.account.host
     })
 
@@ -127,7 +128,7 @@ describe('Test video channels', function () {
   it('Should paginate and sort account channels', async function () {
     {
       const res = await getAccountVideoChannelsList({
-        url: servers[ 0 ].url,
+        url: servers[0].url,
         accountName: userInfo.account.name + '@' + userInfo.account.host,
         start: 0,
         count: 1,
@@ -137,13 +138,13 @@ describe('Test video channels', function () {
       expect(res.body.total).to.equal(2)
       expect(res.body.data).to.have.lengthOf(1)
 
-      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      const videoChannel: VideoChannel = res.body.data[0]
       expect(videoChannel.name).to.equal('root_channel')
     }
 
     {
       const res = await getAccountVideoChannelsList({
-        url: servers[ 0 ].url,
+        url: servers[0].url,
         accountName: userInfo.account.name + '@' + userInfo.account.host,
         start: 0,
         count: 1,
@@ -153,13 +154,13 @@ describe('Test video channels', function () {
       expect(res.body.total).to.equal(2)
       expect(res.body.data).to.have.lengthOf(1)
 
-      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      const videoChannel: VideoChannel = res.body.data[0]
       expect(videoChannel.name).to.equal('second_video_channel')
     }
 
     {
       const res = await getAccountVideoChannelsList({
-        url: servers[ 0 ].url,
+        url: servers[0].url,
         accountName: userInfo.account.name + '@' + userInfo.account.host,
         start: 1,
         count: 1,
@@ -169,14 +170,14 @@ describe('Test video channels', function () {
       expect(res.body.total).to.equal(2)
       expect(res.body.data).to.have.lengthOf(1)
 
-      const videoChannel: VideoChannel = res.body.data[ 0 ]
+      const videoChannel: VideoChannel = res.body.data[0]
       expect(videoChannel.name).to.equal('root_channel')
     }
   })
 
   it('Should have one video channel when getting account channels on server 2', async function () {
     const res = await getAccountVideoChannelsList({
-      url: servers[ 1 ].url,
+      url: servers[1].url,
       accountName: userInfo.account.name + '@' + userInfo.account.host
     })
 
@@ -349,15 +350,15 @@ describe('Test video channels', function () {
   it('Should create the main channel with an uuid if there is a conflict', async function () {
     {
       const videoChannel = { name: 'toto_channel', displayName: 'My toto channel' }
-      await addVideoChannel(servers[ 0 ].url, servers[ 0 ].accessToken, videoChannel)
+      await addVideoChannel(servers[0].url, servers[0].accessToken, videoChannel)
     }
 
     {
-      await createUser({ url: servers[ 0 ].url, accessToken: servers[ 0 ].accessToken, username: 'toto', password: 'password' })
-      const accessToken = await userLogin(servers[ 0 ], { username: 'toto', password: 'password' })
+      await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: 'toto', password: 'password' })
+      const accessToken = await userLogin(servers[0], { username: 'toto', password: 'password' })
 
-      const res = await getMyUserInformation(servers[ 0 ].url, accessToken)
-      const videoChannel = res.body.videoChannels[ 0 ]
+      const res = await getMyUserInformation(servers[0].url, accessToken)
+      const videoChannel = res.body.videoChannels[0]
       expect(videoChannel.name).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
     }
   })

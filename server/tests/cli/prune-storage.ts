@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
 import * as chai from 'chai'
@@ -11,9 +11,11 @@ import {
   execCLI,
   flushAndRunMultipleServers,
   getAccount,
-  getEnvCli, makeGetRequest, makeRawRequest,
+  getEnvCli,
+  makeGetRequest,
   ServerInfo,
-  setAccessTokensToServers, setDefaultVideoChannel,
+  setAccessTokensToServers,
+  setDefaultVideoChannel,
   updateMyAvatar,
   uploadVideo,
   wait
@@ -22,7 +24,6 @@ import { Account, VideoPlaylistPrivacy } from '../../../shared/models'
 import { createFile, readdir } from 'fs-extra'
 import * as uuidv4 from 'uuid/v4'
 import { join } from 'path'
-import * as request from 'supertest'
 
 const expect = chai.expect
 
@@ -61,7 +62,7 @@ async function assertCountAreOkay (servers: ServerInfo[]) {
 
 describe('Test prune storage scripts', function () {
   let servers: ServerInfo[]
-  const badNames: { [ directory: string ]: string[] } = {}
+  const badNames: { [directory: string]: string[] } = {}
 
   before(async function () {
     this.timeout(120000)
@@ -92,20 +93,20 @@ describe('Test prune storage scripts', function () {
 
     // Lazy load the remote avatar
     {
-      const res = await getAccount(servers[ 0 ].url, 'root@localhost:' + servers[ 1 ].port)
+      const res = await getAccount(servers[0].url, 'root@localhost:' + servers[1].port)
       const account: Account = res.body
       await makeGetRequest({
-        url: servers[ 0 ].url,
+        url: servers[0].url,
         path: account.avatar.path,
         statusCodeExpected: 200
       })
     }
 
     {
-      const res = await getAccount(servers[ 1 ].url, 'root@localhost:' + servers[ 0 ].port)
+      const res = await getAccount(servers[1].url, 'root@localhost:' + servers[0].port)
       const account: Account = res.body
       await makeGetRequest({
-        url: servers[ 1 ].url,
+        url: servers[1].url,
         path: account.avatar.path,
         statusCodeExpected: 200
       })

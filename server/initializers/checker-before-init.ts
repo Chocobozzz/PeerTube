@@ -35,8 +35,8 @@ function checkMissedConfig () {
   ]
   const requiredAlternatives = [
     [ // set
-      ['redis.hostname', 'redis.port'], // alternative
-      ['redis.socket']
+      [ 'redis.hostname', 'redis.port' ], // alternative
+      [ 'redis.socket' ]
     ]
   ]
   const miss: string[] = []

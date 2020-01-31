@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import { omit } from 'lodash'
 import 'mocha'
@@ -29,6 +29,7 @@ describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
   let server: ServerInfo
   let userAccessToken = ''
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let accountName: string
   let channelId: number
 
@@ -48,7 +49,7 @@ describe('Test video imports API validator', function () {
 
     {
       const res = await getMyUserInformation(server.url, server.accessToken)
-      channelId = res.body.videoChannels[ 0 ].id
+      channelId = res.body.videoChannels[0].id
       accountName = res.body.account.name + '@' + res.body.account.host
     }
   })
@@ -196,7 +197,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an incorrect thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -205,7 +206,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big thumbnail file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'thumbnailfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        thumbnailfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -214,7 +215,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an incorrect preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar.png')
+        previewfile: join(__dirname, '..', '..', 'fixtures', 'avatar.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -223,7 +224,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with a big preview file', async function () {
       const fields = baseCorrectParams
       const attaches = {
-        'previewfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        previewfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -232,7 +233,7 @@ describe('Test video imports API validator', function () {
     it('Should fail with an invalid torrent file', async function () {
       const fields = omit(baseCorrectParams, 'targetUrl')
       const attaches = {
-        'torrentfile': join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
+        torrentfile: join(__dirname, '..', '..', 'fixtures', 'avatar-big.png')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches })
@@ -303,7 +304,7 @@ describe('Test video imports API validator', function () {
 
       fields = omit(fields, 'magnetUri')
       const attaches = {
-        'torrentfile': join(__dirname, '..', '..', 'fixtures', 'video-720p.torrent')
+        torrentfile: join(__dirname, '..', '..', 'fixtures', 'video-720p.torrent')
       }
 
       await makeUploadRequest({ url: server.url, path, token: server.accessToken, fields, attaches, statusCodeExpected: 409 })

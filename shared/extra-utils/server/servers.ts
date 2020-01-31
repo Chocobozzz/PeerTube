@@ -1,16 +1,15 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/no-floating-promises */
 
 import { ChildProcess, exec, fork } from 'child_process'
 import { join } from 'path'
 import { root, wait } from '../miscs/miscs'
 import { copy, pathExists, readdir, readFile, remove } from 'fs-extra'
-import { existsSync } from 'fs'
 import { expect } from 'chai'
 import { VideoChannel } from '../../models/videos'
 import { randomInt } from '../../core-utils/miscs/miscs'
 
 interface ServerInfo {
-  app: ChildProcess,
+  app: ChildProcess
   url: string
   host: string
 
@@ -20,13 +19,13 @@ interface ServerInfo {
   serverNumber: number
 
   client: {
-    id: string,
+    id: string
     secret: string
   }
 
   user: {
-    username: string,
-    password: string,
+    username: string
+    password: string
     email?: string
   }
 
@@ -57,7 +56,7 @@ function parallelTests () {
 }
 
 function flushAndRunMultipleServers (totalServers: number, configOverride?: Object) {
-  let apps = []
+  const apps = []
   let i = 0
 
   return new Promise<ServerInfo[]>(res => {
@@ -203,20 +202,20 @@ async function runServer (server: ServerInfo, configOverrideArg?: any, args = []
 
       // Capture things if we want to
       for (const key of Object.keys(regexps)) {
-        const regexp = regexps[ key ]
+        const regexp = regexps[key]
         const matches = data.toString().match(regexp)
         if (matches !== null) {
-          if (key === 'client_id') server.client.id = matches[ 1 ]
-          else if (key === 'client_secret') server.client.secret = matches[ 1 ]
-          else if (key === 'user_username') server.user.username = matches[ 1 ]
-          else if (key === 'user_password') server.user.password = matches[ 1 ]
+          if (key === 'client_id') server.client.id = matches[1]
+          else if (key === 'client_secret') server.client.secret = matches[1]
+          else if (key === 'user_username') server.user.username = matches[1]
+          else if (key === 'user_password') server.user.password = matches[1]
         }
       }
 
       // Check if all required sentences are here
       for (const key of Object.keys(serverRunString)) {
-        if (data.toString().indexOf(key) !== -1) serverRunString[ key ] = true
-        if (serverRunString[ key ] === false) dontContinue = true
+        if (data.toString().indexOf(key) !== -1) serverRunString[key] = true
+        if (serverRunString[key] === false) dontContinue = true
       }
 
       // If no, there is maybe one thing not already initialized (client/user credentials generation...)

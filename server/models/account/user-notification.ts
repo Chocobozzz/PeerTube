@@ -379,7 +379,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
 
   toFormattedJSON (this: UserNotificationModelForApi): UserNotification {
     const video = this.Video
-      ? Object.assign(this.formatVideo(this.Video),{ channel: this.formatActor(this.Video.VideoChannel) })
+      ? Object.assign(this.formatVideo(this.Video), { channel: this.formatActor(this.Video.VideoChannel) })
       : undefined
 
     const videoImport = this.VideoImport ? {

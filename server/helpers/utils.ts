@@ -1,6 +1,6 @@
 import { ResultList } from '../../shared'
 import { ApplicationModel } from '../models/application/application'
-import { execPromise, execPromise2, pseudoRandomBytesPromise, sha256 } from './core-utils'
+import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
@@ -14,7 +14,7 @@ function deleteFileAsync (path: string) {
 }
 
 async function generateRandomString (size: number) {
-  const raw = await pseudoRandomBytesPromise(size)
+  const raw = await randomBytesPromise(size)
 
   return raw.toString('hex')
 }

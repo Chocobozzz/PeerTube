@@ -1,9 +1,11 @@
+/* eslint-disable no-useless-call */
+
 /*
   Different from 'utils' because we don't not import other PeerTube modules.
   Useful to avoid circular dependencies.
 */
 
-import { createHash, HexBase64Latin1Encoding, pseudoRandomBytes } from 'crypto'
+import { createHash, HexBase64Latin1Encoding, randomBytes } from 'crypto'
 import { basename, isAbsolute, join, resolve } from 'path'
 import * as pem from 'pem'
 import { URL } from 'url'
@@ -22,31 +24,31 @@ const objectConverter = (oldObject: any, keyConverter: (e: string) => string, va
   const newObject = {}
   Object.keys(oldObject).forEach(oldKey => {
     const newKey = keyConverter(oldKey)
-    newObject[ newKey ] = objectConverter(oldObject[ oldKey ], keyConverter, valueConverter)
+    newObject[newKey] = objectConverter(oldObject[oldKey], keyConverter, valueConverter)
   })
 
   return newObject
 }
 
 const timeTable = {
-  ms:           1,
-  second:       1000,
-  minute:       60000,
-  hour:         3600000,
-  day:          3600000 * 24,
-  week:         3600000 * 24 * 7,
-  month:        3600000 * 24 * 30
+  ms: 1,
+  second: 1000,
+  minute: 60000,
+  hour: 3600000,
+  day: 3600000 * 24,
+  week: 3600000 * 24 * 7,
+  month: 3600000 * 24 * 30
 }
 
 export function parseDurationToMs (duration: number | string): number {
   if (typeof duration === 'number') return duration
 
   if (typeof duration === 'string') {
-    const split = duration.match(/^([\d\.,]+)\s?(\w+)$/)
+    const split = duration.match(/^([\d.,]+)\s?(\w+)$/)
 
     if (split.length === 3) {
       const len = parseFloat(split[1])
-      let unit = split[2].replace(/s$/i,'').toLowerCase()
+      let unit = split[2].replace(/s$/i, '').toLowerCase()
       if (unit === 'm') {
         unit = 'ms'
       }
@@ -73,21 +75,21 @@ export function parseBytes (value: string | number): number {
 
   if (value.match(tgm)) {
     match = value.match(tgm)
-    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
-    + parseInt(match[2], 10) * 1024 * 1024 * 1024
-    + parseInt(match[3], 10) * 1024 * 1024
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024 +
+      parseInt(match[2], 10) * 1024 * 1024 * 1024 +
+      parseInt(match[3], 10) * 1024 * 1024
   } else if (value.match(tg)) {
     match = value.match(tg)
-    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
-    + parseInt(match[2], 10) * 1024 * 1024 * 1024
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024 +
+      parseInt(match[2], 10) * 1024 * 1024 * 1024
   } else if (value.match(tm)) {
     match = value.match(tm)
-    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
-    + parseInt(match[2], 10) * 1024 * 1024
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024 +
+      parseInt(match[2], 10) * 1024 * 1024
   } else if (value.match(gm)) {
     match = value.match(gm)
-    return parseInt(match[1], 10) * 1024 * 1024 * 1024
-    + parseInt(match[2], 10) * 1024 * 1024
+    return parseInt(match[1], 10) * 1024 * 1024 * 1024 +
+      parseInt(match[2], 10) * 1024 * 1024
   } else if (value.match(t)) {
     match = value.match(t)
     return parseInt(match[1], 10) * 1024 * 1024 * 1024 * 1024
@@ -137,6 +139,7 @@ function getAppNumber () {
 }
 
 let rootPath: string
+
 function root () {
   if (rootPath) return rootPath
 
@@ -163,7 +166,7 @@ function escapeHTML (stringParam) {
     '=': '&#x3D;'
   }
 
-  return String(stringParam).replace(/[&<>"'`=\/]/g, s => entityMap[s])
+  return String(stringParam).replace(/[&<>"'`=/]/g, s => entityMap[s])
 }
 
 function pageToStartAndCount (page: number, itemsPerPage: number) {
@@ -202,6 +205,7 @@ function sha1 (str: string | Buffer, encoding: HexBase64Latin1Encoding = 'hex') 
 function execShell (command: string, options?: ExecOptions) {
   return new Promise<{ err?: Error, stdout: string, stderr: string }>((res, rej) => {
     exec(command, options, (err, stdout, stderr) => {
+      // eslint-disable-next-line prefer-promise-reject-errors
       if (err) return rej({ err, stdout, stderr })
 
       return res({ stdout, stderr })
@@ -226,14 +230,6 @@ function promisify1<T, A> (func: (arg: T, cb: (err: any, result: A) => void) => 
   }
 }
 
-function promisify1WithVoid<T> (func: (arg: T, cb: (err: any) => void) => void): (arg: T) => Promise<void> {
-  return function promisified (arg: T): Promise<void> {
-    return new Promise<void>((resolve: () => void, reject: (err: any) => void) => {
-      func.apply(null, [ arg, (err: any) => err ? reject(err) : resolve() ])
-    })
-  }
-}
-
 function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A) => void) => void): (arg1: T, arg2: U) => Promise<A> {
   return function promisified (arg1: T, arg2: U): Promise<A> {
     return new Promise<A>((resolve: (arg: A) => void, reject: (err: any) => void) => {
@@ -242,15 +238,7 @@ function promisify2<T, U, A> (func: (arg1: T, arg2: U, cb: (err: any, result: A)
   }
 }
 
-function promisify2WithVoid<T, U> (func: (arg1: T, arg2: U, cb: (err: any) => void) => void): (arg1: T, arg2: U) => Promise<void> {
-  return function promisified (arg1: T, arg2: U): Promise<void> {
-    return new Promise<void>((resolve: () => void, reject: (err: any) => void) => {
-      func.apply(null, [ arg1, arg2, (err: any) => err ? reject(err) : resolve() ])
-    })
-  }
-}
-
-const pseudoRandomBytesPromise = promisify1<number, Buffer>(pseudoRandomBytes)
+const randomBytesPromise = promisify1<number, Buffer>(randomBytes)
 const createPrivateKey = promisify1<number, { key: string }>(pem.createPrivateKey)
 const getPublicKey = promisify1<string, { publicKey: string }>(pem.getPublicKey)
 const execPromise2 = promisify2<string, any, string>(exec)
@@ -280,7 +268,7 @@ export {
   promisify1,
   promisify2,
 
-  pseudoRandomBytesPromise,
+  randomBytesPromise,
   createPrivateKey,
   getPublicKey,
   execPromise2,

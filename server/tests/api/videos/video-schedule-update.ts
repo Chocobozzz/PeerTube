@@ -1,4 +1,4 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import * as chai from 'chai'
 import 'mocha'
@@ -10,7 +10,6 @@ import {
   getMyVideos,
   getVideosList,
   getVideoWithToken,
-  killallServers,
   ServerInfo,
   setAccessTokensToServers,
   updateVideo,

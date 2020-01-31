@@ -106,7 +106,7 @@ const listVideoRedundanciesValidator = [
   query('target')
     .custom(isVideoRedundancyTarget).withMessage('Should have a valid video redundancies target'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking listVideoRedundanciesValidator parameters', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return

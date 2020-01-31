@@ -12,7 +12,7 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'false') return false
   if (paramNSFW === 'both') return undefined
 
-  if (res && res.locals.oauth) {
+  if (res?.locals.oauth) {
     const user = res.locals.oauth.token.User
 
     // User does not want NSFW videos
@@ -28,7 +28,7 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   return null
 }
 
-function cleanUpReqFiles (req: { files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[] }) {
+function cleanUpReqFiles (req: { files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] }) {
   const files = req.files
 
   if (!files) return
@@ -39,7 +39,7 @@ function cleanUpReqFiles (req: { files: { [ fieldname: string ]: Express.Multer.
   }
 
   for (const key of Object.keys(files)) {
-    const file = files[ key ]
+    const file = files[key]
 
     if (isArray(file)) file.forEach(f => deleteFileAsync(f.path))
     else deleteFileAsync(file.path)
@@ -65,18 +65,18 @@ function badRequest (req: express.Request, res: express.Response) {
 
 function createReqFiles (
   fieldNames: string[],
-  mimeTypes: { [ id: string ]: string },
-  destinations: { [ fieldName: string ]: string }
+  mimeTypes: { [id: string]: string },
+  destinations: { [fieldName: string]: string }
 ) {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, destinations[ file.fieldname ])
+      cb(null, destinations[file.fieldname])
     },
 
     filename: async (req, file, cb) => {
       let extension: string
       const fileExtension = extname(file.originalname)
-      const extensionFromMimetype = mimeTypes[ file.mimetype ]
+      const extensionFromMimetype = mimeTypes[file.mimetype]
 
       // Take the file extension if we don't understand the mime type
       // We have the OGG/OGV exception too because firefox sends a bad mime type when sending an OGG file
@@ -99,7 +99,7 @@ function createReqFiles (
     }
   })
 
-  let fields: { name: string, maxCount: number }[] = []
+  const fields: { name: string, maxCount: number }[] = []
   for (const fieldName of fieldNames) {
     fields.push({
       name: fieldName,

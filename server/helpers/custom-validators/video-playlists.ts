@@ -1,8 +1,6 @@
 import { exists } from './misc'
 import validator from 'validator'
 import { CONSTRAINTS_FIELDS, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PLAYLIST_TYPES } from '../../initializers/constants'
-import * as express from 'express'
-import { VideoPlaylistModel } from '../../models/video/video-playlist'
 
 const PLAYLISTS_CONSTRAINT_FIELDS = CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS
 
@@ -15,7 +13,7 @@ function isVideoPlaylistDescriptionValid (value: any) {
 }
 
 function isVideoPlaylistPrivacyValid (value: number) {
-  return validator.isInt(value + '') && VIDEO_PLAYLIST_PRIVACIES[ value ] !== undefined
+  return validator.isInt(value + '') && VIDEO_PLAYLIST_PRIVACIES[value] !== undefined
 }
 
 function isVideoPlaylistTimestampValid (value: any) {
@@ -23,7 +21,7 @@ function isVideoPlaylistTimestampValid (value: any) {
 }
 
 function isVideoPlaylistTypeValid (value: any) {
-  return exists(value) && VIDEO_PLAYLIST_TYPES[ value ] !== undefined
+  return exists(value) && VIDEO_PLAYLIST_TYPES[value] !== undefined
 }
 
 // ---------------------------------------------------------------------------

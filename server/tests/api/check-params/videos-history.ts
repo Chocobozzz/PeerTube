@@ -1,6 +1,5 @@
-/* tslint:disable:no-unused-expression */
+/* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
 import {
   checkBadCountPagination,
@@ -15,12 +14,10 @@ import {
   uploadVideo
 } from '../../../../shared/extra-utils'
 
-const expect = chai.expect
-
 describe('Test videos history API validator', function () {
+  const myHistoryPath = '/api/v1/users/me/history/videos'
+  const myHistoryRemove = myHistoryPath + '/remove'
   let watchingPath: string
-  let myHistoryPath = '/api/v1/users/me/history/videos'
-  let myHistoryRemove = myHistoryPath + '/remove'
   let server: ServerInfo
 
   // ---------------------------------------------------------------

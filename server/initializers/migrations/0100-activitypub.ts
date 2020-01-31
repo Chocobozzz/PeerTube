@@ -7,9 +7,9 @@ import { ApplicationModel } from '../../models/application/application'
 import { SERVER_ACTOR_NAME } from '../constants'
 
 async function up (utils: {
-  transaction: Sequelize.Transaction,
-  queryInterface: Sequelize.QueryInterface,
-  sequelize: Sequelize.Sequelize,
+  transaction: Sequelize.Transaction
+  queryInterface: Sequelize.QueryInterface
+  sequelize: Sequelize.Sequelize
   db: any
 }): Promise<void> {
   const q = utils.queryInterface

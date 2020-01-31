@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
+
 import * as request from 'supertest'
 import { VideoChannelUpdate } from '../../models/videos/channel/video-channel-update.model'
 import { VideoChannelCreate } from '../../models/videos/channel/video-channel-create.model'
@@ -22,11 +24,11 @@ function getVideoChannelsList (url: string, start: number, count: number, sort?:
 }
 
 function getAccountVideoChannelsList (parameters: {
-  url: string,
-  accountName: string,
-  start?: number,
-  count?: number,
-  sort?: string,
+  url: string
+  accountName: string
+  start?: number
+  count?: number
+  sort?: string
   specialStatus?: number
 }) {
   const { url, accountName, start, count, sort = 'createdAt', specialStatus = 200 } = parameters
@@ -113,9 +115,9 @@ function getVideoChannel (url: string, channelName: string) {
 }
 
 function updateVideoChannelAvatar (options: {
-  url: string,
-  accessToken: string,
-  fixture: string,
+  url: string
+  accessToken: string
+  fixture: string
   videoChannelName: string | number
 }) {
 
@@ -129,7 +131,7 @@ function setDefaultVideoChannel (servers: ServerInfo[]) {
 
   for (const server of servers) {
     const p = getMyUserInformation(server.url, server.accessToken)
-      .then(res => server.videoChannel = (res.body as User).videoChannels[0])
+      .then(res => { server.videoChannel = (res.body as User).videoChannels[0] })
 
     tasks.push(p)
   }
