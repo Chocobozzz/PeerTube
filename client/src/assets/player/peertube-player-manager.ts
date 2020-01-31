@@ -211,9 +211,9 @@ export class PeertubePlayerManager {
     }
 
     if (mode === 'p2p-media-loader') {
-      const { streamrootHls } = PeertubePlayerManager.addP2PMediaLoaderOptions(plugins, options, p2pMediaLoaderModule)
+      const { hlsjs } = PeertubePlayerManager.addP2PMediaLoaderOptions(plugins, options, p2pMediaLoaderModule)
 
-      html5 = streamrootHls.html5
+      html5 = hlsjs.html5
     }
 
     if (mode === 'webtorrent') {
@@ -303,7 +303,7 @@ export class PeertubePlayerManager {
         swarmId: p2pMediaLoaderOptions.playlistUrl
       }
     }
-    const streamrootHls = {
+    const hlsjs = {
       levelLabelHandler: (level: { height: number, width: number }) => {
         const file = p2pMediaLoaderOptions.videoFiles.find(f => f.resolution.id === level.height)
 
@@ -322,7 +322,7 @@ export class PeertubePlayerManager {
       }
     }
 
-    const toAssign = { p2pMediaLoader, streamrootHls }
+    const toAssign = { p2pMediaLoader, hlsjs }
     Object.assign(plugins, toAssign)
 
     return toAssign

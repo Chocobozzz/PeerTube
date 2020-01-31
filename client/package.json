@@ -56,7 +56,6 @@
     "@ngx-loading-bar/router": "^4.2.0",
     "@ngx-meta/core": "^7.0.0",
     "@ngx-translate/i18n-polyfill": "^1.0.0",
-    "@streamroot/videojs-hlsjs-plugin": "^1.0.10",
     "@types/core-js": "^2.5.2",
     "@types/debug": "^4.1.5",
     "@types/hls.js": "^0.12.4",

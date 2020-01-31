@@ -987,11 +987,6 @@
     semver "6.3.0"
     semver-intersect "1.4.0"
 
-"@streamroot/videojs-hlsjs-plugin@^1.0.10":
-  version "1.0.13"
-  resolved "https://registry.yarnpkg.com/@streamroot/videojs-hlsjs-plugin/-/videojs-hlsjs-plugin-1.0.13.tgz#ae3afb3a5a3cd90e7b424b6b4cb14de1cde40836"
-  integrity sha512-A55213sFj8nuoj23YiR0r73cRV4dlnSwXGwT1Qiu+oqhsauhqN+lHSRHFztMIU4EMf2Cafvv5P4R+A2c/Uj6nw==
-
 "@types/bittorrent-protocol@*":
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/@types/bittorrent-protocol/-/bittorrent-protocol-2.2.4.tgz#7dc0716924bc6a904753d39846ad235c7dab4641"

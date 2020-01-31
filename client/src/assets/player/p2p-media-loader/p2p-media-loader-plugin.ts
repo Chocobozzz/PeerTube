@@ -3,10 +3,11 @@ import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../peertube-vide
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
 import { Events, Segment } from 'p2p-media-loader-core'
 import { timeToInt } from '../utils'
+import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
+import * as Hlsjs from 'hls.js'
 
-// videojs-hlsjs-plugin needs videojs in window
-window['videojs'] = videojs
-require('@streamroot/videojs-hlsjs-plugin')
+registerConfigPlugin(videojs)
+registerSourceHandler(videojs)
 
 const Plugin = videojs.getPlugin('plugin')
 class P2pMediaLoaderPlugin extends Plugin {
@@ -16,7 +17,7 @@ class P2pMediaLoaderPlugin extends Plugin {
   }
   private readonly options: P2PMediaLoaderPluginOptions
 
-  private hlsjs: any // Don't type hlsjs to not bundle the module
+  private hlsjs: Hlsjs
   private p2pEngine: Engine
   private statsP2PBytes = {
     pendingDownload: [] as number[],
@@ -88,9 +89,7 @@ class P2pMediaLoaderPlugin extends Plugin {
     const options = this.player.tech(true).options_ as any
     this.p2pEngine = options.hlsjsConfig.loader.getEngine()
 
-    // Avoid using constants to not import hls.hs
-    // https://github.com/video-dev/hls.js/blob/master/src/events.js#L37
-    this.hlsjs.on('hlsLevelSwitching', (_: any, data: any) => {
+    this.hlsjs.on(Hlsjs.Events.LEVEL_SWITCHING, (_: any, data: any) => {
       this.trigger('resolutionChange', { auto: this.hlsjs.autoLevelEnabled, resolutionId: data.height })
     })
 
