@@ -6566,20 +6566,6 @@ xhr2@^0.1.4:
   resolved "https://registry.yarnpkg.com/xhr2/-/xhr2-0.1.4.tgz#7f87658847716db5026323812f818cadab387a5f"
   integrity sha1-f4dliEdxbbUCYyOBL4GMras4el8=
 
-xliff@^4.0.0:
-  version "4.3.2"
-  resolved "https://registry.yarnpkg.com/xliff/-/xliff-4.3.2.tgz#ef9655abce99f4c60efbc8b6d019c3c55e543315"
-  integrity sha512-NmI1Q1Zx8tyMl87XmoQnOPQaR7hvgzHhGArskwmUB6Tvyo0PxPkMq59wlyOtV/fNFEhobQqtW/TkpXvuF0RFng==
-  dependencies:
-    xml-js "1.6.11"
-
-xml-js@1.6.11:
-  version "1.6.11"
-  resolved "https://registry.yarnpkg.com/xml-js/-/xml-js-1.6.11.tgz#927d2f6947f7f1c19a316dd8eea3614e8b18f8e9"
-  integrity sha512-7rVi2KMfwfWFl+GpPg6m80IVMWXLRjO+PxTq7V2CDhoGak0wzYzFgUY2m4XJ47OGdXd8eLE8EmwfAmdjw7lC1g==
-  dependencies:
-    sax "^1.2.4"
-
 xml2js@^0.4.4:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/xml2js/-/xml2js-0.4.23.tgz#a0c69516752421eb2ac758ee4d4ccf58843eac66"

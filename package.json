@@ -37,7 +37,6 @@
     "i18n:generate": "scripty",
     "plugin:install": "node ./dist/scripts/plugin/install.js",
     "plugin:uninstall": "node ./dist/scripts/plugin/uninstall.js",
-    "i18n:xliff2json": "node ./dist/scripts/i18n/xliff2json.js",
     "i18n:create-custom-files": "node ./dist/scripts/i18n/create-custom-files.js",
     "reset-password": "node ./dist/scripts/reset-password.js",
     "play": "scripty",
@@ -202,8 +201,7 @@
     "ts-node": "8.5.4",
     "tslint": "^5.7.0",
     "tslint-config-standard": "^9.0.0",
-    "typescript": "^3.7.2",
-    "xliff": "^4.0.0"
+    "typescript": "^3.7.2"
   },
   "scripty": {
     "silent": true
