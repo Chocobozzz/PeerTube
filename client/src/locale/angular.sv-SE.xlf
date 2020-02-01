@@ -1893,7 +1893,7 @@
       </trans-unit>
       <trans-unit id="088b75b856963c2945806454a83f69cc5e9ab9da" datatype="html">
         <source>Any or no category set</source>
-        <target state="translated"/>
+        <target state="translated">Visa alla kategorier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">106</context>
@@ -1911,7 +1911,7 @@
       </trans-unit>
       <trans-unit id="0101457b9856145780bc92c54f9477a0bb4abbb8" datatype="html">
         <source>Any or no license set</source>
-        <target state="translated"/>
+        <target state="translated">Visa alla licenser</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">119</context>
@@ -1930,7 +1930,7 @@
       </trans-unit>
       <trans-unit id="f0cc3929292ee21bc26f607267f31d214a1230ac" datatype="html">
         <source>Any or no language set</source>
-        <target state="translated"/>
+        <target state="translated">Visa alla språk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">132</context>
@@ -5886,7 +5886,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
         <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target state="translated"/>
+        <target state="translated">Automatisk videoredundans från vissa instanser så att det inte går att avgöra om någon medvetet laddade ner en video eller IP-adressen tillhör en server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">156</context>
@@ -7651,7 +7651,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="16d449549ab7bc61caf3d636372a4a56b5870383" datatype="html">
         <source>Any</source>
-        <target state="translated"/>
+        <target state="translated">Alla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
