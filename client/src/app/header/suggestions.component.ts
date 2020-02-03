@@ -19,7 +19,6 @@ export class SuggestionsComponent implements AfterViewInit {
   @Output() init = new EventEmitter()
 
   ngAfterViewInit () {
-    this.init.emit({ items: this.listItems })
     this.listItems.changes.subscribe(
       val => this.init.emit({ items: this.listItems })
     )

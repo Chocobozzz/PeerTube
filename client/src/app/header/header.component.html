@@ -1,9 +1,9 @@
-<my-search-typeahead>
+<my-search-typeahead class="w-100 d-flex justify-content-end">
   <input
-    type="text" id="search-video" name="search-video" [attr.aria-label]="ariaLabelTextForSearch" i18n-placeholder placeholder="Search locally videos, channels…"
-    [(ngModel)]="searchValue" (keyup.enter)="doSearch()"
+    type="text" id="search-video" name="search-video" [attr.aria-label]="ariaLabelTextForSearch"
+    i18n-placeholder placeholder="Search videos, channels… known by this instance" [(ngModel)]="searchValue"
   >
-  <span (click)="doSearch()" class="icon icon-search"></span>
+  <span class="icon icon-search"></span>
 </my-search-typeahead>
 
 <a class="upload-button" routerLink="/videos/upload">

@@ -3,10 +3,11 @@ import { RouterLink } from '@angular/router'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ListKeyManagerOption } from '@angular/cdk/a11y'
 
-type Result = {
+export type Result = {
   text: string
   type: 'channel' | 'suggestion' | 'search-channel' | 'search-instance' | 'search-global' | 'search-any'
-  routerLink?: RouterLink
+  routerLink?: RouterLink,
+  default?: boolean
 }
 
 @Component({
@@ -39,7 +40,7 @@ export class SuggestionComponent implements OnInit, ListKeyManagerOption {
   }
 
   ngOnInit () {
-    this.active = false
+    if (this.result.default) this.active = true
   }
 
   selectItem () {

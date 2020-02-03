@@ -7,6 +7,7 @@
   padding: 0;
   width: $menu-width;
   z-index: z(menu);
+  scrollbar-color: var(--actionButtonColor) var(--menuBackgroundColor);
 }
 
 menu {

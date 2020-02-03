@@ -46,6 +46,18 @@ my-suggestions ::ng-deep ul {
     transition: box-shadow .3s ease, width .2s ease;
   }
 
+  @media screen and (min-width: 500px) {
+    margin-left: 10px;
+  }
+
+  @media screen and (max-width: 800px) {
+    flex: 1;
+
+    ::ng-deep input {
+      width: unset;
+    }
+  }
+
   ::ng-deep span {
     right: 10px;
   }
@@ -59,7 +71,9 @@ my-suggestions ::ng-deep ul {
   &:focus,
   ::ng-deep &:focus-within {
     & > div:last-child {
-      display: initial !important;
+      @media screen and (min-width: 500px) {
+        display: initial !important;
+      }
       
       #typeahead-help,
       #typeahead-instructions,

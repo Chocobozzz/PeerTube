@@ -14,14 +14,6 @@ my-search-typeahead {
   &::placeholder {
     color: var(--inputPlaceholderColor);
   }
-
-  @media screen and (max-width: 800px) {
-    width: calc(100% - 150px);
-  }
-
-  @media screen and (max-width: 600px) {
-    width: calc(100% - 70px);
-  }
 }
 
 .icon.icon-search {
@@ -44,10 +36,6 @@ my-search-typeahead {
 
   color: var(--mainBackgroundColor) !important;
   margin-right: 25px;
-
-  @media screen and (max-width: 800px) {
-    margin-right: 0;
-  }
 
   @media screen and (max-width: 600px) {
     margin-right: 10px;

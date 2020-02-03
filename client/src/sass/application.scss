@@ -47,6 +47,11 @@ body {
   font-size: 14px;
 }
 
+::selection {
+  color: var(--mainBackgroundColor);
+  background-color: var(--mainHoverColor);
+}
+
 #incompatible-browser {
   display: none;
   text-align: center;
