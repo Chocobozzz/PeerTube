@@ -43,7 +43,7 @@
   }
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: $small-view) {
   .video-playlists-header {
     text-align: center;
   }

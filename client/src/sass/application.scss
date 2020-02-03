@@ -167,7 +167,7 @@ label {
     color: var(--mainForegroundColor);
   }
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $mobile-view) {
     margin-right: 15px;
   }
 }

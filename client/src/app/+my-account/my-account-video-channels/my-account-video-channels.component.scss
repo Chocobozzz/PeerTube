@@ -58,7 +58,7 @@
   margin: 20px 0 50px;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: $small-view) {
   .video-channels-header {
     text-align: center;
   }

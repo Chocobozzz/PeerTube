@@ -240,7 +240,7 @@ $play-overlay-width: 18px;
     width: $video-miniature-width * 2;
   }
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $mobile-view) {
     width: auto;
     margin: 0 !important;
 

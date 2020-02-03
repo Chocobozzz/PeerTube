@@ -1,3 +1,4 @@
+@import '_variables';
 @import '_mixins';
 
 .cfp-hotkeys-container {
@@ -93,7 +94,7 @@
   cursor: pointer;
 }
 
-@media all and (max-width: 500px) {
+@media all and (max-width: $mobile-view) {
   .cfp-hotkeys {
     font-size: 0.8em;
   }
