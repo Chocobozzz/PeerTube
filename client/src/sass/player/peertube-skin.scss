@@ -185,7 +185,6 @@ body {
 
         .vjs-play-progress {
           background: var(--embedForegroundColor);
-          transition: all .2s ease 0s;
 
           // Not display the circle if the progress is not hovered
           &::before {
