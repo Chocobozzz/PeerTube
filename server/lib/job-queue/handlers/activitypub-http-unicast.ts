@@ -4,11 +4,13 @@ import { doRequest } from '../../../helpers/requests'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 import { JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
+import { ContextType } from '@server/helpers/activitypub'
 
 export type ActivitypubHttpUnicastPayload = {
   uri: string
   signatureActorId?: number
   body: any
+  contextType?: ContextType
 }
 
 async function processActivityPubHttpUnicast (job: Bull.Job) {

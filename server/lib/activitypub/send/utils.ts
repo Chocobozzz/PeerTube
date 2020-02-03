@@ -8,13 +8,15 @@ import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAud
 import { getServerActor } from '../../../helpers/utils'
 import { afterCommitIfTransaction } from '../../../helpers/database-utils'
 import { MActorWithInboxes, MActor, MActorId, MActorLight, MVideo, MVideoAccountLight } from '../../../typings/models'
+import { ContextType } from '@server/helpers/activitypub'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
   video: MVideoAccountLight
-  transaction?: Transaction
+  transaction?: Transaction,
+  contextType?: ContextType
 }) {
-  const { byActor, video, transaction } = options
+  const { byActor, video, transaction, contextType } = options
 
   const actorsInvolvedInVideo = await getActorsInvolvedInVideo(video, transaction)
 
@@ -24,7 +26,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
     const activity = activityBuilder(audience)
 
     return afterCommitIfTransaction(transaction, () => {
-      return unicastTo(activity, byActor, video.VideoChannel.Account.Actor.getSharedInbox())
+      return unicastTo(activity, byActor, video.VideoChannel.Account.Actor.getSharedInbox(), contextType)
     })
   }
 
@@ -34,7 +36,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   const actorsException = [ byActor ]
 
-  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, transaction, actorsException)
+  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, transaction, actorsException, contextType)
 }
 
 async function forwardVideoRelatedActivity (
@@ -90,11 +92,12 @@ async function broadcastToFollowers (
   byActor: MActorId,
   toFollowersOf: MActorId[],
   t: Transaction,
-  actorsException: MActorWithInboxes[] = []
+  actorsException: MActorWithInboxes[] = [],
+  contextType?: ContextType
 ) {
   const uris = await computeFollowerUris(toFollowersOf, actorsException, t)
 
-  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor))
+  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor, contextType))
 }
 
 async function broadcastToActors (
@@ -102,13 +105,14 @@ async function broadcastToActors (
   byActor: MActorId,
   toActors: MActor[],
   t?: Transaction,
-  actorsException: MActorWithInboxes[] = []
+  actorsException: MActorWithInboxes[] = [],
+  contextType?: ContextType
 ) {
   const uris = await computeUris(toActors, actorsException)
-  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor))
+  return afterCommitIfTransaction(t, () => broadcastTo(uris, data, byActor, contextType))
 }
 
-function broadcastTo (uris: string[], data: any, byActor: MActorId) {
+function broadcastTo (uris: string[], data: any, byActor: MActorId, contextType?: ContextType) {
   if (uris.length === 0) return undefined
 
   logger.debug('Creating broadcast job.', { uris })
@@ -116,19 +120,21 @@ function broadcastTo (uris: string[], data: any, byActor: MActorId) {
   const payload = {
     uris,
     signatureActorId: byActor.id,
-    body: data
+    body: data,
+    contextType
   }
 
   return JobQueue.Instance.createJob({ type: 'activitypub-http-broadcast', payload })
 }
 
-function unicastTo (data: any, byActor: MActorId, toActorUrl: string) {
+function unicastTo (data: any, byActor: MActorId, toActorUrl: string, contextType?: ContextType) {
   logger.debug('Creating unicast job.', { uri: toActorUrl })
 
   const payload = {
     uri: toActorUrl,
     signatureActorId: byActor.id,
-    body: data
+    body: data,
+    contextType
   }
 
   JobQueue.Instance.createJob({ type: 'activitypub-http-unicast', payload })

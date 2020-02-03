@@ -8,93 +8,100 @@ import { pageToStartAndCount } from './core-utils'
 import { URL } from 'url'
 import { MActor, MVideoAccountLight } from '../typings/models'
 
-function activityPubContextify <T> (data: T) {
-  return Object.assign(data, {
+export type ContextType = 'All' | 'View' | 'Announce'
+
+function activityPubContextify <T> (data: T, type: ContextType = 'All') {
+  const base = {
+    RsaSignature2017: 'https://w3id.org/security#RsaSignature2017'
+  }
+
+  if (type === 'All') {
+    Object.assign(base, {
+      pt: 'https://joinpeertube.org/ns#',
+      sc: 'http://schema.org#',
+      Hashtag: 'as:Hashtag',
+      uuid: 'sc:identifier',
+      category: 'sc:category',
+      licence: 'sc:license',
+      subtitleLanguage: 'sc:subtitleLanguage',
+      sensitive: 'as:sensitive',
+      language: 'sc:inLanguage',
+      expires: 'sc:expires',
+      CacheFile: 'pt:CacheFile',
+      Infohash: 'pt:Infohash',
+      originallyPublishedAt: 'sc:datePublished',
+      views: {
+        '@type': 'sc:Number',
+        '@id': 'pt:views'
+      },
+      state: {
+        '@type': 'sc:Number',
+        '@id': 'pt:state'
+      },
+      size: {
+        '@type': 'sc:Number',
+        '@id': 'pt:size'
+      },
+      fps: {
+        '@type': 'sc:Number',
+        '@id': 'pt:fps'
+      },
+      startTimestamp: {
+        '@type': 'sc:Number',
+        '@id': 'pt:startTimestamp'
+      },
+      stopTimestamp: {
+        '@type': 'sc:Number',
+        '@id': 'pt:stopTimestamp'
+      },
+      position: {
+        '@type': 'sc:Number',
+        '@id': 'pt:position'
+      },
+      commentsEnabled: {
+        '@type': 'sc:Boolean',
+        '@id': 'pt:commentsEnabled'
+      },
+      downloadEnabled: {
+        '@type': 'sc:Boolean',
+        '@id': 'pt:downloadEnabled'
+      },
+      waitTranscoding: {
+        '@type': 'sc:Boolean',
+        '@id': 'pt:waitTranscoding'
+      },
+      support: {
+        '@type': 'sc:Text',
+        '@id': 'pt:support'
+      },
+      likes: {
+        '@id': 'as:likes',
+        '@type': '@id'
+      },
+      dislikes: {
+        '@id': 'as:dislikes',
+        '@type': '@id'
+      },
+      playlists: {
+        '@id': 'pt:playlists',
+        '@type': '@id'
+      },
+      shares: {
+        '@id': 'as:shares',
+        '@type': '@id'
+      },
+      comments: {
+        '@id': 'as:comments',
+        '@type': '@id'
+      }
+    })
+  }
+
+  return Object.assign({}, data, {
     '@context': [
       'https://www.w3.org/ns/activitystreams',
       'https://w3id.org/security/v1',
-      {
-        RsaSignature2017: 'https://w3id.org/security#RsaSignature2017',
-        pt: 'https://joinpeertube.org/ns#',
-        sc: 'http://schema.org#',
-        Hashtag: 'as:Hashtag',
-        uuid: 'sc:identifier',
-        category: 'sc:category',
-        licence: 'sc:license',
-        subtitleLanguage: 'sc:subtitleLanguage',
-        sensitive: 'as:sensitive',
-        language: 'sc:inLanguage',
-        expires: 'sc:expires',
-        CacheFile: 'pt:CacheFile',
-        Infohash: 'pt:Infohash',
-        originallyPublishedAt: 'sc:datePublished',
-        views: {
-          '@type': 'sc:Number',
-          '@id': 'pt:views'
-        },
-        state: {
-          '@type': 'sc:Number',
-          '@id': 'pt:state'
-        },
-        size: {
-          '@type': 'sc:Number',
-          '@id': 'pt:size'
-        },
-        fps: {
-          '@type': 'sc:Number',
-          '@id': 'pt:fps'
-        },
-        startTimestamp: {
-          '@type': 'sc:Number',
-          '@id': 'pt:startTimestamp'
-        },
-        stopTimestamp: {
-          '@type': 'sc:Number',
-          '@id': 'pt:stopTimestamp'
-        },
-        position: {
-          '@type': 'sc:Number',
-          '@id': 'pt:position'
-        },
-        commentsEnabled: {
-          '@type': 'sc:Boolean',
-          '@id': 'pt:commentsEnabled'
-        },
-        downloadEnabled: {
-          '@type': 'sc:Boolean',
-          '@id': 'pt:downloadEnabled'
-        },
-        waitTranscoding: {
-          '@type': 'sc:Boolean',
-          '@id': 'pt:waitTranscoding'
-        },
-        support: {
-          '@type': 'sc:Text',
-          '@id': 'pt:support'
-        }
-      },
-      {
-        likes: {
-          '@id': 'as:likes',
-          '@type': '@id'
-        },
-        dislikes: {
-          '@id': 'as:dislikes',
-          '@type': '@id'
-        },
-        playlists: {
-          '@id': 'pt:playlists',
-          '@type': '@id'
-        },
-        shares: {
-          '@id': 'as:shares',
-          '@type': '@id'
-        },
-        comments: {
-          '@id': 'as:comments',
-          '@type': '@id'
-        }
-      }
+      base
     ]
   })
 }
@@ -148,8 +155,8 @@ async function activityPubCollectionPagination (
 
 }
 
-function buildSignedActivity (byActor: MActor, data: Object) {
-  const activity = activityPubContextify(data)
+function buildSignedActivity (byActor: MActor, data: Object, contextType?: ContextType) {
+  const activity = activityPubContextify(data, contextType)
 
   return signJsonLDObject(byActor, activity) as Promise<Activity>
 }

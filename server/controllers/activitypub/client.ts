@@ -234,7 +234,7 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 
   const { activity } = await buildAnnounceWithVideoAudience(share.Actor, share, res.locals.videoAll, undefined)
 
-  return activityPubResponse(activityPubContextify(activity), res)
+  return activityPubResponse(activityPubContextify(activity, 'Announce'), res)
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response) {

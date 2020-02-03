@@ -28,7 +28,7 @@ async function sendVideoAnnounce (byActor: MActorLight, videoShare: MVideoShare,
   logger.info('Creating job to send announce %s.', videoShare.url)
 
   const followersException = [ byActor ]
-  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, t, followersException)
+  return broadcastToFollowers(activity, byActor, actorsInvolvedInVideo, t, followersException, 'Announce')
 }
 
 function buildAnnounceActivity (url: string, byActor: MActorLight, object: string, audience?: ActivityAudience): ActivityAnnounce {

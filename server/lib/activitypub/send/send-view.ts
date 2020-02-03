@@ -16,7 +16,7 @@ async function sendView (byActor: ActorModel, video: MVideoAccountLight, t: Tran
     return buildViewActivity(url, byActor, video, audience)
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction: t })
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, transaction: t, contextType: 'View' })
 }
 
 function buildViewActivity (url: string, byActor: MActorAudience, video: MVideoUrl, audience?: ActivityAudience): ActivityView {

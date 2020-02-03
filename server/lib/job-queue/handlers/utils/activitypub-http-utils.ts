@@ -1,11 +1,11 @@
-import { buildSignedActivity } from '../../../../helpers/activitypub'
+import { buildSignedActivity, ContextType } from '../../../../helpers/activitypub'
 import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { sha256 } from '../../../../helpers/core-utils'
 import { HTTP_SIGNATURE } from '../../../../initializers/constants'
 import { MActor } from '../../../../typings/models'
 
-type Payload = { body: any, signatureActorId?: number }
+type Payload = { body: any, contextType?: ContextType, signatureActorId?: number }
 
 async function computeBody (payload: Payload) {
   let body = payload.body
@@ -13,7 +13,7 @@ async function computeBody (payload: Payload) {
   if (payload.signatureActorId) {
     const actorSignature = await ActorModel.load(payload.signatureActorId)
     if (!actorSignature) throw new Error('Unknown signature actor id.')
-    body = await buildSignedActivity(actorSignature, payload.body)
+    body = await buildSignedActivity(actorSignature, payload.body, payload.contextType)
   }
 
   return body

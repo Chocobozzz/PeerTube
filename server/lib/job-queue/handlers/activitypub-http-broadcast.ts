@@ -5,11 +5,13 @@ import { doRequest } from '../../../helpers/requests'
 import { buildGlobalHeaders, buildSignedRequestOptions, computeBody } from './utils/activitypub-http-utils'
 import { BROADCAST_CONCURRENCY, JOB_REQUEST_TIMEOUT } from '../../../initializers/constants'
 import { ActorFollowScoreCache } from '../../files-cache'
+import { ContextType } from '@server/helpers/activitypub'
 
 export type ActivitypubHttpBroadcastPayload = {
   uris: string[]
   signatureActorId?: number
   body: any
+  contextType?: ContextType
 }
 
 async function processActivityPubHttpBroadcast (job: Bull.Job) {
