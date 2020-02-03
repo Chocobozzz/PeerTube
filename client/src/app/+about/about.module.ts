@@ -7,6 +7,7 @@ import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertub
 import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
 import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.component'
 import { AboutPeertubeContributorsComponent } from '@app/+about/about-peertube/about-peertube-contributors.component'
+import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance.resolver'
 
 @NgModule({
   imports: [
@@ -28,6 +29,7 @@ import { AboutPeertubeContributorsComponent } from '@app/+about/about-peertube/a
   ],
 
   providers: [
+    AboutInstanceResolver
   ]
 })
 export class AboutModule { }

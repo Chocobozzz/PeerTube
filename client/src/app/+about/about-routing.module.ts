@@ -5,6 +5,7 @@ import { AboutComponent } from './about.component'
 import { AboutInstanceComponent } from '@app/+about/about-instance/about-instance.component'
 import { AboutPeertubeComponent } from '@app/+about/about-peertube/about-peertube.component'
 import { AboutFollowsComponent } from '@app/+about/about-follows/about-follows.component'
+import { AboutInstanceResolver } from '@app/+about/about-instance/about-instance.resolver'
 
 const aboutRoutes: Routes = [
   {
@@ -24,6 +25,9 @@ const aboutRoutes: Routes = [
           meta: {
             title: 'About this instance'
           }
+        },
+        resolve: {
+          instanceData: AboutInstanceResolver
         }
       },
       {
