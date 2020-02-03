@@ -21,6 +21,12 @@ body {
 
   .vjs-dock-text {
     padding-right: 10px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, .6) 0, rgba(0, 0, 0, 0.2) 70%, rgba(0, 0, 0, 0) 100%);
+  }
+
+  .vjs-dock-title,
+  .vjs-dock-description {
+    text-shadow: 0 0 2px rgba(0, 0, 0, .5);
   }
 
   .vjs-dock-description {
@@ -55,7 +61,7 @@ body {
     $big-play-width: 1.2em;
     $big-play-height: 1.2em;
 
-    border: 4px solid #fff;
+    border: 2px solid #fff;
     border-radius: 100%;
 
     left: 50%;

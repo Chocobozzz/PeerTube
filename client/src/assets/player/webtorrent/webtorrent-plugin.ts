@@ -25,12 +25,13 @@ type PlayOptions = {
 const Plugin = videojs.getPlugin('plugin')
 
 class WebTorrentPlugin extends Plugin {
+  readonly videoFiles: VideoFile[]
+
   private readonly playerElement: HTMLVideoElement
 
   private readonly autoplay: boolean = false
   private readonly startTime: number = 0
   private readonly savePlayerSrcFunction: VideoJsPlayer['src']
-  private readonly videoFiles: VideoFile[]
   private readonly videoDuration: number
   private readonly CONSTANTS = {
     INFO_SCHEDULER: 1000, // Don't change this

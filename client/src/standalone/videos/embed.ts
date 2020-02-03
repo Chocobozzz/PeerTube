@@ -1,15 +1,11 @@
 import './embed.scss'
 
 import {
-  getCompleteLocale,
-  is18nLocale,
-  isDefaultLocale,
   peertubeTranslate,
   ResultList,
   ServerConfig,
   VideoDetails
 } from '../../../../shared'
-import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
 import {
   P2PMediaLoaderOptions,
@@ -19,10 +15,14 @@ import {
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { PeerTubeEmbedApi } from './embed-api'
 import { TranslationsManager } from '../../assets/player/translations-manager'
+import { VideoJsPlayer } from 'video.js'
+import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
+
+type Translations = { [ id: string ]: string }
 
 export class PeerTubeEmbed {
   videoElement: HTMLVideoElement
-  player: any
+  player: VideoJsPlayer
   api: PeerTubeEmbedApi = null
   autoplay: boolean
   controls: boolean
@@ -71,7 +71,7 @@ export class PeerTubeEmbed {
     element.parentElement.removeChild(element)
   }
 
-  displayError (text: string, translations?: { [ id: string ]: string }) {
+  displayError (text: string, translations?: Translations) {
     // Remove video element
     if (this.videoElement) this.removeElement(this.videoElement)
 
@@ -90,12 +90,12 @@ export class PeerTubeEmbed {
     errorText.innerHTML = translatedText
   }
 
-  videoNotFound (translations?: { [ id: string ]: string }) {
+  videoNotFound (translations?: Translations) {
     const text = 'This video does not exist.'
     this.displayError(text, translations)
   }
 
-  videoFetchError (translations?: { [ id: string ]: string }) {
+  videoFetchError (translations?: Translations) {
     const text = 'We cannot fetch the video. Please try again later.'
     this.displayError(text, translations)
   }
@@ -237,7 +237,7 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: any) => this.player = player)
+    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: VideoJsPlayer) => this.player = player)
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 
     window[ 'videojsPlayer' ] = this.player
@@ -261,19 +261,19 @@ export class PeerTubeEmbed {
   }
 
   private async buildDock (videoInfo: VideoDetails, configResponse: Response) {
-    if (this.controls) {
-      const title = this.title ? videoInfo.name : undefined
+    if (!this.controls) return
 
-      const config: ServerConfig = await configResponse.json()
-      const description = config.tracker.enabled && this.warningTitle
-        ? '<span class="text">' + this.player.localize('Watching this video may reveal your IP address to others.') + '</span>'
-        : undefined
+    const title = this.title ? videoInfo.name : undefined
 
-      this.player.dock({
-        title,
-        description
-      })
-    }
+    const config: ServerConfig = await configResponse.json()
+    const description = config.tracker.enabled && this.warningTitle
+      ? '<span class="text">' + peertubeTranslate('Watching this video may reveal your IP address to others.') + '</span>'
+      : undefined
+
+    this.player.dock({
+      title,
+      description
+    })
   }
 
   private buildCSS () {

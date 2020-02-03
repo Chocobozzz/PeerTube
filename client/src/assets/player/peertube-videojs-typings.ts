@@ -42,6 +42,8 @@ declare module 'video.js' {
     }
 
     audioTracks (): AudioTrackList
+
+    dock (options: { title: string, description: string }): void
   }
 }
 
