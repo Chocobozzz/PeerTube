@@ -4,7 +4,7 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
-import { audio, canDoQuickTranscode, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { audio, canDoQuickTranscode, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution, getMetadataFromFile } from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -455,6 +455,46 @@ describe('Test video transcoding', function () {
         const fps = await getVideoFileFPS(path)
         expect(fps).to.be.equal(59)
       }
+    }
+  })
+
+  it('Should provide valid ffprobe data', async function () {
+    this.timeout(160000)
+
+    const videoAttributes = {
+      name: 'my super name for server 1',
+      description: 'my super description for server 1',
+      fixture: 'video_short.webm'
+    }
+    await uploadVideo(servers[1].url, servers[1].accessToken, videoAttributes)
+
+    await waitJobs(servers)
+
+    const res = await getVideosList(servers[1].url)
+
+    const video = res.body.data.find(v => v.name === videoAttributes.name)
+
+    {
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
+      const metadata = await getMetadataFromFile(path)
+      for (const p of [
+        // expected format properties
+        'format.encoder',
+        'format.format_long_name',
+        'format.size',
+        'format.bit_rate',
+        // expected stream properties
+        'stream[0].codec_long_name',
+        'stream[0].profile',
+        'stream[0].width',
+        'stream[0].height',
+        'stream[0].display_aspect_ratio',
+        'stream[0].avg_frame_rate',
+        'stream[0].pix_fmt'
+      ]) {
+        expect(metadata).to.have.nested.property(p)
+      }
+      expect(metadata).to.not.have.nested.property('format.filename')
     }
   })
 
