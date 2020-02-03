@@ -47,6 +47,12 @@ export class ServerService {
         css: ''
       }
     },
+    search: {
+      remoteUri: {
+        users: true,
+        anonymous: false
+      }
+    },
     plugin: {
       registered: []
     },

@@ -28,6 +28,13 @@ export interface ServerConfig {
     }
   }
 
+  search: {
+    remoteUri: {
+      users: boolean
+      anonymous: boolean
+    }
+  }
+
   plugin: {
     registered: ServerConfigPlugin[]
   }

@@ -235,6 +235,12 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
         nodeName: CONFIG.INSTANCE.NAME,
         nodeDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
         nodeConfig: {
+          search: {
+            remoteUri: {
+              users: CONFIG.SEARCH.REMOTE_URI.USERS,
+              anonymous: CONFIG.SEARCH.REMOTE_URI.ANONYMOUS
+            }
+          },
           plugin: {
             registered: getRegisteredPlugins()
           },

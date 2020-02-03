@@ -91,5 +91,16 @@
         <my-feature-boolean [value]="serverConfig.tracker.enabled"></my-feature-boolean>
       </td>
     </tr>
+
+    <tr>
+      <td i18n class="label" colspan="2">Search</td>
+    </tr>
+
+    <tr>
+      <td i18n class="sub-label">Users can resolve distant content</td>
+      <td>
+        <my-feature-boolean [value]="serverConfig.search.remoteUri.users"></my-feature-boolean>
+      </td>
+    </tr>
   </table>
 </div>

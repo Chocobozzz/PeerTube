@@ -73,6 +73,12 @@ async function getConfig (req: express.Request, res: express.Response) {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
       }
     },
+    search: {
+      remoteUri: {
+        users: CONFIG.SEARCH.REMOTE_URI.USERS,
+        anonymous: CONFIG.SEARCH.REMOTE_URI.ANONYMOUS
+      }
+    },
     plugin: {
       registered: getRegisteredPlugins()
     },

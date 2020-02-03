@@ -8,14 +8,15 @@ import {
   QueryList
 } from '@angular/core'
 import { Router, NavigationEnd, Params, ActivatedRoute } from '@angular/router'
-import { AuthService } from '@app/core'
+import { AuthService, ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { filter, first, tap, map } from 'rxjs/operators'
 import { ListKeyManager } from '@angular/cdk/a11y'
-import { UP_ARROW, DOWN_ARROW, ENTER, TAB } from '@angular/cdk/keycodes'
+import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes'
 import { SuggestionComponent, Result } from './suggestion.component'
 import { of } from 'rxjs'
 import { getParameterByName } from '@app/shared/misc/utils'
+import { ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-search-typeahead',
@@ -30,7 +31,7 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
   newSearch = true
 
   searchInput: HTMLInputElement
-  URIPolicy: 'only-followed' | 'any' = 'any'
+  serverConfig: ServerConfig
 
   URIPolicyText: string
   inAllText: string
@@ -44,6 +45,7 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
+    private serverService: ServerService,
     private i18n: I18n
   ) {
     this.URIPolicyText = this.i18n('Determines whether you can resolve any distant content, or if your instance only allows doing so for instances it follows.')
@@ -66,6 +68,9 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
         map(() => getParameterByName('search', window.location.href))
       )
       .subscribe(searchQuery => this.searchInput.value = searchQuery || '')
+
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
   }
 
   ngOnDestroy () {
@@ -88,6 +93,16 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
 
   get showHelp () {
     return this.hasSearch && this.newSearch && this.activeResult && this.activeResult.type === 'search-global' || false
+  }
+
+  get URIPolicy (): 'only-followed' | 'any' {
+    return (
+      this.authService.isLoggedIn()
+        ? this.serverConfig.search.remoteUri.users
+        : this.serverConfig.search.remoteUri.anonymous
+    )
+      ? 'any'
+      : 'only-followed'
   }
 
   computeResults () {
@@ -149,10 +164,6 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
     this.keyboardEventsManager.change.subscribe(
       _ => this.setEventItems(event)
     )
-  }
-
-  isUserLoggedIn () {
-    return this.authService.isLoggedIn()
   }
 
   handleKeyUp (event: KeyboardEvent, indexSelected?: number) {
