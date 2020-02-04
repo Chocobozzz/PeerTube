@@ -5,6 +5,7 @@ import { User } from '../shared/users/user.model'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { HotkeysService } from 'angular2-hotkeys'
 import { ServerConfig } from '@shared/models'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-menu',
@@ -33,7 +34,8 @@ export class MenuComponent implements OnInit {
     private authService: AuthService,
     private serverService: ServerService,
     private redirectService: RedirectService,
-    private hotkeysService: HotkeysService
+    private hotkeysService: HotkeysService,
+    private screenService: ScreenService
   ) {}
 
   ngOnInit () {
