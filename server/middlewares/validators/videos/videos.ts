@@ -160,6 +160,9 @@ const videosCustomGetValidator = (
       if (areValidationErrors(req, res)) return
       if (!await doesVideoExist(req.params.id, res, fetchType)) return
 
+      // Controllers does not need to check video rights
+      if (fetchType === 'only-immutable-attributes') return next()
+
       const video = getVideoWithAttributes(res)
       const videoAll = video as MVideoFullLight
 

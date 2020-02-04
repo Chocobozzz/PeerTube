@@ -6,7 +6,8 @@ type ModelCacheType =
   'local-account-name'
   | 'local-actor-name'
   | 'local-actor-url'
-  | 'video-immutable'
+  | 'load-video-immutable-id'
+  | 'load-video-immutable-url'
 
 type DeleteKey =
   'video'
@@ -19,7 +20,8 @@ class ModelCache {
     'local-account-name': new Map(),
     'local-actor-name': new Map(),
     'local-actor-url': new Map(),
-    'video-immutable': new Map()
+    'load-video-immutable-id': new Map(),
+    'load-video-immutable-url': new Map()
   }
 
   private readonly deleteIds: {

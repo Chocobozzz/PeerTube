@@ -145,6 +145,7 @@ export enum ScopeNames {
   WITH_USER_HISTORY = 'WITH_USER_HISTORY',
   WITH_STREAMING_PLAYLISTS = 'WITH_STREAMING_PLAYLISTS',
   WITH_USER_ID = 'WITH_USER_ID',
+  WITH_IMMUTABLE_ATTRIBUTES = 'WITH_IMMUTABLE_ATTRIBUTES',
   WITH_THUMBNAILS = 'WITH_THUMBNAILS'
 }
 
@@ -188,6 +189,9 @@ export type AvailableForListIDsOptions = {
 }
 
 @Scopes(() => ({
+  [ScopeNames.WITH_IMMUTABLE_ATTRIBUTES]: {
+    attributes: [ 'id', 'url', 'uuid', 'remote' ]
+  },
   [ScopeNames.FOR_API]: (options: ForAPIOptions) => {
     const query: FindOptions = {
       include: [
@@ -1476,20 +1480,16 @@ export class VideoModel extends Model<VideoModel> {
 
   static loadImmutableAttributes (id: number | string, t?: Transaction): Bluebird<MVideoImmutable> {
     const fun = () => {
-      const where = buildWhereIdOrUUID(id)
-      const options = {
-        attributes: [
-          'id', 'url', 'uuid'
-        ],
-        where,
+      const query = {
+        where: buildWhereIdOrUUID(id),
         transaction: t
       }
 
-      return VideoModel.unscoped().findOne(options)
+      return VideoModel.scope(ScopeNames.WITH_IMMUTABLE_ATTRIBUTES).findOne(query)
     }
 
     return ModelCache.Instance.doCache({
-      cacheType: 'video-immutable',
+      cacheType: 'load-video-immutable-id',
       key: '' + id,
       deleteKey: 'video',
       fun
@@ -1557,6 +1557,26 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     return VideoModel.scope(ScopeNames.WITH_THUMBNAILS).findOne(query)
+  }
+
+  static loadByUrlImmutableAttributes (url: string, transaction?: Transaction): Bluebird<MVideoImmutable> {
+    const fun = () => {
+      const query: FindOptions = {
+        where: {
+          url
+        },
+        transaction
+      }
+
+      return VideoModel.scope(ScopeNames.WITH_IMMUTABLE_ATTRIBUTES).findOne(query)
+    }
+
+    return ModelCache.Instance.doCache({
+      cacheType: 'load-video-immutable-url',
+      key: url,
+      deleteKey: 'video',
+      fun
+    })
   }
 
   static loadByUrlAndPopulateAccount (url: string, transaction?: Transaction): Bluebird<MVideoAccountLightBlacklistAllFiles> {

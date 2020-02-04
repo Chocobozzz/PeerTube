@@ -23,7 +23,8 @@ async function processCreateView (activity: ActivityView | ActivityCreate, byAct
 
   const options = {
     videoObject,
-    fetchType: 'only-video' as 'only-video'
+    fetchType: 'only-immutable-attributes' as 'only-immutable-attributes',
+    allowRefresh: false as false
   }
   const { video } = await getOrCreateVideoAndAccountAndChannel(options)
 

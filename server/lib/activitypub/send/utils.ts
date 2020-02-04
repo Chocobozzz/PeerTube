@@ -7,7 +7,7 @@ import { JobQueue } from '../../job-queue'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 import { getServerActor } from '../../../helpers/utils'
 import { afterCommitIfTransaction } from '../../../helpers/database-utils'
-import { MActorWithInboxes, MActor, MActorId, MActorLight, MVideo, MVideoAccountLight } from '../../../typings/models'
+import { MActorWithInboxes, MActor, MActorId, MActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../../typings/models'
 import { ContextType } from '@server/helpers/activitypub'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
@@ -43,7 +43,7 @@ async function forwardVideoRelatedActivity (
   activity: Activity,
   t: Transaction,
   followersException: MActorWithInboxes[] = [],
-  video: MVideo
+  video: MVideoId
 ) {
   // Mastodon does not add our announces in audience, so we forward to them manually
   const additionalActors = await getActorsInvolvedInVideo(video, t)

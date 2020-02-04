@@ -68,7 +68,7 @@ import {
   MVideoAPWithoutCaption,
   MVideoFile,
   MVideoFullLight,
-  MVideoId,
+  MVideoId, MVideoImmutable,
   MVideoThumbnail
 } from '../../typings/models'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
@@ -200,24 +200,41 @@ async function syncVideoExternalAttributes (video: MVideo, fetchedVideo: VideoTo
   await Bluebird.map(jobPayloads, payload => JobQueue.Instance.createJobWithPromise({ type: 'activitypub-http-fetcher', payload }))
 }
 
-function getOrCreateVideoAndAccountAndChannel (options: {
+type GetVideoResult <T> = Promise<{
+  video: T
+  created: boolean
+  autoBlacklisted?: boolean
+}>
+
+type GetVideoParamAll = {
   videoObject: { id: string } | string
   syncParam?: SyncParam
   fetchType?: 'all'
   allowRefresh?: boolean
-}): Promise<{ video: MVideoAccountLightBlacklistAllFiles, created: boolean, autoBlacklisted?: boolean }>
-function getOrCreateVideoAndAccountAndChannel (options: {
+}
+
+type GetVideoParamImmutable = {
   videoObject: { id: string } | string
   syncParam?: SyncParam
-  fetchType?: VideoFetchByUrlType
+  fetchType: 'only-immutable-attributes'
+  allowRefresh: false
+}
+
+type GetVideoParamOther = {
+  videoObject: { id: string } | string
+  syncParam?: SyncParam
+  fetchType?: 'all' | 'only-video'
   allowRefresh?: boolean
-}): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }>
-async function getOrCreateVideoAndAccountAndChannel (options: {
-  videoObject: { id: string } | string
-  syncParam?: SyncParam
-  fetchType?: VideoFetchByUrlType
-  allowRefresh?: boolean // true by default
-}): Promise<{ video: MVideoAccountLightBlacklistAllFiles | MVideoThumbnail, created: boolean, autoBlacklisted?: boolean }> {
+}
+
+function getOrCreateVideoAndAccountAndChannel (options: GetVideoParamAll): GetVideoResult<MVideoAccountLightBlacklistAllFiles>
+function getOrCreateVideoAndAccountAndChannel (options: GetVideoParamImmutable): GetVideoResult<MVideoImmutable>
+function getOrCreateVideoAndAccountAndChannel (
+  options: GetVideoParamOther
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
+async function getOrCreateVideoAndAccountAndChannel (
+  options: GetVideoParamAll | GetVideoParamImmutable | GetVideoParamOther
+): GetVideoResult<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   // Default params
   const syncParam = options.syncParam || { likes: true, dislikes: true, shares: true, comments: true, thumbnail: true, refreshVideo: false }
   const fetchType = options.fetchType || 'all'
@@ -225,12 +242,13 @@ async function getOrCreateVideoAndAccountAndChannel (options: {
 
   // Get video url
   const videoUrl = getAPId(options.videoObject)
-
   let videoFromDatabase = await fetchVideoByUrl(videoUrl, fetchType)
+
   if (videoFromDatabase) {
-    if (videoFromDatabase.isOutdated() && allowRefresh === true) {
+    // If allowRefresh is true, we could not call this function using 'only-immutable-attributes' fetch type
+    if (allowRefresh === true && (videoFromDatabase as MVideoThumbnail).isOutdated()) {
       const refreshOptions = {
-        video: videoFromDatabase,
+        video: videoFromDatabase as MVideoThumbnail,
         fetchedType: fetchType,
         syncParam
       }

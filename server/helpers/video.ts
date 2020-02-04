@@ -38,13 +38,22 @@ function fetchVideo (
   if (fetchType === 'id' || fetchType === 'none') return VideoModel.loadOnlyId(id)
 }
 
-type VideoFetchByUrlType = 'all' | 'only-video'
+type VideoFetchByUrlType = 'all' | 'only-video' | 'only-immutable-attributes'
 
 function fetchVideoByUrl (url: string, fetchType: 'all'): Bluebird<MVideoAccountLightBlacklistAllFiles>
+function fetchVideoByUrl (url: string, fetchType: 'only-immutable-attributes'): Bluebird<MVideoImmutable>
 function fetchVideoByUrl (url: string, fetchType: 'only-video'): Bluebird<MVideoThumbnail>
-function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail>
-function fetchVideoByUrl (url: string, fetchType: VideoFetchByUrlType): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail> {
+function fetchVideoByUrl (
+  url: string,
+  fetchType: VideoFetchByUrlType
+): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable>
+function fetchVideoByUrl (
+  url: string,
+  fetchType: VideoFetchByUrlType
+): Bluebird<MVideoAccountLightBlacklistAllFiles | MVideoThumbnail | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadByUrlAndPopulateAccount(url)
+
+  if (fetchType === 'only-immutable-attributes') return VideoModel.loadByUrlImmutableAttributes(url)
 
   if (fetchType === 'only-video') return VideoModel.loadByUrl(url)
 }
