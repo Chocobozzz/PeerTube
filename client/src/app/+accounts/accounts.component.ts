@@ -96,7 +96,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   }
 
   subscribersDisplayFor (count: number) {
-    return this.i18n(`{count, plural, =1 {1 subscriber} other {${count} subscribers}}`, { count })
+    return this.i18n('{count, plural, =1 {1 subscriber} other {{{count}} subscribers}}', { count })
   }
 
   private getUserIfNeeded (account: Account) {

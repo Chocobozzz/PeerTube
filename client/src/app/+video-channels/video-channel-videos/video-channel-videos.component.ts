@@ -72,7 +72,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
                .getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
                .pipe(
                  tap(({ total }) => {
-                   this.titlePage = this.i18n(`{total, plural, =1 {Published 1 video} other {Published ${total} videos}}`, { total })
+                   this.titlePage = this.i18n(`{total, plural, =1 {Published 1 video} other {Published {{total}} videos}}`, { total })
                  })
                )
   }
