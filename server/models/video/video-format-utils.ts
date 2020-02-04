@@ -270,7 +270,15 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     }
   }
 
-  const url: ActivityUrlObject[] = []
+  const url: ActivityUrlObject[] = [
+    // HTML url should be the first element in the array so Mastodon correctly displays the embed
+    {
+      type: 'Link',
+      mediaType: 'text/html',
+      href: WEBSERVER.URL + '/videos/watch/' + video.uuid
+    }
+  ]
+
   addVideoFilesInAPAcc(url, video, baseUrlHttp, baseUrlWs, video.VideoFiles || [])
 
   for (const playlist of (video.VideoStreamingPlaylists || [])) {
@@ -295,13 +303,6 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
       tag
     })
   }
-
-  // Add video url too
-  url.push({
-    type: 'Link',
-    mediaType: 'text/html',
-    href: WEBSERVER.URL + '/videos/watch/' + video.uuid
-  })
 
   const subtitleLanguage = []
   for (const caption of video.VideoCaptions) {
