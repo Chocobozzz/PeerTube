@@ -13,7 +13,7 @@ import { ContextType } from '@server/helpers/activitypub'
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
   video: MVideoAccountLight
-  transaction?: Transaction,
+  transaction?: Transaction
   contextType?: ContextType
 }) {
   const { byActor, video, transaction, contextType } = options
