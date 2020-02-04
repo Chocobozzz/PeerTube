@@ -4,7 +4,7 @@
 
 ### IMPORTANT NOTES
 
- * **/!\ VERY IMPORTANT /!\\** You need to execute manually a script (can be executed after your upgrade, while your PeerTube instance is running) to create HLS video torrents:
+ * **/!\ VERY IMPORTANT /!\\** You need to execute manually a script (must be executed after the upgrade and a PeerTube restart, while your instance is running) to create HLS video torrents:
    * `cd /var/www/peertube/peertube-latest && sudo -u peertube NODE_CONFIG_DIR=/var/www/peertube/config NODE_ENV=production node dist/scripts/migrations/peertube-2.1.js`
  * **/!\ VERY IMPORTANT /!\\** In the next PeerTube release (v2.2.0), we'll add a unique index on actors usernames to fix some federation bugs.
  Please check now if you have conflicts using:
