@@ -84,7 +84,7 @@ async function sendUpdateCacheFile (byActor: MActorLight, redundancyModel: MVide
     return buildUpdateActivity(url, byActor, redundancyObject, audience)
   }
 
-  return sendVideoRelatedActivity(activityBuilder, { byActor, video })
+  return sendVideoRelatedActivity(activityBuilder, { byActor, video, contextType: 'CacheFile' })
 }
 
 async function sendUpdateVideoPlaylist (videoPlaylist: MVideoPlaylistFull, t: Transaction) {

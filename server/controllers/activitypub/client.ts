@@ -335,10 +335,10 @@ async function videoRedundancyController (req: express.Request, res: express.Res
 
   if (req.path.endsWith('/activity')) {
     const data = buildCreateActivity(videoRedundancy.url, serverActor, object, audience)
-    return activityPubResponse(activityPubContextify(data), res)
+    return activityPubResponse(activityPubContextify(data, 'CacheFile'), res)
   }
 
-  return activityPubResponse(activityPubContextify(object), res)
+  return activityPubResponse(activityPubContextify(object, 'CacheFile'), res)
 }
 
 async function videoPlaylistController (req: express.Request, res: express.Response) {

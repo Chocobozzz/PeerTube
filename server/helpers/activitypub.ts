@@ -8,102 +8,117 @@ import { pageToStartAndCount } from './core-utils'
 import { URL } from 'url'
 import { MActor, MVideoAccountLight } from '../typings/models'
 
-export type ContextType = 'All' | 'View' | 'Announce'
+export type ContextType = 'All' | 'View' | 'Announce' | 'CacheFile'
+
+function getContextData (type: ContextType) {
+  const context: any[] = [
+    'https://www.w3.org/ns/activitystreams',
+    'https://w3id.org/security/v1',
+    {
+      RsaSignature2017: 'https://w3id.org/security#RsaSignature2017'
+    }
+  ]
+
+  if (type !== 'View' && type !== 'Announce') {
+    const additional = {
+      pt: 'https://joinpeertube.org/ns#',
+      sc: 'http://schema.org#'
+    }
+
+    if (type === 'CacheFile') {
+      Object.assign(additional, {
+        expires: 'sc:expires',
+        CacheFile: 'pt:CacheFile'
+      })
+    } else {
+      Object.assign(additional, {
+        Hashtag: 'as:Hashtag',
+        uuid: 'sc:identifier',
+        category: 'sc:category',
+        licence: 'sc:license',
+        subtitleLanguage: 'sc:subtitleLanguage',
+        sensitive: 'as:sensitive',
+        language: 'sc:inLanguage',
+
+        Infohash: 'pt:Infohash',
+        originallyPublishedAt: 'sc:datePublished',
+        views: {
+          '@type': 'sc:Number',
+          '@id': 'pt:views'
+        },
+        state: {
+          '@type': 'sc:Number',
+          '@id': 'pt:state'
+        },
+        size: {
+          '@type': 'sc:Number',
+          '@id': 'pt:size'
+        },
+        fps: {
+          '@type': 'sc:Number',
+          '@id': 'pt:fps'
+        },
+        startTimestamp: {
+          '@type': 'sc:Number',
+          '@id': 'pt:startTimestamp'
+        },
+        stopTimestamp: {
+          '@type': 'sc:Number',
+          '@id': 'pt:stopTimestamp'
+        },
+        position: {
+          '@type': 'sc:Number',
+          '@id': 'pt:position'
+        },
+        commentsEnabled: {
+          '@type': 'sc:Boolean',
+          '@id': 'pt:commentsEnabled'
+        },
+        downloadEnabled: {
+          '@type': 'sc:Boolean',
+          '@id': 'pt:downloadEnabled'
+        },
+        waitTranscoding: {
+          '@type': 'sc:Boolean',
+          '@id': 'pt:waitTranscoding'
+        },
+        support: {
+          '@type': 'sc:Text',
+          '@id': 'pt:support'
+        },
+        likes: {
+          '@id': 'as:likes',
+          '@type': '@id'
+        },
+        dislikes: {
+          '@id': 'as:dislikes',
+          '@type': '@id'
+        },
+        playlists: {
+          '@id': 'pt:playlists',
+          '@type': '@id'
+        },
+        shares: {
+          '@id': 'as:shares',
+          '@type': '@id'
+        },
+        comments: {
+          '@id': 'as:comments',
+          '@type': '@id'
+        }
+      })
+    }
+
+    context.push(additional)
+  }
+
+  return {
+    '@context': context
+  }
+}
 
 function activityPubContextify <T> (data: T, type: ContextType = 'All') {
-  const base = {
-    RsaSignature2017: 'https://w3id.org/security#RsaSignature2017'
-  }
-
-  if (type === 'All') {
-    Object.assign(base, {
-      pt: 'https://joinpeertube.org/ns#',
-      sc: 'http://schema.org#',
-      Hashtag: 'as:Hashtag',
-      uuid: 'sc:identifier',
-      category: 'sc:category',
-      licence: 'sc:license',
-      subtitleLanguage: 'sc:subtitleLanguage',
-      sensitive: 'as:sensitive',
-      language: 'sc:inLanguage',
-      expires: 'sc:expires',
-      CacheFile: 'pt:CacheFile',
-      Infohash: 'pt:Infohash',
-      originallyPublishedAt: 'sc:datePublished',
-      views: {
-        '@type': 'sc:Number',
-        '@id': 'pt:views'
-      },
-      state: {
-        '@type': 'sc:Number',
-        '@id': 'pt:state'
-      },
-      size: {
-        '@type': 'sc:Number',
-        '@id': 'pt:size'
-      },
-      fps: {
-        '@type': 'sc:Number',
-        '@id': 'pt:fps'
-      },
-      startTimestamp: {
-        '@type': 'sc:Number',
-        '@id': 'pt:startTimestamp'
-      },
-      stopTimestamp: {
-        '@type': 'sc:Number',
-        '@id': 'pt:stopTimestamp'
-      },
-      position: {
-        '@type': 'sc:Number',
-        '@id': 'pt:position'
-      },
-      commentsEnabled: {
-        '@type': 'sc:Boolean',
-        '@id': 'pt:commentsEnabled'
-      },
-      downloadEnabled: {
-        '@type': 'sc:Boolean',
-        '@id': 'pt:downloadEnabled'
-      },
-      waitTranscoding: {
-        '@type': 'sc:Boolean',
-        '@id': 'pt:waitTranscoding'
-      },
-      support: {
-        '@type': 'sc:Text',
-        '@id': 'pt:support'
-      },
-      likes: {
-        '@id': 'as:likes',
-        '@type': '@id'
-      },
-      dislikes: {
-        '@id': 'as:dislikes',
-        '@type': '@id'
-      },
-      playlists: {
-        '@id': 'pt:playlists',
-        '@type': '@id'
-      },
-      shares: {
-        '@id': 'as:shares',
-        '@type': '@id'
-      },
-      comments: {
-        '@id': 'as:comments',
-        '@type': '@id'
-      }
-    })
-  }
-
-  return Object.assign({}, data, {
-    '@context': [
-      'https://www.w3.org/ns/activitystreams',
-      'https://w3id.org/security/v1',
-      base
-    ]
-  })
+  return Object.assign({}, data, getContextData(type))
 }
 
 type ActivityPubCollectionPaginationHandler = (start: number, count: number) => Bluebird<ResultList<any>> | Promise<ResultList<any>>
