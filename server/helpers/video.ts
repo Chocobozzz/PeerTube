@@ -5,13 +5,15 @@ import {
   MVideoFullLight,
   MVideoIdThumbnail,
   MVideoThumbnail,
-  MVideoWithRights
+  MVideoWithRights,
+  MVideoImmutable
 } from '@server/typings/models'
 import { Response } from 'express'
 
-type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none'
+type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
 function fetchVideo (id: number | string, fetchType: 'all', userId?: number): Bluebird<MVideoFullLight>
+function fetchVideo (id: number | string, fetchType: 'only-immutable-attributes'): Bluebird<MVideoImmutable>
 function fetchVideo (id: number | string, fetchType: 'only-video', userId?: number): Bluebird<MVideoThumbnail>
 function fetchVideo (id: number | string, fetchType: 'only-video-with-rights', userId?: number): Bluebird<MVideoWithRights>
 function fetchVideo (id: number | string, fetchType: 'id' | 'none', userId?: number): Bluebird<MVideoIdThumbnail>
@@ -19,13 +21,15 @@ function fetchVideo (
   id: number | string,
   fetchType: VideoFetchType,
   userId?: number
-): Bluebird<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail>
+): Bluebird<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable>
 function fetchVideo (
   id: number | string,
   fetchType: VideoFetchType,
   userId?: number
-): Bluebird<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail> {
+): Bluebird<MVideoFullLight | MVideoThumbnail | MVideoWithRights | MVideoIdThumbnail | MVideoImmutable> {
   if (fetchType === 'all') return VideoModel.loadAndPopulateAccountAndServerAndTags(id, undefined, userId)
+
+  if (fetchType === 'only-immutable-attributes') return VideoModel.loadImmutableAttributes(id)
 
   if (fetchType === 'only-video-with-rights') return VideoModel.loadWithRights(id)
 

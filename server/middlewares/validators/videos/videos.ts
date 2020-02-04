@@ -147,7 +147,10 @@ async function checkVideoFollowConstraints (req: express.Request, res: express.R
             })
 }
 
-const videosCustomGetValidator = (fetchType: 'all' | 'only-video' | 'only-video-with-rights', authenticateInQuery = false) => {
+const videosCustomGetValidator = (
+  fetchType: 'all' | 'only-video' | 'only-video-with-rights' | 'only-immutable-attributes',
+  authenticateInQuery = false
+) => {
   return [
     param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
 

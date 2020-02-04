@@ -6,6 +6,10 @@ type ModelCacheType =
   'local-account-name'
   | 'local-actor-name'
   | 'local-actor-url'
+  | 'video-immutable'
+
+type DeleteKey =
+  'video'
 
 class ModelCache {
 
@@ -14,7 +18,14 @@ class ModelCache {
   private readonly localCache: { [id in ModelCacheType]: Map<string, any> } = {
     'local-account-name': new Map(),
     'local-actor-name': new Map(),
-    'local-actor-url': new Map()
+    'local-actor-url': new Map(),
+    'video-immutable': new Map()
+  }
+
+  private readonly deleteIds: {
+    [deleteKey in DeleteKey]: Map<number, { cacheType: ModelCacheType, key: string }[]>
+  } = {
+    video: new Map()
   }
 
   private constructor () {
@@ -29,8 +40,9 @@ class ModelCache {
     key: string
     fun: () => Bluebird<T>
     whitelist?: () => boolean
+    deleteKey?: DeleteKey
   }) {
-    const { cacheType, key, fun, whitelist } = options
+    const { cacheType, key, fun, whitelist, deleteKey } = options
 
     if (whitelist && whitelist() !== true) return fun()
 
@@ -42,10 +54,33 @@ class ModelCache {
     }
 
     return fun().then(m => {
+      if (!m) return m
+
       if (!whitelist || whitelist()) cache.set(key, m)
+
+      if (deleteKey) {
+        const map = this.deleteIds[deleteKey]
+        if (!map.has(m.id)) map.set(m.id, [])
+
+        const a = map.get(m.id)
+        a.push({ cacheType, key })
+      }
 
       return m
     })
+  }
+
+  invalidateCache (deleteKey: DeleteKey, modelId: number) {
+    const map = this.deleteIds[deleteKey]
+
+    if (!map.has(modelId)) return
+
+    for (const toDelete of map.get(modelId)) {
+      logger.debug('Removing %s -> %d of model cache %s -> %s.', deleteKey, modelId, toDelete.cacheType, toDelete.key)
+      this.localCache[toDelete.cacheType].delete(toDelete.key)
+    }
+
+    map.delete(modelId)
   }
 }
 

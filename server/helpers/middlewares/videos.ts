@@ -2,7 +2,16 @@ import { Response } from 'express'
 import { fetchVideo, VideoFetchType } from '../video'
 import { UserRight } from '../../../shared/models/users'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { MUser, MUserAccountId, MVideoAccountLight, MVideoFullLight, MVideoThumbnail, MVideoWithRights } from '@server/typings/models'
+import {
+  MUser,
+  MUserAccountId,
+  MVideoAccountLight,
+  MVideoFullLight,
+  MVideoIdThumbnail,
+  MVideoImmutable,
+  MVideoThumbnail,
+  MVideoWithRights
+} from '@server/typings/models'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoFetchType = 'all') {
   const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
@@ -22,8 +31,12 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
       res.locals.videoAll = video as MVideoFullLight
       break
 
+    case 'only-immutable-attributes':
+      res.locals.onlyImmutableVideo = video as MVideoImmutable
+      break
+
     case 'id':
-      res.locals.videoId = video
+      res.locals.videoId = video as MVideoIdThumbnail
       break
 
     case 'only-video':

@@ -37,7 +37,7 @@ import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { MAccountId, MActorId, MVideo, MVideoAPWithoutCaption } from '@server/typings/models'
+import { MAccountId, MActorId, MVideo, MVideoAPWithoutCaption, MVideoId } from '@server/typings/models'
 
 const activityPubClientRouter = express.Router()
 
@@ -85,7 +85,7 @@ activityPubClientRouter.get('/videos/watch/:id/activity',
 )
 activityPubClientRouter.get('/videos/watch/:id/announces',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(videoAnnouncesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/announces/:actorId',
@@ -95,17 +95,17 @@ activityPubClientRouter.get('/videos/watch/:id/announces/:actorId',
 )
 activityPubClientRouter.get('/videos/watch/:id/likes',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(videoLikesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/dislikes',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(videoDislikesController)
 )
 activityPubClientRouter.get('/videos/watch/:id/comments',
   executeIfActivityPub,
-  asyncMiddleware(videosCustomGetValidator('only-video')),
+  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(videoCommentsController)
 )
 activityPubClientRouter.get('/videos/watch/:videoId/comments/:commentId',
@@ -238,7 +238,7 @@ async function videoAnnounceController (req: express.Request, res: express.Respo
 }
 
 async function videoAnnouncesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.onlyImmutableVideo
 
   const handler = async (start: number, count: number) => {
     const result = await VideoShareModel.listAndCountByVideoId(video.id, start, count)
@@ -253,21 +253,21 @@ async function videoAnnouncesController (req: express.Request, res: express.Resp
 }
 
 async function videoLikesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.onlyImmutableVideo
   const json = await videoRates(req, 'like', video, getVideoLikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoDislikesController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.onlyImmutableVideo
   const json = await videoRates(req, 'dislike', video, getVideoDislikesActivityPubUrl(video))
 
   return activityPubResponse(activityPubContextify(json), res)
 }
 
 async function videoCommentsController (req: express.Request, res: express.Response) {
-  const video = res.locals.onlyVideo
+  const video = res.locals.onlyImmutableVideo
 
   const handler = async (start: number, count: number) => {
     const result = await VideoCommentModel.listAndCountByVideoId(video.id, start, count)
@@ -386,7 +386,7 @@ async function actorPlaylists (req: express.Request, account: MAccountId) {
   return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
-function videoRates (req: express.Request, rateType: VideoRateType, video: MVideo, url: string) {
+function videoRates (req: express.Request, rateType: VideoRateType, video: MVideoId, url: string) {
   const handler = async (start: number, count: number) => {
     const result = await AccountVideoRateModel.listAndCountAccountUrlsByVideoId(rateType, video.id, start, count)
     return {

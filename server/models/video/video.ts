@@ -120,7 +120,7 @@ import {
   MVideoFormattableDetails,
   MVideoForUser,
   MVideoFullLight,
-  MVideoIdThumbnail,
+  MVideoIdThumbnail, MVideoImmutable,
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
@@ -132,6 +132,7 @@ import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import validator from 'validator'
+import { ModelCache } from '@server/models/model-cache'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -1074,6 +1075,11 @@ export class VideoModel extends Model<VideoModel> {
     return undefined
   }
 
+  @BeforeDestroy
+  static invalidateCache (instance: VideoModel) {
+    ModelCache.Instance.invalidateCache('video', instance.id)
+  }
+
   static listLocal (): Bluebird<MVideoWithAllFiles[]> {
     const query = {
       where: {
@@ -1466,6 +1472,28 @@ export class VideoModel extends Model<VideoModel> {
       ScopeNames.WITH_THUMBNAILS,
       ScopeNames.WITH_BLACKLISTED
     ]).findOne(options)
+  }
+
+  static loadImmutableAttributes (id: number | string, t?: Transaction): Bluebird<MVideoImmutable> {
+    const fun = () => {
+      const where = buildWhereIdOrUUID(id)
+      const options = {
+        attributes: [
+          'id', 'url', 'uuid'
+        ],
+        where,
+        transaction: t
+      }
+
+      return VideoModel.unscoped().findOne(options)
+    }
+
+    return ModelCache.Instance.doCache({
+      cacheType: 'video-immutable',
+      key: '' + id,
+      deleteKey: 'video',
+      fun
+    })
   }
 
   static loadWithRights (id: number | string, t?: Transaction): Bluebird<MVideoWithRights> {
