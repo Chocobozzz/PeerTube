@@ -462,6 +462,36 @@ export class ActorModel extends Model<ActorModel> {
     }, { where, transaction })
   }
 
+  static loadAccountActorByVideoId (videoId: number): Bluebird<MActor> {
+    const query = {
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id', 'accountId' ],
+              model: VideoChannelModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: [ 'id', 'channelId' ],
+                  model: VideoModel.unscoped(),
+                  where: {
+                    id: videoId
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return ActorModel.unscoped().findOne(query)
+  }
+
   getSharedInbox (this: MActorWithInboxes) {
     return this.sharedInboxUrl || this.inboxUrl
   }

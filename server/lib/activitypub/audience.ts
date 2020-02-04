@@ -4,19 +4,11 @@ import { ACTIVITY_PUB } from '../../initializers/constants'
 import { ActorModel } from '../../models/activitypub/actor'
 import { VideoModel } from '../../models/video/video'
 import { VideoShareModel } from '../../models/video/video-share'
-import {
-  MActorFollowersUrl,
-  MActorLight,
-  MCommentOwner,
-  MCommentOwnerVideo,
-  MVideo,
-  MVideoAccountLight,
-  MVideoId
-} from '../../typings/models'
+import { MActorFollowersUrl, MActorLight, MActorUrl, MCommentOwner, MCommentOwnerVideo, MVideoId } from '../../typings/models'
 
-function getRemoteVideoAudience (video: MVideoAccountLight, actorsInvolvedInVideo: MActorFollowersUrl[]): ActivityAudience {
+function getRemoteVideoAudience (accountActor: MActorUrl, actorsInvolvedInVideo: MActorFollowersUrl[]): ActivityAudience {
   return {
-    to: [ video.VideoChannel.Account.Actor.url ],
+    to: [ accountActor.url ],
     cc: actorsInvolvedInVideo.map(a => a.followersUrl)
   }
 }

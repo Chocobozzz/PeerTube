@@ -1,4 +1,3 @@
-// Intercept ActivityPub client requests
 import * as express from 'express'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
@@ -37,9 +36,11 @@ import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { MAccountId, MActorId, MVideo, MVideoAPWithoutCaption, MVideoId } from '@server/typings/models'
+import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId } from '@server/typings/models'
 
 const activityPubClientRouter = express.Router()
+
+// Intercept ActivityPub client requests
 
 activityPubClientRouter.get('/accounts?/:name',
   executeIfActivityPub,

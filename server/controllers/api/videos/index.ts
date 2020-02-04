@@ -135,7 +135,7 @@ videosRouter.get('/:id',
   asyncMiddleware(getVideo)
 )
 videosRouter.post('/:id/views',
-  asyncMiddleware(videosGetValidator),
+  asyncMiddleware(videosCustomGetValidator('only-immutable-attributes')),
   asyncMiddleware(viewVideo)
 )
 
@@ -458,7 +458,7 @@ async function getVideo (req: express.Request, res: express.Response) {
 }
 
 async function viewVideo (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
+  const videoInstance = res.locals.onlyImmutableVideo
 
   const ip = req.ip
   const exists = await Redis.Instance.doesVideoIPViewExist(ip, videoInstance.uuid)

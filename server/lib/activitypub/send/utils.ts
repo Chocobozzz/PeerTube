@@ -7,12 +7,12 @@ import { JobQueue } from '../../job-queue'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 import { getServerActor } from '../../../helpers/utils'
 import { afterCommitIfTransaction } from '../../../helpers/database-utils'
-import { MActorWithInboxes, MActor, MActorId, MActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../../typings/models'
+import { MActor, MActorId, MActorLight, MActorWithInboxes, MVideoAccountLight, MVideoId, MVideoImmutable } from '../../../typings/models'
 import { ContextType } from '@server/helpers/activitypub'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight
-  video: MVideoAccountLight
+  video: MVideoImmutable | MVideoAccountLight
   transaction?: Transaction
   contextType?: ContextType
 }) {
@@ -22,11 +22,13 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 
   // Send to origin
   if (video.isOwned() === false) {
-    const audience = getRemoteVideoAudience(video, actorsInvolvedInVideo)
+    const accountActor = (video as MVideoAccountLight).VideoChannel?.Account?.Actor || await ActorModel.loadAccountActorByVideoId(video.id)
+
+    const audience = getRemoteVideoAudience(accountActor, actorsInvolvedInVideo)
     const activity = activityBuilder(audience)
 
     return afterCommitIfTransaction(transaction, () => {
-      return unicastTo(activity, byActor, video.VideoChannel.Account.Actor.getSharedInbox(), contextType)
+      return unicastTo(activity, byActor, accountActor.getSharedInbox(), contextType)
     })
   }
 
