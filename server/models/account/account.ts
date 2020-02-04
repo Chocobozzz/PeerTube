@@ -32,8 +32,9 @@ import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequ
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { ActorFollowModel } from '../activitypub/actor-follow'
-import { MAccountActor, MAccountDefault, MAccountSummaryFormattable, MAccountFormattable, MAccountAP } from '../../typings/models'
+import { MAccountActor, MAccountAP, MAccountDefault, MAccountFormattable, MAccountSummaryFormattable } from '../../typings/models'
 import * as Bluebird from 'bluebird'
+import { ModelCache } from '@server/models/model-cache'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -218,8 +219,6 @@ export class AccountModel extends Model<AccountModel> {
   })
   BlockedAccounts: AccountBlocklistModel[]
 
-  private static cache: { [ id: string ]: any } = {}
-
   @BeforeDestroy
   static async sendDeleteIfOwned (instance: AccountModel, options) {
     if (!instance.Actor) {
@@ -247,45 +246,43 @@ export class AccountModel extends Model<AccountModel> {
   }
 
   static loadLocalByName (name: string): Bluebird<MAccountDefault> {
-    // The server actor never change, so we can easily cache it
-    if (name === SERVER_ACTOR_NAME && AccountModel.cache[name]) {
-      return Bluebird.resolve(AccountModel.cache[name])
-    }
-
-    const query = {
-      where: {
-        [Op.or]: [
-          {
-            userId: {
-              [Op.ne]: null
+    const fun = () => {
+      const query = {
+        where: {
+          [Op.or]: [
+            {
+              userId: {
+                [Op.ne]: null
+              }
+            },
+            {
+              applicationId: {
+                [Op.ne]: null
+              }
             }
-          },
+          ]
+        },
+        include: [
           {
-            applicationId: {
-              [Op.ne]: null
+            model: ActorModel,
+            required: true,
+            where: {
+              preferredUsername: name
             }
           }
         ]
-      },
-      include: [
-        {
-          model: ActorModel,
-          required: true,
-          where: {
-            preferredUsername: name
-          }
-        }
-      ]
+      }
+
+      return AccountModel.findOne(query)
     }
 
-    return AccountModel.findOne(query)
-      .then(account => {
-        if (name === SERVER_ACTOR_NAME) {
-          AccountModel.cache[name] = account
-        }
-
-        return account
-      })
+    return ModelCache.Instance.doCache({
+      cacheType: 'local-account-name',
+      key: name,
+      fun,
+      // The server actor never change, so we can easily cache it
+      whitelist: () => name === SERVER_ACTOR_NAME
+    })
   }
 
   static loadByNameAndHost (name: string, host: string): Bluebird<MAccountDefault> {

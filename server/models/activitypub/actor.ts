@@ -48,6 +48,7 @@ import {
 } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 import { Op, Transaction, literal } from 'sequelize'
+import { ModelCache } from '@server/models/model-cache'
 
 enum ScopeNames {
   FULL = 'FULL'
@@ -276,9 +277,6 @@ export class ActorModel extends Model<ActorModel> {
   })
   VideoChannel: VideoChannelModel
 
-  private static localNameCache: { [ id: string ]: any } = {}
-  private static localUrlCache: { [ id: string ]: any } = {}
-
   static load (id: number): Bluebird<MActor> {
     return ActorModel.unscoped().findByPk(id)
   }
@@ -345,54 +343,50 @@ export class ActorModel extends Model<ActorModel> {
   }
 
   static loadLocalByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorFull> {
-    // The server actor never change, so we can easily cache it
-    if (preferredUsername === SERVER_ACTOR_NAME && ActorModel.localNameCache[preferredUsername]) {
-      return Bluebird.resolve(ActorModel.localNameCache[preferredUsername])
+    const fun = () => {
+      const query = {
+        where: {
+          preferredUsername,
+          serverId: null
+        },
+        transaction
+      }
+
+      return ActorModel.scope(ScopeNames.FULL)
+                       .findOne(query)
     }
 
-    const query = {
-      where: {
-        preferredUsername,
-        serverId: null
-      },
-      transaction
-    }
-
-    return ActorModel.scope(ScopeNames.FULL)
-                     .findOne(query)
-                     .then(actor => {
-                       if (preferredUsername === SERVER_ACTOR_NAME) {
-                         ActorModel.localNameCache[preferredUsername] = actor
-                       }
-
-                       return actor
-                     })
+    return ModelCache.Instance.doCache({
+      cacheType: 'local-actor-name',
+      key: preferredUsername,
+      // The server actor never change, so we can easily cache it
+      whitelist: () => preferredUsername === SERVER_ACTOR_NAME,
+      fun
+    })
   }
 
   static loadLocalUrlByName (preferredUsername: string, transaction?: Transaction): Bluebird<MActorUrl> {
-    // The server actor never change, so we can easily cache it
-    if (preferredUsername === SERVER_ACTOR_NAME && ActorModel.localUrlCache[preferredUsername]) {
-      return Bluebird.resolve(ActorModel.localUrlCache[preferredUsername])
+    const fun = () => {
+      const query = {
+        attributes: [ 'url' ],
+        where: {
+          preferredUsername,
+          serverId: null
+        },
+        transaction
+      }
+
+      return ActorModel.unscoped()
+                       .findOne(query)
     }
 
-    const query = {
-      attributes: [ 'url' ],
-      where: {
-        preferredUsername,
-        serverId: null
-      },
-      transaction
-    }
-
-    return ActorModel.unscoped()
-                     .findOne(query)
-                     .then(actor => {
-                       if (preferredUsername === SERVER_ACTOR_NAME) {
-                         ActorModel.localUrlCache[preferredUsername] = actor
-                       }
-
-                       return actor
-                     })
+    return ModelCache.Instance.doCache({
+      cacheType: 'local-actor-name',
+      key: preferredUsername,
+      // The server actor never change, so we can easily cache it
+      whitelist: () => preferredUsername === SERVER_ACTOR_NAME,
+      fun
+    })
   }
 
   static loadByNameAndHost (preferredUsername: string, host: string): Bluebird<MActorFull> {
