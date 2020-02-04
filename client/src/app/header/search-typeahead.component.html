@@ -1,9 +1,13 @@
-<div class="d-inline-flex position-relative" id="typeahead-container" #contentWrapper>
-  <ng-content></ng-content>
+<div class="d-inline-flex position-relative" id="typeahead-container">
+  <input
+    type="text" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, channels…"
+    [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keyup)="handleKeyUp($event)"
+  >
+  <span class="icon icon-search" (click)="doSearch()"></span>
 
   <div class="position-absolute jump-to-suggestions">
     <!-- suggestions -->
-    <my-suggestions *ngIf="hasSearch && newSearch" [results]="results" [highlight]="searchInput.value" (init)="initKeyboardEventsManager($event)" #suggestions></my-suggestions>
+    <my-suggestions *ngIf="search && newSearch" [results]="results" [highlight]="search" (init)="initKeyboardEventsManager($event)"></my-suggestions>
 
     <!-- suggestion help, not shown until one of the suggestions is selected and specific to that suggestion -->
     <div *ngIf="showHelp" id="typeahead-help" class="overflow-hidden">
@@ -11,7 +15,7 @@
         <div class="d-flex justify-content-between">
           <label class="small-title" i18n>Global search</label>
           <div class="advanced-search-status text-muted">
-            <span class="mr-1" i18n>using {{ globalSearchIndex }}</span>
+            <span *ngIf="serverConfig" class="mr-1" i18n>using {{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}</span>
             <i class="glyphicon glyphicon-globe"></i>
           </div>
         </div>
@@ -20,13 +24,14 @@
     </div>
 
     <!-- search instructions, when search input is empty -->
-    <div *ngIf="!hasSearch" id="typeahead-instructions" class="overflow-hidden">
+    <div *ngIf="showInstructions" id="typeahead-instructions" class="overflow-hidden">
       <div class="d-flex justify-content-between">
         <label class="small-title" i18n>Advanced search</label>
         <div class="advanced-search-status c-help">
-          <span [ngClass]="URIPolicy === 'any' ? 'text-success' : 'text-muted'" [title]="URIPolicyText">
-            <span class="mr-1" i18n>{URIPolicy, select, only-followed {only followed instances} other {any instance}} </span>
-            <i [ngClass]="URIPolicy === 'any' ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
+          <span [ngClass]="anyURI ? 'text-success' : 'text-muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
+            <span *ngIf="anyURI" class="mr-1" i18n>any instance</span>
+            <span *ngIf="!anyURI" class="mr-1" i18n>only followed instances</span>
+            <i [ngClass]="anyURI ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
           </span>
         </div>
       </div>

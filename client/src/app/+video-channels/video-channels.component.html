@@ -7,25 +7,29 @@
       <div class="actor-info">
         <div class="actor-names">
           <div class="actor-display-name">{{ videoChannel.displayName }}</div>
-          <div class="actor-name">{{ videoChannel.nameWithHost }}
+          <div class="actor-name">
+            <span>{{ videoChannel.nameWithHost }}</span>
             <button [cdkCopyToClipboard]="videoChannel.nameWithHost" (click)="activateCopiedMessage()"
                     class="btn btn-outline-secondary btn-sm copy-button"
             >
               <span class="glyphicon glyphicon-copy"></span>
             </button>
           </div>
-
-          <div class="right-buttons">
-            <a *ngIf="isChannelManageable" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
-            <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
-          </div>
         </div>
-        <div class="actor-followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
 
-        <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
-          <span i18n>Created by {{ videoChannel.ownerBy }}</span>
-          <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
-        </a>
+        <div class="right-buttons">
+          <a *ngIf="isChannelManageable" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
+          <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
+        </div>
+
+        <div class="actor-lower">
+          <div class="actor-followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
+  
+          <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
+            <span i18n>Created by {{ videoChannel.ownerBy }}</span>
+            <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
+          </a>
+        </div>
       </div>
     </div>
 

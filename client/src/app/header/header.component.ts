@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'my-header',
@@ -7,15 +6,4 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './header.component.scss' ]
 })
 
-export class HeaderComponent implements OnInit {
-  searchValue = ''
-  ariaLabelTextForSearch = ''
-
-  constructor (
-    private i18n: I18n
-  ) {}
-
-  ngOnInit () {
-    this.ariaLabelTextForSearch = this.i18n('Search videos, channels')
-  }
-}
+export class HeaderComponent {}

@@ -1,5 +1,6 @@
 $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
+@import '_bootstrap-variables';
 @import '_variables';
 @import '_mixins';
 
@@ -234,7 +235,7 @@ table {
   }
 }
 
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: #{map-get($grid-breakpoints, xxl)}) {
   .main-col {
     &.expanded {
       .margin-content {
@@ -245,7 +246,7 @@ table {
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
   .main-col {
     &.expanded {
       .margin-content {

@@ -3,6 +3,30 @@
 @import '_bootstrap-variables';
 @import '~bootstrap/scss/mixins/_breakpoints';
 
+#search-video {
+  @include peertube-input-text($search-input-width);
+  padding-left: 10px;
+  padding-right: 40px; // For the search icon
+  font-size: 14px;
+
+  &::placeholder {
+    color: var(--inputPlaceholderColor);
+  }
+}
+
+.icon.icon-search {
+  @include icon(25px);
+  height: 21px;
+
+  background-color: var(--mainForegroundColor);
+  mask: url('../../assets/images/header/search.svg') no-repeat 50% 50%;
+
+  // yolo
+  position: absolute;
+  margin-left: -35px;
+  margin-top: 5px;
+}
+
 .jump-to-suggestions {
   top: 100%;
   left: 0;
@@ -42,7 +66,7 @@ my-suggestions ::ng-deep ul {
 }
 
 #typeahead-container {
-  ::ng-deep input {
+  input {
     border: 1px solid var(--mainBackgroundColor) !important;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 20px 0px;
     flex-grow: 1;
@@ -56,12 +80,12 @@ my-suggestions ::ng-deep ul {
   @media screen and (max-width: $small-view) {
     flex: 1;
 
-    ::ng-deep input {
+    input {
       width: unset;
     }
   }
 
-  ::ng-deep span {
+  span {
     right: 10px;
   }
 

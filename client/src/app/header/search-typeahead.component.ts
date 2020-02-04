@@ -1,16 +1,15 @@
 import {
   Component,
-  ViewChild,
-  ElementRef,
   AfterViewInit,
   OnInit,
   OnDestroy,
-  QueryList
+  QueryList,
+  ViewChild,
+  ElementRef
 } from '@angular/core'
-import { Router, NavigationEnd, Params, ActivatedRoute } from '@angular/router'
+import { Router, Params, ActivatedRoute } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { filter, first, tap, map } from 'rxjs/operators'
+import { first, tap } from 'rxjs/operators'
 import { ListKeyManager } from '@angular/cdk/a11y'
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes'
 import { SuggestionComponent, Result } from './suggestion.component'
@@ -24,19 +23,16 @@ import { ServerConfig } from '@shared/models'
   styleUrls: [ './search-typeahead.component.scss' ]
 })
 export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewInit {
-  @ViewChild('contentWrapper', { static: true }) contentWrapper: ElementRef
+  @ViewChild('searchVideo', { static: true }) searchInput: ElementRef<HTMLInputElement>
 
   hasChannel = false
   inChannel = false
   newSearch = true
 
-  searchInput: HTMLInputElement
+  search = ''
   serverConfig: ServerConfig
 
-  URIPolicyText: string
-  inAllText: string
   inThisChannelText: string
-  globalSearchIndex = 'https://index.joinpeertube.org'
 
   keyboardEventsManager: ListKeyManager<SuggestionComponent>
   results: any[] = []
@@ -45,30 +41,10 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private serverService: ServerService,
-    private i18n: I18n
-  ) {
-    this.URIPolicyText = this.i18n('Determines whether you can resolve any distant content, or if your instance only allows doing so for instances it follows.')
-    this.inAllText = this.i18n('In all PeerTube')
-    this.inThisChannelText = this.i18n('In this channel')
-  }
+    private serverService: ServerService
+  ) {}
 
   ngOnInit () {
-    this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.hasChannel = event.url.startsWith('/videos/watch')
-        this.inChannel = event.url.startsWith('/video-channels')
-        this.computeResults()
-      })
-
-    this.router.events
-      .pipe(
-        filter(e => e instanceof NavigationEnd),
-        map(() => getParameterByName('search', window.location.href))
-      )
-      .subscribe(searchQuery => this.searchInput.value = searchQuery || '')
-
     this.serverService.getConfig()
       .subscribe(config => this.serverConfig = config)
   }
@@ -78,53 +54,52 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
   }
 
   ngAfterViewInit () {
-    this.searchInput = this.contentWrapper.nativeElement.childNodes[0]
-    this.searchInput.addEventListener('input', this.computeResults.bind(this))
-    this.searchInput.addEventListener('keyup', this.handleKeyUp.bind(this))
-  }
-
-  get hasSearch () {
-    return !!this.searchInput && !!this.searchInput.value
+    this.search = getParameterByName('search', window.location.href) || ''
   }
 
   get activeResult () {
     return this.keyboardEventsManager && this.keyboardEventsManager.activeItem && this.keyboardEventsManager.activeItem.result
   }
 
-  get showHelp () {
-    return this.hasSearch && this.newSearch && this.activeResult && this.activeResult.type === 'search-global' || false
+  get showInstructions () {
+    return !this.search
   }
 
-  get URIPolicy (): 'only-followed' | 'any' {
-    return (
-      this.authService.isLoggedIn()
-        ? this.serverConfig.search.remoteUri.users
-        : this.serverConfig.search.remoteUri.anonymous
-    )
-      ? 'any'
-      : 'only-followed'
+  get showHelp () {
+    return this.search && this.newSearch && this.activeResult && this.activeResult.type === 'search-global' || false
+  }
+
+  get anyURI () {
+    if (!this.serverConfig) return false
+    return this.authService.isLoggedIn()
+      ? this.serverConfig.search.remoteUri.users
+      : this.serverConfig.search.remoteUri.anonymous
+  }
+
+  onSearchChange () {
+    this.computeResults()
   }
 
   computeResults () {
     this.newSearch = true
     let results: Result[] = []
 
-    if (this.hasSearch) {
+    if (this.search) {
       results = [
         /* Channel search is still unimplemented. Uncomment when it is.
         {
-          text: this.searchInput.value,
+          text: this.search,
           type: 'search-channel'
         },
         */
         {
-          text: this.searchInput.value,
+          text: this.search,
           type: 'search-instance',
           default: true
         },
         /* Global search is still unimplemented. Uncomment when it is.
         {
-          text: this.searchInput.value,
+          text: this.search,
           type: 'search-global'
         },
         */
@@ -137,7 +112,8 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
         // if we're not in a channel or one of its videos/playlits, show all channel-related results
         if (!(this.hasChannel || this.inChannel)) return !result.type.includes('channel')
         // if we're in a channel, show all channel-related results except for the channel redirection itself
-        if (this.inChannel) return !(result.type === 'channel')
+        if (this.inChannel) return result.type !== 'channel'
+        // all other result types are kept
         return true
       }
     )
@@ -187,7 +163,7 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
       Object.assign(queryParams, this.route.snapshot.queryParams)
     }
 
-    Object.assign(queryParams, { search: this.searchInput.value })
+    Object.assign(queryParams, { search: this.search })
 
     const o = this.authService.isLoggedIn()
       ? this.loadUserLanguagesIfNeeded(queryParams)

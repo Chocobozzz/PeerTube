@@ -5,48 +5,50 @@ import { SafeHtml } from '@angular/platform-browser'
 @Pipe({ name: 'highlight' })
 export class HighlightPipe implements PipeTransform {
   /* use this for single match search */
-  static SINGLE_MATCH: string = "Single-Match"
+  static SINGLE_MATCH = 'Single-Match'
   /* use this for single match search with a restriction that target should start with search string */
-  static SINGLE_AND_STARTS_WITH_MATCH: string = "Single-And-StartsWith-Match"
+  static SINGLE_AND_STARTS_WITH_MATCH = 'Single-And-StartsWith-Match'
   /* use this for global search */
-  static MULTI_MATCH: string = "Multi-Match"
+  static MULTI_MATCH = 'Multi-Match'
 
-  constructor() {}
-  transform(
+  // tslint:disable-next-line:no-empty
+  constructor () {}
+
+  transform (
       contentString: string = null,
       stringToHighlight: string = null,
-      option: string = "Single-And-StartsWith-Match",
-      caseSensitive: boolean = false,
-      highlightStyleName: string = "search-highlight"
+      option = 'Single-And-StartsWith-Match',
+      caseSensitive = false,
+      highlightStyleName = 'search-highlight'
   ): SafeHtml {
-      if (stringToHighlight && contentString && option) {
-          let regex: any = ""
-          let caseFlag: string = !caseSensitive ? "i" : ""
-          switch (option) {
-              case "Single-Match": {
-                  regex = new RegExp(stringToHighlight, caseFlag)
-                  break
-              }
-              case "Single-And-StartsWith-Match": {
-                  regex = new RegExp("^" + stringToHighlight, caseFlag)
-                  break
-              }
-              case "Multi-Match": {
-                  regex = new RegExp(stringToHighlight, "g" + caseFlag)
-                  break
-              }
-              default: {
-                  // default will be a global case-insensitive match
-                  regex = new RegExp(stringToHighlight, "gi")
-              }
-          }
-          const replaced = contentString.replace(
-              regex,
-              (match) => `<span class="${highlightStyleName}">${match}</span>`
-          )
-          return replaced
-      } else {
-          return contentString
+    if (stringToHighlight && contentString && option) {
+      let regex: any = ''
+      const caseFlag: string = !caseSensitive ? 'i' : ''
+      switch (option) {
+        case 'Single-Match': {
+          regex = new RegExp(stringToHighlight, caseFlag)
+          break
+        }
+        case 'Single-And-StartsWith-Match': {
+          regex = new RegExp("^" + stringToHighlight, caseFlag)
+          break
+        }
+        case 'Multi-Match': {
+          regex = new RegExp(stringToHighlight, 'g' + caseFlag)
+          break
+        }
+        default: {
+          // default will be a global case-insensitive match
+          regex = new RegExp(stringToHighlight, 'gi')
+        }
       }
+      const replaced = contentString.replace(
+          regex,
+          (match) => `<span class="${highlightStyleName}">${match}</span>`
+      )
+      return replaced
+    } else {
+      return contentString
+    }
   }
 }

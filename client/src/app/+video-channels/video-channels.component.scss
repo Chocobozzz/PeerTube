@@ -8,6 +8,23 @@
     width: 100%;
   }
 
+  .actor-info {
+    display: grid !important;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: 1fr auto / 1fr auto;
+    grid-template-areas: "name buttons"
+                         "lower buttons";
+
+    @media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
+      grid-template-areas: "name name"
+                           "lower buttons";
+    }
+  }
+
+  .actor-names {
+    grid-area: name;
+  }
+
   .actor-name {
     flex-grow: 1;
 
@@ -24,6 +41,9 @@
   height: max-content;
   margin-left: auto;
   margin-top: 20px;
+
+  grid-row: buttons-start / span buttons-end;
+  grid-column: buttons-start;
 
   a {
     @include peertube-button-outline;

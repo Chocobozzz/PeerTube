@@ -445,7 +445,6 @@
 @mixin actor-owner {
   @include disable-default-a-behaviour;
 
-  display: inline-table;
   font-size: 13px;
   margin-top: 4px;
   color: var(--mainForegroundColor);
@@ -488,19 +487,24 @@
       .actor-names {
         display: flex;
         align-items: center;
+        flex-wrap: wrap;
 
         .actor-display-name {
           font-size: 23px;
           font-weight: $font-bold;
+          margin-right: 7px;
         }
 
         .actor-name {
-          margin-left: 7px;
           position: relative;
           top: 3px;
           font-size: 14px;
           color: $grey-actor-name;
         }
+      }
+
+      .actor-lower {
+        grid-area: lower;
       }
 
       .actor-followers {
@@ -522,6 +526,11 @@
       margin-bottom: 0;
       text-transform: uppercase;
       font-weight: 600;
+      font-size: 110%;
+
+      @media screen and (max-width: $mobile-view) {
+        font-size: 130%;
+      }
     }
   }
 }

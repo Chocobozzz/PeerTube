@@ -9,15 +9,9 @@
   <div class="flex-auto overflow-hidden text-left no-wrap css-truncate css-truncate-target" [attr.aria-label]="result.text" [innerHTML]="result.text | highlight : highlight"></div>
 
   <div *ngIf="result.type !== 'channel' && result.type !== 'suggestion'" class="border rounded flex-shrink-0 px-1 bg-gray text-gray-light ml-1 f6">
-    <span *ngIf="result.type === 'search-channel'" [attr.aria-label]="inThisChannelText">
-      {{ inThisChannelText }}
-    </span>
-    <span *ngIf="result.type === 'search-instance'" [attr.aria-label]="inThisInstanceText">
-      {{ inThisInstanceText }}
-    </span>
-    <span *ngIf="result.type === 'search-global'" [attr.aria-label]="inAllText">
-      {{ inAllText }}
-    </span>
+    <span *ngIf="result.type === 'search-channel'" i18n>In this channel</span>
+    <span *ngIf="result.type === 'search-instance'" i18n>In this instance</span>
+    <span *ngIf="result.type === 'search-global'" i18n>In the vidiverse</span>
     <span *ngIf="result.type === 'search-any'" aria-hidden="true" class="d-inline-block ml-1 v-align-middle">↵</span>
   </div>
 

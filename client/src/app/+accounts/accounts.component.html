@@ -7,14 +7,13 @@
       <div class="actor-info">
         <div class="actor-names">
           <div class="actor-display-name">{{ account.displayName }}</div>
-          <div class="actor-name">{{ account.nameWithHost }}
-
-          <button [cdkCopyToClipboard]="account.nameWithHostForced" (click)="activateCopiedMessage()"
-                  class="btn btn-outline-secondary btn-sm copy-button"
-          >
-            <span class="glyphicon glyphicon-copy"></span>
-          </button>
-
+          <div class="actor-name">
+            <span>{{ account.nameWithHost }}</span>
+            <button [cdkCopyToClipboard]="account.nameWithHostForced" (click)="activateCopiedMessage()"
+                    class="btn btn-outline-secondary btn-sm copy-button"
+            >
+              <span class="glyphicon glyphicon-copy"></span>
+            </button>
           </div>
           <span *ngIf="accountUser?.blocked" [ngbTooltip]="accountUser.blockedReason" class="badge badge-danger" i18n>Banned</span>
           <span *ngIf="account.mutedByUser" class="badge badge-danger" i18n>Muted</span>

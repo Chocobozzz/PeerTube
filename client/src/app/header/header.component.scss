@@ -5,30 +5,6 @@ my-search-typeahead {
   margin-right: 15px;
 }
 
-#search-video {
-  @include peertube-input-text($search-input-width);
-  padding-left: 10px;
-  padding-right: 40px; // For the search icon
-  font-size: 14px;
-
-  &::placeholder {
-    color: var(--inputPlaceholderColor);
-  }
-}
-
-.icon.icon-search {
-  @include icon(25px);
-  height: 21px;
-
-  background-color: var(--mainForegroundColor);
-  mask: url('../../assets/images/header/search.svg') no-repeat 50% 50%;
-
-  // yolo
-  position: absolute;
-  margin-left: -35px;
-  margin-top: 5px;
-}
-
 .upload-button {
   @include peertube-button-link;
   @include orange-button;
