@@ -748,7 +748,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="translated"></target>
+        <target state="translated">Prenumerera med ett konto på den här instansen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">53</context>
@@ -1071,7 +1071,7 @@
       </trans-unit>
       <trans-unit id="d780b02074a6317126378e0365e1066c890a3570" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="translated"></target>
+        <target state="translated">Om du letar efter ett konto …</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1079,7 +1079,7 @@
       </trans-unit>
       <trans-unit id="79dacac459775e2cf163bce6c3f05ed814f82ba2" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated"></target>
+        <target state="translated">Den här instansen tillåter inte kontoregistrering för tillfället, men du kan hitta en instans som ger dig möjligheten att skapa ett konto och ladda upp dina videor till. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Hitta din favorit bland de många instanserna på <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1241,7 +1241,7 @@
       </trans-unit>
       <trans-unit id="3c2c6b17d0326ab344e194b17abbee201d58dbea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></source>
-        <target state="translated"></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {…} other {…}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1893,7 +1893,7 @@
       </trans-unit>
       <trans-unit id="088b75b856963c2945806454a83f69cc5e9ab9da" datatype="html">
         <source>Any or no category set</source>
-        <target state="translated"/>
+        <target state="translated">Visa alla kategorier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">106</context>
@@ -1911,7 +1911,7 @@
       </trans-unit>
       <trans-unit id="0101457b9856145780bc92c54f9477a0bb4abbb8" datatype="html">
         <source>Any or no license set</source>
-        <target state="translated"/>
+        <target state="translated">Visa alla licenser</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">119</context>
@@ -1930,7 +1930,7 @@
       </trans-unit>
       <trans-unit id="f0cc3929292ee21bc26f607267f31d214a1230ac" datatype="html">
         <source>Any or no language set</source>
-        <target state="translated"/>
+        <target state="translated">Visa alla språk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">132</context>
@@ -2810,7 +2810,7 @@
       </trans-unit>
       <trans-unit id="6e215e23505768151b501b7e11dd5b864e604fd9" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="translated"></target>
+        <target state="translated">Prenumerera på alla kanalerna</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2818,7 +2818,7 @@
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
         <source>channels subscribed</source>
-        <target state="translated"></target>
+        <target state="translated">prenumererar på kanaler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2826,7 +2826,7 @@
       </trans-unit>
       <trans-unit id="e01bfa3629e2133dbf307975446bde047eb8bd1f" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated"></target>
+        <target state="translated">{VAR_SELECT, select, undefined {Avsluta prenumeration} other {Avsluta prenumerationer på samtliga kanaler} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">31</context>
@@ -2910,7 +2910,7 @@
       </trans-unit>
       <trans-unit id="8164af7bbe7fb9a3d2064ddf2627a7a4d5446575" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ componentPagination.totalItems }}"/> Comments</source>
-        <target state="translated"></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ componentPagination.totalItems }}"/> kommentarer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">7</context>
@@ -4314,7 +4314,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
         <source>Allow import with HTTP URL (i.e. YouTube)</source>
-        <target state="translated"></target>
+        <target state="translated">Tillåt import via HTTP-länk (t.ex. YouTube)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">294</context>
@@ -4322,7 +4322,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="translated"></target>
+        <target state="translated">Tillåt import via torrent-fil eller magnet-länk</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">301</context>
@@ -4338,7 +4338,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="bbed7359eacdb7bed596f6e21211f5bb131f69be" datatype="html">
         <source>Videos of regular users will stay private until a moderator reviews them. Can be overriden per user.</source>
-        <target state="translated"></target>
+        <target state="translated">Vanliga användares videor kommer fortsätta vara privata tills en moderator godkänt dem. Alternativet kan ändras per användare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">321</context>
@@ -4346,7 +4346,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="680ef3c95b9b6264dfb992c82e91d64312b133db" datatype="html">
         <source>Blacklist new videos automatically</source>
-        <target state="translated"></target>
+        <target state="translated">Svartlista nya videor automatiskt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">318</context>
@@ -4370,7 +4370,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="3d9ffce2b1f284cb60067de15a313d3ecde0875f" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target state="translated"></target>
+        <target state="translated">Godkänn instansens nya följare manuellt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">346</context>
@@ -4411,7 +4411,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="827523b730c599698d1bdf6a17bcfb500db62c5d" datatype="html">
         <source>Automatically follow instances of the public index</source>
-        <target state="translated"></target>
+        <target state="translated">Följ instanserna på den offentliga listan automatiskt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">374</context>
@@ -4950,7 +4950,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="7cb7f53b151a060db53d748d3973e345013f1af6" datatype="html">
         <source>Videos <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"></target>
+        <target state="translated">Videor <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.html</context>
           <context context-type="linenumber">2</context>
@@ -5245,7 +5245,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="a808c932c8ac3cac864f214734b6899568d6c976" datatype="html">
         <source>Playlists <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated"></target>
+        <target state="translated">Spellistor <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlists.component.html</context>
           <context context-type="linenumber">2</context>
@@ -5761,7 +5761,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="d0a97e9255fb49b92504d36516f902f440bc8878" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="translated"></target>
+        <target state="translated">Som standard använder PeerTube protokollet BitTorrent för att dela bandbredd mellan användarna och därmed bidra till att minska belastningen på servrarna. Du är däremot fri att växla tillbaka till klassisk strömning direkt från videons server. Följande gäller enbart om du väljer att fortsätta använda PeerTubes P2P-funktion.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">71</context>
@@ -5825,7 +5825,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="translated"></target>
+        <target state="translated">Det som inskränker privatlivet på YouTube är av ett helt annat slag än det på PeerTube. Vad gäller YouTube, samlar plattformen enorma mängder personlig information (inte bara din IP-adress) för att analysera och spåra dig. Dessutom ägs YouTube av Google / Alphabet, ett företag som spårar dig på en uppsjö webbplatser (via AdSense och Google Analytics).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">130</context>
@@ -5854,7 +5854,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="db4d65ed605b948169d51eac4c1b2ff662088eb7" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="translated"></target>
+        <target state="translated">PeerTube vill erbjuda bästa möjliga lösningarna, ge dig fler valmöjligheter och minimera risken för attacker. Detta har vi gjort hitintills:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">147</context>
@@ -5862,7 +5862,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="translated"></target>
+        <target state="translated">Vi har begränsat antalet serventer som skickas ut av spåraren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">153</context>
@@ -5870,7 +5870,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="translated"></target>
+        <target state="translated">Vi har begränsat hur ofta spåraren kan skicka ut serventer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">154</context>
@@ -5878,7 +5878,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="translated"></target>
+        <target state="translated">Låta administratörer avaktivera P2P från administratörsgränssnittet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">155</context>
@@ -5886,7 +5886,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
         <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target state="translated"></target>
+        <target state="translated">Automatisk videoredundans från vissa instanser så att det inte går att avgöra om någon medvetet laddade ner en video eller IP-adressen tillhör en server</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">156</context>
@@ -5894,7 +5894,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="translated"></target>
+        <target state="translated">Kom ihåg att du alltid kan avaktivera P2P i videospelaren eller avaktivera WebRCT i din webbläsare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">159</context>
@@ -5902,7 +5902,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
-        <target state="translated"/>
+        <target state="translated">Följare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5918,7 +5918,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="translated"/>
+        <target state="translated">Följer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">13</context>
@@ -7651,7 +7651,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="16d449549ab7bc61caf3d636372a4a56b5870383" datatype="html">
         <source>Any</source>
-        <target state="translated"/>
+        <target state="translated">Alla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9320,7 +9320,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="4104d2ac06bd0103868795086100a871c8dbeb49" datatype="html">
         <source>Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated"></target>
+        <target state="translated">Prenumererar på samtliga kanaler tillhörande <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Du kommer underrättas om alla nya videor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9328,7 +9328,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Prenumererar på <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Du kommer meddelas om alla deras nya videor.</target>
+        <target state="translated">Prenumererar på <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Du kommer underrättas om alla nya videor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9344,7 +9344,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="3bd3791d3b0ab933981a0b884396af74b0c95e2a" datatype="html">
         <source>Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target state="translated"></target>
+        <target state="translated">Prenumerationerna på <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> har avslutats</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
