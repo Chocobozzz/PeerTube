@@ -95,7 +95,7 @@
     "deep-object-diff": "^1.1.0",
     "express": "^4.12.4",
     "express-oauth-server": "^2.0.0",
-    "express-rate-limit": "^4.0.4",
+    "express-rate-limit": "^5.0.0",
     "express-validator": "^6.4.0",
     "flat": "^5.0.0",
     "fluent-ffmpeg": "^2.1.0",

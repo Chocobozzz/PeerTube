@@ -2282,10 +2282,10 @@ express-oauth-server@^2.0.0:
     express "^4.13.3"
     oauth2-server "3.0.0"
 
-express-rate-limit@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-4.0.4.tgz#a495338ae9e58c856b66d1346ec0d86f43ba2e43"
-  integrity sha512-DLRj2vMO7Xgai8qWKU9O6ZztF2bdDmfFNFi9k3G9BPzJ+7MG7eWaaBikbe0eBpNGSxU8JziwW0PQKG78aNWa6g==
+express-rate-limit@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/express-rate-limit/-/express-rate-limit-5.0.0.tgz#9a6f4cacc388c1a1da7ba2f65db69f7395e9b04e"
+  integrity sha512-dhT57wqxfqmkOi4HM7NuT4Gd7gbUgSK2ocG27Y6lwm8lbOAw9XQfeANawGq8wLDtlGPO1ZgDj0HmKsykTxfFAg==
 
 express-validator@^6.4.0:
   version "6.4.0"

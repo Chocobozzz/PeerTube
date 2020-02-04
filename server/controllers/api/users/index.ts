@@ -53,8 +53,6 @@ import { Hooks } from '@server/lib/plugins/hooks'
 
 const auditLogger = auditLoggerFactory('users')
 
-// FIXME: https://github.com/nfriedly/express-rate-limit/issues/138
-// @ts-ignore
 const loginRateLimiter = RateLimit({
   windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.LOGIN.MAX
