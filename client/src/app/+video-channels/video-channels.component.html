@@ -29,10 +29,12 @@
       </div>
     </div>
 
-    <div class="links">
-      <a i18n routerLink="videos" routerLinkActive="active" class="title-page">Videos</a>
-      <a i18n routerLink="video-playlists" routerLinkActive="active" class="title-page">Video playlists</a>
-      <a i18n routerLink="about" routerLinkActive="active" class="title-page">About</a>
+    <div class="links w-100">
+      <ng-template #linkTemplate let-item="item">
+        <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
+      </ng-template>
+
+      <list-overflow [items]="links" [itemTemplate]="linkTemplate"></list-overflow>
     </div>
   </div>
 

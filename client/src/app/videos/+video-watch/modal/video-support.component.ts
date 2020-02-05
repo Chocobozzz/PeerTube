@@ -21,7 +21,7 @@ export class VideoSupportComponent {
   ) { }
 
   show () {
-    this.modalService.open(this.modal)
+    this.modalService.open(this.modal, { centered: true })
 
     this.markdownService.enhancedMarkdownToHTML(this.video.support)
       .then(r => this.videoHTMLSupport = r)

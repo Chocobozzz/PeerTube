@@ -1,0 +1,35 @@
+<div #itemsParent class="d-flex align-items-center text-nowrap w-100 list-overflow-parent">
+  <span [id]="getId(id)" #itemsRendered *ngFor="let item of items; index as id">
+    <ng-container *ngTemplateOutlet="itemTemplate; context: {item: item}"></ng-container>
+  </span>
+  
+  <ng-container *ngIf="isMenuDisplayed()">
+    <button *ngIf="isInMobileView" class="btn btn-outline-secondary btn-sm list-overflow-menu" (click)="toggleModal()">
+      <span class="glyphicon glyphicon-chevron-down"></span>
+    </button>
+  
+    <div *ngIf="!isInMobileView" class="list-overflow-menu" ngbDropdown container="body" #dropdown="ngbDropdown" (mouseleave)="closeDropdownIfHovered(dropdown)" (mouseenter)="openDropdownOnHover(dropdown)">
+      <button class="btn btn-outline-secondary btn-sm" [ngClass]="{ routeActive: active }"
+        ngbDropdownAnchor (click)="dropdownAnchorClicked(dropdown)" role="button"
+      >
+        <span class="glyphicon glyphicon-chevron-down"></span>
+      </button>
+  
+      <div ngbDropdownMenu>
+        <a *ngFor="let item of items | slice:showItemsUntilIndexExcluded:items.length"
+          [routerLink]="item.routerLink" routerLinkActive="active" class="dropdown-item">
+          {{ item.label }}
+        </a>
+      </div>
+    </div>
+  </ng-container>
+</div >
+
+<ng-template #modal let-close="close" let-dismiss="dismiss">
+  <div class="modal-body">
+    <a *ngFor="let item of items | slice:showItemsUntilIndexExcluded:items.length"
+       [routerLink]="item.routerLink" routerLinkActive="active" (click)="dismissOtherModals()">
+       {{ item.label }}
+    </a>
+  </div>
+</ng-template>

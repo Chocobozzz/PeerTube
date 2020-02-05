@@ -48,7 +48,7 @@ export class VideoDownloadComponent {
     this.video = video
     this.videoCaptions = videoCaptions && videoCaptions.length ? videoCaptions : undefined
 
-    this.activeModal = this.modalService.open(this.modal)
+    this.activeModal = this.modalService.open(this.modal, { centered: true })
 
     this.resolutionId = this.getVideoFiles()[0].resolution.id
     if (this.videoCaptions) this.subtitleLanguageId = this.videoCaptions[0].language.id

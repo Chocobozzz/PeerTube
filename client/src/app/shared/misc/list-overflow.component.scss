@@ -1,0 +1,61 @@
+@import '_mixins';
+
+:host {
+  width: 100%;
+}
+
+.list-overflow-parent {
+  overflow: hidden;
+}
+
+.list-overflow-menu {
+  position: absolute;
+  right: 0;
+}
+
+button {
+  width: 30px;
+  border: none;
+
+  &::after {
+    display: none;
+  }
+
+  &.routeActive {
+    &::after {
+      display: inherit;
+      border: 2px solid var(--mainColor);
+      position: relative;
+      right: 95%;
+      top: 50%;
+    }
+  }
+}
+
+::ng-deep .dropdown-menu {
+  margin-top: 0 !important;
+  position: static;
+  right: auto;
+  bottom: auto
+}
+
+.modal-body {
+  a {
+    @include disable-default-a-behaviour;
+
+    color: currentColor;
+    box-sizing: border-box;
+    display: block;
+    font-size: 1.2rem;
+    padding: 9px 12px;
+    text-align: initial;
+    text-transform: unset;
+    width: 100%;
+
+    &.active {
+      color: var(--mainBackgroundColor) !important;
+      background-color: var(--mainHoverColor);
+      opacity: .9;
+    }
+  }
+}

@@ -10,6 +10,7 @@ import { User, UserRight } from '../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { ListOverflowItem } from '@app/shared/misc/list-overflow.component'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -19,6 +20,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
   account: Account
   accountUser: User
   videoChannels: VideoChannel[] = []
+  links: ListOverflowItem[] = []
 
   isAccountManageable = false
   accountFollowerTitle = ''
@@ -70,6 +72,12 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
                           err => this.notifier.error(err.message)
                         )
+
+    this.links = [
+      { label: this.i18n('Video channels'), routerLink: 'video-channels' },
+      { label: this.i18n('Videos'), routerLink: 'videos' },
+      { label: this.i18n('About'), routerLink: 'about' }
+    ]
   }
 
   ngOnDestroy () {

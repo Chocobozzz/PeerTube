@@ -18,7 +18,8 @@ export class WelcomeModalComponent {
   ) { }
 
   show () {
-    this.modalService.open(this.modal,{
+    this.modalService.open(this.modal, {
+      centered: true,
       backdrop: 'static',
       keyboard: false,
       size: 'lg'
