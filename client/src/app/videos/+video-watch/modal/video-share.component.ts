@@ -72,7 +72,7 @@ export class VideoShareComponent {
       controls: true
     }
 
-    this.modalService.open(this.modal)
+    this.modalService.open(this.modal, { centered: true })
   }
 
   getVideoIframeCode () {

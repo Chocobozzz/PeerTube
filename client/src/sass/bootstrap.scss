@@ -26,8 +26,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .dropdown-item {
     padding: 3px 15px;
 
-    &:active {
-      color: #000 !important;
+    &.active {
+      color: var(--mainBackgroundColor) !important;
+      background-color: var(--mainHoverColor);
+      opacity: .9;
     }
   }
 
@@ -44,14 +46,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @media screen and (min-width: 768px) {
   .modal:before {
-    display: inline-block;
     vertical-align: middle;
     content: " ";
     height: 100%;
   }
 
   .modal-dialog {
-    display: inline-block;
     text-align: left;
     vertical-align: middle;
     min-width: 500px;

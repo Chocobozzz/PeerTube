@@ -53,7 +53,7 @@ export class MyAccountAcceptOwnershipComponent extends FormReactive implements O
   show (videoChangeOwnership: VideoChangeOwnership) {
     this.videoChangeOwnership = videoChangeOwnership
     this.modalService
-      .open(this.modal)
+      .open(this.modal, { centered: true })
       .result
       .then(() => this.acceptOwnership())
       .catch(() => this.videoChangeOwnership = undefined)

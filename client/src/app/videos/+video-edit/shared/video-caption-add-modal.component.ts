@@ -56,7 +56,7 @@ export class VideoCaptionAddModalComponent extends FormReactive implements OnIni
   show () {
     this.closingModal = false
 
-    this.openedModal = this.modalService.open(this.modal, { keyboard: false })
+    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
   }
 
   hide () {

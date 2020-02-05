@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.component'
 import { HelpComponent } from '@app/shared/misc/help.component'
+import { ListOverflowComponent } from '@app/shared/misc/list-overflow.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
 import { SharedModule as PrimeSharedModule } from 'primeng/api'
@@ -156,6 +157,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+    ListOverflowComponent,
 
     ReactiveFileComponent,
     PeertubeCheckboxComponent,
@@ -227,6 +229,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     InfiniteScrollerDirective,
     TextareaAutoResizeDirective,
     HelpComponent,
+    ListOverflowComponent,
     InputReadonlyCopyComponent,
 
     ReactiveFileComponent,

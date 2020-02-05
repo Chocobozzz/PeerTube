@@ -21,7 +21,7 @@ export class LanguageChooserComponent {
   }
 
   show () {
-    this.modalService.open(this.modal)
+    this.modalService.open(this.modal, { centered: true })
   }
 
   buildLanguageLink (lang: { id: string }) {

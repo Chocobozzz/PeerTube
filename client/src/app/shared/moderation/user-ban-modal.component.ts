@@ -39,7 +39,7 @@ export class UserBanModalComponent extends FormReactive implements OnInit {
 
   openModal (user: User | User[]) {
     this.usersToBan = user
-    this.openedModal = this.modalService.open(this.modal)
+    this.openedModal = this.modalService.open(this.modal, { centered: true })
   }
 
   hide () {

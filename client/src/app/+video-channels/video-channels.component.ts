@@ -9,6 +9,7 @@ import { AuthService, Notifier } from '@app/core'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ListOverflowItem } from '@app/shared/misc/list-overflow.component'
 
 @Component({
   templateUrl: './video-channels.component.html',
@@ -19,6 +20,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
 
   videoChannel: VideoChannel
   hotkeys: Hotkey[]
+  links: ListOverflowItem[] = []
   isChannelManageable = false
 
   private routeSub: Subscription
@@ -62,6 +64,12 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
       }, undefined, this.i18n('Subscribe to the account'))
     ]
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
+
+    this.links = [
+      { label: this.i18n('Videos'), routerLink: 'videos' },
+      { label: this.i18n('Video playlists'), routerLink: 'video-playlists' },
+      { label: this.i18n('About'), routerLink: 'about' }
+    ]
   }
 
   ngOnDestroy () {

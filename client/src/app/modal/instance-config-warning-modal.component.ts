@@ -24,7 +24,7 @@ export class InstanceConfigWarningModalComponent {
   show (about: About) {
     this.about = about
 
-    const ref = this.modalService.open(this.modal)
+    const ref = this.modalService.open(this.modal, { centered: true })
 
     ref.result.finally(() => {
       if (this.stopDisplayModal === true) this.doNotOpenAgain()

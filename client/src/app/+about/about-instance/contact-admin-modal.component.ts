@@ -51,7 +51,7 @@ export class ContactAdminModalComponent extends FormReactive implements OnInit {
   }
 
   show () {
-    this.openedModal = this.modalService.open(this.modal, { keyboard: false })
+    this.openedModal = this.modalService.open(this.modal, { centered: true, keyboard: false })
   }
 
   hide () {
