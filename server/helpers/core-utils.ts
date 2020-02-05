@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-call */
 
 /*
-  Different from 'utils' because we don't not import other PeerTube modules.
+  Different from 'utils' because we don't import other PeerTube modules.
   Useful to avoid circular dependencies.
 */
 
