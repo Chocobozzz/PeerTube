@@ -626,20 +626,15 @@ function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObjec
   const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
   const duration = videoObject.duration.replace(/[^\d]+/, '')
 
-  let language: string | undefined
-  if (videoObject.language) {
-    language = videoObject.language.identifier
-  }
+  const language = videoObject.language?.identifier
 
-  let category: number | undefined
-  if (videoObject.category) {
-    category = parseInt(videoObject.category.identifier, 10)
-  }
+  const category = videoObject.category
+    ? parseInt(videoObject.category.identifier, 10)
+    : undefined
 
-  let licence: number | undefined
-  if (videoObject.licence) {
-    licence = parseInt(videoObject.licence.identifier, 10)
-  }
+  const licence = videoObject.licence
+    ? parseInt(videoObject.licence.identifier, 10)
+    : undefined
 
   const description = videoObject.content || null
   const support = videoObject.support || null
@@ -662,7 +657,11 @@ function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObjec
     duration: parseInt(duration, 10),
     createdAt: new Date(videoObject.published),
     publishedAt: new Date(videoObject.published),
-    originallyPublishedAt: videoObject.originallyPublishedAt ? new Date(videoObject.originallyPublishedAt) : null,
+
+    originallyPublishedAt: videoObject.originallyPublishedAt
+      ? new Date(videoObject.originallyPublishedAt)
+      : null,
+
     updatedAt: new Date(videoObject.updated),
     views: videoObject.views,
     likes: 0,
