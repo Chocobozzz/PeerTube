@@ -340,9 +340,11 @@ async function updateVideoFromAP (options: {
 
       if (thumbnailModel) await videoUpdated.addAndSaveThumbnail(thumbnailModel, t)
 
-      const previewUrl = videoUpdated.getPreview().getFileUrl(videoUpdated)
-      const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
-      await videoUpdated.addAndSaveThumbnail(previewModel, t)
+      if (videoUpdated.getPreview()) {
+        const previewUrl = videoUpdated.getPreview().getFileUrl(videoUpdated)
+        const previewModel = createPlaceholderThumbnail(previewUrl, video, ThumbnailType.PREVIEW, PREVIEWS_SIZE)
+        await videoUpdated.addAndSaveThumbnail(previewModel, t)
+      }
 
       {
         const videoFileAttributes = videoFileActivityUrlToDBAttributes(videoUpdated, videoObject.url)
@@ -531,6 +533,10 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
   const video = VideoModel.build(videoData) as MVideoThumbnail
 
   const promiseThumbnail = createVideoMiniatureFromUrl(getThumbnailFromIcons(videoObject).url, video, ThumbnailType.MINIATURE)
+    .catch(err => {
+      logger.error('Cannot create miniature from url.', { err })
+      return undefined
+    })
 
   let thumbnailModel: MThumbnail
   if (waitThumbnail === true) {
@@ -602,11 +608,15 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
   })
 
   if (waitThumbnail === false) {
+    // Error is already caught above
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
     promiseThumbnail.then(thumbnailModel => {
+      if (!thumbnailModel) return
+
       thumbnailModel = videoCreated.id
 
       return thumbnailModel.save()
-    }).catch(err => logger.error('Cannot create miniature from url.', { err }))
+    })
   }
 
   return { autoBlacklisted, videoCreated }

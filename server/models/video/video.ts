@@ -1937,6 +1937,10 @@ export class VideoModel extends Model<VideoModel> {
     return this.uuid + '.jpg'
   }
 
+  hasPreview () {
+    return !!this.getPreview()
+  }
+
   getPreview () {
     if (Array.isArray(this.Thumbnails) === false) return undefined
 
