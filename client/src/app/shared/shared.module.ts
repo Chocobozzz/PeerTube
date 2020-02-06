@@ -47,6 +47,7 @@ import {
 import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
 import { InputMaskModule } from 'primeng/inputmask'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { LocalStorageService, SessionStorageService } from '@app/shared/misc/storage.service'
 import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { PeertubeCheckboxComponent } from '@app/shared/forms/peertube-checkbox.component'
@@ -101,6 +102,10 @@ import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.co
 import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-copy.component'
 import { RedundancyService } from '@app/shared/video/redundancy.service'
 import { ClipboardModule } from '@angular/cdk/clipboard'
+import { InputSwitchModule } from 'primeng/inputswitch'
+
+import { MyAccountVideoSettingsComponent } from '@app/+my-account/my-account-settings/my-account-video-settings'
+import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account-settings/my-account-interface'
 
 @NgModule({
   imports: [
@@ -122,7 +127,8 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     PrimeSharedModule,
     InputMaskModule,
     NgPipesModule,
-    MultiSelectModule
+    MultiSelectModule,
+    InputSwitchModule
   ],
 
   declarations: [
@@ -180,7 +186,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     DateToggleComponent,
 
     GlobalIconComponent,
-    PreviewUploadComponent
+    PreviewUploadComponent,
+
+    MyAccountVideoSettingsComponent,
+    MyAccountInterfaceSettingsComponent
   ],
 
   exports: [
@@ -258,7 +267,10 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
     FromNowPipe,
     HighlightPipe,
     PeerTubeTemplateDirective,
-    VideoDurationPipe
+    VideoDurationPipe,
+
+    MyAccountVideoSettingsComponent,
+    MyAccountInterfaceSettingsComponent,
   ],
 
   providers: [
@@ -303,6 +315,7 @@ import { ClipboardModule } from '@angular/cdk/clipboard'
 
     I18nPrimengCalendarService,
     ScreenService,
+    LocalStorageService, SessionStorageService,
 
     UserNotificationService,
 

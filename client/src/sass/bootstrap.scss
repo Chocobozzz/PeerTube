@@ -13,6 +13,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   flex: auto;
 }
 
+.c-hand {
+  cursor: pointer;
+}
+
 @keyframes spin {
   from {
     transform: scale(1) rotate(0deg);
@@ -40,6 +44,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
       color: var(--mainBackgroundColor) !important;
       background-color: var(--mainHoverColor);
       opacity: .9;
+    }
+    
+    &::after {
+      display: none;
     }
   }
 

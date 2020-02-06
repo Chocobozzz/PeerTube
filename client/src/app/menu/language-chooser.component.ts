@@ -28,4 +28,10 @@ export class LanguageChooserComponent {
     return window.location.origin + '/' + lang.id
   }
 
+  getCurrentLanguage () {
+    const english = 'English'
+    const lang = window.location.pathname.split('/')[1]
+    if (lang) return I18N_LOCALES[lang] || english
+    return english
+  }
 }

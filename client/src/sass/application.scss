@@ -24,6 +24,7 @@ body {
   // now beware node-sass requires interpolation
   // for css custom properties #{$var}
   --mainColor: #{$orange-color};
+  --mainColorLighter: #{$orange-color-lighter};
   --mainHoverColor: #{$orange-hover-color};
   --mainBackgroundColor: #{$bg-color};
   --mainForegroundColor: #{$fg-color};

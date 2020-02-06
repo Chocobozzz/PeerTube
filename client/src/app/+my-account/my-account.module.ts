@@ -5,7 +5,6 @@ import { InputSwitchModule } from 'primeng/inputswitch'
 import { SharedModule } from '../shared'
 import { MyAccountRoutingModule } from './my-account-routing.module'
 import { MyAccountChangePasswordComponent } from './my-account-settings/my-account-change-password/my-account-change-password.component'
-import { MyAccountVideoSettingsComponent } from './my-account-settings/my-account-video-settings/my-account-video-settings.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountComponent } from './my-account.component'
 import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
@@ -37,7 +36,6 @@ import {
 } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-elements.component'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { MyAccountChangeEmailComponent } from '@app/+my-account/my-account-settings/my-account-change-email'
-import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account-settings/my-account-interface'
 
 @NgModule({
   imports: [
@@ -54,10 +52,8 @@ import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account
     MyAccountComponent,
     MyAccountSettingsComponent,
     MyAccountChangePasswordComponent,
-    MyAccountVideoSettingsComponent,
     MyAccountProfileComponent,
     MyAccountChangeEmailComponent,
-    MyAccountInterfaceSettingsComponent,
 
     MyAccountVideosComponent,
 

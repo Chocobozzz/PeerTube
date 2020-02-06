@@ -31,6 +31,8 @@ import { ServerService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { peertubeLocalStorage } from '../misc/peertube-web-storage'
+import { User } from '../users'
 
 export interface VideosProvider {
   getVideos (parameters: {
@@ -199,9 +201,10 @@ export class VideoService implements VideosProvider {
     filter?: VideoFilter,
     categoryOneOf?: number,
     languageOneOf?: string[],
-    skipCount?: boolean
+    skipCount?: boolean,
+    nsfw?: boolean
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount } = parameters
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfw } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -211,6 +214,12 @@ export class VideoService implements VideosProvider {
     if (filter) params = params.set('filter', filter)
     if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
     if (skipCount) params = params.set('skipCount', skipCount + '')
+    
+    if (nsfw) {
+      params = params.set('nsfw', nsfw + '')
+    } else {
+      if (peertubeLocalStorage.getItem(User.KEYS.NSFW_POLICY) === 'do_not_list') params.set('nsfw', 'false')
+    }
 
     if (languageOneOf) {
       for (const l of languageOneOf) {

@@ -4,15 +4,14 @@ import { ServerService } from '@app/core/server'
 import { environment } from '../../../environments/environment'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { ServerConfig, ServerConfigTheme } from '@shared/models'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { first } from 'rxjs/operators'
+import { User } from '@app/shared/users/user.model'
+import { UserService } from '@app/shared/users/user.service'
+import { LocalStorageService } from '@app/shared/misc/storage.service'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 
 @Injectable()
 export class ThemeService {
-
-  private static KEYS = {
-    LAST_ACTIVE_THEME: 'last_active_theme'
-  }
 
   private oldThemeName: string
   private themes: ServerConfigTheme[] = []
@@ -24,8 +23,10 @@ export class ThemeService {
 
   constructor (
     private auth: AuthService,
+    private userService: UserService,
     private pluginService: PluginService,
-    private server: ServerService
+    private server: ServerService,
+    private localStorageService: LocalStorageService
   ) {}
 
   initialize () {
@@ -80,6 +81,9 @@ export class ThemeService {
     if (this.auth.isLoggedIn()) {
       const theme = this.auth.getUser().theme
       if (theme !== 'instance-default') return theme
+    } else {
+      const theme = this.userService.getAnonymousUser().theme
+      if (theme !== 'instance-default') return theme
     }
 
     return this.serverConfig.theme.default
@@ -111,9 +115,11 @@ export class ThemeService {
 
       this.pluginService.reloadLoadedScopes()
 
-      peertubeLocalStorage.setItem(ThemeService.KEYS.LAST_ACTIVE_THEME, JSON.stringify(theme))
+      // end of event loop, we don't need to use the storage service
+      peertubeLocalStorage.setItem(User.KEYS.THEME, JSON.stringify(theme))
     } else {
-      peertubeLocalStorage.removeItem(ThemeService.KEYS.LAST_ACTIVE_THEME)
+      // end of event loop, we don't need to use the storage service
+      peertubeLocalStorage.removeItem(User.KEYS.THEME)
     }
 
     this.oldThemeName = currentTheme
@@ -126,6 +132,10 @@ export class ThemeService {
 
     if (!this.auth.isLoggedIn()) {
       this.updateCurrentTheme()
+
+      this.localStorageService.watch([User.KEYS.THEME]).subscribe(
+        key => this.updateCurrentTheme()
+      )
     }
 
     this.auth.userInformationLoaded
@@ -134,7 +144,7 @@ export class ThemeService {
   }
 
   private loadAndSetFromLocalStorage () {
-    const lastActiveThemeString = peertubeLocalStorage.getItem(ThemeService.KEYS.LAST_ACTIVE_THEME)
+    const lastActiveThemeString = this.localStorageService.getItem(User.KEYS.THEME)
     if (!lastActiveThemeString) return
 
     try {

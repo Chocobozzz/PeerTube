@@ -11,31 +11,62 @@
           <div class="logged-in-username">{{ user.username }}</div>
         </div>
 
-        <div class="logged-in-more" ngbDropdown placement="bottom-right auto" container="body">
+        <div class="logged-in-more" ngbDropdown placement="right-top auto" container="body" [autoClose]="'outside'">
           <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button"></my-global-icon>
 
           <div ngbDropdownMenu>
-            <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="dropdown-item">
+            <a *ngIf="user.account" ngbDropdownItem ngbDropdownToggle class="dropdown-item" [routerLink]="[ '/accounts', user.account.nameWithHost ]">
               <my-global-icon iconName="go"></my-global-icon> <ng-container i18n>Public profile</ng-container>
             </a>
 
             <div class="dropdown-divider"></div>
 
-            <a routerLink="/my-account" class="dropdown-item">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
               <my-global-icon iconName="user"></my-global-icon> <ng-container i18n>Account settings</ng-container>
             </a>
 
-            <a routerLink="/my-account/video-channels" class="dropdown-item">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/video-channels">
               <my-global-icon iconName="folder"></my-global-icon> <ng-container i18n>Channels settings</ng-container>
             </a>
 
             <div class="dropdown-divider"></div>
 
-            <a class="dropdown-item" href="https://joinpeertube.org/help" target="_blank" rel="noopener noreferrer">
-              <my-global-icon iconName="help"></my-global-icon> <ng-container i18n>Help</ng-container>
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
+              <my-global-icon iconName="language"></my-global-icon>
+              <ng-container i18n>Interface: {{ language }}</ng-container>
+              <i class="ml-auto glyphicon glyphicon-menu-right"></i>
             </a>
 
-            <a (click)="logout($event)" class="dropdown-item" href="#">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+              <my-global-icon iconName="video-lang"></my-global-icon>
+              <ng-container i18n>Videos: {{ videoLanguages.join(', ') }}</ng-container>
+              <i class="ml-auto glyphicon glyphicon-menu-right"></i>
+            </a>
+
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+              <my-global-icon [attr.initial]="user.nsfwPolicy !== 'display'" iconName="sensitive"></my-global-icon>
+              <my-global-icon [attr.initial]="user.nsfwPolicy === 'display'" iconName="unsensitive"></my-global-icon>
+              <ng-container i18n>Sensitive: {{ nsfwPolicy }}</ng-container>
+              <i class="ml-auto glyphicon glyphicon-menu-right"></i>
+            </a>
+
+            <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
+              <my-global-icon iconName="p2p"></my-global-icon>
+              <ng-container i18n>Help share videos</ng-container>
+              <input type="checkbox" [checked]="user.webTorrentEnabled"/><label class="ml-auto" for="switch">Toggle p2p</label>
+            </a>
+
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+              <my-global-icon iconName="more-horizontal"></my-global-icon> <ng-container i18n>More account settings</ng-container>
+            </a>
+
+            <div class="dropdown-divider"></div>
+
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
+              <i class="icon icon-shortcuts"></i> <ng-container i18n>Keyboard shortcuts</ng-container>
+            </a>
+
+            <a ngbDropdownItem ngbDropdownToggle (click)="logout($event)" class="dropdown-item" href="#">
               <my-global-icon iconName="sign-out"></my-global-icon> <ng-container i18n>Log out</ng-container>
             </a>
           </div>
@@ -100,32 +131,56 @@
           <ng-container i18n>Local</ng-container>
         </a>
       </div>
+    </div>
 
+    <div class="footer">
       <div class="panel-block">
-        <div class="block-title" i18n>MORE</div>
-
         <a *ngIf="userHasAdminAccess" [routerLink]="getFirstAdminRouteAvailable()" routerLinkActive="active">
-          <my-global-icon iconName="administration"></my-global-icon>
+          <my-global-icon iconName="cog"></my-global-icon>
           <ng-container i18n>Administration</ng-container>
         </a>
-
-        <a routerLink="/about" routerLinkActive="active">
-          <my-global-icon iconName="about"></my-global-icon>
+        <a *ngIf="!isLoggedIn" (click)="openQuickSettings()">
+          <my-global-icon iconName="cog"></my-global-icon>
+          <ng-container i18n>Settings</ng-container>
+        </a>
+        <a routerLink="/about/instance">
+          <my-global-icon iconName="help"></my-global-icon>
           <ng-container i18n>About</ng-container>
         </a>
       </div>
-    </div>
 
-    <div class="footer d-flex justify-content-between">
-      <span class="language">
-        <span tabindex="0" role="button" (keyup.enter)="openLanguageChooser()" (click)="openLanguageChooser()" i18n-title title="Change the language" class="icon icon-language"></span>
-      </span>
-
-      <span class="shortcuts">
-        <span tabindex="0" role="button" (keyup.enter)="openHotkeysCheatSheet()" (click)="openHotkeysCheatSheet()" i18n-title title="Show keyboard shortcuts" class="icon icon-shortcuts"></span>
-      </span>
+      <div class="d-flex flex-column" style="row-gap: 1em;">
+        <div id="links-primary">
+          <a i18n routerLink="/about/instance">Contact</a>
+          <a i18n routerLink="/about/instance">Terms of Service</a>
+          <a i18n routerLink="/about/instance" fragment="statistics">Stats</a>
+          <a (click)="openLanguageChooser()" class="c-hand">
+            <span i18n>Interface: {{ language }}</span>
+          </a>
+        </div>
+        <div id="links-secondary">
+          <a i18n href="https://joinpeertube.org/#you-are-a-video-maker" i18n-title title="Creator guide" target="_blank" rel="noopener noreferrer">Creators</a>
+          <a i18n href="https://docs.joinpeertube.org/#/contribute-getting-started" i18n-title title="PeerTube license" target="_blank" rel="noopener noreferrer">Contributors</a>
+          <a i18n routerLink="/about/peertube" i18n-title title="More information about privacy within PeerTube">Privacy</a>
+          <a i18n href="https://joinpeertube.org/faq" i18n-title title="Frequently asked questions about PeerTube" target="_blank" rel="noopener noreferrer">FAQ</a>
+          <a i18n href="https://docs.joinpeertube.org/api-rest-reference.html" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">API</a>
+          <a i18n href="https://joinpeertube.org/help" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">Help</a>
+          <a (click)="openHotkeysCheatSheet()" class="c-hand" i18n>Shortcuts</a>
+        </div>
+        <div id="copyleft">
+          <small class="d-inline" i18n-title title="powered by PeerTube - CopyLeft 2015-2020">
+            <a href="https://joinpeertube.org" title="PeerTube website" target="_blank" rel="noopener noreferrer" i18n>
+              powered by PeerTube
+            </a>
+            <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" title="PeerTube license" target="_blank" rel="noopener noreferrer">
+              <span aria-label="copyleft" class="d-inline-block" style="transform: rotateY(180deg)">&copy;</span> 2015-2020
+            </a>
+          </small>
+        </div>
+      </div>
     </div>
   </menu>
 </div>
 
 <my-language-chooser #languageChooserModal></my-language-chooser>
+<my-quick-settings #quickSettingsModal></my-quick-settings>

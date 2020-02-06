@@ -9,6 +9,7 @@ import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.
 import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
 import { peertubeLocalStorage, peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { SessionStorageService, LocalStorageService } from '@app/shared/misc/storage.service'
 
 @Component({
   selector: 'my-video-watch-playlist',
@@ -42,16 +43,18 @@ export class VideoWatchPlaylistComponent {
     private notifier: Notifier,
     private i18n: I18n,
     private videoPlaylist: VideoPlaylistService,
+    private localStorageService: LocalStorageService,
+    private sessionStorageService: SessionStorageService,
     private router: Router
   ) {
     // defaults to true
     this.autoPlayNextVideoPlaylist = this.auth.isLoggedIn()
       ? this.auth.getUser().autoPlayNextVideoPlaylist
-      : peertubeLocalStorage.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
+      : this.localStorageService.getItem(VideoWatchPlaylistComponent.LOCAL_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) !== 'false'
     this.setAutoPlayNextVideoPlaylistSwitchText()
 
     // defaults to false
-    this.loopPlaylist = peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+    this.loopPlaylist = this.sessionStorageService.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
     this.setLoopPlaylistSwitchText()
   }
 

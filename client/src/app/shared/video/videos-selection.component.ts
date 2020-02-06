@@ -22,6 +22,8 @@ import { VideoSortField } from '@app/shared/video/sort-field.type'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ResultList } from '@shared/models'
+import { UserService } from '../users'
+import { LocalStorageService } from '../misc/storage.service'
 
 export type SelectionType = { [ id: number ]: boolean }
 
@@ -51,7 +53,9 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
+    protected userService: UserService,
     protected screenService: ScreenService,
+    protected storageService: LocalStorageService,
     protected serverService: ServerService
   ) {
     super()

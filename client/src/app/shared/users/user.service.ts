@@ -1,5 +1,5 @@
-import { from, Observable, of } from 'rxjs'
-import { catchError, concatMap, map, share, shareReplay, tap, toArray } from 'rxjs/operators'
+import { from, Observable } from 'rxjs'
+import { catchError, concatMap, map, shareReplay, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ResultList, User, UserCreate, UserRole, UserUpdate, UserUpdateMe, UserVideoQuota } from '../../../../../shared'
@@ -10,6 +10,10 @@ import { SortMeta } from 'primeng/api'
 import { BytesPipe } from 'ngx-pipes'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRegister } from '@shared/models/users/user-register.model'
+import { User as UserType } from './user.model'
+import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { has } from 'lodash-es'
+import { LocalStorageService, SessionStorageService } from '../misc/storage.service'
 
 @Injectable()
 export class UserService {
@@ -23,6 +27,8 @@ export class UserService {
     private authHttp: HttpClient,
     private restExtractor: RestExtractor,
     private restService: RestService,
+    private localStorageService: LocalStorageService,
+    private sessionStorageService: SessionStorageService,
     private i18n: I18n
   ) { }
 
@@ -62,6 +68,25 @@ export class UserService {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  updateMyAnonymousProfile (profile: UserUpdateMe) {
+    const supportedKeys = {
+      // local storage keys
+      nsfwPolicy: (val: NSFWPolicyType) => this.localStorageService.setItem(UserType.KEYS.NSFW_POLICY, val),
+      webTorrentEnabled: (val: boolean) => this.localStorageService.setItem(UserType.KEYS.WEBTORRENT_ENABLED, String(val)),
+      autoPlayVideo: (val: boolean) => this.localStorageService.setItem(UserType.KEYS.AUTO_PLAY_VIDEO, String(val)),
+      autoPlayNextVideoPlaylist: (val: boolean) => this.localStorageService.setItem(UserType.KEYS.AUTO_PLAY_VIDEO_PLAYLIST, String(val)),
+      theme: (val: string) => this.localStorageService.setItem(UserType.KEYS.THEME, val),
+      videoLanguages: (val: string[]) => this.localStorageService.setItem(UserType.KEYS.VIDEO_LANGUAGES, JSON.stringify(val)),
+
+      // session storage keys
+      autoPlayNextVideo: (val: boolean) => this.sessionStorageService.setItem(UserType.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, String(val))
+    }
+
+    for (const key of Object.keys(profile)) {
+      if (has(supportedKeys, key)) supportedKeys[key](profile[key])
+    }
   }
 
   deleteMe () {
@@ -207,6 +232,21 @@ export class UserService {
   getUser (userId: number) {
     return this.authHttp.get<User>(UserService.BASE_USERS_URL + userId)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
+  }
+
+  getAnonymousUser () {
+    return new UserType({
+      // local storage keys
+      nsfwPolicy: this.localStorageService.getItem(UserType.KEYS.NSFW_POLICY) as NSFWPolicyType,
+      webTorrentEnabled: this.localStorageService.getItem(UserType.KEYS.WEBTORRENT_ENABLED) !== 'false',
+      autoPlayVideo: this.localStorageService.getItem(UserType.KEYS.AUTO_PLAY_VIDEO) === 'true',
+      autoPlayNextVideoPlaylist: this.localStorageService.getItem(UserType.KEYS.AUTO_PLAY_VIDEO_PLAYLIST) === 'true',
+      theme: this.localStorageService.getItem(UserType.KEYS.THEME) || 'default',
+      videoLanguages: JSON.parse(this.localStorageService.getItem(UserType.KEYS.VIDEO_LANGUAGES)),
+
+      // session storage keys
+      autoPlayNextVideo: this.sessionStorageService.getItem(UserType.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+    })
   }
 
   getUsers (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<User>> {

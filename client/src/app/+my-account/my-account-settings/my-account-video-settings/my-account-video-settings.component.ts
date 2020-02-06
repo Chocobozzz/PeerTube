@@ -1,13 +1,16 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
-import { UserUpdateMe } from '../../../../../../shared'
+import { UserUpdateMe } from '../../../../../../shared/models/users'
+import { User, UserService } from '@app/shared/users'
 import { AuthService } from '../../../core'
-import { FormReactive, User, UserService } from '../../../shared'
+import { FormReactive } from '@app/shared/forms/form-reactive'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { forkJoin, Subject } from 'rxjs'
 import { SelectItem } from 'primeng/api'
 import { first } from 'rxjs/operators'
+import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { pick } from 'lodash-es'
 
 @Component({
   selector: 'my-account-video-settings',
@@ -16,9 +19,14 @@ import { first } from 'rxjs/operators'
 })
 export class MyAccountVideoSettingsComponent extends FormReactive implements OnInit {
   @Input() user: User = null
+  @Input() reactive = false
+  @Input() notify = true
   @Input() userInformationLoaded: Subject<any>
 
   languageItems: SelectItem[] = []
+  defaultNSFWPolicy: NSFWPolicyType
+
+  old: any
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -42,8 +50,9 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
 
     forkJoin([
       this.serverService.getVideoLanguages(),
+      this.serverService.getConfig(),
       this.userInformationLoaded.pipe(first())
-    ]).subscribe(([ languages ]) => {
+    ]).subscribe(([ languages, config ]) => {
       this.languageItems = [ { label: this.i18n('Unknown language'), value: '_unknown' } ]
       this.languageItems = this.languageItems
                                .concat(languages.map(l => ({ label: l.label, value: l.id })))
@@ -52,17 +61,28 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
         ? this.user.videoLanguages
         : this.languageItems.map(l => l.value)
 
+      this.defaultNSFWPolicy = config.instance.defaultNSFWPolicy
+
       this.form.patchValue({
-        nsfwPolicy: this.user.nsfwPolicy,
+        nsfwPolicy: this.user.nsfwPolicy || this.defaultNSFWPolicy,
         webTorrentEnabled: this.user.webTorrentEnabled,
         autoPlayVideo: this.user.autoPlayVideo === true,
         autoPlayNextVideo: this.user.autoPlayNextVideo,
         videoLanguages
       })
+
+      if (this.reactive) {
+        this.old = { ...this.form.value }
+        this.form.valueChanges.subscribe(val => {
+          const key = Object.keys(val).find(k => val[k] !== this.old[k])
+          this.old = { ...this.form.value }
+          if (!this.authService.isLoggedIn()) this.updateDetails([key])
+        })
+      }
     })
   }
 
-  updateDetails () {
+  updateDetails (onylKeys?: string[]) {
     const nsfwPolicy = this.form.value[ 'nsfwPolicy' ]
     const webTorrentEnabled = this.form.value['webTorrentEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
@@ -81,7 +101,7 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       }
     }
 
-    const details: UserUpdateMe = {
+    let details: UserUpdateMe = {
       nsfwPolicy,
       webTorrentEnabled,
       autoPlayVideo,
@@ -89,15 +109,22 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       videoLanguages
     }
 
-    this.userService.updateMyProfile(details).subscribe(
-      () => {
-        this.notifier.success(this.i18n('Video settings updated.'))
+    if (onylKeys) details = pick(details, onylKeys)
 
-        this.authService.refreshUserInformation()
-      },
+    if (this.authService.isLoggedIn()) {
+      this.userService.updateMyProfile(details).subscribe(
+        () => {
+          this.authService.refreshUserInformation()
 
-      err => this.notifier.error(err.message)
-    )
+          if (this.notify) this.notifier.success(this.i18n('Video settings updated.'))
+        },
+
+        err => this.notifier.error(err.message)
+      )
+    } else {
+      this.userService.updateMyAnonymousProfile(details)
+      if (this.notify) this.notifier.success(this.i18n('Display/Video settings updated.'))
+    }
   }
 
   getDefaultVideoLanguageLabel () {

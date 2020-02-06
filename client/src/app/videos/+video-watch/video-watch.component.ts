@@ -2,7 +2,7 @@ import { catchError } from 'rxjs/operators'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { RedirectService } from '@app/core/routing/redirect.service'
-import { peertubeLocalStorage, peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
 import { MetaService } from '@ngx-meta/core'
 import { AuthUser, Notifier, ServerService } from '@app/core'
@@ -10,7 +10,7 @@ import { forkJoin, Observable, Subscription } from 'rxjs'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
 import { AuthService, ConfirmService } from '../../core'
-import { RestExtractor } from '../../shared'
+import { RestExtractor, UserService } from '../../shared'
 import { VideoDetails } from '../../shared/video/video-details.model'
 import { VideoService } from '../../shared/video/video.service'
 import { VideoShareComponent } from './modal/video-share.component'
@@ -35,7 +35,6 @@ import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watc
 import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { PlatformLocation } from '@angular/common'
-import { RecommendedVideosComponent } from '../recommendations/recommended-videos.component'
 import { scrollToTop, isXPercentInViewport } from '@app/shared/misc/utils'
 
 @Component({
@@ -95,6 +94,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     private confirmService: ConfirmService,
     private metaService: MetaService,
     private authService: AuthService,
+    private userService: UserService,
     private serverService: ServerService,
     private restExtractor: RestExtractor,
     private notifier: Notifier,
@@ -116,6 +116,10 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
   get user () {
     return this.authService.getUser()
+  }
+
+  get anonymousUser() {
+    return this.userService.getAnonymousUser()
   }
 
   async ngOnInit () {
@@ -266,6 +270,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.redirectService.redirectToHomepage()
   }
 
+  declinedPrivacyConcern () {
+    peertubeLocalStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'false')
+    this.hasAlreadyAcceptedPrivacyConcern = false
+  }
+
   acceptedPrivacyConcern () {
     peertubeLocalStorage.setItem(VideoWatchComponent.LOCAL_STORAGE_PRIVACY_CONCERN_KEY, 'true')
     this.hasAlreadyAcceptedPrivacyConcern = true
@@ -290,7 +299,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   isAutoPlayEnabled () {
     return (
       (this.user && this.user.autoPlayNextVideo) ||
-      peertubeSessionStorage.getItem(RecommendedVideosComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+      this.anonymousUser.autoPlayNextVideo
     )
   }
 
@@ -302,7 +311,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   isPlaylistAutoPlayEnabled () {
     return (
       (this.user && this.user.autoPlayNextVideoPlaylist) ||
-      peertubeSessionStorage.getItem(VideoWatchPlaylistComponent.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO_PLAYLIST) === 'true'
+      this.anonymousUser.autoPlayNextVideoPlaylist
     )
   }
 

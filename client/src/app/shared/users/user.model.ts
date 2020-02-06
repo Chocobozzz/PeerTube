@@ -1,10 +1,17 @@
-import { hasUserRight, User as UserServerModel, UserNotificationSetting, UserRight, UserRole, VideoChannel } from '../../../../../shared'
+import {
+  hasUserRight,
+  User as UserServerModel,
+  UserNotificationSetting,
+  UserRight,
+  UserRole
+} from '../../../../../shared/models/users'
+import { VideoChannel } from '../../../../../shared/models/videos'
 import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
 import { Account } from '@app/shared/account/account.model'
 import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 
-export class User implements UserServerModel {
+export class User implements UserServerModel {  
   id: number
   username: string
   email: string
@@ -44,6 +51,21 @@ export class User implements UserServerModel {
 
   createdAt: Date
 
+  static KEYS = {
+    ID: 'id',
+    ROLE: 'role',
+    EMAIL: 'email',
+    VIDEOS_HISTORY_ENABLED: 'videos-history-enabled',
+    USERNAME: 'username',
+    NSFW_POLICY: 'nsfw_policy',
+    WEBTORRENT_ENABLED: 'peertube-videojs-' + 'webtorrent_enabled',
+    AUTO_PLAY_VIDEO: 'auto_play_video',
+    SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO: 'auto_play_next_video',
+    AUTO_PLAY_VIDEO_PLAYLIST: 'auto_play_video_playlist',
+    THEME: 'last_active_theme',
+    VIDEO_LANGUAGES: 'video_languages'
+  }
+
   constructor (hash: Partial<UserServerModel>) {
     this.id = hash.id
     this.username = hash.username
@@ -60,8 +82,11 @@ export class User implements UserServerModel {
 
     this.nsfwPolicy = hash.nsfwPolicy
     this.webTorrentEnabled = hash.webTorrentEnabled
-    this.videosHistoryEnabled = hash.videosHistoryEnabled
     this.autoPlayVideo = hash.autoPlayVideo
+    this.autoPlayNextVideo = hash.autoPlayNextVideo
+    this.autoPlayNextVideoPlaylist = hash.autoPlayNextVideoPlaylist
+    this.videosHistoryEnabled = hash.videosHistoryEnabled
+    this.videoLanguages = hash.videoLanguages
 
     this.theme = hash.theme
 
