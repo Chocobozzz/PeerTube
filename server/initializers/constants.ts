@@ -866,7 +866,7 @@ function buildLanguages () {
   // Only add ISO639-1 languages and some sign languages (ISO639-3)
   iso639
     .filter(l => {
-      return (l.iso6391 !== null && l.type === 'living') ||
+      return (l.iso6391 !== undefined && l.type === 'living') ||
         additionalLanguages[l.iso6393] === true
     })
     .forEach(l => { languages[l.iso6391 || l.iso6393] = l.name })
