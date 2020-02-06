@@ -3637,7 +3637,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="0e96ed54157e69989a2c0bcce2f62399accdaa27" datatype="html">
         <source>Enabled strategies stats</source>
-        <target state="translated"></target>
+        <target state="translated">Statistik för valda strategier</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">69</context>
@@ -9478,7 +9478,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="ec993f2e1ecd979ff28871591b6f253afb3b3138" datatype="html">
         <source>Hide any content from that user for you, your instance and its users.</source>
-        <target state="translated"></target>
+        <target state="translated">Dölj allt innehåll från den användaren för dig, din instans och dess användare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9494,7 +9494,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="a50c42119c5ffaa4ecb61e996c432f1ab0f8d0ff" datatype="html">
         <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="translated"></target>
+        <target state="translated">Visa allt innehåll från den användaren för dig, din instans och dess användare igen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9510,7 +9510,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="1a4ed1f8e28636212f1bcf06c36644d2627b682a" datatype="html">
         <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="translated"></target>
+        <target state="translated">Dölj allt innehåll från den instansen för dig, din instans och dess användare.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9526,7 +9526,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="d97d7d9b0c359f7b900652b547678841369691b1" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="translated"></target>
+        <target state="translated">Visa allt innehåll från den användaren för dig, din instans och dess användare igen.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
