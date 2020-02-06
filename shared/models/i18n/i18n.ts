@@ -1,11 +1,13 @@
 export const LOCALE_FILES = [ 'player', 'server' ]
 
 export const I18N_LOCALES = {
+  // Always first to avoid issues when using express acceptLanguages function when no accept language header is set
+  'en-US': 'English',
+
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',
   'de-DE': 'Deutsch',
   'el-GR': 'ελληνικά',
-  'en-US': 'English',
   'eo': 'Esperanto',
   'es-ES': 'Español',
   'eu-ES': 'Euskara',
