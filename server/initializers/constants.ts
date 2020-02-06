@@ -795,7 +795,6 @@ function buildVideoMimetypeExt () {
         'video/x-msvideo': '.avi',
         'video/x-flv': '.flv',
         'video/x-matroska': '.mkv',
-        'application/octet-stream': '.mkv',
         'video/avi': '.avi',
         'video/x-m4v': '.m4v',
         'video/m4v': '.m4v'
