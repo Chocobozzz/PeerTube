@@ -2,6 +2,8 @@
 
 set -eu
 
+declare -A languages
+
 pre_build_hook () {
   mkdir "./src/pending_locale" > /dev/null || true
   mv ./src/locale/angular.*.xlf "./src/pending_locale"
@@ -38,22 +40,46 @@ post_build_hook
 # Don't build other languages if --light arg is provided
 if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     if [ ! -z ${1+x} ] && [ "$1" == "--light-fr" ]; then
-        languages=("fr-FR")
+        languages=(["fr"]="fr-FR")
     else
         # Supported languages
         languages=(
-            "hu-HU" "th-TH"
-            "fi-FI" "nl-NL" "gd" "el-GR" "es-ES" "oc" "pt-BR" "pt-PT" "sv-SE" "pl-PL" "ru-RU" "zh-Hans-CN" "zh-Hant-TW"
-            "fr-FR" "ja-JP" "eu-ES" "ca-ES" "cs-CZ" "eo" "de-DE" "it-IT"
+            ["hu"]="hu-HU"
+            ["th"]="th-TH"
+            ["fi"]="fi-FI"
+            ["nl"]="nl-NL"
+            ["gd"]="gd"
+            ["el"]="el-GR"
+            ["es"]="es-ES"
+            ["oc"]="oc"
+            ["pt"]="pt-BR"
+            ["pt-PT"]="pt-PT"
+            ["sv"]="sv-SE"
+            ["pl"]="pl-PL"
+            ["ru"]="ru-RU"
+            ["zh-Hans"]="zh-Hans-CN"
+            ["zh-Hant"]="zh-Hant-TW"
+            ["fr"]="fr-FR"
+            ["ja"]="ja-JP"
+            ["eu"]="eu-ES"
+            ["ca"]="ca-ES"
+            ["cs"]="cs-CZ"
+            ["eo"]="eo"
+            ["de"]="de-DE"
+            ["it"]="it-IT"
         )
     fi
 
-    for lang in "${languages[@]}"; do
+    for key in "${!languages[@]}"; do
+        lang=${languages[$key]}
+
         # TODO: remove when the project will use runtime translations
         pre_build_hook "$lang"
 
-        npm run ng build -- --prod --i18n-file "./src/locale/angular.$lang.xlf" --i18n-format xlf --i18n-locale "$lang" \
-            --output-path "dist/$lang/" --deploy-url "/client/$lang/"
+        npm run ng build --  --output-path "dist/build" --deploy-url "/client/$lang/" --prod --configuration="$lang"
+
+        mv "dist/build/$key" "dist/$lang"
+        rmdir "dist/build"
 
         # Do not duplicate assets
         rm -r "./dist/$lang/assets"

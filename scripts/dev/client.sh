@@ -2,7 +2,7 @@
 
 set -eu
 
-clientCommand="cd client && node node_modules/.bin/ng serve --proxy-config proxy.config.json --hmr --configuration hmr --host 0.0.0.0 --disable-host-check --port 3000"
+clientCommand="cd client && node node_modules/.bin/ng serve --proxy-config proxy.config.json --hmr --configuration hmr,fr --host 0.0.0.0 --disable-host-check --port 3000"
 serverCommand="npm run build:server && NODE_ENV=test node dist/server"
 
 if [ ! -z ${1+x} ] && [ "$1" == "--skip-server" ]; then

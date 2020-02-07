@@ -12,12 +12,11 @@
     ]
   },
   "files": [
-    "src/main.ts",
     "src/polyfills.ts"
   ],
   "include": [
+    "src/main*.ts",
     "src/**/*.d.ts",
-    "src/shims/*.ts",
-    "../shared/models"
+    "src/shims/*.ts"
   ]
 }

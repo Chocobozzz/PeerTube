@@ -7,12 +7,108 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "hu": {
+            "translation": "src/locale/angular.hu-HU.xlf",
+            "baseHref": "/"
+          },
+          "th": {
+            "translation": "src/locale/angular.th-TH.xlf",
+            "baseHref": "/"
+          },
+          "fi": {
+            "translation": "src/locale/angular.fi-FI.xlf",
+            "baseHref": "/"
+          },
+          "nl": {
+            "translation": "src/locale/angular.nl-NL.xlf",
+            "baseHref": "/"
+          },
+          "gd": {
+            "translation": "src/locale/angular.gd.xlf",
+            "baseHref": "/"
+          },
+          "el": {
+            "translation": "src/locale/angular.el-GR.xlf",
+            "baseHref": "/"
+          },
+          "es": {
+            "translation": "src/locale/angular.es-ES.xlf",
+            "baseHref": "/"
+          },
+          "oc": {
+            "translation": "src/locale/angular.oc.xlf",
+            "baseHref": "/"
+          },
+          "pt": {
+            "translation": "src/locale/angular.pt-BR.xlf",
+            "baseHref": "/"
+          },
+          "pt-PT": {
+            "translation": "src/locale/angular.pt-PT.xlf",
+            "baseHref": "/"
+          },
+          "sv": {
+            "translation": "src/locale/angular.sv-SE.xlf",
+            "baseHref": "/"
+          },
+          "pl": {
+            "translation": "src/locale/angular.pl-PL.xlf",
+            "baseHref": "/"
+          },
+          "ru": {
+            "translation": "src/locale/angular.ru-RU.xlf",
+            "baseHref": "/"
+          },
+          "zh-Hans": {
+            "translation": "src/locale/angular.zh-Hans-CN.xlf",
+            "baseHref": "/"
+          },
+          "zh-Hant": {
+            "translation": "src/locale/angular.zh-Hant-TW.xlf",
+            "baseHref": "/"
+          },
+          "fr": {
+            "translation": "src/locale/angular.fr-FR.xlf",
+            "baseHref": "/"
+          },
+          "ja": {
+            "translation": "src/locale/angular.ja-JP.xlf",
+            "baseHref": "/"
+          },
+          "eu": {
+            "translation": "src/locale/angular.eu-ES.xlf",
+            "baseHref": "/"
+          },
+          "ca": {
+            "translation": "src/locale/angular.ca-ES.xlf",
+            "baseHref": "/"
+          },
+          "cs": {
+            "translation": "src/locale/angular.cs-CZ.xlf",
+            "baseHref": "/"
+          },
+          "eo": {
+            "translation": "src/locale/angular.eo.xlf",
+            "baseHref": "/"
+          },
+          "de": {
+            "translation": "src/locale/angular.de-DE.xlf",
+            "baseHref": "/"
+          },
+          "it": {
+            "translation": "src/locale/angular.it-IT.xlf",
+            "baseHref": "/"
+          }
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "deployUrl": "client/",
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -91,6 +187,75 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ]
+            },
+            "hu-HU": {
+              "localize": [ "hu" ]
+            },
+            "th-TH": {
+              "localize":  [ "th" ]
+            },
+            "fi-FI": {
+              "localize":  [ "fi" ]
+            },
+            "nl-NL": {
+              "localize":  [ "nl" ]
+            },
+            "gd": {
+              "localize":  [ "gd" ]
+            },
+            "el-GR": {
+              "localize":  [ "el" ]
+            },
+            "es-ES": {
+              "localize":  [ "es" ]
+            },
+            "oc": {
+              "localize":  [ "oc" ]
+            },
+            "pt-BR": {
+              "localize":  [ "pt" ]
+            },
+            "pt-PT": {
+              "localize":  [ "pt-PT" ]
+            },
+            "sv-SE": {
+              "localize":  [ "sv" ]
+            },
+            "pl-PL": {
+              "localize":  [ "pl" ]
+            },
+            "ru-RU": {
+              "localize":  [ "ru" ]
+            },
+            "zh-Hans-CN": {
+              "localize":  [ "zh-Hans" ]
+            },
+            "zh-Hant-TW": {
+              "localize":  [ "zh-Hant" ]
+            },
+            "fr-FR": {
+              "localize":  [ "fr" ]
+            },
+            "ja-JP": {
+              "localize":  [ "ja" ]
+            },
+            "eu-ES": {
+              "localize":  [ "eu" ]
+            },
+            "ca-ES": {
+              "localize":  [ "ca" ]
+            },
+            "cs-CZ": {
+              "localize":  [ "cs" ]
+            },
+            "eo": {
+              "localize":  [ "eo" ]
+            },
+            "de-DE": {
+              "localize":  [ "de" ]
+            },
+            "it-IT": {
+              "localize":  [ "it" ]
             }
           }
         },
