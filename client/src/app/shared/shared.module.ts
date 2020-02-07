@@ -7,7 +7,7 @@ import { MarkdownTextareaComponent } from '@app/shared/forms/markdown-textarea.c
 import { HelpComponent } from '@app/shared/misc/help.component'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
 import { BytesPipe, KeysPipe, NgPipesModule } from 'ngx-pipes'
-import { SharedModule as PrimeSharedModule } from 'primeng/components/common/shared'
+import { SharedModule as PrimeSharedModule } from 'primeng/api'
 import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 import { ButtonComponent } from './buttons/button.component'
 import { DeleteButtonComponent } from './buttons/delete-button.component'

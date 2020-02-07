@@ -4,14 +4,6 @@
   "newProjectRoot": "projects",
   "projects": {
     "PeerTube": {
-      "i18n": {
-        "locales": {
-          "fr_FR": {
-            "translation": "src/i18n/messages.fr_FR.xlf",
-            "baseHref": ""
-          }
-        }
-      },
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
