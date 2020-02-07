@@ -99,18 +99,6 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ]
-            },
-            "fr_FR": {
-              "aot": true,
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
-                }
-              ],
-              "outputPath": "dist/PeerTube-fr_FR",
-              "i18nFile": "src/i18n/messages.fr_FR.xlf",
-              "i18nLocale": "fr_FR"
             }
           }
         },
@@ -132,9 +120,6 @@
             "e2e": {
               "browserTarget": "PeerTube:build:e2e",
               "proxyConfig": "e2e/proxy.config.json"
-            },
-            "fr_FR": {
-              "browserTarget": "PeerTube:build:fr_FR"
             }
           }
         },
