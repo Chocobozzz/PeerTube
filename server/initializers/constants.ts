@@ -403,6 +403,9 @@ const MIMETYPES = {
       'audio/mp3': '.mp3',
       'application/ogg': '.ogg',
       'audio/ogg': '.ogg',
+      'audio/x-ms-wma': '.wma',
+      'audio/wav': '.wav',
+      'audio/x-flac': '.flac',
       'audio/flac': '.flac'
     },
     EXT_MIMETYPE: null as { [ id: string ]: string }
