@@ -197,7 +197,7 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-9.0.0.tgz#24ba63ae5db566b70f7c40bb148dc37a77aaa373"
   integrity sha512-tOMtXY8DFpTWMF77BOTXZmMMtqvdy6fbyOkJSccn6VatcPrNXOs5rKur+KNwdSlK+djjss6Y+LA8fQAvjNvUqw==
 
-"@angular/localize@~9.0.0":
+"@angular/localize@^9.0.0":
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/@angular/localize/-/localize-9.0.0.tgz#d7b428e2784a2c35430ff47c823b70c514fa0016"
   integrity sha512-T1dtjqT6BDjWLvtF81RsCBdo+hiORLiNKpSD1wXmHF1L/GMKP+EDODvBDMgnyt4NlSn+HzBeSxE+XPWsHub6cg==
