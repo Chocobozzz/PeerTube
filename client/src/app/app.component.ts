@@ -25,8 +25,8 @@ import { InstanceService } from '@app/shared/instance/instance.service'
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit {
-  @ViewChild('welcomeModal', { static: false }) welcomeModal: WelcomeModalComponent
-  @ViewChild('instanceConfigWarningModal', { static: false }) instanceConfigWarningModal: InstanceConfigWarningModalComponent
+  @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
+  @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
 
   isMenuDisplayed = true
   isMenuChangedByUser = false
