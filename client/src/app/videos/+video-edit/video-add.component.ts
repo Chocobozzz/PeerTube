@@ -12,9 +12,9 @@ import { ServerConfig } from '@shared/models'
   styleUrls: [ './video-add.component.scss' ]
 })
 export class VideoAddComponent implements OnInit, CanComponentDeactivate {
-  @ViewChild('videoUpload', { static: false }) videoUpload: VideoUploadComponent
-  @ViewChild('videoImportUrl', { static: false }) videoImportUrl: VideoImportUrlComponent
-  @ViewChild('videoImportTorrent', { static: false }) videoImportTorrent: VideoImportTorrentComponent
+  @ViewChild('videoUpload') videoUpload: VideoUploadComponent
+  @ViewChild('videoImportUrl') videoImportUrl: VideoImportUrlComponent
+  @ViewChild('videoImportTorrent') videoImportTorrent: VideoImportTorrentComponent
 
   secondStepType: 'upload' | 'import-url' | 'import-torrent'
   videoName: string

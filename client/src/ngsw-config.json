@@ -10,7 +10,8 @@
           "/client/assets/images/favicon.png",
           "/client/*.bundle.css",
           "/client/*.bundle.js",
-          "/client/*.chunk.js"
+          "/client/*.chunk.js",
+          "/manifest.webmanifest"
         ]
       }
     },

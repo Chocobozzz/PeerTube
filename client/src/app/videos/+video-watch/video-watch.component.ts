@@ -47,9 +47,9 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   private static LOCAL_STORAGE_PRIVACY_CONCERN_KEY = 'video-watch-privacy-concern'
 
   @ViewChild('videoWatchPlaylist', { static: true }) videoWatchPlaylist: VideoWatchPlaylistComponent
-  @ViewChild('videoShareModal', { static: false }) videoShareModal: VideoShareComponent
-  @ViewChild('videoSupportModal', { static: false }) videoSupportModal: VideoSupportComponent
-  @ViewChild('subscribeButton', { static: false }) subscribeButton: SubscribeButtonComponent
+  @ViewChild('videoShareModal') videoShareModal: VideoShareComponent
+  @ViewChild('videoSupportModal') videoSupportModal: VideoSupportComponent
+  @ViewChild('subscribeButton') subscribeButton: SubscribeButtonComponent
 
   player: any
   playerElement: HTMLVideoElement

@@ -4,6 +4,14 @@
   "newProjectRoot": "projects",
   "projects": {
     "PeerTube": {
+      "i18n": {
+        "locales": {
+          "fr_FR": {
+            "translation": "src/i18n/messages.fr_FR.xlf",
+            "baseHref": ""
+          }
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -11,6 +19,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "deployUrl": "client/",
             "outputPath": "dist",
             "index": "src/index.html",
@@ -64,6 +73,12 @@
               ]
             },
             "hmr": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -72,6 +87,12 @@
               ]
             },
             "e2e": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -81,9 +102,14 @@
             },
             "fr_FR": {
               "aot": true,
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "outputPath": "dist/PeerTube-fr_FR",
               "i18nFile": "src/i18n/messages.fr_FR.xlf",
-              "i18nFormat": "xlf",
               "i18nLocale": "fr_FR"
             }
           }

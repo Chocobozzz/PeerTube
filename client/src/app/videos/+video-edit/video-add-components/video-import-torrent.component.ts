@@ -25,7 +25,7 @@ import { scrollToTop } from '@app/shared/misc/utils'
 export class VideoImportTorrentComponent extends VideoSend implements OnInit, CanComponentDeactivate {
   @Output() firstStepDone = new EventEmitter<string>()
   @Output() firstStepError = new EventEmitter<void>()
-  @ViewChild('torrentfileInput', { static: false }) torrentfileInput: ElementRef<HTMLInputElement>
+  @ViewChild('torrentfileInput') torrentfileInput: ElementRef<HTMLInputElement>
 
   magnetUri = ''
 

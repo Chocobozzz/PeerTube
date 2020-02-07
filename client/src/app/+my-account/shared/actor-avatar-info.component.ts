@@ -11,7 +11,7 @@ import { ServerConfig } from '@shared/models'
   styleUrls: [ './actor-avatar-info.component.scss' ]
 })
 export class ActorAvatarInfoComponent implements OnInit {
-  @ViewChild('avatarfileInput', { static: false }) avatarfileInput: ElementRef<HTMLInputElement>
+  @ViewChild('avatarfileInput') avatarfileInput: ElementRef<HTMLInputElement>
 
   @Input() actor: VideoChannel | Account
 
