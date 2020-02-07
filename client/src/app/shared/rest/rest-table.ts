@@ -1,6 +1,5 @@
 import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
-import { LazyLoadEvent } from 'primeng/components/common/lazyloadevent'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { LazyLoadEvent, SortMeta } from 'primeng/api'
 import { RestPagination } from './rest-pagination'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'

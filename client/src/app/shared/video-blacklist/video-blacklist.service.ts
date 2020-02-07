@@ -1,7 +1,7 @@
 import { catchError, map, concatMap, toArray } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { SortMeta } from 'primeng/api'
 import { from as observableFrom, Observable } from 'rxjs'
 import { VideoBlacklist, VideoBlacklistType, ResultList } from '../../../../../shared'
 import { Video } from '../video/video.model'

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { RestPagination, RestTable } from '@app/shared'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { SortMeta } from 'primeng/api'
 import { Notifier } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoImport, VideoImportState } from '../../../../../shared/models/videos'

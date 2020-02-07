@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { SortMeta } from 'primeng/api'
 import { Notifier, ServerService } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { RestPagination, RestTable, VideoBlacklistService } from '../../../shared'

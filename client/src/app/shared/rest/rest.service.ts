@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { HttpParams } from '@angular/common/http'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { SortMeta } from 'primeng/api'
 import { ComponentPagination, ComponentPaginationLight } from './component-pagination.model'
 
 import { RestPagination } from './rest-pagination'

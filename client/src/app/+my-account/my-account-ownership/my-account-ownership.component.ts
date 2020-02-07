@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { RestPagination, RestTable } from '@app/shared'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { SortMeta } from 'primeng/api'
 import { VideoChangeOwnership } from '../../../../../shared'
 import { VideoOwnershipService } from '@app/shared/video-ownership'
 import { Account } from '@app/shared/account/account.model'

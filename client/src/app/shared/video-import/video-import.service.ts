@@ -9,7 +9,7 @@ import { VideoImportCreate, VideoUpdate } from '../../../../../shared/models/vid
 import { objectToFormData } from '@app/shared/misc/utils'
 import { ResultList } from '../../../../../shared/models/result-list.model'
 import { UserService } from '@app/shared/users/user.service'
-import { SortMeta } from 'primeng/components/common/sortmeta'
+import { SortMeta } from 'primeng/api'
 import { RestPagination } from '@app/shared/rest'
 import { ServerService } from '@app/core'
 
