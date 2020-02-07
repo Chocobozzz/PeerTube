@@ -795,6 +795,8 @@ function buildVideoMimetypeExt () {
         'video/x-matroska': '.mkv',
         'video/avi': '.avi',
         'video/x-m4v': '.m4v',
+        // Could be anything
+        'application/octet-stream': null,
         'video/m4v': '.m4v'
       })
     }
