@@ -293,6 +293,8 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   private isAudioFile (filename: string) {
-    return filename.endsWith('.mp3') || filename.endsWith('.flac') || filename.endsWith('.ogg')
+    const extensions = [ '.mp3', '.flac', '.ogg', '.wma', '.wav' ]
+
+    return extensions.some(e => filename.endsWith(e))
   }
 }
