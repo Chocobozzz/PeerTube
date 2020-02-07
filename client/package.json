@@ -140,7 +140,7 @@
     "zone.js": "~0.10.2"
   },
   "dependencies": {
-    "@angular/localize": "~9.0.0",
+    "@angular/localize": "^9.0.0",
     "@ngx-i18nsupport/tooling": "^8.0.3",
     "tslib": "^1.10.0"
   }
