@@ -1,7 +1,7 @@
-import { Observable, timer as observableTimer, of as ofObservable } from 'rxjs'
+import { Observable, of as ofObservable, timer as observableTimer } from 'rxjs'
 import { switchMap } from 'rxjs/operators'
 import { PreloadingStrategy, Route } from '@angular/router'
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core'
 
 @Injectable()
 export class PreloadSelectedModulesList implements PreloadingStrategy {
