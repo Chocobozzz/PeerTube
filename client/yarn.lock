@@ -7584,25 +7584,10 @@ ngx-chips@2.1.0:
     ng2-material-dropdown "0.11.0"
     tslib "^1.9.0"
 
-ngx-clipboard@12.3.0:
-  version "12.3.0"
-  resolved "https://registry.yarnpkg.com/ngx-clipboard/-/ngx-clipboard-12.3.0.tgz#8e61a894ff57249db64b733d26f9a0b98c08829f"
-  integrity sha512-ToSsuDv9I1L0g+TcthePcZ4B859/MpoarlHVr2KnHWy3pR8SxfJlNyP2i9STYRQkJ5bSEg65RFErW4tx52lHYQ==
-  dependencies:
-    ngx-window-token "^2.0.0"
-    tslib "^1.9.0"
-
 ngx-pipes@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/ngx-pipes/-/ngx-pipes-2.6.0.tgz#8aec62de477067ef2726f2b87086a169bcf41b8a"
   integrity sha512-JdoiiAiYk8qN8tmYutmbWgc2vfrpWzqV+b/dTyzDDYce1sg0+IfAXxG+il4XKjRtIR06IIT5H9TKOU9ZrlM1EQ==
-  dependencies:
-    tslib "^1.9.0"
-
-ngx-window-token@^2.0.0:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-window-token/-/ngx-window-token-2.0.1.tgz#8f91221af4116aa9f49bb3f7a6f1111639884fba"
-  integrity sha512-rvqdqJEfnWXQFU5fyfYt06E10tR/UtFOYdF3QebfcOh5VIJhnTKiprX8e4B9OrX7WEVFm9BT8uV72xXcEgsaKA==
   dependencies:
     tslib "^1.9.0"
 

@@ -93,12 +93,12 @@ import { VideoActionsDropdownComponent } from '@app/shared/video/video-actions-d
 import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklist.component'
 import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.component'
 import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
-import { ClipboardModule } from 'ngx-clipboard'
 import { FollowService } from '@app/shared/instance/follow.service'
 import { MultiSelectModule } from 'primeng/multiselect'
 import { FeatureBooleanComponent } from '@app/shared/instance/feature-boolean.component'
 import { InputReadonlyCopyComponent } from '@app/shared/forms/input-readonly-copy.component'
 import { RedundancyService } from '@app/shared/video/redundancy.service'
+import { ClipboardModule } from '@angular/cdk/clipboard'
 
 @NgModule({
   imports: [

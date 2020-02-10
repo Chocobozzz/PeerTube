@@ -8,7 +8,7 @@
           <a *ngIf="user.account" [routerLink]="[ '/accounts', user.account.nameWithHost ]" class="logged-in-display-name">{{ user.account?.displayName }}</a>
           <a *ngIf="!user.account" routerLink="/my-account/settings" class="logged-in-display-name">{{ user.account?.displayName }}</a>
 
-          <div ngxClipboard [cbContent]="user.account?.nameWithHost" class="logged-in-username">{{ user.username }}</div>
+          <div class="logged-in-username">{{ user.username }}</div>
         </div>
 
         <div class="logged-in-more" ngbDropdown placement="bottom-right auto">

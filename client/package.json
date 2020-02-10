@@ -103,7 +103,6 @@
     "lodash-es": "^4.17.4",
     "markdown-it": "^9.0.1",
     "ngx-chips": "2.1.0",
-    "ngx-clipboard": "12.3.0",
     "ngx-pipes": "^2.6.0",
     "node-sass": "^4.9.3",
     "npm-font-source-sans-pro": "^1.0.2",
