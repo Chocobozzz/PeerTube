@@ -14,6 +14,7 @@ import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
 import { ServerConfig } from '@shared/models'
+import { GlobalIconName } from '@app/shared/images/global-icon.component'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -61,7 +62,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   actions: {
     routerLink: string
-    iconName: string
+    iconName: GlobalIconName
     label: string
   }[] = []
 

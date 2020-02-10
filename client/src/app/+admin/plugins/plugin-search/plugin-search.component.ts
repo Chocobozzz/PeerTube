@@ -70,8 +70,10 @@ export class PluginSearchComponent implements OnInit {
     this.reloadPlugins()
   }
 
-  onSearchChange (search: string) {
-    this.searchSubject.next(search)
+  onSearchChange (event: Event) {
+    const target = event.target as HTMLInputElement
+
+    this.searchSubject.next(target.value)
   }
 
   reloadPlugins () {

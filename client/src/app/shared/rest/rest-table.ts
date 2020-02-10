@@ -65,8 +65,9 @@ export abstract class RestTable {
       })
   }
 
-  onSearch (search: string) {
-    this.searchStream.next(search)
+  onSearch (event: Event) {
+    const target = event.target as HTMLInputElement
+    this.searchStream.next(target.value)
   }
 
   protected abstract loadData (): void

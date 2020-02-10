@@ -1,5 +1,5 @@
 import { Account as AccountInterface } from '../../../../../../shared/models/actors'
-import { VideoComment as VideoCommentServerModel } from '../../../../../../shared/models/videos/video-comment.model'
+import { VideoComment as VideoCommentServerModel, VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
 import { Actor } from '@app/shared/actor/actor.model'
 import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 

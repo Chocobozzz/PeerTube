@@ -146,7 +146,7 @@
           [(ngModel)]="advancedSearch.tagsAllOf" name="tagsAllOf" id="tagsAllOf"
           [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
           i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
-          maxItems="5" modelAsStrings="true"
+          [maxItems]="5" [modelAsStrings]="true"
         ></tag-input>
       </div>
 
@@ -159,7 +159,7 @@
           [(ngModel)]="advancedSearch.tagsOneOf" name="tagsOneOf" id="tagsOneOf"
           [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
           i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
-          maxItems="5" modelAsStrings="true"
+          [maxItems]="5" [modelAsStrings]="true"
         ></tag-input>
       </div>
     </div>

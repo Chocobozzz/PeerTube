@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
 import { User, UserRight } from '../../../../../../shared/models/users'
-import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '@app/core/auth'
 import { AccountService } from '@app/shared/account/account.service'
 import { Video } from '@app/shared/video/video.model'
@@ -10,6 +9,7 @@ import { Account } from '@app/shared/account/account.model'
 import { Notifier } from '@app/core'
 import { UserService } from '@app/shared'
 import { Actor } from '@app/shared/actor/actor.model'
+import { VideoCommentThreadTree } from '@app/videos/+video-watch/comment/video-comment-thread-tree.model'
 
 @Component({
   selector: 'my-video-comment',

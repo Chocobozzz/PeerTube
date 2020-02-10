@@ -29,7 +29,7 @@
               <tag-input
                 [validators]="tagValidators" [errorMessages]="tagValidatorsMessages"
                 i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a new tag"
-                formControlName="tags" maxItems="5" modelAsStrings="true"
+                formControlName="tags" [maxItems]="5" [modelAsStrings]="true"
               ></tag-input>
             </div>
 
@@ -44,7 +44,7 @@
                 </ng-template>
               </my-help>
 
-              <my-markdown-textarea truncate="250" formControlName="description" markdownVideo="true"></my-markdown-textarea>
+              <my-markdown-textarea [truncate]="250" formControlName="description" [markdownVideo]="true"></my-markdown-textarea>
 
               <div *ngIf="formErrors.description" class="form-error">
                 {{ formErrors.description }}

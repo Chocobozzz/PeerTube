@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier, RedirectService } from '@app/core'
 import { VideoBlacklistService } from '../../../shared/video-blacklist'
-import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { FormReactive, VideoBlacklistValidatorsService } from '@app/shared/forms'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-video-blacklist',
@@ -14,7 +14,7 @@ import { FormReactive, VideoBlacklistValidatorsService } from '@app/shared/forms
   styleUrls: [ './video-blacklist.component.scss' ]
 })
 export class VideoBlacklistComponent extends FormReactive implements OnInit {
-  @Input() video: VideoDetails = null
+  @Input() video: Video = null
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 

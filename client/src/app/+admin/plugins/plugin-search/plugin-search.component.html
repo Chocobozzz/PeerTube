@@ -3,7 +3,7 @@
 </div>
 
 <div class="search-bar">
-  <input type="text" (input)="onSearchChange($event.target.value)" i18n-placeholder placeholder="Search..."/>
+  <input type="text" (input)="onSearchChange($event)" i18n-placeholder placeholder="Search..."/>
 </div>
 
 <div class="alert alert-info" i18n *ngIf="pluginInstalled">
