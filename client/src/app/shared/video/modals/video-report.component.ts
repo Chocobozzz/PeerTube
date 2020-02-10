@@ -1,13 +1,13 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
 import { FormReactive } from '../../../shared/forms'
-import { VideoDetails } from '../../../shared/video/video-details.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoAbuseValidatorsService } from '@app/shared/forms/form-validators/video-abuse-validators.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { VideoAbuseService } from '@app/shared/video-abuse'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-video-report',
@@ -15,7 +15,7 @@ import { VideoAbuseService } from '@app/shared/video-abuse'
   styleUrls: [ './video-report.component.scss' ]
 })
 export class VideoReportComponent extends FormReactive implements OnInit {
-  @Input() video: VideoDetails = null
+  @Input() video: Video = null
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 

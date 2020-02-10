@@ -141,7 +141,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     return this.advancedSearch.size()
   }
 
-  removeVideoFromArray (video: Video) {
+  // Add VideoChannel for typings, but the template already checks "video" argument is a video
+  removeVideoFromArray (video: Video | VideoChannel) {
     this.results = this.results.filter(r => !this.isVideo(r) || r.id !== video.id)
   }
 

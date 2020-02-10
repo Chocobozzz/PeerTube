@@ -6,7 +6,6 @@ import { Notifier, UserNotificationSocket } from '@app/core'
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 import { NavigationEnd, Router } from '@angular/router'
 import { filter } from 'rxjs/operators'
-import { UserNotificationsComponent } from '@app/shared'
 
 @Component({
   selector: 'my-avatar-notification',

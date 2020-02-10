@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core'
 
 export class EditButtonComponent {
   @Input() label: string
-  @Input() routerLink: string[] = []
+  @Input() routerLink: string[] | string = []
 }

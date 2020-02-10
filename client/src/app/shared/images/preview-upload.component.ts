@@ -26,7 +26,7 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
   allowedExtensionsMessage = ''
 
   private serverConfig: ServerConfig
-  private file: File
+  private file: Blob
 
   constructor (
     private sanitizer: DomSanitizer,
@@ -49,7 +49,7 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
     this.allowedExtensionsMessage = this.videoImageExtensions.join(', ')
   }
 
-  onFileChanged (file: File) {
+  onFileChanged (file: Blob) {
     this.file = file
 
     this.propagateChange(this.file)

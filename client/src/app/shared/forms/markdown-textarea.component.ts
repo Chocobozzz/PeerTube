@@ -21,7 +21,7 @@ import { MarkdownService } from '@app/shared/renderer'
 
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
-  @Input() classes: string[] = []
+  @Input() classes: string[] | { [klass: string]: any[] | any } = []
   @Input() textareaWidth = '100%'
   @Input() textareaHeight = '150px'
   @Input() previewColumn = false

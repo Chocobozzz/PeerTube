@@ -1,8 +1,7 @@
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, Output, EventEmitter } from '@angular/core'
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { ConfirmService, Notifier } from '@app/core'
 import { Subject, Subscription } from 'rxjs'
-import { VideoCommentThreadTree } from '../../../../../../shared/models/videos/video-comment.model'
 import { AuthService } from '../../../core/auth'
 import { ComponentPagination, hasMoreItems } from '../../../shared/rest/component-pagination.model'
 import { User } from '../../../shared/users'
@@ -13,6 +12,7 @@ import { VideoCommentService } from './video-comment.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Syndication } from '@app/shared/video/syndication.model'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { VideoCommentThreadTree } from '@app/videos/+video-watch/comment/video-comment-thread-tree.model'
 
 @Component({
   selector: 'my-video-comments',

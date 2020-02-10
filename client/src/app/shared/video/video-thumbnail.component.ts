@@ -12,7 +12,7 @@ export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
   @Input() routerLink: any[]
-  @Input() queryParams: any[]
+  @Input() queryParams: { [ p: string ]: any }
 
   @Input() displayWatchLaterPlaylist: boolean
   @Input() inWatchLaterPlaylist: boolean

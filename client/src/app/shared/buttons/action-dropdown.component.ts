@@ -34,10 +34,10 @@ export class ActionDropdownComponent<T> {
   @Input() label: string
   @Input() theme: DropdownTheme = 'grey'
 
-  getActions () {
-    if (this.actions.length !== 0 && Array.isArray(this.actions[0])) return this.actions
+  getActions (): DropdownAction<T>[][] {
+    if (this.actions.length !== 0 && Array.isArray(this.actions[0])) return this.actions as DropdownAction<T>[][]
 
-    return [ this.actions ]
+    return [ this.actions as DropdownAction<T>[] ]
   }
 
   areActionsDisplayed (actions: Array<DropdownAction<T> | DropdownAction<T>[]>, entry: T): boolean {

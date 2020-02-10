@@ -41,7 +41,7 @@
 
             <div>
               <p-multiSelect
-                inputId="instanceCategories" [options]="categoryItems" formControlName="categories" showToggleAll="false"
+                inputId="instanceCategories" [options]="categoryItems" formControlName="categories" [showToggleAll]="false"
                 [defaultLabel]="getDefaultCategoryLabel()" [selectedItemsLabel]="getSelectedCategoryLabel()"
                 emptyFilterMessage="No results found" i18n-emptyFilterMessage
               ></p-multiSelect>
@@ -53,7 +53,7 @@
 
             <div>
               <p-multiSelect
-                inputId="instanceLanguages" [options]="languageItems" formControlName="languages" showToggleAll="false"
+                inputId="instanceLanguages" [options]="languageItems" formControlName="languages" [showToggleAll]="false"
                 [defaultLabel]="getDefaultLanguageLabel()" [selectedItemsLabel]="getSelectedLanguageLabel()"
                 emptyFilterMessage="No results found" i18n-emptyFilterMessage
               ></p-multiSelect>
