@@ -49,7 +49,7 @@ import { VideoPlaylistModel } from '../video/video-playlist'
 import { AccountModel } from './account'
 import { NSFWPolicyType } from '../../../shared/models/videos/nsfw-policy.type'
 import { values } from 'lodash'
-import { DEFAULT_THEME_NAME, DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
+import { DEFAULT_USER_THEME_NAME, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { clearCacheByUserId } from '../../lib/oauth-model'
 import { UserNotificationSettingModel } from './user-notification-setting'
 import { VideoModel } from '../video/video'
@@ -233,7 +233,7 @@ export class UserModel extends Model<UserModel> {
   videoQuotaDaily: number
 
   @AllowNull(false)
-  @Default(DEFAULT_THEME_NAME)
+  @Default(DEFAULT_USER_THEME_NAME)
   @Is('UserTheme', value => throwIfNotValid(value, isThemeNameValid, 'theme'))
   @Column
   theme: string
