@@ -368,7 +368,7 @@
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1903,7 +1903,7 @@
       </trans-unit>
       <trans-unit id="75706466a5cffa6f6bf0d6c94a8345a001ce8cea" datatype="html">
         <source>Display all categories</source>
-        <target state="new">Display all categories</target>
+        <target state="translated">顯示所有分類</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">106</context>
@@ -1921,7 +1921,7 @@
       </trans-unit>
       <trans-unit id="e19d80c6277747a68f3da8cfe1318303d2b5c952" datatype="html">
         <source>Display all licenses</source>
-        <target state="new">Display all licenses</target>
+        <target state="translated">顯示所有授權條款</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">119</context>
@@ -1940,7 +1940,7 @@
       </trans-unit>
       <trans-unit id="dcc3173a99661496cd1f836283993cc3e6576b26" datatype="html">
         <source>Display all languages</source>
-        <target state="new">Display all languages</target>
+        <target state="translated">顯示所有語言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">132</context>
@@ -2856,7 +2856,7 @@
       </trans-unit>
       <trans-unit id="57bfd54c230fc20caff1f0b321ad42be3bf859a6" datatype="html">
         <source>Origin instance</source>
-        <target state="new">Origin instance</target>
+        <target state="translated">來源站臺</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">192</context>
@@ -3098,9 +3098,7 @@
       </trans-unit>
       <trans-unit id="6f37f53bce7ca4a77c08cdd5b737c2ac02722d8c" datatype="html">
         <source>Follows &amp; redundancies</source>
-        <target state="new">
-      Follows &amp; redundancies
-    </target>
+        <target state="translated">追蹤與冗餘</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.html</context>
           <context context-type="linenumber">7</context>
@@ -3147,7 +3145,7 @@
       </trans-unit>
       <trans-unit id="fee25862814afd08fca2abe1452e6841e8b57b1e" datatype="html">
         <source>Follows &amp; redundancies</source>
-        <target state="new">Follows &amp; redundancies</target>
+        <target state="translated">追蹤與冗餘</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3179,7 +3177,7 @@
       </trans-unit>
       <trans-unit id="31e902955ed9501f124814901a0031c37a070f1f" datatype="html">
         <source>Video redundancies</source>
-        <target state="new">Video redundancies</target>
+        <target state="translated">影片冗餘</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3351,7 +3349,7 @@
       </trans-unit>
       <trans-unit id="fe3654e0d1e607e3ebc04d1e209d6f03ffdc5a9d" datatype="html">
         <source>Video redundancies list</source>
-        <target state="new">Video redundancies list</target>
+        <target state="translated">影片冗餘清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3620,7 +3618,7 @@
       </trans-unit>
       <trans-unit id="c6233e4d80607c136c6b4b590604db3af789ee9d" datatype="html">
         <source>Video URL</source>
-        <target state="new">Video URL</target>
+        <target state="translated">影片 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">24</context>
@@ -3628,7 +3626,7 @@
       </trans-unit>
       <trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
         <source>Total size</source>
-        <target state="new">Total size</target>
+        <target state="translated">總大小</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">25</context>
@@ -3636,7 +3634,7 @@
       </trans-unit>
       <trans-unit id="0e96ed54157e69989a2c0bcce2f62399accdaa27" datatype="html">
         <source>Enabled strategies stats</source>
-        <target state="new">Enabled strategies stats</target>
+        <target state="translated">策略統計已啟用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">69</context>
@@ -3644,9 +3642,7 @@
       </trans-unit>
       <trans-unit id="0f6e6ec286d43c14f16444a077639090f38e29de" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="new">
-      No redundancy strategy is enabled on your instance.
-    </target>
+        <target state="translated">您的站臺未啟用策略統計。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">73</context>
@@ -4153,7 +4149,7 @@
       </trans-unit>
       <trans-unit id="05f5612d42b02be4d6d9e0a99585ae7e30a91780" datatype="html">
         <source>Strategy</source>
-        <target state="new">Strategy</target>
+        <target state="translated">策略</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4191,7 +4187,7 @@
       </trans-unit>
       <trans-unit id="d635f94dd3214d8e5fb83a2af04e7b96c861e91f" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="new">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</target>
+        <target state="translated">誰管理此站臺？對 NSFW 影片有何政策？對政治影片呢？等等</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">121</context>
@@ -4215,7 +4211,7 @@
       </trans-unit>
       <trans-unit id="963707d11903100147b40788e4f67cc93a234308" datatype="html">
         <source>A single person? A non-profit? A company?</source>
-        <target state="new">A single person? A non-profit? A company?</target>
+        <target state="translated">一個人？非營利組織？還是一間公司？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">134</context>
@@ -4231,7 +4227,7 @@
       </trans-unit>
       <trans-unit id="53fe4c724dc3f942c4d1eac4206a9686cbbf968e" datatype="html">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="new">To share your personal videos? To open registrations and allow people to upload what they want?</target>
+        <target state="translated">要分享您的個人影片？還是要開放註冊並讓人們可以上傳他們想要上傳的影片呢？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">146</context>
@@ -4247,7 +4243,7 @@
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="new">It's important to know for users who want to register on your instance</target>
+        <target state="translated">這對想要在您的站臺上註冊的使用者來說是很重要的</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">157</context>
@@ -4263,7 +4259,7 @@
       </trans-unit>
       <trans-unit id="711791c0af2b344c13f84bf3a1d627b9cac5235a" datatype="html">
         <source>With your own funds? With users donations? Advertising?</source>
-        <target state="new">With your own funds? With users donations? Advertising?</target>
+        <target state="translated">用自己的資金？使用者捐款？廣告？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">168</context>
@@ -4287,7 +4283,7 @@
       </trans-unit>
       <trans-unit id="67d731127330b22feb349c163720647a14edc44b" datatype="html">
         <source>2vCore 2GB RAM/or directly the link to the server you rent etc</source>
-        <target state="new">2vCore 2GB RAM/or directly the link to the server you rent etc</target>
+        <target state="translated">2個虛擬核心 2GB RAM 或是直接貼上到您租用伺服器的連結等等</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">181</context>
@@ -4449,7 +4445,7 @@
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="new">Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</target>
+        <target state="translated">除非使用者被標記為受信任，否則他們的影片將會在版主審閱前保持私人影片的狀態。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">325</context>
@@ -5266,7 +5262,7 @@
       </trans-unit>
       <trans-unit id="cb6fc818d4547d66ac5ea65f2c5d5cbfb6ebc04e" datatype="html">
         <source>Video history</source>
-        <target state="new">Video history</target>
+        <target state="translated">影片歷史</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6160,9 +6156,7 @@
       </trans-unit>
       <trans-unit id="4a935862bd3120d5878e9635a9d46dfc1bcaedb4" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">頻道名稱是在這個與其他所有站臺上對您的頻道的唯一識別記號。它就跟電子郵件地址一樣獨一無二，讓其他人更容易找到並與其互動。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6188,9 +6182,7 @@
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">使用者名稱是在這個與其他所有站臺上對您的帳號的唯一識別記號。它就跟電子郵件地址一樣獨一無二，讓其他人更容易找到並與其互動。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6253,7 +6245,7 @@
       </trans-unit>
       <trans-unit id="e1979668b5d368a2a5d476ba4949bc518a4316a0" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{followers}}"/> direct account followers</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{followers}}"/> direct account followers</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{followers}}"/> 直接帳號追蹤者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6270,7 +6262,7 @@
       </trans-unit>
       <trans-unit id="f1a851fd8b39e5544e3eec438ebd7f4ccfcc34dc" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> subscribers} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> 個訂閱者} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6622,7 +6614,7 @@
       </trans-unit>
       <trans-unit id="fb2e1bed329dc5b84197808c778abb9edcbdb335" datatype="html">
         <source>Used</source>
-        <target state="new">Used</target>
+        <target state="translated">已使用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6630,7 +6622,7 @@
       </trans-unit>
       <trans-unit id="b7da3e3505cc80f9bf3cffc8444c53e8a9ec70a5" datatype="html">
         <source>Available</source>
-        <target state="new">Available</target>
+        <target state="translated">可用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6638,7 +6630,7 @@
       </trans-unit>
       <trans-unit id="aea95ff7fb86826539cc9c81c90e766d82f9cbb5" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="new">Do you really want to remove this video redundancy?</target>
+        <target state="translated">您真的想要移除此重複影片嗎？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6646,7 +6638,7 @@
       </trans-unit>
       <trans-unit id="9eef7dd291945247d4aefb3994b617d73a0c96e2" datatype="html">
         <source>Remove redundancy</source>
-        <target state="new">Remove redundancy</target>
+        <target state="translated">移除冗餘</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6654,7 +6646,7 @@
       </trans-unit>
       <trans-unit id="1009a5a3eab4ef49f45fe10392d8685c1ff03df9" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="new">Video redundancies removed!</target>
+        <target state="translated">重複影片已刪除！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7020,7 +7012,7 @@
       </trans-unit>
       <trans-unit id="a3f529c8552196571418065c5b81a44ae2f94972" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="new">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">影片與留言都將會被刪除。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7032,7 +7024,7 @@
       </trans-unit>
       <trans-unit id="319c89ebc6de62d35b794da23c9794af9b16514e" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="new">User won't be able to login anymore, but videos and comments will be kept as is.</target>
+        <target state="translated">使用者將無法登入，但影片與留言將會保持原樣。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7641,7 +7633,7 @@
       </trans-unit>
       <trans-unit id="897e90115ad2bc3d07469e0d80bc6f390961723d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> 部影片} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9376,7 +9368,7 @@
       </trans-unit>
       <trans-unit id="f140baf295648e021385e7dd57fbbc7cee4ad4e6" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="new">Change quota, role, and more.</target>
+        <target state="translated">變更配額、角色等等。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9400,7 +9392,7 @@
       </trans-unit>
       <trans-unit id="f7044a58ed834f7380eaac0e670dc817b19d9209" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="new">Allow the user to login and create videos/comments again</target>
+        <target state="translated">再次允許使用者登入並建立影片／留言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9416,7 +9408,7 @@
       </trans-unit>
       <trans-unit id="5f4ea46bfaffa09963d51fa969cb45b82a3c377f" datatype="html">
         <source>Hide any content from that user for you.</source>
-        <target state="new">Hide any content from that user for you.</target>
+        <target state="translated">對您隱藏此使用者的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9432,7 +9424,7 @@
       </trans-unit>
       <trans-unit id="896713adfa81db9a514ba3214ea1b9a7b59543bb" datatype="html">
         <source>Show back content from that user for you.</source>
-        <target state="new">Show back content from that user for you.</target>
+        <target state="translated">對您顯示該使用者的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9448,7 +9440,7 @@
       </trans-unit>
       <trans-unit id="b67a9b47f49012501f2aa71c74d7fccc9e331cdb" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="new">Hide any content from that instance for you.</target>
+        <target state="translated">對您隱藏此站臺的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9464,7 +9456,7 @@
       </trans-unit>
       <trans-unit id="7e80d54718404d853b9e51a3b8d5210a2bedaf6f" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="new">Show back content from that instance for you.</target>
+        <target state="translated">對您顯示該站臺的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9480,7 +9472,7 @@
       </trans-unit>
       <trans-unit id="ec993f2e1ecd979ff28871591b6f253afb3b3138" datatype="html">
         <source>Hide any content from that user for you, your instance and its users.</source>
-        <target state="new">Hide any content from that user for you, your instance and its users.</target>
+        <target state="translated">對您、您的站臺與其使用者隱藏此使用者的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9496,7 +9488,7 @@
       </trans-unit>
       <trans-unit id="a50c42119c5ffaa4ecb61e996c432f1ab0f8d0ff" datatype="html">
         <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="new">Show back content from that user for you, your instance and its users.</target>
+        <target state="translated">對您、您的站臺與其使用者顯示該使用者的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9512,7 +9504,7 @@
       </trans-unit>
       <trans-unit id="1a4ed1f8e28636212f1bcf06c36644d2627b682a" datatype="html">
         <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance for you, your instance and its users.</target>
+        <target state="translated">對您、您的站臺與其使用者隱藏此站臺的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9528,7 +9520,7 @@
       </trans-unit>
       <trans-unit id="d97d7d9b0c359f7b900652b547678841369691b1" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="new">Show back content from that instance for you, your instance and its users.</target>
+        <target state="translated">對您、您的站臺與其使用者顯示該站臺的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9715,7 +9707,7 @@
       </trans-unit>
       <trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="new">This video will be duplicated by your instance.</target>
+        <target state="translated">此影片將會被您的站臺複製。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9740,7 +9732,7 @@
       </trans-unit>
       <trans-unit id="fb6f1916659a093d943fab8322777922796efe27" datatype="html">
         <source>Duplicate (redundancy)</source>
-        <target state="new">Duplicate (redundancy)</target>
+        <target state="translated">複製（冗餘）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
