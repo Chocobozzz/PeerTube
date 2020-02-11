@@ -38,6 +38,7 @@ command
   .option('--first <first>', 'Process first n elements of returned playlist')
   .option('--last <last>', 'Process last n elements of returned playlist')
   .option('-T, --tmpdir <tmpdir>', 'Working directory', __dirname)
+  .usage("[global options] [ -- youtube-dl options]")
   .parse(process.argv)
 
 const log = getLogger(program['verbose'])
@@ -71,10 +72,11 @@ async function run (url: string, user: UserInfo) {
 
   const youtubeDL = await safeGetYoutubeDL()
 
-  const options = [ '-j', '--flat-playlist', '--playlist-reverse' ]
+  const options = [ '-j', '--flat-playlist', '--playlist-reverse', ...command.args ]
+
   youtubeDL.getInfo(program['targetUrl'], options, processOptions, async (err, info) => {
     if (err) {
-      exitError(err.message)
+      exitError(err.stderr + ' ' + err.message)
     }
 
     let infoArray: any[]
@@ -146,7 +148,7 @@ function processVideo (parameters: {
 
     log.info('Downloading video "%s"...', videoInfo.title)
 
-    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
+    const options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', ...command.args, '-o', path ]
     try {
       const youtubeDL = await safeGetYoutubeDL()
       youtubeDL.exec(videoInfo.url, options, processOptions, async (err, output) => {
