@@ -3,21 +3,21 @@
  * Chocobozzz
  * Rigel Kent
  * Felix Ableitner
+ * Filip Bengtsson
  * Gérald Niel
+ * Julien Maulny
  * Jorropo
  * Josh Morel
- * Julien Maulny
  * BO41
- * Filip Bengtsson
  * Francesc
  * Frank Sträter
+ * Phongpanot
  * buoyantair
  * John Livingston
  * Attila F
  * Benjamin Bouvier
  * Jan Keromnes
  * Lucas Declercq
- * Phongpanot
  * matograine
  * David Libeau
  * Florent F
@@ -36,6 +36,7 @@
  * Wirebrass
  * Angristan
  * GunChleoc
+ * Marcin Mikołajczak
  * Okhin
  * Pierre-Alain TORET
  * Thomas Citharel
@@ -44,13 +45,13 @@
  * Andréas Livet
  * Andrés Maldonado
  * Aurélien Bertron
+ * DontUseGithub
  * Hans Meiser
  * Jefferson Hernandez
  * Kemal Oktay Aktoğan
  * LecygneNoir
  * Leopere
  * Manuela Silva
- * Marcin Mikołajczak
  * Yohan Boniface
  * am97
  * anotheranonymoususer
@@ -61,17 +62,21 @@
  * Aurélien Béranger
  * Axel Viala
  * ButterflyOfFire
+ * Ch
  * Dashie
  * Dirk Kelly
+ * EndoGai
  * Florent Fayolle
  * Florian
  * Frank de Lange
  * Gaëtan Rizio
+ * Jeff Huang
  * Joan Montané
  * Jocelyn Jaubert
  * Julien Lemaire
  * Lucas Teixeira
  * Lukas Winkler
+ * Manuel Viens
  * Millicent Billette
  * NorbiPeti
  * Pierre Jaury
@@ -80,6 +85,8 @@
  * SerCom_KC
  * Valvin
  * ahmadsharifian
+ * framail
+ * les
  * taziden
  * victor héry
  * Acid Chicken (硫酸鶏)
@@ -99,12 +106,10 @@
  * Benjamin EWFT
  * Brad Johnson
  * Cale
- * Ch
  * Charles de Lacombe
  * Claude
  * Clément Brizard
  * DeeJayBro
- * DontUseGithub
  * Edouard SCHWEISGUTH
  * Edwin Alberto Amado Baron
  * Eric Brehault
@@ -119,7 +124,6 @@
  * Jacques Foucry
  * Jagannath Bhat
  * Jarosław Maciejewski
- * Jeff Huang
  * Jessica Fairchild
  * Julien Le Bras
  * Knackie
@@ -132,14 +136,15 @@
  * LoveIsGrief
  * Léo Andrès
  * ManMade-cube42
- * Manuel Viens
  * Marco Zehe
+ * Marian Steinbach
  * Markus Richter
  * Martin Trigaux
  * Mateusz Piotrowski
  * Mathieu Agopian
  * Matthieu De Beule
  * Michael Koppmann
+ * Miguel Mayol Tur
  * Mike
  * MrGiga
  * Mélanie Pin
@@ -154,9 +159,11 @@
  * Philip Durbin
  * Predatorix Phoenix
  * Quentin Dupont
+ * Quentin PAGÈS
  * Quentí
  * ROPEDE
  * Raphael
+ * Rech
  * Robin
  * Sankar
  * Simon Gilliot
@@ -320,4 +327,4 @@
 
  * [Robbie Pearce](https://robbiepearce.com/softies/)
  * [Fork-Awesome](https://github.com/ForkAwesome/Fork-Awesome)
- * playlist add by Google
+ * playlist add by Material UI
