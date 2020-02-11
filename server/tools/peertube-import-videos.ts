@@ -32,6 +32,7 @@ command
   .option('-u, --url <url>', 'Server url')
   .option('-U, --username <username>', 'Username')
   .option('-p, --password <token>', 'Password')
+  .option('--metadata <metadata>', 'Additional metadata to add to the videos to be uploaded')
   .option('--target-url <targetUrl>', 'Video target URL')
   .option('--since <since>', 'Publication date (inclusive) since which the videos can be imported (YYYY-MM-DD)', parseDate)
   .option('--until <until>', 'Publication date (inclusive) until which the videos can be imported (YYYY-MM-DD)', parseDate)
@@ -174,6 +175,74 @@ function processVideo (parameters: {
   })
 }
 
+// https://stackoverflow.com/a/6491621/5441588
+function Object_byString(o, s) {
+    s = s.replace(/\[(\w+)\]/g, '.$1'); // convert indexes to properties
+    s = s.replace(/^\./, '');           // strip a leading dot
+    var a = s.split('.');
+    for (var i = 0, n = a.length; i < n; ++i) {
+        var k = a[i];
+        if (k in o) {
+            o = o[k];
+        } else {
+            return;
+        }
+    }
+    return o;
+}
+
+/**
+ * This provide user supports for override and set upload metadata based on attributes retrieved from
+ * imported file (and current program state).
+ * An example value JSON value for --metadata could be:
+ * {"foo": "test", "video": "@video.url", "cmd": "@prog.args", "x1": "@video.foobar", "x2": "@?video.foobar", "exec1": "!2+2", "exec2": "!videoInfo.url"}
+ *
+ * Explanation:
+ * - foo:   A the string "test".
+ * - video: The "url" attribute of the importer video (or null if such an attribute does not exist).
+ * - cmd:   program["args"] = additional youtube-dl arguments passed to the command-line.
+ * - x1:    null because videoInfo["foobar"] probably does not exist.
+ * - x2:    Omitted from attributes, because @? set this metadata only if the value if non-null/false.
+ * - exec1: The result of the execute of 2+2.
+ * - exec2: Same as videoInfo["url"] but using an eval()
+ */
+function buildDynamicVideoAttributesFromCommander(url, program, defaultAttributes, videoInfo) {
+  if (! program.metadata) {
+    return null;
+  }
+
+  var metadata = JSON.parse(program.metadata);
+  var dynamic_metadata = {};
+  for(const [k, v] of Object.entries(metadata)) {
+    var value = null, goto_next_meta = false;
+
+    for(const [prefix, obj] of Object.entries({'video': videoInfo,
+                                               'prog': program,
+                                               'attr': defaultAttributes})) {
+      if (typeof v === 'string' && (v.startsWith(`@${prefix}.`) || v.startsWith(`@?${prefix}.`))) {
+        value = Object_byString(obj, v.replace(`@${prefix}.`, '').replace(`@?${prefix}.`, ''));
+        goto_next_meta = true;
+        if (value || !v.startsWith('@?')) {
+          dynamic_metadata[k] = value;
+        }
+      }
+    }
+
+    if (goto_next_meta) {
+      continue;
+    }
+
+    if (typeof v === 'string' && v.startsWith('!')) {
+      dynamic_metadata[k] = eval(v.substring(1));
+      continue;
+    }
+
+    dynamic_metadata[k] = v;
+  }
+
+  return dynamic_metadata;
+}
+
 async function uploadVideoOnPeerTube (parameters: {
   videoInfo: any
   videoPath: string
@@ -226,6 +295,11 @@ async function uploadVideoOnPeerTube (parameters: {
     previewfile: thumbnailfile,
     fixture: videoPath
   })
+
+  const dynamicVideoAttributes = buildDynamicVideoAttributesFromCommander(url, program, videoAttributes, videoInfo)
+  if (dynamicVideoAttributes) {
+    Object.assign(videoAttributes, dynamicVideoAttributes);
+  }
 
   log.info('\nUploading on PeerTube video "%s".', videoAttributes.name)
 
