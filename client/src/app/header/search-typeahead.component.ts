@@ -1,6 +1,5 @@
 import {
   Component,
-  AfterViewInit,
   OnInit,
   OnDestroy,
   QueryList,
@@ -14,7 +13,6 @@ import { ListKeyManager } from '@angular/cdk/a11y'
 import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes'
 import { SuggestionComponent, Result } from './suggestion.component'
 import { of } from 'rxjs'
-import { getParameterByName } from '@app/shared/misc/utils'
 import { ServerConfig } from '@shared/models'
 
 @Component({
@@ -22,7 +20,7 @@ import { ServerConfig } from '@shared/models'
   templateUrl: './search-typeahead.component.html',
   styleUrls: [ './search-typeahead.component.scss' ]
 })
-export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SearchTypeaheadComponent implements OnInit, OnDestroy {
   @ViewChild('searchVideo', { static: true }) searchInput: ElementRef<HTMLInputElement>
 
   hasChannel = false
@@ -35,7 +33,7 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
   inThisChannelText: string
 
   keyboardEventsManager: ListKeyManager<SuggestionComponent>
-  results: any[] = []
+  results: Result[] = []
 
   constructor (
     private authService: AuthService,
@@ -45,6 +43,9 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
   ) {}
 
   ngOnInit () {
+    const query = this.route.snapshot.queryParams
+    if (query['search']) this.search = query['search']
+
     this.serverService.getConfig()
       .subscribe(config => this.serverConfig = config)
   }
@@ -53,23 +54,19 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
     if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
   }
 
-  ngAfterViewInit () {
-    this.search = getParameterByName('search', window.location.href) || ''
-  }
-
   get activeResult () {
-    return this.keyboardEventsManager && this.keyboardEventsManager.activeItem && this.keyboardEventsManager.activeItem.result
+    return this.keyboardEventsManager?.activeItem?.result
   }
 
-  get showInstructions () {
+  get areInstructionsDisplayed () {
     return !this.search
   }
 
   get showHelp () {
-    return this.search && this.newSearch && this.activeResult && this.activeResult.type === 'search-global' || false
+    return this.search && this.newSearch && this.activeResult?.type === 'search-global'
   }
 
-  get anyURI () {
+  get canSearchAnyURI () {
     if (!this.serverConfig) return false
     return this.authService.isLoggedIn()
       ? this.serverConfig.search.remoteUri.users
@@ -131,28 +128,33 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy, AfterViewIni
 
   initKeyboardEventsManager (event: { items: QueryList<SuggestionComponent>, index?: number }) {
     if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
+
     this.keyboardEventsManager = new ListKeyManager(event.items)
+
     if (event.index !== undefined) {
       this.keyboardEventsManager.setActiveItem(event.index)
     } else {
       this.keyboardEventsManager.setFirstItemActive()
     }
+
     this.keyboardEventsManager.change.subscribe(
       _ => this.setEventItems(event)
     )
   }
 
-  handleKeyUp (event: KeyboardEvent, indexSelected?: number) {
+  handleKeyUp (event: KeyboardEvent) {
     event.stopImmediatePropagation()
-    if (this.keyboardEventsManager) {
-      if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
+    if (!this.keyboardEventsManager) return
+    
+    switch (event.key) {
+      case "ArrowDown":
+      case "ArrowUp":
         this.keyboardEventsManager.onKeydown(event)
-        return false
-      } else if (event.keyCode === ENTER) {
+        break
+      case "Enter":
         this.newSearch = false
         this.doSearch()
-        return false
-      }
+        break
     }
   }
 

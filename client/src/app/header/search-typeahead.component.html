@@ -24,14 +24,14 @@
     </div>
 
     <!-- search instructions, when search input is empty -->
-    <div *ngIf="showInstructions" id="typeahead-instructions" class="overflow-hidden">
+    <div *ngIf="areInstructionsDisplayed" id="typeahead-instructions" class="overflow-hidden">
       <div class="d-flex justify-content-between">
         <label class="small-title" i18n>Advanced search</label>
         <div class="advanced-search-status c-help">
-          <span [ngClass]="anyURI ? 'text-success' : 'text-muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
-            <span *ngIf="anyURI" class="mr-1" i18n>any instance</span>
-            <span *ngIf="!anyURI" class="mr-1" i18n>only followed instances</span>
-            <i [ngClass]="anyURI ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
+          <span [ngClass]="canSearchAnyURI ? 'text-success' : 'text-muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
+            <span *ngIf="canSearchAnyURI" class="mr-1" i18n>any instance</span>
+            <span *ngIf="!canSearchAnyURI" class="mr-1" i18n>only followed instances</span>
+            <i [ngClass]="canSearchAnyURI ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
           </span>
         </div>
       </div>

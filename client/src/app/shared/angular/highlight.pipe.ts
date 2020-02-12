@@ -30,7 +30,7 @@ export class HighlightPipe implements PipeTransform {
           break
         }
         case 'Single-And-StartsWith-Match': {
-          regex = new RegExp("^" + stringToHighlight, caseFlag)
+          regex = new RegExp('^' + stringToHighlight, caseFlag)
           break
         }
         case 'Multi-Match': {
