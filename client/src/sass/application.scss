@@ -220,6 +220,15 @@ table {
   font-weight: $font-semibold;
 }
 
+.dropdown-item {
+  @include dropdown-with-icon-item;
+
+  my-global-icon {
+    width: 22px;
+    height: 22px;
+  }
+}
+
 @media screen and (max-width: 1600px) {
   .main-col {
     &.expanded {
