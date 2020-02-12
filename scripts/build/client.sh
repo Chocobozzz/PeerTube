@@ -76,11 +76,16 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         # TODO: remove when the project will use runtime translations
         pre_build_hook "$lang"
 
-        npm run ng build -- --prod --configuration="$lang"
+        npm run ng build -- --prod --configuration="$lang" --output-path "dist/build"
 
-        if [ ! "$lang" = "$key" ]; then
-          mv "dist/$key" "dist/$lang"
-        fi
+        # If --localize is not used
+        mv "dist/build/$key" "dist/$lang"
+        rmdir "dist/build"
+
+        # If --localize is used
+        # if [ ! "$lang" = "$key" ]; then
+        #   mv "dist/$key" "dist/$lang"
+        # fi
 
         # Do not duplicate assets
         rm -r "./dist/$lang/assets"
