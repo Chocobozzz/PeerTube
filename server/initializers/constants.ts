@@ -422,7 +422,8 @@ const MIMETYPES = {
       'image/png': '.png',
       'image/jpg': '.jpg',
       'image/jpeg': '.jpg'
-    }
+    },
+    EXT_MIMETYPE: null as { [ id: string ]: string }
   },
   VIDEO_CAPTIONS: {
     MIMETYPE_EXT: {
@@ -438,6 +439,7 @@ const MIMETYPES = {
   }
 }
 MIMETYPES.AUDIO.EXT_MIMETYPE = invert(MIMETYPES.AUDIO.MIMETYPE_EXT)
+MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
 
 // ---------------------------------------------------------------------------
 

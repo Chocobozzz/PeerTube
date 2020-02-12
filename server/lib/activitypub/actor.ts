@@ -35,6 +35,7 @@ import {
   MActorId,
   MChannel
 } from '../../typings/models'
+import { extname } from 'path'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys <T extends MActor> (actor: T) {
@@ -215,19 +216,21 @@ async function fetchActorTotalItems (url: string) {
 }
 
 function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
-  if (
-    actorJSON.icon && actorJSON.icon.type === 'Image' && MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType] !== undefined &&
-    isActivityPubUrlValid(actorJSON.icon.url)
-  ) {
-    const extension = MIMETYPES.IMAGE.MIMETYPE_EXT[actorJSON.icon.mediaType]
+  const mimetypes = MIMETYPES.IMAGE
+  const icon = actorJSON.icon
 
-    return {
-      name: uuidv4() + extension,
-      fileUrl: actorJSON.icon.url
-    }
+  if (!icon || icon.type !== 'Image' || !isActivityPubUrlValid(icon.url)) return undefined
+
+  const extension = icon.mediaType
+    ? mimetypes.MIMETYPE_EXT[icon.mediaType]
+    : extname(icon.url)
+
+  if (!extension) return undefined
+
+  return {
+    name: uuidv4() + extension,
+    fileUrl: icon.url
   }
-
-  return undefined
 }
 
 async function addFetchOutboxJob (actor: Pick<ActorModel, 'id' | 'outboxUrl'>) {
