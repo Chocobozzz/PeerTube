@@ -8,99 +8,102 @@
       "sourceRoot": "src",
       "projectType": "application",
       "i18n": {
-        "sourceLocale": "en",
+        "sourceLocale": {
+          "code": "en",
+          "baseHref": "/client/en-US/"
+        },
         "locales": {
           "hu": {
             "translation": "src/locale/angular.hu-HU.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/hu-HU/"
           },
           "th": {
             "translation": "src/locale/angular.th-TH.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/th-TH/"
           },
           "fi": {
             "translation": "src/locale/angular.fi-FI.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/fi-FI/"
           },
           "nl": {
             "translation": "src/locale/angular.nl-NL.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/nl-NL/"
           },
           "gd": {
             "translation": "src/locale/angular.gd.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/gd/"
           },
           "el": {
             "translation": "src/locale/angular.el-GR.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/el-GR/"
           },
           "es": {
             "translation": "src/locale/angular.es-ES.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/es-ES/"
           },
           "oc": {
             "translation": "src/locale/angular.oc.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/oc/"
           },
           "pt": {
             "translation": "src/locale/angular.pt-BR.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/pt-BR/"
           },
           "pt-PT": {
             "translation": "src/locale/angular.pt-PT.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/pt-PT/"
           },
           "sv": {
             "translation": "src/locale/angular.sv-SE.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/sv-SE/"
           },
           "pl": {
             "translation": "src/locale/angular.pl-PL.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/pl-PL/"
           },
           "ru": {
             "translation": "src/locale/angular.ru-RU.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/ru-RU/"
           },
           "zh-Hans": {
             "translation": "src/locale/angular.zh-Hans-CN.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/zh-Hans-CN/"
           },
           "zh-Hant": {
             "translation": "src/locale/angular.zh-Hant-TW.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/zh-Hant-TW/"
           },
           "fr": {
             "translation": "src/locale/angular.fr-FR.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/fr-FR/"
           },
           "ja": {
             "translation": "src/locale/angular.ja-JP.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/ja-JP/"
           },
           "eu": {
             "translation": "src/locale/angular.eu-ES.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/eu-ES/"
           },
           "ca": {
             "translation": "src/locale/angular.ca-ES.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/ca-ES/"
           },
           "cs": {
             "translation": "src/locale/angular.cs-CZ.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/cs-CZ/"
           },
           "eo": {
             "translation": "src/locale/angular.eo.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/eo/"
           },
           "de": {
             "translation": "src/locale/angular.de-DE.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/de-DE/"
           },
           "it": {
             "translation": "src/locale/angular.it-IT.xlf",
-            "baseHref": "/"
+            "baseHref": "/client/it-IT/"
           }
         }
       },

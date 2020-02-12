@@ -18,6 +18,7 @@ import { SearchModule } from '@app/search'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/models'
+import { APP_BASE_HREF } from '@angular/common'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -67,6 +68,11 @@ export function metaFactory (serverService: ServerService): MetaLoader {
   ],
 
   providers: [
+    {
+      provide: APP_BASE_HREF,
+      useValue: '/'
+    },
+
     {
       provide: TRANSLATIONS,
       useFactory: (locale: string) => {
