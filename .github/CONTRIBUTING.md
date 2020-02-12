@@ -195,7 +195,7 @@ $ npm test
 If you just want to run 1 test:
 
 ```
-$ npm run mocha -- --exit --require ts-node/register/type-check --bail server/tests/api/index.ts
+$ npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail server/tests/api/index.ts
 ```
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
