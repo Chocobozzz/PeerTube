@@ -221,9 +221,15 @@ function getAvatarInfoIfExists (actorJSON: ActivityPubActor) {
 
   if (!icon || icon.type !== 'Image' || !isActivityPubUrlValid(icon.url)) return undefined
 
-  const extension = icon.mediaType
-    ? mimetypes.MIMETYPE_EXT[icon.mediaType]
-    : extname(icon.url)
+  let extension: string
+
+  if (icon.mediaType) {
+    extension = mimetypes.MIMETYPE_EXT[icon.mediaType]
+  } else {
+    const tmp = extname(icon.url)
+
+    if (mimetypes.EXT_MIMETYPE[tmp] !== undefined) extension = tmp
+  }
 
   if (!extension) return undefined
 
