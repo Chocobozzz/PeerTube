@@ -88,18 +88,25 @@ menu {
         }
       }
 
-      .dropdown-item {
-        @include dropdown-with-icon-item;
-
-        my-global-icon {
-          width: 22px;
-          height: 22px;
-
-          &[iconName="sign-out"] {
-            position: relative;
-            right: -1px;
-            height: 21px;
-            width: 21px;
+      .dropdown-menu{
+        position: fixed!important;
+        top: 110px!important;
+        left: 50px!important;
+        will-change: unset !important;
+        transform: none !important;
+        .dropdown-item {
+          @include dropdown-with-icon-item;
+  
+          my-global-icon {
+            width: 22px;
+            height: 22px;
+  
+            &[iconName="sign-out"] {
+              position: relative;
+              right: -1px;
+              height: 21px;
+              width: 21px;
+            }
           }
         }
       }
