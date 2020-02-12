@@ -30,7 +30,7 @@ We added some sections in the documentation website:
  * Customize your instance (install plugins & themes): https://docs.joinpeertube.org/#/admin-customize-instance
  * PeerTube logs (standard log/audit log): https://docs.joinpeertube.org/#/admin-logs
  * Mute accounts/instances: https://docs.joinpeertube.org/#/use-mute
- * Controlled player embed API: https://docs.joinpeertube.org/#/api-em
+ * Controlled player embed API: https://docs.joinpeertube.org/#/api-embed-player
 
 ### Docker
 
@@ -216,7 +216,7 @@ We added some sections in the documentation website:
  * Customize your instance (install plugins & themes): https://docs.joinpeertube.org/#/admin-customize-instance
  * PeerTube logs (standard log/audit log): https://docs.joinpeertube.org/#/admin-logs
  * Mute accounts/instances: https://docs.joinpeertube.org/#/use-mute
- * Controlled player embed API: https://docs.joinpeertube.org/#/api-em
+ * Controlled player embed API: https://docs.joinpeertube.org/#/api-embed-player
 
 ### Docker
 
