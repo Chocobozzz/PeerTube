@@ -1052,9 +1052,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="d780b02074a6317126378e0365e1066c890a3570" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="new">
-      If you are looking for an account…
-    </target>
+        <target state="translated">Si estás buscando una cuenta…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1062,14 +1060,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="79dacac459775e2cf163bce6c3f05ed814f82ba2" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-      Currently this instance doesn't allow for user registration, but you can find an instance
-      that gives you the possibility to sign up for an account and upload your videos there.
-
-      <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-
-      Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    </target>
+        <target state="translated">Actualmente esta instancia no permite el registro de nuevos usuarios, pero puedes encontrar varias instancias en las que tendrás la posibilidad de crear una cuenta y subir tus videos. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Entre muchas instacias, encuentra la tuya en <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1517,7 +1508,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="608d7164ed2d996dc827b17cd7b6f5915c617be4" datatype="html">
         <source>Public profile</source>
-        <target state="new">Public profile</target>
+        <target state="translated">Perfil público</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1525,7 +1516,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="1eecebc91b4c671d43617b559cf3933275492931" datatype="html">
         <source>Account settings</source>
-        <target state="translated">opciones de cuenta</target>
+        <target state="translated">Configuración de usuario</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">25</context>
@@ -1612,12 +1603,12 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="9d9983bd6d0817a5b1bb7650034a2f9a5f4b7bac" datatype="html">
         <source>Most liked</source>
-        <target state="translated">Más apreciadas</target>
+        <target state="translated">Recomendadas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
         <source>Recently added</source>
-        <target>Añadidos recientemente</target>
+        <target>Recientes</target>
         <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
@@ -1844,7 +1835,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="75706466a5cffa6f6bf0d6c94a8345a001ce8cea" datatype="html">
         <source>Display all categories</source>
-        <target state="new">Display all categories</target>
+        <target state="translated">Mostrar todas las categorías</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">106</context>
@@ -1862,7 +1853,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="e19d80c6277747a68f3da8cfe1318303d2b5c952" datatype="html">
         <source>Display all licenses</source>
-        <target state="new">Display all licenses</target>
+        <target state="translated">Mostrar todas las licencias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">119</context>
@@ -1881,7 +1872,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="dcc3173a99661496cd1f836283993cc3e6576b26" datatype="html">
         <source>Display all languages</source>
-        <target state="new">Display all languages</target>
+        <target state="translated">Mostrar todos los lenguajes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.html</context>
           <context context-type="linenumber">132</context>
@@ -4318,7 +4309,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">Videos recomendados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">221</context>
