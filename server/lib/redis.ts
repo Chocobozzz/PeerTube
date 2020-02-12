@@ -6,6 +6,7 @@ import {
   CONTACT_FORM_LIFETIME,
   USER_EMAIL_VERIFY_LIFETIME,
   USER_PASSWORD_RESET_LIFETIME,
+  USER_PASSWORD_CREATE_LIFETIME,
   VIDEO_VIEW_LIFETIME,
   WEBSERVER
 } from '../initializers/constants'
@@ -70,6 +71,14 @@ class Redis {
     const generatedString = await generateRandomString(32)
 
     await this.setValue(this.generateResetPasswordKey(userId), generatedString, USER_PASSWORD_RESET_LIFETIME)
+
+    return generatedString
+  }
+
+  async setCreatePasswordVerificationString (userId: number) {
+    const generatedString = await generateRandomString(32)
+
+    await this.setValue(this.generateResetPasswordKey(userId), generatedString, USER_PASSWORD_CREATE_LIFETIME)
 
     return generatedString
   }

@@ -5,6 +5,7 @@ import { UserRight } from '../../../../../shared'
 import { UsersComponent } from './users.component'
 import { UserCreateComponent, UserUpdateComponent } from './user-edit'
 import { UserListComponent } from './user-list'
+import { ServerConfigResolver } from '@app/core/routing/server-config-resolver.service'
 
 export const UsersRoutes: Routes = [
   {
@@ -36,6 +37,9 @@ export const UsersRoutes: Routes = [
           meta: {
             title: 'Create a user'
           }
+        },
+        resolve: {
+          serverConfig: ServerConfigResolver
         }
       },
       {

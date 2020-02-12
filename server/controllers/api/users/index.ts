@@ -2,7 +2,7 @@ import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
 import { UserCreate, UserRight, UserRole, UserUpdate } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
-import { getFormattedObjects } from '../../../helpers/utils'
+import { generateRandomString, getFormattedObjects } from '../../../helpers/utils'
 import { WEBSERVER } from '../../../initializers/constants'
 import { Emailer } from '../../../lib/emailer'
 import { Redis } from '../../../lib/redis'
@@ -197,10 +197,24 @@ async function createUser (req: express.Request, res: express.Response) {
     adminFlags: body.adminFlags || UserAdminFlag.NONE
   }) as MUser
 
+  // NB: due to the validator usersAddValidator, password==='' can only be true if we can send the mail.
+  const createPassword = userToCreate.password === ''
+  if (createPassword) {
+    userToCreate.password = await generateRandomString(20)
+  }
+
   const { user, account, videoChannel } = await createUserAccountAndChannelAndPlaylist({ userToCreate: userToCreate })
 
   auditLogger.create(getAuditIdFromRes(res), new UserAuditView(user.toFormattedJSON()))
   logger.info('User %s with its channel and account created.', body.username)
+
+  if (createPassword) {
+    // this will send an email for newly created users, so then can set their first password.
+    logger.info('Sending to user %s a create password email', body.username)
+    const verificationString = await Redis.Instance.setCreatePasswordVerificationString(user.id)
+    const url = WEBSERVER.URL + '/reset-password?userId=' + user.id + '&verificationString=' + verificationString
+    await Emailer.Instance.addPasswordCreateEmailJob(userToCreate.username, user.email, url)
+  }
 
   Hooks.runAction('action:api.user.created', { body, user, account, videoChannel })
 

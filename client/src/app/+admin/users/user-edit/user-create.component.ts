@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { Router } from '@angular/router'
+import { Router, ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { UserCreate, UserRole } from '../../../../../../shared'
 import { UserEdit } from './user-edit'
@@ -23,6 +23,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     protected configService: ConfigService,
     protected auth: AuthService,
     private userValidatorsService: UserValidatorsService,
+    private route: ActivatedRoute,
     private router: Router,
     private notifier: Notifier,
     private userService: UserService,
@@ -42,10 +43,13 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       videoQuotaDaily: '-1'
     }
 
+    const serverConfig = this.route.snapshot.data.serverConfig
+    const isEmailEnabled = !!serverConfig.email.enabled
+
     this.buildForm({
       username: this.userValidatorsService.USER_USERNAME,
       email: this.userValidatorsService.USER_EMAIL,
-      password: this.userValidatorsService.USER_PASSWORD,
+      password: isEmailEnabled ? this.userValidatorsService.USER_PASSWORD_OPTIONAL : this.userValidatorsService.USER_PASSWORD,
       role: this.userValidatorsService.USER_ROLE,
       videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
