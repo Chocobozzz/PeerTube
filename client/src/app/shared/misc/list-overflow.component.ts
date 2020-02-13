@@ -1,17 +1,18 @@
 import {
-  Component,
-  Input,
-  TemplateRef,
-  ViewChildren,
-  ViewChild,
-  QueryList,
+  AfterViewInit,
   ChangeDetectionStrategy,
-  ElementRef,
   ChangeDetectorRef,
-  HostListener
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  QueryList,
+  TemplateRef,
+  ViewChild,
+  ViewChildren
 } from '@angular/core'
-import { NgbModal, NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
-import { uniqueId, lowerFirst } from 'lodash-es'
+import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { lowerFirst, uniqueId } from 'lodash-es'
 import { ScreenService } from './screen.service'
 import { take } from 'rxjs/operators'
 
@@ -26,7 +27,7 @@ export interface ListOverflowItem {
   styleUrls: [ './list-overflow.component.scss' ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ListOverflowComponent<T extends ListOverflowItem> {
+export class ListOverflowComponent<T extends ListOverflowItem> implements AfterViewInit {
   @ViewChild('modal', { static: true }) modal: ElementRef
   @ViewChild('itemsParent', { static: true }) parent: ElementRef<HTMLDivElement>
   @ViewChildren('itemsRendered') itemsRendered: QueryList<ElementRef>
@@ -45,6 +46,10 @@ export class ListOverflowComponent<T extends ListOverflowItem> {
     private modalService: NgbModal,
     private screenService: ScreenService
   ) {}
+
+  ngAfterViewInit () {
+    setTimeout(() => this.onWindowResize(), 0)
+  }
 
   isMenuDisplayed () {
     return !!this.showItemsUntilIndexExcluded
