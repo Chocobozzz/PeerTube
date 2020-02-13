@@ -93,8 +93,24 @@ $variables: (
   --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
 );
 
-/*** theme helper ***/
-
 @function var($variable) {
   @return map-get($variables, $variable);
+}
+
+/*** z-index groups ***/
+
+$zindex: (
+  header       :  1000,
+    /* header context */
+    headerLeft :    10,
+  menu         : 11000,
+  dropdown     : 12000,
+  loadbar      : 13000,
+  modal        : 14000,
+  notification : 15000,
+  hotkeys      : 16000
+);
+
+@function z($label) {
+  @return map-get($zindex, $label);
 }

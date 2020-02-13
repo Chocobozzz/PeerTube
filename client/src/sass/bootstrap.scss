@@ -19,7 +19,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 .dropdown {
-  z-index: 10001 !important;
+  z-index: z(dropdown) !important;
 }
 
 .dropdown-menu {
@@ -176,7 +176,11 @@ ngb-tabset.bootstrap {
 }
 
 ngb-modal-backdrop {
-  z-index: 10000 !important;
+  z-index: z(modal) - 1 !important;
+}
+
+ngb-modal-window {
+  z-index: z(modal) !important;
 }
 
 .btn-outline-tertiary {

@@ -383,8 +383,7 @@ p-inputswitch {
 
 p-toast {
   .ui-toast {
-    // Modal is 10005
-    z-index: 10010 !important;
+    z-index: z(notification) !important;
   }
 
   .ui-toast-message {

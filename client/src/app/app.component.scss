@@ -16,12 +16,12 @@
   top: 0;
   width: 100%;
   background-color: var(--mainBackgroundColor);
-  z-index: 1000;
+  z-index: z(header);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
   display: flex;
 
   .top-left-block {
-    z-index: 1001;
+    z-index: z(headerLeft);
     height: $header-height;
     display: flex;
     align-items: center;

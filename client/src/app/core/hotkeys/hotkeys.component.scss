@@ -1,3 +1,5 @@
+@import '_mixins';
+
 .cfp-hotkeys-container {
   display: flex !important;
   align-items: center;
@@ -23,7 +25,7 @@
 }
 
 .cfp-hotkeys-container.fade.in {
-  z-index: 10002;
+  z-index: z(hotkeys);
   visibility: visible;
   opacity: 1;
 }
