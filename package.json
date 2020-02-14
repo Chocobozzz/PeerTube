@@ -73,6 +73,7 @@
     "release": "scripty",
     "release-embed-api": "scripty",
     "nightly": "scripty",
+    "openapi-clients": "scripty",
     "client-report": "scripty",
     "swagger-cli": "swagger-cli",
     "sass-lint": "sass-lint"
@@ -142,6 +143,7 @@
     "youtube-dl": "^3.0.2"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^1.0.10-4.2.3",
     "@types/apicache": "^1.2.0",
     "@types/async": "^3.0.0",
     "@types/async-lock": "^1.1.0",

@@ -4,6 +4,7 @@ stages:
   - build-and-lint
   - test
   - docker-nightly
+  - clients
 
 #before_script:
 #  - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
@@ -83,6 +84,21 @@ cache:
 #    max: 1
 #  script:
 #    - NODE_PENDING_JOB_WAIT=1000 npm run ci -- api-$CI_NODE_INDEX
+
+build-openapi-clients:
+  stage: clients
+  only:
+    refs:
+      - master
+      - schedules
+    changes:
+      - support/doc/api/openapi.yaml
+  script: 
+    - apt-get update -qq
+    - apt-get -yqqq install openjdk-8-jre
+    - yarn install --pure-lockfile
+    - scripts/openapi-peertube-version.sh
+    - scripts/openapi-clients.sh
 
 build-nightly:
   stage: docker-nightly

@@ -1,0 +1,6 @@
+# https://openapi-generator.tech/docs/generators/kotlin
+
+artifactId: peertube-api
+groupId: org.peertube
+packageName: org.peertube.client
+
