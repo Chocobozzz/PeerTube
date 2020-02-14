@@ -18,6 +18,11 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@openapitools/openapi-generator-cli@^1.0.10-4.2.3":
+  version "1.0.10-4.2.3"
+  resolved "https://registry.yarnpkg.com/@openapitools/openapi-generator-cli/-/openapi-generator-cli-1.0.10-4.2.3.tgz#4b934362efb9262fc236d4fb81b381e29bdb8245"
+  integrity sha512-Xo4rbz3aPiObpVS8oBUR0pHWYU5WBG/bmsJg16yCG7/vpGE8o1YsROTWMFfaMepWfxESrLP5XOqlBkZqbre7dw==
+
 "@types/apicache@^1.2.0":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@types/apicache/-/apicache-1.2.2.tgz#b820659b1d95e66ec0e71dcd0317e9d30f0c154b"
