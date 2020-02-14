@@ -14,7 +14,7 @@ PeerTube needs a PostgreSQL and a Redis instance to work correctly. If you want
 to quickly set up a full environment, either for trying the service or in
 production, you can use a `docker-compose` setup.
 
-Go to your peertube workdir:
+#### Go to your peertube workdir
 ```shell
 cd /your/peertube/directory
 ```
