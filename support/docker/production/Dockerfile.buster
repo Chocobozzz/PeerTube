@@ -7,7 +7,7 @@ ARG NPM_RUN_BUILD_OPTS
 
 # Install dependencies
 RUN apt update \
- && apt install -y --no-install-recommends openssl ffmpeg gnupg gosu \
+ && apt install -y --no-install-recommends openssl ffmpeg youtube-dl gnupg gosu \
  && gosu nobody true \
  && rm /var/lib/apt/lists/* -fR
 
