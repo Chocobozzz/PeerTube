@@ -66,7 +66,7 @@ View the source of the file you're about to download: [.env](https://github.com/
 vim ./docker-volume/traefik/traefik.toml
 ```
 
-You must replace `<MY EMAIL ADDRESS>` and `<MY DOMAIN>` to enable Let's Encrypt SSL Certificates creation.
+~~You must replace `<MY EMAIL ADDRESS>` and `<MY DOMAIN>` to enable Let's Encrypt SSL Certificates creation.~~ Now inclued in `.env` file through traefik service command value of `docker-compose.yml` file.
 
 More at: https://docs.traefik.io/v1.7
 

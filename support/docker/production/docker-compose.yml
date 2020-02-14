@@ -5,7 +5,10 @@ services:
   reverse-proxy:
     image: traefik:v1.7
     network_mode: "host"
-    command: --docker # Tells Træfik to listen to docker
+    command:
+      - "--docker" # Tells Træfik to listen to docker
+      - "--acme.email=${TRAEFIK_ACME_EMAIL}" # Let's Encrypt ACME email
+      - "--acme.domains=${TRAEFIK_ACME_DOMAINS}" # Let's Encrypt ACME domain list
     ports:
       - "80:80"     # The HTTP port
       - "443:443"   # The HTTPS port
