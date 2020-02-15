@@ -46,7 +46,7 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:10-alpine
+    image: postgres:12
     env_file:
       - .env
     volumes:
@@ -56,7 +56,7 @@ services:
       traefik.enable: "false"
 
   redis:
-    image: redis:4-alpine
+    image: redis:5-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"
