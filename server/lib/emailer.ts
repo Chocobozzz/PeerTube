@@ -386,14 +386,14 @@ class Emailer {
 
   addPasswordCreateEmailJob (username: string, to: string, resetPasswordUrl: string) {
     const text = 'Hi,\n\n' +
-      `Welcome to your ${WEBSERVER.HOST}'s account. Your username is: ${username}.\n\n` +
+      `Welcome to your ${WEBSERVER.HOST} PeerTube instance. Your username is: ${username}.\n\n` +
       `Please set your password by following this link: ${resetPasswordUrl} (this link will expire within seven days).\n\n` +
       'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 
     const emailPayload: EmailPayload = {
       to: [ to ],
-      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'Set your password',
+      subject: CONFIG.EMAIL.SUBJECT.PREFIX + 'New PeerTube account password',
       text
     }
 

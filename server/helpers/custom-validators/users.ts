@@ -14,7 +14,7 @@ function isUserPasswordValid (value: string) {
 function isUserPasswordValidOrEmpty (value: string) {
   // Empty password is only possible if emailing is enabled.
   if (value === '') {
-    return !!Emailer.isEnabled()
+    return Emailer.isEnabled()
   }
   return isUserPasswordValid(value)
 }

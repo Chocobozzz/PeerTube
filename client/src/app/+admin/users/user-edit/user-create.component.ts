@@ -44,7 +44,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     }
 
     const serverConfig = this.route.snapshot.data.serverConfig
-    const isEmailEnabled = !!serverConfig.email.enabled
+    const isEmailEnabled = serverConfig.email.enabled
 
     this.buildForm({
       username: this.userValidatorsService.USER_USERNAME,
