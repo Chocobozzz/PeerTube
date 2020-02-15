@@ -43,13 +43,10 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       videoQuotaDaily: '-1'
     }
 
-    const serverConfig = this.route.snapshot.data.serverConfig
-    const isEmailEnabled = serverConfig.email.enabled
-
     this.buildForm({
       username: this.userValidatorsService.USER_USERNAME,
       email: this.userValidatorsService.USER_EMAIL,
-      password: isEmailEnabled ? this.userValidatorsService.USER_PASSWORD_OPTIONAL : this.userValidatorsService.USER_PASSWORD,
+      password: this.isPasswordOptional() ? this.userValidatorsService.USER_PASSWORD_OPTIONAL : this.userValidatorsService.USER_PASSWORD,
       role: this.userValidatorsService.USER_ROLE,
       videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
@@ -80,6 +77,11 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
   isCreation () {
     return true
+  }
+
+  isPasswordOptional () {
+    const serverConfig = this.route.snapshot.data.serverConfig
+    return serverConfig.email.enabled
   }
 
   getFormButtonTitle () {

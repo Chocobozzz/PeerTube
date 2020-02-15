@@ -92,6 +92,10 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     return false
   }
 
+  isPasswordOptional () {
+    return false
+  }
+
   getFormButtonTitle () {
     return this.i18n('Update user')
   }
