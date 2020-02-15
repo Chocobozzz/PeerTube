@@ -54,6 +54,13 @@ services:
     restart: "always"
     labels:
       traefik.enable: "false"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    shm_size: 64M
 
   redis:
     image: redis:5-alpine
@@ -62,6 +69,9 @@ services:
     restart: "always"
     labels:
       traefik.enable: "false"
+    healthcheck:
+    environment:
+      test: ["CMD", "redis-cli", "ping"]
 
   postfix:
     image: mwader/postfix-relay
