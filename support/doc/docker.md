@@ -21,8 +21,7 @@ $ curl "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/doc
 $ touch ./docker-volume/traefik/acme.json && chmod 600 ./docker-volume/traefik/acme.json
 $ curl -s "https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml" -o docker-compose.yml "https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/docker/production/.env" -o .env
 ```
-View the source of the files you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) and the [traefik.toml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/traefik.toml) and the [.env]
-(https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env)
+View the source of the files you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml) and the [traefik.toml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/traefik.toml) and the [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env)
 
 Update the reverse proxy configuration:
 
