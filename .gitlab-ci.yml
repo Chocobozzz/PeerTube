@@ -87,6 +87,7 @@ cache:
 
 build-openapi-clients:
   stage: clients
+  needs: []
   only:
     refs:
       - master
