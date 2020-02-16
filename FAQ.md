@@ -101,7 +101,7 @@ We need this information because Twitter requires an account for links share/vid
 
 ## How video views are calculated?
 
-Your web browser sends a view to the server after 30 seconds of playback. Then, the IP cannot send another view in the next hour.
+Your web browser sends a view to the server after 30 seconds of playback. If a video is less than 30 seconds in length, a view is sent after 75% of the video. After giving a view, that IP address cannot add another view in the next hour.
 Views are buffered, so don't panic if the view counter stays the same after you watched a video.
 
 
