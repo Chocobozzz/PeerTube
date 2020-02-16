@@ -3,8 +3,8 @@ image: chocobozzz/peertube-ci:10
 stages:
   - build-and-lint
   - test
-  - docker-nightly
   - clients
+  - docker-nightly
 
 #before_script:
 #  - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
@@ -87,7 +87,6 @@ cache:
 
 build-openapi-clients:
   stage: clients
-  needs: []
   only:
     refs:
       - master
