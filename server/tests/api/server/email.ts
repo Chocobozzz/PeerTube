@@ -28,10 +28,12 @@ const expect = chai.expect
 describe('Test emails', function () {
   let server: ServerInfo
   let userId: number
+  let userId2: number
   let userAccessToken: string
   let videoUUID: string
   let videoUserUUID: string
   let verificationString: string
+  let verificationString2: string
   const emails: object[] = []
   const user = {
     username: 'user_1',
@@ -122,6 +124,56 @@ describe('Test emails', function () {
     })
   })
 
+  describe('When creating a user without password', function () {
+    it('Should send a create password email', async function () {
+      this.timeout(10000)
+
+      await createUser({
+        url: server.url,
+        accessToken: server.accessToken,
+        username: 'create_password',
+        password: ''
+      })
+
+      await waitJobs(server)
+      expect(emails).to.have.lengthOf(2)
+
+      const email = emails[1]
+
+      expect(email['from'][0]['name']).equal('localhost:' + server.port)
+      expect(email['from'][0]['address']).equal('test-admin@localhost')
+      expect(email['to'][0]['address']).equal('create_password@example.com')
+      expect(email['subject']).contains('account')
+      expect(email['subject']).contains('password')
+
+      const verificationStringMatches = /verificationString=([a-z0-9]+)/.exec(email['text'])
+      expect(verificationStringMatches).not.to.be.null
+
+      verificationString2 = verificationStringMatches[1]
+      expect(verificationString2).to.have.length.above(2)
+
+      const userIdMatches = /userId=([0-9]+)/.exec(email['text'])
+      expect(userIdMatches).not.to.be.null
+
+      userId2 = parseInt(userIdMatches[1], 10)
+    })
+
+    it('Should not reset the password with an invalid verification string', async function () {
+      await resetPassword(server.url, userId2, verificationString2 + 'c', 'newly_created_password', 403)
+    })
+
+    it('Should reset the password', async function () {
+      await resetPassword(server.url, userId2, verificationString2, 'newly_created_password')
+    })
+
+    it('Should login with this new password', async function () {
+      await userLogin(server, {
+        username: 'create_password',
+        password: 'newly_created_password'
+      })
+    })
+  })
+
   describe('When creating a video abuse', function () {
     it('Should send the notification email', async function () {
       this.timeout(10000)
@@ -130,9 +182,9 @@ describe('Test emails', function () {
       await reportVideoAbuse(server.url, server.accessToken, videoUUID, reason)
 
       await waitJobs(server)
-      expect(emails).to.have.lengthOf(2)
+      expect(emails).to.have.lengthOf(3)
 
-      const email = emails[1]
+      const email = emails[2]
 
       expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
@@ -151,9 +203,9 @@ describe('Test emails', function () {
       await blockUser(server.url, userId, server.accessToken, 204, reason)
 
       await waitJobs(server)
-      expect(emails).to.have.lengthOf(3)
+      expect(emails).to.have.lengthOf(4)
 
-      const email = emails[2]
+      const email = emails[3]
 
       expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
@@ -169,9 +221,9 @@ describe('Test emails', function () {
       await unblockUser(server.url, userId, server.accessToken, 204)
 
       await waitJobs(server)
-      expect(emails).to.have.lengthOf(4)
+      expect(emails).to.have.lengthOf(5)
 
-      const email = emails[3]
+      const email = emails[4]
 
       expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
@@ -189,9 +241,9 @@ describe('Test emails', function () {
       await addVideoToBlacklist(server.url, server.accessToken, videoUserUUID, reason)
 
       await waitJobs(server)
-      expect(emails).to.have.lengthOf(5)
+      expect(emails).to.have.lengthOf(6)
 
-      const email = emails[4]
+      const email = emails[5]
 
       expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
@@ -207,9 +259,9 @@ describe('Test emails', function () {
       await removeVideoFromBlacklist(server.url, server.accessToken, videoUserUUID)
 
       await waitJobs(server)
-      expect(emails).to.have.lengthOf(6)
+      expect(emails).to.have.lengthOf(7)
 
-      const email = emails[5]
+      const email = emails[6]
 
       expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
@@ -227,9 +279,9 @@ describe('Test emails', function () {
       await askSendVerifyEmail(server.url, 'user_1@example.com')
 
       await waitJobs(server)
-      expect(emails).to.have.lengthOf(7)
+      expect(emails).to.have.lengthOf(8)
 
-      const email = emails[6]
+      const email = emails[7]
 
       expect(email['from'][0]['name']).equal('localhost:' + server.port)
       expect(email['from'][0]['address']).equal('test-admin@localhost')
