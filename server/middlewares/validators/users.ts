@@ -14,6 +14,7 @@ import {
   isUserDisplayNameValid,
   isUserNSFWPolicyValid,
   isUserPasswordValid,
+  isUserPasswordValidOrEmpty,
   isUserRoleValid,
   isUserUsernameValid,
   isUserVideoLanguages,
@@ -39,7 +40,7 @@ import { Hooks } from '@server/lib/plugins/hooks'
 
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
-  body('password').custom(isUserPasswordValid).withMessage('Should have a valid password'),
+  body('password').custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
   body('email').isEmail().withMessage('Should have a valid email'),
   body('videoQuota').custom(isUserVideoQuotaValid).withMessage('Should have a valid user quota'),
   body('videoQuotaDaily').custom(isUserVideoQuotaDailyValid).withMessage('Should have a valid daily user quota'),

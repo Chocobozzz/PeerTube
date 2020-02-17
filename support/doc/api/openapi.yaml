@@ -2781,7 +2781,7 @@ components:
           description: 'The user username '
         password:
           type: string
-          description: 'The user password '
+          description: 'The user password. If the smtp server is configured, you can leave empty and an email will be sent '
         email:
           type: string
           description: 'The user email '

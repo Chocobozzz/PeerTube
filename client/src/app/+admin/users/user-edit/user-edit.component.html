@@ -29,6 +29,13 @@
 
   <div class="form-group" *ngIf="isCreation()">
     <label i18n for="password">Password</label>
+    <my-help *ngIf="isPasswordOptional()">
+      <ng-template ptTemplate="customHtml">
+        <ng-container i18n>
+          If you leave the password empty, an email will be sent to the user.
+        </ng-container>
+      </ng-template>
+    </my-help>
     <input
       type="password" id="password" autocomplete="new-password"
       formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
