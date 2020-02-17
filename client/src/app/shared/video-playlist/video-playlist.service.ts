@@ -141,6 +141,8 @@ export class VideoPlaylistService {
     return this.authHttp.post<{ videoPlaylist: { id: number } }>(VideoPlaylistService.BASE_VIDEO_PLAYLIST_URL, data)
                .pipe(
                  tap(res => {
+                   if (!this.myAccountPlaylistCache) return
+
                    this.myAccountPlaylistCache.total++
 
                    this.myAccountPlaylistCache.data.push({
@@ -161,6 +163,8 @@ export class VideoPlaylistService {
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  tap(() => {
+                   if (!this.myAccountPlaylistCache) return
+
                    const playlist = this.myAccountPlaylistCache.data.find(p => p.id === videoPlaylist.id)
                    playlist.displayName = body.displayName
 
@@ -175,6 +179,8 @@ export class VideoPlaylistService {
                .pipe(
                  map(this.restExtractor.extractDataBool),
                  tap(() => {
+                   if (!this.myAccountPlaylistCache) return
+
                    this.myAccountPlaylistCache.total--
                    this.myAccountPlaylistCache.data = this.myAccountPlaylistCache.data
                                                           .filter(p => p.id !== videoPlaylist.id)
