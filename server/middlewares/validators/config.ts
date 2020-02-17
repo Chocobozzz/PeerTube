@@ -3,10 +3,10 @@ import { body } from 'express-validator'
 import { isUserNSFWPolicyValid, isUserVideoQuotaDailyValid, isUserVideoQuotaValid } from '../../helpers/custom-validators/users'
 import { logger } from '../../helpers/logger'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
-import { Emailer } from '../../lib/emailer'
 import { areValidationErrors } from './utils'
 import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
+import { isEmailEnabled } from '@server/initializers/config'
 
 const customConfigUpdateValidator = [
   body('instance.name').exists().withMessage('Should have a valid instance name'),
@@ -73,7 +73,7 @@ export {
 }
 
 function checkInvalidConfigIfEmailDisabled (customConfig: CustomConfig, res: express.Response) {
-  if (Emailer.isEnabled()) return true
+  if (isEmailEnabled()) return true
 
   if (customConfig.signup.requiresEmailVerification === true) {
     res.status(400)

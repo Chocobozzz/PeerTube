@@ -4,13 +4,12 @@ import { UserModel } from '../models/account/user'
 import { ApplicationModel } from '../models/application/application'
 import { OAuthClientModel } from '../models/oauth/oauth-client'
 import { URL } from 'url'
-import { CONFIG } from './config'
+import { CONFIG, isEmailEnabled } from './config'
 import { logger } from '../helpers/logger'
 import { getServerActor } from '../helpers/utils'
 import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isArray } from '../helpers/custom-validators/misc'
 import { uniq } from 'lodash'
-import { Emailer } from '../lib/emailer'
 import { WEBSERVER } from './constants'
 
 async function checkActivityPubUrls () {
@@ -41,7 +40,7 @@ function checkConfig () {
   }
 
   // Email verification
-  if (!Emailer.isEnabled()) {
+  if (!isEmailEnabled()) {
     if (CONFIG.SIGNUP.ENABLED && CONFIG.SIGNUP.REQUIRES_EMAIL_VERIFICATION) {
       return 'Emailer is disabled but you require signup email verification.'
     }

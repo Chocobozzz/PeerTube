@@ -5,9 +5,8 @@ import { isHostValid, isValidContactBody } from '../../helpers/custom-validators
 import { ServerModel } from '../../models/server/server'
 import { body } from 'express-validator'
 import { isUserDisplayNameValid } from '../../helpers/custom-validators/users'
-import { Emailer } from '../../lib/emailer'
 import { Redis } from '../../lib/redis'
-import { CONFIG } from '../../initializers/config'
+import { CONFIG, isEmailEnabled } from '../../initializers/config'
 
 const serverGetValidator = [
   body('host').custom(isHostValid).withMessage('Should have a valid host'),
@@ -50,7 +49,7 @@ const contactAdministratorValidator = [
         .end()
     }
 
-    if (Emailer.isEnabled() === false) {
+    if (isEmailEnabled() === false) {
       return res
         .status(409)
         .send({ error: 'Emailer is not enabled on this instance.' })

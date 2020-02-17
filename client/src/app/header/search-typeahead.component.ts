@@ -1,17 +1,9 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  QueryList,
-  ViewChild,
-  ElementRef
-} from '@angular/core'
-import { Router, Params, ActivatedRoute } from '@angular/router'
+import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild } from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
 import { first, tap } from 'rxjs/operators'
 import { ListKeyManager } from '@angular/cdk/a11y'
-import { UP_ARROW, DOWN_ARROW, ENTER } from '@angular/cdk/keycodes'
-import { SuggestionComponent, Result } from './suggestion.component'
+import { Result, SuggestionComponent } from './suggestion.component'
 import { of } from 'rxjs'
 import { ServerConfig } from '@shared/models'
 
@@ -145,13 +137,13 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
   handleKeyUp (event: KeyboardEvent) {
     event.stopImmediatePropagation()
     if (!this.keyboardEventsManager) return
-    
+
     switch (event.key) {
-      case "ArrowDown":
-      case "ArrowUp":
+      case 'ArrowDown':
+      case 'ArrowUp':
         this.keyboardEventsManager.onKeydown(event)
         break
-      case "Enter":
+      case 'Enter':
         this.newSearch = false
         this.doSearch()
         break

@@ -284,11 +284,16 @@ function registerConfigChangedHandler (fun: Function) {
   configChangedHandlers.push(fun)
 }
 
+function isEmailEnabled () {
+  return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   CONFIG,
-  registerConfigChangedHandler
+  registerConfigChangedHandler,
+  isEmailEnabled
 }
 
 // ---------------------------------------------------------------------------

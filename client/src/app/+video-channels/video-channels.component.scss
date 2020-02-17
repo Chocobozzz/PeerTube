@@ -12,12 +12,10 @@
     display: grid !important;
     grid-template-columns: 1fr auto;
     grid-template-rows: 1fr auto / 1fr auto;
-    grid-template-areas: "name buttons"
-                         "lower buttons";
+    grid-template-areas: "name buttons" "lower buttons";
 
     @media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
-      grid-template-areas: "name name"
-                           "lower buttons";
+      grid-template-areas: "name name" "lower buttons";
     }
   }
 

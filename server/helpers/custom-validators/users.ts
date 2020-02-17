@@ -3,7 +3,7 @@ import { UserRole } from '../../../shared'
 import { CONSTRAINTS_FIELDS, NSFW_POLICY_TYPES } from '../../initializers/constants'
 import { exists, isArray, isBooleanValid, isFileValid } from './misc'
 import { values } from 'lodash'
-import { CONFIG } from '../../initializers/config'
+import { isEmailEnabled } from '../../initializers/config'
 
 const USERS_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.USERS
 
@@ -13,9 +13,8 @@ function isUserPasswordValid (value: string) {
 
 function isUserPasswordValidOrEmpty (value: string) {
   // Empty password is only possible if emailing is enabled.
-  if (value === '') {
-    return !!CONFIG.SMTP.HOSTNAME && !!CONFIG.SMTP.PORT
-  }
+  if (value === '') return isEmailEnabled()
+
   return isUserPasswordValid(value)
 }
 

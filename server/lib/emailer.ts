@@ -1,7 +1,7 @@
 import { createTransport, Transporter } from 'nodemailer'
 import { isTestInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
-import { CONFIG } from '../initializers/config'
+import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { JobQueue } from './job-queue'
 import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs-extra'
@@ -40,7 +40,7 @@ class Emailer {
     if (this.initialized === true) return
     this.initialized = true
 
-    if (Emailer.isEnabled()) {
+    if (isEmailEnabled) {
       logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
 
       let tls
@@ -459,7 +459,7 @@ class Emailer {
   }
 
   async sendMail (options: EmailPayload) {
-    if (!Emailer.isEnabled()) {
+    if (!isEmailEnabled()) {
       throw new Error('Cannot send mail because SMTP is not configured.')
     }
 

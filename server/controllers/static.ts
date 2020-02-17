@@ -1,15 +1,15 @@
 import * as cors from 'cors'
 import * as express from 'express'
 import {
+  CONSTRAINTS_FIELDS,
+  DEFAULT_THEME_NAME,
   HLS_STREAMING_PLAYLIST_DIRECTORY,
   PEERTUBE_VERSION,
   ROUTE_CACHE_LIFETIME,
   STATIC_DOWNLOAD_PATHS,
   STATIC_MAX_AGE,
   STATIC_PATHS,
-  WEBSERVER,
-  CONSTRAINTS_FIELDS,
-  DEFAULT_THEME_NAME
+  WEBSERVER
 } from '../initializers/constants'
 import { cacheRoute } from '../middlewares/cache'
 import { asyncMiddleware, videosDownloadValidator } from '../middlewares'
@@ -19,8 +19,7 @@ import { VideoCommentModel } from '../models/video/video-comment'
 import { HttpNodeinfoDiasporaSoftwareNsSchema20 } from '../../shared/models/nodeinfo'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
-import { CONFIG } from '../initializers/config'
-import { Emailer } from '../lib/emailer'
+import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { getPreview, getVideoCaption } from './lazy-static'
 import { VideoStreamingPlaylistType } from '@shared/models/videos/video-streaming-playlist.type'
 import { MVideoFile, MVideoFullLight } from '@server/typings/models'
@@ -249,7 +248,7 @@ async function generateNodeinfo (req: express.Request, res: express.Response) {
             default: getThemeOrDefault(CONFIG.THEME.DEFAULT, DEFAULT_THEME_NAME)
           },
           email: {
-            enabled: Emailer.isEnabled()
+            enabled: isEmailEnabled()
           },
           contactForm: {
             enabled: CONFIG.CONTACT_FORM.ENABLED

@@ -11,10 +11,9 @@ import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
 import { remove, writeJSON } from 'fs-extra'
 import { getServerCommit } from '../../helpers/utils'
-import { Emailer } from '../../lib/emailer'
 import validator from 'validator'
 import { objectConverter } from '../../helpers/core-utils'
-import { CONFIG, reloadConfig } from '../../initializers/config'
+import { CONFIG, isEmailEnabled, reloadConfig } from '../../initializers/config'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
 import { Hooks } from '@server/lib/plugins/hooks'
@@ -87,7 +86,7 @@ async function getConfig (req: express.Request, res: express.Response) {
       default: defaultTheme
     },
     email: {
-      enabled: Emailer.isEnabled()
+      enabled: isEmailEnabled()
     },
     contactForm: {
       enabled: CONFIG.CONTACT_FORM.ENABLED
