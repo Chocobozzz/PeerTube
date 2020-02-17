@@ -59,7 +59,7 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
       transaction: t
     })
 
-    if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
+    if (actorFollow.state !== 'accepted' && isFollowingInstance && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
       actorFollow.state = 'accepted'
       await actorFollow.save({ transaction: t })
     }
