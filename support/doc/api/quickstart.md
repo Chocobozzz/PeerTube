@@ -52,3 +52,13 @@ $ curl -H 'Authorization: Bearer 90286a0bdf0f7315d9d3fe8dabf9e1d2be9c97d0' https
 ```bash
 $ curl https://peertube.example.com/api/v1/videos
 ```
+
+## Libraries
+
+[Convenience libraries](https://framagit.org/framasoft/peertube/clients) are generated automatically from the [OpenAPI specification](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/api/openapi.yaml) for the following languages:
+
+- [python](https://framagit.org/framasoft/peertube/clients/python)
+- [go](https://framagit.org/framasoft/peertube/clients/go)
+- [kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
+
+Other [languages supported by the OpenAPI generator](https://openapi-generator.tech/docs/generators/#client-generators) can be added to the generation, provided they make a common enough use case.
