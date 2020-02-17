@@ -1110,7 +1110,7 @@
       </trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478">
         <source>Username or email address</source>
-        <target>Användarnamn eller epostadress</target>
+        <target>Användarnamn eller e-postadress</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
