@@ -1,0 +1,47 @@
+# Python API client for {{appName}}
+
+This Python package is automatically generated from [PeerTube's REST API](https://docs.joinpeertube.org/api-rest-reference.html),
+using the [OpenAPI Generator](https://openapi-generator.tech) project:
+
+- API version: {{appVersion}}
+- Package version: {{packageVersion}}
+{{^hideGenerationTimestamp}}
+- Build date: {{generatedDate}}
+{{/hideGenerationTimestamp}}
+- Build package: {{generatorClass}}
+
+{{#infoUrl}}
+For more information, please visit [{{{infoUrl}}}]({{{infoUrl}}})
+{{/infoUrl}}
+
+## Requirements.
+
+Python 2.7 and 3.4+
+
+## Installation & Usage
+
+```sh
+pip install git+https://{{gitHost}}/{{{gitUserId}}}/{{{gitRepoId}}}.git
+```
+(you may need to run `pip` with root permission: `sudo pip install git+https://{{gitHost}}/{{{gitUserId}}}/{{{gitRepoId}}}.git`)
+
+Then import the package:
+```python
+import {{{packageName}}}
+```
+
+## Getting Started
+
+Please follow the [installation procedure](#installation--usage) and then run the following:
+
+{{> common_README }}
+
+## License
+
+Copyright (C) 2015-2020 PeerTube Contributors
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see http://www.gnu.org/licenses.

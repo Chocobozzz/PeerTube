@@ -46,6 +46,8 @@ for lang in ${API_LANGS//:/ } ; do
 (
     echo "Generating client API libs for $lang"
 
+    lang_dir="support/openapi/${lang}"
+
     out_dir_prefix="dist/api/${API_PATH_PREFIX}"
     out_dir="${out_dir_prefix}/${lang}"
     git_repo_id="${API_PATH_PREFIX}${lang}"
@@ -59,7 +61,8 @@ for lang in ${API_LANGS//:/ } ; do
 
     npx openapi-generator generate \
         -i support/doc/api/openapi.yaml \
-        -c "support/openapi/${lang}.yaml" \
+        -c "${lang_dir}/def.yaml" \
+        -t "${lang_dir}" \
         -g "$lang" \
         --git-host "${API_REPO_HOST}" \
         --git-user-id "${API_URL_USERNAME}" \
