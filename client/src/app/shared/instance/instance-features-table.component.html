@@ -37,8 +37,8 @@
     <tr>
       <td i18n class="sub-label">Video uploads</td>
       <td>
-        <span *ngIf="serverConfig.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
-        <span *ngIf="!serverConfig.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
+        <span i18n *ngIf="serverConfig.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
+        <span i18n *ngIf="!serverConfig.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
       </td>
     </tr>
 

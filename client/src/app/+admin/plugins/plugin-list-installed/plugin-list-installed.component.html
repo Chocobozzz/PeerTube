@@ -10,7 +10,7 @@
   <div class="card plugin" *ngFor="let plugin of plugins">
     <div class="card-body">
       <div class="first-row">
-        <a class="plugin-name" [routerLink]="getShowRouterLink(plugin)" title="Show plugin settings">{{ plugin.name }}</a>
+        <a class="plugin-name" [routerLink]="getShowRouterLink(plugin)" i18n-title title="Show plugin settings">{{ plugin.name }}</a>
 
         <span class="plugin-version">{{ plugin.version }}</span>
       </div>

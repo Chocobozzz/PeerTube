@@ -21,7 +21,7 @@
 </div>
 
 <div class="logs">
-  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="loading" i18n>Loading...</div>
 
   <div #logsElement>
     <div *ngFor="let log of logs" class="log-row" [ngClass]="{ error: log.level === 'error', warn: log.level === 'warn' }">
