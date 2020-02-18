@@ -104,13 +104,15 @@ $variables: (
 $zindex: (
   header       :  1000,
   /* header context */
-  headerLeft :    10,
+  headerLeft   :    10,
   menu         : 11000,
   dropdown     : 12000,
-  loadbar      : 13000,
-  modal        : 14000,
-  notification : 15000,
-  hotkeys      : 16000
+  popover      : 13000,
+  tooltip      : 14000,
+  loadbar      : 15000,
+  modal        : 16000,
+  notification : 17000,
+  hotkeys      : 18000
 );
 
 @function z($label) {
