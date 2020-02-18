@@ -1,0 +1,121 @@
+# Go API client for {{appName}}
+
+This Python package is automatically generated from [PeerTube's REST API](https://docs.joinpeertube.org/api-rest-reference.html),
+using the [OpenAPI Generator](https://openapi-generator.tech) project:
+
+- API version: {{appVersion}}
+- Package version: {{packageVersion}}
+{{^hideGenerationTimestamp}}
+- Build date: {{generatedDate}}
+{{/hideGenerationTimestamp}}
+- Build package: {{generatorClass}}
+
+{{#infoUrl}}
+For more information, please visit [{{{infoUrl}}}]({{{infoUrl}}})
+{{/infoUrl}}
+
+## Installation
+
+Install the following dependencies:
+
+```shell
+go get github.com/stretchr/testify/assert
+go get golang.org/x/oauth2
+go get golang.org/x/net/context
+go get github.com/antihax/optional
+```
+
+Put the package under your project folder and add the following in import:
+
+```golang
+import "./{{packageName}}"
+```
+
+## Documentation for API Endpoints
+
+All URIs are relative to *{{basePath}}*
+
+Class | Method | HTTP request | Description
+------------ | ------------- | ------------- | -------------
+{{#apiInfo}}{{#apis}}{{#operations}}{{#operation}}*{{classname}}* | [**{{operationId}}**]({{apiDocPath}}{{classname}}.md#{{operationIdLowerCase}}) | **{{httpMethod}}** {{path}} | {{#summary}}{{summary}}{{/summary}}
+{{/operation}}{{/operations}}{{/apis}}{{/apiInfo}}
+
+## Documentation For Models
+
+{{#models}}{{#model}} - [{{{classname}}}]({{modelDocPath}}{{{classname}}}.md)
+{{/model}}{{/models}}
+
+## Documentation For Authorization
+
+{{^authMethods}} Endpoints do not require authorization.
+{{/authMethods}}{{#authMethods}}{{#last}} Authentication schemes defined for the API:{{/last}}{{/authMethods}}
+{{#authMethods}}
+
+## {{{name}}}
+
+{{#isApiKey}}- **Type**: API key
+
+Example
+
+```golang
+auth := context.WithValue(context.Background(), sw.ContextAPIKey, sw.APIKey{
+    Key: "APIKEY",
+    Prefix: "Bearer", // Omit if not necessary.
+})
+r, err := client.Service.Operation(auth, args)
+```
+
+{{/isApiKey}}
+{{#isBasic}}- **Type**: HTTP basic authentication
+
+Example
+
+```golang
+auth := context.WithValue(context.Background(), sw.ContextBasicAuth, sw.BasicAuth{
+    UserName: "username",
+    Password: "password",
+})
+r, err := client.Service.Operation(auth, args)
+```
+
+{{/isBasic}}
+{{#isOAuth}}
+
+- **Type**: OAuth
+- **Flow**: {{{flow}}}
+- **Authorization URL**: {{{authorizationUrl}}}
+- **Scopes**: {{^scopes}}N/A{{/scopes}}
+{{#scopes}} - **{{{scope}}}**: {{{description}}}
+{{/scopes}}
+
+Example
+
+```golang
+auth := context.WithValue(context.Background(), sw.ContextAccessToken, "ACCESSTOKENSTRING")
+r, err := client.Service.Operation(auth, args)
+```
+
+Or via OAuth2 module to automatically refresh tokens and perform user authentication.
+
+```golang
+import "golang.org/x/oauth2"
+
+/* Perform OAuth2 round trip request and obtain a token */
+
+tokenSource := oauth2cfg.TokenSource(createContext(httpClient), &token)
+auth := context.WithValue(oauth2.NoContext, sw.ContextOAuth2, tokenSource)
+r, err := client.Service.Operation(auth, args)
+```
+
+{{/isOAuth}}
+{{/authMethods}}
+
+## License
+
+Copyright (C) 2015-2020 PeerTube Contributors
+
+This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License along with this program. If not, see http://www.gnu.org/licenses.
