@@ -40,7 +40,7 @@ class Emailer {
     if (this.initialized === true) return
     this.initialized = true
 
-    if (isEmailEnabled) {
+    if (isEmailEnabled()) {
       logger.info('Using %s:%s as SMTP server.', CONFIG.SMTP.HOSTNAME, CONFIG.SMTP.PORT)
 
       let tls
