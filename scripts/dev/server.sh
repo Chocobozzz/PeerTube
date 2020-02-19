@@ -3,8 +3,10 @@
 set -eu
 
 if [ ! -f "./client/dist/en-US/index.html" ]; then
-  echo "client/dist/en-US/index.html does not exist, compile client files..."
-  npm run build:client -- --light
+  if [ -z ${1+x} ] || [ "$1" != "--skip-client" ]; then
+    echo "client/dist/en-US/index.html does not exist, compile client files..."
+    npm run build:client -- --light
+  fi
 fi
 
 # Copy locales
