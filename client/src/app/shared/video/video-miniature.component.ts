@@ -200,7 +200,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   isWatchLaterPlaylistDisplayed () {
-    return this.inWatchLaterPlaylist !== undefined
+    return this.isUserLoggedIn() && this.inWatchLaterPlaylist !== undefined
   }
 
   private setUpBy () {
