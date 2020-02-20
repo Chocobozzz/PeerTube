@@ -261,3 +261,11 @@ menu {
     width: 100% !important;
   }
 }
+
+@media (hover: none) and (pointer: coarse) {
+  .menu-wrapper {
+    menu {
+      overflow-y: auto;
+    }
+  }
+}
