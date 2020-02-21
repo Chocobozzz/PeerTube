@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { UserRight } from '../../../../shared/models/users/user-right.enum'
 import { AuthService, AuthStatus, RedirectService, ServerService } from '../core'
-import { User } from '../shared/users/user.model'
+import { User } from '@app/shared/users/user.model'
+import { UserService } from '@app/shared/users/user.service'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { HotkeysService } from 'angular2-hotkeys'
-import { ServerConfig, I18N_LOCALES } from '@shared/models'
+import { ServerConfig, I18N_LOCALES, UserUpdateMe } from '@shared/models'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { startsWith, pickBy } from 'lodash-es'
@@ -35,6 +36,7 @@ export class MenuComponent implements OnInit {
 
   constructor (
     private authService: AuthService,
+    private userService: UserService,
     private serverService: ServerService,
     private redirectService: RedirectService,
     private hotkeysService: HotkeysService,
@@ -149,7 +151,10 @@ export class MenuComponent implements OnInit {
   }
 
   toggleUseP2P () {
-    console.log('toggleUseP2P called but nothing done because it is not implemented')
+    this.user.webTorrentEnabled = !this.user.webTorrentEnabled
+    this.userService.updateMyProfile({
+      webTorrentEnabled: this.user.webTorrentEnabled
+    } as UserUpdateMe).subscribe(() => this.authService.refreshUserInformation())
   }
 
   private computeIsUserHasAdminAccess () {

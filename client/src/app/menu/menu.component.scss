@@ -321,7 +321,7 @@ label:after {
 	height: 14px;
 	background: var(--mainBackgroundColor);
 	border-radius: 50%;
-	transition: 0.3s;
+	transition: 0.3s ease-out;
 }
 
 input:checked + label {
