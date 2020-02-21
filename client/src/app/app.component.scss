@@ -21,7 +21,7 @@
   display: flex;
 
   .top-left-block {
-    z-index: z(headerLeft);
+    z-index: 1;
     height: $header-height;
     display: flex;
     align-items: center;

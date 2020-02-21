@@ -462,6 +462,7 @@ my-video-comments {
 .privacy-concerns {
   position: fixed;
   bottom: 0;
+  z-index: z(privacymsg);
 
   padding: 5px 15px;
 
