@@ -66,9 +66,9 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     if (this.isUserLoggedIn()) this.hotkeysService.add(this.hotkeys)
 
     this.links = [
-      { label: this.i18n('Videos'), routerLink: 'videos' },
-      { label: this.i18n('Video playlists'), routerLink: 'video-playlists' },
-      { label: this.i18n('About'), routerLink: 'about' }
+      { label: this.i18n('VIDEOS'), routerLink: 'videos' },
+      { label: this.i18n('VIDEO PLAYLISTS'), routerLink: 'video-playlists' },
+      { label: this.i18n('ABOUT'), routerLink: 'about' }
     ]
   }
 

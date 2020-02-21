@@ -7,7 +7,7 @@
 
         <ng-container formGroupName="instance">
 
-          <div i18n class="inner-form-title">Instance</div>
+          <div i18n class="inner-form-title">INSTANCE</div>
 
           <div class="form-group">
             <label i18n for="instanceName">Name</label>
@@ -60,7 +60,7 @@
             </div>
           </div>
 
-          <div i18n class="inner-form-title">Moderation & NSFW</div>
+          <div i18n class="inner-form-title">MODERATION & NSFW</div>
 
           <div class="form-group">
             <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
@@ -127,7 +127,7 @@
             <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
           </div>
 
-          <div i18n class="inner-form-title">You and your instance</div>
+          <div i18n class="inner-form-title">YOU AND YOUR INSTANCE</div>
 
           <div class="form-group">
             <label i18n for="instanceAdministrator">Who is behind the instance?</label>
@@ -174,7 +174,7 @@
             <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
           </div>
 
-          <div i18n class="inner-form-title">Other information</div>
+          <div i18n class="inner-form-title">OTHER INFORMATION</div>
 
           <div class="form-group">
             <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
@@ -195,7 +195,7 @@
     <ngb-tab i18n-title title="Basic configuration">
       <ng-template ngbTabContent>
 
-        <div i18n class="inner-form-title">Theme & Default route</div>
+        <div i18n class="inner-form-title">THEME AND DEFAULT ROUTE</div>
 
         <ng-container formGroupName="theme">
           <div class="form-group">
@@ -226,7 +226,7 @@
           <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
         </div>
 
-        <div i18n class="inner-form-title">Signup</div>
+        <div i18n class="inner-form-title">SIGNUP</div>
 
         <ng-container formGroupName="signup">
           <div class="form-group">
@@ -258,7 +258,7 @@
         </ng-container>
 
 
-        <div i18n class="inner-form-title">Users</div>
+        <div i18n class="inner-form-title">USERS</div>
 
         <ng-container formGroupName="user">
           <div class="form-group">
@@ -287,7 +287,7 @@
         </ng-container>
 
 
-        <div i18n class="inner-form-title">Import</div>
+        <div i18n class="inner-form-title">IMPORT</div>
 
         <ng-container formGroupName="import">
           <ng-container formGroupName="videos">
@@ -310,7 +310,7 @@
         </ng-container>
 
 
-        <div i18n class="inner-form-title">Auto-blacklist</div>
+        <div i18n class="inner-form-title">AUTO-BLACKLIST</div>
 
         <ng-container formGroupName="autoBlacklist">
           <ng-container formGroupName="videos">
@@ -332,7 +332,7 @@
         </ng-container>
 
 
-        <div i18n class="inner-form-title">Instance followers</div>
+        <div i18n class="inner-form-title">INSTANCE FOLLOWERS</div>
 
         <ng-container formGroupName="followers">
           <ng-container formGroupName="instance">
@@ -353,7 +353,7 @@
           </ng-container>
         </ng-container>
 
-        <div i18n class="inner-form-title">Instance followings</div>
+        <div i18n class="inner-form-title">INSTANCE FOLLOWINGS</div>
 
         <ng-container formGroupName="followings">
           <ng-container formGroupName="instance">
@@ -399,7 +399,7 @@
         </ng-container>
 
 
-        <div i18n class="inner-form-title">Administrator</div>
+        <div i18n class="inner-form-title">ADMINISTRATORS</div>
 
         <div class="form-group" formGroupName="admin">
           <label i18n for="adminEmail">Admin email</label>
@@ -422,7 +422,7 @@
 
     <ngb-tab i18n-title title="Services">
       <ng-template ngbTabContent>
-        <div i18n class="inner-form-title">Twitter</div>
+        <div i18n class="inner-form-title">TWITTER</div>
 
         <ng-container formGroupName="services">
           <ng-container formGroupName="twitter">
@@ -470,7 +470,7 @@
     <ngb-tab i18n-title title="Advanced configuration">
       <ng-template ngbTabContent>
 
-        <div i18n class="inner-form-title">Transcoding</div>
+        <div i18n class="inner-form-title">TRANSCODING</div>
 
         <ng-container formGroupName="transcoding">
           <div class="form-group">
@@ -583,7 +583,7 @@
         </ng-container>
 
         <div class="inner-form-title">
-          <ng-container i18n>Cache</ng-container>
+          <ng-container i18n>CACHE</ng-container>
 
           <my-help>
             <ng-template ptTemplate="customHtml">
@@ -612,7 +612,7 @@
           </div>
         </ng-container>
 
-        <div i18n class="inner-form-title">Customizations</div>
+        <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
 
         <ng-container formGroupName="instance">
           <ng-container formGroupName="customizations">

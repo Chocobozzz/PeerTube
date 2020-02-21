@@ -74,9 +74,9 @@ export class AccountsComponent implements OnInit, OnDestroy {
                         )
 
     this.links = [
-      { label: this.i18n('Video channels'), routerLink: 'video-channels' },
-      { label: this.i18n('Videos'), routerLink: 'videos' },
-      { label: this.i18n('About'), routerLink: 'about' }
+      { label: this.i18n('VIDEO CHANNELS'), routerLink: 'video-channels' },
+      { label: this.i18n('VIDEOS'), routerLink: 'videos' },
+      { label: this.i18n('ABOUT'), routerLink: 'about' }
     ]
   }
 
