@@ -2704,7 +2704,7 @@
       </trans-unit>
       <trans-unit id="67732b09326ab7941ce983205a42d7819dd35668" datatype="html">
         <source>Loop</source>
-        <target state="new">Loop</target>
+        <target state="translated">ループ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">149</context></context-group>
       </trans-unit>
       <trans-unit id="af3ab1a1035c222ccc88816baa236eb95cea7523" datatype="html">
@@ -2841,7 +2841,7 @@
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
         <source>Subscribe</source>
-        <target state="new">Subscribe</target>
+        <target state="translated">チャンネル登録する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">7</context>
@@ -2849,7 +2849,7 @@
       </trans-unit>
       <trans-unit id="6e215e23505768151b501b7e11dd5b864e604fd9" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="new">Subscribe to all channels</target>
+        <target state="translated">すべてのチャンネル登録する</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -2857,7 +2857,7 @@
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
         <source>channels subscribed</source>
-        <target state="new">channels subscribed</target>
+        <target state="translated">チャンネル登録しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">11</context>
@@ -2873,7 +2873,7 @@
       </trans-unit>
       <trans-unit id="f0c5f6f270e70cbe063b5368fcf48f9afc1abd9b">
         <source>Show more</source>
-        <target>もっと表示</target>
+        <target>もっと見る</target>
         <context-group name="null">
           <context context-type="linenumber">141</context>
         </context-group>
@@ -2881,7 +2881,7 @@
       </trans-unit>
       <trans-unit id="5403a767248e304199592271bba3366d2ca3f903">
         <source>Show less</source>
-        <target>少なく表示</target>
+        <target>少なくする</target>
         <context-group name="null">
           <context context-type="linenumber">147</context>
         </context-group>
@@ -2923,7 +2923,7 @@
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
         <source>More information</source>
-        <target>詳しくは：</target>
+        <target>詳細</target>
         <context-group name="null">
           <context context-type="linenumber">215</context>
         </context-group>
@@ -2931,7 +2931,7 @@
       </trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
-        <target>より多くの情報を得る</target>
+        <target>詳細</target>
         <context-group name="null">
           <context context-type="linenumber">215</context>
         </context-group>
@@ -2939,9 +2939,7 @@
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f">
         <source>OK</source>
-        <target>
-      はい
-    </target>
+        <target state="translated">はい</target>
         <context-group name="null">
           <context context-type="linenumber">218</context>
         </context-group>
@@ -2973,9 +2971,7 @@
       </trans-unit>
       <trans-unit id="cd197a90bd4a06315415945482b2c94ba151a4bd" datatype="html">
         <source>Sort by</source>
-        <target state="new">
-        Sort by
-      </target>
+        <target state="translated">並び替え</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">15</context>
@@ -2983,7 +2979,7 @@
       </trans-unit>
       <trans-unit id="6d355ab9a2c6af4f7ffcb44dd8ca0c5572f958ca" datatype="html">
         <source>Most recent first (default)</source>
-        <target state="new">Most recent first (default)</target>
+        <target state="translated">新しい順（デフォールト）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2999,7 +2995,7 @@
       </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
         <source>No comments.</source>
-        <target>コメントはまだありません。</target>
+        <target>コメントがありません。</target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
         </context-group>
@@ -3035,9 +3031,7 @@
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
         <source>Comments are disabled.</source>
-        <target>
-    この動画にはコメントできません。
-  </target>
+        <target>コメントはオフになっています。</target>
         <context-group name="null">
           <context context-type="linenumber">64</context>
         </context-group>
@@ -3045,7 +3039,7 @@
       </trans-unit>
       <trans-unit id="db79255cb8757e9e945ba5f901a2b67e4189016e">
         <source>Add comment...</source>
-        <target>コメントを追加…</target>
+        <target>コメントを入力...</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -3053,9 +3047,7 @@
       </trans-unit>
       <trans-unit id="8956c0f4c6974289fc63f1ab6b54f5b32ed65eeb" datatype="html">
         <source>Reply</source>
-        <target state="new">
-      Reply
-    </target>
+        <target state="translated">返信</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3063,7 +3055,7 @@
       </trans-unit>
       <trans-unit id="8b2bb53dfb5f059f2b68cc4ac00661a865909135">
         <source>You are one step away from commenting</source>
-        <target>あなたはコメントから一歩離れています</target>
+        <target state="translated">あなたはコメントから一歩離れています</target>
         <context-group name="null">
           <context context-type="linenumber">28</context>
         </context-group>
@@ -3071,9 +3063,7 @@
       </trans-unit>
       <trans-unit id="7984a44ce86b961f4f18c9a58c638f5e8f07a225">
         <source>If you have an account on this instance, you can login:</source>
-        <target>
-      このインスタンスのアカウントをお持ちの場合は、ログインできます:
-    </target>
+        <target state="translated">このインスタンスのアカウントをお持ちの場合は、ログインできます:</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
@@ -3081,7 +3071,7 @@
       </trans-unit>
       <trans-unit id="afe0ad39fee662489f1033e53aea3e16a7e89228">
         <source>login to comment</source>
-        <target>ログインしてコメントする</target>
+        <target state="translated">ログインしてコメントする</target>
         <context-group name="null">
           <context context-type="linenumber">35</context>
         </context-group>
@@ -3098,9 +3088,7 @@
       </trans-unit>
       <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
         <source>If you have an account on Mastodon or Pleroma, you can open it directly in their interface:</source>
-        <target>
-      MastodonまたはPleromaのアカウントをお持ちの場合は、それらのインターフェースで直接開くことができます:
-    </target>
+        <target state="translated">MastodonまたはPleromaのアカウントをお持ちの場合は、それらのインターフェースで直接開くことができます:</target>
         <context-group name="null">
           <context context-type="linenumber">41</context>
         </context-group>
@@ -3108,7 +3096,7 @@
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
         <source>Highlighted comment</source>
-        <target>強調表示されたコメント</target>
+        <target>注目のコメント</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -3124,7 +3112,7 @@
       </trans-unit>
       <trans-unit id="3dc4cf221502c170c7fcd4b2bffc9b3aa46b84bb" datatype="html">
         <source>This comment has been deleted</source>
-        <target state="new">This comment has been deleted</target>
+        <target state="translated">このコメントが削除されました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="80dbb8ba42b97a9ec035c0ba09f45c07ea07096c">
@@ -3170,9 +3158,7 @@
       </trans-unit>
       <trans-unit id="4cad4cde2db81e1b14ebb84196af33c3d23f7322" datatype="html">
         <source>Plugins/Themes</source>
-        <target state="new">
-      Plugins/Themes
-    </target>
+        <target state="translated">プラグイン・テーマ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3180,9 +3166,7 @@
       </trans-unit>
       <trans-unit id="638b9df143315199c73f6c82d9754307d4b9f01c" datatype="html">
         <source>System</source>
-        <target state="new">
-      System
-    </target>
+        <target state="translated">システム</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3312,7 +3296,7 @@
       </trans-unit>
       <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
         <source>Finished</source>
-        <target state="new">Finished</target>
+        <target state="translated">終了しました</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context>
           <context context-type="linenumber">45</context>
@@ -3368,7 +3352,7 @@
       </trans-unit>
       <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2">
         <source>Refuse</source>
-        <target>ごみ</target>
+        <target>断る</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
         </context-group>
@@ -3430,7 +3414,7 @@
       </trans-unit>
       <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a">
         <source>john</source>
-        <target>john</target>
+        <target>太郎</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -5432,7 +5416,7 @@
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf" datatype="html">
-        <source></source>
+        <source/>
         <target state="new">
   </target>
         <context-group purpose="location">
@@ -6285,7 +6269,7 @@
       </trans-unit>
       <trans-unit id="26025b8081241cf85eb6516431b596df11fa66b3">
         <source>Example: jane_doe</source>
-        <target>例: jane_doe</target>
+        <target>例: yamada_taro</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
@@ -6364,7 +6348,7 @@
       </trans-unit>
       <trans-unit id="056a9a97eb47882159d3cf5bd8a9fc2cfe9371bf" datatype="html">
         <source>Username copied</source>
-        <target state="new">Username copied</target>
+        <target state="translated">ユーザー名をコピーしました</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
@@ -6378,7 +6362,7 @@
       </trans-unit>
       <trans-unit id="00437b281d12d04c60a57bd329cff5e3c5febd93" datatype="html">
         <source>Audio-only</source>
-        <target state="new">Audio-only</target>
+        <target state="translated">音声のみ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6434,7 +6418,7 @@
       </trans-unit>
       <trans-unit id="2303f8783df836e13c208710dc029a1d34b6a77a" datatype="html">
         <source>2160p</source>
-        <target state="new">2160p</target>
+        <target state="translated">2160p</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6890,7 +6874,7 @@
       </trans-unit>
       <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target state="new">You don't have plugins installed yet.</target>
+        <target state="translated">プラグインがまだインストールされていません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6898,7 +6882,7 @@
       </trans-unit>
       <trans-unit id="c52fe59dee78663d109bfa6727e172033ff8e61f" datatype="html">
         <source>You don't have themes installed yet.</source>
-        <target state="new">You don't have themes installed yet.</target>
+        <target state="translated">テーマがまだインストールされていません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6906,7 +6890,7 @@
       </trans-unit>
       <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9" datatype="html">
         <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
-        <target state="new">Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{version}}"/>にアップデート</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6914,7 +6898,7 @@
       </trans-unit>
       <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702" datatype="html">
         <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
-        <target state="new">Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <target state="translated">本当に<x id="INTERPOLATION" equiv-text="{{pluginName}}"/>をアンインストールしますか?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6922,7 +6906,7 @@
       </trans-unit>
       <trans-unit id="61136b14ca13f166ecc9ee7b05bb6fe865f10144" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> uninstalled.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/>をアンインストールしました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6930,7 +6914,7 @@
       </trans-unit>
       <trans-unit id="d352fa8f51305c18ab8f882b37c4fdaab6f2371b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> updated.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/>をアップデートしました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6954,7 +6938,7 @@
       </trans-unit>
       <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b" datatype="html">
         <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
-        <target state="new">Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/>をインストールしますか？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6962,7 +6946,7 @@
       </trans-unit>
       <trans-unit id="10467f787088bc27cc6eec0c570a30539360979b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/> installed.</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{pluginName}}"/>をインストールしました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6970,7 +6954,7 @@
       </trans-unit>
       <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12" datatype="html">
         <source>Settings updated.</source>
-        <target state="new">Settings updated.</target>
+        <target state="translated">設定が更新されました。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6978,7 +6962,7 @@
       </trans-unit>
       <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50" datatype="html">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">プラグイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6986,7 +6970,7 @@
       </trans-unit>
       <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf" datatype="html">
         <source>Themes</source>
-        <target state="new">Themes</target>
+        <target state="translated">テーマ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6994,7 +6978,7 @@
       </trans-unit>
       <trans-unit id="e72b0e32070d4a69221ef64d793fe7d61381a819" datatype="html">
         <source>plugin</source>
-        <target state="new">plugin</target>
+        <target state="translated">プラグイン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7002,7 +6986,7 @@
       </trans-unit>
       <trans-unit id="0f6f5bc1d9e83b758dd60bc6dc7aad7d2cb7f600" datatype="html">
         <source>theme</source>
-        <target state="new">theme</target>
+        <target state="translated">テーマ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7010,7 +6994,7 @@
       </trans-unit>
       <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f" datatype="html">
         <source>Last week</source>
-        <target state="new">Last week</target>
+        <target state="translated">先週</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7126,7 +7110,7 @@
       </trans-unit>
       <trans-unit id="a3f529c8552196571418065c5b81a44ae2f94972" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="new">Videos will be deleted, comments will be tombstoned.</target>
+        <target state="translated">動画もコメントが削除されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7138,7 +7122,7 @@
       </trans-unit>
       <trans-unit id="319c89ebc6de62d35b794da23c9794af9b16514e" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="new">User won't be able to login anymore, but videos and comments will be kept as is.</target>
+        <target state="translated">ユーザーがログイン出来なくなりますが、動画とコメントがそのまま残ります。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7335,7 +7319,7 @@
       </trans-unit>
       <trans-unit id="e381d4750a4eec494e65f68fb147806f9034d59d" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos etc.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos etc.</target>
+        <target state="translated">本当にアカウントを削除しますか？すべてのデータ（チャンネルや動画などなど）が削除されます。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
