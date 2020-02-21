@@ -81,7 +81,8 @@ export class UserService {
       videoLanguages: (val: string[]) => this.localStorageService.setItem(UserType.KEYS.VIDEO_LANGUAGES, JSON.stringify(val)),
 
       // session storage keys
-      autoPlayNextVideo: (val: boolean) => this.sessionStorageService.setItem(UserType.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, String(val))
+      autoPlayNextVideo: (val: boolean) =>
+        this.sessionStorageService.setItem(UserType.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO, String(val))
     }
 
     for (const key of Object.keys(profile)) {

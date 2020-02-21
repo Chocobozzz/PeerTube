@@ -31,10 +31,10 @@ abstract class StorageService {
 
 @Injectable()
 export class LocalStorageService extends StorageService {
-  protected instance: Storage = peertubeLocalStorage
+  protected instance: Storage = peertubeLocalStorage
 }
 
 @Injectable()
 export class SessionStorageService extends StorageService {
-  protected instance: Storage = peertubeSessionStorage
+  protected instance: Storage = peertubeSessionStorage
 }

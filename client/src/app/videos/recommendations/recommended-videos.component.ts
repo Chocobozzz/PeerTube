@@ -33,7 +33,7 @@ export class RecommendedVideosComponent implements OnChanges {
     private notifier: Notifier,
     private i18n: I18n,
     private store: RecommendedVideosStore,
-    private sessionStorageService: SessionStorageService,
+    private sessionStorageService: SessionStorageService
   ) {
     this.videos$ = this.store.recommendations$
     this.hasVideos$ = this.store.hasRecommendations$

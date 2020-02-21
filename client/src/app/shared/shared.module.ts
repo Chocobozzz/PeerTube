@@ -270,7 +270,7 @@ import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account
     VideoDurationPipe,
 
     MyAccountVideoSettingsComponent,
-    MyAccountInterfaceSettingsComponent,
+    MyAccountInterfaceSettingsComponent
   ],
 
   providers: [

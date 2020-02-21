@@ -214,7 +214,7 @@ export class VideoService implements VideosProvider {
     if (filter) params = params.set('filter', filter)
     if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
     if (skipCount) params = params.set('skipCount', skipCount + '')
-    
+
     if (nsfw) {
       params = params.set('nsfw', nsfw + '')
     } else {

@@ -118,7 +118,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     return this.authService.getUser()
   }
 
-  get anonymousUser() {
+  get anonymousUser () {
     return this.userService.getAnonymousUser()
   }
 

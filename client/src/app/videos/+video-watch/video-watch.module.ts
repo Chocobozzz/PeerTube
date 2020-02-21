@@ -20,7 +20,7 @@ import { TimestampRouteTransformerDirective } from '@app/shared/angular/timestam
     SharedModule,
     NgbTooltipModule,
     QRCodeModule,
-    RecommendationsModule,
+    RecommendationsModule
   ],
 
   declarations: [
