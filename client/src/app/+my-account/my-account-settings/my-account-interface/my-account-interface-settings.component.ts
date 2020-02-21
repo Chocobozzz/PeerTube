@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { ServerConfig, UserUpdateMe } from '../../../../../../shared'
 import { AuthService } from '../../../core'
@@ -6,18 +6,20 @@ import { FormReactive } from '../../../shared/forms/form-reactive'
 import { User, UserService } from '../../../shared/users'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { Subject } from 'rxjs'
+import { Subject, Subscription } from 'rxjs'
 
 @Component({
   selector: 'my-account-interface-settings',
   templateUrl: './my-account-interface-settings.component.html',
   styleUrls: [ './my-account-interface-settings.component.scss' ]
 })
-export class MyAccountInterfaceSettingsComponent extends FormReactive implements OnInit {
+export class MyAccountInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User = null
   @Input() reactive = false
   @Input() notify = true
   @Input() userInformationLoaded: Subject<any>
+
+  watcher: Subscription
 
   private serverConfig: ServerConfig
 
@@ -53,11 +55,13 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
         })
 
         if (this.reactive) {
-          this.form.valueChanges.subscribe(val => {
-            if (!this.authService.isLoggedIn()) this.updateInterfaceSettings()
-          })
+          this.watcher = this.form.valueChanges.subscribe(val => this.updateInterfaceSettings())
         }
       })
+  }
+
+  ngOnDestroy () {
+    this.watcher.unsubscribe()
   }
 
   updateInterfaceSettings () {

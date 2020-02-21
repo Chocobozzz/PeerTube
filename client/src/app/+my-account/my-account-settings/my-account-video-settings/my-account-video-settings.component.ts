@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnInit, OnDestroy } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
 import { UserUpdateMe } from '../../../../../../shared/models/users'
 import { User, UserService } from '@app/shared/users'
@@ -6,7 +6,7 @@ import { AuthService } from '../../../core'
 import { FormReactive } from '@app/shared/forms/form-reactive'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { forkJoin, Subject } from 'rxjs'
+import { forkJoin, Subject, Subscription } from 'rxjs'
 import { SelectItem } from 'primeng/api'
 import { first } from 'rxjs/operators'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
@@ -17,7 +17,7 @@ import { pick } from 'lodash-es'
   templateUrl: './my-account-video-settings.component.html',
   styleUrls: [ './my-account-video-settings.component.scss' ]
 })
-export class MyAccountVideoSettingsComponent extends FormReactive implements OnInit {
+export class MyAccountVideoSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User = null
   @Input() reactive = false
   @Input() notify = true
@@ -25,8 +25,8 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
 
   languageItems: SelectItem[] = []
   defaultNSFWPolicy: NSFWPolicyType
-
   old: any
+  watcher: Subscription
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -73,13 +73,17 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
 
       if (this.reactive) {
         this.old = { ...this.form.value }
-        this.form.valueChanges.subscribe(val => {
+        this.watcher = this.form.valueChanges.subscribe((val: any) => {
           const key = Object.keys(val).find(k => val[k] !== this.old[k])
           this.old = { ...this.form.value }
-          if (!this.authService.isLoggedIn()) this.updateDetails([key])
+          this.updateDetails([key])
         })
       }
     })
+  }
+
+  ngOnDestroy () {
+    this.watcher.unsubscribe()
   }
 
   updateDetails (onylKeys?: string[]) {
