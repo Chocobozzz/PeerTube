@@ -31,7 +31,7 @@ mkdir -p ./docker-volume/traefik
 curl https://raw.github.com/chocobozzz/PeerTube/master/support/docker/production/config/traefik.toml > ./docker-volume/traefik/traefik.toml
 ```
 
-View the source of the file you're about to download: [traefik.toml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/traefik.toml)
+View the source of the file you're about to download: [traefik.toml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/config/traefik.toml)
 
 #### Create Let's Encrypt ACME certificates as JSON file
 
@@ -49,7 +49,7 @@ chmod 600 ./docker-volume/traefik/acme.json
 curl https://raw.github.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml 
 ```
 
-View the source of the file you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/docker-compose.yml)
+View the source of the file you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/docker-compose.yml)
 
 
 #### Get the latest env_file
@@ -58,7 +58,7 @@ View the source of the file you're about to download: [docker-compose.yml](https
 curl https://raw.github.com/Chocobozzz/PeerTube/master/support/docker/production/.env > .env
 ```
 
-View the source of the file you're about to download: [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env)
+View the source of the file you're about to download: [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env)
 
 #### Update the reverse proxy configuration
 
@@ -81,7 +81,7 @@ vim ./docker-compose.yml
 ```shell
 vim ./.env
 ```
-In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/.env), you must replace:
+In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env), you must replace:
 - `<MY POSTGRES USERNAME>`
 - `<MY POSTGRES PASSWORD>`
 - `<MY POSTGRES DB>`
@@ -89,7 +89,7 @@ In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/dev
 - `<MY EMAIL ADDRESS>`
 
 Other environment variables are used in
-[/support/docker/production/config/custom-environment-variables.yaml](https://github.com/Chocobozzz/PeerTube/blob/develop/support/docker/production/config/custom-environment-variables.yaml) and can be
+[/support/docker/production/config/custom-environment-variables.yaml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/config/custom-environment-variables.yaml) and can be
 intuited from usage.
 
 #### Testing local Docker setup
@@ -140,5 +140,5 @@ $ docker build . -f ./support/docker/production/Dockerfile.buster
 
 ## Development
 
-We don't have a Docker image for development. See [the CONTRIBUTING guide](https://github.com/Chocobozzz/PeerTube/blob/develop/.github/CONTRIBUTING.md#develop)
+We don't have a Docker image for development. See [the CONTRIBUTING guide](https://github.com/Chocobozzz/PeerTube/blob/master/.github/CONTRIBUTING.md#develop)
 for more information on how you can hack PeerTube!
