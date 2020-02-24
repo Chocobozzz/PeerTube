@@ -7489,7 +7489,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4bd9c01837da35babbbe3c7585161268e0ece095" datatype="html">
         <source>An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>. The link will expire within 1 hour.</source>
-        <target state="new">An email with the reset password instructions will be sent to <x id="INTERPOLATION" equiv-text="{{email}}"/>. The link will expire within 1 hour.</target>
+        <target state="translated">E-mail z instrukcjami resetowania hasła zostanie wysłany pod adres <x id="INTERPOLATION" equiv-text="{{email}}"/>. Link wygaśnie za godzinę.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.ts</context>
           <context context-type="linenumber">1</context>
