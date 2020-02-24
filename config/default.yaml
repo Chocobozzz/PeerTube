@@ -78,6 +78,7 @@ storage:
   previews: 'storage/previews/'
   thumbnails: 'storage/thumbnails/'
   timecode_thumbnails: 'storage/timecode-thumbnails'
+  timecode_spritesheets: 'storage/timecode-spritesheets'
   torrents: 'storage/torrents/'
   captions: 'storage/captions/'
   cache: 'storage/cache/'

@@ -298,11 +298,15 @@ async function addVideo (req: express.Request, res: express.Response) {
   generateVideoTimecodeThumbnails(video, videoFile, ThumbnailType.TIMECODE)
     .then(res => {
       sequelizeTypescript.transaction(async t2 => {
+        // save all returned values contained in res: thumbnails, spritesheets and the manifest
         await Promise.all(res.thumbnails.map(thumbnail => {
-          videoCreated.addAndSaveThumbnail(thumbnail, t2)
-        }))
+          videoCreated.addAndSaveThumbnail(thumbnail, t2).catch(err => logger.error(err))
+        })).catch(err => logger.error(err))
+        await Promise.all(res.spritesheets.map(spritesheet => {
+          videoCreated.addAndSaveThumbnail(spritesheet, t2).catch(err => logger.error(err))
+        })).catch(err => logger.error(err))
         await videoCreated.addAndSaveTimecodeThumbnailManifest(res.manifest, t2)
-      })
+      }).catch(err => logger.error(err))
     })
     .catch(err => logger.error(err))
 

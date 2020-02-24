@@ -124,6 +124,11 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
       label: 'timecode',
       directory: CONFIG.STORAGE.TIMECODE_THUMBNAILS_DIR,
       staticPath: STATIC_PATHS.TIMECODE_THUMBNAILS
+    },
+    [ThumbnailType.SPRITESHEET]: {
+      label: 'spritesheet',
+      directory: CONFIG.STORAGE.TIMECODE_SPRITESHEETS_DIR,
+      staticPath: STATIC_PATHS.TIMECODE_SPRITESHEETS
     }
   }
 

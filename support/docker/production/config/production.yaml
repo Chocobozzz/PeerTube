@@ -51,6 +51,7 @@ storage:
   previews: '../data/previews/'
   thumbnails: '../data/thumbnails/'
   timecode_thumbnails: 'storage/timecode-thumbnails'
+  timecode_spritesheets: 'storage/timecode-spritesheets'
   torrents: '../data/torrents/'
   captions: '../data/captions/'
   cache: '../data/cache/'

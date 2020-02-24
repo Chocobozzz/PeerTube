@@ -5,14 +5,20 @@ import { FFMPEG_NICE, VIDEO_TRANSCODING_FPS, STATIC_PATHS } from '../initializer
 import { processImage } from './image-utils'
 import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
-import { readFile, remove, writeFile } from 'fs-extra'
+import { readFile, remove, writeFile, stat } from 'fs-extra'
 import { CONFIG } from '../initializers/config'
 import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 import { insertBeforeExtension } from './utils'
 import { ThumbnailType } from '@shared/models/videos/thumbnail.type'
 import { createThumbnailFromFunction } from '@server/lib/thumbnail'
 import { TimecodeThumbnailManifestModel } from '@server/models/video/timecode-thumbnail-manifest'
+import { chunk, flatten } from 'lodash'
+import { promisify1 } from './core-utils'
+import { ThumbnailModel } from '@server/models/video/thumbnail'
+import { MThumbnail } from '@server/typings/models'
+import * as sharp from 'sharp'
 const webvtt = require('node-webvtt')
+const spritesmith = promisify1(require('spritesmith').run)
 
 /**
  * A toolbox to play with audio
@@ -239,13 +245,24 @@ async function generateImageFromVideoFile (fromPath: string, folder: string, ima
 }
 
 /**
- * Generates images representing timecodes of the video, used for scrubbing preview
+ * Generates images representing timecodes of the video, used for scrubbing preview.
  *
- * @param fromPath source path
+ * Strategy: generates max 200 images (scrubbing isn't that precise) and minimum
+ * 1 image/sec (more and the image won't represent anything) of 2 resolutions: one
+ * low resolution that is meant to be fetched immediately, another higher resolution
+ * for definitive, on-demand fetching.
+ *
+ * 1) Images are stored in the Thumbnails table with their own type.
+ * 2) Images are then aggregated in spritesheets, per-resolution, chunked per 300KB.
+ * These sprites are stored in the Thumbnails table with their own type.
+ * 3) Sprites are referenced in a per-resolution VTT file, stored in the TimecodeThumbnailManifest table.
+ *
+ * @param fromPath source path of the video file
  * @param folder destination folder
  * @param imageName base image name
  * @param size dimensions to which the images should be resized
  * @param count images/video, always capped at 1 image/sec || 200 images
+ * @returns {{...ThumbnailModel, ...ThumbnailModel, TimecodeThumbnailManifestModel}}
  */
 async function generateTimecodeThumbnailsFromVideoFile (
   fromPath: string,
@@ -257,11 +274,9 @@ async function generateTimecodeThumbnailsFromVideoFile (
   },
   count = 50
 ) {
-  // cap thumbnails at 1 image/sec max
-  const duration = await getDurationFromVideoFile(fromPath)
-  if (count > duration) count = duration
-  if (count > 200) count = 200
+  const finalImageName = i => insertBeforeExtension(imageName, `-${('000' + i).slice(-3)}`)
 
+  // Thumbnail part
   imageName = TimecodeThumbnailManifestModel.generateManifestName().replace(/\.[^.]+$/, extname(imageName))
   const pendingImagePattern = 'pending-' + insertBeforeExtension(imageName, '-%00i')
   const pendingImageName = i => 'pending-' + insertBeforeExtension(imageName, `-${('000' + i).slice(-3)}`)
@@ -272,7 +287,13 @@ async function generateTimecodeThumbnailsFromVideoFile (
     folder
   }
 
-  const thumbnails = []
+  // Cap thumbnails at 1 image/sec max
+  const duration = await getDurationFromVideoFile(fromPath)
+  if (count > duration) count = duration
+  if (count > 200) count = 200
+
+  // Store future thumbnails [returned variable]
+  const thumbnails: ThumbnailModel[] = []
 
   try {
     await new Promise<void>((res, rej) => {
@@ -285,20 +306,20 @@ async function generateTimecodeThumbnailsFromVideoFile (
     for (let i = 1; i <= count; i++) {
       const thumbnailCreator = async () => {
         const pendingImagePath = join(folder, pendingImageName(i))
-        const destination = join(folder, pendingImageName(i).replace('pending-', ''))
+        const destination = join(folder, finalImageName(i))
         await processImage(pendingImagePath, destination, size)
       }
 
       thumbnails.push(
         await createThumbnailFromFunction({
           thumbnailCreator,
-          filename: pendingImageName(i).replace('pending-', ''),
+          filename: finalImageName(i),
           height: size.height,
           width: size.width,
           type: ThumbnailType.TIMECODE,
           automaticallyGenerated: true,
           existingThumbnail: null
-        })
+        }) as ThumbnailModel
       )
     }
   } catch (err) {
@@ -315,25 +336,95 @@ async function generateTimecodeThumbnailsFromVideoFile (
     }
   }
 
+  // Spritesheet part
+  type Coordinates = {
+    x: number
+    y: number
+    width: number
+    height: number
+  }
+  type SpritesmithResult = {
+    image: Buffer
+    coordinates: { [key: string]: Coordinates }
+    properties: {
+      width: number
+      height: number
+    }
+  }
+
+  // Chunk thumbnails in sprites of maximum 100KB
+  const firstThumbnailPath = join(folder, thumbnails[0].filename)
+  const representativeSizeInBytes = (await stat(firstThumbnailPath)).size
+  const _300KBinBytes = 300 * 1024
+  let thumbnailGroups = chunk(
+    thumbnails.map(t => ({ image: t } as { image: ThumbnailModel, text?: string })),
+    Math.ceil(_300KBinBytes / representativeSizeInBytes)
+  )
+
+  // Store future spritesheets [returned variable]
+  const spritesheets: MThumbnail[] = []
+
+  // Spritesheets generation, and modification of thumbnailGroups to add to each
+  // thumbnail the text attribute that will later be used in VTT.
+  thumbnailGroups = await Promise.all(
+    thumbnailGroups.map(async (group, index) => {
+      const result = await spritesmith({
+        src: group.map(g => join(folder, g.image.filename))
+      }) as SpritesmithResult
+
+      spritesheets.push(
+        await createThumbnailFromFunction({
+          thumbnailCreator: async () => {
+            await sharp(result.image)
+              .jpeg({ quality: 80 })
+              .toFile(join(CONFIG.STORAGE.TIMECODE_SPRITESHEETS_DIR, finalImageName(index)))
+          },
+          filename: finalImageName(index),
+          height: result.properties.height,
+          width: result.properties.width,
+          type: ThumbnailType.SPRITESHEET,
+          automaticallyGenerated: true,
+          existingThumbnail: null
+        })
+      )
+
+      // Add text attribute to the current thumbnail group
+      return group.map(g => {
+        const coords = result.coordinates[join(folder, g.image.filename)]
+        return {
+          ...g,
+          text:
+            STATIC_PATHS.TIMECODE_SPRITESHEETS +
+            `${finalImageName(index)}#xywh=${coords.x},${coords.y},${coords.width},${coords.height}`
+        }
+      })
+    })
+  )
+
+  // Manifest part
   const manifest = new TimecodeThumbnailManifestModel()
 
   manifest.filename = imageName.replace(/\.[^.]+$/, '.vtt')
   manifest.thumbnailsCount = count
 
+  const regroupedThumbnails = flatten(thumbnailGroups)
+
   const manifestContent = webvtt.compile({
     valid: true,
-    cues: Array(count).fill(0).map((x, i) => ({
+    cues: Array(count).fill(0).map((_, i) => ({
       identifier: '',
       start: (i * duration / count),
       end: ((i + 1) * duration / count),
-      text: join(STATIC_PATHS.TIMECODE_THUMBNAILS, pendingImageName(i + 1).replace('pending-', '')),
+      text: regroupedThumbnails[i].text,
       styles: ''
     }))
   })
   await writeFile(join(folder, manifest.filename), manifestContent)
 
+  // all are saved as objects in db later: c.f. i.e. generateVideoTimecodeThumbnails
   return {
     thumbnails,
+    spritesheets,
     manifest
   }
 }

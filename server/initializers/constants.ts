@@ -516,6 +516,7 @@ const STATIC_PATHS = {
   PREVIEWS: '/static/previews/',
   THUMBNAILS: '/static/thumbnails/',
   TIMECODE_THUMBNAILS: '/static/timecode-thumbnails/',
+  TIMECODE_SPRITESHEETS: '/static/timecode-spritesheets/',
   TORRENTS: '/static/torrents/',
   WEBSEED: '/static/webseed/',
   REDUNDANCY: '/static/redundancy/',

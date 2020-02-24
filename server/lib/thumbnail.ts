@@ -189,5 +189,19 @@ function buildMetadataFromVideo (video: MVideoThumbnail, type: ThumbnailType, si
     }
   }
 
+  if (type === ThumbnailType.SPRITESHEET) {
+    const filename = join(video.uuid, video.generateThumbnailName())
+    const basePath = CONFIG.STORAGE.TIMECODE_SPRITESHEETS_DIR
+
+    return {
+      filename,
+      basePath,
+      existingThumbnail: undefined,
+      outputPath: join(basePath, filename),
+      height: size ? size.height : THUMBNAILS_SIZE.height,
+      width: size ? size.width : THUMBNAILS_SIZE.width
+    }
+  }
+
   return undefined
 }

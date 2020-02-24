@@ -137,6 +137,7 @@
     "sharp": "^0.25.2",
     "sitemap": "^6.1.0",
     "socket.io": "^2.2.0",
+    "spritesmith": "^3.4.0",
     "srt-to-vtt": "^1.1.2",
     "tsconfig-paths": "^3.9.0",
     "useragent": "^2.3.0",
