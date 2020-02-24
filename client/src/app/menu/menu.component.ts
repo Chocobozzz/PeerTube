@@ -5,10 +5,9 @@ import { User } from '@app/shared/users/user.model'
 import { UserService } from '@app/shared/users/user.service'
 import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { HotkeysService } from 'angular2-hotkeys'
-import { ServerConfig, I18N_LOCALES, UserUpdateMe } from '@shared/models'
+import { ServerConfig, VideoConstant } from '@shared/models'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { startsWith, pickBy } from 'lodash-es'
 
 @Component({
   selector: 'my-menu',
@@ -23,6 +22,7 @@ export class MenuComponent implements OnInit {
   isLoggedIn: boolean
   userHasAdminAccess = false
   helpVisible = false
+  languages: VideoConstant<string>[]
 
   private serverConfig: ServerConfig
   private routesPerRight: { [ role in UserRight ]?: string } = {
@@ -70,9 +70,9 @@ export class MenuComponent implements OnInit {
       }
     )
 
-    this.hotkeysService.cheatSheetToggle.subscribe(isOpen => {
-      this.helpVisible = isOpen
-    })
+    this.hotkeysService.cheatSheetToggle.subscribe(isOpen => this.helpVisible = isOpen)
+
+    this.serverService.getVideoLanguages().subscribe(languages => this.languages = languages)
   }
 
   get language () {
@@ -82,8 +82,8 @@ export class MenuComponent implements OnInit {
   get videoLanguages (): string[] {
     if (!this.user.videoLanguages) return [this.i18n('any language')]
     return this.user.videoLanguages
-      .map(l => Object.values(pickBy(I18N_LOCALES, (_, key) => startsWith(key, l)))[0])
-      .map(v => v === undefined ? '?' : v)
+      .map(locale => this.langForLocale(locale))
+      .map(value => value === undefined ? '?' : value)
   }
 
   get nsfwPolicy () {
@@ -154,7 +154,11 @@ export class MenuComponent implements OnInit {
     this.user.webTorrentEnabled = !this.user.webTorrentEnabled
     this.userService.updateMyProfile({
       webTorrentEnabled: this.user.webTorrentEnabled
-    } as UserUpdateMe).subscribe(() => this.authService.refreshUserInformation())
+    }).subscribe(() => this.authService.refreshUserInformation())
+  }
+
+  langForLocale(localeId: string) {
+    return this.languages.find(lang => lang.id = localeId).label
   }
 
   private computeIsUserHasAdminAccess () {

@@ -19,14 +19,13 @@ import { pick } from 'lodash-es'
 })
 export class MyAccountVideoSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User = null
-  @Input() reactive = false
-  @Input() notify = true
+  @Input() reactiveUpdate = false
+  @Input() notifyOnUpdate = true
   @Input() userInformationLoaded: Subject<any>
 
   languageItems: SelectItem[] = []
   defaultNSFWPolicy: NSFWPolicyType
-  old: any
-  watcher: Subscription
+  formValuesWatcher: Subscription
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -40,6 +39,8 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
   }
 
   ngOnInit () {
+    let oldForm: any
+
     this.buildForm({
       nsfwPolicy: null,
       webTorrentEnabled: null,
@@ -71,22 +72,22 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
         videoLanguages
       })
 
-      if (this.reactive) {
-        this.old = { ...this.form.value }
-        this.watcher = this.form.valueChanges.subscribe((val: any) => {
-          const key = Object.keys(val).find(k => val[k] !== this.old[k])
-          this.old = { ...this.form.value }
-          this.updateDetails([key])
+      if (this.reactiveUpdate) {
+        oldForm = { ...this.form.value }
+        this.formValuesWatcher = this.form.valueChanges.subscribe((formValue: any) => {
+          const updatedKey = Object.keys(formValue).find(k => formValue[k] !== oldForm[k])
+          oldForm = { ...this.form.value }
+          this.updateDetails([updatedKey])
         })
       }
     })
   }
 
   ngOnDestroy () {
-    this.watcher.unsubscribe()
+    this.formValuesWatcher?.unsubscribe()
   }
 
-  updateDetails (onylKeys?: string[]) {
+  updateDetails (onlyKeys?: string[]) {
     const nsfwPolicy = this.form.value[ 'nsfwPolicy' ]
     const webTorrentEnabled = this.form.value['webTorrentEnabled']
     const autoPlayVideo = this.form.value['autoPlayVideo']
@@ -113,21 +114,21 @@ export class MyAccountVideoSettingsComponent extends FormReactive implements OnI
       videoLanguages
     }
 
-    if (onylKeys) details = pick(details, onylKeys)
+    if (onlyKeys) details = pick(details, onlyKeys)
 
     if (this.authService.isLoggedIn()) {
       this.userService.updateMyProfile(details).subscribe(
         () => {
           this.authService.refreshUserInformation()
 
-          if (this.notify) this.notifier.success(this.i18n('Video settings updated.'))
+          if (this.notifyOnUpdate) this.notifier.success(this.i18n('Video settings updated.'))
         },
 
         err => this.notifier.error(err.message)
       )
     } else {
       this.userService.updateMyAnonymousProfile(details)
-      if (this.notify) this.notifier.success(this.i18n('Display/Video settings updated.'))
+      if (this.notifyOnUpdate) this.notifier.success(this.i18n('Display/Video settings updated.'))
     }
   }
 

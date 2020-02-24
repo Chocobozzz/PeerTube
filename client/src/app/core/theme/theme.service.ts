@@ -78,14 +78,11 @@ export class ThemeService {
   private getCurrentTheme () {
     if (this.themeFromLocalStorage) return this.themeFromLocalStorage.name
 
-    if (this.auth.isLoggedIn()) {
-      const theme = this.auth.getUser().theme
-      if (theme !== 'instance-default') return theme
-    } else {
-      const theme = this.userService.getAnonymousUser().theme
-      if (theme !== 'instance-default') return theme
-    }
+    const theme = this.auth.isLoggedIn()
+      ? this.auth.getUser().theme
+      : this.userService.getAnonymousUser().theme
 
+    if (theme !== 'instance-default') return theme
     return this.serverConfig.theme.default
   }
 
@@ -115,11 +112,9 @@ export class ThemeService {
 
       this.pluginService.reloadLoadedScopes()
 
-      // end of event loop, we don't need to use the storage service
-      peertubeLocalStorage.setItem(User.KEYS.THEME, JSON.stringify(theme))
+      this.localStorageService.setItem(User.KEYS.THEME, JSON.stringify(theme), false)
     } else {
-      // end of event loop, we don't need to use the storage service
-      peertubeLocalStorage.removeItem(User.KEYS.THEME)
+      this.localStorageService.removeItem(User.KEYS.THEME, false)
     }
 
     this.oldThemeName = currentTheme
@@ -134,7 +129,7 @@ export class ThemeService {
       this.updateCurrentTheme()
 
       this.localStorageService.watch([User.KEYS.THEME]).subscribe(
-        key => this.updateCurrentTheme()
+        () => this.updateCurrentTheme()
       )
     }
 

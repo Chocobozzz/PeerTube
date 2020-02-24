@@ -133,7 +133,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
       User.KEYS.NSFW_POLICY,
       User.KEYS.VIDEO_LANGUAGES
     ]).pipe(throttleTime(200)).subscribe(
-      key => {
+      () => {
         this.loadUserVideoLanguagesIfNeeded()
         if (this.hasDoneFirstQuery) this.reloadVideos()
       }

@@ -74,7 +74,7 @@
 
 @mixin fill-svg-color ($color) {
   ::ng-deep svg {
-    ::ng-deep path {
+    path {
       fill: $color;
     }
   }

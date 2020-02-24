@@ -15,11 +15,11 @@ import { Subject, Subscription } from 'rxjs'
 })
 export class MyAccountInterfaceSettingsComponent extends FormReactive implements OnInit, OnDestroy {
   @Input() user: User = null
-  @Input() reactive = false
-  @Input() notify = true
+  @Input() reactiveUpdate = false
+  @Input() notifyOnUpdate = true
   @Input() userInformationLoaded: Subject<any>
 
-  watcher: Subscription
+  formValuesWatcher: Subscription
 
   private serverConfig: ServerConfig
 
@@ -54,14 +54,14 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
           theme: this.user.theme
         })
 
-        if (this.reactive) {
-          this.watcher = this.form.valueChanges.subscribe(val => this.updateInterfaceSettings())
+        if (this.reactiveUpdate) {
+          this.formValuesWatcher = this.form.valueChanges.subscribe(val => this.updateInterfaceSettings())
         }
       })
   }
 
   ngOnDestroy () {
-    this.watcher.unsubscribe()
+    this.formValuesWatcher?.unsubscribe()
   }
 
   updateInterfaceSettings () {
@@ -76,14 +76,14 @@ export class MyAccountInterfaceSettingsComponent extends FormReactive implements
         () => {
           this.authService.refreshUserInformation()
 
-          if (this.notify) this.notifier.success(this.i18n('Interface settings updated.'))
+          if (this.notifyOnUpdate) this.notifier.success(this.i18n('Interface settings updated.'))
         },
 
         err => this.notifier.error(err.message)
       )
     } else {
       this.userService.updateMyAnonymousProfile(details)
-      if (this.notify) this.notifier.success(this.i18n('Interface settings updated.'))
+      if (this.notifyOnUpdate) this.notifier.success(this.i18n('Interface settings updated.'))
     }
   }
 }

@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { ReplaySubject } from 'rxjs'
 import { LocalStorageService } from '@app/shared/misc/storage.service'
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'my-quick-settings',
@@ -16,7 +17,6 @@ export class QuickSettingsModalComponent extends FormReactive implements OnInit 
 
   user: User
   userInformationLoaded = new ReplaySubject<boolean>(1)
-  notify = true
 
   private openedModal: NgbModalRef
 
@@ -33,20 +33,18 @@ export class QuickSettingsModalComponent extends FormReactive implements OnInit 
   ngOnInit () {
     this.user = this.userService.getAnonymousUser()
     this.localStorageService.watch().subscribe(
-      key => this.user = this.userService.getAnonymousUser()
+      () => this.user = this.userService.getAnonymousUser()
     )
     this.userInformationLoaded.next(true)
 
-    this.authService.loginChangedSource.subscribe(
-      status => {
-        if (status !== AuthStatus.LoggedIn) {
-          this.notify = false
+    this.authService.loginChangedSource
+      .pipe(filter(status => status !== AuthStatus.LoggedIn))
+      .subscribe(
+        () => {
           this.user = this.userService.getAnonymousUser()
           this.userInformationLoaded.next(true)
-          this.notify = true
         }
-      }
-    )
+      )
   }
 
   isUserLoggedIn () {

@@ -18,14 +18,14 @@ abstract class StorageService {
     return this.instance.getItem(key)
   }
 
-  setItem (key: string, data: any) {
+  setItem (key: string, data: any, notifyOfUpdate = true) {
     this.instance.setItem(key, data)
-    StorageService.storageSub.next(key)
+    if (notifyOfUpdate) StorageService.storageSub.next(key)
   }
 
-  removeItem (key: string) {
+  removeItem (key: string, notifyOfUpdate = true) {
     this.instance.removeItem(key)
-    StorageService.storageSub.next(key)
+    if (notifyOfUpdate) StorageService.storageSub.next(key)
   }
 }
 

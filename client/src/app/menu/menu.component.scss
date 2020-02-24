@@ -188,12 +188,12 @@ menu {
     & > div:not(.panel-block) {
       padding-left: $menu-lateral-padding;
       padding-right: $menu-lateral-padding;
+      row-gap: 1em;
     }
 
     $footer-links-base-opacity: .8;
 
-    #links-primary,
-    #links-secondary {
+    .footer-links {
       display: inline-flex;
       flex-wrap: wrap;
 
@@ -228,7 +228,7 @@ menu {
       }
     }
 
-    #copyleft small a {
+    .footer-copyleft small a {
       @include disable-default-a-behaviour;
 
       color: var(--mainBackgroundColor);
@@ -262,15 +262,16 @@ menu {
     }
   }
 
-  my-global-icon[initial="false"] {
+  my-global-icon.not-displayed {
     display: none;
   }
+
   &:hover {
-    my-global-icon[initial="true"] {
-      display: none;
-    }
-    my-global-icon[initial="false"] {
+    my-global-icon.hover-display-toggle.not-displayed {
       display: inherit;
+    }
+    my-global-icon.hover-display-toggle {
+      display: none;
     }
   }
 }
@@ -297,7 +298,7 @@ menu {
 
 input[type=checkbox]{
   position: absolute;
-	visibility: hidden;
+  visibility: hidden;
 }
 
 label {

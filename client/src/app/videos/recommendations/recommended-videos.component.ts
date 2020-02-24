@@ -44,7 +44,7 @@ export class RecommendedVideosComponent implements OnChanges {
     } else {
       this.autoPlayNextVideo = this.sessionStorageService.getItem(User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true' || false
       this.sessionStorageService.watch([User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO]).subscribe(
-        key => this.autoPlayNextVideo = this.sessionStorageService.getItem(User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
+        () => this.autoPlayNextVideo = this.sessionStorageService.getItem(User.KEYS.SESSION_STORAGE_AUTO_PLAY_NEXT_VIDEO) === 'true'
       )
     }
 
