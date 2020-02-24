@@ -257,7 +257,7 @@
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
-        <target>通知はありません。</target>
+        <target>通知がありません。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -285,16 +285,12 @@
       </trans-unit>
       <trans-unit id="cd1df1f67905a0fc5c598a95f450ab6cfd6ca3c6" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted </source>
-        <target state="new">
-          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been unblacklisted
-        </target>
+        <target state="translated">あなたの動画 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> がブラックリストから外されました。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">32</context></context-group>
       </trans-unit>
       <trans-unit id="066903c4bc7d397c799979d64ce8c450792eb664" datatype="html">
         <source>Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blacklisted </source>
-        <target state="new">
-          Your video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been blacklisted
-        </target>
+        <target state="translated">あなたの動画 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> がブラックリストされました。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">40</context></context-group>
       </trans-unit>
       <trans-unit id="b5e2152dd5b4222093fcec9c8289f12308a598e7" datatype="html">
@@ -306,9 +302,7 @@
       </trans-unit>
       <trans-unit id="8b6534c6f0dab443bd67f7d6b51f5347b115b9af" datatype="html">
         <source>The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target state="new">
-          The recently added video <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> has been <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>auto-blacklisted<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">最近追加された動画 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.videoBlacklist.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> が <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>自動的にブラックリストされました。<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="bb62d9c0e9059be1f08d6a03a946bdae8623e04a" datatype="html">
@@ -354,9 +348,7 @@
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
         <source>User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> registered on your instance </source>
-        <target state="new">
-          User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> registered on your instance
-        </target>
+        <target state="translated">ユーザー <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> がこのインスタンスに登録しました </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">110</context>
@@ -858,7 +850,7 @@
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
         <source>PeerTube version</source>
-        <target state="new">PeerTube version</target>
+        <target state="translated">PeerTubeバージョン</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">5</context>
@@ -874,7 +866,7 @@
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c">
         <source>User registration allowed</source>
-        <target>ユーザーの登録を許可する</target>
+        <target>ユーザー登録が可能です</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
@@ -940,7 +932,7 @@
       </trans-unit>
       <trans-unit id="59bdc3dfa4075f92c734588899485db702c8f120" datatype="html">
         <source>Player</source>
-        <target state="new">Player</target>
+        <target state="translated">プレーヤー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
@@ -1015,7 +1007,7 @@
       </trans-unit>
       <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7" datatype="html">
         <source>Federation</source>
-        <target state="new">Federation</target>
+        <target state="translated">連合</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -1127,7 +1119,7 @@
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
         <source>Request new verification email.</source>
-        <target>新しい確認メールをリクエストする</target>
+        <target>新しい登録確認メールを要求</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
@@ -1317,7 +1309,7 @@
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> 人が購読</target>
+        <target>チャンネル登録者数 <x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/>人</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
         </context-group>
@@ -1593,7 +1585,7 @@
       </trans-unit>
       <trans-unit id="1eecebc91b4c671d43617b559cf3933275492931" datatype="html">
         <source>Account settings</source>
-        <target state="new">Account settings</target>
+        <target state="translated">アカウント設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">25</context>
@@ -1601,7 +1593,7 @@
       </trans-unit>
       <trans-unit id="7c55f3a275f9e86fc95243e2fd1f17156a4e97f0" datatype="html">
         <source>Channels settings</source>
-        <target state="new">Channels settings</target>
+        <target state="translated">チャンネル設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1660,7 +1652,7 @@
       </trans-unit>
       <trans-unit id="357064ca9d9ac859eb618e28e8126fa32be049e2">
         <source>Subscriptions</source>
-        <target>購読</target>
+        <target>登録チャンネル</target>
         <context-group name="null">
           <context context-type="linenumber">51</context>
         </context-group>
@@ -1676,12 +1668,12 @@
       </trans-unit>
       <trans-unit id="411ca58f59b00246e15b161e07409df55b5eb6db" datatype="html">
         <source>Discover</source>
-        <target state="new">Discover</target>
+        <target state="translated">ディスカバー</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="b6b7986bc3721ac483baf20bc9a320529075c807">
         <source>Trending</source>
-        <target>トレンド</target>
+        <target>急上昇</target>
         <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
@@ -1689,12 +1681,12 @@
       </trans-unit>
       <trans-unit id="9d9983bd6d0817a5b1bb7650034a2f9a5f4b7bac" datatype="html">
         <source>Most liked</source>
-        <target state="new">Most liked</target>
+        <target state="translated">最も好まれている動画</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
         <source>Recently added</source>
-        <target>最近追加された</target>
+        <target>最近追加された動画</target>
         <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
@@ -1710,7 +1702,7 @@
       </trans-unit>
       <trans-unit id="b7648e7aced164498aa843b5c4e8f2f1c36a7919">
         <source>Administration</source>
-        <target>運営</target>
+        <target>管理</target>
         <context-group name="null">
           <context context-type="linenumber">95</context>
         </context-group>
@@ -1718,7 +1710,7 @@
       </trans-unit>
       <trans-unit id="004b222ff9ef9dd4771b777950ca1d0e4cd4348a">
         <source>About</source>
-        <target>私たちについて</target>
+        <target>このインスタンスについて</target>
         <context-group name="null">
           <context context-type="linenumber">26</context>
         </context-group>
@@ -2208,7 +2200,7 @@
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
-        <target>動画を公開する前にトランスコーディングを待ってください。</target>
+        <target>公開する前にトランスコーディングを終わらせる</target>
         <context-group name="null">
           <context context-type="linenumber">146</context>
         </context-group>
@@ -2336,7 +2328,7 @@
       </trans-unit>
       <trans-unit id="4f6ce709bf09f9f24c161840ae983971a09fb12c">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target>これは、コンテンツが最初に公開された日付です (例: 映画の公開日)。</target>
+        <target state="translated">これは、コンテンツが最初に公開された日付です (例: 映画の公開日)。</target>
         <context-group name="null">
           <context context-type="linenumber">240</context>
         </context-group>
@@ -2389,7 +2381,7 @@
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
         <source>Sorry, but something went wrong</source>
-        <target>申し訳ありませんが、何かが間違っていました。</target>
+        <target>申し訳ありませんが、何か問題が発生しました</target>
         <context-group name="null">
           <context context-type="linenumber">53</context>
         </context-group>
@@ -2466,7 +2458,7 @@
       </trans-unit>
       <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
         <source>Publish will be available when upload is finished</source>
-        <target>アップロードが完了すると公開が可能になります。</target>
+        <target>アップロードが終わったら公開することができます</target>
         <context-group name="null">
           <context context-type="linenumber">79</context>
         </context-group>
@@ -4384,7 +4376,7 @@
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">ディスカバー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">219</context>
@@ -4392,7 +4384,7 @@
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">急上昇</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">220</context>
@@ -4400,7 +4392,7 @@
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">最も好まれている動画</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">221</context>
@@ -4732,7 +4724,7 @@
       </trans-unit>
       <trans-unit id="1fa92c6ce274f878b2625587daa7e08b2a3a8b38" datatype="html">
         <source>Cache</source>
-        <target state="new">Cache</target>
+        <target state="translated">キャッシュ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">586</context></context-group>
       </trans-unit>
       <trans-unit id="d5bf7bea37daff4e018fd11a1b552512e5cb54c0">
@@ -5026,7 +5018,7 @@
       </trans-unit>
       <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
         <source>Theme</source>
-        <target state="new">Theme</target>
+        <target state="translated">テーマ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-interface/my-account-interface-settings.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5156,7 +5148,7 @@
       </trans-unit>
       <trans-unit id="8fef247fd0c5bf790151f7661cafc4b7fd0397f3">
         <source><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> 人の登録者</target>
+        <target>チャンネル登録者数 <x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/>人</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
@@ -5205,7 +5197,7 @@
       </trans-unit>
       <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> 人の登録者</target>
+        <target>チャンネル登録者数 <x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/>人</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -5237,7 +5229,7 @@
       </trans-unit>
       <trans-unit id="d1a04ba05116499d4cf59a48a282a8bcbf5b622d">
         <source>Once you delete your account, there is no going back. Please be certain.</source>
-        <target>アカウントを削除したら、元に戻すことはできません。よろしいですね?</target>
+        <target>アカウントを削除すると元に戻すことはできません。よろしいですか?</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -5253,7 +5245,7 @@
       </trans-unit>
       <trans-unit id="3a5d57052d13d2da1cbcffdbb8effb9874b1595a">
         <source>You don't have any subscriptions yet.</source>
-        <target>あなたはまだ購読をしていません。</target>
+        <target>登録チャンネルはまだありません。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -5389,7 +5381,7 @@
       </trans-unit>
       <trans-unit id="3346d8a0bf3dd8c25ddc561ccd5fafb6ee9fadc8" datatype="html">
         <source>Welcome to PeerTube!</source>
-        <target state="new">Welcome to PeerTube!</target>
+        <target state="translated">PeerTubeへようこそ！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/shared/signup-success.component.html</context>
           <context context-type="linenumber">8</context>
@@ -5522,7 +5514,7 @@
       </trans-unit>
       <trans-unit id="87f77a03c185ea644ed8378a562a2d0225513974" datatype="html">
         <source>This account does not have channels.</source>
-        <target state="new">This account does not have channels.</target>
+        <target state="translated">このアカウントはチャンネルを持ってません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5550,7 +5542,7 @@
       </trans-unit>
       <trans-unit id="7bfe8fdef5d1a90e5bf286ec6ed4c079522a9b44" datatype="html">
         <source>This channel doesn't have any videos.</source>
-        <target state="new">This channel doesn't have any videos.</target>
+        <target state="translated">このチャンネルには動画がありません。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">19</context>
@@ -5635,7 +5627,7 @@
       </trans-unit>
       <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a" datatype="html">
         <source>Follows</source>
-        <target state="new">Follows</target>
+        <target state="translated">フォロー</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -5683,7 +5675,7 @@
       </trans-unit>
       <trans-unit id="ce301bc59085d13cf569fb7a97f073148435ec27" datatype="html">
         <source>About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></source>
-        <target state="new">About <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> について</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5777,7 +5769,7 @@
       </trans-unit>
       <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
         <source>Features found on this instance</source>
-        <target>このインスタンスで見つかった機能</target>
+        <target>このインスタンスの特徴</target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
         </context-group>
@@ -5796,9 +5788,7 @@
       </trans-unit>
       <trans-unit id="6b8b10fedeff64aa441ebedc2b7fbd07f6f246c1" datatype="html">
         <source>What is PeerTube?</source>
-        <target state="new">
-    What is PeerTube?
-  </target>
+        <target state="translated">PeerTubeとは？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">2</context>
@@ -6138,7 +6128,7 @@
       </trans-unit>
       <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">次</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6164,7 +6154,7 @@
       </trans-unit>
       <trans-unit id="8dd413cee2228118c536f503709329a4d1a395e2" datatype="html">
         <source>Done</source>
-        <target state="new">Done</target>
+        <target state="translated">終了</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">33</context>
@@ -6233,7 +6223,7 @@
       </trans-unit>
       <trans-unit id="306a2ab7f93c214af3f5579f54bd8b3ad0d5560e" datatype="html">
         <source>Channel name</source>
-        <target state="new">Channel name</target>
+        <target state="translated">チャンネル名</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">30</context>
@@ -6241,7 +6231,7 @@
       </trans-unit>
       <trans-unit id="cb4c2c5a4f4b34d3158f2344a3e625d0dc321f4d" datatype="html">
         <source>Example: my_super_channel</source>
-        <target state="new">Example: my_super_channel</target>
+        <target state="translated">例: my_super_channel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">34</context>
@@ -6576,7 +6566,7 @@
       </trans-unit>
       <trans-unit id="3d8e85e3f78a29db7959c495e74cc9af90838430">
         <source>Do you really want to reject this follower?</source>
-        <target>このフォロワーを本当に拒否しますか</target>
+        <target>このフォロワーを本当に拒否しますか？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -6600,7 +6590,7 @@
       </trans-unit>
       <trans-unit id="150d48f01a24d84c2bfffb2761419b9482074b61">
         <source>Do you really want to delete this follower?</source>
-        <target>このフォロワーを本当に削除しますか</target>
+        <target>このフォロワーを本当に削除しますか？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7359,7 +7349,7 @@
       </trans-unit>
       <trans-unit id="7c193bf704577e514b63497c4f366511afdb6585">
         <source>New video from your subscriptions</source>
-        <target>あなたの購読からの新しい動画</target>
+        <target>登録チャンネルから新しい動画がアップロードされました</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7642,7 +7632,7 @@
       </trans-unit>
       <trans-unit id="29038e66547b3ba70701fb34eda68834a56f17d9">
         <source>My subscriptions</source>
-        <target>購読</target>
+        <target>登録チャンネル</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7764,7 +7754,7 @@
       </trans-unit>
       <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81" datatype="html">
         <source>Go to the discover videos page</source>
-        <target state="new">Go to the discover videos page</target>
+        <target state="translated">ディスカバーページへ移動</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7772,7 +7762,7 @@
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0">
         <source>Go to the trending videos page</source>
-        <target>トレンドの動画ページへ移動する</target>
+        <target>急上昇ページへ移動する</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7804,7 +7794,7 @@
       </trans-unit>
       <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2">
         <source>Go to my subscriptions</source>
-        <target>購読一覧</target>
+        <target>登録チャンネルへ移動</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9690,7 +9680,7 @@
       </trans-unit>
       <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26">
         <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> の購読を解除しました。</target>
+        <target><x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> のチャンネル登録を外しました</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9780,7 +9770,7 @@
       </trans-unit>
       <trans-unit id="ef90545bc832876c0d7f9a10363c75137472bbb5">
         <source>Copied</source>
-        <target>コピーしました。</target>
+        <target>コピーしました</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9972,7 +9962,7 @@
       </trans-unit>
       <trans-unit id="c5cb19aeb6447deda40cc1227ceca1359ab955e9">
         <source>Upload cancelled</source>
-        <target>アップロードがキャンセルされました。</target>
+        <target>アップロードがキャンセルされました</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10268,7 +10258,7 @@
       </trans-unit>
       <trans-unit id="1b157e15c434469d91e56d027b78bf69c9983165">
         <source>Videos from your subscriptions</source>
-        <target>購読した動画</target>
+        <target>登録チャンネルからの動画</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
