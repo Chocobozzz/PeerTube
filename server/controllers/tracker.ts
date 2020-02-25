@@ -87,7 +87,7 @@ function createWebsocketTrackerServer (app: express.Application) {
   })
 
   server.on('upgrade', (request: express.Request, socket, head) => {
-    if (request.path === '/tracker/socket') {
+    if (request.url === '/tracker/socket') {
       wss.handleUpgrade(request, socket, head, ws => wss.emit('connection', ws, request))
     }
 
