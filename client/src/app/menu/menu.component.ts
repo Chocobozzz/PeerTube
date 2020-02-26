@@ -20,9 +20,10 @@ export class MenuComponent implements OnInit {
 
   user: User
   isLoggedIn: boolean
+
   userHasAdminAccess = false
   helpVisible = false
-  languages: VideoConstant<string>[]
+  languages: VideoConstant<string>[] = []
 
   private serverConfig: ServerConfig
   private routesPerRight: { [ role in UserRight ]?: string } = {
@@ -80,6 +81,7 @@ export class MenuComponent implements OnInit {
   }
 
   get videoLanguages (): string[] {
+    if (!this.user) return
     if (!this.user.videoLanguages) return [this.i18n('any language')]
     return this.user.videoLanguages
       .map(locale => this.langForLocale(locale))
@@ -87,6 +89,7 @@ export class MenuComponent implements OnInit {
   }
 
   get nsfwPolicy () {
+    if (!this.user) return
     switch (this.user.nsfwPolicy) {
       case 'do_not_list':
         return this.i18n('hide')
@@ -151,6 +154,7 @@ export class MenuComponent implements OnInit {
   }
 
   toggleUseP2P () {
+    if (!this.user) return
     this.user.webTorrentEnabled = !this.user.webTorrentEnabled
     this.userService.updateMyProfile({
       webTorrentEnabled: this.user.webTorrentEnabled

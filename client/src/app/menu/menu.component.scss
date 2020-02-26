@@ -302,40 +302,40 @@ input[type=checkbox]{
 }
 
 label {
-	cursor: pointer;
-	text-indent: -9999px;
-	width: 35px;
-	height: 20px;
-	background: #cccccc;
-	display: block;
-	border-radius: 100px;
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 35px;
+  height: 20px;
+  background: #cccccc;
+  display: block;
+  border-radius: 100px;
   position: relative;
   margin: 0;
-}
 
-label:after {
-	content: '';
-	position: absolute;
-	top: 3px;
-	left: 3px;
-	width: 14px;
-	height: 14px;
-	background: var(--mainBackgroundColor);
-	border-radius: 50%;
-	transition: 0.3s ease-out;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: var(--mainBackgroundColor);
+    border-radius: 50%;
+    transition: 0.3s ease-out;
+  }
+
+  &:active:after {
+    width: 40px;
+  }
 }
 
 input:checked + label {
-	background: var(--mainColor);
-}
+  background: var(--mainColor);
 
-input:checked + label:after {
-	left: calc(100% - 3px);
-	transform: translateX(-100%);
-}
-
-label:active:after {
-	width: 40px;
+  &:after {
+    left: calc(100% - 3px);
+    transform: translateX(-100%);
+  }
 }
 
 @media screen and (max-width: $mobile-view) {

@@ -86,7 +86,11 @@ export class UserService {
     }
 
     for (const key of Object.keys(profile)) {
-      if (has(supportedKeys, key)) supportedKeys[key](profile[key])
+      try {
+        if (has(supportedKeys, key)) supportedKeys[key](profile[key])
+      } catch (err) {
+        console.error(`Cannot set item ${key} in localStorage. Likely due to a value impossible to stringify.`, err)
+      }
     }
   }
 
@@ -239,8 +243,9 @@ export class UserService {
     let videoLanguages
     try {
       videoLanguages = JSON.parse(this.localStorageService.getItem(User.KEYS.VIDEO_LANGUAGES))
-    } catch (e) {
+    } catch (err) {
       videoLanguages = null
+      console.error('Cannot parse desired video languages from localStorage.', err)
     }
 
     return new User({

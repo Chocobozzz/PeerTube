@@ -27,12 +27,11 @@ import { objectToFormData } from '@app/shared/misc/utils'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { ServerService } from '@app/core'
+import { ServerService, AuthService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { peertubeLocalStorage } from '../misc/peertube-web-storage'
-import { User } from '../users'
+import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 
 export interface VideosProvider {
   getVideos (parameters: {
@@ -51,6 +50,8 @@ export class VideoService implements VideosProvider {
 
   constructor (
     private authHttp: HttpClient,
+    private authService: AuthService,
+    private userService: UserService,
     private restExtractor: RestExtractor,
     private restService: RestService,
     private serverService: ServerService,
@@ -218,7 +219,10 @@ export class VideoService implements VideosProvider {
     if (nsfw) {
       params = params.set('nsfw', nsfw + '')
     } else {
-      if (peertubeLocalStorage.getItem(User.KEYS.NSFW_POLICY) === 'do_not_list') params.set('nsfw', 'false')
+      const nsfwPolicy = this.authService.isLoggedIn()
+        ? this.authService.getUser().nsfwPolicy
+        : this.userService.getAnonymousUser().nsfwPolicy
+      if (this.nsfwPolicyToFilter(nsfwPolicy)) params.set('nsfw', 'false')
     }
 
     if (languageOneOf) {
@@ -376,5 +380,9 @@ export class VideoService implements VideosProvider {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  private nsfwPolicyToFilter (policy: NSFWPolicyType) {
+    return policy === 'do_not_list'
   }
 }
