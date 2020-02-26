@@ -7574,7 +7574,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca" datatype="html">
         <source>Relevance</source>
-        <target state="new">Relevance</target>
+        <target state="translated">Trafność</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7742,7 +7742,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="545f5dea553b2d7c4a65920ccdcb1e9dbdc7f4d8" datatype="html">
         <source>Captions cache size is required.</source>
-        <target state="new">Captions cache size is required.</target>
+        <target state="translated">Rozmiar pamięci podręcznej napisów jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7750,7 +7750,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a8d7131c0ca1eefe7b058e6081236ca1be364e2c" datatype="html">
         <source>Captions cache size must be greater than 1.</source>
-        <target state="new">Captions cache size must be greater than 1.</target>
+        <target state="translated">Rozmiar pamięci podręcznej napisów musi być większy niż 1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7758,7 +7758,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c3decd47b03cf542df091c1a2fb25b756e59074e" datatype="html">
         <source>Captions cache size must be a number.</source>
-        <target state="new">Captions cache size must be a number.</target>
+        <target state="translated">Rozmiar pamięci podręcznej napisów musi być liczbą.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7814,7 +7814,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4166cc066b963a23829b48a09e394f73b453fabd" datatype="html">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target state="new">Transcoding threads must be greater or equal to 0.</target>
+        <target state="translated">Ilość wątków transkodowania musi być większa niż lub równa 0.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7856,7 +7856,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="ac451f128840b34804ea69c820dc3566f476fb33" datatype="html">
         <source>Your name is required.</source>
-        <target state="new">Your name is required.</target>
+        <target state="translated">Twoje imię jest wymagane.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7864,7 +7864,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1fc4633008a2431fdec891d58efcc8b865d7de1a" datatype="html">
         <source>Your name must be at least 1 character long.</source>
-        <target state="new">Your name must be at least 1 character long.</target>
+        <target state="translated">Twoje imię musi mieć przynajmniej 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7872,7 +7872,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c7b44b92c0ce3ccd2f804d001e13da399524e11b" datatype="html">
         <source>Your name cannot be more than 120 characters long.</source>
-        <target state="new">Your name cannot be more than 120 characters long.</target>
+        <target state="translated">Twoje imię nie może mieć więcej niż 120 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7880,7 +7880,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="73417de6b009e361996f9cd0e3b83d88bed368b6" datatype="html">
         <source>A subject is required.</source>
-        <target state="new">A subject is required.</target>
+        <target state="translated">Temat jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7888,7 +7888,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4f049fd004313524afeaf0ae25f98583a0ffd29b" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">Temat musi mieć przynajmniej 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7896,7 +7896,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="d82f880ea1d0ee03c47bf1212a0fbcb23b3edf18" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">Temat nie może mieć więcej niż 120 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7904,7 +7904,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="40b35cf927f9f9a59404a6c914ec4632690b69b2" datatype="html">
         <source>A message is required.</source>
-        <target state="new">A message is required.</target>
+        <target state="translated">Wiadomość jest wymagana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7912,7 +7912,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="d8d4a23f467ee3e93ca0edb1198c233ed633cf64" datatype="html">
         <source>The message must be at least 3 characters long.</source>
-        <target state="new">The message must be at least 3 characters long.</target>
+        <target state="translated">Wiadomość musi zawierać przynajmniej 3 znaki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7920,7 +7920,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="07422f6141cfcabaf3c2ce77e3e063222849ef60" datatype="html">
         <source>The message cannot be more than 5000 characters long.</source>
-        <target state="new">The message cannot be more than 5000 characters long.</target>
+        <target state="translated">Wiadomość nie może mieć więcej niż 5000 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7954,7 +7954,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6330d25a3bc6f55dfd5177da6e681d1d3b1a2b1a" datatype="html">
         <source>Username must be at least 1 character long.</source>
-        <target state="new">Username must be at least 1 character long.</target>
+        <target state="translated">Nazwa użytkownika musi mieć przynajmniej 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7962,7 +7962,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="aaaf3d00c35f809eebc7fd68a3f7b8b0230b197a" datatype="html">
         <source>Username cannot be more than 50 characters long.</source>
-        <target state="new">Username cannot be more than 50 characters long.</target>
+        <target state="translated">Nazwa użytkownika nie może zawierać więcej niż 50 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7970,7 +7970,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6f3e95be2538a22da07beaefc39bb2195683990c" datatype="html">
         <source>Username should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Username should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Nazwa użytkownika może zawierać jedynie litery, cyfry, kropki i podkreślniki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8018,7 +8018,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="7e58d1fb4e86af94f5199660ef349d55811888bb" datatype="html">
         <source>Daily upload limit is required.</source>
-        <target state="new">Daily upload limit is required.</target>
+        <target state="translated">Dzienny limit wrzucania jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8026,7 +8026,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="e283cbc4469959ea664f9d545f15278e089a6f1e" datatype="html">
         <source>Daily upload limit must be greater than -1.</source>
-        <target state="new">Daily upload limit must be greater than -1.</target>
+        <target state="translated">Dzienny limit wrzucania musi być większy niż -1.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8052,7 +8052,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a4179e366d4aa335f1ddd0a13e9109c71a9338d0" datatype="html">
         <source>Description cannot be more than 1000 characters long.</source>
-        <target state="new">Description cannot be more than 1000 characters long.</target>
+        <target state="translated">Opis nie może mieć więcej niż 1000 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8068,7 +8068,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1d973f9ee250b94d31ceb5c763edcd9b255ea524" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Musisz zgodzić się na zasady instancji żeby się na niej zarejestrować.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8076,7 +8076,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6d2c3ebffd49b8933200a6d4e5b74712be49bf00" datatype="html">
         <source>Ban reason must be at least 3 characters long.</source>
-        <target state="new">Ban reason must be at least 3 characters long.</target>
+        <target state="translated">Powód bana musi zawierać przynajmniej 3 znaki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8084,7 +8084,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="be32ff1dd6e464c5c085dd7d128316f476d2e0fd" datatype="html">
         <source>Ban reason cannot be more than 250 characters long.</source>
-        <target state="new">Ban reason cannot be more than 250 characters long.</target>
+        <target state="translated">Powód bana nie może zawierać więcej niż 250 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8102,7 +8102,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="085b2d6f79819a72a2b56cada4ef5085ba51d90c" datatype="html">
         <source>Display name must be at least 1 character long.</source>
-        <target state="new">Display name must be at least 1 character long.</target>
+        <target state="translated">Wyświetlana nazwa musi zawierać przynajmniej 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8118,7 +8118,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5a920575b8e1067f5b11c66a4a36d3ced87756f1" datatype="html">
         <source>Display name cannot be more than 50 characters long.</source>
-        <target state="new">Display name cannot be more than 50 characters long.</target>
+        <target state="translated">Wyświetlana nazwa nie może zawierać więcej niż 50 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8146,7 +8146,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="8c7d4c82b057aea5dbae811e16935f9bcae4c2aa" datatype="html">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target state="new">Report reason cannot be more than 3000 characters long.</target>
+        <target state="translated">Powód zgłoszenia nie może zawierać więcej niż 3000 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8154,7 +8154,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="2fa41debd17a206d4a2a5e8d14bcd7055f6e5118" datatype="html">
         <source>Moderation comment is required.</source>
-        <target state="new">Moderation comment is required.</target>
+        <target state="translated">Komentarz moderatorski jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8162,7 +8162,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="82e31d0837eaa69a4364e7434d253ce138b3c5c2" datatype="html">
         <source>Moderation comment must be at least 2 characters long.</source>
-        <target state="new">Moderation comment must be at least 2 characters long.</target>
+        <target state="translated">Komentarz moderatorski musi zawierać przynajmniej 2 znaki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8170,7 +8170,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="23c1c2e105a98b0b6728949418a256b026b8971c" datatype="html">
         <source>Moderation comment cannot be more than 3000 characters long.</source>
-        <target state="new">Moderation comment cannot be more than 3000 characters long.</target>
+        <target state="translated">Komentarz moderatorski nie może zawierać więcej niż 3000 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-abuse-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8178,7 +8178,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="94b831c7e3684258f88e099c6cd3b8f73f8a2de6" datatype="html">
         <source>The channel is required.</source>
-        <target state="new">The channel is required.</target>
+        <target state="translated">Kanał jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-accept-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8186,7 +8186,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="0776b05d442a0a16f083a5eefa52a166b9d514ca" datatype="html">
         <source>Blacklist reason must be at least 2 characters long.</source>
-        <target state="new">Blacklist reason must be at least 2 characters long.</target>
+        <target state="translated">Powód dodania do czarnej listy musi zawierać przynajmniej 2 znaki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-blacklist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8194,7 +8194,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5009443905b0b152915247799492bf5e164e7626" datatype="html">
         <source>Blacklist reason cannot be more than 300 characters long.</source>
-        <target state="new">Blacklist reason cannot be more than 300 characters long.</target>
+        <target state="translated">Powód dodania do czarnej listy nie może zawierać więcej niż 300 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-blacklist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8202,7 +8202,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e" datatype="html">
         <source>Video caption language is required.</source>
-        <target state="new">Video caption language is required.</target>
+        <target state="translated">Język napisów filmu jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-captions-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8210,7 +8210,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963" datatype="html">
         <source>Video caption file is required.</source>
-        <target state="new">Video caption file is required.</target>
+        <target state="translated">Plik z napisami do filmu jest wymagany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-captions-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8226,7 +8226,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c8465c3773699dd075e0147e264d2e232f605803" datatype="html">
         <source>You can only transfer ownership to a local account</source>
-        <target state="new">You can only transfer ownership to a local account</target>
+        <target state="translated">Właścicielem musi być lokalne konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-change-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8242,7 +8242,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="b8b59b6284a14fc71268cf722ed98c62c5af4a76" datatype="html">
         <source>Name must be at least 1 character long.</source>
-        <target state="new">Name must be at least 1 character long.</target>
+        <target state="translated">Nazwa musi zawierać przynajmniej 1 znak.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8250,7 +8250,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="e14cd37d29f13eac7384c339e4f1df58d96e4e3d" datatype="html">
         <source>Name cannot be more than 50 characters long.</source>
-        <target state="new">Name cannot be more than 50 characters long.</target>
+        <target state="translated">Nazwa nie może zawierać więcej niż 50 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8258,7 +8258,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="135185da003b14cbb69521f570fa617a00bbbe18" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Nazwa może zawierać jedynie litery, cyfry, kropki i podkreślniki.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8274,7 +8274,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="15ec53d9ee65cb930c5f5d10ae2e8dd3fd44fc85" datatype="html">
         <source>Support text cannot be more than 1000 characters long.</source>
-        <target state="new">Support text cannot be more than 1000 characters long.</target>
+        <target state="translated">Tekst pomocniczy nie może zawierać więcej niż 1000 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8314,7 +8314,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="e8c50a2e0b9a6eec54a983a3284839d81739f18c" datatype="html">
         <source>Privacy is required.</source>
-        <target state="new">Privacy is required.</target>
+        <target state="translated">Prywatność jest wymagana.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-playlist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8322,7 +8322,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="3499ad3f4da49c7373332c5052d543929b94dc9c" datatype="html">
         <source>The channel is required when the playlist is public.</source>
-        <target state="new">The channel is required when the playlist is public.</target>
+        <target state="translated">Kanał jest wymagany gdy playlista jest publiczna.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-playlist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8434,7 +8434,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="2f5f2093f14679fed82ff76a0cd2a28145a83ca9" datatype="html">
         <source>PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</source>
-        <target state="new">PeerTube cannot handle this kind of file. Accepted extensions are <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
+        <target state="translated">PeerTube nie potrafi zajmo <x id="INTERPOLATION" equiv-text="{{extensions}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/reactive-file.component.ts</context>
           <context context-type="linenumber">1</context>
