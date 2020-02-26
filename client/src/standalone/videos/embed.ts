@@ -263,6 +263,9 @@ export class PeerTubeEmbed {
   private async buildDock (videoInfo: VideoDetails, configResponse: Response) {
     if (!this.controls) return
 
+    // On webtorrent fallback, player may have been disposed
+    if (!this.player.player_) return
+
     const title = this.title ? videoInfo.name : undefined
 
     const config: ServerConfig = await configResponse.json()
