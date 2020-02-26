@@ -254,17 +254,13 @@ menu {
 @media screen and (max-width: $mobile-view) {
   .menu-wrapper {
     width: 100% !important;
+
+    menu {
+      overflow-y: auto;
+    }
   }
 
   .top-menu, .footer {
     width: 100% !important;
-  }
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .menu-wrapper {
-    menu {
-      overflow-y: auto;
-    }
   }
 }
