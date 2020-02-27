@@ -159,8 +159,11 @@ export class ServerService {
     if (!this.configObservable) {
       this.configObservable = this.http.get<ServerConfig>(ServerService.BASE_CONFIG_URL)
                                   .pipe(
-                                    tap(this.saveConfigLocally),
-                                    tap(() => this.configLoaded = true),
+                                    tap(config => this.saveConfigLocally(config)),
+                                    tap(config => {
+                                      this.config = config
+                                      this.configLoaded = true
+                                    }),
                                     tap(() => {
                                       if (this.configReset) {
                                         this.configReloaded.next()

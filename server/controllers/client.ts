@@ -2,10 +2,11 @@ import * as express from 'express'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
 import { ACCEPT_HEADERS, STATIC_MAX_AGE } from '../initializers/constants'
-import { asyncMiddleware } from '../middlewares'
+import { asyncMiddleware, embedCSP } from '../middlewares'
 import { buildFileLocale, getCompleteLocale, is18nLocale, LOCALE_FILES } from '../../shared/models/i18n/i18n'
 import { ClientHtml } from '../lib/client-html'
 import { logger } from '../helpers/logger'
+import { CONFIG } from '@server/initializers/config'
 
 const clientsRouter = express.Router()
 
@@ -19,8 +20,13 @@ clientsRouter.use('/videos/watch/:id', asyncMiddleware(generateWatchHtmlPage))
 clientsRouter.use('/accounts/:nameWithHost', asyncMiddleware(generateAccountHtmlPage))
 clientsRouter.use('/video-channels/:nameWithHost', asyncMiddleware(generateVideoChannelHtmlPage))
 
+const embedCSPMiddleware = CONFIG.CSP.ENABLED
+  ? embedCSP
+  : (req: express.Request, res: express.Response, next: express.NextFunction) => next()
+
 clientsRouter.use(
   '/videos/embed',
+  embedCSPMiddleware,
   (req: express.Request, res: express.Response) => {
     res.removeHeader('X-Frame-Options')
     res.sendFile(embedPath)

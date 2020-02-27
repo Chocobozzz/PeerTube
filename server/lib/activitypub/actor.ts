@@ -176,8 +176,8 @@ async function updateActorAvatarInstance (actor: MActorDefault, info: AvatarInfo
   if (!info.name) return actor
 
   if (actor.Avatar) {
-    // Don't update the avatar if the filename did not change
-    if (actor.Avatar.fileUrl === info.fileUrl) return actor
+    // Don't update the avatar if the file URL did not change
+    if (info.fileUrl && actor.Avatar.fileUrl === info.fileUrl) return actor
 
     try {
       await actor.Avatar.destroy({ transaction: t })

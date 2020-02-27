@@ -59,7 +59,9 @@ async function processFollow (byActor: MActorSignature, targetActorURL: string) 
       transaction: t
     })
 
-    if (actorFollow.state !== 'accepted' && CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false) {
+    // Set the follow as accepted if the remote actor follows a channel or account
+    // Or if the instance automatically accepts followers
+    if (actorFollow.state !== 'accepted' && (isFollowingInstance === false || CONFIG.FOLLOWERS.INSTANCE.MANUAL_APPROVAL === false)) {
       actorFollow.state = 'accepted'
       await actorFollow.save({ transaction: t })
     }

@@ -136,8 +136,7 @@ import {
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
   MVideoWithFile,
-  MVideoWithRights,
-  MStreamingPlaylistFiles
+  MVideoWithRights
 } from '../../typings/models'
 import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
@@ -437,42 +436,31 @@ export type AvailableForListIDsOptions = {
     }
 
     if (options.followerActorId) {
-      let localVideosReq: WhereOptions = {}
+      let localVideosReq = ''
       if (options.includeLocalVideos === true) {
-        localVideosReq = { remote: false }
+        localVideosReq = ' UNION ALL SELECT "video"."id" FROM "video" WHERE remote IS FALSE'
       }
 
       // Force actorId to be a number to avoid SQL injections
       const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
       whereAnd.push({
-        [Op.or]: [
-          {
-            id: {
-              [ Op.in ]: Sequelize.literal(
-                '(' +
-                'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-                'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-                'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-                ')'
-              )
-            }
-          },
-          {
-            id: {
-              [ Op.in ]: Sequelize.literal(
-                '(' +
-                'SELECT "video"."id" AS "id" FROM "video" ' +
-                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-                'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-                'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-                'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-                ')'
-              )
-            }
-          },
-          localVideosReq
-        ]
+        id: {
+          [Op.in]: Sequelize.literal(
+            '(' +
+            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+            ' UNION ALL ' +
+            'SELECT "video"."id" AS "id" FROM "video" ' +
+            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
+            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
+            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
+            localVideosReq +
+            ')'
+          )
+        }
       })
     }
 

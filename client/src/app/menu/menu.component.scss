@@ -254,6 +254,10 @@ menu {
 @media screen and (max-width: $mobile-view) {
   .menu-wrapper {
     width: 100% !important;
+
+    menu {
+      overflow-y: auto;
+    }
   }
 
   .top-menu, .footer {
