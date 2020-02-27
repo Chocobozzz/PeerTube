@@ -257,7 +257,7 @@
       </trans-unit>
       <trans-unit id="f3e63578c50546530daf6050d2ba6f8226040f2c">
         <source>You don't have notifications.</source>
-        <target>Nie masz powiadomień</target>
+        <target>Nie masz powiadomień.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -847,7 +847,7 @@
       </trans-unit>
       <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target>HTTP import (YouTube, Vimeo, direct URL...)</target>
+        <target>Import z linku HTTP (YouTube, Vimeo, bezpośredni URL...)</target>
         <context-group name="null">
           <context context-type="linenumber">64</context>
         </context-group>
@@ -3171,10 +3171,7 @@
       </trans-unit>
       <trans-unit id="42e3c0e89177ca135974221eaf0e4e836c32e345">
         <source>Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target>
-      Transcoding is enabled on server. The video quota only take in account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-      At most, this user could use ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-    </target>
+        <target>Transkodowanie jest włączone na tym serwerze. Limit rozmiaru wideo wliczy jedynie <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>oryginalny<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> film. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Ten użytkownik może maksymalnie zużyć ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group name="null">
           <context context-type="linenumber">66</context>
         </context-group>
@@ -5292,7 +5289,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5fea66be16da46ed7a0775e9a62b7b5e94b77473">
         <source>Contact <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> administrator</source>
-        <target>Kontakt z administratorem <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/> </target>
+        <target>Kontakt z administratorem <x id="INTERPOLATION" equiv-text="{{ instanceName }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -7505,7 +7502,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="16d449549ab7bc61caf3d636372a4a56b5870383" datatype="html">
         <source>Any</source>
-        <target state="new">Any</target>
+        <target state="translated">Dowolny</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7822,7 +7819,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6975c8c2dac1982f393cb9a890e33ef95b758111" datatype="html">
         <source>Index URL is required.</source>
-        <target state="new">Index URL is required.</target>
+        <target state="translated">URL indeksu jest wymagane.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7830,7 +7827,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="febc4795f39d34b901907a2718b0c5c21165eb36" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="new">Index URL should be a URL</target>
+        <target state="translated">URL indeksu musi być linkiem URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8402,7 +8399,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
         <source>Video support must be at least 3 characters long.</source>
-        <target state="new">Video support must be at least 3 characters long.</target>
+        <target state="translated">Wsparcie musi zawierać przynajmniej 3 znaki.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8410,7 +8407,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad" datatype="html">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target state="new">Video support cannot be more than 1000 characters long.</target>
+        <target state="translated">Wsparcie nie może zawierać więcej niż 1000 znaków.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8845,7 +8842,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c09a68321f26f058b547021e6e2c167ae22c6e24" datatype="html">
         <source>Hidden</source>
-        <target state="new">Hidden</target>
+        <target state="translated">Ukryte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8853,7 +8850,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="75cc14815746a90d424157080fc7efd3e2631654" datatype="html">
         <source>Blurred with confirmation request</source>
-        <target state="new">Blurred with confirmation request</target>
+        <target state="translated">Zamazane z potwierdzeniem</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8861,7 +8858,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1e89bd0d46ef7d90b5f98b24f83afc312c6ef105" datatype="html">
         <source>Displayed</source>
-        <target state="new">Displayed</target>
+        <target state="translated">Wyświetlane</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8909,7 +8906,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="457f161d3ca706b8de263b0cd58e493d54e7d4c5">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> compatible that supports:</source>
-        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> compatible that supports:</target>
+        <target state="translated">Kompatybilne z <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Markdown<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, wspierające:</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8957,7 +8954,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="f9b4f2d8146c789cd40314f640ec4e88efbaf681" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> users banned.</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{num}}"/> users banned.</target>
+        <target state="translated">Zbanowano <x id="INTERPOLATION" equiv-text="{{num}}"/> użytkowników.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8965,7 +8962,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="3ab99e62550869aebc85661fca2faf46785263dd" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{username}}"/> banned.</target>
+        <target state="translated">Zbanowano użytkownika <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8973,7 +8970,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="faafee0c03ad25c8a43aa91bd5d98185b67ff734" datatype="html">
         <source>Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</source>
-        <target state="new">Do you really want to unban <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
+        <target state="translated">Czy na pewno checz odwołać ban użytkownika <x id="INTERPOLATION" equiv-text="{{username}}"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8981,7 +8978,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="925ba9946b7b256a586f0fcbe3e04fa7a0dee7bd" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{username}}"/> unbanned.</target>
+        <target state="translated">Odbanowano użytkownika <x id="INTERPOLATION" equiv-text="{{username}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8989,7 +8986,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="ad07d34d4aadfe03c964cec02ca1d3a921e6b603" datatype="html">
         <source>If you remove this user, you will not be able to create another with the same username!</source>
-        <target state="new">If you remove this user, you will not be able to create another with the same username!</target>
+        <target state="translated">Jeżeli usuniesz tego użytkownika, nie będziesz mógł stworzyć nowego z tą samą nazwą użytkownika!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9005,7 +9002,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="534202c90c6dcadd2989fc72c5030d5483e26096" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> email set as verified</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{username}}"/> email set as verified</target>
+        <target state="translated">E-mail użytkownika <x id="INTERPOLATION" equiv-text="{{username}}"/> ustawiony jako zweryfikowany</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9013,7 +9010,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="33a6319f765848a22a155cef9f1d8e645202e249" datatype="html">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</source>
-        <target state="new">Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted.</target>
+        <target state="translated">Wyciszono konto <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9021,7 +9018,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="086eda792aeb1b0d131d633b50fdd1792f5f24c6" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</source>
-        <target state="new">Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</target>
+        <target state="translated">Wyciszono instancję <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9029,7 +9026,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="bb72d6d1219e89d182e9fd09d853d83baf8d6499" datatype="html">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</source>
-        <target state="new">Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</target>
+        <target state="translated">Wyciszono przez instancję konto <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9037,7 +9034,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="8686834bc4afe42c1991c6c18f0bce174a0e17a6" datatype="html">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source>
-        <target state="new">Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</target>
+        <target state="translated">Anulowano wyciszenie przez instancję konta <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9045,7 +9042,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="35d3509161861a610b0895bf084c781e56ba2830" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
-        <target state="new">Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</target>
+        <target state="translated">Wyciszono przez instancję instancję <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9053,7 +9050,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="978aeec5613fa97e8a5336d3599cebb23ee5a90f" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</source>
-        <target state="new">Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</target>
+        <target state="translated">Anulowano wyciszenie przez instancję instancji <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9061,7 +9058,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="632e8b20c98e8eec4059a605a4b011bb476137af" datatype="html">
         <source>Edit user</source>
-        <target state="new">Edit user</target>
+        <target state="translated">Edytuj użytkownika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9069,7 +9066,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="f140baf295648e021385e7dd57fbbc7cee4ad4e6" datatype="html">
         <source>Change quota, role, and more.</source>
-        <target state="new">Change quota, role, and more.</target>
+        <target state="translated">Zmień limity, role i inne.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9077,7 +9074,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="95b95a9c79e4fd9ed41f6855e37b3b06af25bcab" datatype="html">
         <source>Delete user</source>
-        <target state="new">Delete user</target>
+        <target state="translated">Usuń użytkownika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9085,7 +9082,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="9b19e922648045e849419204513fe029db427b46" datatype="html">
         <source>Unban user</source>
-        <target state="new">Unban user</target>
+        <target state="translated">Odbanuj użytkownika</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9093,7 +9090,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="f7044a58ed834f7380eaac0e670dc817b19d9209" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="new">Allow the user to login and create videos/comments again</target>
+        <target state="translated">Ponownie zezwól użytkownikowi logować się i dodawać filmy/komentarze</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9101,7 +9098,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4a09bf8724e7659fbb5ec33647529cdef7614bdc" datatype="html">
         <source>Mute this account</source>
-        <target state="new">Mute this account</target>
+        <target state="translated">Wycisz to konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9109,7 +9106,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5f4ea46bfaffa09963d51fa969cb45b82a3c377f" datatype="html">
         <source>Hide any content from that user for you.</source>
-        <target state="new">Hide any content from that user for you.</target>
+        <target state="translated">Ukryj wszystko od tego użytkownika dla ciebie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9117,7 +9114,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="d666ca3261aef72b2ddcd649d7b32af488f59952" datatype="html">
         <source>Unmute this account</source>
-        <target state="new">Unmute this account</target>
+        <target state="translated">Cofnij wyciszenie tego konta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9125,7 +9122,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="896713adfa81db9a514ba3214ea1b9a7b59543bb" datatype="html">
         <source>Show back content from that user for you.</source>
-        <target state="new">Show back content from that user for you.</target>
+        <target state="translated">Ponownie pokazuj wszystko od tego użytkownika dla ciebie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9133,7 +9130,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="e17218983b1de76e5a920b04e1c2ecbdb6e3e06d" datatype="html">
         <source>Mute the instance</source>
-        <target state="new">Mute the instance</target>
+        <target state="translated">Wycisz instancję</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9141,7 +9138,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="b67a9b47f49012501f2aa71c74d7fccc9e331cdb" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="new">Hide any content from that instance for you.</target>
+        <target state="translated">Ukryj wszystko z tej instancji dla ciebie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9149,7 +9146,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a23514d8aca2f8633622dda0e86b399dc576a2b9" datatype="html">
         <source>Unmute the instance</source>
-        <target state="new">Unmute the instance</target>
+        <target state="translated">Cofnij wyciszenie tej instancji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9157,7 +9154,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="7e80d54718404d853b9e51a3b8d5210a2bedaf6f" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="new">Show back content from that instance for you.</target>
+        <target state="translated">Ponownie pokazuj zawartość z tej instancji dla ciebie.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9165,7 +9162,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4e4107055b44eee44b6954c41120de1cb4d46432" datatype="html">
         <source>Mute this account by your instance</source>
-        <target state="new">Mute this account by your instance</target>
+        <target state="translated">Wycisz konto dla twojej instancji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9173,7 +9170,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="ec993f2e1ecd979ff28871591b6f253afb3b3138" datatype="html">
         <source>Hide any content from that user for you, your instance and its users.</source>
-        <target state="new">Hide any content from that user for you, your instance and its users.</target>
+        <target state="translated">Ukryj wszystko od tego użytkownika dla ciebie, twojej instancji i jej użytkowników.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9181,7 +9178,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a51c59cb5ecb7004a6a8ddd2855b5c52266ad957" datatype="html">
         <source>Unmute this account by your instance</source>
-        <target state="new">Unmute this account by your instance</target>
+        <target state="translated">Cofnij wyciszenie tego konta dla twojej instancji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9189,7 +9186,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a50c42119c5ffaa4ecb61e996c432f1ab0f8d0ff" datatype="html">
         <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="new">Show back content from that user for you, your instance and its users.</target>
+        <target state="translated">Ponownie pokazuj wszystko od tego użytkownika dla ciebie, twojej instancji i jej użytkowników.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9197,7 +9194,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="588073e831cec240d6bb0db0b133e45dab69f178" datatype="html">
         <source>Mute the instance by your instance</source>
-        <target state="new">Mute the instance by your instance</target>
+        <target state="translated">Wycisz instancję dla twojej instancji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9205,7 +9202,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1a4ed1f8e28636212f1bcf06c36644d2627b682a" datatype="html">
         <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance for you, your instance and its users.</target>
+        <target state="translated">Ukryj wszystko z tej instancji dla ciebie, twojej instancji i jej użytkowników.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9213,7 +9210,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="676221cdabd4805901343976988c028dbf71b20a" datatype="html">
         <source>Unmute the instance by your instance</source>
-        <target state="new">Unmute the instance by your instance</target>
+        <target state="translated">Cofnij wyciszenie tej instancji dla twojej instancji</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9221,7 +9218,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="d97d7d9b0c359f7b900652b547678841369691b1" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="new">Show back content from that instance for you, your instance and its users.</target>
+        <target state="translated">Ponownie pokazuj zawartość z tej instancji dla ciebie, twojej instancji i jej użytkowników.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9261,7 +9258,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4104d2ac06bd0103868795086100a871c8dbeb49" datatype="html">
         <source>Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Zasubskrybowano wszystkie kanały użytkownika <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Otrzymasz powiadomienia o wszystkich ich filmach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9269,7 +9266,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Zasubskrybowano kanał <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Otrzymasz powiadomienia o wszystkich jego filmach.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9285,7 +9282,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="3bd3791d3b0ab933981a0b884396af74b0c95e2a" datatype="html">
         <source>Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target state="new">Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target state="translated">Anulowano subskrypcje wszystkich kanałów użytkownika <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9293,7 +9290,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26" datatype="html">
         <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target state="new">Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target state="translated">Anulowano subskrypcję kanału <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9309,7 +9306,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf" datatype="html">
         <source>Moderator</source>
-        <target state="new">Moderator</target>
+        <target state="translated">Moderator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9317,7 +9314,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5034e84fab7cd3d662d2483753e33caea0774b78" datatype="html">
         <source>Video removed from <x id="INTERPOLATION" equiv-text="{{name}}"/></source>
-        <target state="new">Video removed from <x id="INTERPOLATION" equiv-text="{{name}}"/></target>
+        <target state="translated">Film usunięty z <x id="INTERPOLATION" equiv-text="{{name}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9329,7 +9326,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5cbf881bedb548fda270e2b745c8cbe332a5e4de" datatype="html">
         <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/> at timestamps <x id="INTERPOLATION_1" equiv-text="{{t}}"/></source>
-        <target state="new">Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/> at timestamps <x id="INTERPOLATION_1" equiv-text="{{t}}"/></target>
+        <target state="translated">Dodano film do <x id="INTERPOLATION" equiv-text="{{n}}"/> w znacznikach czasu <x id="INTERPOLATION_1" equiv-text="{{t}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9337,7 +9334,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="f69a06eee4963406efdbff8c3d9765832c30482f" datatype="html">
         <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/></source>
-        <target state="new">Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/></target>
+        <target state="translated">Dodano film do <x id="INTERPOLATION" equiv-text="{{n}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9345,7 +9342,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="986f17319b16d01d0047e2e2cd728bf4dbac4fe8" datatype="html">
         <source>Timestamps updated</source>
-        <target state="new">Timestamps updated</target>
+        <target state="translated">Zaktualizowano znaczniki czasu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9353,7 +9350,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="28d23ed47149ffd34c2ebd58bfeb4601649c784f" datatype="html">
         <source>Starts at</source>
-        <target state="new">Starts at </target>
+        <target state="translated">Początek</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9365,7 +9362,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1e40e4317900075588705bc4084fda4b2ddb3372" datatype="html">
         <source>Stops at</source>
-        <target state="new">Stops at </target>
+        <target state="translated">Koniec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9373,7 +9370,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1b8201c470a1635cc9beab9adb90eabd19fc9691" datatype="html">
         <source>and stops at</source>
-        <target state="new"> and stops at </target>
+        <target state="translated">i kończy się</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9381,7 +9378,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="73c33d602da89a33d353d686f36c2fff39f0aee3" datatype="html">
         <source>Video blacklisted.</source>
-        <target state="new">Video blacklisted.</target>
+        <target state="translated">Dodano film do czarnej listy.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9414,7 +9411,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="new">This video will be duplicated by your instance.</target>
+        <target state="translated">Ten film zostanie zduplikowany przez twoją instancję.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9422,7 +9419,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="0f829293d953936450158c2dd7b483d6b960ed2b" datatype="html">
         <source>Save to playlist</source>
-        <target state="new">Save to playlist</target>
+        <target state="translated">Dodaj do playlisty</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
@@ -9436,7 +9433,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="fb6f1916659a093d943fab8322777922796efe27" datatype="html">
         <source>Duplicate (redundancy)</source>
-        <target state="new">Duplicate (redundancy)</target>
+        <target state="translated">Duplikuj (redundancja)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9484,7 +9481,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="289fe8342e8b7df689c75026a24a60fd7f5e9392" datatype="html">
         <source>To import</source>
-        <target state="new">To import</target>
+        <target state="translated">Do importu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9492,7 +9489,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="b41da527dd2f804519e13b78b5dae42897213545" datatype="html">
         <source>Add to watch later</source>
-        <target state="new">Add to watch later</target>
+        <target state="translated">Dodaj do playlisty "Oglądaj później"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9500,7 +9497,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="2660edf82b9bf5d6ee25fbefd3bbb23172687ccc" datatype="html">
         <source>Remove from watch later</source>
-        <target state="new">Remove from watch later</target>
+        <target state="translated">Usuń z playlisty "Oglądaj później"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9532,7 +9529,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="ed3394ad721212bca2a1da43ad6063b6d4f9a008" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="new">Only users of this instance can see this video</target>
+        <target state="translated">Tylko użytkownicy tej instancji mogą zobaczyć ten film</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9540,7 +9537,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb" datatype="html">
         <source>Video to import updated.</source>
-        <target state="new">Video to import updated.</target>
+        <target state="translated">Film do zaimportowania zaktualizowany.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-import-torrent.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9552,7 +9549,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c" datatype="html">
         <source>Your video was uploaded to your account and is private.</source>
-        <target state="new">Your video was uploaded to your account and is private.</target>
+        <target state="translated">Film został wrzucony na twoje konto i jest prywatny.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9576,7 +9573,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="bef4ec92fa80e7b7ac03f8ad2b49d2a126f0cc71" datatype="html">
         <source>Upload <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></source>
-        <target state="new">Upload <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></target>
+        <target state="translated">Wrzuć <x id="INTERPOLATION" equiv-text="{{videofileName}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9600,7 +9597,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a6019e856f511dbe1fe658790c71c594b26930ee" datatype="html">
         <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</source>
-        <target state="new">Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</target>
+        <target state="translated">Twój limit rozmiaru filmów zostanie przekroczony przez ten film (rozmiar: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, zużyto: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, limit: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9608,7 +9605,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c980896ac8e08e9751545db1b7ef0e93fb8a52cd" datatype="html">
         <source>Your daily video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</source>
-        <target state="new">Your daily video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</target>
+        <target state="translated">Twój dzienny limit rozmiaru filmów zostanie przekroczony przez ten film (rozmiar: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, zużyto: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, limit: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9616,7 +9613,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="bfdf9de4bd9140f77feb6a5fe2b51f3f0565eaa4" datatype="html">
         <source>You have unsaved changes! If you leave, your changes will be lost.</source>
-        <target state="new">You have unsaved changes! If you leave, your changes will be lost.</target>
+        <target state="translated">Masz niezapisane zmiany! Jeżeli zamkniesz to okno, twoje zmiany zostaną stracone.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9632,7 +9629,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="2f1871ee46375fa532326533303288fbe891e85d" datatype="html">
         <source>The deletion will be sent to remote instances, so they remove the comment too.</source>
-        <target state="new"> The deletion will be sent to remote instances, so they remove the comment too.</target>
+        <target state="translated">Prośba o usunięcie komentarza zostanie wysłana do innych instancji, więc one również go usuną.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9640,7 +9637,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="8d850ce30ecdacf4755d85cce1fe44cb0d1fc38d" datatype="html">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target state="new"> It is a remote comment, so the deletion will only be effective on your instance.</target>
+        <target state="translated">Jest to zdalny komentarz, więc zostanie on usunięty jedynie na twojej instancji.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9648,7 +9645,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="4334a60889af951a137a22cd862f2675daad3292" datatype="html">
         <source>Stop autoplaying next video</source>
-        <target state="new">Stop autoplaying next video</target>
+        <target state="translated">Nie odtwarzaj automatycznie następnego filmu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9656,7 +9653,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="0663c85b5bc0806356ab768f411299c29cf39360" datatype="html">
         <source>Autoplay next video</source>
-        <target state="new">Autoplay next video</target>
+        <target state="translated">Odtwarzaj automatycznie następny film</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9664,7 +9661,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="77fde72fafe6a5272b7d5e3ffedd179ec2d7f8b0" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="new">Stop looping playlist videos</target>
+        <target state="translated">Nie powtarzaj filmów w playliście</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9672,7 +9669,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="54428deb88d7bc58721d6839d9406ff607eccef4" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="new">Loop playlist videos</target>
+        <target state="translated">Powtarzaj filmy w playliście</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9680,7 +9677,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="74e95a8a42bc8e07d3459f86184ce798e6189ec6" datatype="html">
         <source>You need to be connected to rate this content.</source>
-        <target state="new">You need to be connected to rate this content.</target>
+        <target state="translated">Musisz być połączony żeby ocenić tę zawartość.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9688,7 +9685,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="d5a4811e15319ad9354e1b62e9ca0131192b489e">
         <source><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> likes / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> dislikes</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{likesNumber}}"/> Lubi to / <x id="INTERPOLATION_1" equiv-text="{{dislikesNumber}}"/> Nie lubi tego</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9712,7 +9709,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="43ee7c4bd1ed4766ec0c13974a1e08881071c927" datatype="html">
         <source>Up Next</source>
-        <target state="new">Up Next</target>
+        <target state="translated">Następnie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9720,7 +9717,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="3a592fe9ee94c99deb20352edd7e994debf5c4c8" datatype="html">
         <source>Autoplay is suspended</source>
-        <target state="new">Autoplay is suspended</target>
+        <target state="translated">Automatyczne odtwarzanie jest zatrzymane</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9728,7 +9725,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="fe51624a8ab9f682f7f21d485eb64fdb4b15e91e" datatype="html">
         <source>Enter/exit fullscreen (requires player focus)</source>
-        <target state="new">Enter/exit fullscreen (requires player focus)</target>
+        <target state="translated">Włącz/wyłącz tryb pełnoekranowy (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9736,7 +9733,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="d5916006cb404a4d3663ac20ad299c45e57a30a6" datatype="html">
         <source>Play/Pause the video (requires player focus)</source>
-        <target state="new">Play/Pause the video (requires player focus)</target>
+        <target state="translated">Odtwarzaj/spauzuj film (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9744,7 +9741,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="c797465d457fbb14d62c08c52be9115b60e5605c" datatype="html">
         <source>Mute/unmute the video (requires player focus)</source>
-        <target state="new">Mute/unmute the video (requires player focus)</target>
+        <target state="translated">Wycisz/wyłącz wyciszenie filmu (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9752,7 +9749,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6ec9800a89e1489861dd08b93d0ff42fd5f20f50" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</source>
-        <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</target>
+        <target state="translated">Przeskocz do procentowej części filmu: 0 to 0% i 9 to 90% (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9760,7 +9757,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="567024b923c37475ef4b2632ec95d07c3f7263f5" datatype="html">
         <source>Increase the volume (requires player focus)</source>
-        <target state="new">Increase the volume (requires player focus)</target>
+        <target state="translated">Zwiększ głośność (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9768,7 +9765,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="bb7e8567023b189bba28de767769192f5fe28430" datatype="html">
         <source>Decrease the volume (requires player focus)</source>
-        <target state="new">Decrease the volume (requires player focus)</target>
+        <target state="translated">Zmniejsz głośność (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9776,7 +9773,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="3fcdc3072de455c3816dc7976ff96ea1bf09eb7b" datatype="html">
         <source>Seek the video forward (requires player focus)</source>
-        <target state="new">Seek the video forward (requires player focus)</target>
+        <target state="translated">Przeskocz dalej w filmie (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9784,7 +9781,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="ea2c30e5c87a4923cbf3cdcac9fc8818f79f9a0b" datatype="html">
         <source>Seek the video backward (requires player focus)</source>
-        <target state="new">Seek the video backward (requires player focus)</target>
+        <target state="translated">Przeskocz do tyłu w filmie (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9792,7 +9789,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="a06ba404b91694a9788bf243582ba437b2bd9490" datatype="html">
         <source>Increase playback rate (requires player focus)</source>
-        <target state="new">Increase playback rate (requires player focus)</target>
+        <target state="translated">Przyspiesz odtwarzanie (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9800,7 +9797,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="68bb1ba6ae67f97934797d79e582fb6f7c3e825d" datatype="html">
         <source>Decrease playback rate (requires player focus)</source>
-        <target state="new">Decrease playback rate (requires player focus)</target>
+        <target state="translated">Zwolnij odtwarzanie (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9808,7 +9805,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="0fc28c34013089209a65fadcad0a552094ef2104" datatype="html">
         <source>Navigate in the video frame by frame (requires player focus)</source>
-        <target state="new">Navigate in the video frame by frame (requires player focus)</target>
+        <target state="translated">Przeglądaj film klatka po klatce (kiedy zaznaczony jest odtwarzacz)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9816,7 +9813,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="0e65067fdcc9d8725a41896cb1e229d1415a45f6" datatype="html">
         <source>Like the video</source>
-        <target state="new">Like the video</target>
+        <target state="translated">Zaznacz "Lubię to"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9824,7 +9821,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1a999e06e1aca0a70cd7d0e3e5c2c63d0e1885c8" datatype="html">
         <source>Dislike the video</source>
-        <target state="new">Dislike the video</target>
+        <target state="translated">Zaznacz "Nie lubię tego"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9832,7 +9829,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="1d9b6c0c66a4a5baa73617b1106c3746bc13f003" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="new">When active, the next video is automatically played after the current one.</target>
+        <target state="translated">Kiedy ta opcja jest zaznaczona, następny film będzie odtwarzany automatycznie po aktualnie oglądanym.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9840,7 +9837,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="8da38a1074a420611eac466a45ef2decbbb45ab8" datatype="html">
         <source>Videos that have the higher number of likes.</source>
-        <target state="new">Videos that have the higher number of likes.</target>
+        <target state="translated">Filmy które mają więcej polubień.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-most-liked.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9848,7 +9845,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="5b94148c16fa19e3db89972d11e93f790a73a054" datatype="html">
         <source>Trending for the last 24 hours</source>
-        <target state="new">Trending for the last 24 hours</target>
+        <target state="translated">Trendujące przez ostatnie 24 godziny</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9856,7 +9853,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6e9cb0b3b38312870471954abec8690170429a4e" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
-        <target state="new">Trending videos are those totalizing the greatest number of views during the last 24 hours</target>
+        <target state="translated">Trendujące filmy to filmy które zdobyły najwięcej wyświetleń w ostatnich 24 godzinach</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9864,7 +9861,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df" datatype="html">
         <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target state="new">Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</target>
+        <target state="translated">Trenduje przez ostatnie <x id="INTERPOLATION" equiv-text="{{days}}"/> dni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9872,7 +9869,7 @@ Jeżeli umieścisz film na ten kanał, pole informujące o możliwości wsparcia
       </trans-unit>
       <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509" datatype="html">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target state="new">Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</target>
+        <target state="translated">Trendujące filmy to filmy które zdobyły najwięcej wyświetleń przez <x id="INTERPOLATION" equiv-text="{{days}}"/> dni</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/video-list/video-trending.component.ts</context>
           <context context-type="linenumber">1</context>
