@@ -129,7 +129,7 @@ export class PeerTubeEmbed {
 
       this.autoplay = this.getParamToggle(params, 'autoplay', false)
       this.controls = this.getParamToggle(params, 'controls', true)
-      this.muted = this.getParamToggle(params, 'muted', false)
+      this.muted = this.getParamToggle(params, 'muted', undefined)
       this.loop = this.getParamToggle(params, 'loop', false)
       this.title = this.getParamToggle(params, 'title', true)
       this.enableApi = this.getParamToggle(params, 'api', this.enableApi)
