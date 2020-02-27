@@ -1,5 +1,20 @@
 # Changelog
 
+## v2.1.1
+
+### Bug fixes
+
+ * Fix youtube-dl in docker image
+ * Fix playlist creation/update
+ * Fix fetch of instance config in client
+ * Manual approves followers only for the instance (and not accounts/channels)
+ * Fix avatar update
+ * Fix CSP for embeds
+ * Fix scroll of the menu on mobile
+ * Fix CPU usage of PostgreSQL
+ * Fix embed for iOS
+ 
+
 ## v2.1.0
 
 **Since v2.0.0**
