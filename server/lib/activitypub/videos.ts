@@ -111,7 +111,7 @@ async function fetchRemoteVideo (videoUrl: string): Promise<{ response: request.
 
   logger.info('Fetching remote video %s.', videoUrl)
 
-  const { response, body } = await doRequest(options)
+  const { response, body } = await doRequest<any>(options)
 
   if (sanitizeAndCheckVideoTorrentObject(body) === false || checkUrlsSameHost(body.id, videoUrl) !== true) {
     logger.debug('Remote video JSON is not valid.', { body })
@@ -129,7 +129,7 @@ async function fetchRemoteVideoDescription (video: MVideoAccountLight) {
     json: true
   }
 
-  const { body } = await doRequest(options)
+  const { body } = await doRequest<any>(options)
   return body.description ? body.description : ''
 }
 
@@ -507,7 +507,7 @@ function isAPVideoUrlObject (url: any): url is ActivityVideoUrlObject {
   const mimeTypes = Object.keys(MIMETYPES.VIDEO.MIMETYPE_EXT)
 
   const urlMediaType = url.mediaType
-  return mimeTypes.indexOf(urlMediaType) !== -1 && urlMediaType.startsWith('video/')
+  return mimeTypes.includes(urlMediaType) && urlMediaType.startsWith('video/')
 }
 
 function isAPStreamingPlaylistUrlObject (url: ActivityUrlObject): url is ActivityPlaylistUrlObject {
@@ -623,9 +623,11 @@ async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAc
 }
 
 function videoActivityObjectToDBAttributes (videoChannel: MChannelId, videoObject: VideoTorrentObject, to: string[] = []) {
-  const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPrivacy.PUBLIC : VideoPrivacy.UNLISTED
-  const duration = videoObject.duration.replace(/[^\d]+/, '')
+  const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
+    ? VideoPrivacy.PUBLIC
+    : VideoPrivacy.UNLISTED
 
+  const duration = videoObject.duration.replace(/[^\d]+/, '')
   const language = videoObject.language?.identifier
 
   const category = videoObject.category

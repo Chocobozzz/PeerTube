@@ -63,7 +63,7 @@ import { addUserSubscription, removeUserSubscription } from '../../../../shared/
 import { VideoPrivacy } from '../../../../shared/models/videos'
 import { getBadVideoUrl, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
 import { addVideoCommentReply, addVideoCommentThread } from '../../../../shared/extra-utils/videos/video-comments'
-import * as uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import { addAccountToAccountBlocklist, removeAccountFromAccountBlocklist } from '../../../../shared/extra-utils/users/blocklist'
 import { CustomConfig } from '../../../../shared/models/server'
 import { VideoCommentThreadTree } from '../../../../shared/models/videos/video-comment.model'

@@ -76,7 +76,7 @@ function serveServerTranslations (req: express.Request, res: express.Response) {
   const locale = req.params.locale
   const file = req.params.file
 
-  if (is18nLocale(locale) && LOCALE_FILES.indexOf(file) !== -1) {
+  if (is18nLocale(locale) && LOCALE_FILES.includes(file)) {
     const completeLocale = getCompleteLocale(locale)
     const completeFileLocale = buildFileLocale(completeLocale)
 

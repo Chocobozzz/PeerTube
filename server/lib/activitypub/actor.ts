@@ -1,8 +1,8 @@
 import * as Bluebird from 'bluebird'
 import { Transaction } from 'sequelize'
 import { URL } from 'url'
-import * as uuidv4 from 'uuid/v4'
-import { ActivityPubActor, ActivityPubActorType } from '../../../shared/models/activitypub'
+import { v4 as uuidv4 } from 'uuid'
+import { ActivityPubActor, ActivityPubActorType, ActivityPubOrderedCollection } from '../../../shared/models/activitypub'
 import { ActivityPubAttributedTo } from '../../../shared/models/activitypub/objects'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { sanitizeAndCheckActorObject } from '../../helpers/custom-validators/activitypub/actor'
@@ -207,7 +207,7 @@ async function fetchActorTotalItems (url: string) {
   }
 
   try {
-    const { body } = await doRequest(options)
+    const { body } = await doRequest<ActivityPubOrderedCollection<unknown>>(options)
     return body.totalItems ? body.totalItems : 0
   } catch (err) {
     logger.warn('Cannot fetch remote actor count %s.', url, { err })

@@ -38,7 +38,7 @@ async function checkSignature (req: Request, res: Response, next: NextFunction) 
 
 function executeIfActivityPub (req: Request, res: Response, next: NextFunction) {
   const accepted = req.accepts(ACCEPT_HEADERS)
-  if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.indexOf(accepted) === -1) {
+  if (accepted === false || ACTIVITY_PUB.POTENTIAL_ACCEPT_HEADERS.includes(accepted) === false) {
     // Bypass this route
     return next('route')
   }

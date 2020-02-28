@@ -22,7 +22,7 @@ import {
 } from '../../../shared/extra-utils'
 import { Account, VideoPlaylistPrivacy } from '../../../shared/models'
 import { createFile, readdir } from 'fs-extra'
-import * as uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 import { join } from 'path'
 
 const expect = chai.expect

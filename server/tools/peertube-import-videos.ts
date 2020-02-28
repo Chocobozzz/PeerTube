@@ -274,7 +274,7 @@ async function getCategory (categories: string[], url: string) {
 function getLicence (licence: string) {
   if (!licence) return undefined
 
-  if (licence.indexOf('Creative Commons Attribution licence') !== -1) return 1
+  if (licence.includes('Creative Commons Attribution licence')) return 1
 
   return undefined
 }

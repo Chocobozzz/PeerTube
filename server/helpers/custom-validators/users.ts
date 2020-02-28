@@ -46,7 +46,7 @@ function isUserEmailVerifiedValid (value: any) {
 
 const nsfwPolicies = values(NSFW_POLICY_TYPES)
 function isUserNSFWPolicyValid (value: any) {
-  return exists(value) && nsfwPolicies.indexOf(value) !== -1
+  return exists(value) && nsfwPolicies.includes(value)
 }
 
 function isUserWebTorrentEnabledValid (value: any) {

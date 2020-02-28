@@ -13,7 +13,7 @@ function isValidRSSFeed (value: string) {
     'atom1'
   ]
 
-  return feedExtensions.indexOf(value) !== -1
+  return feedExtensions.includes(value)
 }
 
 // ---------------------------------------------------------------------------

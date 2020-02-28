@@ -44,7 +44,7 @@ async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAud
 async function forwardVideoRelatedActivity (
   activity: Activity,
   t: Transaction,
-  followersException: MActorWithInboxes[] = [],
+  followersException: MActorWithInboxes[],
   video: MVideoId
 ) {
   // Mastodon does not add our announces in audience, so we forward to them manually
@@ -161,7 +161,7 @@ async function computeFollowerUris (toFollowersOf: MActorId[], actorsException: 
   const result = await ActorFollowModel.listAcceptedFollowerSharedInboxUrls(toActorFollowerIds, t)
   const sharedInboxesException = await buildSharedInboxesException(actorsException)
 
-  return result.data.filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
+  return result.data.filter(sharedInbox => sharedInboxesException.includes(sharedInbox) === false)
 }
 
 async function computeUris (toActors: MActor[], actorsException: MActorWithInboxes[] = []) {
@@ -174,7 +174,7 @@ async function computeUris (toActors: MActor[], actorsException: MActorWithInbox
 
   const sharedInboxesException = await buildSharedInboxesException(actorsException)
   return Array.from(toActorSharedInboxesSet)
-              .filter(sharedInbox => sharedInboxesException.indexOf(sharedInbox) === -1)
+              .filter(sharedInbox => sharedInboxesException.includes(sharedInbox) === false)
 }
 
 async function buildSharedInboxesException (actorsException: MActorWithInboxes[]) {

@@ -73,7 +73,7 @@ function isVideoViewsValid (value: string) {
 }
 
 function isVideoRatingTypeValid (value: string) {
-  return value === 'none' || values(VIDEO_RATE_TYPES).indexOf(value as VideoRateType) !== -1
+  return value === 'none' || values(VIDEO_RATE_TYPES).includes(value as VideoRateType)
 }
 
 function isVideoFileExtnameValid (value: string) {

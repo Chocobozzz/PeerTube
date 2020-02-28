@@ -63,11 +63,13 @@
         "allowNumber": "true"
       }
     ],
+
     "@typescript-eslint/quotes": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/promise-function-async": "off",
     "@typescript-eslint/no-dynamic-delete": "off",
+    "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/no-misused-promises": "off",

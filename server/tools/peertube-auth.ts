@@ -133,7 +133,7 @@ program
   .description('set an existing entry as default')
   .action(async url => {
     const settings = await getSettings()
-    const instanceExists = settings.remotes.indexOf(url) !== -1
+    const instanceExists = settings.remotes.includes(url)
 
     if (instanceExists) {
       settings.default = settings.remotes.indexOf(url)

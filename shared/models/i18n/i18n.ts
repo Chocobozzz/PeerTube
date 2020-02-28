@@ -69,11 +69,11 @@ export function peertubeTranslate (str: string, translations?: { [ id: string ]:
 
 const possiblePaths = POSSIBLE_LOCALES.map(l => '/' + l)
 export function is18nPath (path: string) {
-  return possiblePaths.indexOf(path) !== -1
+  return possiblePaths.includes(path)
 }
 
 export function is18nLocale (locale: string) {
-  return POSSIBLE_LOCALES.indexOf(locale) !== -1
+  return POSSIBLE_LOCALES.includes(locale)
 }
 
 export function getCompleteLocale (locale: string) {
@@ -85,7 +85,7 @@ export function getCompleteLocale (locale: string) {
 }
 
 export function getShortLocale (locale: string) {
-  if (locale.indexOf('-') === -1) return locale
+  if (locale.includes('-') === false) return locale
 
   return locale.split('-')[0]
 }

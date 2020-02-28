@@ -335,7 +335,7 @@ export function reloadConfig () {
 
   function purge () {
     for (const fileName in require.cache) {
-      if (fileName.indexOf(directory()) === -1) {
+      if (fileName.includes(directory()) === false) {
         continue
       }
 

@@ -38,5 +38,5 @@ const userRoleRights: { [ id in UserRole ]: UserRight[] } = {
 export function hasUserRight (userRole: UserRole, userRight: UserRight) {
   const userRights = userRoleRights[userRole]
 
-  return userRights.indexOf(UserRight.ALL) !== -1 || userRights.indexOf(userRight) !== -1
+  return userRights.includes(UserRight.ALL) || userRights.includes(userRight)
 }

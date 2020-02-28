@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import * as uuidv4 from 'uuid/v4'
+import { v4 as uuidv4 } from 'uuid'
 
 async function up (utils: {
   transaction: Sequelize.Transaction

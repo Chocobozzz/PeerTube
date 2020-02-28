@@ -54,7 +54,7 @@ function checkConfig () {
   const defaultNSFWPolicy = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
   {
     const available = [ 'do_not_list', 'blur', 'display' ]
-    if (available.indexOf(defaultNSFWPolicy) === -1) {
+    if (available.includes(defaultNSFWPolicy) === false) {
       return 'NSFW policy setting should be ' + available.join(' or ') + ' instead of ' + defaultNSFWPolicy
     }
   }
@@ -64,7 +64,7 @@ function checkConfig () {
   if (isArray(redundancyVideos)) {
     const available = [ 'most-views', 'trending', 'recently-added' ]
     for (const r of redundancyVideos) {
-      if (available.indexOf(r.strategy) === -1) {
+      if (available.includes(r.strategy) === false) {
         return 'Videos redundancy should have ' + available.join(' or ') + ' strategy instead of ' + r.strategy
       }
 

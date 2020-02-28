@@ -20,7 +20,9 @@ import { MAccountDefault, MAccountId, MVideoId } from '../../typings/models'
 import { MVideoPlaylist, MVideoPlaylistId, MVideoPlaylistOwner } from '../../typings/models/video/video-playlist'
 
 function playlistObjectToDBAttributes (playlistObject: PlaylistObject, byAccount: MAccountId, to: string[]) {
-  const privacy = to.indexOf(ACTIVITY_PUB.PUBLIC) !== -1 ? VideoPlaylistPrivacy.PUBLIC : VideoPlaylistPrivacy.UNLISTED
+  const privacy = to.includes(ACTIVITY_PUB.PUBLIC)
+    ? VideoPlaylistPrivacy.PUBLIC
+    : VideoPlaylistPrivacy.UNLISTED
 
   return {
     name: playlistObject.name,
@@ -205,7 +207,7 @@ async function fetchRemoteVideoPlaylist (playlistUrl: string): Promise<{ statusC
 
   logger.info('Fetching remote playlist %s.', playlistUrl)
 
-  const { response, body } = await doRequest(options)
+  const { response, body } = await doRequest<any>(options)
 
   if (isPlaylistObjectValid(body) === false || checkUrlsSameHost(body.id, playlistUrl) !== true) {
     logger.debug('Remote video playlist JSON is not valid.', { body })

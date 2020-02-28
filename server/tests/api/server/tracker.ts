@@ -49,7 +49,7 @@ describe('Test tracker', function () {
     torrent.on('error', done)
     torrent.on('warning', warn => {
       const message = typeof warn === 'string' ? warn : warn.message
-      if (message.indexOf('Unknown infoHash ') !== -1) return done()
+      if (message.includes('Unknown infoHash ')) return done()
     })
 
     torrent.on('done', () => done(new Error('No error on infohash')))
@@ -64,7 +64,7 @@ describe('Test tracker', function () {
     torrent.on('error', done)
     torrent.on('warning', warn => {
       const message = typeof warn === 'string' ? warn : warn.message
-      if (message.indexOf('Unknown infoHash ') !== -1) return done(new Error('Error on infohash'))
+      if (message.includes('Unknown infoHash ')) return done(new Error('Error on infohash'))
     })
 
     torrent.on('done', done)
@@ -83,7 +83,7 @@ describe('Test tracker', function () {
         torrent.on('error', done)
         torrent.on('warning', warn => {
           const message = typeof warn === 'string' ? warn : warn.message
-          if (message.indexOf('disabled ') !== -1) return done()
+          if (message.includes('disabled ')) return done()
         })
 
         torrent.on('done', () => done(new Error('Tracker is enabled')))

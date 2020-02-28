@@ -84,19 +84,19 @@ function sanitizeAndCheckVideoTorrentObject (video: any) {
 function isRemoteVideoUrlValid (url: any) {
   return url.type === 'Link' &&
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.indexOf(url.mediaType) !== -1 &&
+      ACTIVITY_PUB.URL_MIME_TYPES.VIDEO.includes(url.mediaType) &&
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.height + '', { min: 0 }) &&
       validator.isInt(url.size + '', { min: 0 }) &&
       (!url.fps || validator.isInt(url.fps + '', { min: -1 }))
     ) ||
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.indexOf(url.mediaType) !== -1 &&
+      ACTIVITY_PUB.URL_MIME_TYPES.TORRENT.includes(url.mediaType) &&
       isActivityPubUrlValid(url.href) &&
       validator.isInt(url.height + '', { min: 0 })
     ) ||
     (
-      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.indexOf(url.mediaType) !== -1 &&
+      ACTIVITY_PUB.URL_MIME_TYPES.MAGNET.includes(url.mediaType) &&
       validator.isLength(url.href, { min: 5 }) &&
       validator.isInt(url.height + '', { min: 0 })
     ) ||
