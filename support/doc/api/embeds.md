@@ -10,7 +10,8 @@ For instance, the playground URL for the above embed URL is `https://my-instance
 
 ## Quick Start
 
-Given an existing PeerTube embed `<iframe>`, one can use the PeerTube Embed API to control it by first including the library. You can include it via Yarn with:
+Given an existing PeerTube embed `<iframe>` **with API enabled** (`https://my-instance.example.com/videos/embed/52a10666-3a18-4e73-93da-e8d3c12c305a?api=1`),
+one can use the PeerTube Embed API to control it by first including the library. You can include it via Yarn with:
 
 ```
 yarn add @peertube/embed-api
