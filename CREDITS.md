@@ -12,8 +12,8 @@
  * Francesc
  * Frank Sträter
  * Phongpanot
- * buoyantair
  * John Livingston
+ * buoyantair
  * Attila F
  * Benjamin Bouvier
  * Jan Keromnes
@@ -35,6 +35,7 @@
  * William Lahti
  * Wirebrass
  * Angristan
+ * DontUseGithub
  * GunChleoc
  * Marcin Mikołajczak
  * Okhin
@@ -45,7 +46,6 @@
  * Andréas Livet
  * Andrés Maldonado
  * Aurélien Bertron
- * DontUseGithub
  * Hans Meiser
  * Jefferson Hernandez
  * Kemal Oktay Aktoğan
@@ -60,6 +60,7 @@
  * jonathanraes
  * Andrew Morgan
  * Aurélien Béranger
+ * Average Dude
  * Axel Viala
  * ButterflyOfFire
  * Ch
@@ -74,10 +75,12 @@
  * Joan Montané
  * Jocelyn Jaubert
  * Julien Lemaire
+ * Kim
  * Lucas Teixeira
  * Lukas Winkler
  * Manuel Viens
  * Millicent Billette
+ * Moritz Warning
  * NorbiPeti
  * Pierre Jaury
  * Quentin
@@ -89,6 +92,7 @@
  * les
  * taziden
  * victor héry
+ * 3risian
  * Acid Chicken (硫酸鶏)
  * Adam Gauthier
  * Adam Magnier
@@ -119,12 +123,14 @@
  * Glandos
  * Haelwenn (lanodan) Monnier
  * HesioZ
+ * ICabaleiro
  * Jacen
  * Jacob
  * Jacques Foucry
  * Jagannath Bhat
  * Jarosław Maciejewski
  * Jessica Fairchild
+ * Jorge Silva
  * Julien Le Bras
  * Knackie
  * Kody
@@ -163,6 +169,7 @@
  * Quentí
  * ROPEDE
  * Raphael
+ * Raphaël Droz
  * Rech
  * Robin
  * Sankar

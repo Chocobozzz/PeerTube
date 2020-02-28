@@ -33,7 +33,8 @@ async function run () {
     console.log('\n\n# Icons\n')
     console.log(' * [Robbie Pearce](https://robbiepearce.com/softies/)')
     console.log(' * [Fork-Awesome](https://github.com/ForkAwesome/Fork-Awesome)')
-    console.log(' * playlist add by Material UI')
+    console.log(' * `playlist add` by Material UI')
+    console.log(' * `language` by Aaron Jin')
   }
 }
 
