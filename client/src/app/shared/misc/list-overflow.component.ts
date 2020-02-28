@@ -28,11 +28,12 @@ export interface ListOverflowItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListOverflowComponent<T extends ListOverflowItem> implements AfterViewInit {
+  @Input() items: T[]
+  @Input() itemTemplate: TemplateRef<{item: T}>
+
   @ViewChild('modal', { static: true }) modal: ElementRef
   @ViewChild('itemsParent', { static: true }) parent: ElementRef<HTMLDivElement>
   @ViewChildren('itemsRendered') itemsRendered: QueryList<ElementRef>
-  @Input() items: T[]
-  @Input() itemTemplate: TemplateRef<{item: T}>
 
   showItemsUntilIndexExcluded: number
   active = false
@@ -55,7 +56,7 @@ export class ListOverflowComponent<T extends ListOverflowItem> implements AfterV
     return !!this.showItemsUntilIndexExcluded
   }
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onWindowResize () {
     this.isInTouchScreen = !!this.screenService.isInTouchScreen()
     this.isInMobileView = !!this.screenService.isInMobileView()
