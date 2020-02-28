@@ -67,17 +67,6 @@ class Tokens {
 }
 
 export class AuthUser extends User implements ServerMyUserModel {
-  private static KEYS = {
-    ID: 'id',
-    ROLE: 'role',
-    EMAIL: 'email',
-    VIDEOS_HISTORY_ENABLED: 'videos-history-enabled',
-    USERNAME: 'username',
-    NSFW_POLICY: 'nsfw_policy',
-    WEBTORRENT_ENABLED: 'peertube-videojs-' + 'webtorrent_enabled',
-    AUTO_PLAY_VIDEO: 'auto_play_video'
-  }
-
   tokens: Tokens
   specialPlaylists: MyUserSpecialPlaylist[]
 
@@ -106,10 +95,6 @@ export class AuthUser extends User implements ServerMyUserModel {
     peertubeLocalStorage.removeItem(this.KEYS.USERNAME)
     peertubeLocalStorage.removeItem(this.KEYS.ID)
     peertubeLocalStorage.removeItem(this.KEYS.ROLE)
-    peertubeLocalStorage.removeItem(this.KEYS.NSFW_POLICY)
-    peertubeLocalStorage.removeItem(this.KEYS.WEBTORRENT_ENABLED)
-    peertubeLocalStorage.removeItem(this.KEYS.VIDEOS_HISTORY_ENABLED)
-    peertubeLocalStorage.removeItem(this.KEYS.AUTO_PLAY_VIDEO)
     peertubeLocalStorage.removeItem(this.KEYS.EMAIL)
     Tokens.flush()
   }

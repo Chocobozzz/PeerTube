@@ -27,10 +27,11 @@ import { objectToFormData } from '@app/shared/misc/utils'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { ServerService } from '@app/core'
+import { ServerService, AuthService } from '@app/core'
 import { UserSubscriptionService } from '@app/shared/user-subscription/user-subscription.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
 
 export interface VideosProvider {
   getVideos (parameters: {
@@ -49,6 +50,8 @@ export class VideoService implements VideosProvider {
 
   constructor (
     private authHttp: HttpClient,
+    private authService: AuthService,
+    private userService: UserService,
     private restExtractor: RestExtractor,
     private restService: RestService,
     private serverService: ServerService,
@@ -199,9 +202,10 @@ export class VideoService implements VideosProvider {
     filter?: VideoFilter,
     categoryOneOf?: number,
     languageOneOf?: string[],
-    skipCount?: boolean
+    skipCount?: boolean,
+    nsfw?: boolean
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount } = parameters
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfw } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -211,6 +215,15 @@ export class VideoService implements VideosProvider {
     if (filter) params = params.set('filter', filter)
     if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
     if (skipCount) params = params.set('skipCount', skipCount + '')
+
+    if (nsfw) {
+      params = params.set('nsfw', nsfw + '')
+    } else {
+      const nsfwPolicy = this.authService.isLoggedIn()
+        ? this.authService.getUser().nsfwPolicy
+        : this.userService.getAnonymousUser().nsfwPolicy
+      if (this.nsfwPolicyToFilter(nsfwPolicy)) params.set('nsfw', 'false')
+    }
 
     if (languageOneOf) {
       for (const l of languageOneOf) {
@@ -367,5 +380,9 @@ export class VideoService implements VideosProvider {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
+  }
+
+  private nsfwPolicyToFilter (policy: NSFWPolicyType) {
+    return policy === 'do_not_list'
   }
 }

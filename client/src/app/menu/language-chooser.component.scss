@@ -4,6 +4,8 @@
 .help-to-translate {
   @include peertube-button-link;
   @include orange-button;
+
+  border-radius: 0;
 }
 
 .modal-body {

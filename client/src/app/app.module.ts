@@ -19,6 +19,7 @@ import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/models'
 import { APP_BASE_HREF } from '@angular/common'
+import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 
 export function metaFactory (serverService: ServerService): MetaLoader {
   return new MetaStaticLoader({
@@ -39,6 +40,7 @@ export function metaFactory (serverService: ServerService): MetaLoader {
 
     MenuComponent,
     LanguageChooserComponent,
+    QuickSettingsModalComponent,
     AvatarNotificationComponent,
     HeaderComponent,
     SearchTypeaheadComponent,

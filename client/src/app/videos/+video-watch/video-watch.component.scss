@@ -443,6 +443,7 @@ my-video-comments {
 
 // If the view is not expanded, take into account the menu
 .privacy-concerns {
+  z-index: z(dropdown) + 1;
   width: calc(100% - #{$menu-width});
 }
 
@@ -488,11 +489,11 @@ my-video-comments {
     }
   }
 
-  .privacy-concerns-okay {
-    background-color: var(--mainColor);
+  .privacy-concerns-button {
     padding: 5px 8px 5px 7px;
     margin-left: auto;
     border-radius: 3px;
+    white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.3s;
     font-weight: $font-semibold;
@@ -500,6 +501,11 @@ my-video-comments {
     &:hover {
       background-color: #000;
     }
+  }
+
+  .privacy-concerns-okay {
+    background-color: var(--mainColor);
+    margin-left: 10px;
   }
 }
 

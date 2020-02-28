@@ -11,6 +11,7 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 import { UserHistoryService } from '@app/shared/users/user-history.service'
 import { UserService } from '@app/shared'
 import { Notifier, ServerService } from '@app/core'
+import { LocalStorageService } from '@app/shared/misc/storage.service'
 
 @Component({
   selector: 'my-account-history',
@@ -35,6 +36,7 @@ export class MyAccountHistoryComponent extends AbstractVideoList implements OnIn
     protected userService: UserService,
     protected notifier: Notifier,
     protected screenService: ScreenService,
+    protected storageService: LocalStorageService,
     private confirmService: ConfirmService,
     private videoService: VideoService,
     private userHistoryService: UserHistoryService

@@ -17,6 +17,7 @@
 
 ::ng-deep {
   .help-popover {
+    z-index: z(help-popover) !important;
     max-width: 300px;
 
     .popover-body {

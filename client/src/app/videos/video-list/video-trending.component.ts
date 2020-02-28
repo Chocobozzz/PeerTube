@@ -9,6 +9,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { Notifier, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { UserService } from '@app/shared'
+import { LocalStorageService } from '@app/shared/misc/storage.service'
 
 @Component({
   selector: 'my-videos-trending',
@@ -28,7 +30,9 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
+    protected userService: UserService,
     protected screenService: ScreenService,
+    protected storageService: LocalStorageService,
     private videoService: VideoService,
     private hooks: HooksService
   ) {

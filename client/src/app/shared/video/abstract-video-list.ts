@@ -1,4 +1,4 @@
-import { debounceTime, first, tap } from 'rxjs/operators'
+import { debounceTime, first, tap, throttleTime } from 'rxjs/operators'
 import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { fromEvent, Observable, of, Subject, Subscription } from 'rxjs'
@@ -15,6 +15,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
 import { ServerConfig } from '@shared/models'
 import { GlobalIconName } from '@app/shared/images/global-icon.component'
+import { UserService, User } from '../users'
+import { LocalStorageService } from '../misc/storage.service'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -72,9 +74,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   protected abstract notifier: Notifier
   protected abstract authService: AuthService
+  protected abstract userService: UserService
   protected abstract route: ActivatedRoute
   protected abstract serverService: ServerService
   protected abstract screenService: ScreenService
+  protected abstract storageService: LocalStorageService
   protected abstract router: Router
   protected abstract i18n: I18n
   abstract titlePage: string
@@ -124,6 +128,16 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     if (this.loadOnInit === true) {
       loadUserObservable.subscribe(() => this.loadMoreVideos())
     }
+
+    this.storageService.watch([
+      User.KEYS.NSFW_POLICY,
+      User.KEYS.VIDEO_LANGUAGES
+    ]).pipe(throttleTime(200)).subscribe(
+      () => {
+        this.loadUserVideoLanguagesIfNeeded()
+        if (this.hasDoneFirstQuery) this.reloadVideos()
+      }
+    )
   }
 
   ngOnDestroy () {
@@ -279,7 +293,12 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
 
   private loadUserVideoLanguagesIfNeeded () {
-    if (!this.authService.isLoggedIn() || !this.useUserVideoLanguagePreferences) {
+    if (!this.useUserVideoLanguagePreferences) {
+      return of(true)
+    }
+
+    if (!this.authService.isLoggedIn()) {
+      this.languageOneOf = this.userService.getAnonymousUser().videoLanguages
       return of(true)
     }
 

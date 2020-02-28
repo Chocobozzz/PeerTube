@@ -25,25 +25,3 @@
     font-weight: 600;
   }
 }
-
-/* p-inputSwitch styles to reduce the switch size */
-
-::ng-deep {
-  p-inputswitch {
-    height: 20px;
-  }
-
-  .ui-inputswitch {
-    width: 2.5em !important;
-    height: 1.45em !important;
-
-    .ui-inputswitch-slider::before {
-      height: 1em !important;
-      width: 1em !important;
-    }
-  }
-
-  .ui-inputswitch-checked .ui-inputswitch-slider::before {
-    transform: translateX(1em) !important;
-  }
-}

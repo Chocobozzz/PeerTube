@@ -12,7 +12,6 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
 import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
 import { QRCodeModule } from 'angularx-qrcode'
-import { InputSwitchModule } from 'primeng/inputswitch'
 import { TimestampRouteTransformerDirective } from '@app/shared/angular/timestamp-route-transformer.directive'
 
 @NgModule({
@@ -21,8 +20,7 @@ import { TimestampRouteTransformerDirective } from '@app/shared/angular/timestam
     SharedModule,
     NgbTooltipModule,
     QRCodeModule,
-    RecommendationsModule,
-    InputSwitchModule
+    RecommendationsModule
   ],
 
   declarations: [

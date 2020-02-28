@@ -274,6 +274,15 @@ p-multiselect {
     //  left: -2px !important;
     //}
   }
+
+  .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-highlight {
+    background-color: var(--mainColorLighter);
+  }
+
+  .ui-inputtext:enabled:focus:not(.ui-state-error) {
+    border-color: var(--mainColorLighter) !important;
+    box-shadow: none;
+  }
 }
 
 // PrimeNG calendar tweaks
@@ -378,6 +387,24 @@ p-inputswitch {
 
   .ui-inputswitch-checked .ui-inputswitch-slider {
     background-color: var(--mainColor) !important;
+  }
+
+  &.small {
+    height: 20px;
+
+    .ui-inputswitch {
+      width: 2.5em !important;
+      height: 1.45em !important;
+
+      .ui-inputswitch-slider::before {
+        height: 1em !important;
+        width: 1em !important;
+      }
+    }
+
+    .ui-inputswitch-checked .ui-inputswitch-slider::before {
+      transform: translateX(1em) !important;
+    }
   }
 }
 

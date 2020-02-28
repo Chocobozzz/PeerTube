@@ -10,6 +10,8 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 import { Notifier, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { UserService } from '@app/shared'
+import { LocalStorageService } from '@app/shared/misc/storage.service'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
@@ -29,7 +31,9 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected route: ActivatedRoute,
     protected notifier: Notifier,
     protected authService: AuthService,
+    protected userService: UserService,
     protected screenService: ScreenService,
+    protected storageService: LocalStorageService,
     private videoService: VideoService,
     private hooks: HooksService
   ) {

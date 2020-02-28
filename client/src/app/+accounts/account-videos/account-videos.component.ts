@@ -12,6 +12,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { Notifier, ServerService } from '@app/core'
+import { UserService } from '@app/shared'
+import { LocalStorageService } from '@app/shared/misc/storage.service'
 
 @Component({
   selector: 'my-account-videos',
@@ -34,9 +36,11 @@ export class AccountVideosComponent extends AbstractVideoList implements OnInit,
     protected serverService: ServerService,
     protected route: ActivatedRoute,
     protected authService: AuthService,
+    protected userService: UserService,
     protected notifier: Notifier,
     protected confirmService: ConfirmService,
     protected screenService: ScreenService,
+    protected storageService: LocalStorageService,
     private accountService: AccountService,
     private videoService: VideoService
   ) {

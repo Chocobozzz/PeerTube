@@ -35,6 +35,8 @@
     </div>
   </div>
 
+  <ng-content select="inner-title"></ng-content>
+
   <div class="form-group">
     <my-peertube-checkbox
       inputName="webTorrentEnabled" formControlName="webTorrentEnabled"
@@ -56,5 +58,5 @@
     ></my-peertube-checkbox>
   </div>
 
-  <input type="submit" i18n-value value="Save" [disabled]="!form.valid">
+  <input *ngIf="!reactiveUpdate" type="submit" i18n-value value="Save" [disabled]="!form.valid">
 </form>

@@ -29,7 +29,7 @@ menu {
 
   &.logged-in {
     .panel-block {
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .block-title {
@@ -88,22 +88,6 @@ menu {
           @include apply-svg-color(var(--menuForegroundColor));
         }
       }
-
-      .dropdown-item {
-        @include dropdown-with-icon-item;
-
-        my-global-icon {
-          width: 22px;
-          height: 22px;
-
-          &[iconName="sign-out"] {
-            position: relative;
-            right: -1px;
-            height: 21px;
-            width: 21px;
-          }
-        }
-      }
     }
   }
 
@@ -143,7 +127,7 @@ menu {
   }
 
   .panel-block {
-    margin-bottom: 45px;
+    margin-bottom: 15px;
 
     a {
       @include disable-default-a-behaviour;
@@ -198,57 +182,159 @@ menu {
   }
 
   .footer {
-    padding-bottom: 15px;
-    padding-left: $menu-lateral-padding;
-    padding-right: $menu-lateral-padding;
     width: $menu-width;
+    padding-bottom: 15px;
 
-    .language, .shortcuts, .color-palette {
-      display: inline-block;
-      color: $menu-bottom-color;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: $font-semibold;
+    & > div:not(.panel-block) {
+      padding-left: $menu-lateral-padding;
+      padding-right: $menu-lateral-padding;
+      row-gap: 1em;
+    }
 
-      .icon {
-        @include disable-outline;
-        @include icon(28px);
-        opacity: 0.9;
+    $footer-links-base-opacity: .8;
 
-        &.icon-language  {
-          position: relative;
-          top: -1px;
-          width: 28px;
-          height: 24px;
+    .footer-links {
+      display: inline-flex;
+      flex-wrap: wrap;
 
-          background-image: url('../../assets/images/menu/language.png');
-        }
+      & > a {
+        @include disable-default-a-behaviour;
 
-        &.icon-shortcuts  {
-          position: relative;
-          top: -1px;
-          width: 24px;
-          height: 24px;
+        display: inline-block;
+        text-decoration: none;
+        color: var(--mainBackgroundColor);
+        opacity: $footer-links-base-opacity;
+        white-space: nowrap;
+        font-size: 90%;
+        font-weight: 500;
+        line-height: 1.4rem;
+        margin-right: 8px;
 
-          background-image: url('../../assets/images/menu/keyboard.png');
-          filter: invert(100%);
-        }
+        &.inline-global-icon {
+          display: inline-flex;
+          align-items: center;
+          white-space: nowrap;
+          height: 1.4rem;
 
-        &.icon-moonsun  {
-          margin-left: 10px;
-          position: relative;
-          top: -1px;
-          width: 24px;
-          height: 24px;
-
-          background-image: url('../../assets/images/menu/moonsun.svg');
-        }
-
-        &:hover {
-          opacity: 1;
+          my-global-icon {
+            @include apply-svg-color(var(--mainBackgroundColor));
+        
+            display: flex;
+            width: auto;
+            height: 90%;
+            margin-right: .2rem;
+          }
         }
       }
     }
+
+    .footer-copyleft small a {
+      @include disable-default-a-behaviour;
+
+      color: var(--mainBackgroundColor);
+      opacity: $footer-links-base-opacity - .2;
+    }
+  }
+}
+
+.dropdown-menu {
+  width: calc(100% + 40px);
+}
+
+.dropdown-item {
+  @include dropdown-with-icon-item;
+
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+
+  i.glyphicon-menu-right {
+    opacity: .4;
+  }
+
+  my-global-icon {
+    &[iconName="cog"],
+    &[iconName="sign-out"] {
+      position: relative;
+      right: -2px;
+      height: 20px;
+      width: 20px;
+    }
+  }
+
+  my-global-icon.not-displayed {
+    display: none;
+  }
+
+  &:hover {
+    my-global-icon.hover-display-toggle.not-displayed {
+      display: inherit;
+    }
+    my-global-icon.hover-display-toggle {
+      display: none;
+    }
+  }
+}
+
+.more-settings {
+  text-transform: uppercase;
+  font-size: 80%;
+  color: #6c757d;
+}
+
+.icon {
+  @include disable-outline;
+  @include icon(22px);
+  opacity: 0.8;
+
+  &.icon-shortcuts  {
+    position: relative;
+    top: -1px;
+    margin-right: 10px;
+
+    background-image: url('../../assets/images/menu/keyboard.png');
+  }
+}
+
+input[type=checkbox]{
+  position: absolute;
+  visibility: hidden;
+}
+
+label {
+  cursor: pointer;
+  text-indent: -9999px;
+  width: 35px;
+  height: 20px;
+  background: #cccccc;
+  display: block;
+  border-radius: 100px;
+  position: relative;
+  margin: 0;
+
+  &:after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 14px;
+    height: 14px;
+    background: var(--mainBackgroundColor);
+    border-radius: 50%;
+    transition: 0.3s ease-out;
+  }
+
+  &:active:after {
+    width: 40px;
+  }
+}
+
+input:checked + label {
+  background: var(--mainColor);
+
+  &:after {
+    left: calc(100% - 3px);
+    transform: translateX(-100%);
   }
 }
 

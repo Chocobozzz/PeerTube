@@ -14,6 +14,7 @@ $grey-foreground-color: #585858;
 $grey-foreground-hover-color: #303030;
 
 $orange-color: #F1680D;
+$orange-color-lighter: rgb(233, 159, 110);
 $orange-hover-color: #F97D46;
 
 $cyan-color: hsl(187, 77%, 34%);
@@ -74,6 +75,7 @@ $activated-action-button-color: black;
 // to be warned of non-existing variables
 $variables: (
   --mainColor: var(--mainColor),
+  --mainColorLighter: var(--mainColorLighter),
   --mainHoverColor: var(--mainHoverColor),
   --mainBackgroundColor: var(--mainBackgroundColor),
   --mainForegroundColor: var(--mainForegroundColor),
@@ -112,8 +114,9 @@ $zindex: (
   tooltip      : 14000,
   loadbar      : 15000,
   modal        : 16000,
-  notification : 17000,
-  hotkeys      : 18000
+  help-popover : 17000,
+  notification : 18000,
+  hotkeys      : 19000
 );
 
 @function z($label) {
