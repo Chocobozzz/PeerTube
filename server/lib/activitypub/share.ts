@@ -36,7 +36,7 @@ async function addVideoShares (shareUrls: string[], video: MVideoId) {
   await Bluebird.map(shareUrls, async shareUrl => {
     try {
       // Fetch url
-      const { body } = await doRequest({
+      const { body } = await doRequest<any>({
         uri: shareUrl,
         json: true,
         activityPub: true

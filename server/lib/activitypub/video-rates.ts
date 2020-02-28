@@ -18,7 +18,7 @@ async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateTy
   await Bluebird.map(ratesUrl, async rateUrl => {
     try {
       // Fetch url
-      const { body } = await doRequest({
+      const { body } = await doRequest<any>({
         uri: rateUrl,
         json: true,
         activityPub: true

@@ -120,7 +120,7 @@ async function resolveParentComment (params: ResolveThreadParams) {
     throw new Error('Recursion limit reached when resolving a thread')
   }
 
-  const { body } = await doRequest({
+  const { body } = await doRequest<any>({
     uri: url,
     json: true,
     activityPub: true
