@@ -161,7 +161,7 @@ export class MenuComponent implements OnInit {
     }).subscribe(() => this.authService.refreshUserInformation())
   }
 
-  langForLocale(localeId: string) {
+  langForLocale (localeId: string) {
     return this.languages.find(lang => lang.id = localeId).label
   }
 
