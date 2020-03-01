@@ -42,9 +42,15 @@ import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '../../../helpers/middlewares'
+import {
+  checkUserCanManageVideo,
+  doesVideoChannelOfAccountExist,
+  doesVideoExist,
+  doesVideoExistForVideoFile
+} from '../../../helpers/middlewares'
 import { MVideoFullLight } from '@server/typings/models'
 import { getVideoWithAttributes } from '../../../helpers/video'
+import toInt from 'validator/lib/toInt'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -207,6 +213,7 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
 
     if (areValidationErrors(req, res)) return
     if (!await doesVideoExist(req.params.id, res)) return
+    if (!await doesVideoExistForVideoFile(toInt(req.params.videoFileId), req.params.id, res)) return
 
     return next()
   }

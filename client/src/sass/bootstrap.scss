@@ -109,6 +109,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
       margin: 0;
       padding: 0;
       opacity: .5;
+
+      &[iconName="cross"] {
+        @include icon(16px);
+        top: -3px;
+      }
     }
   }
 

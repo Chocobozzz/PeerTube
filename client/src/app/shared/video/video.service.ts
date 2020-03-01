@@ -32,6 +32,7 @@ import { UserSubscriptionService } from '@app/shared/user-subscription/user-subs
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 export interface VideosProvider {
   getVideos (parameters: {
@@ -289,6 +290,14 @@ export class VideoService implements VideosProvider {
     params = params.set('videoChannelId', videoChannelId.toString())
 
     return this.buildBaseFeedUrls(params)
+  }
+
+  getVideoFileMetadata (metadataUrl: string) {
+    return this.authHttp
+               .get<FfprobeData>(metadataUrl)
+               .pipe(
+                 catchError(err => this.restExtractor.handleError(err))
+               )
   }
 
   removeVideo (id: number) {

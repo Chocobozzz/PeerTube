@@ -7,8 +7,11 @@ import { VideoPrivacy, VideoCaption, VideoFile } from '@shared/models'
 import { FfprobeFormat, FfprobeStream } from 'fluent-ffmpeg'
 import { mapValues, pick } from 'lodash-es'
 import { NumberFormatterPipe } from '@app/shared/angular/number-formatter.pipe'
+import { BytesPipe } from 'ngx-pipes'
+import { VideoService } from '../video.service'
 
 type DownloadType = 'video' | 'subtitles'
+type FileMetadata = { [key: string]: { label: string, value: string }}
 
 @Component({
   selector: 'my-video-download',
@@ -24,20 +27,27 @@ export class VideoDownloadComponent {
 
   video: VideoDetails
   videoFile: VideoFile
-  videoFileMetadataFormat: { [key: string]: { label: string, value: string }}
-  videoFileMetadataVideoStream: { [key: string]: { label: string, value: string }} | undefined
-  videoFileMetadataAudioStream: { [key: string]: { label: string, value: string }} | undefined
+  videoFileMetadataFormat: FileMetadata
+  videoFileMetadataVideoStream: FileMetadata | undefined
+  videoFileMetadataAudioStream: FileMetadata | undefined
   videoCaptions: VideoCaption[]
   activeModal: NgbActiveModal
 
   type: DownloadType = 'video'
 
+  private bytesPipe: BytesPipe
+  private numbersPipe: NumberFormatterPipe
+
   constructor (
     private notifier: Notifier,
     private modalService: NgbModal,
+    private videoService: VideoService,
     private auth: AuthService,
     private i18n: I18n
-  ) { }
+  ) {
+    this.bytesPipe = new BytesPipe()
+    this.numbersPipe = new NumberFormatterPipe()
+  }
 
   get typeText () {
     return this.type === 'video'
@@ -79,10 +89,11 @@ export class VideoDownloadComponent {
   }
 
   async onResolutionIdChange () {
-    this.videoFile = await this.getVideoFile()
+    this.videoFile = this.getVideoFile()
+    if (this.videoFile.metadata) return
+
     await this.hydrateMetadataFromMetadataUrl(this.videoFile)
 
-    if (!this.videoFile.metadata) return
     this.videoFileMetadataFormat = this.videoFile
       ? this.getMetadataFormat(this.videoFile.metadata.format)
       : undefined
@@ -137,45 +148,49 @@ export class VideoDownloadComponent {
 
   getMetadataFormat (format: FfprobeFormat) {
     const keyToTranslateFunction = {
-      'encoder': (value: any) => ({ label: this.i18n('Encoder'), value }),
-      'format_long_name': (value: any) => ({ label: this.i18n('Format name'), value }),
-      'size': (value: any) => ({ label: this.i18n('Size'), value: new NumberFormatterPipe().transform(value) }),
-      'bit_rate': (value: any) => ({
+      'encoder': (value: string) => ({ label: this.i18n('Encoder'), value }),
+      'format_long_name': (value: string) => ({ label: this.i18n('Format name'), value }),
+      'size': (value: number) => ({ label: this.i18n('Size'), value: this.bytesPipe.transform(value, 2) }),
+      'bit_rate': (value: number) => ({
         label: this.i18n('Bitrate'),
-        value: `${new NumberFormatterPipe().transform(value)}bit/sec`
+        value: `${this.numbersPipe.transform(value)}bps`
       })
     }
 
     // flattening format
-    format = Object.assign(format, format.tags)
-    delete format.tags
+    const sanitizedFormat = Object.assign(format, format.tags)
+    delete sanitizedFormat.tags
 
     return mapValues(
-      pick(format, Object.keys(keyToTranslateFunction)),
+      pick(sanitizedFormat, Object.keys(keyToTranslateFunction)),
       (val, key) => keyToTranslateFunction[key](val)
     )
   }
 
   getMetadataStream (streams: FfprobeStream[], type: 'video' | 'audio') {
-    const stream = streams.find(s => s.codec_type === type) || undefined
+    const stream = streams.find(s => s.codec_type === type)
     if (!stream) return undefined
 
     let keyToTranslateFunction = {
-      'codec_long_name': (value: any) => ({ label: this.i18n('Codec'), value }),
-      'profile': (value: any) => ({ label: this.i18n('Profile'), value })
+      'codec_long_name': (value: string) => ({ label: this.i18n('Codec'), value }),
+      'profile': (value: string) => ({ label: this.i18n('Profile'), value }),
+      'bit_rate': (value: number) => ({
+        label: this.i18n('Bitrate'),
+        value: `${this.numbersPipe.transform(value)}bps`
+      })
     }
 
     if (type === 'video') {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'width': (value: any) => ({ label: this.i18n('Resolution'), value: `${value}x${stream.height}` }),
-        'display_aspect_ratio': (value: any) => ({ label: this.i18n('Aspect ratio'), value }),
-        'avg_frame_rate': (value: any) => ({ label: this.i18n('Average frame rate'), value }),
-        'pix_fmt': (value: any) => ({ label: this.i18n('Pixel format'), value })
+        'width': (value: number) => ({ label: this.i18n('Resolution'), value: `${value}x${stream.height}` }),
+        'display_aspect_ratio': (value: string) => ({ label: this.i18n('Aspect ratio'), value }),
+        'avg_frame_rate': (value: string) => ({ label: this.i18n('Average frame rate'), value }),
+        'pix_fmt': (value: string) => ({ label: this.i18n('Pixel format'), value })
       })
     } else {
       keyToTranslateFunction = Object.assign(keyToTranslateFunction, {
-        'sample_rate': (value: any) => ({ label: this.i18n('Sample rate'), value }),
-        'channel_layout': (value: any) => ({ label: this.i18n('Channel Layout'), value })
+        'sample_rate': (value: number) => ({ label: this.i18n('Sample rate'), value }),
+        'channel_layout': (value: number) => ({ label: this.i18n('Channel Layout'), value })
       })
     }
 
@@ -188,10 +203,8 @@ export class VideoDownloadComponent {
   private hydrateMetadataFromMetadataUrl (file: VideoFile) {
     if (file.metadata || !file.metadataUrl) return
 
-    return fetch(file.metadataUrl)
-      .then(response => response.json())
-      .then(data => {
-        file.metadata = data
-      })
+    const observable = this.videoService.getVideoFileMetadata(file.metadataUrl)
+    observable.subscribe(res => file.metadata = res)
+    return observable.toPromise()
   }
 }

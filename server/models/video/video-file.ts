@@ -194,6 +194,11 @@ export class VideoFileModel extends Model<VideoFileModel> {
               .then(results => results.length === 1)
   }
 
+  static async doesVideoExistForVideoFile (id: number, videoId: number | string) {
+    const videoFile = await VideoFileModel.loadWithVideo(id)
+    return (videoFile?.Video.id === videoId) || (videoFile?.VideoStreamingPlaylist?.Video?.id === videoId)
+  }
+
   static loadWithMetadata (id: number) {
     return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk(id)
   }

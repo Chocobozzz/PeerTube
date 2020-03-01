@@ -67,6 +67,7 @@ import { Hooks } from '../../../lib/plugins/hooks'
 import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
+import toInt from 'validator/lib/toInt'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -500,7 +501,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 }
 
 async function getVideoFileMetadata (req: express.Request, res: express.Response) {
-  const videoFile = await VideoFileModel.loadWithMetadata(Number(req.params.videoFileId))
+  const videoFile = await VideoFileModel.loadWithMetadata(toInt(req.params.videoFileId))
   return res.json(videoFile.metadata)
 }
 

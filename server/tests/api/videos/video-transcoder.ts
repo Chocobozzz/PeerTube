@@ -4,7 +4,14 @@ import * as chai from 'chai'
 import 'mocha'
 import { omit } from 'lodash'
 import { getMaxBitrate, VideoDetails, VideoResolution, VideoState } from '../../../../shared/models/videos'
-import { audio, canDoQuickTranscode, getVideoFileBitrate, getVideoFileFPS, getVideoFileResolution, getMetadataFromFile } from '../../../helpers/ffmpeg-utils'
+import {
+  audio,
+  canDoQuickTranscode,
+  getVideoFileBitrate,
+  getVideoFileFPS,
+  getVideoFileResolution,
+  getMetadataFromFile
+} from '../../../helpers/ffmpeg-utils'
 import {
   buildAbsoluteFixturePath,
   cleanupTests,
@@ -14,6 +21,7 @@ import {
   generateVideoWithFramerate,
   getMyVideos,
   getVideo,
+  getVideoFileMetadataUrl,
   getVideosList,
   makeGetRequest,
   root,
@@ -25,6 +33,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { join } from 'path'
 import { VIDEO_TRANSCODING_FPS } from '../../../../server/initializers/constants'
+import { FfprobeData } from 'fluent-ffmpeg'
 
 const expect = chai.expect
 
@@ -472,10 +481,12 @@ describe('Test video transcoding', function () {
 
     const res = await getVideosList(servers[1].url)
 
-    const video = res.body.data.find(v => v.name === videoAttributes.name)
+    const videoOnOrigin = res.body.data.find(v => v.name === videoAttributes.name)
+    const res2 = await getVideo(servers[1].url, videoOnOrigin.id)
+    const videoOnOriginDetails: VideoDetails = res2.body
 
     {
-      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', video.uuid + '-240.mp4')
+      const path = join(root(), 'test' + servers[1].internalServerNumber, 'videos', videoOnOrigin.uuid + '-240.mp4')
       const metadata = await getMetadataFromFile(path)
       for (const p of [
         // expected format properties
@@ -495,6 +506,28 @@ describe('Test video transcoding', function () {
         expect(metadata).to.have.nested.property(p)
       }
       expect(metadata).to.not.have.nested.property('format.filename')
+    }
+
+    const otherServers = servers
+    delete otherServers[1]
+    for (const server of otherServers) {
+      const res = await getVideosList(server.url)
+
+      const video = res.body.data.find(v => v.name === videoAttributes.name)
+      const res2 = await getVideo(server.url, video.id)
+      const videoDetails = res2.body
+
+      const videoFiles = videoDetails.files
+      for (const [ index, file ] of videoFiles.entries()) {
+        expect(file.metadata).to.be.undefined
+        expect(file.metadataUrl).to.contain(servers[1].url)
+        expect(file.metadataUrl).to.contain(videoOnOrigin.uuid)
+
+        const res3 = await getVideoFileMetadataUrl(file.metadataUrl)
+        const metadata: FfprobeData = res3.body
+        expect(metadata).to.have.nested.property('format.size')
+        expect(metadata.format.size).to.equal(videoOnOriginDetails.files[index].metadata.format.size)
+      }
     }
   })
 
