@@ -2,44 +2,65 @@ version: "3.3"
 
 services:
 
+  # The reverse-proxy only does SSL termination and automatic certificate generation. You can
+  # replace it with any other reverse-proxy, in which case you can remove 'traefik.*' labels.
   reverse-proxy:
     image: traefik:v1.7
     network_mode: "host"
     command:
-      - "--docker" # Tells Træfik to listen to docker
-      - "--acme.email=${TRAEFIK_ACME_EMAIL}" # Let's Encrypt ACME email
-      - "--acme.domains=${TRAEFIK_ACME_DOMAINS}" # Let's Encrypt ACME domain list
+      - "--docker"                                # Tells Træfik to listen to docker
+      - "--acme.email=${TRAEFIK_ACME_EMAIL}"      # Let's Encrypt ACME email
+      - "--acme.domains=${TRAEFIK_ACME_DOMAINS}"  # Let's Encrypt ACME domain list
     ports:
-      - "80:80"     # The HTTP port
-      - "443:443"   # The HTTPS port
+      - "80:80"    # The HTTP port
+      - "443:443"  # The HTTPS port
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock # So that Træfik can listen to the Docker events
       - ./docker-volume/traefik/acme.json:/etc/acme.json
       - ./docker-volume/traefik/traefik.toml:/traefik.toml
     restart: "always"
-    # If you want to use the Traefik dashboard, you should expose it on a
-    # subdomain with HTTPS and authentification:
-    # https://medium.com/@xavier.priour/secure-traefik-dashboard-with-https-and-password-in-docker-5b657e2aa15f
-    # https://github.com/containous/traefik/issues/880#issuecomment-310301168
 
-  peertube:
-    # If you don't want to use the official image and build one from sources
-    # build:
-    #   context: .
-    #   dockerfile: ./support/docker/production/Dockerfile.buster
-    image: chocobozzz/peertube:production-buster
+  # The webserver is not required, but recommended since a lot of optimizations went to its
+  # nginx configuration file. It runs the default nginx configuration without HTTPS nor SSL,
+  # so use it in production in tandem with an SSL-terminating reverse-proxy like above.
+  webserver:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
     env_file:
       - .env
-    # Traefik labels are suggested as an example for people using Traefik,
-    # remove them if you are using another reverse proxy.
+    # If you provide your own reverse-proxy, otherwise not suitable for production:
+    #ports:
+    #  - "80:80"
+    volumes:
+      - type: bind
+        # Switch sources if you downloaded the nginx configuration without the whole repository
+        #source: ./peertube
+        source: ../../nginx/peertube
+        target: /etc/nginx/conf.d/peertube.template
+      - assets:/var/www/peertube/peertube-latest/client/dist:ro
+      - ./docker-volume/data:/var/www/peertube/storage
+    depends_on:
+      - peertube
+    restart: "always"
     labels:
       traefik.enable: "true"
       traefik.frontend.rule: "Host:${PEERTUBE_WEBSERVER_HOSTNAME}"
-      traefik.port: "9000"
-    # If you don't want to use a reverse proxy (not suitable for production!)
-    # ports:
-      # - "80:9000"
+      traefik.port: "80"
+
+  peertube:
+    # If you don't want to use the official image and build one from sources:
+    #build:
+    #  context: .
+    #  dockerfile: ./support/docker/production/Dockerfile.buster
+    image: chocobozzz/peertube:production-buster
+    env_file:
+      - .env
+    # If you provide your own webserver and reverse-proxy, otherwise not suitable for production:
+    #ports:
+    #  - "80:9000"
     volumes:
+      - assets:/app/client/dist
       - ./docker-volume/data:/data
       - ./docker-volume/config:/config
     depends_on:
@@ -47,6 +68,8 @@ services:
       - redis
       - postfix
     restart: "always"
+    labels:
+      traefik.enable: "false"
 
   postgres:
     image: postgres:10-alpine
@@ -59,7 +82,7 @@ services:
       traefik.enable: "false"
 
   redis:
-    image: redis:4-alpine
+    image: redis:5-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"
@@ -82,3 +105,6 @@ networks:
       driver: default
       config:
       - subnet:  172.18.0.0/16
+
+volumes:
+  assets:

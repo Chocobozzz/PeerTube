@@ -1,26 +1,24 @@
-server {
-  listen 80;
-  listen [::]:80;
-  server_name peertube.example.com;
-
-  access_log /var/log/nginx/peertube.example.com.access.log;
-  error_log /var/log/nginx/peertube.example.com.error.log;
-
-  location /.well-known/acme-challenge/ {
-    default_type "text/plain";
-    root /var/www/certbot;
-  }
-  location / { return 301 https://$host$request_uri; }
-}
+# Uncomment in production to redirect HTTP to HTTPS. Leave commented for docker-compose.
+#server {
+#  listen 80;
+#  listen [::]:80;
+#  server_name ${WEBSERVER_HOST};
+#
+#  location /.well-known/acme-challenge/ {
+#    default_type "text/plain";
+#    root /var/www/certbot;
+#  }
+#  location / { return 301 https://$host$request_uri; }
+#}
 
 server {
   listen 443 ssl http2;
   listen [::]:443 ssl http2;
-  server_name peertube.example.com;
+  server_name ${WEBSERVER_HOST};
 
   # For example with certbot (you need a certificate to run https)
-  ssl_certificate      /etc/letsencrypt/live/peertube.example.com/fullchain.pem;
-  ssl_certificate_key  /etc/letsencrypt/live/peertube.example.com/privkey.pem;
+  ssl_certificate      /etc/letsencrypt/live/${WEBSERVER_HOST}/fullchain.pem;
+  ssl_certificate_key  /etc/letsencrypt/live/${WEBSERVER_HOST}/privkey.pem;
 
   # Security hardening (as of 11/02/2018)
   ssl_protocols TLSv1.2; # TLSv1.3, TLSv1.2 if nginx >= 1.13.0
@@ -51,8 +49,8 @@ server {
   # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path
   # client_body_temp_path /var/www/peertube/storage/nginx/;
 
-  access_log /var/log/nginx/peertube.example.com.access.log;
-  error_log /var/log/nginx/peertube.example.com.error.log;
+  access_log /var/log/nginx/${WEBSERVER_HOST}.access.log;
+  error_log /var/log/nginx/${WEBSERVER_HOST}.error.log;
 
   location ^~ '/.well-known/acme-challenge' {
     default_type "text/plain";
@@ -92,7 +90,7 @@ server {
   }
 
   location / {
-    proxy_pass http://127.0.0.1:9000;
+    proxy_pass http://${PEERTUBE_HOST};
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header Host $host;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -177,14 +175,14 @@ server {
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $host;
-    proxy_pass http://127.0.0.1:9000;
+    proxy_pass http://${PEERTUBE_HOST};
   }
 
   location /socket.io {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header Host $host;
 
-    proxy_pass http://127.0.0.1:9000;
+    proxy_pass http://${PEERTUBE_HOST};
 
     # enable WebSockets
     proxy_http_version 1.1;
