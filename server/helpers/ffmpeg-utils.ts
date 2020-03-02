@@ -7,6 +7,7 @@ import { logger } from './logger'
 import { checkFFmpegEncoders } from '../initializers/checker-before-init'
 import { readFile, remove, writeFile } from 'fs-extra'
 import { CONFIG } from '../initializers/config'
+import { VideoFileMetadata } from '@shared/models/videos/video-file-metadata'
 
 /**
  * A toolbox to play with audio
@@ -174,8 +175,7 @@ async function getMetadataFromFile<T> (path: string, cb = metadata => metadata) 
     ffmpeg.ffprobe(path, (err, metadata) => {
       if (err) return rej(err)
 
-      delete metadata.format.filename // we want to remove information about the filesystem
-      return res(cb(metadata))
+      return res(cb(new VideoFileMetadata(metadata)))
     })
   })
 }
