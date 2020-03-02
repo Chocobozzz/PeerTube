@@ -1872,7 +1872,7 @@
       </trans-unit>
       <trans-unit id="7ef9c50b8735e25780026b93da26cfcab1546653" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></source>
-        <target state="new">using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
+        <target state="translated">använder <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1880,7 +1880,7 @@
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">Resultaten kommer kompletteras med en indexering från en utomstående tjänst. Endast data som är nödvändig för sökningen kommer skickas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1972,7 +1972,7 @@
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">I videoversum</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">14</context>
@@ -3160,10 +3160,7 @@
       </trans-unit>
       <trans-unit id="a108b24038bb1a877d8ed3b3ccdf2d457fe81e8b" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Help your peers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and activate the sharing system to improve the experience for everyone. </source>
-        <target state="new">
-        <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Help your peers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-        and activate the sharing system to improve the experience for everyone.
-      </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Hjälp andra<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> genom att aktivera delningssystemet och att förbättra upplevelsen för alla. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">260</context>
@@ -3638,9 +3635,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="5226f8514b3952f242ac12e8cc7e8cdb59af0500" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-          If you leave the password empty, an email will be sent to the user.
-        </target>
+        <target state="translated">Om du inte anger ett lösenord, kommer ett skickas till användaren via e-post.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">34</context>
@@ -4369,7 +4364,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="new">MODERATION &amp; NSFW</target>
+        <target state="translated">MODERATION OCH OFÖRBEHÅLLSAMT MATERIAL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">63</context>
@@ -4775,7 +4770,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="ffd20e408d9c19dd0fed999f922b79acf3ca4be6" datatype="html">
         <source>INSTANCE FOLLOWERS</source>
-        <target state="new">INSTANCE FOLLOWERS</target>
+        <target state="translated">INSTANSENS FÖLJARE</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">335</context>
@@ -4796,7 +4791,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="31d09923321845d596339dddb4351dcfd608d930" datatype="html">
         <source>INSTANCE FOLLOWINGS</source>
-        <target state="new">INSTANCE FOLLOWINGS</target>
+        <target state="translated">FÖLJ INSTANSER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">356</context>
@@ -5890,7 +5885,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="683e563d15566afc94da584428bfecfe82f9b826" datatype="html">
         <source>Creator guide</source>
-        <target state="new">Creator guide</target>
+        <target state="translated">Guide för skapare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">162</context>
@@ -5898,7 +5893,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="79205f76b374a738487ccebb66b2b4612e61b7bb" datatype="html">
         <source>Contributors</source>
-        <target state="new">Contributors</target>
+        <target state="translated">Bidragsgivare</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">163</context>
@@ -5906,7 +5901,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="2a851f40f4a956fc4c3e0c3ed8dd33f10a4fa161" datatype="html">
         <source>PeerTube license</source>
-        <target state="new">PeerTube license</target>
+        <target state="translated">PeerTubes licens</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">163</context>
@@ -5926,7 +5921,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="b8bf6036a9fb05c08cdb190cdf4e3becc6e6fa0a" datatype="html">
         <source>SUPPORT THIS CHANNEL</source>
-        <target state="new">SUPPORT THIS CHANNEL</target>
+        <target state="translated">STÖD DEN HÄR KANALEN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-about/video-channel-about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6040,9 +6035,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="b37e7abff3d4e62f3bae09f486624aee45d02008" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target state="new">
-      ADMINISTRATORS &amp; SUSTAINABILITY
-    </target>
+        <target state="translated">ADMINISTRATÖRER OCH HÅLLBARHET</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">22</context>
@@ -6082,9 +6075,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="4b08f867a83bf0fef0d15bffc0b4cf277de2d376" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">
-      INFORMATION
-    </target>
+        <target state="translated">INFORMATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">50</context>
@@ -6092,9 +6083,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="fbbd3718f919643cf73006ceb30ec5b09a8b07f2" datatype="html">
         <source>MODERATION</source>
-        <target state="new">
-      MODERATION
-    </target>
+        <target state="translated">MODERATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">60</context>
@@ -6102,9 +6091,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="5270b8fd3d35ab0a0475354a84d1265caf4790bd" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">
-      OTHER INFORMATION
-    </target>
+        <target state="translated">ÖVRIG INFORMATION</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">82</context>
@@ -6129,9 +6116,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="e0b68a9aa60867a9b7016a48e30c31c790f8dcb1" datatype="html">
         <source>STATISTICS</source>
-        <target state="new">
-      STATISTICS
-    </target>
+        <target state="translated">STATISTIK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">99</context>
@@ -6627,7 +6612,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="55d67844f534a75a89f86bb19d51c0703280a6ad" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="new">VIDEO CHANNELS</target>
+        <target state="translated">VIDEOKANALER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6635,7 +6620,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="2ccc315673e88d7490220d465da566e3acff72d5" datatype="html">
         <source>ABOUT</source>
-        <target state="new">ABOUT</target>
+        <target state="translated">OM</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7792,7 +7777,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="9763d47eba525cfe3f0007f99e70b1dbc5e20c46" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="new">Display/Video settings updated.</target>
+        <target state="translated">Inställningarna för videor eller visning har ändrats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8052,7 +8037,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="33e9ca3aab38821eeaf966493df042d4202414df" datatype="html">
         <source>VIDEO PLAYLISTS</source>
-        <target state="new">VIDEO PLAYLISTS</target>
+        <target state="translated">VIDEOSPELLISTOR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8213,7 +8198,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="7d5d2f4e2aebe4977c5e3daff4283814f869c609" datatype="html">
         <source>any language</source>
-        <target state="new">any language</target>
+        <target state="translated">vilket språk som helst</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8221,7 +8206,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="6e998fc06a19659c22cca43efa1b35515761cbb2" datatype="html">
         <source>hide</source>
-        <target state="new">hide</target>
+        <target state="translated">dölj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8229,7 +8214,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="1214427202da5b7fb88968172a3b309f8da35d76" datatype="html">
         <source>blur</source>
-        <target state="new">blur</target>
+        <target state="translated">gör suddig</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8237,7 +8222,7 @@ När du laddar upp en video i den här kanalen kommer supportfältet automatiskt
       </trans-unit>
       <trans-unit id="890d991273787485fc939391676762a90edd8f34" datatype="html">
         <source>display</source>
-        <target state="new">display</target>
+        <target state="translated">visa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
