@@ -90,7 +90,7 @@ export class VideoDownloadComponent {
 
   async onResolutionIdChange () {
     this.videoFile = this.getVideoFile()
-    if (this.videoFile.metadata) return
+    if (this.videoFile.metadata || !this.videoFile.metadataUrl) return
 
     await this.hydrateMetadataFromMetadataUrl(this.videoFile)
 
@@ -201,8 +201,6 @@ export class VideoDownloadComponent {
   }
 
   private hydrateMetadataFromMetadataUrl (file: VideoFile) {
-    if (file.metadata || !file.metadataUrl) return
-
     const observable = this.videoService.getVideoFileMetadata(file.metadataUrl)
     observable.subscribe(res => file.metadata = res)
     return observable.toPromise()
