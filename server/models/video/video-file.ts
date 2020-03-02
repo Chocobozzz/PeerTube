@@ -44,7 +44,7 @@ const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
   }
 }))
 @Scopes(() => ({
-  [ ScopeNames.WITH_VIDEO ]: {
+  [ScopeNames.WITH_VIDEO]: {
     include: [
       {
         model: VideoModel.unscoped(),
@@ -52,7 +52,7 @@ const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
       }
     ]
   },
-  [ ScopeNames.WITH_METADATA ]: {
+  [ScopeNames.WITH_METADATA]: {
     attributes: {
       include: METADATA_FIELDS
     }
