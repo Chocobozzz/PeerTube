@@ -2921,7 +2921,7 @@
       </trans-unit>
       <trans-unit id="e01bfa3629e2133dbf307975446bde047eb8bd1f" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target state="translated">{VAR_SELECT, select, undefined {Anuluj subskrypcję} other {Anuluj subskrypcję wszystkich kanałów }</target>
+        <target state="translated">{VAR_SELECT, select, undefined {Anuluj subskrypcję} other {Anuluj subskrypcję wszystkich kanałów } }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">31</context>
