@@ -33,6 +33,8 @@ server {
   ssl_session_tickets off; # Requires nginx >= 1.5.9
   ssl_stapling on; # Requires nginx >= 1.3.7
   ssl_stapling_verify on; # Requires nginx => 1.3.7
+  # HSTS (https://hstspreload.org), requires to be copied in 'location' sections that have add_header directives
+  #add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
 
   # Configure with your resolvers
   # resolver $DNS-IP-1 $DNS-IP-2 valid=300s;
@@ -48,12 +50,6 @@ server {
   # If you have a small /var/lib partition, it could be interesting to store temp nginx uploads in a different place
   # See https://nginx.org/en/docs/http/ngx_http_core_module.html#client_body_temp_path
   # client_body_temp_path /var/www/peertube/storage/nginx/;
-
-  # Enable HSTS
-  # Tells browsers to stick with HTTPS and never visit the insecure HTTP
-  # version. Once a browser sees this header, it will only visit the site over
-  # HTTPS for the next 2 years: (read more on hstspreload.org)
-  #add_header Strict-Transport-Security "max-age=63072000; includeSubDomains";
 
   access_log /var/log/nginx/peertube.example.com.access.log;
   error_log /var/log/nginx/peertube.example.com.error.log;
