@@ -194,8 +194,8 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   onNearOfBottom () {    
     if (hasMoreItems(this.componentPagination)) {
-      this.loadMoreThreads()
       this.componentPagination.currentPage++
+      this.loadMoreThreads()
     }
   }
 
