@@ -192,11 +192,10 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
-  onNearOfBottom () {
-    this.componentPagination.currentPage++
-
+  onNearOfBottom () {    
     if (hasMoreItems(this.componentPagination)) {
       this.loadMoreThreads()
+      this.componentPagination.currentPage++
     }
   }
 
@@ -219,7 +218,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
       this.componentPagination.totalItems = null
 
       this.syndicationItems = this.videoCommentService.getVideoCommentsFeeds(this.video.uuid)
-
+      
       this.loadMoreThreads()
     }
   }
