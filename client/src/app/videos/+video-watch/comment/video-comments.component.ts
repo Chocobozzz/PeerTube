@@ -130,6 +130,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
         this.componentPagination.totalItems = res.total
 
         this.onDataSubject.next(res.data)
+        this.hooks.runAction('action:video-watch.comments.loaded', 'video-watch', { data: this.componentPagination })
       },
 
       err => this.notifier.error(err.message)
