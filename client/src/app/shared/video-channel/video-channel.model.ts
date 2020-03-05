@@ -8,6 +8,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   support: string
   isLocal: boolean
   nameWithHost: string
+  nameWithHostForced: string
   ownerAccount?: Account
   ownerBy?: string
   ownerAvatarUrl?: string
@@ -20,6 +21,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.support = hash.support
     this.isLocal = hash.isLocal
     this.nameWithHost = Actor.CREATE_BY_STRING(this.name, this.host)
+    this.nameWithHostForced = Actor.CREATE_BY_STRING(this.name, this.host, true)
 
     if (hash.ownerAccount) {
       this.ownerAccount = hash.ownerAccount

@@ -9,7 +9,7 @@
           <div class="actor-display-name">{{ videoChannel.displayName }}</div>
           <div class="actor-name">
             <span>{{ videoChannel.nameWithHost }}</span>
-            <button [cdkCopyToClipboard]="videoChannel.nameWithHost" (click)="activateCopiedMessage()"
+            <button [cdkCopyToClipboard]="videoChannel.nameWithHostForced" (click)="activateCopiedMessage()"
                     class="btn btn-outline-secondary btn-sm copy-button"
             >
               <span class="glyphicon glyphicon-copy"></span>
