@@ -156,8 +156,11 @@ function parseAggregateResult (result: any) {
 }
 
 const createSafeIn = (model: typeof Model, stringArr: (string | number)[]) => {
-  return stringArr.map(t => model.sequelize.escape('' + t))
-                  .join(', ')
+  return stringArr.map(t => {
+    return t === null
+      ? null
+      : model.sequelize.escape('' + t)
+  }).join(', ')
 }
 
 function buildLocalAccountIdsIn () {
@@ -170,6 +173,21 @@ function buildLocalActorIdsIn () {
   return literal(
     '(SELECT "actor"."id" FROM "actor" WHERE "actor"."serverId" IS NULL)'
   )
+}
+
+function buildDirectionAndField (value: string) {
+  let field: string
+  let direction: 'ASC' | 'DESC'
+
+  if (value.substring(0, 1) === '-') {
+    direction = 'DESC'
+    field = value.substring(1)
+  } else {
+    direction = 'ASC'
+    field = value
+  }
+
+  return { direction, field }
 }
 
 // ---------------------------------------------------------------------------
@@ -191,6 +209,7 @@ export {
   isOutdated,
   parseAggregateResult,
   getFollowsSort,
+  buildDirectionAndField,
   createSafeIn
 }
 
@@ -202,19 +221,4 @@ function searchTrigramNormalizeValue (value: string) {
 
 function searchTrigramNormalizeCol (col: string) {
   return Sequelize.fn('lower', Sequelize.fn('immutable_unaccent', Sequelize.col(col)))
-}
-
-function buildDirectionAndField (value: string) {
-  let field: string
-  let direction: 'ASC' | 'DESC'
-
-  if (value.substring(0, 1) === '-') {
-    direction = 'DESC'
-    field = value.substring(1)
-  } else {
-    direction = 'ASC'
-    field = value
-  }
-
-  return { direction, field }
 }

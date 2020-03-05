@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { maxBy, minBy } from 'lodash'
 import { join } from 'path'
-import { CountOptions, FindOptions, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
+import { FindOptions, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BeforeDestroy,
@@ -65,16 +65,7 @@ import { AccountVideoRateModel } from '../account/account-video-rate'
 import { ActorModel } from '../activitypub/actor'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import {
-  buildBlockedAccountSQL,
-  buildTrigramSearchIndex,
-  buildWhereIdOrUUID,
-  createSafeIn,
-  createSimilarityAttribute,
-  getVideoSort,
-  isOutdated,
-  throwIfNotValid
-} from '../utils'
+import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
 import { TagModel } from './tag'
 import { VideoAbuseModel } from './video-abuse'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
@@ -120,7 +111,8 @@ import {
   MVideoFormattableDetails,
   MVideoForUser,
   MVideoFullLight,
-  MVideoIdThumbnail, MVideoImmutable,
+  MVideoIdThumbnail,
+  MVideoImmutable,
   MVideoThumbnail,
   MVideoThumbnailBlacklist,
   MVideoWithAllFiles,
@@ -131,8 +123,8 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/mode
 import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
-import validator from 'validator'
 import { ModelCache } from '@server/models/model-cache'
+import { buildListQuery, BuildVideosQueryOptions } from './video-query-builder'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -237,274 +229,6 @@ export type AvailableForListIDsOptions = {
           videoPlaylistId: options.videoPlaylistId
         }
       })
-    }
-
-    return query
-  },
-  [ScopeNames.AVAILABLE_FOR_LIST_IDS]: (options: AvailableForListIDsOptions) => {
-    const whereAnd = options.baseWhere ? [].concat(options.baseWhere) : []
-
-    const query: FindOptions = {
-      raw: true,
-      include: []
-    }
-
-    const attributesType = options.attributesType || 'id'
-
-    if (attributesType === 'id') query.attributes = [ 'id' ]
-    else if (attributesType === 'none') query.attributes = []
-
-    whereAnd.push({
-      id: {
-        [Op.notIn]: Sequelize.literal(
-          '(SELECT "videoBlacklist"."videoId" FROM "videoBlacklist")'
-        )
-      }
-    })
-
-    if (options.serverAccountId) {
-      whereAnd.push({
-        channelId: {
-          [Op.notIn]: Sequelize.literal(
-            '(' +
-              'SELECT id FROM "videoChannel" WHERE "accountId" IN (' +
-                buildBlockedAccountSQL(options.serverAccountId, options.user ? options.user.Account.id : undefined) +
-              ')' +
-            ')'
-          )
-        }
-      })
-    }
-
-    // Only list public/published videos
-    if (!options.filter || options.filter !== 'all-local') {
-      const publishWhere = {
-        // Always list published videos, or videos that are being transcoded but on which we don't want to wait for transcoding
-        [Op.or]: [
-          {
-            state: VideoState.PUBLISHED
-          },
-          {
-            [Op.and]: {
-              state: VideoState.TO_TRANSCODE,
-              waitTranscoding: false
-            }
-          }
-        ]
-      }
-      whereAnd.push(publishWhere)
-
-      // List internal videos if the user is logged in
-      if (options.user) {
-        const privacyWhere = {
-          [Op.or]: [
-            {
-              privacy: VideoPrivacy.INTERNAL
-            },
-            {
-              privacy: VideoPrivacy.PUBLIC
-            }
-          ]
-        }
-
-        whereAnd.push(privacyWhere)
-      } else { // Or only public videos
-        const privacyWhere = { privacy: VideoPrivacy.PUBLIC }
-        whereAnd.push(privacyWhere)
-      }
-    }
-
-    if (options.videoPlaylistId) {
-      query.include.push({
-        attributes: [],
-        model: VideoPlaylistElementModel.unscoped(),
-        required: true,
-        where: {
-          videoPlaylistId: options.videoPlaylistId
-        }
-      })
-
-      query.subQuery = false
-    }
-
-    if (options.filter && (options.filter === 'local' || options.filter === 'all-local')) {
-      whereAnd.push({
-        remote: false
-      })
-    }
-
-    if (options.accountId || options.videoChannelId) {
-      const videoChannelInclude: IncludeOptions = {
-        attributes: [],
-        model: VideoChannelModel.unscoped(),
-        required: true
-      }
-
-      if (options.videoChannelId) {
-        videoChannelInclude.where = {
-          id: options.videoChannelId
-        }
-      }
-
-      if (options.accountId) {
-        const accountInclude: IncludeOptions = {
-          attributes: [],
-          model: AccountModel.unscoped(),
-          required: true
-        }
-
-        accountInclude.where = { id: options.accountId }
-        videoChannelInclude.include = [ accountInclude ]
-      }
-
-      query.include.push(videoChannelInclude)
-    }
-
-    if (options.followerActorId) {
-      let localVideosReq = ''
-      if (options.includeLocalVideos === true) {
-        localVideosReq = ' UNION ALL SELECT "video"."id" FROM "video" WHERE remote IS FALSE'
-      }
-
-      // Force actorId to be a number to avoid SQL injections
-      const actorIdNumber = parseInt(options.followerActorId.toString(), 10)
-      whereAnd.push({
-        id: {
-          [Op.in]: Sequelize.literal(
-            '(' +
-            'SELECT "videoShare"."videoId" AS "id" FROM "videoShare" ' +
-            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            ' UNION ALL ' +
-            'SELECT "video"."id" AS "id" FROM "video" ' +
-            'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-            'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-            'INNER JOIN "actor" ON "account"."actorId" = "actor"."id" ' +
-            'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "actor"."id" ' +
-            'WHERE "actorFollow"."actorId" = ' + actorIdNumber +
-            localVideosReq +
-            ')'
-          )
-        }
-      })
-    }
-
-    if (options.withFiles === true) {
-      whereAnd.push({
-        id: {
-          [Op.in]: Sequelize.literal(
-            '(SELECT "videoId" FROM "videoFile")'
-          )
-        }
-      })
-    }
-
-    // FIXME: issues with sequelize count when making a join on n:m relation, so we just make a IN()
-    if (options.tagsAllOf || options.tagsOneOf) {
-      if (options.tagsOneOf) {
-        const tagsOneOfLower = options.tagsOneOf.map(t => t.toLowerCase())
-
-        whereAnd.push({
-          id: {
-            [Op.in]: Sequelize.literal(
-              '(' +
-              'SELECT "videoId" FROM "videoTag" ' +
-              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE lower("tag"."name") IN (' + createSafeIn(VideoModel, tagsOneOfLower) + ')' +
-              ')'
-            )
-          }
-        })
-      }
-
-      if (options.tagsAllOf) {
-        const tagsAllOfLower = options.tagsAllOf.map(t => t.toLowerCase())
-
-        whereAnd.push({
-          id: {
-            [Op.in]: Sequelize.literal(
-              '(' +
-              'SELECT "videoId" FROM "videoTag" ' +
-              'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-              'WHERE lower("tag"."name") IN (' + createSafeIn(VideoModel, tagsAllOfLower) + ')' +
-              'GROUP BY "videoTag"."videoId" HAVING COUNT(*) = ' + tagsAllOfLower.length +
-              ')'
-            )
-          }
-        })
-      }
-    }
-
-    if (options.nsfw === true || options.nsfw === false) {
-      whereAnd.push({ nsfw: options.nsfw })
-    }
-
-    if (options.categoryOneOf) {
-      whereAnd.push({
-        category: {
-          [Op.or]: options.categoryOneOf
-        }
-      })
-    }
-
-    if (options.licenceOneOf) {
-      whereAnd.push({
-        licence: {
-          [Op.or]: options.licenceOneOf
-        }
-      })
-    }
-
-    if (options.languageOneOf) {
-      let videoLanguages = options.languageOneOf
-      if (options.languageOneOf.find(l => l === '_unknown')) {
-        videoLanguages = videoLanguages.concat([ null ])
-      }
-
-      whereAnd.push({
-        [Op.or]: [
-          {
-            language: {
-              [Op.or]: videoLanguages
-            }
-          },
-          {
-            id: {
-              [Op.in]: Sequelize.literal(
-                '(' +
-                'SELECT "videoId" FROM "videoCaption" ' +
-                'WHERE "language" IN (' + createSafeIn(VideoModel, options.languageOneOf) + ') ' +
-                ')'
-              )
-            }
-          }
-        ]
-      })
-    }
-
-    if (options.trendingDays) {
-      query.include.push(VideoModel.buildTrendingQuery(options.trendingDays))
-
-      query.subQuery = false
-    }
-
-    if (options.historyOfUser) {
-      query.include.push({
-        model: UserVideoHistoryModel,
-        required: true,
-        where: {
-          userId: options.historyOfUser.id
-        }
-      })
-
-      // Even if the relation is n:m, we know that a user only have 0..1 video history
-      // So we won't have multiple rows for the same video
-      // Without this, we would not be able to sort on "updatedAt" column of UserVideoHistoryModel
-      query.subQuery = false
-    }
-
-    query.where = {
-      [Op.and]: whereAnd
     }
 
     return query
@@ -1281,25 +1005,21 @@ export class VideoModel extends Model<VideoModel> {
       throw new Error('Try to filter all-local but no user has not the see all videos right')
     }
 
-    const query: FindOptions & { where?: null } = {
-      offset: options.start,
-      limit: options.count,
-      order: getVideoSort(options.sort)
-    }
-
-    let trendingDays: number
-    if (options.sort.endsWith('trending')) {
-      trendingDays = CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
-
-      query.group = 'VideoModel.id'
-    }
+    const trendingDays = options.sort.endsWith('trending')
+      ? CONFIG.TRENDING.VIDEOS.INTERVAL_DAYS
+      : undefined
 
     const serverActor = await getServerActor()
 
     // followerActorId === null has a meaning, so just check undefined
-    const followerActorId = options.followerActorId !== undefined ? options.followerActorId : serverActor.id
+    const followerActorId = options.followerActorId !== undefined
+      ? options.followerActorId
+      : serverActor.id
 
     const queryOptions = {
+      start: options.start,
+      count: options.count,
+      sort: options.sort,
       followerActorId,
       serverAccountId: serverActor.Account.id,
       nsfw: options.nsfw,
@@ -1319,7 +1039,7 @@ export class VideoModel extends Model<VideoModel> {
       trendingDays
     }
 
-    return VideoModel.getAvailableForApi(query, queryOptions, options.countVideos)
+    return VideoModel.getAvailableForApi(queryOptions, options.countVideos)
   }
 
   static async searchAndPopulateAccountAndServer (options: {
@@ -1343,88 +1063,6 @@ export class VideoModel extends Model<VideoModel> {
     user?: MUserAccountId
     filter?: VideoFilter
   }) {
-    const whereAnd = []
-
-    if (options.startDate || options.endDate) {
-      const publishedAtRange = {}
-
-      if (options.startDate) publishedAtRange[Op.gte] = options.startDate
-      if (options.endDate) publishedAtRange[Op.lte] = options.endDate
-
-      whereAnd.push({ publishedAt: publishedAtRange })
-    }
-
-    if (options.originallyPublishedStartDate || options.originallyPublishedEndDate) {
-      const originallyPublishedAtRange = {}
-
-      if (options.originallyPublishedStartDate) originallyPublishedAtRange[Op.gte] = options.originallyPublishedStartDate
-      if (options.originallyPublishedEndDate) originallyPublishedAtRange[Op.lte] = options.originallyPublishedEndDate
-
-      whereAnd.push({ originallyPublishedAt: originallyPublishedAtRange })
-    }
-
-    if (options.durationMin || options.durationMax) {
-      const durationRange = {}
-
-      if (options.durationMin) durationRange[Op.gte] = options.durationMin
-      if (options.durationMax) durationRange[Op.lte] = options.durationMax
-
-      whereAnd.push({ duration: durationRange })
-    }
-
-    const attributesInclude = []
-    const escapedSearch = VideoModel.sequelize.escape(options.search)
-    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
-    if (options.search) {
-      const trigramSearch = {
-        id: {
-          [Op.in]: Sequelize.literal(
-            '(' +
-            'SELECT "video"."id" FROM "video" ' +
-            'WHERE ' +
-            'lower(immutable_unaccent("video"."name")) % lower(immutable_unaccent(' + escapedSearch + ')) OR ' +
-            'lower(immutable_unaccent("video"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))' +
-            'UNION ALL ' +
-            'SELECT "video"."id" FROM "video" LEFT JOIN "videoTag" ON "videoTag"."videoId" = "video"."id" ' +
-            'INNER JOIN "tag" ON "tag"."id" = "videoTag"."tagId" ' +
-            'WHERE lower("tag"."name") = lower(' + escapedSearch + ')' +
-            ')'
-          )
-        }
-      }
-
-      if (validator.isUUID(options.search)) {
-        whereAnd.push({
-          [Op.or]: [
-            trigramSearch,
-            {
-              uuid: options.search
-            }
-          ]
-        })
-      } else {
-        whereAnd.push(trigramSearch)
-      }
-
-      attributesInclude.push(createSimilarityAttribute('VideoModel.name', options.search))
-    }
-
-    // Cannot search on similarity if we don't have a search
-    if (!options.search) {
-      attributesInclude.push(
-        Sequelize.literal('0 as similarity')
-      )
-    }
-
-    const query = {
-      attributes: {
-        include: attributesInclude
-      },
-      offset: options.start,
-      limit: options.count,
-      order: getVideoSort(options.sort)
-    }
-
     const serverActor = await getServerActor()
     const queryOptions = {
       followerActorId: serverActor.id,
@@ -1438,10 +1076,21 @@ export class VideoModel extends Model<VideoModel> {
       tagsAllOf: options.tagsAllOf,
       user: options.user,
       filter: options.filter,
-      baseWhere: whereAnd
+      start: options.start,
+      count: options.count,
+      sort: options.sort,
+      startDate: options.startDate,
+      endDate: options.endDate,
+      originallyPublishedStartDate: options.originallyPublishedStartDate,
+      originallyPublishedEndDate: options.originallyPublishedEndDate,
+
+      durationMin: options.durationMin,
+      durationMax: options.durationMax,
+
+      search: options.search
     }
 
-    return VideoModel.getAvailableForApi(query, queryOptions)
+    return VideoModel.getAvailableForApi(queryOptions)
   }
 
   static load (id: number | string, t?: Transaction): Bluebird<MVideoThumbnail> {
@@ -1723,26 +1372,22 @@ export class VideoModel extends Model<VideoModel> {
     const serverActor = await getServerActor()
     const followerActorId = serverActor.id
 
-    const scopeOptions: AvailableForListIDsOptions = {
+    const queryOptions: BuildVideosQueryOptions = {
+      attributes: [ `"${field}"` ],
+      group: `GROUP BY "${field}"`,
+      having: `HAVING COUNT("${field}") >= ${threshold}`,
+      start: 0,
+      sort: 'random',
+      count,
       serverAccountId: serverActor.Account.id,
       followerActorId,
-      includeLocalVideos: true,
-      attributesType: 'none' // Don't break aggregation
+      includeLocalVideos: true
     }
 
-    const query: FindOptions = {
-      attributes: [ field ],
-      limit: count,
-      group: field,
-      having: Sequelize.where(
-        Sequelize.fn('COUNT', Sequelize.col(field)), { [Op.gte]: threshold }
-      ),
-      order: [ (this.sequelize as any).random() ]
-    }
+    const { query, replacements } = buildListQuery(VideoModel, queryOptions)
 
-    return VideoModel.scope({ method: [ ScopeNames.AVAILABLE_FOR_LIST_IDS, scopeOptions ] })
-                     .findAll(query)
-                     .then(rows => rows.map(r => r[field]))
+    return this.sequelize.query<any>(query, { replacements, type: QueryTypes.SELECT })
+        .then(rows => rows.map(r => r[field]))
   }
 
   static buildTrendingQuery (trendingDays: number) {
@@ -1760,34 +1405,21 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   private static async getAvailableForApi (
-    query: FindOptions & { where?: null }, // Forbid where field in query
-    options: AvailableForListIDsOptions,
+    options: BuildVideosQueryOptions,
     countVideos = true
   ) {
-    const idsScope: ScopeOptions = {
-      method: [
-        ScopeNames.AVAILABLE_FOR_LIST_IDS, options
-      ]
-    }
-
-    // Remove trending sort on count, because it uses a group by
-    const countOptions = Object.assign({}, options, { trendingDays: undefined })
-    const countQuery: CountOptions = Object.assign({}, query, { attributes: undefined, group: undefined })
-    const countScope: ScopeOptions = {
-      method: [
-        ScopeNames.AVAILABLE_FOR_LIST_IDS, countOptions
-      ]
-    }
+    const { query, replacements } = buildListQuery(VideoModel, options)
+    const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel, Object.assign({}, options, { isCount: true }))
 
     const [ count, rows ] = await Promise.all([
       countVideos
-        ? VideoModel.scope(countScope).count(countQuery)
+        ? this.sequelize.query<any>(queryCount, { replacements: replacementsCount, type: QueryTypes.SELECT })
+              .then(rows => rows.length !== 0 ? rows[0].total : 0)
         : Promise.resolve<number>(undefined),
 
-      VideoModel.scope(idsScope)
-                .findAll(Object.assign({}, query, { raw: true }))
+      this.sequelize.query<any>(query, { replacements, type: QueryTypes.SELECT })
                 .then(rows => rows.map(r => r.id))
-                .then(ids => VideoModel.loadCompleteVideosForApi(ids, query, options))
+                .then(ids => VideoModel.loadCompleteVideosForApi(ids, options))
     ])
 
     return {
@@ -1796,13 +1428,12 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
-  private static loadCompleteVideosForApi (ids: number[], query: FindOptions, options: AvailableForListIDsOptions) {
+  private static loadCompleteVideosForApi (ids: number[], options: BuildVideosQueryOptions) {
     if (ids.length === 0) return []
 
     const secondQuery: FindOptions = {
       offset: 0,
-      limit: query.limit,
-      attributes: query.attributes,
+      limit: options.count,
       order: [ // Keep original order
         Sequelize.literal(
           ids.map(id => `"VideoModel".id = ${id} DESC`).join(', ')
