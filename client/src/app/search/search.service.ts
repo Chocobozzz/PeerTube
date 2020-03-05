@@ -11,6 +11,7 @@ import { Video } from '@app/shared/video/video.model'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 
 @Injectable()
 export class SearchService {
@@ -21,7 +22,11 @@ export class SearchService {
     private restExtractor: RestExtractor,
     private restService: RestService,
     private videoService: VideoService
-  ) {}
+  ) {
+    // Add ability to override search endpoint if the user updated this local storage key
+    const searchUrl = peertubeLocalStorage.getItem('search-url')
+    if (searchUrl) SearchService.BASE_SEARCH_URL = searchUrl
+  }
 
   searchVideos (parameters: {
     search: string,
