@@ -1,5 +1,5 @@
 <a
-  [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" [title]="video.name"
+  [routerLink]="getVideoRouterLink()" [queryParams]="queryParams"
   class="video-thumbnail"
 >
   <img alt="" [attr.aria-label]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
