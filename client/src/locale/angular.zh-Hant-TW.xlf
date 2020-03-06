@@ -1517,10 +1517,7 @@
       </trans-unit>
       <trans-unit id="7e76a185dbd8842cfea86afe863ed902a4447f7c" datatype="html">
         <source>Please consider to configure these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Without them, your instance may not be referenced on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-      Please consider to configure these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
-      Without them, your instance may not be referenced on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    </target>
+        <target state="translated">請考慮設定這些欄位以協助人們選擇<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>適合的站臺<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>。沒有它們，您的站臺可能無法在 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube 網站<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>上顯示。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -1595,7 +1592,7 @@
       </trans-unit>
       <trans-unit id="5a69be913ebcc70f300060cf1be0c7f8827159d6" datatype="html">
         <source>Interface: <x id="INTERPOLATION" equiv-text="{{ language }}"/></source>
-        <target state="new">Interface: <x id="INTERPOLATION" equiv-text="{{ language }}"/></target>
+        <target state="translated">站臺：<x id="INTERPOLATION" equiv-text="{{ language }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">36</context>
@@ -1607,7 +1604,7 @@
       </trans-unit>
       <trans-unit id="e472a6eaa2a51bd4a8ac19a1cf5567add4a04ff8" datatype="html">
         <source>Videos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></source>
-        <target state="new">Videos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></target>
+        <target state="translated">影片：<x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1615,7 +1612,7 @@
       </trans-unit>
       <trans-unit id="cc37c9e1ceff31dc1227cc8c2f4bdadb2f239173" datatype="html">
         <source>Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></source>
-        <target state="new">Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
+        <target state="translated">敏感的：<x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1623,7 +1620,7 @@
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
         <source>Help share videos</source>
-        <target state="new">Help share videos</target>
+        <target state="translated">協助分享影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">55</context>
@@ -1631,7 +1628,7 @@
       </trans-unit>
       <trans-unit id="cb17d0eefd7d4fc2633ffd351eae187a2c7d4b57" datatype="html">
         <source>More account settings</source>
-        <target state="new">More account settings</target>
+        <target state="translated">更多帳號設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">60</context>
@@ -1639,7 +1636,7 @@
       </trans-unit>
       <trans-unit id="d2dcb25a3b90ccb169effc066d36335363546d17" datatype="html">
         <source>Keyboard shortcuts</source>
-        <target state="new">Keyboard shortcuts</target>
+        <target state="translated">鍵盤快捷鍵</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">66</context>
@@ -1652,7 +1649,7 @@
       </trans-unit>
       <trans-unit id="0530eaf7a05c66b3167da49a57e5af4326f3af15" datatype="html">
         <source>Get help using PeerTube</source>
-        <target state="new">Get help using PeerTube</target>
+        <target state="translated">取得 PeerTube 的使用說明</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">167</context>
@@ -1660,7 +1657,7 @@
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
         <source>Shortcuts</source>
-        <target state="new">Shortcuts</target>
+        <target state="translated">快捷鍵</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">168</context>
@@ -1668,9 +1665,7 @@
       </trans-unit>
       <trans-unit id="5c195f8d79bd19e8520c890a2513fe635529b7a7" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="new">
-              powered by PeerTube
-            </target>
+        <target state="translated">威力本源 PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">172</context>
@@ -1678,7 +1673,7 @@
       </trans-unit>
       <trans-unit id="018843afca0913de849c80fdf962a6a42f5190b4" datatype="html">
         <source>PeerTube website</source>
-        <target state="new">PeerTube website</target>
+        <target state="translated">PeerTube 網站</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">172</context>
@@ -1686,7 +1681,7 @@
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2020</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2020</target>
+        <target state="translated">威力本源 PeerTube - CopyLeft 2015-2020</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -1710,7 +1705,7 @@
       </trans-unit>
       <trans-unit id="c3346a45c43ae8e5021086880268979b8d2266f3" datatype="html">
         <source>MY LIBRARY</source>
-        <target state="new">MY LIBRARY</target>
+        <target state="translated">我的媒體庫</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">82</context>
@@ -1758,7 +1753,7 @@
       </trans-unit>
       <trans-unit id="165035acb08983753bcecc3e8b6b18c7caf26d35" datatype="html">
         <source>VIDEOS</source>
-        <target state="new">VIDEOS</target>
+        <target state="translated">影片</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">107</context>
@@ -1814,7 +1809,7 @@
       </trans-unit>
       <trans-unit id="34746fb1c7f3d2194d99652bdff89e6e14c9c4f4" datatype="html">
         <source>Contact</source>
-        <target state="new">Contact</target>
+        <target state="translated">聯絡人</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">154</context>
@@ -1822,7 +1817,7 @@
       </trans-unit>
       <trans-unit id="aa4f4b7c81ae9cabfcebc2173f31e3f4bf08d833" datatype="html">
         <source>Terms of Service</source>
-        <target state="new">Terms of Service</target>
+        <target state="translated">服務條款</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">155</context>
@@ -1874,7 +1869,7 @@
       </trans-unit>
       <trans-unit id="90ce30ddedd5892740bb41e9ead736cd2c0f9b53" datatype="html">
         <source>GLOBAL SEARCH</source>
-        <target state="new">GLOBAL SEARCH</target>
+        <target state="translated">全域搜尋</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1882,7 +1877,7 @@
       </trans-unit>
       <trans-unit id="7ef9c50b8735e25780026b93da26cfcab1546653" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></source>
-        <target state="new">using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
+        <target state="translated">正在使用 <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1890,7 +1885,7 @@
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">結果將使用第三方索引來強化。僅會傳送查詢所需的資料。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1898,7 +1893,7 @@
       </trans-unit>
       <trans-unit id="ee697ded3eb6909ca0e619ab5cc9647cbd849da5" datatype="html">
         <source>ADVANCED SEARCH</source>
-        <target state="new">ADVANCED SEARCH</target>
+        <target state="translated">進階搜尋</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1906,7 +1901,7 @@
       </trans-unit>
       <trans-unit id="8e799fee4b3df7ea53786f096380f81c78a77efd" datatype="html">
         <source>any instance</source>
-        <target state="new">any instance</target>
+        <target state="translated">任何站臺</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">32</context>
@@ -1914,7 +1909,7 @@
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">僅已追蹤的站臺</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1922,7 +1917,7 @@
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">確定您是否可以解析任何遠端內容，或僅允許其追蹤的站臺這麼做。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1930,7 +1925,7 @@
       </trans-unit>
       <trans-unit id="148b42ba95872d1a4824bb6eed2ebdc1df3eb13a" datatype="html">
         <source>account or channel</source>
-        <target state="new">account or channel</target>
+        <target state="translated">帳號或頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1942,7 +1937,7 @@
       </trans-unit>
       <trans-unit id="17eef440fb4a97c69858bcc5b652210ebeebf182" datatype="html">
         <source>Any other text will return matching video, channel or account names.</source>
-        <target state="new">Any other text will return matching video, channel or account names.</target>
+        <target state="translated">其他任何文字將會回傳符合的影片、頻道或帳號名稱。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1966,7 +1961,7 @@
       </trans-unit>
       <trans-unit id="2f8adf9966f3c287b193683af9e1eaba4f526d68" datatype="html">
         <source>In this channel</source>
-        <target state="new">In this channel</target>
+        <target state="translated">在此頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1974,7 +1969,7 @@
       </trans-unit>
       <trans-unit id="2fb6c7364664174a205180f7173c4128b350c5ec" datatype="html">
         <source>In this instance</source>
-        <target state="new">In this instance</target>
+        <target state="translated">在此站臺</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1982,7 +1977,7 @@
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">在此聯盟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1990,10 +1985,7 @@
       </trans-unit>
       <trans-unit id="17ebc377c617be81cff7c2f2edbb7d405595d73a" datatype="html">
         <source>Jump to channel <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-    Jump to channel
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
+        <target state="translated">跳到頻道 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2378,7 +2370,7 @@
       </trans-unit>
       <trans-unit id="2799dff9e24f531a0b23e198ad3dde8e06e16267" datatype="html">
         <source>More information about privacy within PeerTube</source>
-        <target state="new">More information about privacy within PeerTube</target>
+        <target state="translated">有關 PeerTube 中隱私的更多資訊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">164</context>
@@ -2386,7 +2378,7 @@
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target state="new">FAQ</target>
+        <target state="translated">FAQ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">165</context>
@@ -2394,7 +2386,7 @@
       </trans-unit>
       <trans-unit id="a2892dc0bd40629b160c490cdd4aff82204bbec6" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
-        <target state="new">Frequently asked questions about PeerTube</target>
+        <target state="translated">關於 PeerTube 的常見問題</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">165</context>
@@ -2402,7 +2394,7 @@
       </trans-unit>
       <trans-unit id="e351b40b3869a5c7d19c3d4918cb1ac7aaab95c4" datatype="html">
         <source>API</source>
-        <target state="new">API</target>
+        <target state="translated">API</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">166</context>
@@ -2410,7 +2402,7 @@
       </trans-unit>
       <trans-unit id="fd91a5f2ef27c48b6908d9016fb6de2a224e8559" datatype="html">
         <source>API documentation</source>
-        <target state="new">API documentation</target>
+        <target state="translated">API 文件</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">166</context>
@@ -2815,7 +2807,7 @@
       </trans-unit>
       <trans-unit id="70155053814b6999f8abce4f89bab85afc76e538" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="new">AUTOPLAY</target>
+        <target state="translated">自動播放</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">10</context>
@@ -3030,7 +3022,7 @@
       </trans-unit>
       <trans-unit id="74059c5dce671d464259e3ce37a5d408c3fd7720" datatype="html">
         <source>SUPPORT</source>
-        <target state="new">SUPPORT</target>
+        <target state="translated">支援</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">87</context>
@@ -3038,7 +3030,7 @@
       </trans-unit>
       <trans-unit id="83ea0f7a6f84393af198d48193e01a96f3fcbc9a" datatype="html">
         <source>SHARE</source>
-        <target state="new">SHARE</target>
+        <target state="translated">分享</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">92</context>
@@ -3046,7 +3038,7 @@
       </trans-unit>
       <trans-unit id="cf272d006ff8c0b60e61b14e17fa6a39b30d614a" datatype="html">
         <source>SAVE</source>
-        <target state="new">SAVE</target>
+        <target state="translated">儲存</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">103</context>
@@ -3169,10 +3161,7 @@
       </trans-unit>
       <trans-unit id="a108b24038bb1a877d8ed3b3ccdf2d457fe81e8b" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Help your peers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and activate the sharing system to improve the experience for everyone. </source>
-        <target state="new">
-        <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Help your peers<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-        and activate the sharing system to improve the experience for everyone.
-      </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>協助您的同伴<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>並啟動分享系統以改善所有人的體驗。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">260</context>
@@ -3196,9 +3185,7 @@
       </trans-unit>
       <trans-unit id="067533b9bd17464e81a23f9afeda252bd01aae01" datatype="html">
         <source>No thanks</source>
-        <target state="new">
-      No thanks
-    </target>
+        <target state="translated">不用了，謝謝</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">267</context>
@@ -3206,9 +3193,7 @@
       </trans-unit>
       <trans-unit id="04b779cb22ffc58a4c297c4fa9ec298ea1c3a209" datatype="html">
         <source>Activate</source>
-        <target state="new">
-      Activate
-    </target>
+        <target state="translated">啟動</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">270</context>
@@ -3240,9 +3225,7 @@
       </trans-unit>
       <trans-unit id="a87cd0a1633f944e697fa2ee68362d8bc11c41ee" datatype="html">
         <source>SORT BY</source>
-        <target state="new">
-        SORT BY
-      </target>
+        <target state="translated">排序方式</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">15</context>
@@ -3651,9 +3634,7 @@
       </trans-unit>
       <trans-unit id="5226f8514b3952f242ac12e8cc7e8cdb59af0500" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-          If you leave the password empty, an email will be sent to the user.
-        </target>
+        <target state="translated">如果您將密碼留空，將會傳送電子郵件給使用者。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">34</context>
@@ -4115,7 +4096,7 @@
       </trans-unit>
       <trans-unit id="9ff236e1b1bd7c8df28518d446f1abd8eb91bd4b" datatype="html">
         <source>Show plugin settings</source>
-        <target state="new">Show plugin settings</target>
+        <target state="translated">顯示外掛程式設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context>
           <context context-type="linenumber">13</context>
@@ -4132,7 +4113,7 @@
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">使用者可以解析遠端內容</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">100</context>
@@ -4169,7 +4150,7 @@
       </trans-unit>
       <trans-unit id="3b79d221458541611e8508d3551dd1ddd76b49d9" datatype="html">
         <source>Display settings</source>
-        <target state="new">Display settings</target>
+        <target state="translated">顯示設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">7</context>
@@ -4312,7 +4293,7 @@
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
-        <target state="new">Loading...</target>
+        <target state="translated">正在載入……</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4328,7 +4309,7 @@
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target state="new">INSTANCE</target>
+        <target state="translated">站臺</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">10</context>
@@ -4380,7 +4361,7 @@
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="new">MODERATION &amp; NSFW</target>
+        <target state="translated">審核與 NSFW</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">63</context>
@@ -4499,7 +4480,7 @@
       </trans-unit>
       <trans-unit id="b222d95cb22ff8c295920ca10c188c5d94cb0aa9" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target state="new">YOU AND YOUR INSTANCE</target>
+        <target state="translated">您與您的站臺</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">130</context>
@@ -4571,7 +4552,7 @@
       </trans-unit>
       <trans-unit id="434d9f89497fe693bb5e4cdce02925dec8d0281f" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">OTHER INFORMATION</target>
+        <target state="translated">其他資訊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">177</context>
@@ -4603,7 +4584,7 @@
       </trans-unit>
       <trans-unit id="71b156f91c3b20abdde26d84f6a811afef84e5c4" datatype="html">
         <source>THEME AND DEFAULT ROUTE</source>
-        <target state="new">THEME AND DEFAULT ROUTE</target>
+        <target state="translated">佈景主題與預設路徑</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">198</context>
@@ -4675,7 +4656,7 @@
       </trans-unit>
       <trans-unit id="e5ea32fdc36857f1b7b2ded9d8cc5ecbee78a678" datatype="html">
         <source>SIGNUP</source>
-        <target state="new">SIGNUP</target>
+        <target state="translated">註冊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">229</context>
@@ -4691,7 +4672,7 @@
       </trans-unit>
       <trans-unit id="0064de8856609140571a14220e469a20bd61507d" datatype="html">
         <source>USERS</source>
-        <target state="new">USERS</target>
+        <target state="translated">使用者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">261</context>
@@ -4723,7 +4704,7 @@
       </trans-unit>
       <trans-unit id="4a41f824a35ba01d5bd7be61aa06b3e8145209d0" datatype="html">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -4747,7 +4728,7 @@
       </trans-unit>
       <trans-unit id="1b596c3b4952c03ff28b465e261791f6967e435c" datatype="html">
         <source>IMPORT</source>
-        <target state="new">IMPORT</target>
+        <target state="translated">匯入</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">290</context>
@@ -4765,7 +4746,7 @@
       </trans-unit>
       <trans-unit id="62023f931385e90f36db5209ce2d4b58be388fb3" datatype="html">
         <source>AUTO-BLACKLIST</source>
-        <target state="new">AUTO-BLACKLIST</target>
+        <target state="translated">自動黑名單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">313</context>
@@ -4786,7 +4767,7 @@
       </trans-unit>
       <trans-unit id="ffd20e408d9c19dd0fed999f922b79acf3ca4be6" datatype="html">
         <source>INSTANCE FOLLOWERS</source>
-        <target state="new">INSTANCE FOLLOWERS</target>
+        <target state="translated">站臺追蹤者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">335</context>
@@ -4807,7 +4788,7 @@
       </trans-unit>
       <trans-unit id="31d09923321845d596339dddb4351dcfd608d930" datatype="html">
         <source>INSTANCE FOLLOWINGS</source>
-        <target state="new">INSTANCE FOLLOWINGS</target>
+        <target state="translated">站臺追蹤</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">356</context>
@@ -4843,7 +4824,7 @@
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target state="new">ADMINISTRATORS</target>
+        <target state="translated">管理</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">402</context>
@@ -4883,7 +4864,7 @@
       </trans-unit>
       <trans-unit id="51d86d65a52d00976c7cce4bdf8e144f956ef888" datatype="html">
         <source>TWITTER</source>
-        <target state="new">TWITTER</target>
+        <target state="translated">TWITTER</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">425</context>
@@ -4937,7 +4918,7 @@
       </trans-unit>
       <trans-unit id="9a6dbeb95c096daa71967ac36a043de69d0cf72b" datatype="html">
         <source>TRANSCODING</source>
-        <target state="new">TRANSCODING</target>
+        <target state="translated">轉換編碼</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">473</context>
@@ -5032,7 +5013,7 @@
       </trans-unit>
       <trans-unit id="f05f4a8b97269a2da6d7fcc6e86fbfafd16e30bd" datatype="html">
         <source>CACHE</source>
-        <target state="new">CACHE</target>
+        <target state="translated">快取</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">586</context>
@@ -5064,7 +5045,7 @@
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target state="new">CUSTOMIZATIONS</target>
+        <target state="translated">自訂</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">615</context>
@@ -5175,7 +5156,7 @@
       </trans-unit>
       <trans-unit id="dc7b800a27960e33af36f16f6c25aaf5776464f7" datatype="html">
         <source>Interface settings</source>
-        <target state="new">Interface settings</target>
+        <target state="translated">介面設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -5623,7 +5604,7 @@
       </trans-unit>
       <trans-unit id="355c9f9d50ed1c6f12729332a44c1fd0f7576638" datatype="html">
         <source>You don't have any video history yet.</source>
-        <target state="new">You don't have any video history yet.</target>
+        <target state="translated">您尚未有任何訊息歷史。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.html</context>
           <context context-type="linenumber">14</context>
@@ -5852,9 +5833,7 @@
       </trans-unit>
       <trans-unit id="5c2b42818f05eafa2690d5eac6bcde295c713097" datatype="html">
         <source>SHOW THIS CHANNEL</source>
-        <target state="new">
-        SHOW THIS CHANNEL
-      </target>
+        <target state="translated">顯示此頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">27</context>
@@ -5862,7 +5841,7 @@
       </trans-unit>
       <trans-unit id="4af6287e70a4a87329affe109839f14ae598f0ca" datatype="html">
         <source>DESCRIPTION</source>
-        <target state="new">DESCRIPTION</target>
+        <target state="translated">描述</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">3</context>
@@ -5874,7 +5853,7 @@
       </trans-unit>
       <trans-unit id="bfc87613409a6cfae59b79ead5d910d8d3c216f5" datatype="html">
         <source>STATS</source>
-        <target state="new">STATS</target>
+        <target state="translated">統計</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-about/account-about.component.html</context>
           <context context-type="linenumber">8</context>
@@ -5894,7 +5873,7 @@
       </trans-unit>
       <trans-unit id="3e2f59e2749ad38a205971a6bf4905977ebc58dd" datatype="html">
         <source>Creators</source>
-        <target state="new">Creators</target>
+        <target state="translated">創作者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">162</context>
@@ -5902,7 +5881,7 @@
       </trans-unit>
       <trans-unit id="683e563d15566afc94da584428bfecfe82f9b826" datatype="html">
         <source>Creator guide</source>
-        <target state="new">Creator guide</target>
+        <target state="translated">創作者指南</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">162</context>
@@ -5910,7 +5889,7 @@
       </trans-unit>
       <trans-unit id="79205f76b374a738487ccebb66b2b4612e61b7bb" datatype="html">
         <source>Contributors</source>
-        <target state="new">Contributors</target>
+        <target state="translated">貢獻者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">163</context>
@@ -5918,7 +5897,7 @@
       </trans-unit>
       <trans-unit id="2a851f40f4a956fc4c3e0c3ed8dd33f10a4fa161" datatype="html">
         <source>PeerTube license</source>
-        <target state="new">PeerTube license</target>
+        <target state="translated">PeerTube 授權條款</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">163</context>
@@ -5938,7 +5917,7 @@
       </trans-unit>
       <trans-unit id="b8bf6036a9fb05c08cdb190cdf4e3becc6e6fa0a" datatype="html">
         <source>SUPPORT THIS CHANNEL</source>
-        <target state="new">SUPPORT THIS CHANNEL</target>
+        <target state="translated">支援此頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-about/video-channel-about.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6052,9 +6031,7 @@
       </trans-unit>
       <trans-unit id="b37e7abff3d4e62f3bae09f486624aee45d02008" datatype="html">
         <source>ADMINISTRATORS &amp; SUSTAINABILITY</source>
-        <target state="new">
-      ADMINISTRATORS &amp; SUSTAINABILITY
-    </target>
+        <target state="translated">管理與永續性</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">22</context>
@@ -6094,9 +6071,7 @@
       </trans-unit>
       <trans-unit id="4b08f867a83bf0fef0d15bffc0b4cf277de2d376" datatype="html">
         <source>INFORMATION</source>
-        <target state="new">
-      INFORMATION
-    </target>
+        <target state="translated">資訊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">50</context>
@@ -6104,9 +6079,7 @@
       </trans-unit>
       <trans-unit id="fbbd3718f919643cf73006ceb30ec5b09a8b07f2" datatype="html">
         <source>MODERATION</source>
-        <target state="new">
-      MODERATION
-    </target>
+        <target state="translated">審核</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">60</context>
@@ -6114,9 +6087,7 @@
       </trans-unit>
       <trans-unit id="5270b8fd3d35ab0a0475354a84d1265caf4790bd" datatype="html">
         <source>OTHER INFORMATION</source>
-        <target state="new">
-      OTHER INFORMATION
-    </target>
+        <target state="translated">其他資訊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">82</context>
@@ -6141,9 +6112,7 @@
       </trans-unit>
       <trans-unit id="e0b68a9aa60867a9b7016a48e30c31c790f8dcb1" datatype="html">
         <source>STATISTICS</source>
-        <target state="new">
-      STATISTICS
-    </target>
+        <target state="translated">統計</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">99</context>
@@ -6636,7 +6605,7 @@
       </trans-unit>
       <trans-unit id="55d67844f534a75a89f86bb19d51c0703280a6ad" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="new">VIDEO CHANNELS</target>
+        <target state="translated">影片頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6644,7 +6613,7 @@
       </trans-unit>
       <trans-unit id="2ccc315673e88d7490220d465da566e3acff72d5" datatype="html">
         <source>ABOUT</source>
-        <target state="new">ABOUT</target>
+        <target state="translated">關於</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7801,7 +7770,7 @@
       </trans-unit>
       <trans-unit id="9763d47eba525cfe3f0007f99e70b1dbc5e20c46" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="new">Display/Video settings updated.</target>
+        <target state="translated">顯示／視訊設定已更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8061,7 +8030,7 @@
       </trans-unit>
       <trans-unit id="33e9ca3aab38821eeaf966493df042d4202414df" datatype="html">
         <source>VIDEO PLAYLISTS</source>
-        <target state="new">VIDEO PLAYLISTS</target>
+        <target state="translated">影片播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8222,7 +8191,7 @@
       </trans-unit>
       <trans-unit id="7d5d2f4e2aebe4977c5e3daff4283814f869c609" datatype="html">
         <source>any language</source>
-        <target state="new">any language</target>
+        <target state="translated">任何語言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8230,7 +8199,7 @@
       </trans-unit>
       <trans-unit id="6e998fc06a19659c22cca43efa1b35515761cbb2" datatype="html">
         <source>hide</source>
-        <target state="new">hide</target>
+        <target state="translated">隱藏</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8238,7 +8207,7 @@
       </trans-unit>
       <trans-unit id="1214427202da5b7fb88968172a3b309f8da35d76" datatype="html">
         <source>blur</source>
-        <target state="new">blur</target>
+        <target state="translated">模糊</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8246,7 +8215,7 @@
       </trans-unit>
       <trans-unit id="890d991273787485fc939391676762a90edd8f34" datatype="html">
         <source>display</source>
-        <target state="new">display</target>
+        <target state="translated">顯示</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
