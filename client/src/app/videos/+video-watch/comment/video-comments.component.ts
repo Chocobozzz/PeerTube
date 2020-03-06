@@ -193,7 +193,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
-  onNearOfBottom () {    
+  onNearOfBottom () {
     if (hasMoreItems(this.componentPagination)) {
       this.componentPagination.currentPage++
       this.loadMoreThreads()
