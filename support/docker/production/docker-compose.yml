@@ -68,26 +68,20 @@ services:
       - redis
       - postfix
     restart: "always"
-    labels:
-      traefik.enable: "false"
 
   postgres:
-    image: postgres:10-alpine
+    image: postgres:12-alpine
     env_file:
       - .env
     volumes:
       - ./docker-volume/db:/var/lib/postgresql/data
     restart: "always"
-    labels:
-      traefik.enable: "false"
 
   redis:
     image: redis:5-alpine
     volumes:
       - ./docker-volume/redis:/data
     restart: "always"
-    labels:
-      traefik.enable: "false"
 
   postfix:
     image: mwader/postfix-relay
@@ -95,8 +89,6 @@ services:
       - .env
     volumes:
       - ./docker-volume/opendkim/keys:/etc/opendkim/keys
-    labels:
-      traefik.enable: "false"
     restart: "always"
 
 networks:

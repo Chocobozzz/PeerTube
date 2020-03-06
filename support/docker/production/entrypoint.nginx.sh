@@ -12,6 +12,4 @@ envsubst '${WEBSERVER_HOST} ${PEERTUBE_HOST}' < $SOURCE > $TARGET
 # Remove HTTPS/SSL from nginx conf
 sed -i 's/443 ssl http2/80/g;/ssl_/d' $TARGET
 
-cat $TARGET
-
 nginx -g "daemon off;"

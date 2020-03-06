@@ -62,3 +62,6 @@ entryPoint = "https"
   # Required
   #
   entryPoint = "http"
+
+[docker]
+  exposedByDefault = false
