@@ -39,14 +39,12 @@ my-input-readonly-copy {
 
 .filters {
   margin-top: 30px;
-  padding-top: 30px;
-  border-top: 1px solid $separator-border-color;
 
   .advanced-filters-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 20px;
     font-size: 16px;
     font-weight: $font-semibold;
     cursor: pointer;
