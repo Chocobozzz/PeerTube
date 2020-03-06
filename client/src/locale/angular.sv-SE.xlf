@@ -1912,7 +1912,7 @@
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">Avgör om du kan hämta fjärrinnehåll eller om instansen bara tillåter det för instanser den följer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">31</context>
@@ -4114,7 +4114,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Användare kan hämta fjärrinnehåll</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">100</context>
