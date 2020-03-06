@@ -31,6 +31,8 @@ function webfingerController (req: express.Request, res: express.Response) {
       }
     ]
   }
+  
+  res.set('Access-Control-Allow-Origin', '*')
 
   return res.json(json)
 }
