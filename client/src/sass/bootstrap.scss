@@ -163,9 +163,21 @@ ngb-tabset.bootstrap {
   }
 }
 
-.nav-tabs .nav-link.active {
-  background-color: var(--mainBackgroundColor) !important;
-  border-bottom: none;
+.nav-tabs .nav-link {
+  &:not(.active) {
+    opacity: .6;
+    border-bottom: 3px solid transparent;
+  }
+  &.active {
+    background-color: var(--mainBackgroundColor) !important;
+    border: none;
+    border-bottom: 2px solid var(--mainColor);
+  }
+  &:hover {
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+  }
 }
 
 .card {

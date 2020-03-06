@@ -70,7 +70,7 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   }
 
   get videoExtensions () {
-    return this.serverConfig.video.file.extensions.join(',')
+    return this.serverConfig.video.file.extensions.join(', ')
   }
 
   ngOnInit () {
