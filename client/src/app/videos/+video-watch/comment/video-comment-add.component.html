@@ -29,15 +29,11 @@
 <ng-template #visitorModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title" i18n>You are one step away from commenting</h4>
-    <button type="button" class="close" aria-label="Close" (click)="hideVisitorModal()"></button>
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hideVisitorModal()"></my-global-icon>
   </div>
   <div class="modal-body">
     <span i18n>
-      If you have an account on this instance, you can login:
-    </span>
-    <span class="btn btn-sm mx-3" role="button" (click)="gotoLogin()" i18n>login to comment</span>
-    <span i18n>
-      Otherwise, you can comment using an account on any ActivityPub-compatible instance.
+      You can comment using an account on any ActivityPub-compatible instance.
       On most platforms, you can find the video by typing its URL in the search bar and then comment it
       from within the software's interface.
     </span>
@@ -50,5 +46,10 @@
     <span i18n class="action-button action-button-cancel" role="button" (click)="hideVisitorModal()">
       Cancel
     </span>
+
+    <input
+      type="submit" i18n-value value="Login to comment" class="action-button-submit"
+      (click)="gotoLogin()"
+    >
   </div>
 </ng-template>

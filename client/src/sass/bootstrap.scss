@@ -95,15 +95,15 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     }
 
     my-global-icon {
-      @include icon(24px);
+      @include icon(22px);
 
       position: relative;
-      top: 3px;
+      top: 5px;
       float: right;
 
       margin: 0;
       padding: 0;
-      opacity: 1;
+      opacity: .5;
     }
   }
 
@@ -113,7 +113,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
     .action-button-cancel {
       @include peertube-button;
-      @include grey-button;
+      @include tertiary-button;
 
       display: inline-block;
       margin-right: 10px;

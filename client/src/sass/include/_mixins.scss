@@ -150,6 +150,19 @@
   }
 }
 
+@mixin tertiary-button {
+  color: $grey-foreground-color;
+  background-color: transparent;
+
+  &[disabled], &.disabled {
+    cursor: default;
+  }
+
+  my-global-icon {
+    @include apply-svg-color(transparent)
+  }
+}
+
 @mixin grey-button {
   &, &:active, &:focus {
     background-color: $grey-background-color;

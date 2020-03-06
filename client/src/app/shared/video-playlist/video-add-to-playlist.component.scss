@@ -4,7 +4,7 @@
 .header,
 .dropdown-item,
 .input-container {
-  padding: 6px 24px 10px 24px;
+  padding: 8px 24px;
 }
 
 .header {
@@ -54,11 +54,12 @@
 }
 
 .playlist {
-  display: flex;
+  display: inline-flex;
   cursor: pointer;
 
   my-peertube-checkbox {
     margin-right: 10px;
+    align-self: center;
   }
 
   .display-name {
