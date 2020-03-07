@@ -4,10 +4,13 @@ import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
 import { PreloadSelectedModulesList } from './core'
 import { AppComponent } from '@app/app.component'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
+import { MenuGuards } from '@app/core/routing/menu-guard.service'
 
 const routes: Routes = [
   {
     path: 'admin',
+    canActivate: [ MenuGuards.close() ],
+    canDeactivate: [ MenuGuards.open() ],
     loadChildren: () => import('./+admin/admin.module').then(m => m.AdminModule)
   },
   {
@@ -54,6 +57,7 @@ const routes: Routes = [
     })
   ],
   providers: [
+    MenuGuards.guards,
     PreloadSelectedModulesList,
     { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
   ],

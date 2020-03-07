@@ -14,6 +14,10 @@ export class ScreenService {
     return this.getWindowInnerWidth() < 800
   }
 
+  isInMediumView () {
+    return this.getWindowInnerWidth() < 1100
+  }
+
   isInMobileView () {
     return this.getWindowInnerWidth() < 500
   }
