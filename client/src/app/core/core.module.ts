@@ -13,6 +13,7 @@ import { throwIfAlreadyLoaded } from './module-import-guard'
 import { LoginGuard, RedirectService, UserRightGuard } from './routing'
 import { ServerService } from './server'
 import { ThemeService } from './theme'
+import { MenuService } from './menu'
 import { HotkeyModule } from 'angular2-hotkeys'
 import { CheatSheetComponent } from './hotkeys'
 import { ToastModule } from 'primeng/toast'
@@ -59,6 +60,7 @@ import { HooksService } from '@app/core/plugins/hooks.service'
     ConfirmService,
     ServerService,
     ThemeService,
+    MenuService,
     LoginGuard,
     UserRightGuard,
     UnloggedGuard,

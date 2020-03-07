@@ -8,7 +8,6 @@ import { first } from 'rxjs/operators'
 import { User } from '@app/shared/users/user.model'
 import { UserService } from '@app/shared/users/user.service'
 import { LocalStorageService } from '@app/shared/misc/storage.service'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 
 @Injectable()
 export class ThemeService {
