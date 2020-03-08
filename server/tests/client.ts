@@ -112,8 +112,7 @@ describe('Test a client controllers', function () {
   it('Should have valid index html tags (title, description...)', async function () {
     const res = await makeHTMLRequest(server.url, '/videos/trending')
 
-    const description = 'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
-      'with WebTorrent and Angular.'
+    const description = 'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
     checkIndexTags(res.text, 'PeerTube', description, '')
   })
 

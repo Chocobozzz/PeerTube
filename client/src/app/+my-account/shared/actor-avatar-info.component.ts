@@ -48,6 +48,6 @@ export class ActorAvatarInfoComponent implements OnInit {
   }
 
   get avatarExtensions () {
-    return this.serverConfig.avatar.file.extensions.join(',')
+    return this.serverConfig.avatar.file.extensions.join(', ')
   }
 }

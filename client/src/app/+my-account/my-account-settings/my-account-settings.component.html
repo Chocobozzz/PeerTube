@@ -1,34 +1,83 @@
-<my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
-
-<div class="user-quota">
-  <div>
-    <span i18n class="user-quota-label">Total video quota:</span>
-    <ng-container i18n>{{ userVideoQuotaUsed | bytes: 0 }} used</ng-container> / {{ userVideoQuota }}
+<div class="form-row"> <!-- profile grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">PROFILE</div>
   </div>
 
-  <div *ngIf="hasDailyQuota()">
-    <span i18n class="user-quota-label">Daily video quota:</span>
-    <ng-container>{{ userVideoQuotaUsedDaily | bytes: 0 }} used</ng-container> / {{ userVideoQuotaDaily }}
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
+
+    <div class="user-quota mb-3">
+      <div>
+        <label i18n>Total video quota:</label>
+        <ng-container i18n>{{ userVideoQuotaUsed | bytes: 0 }} used</ng-container> / {{ userVideoQuota }}
+      </div>
+
+      <div *ngIf="hasDailyQuota()">
+        <label i18n>Daily video quota:</label>
+        <ng-container>{{ userVideoQuotaUsedDaily | bytes: 0 }} used</ng-container> / {{ userVideoQuotaDaily }}
+      </div>
+    </div>
+
+    <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
   </div>
 </div>
 
-<div i18n class="account-title">Profile</div>
-<my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
+<div class="form-row mt-5"> <!-- video settings grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">VIDEO SETTINGS</div>
+  </div>
 
-<div i18n class="account-title">Video settings</div>
-<my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-account-video-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-video-settings>
+  </div>
+</div>
 
-<div i18n class="account-title">Notifications</div>
-<my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
+<div class="form-row mt-5"> <!-- notifications grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">NOTIFICATIONS</div>
+  </div>
 
-<div i18n class="account-title">Interface</div>
-<my-account-interface-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-interface-settings>
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-account-notification-preferences [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-notification-preferences>
+  </div>
+</div>
 
-<div i18n class="account-title">Password</div>
-<my-account-change-password></my-account-change-password>
+<div class="form-row mt-5"> <!-- interface grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">INTERFACE</div>
+  </div>
 
-<div i18n class="account-title">Email</div>
-<my-account-change-email></my-account-change-email>
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-account-interface-settings [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-interface-settings>
+  </div>
+</div>
 
-<div i18n class="account-title">Danger zone</div>
-<my-account-danger-zone [user]="user"></my-account-danger-zone>
+<div class="form-row mt-5"> <!-- password grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">PASSWORD</div>
+  </div>
+
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-account-change-password></my-account-change-password>
+  </div>
+</div>
+
+<div class="form-row mt-5"> <!-- email grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">EMAIL</div>
+  </div>
+
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-account-change-email></my-account-change-email>
+  </div>
+</div>
+
+<div class="form-row mt-5"> <!-- danger zone grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div i18n class="account-title">DANGER ZONE</div>
+  </div>
+
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+    <my-account-danger-zone [user]="user"></my-account-danger-zone>
+  </div>
+</div>

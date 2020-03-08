@@ -175,10 +175,10 @@ ngb-tabset {
 
 .nav-tabs .nav-link {
   &:not(.active) {
-    opacity: .6;
     border-bottom: 3px solid transparent;
   }
   &.active {
+    font-weight: $font-semibold;
     background-color: var(--mainBackgroundColor) !important;
     border: none;
     border-bottom: 2px solid var(--mainColor);

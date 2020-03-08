@@ -463,6 +463,14 @@
   font-size: 13px;
 }
 
+@mixin settings-big-title {
+  text-transform: uppercase;
+  color: var(--mainColor);
+  font-weight: $font-bold;
+  font-size: 110%;
+  margin-bottom: 10px;
+}
+
 @mixin actor-owner {
   @include disable-default-a-behaviour;
 

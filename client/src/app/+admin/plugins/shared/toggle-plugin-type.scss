@@ -13,9 +13,23 @@
         font-weight: 600;
       }
 
+      .ui-button.ui-state-default {
+        background-color: #f0f0f0;
+        border: 1px solid #f0f0f0;
+      }
+
       .ui-button.ui-state-active {
         background-color: var(--mainColor);
         border-color: var(--mainColor);
+
+        &:hover {
+          background-color: var(--mainHoverColor);
+          border-color: var(--mainHoverColor);
+        }
+      }
+
+      .ui-button:not(.ui-state-active).ui-state-focus {
+        box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
       }
     }
   }

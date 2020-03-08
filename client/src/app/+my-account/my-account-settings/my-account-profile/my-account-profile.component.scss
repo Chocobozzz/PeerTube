@@ -1,18 +1,17 @@
 @import '_variables';
 @import '_mixins';
 
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
 .form-group:first-child {
   margin-bottom: 15px;
 }
 
 input[type=text] {
   @include peertube-input-text(340px);
-
-  display: block;
-}
-
-textarea {
-  @include peertube-textarea(500px, 150px);
 
   display: block;
 }
@@ -24,3 +23,8 @@ input[type=submit] {
   margin-top: 15px;
 }
 
+textarea {
+  @include peertube-textarea(500px, 150px);
+
+  display: block;
+}
