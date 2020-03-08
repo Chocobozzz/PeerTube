@@ -1,12 +1,19 @@
 @import '_variables';
 @import '_mixins';
 
-.form-group {
-  margin-bottom: 25px;
+$form-base-input-width: 340px;
+
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
+form {
+  padding-bottom: 1.5rem;
 }
 
 input[type=text] {
-  @include peertube-input-text(340px);
+  @include peertube-input-text($form-base-input-width);
   display: block;
 }
 
@@ -20,14 +27,15 @@ input[type=checkbox] {
 }
 
 .peertube-select-container {
-  @include peertube-select-container(340px);
+  @include peertube-select-container($form-base-input-width);
 }
 
 input[type=submit] {
   @include peertube-button;
   @include orange-button;
 
-  margin-top: 20px;
+  display: flex;
+  margin-left: auto;
 
   & + .form-error {
     display: inline;
@@ -36,12 +44,7 @@ input[type=submit] {
 }
 
 .inner-form-title {
-  text-transform: uppercase;
-  color: var(--mainColor);
-  font-weight: $font-bold;
-  font-size: 13px;
-  margin-top: 30px;
-  margin-bottom: 10px;
+  @include settings-big-title;
 }
 
 textarea {
@@ -62,4 +65,22 @@ textarea {
 .disabled-checkbox-extra {
   opacity: .5;
   pointer-events: none;
+}
+
+my-markdown-textarea ::ng-deep {
+  .root {
+    @media screen and (max-width: 1400px) {
+      flex-direction: column !important;
+    }
+  }
+}
+
+.form-group-right {
+  padding-top: 2px;
+}
+
+ngb-tabset:not(.previews) ::ng-deep {
+  .nav-link {
+    font-size: 105%;
+  }
 }

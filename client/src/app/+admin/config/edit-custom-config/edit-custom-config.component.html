@@ -7,185 +7,217 @@
 
         <ng-container formGroupName="instance">
 
-          <div i18n class="inner-form-title">INSTANCE</div>
+          <div class="form-row mt-5"> <!-- instance grid -->
+            <div class="form-group col-12 col-lg-4 col-xl-3">
+              <div i18n class="inner-form-title">INSTANCE</div>
+            </div>
 
-          <div class="form-group">
-            <label i18n for="instanceName">Name</label>
-            <input
-              type="text" id="instanceName"
-              formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
-            >
-            <div *ngIf="formErrors.instance.name" class="form-error">{{ formErrors.instance.name }}</div>
-          </div>
+            <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-          <div class="form-group">
-            <label i18n for="instanceShortDescription">Short description</label>
-            <textarea
-              id="instanceShortDescription" formControlName="shortDescription" class="small"
-              [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
-            ></textarea>
-            <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
-          </div>
+              <div class="form-group">
+                <label i18n for="instanceName">Name</label>
+                <input
+                  type="text" id="instanceName"
+                  formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
+                >
+                <div *ngIf="formErrors.instance.name" class="form-error">{{ formErrors.instance.name }}</div>
+              </div>
 
-          <div class="form-group">
-            <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
-            <my-markdown-textarea
-              name="instanceDescription" formControlName="description" textareaWidth="500px" [previewColumn]="true"
-              [classes]="{ 'input-error': formErrors['instance.description'] }"
-            ></my-markdown-textarea>
-            <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
-          </div>
+              <div class="form-group">
+                <label i18n for="instanceShortDescription">Short description</label>
+                <textarea
+                  id="instanceShortDescription" formControlName="shortDescription" class="small"
+                  [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
+                ></textarea>
+                <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
+              </div>
 
-          <div class="form-group">
-            <label i18n for="instanceCategories">Main instance categories</label>
+              <div class="form-group">
+                <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
+                <my-markdown-textarea
+                  name="instanceDescription" formControlName="description" textareaWidth="500px" [previewColumn]="true"
+                  [classes]="{ 'input-error': formErrors['instance.description'] }"
+                ></my-markdown-textarea>
+                <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
+              </div>
 
-            <div>
-              <p-multiSelect
-                inputId="instanceCategories" [options]="categoryItems" formControlName="categories" [showToggleAll]="false"
-                [defaultLabel]="getDefaultCategoryLabel()" [selectedItemsLabel]="getSelectedCategoryLabel()"
-                emptyFilterMessage="No results found" i18n-emptyFilterMessage
-              ></p-multiSelect>
+              <div class="form-group">
+                <label i18n for="instanceCategories">Main instance categories</label>
+
+                <div>
+                  <p-multiSelect
+                    inputId="instanceCategories" [options]="categoryItems" formControlName="categories" [showToggleAll]="false"
+                    [defaultLabel]="getDefaultCategoryLabel()" [selectedItemsLabel]="getSelectedCategoryLabel()"
+                    emptyFilterMessage="No results found" i18n-emptyFilterMessage
+                  ></p-multiSelect>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceLanguages">Main languages you/your moderators speak</label>
+
+                <div>
+                  <p-multiSelect
+                    inputId="instanceLanguages" [options]="languageItems" formControlName="languages" [showToggleAll]="false"
+                    [defaultLabel]="getDefaultLanguageLabel()" [selectedItemsLabel]="getSelectedLanguageLabel()"
+                    emptyFilterMessage="No results found" i18n-emptyFilterMessage
+                  ></p-multiSelect>
+                </div>
+              </div>
+
             </div>
           </div>
 
-          <div class="form-group">
-            <label i18n for="instanceLanguages">Main languages you/your moderators speak</label>
+          <div class="form-row mt-4"> <!-- moderation & nsfw grid -->
+            <div class="form-group col-12 col-lg-4 col-xl-3">
+              <div i18n class="inner-form-title">MODERATION & NSFW</div>
+            </div>
 
-            <div>
-              <p-multiSelect
-                inputId="instanceLanguages" [options]="languageItems" formControlName="languages" [showToggleAll]="false"
-                [defaultLabel]="getDefaultLanguageLabel()" [selectedItemsLabel]="getSelectedLanguageLabel()"
-                emptyFilterMessage="No results found" i18n-emptyFilterMessage
-              ></p-multiSelect>
+            <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+              <div class="form-group">
+                <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
+                  <ng-template ptTemplate="label">
+                    <ng-container i18n>This instance is dedicated to sensitive or NSFW content</ng-container>
+                  </ng-template>
+
+                  <ng-template ptTemplate="help">
+                    <ng-container i18n>
+                      Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
+                      Moreover, the NSFW checkbox on video upload will be automatically checked by default.
+                    </ng-container>
+                  </ng-template>
+                </my-peertube-checkbox>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
+
+                <my-help>
+                  <ng-template ptTemplate="customHtml">
+                    <ng-container i18n>
+                      With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
+                    </ng-container>
+                  </ng-template>
+                </my-help>
+
+                <div class="peertube-select-container">
+                  <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy">
+                    <option i18n value="do_not_list">Do not list</option>
+                    <option i18n value="blur">Blur thumbnails</option>
+                    <option i18n value="display">Display</option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error">{{ formErrors.instance.defaultNSFWPolicy }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
+                <my-markdown-textarea
+                  name="instanceTerms" formControlName="terms" textareaWidth="500px" [previewColumn]="true"
+                  [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
+                ></my-markdown-textarea>
+                <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
+                <my-markdown-textarea
+                  name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaWidth="500px" [previewColumn]="true"
+                  [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
+                ></my-markdown-textarea>
+                <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
+                <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
+
+                <my-markdown-textarea
+                  name="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px" [previewColumn]="true"
+                  [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
+                ></my-markdown-textarea>
+                <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
+              </div>
+
             </div>
           </div>
 
-          <div i18n class="inner-form-title">MODERATION & NSFW</div>
-
-          <div class="form-group">
-            <my-peertube-checkbox inputName="instanceIsNSFW" formControlName="isNSFW">
-              <ng-template ptTemplate="label">
-                <ng-container i18n>This instance is dedicated to sensitive or NSFW content</ng-container>
-              </ng-template>
-
-              <ng-template ptTemplate="help">
-                <ng-container i18n>
-                  Enabling it will allow other administrators to know that you are mainly federating sensitive content.<br /><br />
-                  Moreover, the NSFW checkbox on video upload will be automatically checked by default.
-                </ng-container>
-              </ng-template>
-            </my-peertube-checkbox>
-          </div>
-
-          <div class="form-group">
-            <label i18n for="instanceDefaultNSFWPolicy">Policy on videos containing sensitive content</label>
-
-            <my-help>
-              <ng-template ptTemplate="customHtml">
-                <ng-container i18n>
-                  With <strong>Do not list</strong> or <strong>Blur thumbnails</strong>, a confirmation will be requested to watch the video.
-                </ng-container>
-              </ng-template>
-            </my-help>
-
-            <div class="peertube-select-container">
-              <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy">
-                <option i18n value="do_not_list">Do not list</option>
-                <option i18n value="blur">Blur thumbnails</option>
-                <option i18n value="display">Display</option>
-              </select>
+          <div class="form-row mt-4"> <!-- you and your instance grid -->
+            <div class="form-group col-12 col-lg-4 col-xl-3">
+              <div i18n class="inner-form-title">YOU AND YOUR INSTANCE</div>
             </div>
-            <div *ngIf="formErrors.instance.defaultNSFWPolicy" class="form-error">{{ formErrors.instance.defaultNSFWPolicy }}</div>
+
+            <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+              <div class="form-group">
+                <label i18n for="instanceAdministrator">Who is behind the instance?</label>
+                <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
+
+                <my-markdown-textarea
+                  name="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
+                  [classes]="{ 'input-error': formErrors['instance.administrator'] }"
+                ></my-markdown-textarea>
+
+                <div *ngIf="formErrors.instance.administrator" class="form-error">{{ formErrors.instance.administrator }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceCreationReason">Why did you create this instance?</label>
+                <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
+
+                <textarea
+                  id="instanceCreationReason" formControlName="creationReason" class="small"
+                  [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
+                ></textarea>
+                <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label>
+                <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
+
+                <textarea
+                  id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="small"
+                  [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
+                ></textarea>
+                <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label>
+                <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
+
+                <textarea
+                  id="instanceBusinessModel" formControlName="businessModel" class="small"
+                  [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
+                ></textarea>
+                <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
+              </div>
+
+            </div>
           </div>
 
-          <div class="form-group">
-            <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
-            <my-markdown-textarea
-              name="instanceTerms" formControlName="terms" textareaWidth="500px" [previewColumn]="true"
-              [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
-            ></my-markdown-textarea>
-            <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
-          </div>
+          <div class="form-row mt-4"> <!-- other information grid -->
+            <div class="form-group col-12 col-lg-4 col-xl-3">
+              <div i18n class="inner-form-title">OTHER INFORMATION</div>
+            </div>
 
-          <div class="form-group">
-            <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
-            <my-markdown-textarea
-              name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaWidth="500px" [previewColumn]="true"
-              [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
-            ></my-markdown-textarea>
-            <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
-          </div>
+            <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-          <div class="form-group">
-            <label i18n for="instanceModerationInformation">Moderation information</label><my-help helpType="markdownText"></my-help>
-            <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
+              <div class="form-group">
+                <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
+                <div i18n class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
 
-            <my-markdown-textarea
-              name="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px" [previewColumn]="true"
-              [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
-            ></my-markdown-textarea>
-            <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
-          </div>
+                <my-markdown-textarea
+                  name="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
+                  [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
+                ></my-markdown-textarea>
 
-          <div i18n class="inner-form-title">YOU AND YOUR INSTANCE</div>
+                <div *ngIf="formErrors.instance.hardwareInformation" class="form-error">{{ formErrors.instance.hardwareInformation }}</div>
+              </div>
 
-          <div class="form-group">
-            <label i18n for="instanceAdministrator">Who is behind the instance?</label>
-            <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
-
-            <my-markdown-textarea
-              name="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
-              [classes]="{ 'input-error': formErrors['instance.administrator'] }"
-            ></my-markdown-textarea>
-
-            <div *ngIf="formErrors.instance.administrator" class="form-error">{{ formErrors.instance.administrator }}</div>
-          </div>
-
-          <div class="form-group">
-            <label i18n for="instanceCreationReason">Why did you create this instance?</label>
-            <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
-
-            <textarea
-              id="instanceCreationReason" formControlName="creationReason" class="small"
-              [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
-            ></textarea>
-            <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
-          </div>
-
-          <div class="form-group">
-            <label i18n for="instanceMaintenanceLifetime">How long do you plan to maintain this instance?</label>
-            <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
-
-            <textarea
-              id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="small"
-              [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
-            ></textarea>
-            <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
-          </div>
-
-          <div class="form-group">
-            <label i18n for="instanceBusinessModel">How will you finance the PeerTube server?</label>
-            <div i18n class="label-small-info">With your own funds? With users donations? Advertising?</div>
-
-            <textarea
-              id="instanceBusinessModel" formControlName="businessModel" class="small"
-              [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
-            ></textarea>
-            <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
-          </div>
-
-          <div i18n class="inner-form-title">OTHER INFORMATION</div>
-
-          <div class="form-group">
-            <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
-            <div i18n class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
-
-            <my-markdown-textarea
-              name="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
-              [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
-            ></my-markdown-textarea>
-
-            <div *ngIf="formErrors.instance.hardwareInformation" class="form-error">{{ formErrors.instance.hardwareInformation }}</div>
+            </div>
           </div>
 
         </ng-container>
@@ -195,226 +227,254 @@
     <ngb-tab i18n-title title="Basic configuration">
       <ng-template ngbTabContent>
 
-        <div i18n class="inner-form-title">THEME AND DEFAULT ROUTE</div>
+        <div class="form-row mt-5"> <!-- appearance grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">APPEARANCE</div>
+          </div>
 
-        <ng-container formGroupName="theme">
-          <div class="form-group">
-            <label i18n for="themeDefault">Global theme</label>
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-            <div class="peertube-select-container">
-              <select formControlName="default" id="themeDefault">
-                <option i18n value="default">default</option>
+            <ng-container formGroupName="theme">
+              <div class="form-group">
+                <label i18n for="themeDefault">Theme</label>
 
-                <option *ngFor="let theme of availableThemes" [value]="theme">{{ theme }}</option>
-              </select>
+                <div class="peertube-select-container">
+                  <select formControlName="default" id="themeDefault">
+                    <option i18n value="default">default</option>
+
+                    <option *ngFor="let theme of availableThemes" [value]="theme">{{ theme }}</option>
+                  </select>
+                </div>
+              </div>
+            </ng-container>
+
+            <div class="form-group" formGroupName="instance">
+              <label i18n for="instanceDefaultClientRoute">Landing page</label>
+              <div class="peertube-select-container">
+                <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">
+                  <option i18n value="/videos/overview">Discover videos</option>
+                  <option i18n value="/videos/trending">Trending videos</option>
+                  <option i18n value="/videos/most-liked">Most liked videos</option>
+                  <option i18n value="/videos/recently-added">Recently added videos</option>
+                  <option i18n value="/videos/local">Local videos</option>
+                </select>
+              </div>
+              <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
             </div>
-          </div>
-        </ng-container>
 
-
-        <div class="form-group" formGroupName="instance">
-          <label i18n for="instanceDefaultClientRoute">Default client route</label>
-          <div class="peertube-select-container">
-            <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">
-              <option i18n value="/videos/overview">Discover videos</option>
-              <option i18n value="/videos/trending">Trending videos</option>
-              <option i18n value="/videos/most-liked">Most liked videos</option>
-              <option i18n value="/videos/recently-added">Recently added videos</option>
-              <option i18n value="/videos/local">Local videos</option>
-            </select>
           </div>
-          <div *ngIf="formErrors.instance.defaultClientRoute" class="form-error">{{ formErrors.instance.defaultClientRoute }}</div>
         </div>
 
-        <div i18n class="inner-form-title">SIGNUP</div>
-
-        <ng-container formGroupName="signup">
-          <div class="form-group">
-            <my-peertube-checkbox
-              inputName="signupEnabled" formControlName="enabled"
-              i18n-labelText labelText="Signup enabled"
-            >
-              <ng-container ngProjectAs="description">
-                <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
-              </ng-container>
-              <ng-container ngProjectAs="extra">
-                <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }"
-                  inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
-                  i18n-labelText labelText="Signup requires email verification"
-                ></my-peertube-checkbox>
-
-                <div [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }" class="mt-3">
-                  <label i18n for="signupLimit">Signup limit</label>
-                  <input
-                    type="number" min="-1" id="signupLimit"
-                    formControlName="limit" [ngClass]="{ 'input-error': formErrors['signup.limit'] }"
-                  >
-                  <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
-                  <small *ngIf="form.value['signup']['limit'] === -1" class="text-muted">Signup won't be limited to a fixed number of users.</small>
-                </div>
-              </ng-container>
-            </my-peertube-checkbox>
-          </div>
-        </ng-container>
-
-
-        <div i18n class="inner-form-title">USERS</div>
-
-        <ng-container formGroupName="user">
-          <div class="form-group">
-            <label i18n for="userVideoQuota">Default video quota per user</label>
-            <div class="peertube-select-container">
-              <select id="userVideoQuota" formControlName="videoQuota">
-                <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
-                  {{ videoQuotaOption.label }}
-                </option>
-              </select>
-            </div>
-            <div *ngIf="formErrors.user.videoQuota" class="form-error">{{ formErrors.user.videoQuota }}</div>
+        <div class="form-row mt-4"> <!-- new users grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">NEW USERS</div>
           </div>
 
-          <div class="form-group">
-            <label i18n for="userVideoQuotaDaily">Default daily upload limit per user</label>
-            <div class="peertube-select-container">
-              <select id="userVideoQuotaDaily" formControlName="videoQuotaDaily">
-                <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
-                  {{ videoQuotaDailyOption.label }}
-                </option>
-              </select>
-            </div>
-            <div *ngIf="formErrors.user.videoQuotaDaily" class="form-error">{{ formErrors.user.videoQuotaDaily }}</div>
-          </div>
-        </ng-container>
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-
-        <div i18n class="inner-form-title">IMPORT</div>
-
-        <ng-container formGroupName="import">
-          <ng-container formGroupName="videos">
-
-            <div class="form-group" formGroupName="http">
-              <my-peertube-checkbox
-                inputName="importVideosHttpEnabled" formControlName="enabled"
-                i18n-labelText labelText="Allow import with HTTP URL (i.e. YouTube)"
-              ></my-peertube-checkbox>
-            </div>
-
-            <div class="form-group" formGroupName="torrent">
-              <my-peertube-checkbox
-                inputName="importVideosTorrentEnabled" formControlName="enabled"
-                i18n-labelText labelText="Allow import with a torrent file or a magnet URI"
-              ></my-peertube-checkbox>
-            </div>
-
-          </ng-container>
-        </ng-container>
-
-
-        <div i18n class="inner-form-title">AUTO-BLACKLIST</div>
-
-        <ng-container formGroupName="autoBlacklist">
-          <ng-container formGroupName="videos">
-            <ng-container formGroupName="ofUsers">
-
+            <ng-container formGroupName="signup">
               <div class="form-group">
                 <my-peertube-checkbox
-                  inputName="autoBlacklistVideosOfUsersEnabled" formControlName="enabled"
-                  i18n-labelText labelText="Blacklist new videos automatically"
-                >
-                <ng-container ngProjectAs="description">
-                  <span i18n>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</span>
-                </ng-container>
-              </my-peertube-checkbox>
-              </div>
-
-            </ng-container>
-          </ng-container>
-        </ng-container>
-
-
-        <div i18n class="inner-form-title">INSTANCE FOLLOWERS</div>
-
-        <ng-container formGroupName="followers">
-          <ng-container formGroupName="instance">
-
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="followersInstanceEnabled" formControlName="enabled"
-                i18n-labelText labelText="Other instances can follow your instance"
-              ></my-peertube-checkbox>
-            </div>
-
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="followersInstanceManualApproval" formControlName="manualApproval"
-                i18n-labelText labelText="Manually approve new instance followers"
-              ></my-peertube-checkbox>
-            </div>
-          </ng-container>
-        </ng-container>
-
-        <div i18n class="inner-form-title">INSTANCE FOLLOWINGS</div>
-
-        <ng-container formGroupName="followings">
-          <ng-container formGroupName="instance">
-
-            <ng-container formGroupName="autoFollowBack">
-              <div class="form-group">
-                <my-peertube-checkbox
-                  inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
-                  i18n-labelText labelText="Automatically follow other instances that follow you"
+                  inputName="signupEnabled" formControlName="enabled"
+                  i18n-labelText labelText="Signup enabled"
                 >
                   <ng-container ngProjectAs="description">
                     <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
                   </ng-container>
-                </my-peertube-checkbox>
-              </div>
-            </ng-container>
-
-            <ng-container formGroupName="autoFollowIndex">
-              <div class="form-group">
-                <my-peertube-checkbox
-                  inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
-                  i18n-labelText labelText="Automatically follow instances of the public index"
-                >
-                  <ng-container ngProjectAs="description">
-                    <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
-                  </ng-container>
-
                   <ng-container ngProjectAs="extra">
-                    <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
-                      <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
+                    <my-peertube-checkbox [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }"
+                      inputName="signupRequiresEmailVerification" formControlName="requiresEmailVerification"
+                      i18n-labelText labelText="Signup requires email verification"
+                    ></my-peertube-checkbox>
+
+                    <div [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }" class="mt-3">
+                      <label i18n for="signupLimit">Signup limit</label>
                       <input
-                        type="text" id="followingsInstanceAutoFollowIndexUrl"
-                        formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
+                        type="number" min="-1" id="signupLimit"
+                        formControlName="limit" [ngClass]="{ 'input-error': formErrors['signup.limit'] }"
                       >
-                      <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+                      <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
+                      <small *ngIf="form.value['signup']['limit'] === -1" class="text-muted">Signup won't be limited to a fixed number of users.</small>
                     </div>
                   </ng-container>
                 </my-peertube-checkbox>
               </div>
-
             </ng-container>
-          </ng-container>
-        </ng-container>
 
+            <ng-container formGroupName="user">
+              <div class="form-group">
+                <label i18n for="userVideoQuota">Default video quota per user</label>
+                <div class="peertube-select-container">
+                  <select id="userVideoQuota" formControlName="videoQuota">
+                    <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+                      {{ videoQuotaOption.label }}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.user.videoQuota" class="form-error">{{ formErrors.user.videoQuota }}</div>
+              </div>
 
-        <div i18n class="inner-form-title">ADMINISTRATORS</div>
+              <div class="form-group">
+                <label i18n for="userVideoQuotaDaily">Default daily upload limit per user</label>
+                <div class="peertube-select-container">
+                  <select id="userVideoQuotaDaily" formControlName="videoQuotaDaily">
+                    <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
+                      {{ videoQuotaDailyOption.label }}
+                    </option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.user.videoQuotaDaily" class="form-error">{{ formErrors.user.videoQuotaDaily }}</div>
+              </div>
+            </ng-container>
 
-        <div class="form-group" formGroupName="admin">
-          <label i18n for="adminEmail">Admin email</label>
-          <input
-            type="text" id="adminEmail"
-            formControlName="email" [ngClass]="{ 'input-error': formErrors['admin.email'] }"
-          >
-          <div *ngIf="formErrors.admin.email" class="form-error">{{ formErrors.admin.email }}</div>
+          </div>
         </div>
 
-        <div class="form-group" formGroupName="contactForm">
-          <my-peertube-checkbox
-            inputName="enableContactForm" formControlName="enabled"
-            i18n-labelText labelText="Enable contact form"
-          ></my-peertube-checkbox>
+        <div class="form-row mt-4"> <!-- new videos grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">NEW VIDEOS</div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <ng-container formGroupName="import">
+              <ng-container formGroupName="videos">
+    
+                <div class="form-group" formGroupName="http">
+                  <my-peertube-checkbox
+                    inputName="importVideosHttpEnabled" formControlName="enabled"
+                    i18n-labelText labelText="Allow import with HTTP URL (i.e. YouTube)"
+                  ></my-peertube-checkbox>
+                </div>
+
+                <div class="form-group" formGroupName="torrent">
+                  <my-peertube-checkbox
+                    inputName="importVideosTorrentEnabled" formControlName="enabled"
+                    i18n-labelText labelText="Allow import with a torrent file or a magnet URI"
+                  ></my-peertube-checkbox>
+                </div>
+
+              </ng-container>
+            </ng-container>
+
+            <ng-container formGroupName="autoBlacklist">
+              <ng-container formGroupName="videos">
+                <ng-container formGroupName="ofUsers">
+    
+                  <div class="form-group">
+                    <my-peertube-checkbox
+                      inputName="autoBlacklistVideosOfUsersEnabled" formControlName="enabled"
+                      i18n-labelText labelText="Blacklist new videos automatically"
+                    >
+                    <ng-container ngProjectAs="description">
+                      <span i18n>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</span>
+                    </ng-container>
+                  </my-peertube-checkbox>
+                  </div>
+    
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+          </div>
+        </div>
+
+        <div class="form-row mt-4"> <!-- federation grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">FEDERATION</div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <ng-container formGroupName="followers">
+              <ng-container formGroupName="instance">
+
+                <div class="form-group">
+                  <my-peertube-checkbox
+                    inputName="followersInstanceEnabled" formControlName="enabled"
+                    i18n-labelText labelText="Other instances can follow yours"
+                  ></my-peertube-checkbox>
+                </div>
+
+                <div class="form-group">
+                  <my-peertube-checkbox
+                    inputName="followersInstanceManualApproval" formControlName="manualApproval"
+                    i18n-labelText labelText="Manually approve new instance followers"
+                  ></my-peertube-checkbox>
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <ng-container formGroupName="followings">
+              <ng-container formGroupName="instance">
+
+                <ng-container formGroupName="autoFollowBack">
+                  <div class="form-group">
+                    <my-peertube-checkbox
+                      inputName="followingsInstanceAutoFollowBackEnabled" formControlName="enabled"
+                      i18n-labelText labelText="Automatically follow back instances"
+                    >
+                      <ng-container ngProjectAs="description">
+                        <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
+                      </ng-container>
+                    </my-peertube-checkbox>
+                  </div>
+                </ng-container>
+
+                <ng-container formGroupName="autoFollowIndex">
+                  <div class="form-group">
+                    <my-peertube-checkbox
+                      inputName="followingsInstanceAutoFollowIndexEnabled" formControlName="enabled"
+                      i18n-labelText labelText="Automatically follow instances of the public index"
+                    >
+                      <ng-container ngProjectAs="description">
+                        <span i18n>⚠️ This functionality requires a lot of attention and extra moderation.</span>
+                      </ng-container>
+
+                      <ng-container ngProjectAs="extra">
+                        <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
+                          <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
+                          <input
+                            type="text" id="followingsInstanceAutoFollowIndexUrl"
+                            formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
+                          >
+                          <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
+                        </div>
+                      </ng-container>
+                    </my-peertube-checkbox>
+                  </div>
+
+                </ng-container>
+              </ng-container>
+            </ng-container>
+
+          </div>
+        </div>
+
+        <div class="form-row mt-4"> <!-- administrators grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">ADMINISTRATORS</div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <div class="form-group" formGroupName="admin">
+              <label i18n for="adminEmail">Admin email</label>
+              <input
+                type="text" id="adminEmail"
+                formControlName="email" [ngClass]="{ 'input-error': formErrors['admin.email'] }"
+              >
+              <div *ngIf="formErrors.admin.email" class="form-error">{{ formErrors.admin.email }}</div>
+            </div>
+
+            <div class="form-group" formGroupName="contactForm">
+              <my-peertube-checkbox
+                inputName="enableContactForm" formControlName="enabled"
+                i18n-labelText labelText="Enable contact form"
+              ></my-peertube-checkbox>
+            </div>
+
+          </div>
         </div>
 
       </ng-template>
@@ -422,47 +482,56 @@
 
     <ngb-tab i18n-title title="Services">
       <ng-template ngbTabContent>
-        <div i18n class="inner-form-title">TWITTER</div>
 
-        <ng-container formGroupName="services">
-          <ng-container formGroupName="twitter">
+        <div class="form-row mt-5"> <!-- twitter grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">TWITTER</div>
+          </div>
 
-            <div class="form-group">
-              <label i18n for="signupLimit">Your Twitter username</label>
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-              <my-help>
-                <ng-template ptTemplate="customHtml">
-                  <ng-container i18n>Indicates the Twitter account for the website or platform on which the content was published.</ng-container>
-                </ng-template>
-              </my-help>
+            <ng-container formGroupName="services">
+              <ng-container formGroupName="twitter">
 
-              <input
-                type="text" id="servicesTwitterUsername"
-                formControlName="username" [ngClass]="{ 'input-error': formErrors['services.twitter.username'] }"
-              >
-              <div *ngIf="formErrors.services.twitter.username" class="form-error">{{ formErrors.services.twitter.username }}</div>
-            </div>
+                <div class="form-group">
+                  <label i18n for="signupLimit">Your Twitter username</label>
 
-            <div class="form-group">
-              <my-peertube-checkbox inputName="servicesTwitterWhitelisted" formControlName="whitelisted">
-                <ng-template ptTemplate="label">
-                  <ng-container i18n>Instance whitelisted by Twitter</ng-container>
-                </ng-template>
+                  <my-help>
+                    <ng-template ptTemplate="customHtml">
+                      <ng-container i18n>Indicates the Twitter account for the website or platform on which the content was published.</ng-container>
+                    </ng-template>
+                  </my-help>
 
-                <ng-template ptTemplate="help">
-                  <ng-container i18n>
-                    If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
-                    If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
-                    Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on
-                    <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
-                    to see if you instance is whitelisted.
-                  </ng-container>
-                </ng-template>
-              </my-peertube-checkbox>
-            </div>
+                  <input
+                    type="text" id="servicesTwitterUsername"
+                    formControlName="username" [ngClass]="{ 'input-error': formErrors['services.twitter.username'] }"
+                  >
+                  <div *ngIf="formErrors.services.twitter.username" class="form-error">{{ formErrors.services.twitter.username }}</div>
+                </div>
 
-          </ng-container>
-        </ng-container>
+                <div class="form-group">
+                  <my-peertube-checkbox inputName="servicesTwitterWhitelisted" formControlName="whitelisted">
+                    <ng-template ptTemplate="label">
+                      <ng-container i18n>Instance whitelisted by Twitter</ng-container>
+                    </ng-template>
+
+                    <ng-template ptTemplate="help">
+                      <ng-container i18n>
+                        If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
+                        If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
+                        Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on
+                        <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
+                        to see if you instance is whitelisted.
+                      </ng-container>
+                    </ng-template>
+                  </my-peertube-checkbox>
+                </div>
+
+              </ng-container>
+            </ng-container>
+
+          </div>
+        </div>
 
     </ng-template>
     </ngb-tab>
@@ -470,206 +539,235 @@
     <ngb-tab i18n-title title="Advanced configuration">
       <ng-template ngbTabContent>
 
-        <div i18n class="inner-form-title">TRANSCODING</div>
-
-        <ng-container formGroupName="transcoding">
-          <div class="form-group">
-            <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled">
-              <ng-template ptTemplate="label">
-                <ng-container i18n>Transcoding enabled</ng-container>
-              </ng-template>
-
-              <ng-template ptTemplate="help">
-                <ng-container i18n>If you disable transcoding, many videos from your users will not work!</ng-container>
-              </ng-template>
-            </my-peertube-checkbox>
+        <div class="form-row mt-5"> <!-- transcoding grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">TRANSCODING</div>
           </div>
 
-          <ng-container *ngIf="isTranscodingEnabled()">
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
-                i18n-labelText labelText="Allow additional extensions"
-              >
-                <ng-template ptTemplate="help">
-                  <ng-container i18n>Allow your users to upload .mkv, .mov, .avi and .flv videos</ng-container>
-                </ng-template>
-              </my-peertube-checkbox>
-            </div>
+            <ng-container formGroupName="transcoding">
 
-            <div class="form-group">
-              <my-peertube-checkbox
-                inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
-                i18n-labelText labelText="Allow audio files upload"
-              >
-                <ng-template ptTemplate="help">
-                  <ng-container i18n>Allow your users to upload audio files that will be merged with the preview file on upload</ng-container>
-                </ng-template>
-              </my-peertube-checkbox>
-            </div>
-
-            <ng-container formGroupName="webtorrent">
-              <div class="form-group" >
-                <my-peertube-checkbox
-                  inputName="transcodingWebTorrentEnabled" formControlName="enabled"
-                  i18n-labelText labelText="WebTorrent support enabled"
-                >
+              <div class="form-group">
+                <my-peertube-checkbox inputName="transcodingEnabled" formControlName="enabled">
+                  <ng-template ptTemplate="label">
+                    <ng-container i18n>Transcoding enabled</ng-container>
+                  </ng-template>
+    
                   <ng-template ptTemplate="help">
-                    <ng-container i18n>
-                      <strong>Experimental, we suggest you to not disable webtorrent support for now</strong>
+                    <ng-container i18n>If you disable transcoding, many videos from your users will not work!</ng-container>
+                  </ng-template>
 
-                      <p>If you also enabled HLS support, it will multiply videos storage by 2</p>
+                  <ng-container ngProjectAs="extra">
 
-                      <br />
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                      <my-peertube-checkbox
+                        inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
+                        i18n-labelText labelText="Allow additional extensions"
+                      >
+                        <ng-template ptTemplate="help">
+                          <ng-container i18n>Allow your users to upload .mkv, .mov, .avi and .flv videos</ng-container>
+                        </ng-template>
+                      </my-peertube-checkbox>
+                    </div>
+    
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                      <my-peertube-checkbox
+                        inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
+                        i18n-labelText labelText="Allow audio files upload"
+                      >
+                        <ng-template ptTemplate="help">
+                          <ng-container i18n>Allow your users to upload audio files that will be merged with the preview file on upload</ng-container>
+                        </ng-template>
+                      </my-peertube-checkbox>
+                    </div>
 
-                      <strong>If disabled, breaks federation with PeerTube instances < 2.1</strong>
+                    <ng-container formGroupName="webtorrent">
+                      <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                        <my-peertube-checkbox
+                          inputName="transcodingWebTorrentEnabled" formControlName="enabled"
+                          i18n-labelText labelText="WebTorrent support enabled"
+                        >
+                          <ng-template ptTemplate="help">
+                            <ng-container i18n>
+                              <strong>Experimental, we suggest you to not disable webtorrent support for now</strong>
+    
+                              <p>If you also enabled HLS support, it will multiply videos storage by 2</p>
+
+                              <br />
+
+                              <strong>If disabled, breaks federation with PeerTube instances < 2.1</strong>
+                            </ng-container>
+                          </ng-template>
+                        </my-peertube-checkbox>
+                      </div>
                     </ng-container>
-                  </ng-template>
-                </my-peertube-checkbox>
-              </div>
-            </ng-container>
 
-            <ng-container formGroupName="hls">
-              <div class="form-group" >
-                <my-peertube-checkbox
-                  inputName="transcodingHlsEnabled" formControlName="enabled"
-                  i18n-labelText labelText="HLS support enabled"
-                >
-                  <ng-template ptTemplate="help">
-                    <ng-container i18n>
-                      <strong>Requires ffmpeg >= 4.1</strong>
-
-                      <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:</p>
-                      <ul>
-                        <li>Resolution change is smoother</li>
-                        <li>Faster playback in particular with long videos</li>
-                        <li>More stable playback (less bugs/infinite loading)</li>
-                      </ul>
-
-                      <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
+                    <ng-container formGroupName="hls">
+                      <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                        <my-peertube-checkbox
+                          inputName="transcodingHlsEnabled" formControlName="enabled"
+                          i18n-labelText labelText="HLS support enabled"
+                        >
+                          <ng-template ptTemplate="help">
+                            <ng-container i18n>
+                              <strong>Requires ffmpeg >= 4.1</strong>
+    
+                              <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:</p>
+                              <ul>
+                                <li>Resolution change is smoother</li>
+                                <li>Faster playback in particular with long videos</li>
+                                <li>More stable playback (less bugs/infinite loading)</li>
+                              </ul>
+    
+                              <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
+                            </ng-container>
+                          </ng-template>
+                        </my-peertube-checkbox>
+                      </div>
                     </ng-container>
-                  </ng-template>
+    
+                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                      <label i18n for="transcodingThreads">Transcoding threads</label>
+                      <div class="peertube-select-container">
+                        <select id="transcodingThreads" formControlName="threads">
+                          <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
+                            {{ transcodingThreadOption.label }}
+                          </option>
+                        </select>
+                      </div>
+                      <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
+                    </div>
+    
+                    <ng-container formGroupName="resolutions">
+                      <div class="form-group" *ngFor="let resolution of resolutions" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                        <my-peertube-checkbox
+                          [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                          i18n-labelText labelText="Resolution {{resolution.label}} enabled"
+                        >
+                          <ng-template *ngIf="resolution.description" ptTemplate="help">
+                            <div [innerHTML]="resolution.description"></div>
+                          </ng-template>
+                        </my-peertube-checkbox>
+                      </div>
+                    </ng-container>
+
+                  </ng-container>
                 </my-peertube-checkbox>
               </div>
+
             </ng-container>
 
-            <div class="form-group">
-              <label i18n for="transcodingThreads">Transcoding threads</label>
-              <div class="peertube-select-container">
-                <select id="transcodingThreads" formControlName="threads">
-                  <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
-                    {{ transcodingThreadOption.label }}
-                  </option>
-                </select>
-              </div>
-              <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
-            </div>
-
-            <ng-container formGroupName="resolutions">
-              <div class="form-group" *ngFor="let resolution of resolutions">
-                <my-peertube-checkbox
-                  [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
-                  i18n-labelText labelText="Resolution {{resolution.label}} enabled"
-                >
-                  <ng-template *ngIf="resolution.description" ptTemplate="help">
-                    <div [innerHTML]="resolution.description"></div>
-                  </ng-template>
-                </my-peertube-checkbox>
-              </div>
-            </ng-container>
-
-          </ng-container>
-        </ng-container>
-
-        <div class="inner-form-title">
-          <ng-container i18n>CACHE</ng-container>
-
-          <my-help>
-            <ng-template ptTemplate="customHtml">
-              <ng-container i18n>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</ng-container>
-            </ng-template>
-          </my-help>
+          </div>
         </div>
 
-        <ng-container formGroupName="cache">
-          <div class="form-group" formGroupName="previews">
-            <label i18n for="cachePreviewsSize">Previews cache size</label>
-            <input
-              type="text" id="cachePreviewsSize"
-              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.previews.size'] }"
-            >
-            <div *ngIf="formErrors.cache.previews.size" class="form-error">{{ formErrors.cache.previews.size }}</div>
-          </div>
-
-          <div class="form-group" formGroupName="captions">
-            <label i18n for="cacheCaptionsSize">Video captions cache size</label>
-            <input
-              type="text" id="cacheCaptionsSize"
-              formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.captions.size'] }"
-            >
-            <div *ngIf="formErrors.cache.captions.size" class="form-error">{{ formErrors.cache.captions.size }}</div>
-          </div>
-        </ng-container>
-
-        <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
-
-        <ng-container formGroupName="instance">
-          <ng-container formGroupName="customizations">
-            <div class="form-group">
-              <label i18n for="customizationJavascript">JavaScript</label>
+        <div class="form-row mt-4"> <!-- cache grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div class="inner-form-title">
+              <ng-container i18n>CACHE</ng-container>
               <my-help>
                 <ng-template ptTemplate="customHtml">
-                  <ng-container i18n>
-                    Write JavaScript code directly.<br />Example: <pre>console.log('my instance is amazing');</pre>
-                  </ng-container>
+                  <ng-container i18n>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</ng-container>
                 </ng-template>
               </my-help>
-
-              <textarea
-                id="customizationJavascript" formControlName="javascript"
-                [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
-              ></textarea>
-
-              <div *ngIf="formErrors.instance.customizations.javascript" class="form-error">{{ formErrors.instance.customizations.javascript }}</div>
             </div>
+          </div>
 
-            <div class="form-group">
-              <label for="customizationCSS">CSS</label>
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-              <my-help>
-                <ng-template ptTemplate="customHtml">
-                  <ng-container i18n>
-                    Write CSS code directly. Example:<br /><br />
-<pre>
-#custom-css {{ '{' }}
-  color: red;
-{{ '}' }}
-</pre>
+            <ng-container formGroupName="cache">
+              <div class="form-group" formGroupName="previews">
+                <label i18n for="cachePreviewsSize">Number of previews to keep in cache</label>
+                <input
+                  type="number" min="0" id="cachePreviewsSize"
+                  formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.previews.size'] }"
+                >
+                <div *ngIf="formErrors.cache.previews.size" class="form-error">{{ formErrors.cache.previews.size }}</div>
+              </div>
 
-                    Prepend with <em>#custom-css</em> to override styles. Example:<br /><br />
-<pre>
-#custom-css .logged-in-email {{ '{' }}
-  color: red;
-{{ '}' }}
-</pre>
-                  </ng-container>
-                </ng-template>
-              </my-help>
+              <div class="form-group" formGroupName="captions">
+                <label i18n for="cacheCaptionsSize">Number of video captions to keep in cache</label>
+                <input
+                  type="number" min="0" id="cacheCaptionsSize"
+                  formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.captions.size'] }"
+                >
+                <div *ngIf="formErrors.cache.captions.size" class="form-error">{{ formErrors.cache.captions.size }}</div>
+              </div>
+            </ng-container>
 
-              <textarea
-                id="customizationCSS" formControlName="css"
-                [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"
-              ></textarea>
-              <div *ngIf="formErrors.instance.customizations.css" class="form-error">{{ formErrors.instance.customizations.css }}</div>
-            </div>
-          </ng-container>
-        </ng-container>
+          </div>
+        </div>
+
+        <div class="form-row mt-4"> <!-- cache grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <ng-container formGroupName="instance">
+              <ng-container formGroupName="customizations">
+                <div class="form-group">
+                  <label i18n for="customizationJavascript">JavaScript</label>
+                  <my-help>
+                    <ng-template ptTemplate="customHtml">
+                      <ng-container i18n>
+                        Write JavaScript code directly.<br />Example: <pre>console.log('my instance is amazing');</pre>
+                      </ng-container>
+                    </ng-template>
+                  </my-help>
+
+                  <textarea
+                    id="customizationJavascript" formControlName="javascript"
+                    [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
+                  ></textarea>
+
+                  <div *ngIf="formErrors.instance.customizations.javascript" class="form-error">{{ formErrors.instance.customizations.javascript }}</div>
+                </div>
+
+                <div class="form-group">
+                  <label for="customizationCSS">CSS</label>
+
+                  <my-help>
+                    <ng-template ptTemplate="customHtml">
+                      <ng-container i18n>
+                        Write CSS code directly. Example:<br /><br />
+    <pre>
+    #custom-css {{ '{' }}
+      color: red;
+    {{ '}' }}
+    </pre>
+                        Prepend with <em>#custom-css</em> to override styles. Example:<br /><br />
+    <pre>
+    #custom-css .logged-in-email {{ '{' }}
+      color: red;
+    {{ '}' }}
+    </pre>
+                      </ng-container>
+                    </ng-template>
+                  </my-help>
+
+                  <textarea
+                    id="customizationCSS" formControlName="css"
+                    [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"
+                  ></textarea>
+                  <div *ngIf="formErrors.instance.customizations.css" class="form-error">{{ formErrors.instance.customizations.css }}</div>
+                </div>
+              </ng-container>
+            </ng-container>
+
+          </div>
+        </div>
 
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
 
-  <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid">
-  <span class="form-error" i18n *ngIf="!form.valid">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</span>
+  <div class="form-row mt-4"> <!-- submit placement block -->
+    <div class="col-md-7 col-xl-5"></div>
+    <div class="col-md-5 col-xl-5">
+      <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid">
+      <span class="form-error" i18n *ngIf="!form.valid">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</span>
+    </div>
+  </div>
 </form>

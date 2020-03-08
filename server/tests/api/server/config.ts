@@ -27,8 +27,7 @@ const expect = chai.expect
 function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
   expect(data.instance.name).to.equal('PeerTube')
   expect(data.instance.shortDescription).to.equal(
-    'PeerTube, a federated (ActivityPub) video streaming platform using P2P (BitTorrent) directly in the web browser ' +
-    'with WebTorrent and Angular.'
+    'PeerTube, an ActivityPub-federated video streaming platform using P2P directly in your web browser.'
   )
   expect(data.instance.description).to.equal('Welcome to this PeerTube instance!')
 

@@ -1,7 +1,7 @@
 <div class="row">
   <div class="sub-menu">
     <ng-template #linkTemplate let-item="item">
-      <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page">{{ item.label }}</a>
+      <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page title-page-settings">{{ item.label }}</a>
     </ng-template>
 
     <list-overflow [items]="items" [itemTemplate]="linkTemplate"></list-overflow>

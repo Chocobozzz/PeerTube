@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
 input[type=submit] {
   @include peertube-button;
   @include orange-button;

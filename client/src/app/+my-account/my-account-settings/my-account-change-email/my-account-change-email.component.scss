@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
 input[type=password],
 input[type=email] {
   @include peertube-input-text(340px);
@@ -16,7 +21,7 @@ input[type=submit] {
 .current-email,
 .pending-email {
   font-size: 16px;
-  margin: 15px 0;
+  margin-bottom: 15px;
 
   .email {
     font-weight: $font-semibold;
