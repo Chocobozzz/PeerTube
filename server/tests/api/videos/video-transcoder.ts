@@ -508,9 +508,7 @@ describe('Test video transcoding', function () {
       expect(metadata).to.not.have.nested.property('format.filename')
     }
 
-    const otherServers = servers
-    delete otherServers[1]
-    for (const server of otherServers) {
+    for (const server of servers) {
       const res = await getVideosList(server.url)
 
       const video = res.body.data.find(v => v.name === videoAttributes.name)

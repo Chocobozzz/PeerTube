@@ -714,7 +714,7 @@ function videoFileActivityUrlToDBAttributes (
       resolution: fileUrl.height,
       size: fileUrl.size,
       fps: fileUrl.fps || -1,
-      metadataUrl: metadata.href,
+      metadataUrl: metadata?.href,
 
       // This is a video file owned by a video or by a streaming playlist
       videoId: (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id,

@@ -52,11 +52,8 @@ async function doesVideoExist (id: number | string, res: Response, fetchType: Vi
   return true
 }
 
-async function doesVideoExistForVideoFile (id: number, videoId: number | string, res: Response) {
-  const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
-  const video = await fetchVideo(videoId, 'all', userId)
-
-  if (!video || !await VideoFileModel.doesVideoExistForVideoFile(id, video.id)) {
+async function doesVideoFileOfVideoExist (id: number, videoIdOrUUID: number | string, res: Response) {
+  if (!await VideoFileModel.doesVideoExistForVideoFile(id, videoIdOrUUID)) {
     res.status(404)
        .json({ error: 'VideoFile matching Video not found' })
        .end()
@@ -123,6 +120,6 @@ function checkUserCanManageVideo (user: MUser, video: MVideoAccountLight, right:
 export {
   doesVideoChannelOfAccountExist,
   doesVideoExist,
-  doesVideoExistForVideoFile,
+  doesVideoFileOfVideoExist,
   checkUserCanManageVideo
 }

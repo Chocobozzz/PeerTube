@@ -46,11 +46,10 @@ import {
   checkUserCanManageVideo,
   doesVideoChannelOfAccountExist,
   doesVideoExist,
-  doesVideoExistForVideoFile
+  doesVideoFileOfVideoExist
 } from '../../../helpers/middlewares'
 import { MVideoFullLight } from '@server/typings/models'
 import { getVideoWithAttributes } from '../../../helpers/video'
-import toInt from 'validator/lib/toInt'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')
@@ -212,8 +211,7 @@ const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
     logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.id, res)) return
-    if (!await doesVideoExistForVideoFile(toInt(req.params.videoFileId), req.params.id, res)) return
+    if (!await doesVideoFileOfVideoExist(+req.params.videoFileId, req.params.id, res)) return
 
     return next()
   }

@@ -40,7 +40,7 @@ const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
 
 @DefaultScope(() => ({
   attributes: {
-    exclude: METADATA_FIELDS
+    exclude: [ METADATA_FIELDS[0] ]
   }
 }))
 @Scopes(() => ({
@@ -194,9 +194,12 @@ export class VideoFileModel extends Model<VideoFileModel> {
               .then(results => results.length === 1)
   }
 
-  static async doesVideoExistForVideoFile (id: number, videoId: number | string) {
+  static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
     const videoFile = await VideoFileModel.loadWithVideo(id)
-    return (videoFile?.Video.id === videoId) || (videoFile?.VideoStreamingPlaylist?.Video?.id === videoId)
+    return (videoFile?.Video.id === videoIdOrUUID) ||
+           (videoFile?.Video.uuid === videoIdOrUUID) ||
+           (videoFile?.VideoStreamingPlaylist?.Video?.id === videoIdOrUUID) ||
+           (videoFile?.VideoStreamingPlaylist?.Video?.uuid === videoIdOrUUID)
   }
 
   static loadWithMetadata (id: number) {

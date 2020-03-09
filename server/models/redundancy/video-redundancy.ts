@@ -528,7 +528,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
       include: [
         {
           required: false,
-          model: VideoFileModel.unscoped(),
+          model: VideoFileModel,
           include: [
             {
               model: VideoRedundancyModel.unscoped(),
@@ -547,7 +547,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
               where: redundancyWhere
             },
             {
-              model: VideoFileModel.unscoped(),
+              model: VideoFileModel,
               required: false
             }
           ]
@@ -699,7 +699,7 @@ export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
 
     return {
       attributes: [],
-      model: VideoFileModel.unscoped(),
+      model: VideoFileModel,
       required: true,
       where: {
         id: {
