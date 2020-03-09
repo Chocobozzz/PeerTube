@@ -28,12 +28,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
 .dropdown:not(.btn-group) {
-  &:not(.parent-entry) {
-    z-index: z(dropdown) !important;
-  }
+  z-index: z(dropdown) !important;
 
+  &.list-overflow-menu,
   &.parent-entry {
-    z-index: z(header) - 1;
+    z-index: z(header) - 1 !important;
   }
 }
 
