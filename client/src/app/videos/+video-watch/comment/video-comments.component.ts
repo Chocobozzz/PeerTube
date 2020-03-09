@@ -96,10 +96,11 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
         res => {
           this.threadComments[commentId] = res
           this.threadLoading[commentId] = false
-
+          this.hooks.runAction('action:video-watch.video-threads.reply-loaded', 'video-watch', { data: res })
+          
           if (highlightThread) {
             this.highlightedThread = new VideoComment(res.comment)
-
+            
             // Scroll to the highlighted thread
             setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
           }

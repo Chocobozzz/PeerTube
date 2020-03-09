@@ -67,6 +67,8 @@ export const clientActionHookObject = {
   'action:video-watch.player.loaded': true,
   // Fired when the video watch page comments(threads) are loaded and load more comments on scroll
   'action:video-watch.video-threads.loaded': true,
+  // Fired when a user click on 'View x replies' and they're loaded
+  'action:video-watch.video-threads.reply-loaded': true,
 
   // Fired when the search page is being initialized
   'action:search.init': true,
