@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { maxBy, minBy } from 'lodash'
+import { maxBy, minBy, pick } from 'lodash'
 import { join } from 'path'
 import { FindOptions, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
 import {
@@ -124,7 +124,7 @@ import { MThumbnail } from '../../typings/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { ModelCache } from '@server/models/model-cache'
-import { buildListQuery, BuildVideosQueryOptions } from './video-query-builder'
+import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -1408,19 +1408,25 @@ export class VideoModel extends Model<VideoModel> {
     options: BuildVideosQueryOptions,
     countVideos = true
   ) {
-    const { query, replacements } = buildListQuery(VideoModel, options)
-    const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel, Object.assign({}, options, { isCount: true }))
+    function getCount () {
+      if (countVideos !== true) return Promise.resolve(undefined)
 
-    const [ count, rows ] = await Promise.all([
-      countVideos
-        ? this.sequelize.query<any>(queryCount, { replacements: replacementsCount, type: QueryTypes.SELECT })
-              .then(rows => rows.length !== 0 ? rows[0].total : 0)
-        : Promise.resolve<number>(undefined),
+      const countOptions = Object.assign({}, options, { isCount: true })
+      const { query: queryCount, replacements: replacementsCount } = buildListQuery(VideoModel, countOptions)
 
-      this.sequelize.query<any>(query, { replacements, type: QueryTypes.SELECT })
-                .then(rows => rows.map(r => r.id))
-                .then(ids => VideoModel.loadCompleteVideosForApi(ids, options))
-    ])
+      return VideoModel.sequelize.query<any>(queryCount, { replacements: replacementsCount, type: QueryTypes.SELECT })
+          .then(rows => rows.length !== 0 ? rows[0].total : 0)
+    }
+
+    function getModels () {
+      const { query, replacements, order } = buildListQuery(VideoModel, options)
+      const queryModels = wrapForAPIResults(query, replacements, options, order)
+
+      return VideoModel.sequelize.query<any>(queryModels, { replacements, type: QueryTypes.SELECT, nest: true })
+          .then(rows => VideoModel.buildAPIResult(rows))
+    }
+
+    const [ count, rows ] = await Promise.all([ getCount(), getModels() ])
 
     return {
       data: rows,
@@ -1428,36 +1434,113 @@ export class VideoModel extends Model<VideoModel> {
     }
   }
 
-  private static loadCompleteVideosForApi (ids: number[], options: BuildVideosQueryOptions) {
-    if (ids.length === 0) return []
+  private static buildAPIResult (rows: any[]) {
+    const memo: { [ id: number ]: VideoModel } = {}
 
-    const secondQuery: FindOptions = {
-      offset: 0,
-      limit: options.count,
-      order: [ // Keep original order
-        Sequelize.literal(
-          ids.map(id => `"VideoModel".id = ${id} DESC`).join(', ')
-        )
-      ]
+    const thumbnailsDone = new Set<number>()
+    const historyDone = new Set<number>()
+    const videoFilesDone = new Set<number>()
+
+    const videos: VideoModel[] = []
+
+    const avatarKeys = [ 'id', 'filename', 'fileUrl', 'onDisk', 'createdAt', 'updatedAt' ]
+    const actorKeys = [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ]
+    const serverKeys = [ 'id', 'host' ]
+    const videoFileKeys = [ 'id', 'createdAt', 'updatedAt', 'resolution', 'size', 'extname', 'infoHash', 'fps', 'videoId' ]
+    const videoKeys = [
+      'id',
+      'uuid',
+      'name',
+      'category',
+      'licence',
+      'language',
+      'privacy',
+      'nsfw',
+      'description',
+      'support',
+      'duration',
+      'views',
+      'likes',
+      'dislikes',
+      'remote',
+      'url',
+      'commentsEnabled',
+      'downloadEnabled',
+      'waitTranscoding',
+      'state',
+      'publishedAt',
+      'originallyPublishedAt',
+      'channelId',
+      'createdAt',
+      'updatedAt'
+    ]
+
+    function buildActor (rowActor: any) {
+      const avatarModel = rowActor.Avatar.id !== null
+        ? new AvatarModel(pick(rowActor.Avatar, avatarKeys))
+        : null
+
+      const serverModel = rowActor.Server.id !== null
+        ? new ServerModel(pick(rowActor.Server, serverKeys))
+        : null
+
+      const actorModel = new ActorModel(pick(rowActor, actorKeys))
+      actorModel.Avatar = avatarModel
+      actorModel.Server = serverModel
+
+      return actorModel
     }
 
-    const apiScope: (string | ScopeOptions)[] = []
+    for (const row of rows) {
+      if (!memo[row.id]) {
+        // Build Channel
+        const channel = row.VideoChannel
+        const channelModel = new VideoChannelModel(pick(channel, [ 'id', 'name', 'description', 'actorId' ]))
+        channelModel.Actor = buildActor(channel.Actor)
 
-    if (options.user) {
-      apiScope.push({ method: [ ScopeNames.WITH_USER_HISTORY, options.user.id ] })
+        const account = row.VideoChannel.Account
+        const accountModel = new AccountModel(pick(account, [ 'id', 'name' ]))
+        accountModel.Actor = buildActor(account.Actor)
+
+        channelModel.Account = accountModel
+
+        const videoModel = new VideoModel(pick(row, videoKeys))
+        videoModel.VideoChannel = channelModel
+
+        videoModel.UserVideoHistories = []
+        videoModel.Thumbnails = []
+        videoModel.VideoFiles = []
+
+        memo[row.id] = videoModel
+        // Don't take object value to have a sorted array
+        videos.push(videoModel)
+      }
+
+      const videoModel = memo[row.id]
+
+      if (row.userVideoHistory?.id && !historyDone.has(row.userVideoHistory.id)) {
+        const historyModel = new UserVideoHistoryModel(pick(row.userVideoHistory, [ 'id', 'currentTime' ]))
+        videoModel.UserVideoHistories.push(historyModel)
+
+        historyDone.add(row.userVideoHistory.id)
+      }
+
+      if (row.Thumbnails?.id && !thumbnailsDone.has(row.Thumbnails.id)) {
+        const thumbnailModel = new ThumbnailModel(pick(row.Thumbnails, [ 'id', 'type', 'filename' ]))
+        videoModel.Thumbnails.push(thumbnailModel)
+
+        thumbnailsDone.add(row.Thumbnails.id)
+      }
+
+      if (row.VideoFiles?.id && !videoFilesDone.has(row.VideoFiles.id)) {
+        const videoFileModel = new VideoFileModel(pick(row.VideoFiles, videoFileKeys))
+        videoModel.VideoFiles.push(videoFileModel)
+
+        videoFilesDone.add(row.VideoFiles.id)
+      }
     }
 
-    apiScope.push({
-      method: [
-        ScopeNames.FOR_API, {
-          ids,
-          withFiles: options.withFiles,
-          videoPlaylistId: options.videoPlaylistId
-        } as ForAPIOptions
-      ]
-    })
-
-    return VideoModel.scope(apiScope).findAll(secondQuery)
+    return videos
   }
 
   private static isPrivacyForFederation (privacy: VideoPrivacy) {

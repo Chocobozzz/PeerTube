@@ -59,7 +59,7 @@ export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
     return VideoModel.listForApi({
       start,
       count,
-      sort: '-UserVideoHistories.updatedAt',
+      sort: '-"userVideoHistory"."updatedAt"',
       nsfw: null, // All
       includeLocalVideos: true,
       withFiles: false,
