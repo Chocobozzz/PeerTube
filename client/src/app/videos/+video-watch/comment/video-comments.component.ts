@@ -100,7 +100,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           
           if (highlightThread) {
             this.highlightedThread = new VideoComment(res.comment)
-            
+
             // Scroll to the highlighted thread
             setTimeout(() => this.commentHighlightBlock.nativeElement.scrollIntoView(), 0)
           }
