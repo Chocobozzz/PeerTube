@@ -32,7 +32,7 @@
       </div>
 
       <div class="right-buttons">
-        <a *ngIf="isAccountManageable" routerLink="/my-account" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
+        <a *ngIf="isAccountManageable && !isInSmallView" routerLink="/my-account" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
         <my-subscribe-button *ngIf="videoChannels" [account]="account" [videoChannels]="videoChannels"></my-subscribe-button>
       </div>
     </div>

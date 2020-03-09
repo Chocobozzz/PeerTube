@@ -11,6 +11,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { ListOverflowItem } from '@app/shared/misc/list-overflow.component'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   templateUrl: './accounts.component.html',
@@ -36,6 +37,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
     private restExtractor: RestExtractor,
     private redirectService: RedirectService,
     private authService: AuthService,
+    private screenService: ScreenService,
     private i18n: I18n
   ) {
   }
@@ -89,6 +91,10 @@ export class AccountsComponent implements OnInit, OnDestroy {
       (acc, val) => acc + val.followersCount,
       this.account.followersCount // accumulator starts with the base number of subscribers the account has
     )
+  }
+
+  get isInSmallView () {
+    return this.screenService.isInSmallView()
   }
 
   onUserChanged () {
