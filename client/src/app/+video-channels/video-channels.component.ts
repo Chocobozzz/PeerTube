@@ -34,7 +34,7 @@ export class VideoChannelsComponent implements OnInit, OnDestroy {
     private videoChannelService: VideoChannelService,
     private restExtractor: RestExtractor,
     private hotkeysService: HotkeysService,
-    private screenService: ScreenService
+    private screenService: ScreenService
   ) { }
 
   ngOnInit () {
