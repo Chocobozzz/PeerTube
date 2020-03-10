@@ -53,7 +53,8 @@ const icons = {
   'p2p': require('!!raw-loader?!../../../assets/images/menu/p2p.svg'),
   'users': require('!!raw-loader?!../../../assets/images/global/users.svg'),
   'search': require('!!raw-loader?!../../../assets/images/global/search.svg'),
-  'refresh': require('!!raw-loader?!../../../assets/images/global/refresh.svg')
+  'refresh': require('!!raw-loader?!../../../assets/images/global/refresh.svg'),
+  'npm': require('!!raw-loader?!../../../assets/images/global/npm.svg')
 }
 
 export type GlobalIconName = keyof typeof icons

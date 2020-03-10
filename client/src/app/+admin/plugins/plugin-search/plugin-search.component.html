@@ -37,24 +37,25 @@
 
         <span class="plugin-version">{{ plugin.latestVersion }}</span>
 
-        <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
-      </div>
+        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin.homepage" i18n-title title="Go to the plugin homepage">
+          <my-global-icon iconName="home"></my-global-icon>
+        </a>
 
-      <div class="second-row">
-        <div class="description">{{ plugin.description }}</div>
+        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="'https://www.npmjs.com/package/peertube-plugin-' + plugin.name" i18n-title title="Go to the plugin homepage">
+          <my-global-icon iconName="npm"></my-global-icon>
+        </a>
+
+        <span *ngIf="plugin.installed" class="badge badge-success">Installed</span>
 
         <div class="buttons">
-          <a class="action-button action-button-edit grey-button" target="_blank" rel="noopener noreferrer"
-             [href]="plugin.homepage" i18n-title title="Go to the plugin homepage"
-          >
-            <my-global-icon iconName="go"></my-global-icon>
-            <span i18n class="button-label">Homepage</span>
-          </a>
-
           <my-button class="update-button" *ngIf="plugin.installed === false" (click)="install(plugin)" [loading]="isInstalling(plugin)"
                      label="Install" icon="cloud-download" [attr.disabled]="isInstalling(plugin)"
           ></my-button>
         </div>
+      </div>
+
+      <div class="second-row">
+        <div class="description">{{ plugin.description }}</div>
       </div>
     </div>
   </div>

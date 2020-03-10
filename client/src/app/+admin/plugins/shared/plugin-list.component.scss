@@ -7,6 +7,8 @@
 }
 
 .first-row {
+  display: flex;
+  align-items: center;
   margin-bottom: 10px;
 
   .plugin-name {
@@ -18,6 +20,26 @@
   .plugin-version {
     opacity: 0.6;
   }
+
+  .plugin-icon {
+    margin-left: 10px;
+    
+    my-global-icon {
+      @include apply-svg-color($grey-foreground-color);
+      
+      &[iconName="npm"] {
+        @include fill-svg-color($grey-foreground-color);
+      }
+    }
+  }
+
+  .buttons {
+    margin-left: auto;
+    width: max-content;
+    > *:not(:last-child) {
+      margin-right: 10px;
+    }
+  }
 }
 
 .second-row {
@@ -28,13 +50,6 @@
 
   .description {
     opacity: 0.8
-  }
-
-  .buttons {
-    margin-left: 10px;
-    > *:not(:last-child) {
-      margin-right: 10px;
-    }
   }
 }
 

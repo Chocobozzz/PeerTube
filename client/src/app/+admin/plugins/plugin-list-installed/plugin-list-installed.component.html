@@ -10,22 +10,19 @@
   <div class="card plugin" *ngFor="let plugin of plugins">
     <div class="card-body">
       <div class="first-row">
-        <a class="plugin-name" [routerLink]="getShowRouterLink(plugin)" i18n-title title="Show plugin settings">{{ plugin.name }}</a>
+        <span class="plugin-name">{{ plugin.name }}</span>
 
         <span class="plugin-version">{{ plugin.version }}</span>
-      </div>
 
-      <div class="second-row">
-        <div class="description">{{ plugin.description }}</div>
+        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="plugin.homepage" i18n-title title="Go to the plugin homepage">
+          <my-global-icon iconName="home"></my-global-icon>
+        </a>
+
+        <a class="plugin-icon" target="_blank" rel="noopener noreferrer" [href]="'https://www.npmjs.com/package/peertube-plugin-' + plugin.name" i18n-title title="Go to the plugin homepage">
+          <my-global-icon iconName="npm"></my-global-icon>
+        </a>
 
         <div class="buttons">
-          <a class="action-button action-button-edit grey-button" target="_blank" rel="noopener noreferrer"
-             [href]="plugin.homepage" i18n-title title="Go to the plugin homepage"
-          >
-            <my-global-icon iconName="go"></my-global-icon>
-            <span i18n class="button-label">Homepage</span>
-          </a>
-
           <my-edit-button *ngIf="pluginType !== PluginType.THEME" [routerLink]="getShowRouterLink(plugin)" label="Settings" i18n-label></my-edit-button>
 
           <my-button class="update-button" *ngIf="isUpdateAvailable(plugin)" (click)="update(plugin)" [loading]="isUpdating(plugin)"
@@ -34,6 +31,10 @@
 
           <my-delete-button (click)="uninstall(plugin)" label="Uninstall" i18n-label></my-delete-button>
         </div>
+      </div>
+
+      <div class="second-row">
+        <div class="description">{{ plugin.description }}</div>
       </div>
     </div>
   </div>
