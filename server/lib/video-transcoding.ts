@@ -237,12 +237,9 @@ async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoF
 
   await move(transcodingPath, outputPath)
 
-  const extractedVideo = extractVideo(video)
-
   videoFile.size = stats.size
   videoFile.fps = fps
   videoFile.metadata = metadata
-  videoFile.metadataUrl = extractedVideo.getVideoFileMetadataUrl(videoFile, extractedVideo.getBaseUrls().baseUrlHttp)
 
   await createTorrentAndSetInfoHash(video, videoFile)
 

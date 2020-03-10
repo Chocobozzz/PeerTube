@@ -13,6 +13,7 @@ import {
 import { isActivityPubUrlValid, isBaseActivityValid, setValidAttributedTo } from './misc'
 import { VideoState } from '../../../../shared/models/videos'
 import { logger } from '@server/helpers/logger'
+import { ActivityVideoFileMetadataObject } from '@shared/models'
 
 function sanitizeAndCheckVideoTorrentUpdateActivity (activity: any) {
   return isBaseActivityValid(activity, 'Update') &&
@@ -104,7 +105,15 @@ function isRemoteVideoUrlValid (url: any) {
       (url.mediaType || url.mimeType) === 'application/x-mpegURL' &&
       isActivityPubUrlValid(url.href) &&
       isArray(url.tag)
-    )
+    ) ||
+    isAPVideoFileMetadataObject(url)
+}
+
+function isAPVideoFileMetadataObject (url: any): url is ActivityVideoFileMetadataObject {
+  return url &&
+    url.type === 'Link' &&
+    url.mediaType === 'application/json' &&
+    isArray(url.rel) && url.rel.includes('metadata')
 }
 
 // ---------------------------------------------------------------------------
@@ -113,7 +122,8 @@ export {
   sanitizeAndCheckVideoTorrentUpdateActivity,
   isRemoteStringIdentifierValid,
   sanitizeAndCheckVideoTorrentObject,
-  isRemoteVideoUrlValid
+  isRemoteVideoUrlValid,
+  isAPVideoFileMetadataObject
 }
 
 // ---------------------------------------------------------------------------

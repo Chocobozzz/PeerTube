@@ -1849,7 +1849,8 @@ export class VideoModel extends Model<VideoModel> {
 
   getVideoFileMetadataUrl (videoFile: MVideoFile, baseUrlHttp: string) {
     const path = '/api/v1/videos/'
-    return videoFile.metadata
+
+    return this.isOwned()
       ? baseUrlHttp + path + this.uuid + '/metadata/' + videoFile.id
       : videoFile.metadataUrl
   }

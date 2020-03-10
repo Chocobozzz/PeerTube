@@ -9,13 +9,13 @@ import {
   ActivityPlaylistUrlObject,
   ActivityTagObject,
   ActivityUrlObject,
+  ActivityVideoFileMetadataObject,
   ActivityVideoUrlObject,
-  VideoState,
-  ActivityVideoFileMetadataObject
+  VideoState
 } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
+import { sanitizeAndCheckVideoTorrentObject, isAPVideoFileMetadataObject } from '../../helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
@@ -26,7 +26,8 @@ import {
   P2P_MEDIA_LOADER_PEER_VERSION,
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
-  STATIC_PATHS, THUMBNAILS_SIZE
+  STATIC_PATHS,
+  THUMBNAILS_SIZE
 } from '../../initializers/constants'
 import { TagModel } from '../../models/video/tag'
 import { VideoModel } from '../../models/video/video'
@@ -69,7 +70,8 @@ import {
   MVideoAPWithoutCaption,
   MVideoFile,
   MVideoFullLight,
-  MVideoId, MVideoImmutable,
+  MVideoId,
+  MVideoImmutable,
   MVideoThumbnail
 } from '../../typings/models'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
@@ -527,10 +529,6 @@ function isAPHashTagObject (url: any): url is ActivityHashTagObject {
   return url && url.type === 'Hashtag'
 }
 
-function isAPVideoFileMetadataObject (url: any): url is ActivityVideoFileMetadataObject {
-  return url && url.type === 'Link' && url.mediaType === 'application/json' && url.hasAttribute('rel') && url.rel.includes('metadata')
-}
-
 async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAccountLight, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
@@ -701,11 +699,11 @@ function videoFileActivityUrlToDBAttributes (
 
     // Fetch associated metadata url, if any
     const metadata = urls.filter(isAPVideoFileMetadataObject)
-                          .find(u =>
-                            u.height === fileUrl.height &&
-                            u.fps === fileUrl.fps &&
-                            u.rel.includes(fileUrl.mediaType)
-                          )
+                         .find(u => {
+                           return u.height === fileUrl.height &&
+                             u.fps === fileUrl.fps &&
+                             u.rel.includes(fileUrl.mediaType)
+                         })
 
     const mediaType = fileUrl.mediaType
     const attribute = {

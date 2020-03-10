@@ -30,18 +30,16 @@ import { MIMETYPES, MEMOIZE_LENGTH, MEMOIZE_TTL } from '../../initializers/const
 import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '../../typings/models/video/video-file'
 import { MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
 import * as memoizee from 'memoizee'
+import validator from 'validator'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
-  WITH_VIDEO_OR_PLAYLIST = 'WITH_VIDEO_OR_PLAYLIST',
   WITH_METADATA = 'WITH_METADATA'
 }
 
-const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
-
 @DefaultScope(() => ({
   attributes: {
-    exclude: [ METADATA_FIELDS[0] ]
+    exclude: [ 'metadata' ]
   }
 }))
 @Scopes(() => ({
@@ -53,35 +51,9 @@ const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
       }
     ]
   },
-  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (videoIdOrUUID: string | number) => {
-    const where = (typeof videoIdOrUUID === 'number')
-      ? { id: videoIdOrUUID }
-      : { uuid: videoIdOrUUID }
-
-    return {
-      include: [
-        {
-          model: VideoModel.unscoped(),
-          required: false,
-          where
-        },
-        {
-          model: VideoStreamingPlaylistModel.unscoped(),
-          required: false,
-          include: [
-            {
-              model: VideoModel.unscoped(),
-              required: true,
-              where
-            }
-          ]
-        }
-      ]
-    }
-  },
   [ScopeNames.WITH_METADATA]: {
     attributes: {
-      include: METADATA_FIELDS
+      include: [ 'metadata' ]
     }
   }
 }))
@@ -223,10 +195,8 @@ export class VideoFileModel extends Model<VideoFileModel> {
 
   static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
     const videoFile = await VideoFileModel.loadWithVideoOrPlaylist(id, videoIdOrUUID)
-    return (videoFile?.Video.id === videoIdOrUUID) ||
-           (videoFile?.Video.uuid === videoIdOrUUID) ||
-           (videoFile?.VideoStreamingPlaylist?.Video?.id === videoIdOrUUID) ||
-           (videoFile?.VideoStreamingPlaylist?.Video?.uuid === videoIdOrUUID)
+
+    return !!videoFile
   }
 
   static loadWithMetadata (id: number) {
@@ -238,12 +208,41 @@ export class VideoFileModel extends Model<VideoFileModel> {
   }
 
   static loadWithVideoOrPlaylist (id: number, videoIdOrUUID: number | string) {
-    return VideoFileModel.scope({
-      method: [
-        ScopeNames.WITH_VIDEO_OR_PLAYLIST,
-        videoIdOrUUID
+    const whereVideo = validator.isUUID(videoIdOrUUID + '')
+      ? { uuid: videoIdOrUUID }
+      : { id: videoIdOrUUID }
+
+    const options = {
+      where: {
+        id
+      },
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: false,
+          where: whereVideo
+        },
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: false,
+          include: [
+            {
+              model: VideoModel.unscoped(),
+              required: true,
+              where: whereVideo
+            }
+          ]
+        }
       ]
-    }).findByPk(id)
+    }
+
+    return VideoFileModel.findOne(options)
+      .then(file => {
+        // We used `required: false` so check we have at least a video or a streaming playlist
+        if (!file.Video && !file.VideoStreamingPlaylist) return null
+
+        return file
+      })
   }
 
   static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {

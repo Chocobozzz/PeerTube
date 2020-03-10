@@ -181,6 +181,8 @@ function videoFilesModelToFormattedJSON (
   baseUrlWs: string,
   videoFiles: MVideoFileRedundanciesOpt[]
 ): VideoFile[] {
+  const video = extractVideo(model)
+
   return videoFiles
     .map(videoFile => {
       return {
@@ -195,7 +197,7 @@ function videoFilesModelToFormattedJSON (
         torrentDownloadUrl: model.getTorrentDownloadUrl(videoFile, baseUrlHttp),
         fileUrl: model.getVideoFileUrl(videoFile, baseUrlHttp),
         fileDownloadUrl: model.getVideoFileDownloadUrl(videoFile, baseUrlHttp),
-        metadataUrl: videoFile.metadataUrl // only send the metadataUrl and not the metadata over the wire
+        metadataUrl: video.getVideoFileMetadataUrl(videoFile, baseUrlHttp)
       } as VideoFile
     })
     .sort((a, b) => {

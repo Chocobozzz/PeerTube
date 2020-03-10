@@ -170,7 +170,7 @@ async function getVideoFileFPS (path: string) {
   return 0
 }
 
-async function getMetadataFromFile<T> (path: string, cb = metadata => metadata) {
+async function getMetadataFromFile <T> (path: string, cb = metadata => metadata) {
   return new Promise<T>((res, rej) => {
     ffmpeg.ffprobe(path, (err, metadata) => {
       if (err) return rej(err)
