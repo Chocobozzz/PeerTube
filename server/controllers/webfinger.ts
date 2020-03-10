@@ -1,8 +1,11 @@
+import * as cors from 'cors'
 import * as express from 'express'
 import { asyncMiddleware } from '../middlewares'
 import { webfingerValidator } from '../middlewares/validators'
 
 const webfingerRouter = express.Router()
+
+webfingerRouter.use(cors())
 
 webfingerRouter.get('/.well-known/webfinger',
   asyncMiddleware(webfingerValidator),
@@ -31,8 +34,6 @@ function webfingerController (req: express.Request, res: express.Response) {
       }
     ]
   }
-  
-  res.set('Access-Control-Allow-Origin', '*')
 
   return res.json(json)
 }
