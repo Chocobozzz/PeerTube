@@ -10,7 +10,8 @@ import {
   ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
-  VideoState
+  VideoState,
+  ActivityVideoFileMetadataObject
 } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
@@ -526,6 +527,10 @@ function isAPHashTagObject (url: any): url is ActivityHashTagObject {
   return url && url.type === 'Hashtag'
 }
 
+function isAPVideoFileMetadataObject (url: any): url is ActivityVideoFileMetadataObject {
+  return url && url.type === 'Link' && url.mediaType === 'application/json' && url.hasAttribute('rel') && url.rel.includes('metadata')
+}
+
 async function createVideo (videoObject: VideoTorrentObject, channel: MChannelAccountLight, waitThumbnail = false) {
   logger.debug('Adding remote video %s.', videoObject.id)
 
@@ -694,6 +699,14 @@ function videoFileActivityUrlToDBAttributes (
       throw new Error('Cannot parse magnet URI ' + magnet.href)
     }
 
+    // Fetch associated metadata url, if any
+    const metadata = urls.filter(isAPVideoFileMetadataObject)
+                          .find(u =>
+                            u.height === fileUrl.height &&
+                            u.fps === fileUrl.fps &&
+                            u.rel.includes(fileUrl.mediaType)
+                          )
+
     const mediaType = fileUrl.mediaType
     const attribute = {
       extname: MIMETYPES.VIDEO.MIMETYPE_EXT[mediaType],
@@ -701,6 +714,7 @@ function videoFileActivityUrlToDBAttributes (
       resolution: fileUrl.height,
       size: fileUrl.size,
       fps: fileUrl.fps || -1,
+      metadataUrl: metadata?.href,
 
       // This is a video file owned by a video or by a streaming playlist
       videoId: (videoOrPlaylist as MStreamingPlaylist).playlistUrl ? null : videoOrPlaylist.id,

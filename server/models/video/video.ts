@@ -216,7 +216,7 @@ export type AvailableForListIDsOptions = {
 
     if (options.withFiles === true) {
       query.include.push({
-        model: VideoFileModel.unscoped(),
+        model: VideoFileModel,
         required: true
       })
     }
@@ -337,7 +337,7 @@ export type AvailableForListIDsOptions = {
     return {
       include: [
         {
-          model: VideoFileModel.unscoped(),
+          model: VideoFileModel,
           separate: true, // We may have multiple files, having multiple redundancies so let's separate this join
           required: false,
           include: subInclude
@@ -348,7 +348,7 @@ export type AvailableForListIDsOptions = {
   [ScopeNames.WITH_STREAMING_PLAYLISTS]: (withRedundancies = false) => {
     const subInclude: IncludeOptions[] = [
       {
-        model: VideoFileModel.unscoped(),
+        model: VideoFileModel,
         required: false
       }
     ]
@@ -1845,6 +1845,13 @@ export class VideoModel extends Model<VideoModel> {
 
   getVideoFileUrl (videoFile: MVideoFile, baseUrlHttp: string) {
     return baseUrlHttp + STATIC_PATHS.WEBSEED + getVideoFilename(this, videoFile)
+  }
+
+  getVideoFileMetadataUrl (videoFile: MVideoFile, baseUrlHttp: string) {
+    const path = '/api/v1/videos/'
+    return videoFile.metadata
+      ? baseUrlHttp + path + this.uuid + '/metadata/' + videoFile.id
+      : videoFile.metadataUrl
   }
 
   getVideoRedundancyUrl (videoFile: MVideoFile, baseUrlHttp: string) {

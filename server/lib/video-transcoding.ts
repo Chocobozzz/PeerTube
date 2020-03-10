@@ -2,6 +2,7 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSER
 import { basename, extname as extnameUtil, join } from 'path'
 import {
   canDoQuickTranscode,
+  getMetadataFromFile,
   getDurationFromVideoFile,
   getVideoFileFPS,
   transcode,
@@ -19,6 +20,7 @@ import { CONFIG } from '../initializers/config'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
+import { extractVideo } from './videos'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.
@@ -202,6 +204,7 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
 
   newVideoFile.size = stats.size
   newVideoFile.fps = await getVideoFileFPS(videoFilePath)
+  newVideoFile.metadata = await getMetadataFromFile(videoFilePath)
 
   await createTorrentAndSetInfoHash(videoStreamingPlaylist, newVideoFile)
 
@@ -230,11 +233,16 @@ export {
 async function onVideoFileTranscoding (video: MVideoWithFile, videoFile: MVideoFile, transcodingPath: string, outputPath: string) {
   const stats = await stat(transcodingPath)
   const fps = await getVideoFileFPS(transcodingPath)
+  const metadata = await getMetadataFromFile(transcodingPath)
 
   await move(transcodingPath, outputPath)
 
+  const extractedVideo = extractVideo(video)
+
   videoFile.size = stats.size
   videoFile.fps = fps
+  videoFile.metadata = metadata
+  videoFile.metadataUrl = extractedVideo.getVideoFileMetadataUrl(videoFile, extractedVideo.getBaseUrls().baseUrlHttp)
 
   await createTorrentAndSetInfoHash(video, videoFile)
 

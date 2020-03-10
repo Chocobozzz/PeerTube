@@ -20,7 +20,7 @@
     <div class="form-group">
       <div class="input-group input-group-sm">
         <div class="input-group-prepend peertube-select-container">
-          <select *ngIf="type === 'video'" [(ngModel)]="resolutionId">
+          <select *ngIf="type === 'video'" [(ngModel)]="resolutionId" (ngModelChange)="onResolutionIdChange()">
             <option *ngFor="let file of getVideoFiles()" [value]="file.resolution.id">{{ file.resolution.label }}</option>
           </select>
 
@@ -37,6 +37,42 @@
         </div>
       </div>
     </div>
+
+    <ngb-tabset *ngIf="type === 'video' && videoFile?.metadata">
+      <ngb-tab>
+        <ng-template ngbTabTitle i18n>Format</ng-template>
+        <ng-template ngbTabContent>
+          <div class="file-metadata">
+            <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataFormat | keyvalue">
+              <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
+              <span class="metadata-attribute-value">{{ item.value.value }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab [disabled]="videoFileMetadataVideoStream === undefined">
+        <ng-template ngbTabTitle i18n>Video stream</ng-template>
+        <ng-template ngbTabContent>
+          <div class="file-metadata">
+            <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataVideoStream | keyvalue">
+              <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
+              <span class="metadata-attribute-value">{{ item.value.value }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab [disabled]="videoFileMetadataAudioStream === undefined">
+        <ng-template ngbTabTitle i18n>Audio stream</ng-template>
+        <ng-template ngbTabContent>
+          <div class="file-metadata">
+            <div class="metadata-attribute metadata-attribute-tags" *ngFor="let item of videoFileMetadataAudioStream | keyvalue">
+              <span i18n class="metadata-attribute-label">{{ item.value.label }}</span>
+              <span class="metadata-attribute-value">{{ item.value.value }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
 
     <div class="download-type" *ngIf="type === 'video'">
       <div class="peertube-radio-container">

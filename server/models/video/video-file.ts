@@ -10,7 +10,9 @@ import {
   Is,
   Model,
   Table,
-  UpdatedAt
+  UpdatedAt,
+  Scopes,
+  DefaultScope
 } from 'sequelize-typescript'
 import {
   isVideoFileExtnameValid,
@@ -29,6 +31,60 @@ import { MVideoFile, MVideoFileStreamingPlaylistVideo, MVideoFileVideo } from '.
 import { MStreamingPlaylistVideo, MVideo } from '@server/typings/models'
 import * as memoizee from 'memoizee'
 
+export enum ScopeNames {
+  WITH_VIDEO = 'WITH_VIDEO',
+  WITH_VIDEO_OR_PLAYLIST = 'WITH_VIDEO_OR_PLAYLIST',
+  WITH_METADATA = 'WITH_METADATA'
+}
+
+const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
+
+@DefaultScope(() => ({
+  attributes: {
+    exclude: [ METADATA_FIELDS[0] ]
+  }
+}))
+@Scopes(() => ({
+  [ScopeNames.WITH_VIDEO]: {
+    include: [
+      {
+        model: VideoModel.unscoped(),
+        required: true
+      }
+    ]
+  },
+  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (videoIdOrUUID: string | number) => {
+    const where = (typeof videoIdOrUUID === 'number')
+      ? { id: videoIdOrUUID }
+      : { uuid: videoIdOrUUID }
+
+    return {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: false,
+          where
+        },
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: false,
+          include: [
+            {
+              model: VideoModel.unscoped(),
+              required: true,
+              where
+            }
+          ]
+        }
+      ]
+    }
+  },
+  [ScopeNames.WITH_METADATA]: {
+    attributes: {
+      include: METADATA_FIELDS
+    }
+  }
+}))
 @Table({
   tableName: 'videoFile',
   indexes: [
@@ -106,6 +162,14 @@ export class VideoFileModel extends Model<VideoFileModel> {
   @Column
   fps: number
 
+  @AllowNull(true)
+  @Column(DataType.JSONB)
+  metadata: any
+
+  @AllowNull(true)
+  @Column
+  metadataUrl: string
+
   @ForeignKey(() => VideoModel)
   @Column
   videoId: number
@@ -157,17 +221,29 @@ export class VideoFileModel extends Model<VideoFileModel> {
               .then(results => results.length === 1)
   }
 
-  static loadWithVideo (id: number) {
-    const options = {
-      include: [
-        {
-          model: VideoModel.unscoped(),
-          required: true
-        }
-      ]
-    }
+  static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
+    const videoFile = await VideoFileModel.loadWithVideoOrPlaylist(id, videoIdOrUUID)
+    return (videoFile?.Video.id === videoIdOrUUID) ||
+           (videoFile?.Video.uuid === videoIdOrUUID) ||
+           (videoFile?.VideoStreamingPlaylist?.Video?.id === videoIdOrUUID) ||
+           (videoFile?.VideoStreamingPlaylist?.Video?.uuid === videoIdOrUUID)
+  }
 
-    return VideoFileModel.findByPk(id, options)
+  static loadWithMetadata (id: number) {
+    return VideoFileModel.scope(ScopeNames.WITH_METADATA).findByPk(id)
+  }
+
+  static loadWithVideo (id: number) {
+    return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk(id)
+  }
+
+  static loadWithVideoOrPlaylist (id: number, videoIdOrUUID: number | string) {
+    return VideoFileModel.scope({
+      method: [
+        ScopeNames.WITH_VIDEO_OR_PLAYLIST,
+        videoIdOrUUID
+      ]
+    }).findByPk(id)
   }
 
   static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {

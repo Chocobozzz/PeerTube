@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { extname } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
-import { getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { getVideoFileFPS, getVideoFileResolution, getMetadataFromFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
@@ -37,7 +37,8 @@ import {
   videosGetValidator,
   videosRemoveValidator,
   videosSortValidator,
-  videosUpdateValidator
+  videosUpdateValidator,
+  videoFileMetadataGetValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
@@ -66,6 +67,7 @@ import { Hooks } from '../../../lib/plugins/hooks'
 import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
+import toInt from 'validator/lib/toInt'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -127,6 +129,10 @@ videosRouter.post('/upload',
 videosRouter.get('/:id/description',
   asyncMiddleware(videosGetValidator),
   asyncMiddleware(getVideoDescription)
+)
+videosRouter.get('/:id/metadata/:videoFileId',
+  asyncMiddleware(videoFileMetadataGetValidator),
+  asyncMiddleware(getVideoFileMetadata)
 )
 videosRouter.get('/:id',
   optionalAuthenticate,
@@ -206,7 +212,8 @@ async function addVideo (req: express.Request, res: express.Response) {
   const videoFile = new VideoFileModel({
     extname: extname(videoPhysicalFile.filename),
     size: videoPhysicalFile.size,
-    videoStreamingPlaylistId: null
+    videoStreamingPlaylistId: null,
+    metadata: await getMetadataFromFile<any>(videoPhysicalFile.path)
   })
 
   if (videoFile.isAudio()) {
@@ -491,6 +498,11 @@ async function getVideoDescription (req: express.Request, res: express.Response)
   }
 
   return res.json({ description })
+}
+
+async function getVideoFileMetadata (req: express.Request, res: express.Response) {
+  const videoFile = await VideoFileModel.loadWithMetadata(toInt(req.params.videoFileId))
+  return res.json(videoFile.metadata)
 }
 
 async function listVideos (req: express.Request, res: express.Response) {

@@ -42,7 +42,12 @@ import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
-import { checkUserCanManageVideo, doesVideoChannelOfAccountExist, doesVideoExist } from '../../../helpers/middlewares'
+import {
+  checkUserCanManageVideo,
+  doesVideoChannelOfAccountExist,
+  doesVideoExist,
+  doesVideoFileOfVideoExist
+} from '../../../helpers/middlewares'
 import { MVideoFullLight } from '@server/typings/models'
 import { getVideoWithAttributes } from '../../../helpers/video'
 
@@ -197,6 +202,20 @@ const videosCustomGetValidator = (
 
 const videosGetValidator = videosCustomGetValidator('all')
 const videosDownloadValidator = videosCustomGetValidator('all', true)
+
+const videoFileMetadataGetValidator = getCommonVideoEditAttributes().concat([
+  param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
+  param('videoFileId').custom(isIdValid).not().isEmpty().withMessage('Should have a valid videoFileId'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoFileMetadataGet parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+    if (!await doesVideoFileOfVideoExist(+req.params.videoFileId, req.params.id, res)) return
+
+    return next()
+  }
+])
 
 const videosRemoveValidator = [
   param('id').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid id'),
@@ -411,6 +430,7 @@ export {
   videosAddValidator,
   videosUpdateValidator,
   videosGetValidator,
+  videoFileMetadataGetValidator,
   videosDownloadValidator,
   checkVideoFollowConstraints,
   videosCustomGetValidator,

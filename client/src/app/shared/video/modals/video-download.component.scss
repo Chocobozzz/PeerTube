@@ -27,3 +27,38 @@
     margin-right: 30px;
   }
 }
+
+.file-metadata {
+  padding: 1rem;
+}
+
+.file-metadata .metadata-attribute {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 12px;
+
+  .metadata-attribute-label {
+    min-width: 142px;
+    padding-right: 5px;
+    display: inline-block;
+    color: $grey-foreground-color;
+    font-weight: $font-bold;
+  }
+
+  a.metadata-attribute-value {
+    @include disable-default-a-behaviour;
+    color: var(--mainForegroundColor);
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &.metadata-attribute-tags {
+    .metadata-attribute-value:not(:nth-child(2)) {
+      &::before {
+        content: ', '
+      }
+    }
+  }
+}

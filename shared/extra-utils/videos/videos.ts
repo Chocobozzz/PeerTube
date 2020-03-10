@@ -95,6 +95,14 @@ function getVideo (url: string, id: number | string, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
+function getVideoFileMetadataUrl (url: string) {
+  return request(url)
+    .get('/')
+    .set('Accept', 'application/json')
+    .expect(200)
+    .expect('Content-Type', /json/)
+}
+
 function viewVideo (url: string, id: number | string, expectedStatus = 204, xForwardedFor?: string) {
   const path = '/api/v1/videos/' + id + '/views'
 
@@ -643,6 +651,7 @@ export {
   getAccountVideos,
   getVideoChannelVideos,
   getVideo,
+  getVideoFileMetadataUrl,
   getVideoWithToken,
   getVideosList,
   getVideosListPagination,
