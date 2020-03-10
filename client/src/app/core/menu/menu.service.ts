@@ -8,7 +8,7 @@ export class MenuService {
   isMenuDisplayed = true
   isMenuChangedByUser = false
 
-  constructor(
+  constructor (
     private screenService: ScreenService
   ) {
     // Do not display menu on small screens

@@ -2,8 +2,8 @@ import { HLS_STREAMING_PLAYLIST_DIRECTORY, P2P_MEDIA_LOADER_PEER_VERSION, WEBSER
 import { basename, extname as extnameUtil, join } from 'path'
 import {
   canDoQuickTranscode,
-  getMetadataFromFile,
   getDurationFromVideoFile,
+  getMetadataFromFile,
   getVideoFileFPS,
   transcode,
   TranscodeOptions,
@@ -20,7 +20,6 @@ import { CONFIG } from '../initializers/config'
 import { MStreamingPlaylistFilesVideo, MVideoFile, MVideoWithAllFiles, MVideoWithFile } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { generateVideoStreamingPlaylistName, getVideoFilename, getVideoFilePath } from './video-paths'
-import { extractVideo } from './videos'
 
 /**
  * Optimize the original video file and replace it. The resolution is not changed.

@@ -9,13 +9,12 @@ import {
   ActivityPlaylistUrlObject,
   ActivityTagObject,
   ActivityUrlObject,
-  ActivityVideoFileMetadataObject,
   ActivityVideoUrlObject,
   VideoState
 } from '../../../shared/index'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { VideoPrivacy } from '../../../shared/models/videos'
-import { sanitizeAndCheckVideoTorrentObject, isAPVideoFileMetadataObject } from '../../helpers/custom-validators/activitypub/videos'
+import { isAPVideoFileMetadataObject, sanitizeAndCheckVideoTorrentObject } from '../../helpers/custom-validators/activitypub/videos'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { deleteNonExistingModels, resetSequelizeInstance, retryTransactionWrapper } from '../../helpers/database-utils'
 import { logger } from '../../helpers/logger'
