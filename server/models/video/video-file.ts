@@ -33,6 +33,7 @@ import * as memoizee from 'memoizee'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO',
+  WITH_VIDEO_OR_PLAYLIST = 'WITH_VIDEO_OR_PLAYLIST',
   WITH_METADATA = 'WITH_METADATA'
 }
 
@@ -51,6 +52,32 @@ const METADATA_FIELDS = [ 'metadata', 'metadataUrl' ]
         required: true
       }
     ]
+  },
+  [ScopeNames.WITH_VIDEO_OR_PLAYLIST]: (videoIdOrUUID: string | number) => {
+    const where = (typeof videoIdOrUUID === 'number')
+      ? { id: videoIdOrUUID }
+      : { uuid: videoIdOrUUID }
+
+    return {
+      include: [
+        {
+          model: VideoModel.unscoped(),
+          required: false,
+          where
+        },
+        {
+          model: VideoStreamingPlaylistModel.unscoped(),
+          required: false,
+          include: [
+            {
+              model: VideoModel.unscoped(),
+              required: true,
+              where
+            }
+          ]
+        }
+      ]
+    }
   },
   [ScopeNames.WITH_METADATA]: {
     attributes: {
@@ -195,7 +222,7 @@ export class VideoFileModel extends Model<VideoFileModel> {
   }
 
   static async doesVideoExistForVideoFile (id: number, videoIdOrUUID: number | string) {
-    const videoFile = await VideoFileModel.loadWithVideo(id)
+    const videoFile = await VideoFileModel.loadWithVideoOrPlaylist(id, videoIdOrUUID)
     return (videoFile?.Video.id === videoIdOrUUID) ||
            (videoFile?.Video.uuid === videoIdOrUUID) ||
            (videoFile?.VideoStreamingPlaylist?.Video?.id === videoIdOrUUID) ||
@@ -208,6 +235,15 @@ export class VideoFileModel extends Model<VideoFileModel> {
 
   static loadWithVideo (id: number) {
     return VideoFileModel.scope(ScopeNames.WITH_VIDEO).findByPk(id)
+  }
+
+  static loadWithVideoOrPlaylist (id: number, videoIdOrUUID: number | string) {
+    return VideoFileModel.scope({
+      method: [
+        ScopeNames.WITH_VIDEO_OR_PLAYLIST,
+        videoIdOrUUID
+      ]
+    }).findByPk(id)
   }
 
   static listByStreamingPlaylist (streamingPlaylistId: number, transaction: Transaction) {
