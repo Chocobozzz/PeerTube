@@ -29,6 +29,11 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
 .dropdown:not(.btn-group) {
   z-index: z(dropdown) !important;
+
+  &.list-overflow-menu,
+  &.parent-entry {
+    z-index: z(header) - 1 !important;
+  }
 }
 
 .dropdown-menu {
@@ -95,15 +100,15 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     }
 
     my-global-icon {
-      @include icon(24px);
+      @include icon(22px);
 
       position: relative;
-      top: 3px;
+      top: 5px;
       float: right;
 
       margin: 0;
       padding: 0;
-      opacity: 1;
+      opacity: .5;
     }
   }
 
@@ -113,7 +118,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
     .action-button-cancel {
       @include peertube-button;
-      @include grey-button;
+      @include tertiary-button;
 
       display: inline-block;
       margin-right: 10px;
@@ -163,9 +168,21 @@ ngb-tabset.bootstrap {
   }
 }
 
-.nav-tabs .nav-link.active {
-  background-color: var(--mainBackgroundColor) !important;
-  border-bottom: none;
+.nav-tabs .nav-link {
+  &:not(.active) {
+    opacity: .6;
+    border-bottom: 3px solid transparent;
+  }
+  &.active {
+    background-color: var(--mainBackgroundColor) !important;
+    border: none;
+    border-bottom: 2px solid var(--mainColor);
+  }
+  &:hover {
+    border-top-color: transparent;
+    border-left-color: transparent;
+    border-right-color: transparent;
+  }
 }
 
 .card {

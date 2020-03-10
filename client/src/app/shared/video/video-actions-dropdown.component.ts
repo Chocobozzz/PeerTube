@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output, ViewChild } from '@angular/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction, DropdownButtonSize, DropdownDirection } from '@app/shared/buttons/action-dropdown.component'
-import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
-import { BlocklistService } from '@app/shared/blocklist'
+import { AuthService, ConfirmService, Notifier } from '@app/core'
 import { Video } from '@app/shared/video/video.model'
 import { VideoService } from '@app/shared/video/video.service'
 import { VideoDetails } from '@app/shared/video/video-details.model'
@@ -73,10 +72,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
     private notifier: Notifier,
     private confirmService: ConfirmService,
     private videoBlacklistService: VideoBlacklistService,
-    private serverService: ServerService,
     private screenService: ScreenService,
     private videoService: VideoService,
-    private blocklistService: BlocklistService,
     private redundancyService: RedundancyService,
     private i18n: I18n
   ) { }

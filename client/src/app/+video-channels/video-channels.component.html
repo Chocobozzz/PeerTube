@@ -18,7 +18,7 @@
         </div>
 
         <div class="right-buttons">
-          <a *ngIf="isChannelManageable" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
+          <a *ngIf="isChannelManageable && !isInSmallView" [routerLink]="[ '/my-account/video-channels/update', videoChannel.nameWithHost ]" class="btn btn-outline-tertiary mr-2" i18n>Manage</a>
           <my-subscribe-button #subscribeButton [videoChannels]="[videoChannel]"></my-subscribe-button>
         </div>
 
@@ -26,7 +26,7 @@
           <div class="actor-followers" i18n>{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
   
           <a [routerLink]="[ '/accounts', videoChannel.ownerBy ]" i18n-title title="Go the owner account page" class="actor-owner">
-            <span i18n>Created by {{ videoChannel.ownerBy }}</span>
+            <span class="d-inline-flex"><span i18n class="d-none d-sm-block mr-1">Created by</span>{{ videoChannel.ownerBy }}</span>
             <img [src]="videoChannel.ownerAvatarUrl" alt="Owner account avatar" />
           </a>
         </div>

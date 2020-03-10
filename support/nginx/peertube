@@ -152,6 +152,14 @@ server {
 
     root /var/www/peertube/storage;
 
+    # Use this in tandem with fuse-mounting i.e. https://docs.joinpeertube.org/#/admin-remote-storage
+    # to serve files directly from a public bucket without proxying.
+    # Assumes you have buckets named after the storage subdirectories, i.e. 'videos', 'redundancy', etc.
+    #set $cdn <your S3-compatiable bucket public url mounted via fuse>;
+    #rewrite ^/static/webseed/(.*)$ $cdn/videos/$1 redirect;
+    #rewrite ^/static/redundancy/(.*)$ $cdn/redundancy/$1 redirect;
+    #rewrite ^/static/streaming-playlists/(.*)$ $cdn/streaming-playlists/$1 redirect;
+
     rewrite ^/static/webseed/(.*)$ /videos/$1 break;
     rewrite ^/static/redundancy/(.*)$ /redundancy/$1 break;
     rewrite ^/static/streaming-playlists/(.*)$ /streaming-playlists/$1 break;

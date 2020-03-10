@@ -92,26 +92,6 @@
           </div>
         </div>
 
-        <div (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed" role="button" class="advanced-filters-button"
-             [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic">
-
-          <ng-container *ngIf="isAdvancedCustomizationCollapsed">
-            <span class="glyphicon glyphicon-menu-down"></span>
-
-            <ng-container i18n>
-              More customization
-            </ng-container>
-          </ng-container>
-
-          <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
-            <span class="glyphicon glyphicon-menu-up"></span>
-
-            <ng-container i18n>
-              Less customization
-            </ng-container>
-          </ng-container>
-        </div>
-
         <div class="advanced-filters collapse-transition" [ngbCollapse]="isAdvancedCustomizationCollapsed">
           <div>
             <div class="form-group stop-at">
@@ -174,12 +154,28 @@
             </div>
           </ng-container>
         </div>
+
+        <div (click)="isAdvancedCustomizationCollapsed = !isAdvancedCustomizationCollapsed" role="button" class="advanced-filters-button"
+             [attr.aria-expanded]="!isAdvancedCustomizationCollapsed" aria-controls="collapseBasic">
+
+          <ng-container *ngIf="isAdvancedCustomizationCollapsed">
+            <span class="glyphicon glyphicon-menu-down"></span>
+
+            <ng-container i18n>
+              More customization
+            </ng-container>
+          </ng-container>
+
+          <ng-container *ngIf="!isAdvancedCustomizationCollapsed">
+            <span class="glyphicon glyphicon-menu-up"></span>
+
+            <ng-container i18n>
+              Less customization
+            </ng-container>
+          </ng-container>
+        </div>
       </div>
     </div>
-  </div>
-
-  <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-cancel" (click)="hide()">Close</span>
   </div>
 
 </ng-template>

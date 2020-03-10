@@ -18,8 +18,12 @@
       <div class="form-group" *ngIf="video.isLocal">
         <my-peertube-checkbox
           inputName="unfederate" formControlName="unfederate"
-          i18n-labelText labelText="Unfederate the video (ask for its deletion from the remote instances)"
-        ></my-peertube-checkbox>
+          i18n-labelText labelText="Unfederate the video"
+        >
+          <ng-container ngProjectAs="description">
+            <span i18n>This will ask remote instances to delete it</span>
+          </ng-container>
+        </my-peertube-checkbox>
       </div>
 
       <div class="form-group inputs">
