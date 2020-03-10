@@ -486,6 +486,9 @@
         <div class="form-row mt-5"> <!-- twitter grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">TWITTER</div>
+            <div i18n class="inner-form-description">
+              Optional. If any, provide the Twitter account representing your instance to improve link previews.
+            </div>
           </div>
 
           <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
@@ -495,12 +498,6 @@
 
                 <div class="form-group">
                   <label i18n for="signupLimit">Your Twitter username</label>
-
-                  <my-help>
-                    <ng-template ptTemplate="customHtml">
-                      <ng-container i18n>Indicates the Twitter account for the website or platform on which the content was published.</ng-container>
-                    </ng-template>
-                  </my-help>
 
                   <input
                     type="text" id="servicesTwitterUsername"
@@ -542,6 +539,10 @@
         <div class="form-row mt-5"> <!-- transcoding grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">TRANSCODING</div>
+            <div i18n class="inner-form-description">
+              Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
+              resources, this is a critical part of PeerTube, so tread carefully.
+            </div>
           </div>
 
           <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
@@ -565,9 +566,9 @@
                         inputName="transcodingAllowAdditionalExtensions" formControlName="allowAdditionalExtensions"
                         i18n-labelText labelText="Allow additional extensions"
                       >
-                        <ng-template ptTemplate="help">
-                          <ng-container i18n>Allow your users to upload .mkv, .mov, .avi and .flv videos</ng-container>
-                        </ng-template>
+                        <ng-container ngProjectAs="description">
+                          <span i18n>Allow your users to upload .mkv, .mov, .avi and .flv videos.</span>
+                        </ng-container>
                       </my-peertube-checkbox>
                     </div>
     
@@ -576,9 +577,9 @@
                         inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
                         i18n-labelText labelText="Allow audio files upload"
                       >
-                        <ng-template ptTemplate="help">
-                          <ng-container i18n>Allow your users to upload audio files that will be merged with the preview file on upload</ng-container>
-                        </ng-template>
+                        <ng-container ngProjectAs="description">
+                          <span i18n>Allow your users to upload audio files that will be merged with the preview file on upload.</span>
+                        </ng-container>
                       </my-peertube-checkbox>
                     </div>
 
@@ -626,34 +627,46 @@
                         </my-peertube-checkbox>
                       </div>
                     </ng-container>
-    
-                    <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                      <label i18n for="transcodingThreads">Transcoding threads</label>
-                      <div class="peertube-select-container">
-                        <select id="transcodingThreads" formControlName="threads">
-                          <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
-                            {{ transcodingThreadOption.label }}
-                          </option>
-                        </select>
-                      </div>
-                      <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
-                    </div>
-    
-                    <ng-container formGroupName="resolutions">
-                      <div class="form-group" *ngFor="let resolution of resolutions" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
-                        <my-peertube-checkbox
-                          [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
-                          i18n-labelText labelText="Resolution {{resolution.label}} enabled"
-                        >
-                          <ng-template *ngIf="resolution.description" ptTemplate="help">
-                            <div [innerHTML]="resolution.description"></div>
-                          </ng-template>
-                        </my-peertube-checkbox>
-                      </div>
-                    </ng-container>
 
                   </ng-container>
                 </my-peertube-checkbox>
+              </div>
+
+              <div class="form-group">
+
+                <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+                  <label i18n for="transcodingThreads">Transcoding threads</label>
+                  <div class="peertube-select-container">
+                    <select id="transcodingThreads" formControlName="threads">
+                      <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
+                        {{ transcodingThreadOption.label }}
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="formErrors.transcoding.threads" class="form-error">{{ formErrors.transcoding.threads }}</div>
+                </div>
+
+              </div>
+
+              <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
+
+                <label i18n for="transcodingThreads">Resolutions to generate</label>
+
+                <div class="ml-2 mt-2 d-flex flex-column">
+                  <ng-container formGroupName="resolutions">
+                    <div class="form-group" *ngFor="let resolution of resolutions">
+                      <my-peertube-checkbox
+                        [inputName]="getResolutionKey(resolution.id)" [formControlName]="resolution.id"
+                        labelText="{{resolution.label}}"
+                      >
+                        <ng-template *ngIf="resolution.description" ptTemplate="help">
+                          <div [innerHTML]="resolution.description"></div>
+                        </ng-template>
+                      </my-peertube-checkbox>
+                    </div>
+                  </ng-container>
+                </div>
+
               </div>
 
             </ng-container>
@@ -663,13 +676,9 @@
 
         <div class="form-row mt-4"> <!-- cache grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
-            <div class="inner-form-title">
-              <ng-container i18n>CACHE</ng-container>
-              <my-help>
-                <ng-template ptTemplate="customHtml">
-                  <ng-container i18n>Some files are not federated (previews, captions). We fetch them directly from the origin instance and cache them.</ng-container>
-                </ng-template>
-              </my-help>
+            <div i18n class="inner-form-title">CACHE</div>
+            <div i18n class="inner-form-description">
+              Some files are not federated, and fetched when necessary. Define their caching policies.
             </div>
           </div>
 
@@ -701,6 +710,9 @@
         <div class="form-row mt-4"> <!-- cache grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
+            <div i18n class="inner-form-description">
+              Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
+            </div>
           </div>
 
           <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
