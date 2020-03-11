@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.video-channel-title {
+  @include settings-big-title;
+}
+
 .form-sub-title {
   margin-bottom: 20px;
 }
@@ -18,15 +22,28 @@ my-actor-avatar-info {
   height: 30px;
 }
 
-input[type=text] {
-  @include peertube-input-text(340px);
-
-  display: block;
-
-  &#name {
-    width: auto;
-    flex-grow: 1;
+input {
+  &[type=text] {
+    @include peertube-input-text(340px);
+  
+    display: block;
+  
+    &#name {
+      width: auto;
+      flex-grow: 1;
+    }
   }
+
+  &[type=submit] {
+    @include peertube-button;
+    @include orange-button;
+    margin-left: auto;
+  }
+}
+
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
 }
 
 textarea {
@@ -35,11 +52,14 @@ textarea {
   display: block;
 }
 
-.peertube-select-container {
-  @include peertube-select-container(340px);
+my-markdown-textarea ::ng-deep {
+  .root {
+    @media screen and (max-width: 1400px) {
+      flex-direction: column !important;
+    }
+  }
 }
 
-input[type=submit] {
-  @include peertube-button;
-  @include orange-button;
+.peertube-select-container {
+  @include peertube-select-container(340px);
 }

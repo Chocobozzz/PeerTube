@@ -18,7 +18,7 @@ import { NgbTabset } from '@ng-bootstrap/ng-bootstrap'
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit, AfterViewChecked {
-  @ViewChild('tabs') private tabs: NgbTabset
+  @ViewChild('tabs') tabs: NgbTabset
 
   initDone = false
   customConfig: CustomConfig

@@ -37,13 +37,13 @@
               <i class="ml-auto glyphicon glyphicon-menu-right"></i>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-settings">
               <my-global-icon iconName="video-lang"></my-global-icon>
               <ng-container i18n>Videos: {{ videoLanguages.join(', ') }}</ng-container>
               <i class="ml-auto glyphicon glyphicon-menu-right"></i>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
+            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-settings">
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive"></my-global-icon>
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy !== 'display' }" iconName="unsensitive"></my-global-icon>
               <ng-container i18n>Sensitive: {{ nsfwPolicy }}</ng-container>

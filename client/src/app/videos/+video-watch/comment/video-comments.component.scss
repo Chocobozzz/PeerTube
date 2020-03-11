@@ -17,8 +17,20 @@
   font-size: 13px;
 }
 
-.title-block .title-page {
-  margin-right: 0;
+.title-block {
+  .title-page {
+    margin-right: 0;
+  }
+  
+  my-feed {
+    display: inline-block;
+    margin-left: 5px;
+    opacity: 0;
+    transition: ease-in .2s opacity;
+  }
+  &:hover my-feed {
+    opacity: 1;
+  }
 }
 
 #dropdownSortComments {
@@ -26,11 +38,6 @@
   text-transform: uppercase;
   border: none;
   transform: translateY(-7%);
-}
-
-my-feed {
-  display: inline-block;
-  margin-left: 5px;
 }
 
 @media screen and (max-width: 600px) {
