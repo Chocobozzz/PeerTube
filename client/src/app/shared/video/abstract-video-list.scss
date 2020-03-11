@@ -15,6 +15,11 @@
       top: 1px;
       margin-left: 5px;
       width: max-content;
+      opacity: 0;
+      transition: ease-in .2s opacity;
+    }
+    &:hover my-feed {
+      opacity: 1;
     }
   }
 
