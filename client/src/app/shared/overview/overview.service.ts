@@ -1,5 +1,5 @@
 import { catchError, map, switchMap, tap } from 'rxjs/operators'
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { forkJoin, Observable, of } from 'rxjs'
 import { VideosOverview as VideosOverviewServer, peertubeTranslate } from '../../../../../shared/models'
@@ -21,9 +21,12 @@ export class OverviewService {
     private serverService: ServerService
   ) {}
 
-  getVideosOverview (): Observable<VideosOverview> {
+  getVideosOverview (page: number): Observable<VideosOverview> {
+    let params = new HttpParams()
+    params = params.append('page', page + '')
+
     return this.authHttp
-               .get<VideosOverviewServer>(OverviewService.BASE_OVERVIEW_URL + 'videos')
+               .get<VideosOverviewServer>(OverviewService.BASE_OVERVIEW_URL + 'videos', { params })
                .pipe(
                  switchMap(serverVideosOverview => this.updateVideosOverview(serverVideosOverview)),
                  catchError(err => this.restExtractor.handleError(err))

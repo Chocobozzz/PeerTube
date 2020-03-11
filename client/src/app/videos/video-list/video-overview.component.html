@@ -2,35 +2,44 @@
 
   <div class="no-results" i18n *ngIf="notResults">No results.</div>
 
-  <div class="section" *ngFor="let object of overview.categories">
-    <div class="section-title">
-      <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
-    </div>
+  <div
+    myInfiniteScroller (nearOfBottom)="onNearOfBottom()" [autoInit]="true" [dataObservable]="onDataSubject.asObservable()"
+  >
+    <ng-container *ngFor="let overview of overviews">
 
-    <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
-    </my-video-miniature>
-  </div>
+      <div class="section" *ngFor="let object of overview.categories">
+        <div class="section-title">
+          <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
+        </div>
 
-  <div class="section" *ngFor="let object of overview.tags">
-    <div class="section-title">
-      <a routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
-    </div>
+        <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
+        </my-video-miniature>
+      </div>
 
-    <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
-    </my-video-miniature>
-  </div>
+      <div class="section" *ngFor="let object of overview.tags">
+        <div class="section-title">
+          <a routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
+        </div>
 
-  <div class="section channel" *ngFor="let object of overview.channels">
-    <div class="section-title">
-      <a [routerLink]="[ '/video-channels', buildVideoChannelBy(object) ]">
-        <img [src]="buildVideoChannelAvatarUrl(object)" alt="Avatar" />
+        <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
+        </my-video-miniature>
+      </div>
 
-        <div>{{ object.channel.displayName }}</div>
-      </a>
-    </div>
+      <div class="section channel" *ngFor="let object of overview.channels">
+        <div class="section-title">
+          <a [routerLink]="[ '/video-channels', buildVideoChannelBy(object) ]">
+            <img [src]="buildVideoChannelAvatarUrl(object)" alt="Avatar" />
 
-    <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
-    </my-video-miniature>
+            <div>{{ object.channel.displayName }}</div>
+          </a>
+        </div>
+
+        <my-video-miniature *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
+        </my-video-miniature>
+      </div>
+
+    </ng-container>
+
   </div>
 
 </div>

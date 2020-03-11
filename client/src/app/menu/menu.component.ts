@@ -23,8 +23,10 @@ export class MenuComponent implements OnInit {
 
   userHasAdminAccess = false
   helpVisible = false
-  languages: VideoConstant<string>[] = []
 
+  videoLanguages: string[] = []
+
+  private languages: VideoConstant<string>[] = []
   private serverConfig: ServerConfig
   private routesPerRight: { [ role in UserRight ]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
@@ -71,30 +73,32 @@ export class MenuComponent implements OnInit {
       }
     )
 
-    this.hotkeysService.cheatSheetToggle.subscribe(isOpen => this.helpVisible = isOpen)
+    this.hotkeysService.cheatSheetToggle
+        .subscribe(isOpen => this.helpVisible = isOpen)
 
-    this.serverService.getVideoLanguages().subscribe(languages => this.languages = languages)
+    this.serverService.getVideoLanguages()
+        .subscribe(languages => {
+          this.languages = languages
+
+          this.authService.userInformationLoaded
+              .subscribe(() => this.buildUserLanguages())
+        })
   }
 
   get language () {
     return this.languageChooserModal.getCurrentLanguage()
   }
 
-  get videoLanguages (): string[] {
-    if (!this.user) return
-    if (!this.user.videoLanguages) return [this.i18n('any language')]
-    return this.user.videoLanguages
-      .map(locale => this.langForLocale(locale))
-      .map(value => value === undefined ? '?' : value)
-  }
-
   get nsfwPolicy () {
     if (!this.user) return
+
     switch (this.user.nsfwPolicy) {
       case 'do_not_list':
         return this.i18n('hide')
+
       case 'blur':
         return this.i18n('blur')
+
       case 'display':
         return this.i18n('display')
     }
@@ -156,13 +160,29 @@ export class MenuComponent implements OnInit {
   toggleUseP2P () {
     if (!this.user) return
     this.user.webTorrentEnabled = !this.user.webTorrentEnabled
-    this.userService.updateMyProfile({
-      webTorrentEnabled: this.user.webTorrentEnabled
-    }).subscribe(() => this.authService.refreshUserInformation())
+
+    this.userService.updateMyProfile({ webTorrentEnabled: this.user.webTorrentEnabled })
+        .subscribe(() => this.authService.refreshUserInformation())
   }
 
   langForLocale (localeId: string) {
-    return this.languages.find(lang => lang.id = localeId).label
+    return this.languages.find(lang => lang.id === localeId).label
+  }
+
+  private buildUserLanguages () {
+    if (!this.user) {
+      this.videoLanguages = []
+      return
+    }
+
+    if (!this.user.videoLanguages) {
+      this.videoLanguages = [ this.i18n('any language') ]
+      return
+    }
+
+    this.videoLanguages = this.user.videoLanguages
+                              .map(locale => this.langForLocale(locale))
+                              .map(value => value === undefined ? '?' : value)
   }
 
   private computeIsUserHasAdminAccess () {

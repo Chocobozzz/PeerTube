@@ -36,6 +36,7 @@ export class LanguageChooserComponent {
   getCurrentLanguage () {
     const english = 'English'
     const locale = isOnDevLocale() ? getDevLocale() : getCompleteLocale(this.localeId)
+
     if (locale) return I18N_LOCALES[locale] || english
     return english
   }
