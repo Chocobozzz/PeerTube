@@ -246,6 +246,11 @@ table {
   }
 }
 
+.anchor {
+  position: relative;
+  top: #{-($header-height + 20px)};
+}
+
 @media screen and (max-width: #{map-get($grid-breakpoints, xxl)}) {
   .main-col {
     &.expanded {

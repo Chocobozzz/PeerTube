@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, AfterViewChecked, ViewChild } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ServerService } from '@app/core/server/server.service'
 import { CustomConfigValidatorsService, FormReactive, UserValidatorsService } from '@app/shared'
@@ -9,13 +9,18 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { SelectItem } from 'primeng/api'
 import { forkJoin } from 'rxjs'
 import { ServerConfig } from '@shared/models'
+import { ViewportScroller } from '@angular/common'
+import { NgbTabset } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-edit-custom-config',
   templateUrl: './edit-custom-config.component.html',
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
-export class EditCustomConfigComponent extends FormReactive implements OnInit {
+export class EditCustomConfigComponent extends FormReactive implements OnInit, AfterViewChecked {
+  @ViewChild('tabs') private tabs: NgbTabset
+
+  initDone = false
   customConfig: CustomConfig
 
   resolutions: { id: string, label: string, description?: string }[] = []
@@ -27,6 +32,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
   private serverConfig: ServerConfig
 
   constructor (
+    private viewportScroller: ViewportScroller,
     protected formValidatorService: FormValidatorService,
     private customConfigValidatorsService: CustomConfigValidatorsService,
     private userValidatorsService: UserValidatorsService,
@@ -226,6 +232,13 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
     this.checkTranscodingFields()
   }
 
+  ngAfterViewChecked () {
+    if (!this.initDone) {
+      this.initDone = true
+      this.gotoAnchor()
+    }
+  }
+
   isTranscodingEnabled () {
     return this.form.value['transcoding']['enabled'] === true
   }
@@ -270,6 +283,18 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit {
 
   getDefaultCategoryLabel () {
     return this.i18n('No category')
+  }
+
+  gotoAnchor () {
+    const hashToTab = {
+      'customizations': 'advanced-configuration'
+    }
+    const hash = window.location.hash.replace('#', '')
+
+    if (hash && Object.keys(hashToTab).includes(hash)) {
+      this.tabs.select(hashToTab[hash])
+      setTimeout(() => this.viewportScroller.scrollToAnchor(hash), 100)
+    }
   }
 
   private updateForm () {

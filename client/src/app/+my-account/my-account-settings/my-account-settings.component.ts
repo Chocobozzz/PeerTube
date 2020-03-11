@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, AfterViewChecked } from '@angular/core'
 import { Notifier } from '@app/core'
 import { BytesPipe } from 'ngx-pipes'
 import { AuthService } from '../../core'
 import { User } from '../../shared'
 import { UserService } from '../../shared/users'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ViewportScroller } from '@angular/common'
 
 @Component({
   selector: 'my-account-settings',
   templateUrl: './my-account-settings.component.html',
   styleUrls: [ './my-account-settings.component.scss' ]
 })
-export class MyAccountSettingsComponent implements OnInit {
+export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
   user: User = null
 
   userVideoQuota = '0'
@@ -21,6 +22,7 @@ export class MyAccountSettingsComponent implements OnInit {
   userVideoQuotaUsedDaily = 0
 
   constructor (
+    private viewportScroller: ViewportScroller,
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier,
@@ -55,6 +57,10 @@ export class MyAccountSettingsComponent implements OnInit {
         this.userVideoQuotaUsed = data.videoQuotaUsed
         this.userVideoQuotaUsedDaily = data.videoQuotaUsedDaily
       })
+  }
+
+  ngAfterViewChecked () {
+    if (window.location.hash) this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
   }
 
   onAvatarChange (formData: FormData) {

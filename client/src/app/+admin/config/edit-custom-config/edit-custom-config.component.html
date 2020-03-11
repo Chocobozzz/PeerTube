@@ -1,8 +1,8 @@
 <form role="form" [formGroup]="form">
 
-  <ngb-tabset class="root-tabset bootstrap">
+  <ngb-tabset #tabs class="root-tabset bootstrap">
 
-    <ngb-tab i18n-title title="Instance information">
+    <ngb-tab id="instance-information" i18n-title title="Instance information">
       <ng-template ngbTabContent>
 
         <ng-container formGroupName="instance">
@@ -210,7 +210,7 @@
 
               <div class="form-group">
                 <label i18n for="instanceHardwareInformation">What server/hardware does the instance run on?</label>
-                <div i18n class="label-small-info">2vCore 2GB RAM/or directly the link to the server you rent etc</div>
+                <div i18n class="label-small-info">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
 
                 <my-markdown-textarea
                   name="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px" [previewColumn]="true"
@@ -227,14 +227,14 @@
       </ng-template>
     </ngb-tab>
 
-    <ngb-tab i18n-title title="Basic configuration">
+    <ngb-tab id="basic-configuration" i18n-title title="Basic configuration">
       <ng-template ngbTabContent>
 
         <div class="form-row mt-5"> <!-- appearance grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">APPEARANCE</div>
             <div i18n class="inner-for-description">
-              Use <a routerLink="/admin/plugins">plugins & themes</a> for more involved changes.
+              Use <a routerLink="/admin/plugins">plugins & themes</a> for more involved changes, or <a routerLink="/admin/config/edit-custom" fragment="customizations" (click)="gotoAnchor()">add slight customizations</a>.
             </div>
           </div>
 
@@ -391,6 +391,9 @@
         <div class="form-row mt-4"> <!-- federation grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">FEDERATION</div>
+            <div i18n class="inner-form-description">
+              Manage <a routerLink="/admin/follows">relations</a> with other instances.
+            </div>
           </div>
 
           <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
@@ -489,7 +492,7 @@
       </ng-template>
     </ngb-tab>
 
-    <ngb-tab i18n-title title="Services">
+    <ngb-tab id="services" i18n-title title="Services">
       <ng-template ngbTabContent>
 
         <div class="form-row mt-5"> <!-- twitter grid -->
@@ -542,7 +545,7 @@
     </ng-template>
     </ngb-tab>
 
-    <ngb-tab i18n-title title="Advanced configuration">
+    <ngb-tab id="advanced-configuration" i18n-title title="Advanced configuration">
       <ng-template ngbTabContent>
 
         <div class="form-row mt-5"> <!-- transcoding grid -->
@@ -718,6 +721,7 @@
 
         <div class="form-row mt-4"> <!-- cache grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div class="anchor" id="customizations"></div> <!-- customizations anchor -->
             <div i18n class="inner-form-title">CUSTOMIZATIONS</div>
             <div i18n class="inner-form-description">
               Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
