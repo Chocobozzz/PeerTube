@@ -90,9 +90,6 @@ const ROUTE_CACHE_LIFETIME = {
   SECURITYTXT: '2 hours',
   NODEINFO: '10 minutes',
   DNT_POLICY: '1 week',
-  OVERVIEWS: {
-    VIDEOS: '1 hour'
-  },
   ACTIVITY_PUB: {
     VIDEOS: '1 second' // 1 second, cache concurrent requests after a broadcast for example
   },
@@ -446,7 +443,7 @@ MIMETYPES.IMAGE.EXT_MIMETYPE = invert(MIMETYPES.IMAGE.MIMETYPE_EXT)
 const OVERVIEWS = {
   VIDEOS: {
     SAMPLE_THRESHOLD: 6,
-    SAMPLES_COUNT: 2
+    SAMPLES_COUNT: 20
   }
 }
 
@@ -687,8 +684,8 @@ if (isTestInstance() === true) {
   JOB_ATTEMPTS['email'] = 1
 
   FILES_CACHE.VIDEO_CAPTIONS.MAX_AGE = 3000
-  MEMOIZE_TTL.OVERVIEWS_SAMPLE = 1
-  ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS = '0ms'
+  MEMOIZE_TTL.OVERVIEWS_SAMPLE = 3000
+  OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD = 2
 }
 
 updateWebserverUrls()

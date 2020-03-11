@@ -1,18 +1,24 @@
 import { Video, VideoChannelSummary, VideoConstant } from '../videos'
 
+export interface ChannelOverview {
+  channel: VideoChannelSummary
+  videos: Video[]
+}
+
+export interface CategoryOverview {
+  category: VideoConstant<number>
+  videos: Video[]
+}
+
+export interface TagOverview {
+  tag: string
+  videos: Video[]
+}
+
 export interface VideosOverview {
-  channels: {
-    channel: VideoChannelSummary
-    videos: Video[]
-  }[]
+  channels: ChannelOverview[]
 
-  categories: {
-    category: VideoConstant<number>
-    videos: Video[]
-  }[]
+  categories: CategoryOverview[]
 
-  tags: {
-    tag: string
-    videos: Video[]
-  }[]
+  tags: TagOverview[]
 }

@@ -1,17 +1,18 @@
 import * as express from 'express'
 import { buildNSFWFilter } from '../../helpers/express-utils'
 import { VideoModel } from '../../models/video/video'
-import { asyncMiddleware } from '../../middlewares'
+import { asyncMiddleware, optionalAuthenticate, videosOverviewValidator } from '../../middlewares'
 import { TagModel } from '../../models/video/tag'
-import { VideosOverview } from '../../../shared/models/overviews'
-import { MEMOIZE_TTL, OVERVIEWS, ROUTE_CACHE_LIFETIME } from '../../initializers/constants'
-import { cacheRoute } from '../../middlewares/cache'
+import { CategoryOverview, ChannelOverview, TagOverview, VideosOverview } from '../../../shared/models/overviews'
+import { MEMOIZE_TTL, OVERVIEWS } from '../../initializers/constants'
 import * as memoizee from 'memoizee'
+import { logger } from '@server/helpers/logger'
 
 const overviewsRouter = express.Router()
 
 overviewsRouter.get('/videos',
-  asyncMiddleware(cacheRoute()(ROUTE_CACHE_LIFETIME.OVERVIEWS.VIDEOS)),
+  videosOverviewValidator,
+  optionalAuthenticate,
   asyncMiddleware(getVideosOverview)
 )
 
@@ -28,17 +29,28 @@ const buildSamples = memoizee(async function () {
     TagModel.getRandomSamples(OVERVIEWS.VIDEOS.SAMPLE_THRESHOLD, OVERVIEWS.VIDEOS.SAMPLES_COUNT)
   ])
 
-  return { categories, channels, tags }
+  const result = { categories, channels, tags }
+
+  logger.debug('Building samples for overview endpoint.', { result })
+
+  return result
 }, { maxAge: MEMOIZE_TTL.OVERVIEWS_SAMPLE })
 
 // This endpoint could be quite long, but we cache it
 async function getVideosOverview (req: express.Request, res: express.Response) {
   const attributes = await buildSamples()
 
-  const [ categories, channels, tags ] = await Promise.all([
-    Promise.all(attributes.categories.map(c => getVideosByCategory(c, res))),
-    Promise.all(attributes.channels.map(c => getVideosByChannel(c, res))),
-    Promise.all(attributes.tags.map(t => getVideosByTag(t, res)))
+  const page = req.query.page || 1
+  const index = page - 1
+
+  const categories: CategoryOverview[] = []
+  const channels: ChannelOverview[] = []
+  const tags: TagOverview[] = []
+
+  await Promise.all([
+    getVideosByCategory(attributes.categories, index, res, categories),
+    getVideosByChannel(attributes.channels, index, res, channels),
+    getVideosByTag(attributes.tags, index, res, tags)
   ])
 
   const result: VideosOverview = {
@@ -47,45 +59,49 @@ async function getVideosOverview (req: express.Request, res: express.Response) {
     tags
   }
 
-  // Cleanup our object
-  for (const key of Object.keys(result)) {
-    result[key] = result[key].filter(v => v !== undefined)
-  }
-
   return res.json(result)
 }
 
-async function getVideosByTag (tag: string, res: express.Response) {
+async function getVideosByTag (tagsSample: string[], index: number, res: express.Response, acc: TagOverview[]) {
+  if (tagsSample.length <= index) return
+
+  const tag = tagsSample[index]
   const videos = await getVideos(res, { tagsOneOf: [ tag ] })
 
-  if (videos.length === 0) return undefined
+  if (videos.length === 0) return
 
-  return {
+  acc.push({
     tag,
     videos
-  }
+  })
 }
 
-async function getVideosByCategory (category: number, res: express.Response) {
+async function getVideosByCategory (categoriesSample: number[], index: number, res: express.Response, acc: CategoryOverview[]) {
+  if (categoriesSample.length <= index) return
+
+  const category = categoriesSample[index]
   const videos = await getVideos(res, { categoryOneOf: [ category ] })
 
-  if (videos.length === 0) return undefined
+  if (videos.length === 0) return
 
-  return {
+  acc.push({
     category: videos[0].category,
     videos
-  }
+  })
 }
 
-async function getVideosByChannel (channelId: number, res: express.Response) {
+async function getVideosByChannel (channelsSample: number[], index: number, res: express.Response, acc: ChannelOverview[]) {
+  if (channelsSample.length <= index) return
+
+  const channelId = channelsSample[index]
   const videos = await getVideos(res, { videoChannelId: channelId })
 
-  if (videos.length === 0) return undefined
+  if (videos.length === 0) return
 
-  return {
+  acc.push({
     channel: videos[0].channel,
     videos
-  }
+  })
 }
 
 async function getVideos (

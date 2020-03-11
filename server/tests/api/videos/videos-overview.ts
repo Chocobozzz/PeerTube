@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo } from '../../../../shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo, setAccessTokensToServers, uploadVideo, wait } from '../../../../shared/extra-utils'
 import { getVideosOverview } from '../../../../shared/extra-utils/overviews/overviews'
 import { VideosOverview } from '../../../../shared/models/overviews'
 
@@ -20,7 +20,7 @@ describe('Test a videos overview', function () {
   })
 
   it('Should send empty overview', async function () {
-    const res = await getVideosOverview(server.url)
+    const res = await getVideosOverview(server.url, 1)
 
     const overview: VideosOverview = res.body
     expect(overview.tags).to.have.lengthOf(0)
@@ -31,15 +31,15 @@ describe('Test a videos overview', function () {
   it('Should upload 5 videos in a specific category, tag and channel but not include them in overview', async function () {
     this.timeout(15000)
 
-    for (let i = 0; i < 5; i++) {
-      await uploadVideo(server.url, server.accessToken, {
-        name: 'video ' + i,
-        category: 3,
-        tags: [ 'coucou1', 'coucou2' ]
-      })
-    }
+    await wait(3000)
 
-    const res = await getVideosOverview(server.url)
+    await uploadVideo(server.url, server.accessToken, {
+      name: 'video 0',
+      category: 3,
+      tags: [ 'coucou1', 'coucou2' ]
+    })
+
+    const res = await getVideosOverview(server.url, 1)
 
     const overview: VideosOverview = res.body
     expect(overview.tags).to.have.lengthOf(0)
@@ -48,27 +48,55 @@ describe('Test a videos overview', function () {
   })
 
   it('Should upload another video and include all videos in the overview', async function () {
-    await uploadVideo(server.url, server.accessToken, {
-      name: 'video 5',
-      category: 3,
-      tags: [ 'coucou1', 'coucou2' ]
-    })
+    this.timeout(15000)
 
-    const res = await getVideosOverview(server.url)
+    for (let i = 1; i < 6; i++) {
+      await uploadVideo(server.url, server.accessToken, {
+        name: 'video ' + i,
+        category: 3,
+        tags: [ 'coucou1', 'coucou2' ]
+      })
+    }
 
-    const overview: VideosOverview = res.body
-    expect(overview.tags).to.have.lengthOf(2)
-    expect(overview.categories).to.have.lengthOf(1)
-    expect(overview.channels).to.have.lengthOf(1)
+    await wait(3000)
+
+    {
+      const res = await getVideosOverview(server.url, 1)
+
+      const overview: VideosOverview = res.body
+      expect(overview.tags).to.have.lengthOf(1)
+      expect(overview.categories).to.have.lengthOf(1)
+      expect(overview.channels).to.have.lengthOf(1)
+    }
+
+    {
+      const res = await getVideosOverview(server.url, 2)
+
+      const overview: VideosOverview = res.body
+      expect(overview.tags).to.have.lengthOf(1)
+      expect(overview.categories).to.have.lengthOf(0)
+      expect(overview.channels).to.have.lengthOf(0)
+    }
   })
 
   it('Should have the correct overview', async function () {
-    const res = await getVideosOverview(server.url)
+    const res1 = await getVideosOverview(server.url, 1)
+    const res2 = await getVideosOverview(server.url, 2)
 
-    const overview: VideosOverview = res.body
+    const overview1: VideosOverview = res1.body
+    const overview2: VideosOverview = res2.body
 
-    for (const attr of [ 'tags', 'categories', 'channels' ]) {
-      const obj = overview[attr][0]
+    const tmp = [
+      overview1.tags,
+      overview1.categories,
+      overview1.channels,
+      overview2.tags
+    ]
+
+    for (const arr of tmp) {
+      expect(arr).to.have.lengthOf(1)
+
+      const obj = arr[0]
 
       expect(obj.videos).to.have.lengthOf(6)
       expect(obj.videos[0].name).to.equal('video 5')
@@ -79,12 +107,13 @@ describe('Test a videos overview', function () {
       expect(obj.videos[5].name).to.equal('video 0')
     }
 
-    expect(overview.tags.find(t => t.tag === 'coucou1')).to.not.be.undefined
-    expect(overview.tags.find(t => t.tag === 'coucou2')).to.not.be.undefined
+    const tags = [ overview1.tags[0].tag, overview2.tags[0].tag ]
+    expect(tags.find(t => t === 'coucou1')).to.not.be.undefined
+    expect(tags.find(t => t === 'coucou2')).to.not.be.undefined
 
-    expect(overview.categories[0].category.id).to.equal(3)
+    expect(overview1.categories[0].category.id).to.equal(3)
 
-    expect(overview.channels[0].channel.name).to.equal('root_channel')
+    expect(overview1.channels[0].channel.name).to.equal('root_channel')
   })
 
   after(async function () {

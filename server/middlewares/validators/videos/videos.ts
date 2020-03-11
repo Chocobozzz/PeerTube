@@ -29,7 +29,7 @@ import {
 } from '../../../helpers/custom-validators/videos'
 import { getDurationFromVideoFile } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { CONSTRAINTS_FIELDS, OVERVIEWS } from '../../../initializers/constants'
 import { authenticatePromiseIfNeeded } from '../../oauth'
 import { areValidationErrors } from '../utils'
 import { cleanUpReqFiles } from '../../../helpers/express-utils'
@@ -301,6 +301,19 @@ const videosAcceptChangeOwnershipValidator = [
   }
 ]
 
+const videosOverviewValidator = [
+  query('page')
+    .optional()
+    .isInt({ min: 1, max: OVERVIEWS.VIDEOS.SAMPLES_COUNT })
+    .withMessage('Should have a valid pagination'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 function getCommonVideoEditAttributes () {
   return [
     body('thumbnailfile')
@@ -442,7 +455,9 @@ export {
 
   getCommonVideoEditAttributes,
 
-  commonVideosFiltersValidator
+  commonVideosFiltersValidator,
+
+  videosOverviewValidator
 }
 
 // ---------------------------------------------------------------------------
