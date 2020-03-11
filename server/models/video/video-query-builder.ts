@@ -3,6 +3,7 @@ import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { Model } from 'sequelize-typescript'
 import { MUserAccountId, MUserId } from '@server/typings/models'
 import validator from 'validator'
+import { exists } from '@server/helpers/custom-validators/misc'
 
 export type BuildVideosQueryOptions = {
   attributes?: string[]
@@ -312,14 +313,21 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
   let suffix = ''
   let order = ''
   if (options.isCount !== true) {
-    const count = parseInt(options.count + '', 10)
-    const start = parseInt(options.start + '', 10)
 
-    order = buildOrder(model, options.sort)
+    if (exists(options.sort)) {
+      order = buildOrder(model, options.sort)
+      suffix += `${order} `
+    }
 
-    suffix = order + ' ' +
-      'LIMIT ' + count + ' ' +
-      'OFFSET ' + start
+    if (exists(options.count)) {
+      const count = parseInt(options.count + '', 10)
+      suffix += `LIMIT ${count} `
+    }
+
+    if (exists(options.start)) {
+      const start = parseInt(options.start + '', 10)
+      suffix += `OFFSET ${start} `
+    }
   }
 
   const cteString = cte.length !== 0
