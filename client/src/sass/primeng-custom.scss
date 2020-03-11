@@ -413,6 +413,19 @@ p-toast {
     z-index: z(notification) !important;
   }
 
+  .ui-toast-close-icon {
+    font-family: "Glyphicons Halflings";
+
+    opacity: .5;
+    &:hover {
+      opacity: .8;
+    }
+
+    &:after {
+      content: "\e014";
+    }
+  }
+
   .ui-toast-message {
     font-family: $main-fonts;
     background-color: var(--mainBackgroundColor) !important;
