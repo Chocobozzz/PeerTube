@@ -398,7 +398,7 @@
 
   &:checked + span {
     border-color: transparent;
-    background: $orange-color;
+    background: var(--mainColor);
     animation: jelly 0.6s ease;
 
     &:after {

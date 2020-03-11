@@ -28,7 +28,7 @@
   }
 
   .warn {
-    color: $orange-color;
+    color: var(--mainColor);
   }
 
   .error {
