@@ -207,7 +207,7 @@ async function generateHlsPlaylist (video: MVideoWithFile, resolution: VideoReso
 
   await createTorrentAndSetInfoHash(videoStreamingPlaylist, newVideoFile)
 
-  await newVideoFile.save()
+  await VideoFileModel.customUpsert(newVideoFile, 'streaming-playlist', undefined)
   videoStreamingPlaylist.VideoFiles = await videoStreamingPlaylist.$get('VideoFiles')
 
   video.setHLSPlaylist(videoStreamingPlaylist)
