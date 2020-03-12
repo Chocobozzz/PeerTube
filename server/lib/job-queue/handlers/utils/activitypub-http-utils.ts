@@ -2,7 +2,7 @@ import { buildSignedActivity, ContextType } from '../../../../helpers/activitypu
 import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { sha256 } from '../../../../helpers/core-utils'
-import { HTTP_SIGNATURE } from '../../../../initializers/constants'
+import { ACTIVITY_PUB, HTTP_SIGNATURE } from '../../../../initializers/constants'
 import { MActor } from '../../../../typings/models'
 
 type Payload = { body: any, contextType?: ContextType, signatureActorId?: number }
@@ -42,7 +42,9 @@ async function buildSignedRequestOptions (payload: Payload) {
 
 function buildGlobalHeaders (body: any) {
   return {
-    Digest: buildDigest(body)
+    'Digest': buildDigest(body),
+    'Content-Type': 'application/activity+json',
+    'Accept': ACTIVITY_PUB.ACCEPT_HEADER
   }
 }
 
