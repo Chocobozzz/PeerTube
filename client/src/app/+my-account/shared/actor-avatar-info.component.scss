@@ -5,12 +5,42 @@
   display: flex;
 
   img {
-    @include avatar(50px);
+    @include avatar(100px);
 
     margin-right: 15px;
   }
 
+  .actor-img-edit-container {
+    position: relative;
+    width: 0;
+
+    .actor-img-edit-button {
+      @include peertube-button-file(21px);
+      @include button-with-icon(19px);
+    
+      margin-top: 10px;
+      margin-bottom: 5px;
+      border-radius: 50%;
+      top: 55px;
+      right: 45px;
+      cursor: pointer;
+
+      input {
+        width: 30px;
+        height: 30px;
+      }
+
+      my-global-icon {
+        right: 7px;
+      }
+    }
+  }
+
   .actor-info {
+    justify-content: center;
+    display: inline-flex;
+    flex-direction: column;
+
     .actor-info-names {
       display: flex;
       align-items: center;
@@ -35,21 +65,7 @@
 
     .actor-info-followers {
       font-size: 15px;
+      padding-bottom: .5rem;
     }
   }
-}
-
-.button-file {
-  @include peertube-button-file(160px);
-
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-.file-max-size {
-  display: inline-block;
-  font-size: 13px;
-
-  position: relative;
-  top: -10px;
 }

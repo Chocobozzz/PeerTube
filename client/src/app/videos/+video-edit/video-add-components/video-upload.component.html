@@ -68,7 +68,7 @@
 </div>
 
 <!-- Hidden because we want to load the component -->
-<form [hidden]="!isUploadingVideo" novalidate [formGroup]="form">
+<form [hidden]="!isUploadingVideo" novalidate [formGroup]="form" class="mb-3">
   <my-video-edit
     [form]="form" [formErrors]="formErrors" [videoCaptions]="videoCaptions"
     [validationMessages]="validationMessages" [userVideoChannels]="userVideoChannels"

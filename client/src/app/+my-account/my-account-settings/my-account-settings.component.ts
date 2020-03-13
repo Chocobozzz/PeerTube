@@ -17,9 +17,11 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
 
   userVideoQuota = '0'
   userVideoQuotaUsed = 0
+  userVideoQuotaPercentage = 15
 
   userVideoQuotaDaily = '0'
   userVideoQuotaUsedDaily = 0
+  userVideoQuotaDailyPercentage = 15
 
   constructor (
     private viewportScroller: ViewportScroller,
@@ -40,12 +42,14 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
       () => {
         if (this.user.videoQuota !== -1) {
           this.userVideoQuota = new BytesPipe().transform(this.user.videoQuota, 0).toString()
+          this.userVideoQuotaPercentage = this.user.videoQuota * 100 / this.userVideoQuotaUsed
         } else {
           this.userVideoQuota = this.i18n('Unlimited')
         }
 
         if (this.user.videoQuotaDaily !== -1) {
           this.userVideoQuotaDaily = new BytesPipe().transform(this.user.videoQuotaDaily, 0).toString()
+          this.userVideoQuotaDailyPercentage = this.user.videoQuotaDaily * 100 / this.userVideoQuotaUsedDaily
         } else {
           this.userVideoQuotaDaily = this.i18n('Unlimited')
         }
