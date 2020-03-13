@@ -9,7 +9,7 @@ import {
   doubleFollow,
   flushAndRunMultipleServers,
   follow,
-  ServerInfo,
+  ServerInfo, unfollow,
   uploadVideo,
   viewVideo,
   wait
@@ -93,6 +93,16 @@ describe('Test stats (excluding redundancy)', function () {
     expect(data.totalVideos).to.equal(1)
     expect(data.totalInstanceFollowing).to.equal(1)
     expect(data.totalInstanceFollowers).to.equal(0)
+  })
+
+  it('Should have the correct total videos stats after an unfollow', async function () {
+    await unfollow(servers[2].url, servers[2].accessToken, servers[0])
+    await waitJobs(servers)
+
+    const res = await getStats(servers[2].url)
+    const data: ServerStats = res.body
+
+    expect(data.totalVideos).to.equal(0)
   })
 
   after(async function () {

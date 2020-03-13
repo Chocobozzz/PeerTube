@@ -26,11 +26,12 @@ async function getStats (req: express.Request, res: express.Response) {
   const { totalInstanceFollowers, totalInstanceFollowing } = await ActorFollowModel.getStats()
   const { totalLocalVideoFilesSize } = await VideoFileModel.getStats()
 
-  const strategies: { strategy: VideoRedundancyStrategyWithManual, size: number }[] = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
-                                                                                            .map(r => ({
-                                                                                              strategy: r.strategy,
-                                                                                              size: r.size
-                                                                                            }))
+  const strategies = CONFIG.REDUNDANCY.VIDEOS.STRATEGIES
+                          .map(r => ({
+                            strategy: r.strategy as VideoRedundancyStrategyWithManual,
+                            size: r.size
+                          }))
+
   strategies.push({ strategy: 'manual', size: null })
 
   const videosRedundancyStats = await Promise.all(

@@ -125,6 +125,7 @@ import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { ModelCache } from '@server/models/model-cache'
 import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
+import { buildNSFWFilter } from '@server/helpers/express-utils'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -1301,15 +1302,24 @@ export class VideoModel extends Model<VideoModel> {
         remote: false
       }
     })
-    const totalVideos = await VideoModel.count()
 
     let totalLocalVideoViews = await VideoModel.sum('views', {
       where: {
         remote: false
       }
     })
+
     // Sequelize could return null...
     if (!totalLocalVideoViews) totalLocalVideoViews = 0
+
+    const { total: totalVideos } = await VideoModel.listForApi({
+      start: 0,
+      count: 0,
+      sort: '-publishedAt',
+      nsfw: buildNSFWFilter(),
+      includeLocalVideos: true,
+      withFiles: false
+    })
 
     return {
       totalLocalVideos,
@@ -1419,6 +1429,8 @@ export class VideoModel extends Model<VideoModel> {
     }
 
     function getModels () {
+      if (options.count === 0) return Promise.resolve([])
+
       const { query, replacements, order } = buildListQuery(VideoModel, options)
       const queryModels = wrapForAPIResults(query, replacements, options, order)
 
