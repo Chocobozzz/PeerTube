@@ -16,7 +16,7 @@
 
       <div *ngIf="hasDailyQuota()" class="mt-3">
         <div class="progress" i18n-title title="Daily video quota">
-          <div class="progress-bar progress-bar-secondary" role="progressbar" [style]="{ width: userVideoQuotaDailyPercentage + '%' }" [attr.aria-valuenow]="userVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="userVideoQuotaDaily">{{ userVideoQuotaUsedDaily | bytes: 0 }}</div>
+          <div class="progress-bar secondary" role="progressbar" [style]="{ width: userVideoQuotaDailyPercentage + '%' }" [attr.aria-valuenow]="userVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="userVideoQuotaDaily">{{ userVideoQuotaUsedDaily | bytes: 0 }}</div>
           <span class="ml-auto mr-2">{{ userVideoQuotaDaily }}</span>
         </div>
       </div>

@@ -3,7 +3,7 @@
     <img [src]="actor.avatarUrl" alt="Avatar" />
 
     <div class="actor-img-edit-container">
-      <div class="actor-img-edit-button" [ngbTooltip]="'(extensions: '+ avatarExtensions +', max size: 100KB)'" placement="right" container="body">
+      <div class="actor-img-edit-button" [ngbTooltip]="'(extensions: '+ avatarExtensions +', '+ maxSizeText +': '+ maxAvatarSizeInBytes +')'" placement="right" container="body">
         <my-global-icon iconName="edit"></my-global-icon>
         <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>
       </div>

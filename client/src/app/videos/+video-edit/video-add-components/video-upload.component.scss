@@ -22,37 +22,21 @@
   margin-top: 25px;
   margin-bottom: 40px;
 
-  p-progressBar {
+  .progress {
+    @include progressbar;
     flex-grow: 1;
+    height: 30px;
+    font-size: 15px;
+    background-color: rgba(11, 204, 41, 0.16);
 
-    ::ng-deep .ui-progressbar {
-      font-size: 15px !important;
-      height: 30px !important;
-      border-radius: 3px !important;
-      background-color: rgba(11, 204, 41, 0.16) !important;
+    .progress-bar {
+      background-color: $green;
+      line-height: 30px;
+      text-align: left;
+      font-weight: $font-bold;
 
-      .ui-progressbar-value {
-        background-color: #0BCC29 !important;
-      }
-
-      .ui-progressbar-label {
-        text-align: left;
-        padding-left: 18px;
-        margin-top: 0 !important;
-        color: #fff !important;
-        line-height: 30px !important;
-      }
-    }
-
-    &.processing {
-      ::ng-deep .ui-progressbar-label {
-        // Same color as background to hide "100%"
-        color: rgba(11, 204, 41, 0.16) !important;
-
-        &::before {
-          content: 'Processing...';
-          color: #fff;
-        }
+      span {
+        margin-left: 18px;
       }
     }
   }

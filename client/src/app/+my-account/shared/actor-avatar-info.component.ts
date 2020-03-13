@@ -4,6 +4,8 @@ import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { Account } from '@app/shared/account/account.model'
 import { Notifier } from '@app/core'
 import { ServerConfig } from '@shared/models'
+import { BytesPipe } from 'ngx-pipes'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-actor-avatar-info',
@@ -17,12 +19,19 @@ export class ActorAvatarInfoComponent implements OnInit {
 
   @Output() avatarChange = new EventEmitter<FormData>()
 
+  maxSizeText: string
+
   private serverConfig: ServerConfig
+  private bytesPipe: BytesPipe
 
   constructor (
     private serverService: ServerService,
-    private notifier: Notifier
-  ) {}
+    private notifier: Notifier,
+    private i18n: I18n
+  ) {
+    this.bytesPipe = new BytesPipe()
+    this.maxSizeText = this.i18n('max size')
+  }
 
   ngOnInit (): void {
     this.serverConfig = this.serverService.getTmpConfig()
@@ -45,6 +54,10 @@ export class ActorAvatarInfoComponent implements OnInit {
 
   get maxAvatarSize () {
     return this.serverConfig.avatar.file.size.max
+  }
+
+  get maxAvatarSizeInBytes () {
+    return this.bytesPipe.transform(this.maxAvatarSize)
   }
 
   get avatarExtensions () {

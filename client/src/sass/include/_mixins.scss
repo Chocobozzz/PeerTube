@@ -225,6 +225,7 @@
   overflow: hidden;
   display: inline-block;
   width: $width;
+  min-height: 30px;
 
   @include peertube-button;
   @include orange-button;
@@ -233,8 +234,8 @@
     position: absolute;
     top: 0;
     right: 0;
-    min-width: 100%;
-    min-height: 100%;
+    width: 100%;
+    height: 100%;
     font-size: 100px;
     text-align: right;
     filter: alpha(opacity=0);
@@ -594,5 +595,29 @@
     margin-right: 10px;
     position: relative;
     top: -2px;
+  }
+}
+
+@mixin progressbar {
+  background-color: $grey-background-color;
+  display: flex;
+  height: 1rem;
+  overflow: hidden;
+  font-size: 0.75rem;
+  border-radius: 0.25rem;
+
+  .progress-bar {
+    color: var(--mainBackgroundColor);
+    background-color: var(--mainColor);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    white-space: nowrap;
+    transition: width 0.6s ease;
+
+    &.secondary {
+      background-color: var(--secondaryColor);
+    }
   }
 }

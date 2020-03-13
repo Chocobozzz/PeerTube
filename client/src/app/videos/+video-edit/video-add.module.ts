@@ -7,14 +7,12 @@ import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.ser
 import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
 import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
 import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-components/video-import-torrent.component'
-import { ProgressBarModule } from 'primeng/progressbar'
 
 @NgModule({
   imports: [
     VideoAddRoutingModule,
     VideoEditModule,
     SharedModule,
-    ProgressBarModule
   ],
   declarations: [
     VideoAddComponent,

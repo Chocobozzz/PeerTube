@@ -41,9 +41,7 @@ $width-size: 190px;
   }
 
   .button-file {
-    @include peertube-button-file(auto);
-
-    min-width: 190px;
+    @include peertube-button-file(max-content);
   }
 
   .button-file-extension {

@@ -51,10 +51,12 @@
 </div>
 
 <div *ngIf="isUploadingVideo && !error" class="upload-progress-cancel">
-  <p-progressBar
-    [value]="videoUploadPercents"
-    [ngClass]="{ processing: videoUploadPercents === 100 && videoUploaded === false }"
-  ></p-progressBar>
+  <div class="progress" i18n-title title="Total video quota">
+    <div class="progress-bar" role="progressbar" [style]="{ width: videoUploadPercents + '%' }" [attr.aria-valuenow]="videoUploadPercents" aria-valuemin="0" [attr.aria-valuemax]="100">
+      <span *ngIf="videoUploadPercents === 100 && videoUploaded === false" i18n>Processing…</span>
+      <span *ngIf="videoUploadPercents !== 100 || videoUploaded">{{ videoUploadPercents }}%</span>
+    </div>
+  </div>
   <input *ngIf="videoUploaded === false" type="button" value="Cancel" (click)="cancelUpload()" />
 </div>
 
