@@ -5052,12 +5052,12 @@
       </trans-unit>
       <trans-unit id="f8f8fca3139cba7d4fd6d9578d93e601f639cc83" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</target>
+        <target state="translated">Похоже, что конфигурация является недопустимой. Пожалуйста, найдите возможные ошибки в различных вкладках.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">674</context></context-group>
       </trans-unit>
       <trans-unit id="14d2b18cdcc8d19927afd8922ac5f85de336fbd3" datatype="html">
         <source>Total video quota:</source>
-        <target state="new">Total video quota:</target>
+        <target state="translated">Общая квота видео:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">5</context>
@@ -5073,7 +5073,7 @@
       </trans-unit>
       <trans-unit id="6fe891bb8eee3fb052813756addd922d4eca6d32" datatype="html">
         <source>Daily video quota:</source>
-        <target state="new">Daily video quota:</target>
+        <target state="translated">Ежедневная квота видео:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">10</context>
@@ -5098,7 +5098,7 @@
       </trans-unit>
       <trans-unit id="dc7b800a27960e33af36f16f6c25aaf5776464f7" datatype="html">
         <source>Interface settings</source>
-        <target state="new">Interface settings</target>
+        <target state="translated">Настройка интерфейса</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -5106,7 +5106,7 @@
       </trans-unit>
       <trans-unit id="88a7dfa6fac89d61c28552598a23ba4ce9abe8ca" datatype="html">
         <source>Interface</source>
-        <target state="new">Interface</target>
+        <target state="translated">Интерфейс</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="c74e3202d080780c6415d0e9209c1c859438b735">
@@ -5152,7 +5152,7 @@
       </trans-unit>
       <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129">
         <source>Default policy on videos containing sensitive content</source>
-        <target>Политика касательно видео, содержащих чувствительный контент</target>
+        <target>Политика касательно видео, содержащих конфиденциальный контент</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
