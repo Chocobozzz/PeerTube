@@ -1,3 +1,10 @@
+
+
 .row {
   flex-direction: column;
+  width: 100%;
+
+  & > my-top-menu-dropdown:nth-child(1) {
+    flex-grow: 1;
+  }
 }

@@ -106,9 +106,13 @@ label {
   color: black;
 }
 
+.row {
+  margin: 0;
+}
+
 .main-col {
   margin-left: $menu-width;
-  width: auto;
+  width: calc(100% - #{$menu-width});
 
   .margin-content {
     margin-left: $not-expanded-horizontal-margins;
@@ -130,6 +134,7 @@ label {
   // Override some properties if the main content is expanded (no menu on the left)
   &.expanded {
     margin-left: 0;
+    width: 100%;
 
     .margin-content {
       margin-left: $expanded-horizontal-margins;
