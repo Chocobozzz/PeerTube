@@ -605,7 +605,7 @@
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 просмотр} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> просмотров} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d">
@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="d780b02074a6317126378e0365e1066c890a3570" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="translated">если вы потеряли учетную запись…</target>
+        <target state="translated">Если вы потеряли учетную запись…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">7</context>
@@ -1095,7 +1095,7 @@
       </trans-unit>
       <trans-unit id="79dacac459775e2cf163bce6c3f05ed814f82ba2" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">В настоящее время этот экземпляр не позволяет регистрировать пользователей, но вы можете найти экземпляр, который дает вам возможность зарегистрироваться и загрузить туда свои видео. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Найдите себя среди других экземпляров по адресу <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">В настоящее время этот экземпляр не позволяет регистрировать пользователей, но вы можете найти экземпляр, на котором доступна регистрация и загрузка туда своих видео. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Найдите подходящий экземпляр по адресу <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">11</context>
@@ -6124,10 +6124,7 @@
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="new">
-          An HTTP request has to be sent on each tracker for each video to spy.
-          If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)
-        </target>
+        <target state="translated">HTTP-запрос должен быть отправлен на каждом трекере для каждого видео, чтобы отслеживать. Если мы хотим следить за всеми видео PeerTube, мы должны отправить столько запросов, сколько есть видео (это потенциально много)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="bf2148ec3190556873bd0ca0c805de3a608b10cc" datatype="html">
@@ -6156,9 +6153,7 @@
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
         <source>The IP address is a vague information: usually, it regularly changes and can represent many persons or entities</source>
-        <target state="new">
-          The IP address is a vague information: usually, it regularly changes and can represent many persons or entities
-        </target>
+        <target state="translated">IP-адрес-это расплывчатая информация: как правило, он регулярно меняется и может представлять множество физических или юридических лиц</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">110</context></context-group>
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
@@ -6247,7 +6242,7 @@
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="new">We set a limit on the request frequency received by the tracker</target>
+        <target state="translated">Мы устанавливаем ограничение на частоту запросов, получаемых трекером</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">154</context>
@@ -6255,7 +6250,7 @@
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="new">Allow instance admins to disable P2P from the administration interface</target>
+        <target state="translated">Разрешить администраторам экземпляра отключать Р2Р через административный интерфейс</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">155</context>
@@ -6271,10 +6266,7 @@
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="new">
-        Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
-        WebRTC in your browser.
-      </target>
+        <target state="translated">В конечном счете, помните, что вы всегда можете отключить P2P, переключив его в видеоплеере или просто отключив WebRTC в вашем браузере.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">159</context>
@@ -6290,7 +6282,7 @@
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target state="new">This instance does not have instances followers.</target>
+        <target state="translated">Этот экземпляр не имеет последователей экземпляров.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">5</context>
@@ -6332,7 +6324,7 @@
       </trans-unit>
       <trans-unit id="f732c304c7433e5a83ffcd862c3dce709a0f4982" datatype="html">
         <source>Next</source>
-        <target state="new">Next</target>
+        <target state="translated">Следующий</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">20</context>
@@ -6340,9 +6332,7 @@
       </trans-unit>
       <trans-unit id="f127303f2937f5d9ced837f692899f5d599659a1" datatype="html">
         <source>Create my account</source>
-        <target state="new">
-            Create my account
-          </target>
+        <target state="translated">Создать свою учетную запись</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">28</context>
@@ -6350,7 +6340,7 @@
       </trans-unit>
       <trans-unit id="cb9d0623f382c9803df997fb30b9a33a5438d919" datatype="html">
         <source>PeerTube is creating your account...</source>
-        <target state="new">PeerTube is creating your account...</target>
+        <target state="translated">PeerTube создает вашу учетную запись...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">37</context>
@@ -6358,7 +6348,7 @@
       </trans-unit>
       <trans-unit id="8dd413cee2228118c536f503709329a4d1a395e2" datatype="html">
         <source>Done</source>
-        <target state="new">Done</target>
+        <target state="translated">Выполнено</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">33</context>
@@ -6366,7 +6356,7 @@
       </trans-unit>
       <trans-unit id="88b19801d99f5dcc4043d6d30dfa32c3f68da5ea" datatype="html">
         <source>Who are we?</source>
-        <target state="new">Who are we?</target>
+        <target state="translated">Кто мы такие?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">60</context>
@@ -6374,7 +6364,7 @@
       </trans-unit>
       <trans-unit id="05db4afa3e85d23d29fcfacaa5a61f0d2ae02dc0" datatype="html">
         <source>How long do we plan to maintain this instance?</source>
-        <target state="new">How long do we plan to maintain this instance?</target>
+        <target state="translated">Как долго мы планируем поддерживать этот экземпляр?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">65</context>
@@ -6382,7 +6372,7 @@
       </trans-unit>
       <trans-unit id="b7ad73ca1e5e4a530ca4eaa5285e4fd0c376c089" datatype="html">
         <source>How will we finance this instance?</source>
-        <target state="new">How will we finance this instance?</target>
+        <target state="translated">Как мы будем финансировать этот экземпляр?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register.component.html</context>
           <context context-type="linenumber">70</context>
@@ -6409,9 +6399,7 @@
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da" datatype="html">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target state="new">
-      Other users can decide to subscribe any channel they want, to be notified when you publish a new video.
-    </target>
+        <target state="translated">Другие пользователи могут подписаться на любой канал и получать уведомления при публикации новых видео.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6419,7 +6407,7 @@
       </trans-unit>
       <trans-unit id="79b3619b36af71e5c70394a3a7b31545e32d83f0" datatype="html">
         <source>Channel display name</source>
-        <target state="new">Channel display name</target>
+        <target state="translated">Отображаемое имя канала</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6427,7 +6415,7 @@
       </trans-unit>
       <trans-unit id="306a2ab7f93c214af3f5579f54bd8b3ad0d5560e" datatype="html">
         <source>Channel name</source>
-        <target state="new">Channel name</target>
+        <target state="translated">Название канала</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">30</context>
@@ -6443,9 +6431,7 @@
       </trans-unit>
       <trans-unit id="4a935862bd3120d5878e9635a9d46dfc1bcaedb4" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">Имя канала - это уникальный идентификатор вашего канала в этом и всех других экземплярах. Он так же уникален, как и адрес электронной почты, что позволяет другим людям легко взаимодействовать с ним.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6471,9 +6457,7 @@
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">Имя пользователя - это уникальный идентификатор вашей учетной записи на этом и всех других экземплярах. Он так же уникален, как и адрес электронной почты, что позволяет другим людям легко взаимодействовать с ним.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6494,9 +6478,7 @@
       </trans-unit>
       <trans-unit id="b925172fc8e9b9a7fc6b9f5d742993b77ffdda2c" datatype="html">
         <source>Sorry, we couldn't find the page you were looking for.</source>
-        <target state="new">
-    Sorry, we couldn't find the page you were looking for.
-  </target>
+        <target state="translated">К сожалению, мы не смогли найти страницу, которую вы искали.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
@@ -6529,7 +6511,7 @@
       </trans-unit>
       <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4" datatype="html">
         <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
-        <target state="new">Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</target>
+        <target state="translated">Опубликовано <x id="INTERPOLATION" equiv-text="{{total}}"/> видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/account-videos/account-videos.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="e1979668b5d368a2a5d476ba4949bc518a4316a0" datatype="html">
@@ -6542,7 +6524,7 @@
       </trans-unit>
       <trans-unit id="55d67844f534a75a89f86bb19d51c0703280a6ad" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="new">VIDEO CHANNELS</target>
+        <target state="translated">ВИДЕОКАНАЛЫ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6562,7 +6544,7 @@
       </trans-unit>
       <trans-unit id="056a9a97eb47882159d3cf5bd8a9fc2cfe9371bf" datatype="html">
         <source>Username copied</source>
-        <target state="new">Username copied</target>
+        <target state="translated">Имя пользователя скопировано</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context><context context-type="linenumber">1</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
@@ -6576,7 +6558,7 @@
       </trans-unit>
       <trans-unit id="00437b281d12d04c60a57bd329cff5e3c5febd93" datatype="html">
         <source>Audio-only</source>
-        <target state="new">Audio-only</target>
+        <target state="translated">Только для аудио</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6656,7 +6638,7 @@
       </trans-unit>
       <trans-unit id="baa5048f978a6fed563ab1d30a6bb965ea687ba8" datatype="html">
         <source>{{'{0} languages selected</source>
-        <target state="new">{{'{0} languages selected</target>
+        <target state="translated">{{'{0} выбранные языки</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6668,7 +6650,7 @@
       </trans-unit>
       <trans-unit id="812a3c71b3a8e6bfc7f1c5e8690cb4738edb2224" datatype="html">
         <source>No language</source>
-        <target state="new">No language</target>
+        <target state="translated">Язык не выбран</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6942,7 +6924,7 @@
       </trans-unit>
       <trans-unit id="aea95ff7fb86826539cc9c81c90e766d82f9cbb5" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="new">Do you really want to remove this video redundancy?</target>
+        <target state="translated">Вы действительно хотите удалить эту избыточность видео?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7981,7 +7963,7 @@
       </trans-unit>
       <trans-unit id="1c95cc372311830f936b39f73c5d6d20c0b16013">
         <source>Focus the search bar</source>
-        <target state="new">Focus the search bar</target>
+        <target state="translated">Перейти в панель поиска</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8134,7 +8116,7 @@
       </trans-unit>
       <trans-unit id="7d5d2f4e2aebe4977c5e3daff4283814f869c609" datatype="html">
         <source>any language</source>
-        <target state="new">any language</target>
+        <target state="translated">любой язык</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8142,7 +8124,7 @@
       </trans-unit>
       <trans-unit id="6e998fc06a19659c22cca43efa1b35515761cbb2" datatype="html">
         <source>hide</source>
-        <target state="new">hide</target>
+        <target state="translated">скрыть</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8150,7 +8132,7 @@
       </trans-unit>
       <trans-unit id="1214427202da5b7fb88968172a3b309f8da35d76" datatype="html">
         <source>blur</source>
-        <target state="new">blur</target>
+        <target state="translated">размытие</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8158,7 +8140,7 @@
       </trans-unit>
       <trans-unit id="890d991273787485fc939391676762a90edd8f34" datatype="html">
         <source>display</source>
-        <target state="new">display</target>
+        <target state="translated">отображение</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8174,7 +8156,7 @@
       </trans-unit>
       <trans-unit id="16d449549ab7bc61caf3d636372a4a56b5870383" datatype="html">
         <source>Any</source>
-        <target state="new">Any</target>
+        <target state="translated">Любой</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search-filters.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8267,7 +8249,7 @@
       </trans-unit>
       <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> лет назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8275,7 +8257,7 @@
       </trans-unit>
       <trans-unit id="e622d3813449fe36371ea258281059306819199d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> месяцев назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8283,7 +8265,7 @@
       </trans-unit>
       <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> месяц назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8291,7 +8273,7 @@
       </trans-unit>
       <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> недель назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8299,7 +8281,7 @@
       </trans-unit>
       <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> неделю назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8307,7 +8289,7 @@
       </trans-unit>
       <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> дней назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8315,7 +8297,7 @@
       </trans-unit>
       <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> день назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8323,7 +8305,7 @@
       </trans-unit>
       <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> часов назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8331,7 +8313,7 @@
       </trans-unit>
       <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> час назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8339,7 +8321,7 @@
       </trans-unit>
       <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> мин назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8347,7 +8329,7 @@
       </trans-unit>
       <trans-unit id="7a158a7555a44ea7eff9fa4988df9aa24d262ceb" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{interval}}"/> sec ago</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> сек назад</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8491,7 +8473,7 @@
       </trans-unit>
       <trans-unit id="6975c8c2dac1982f393cb9a890e33ef95b758111" datatype="html">
         <source>Index URL is required.</source>
-        <target state="new">Index URL is required.</target>
+        <target state="translated">Требуется индексировать URL-адрес.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8499,7 +8481,7 @@
       </trans-unit>
       <trans-unit id="febc4795f39d34b901907a2718b0c5c21165eb36" datatype="html">
         <source>Index URL should be a URL</source>
-        <target state="new">Index URL should be a URL</target>
+        <target state="translated">Индексный URL должен быть URL-адресом</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8557,7 +8539,7 @@
       </trans-unit>
       <trans-unit id="4f049fd004313524afeaf0ae25f98583a0ffd29b" datatype="html">
         <source>The subject must be at least 1 character long.</source>
-        <target state="new">The subject must be at least 1 character long.</target>
+        <target state="translated">Название должно быть длиной не менее 1 символа.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8565,7 +8547,7 @@
       </trans-unit>
       <trans-unit id="d82f880ea1d0ee03c47bf1212a0fbcb23b3edf18" datatype="html">
         <source>The subject cannot be more than 120 characters long.</source>
-        <target state="new">The subject cannot be more than 120 characters long.</target>
+        <target state="translated">Длина не может превышать 120 символов.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/instance-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8731,7 +8713,7 @@
       </trans-unit>
       <trans-unit id="1d973f9ee250b94d31ceb5c763edcd9b255ea524" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">Вы должны согласиться с условиями экземпляра, чтобы зарегистрироваться на нем.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8872,7 +8854,7 @@
       </trans-unit>
       <trans-unit id="bd7fc070c728dc6dbf3959d49fe5bb27ce15d294" datatype="html">
         <source>The username is required.</source>
-        <target state="new">The username is required.</target>
+        <target state="translated">Имя пользователя является обязательным.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-change-ownership-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8912,7 +8894,7 @@
       </trans-unit>
       <trans-unit id="135185da003b14cbb69521f570fa617a00bbbe18" datatype="html">
         <source>Name should be lowercase alphanumeric; dots and underscores are allowed.</source>
-        <target state="new">Name should be lowercase alphanumeric; dots and underscores are allowed.</target>
+        <target state="translated">Имя должно быть строчным, буквы и цифры; допускаются точки и подчеркивания.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-channel-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -8968,7 +8950,7 @@
       </trans-unit>
       <trans-unit id="e8c50a2e0b9a6eec54a983a3284839d81739f18c" datatype="html">
         <source>Privacy is required.</source>
-        <target state="new">Privacy is required.</target>
+        <target state="translated">Требуется конфиденциальность.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/video-playlist-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10515,7 +10497,7 @@
       </trans-unit>
       <trans-unit id="6da9ddede61711ecfeaa94fc61a6b7bb844ab3df">
         <source>Trending for the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target>В тренде за несколько <x id="INTERPOLATION" equiv-text="{{days}}"/> дней</target>
+        <target>В тренде за последние <x id="INTERPOLATION" equiv-text="{{days}}"/> дней</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10523,7 +10505,7 @@
       </trans-unit>
       <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target>Видео в тренде с наибольшим количеством просмотров за несколько <x id="INTERPOLATION" equiv-text="{{days}}"/> дней</target>
+        <target>Видео в тренде с наибольшим количеством просмотров за последние <x id="INTERPOLATION" equiv-text="{{days}}"/> дней</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
