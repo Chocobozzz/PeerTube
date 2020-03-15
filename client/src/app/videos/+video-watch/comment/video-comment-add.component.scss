@@ -30,14 +30,6 @@ form {
   }
 }
 
-.cancel-button {
-  font-weight: $font-semibold;
-  display: inline-block;
-  padding: 0 10px 0 10px;
-  white-space: nowrap;
-  background: transparent;
-}
-
 .comment-buttons {
   display: flex;
   justify-content: flex-end;
@@ -48,6 +40,16 @@ form {
     &:last-child {
       @include orange-button;
     }
+  }
+
+  .cancel-button {
+    @include tertiary-button;
+
+    font-weight: $font-semibold;
+    display: inline-block;
+    padding: 0 10px 0 10px;
+    white-space: nowrap;
+    background: transparent;
   }
 }
 

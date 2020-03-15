@@ -139,6 +139,7 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
 
   cancelCommentReply () {
     this.cancel.emit(null)
+    this.form.value['text'] = this.textareaElement.nativeElement.value = ''
   }
 
   private addCommentReply (commentCreate: VideoCommentCreate) {
