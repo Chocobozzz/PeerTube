@@ -30,6 +30,16 @@ export abstract class UserEdit extends FormReactive implements OnInit {
     this.buildRoles()
   }
 
+  get subscribersCount () {
+    const forAccount = this.user
+      ? this.user.account.followersCount
+      : 0
+    const forChannels = this.user
+      ? this.user.videoChannels.map(c => c.followersCount).reduce((a, b) => a + b, 0)
+      : 0
+    return forAccount + forChannels
+  }
+
   buildRoles () {
     const authUser = this.auth.getUser()
 
