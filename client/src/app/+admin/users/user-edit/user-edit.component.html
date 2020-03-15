@@ -1,112 +1,198 @@
-<div i18n class="form-sub-title" *ngIf="isCreation() === true">Create user</div>
-<div i18n class="form-sub-title" *ngIf="isCreation() === false">Edit user {{ username }}</div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/admin/users">Users</a>
+    </li>
+
+    <ng-container *ngIf="isCreation()">
+      <li class="breadcrumb-item active">Create</li>
+    </ng-container>
+    <ng-container *ngIf="!isCreation()">
+      <li class="breadcrumb-item">Edit</li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a *ngIf="user" [routerLink]="[ '/accounts', user?.username ]">{{ user?.username }}</a>
+      </li>
+    </ng-container>
+  </ol>
+</nav>
+
+<div class="form-row">
+  <div class="col-12 col-xl-3"></div>
+
+  <div class="form-group-right col-12 col-xl-9">
+
+    <div *ngIf="!isCreation() && user" class="dashboard">
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoCount }} ({{ user.videoQuotaUsed | bytes: 0 }})</div>
+          <div class="dashboard-label" i18n>{user.videoCount, plural, =1 {Video} other {Videos}}</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoChannels.length || 0 }}</div>
+          <div class="dashboard-label" i18n>{user.videoChannels.length, plural, =1 {Channel} other {Channels}}</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ subscribersCount }}</div>
+          <div class="dashboard-label" i18n>{subscribersCount, plural, =1 {Subscriber} other {Subscribers}}</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoAbuseCount }}</div>
+          <div class="dashboard-label" i18n>Incriminated in reports</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoAbuseAcceptedCount }} / {{ user.videoAbuseCreatedCount }}</div>
+          <div class="dashboard-label" i18n>Authored reports accepted</div>
+        </a>
+      </div>
+      <div>
+        <a>
+          <div class="dashboard-num">{{ user.videoCommentCount }}</div>
+          <div class="dashboard-label" i18n>{user.videoCommentCount, plural, =1 {Comment} other {Comments}}</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
-<form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
-  <div class="form-group" *ngIf="isCreation()">
-    <label i18n for="username">Username</label>
-    <input
-      type="text" id="username" i18n-placeholder placeholder="john"
-      formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
-    >
-    <div *ngIf="formErrors.username" class="form-error">
-      {{ formErrors.username }}
+<div class="form-row mt-4"> <!-- user grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div class="anchor" id="user"></div> <!-- user anchor -->
+    <div *ngIf="isCreation()" i18n class="account-title">NEW USER</div>
+    <div *ngIf="!isCreation() && user" class="account-title">
+      <my-actor-avatar-info [actor]="user.account"></my-actor-avatar-info>
     </div>
   </div>
 
-  <div class="form-group">
-    <label i18n for="email">Email</label>
-    <input
-      type="text" id="email" i18n-placeholder placeholder="mail@example.com"
-      formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
-      autocomplete="off"
-    >
-    <div *ngIf="formErrors.email" class="form-error">
-      {{ formErrors.email }}
-    </div>
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+    <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+      <div class="form-group" *ngIf="isCreation()">
+        <label i18n for="username">Username</label>
+        <input
+          type="text" id="username" i18n-placeholder placeholder="john"
+          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+        >
+        <div *ngIf="formErrors.username" class="form-error">
+          {{ formErrors.username }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="email">Email</label>
+        <input
+          type="text" id="email" i18n-placeholder placeholder="mail@example.com"
+          formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
+          autocomplete="off"
+        >
+        <div *ngIf="formErrors.email" class="form-error">
+          {{ formErrors.email }}
+        </div>
+      </div>
+
+      <div class="form-group" *ngIf="isCreation()">
+        <label i18n for="password">Password</label>
+        <my-help *ngIf="isPasswordOptional()">
+          <ng-template ptTemplate="customHtml">
+            <ng-container i18n>
+              If you leave the password empty, an email will be sent to the user.
+            </ng-container>
+          </ng-template>
+        </my-help>
+        <input
+          type="password" id="password" autocomplete="new-password"
+          formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+        >
+        <div *ngIf="formErrors.password" class="form-error">
+          {{ formErrors.password }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="role">Role</label>
+        <div class="peertube-select-container">
+            <select id="role" formControlName="role">
+              <option *ngFor="let role of roles" [value]="role.value">
+               {{ role.label }}
+              </option>
+            </select>
+        </div>
+
+        <div *ngIf="formErrors.role" class="form-error">
+          {{ formErrors.role }}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="videoQuota">Video quota</label>
+        <div class="peertube-select-container">
+          <select id="videoQuota" formControlName="videoQuota">
+            <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+              {{ videoQuotaOption.label }}
+            </option>
+          </select>
+        </div>
+
+        <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
+          Transcoding is enabled. The video quota only takes into account <strong>original</strong> video size. <br />
+          At most, this user could upload ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label i18n for="videoQuotaDaily">Daily video quota</label>
+        <div class="peertube-select-container">
+          <select id="videoQuotaDaily" formControlName="videoQuotaDaily">
+            <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
+              {{ videoQuotaDailyOption.label }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <my-peertube-checkbox
+          inputName="byPassAutoBlacklist" formControlName="byPassAutoBlacklist"
+          i18n-labelText labelText="Doesn't need review before a video goes public"
+        ></my-peertube-checkbox>
+      </div>
+
+      <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
+    </form>
+
+  </div>
+</div>
+
+
+<div *ngIf="!isCreation() && user" class="form-row mt-4"> <!-- danger zone grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <div class="anchor" id="user"></div> <!-- danger zone anchor -->
+    <div i18n class="account-title">DANGER ZONE</div>
   </div>
 
-  <div class="form-group" *ngIf="isCreation()">
-    <label i18n for="password">Password</label>
-    <my-help *ngIf="isPasswordOptional()">
-      <ng-template ptTemplate="customHtml">
-        <ng-container i18n>
-          If you leave the password empty, an email will be sent to the user.
-        </ng-container>
-      </ng-template>
-    </my-help>
-    <input
-      type="password" id="password" autocomplete="new-password"
-      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
-    >
-    <div *ngIf="formErrors.password" class="form-error">
-      {{ formErrors.password }}
-    </div>
-  </div>
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-  <div class="form-group">
-    <label i18n for="role">Role</label>
-    <div class="peertube-select-container">
-      <select id="role" formControlName="role">
-        <option *ngFor="let role of roles" [value]="role.value">
-          {{ role.label }}
-        </option>
-      </select>
+    <div class="danger-zone">
+      <div class="form-group reset-password-email">
+        <label i18n>Send a link to reset the password by email to the user</label>
+        <button (click)="resetPassword()" i18n>Ask for new password</button>
+      </div>
+
+      <div class="form-group">
+        <label i18n>Manually set the user password</label>
+        <my-user-password [userId]="user.id"></my-user-password>
+      </div>
     </div>
 
-    <div *ngIf="formErrors.role" class="form-error">
-      {{ formErrors.role }}
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label i18n for="videoQuota">Video quota</label>
-    <div class="peertube-select-container">
-      <select id="videoQuota" formControlName="videoQuota">
-        <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
-          {{ videoQuotaOption.label }}
-        </option>
-      </select>
-    </div>
-
-    <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
-      Transcoding is enabled on server. The video quota only take in account <strong>original</strong> video. <br />
-      At most, this user could use ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
-    </div>
-  </div>
-
-  <div class="form-group">
-    <label i18n for="videoQuotaDaily">Daily video quota</label>
-    <div class="peertube-select-container">
-      <select id="videoQuotaDaily" formControlName="videoQuotaDaily">
-        <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
-          {{ videoQuotaDailyOption.label }}
-        </option>
-      </select>
-    </div>
-  </div>
-
-  <div class="form-group">
-    <my-peertube-checkbox
-      inputName="byPassAutoBlacklist" formControlName="byPassAutoBlacklist"
-      i18n-labelText labelText="Bypass video auto blacklist"
-    ></my-peertube-checkbox>
-  </div>
-
-  <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
-</form>
-
-<div *ngIf="!isCreation()" class="danger-zone">
-  <div class="account-title" i18n>Danger Zone</div>
-
-  <div class="form-group reset-password-email">
-    <label i18n>Send a link to reset the password by email to the user</label>
-    <button (click)="resetPassword()" i18n>Ask for new password</button>
-  </div>
-
-  <div class="form-group">
-    <label i18n>Manually set the user password</label>
-    <my-user-password [userId]="userId"></my-user-password>
   </div>
 </div>

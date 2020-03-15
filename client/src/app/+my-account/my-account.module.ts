@@ -15,7 +15,6 @@ import { MyAccountProfileComponent } from '@app/+my-account/my-account-settings/
 import { MyAccountVideoChannelsComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channels.component'
 import { MyAccountVideoChannelCreateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-create.component'
 import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-update.component'
-import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-info.component'
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountDangerZoneComponent } from '@app/+my-account/my-account-settings/my-account-danger-zone'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
@@ -63,7 +62,6 @@ import { MyAccountChangeEmailComponent } from '@app/+my-account/my-account-setti
     MyAccountVideoChannelsComponent,
     MyAccountVideoChannelCreateComponent,
     MyAccountVideoChannelUpdateComponent,
-    ActorAvatarInfoComponent,
     MyAccountVideoImportsComponent,
     MyAccountDangerZoneComponent,
     MyAccountSubscriptionsComponent,

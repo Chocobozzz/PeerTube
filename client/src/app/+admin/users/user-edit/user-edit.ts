@@ -4,12 +4,13 @@ import { ServerConfig, USER_ROLE_LABELS, UserRole, VideoResolution } from '../..
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { OnInit } from '@angular/core'
+import { User } from '@app/shared/users/user.model'
 
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
   username: string
-  userId: number
+  user: User
 
   roles: { value: string, label: string }[] = []
 

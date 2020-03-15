@@ -19,7 +19,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, VideoPlaylistType, VideoPrivacy } from '../../../shared'
+import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, VideoPlaylistType, VideoPrivacy, VideoAbuseState } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isNoInstanceConfigWarningModal,
@@ -70,8 +70,25 @@ import {
   MVideoFullLight
 } from '@server/typings/models'
 
+const literalVideoQuotaUsed: any = [
+  literal(
+    '(' +
+      'SELECT COALESCE(SUM("size"), 0) ' +
+      'FROM (' +
+        'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
+        'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+        'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+        'WHERE "account"."userId" = "UserModel"."id" GROUP BY "video"."id"' +
+      ') t' +
+    ')'
+  ),
+  'videoQuotaUsed'
+]
+
 enum ScopeNames {
-  FOR_ME_API = 'FOR_ME_API'
+  WITH_VIDEOCHANNELS = 'WITH_VIDEOCHANNELS',
+  WITH_STATS = 'WITH_STATS'
 }
 
 @DefaultScope(() => ({
@@ -87,7 +104,7 @@ enum ScopeNames {
   ]
 }))
 @Scopes(() => ({
-  [ScopeNames.FOR_ME_API]: {
+  [ScopeNames.WITH_VIDEOCHANNELS]: {
     include: [
       {
         model: AccountModel,
@@ -106,12 +123,66 @@ enum ScopeNames {
             }
           }
         ]
-      },
-      {
-        model: UserNotificationSettingModel,
-        required: true
       }
     ]
+  },
+  [ScopeNames.WITH_STATS]: {
+    attributes: {
+      include: [
+        literalVideoQuotaUsed,
+        [
+          literal(
+            '(' +
+              'SELECT COUNT("video"."id") ' +
+              'FROM "video" ' +
+              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+              'WHERE "account"."actorId" = "UserModel"."id"' +
+            ')'
+          ),
+          'videoCount'
+        ],
+        [
+          literal(
+            '(' +
+              'SELECT ("abuses", "acceptedAbuses")::text ' +
+              'FROM (' +
+                'SELECT COUNT("videoAbuse"."id") AS "abuses", ' +
+                       `COUNT(CASE WHEN "videoAbuse"."state" = ${VideoAbuseState.ACCEPTED} THEN 1 END) AS "acceptedAbuses" ` +
+                'FROM "videoAbuse" ' +
+                'INNER JOIN "video" ON "videoAbuse"."videoId" = "video"."id" ' +
+                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+                'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+                'WHERE "account"."actorId" = "UserModel"."id"' +
+              ') t' +
+            ')'
+          ),
+          'videoAbuseCount'
+        ],
+        [
+          literal(
+            '(' +
+              'SELECT COUNT("videoAbuse"."id") ' +
+              'FROM "videoAbuse" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoAbuse"."reporterAccountId" ' +
+              'WHERE "account"."actorId" = "UserModel"."id"' +
+            ')'
+          ),
+          'videoAbuseCreatedCount'
+        ],
+        [
+          literal(
+            '(' +
+              'SELECT COUNT("videoComment"."id") ' +
+              'FROM "videoComment" ' +
+              'INNER JOIN "account" ON "account"."id" = "videoComment"."accountId" ' +
+              'WHERE "account"."actorId" = "UserModel"."id"' +
+            ')'
+          ),
+          'videoCommentCount'
+        ]
+      ]
+    }
   }
 }))
 @Table({
@@ -332,23 +403,7 @@ export class UserModel extends Model<UserModel> {
 
     const query: FindOptions = {
       attributes: {
-        include: [
-          [
-            literal(
-              '(' +
-              'SELECT COALESCE(SUM("size"), 0) ' +
-              'FROM (' +
-              'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-              'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-              'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-              'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-              'WHERE "account"."userId" = "UserModel"."id" GROUP BY "video"."id"' +
-              ') t' +
-              ')'
-            ),
-            'videoQuotaUsed'
-          ]
-        ]
+        include: [ literalVideoQuotaUsed ]
       },
       offset: start,
       limit: count,
@@ -431,7 +486,10 @@ export class UserModel extends Model<UserModel> {
   }
 
   static loadById (id: number): Bluebird<MUserDefault> {
-    return UserModel.findByPk(id)
+    return UserModel.scope([
+      ScopeNames.WITH_VIDEOCHANNELS,
+      ScopeNames.WITH_STATS
+    ]).findByPk(id)
   }
 
   static loadByUsername (username: string): Bluebird<MUserDefault> {
@@ -451,7 +509,7 @@ export class UserModel extends Model<UserModel> {
       }
     }
 
-    return UserModel.scope(ScopeNames.FOR_ME_API).findOne(query)
+    return UserModel.scope(ScopeNames.WITH_VIDEOCHANNELS).findOne(query)
   }
 
   static loadByEmail (email: string): Bluebird<MUserDefault> {
@@ -637,6 +695,14 @@ export class UserModel extends Model<UserModel> {
   toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
+    const videoCount = this.get('videoCount')
+    const videoAbuseCount = this.get('videoAbuseCount') as string
+    const videoAbuseCreatedCount = this.get('videoAbuseCreatedCount')
+    const videoCommentCount = this.get('videoCommentCount')
+
+    function parseAbuseCount (videoAbuseCount: string, position: number) {
+      return videoAbuseCount.replace(/[()]/g, '').split(',').map(x => parseInt(x, 10))[position]
+    }
 
     const json: User = {
       id: this.id,
@@ -665,6 +731,21 @@ export class UserModel extends Model<UserModel> {
         : undefined,
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
         ? parseInt(videoQuotaUsedDaily + '', 10)
+        : undefined,
+      videoCount: videoCount !== undefined
+        ? parseInt(videoCount + '', 10)
+        : undefined,
+      videoAbuseCount: videoAbuseCount !== undefined
+        ? parseAbuseCount(videoAbuseCount, 0)
+        : undefined,
+      videoAbuseAcceptedCount: videoAbuseCount !== undefined
+        ? parseAbuseCount(videoAbuseCount, 1)
+        : undefined,
+      videoAbuseCreatedCount: videoAbuseCreatedCount !== undefined
+        ? parseInt(videoAbuseCreatedCount + '', 10)
+        : undefined,
+      videoCommentCount: videoCommentCount !== undefined
+        ? parseInt(videoCommentCount + '', 10)
         : undefined,
 
       noInstanceConfigWarningModal: this.noInstanceConfigWarningModal,

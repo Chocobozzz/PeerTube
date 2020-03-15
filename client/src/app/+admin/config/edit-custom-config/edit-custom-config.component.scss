@@ -50,6 +50,7 @@ input[type=submit] {
 textarea {
   @include peertube-textarea(500px, 150px);
 
+  max-width: 100%;
   display: block;
 
   &.small {
@@ -71,6 +72,10 @@ my-markdown-textarea ::ng-deep {
   .root {
     @media screen and (max-width: 1400px) {
       flex-direction: column !important;
+    }
+
+    textarea {
+      max-width: 100%;
     }
   }
 }

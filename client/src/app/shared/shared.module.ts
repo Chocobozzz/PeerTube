@@ -106,6 +106,7 @@ import { InputSwitchModule } from 'primeng/inputswitch'
 
 import { MyAccountVideoSettingsComponent } from '@app/+my-account/my-account-settings/my-account-video-settings'
 import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account-settings/my-account-interface'
+import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-info.component'
 
 @NgModule({
   imports: [
@@ -189,7 +190,8 @@ import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account
     PreviewUploadComponent,
 
     MyAccountVideoSettingsComponent,
-    MyAccountInterfaceSettingsComponent
+    MyAccountInterfaceSettingsComponent,
+    ActorAvatarInfoComponent
   ],
 
   exports: [
@@ -270,7 +272,8 @@ import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account
     VideoDurationPipe,
 
     MyAccountVideoSettingsComponent,
-    MyAccountInterfaceSettingsComponent
+    MyAccountInterfaceSettingsComponent,
+    ActorAvatarInfoComponent
   ],
 
   providers: [
