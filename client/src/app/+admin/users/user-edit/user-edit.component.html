@@ -1,14 +1,14 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
     <li class="breadcrumb-item">
-      <a routerLink="/admin/users">Users</a>
+      <a routerLink="/admin/users" i18n>Users</a>
     </li>
 
     <ng-container *ngIf="isCreation()">
-      <li class="breadcrumb-item active">Create</li>
+      <li class="breadcrumb-item active" i18n>Create</li>
     </ng-container>
     <ng-container *ngIf="!isCreation()">
-      <li class="breadcrumb-item">Edit</li>
+      <li class="breadcrumb-item active" i18n>Edit</li>
       <li class="breadcrumb-item active" aria-current="page">
         <a *ngIf="user" [routerLink]="[ '/accounts', user?.username ]">{{ user?.username }}</a>
       </li>

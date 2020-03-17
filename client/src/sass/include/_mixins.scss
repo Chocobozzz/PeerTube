@@ -632,6 +632,8 @@
   border-radius: 0.25rem;
 
   .breadcrumb-item {
+    display: flex;
+
     a {
       color: var(--mainColor);
     }

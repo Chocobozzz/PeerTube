@@ -45,7 +45,12 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   ngOnInit () {
     super.ngOnInit()
 
-    const defaultValues = { role: UserRole.USER.toString(), videoQuota: '-1', videoQuotaDaily: '-1' }
+    const defaultValues = {
+      role: UserRole.USER.toString(),
+      videoQuota: '-1',
+      videoQuotaDaily: '-1'
+    }
+
     this.buildForm({
       email: this.userValidatorsService.USER_EMAIL,
       role: this.userValidatorsService.USER_ROLE,
@@ -80,7 +85,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.userService.updateUser(this.user.id, userUpdate).subscribe(
       () => {
-        this.notifier.success(this.i18n('User {{username}} updated.', { username: this.user.username }))
+        this.notifier.success(this.i18n('User {{user.username}} updated.', { username: this.user.username }))
         this.router.navigate([ '/admin/users/list' ])
       },
 
