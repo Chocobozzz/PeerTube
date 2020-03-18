@@ -12,7 +12,7 @@ import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-c
   imports: [
     VideoAddRoutingModule,
     VideoEditModule,
-    SharedModule,
+    SharedModule
   ],
   declarations: [
     VideoAddComponent,
