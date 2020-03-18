@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.peertube-container {
+  padding-bottom: 20px;
+}
+
 .main-row {
   min-height: calc(100vh - #{$header-height} - #{$footer-height} - #{$footer-margin});
 }
@@ -83,12 +87,4 @@
     white-space: nowrap;
     flex: 1;
   }
-}
-
-footer {
-  padding: 10px 0;
-  font-size: 11px;
-  margin-top: $footer-margin;
-  height: $footer-height;
-  justify-content: center;
 }
