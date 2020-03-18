@@ -11,6 +11,8 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   username: string
   userId: number
 
+  roles: { value: string, label: string }[] = []
+
   protected serverConfig: ServerConfig
 
   protected abstract serverService: ServerService
@@ -23,17 +25,20 @@ export abstract class UserEdit extends FormReactive implements OnInit {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
         .subscribe(config => this.serverConfig = config)
+
+    this.buildRoles()
   }
 
-  getRoles () {
+  buildRoles () {
     const authUser = this.auth.getUser()
 
     if (authUser.role === UserRole.ADMINISTRATOR) {
-      return Object.keys(USER_ROLE_LABELS)
+      this.roles = Object.keys(USER_ROLE_LABELS)
             .map(key => ({ value: key.toString(), label: USER_ROLE_LABELS[key] }))
+      return
     }
 
-    return [
+    this.roles = [
       { value: UserRole.USER.toString(), label: USER_ROLE_LABELS[UserRole.USER] }
     ]
   }
