@@ -31,11 +31,11 @@ export interface User {
   videoQuotaDaily: number
   videoQuotaUsed?: number
   videoQuotaUsedDaily?: number
-  videoCount?: number
-  videoAbuseCount?: number
-  videoAbuseAcceptedCount?: number
-  videoAbuseCreatedCount?: number
-  videoCommentCount? : number
+  videosCount?: number
+  videoAbusesCount?: number
+  videoAbusesAcceptedCount?: number
+  videoAbusesCreatedCount?: number
+  videoCommentsCount? : number
 
   theme: string
 

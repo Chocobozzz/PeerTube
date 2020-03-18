@@ -61,7 +61,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const userId = routeParams['id']
-      this.userService.getUser(userId).subscribe(
+      this.userService.getUser(userId, true).subscribe(
         user => this.onUserFetched(user),
 
         err => this.error = err.message

@@ -87,6 +87,7 @@ const literalVideoQuotaUsed: any = [
 ]
 
 enum ScopeNames {
+  FOR_ME_API = 'FOR_ME_API',
   WITH_VIDEOCHANNELS = 'WITH_VIDEOCHANNELS',
   WITH_STATS = 'WITH_STATS'
 }
@@ -104,6 +105,32 @@ enum ScopeNames {
   ]
 }))
 @Scopes(() => ({
+  [ScopeNames.FOR_ME_API]: {
+    include: [
+      {
+        model: AccountModel,
+        include: [
+          {
+            model: VideoChannelModel
+          },
+          {
+            attributes: [ 'id', 'name', 'type' ],
+            model: VideoPlaylistModel.unscoped(),
+            required: true,
+            where: {
+              type: {
+                [Op.ne]: VideoPlaylistType.REGULAR
+              }
+            }
+          }
+        ]
+      },
+      {
+        model: UserNotificationSettingModel,
+        required: true
+      }
+    ]
+  },
   [ScopeNames.WITH_VIDEOCHANNELS]: {
     include: [
       {
@@ -137,27 +164,27 @@ enum ScopeNames {
               'FROM "video" ' +
               'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
               'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-              'WHERE "account"."actorId" = "UserModel"."id"' +
+              'WHERE "account"."userId" = "UserModel"."id"' +
             ')'
           ),
-          'videoCount'
+          'videosCount'
         ],
         [
           literal(
             '(' +
-              'SELECT ("abuses", "acceptedAbuses")::text ' +
+              `SELECT concat_ws(':', "abuses", "acceptedAbuses") ` +
               'FROM (' +
                 'SELECT COUNT("videoAbuse"."id") AS "abuses", ' +
-                       `COUNT(CASE WHEN "videoAbuse"."state" = ${VideoAbuseState.ACCEPTED} THEN 1 END) AS "acceptedAbuses" ` +
+                       `COUNT("videoAbuse"."id") FILTER (WHERE "videoAbuse"."state" = ${VideoAbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
                 'FROM "videoAbuse" ' +
                 'INNER JOIN "video" ON "videoAbuse"."videoId" = "video"."id" ' +
                 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
                 'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
-                'WHERE "account"."actorId" = "UserModel"."id"' +
+                'WHERE "account"."userId" = "UserModel"."id"' +
               ') t' +
             ')'
           ),
-          'videoAbuseCount'
+          'videoAbusesCount'
         ],
         [
           literal(
@@ -165,10 +192,10 @@ enum ScopeNames {
               'SELECT COUNT("videoAbuse"."id") ' +
               'FROM "videoAbuse" ' +
               'INNER JOIN "account" ON "account"."id" = "videoAbuse"."reporterAccountId" ' +
-              'WHERE "account"."actorId" = "UserModel"."id"' +
+              'WHERE "account"."userId" = "UserModel"."id"' +
             ')'
           ),
-          'videoAbuseCreatedCount'
+          'videoAbusesCreatedCount'
         ],
         [
           literal(
@@ -176,10 +203,10 @@ enum ScopeNames {
               'SELECT COUNT("videoComment"."id") ' +
               'FROM "videoComment" ' +
               'INNER JOIN "account" ON "account"."id" = "videoComment"."accountId" ' +
-              'WHERE "account"."actorId" = "UserModel"."id"' +
+              'WHERE "account"."userId" = "UserModel"."id"' +
             ')'
           ),
-          'videoCommentCount'
+          'videoCommentsCount'
         ]
       ]
     }
@@ -485,11 +512,14 @@ export class UserModel extends Model<UserModel> {
     return UserModel.findAll(query)
   }
 
-  static loadById (id: number): Bluebird<MUserDefault> {
-    return UserModel.scope([
-      ScopeNames.WITH_VIDEOCHANNELS,
-      ScopeNames.WITH_STATS
-    ]).findByPk(id)
+  static loadById (id: number, withStats = false): Bluebird<MUserDefault> {
+    const scopes = [
+      ScopeNames.WITH_VIDEOCHANNELS
+    ]
+
+    if (withStats) scopes.push(ScopeNames.WITH_STATS)
+
+    return UserModel.scope(scopes).findByPk(id)
   }
 
   static loadByUsername (username: string): Bluebird<MUserDefault> {
@@ -509,7 +539,7 @@ export class UserModel extends Model<UserModel> {
       }
     }
 
-    return UserModel.scope(ScopeNames.WITH_VIDEOCHANNELS).findOne(query)
+    return UserModel.scope(ScopeNames.FOR_ME_API).findOne(query)
   }
 
   static loadByEmail (email: string): Bluebird<MUserDefault> {
@@ -695,13 +725,13 @@ export class UserModel extends Model<UserModel> {
   toFormattedJSON (this: MUserFormattable, parameters: { withAdminFlags?: boolean } = {}): User {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
-    const videoCount = this.get('videoCount')
-    const videoAbuseCount = this.get('videoAbuseCount') as string
-    const videoAbuseCreatedCount = this.get('videoAbuseCreatedCount')
-    const videoCommentCount = this.get('videoCommentCount')
+    const videosCount = this.get('videosCount')
+    const videoAbusesCount = this.get('videoAbusesCount') as string
+    const videoAbusesCreatedCount = this.get('videoAbusesCreatedCount')
+    const videoCommentsCount = this.get('videoCommentsCount')
 
-    function parseAbuseCount (videoAbuseCount: string, position: number) {
-      return videoAbuseCount.replace(/[()]/g, '').split(',').map(x => parseInt(x, 10))[position]
+    function parseAbuseCount (videoAbusesCount: string, position: number) {
+      return videoAbusesCount.split(':').map(x => parseInt(x, 10))[position]
     }
 
     const json: User = {
@@ -732,20 +762,20 @@ export class UserModel extends Model<UserModel> {
       videoQuotaUsedDaily: videoQuotaUsedDaily !== undefined
         ? parseInt(videoQuotaUsedDaily + '', 10)
         : undefined,
-      videoCount: videoCount !== undefined
-        ? parseInt(videoCount + '', 10)
+      videosCount: videosCount !== undefined
+        ? parseInt(videosCount + '', 10)
         : undefined,
-      videoAbuseCount: videoAbuseCount !== undefined
-        ? parseAbuseCount(videoAbuseCount, 0)
+      videoAbusesCount: videoAbusesCount !== undefined
+        ? parseAbuseCount(videoAbusesCount, 0)
         : undefined,
-      videoAbuseAcceptedCount: videoAbuseCount !== undefined
-        ? parseAbuseCount(videoAbuseCount, 1)
+      videoAbusesAcceptedCount: videoAbusesCount !== undefined
+        ? parseAbuseCount(videoAbusesCount, 1)
         : undefined,
-      videoAbuseCreatedCount: videoAbuseCreatedCount !== undefined
-        ? parseInt(videoAbuseCreatedCount + '', 10)
+      videoAbusesCreatedCount: videoAbusesCreatedCount !== undefined
+        ? parseInt(videoAbusesCreatedCount + '', 10)
         : undefined,
-      videoCommentCount: videoCommentCount !== undefined
-        ? parseInt(videoCommentCount + '', 10)
+      videoCommentsCount: videoCommentsCount !== undefined
+        ? parseInt(videoCommentsCount + '', 10)
         : undefined,
 
       noInstanceConfigWarningModal: this.noInstanceConfigWarningModal,
