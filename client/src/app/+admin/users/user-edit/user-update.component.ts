@@ -12,8 +12,7 @@ import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserService } from '@app/shared'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { User } from '@app/shared/users/user.model'
-import { Account } from '@app/shared/account/account.model'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-user-update',
@@ -29,6 +28,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
     protected configService: ConfigService,
+    protected screenService: ScreenService,
     protected auth: AuthService,
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,

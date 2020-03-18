@@ -130,11 +130,12 @@ function getMyUserVideoQuotaUsed (url: string, accessToken: string, specialStatu
           .expect('Content-Type', /json/)
 }
 
-function getUserInformation (url: string, accessToken: string, userId: number) {
+function getUserInformation (url: string, accessToken: string, userId: number, withStats = false) {
   const path = '/api/v1/users/' + userId
 
   return request(url)
     .get(path)
+    .query({ withStats })
     .set('Accept', 'application/json')
     .set('Authorization', 'Bearer ' + accessToken)
     .expect(200)

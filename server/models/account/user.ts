@@ -726,13 +726,9 @@ export class UserModel extends Model<UserModel> {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
     const videosCount = this.get('videosCount')
-    const videoAbusesCount = this.get('videoAbusesCount') as string
+    const [ videoAbusesCount, videoAbusesAcceptedCount ] = (this.get('videoAbusesCount') as string).split(':')
     const videoAbusesCreatedCount = this.get('videoAbusesCreatedCount')
     const videoCommentsCount = this.get('videoCommentsCount')
-
-    function parseAbuseCount (videoAbusesCount: string, position: number) {
-      return videoAbusesCount.split(':').map(x => parseInt(x, 10))[position]
-    }
 
     const json: User = {
       id: this.id,
@@ -765,11 +761,11 @@ export class UserModel extends Model<UserModel> {
       videosCount: videosCount !== undefined
         ? parseInt(videosCount + '', 10)
         : undefined,
-      videoAbusesCount: videoAbusesCount !== undefined
-        ? parseAbuseCount(videoAbusesCount, 0)
+      videoAbusesCount: videoAbusesCount
+        ? parseInt(videoAbusesCount, 10)
         : undefined,
-      videoAbusesAcceptedCount: videoAbusesCount !== undefined
-        ? parseAbuseCount(videoAbusesCount, 1)
+      videoAbusesAcceptedCount: videoAbusesAcceptedCount
+        ? parseInt(videoAbusesAcceptedCount, 10)
         : undefined,
       videoAbusesCreatedCount: videoAbusesCreatedCount !== undefined
         ? parseInt(videoAbusesCreatedCount + '', 10)

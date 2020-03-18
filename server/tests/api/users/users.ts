@@ -254,7 +254,7 @@ describe('Test users', function () {
       const res1 = await getMyUserInformation(server.url, accessTokenUser)
       const userMe: MyUser = res1.body
 
-      const res2 = await getUserInformation(server.url, server.accessToken, userMe.id)
+      const res2 = await getUserInformation(server.url, server.accessToken, userMe.id, true)
       const userGet: User = res2.body
 
       for (const user of [ userMe, userGet ]) {
@@ -273,6 +273,16 @@ describe('Test users', function () {
 
       expect(userMe.specialPlaylists).to.have.lengthOf(1)
       expect(userMe.specialPlaylists[0].type).to.equal(VideoPlaylistType.WATCH_LATER)
+
+      // Check stats are included with withStats
+      expect(userGet.videosCount).to.be.a('number')
+      expect(userGet.videosCount).to.equal(0)
+      expect(userGet.videoCommentsCount).to.be.a('number')
+      expect(userGet.videoCommentsCount).to.equal(0)
+      expect(userGet.videoAbusesCount).to.be.a('number')
+      expect(userGet.videoAbusesCount).to.equal(0)
+      expect(userGet.videoAbusesAcceptedCount).to.be.a('number')
+      expect(userGet.videoAbusesAcceptedCount).to.equal(0)
     })
   })
 

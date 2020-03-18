@@ -57,7 +57,7 @@
   </div>
 </ng-template>
 
-<div class="form-row">
+<div class="form-row" *ngIf="!isInBigView()"> <!-- hidden on large screens, as it is then displayed on the right side of the form -->
   <div class="col-12 col-xl-3"></div>
 
   <div class="form-group-right col-12 col-xl-9">
@@ -70,15 +70,15 @@
 <div class="form-row mt-4"> <!-- user grid -->
   <div class="form-group col-12 col-lg-4 col-xl-3">
     <div class="anchor" id="user"></div> <!-- user anchor -->
-    <div *ngIf="isCreation()" i18n class="account-title">NEW USER</div>
+    <div *ngIf="isCreation()" class="account-title" i18n>NEW USER</div>
     <div *ngIf="!isCreation() && user" class="account-title">
       <my-actor-avatar-info [actor]="user.account"></my-actor-avatar-info>
     </div>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9 form-row">
 
-    <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
+    <form role="form" (ngSubmit)="formValidated()" [formGroup]="form" [ngClass]="{ 'col-5': isInBigView() }">
       <div class="form-group" *ngIf="isCreation()">
         <label i18n for="username">Username</label>
         <input
@@ -89,7 +89,7 @@
           {{ formErrors.username }}
         </div>
       </div>
-
+  
       <div class="form-group">
         <label i18n for="email">Email</label>
         <input
@@ -101,7 +101,7 @@
           {{ formErrors.email }}
         </div>
       </div>
-
+  
       <div class="form-group" *ngIf="isCreation()">
         <label i18n for="password">Password</label>
         <my-help *ngIf="isPasswordOptional()">
@@ -119,7 +119,7 @@
           {{ formErrors.password }}
         </div>
       </div>
-
+  
       <div class="form-group">
         <label i18n for="role">Role</label>
         <div class="peertube-select-container">
@@ -129,12 +129,12 @@
               </option>
             </select>
         </div>
-
+  
         <div *ngIf="formErrors.role" class="form-error">
           {{ formErrors.role }}
         </div>
       </div>
-
+  
       <div class="form-group">
         <label i18n for="videoQuota">Video quota</label>
         <div class="peertube-select-container">
@@ -144,13 +144,13 @@
             </option>
           </select>
         </div>
-
+  
         <div i18n class="transcoding-information" *ngIf="isTranscodingInformationDisplayed()">
           Transcoding is enabled. The video quota only takes into account <strong>original</strong> video size. <br />
           At most, this user could upload ~ {{ computeQuotaWithTranscoding() | bytes: 0 }}.
         </div>
       </div>
-
+  
       <div class="form-group">
         <label i18n for="videoQuotaDaily">Daily video quota</label>
         <div class="peertube-select-container">
@@ -161,16 +161,20 @@
           </select>
         </div>
       </div>
-
+  
       <div class="form-group">
         <my-peertube-checkbox
           inputName="byPassAutoBlacklist" formControlName="byPassAutoBlacklist"
           i18n-labelText labelText="Doesn't need review before a video goes public"
         ></my-peertube-checkbox>
       </div>
-
+  
       <input type="submit" value="{{ getFormButtonTitle() }}" [disabled]="!form.valid">
     </form>
+
+    <div *ngIf="isInBigView()" class="col-7">
+      <ng-template *ngTemplateOutlet="dashboard"></ng-template>
+    </div>
 
   </div>
 </div>
