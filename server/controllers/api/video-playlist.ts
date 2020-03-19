@@ -463,7 +463,13 @@ async function regeneratePlaylistThumbnail (videoPlaylist: MVideoPlaylistThumbna
 async function generateThumbnailForPlaylist (videoPlaylist: MVideoPlaylistThumbnail, video: MVideoThumbnail) {
   logger.info('Generating default thumbnail to playlist %s.', videoPlaylist.url)
 
-  const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, video.getMiniature().filename)
+  const videoMiniature = video.getMiniature()
+  if (!videoMiniature) {
+    logger.info('Cannot generate thumbnail for playlist %s because video %s does not have any.', videoPlaylist.url, video.url)
+    return
+  }
+
+  const inputPath = join(CONFIG.STORAGE.THUMBNAILS_DIR, videoMiniature.filename)
   const thumbnailModel = await createPlaylistMiniatureFromExisting(inputPath, videoPlaylist, true, true)
 
   thumbnailModel.videoPlaylistId = videoPlaylist.id
