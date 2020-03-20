@@ -30,7 +30,7 @@ window.addEventListener('load', async () => {
   ]
 
   monitoredEvents.forEach(e => {
-    player.addEventListener(e as PlayerEventType, () => console.log(`PLAYER: event '${e}' received`))
+    player.addEventListener(e as PlayerEventType, (param) => console.log(`PLAYER: event '${e}' received`, param))
     console.log(`PLAYER: now listening for event '${e}'`)
   })
 

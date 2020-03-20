@@ -111,14 +111,6 @@ Get the playback volume. Returns a value between `0` and `1`.
 
 You can subscribe to events by using `addEventListener()`. See above for details.
 
-## Event `play`
-
-Fired when playback begins or is resumed after pausing.
-
-## Event `pause`
-
-Fired when playback is paused.
-
 ## Event `playbackStatusUpdate`
 
 Fired every half second to provide the current status of playback. The parameter of the callback will resemble:
@@ -135,7 +127,7 @@ The `volume` field contains the volume from `0` (silent) to `1` (full volume). T
 
 ## Event `playbackStatusChange`
 
-Fired when playback transitions between states, such as `pausing` and `playing`. More states may be added later.
+Fired when playback transitions between states, such as `paused` and `playing`. More states may be added later.
 
 ## Event `resolutionUpdate`
 
