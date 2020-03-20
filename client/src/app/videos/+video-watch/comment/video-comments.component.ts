@@ -183,7 +183,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
           // Mark the comment as deleted
           this.softDeleteComment(commentToDelete)
 
-          if (this.highlightedThread.id === commentToDelete.id) this.highlightedThread = undefined
+          if (this.highlightedThread?.id === commentToDelete.id) this.highlightedThread = undefined
         },
 
         err => this.notifier.error(err.message)

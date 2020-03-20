@@ -80,7 +80,8 @@ async function sendCreateVideoComment (comment: MCommentOwnerVideo, t: Transacti
   // Add the actor that commented too
   actorsInvolvedInComment.push(byActor)
 
-  const parentsCommentActors = threadParentComments.map(c => c.Account.Actor)
+  const parentsCommentActors = threadParentComments.filter(c => !c.isDeleted())
+                                                   .map(c => c.Account.Actor)
 
   let audience: ActivityAudience
   if (isOrigin) {

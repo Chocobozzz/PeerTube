@@ -32,6 +32,8 @@ function getVideoCommentAudience (
 
   // Send to actors we reply to
   for (const parentComment of threadParentComments) {
+    if (parentComment.isDeleted()) continue
+
     cc.push(parentComment.Account.Actor.url)
   }
 

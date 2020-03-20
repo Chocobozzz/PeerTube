@@ -125,7 +125,12 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     const html = await this.markdownService.textMarkdownToHTML(this.comment.text, true)
     this.sanitizedCommentHTML = await this.markdownService.processVideoTimestamps(html)
     this.newParentComments = this.parentComments.concat([ this.comment ])
-    this.commentAccount = new Account(this.comment.account)
-    this.getUserIfNeeded(this.commentAccount)
+
+    if (this.comment.account) {
+      this.commentAccount = new Account(this.comment.account)
+      this.getUserIfNeeded(this.commentAccount)
+    } else {
+      this.comment.account = null
+    }
   }
 }
