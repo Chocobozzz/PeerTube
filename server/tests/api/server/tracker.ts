@@ -73,6 +73,8 @@ describe('Test tracker', function () {
   it('Should disable the tracker', function (done) {
     this.timeout(20000)
 
+    const errCb = () => done(new Error('Tracker is enabled'))
+
     killallServers([ server ])
     reRunServer(server, { tracker: { enabled: false } })
       .then(() => {
@@ -83,10 +85,14 @@ describe('Test tracker', function () {
         torrent.on('error', done)
         torrent.on('warning', warn => {
           const message = typeof warn === 'string' ? warn : warn.message
-          if (message.includes('disabled ')) return done()
+          if (message.includes('disabled ')) {
+            torrent.off('done', errCb)
+
+            return done()
+          }
         })
 
-        torrent.on('done', () => done(new Error('Tracker is enabled')))
+        torrent.on('done', errCb)
       })
   })
 
