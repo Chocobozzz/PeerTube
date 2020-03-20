@@ -309,7 +309,10 @@ export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> 
     // Owned video, don't filter it
     if (accountId && video.VideoChannel.Account.id === accountId) return VideoPlaylistElementType.REGULAR
 
-    if (video.privacy === VideoPrivacy.PRIVATE) return VideoPlaylistElementType.PRIVATE
+    // Internal video?
+    if (video.privacy === VideoPrivacy.INTERNAL && accountId) return VideoPlaylistElementType.REGULAR
+
+    if (video.privacy === VideoPrivacy.PRIVATE || video.privacy === VideoPrivacy.INTERNAL) return VideoPlaylistElementType.PRIVATE
 
     if (video.isBlacklisted() || video.isBlocked()) return VideoPlaylistElementType.UNAVAILABLE
     if (video.nsfw === true && displayNSFW === false) return VideoPlaylistElementType.UNAVAILABLE
