@@ -28,7 +28,7 @@ mkdir -p ./docker-volume/traefik
 #### Get the latest reverse proxy configuration
 
 ```shell
-curl https://raw.github.com/chocobozzz/PeerTube/master/support/docker/production/config/traefik.toml > ./docker-volume/traefik/traefik.toml
+curl https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/config/traefik.toml > ./docker-volume/traefik/traefik.toml
 ```
 
 View the source of the file you're about to download: [traefik.toml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/config/traefik.toml)
@@ -46,7 +46,7 @@ chmod 600 ./docker-volume/traefik/acme.json
 #### Get the latest Compose file
 
 ```shell
-curl https://raw.github.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml 
+curl https://raw.githubusercontent.com/chocobozzz/PeerTube/master/support/docker/production/docker-compose.yml > docker-compose.yml 
 ```
 
 View the source of the file you're about to download: [docker-compose.yml](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/docker-compose.yml)
@@ -55,7 +55,7 @@ View the source of the file you're about to download: [docker-compose.yml](https
 #### Get the latest env_file
 
 ```shell
-curl https://raw.github.com/Chocobozzz/PeerTube/master/support/docker/production/.env > .env
+curl https://raw.githubusercontent.com/Chocobozzz/PeerTube/master/support/docker/production/.env > .env
 ```
 
 View the source of the file you're about to download: [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env)
