@@ -633,7 +633,6 @@ describe('Test users', function () {
   })
 
   describe('Updating another user', function () {
-
     it('Should be able to update another user', async function () {
       await updateUser({
         url: server.url,
@@ -679,6 +678,19 @@ describe('Test users', function () {
 
       user.password = 'password updated'
       accessTokenUser = await userLogin(server, user)
+    })
+  })
+
+  describe('Overview of a user', function () {
+    it('Should have correct statistics about a user', async function () {
+      const res = await getUserInformation(server.url, accessToken, userId)
+      const user: User = res.body
+
+      // Check stats are correct with withStats
+      expect(user.videosCount).to.equal(0)
+      expect(user.videoCommentsCount).to.equal(0)
+      expect(user.videoAbusesCount).to.equal(0)
+      expect(user.videoAbusesAcceptedCount).to.equal(0)
     })
   })
 

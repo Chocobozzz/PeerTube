@@ -76,7 +76,7 @@
     </div>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9 form-row">
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">
 
     <form role="form" (ngSubmit)="formValidated()" [formGroup]="form" [ngClass]="{ 'col-5': isInBigView() }">
       <div class="form-group" *ngIf="isCreation()">
@@ -182,11 +182,11 @@
 
 <div *ngIf="!isCreation() && user" class="form-row mt-4"> <!-- danger zone grid -->
   <div class="form-group col-12 col-lg-4 col-xl-3">
-    <div class="anchor" id="user"></div> <!-- danger zone anchor -->
+    <div class="anchor" id="danger"></div> <!-- danger zone anchor -->
     <div i18n class="account-title">DANGER ZONE</div>
   </div>
 
-  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">
 
     <div class="danger-zone">
       <div class="form-group reset-password-email">
