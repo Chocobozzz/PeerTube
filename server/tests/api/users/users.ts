@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { MyUser, User, UserRole, Video, VideoPlaylistType } from '../../../../shared/index'
+import { MyUser, User, UserRole, Video, VideoPlaylistType, VideoAbuseState, VideoAbuseUpdate } from '../../../../shared/index'
 import {
   blockUser,
   cleanupTests,
@@ -33,7 +33,11 @@ import {
   updateMyUser,
   updateUser,
   uploadVideo,
-  userLogin
+  userLogin,
+  reportVideoAbuse,
+  addVideoCommentThread,
+  updateVideoAbuse,
+  getVideoAbusesList
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
@@ -681,19 +685,6 @@ describe('Test users', function () {
     })
   })
 
-  describe('Overview of a user', function () {
-    it('Should have correct statistics about a user', async function () {
-      const res = await getUserInformation(server.url, accessToken, userId)
-      const user: User = res.body
-
-      // Check stats are correct with withStats
-      expect(user.videosCount).to.equal(0)
-      expect(user.videoCommentsCount).to.equal(0)
-      expect(user.videoAbusesCount).to.equal(0)
-      expect(user.videoAbusesAcceptedCount).to.equal(0)
-    })
-  })
-
   describe('Video blacklists', function () {
     it('Should be able to list video blacklist by a moderator', async function () {
       await getBlacklistedVideosList({ url: server.url, token: accessTokenUser })
@@ -733,18 +724,18 @@ describe('Test users', function () {
         password: 'my super password'
       }
 
-      accessToken = await userLogin(server, user15)
+      accessTokenUser = await userLogin(server, user15)
     })
 
     it('Should have the correct display name', async function () {
-      const res = await getMyUserInformation(server.url, accessToken)
+      const res = await getMyUserInformation(server.url, accessTokenUser)
       const user: User = res.body
 
       expect(user.account.displayName).to.equal('super user 15')
     })
 
     it('Should have the correct video quota', async function () {
-      const res = await getMyUserInformation(server.url, accessToken)
+      const res = await getMyUserInformation(server.url, accessTokenUser)
       const user = res.body
 
       expect(user.videoQuota).to.equal(5 * 1024 * 1024)
@@ -762,7 +753,7 @@ describe('Test users', function () {
         expect(res.body.data.find(u => u.username === 'user_15')).to.not.be.undefined
       }
 
-      await deleteMe(server.url, accessToken)
+      await deleteMe(server.url, accessTokenUser)
 
       {
         const res = await getUsersList(server.url, server.accessToken)
@@ -785,17 +776,93 @@ describe('Test users', function () {
       })
       const user16Id = resUser.body.user.id
 
-      accessToken = await userLogin(server, user16)
+      accessTokenUser = await userLogin(server, user16)
 
-      await getMyUserInformation(server.url, accessToken, 200)
+      await getMyUserInformation(server.url, accessTokenUser, 200)
       await blockUser(server.url, user16Id, server.accessToken)
 
-      await getMyUserInformation(server.url, accessToken, 401)
+      await getMyUserInformation(server.url, accessTokenUser, 401)
       await userLogin(server, user16, 400)
 
       await unblockUser(server.url, user16Id, server.accessToken)
-      accessToken = await userLogin(server, user16)
-      await getMyUserInformation(server.url, accessToken, 200)
+      accessTokenUser = await userLogin(server, user16)
+      await getMyUserInformation(server.url, accessTokenUser, 200)
+    })
+  })
+
+  describe('User stats', function () {
+    let user17Id
+    let user17AccessToken
+
+    it('Should report correct initial statistics about a user', async function () {
+      const user17 = {
+        username: 'user_17',
+        password: 'my super password'
+      }
+      const resUser = await createUser({
+        url: server.url,
+        accessToken: server.accessToken,
+        username: user17.username,
+        password: user17.password
+      })
+
+      user17Id = resUser.body.user.id
+      user17AccessToken = await userLogin(server, user17)
+
+      const res = await getUserInformation(server.url, accessToken, user17Id, true)
+      const user: User = res.body
+
+      expect(user.videosCount).to.equal(0)
+      expect(user.videoCommentsCount).to.equal(0)
+      expect(user.videoAbusesCount).to.equal(0)
+      expect(user.videoAbusesCreatedCount).to.equal(0)
+      expect(user.videoAbusesAcceptedCount).to.equal(0)
+    })
+
+    it('Should report correct videos count', async function () {
+      const videoAttributes = {
+        name: 'video to test user stats'
+      }
+      await uploadVideo(server.url, user17AccessToken, videoAttributes)
+      const res1 = await getVideosList(server.url)
+      videoId = res1.body.data.find(video => video.name === videoAttributes.name)
+
+      const res2 = await getUserInformation(server.url, accessToken, user17Id, true)
+      const user: User = res2.body
+
+      expect(user.videosCount).to.equal(1)
+    })
+
+    it('Should report correct video abuses counts', async function () {
+      const reason = 'my super bad reason'
+      await reportVideoAbuse(server.url, user17AccessToken, videoId, reason)
+
+      const res1 = await getVideoAbusesList(server.url, accessToken)
+      const abuseId = res1.body.data[0]
+
+      const res2 = await getUserInformation(server.url, accessToken, user17Id, true)
+      const user2: User = res2.body
+
+      expect(user2.videoAbusesCount).to.equal(1) // number of incriminations
+      expect(user2.videoAbusesCreatedCount).to.equal(1) // number of reports created
+
+      const body: VideoAbuseUpdate = { state: VideoAbuseState.ACCEPTED }
+      await updateVideoAbuse(server.url, accessToken, videoId, abuseId, body)
+
+      const res3 = await getUserInformation(server.url, accessToken, user17Id, true)
+      const user3: User = res3.body
+
+      expect(user3.videoAbusesAcceptedCount).to.equal(1) // number of reports created accepted
+    })
+
+    it('Should report correct video comments for user', async function () {
+      const text = 'super comment'
+      await addVideoCommentThread(server.url, user17AccessToken, videoId, text)
+
+      const res = await getUserInformation(server.url, accessToken, user17Id, true)
+      const user: User = res.body
+
+      expect(user.videoCommentsCount).to.equal(1)
     })
   })
 
