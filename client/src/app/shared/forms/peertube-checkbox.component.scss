@@ -34,4 +34,19 @@
   .wrapper:empty {
     display: none;
   }
+
+  .recommended {
+    margin-left: .5rem;
+    align-self: baseline;
+    display: inline-block;
+    padding: 4px 6px;
+    cursor: default;
+    border-radius: 3px;
+    font-size: 12px;
+    line-height: 12px;
+    font-weight: 500;
+    color: var(--inputPlaceholderColor);
+    background-color: rgba(217,225,232,.1);
+    border: 1px solid rgba(217,225,232,.5);
+  }
 }

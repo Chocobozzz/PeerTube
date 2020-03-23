@@ -21,6 +21,7 @@ export class PeertubeCheckboxComponent implements ControlValueAccessor, AfterCon
   @Input() labelInnerHTML: string
   @Input() helpPlacement = 'top auto'
   @Input() disabled = false
+  @Input() recommended = false
 
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'label' | 'help'>>
 

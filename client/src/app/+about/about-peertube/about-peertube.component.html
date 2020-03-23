@@ -65,8 +65,11 @@
   <div class="privacy-contributors">
     <my-about-peertube-contributors></my-about-peertube-contributors>
 
-    <div class="p2p-privacy">
-      <h3 i18n class="section-title">P2P & Privacy</h3>
+    <div class="p2p-privacy">     
+      <h3 class="section-title">
+        <div class="anchor" id="privacy"></div> <!-- privacy anchor -->
+        <ng-container i18n>P2P & Privacy</ng-container>
+      </h3>
 
       <p i18n>
         PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server,
@@ -95,7 +98,7 @@
         <li i18n>
           For each request sent, the tracker returns random peers at a limited number.
           For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-          requests sent to know every peers in the swarm
+          requests sent to know every peer in the swarm
         </li>
 
         <li i18n>

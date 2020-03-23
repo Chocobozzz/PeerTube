@@ -7,5 +7,6 @@
   button {
     @include peertube-button;
     @include grey-button;
+    @include disable-outline;
   }
 }
