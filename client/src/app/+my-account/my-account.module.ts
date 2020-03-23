@@ -1,7 +1,8 @@
-import { TableModule } from 'primeng/table'
 import { NgModule } from '@angular/core'
+import { TableModule } from 'primeng/table'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { InputSwitchModule } from 'primeng/inputswitch'
+import { ChartModule } from 'primeng/chart'
 import { SharedModule } from '../shared'
 import { MyAccountRoutingModule } from './my-account-routing.module'
 import { MyAccountChangePasswordComponent } from './my-account-settings/my-account-change-password/my-account-change-password.component'
@@ -44,7 +45,8 @@ import { MyAccountChangeEmailComponent } from '@app/+my-account/my-account-setti
     SharedModule,
     TableModule,
     InputSwitchModule,
-    DragDropModule
+    DragDropModule,
+    ChartModule
   ],
 
   declarations: [

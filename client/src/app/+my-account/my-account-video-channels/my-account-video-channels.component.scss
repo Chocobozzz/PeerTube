@@ -6,13 +6,14 @@
 }
 
 ::ng-deep .action-button {
-  &.action-button-delete {
+  &.action-button-edit {
     margin-right: 10px;
   }
 }
 
 .video-channel {
   @include row-blocks;
+  padding-bottom: 0;
 
   img {
     @include avatar(80px);
@@ -56,6 +57,11 @@
 .video-channels-header {
   text-align: right;
   margin: 20px 0 50px;
+}
+
+::ng-deep .chartjs-render-monitor {
+  position: relative;
+  top: 1px;
 }
 
 @media screen and (max-width: $small-view) {

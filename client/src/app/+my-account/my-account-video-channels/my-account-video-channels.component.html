@@ -6,7 +6,7 @@
 </div>
 
 <div class="video-channels">
-  <div *ngFor="let videoChannel of videoChannels" class="video-channel">
+  <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">
     <a [routerLink]="[ '/video-channels', videoChannel.nameWithHost ]">
       <img [src]="videoChannel.avatarUrl" alt="Avatar" />
     </a>
@@ -17,13 +17,16 @@
         <div class="video-channel-name">{{ videoChannel.nameWithHost }}</div>
       </a>
 
-      <div i18n class="video-channel-followers">{{ videoChannel.followersCount }} subscribers</div>
+      <div i18n class="video-channel-followers">{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
+
+      <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end">
+        <p-chart *ngIf="videoChannelsData && videoChannelsData[i]" type="line" [data]="videoChannelsData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
+      </div>
     </div>
 
     <div class="video-channel-buttons">
-      <my-delete-button (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
-
       <my-edit-button [routerLink]="[ 'update', videoChannel.nameWithHost ]"></my-edit-button>
+      <my-delete-button (click)="deleteVideoChannel(videoChannel)"></my-delete-button>
     </div>
   </div>
 </div>
