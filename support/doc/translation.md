@@ -49,4 +49,4 @@ For example:
 
 should be in french 
 
-```{VAR_PLURAL, plural, =0 {Aucune vidéos} =1 {1 vidéo} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> vidéos} }```
+```{VAR_PLURAL, plural, =0 {Aucune vidéo} =1 {1 vidéo} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> vidéos} }```
