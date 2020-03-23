@@ -30,7 +30,7 @@ import { buildServerIdsFollowedBy, buildTrigramSearchIndex, createSimilarityAttr
 import { VideoModel } from './video'
 import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { FindOptions, Op } from 'sequelize'
+import { FindOptions, Op, literal, ScopeOptions } from 'sequelize'
 import { AvatarModel } from '../avatar/avatar'
 import { VideoPlaylistModel } from './video-playlist'
 import * as Bluebird from 'bluebird'
@@ -45,14 +45,19 @@ import {
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',
+  SUMMARY = 'SUMMARY',
   WITH_ACCOUNT = 'WITH_ACCOUNT',
   WITH_ACTOR = 'WITH_ACTOR',
   WITH_VIDEOS = 'WITH_VIDEOS',
-  SUMMARY = 'SUMMARY'
+  WITH_STATS = 'WITH_STATS'
 }
 
 type AvailableForListOptions = {
   actorId: number
+}
+
+type AvailableWithStatsOptions = {
+  daysPrior: number
 }
 
 export type SummaryOptions = {
@@ -69,40 +74,6 @@ export type SummaryOptions = {
   ]
 }))
 @Scopes(() => ({
-  [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
-    const base: FindOptions = {
-      attributes: [ 'id', 'name', 'description', 'actorId' ],
-      include: [
-        {
-          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
-          model: ActorModel.unscoped(),
-          required: true,
-          include: [
-            {
-              attributes: [ 'host' ],
-              model: ServerModel.unscoped(),
-              required: false
-            },
-            {
-              model: AvatarModel.unscoped(),
-              required: false
-            }
-          ]
-        }
-      ]
-    }
-
-    if (options.withAccount === true) {
-      base.include.push({
-        model: AccountModel.scope({
-          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
-        }),
-        required: true
-      })
-    }
-
-    return base
-  },
   [ScopeNames.FOR_API]: (options: AvailableForListOptions) => {
     // Only list local channels OR channels that are on an instance followed by actorId
     const inQueryInstanceFollow = buildServerIdsFollowedBy(options.actorId)
@@ -143,6 +114,40 @@ export type SummaryOptions = {
       ]
     }
   },
+  [ScopeNames.SUMMARY]: (options: SummaryOptions = {}) => {
+    const base: FindOptions = {
+      attributes: [ 'id', 'name', 'description', 'actorId' ],
+      include: [
+        {
+          attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
+          model: ActorModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'host' ],
+              model: ServerModel.unscoped(),
+              required: false
+            },
+            {
+              model: AvatarModel.unscoped(),
+              required: false
+            }
+          ]
+        }
+      ]
+    }
+
+    if (options.withAccount === true) {
+      base.include.push({
+        model: AccountModel.scope({
+          method: [ AccountModelScopeNames.SUMMARY, { withAccountBlockerIds: options.withAccountBlockerIds } as AccountSummaryOptions ]
+        }),
+        required: true
+      })
+    }
+
+    return base
+  },
   [ScopeNames.WITH_ACCOUNT]: {
     include: [
       {
@@ -151,16 +156,52 @@ export type SummaryOptions = {
       }
     ]
   },
+  [ScopeNames.WITH_ACTOR]: {
+    include: [
+      ActorModel
+    ]
+  },
   [ScopeNames.WITH_VIDEOS]: {
     include: [
       VideoModel
     ]
   },
-  [ScopeNames.WITH_ACTOR]: {
-    include: [
-      ActorModel
-    ]
-  }
+  [ScopeNames.WITH_STATS]: (options: AvailableWithStatsOptions = { daysPrior: 30 }) => ({
+    attributes: {
+      include: [
+        [
+          literal(
+            '(' +
+            `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
+            'FROM ( ' +
+              'WITH ' +
+                'days AS ( ' +
+                  `SELECT generate_series(date_trunc('day', now()) - '${options.daysPrior} day'::interval, ` +
+                         `date_trunc('day', now()), '1 day'::interval) AS day ` +
+                '), ' +
+                'views AS ( ' +
+                  'SELECT * ' +
+                  'FROM "videoView" ' +
+                  'WHERE "videoView"."videoId" IN ( ' +
+                    'SELECT "video"."id" ' +
+                    'FROM "video" ' +
+                    'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
+                  ') ' +
+                ') ' +
+              'SELECT days.day AS day, ' +
+                     'COALESCE(SUM(views.views), 0) AS views ' +
+              'FROM days ' +
+              `LEFT JOIN views ON date_trunc('day', "views"."createdAt") = days.day ` +
+              'GROUP BY 1 ' +
+              'ORDER BY day ' +
+            ') t' +
+            ')'
+          ),
+          'viewsPerDay'
+        ]
+      ]
+    }
+  })
 }))
 @Table({
   tableName: 'videoChannel',
@@ -352,6 +393,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     start: number
     count: number
     sort: string
+    withStats?: boolean
   }) {
     const query = {
       offset: options.start,
@@ -368,7 +410,17 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       ]
     }
 
+    const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]
+
+    options.withStats = true // TODO: remove beyond after initial tests
+    if (options.withStats) {
+      scopes.push({
+        method: [ ScopeNames.WITH_STATS, { daysPrior: 30 } as AvailableWithStatsOptions ]
+      })
+    }
+
     return VideoChannelModel
+      .scope(scopes)
       .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
@@ -496,6 +548,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   toFormattedJSON (this: MChannelFormattable): VideoChannel {
+    const viewsPerDay = this.get('viewsPerDay') as string
+
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
       id: this.id,
@@ -505,7 +559,16 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       isLocal: this.Actor.isOwned(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      ownerAccount: undefined
+      ownerAccount: undefined,
+      viewsPerDay: viewsPerDay !== undefined
+        ? viewsPerDay.split(',').map(v => {
+          const o = v.split('|')
+          return {
+            date: new Date(o[0]),
+            views: +o[1]
+          }
+        })
+        : undefined
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
