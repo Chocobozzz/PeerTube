@@ -57,7 +57,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
             min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
             max: this.videoChannelsMaximumDailyViews
           }
-        }],
+        }]
       },
       layout: {
         padding: {
@@ -68,7 +68,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
         }
       },
       elements: {
-        point:{
+        point: {
           radius: 0
         }
       },
@@ -76,14 +76,12 @@ export class MyAccountVideoChannelsComponent implements OnInit {
         mode: 'index',
         intersect: false,
         custom: function (tooltip: any) {
-          if (!tooltip) return;
-          // disable displaying the color box;
-          tooltip.displayColors = false;
+          if (!tooltip) return
+          // disable displaying the color box
+          tooltip.displayColors = false
         },
         callbacks: {
-          label: function (tooltip: any, data: any) {
-            return `${tooltip.value} views`;
-          }
+          label: (tooltip: any, data: any) => `${tooltip.value} views`
         }
       },
       hover: {
@@ -124,7 +122,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   private loadVideoChannels () {
     this.authService.userInformationLoaded
-        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account)))
+        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account, null, true)))
         .subscribe(res => {
           this.videoChannels = res.data
           this.videoChannelsData = this.videoChannels.map(v => ({

@@ -17,7 +17,8 @@ import {
   accountsSortValidator,
   ensureAuthUserOwnsAccountValidator,
   videoChannelsSortValidator,
-  videosSortValidator
+  videosSortValidator,
+  videoChannelStatsValidator
 } from '../../middlewares/validators'
 import { AccountModel } from '../../models/account/account'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
@@ -56,6 +57,7 @@ accountsRouter.get('/:accountName/videos',
 
 accountsRouter.get('/:accountName/video-channels',
   asyncMiddleware(accountNameWithHostGetValidator),
+  videoChannelStatsValidator,
   paginationValidator,
   videoChannelsSortValidator,
   setDefaultSort,
@@ -116,7 +118,8 @@ async function listAccountChannels (req: express.Request, res: express.Response)
     accountId: res.locals.account.id,
     start: req.query.start,
     count: req.query.count,
-    sort: req.query.sort
+    sort: req.query.sort,
+    withStats: req.query.withStats
   }
 
   const resultList = await VideoChannelModel.listByAccount(options)
