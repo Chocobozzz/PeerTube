@@ -25,7 +25,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.nameWithHostForced = Actor.CREATE_BY_STRING(this.name, this.host, true)
 
     if (hash.viewsPerDay) {
-      this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date)}))
+      this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date) }))
     }
 
     if (hash.ownerAccount) {

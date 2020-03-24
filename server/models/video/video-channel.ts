@@ -412,7 +412,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]
 
-    options.withStats = true // TODO: remove beyond after initial tests
     if (options.withStats) {
       scopes.push({
         method: [ ScopeNames.WITH_STATS, { daysPrior: 30 } as AvailableWithStatsOptions ]

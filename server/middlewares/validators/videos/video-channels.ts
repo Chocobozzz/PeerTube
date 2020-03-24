@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { UserRight } from '../../../../shared'
 import {
   isVideoChannelDescriptionValid,
@@ -128,6 +128,15 @@ const localVideoChannelValidator = [
   }
 ]
 
+const videoChannelStatsValidator = [
+  query('withStats').optional().isBoolean().withMessage('Should have a valid stats flag'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    if (areValidationErrors(req, res)) return
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -135,7 +144,8 @@ export {
   videoChannelsUpdateValidator,
   videoChannelsRemoveValidator,
   videoChannelsNameWithHostValidator,
-  localVideoChannelValidator
+  localVideoChannelValidator,
+  videoChannelStatsValidator
 }
 
 // ---------------------------------------------------------------------------
