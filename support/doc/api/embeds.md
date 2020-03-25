@@ -46,7 +46,7 @@ await player.ready // wait for the player to be ready
 // now you can use it!
 player.play()
 player.seek(32)
-player.stop()
+player.pause()
 ```
 
 # Methods
