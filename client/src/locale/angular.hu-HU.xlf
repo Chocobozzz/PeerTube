@@ -6334,7 +6334,7 @@
       </trans-unit>
       <trans-unit id="b925172fc8e9b9a7fc6b9f5d742993b77ffdda2c" datatype="html">
         <source>Sorry, we couldn't find the page you were looking for.</source>
-        <target state="translated">Sajnáljuk, de nem találtuk meg a keresett oldalt.</target>
+        <target state="translated">Sajnáljuk, nem található a keresett oldal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+page-not-found/page-not-found.component.html</context>
           <context context-type="linenumber">4</context>
