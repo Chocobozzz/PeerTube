@@ -4424,10 +4424,7 @@ Det verkar som du inte är på en HTTPS-server. Din webbserver behöver ha TLS a
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="new">
-                      Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                      Moreover, the NSFW checkbox on video upload will be automatically checked by default.
-                    </target>
+        <target state="translated">Du kan låta andra administratörer veta att du huvudsakligen federerar känsligt material.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Dessutom kommer rutan för känsligt och oförbehållsamt innehåll vara ifylld som standard. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">88</context>
