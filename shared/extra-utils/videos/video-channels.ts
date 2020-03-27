@@ -8,7 +8,7 @@ import { ServerInfo } from '../server/servers'
 import { User } from '../../models/users/user.model'
 import { getMyUserInformation } from '../users/users'
 
-function getVideoChannelsList (url: string, start: number, count: number, sort?: string) {
+function getVideoChannelsList (url: string, start: number, count: number, sort?: string, withStats?: boolean) {
   const path = '/api/v1/video-channels'
 
   const req = request(url)
@@ -17,6 +17,7 @@ function getVideoChannelsList (url: string, start: number, count: number, sort?:
     .query({ count: count })
 
   if (sort) req.query({ sort })
+  if (withStats) req.query({ withStats })
 
   return req.set('Accept', 'application/json')
             .expect(200)
@@ -30,8 +31,9 @@ function getAccountVideoChannelsList (parameters: {
   count?: number
   sort?: string
   specialStatus?: number
+  withStats?: boolean
 }) {
-  const { url, accountName, start, count, sort = 'createdAt', specialStatus = 200 } = parameters
+  const { url, accountName, start, count, sort = 'createdAt', specialStatus = 200, withStats = false } = parameters
 
   const path = '/api/v1/accounts/' + accountName + '/video-channels'
 
@@ -41,7 +43,8 @@ function getAccountVideoChannelsList (parameters: {
     query: {
       start,
       count,
-      sort
+      sort,
+      withStats
     },
     statusCodeExpected: specialStatus
   })
