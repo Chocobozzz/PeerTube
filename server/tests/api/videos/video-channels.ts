@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
+import { User, Video, VideoChannel, viewsPerTime, VideoDetails } from '../../../../shared/index'
 import {
   cleanupTests,
   createUser,
@@ -14,7 +14,8 @@ import {
   updateVideo,
   updateVideoChannelAvatar,
   uploadVideo,
-  userLogin
+  userLogin,
+  wait
 } from '../../../../shared/extra-utils'
 import {
   addVideoChannel,
@@ -25,7 +26,8 @@ import {
   getVideoChannelsList,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideoChannel
+  updateVideoChannel,
+  viewVideo
 } from '../../../../shared/extra-utils/index'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
@@ -360,6 +362,42 @@ describe('Test video channels', function () {
       const res = await getMyUserInformation(servers[0].url, accessToken)
       const videoChannel = res.body.videoChannels[0]
       expect(videoChannel.name).to.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/)
+    }
+  })
+
+  it('Should report correct channel statistics', async function () {
+
+    {
+      const res = await getAccountVideoChannelsList({
+        url: servers[0].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        withStats: true
+      })
+      res.body.data.forEach((channel: VideoChannel) => {
+        expect(channel).to.haveOwnProperty('viewsPerDay')
+        expect(channel.viewsPerDay).to.have.length(30 + 1) // daysPrior + today
+        channel.viewsPerDay.forEach((v: viewsPerTime) => {
+          expect(v.date).to.be.an('string')
+          expect(v.views).to.equal(0)
+        })
+      })
+    }
+
+    {
+      // video has been posted on channel firstVideoChannelId since last update
+      await viewVideo(servers[0].url, videoUUID, 204, '0.0.0.1,127.0.0.1')
+      await viewVideo(servers[0].url, videoUUID, 204, '0.0.0.2,127.0.0.1')
+
+      // Wait the repeatable job
+      await wait(8000)
+
+      const res = await getAccountVideoChannelsList({
+        url: servers[0].url,
+        accountName: userInfo.account.name + '@' + userInfo.account.host,
+        withStats: true
+      })
+      const channelWithView = res.body.data.find((channel: VideoChannel) => channel.id === firstVideoChannelId)
+      expect(channelWithView.viewsPerDay.slice(-1)[0].views).to.equal(2)
     }
   })
 

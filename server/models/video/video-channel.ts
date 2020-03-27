@@ -191,7 +191,7 @@ export type SummaryOptions = {
               'SELECT days.day AS day, ' +
                      'COALESCE(SUM(views.views), 0) AS views ' +
               'FROM days ' +
-              `LEFT JOIN views ON date_trunc('day', "views"."createdAt") = days.day ` +
+              `LEFT JOIN views ON date_trunc('day', "views"."startDate") = date_trunc('day', days.day) ` +
               'GROUP BY 1 ' +
               'ORDER BY day ' +
             ') t' +
