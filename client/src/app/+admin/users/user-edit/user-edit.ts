@@ -4,12 +4,14 @@ import { ServerConfig, USER_ROLE_LABELS, UserRole, VideoResolution } from '../..
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { OnInit } from '@angular/core'
+import { User } from '@app/shared/users/user.model'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: { value: string, label: string }[] = []
   videoQuotaDailyOptions: { value: string, label: string }[] = []
   username: string
-  userId: number
+  user: User
 
   roles: { value: string, label: string }[] = []
 
@@ -17,6 +19,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
 
   protected abstract serverService: ServerService
   protected abstract configService: ConfigService
+  protected abstract screenService: ScreenService
   protected abstract auth: AuthService
   abstract isCreation (): boolean
   abstract getFormButtonTitle (): string
@@ -27,6 +30,20 @@ export abstract class UserEdit extends FormReactive implements OnInit {
         .subscribe(config => this.serverConfig = config)
 
     this.buildRoles()
+  }
+
+  get subscribersCount () {
+    const forAccount = this.user
+      ? this.user.account.followersCount
+      : 0
+    const forChannels = this.user
+      ? this.user.videoChannels.map(c => c.followersCount).reduce((a, b) => a + b, 0)
+      : 0
+    return forAccount + forChannels
+  }
+
+  isInBigView () {
+    return this.screenService.getWindowInnerWidth() > 1600
   }
 
   buildRoles () {

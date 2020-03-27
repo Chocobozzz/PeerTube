@@ -4,13 +4,15 @@ import { Subscription } from 'rxjs'
 import { AuthService, Notifier } from '@app/core'
 import { ServerService } from '../../../core'
 import { UserEdit } from './user-edit'
-import { User, UserUpdate } from '../../../../../../shared'
+import { User as UserType, UserUpdate, UserRole } from '../../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserService } from '@app/shared'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
+import { User } from '@app/shared/users/user.model'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-user-update',
@@ -19,9 +21,6 @@ import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 })
 export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   error: string
-  userId: number
-  userEmail: string
-  username: string
 
   private paramsSub: Subscription
 
@@ -29,6 +28,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     protected formValidatorService: FormValidatorService,
     protected serverService: ServerService,
     protected configService: ConfigService,
+    protected screenService: ScreenService,
     protected auth: AuthService,
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,
@@ -45,7 +45,12 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   ngOnInit () {
     super.ngOnInit()
 
-    const defaultValues = { videoQuota: '-1', videoQuotaDaily: '-1' }
+    const defaultValues = {
+      role: UserRole.USER.toString(),
+      videoQuota: '-1',
+      videoQuotaDaily: '-1'
+    }
+
     this.buildForm({
       email: this.userValidatorsService.USER_EMAIL,
       role: this.userValidatorsService.USER_ROLE,
@@ -56,7 +61,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
       const userId = routeParams['id']
-      this.userService.getUser(userId).subscribe(
+      this.userService.getUser(userId, true).subscribe(
         user => this.onUserFetched(user),
 
         err => this.error = err.message
@@ -78,9 +83,9 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     userUpdate.videoQuota = parseInt(this.form.value['videoQuota'], 10)
     userUpdate.videoQuotaDaily = parseInt(this.form.value['videoQuotaDaily'], 10)
 
-    this.userService.updateUser(this.userId, userUpdate).subscribe(
+    this.userService.updateUser(this.user.id, userUpdate).subscribe(
       () => {
-        this.notifier.success(this.i18n('User {{username}} updated.', { username: this.username }))
+        this.notifier.success(this.i18n('User {{user.username}} updated.', { username: this.user.username }))
         this.router.navigate([ '/admin/users/list' ])
       },
 
@@ -101,10 +106,10 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
   }
 
   resetPassword () {
-    this.userService.askResetPassword(this.userEmail).subscribe(
+    this.userService.askResetPassword(this.user.email).subscribe(
       () => {
         this.notifier.success(
-          this.i18n('An email asking for password reset has been sent to {{username}}.', { username: this.username })
+          this.i18n('An email asking for password reset has been sent to {{username}}.', { username: this.user.username })
         )
       },
 
@@ -112,14 +117,12 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
     )
   }
 
-  private onUserFetched (userJson: User) {
-    this.userId = userJson.id
-    this.username = userJson.username
-    this.userEmail = userJson.email
+  private onUserFetched (userJson: UserType) {
+    this.user = new User(userJson)
 
     this.form.patchValue({
       email: userJson.email,
-      role: userJson.role,
+      role: userJson.role.toString(),
       videoQuota: userJson.videoQuota,
       videoQuotaDaily: userJson.videoQuotaDaily,
       byPassAutoBlacklist: userJson.adminFlags & UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST

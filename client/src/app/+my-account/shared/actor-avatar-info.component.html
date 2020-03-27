@@ -1,13 +1,16 @@
 <ng-container *ngIf="actor">
   <div class="actor">
-    <img [src]="actor.avatarUrl" alt="Avatar" />
+    <div class="d-flex">
+      <img [src]="actor.avatarUrl" alt="Avatar" />
 
-    <div class="actor-img-edit-container">
-      <div class="actor-img-edit-button" [ngbTooltip]="'(extensions: '+ avatarExtensions +', '+ maxSizeText +': '+ maxAvatarSizeInBytes +')'" placement="right" container="body">
-        <my-global-icon iconName="edit"></my-global-icon>
-        <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>
+      <div class="actor-img-edit-container">
+        <div class="actor-img-edit-button" [ngbTooltip]="'(extensions: '+ avatarExtensions +', '+ maxSizeText +': '+ maxAvatarSizeInBytes +')'" placement="right" container="body">
+          <my-global-icon iconName="edit"></my-global-icon>
+          <input #avatarfileInput type="file" title=" " name="avatarfile" id="avatarfile" [accept]="avatarExtensions" (change)="onAvatarChange()"/>
+        </div>
       </div>
     </div>
+
 
     <div class="actor-info">
       <div class="actor-info-names">

@@ -1,8 +1,13 @@
 @import '_variables';
 @import '_mixins';
 
-.form-sub-title {
-  margin-bottom: 30px;
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
+.account-title {
+  @include settings-big-title;
 }
 
 input:not([type=submit]) {
@@ -26,22 +31,30 @@ input[type=submit], button {
   font-size: 11px;
 }
 
-.account-title {
-  @include in-content-small-title;
-
-  margin-top: 55px;
-  margin-bottom: 30px;
-}
-
 .danger-zone {
   .reset-password-email {
     margin-bottom: 30px;
-    padding-bottom: 30px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
     button {
       display: block;
       margin-top: 0;
     }
+  }
+}
+
+.breadcrumb {
+  @include breadcrumb;
+}
+
+.dashboard {
+  @include dashboard;
+  max-width: 900px;
+}
+
+my-actor-avatar-info ::ng-deep {
+  .actor-img-edit-container,
+  .actor-info-followers,
+  .actor-info-username {
+    display: none;
   }
 }

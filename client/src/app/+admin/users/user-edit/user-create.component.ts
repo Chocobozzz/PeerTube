@@ -8,6 +8,7 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { UserService } from '@app/shared'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-user-create',
@@ -21,6 +22,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
     protected serverService: ServerService,
     protected formValidatorService: FormValidatorService,
     protected configService: ConfigService,
+    protected screenService: ScreenService,
     protected auth: AuthService,
     private userValidatorsService: UserValidatorsService,
     private route: ActivatedRoute,

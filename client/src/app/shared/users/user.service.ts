@@ -234,8 +234,9 @@ export class UserService {
     return this.userCache[userId]
   }
 
-  getUser (userId: number) {
-    return this.authHttp.get<UserServerModel>(UserService.BASE_USERS_URL + userId)
+  getUser (userId: number, withStats = false) {
+    const params = new HttpParams().append('withStats', withStats + '')
+    return this.authHttp.get<UserServerModel>(UserService.BASE_USERS_URL + userId, { params })
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 

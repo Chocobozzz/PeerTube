@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import * as express from 'express'
-import { body, param } from 'express-validator'
+import { body, param, query } from 'express-validator'
 import { omit } from 'lodash'
 import { isIdOrUUIDValid, toBooleanOrNull, toIntOrNull } from '../../helpers/custom-validators/misc'
 import {
@@ -256,12 +256,13 @@ const usersUpdateMeValidator = [
 
 const usersGetValidator = [
   param('id').isInt().not().isEmpty().withMessage('Should have a valid id'),
+  query('withStats').optional().isBoolean().withMessage('Should have a valid stats flag'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersGet parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-    if (!await checkUserIdExist(req.params.id, res)) return
+    if (!await checkUserIdExist(req.params.id, res, req.query.withStats)) return
 
     return next()
   }
@@ -460,9 +461,9 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function checkUserIdExist (idArg: number | string, res: express.Response) {
+function checkUserIdExist (idArg: number | string, res: express.Response, withStats = false) {
   const id = parseInt(idArg + '', 10)
-  return checkUserExist(() => UserModel.loadById(id), res)
+  return checkUserExist(() => UserModel.loadById(id, withStats), res)
 }
 
 function checkUserEmailExist (email: string, res: express.Response, abortResponse = true) {

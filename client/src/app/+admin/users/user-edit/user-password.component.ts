@@ -23,8 +23,6 @@ export class UserPasswordComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private userValidatorsService: UserValidatorsService,
-    private route: ActivatedRoute,
-    private router: Router,
     private notifier: Notifier,
     private userService: UserService,
     private i18n: I18n
