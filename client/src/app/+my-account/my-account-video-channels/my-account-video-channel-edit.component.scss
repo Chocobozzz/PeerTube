@@ -1,6 +1,11 @@
 @import '_variables';
 @import '_mixins';
 
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
+
 .video-channel-title {
   @include settings-big-title;
 }
@@ -35,11 +40,6 @@ input {
     @include orange-button;
     margin-left: auto;
   }
-}
-
-label {
-  font-weight: $font-regular;
-  font-size: 100%;
 }
 
 textarea {
