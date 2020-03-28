@@ -1,33 +1,51 @@
-<div i18n class="form-sub-title" *ngIf="isCreation() === true">Create a video channel</div>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a routerLink="/my-account/video-channels" i18n>My Channels</a>
+    </li>
+
+    <ng-container *ngIf="isCreation()">
+      <li class="breadcrumb-item active" i18n>Create</li>
+    </ng-container>
+    <ng-container *ngIf="!isCreation()">
+      <li class="breadcrumb-item active" i18n>Edit</li>
+      <li class="breadcrumb-item active" aria-current="page">
+        <a *ngIf="videoChannelToUpdate" [routerLink]="[ '/my-account/video-channels/update', videoChannelToUpdate?.nameWithHost ]">{{ videoChannelToUpdate?.displayName }}</a>
+      </li>
+    </ng-container>
+  </ol>
+</nav>
 
 <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
 <form role="form" (ngSubmit)="formValidated()" [formGroup]="form">
-  <div class="form-group" *ngIf="isCreation() === true">
-    <label i18n for="name">Name</label>
-    <div class="input-group">
-      <input
-        type="text" id="name" i18n-placeholder placeholder="Example: my_channel"
-        formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
-      >
-      <div class="input-group-append">
-        <span class="input-group-text">@{{ instanceHost }}</span>
-      </div>
-    </div>
-    <div *ngIf="formErrors['name']" class="form-error">
-      {{ formErrors['name'] }}
-    </div>
-  </div>
 
   <div class="form-row"> <!-- channel grid -->
     <div class="form-group col-12 col-lg-4 col-xl-3">
-      <div i18n class="video-channel-title">CHANNEL</div>
+      <div *ngIf="isCreation()" class="video-channel-title" i18n>NEW CHANNEL</div>
+      <div *ngIf="!isCreation() && videoChannelToUpdate" class="video-channel-title" i18n>CHANNEL</div>
     </div>
 
     <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
+      <div class="form-group" *ngIf="isCreation()">
+        <label i18n for="name">Name</label>
+        <div class="input-group">
+          <input
+            type="text" id="name" i18n-placeholder placeholder="Example: my_channel"
+            formControlName="name" [ngClass]="{ 'input-error': formErrors['name'] }"
+          >
+          <div class="input-group-append">
+            <span class="input-group-text">@{{ instanceHost }}</span>
+          </div>
+        </div>
+        <div *ngIf="formErrors['name']" class="form-error">
+          {{ formErrors['name'] }}
+        </div>
+      </div>
+
       <my-actor-avatar-info
-        *ngIf="isCreation() === false && videoChannelToUpdate"
+        *ngIf="!isCreation() && videoChannelToUpdate"
         [actor]="videoChannelToUpdate" (avatarChange)="onAvatarChange($event)"
       ></my-actor-avatar-info>
 

@@ -5,10 +5,6 @@
   @include settings-big-title;
 }
 
-.form-sub-title {
-  margin-bottom: 20px;
-}
-
 my-actor-avatar-info {
   display: block;
   margin-bottom: 20px;
@@ -62,4 +58,8 @@ my-markdown-textarea ::ng-deep {
 
 .peertube-select-container {
   @include peertube-select-container(340px);
+}
+
+.breadcrumb {
+  @include breadcrumb;
 }
