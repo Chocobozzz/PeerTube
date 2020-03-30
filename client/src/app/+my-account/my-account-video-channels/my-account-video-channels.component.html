@@ -20,7 +20,7 @@
       <div i18n class="video-channel-followers">{videoChannel.followersCount, plural, =1 {1 subscriber} other {{{ videoChannel.followersCount }} subscribers}}</div>
 
       <div *ngIf="!isInSmallView" class="w-100 d-flex justify-content-end">
-        <p-chart *ngIf="videoChannelsData && videoChannelsData[i]" type="line" [data]="videoChannelsData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
+        <p-chart *ngIf="videoChannelsChartData && videoChannelsChartData[i]" type="line" [data]="videoChannelsChartData[i]" [options]="chartOptions" width="40vw" height="100px"></p-chart>
       </div>
     </div>
 

@@ -2,7 +2,7 @@ import { Actor } from '../../actors/actor.model'
 import { Account } from '../../actors/index'
 import { Avatar } from '../../avatars'
 
-export type viewsPerTime = {
+export type ViewsPerDate = {
   date: Date
   views: number
 }
@@ -13,7 +13,7 @@ export interface VideoChannel extends Actor {
   support: string
   isLocal: boolean
   ownerAccount?: Account
-  viewsPerDay?: viewsPerTime[] // chronologically ordered
+  viewsPerDay?: ViewsPerDate[] // chronologically ordered
 }
 
 export interface VideoChannelSummary {
