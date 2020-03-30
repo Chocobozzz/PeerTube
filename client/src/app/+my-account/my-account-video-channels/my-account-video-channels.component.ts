@@ -8,7 +8,8 @@ import { ScreenService } from '@app/shared/misc/screen.service'
 import { User } from '@app/shared'
 import { flatMap } from 'rxjs/operators'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { minBy, maxBy } from 'lodash-es'
+import { min, minBy, max, maxBy } from 'lodash-es'
+import { ChartData } from 'chart.js'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -17,7 +18,7 @@ import { minBy, maxBy } from 'lodash-es'
 })
 export class MyAccountVideoChannelsComponent implements OnInit {
   videoChannels: VideoChannel[] = []
-  videoChannelsData: any[]
+  videoChannelsChartData: ChartData[]
   videoChannelsMinimumDailyViews = 0
   videoChannelsMaximumDailyViews: number
 
@@ -125,7 +126,9 @@ export class MyAccountVideoChannelsComponent implements OnInit {
         .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account, null, true)))
         .subscribe(res => {
           this.videoChannels = res.data
-          this.videoChannelsData = this.videoChannels.map(v => ({
+
+          // chart data
+          this.videoChannelsChartData = this.videoChannels.map(v => ({
             labels: v.viewsPerDay.map(day => day.date.toLocaleDateString()),
             datasets: [
               {
@@ -135,9 +138,22 @@ export class MyAccountVideoChannelsComponent implements OnInit {
                   borderColor: "#c6c6c6"
               }
             ]
-          }))
-          this.videoChannelsMinimumDailyViews = minBy(this.videoChannels.map(v => minBy(v.viewsPerDay, day => day.views)), day => day.views).views
-          this.videoChannelsMaximumDailyViews = maxBy(this.videoChannels.map(v => maxBy(v.viewsPerDay, day => day.views)), day => day.views).views
+          } as ChartData))
+
+          // chart options that depend on chart data:
+          // we don't want to skew values and have min at 0, so we define what the floor/ceiling is here
+          this.videoChannelsMinimumDailyViews = min(
+            this.videoChannels.map(v => minBy( // compute local minimum daily views for each channel, by their "views" attribute
+              v.viewsPerDay,
+              day => day.views
+            ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
+          )
+          this.videoChannelsMaximumDailyViews = max(
+            this.videoChannels.map(v => maxBy( // compute local maximum daily views for each channel, by their "views" attribute
+              v.viewsPerDay,
+              day => day.views
+            ).views) // the object returned is a ViewPerDate, so we still need to get the views attribute
+          )
         })
   }
 }

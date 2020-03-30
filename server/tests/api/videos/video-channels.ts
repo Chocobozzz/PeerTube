@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { User, Video, VideoChannel, viewsPerTime, VideoDetails } from '../../../../shared/index'
+import { User, Video, VideoChannel, ViewsPerDate, VideoDetails } from '../../../../shared/index'
 import {
   cleanupTests,
   createUser,
@@ -376,7 +376,7 @@ describe('Test video channels', function () {
       res.body.data.forEach((channel: VideoChannel) => {
         expect(channel).to.haveOwnProperty('viewsPerDay')
         expect(channel.viewsPerDay).to.have.length(30 + 1) // daysPrior + today
-        channel.viewsPerDay.forEach((v: viewsPerTime) => {
+        channel.viewsPerDay.forEach((v: ViewsPerDate) => {
           expect(v.date).to.be.an('string')
           expect(v.views).to.equal(0)
         })

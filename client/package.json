@@ -56,6 +56,7 @@
     "@ngx-loading-bar/router": "^4.2.0",
     "@ngx-meta/core": "^8.0.2",
     "@ngx-translate/i18n-polyfill": "^1.0.0",
+    "@types/chart.js": "^2.9.16",
     "@types/core-js": "^2.5.2",
     "@types/debug": "^4.1.5",
     "@types/hls.js": "^0.12.4",

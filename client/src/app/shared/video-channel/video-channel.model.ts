@@ -1,4 +1,4 @@
-import { VideoChannel as ServerVideoChannel, viewsPerTime } from '../../../../../shared/models/videos'
+import { VideoChannel as ServerVideoChannel, ViewsPerDate } from '../../../../../shared/models/videos'
 import { Actor } from '../actor/actor.model'
 import { Account } from '../../../../../shared/models/actors'
 
@@ -12,7 +12,7 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   ownerAccount?: Account
   ownerBy?: string
   ownerAvatarUrl?: string
-  viewsPerDay?: viewsPerTime[]
+  viewsPerDay?: ViewsPerDate[]
 
   constructor (hash: ServerVideoChannel) {
     super(hash)

@@ -166,42 +166,43 @@ export type SummaryOptions = {
       VideoModel
     ]
   },
-  [ScopeNames.WITH_STATS]: (options: AvailableWithStatsOptions = { daysPrior: 30 }) => ({
-    attributes: {
-      include: [
-        [
-          literal(
-            '(' +
-            `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
-            'FROM ( ' +
-              'WITH ' +
-                'days AS ( ' +
-                  `SELECT generate_series(date_trunc('day', now()) - '${options.daysPrior} day'::interval, ` +
-                         `date_trunc('day', now()), '1 day'::interval) AS day ` +
-                '), ' +
-                'views AS ( ' +
-                  'SELECT * ' +
-                  'FROM "videoView" ' +
-                  'WHERE "videoView"."videoId" IN ( ' +
-                    'SELECT "video"."id" ' +
-                    'FROM "video" ' +
+  [ScopeNames.WITH_STATS]: (options: AvailableWithStatsOptions = { daysPrior: 30 }) => {
+    const daysPrior = parseInt(options.daysPrior + '', 10)
+
+    return {
+      attributes: {
+        include: [
+          [
+            literal(
+              '(' +
+              `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
+              'FROM ( ' +
+                'WITH ' +
+                  'days AS ( ' +
+                    `SELECT generate_series(date_trunc('day', now()) - '${daysPrior} day'::interval, ` +
+                          `date_trunc('day', now()), '1 day'::interval) AS day ` +
+                  '), ' +
+                  'views AS ( ' +
+                    'SELECT v.* ' +
+                    'FROM "videoView" AS v ' +
+                    'INNER JOIN "video" ON "video"."id" = v."videoId" ' +
                     'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
                   ') ' +
-                ') ' +
-              'SELECT days.day AS day, ' +
-                     'COALESCE(SUM(views.views), 0) AS views ' +
-              'FROM days ' +
-              `LEFT JOIN views ON date_trunc('day', "views"."startDate") = date_trunc('day', days.day) ` +
-              'GROUP BY 1 ' +
-              'ORDER BY day ' +
-            ') t' +
-            ')'
-          ),
-          'viewsPerDay'
+                'SELECT days.day AS day, ' +
+                      'COALESCE(SUM(views.views), 0) AS views ' +
+                'FROM days ' +
+                `LEFT JOIN views ON date_trunc('day', "views"."startDate") = date_trunc('day', days.day) ` +
+                'GROUP BY day ' +
+                'ORDER BY day ' +
+              ') t' +
+              ')'
+            ),
+            'viewsPerDay'
+          ]
         ]
-      ]
+      }
     }
-  })
+  }
 }))
 @Table({
   tableName: 'videoChannel',

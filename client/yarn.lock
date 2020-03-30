@@ -1149,6 +1149,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/chart.js@^2.9.16":
+  version "2.9.16"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.9.16.tgz#ac9d268fa192c0ec0efd740f802683e3ed97642c"
+  integrity sha512-Mofg7xFIeAWME46YMVKHPCyUz2Z0KsVMNE1f4oF3T74mK3RiPQxOm9qzoeNTyMs6lpl4x0tiHL+Wsz2DHCxQlQ==
+  dependencies:
+    moment "^2.10.2"
+
 "@types/core-js@^2.5.2":
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/@types/core-js/-/core-js-2.5.2.tgz#d4c25420044d4a5b65e00a82fc04b7824b62691f"
