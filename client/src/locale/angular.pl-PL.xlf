@@ -4353,7 +4353,7 @@
       </trans-unit>
       <trans-unit id="a42daa4748e433f25a51f598627d10de9c88d5d3" datatype="html">
         <source>Landing page</source>
-        <target state="new">Landing page</target>
+        <target state="translated">Strona lądowania</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">258</context>
@@ -4389,7 +4389,7 @@
       </trans-unit>
       <trans-unit id="0ea3c4f671addedc1fff64ba63adbf0629fab06a" datatype="html">
         <source>NEW USERS</source>
-        <target state="new">NEW USERS</target>
+        <target state="translated">NOWI UŻYTKOWNICY</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">276</context>
@@ -4457,7 +4457,7 @@
       </trans-unit>
       <trans-unit id="e8835d4b5abe1ae304ffaaea6e96bf49805f54a2" datatype="html">
         <source>NEW VIDEOS</source>
-        <target state="new">NEW VIDEOS</target>
+        <target state="translated">NOWE WIDEO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">344</context>
@@ -4485,7 +4485,7 @@
       </trans-unit>
       <trans-unit id="3f237e2a863d0308a21bdb0bb5d4b84e3376dbee" datatype="html">
         <source>FEDERATION</source>
-        <target state="new">FEDERATION</target>
+        <target state="translated">FEDERACJA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">393</context>
@@ -4503,7 +4503,7 @@
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
         <source>Other instances can follow yours</source>
-        <target state="new">Other instances can follow yours</target>
+        <target state="translated">Inne instancje mogą śledzić twoją</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">407</context>
@@ -4516,7 +4516,7 @@
       </trans-unit>
       <trans-unit id="9a3dd9c65ee3381ae3b78b9c56cc4e0d2e41f0e8" datatype="html">
         <source>Automatically follow back instances</source>
-        <target state="new">Automatically follow back instances</target>
+        <target state="translated">Automatycznie śledź instancje które śledzą ciebie</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">427</context>
