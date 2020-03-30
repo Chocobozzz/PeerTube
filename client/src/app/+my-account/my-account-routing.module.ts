@@ -5,9 +5,6 @@ import { LoginGuard } from '../core'
 import { MyAccountComponent } from './my-account.component'
 import { MyAccountSettingsComponent } from './my-account-settings/my-account-settings.component'
 import { MyAccountVideosComponent } from './my-account-videos/my-account-videos.component'
-import { MyAccountVideoChannelsComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channels.component'
-import { MyAccountVideoChannelCreateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-create.component'
-import { MyAccountVideoChannelUpdateComponent } from '@app/+my-account/my-account-video-channels/my-account-video-channel-update.component'
 import { MyAccountVideoImportsComponent } from '@app/+my-account/my-account-video-imports/my-account-video-imports.component'
 import { MyAccountSubscriptionsComponent } from '@app/+my-account/my-account-subscriptions/my-account-subscriptions.component'
 import { MyAccountOwnershipComponent } from '@app/+my-account/my-account-ownership/my-account-ownership.component'
@@ -49,30 +46,7 @@ const myAccountRoutes: Routes = [
 
       {
         path: 'video-channels',
-        component: MyAccountVideoChannelsComponent,
-        data: {
-          meta: {
-            title: 'Account video channels'
-          }
-        }
-      },
-      {
-        path: 'video-channels/create',
-        component: MyAccountVideoChannelCreateComponent,
-        data: {
-          meta: {
-            title: 'Create new video channel'
-          }
-        }
-      },
-      {
-        path: 'video-channels/update/:videoChannelId',
-        component: MyAccountVideoChannelUpdateComponent,
-        data: {
-          meta: {
-            title: 'Update video channel'
-          }
-        }
+        loadChildren: () => import('./my-account-video-channels/my-account-video-channels.module').then(m => m.MyAccountVideoChannelsModule)
       },
 
       {
