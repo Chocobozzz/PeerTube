@@ -13,6 +13,8 @@ type Metadata = {
   levels: Hlsjs.Level[]
 }
 
+type CustomAudioTrack = AudioTrack & { name?: string, lang?: string }
+
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
     console.warn('Hls.js is not supported in this browser!')
@@ -91,7 +93,7 @@ class Html5Hlsjs {
   private readonly source: videojs.Tech.SourceObject
   private readonly vjs: typeof videojs
 
-  private hls: Hlsjs & { manualLevel?: number } // FIXME: typings
+  private hls: Hlsjs & { manualLevel?: number, audioTrack?: any, audioTracks?: CustomAudioTrack[] } // FIXME: typings
   private hlsjsConfig: Partial<Hlsjs.Config & { cueHandler: any }> = null
 
   private _duration: number = null
@@ -393,7 +395,7 @@ class Html5Hlsjs {
   }
 
   private _onAudioTracks () {
-    const hlsAudioTracks = this.hls.audioTracks as (AudioTrack & { name?: string, lang?: string })[] // FIXME typings
+    const hlsAudioTracks = this.hls.audioTracks
     const playerAudioTracks = this.tech.audioTracks()
 
     if (hlsAudioTracks.length > 1 && playerAudioTracks.length === 0) {
