@@ -27,29 +27,33 @@
     <div class="video">
       <div class="title-page title-page-single" *ngIf="hasPlaylist()" i18n>Share the video</div>
 
-      <ngb-tabset class="root-tabset bootstrap" (tabChange)="onTabChange($event)">
+      <div ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeId">
 
-        <ngb-tab i18n-title title="URL" id="url">
-          <ng-template ngbTabContent>
+        <ng-container ngbNavItem="url">
+          <a ngbNavLink i18n>URL</a>
 
-            <div class="tab-content">
+          <ng-template ngbNavContent>
+            <div class="nav-content">
               <my-input-readonly-copy [value]="getVideoUrl()"></my-input-readonly-copy>
             </div>
-
           </ng-template>
-        </ngb-tab>
+        </ng-container>
 
-        <ngb-tab i18n-title title="QR-Code" id="qrcode">
-          <ng-template ngbTabContent>
-            <div class="tab-content">
+        <ng-container ngbNavItem="qrcode">
+          <a ngbNavLink i18n>QR-Code</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
               <qrcode [qrdata]="getVideoUrl()" [size]="256" level="Q"></qrcode>
             </div>
           </ng-template>
-        </ngb-tab>
+        </ng-container>
 
-        <ngb-tab i18n-title title="Embed" id="embed">
-          <ng-template ngbTabContent>
-            <div class="tab-content">
+        <ng-container ngbNavItem="embed">
+          <a ngbNavLink i18n>Embed</a>
+
+          <ng-template ngbNavContent>
+            <div class="nav-content">
               <my-input-readonly-copy [value]="getVideoIframeCode()"></my-input-readonly-copy>
 
               <div i18n *ngIf="notSecure()" class="alert alert-warning">
@@ -57,9 +61,11 @@
               </div>
             </div>
           </ng-template>
-        </ngb-tab>
+        </ng-container>
 
-      </ngb-tabset>
+      </div>
+
+      <div [ngbNavOutlet]="nav"></div>
 
       <div class="filters">
         <div>

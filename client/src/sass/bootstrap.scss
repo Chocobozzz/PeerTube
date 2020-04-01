@@ -50,7 +50,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
       background-color: var(--mainHoverColor);
       opacity: .9;
     }
-    
+
     &::after {
       display: none;
     }
@@ -158,18 +158,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
-ngb-tabset {
+.nav-tabs {
 
   .nav-link {
-    &, & a {
-      @include disable-default-a-behaviour;
+    @include disable-default-a-behaviour;
 
-      color: var(--mainForegroundColor) !important;
-    }
-  }
-
-  .nav-pills .nav-link.active {
-    color: #000 !important;
+    color: var(--mainForegroundColor) !important;
   }
 }
 

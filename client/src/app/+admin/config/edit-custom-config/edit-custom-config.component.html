@@ -1,9 +1,11 @@
 <form role="form" [formGroup]="form">
 
-  <ngb-tabset #tabs class="root-tabset bootstrap">
+  <div ngbNav #nav="ngbNav" class="nav-tabs">
 
-    <ngb-tab id="instance-information" i18n-title title="Instance information">
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem="instance-information">
+      <a ngbNavLink i18n>Instance information</a>
+
+      <ng-template ngbNavContent>
 
         <ng-container formGroupName="instance">
 
@@ -225,10 +227,12 @@
 
         </ng-container>
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-    <ngb-tab id="basic-configuration" i18n-title title="Basic configuration">
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem="basic-configuration">
+      <a ngbNavLink i18n>Basic configuration</a>
+
+      <ng-template ngbNavContent>
 
         <div class="form-row mt-5"> <!-- appearance grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
@@ -348,7 +352,7 @@
 
             <ng-container formGroupName="import">
               <ng-container formGroupName="videos">
-    
+
                 <div class="form-group" formGroupName="http">
                   <my-peertube-checkbox
                     inputName="importVideosHttpEnabled" formControlName="enabled"
@@ -369,7 +373,7 @@
             <ng-container formGroupName="autoBlacklist">
               <ng-container formGroupName="videos">
                 <ng-container formGroupName="ofUsers">
-    
+
                   <div class="form-group">
                     <my-peertube-checkbox
                       inputName="autoBlacklistVideosOfUsersEnabled" formControlName="enabled"
@@ -380,7 +384,7 @@
                     </ng-container>
                   </my-peertube-checkbox>
                   </div>
-    
+
                 </ng-container>
               </ng-container>
             </ng-container>
@@ -490,10 +494,12 @@
         </div>
 
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-    <ngb-tab id="services" i18n-title title="Services">
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem="services">
+      <a ngbNavLink i18n>Services</a>
+
+      <ng-template ngbNavContent>
 
         <div class="form-row mt-5"> <!-- twitter grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
@@ -541,12 +547,13 @@
 
           </div>
         </div>
+      </ng-template>
+    </ng-container>
 
-    </ng-template>
-    </ngb-tab>
+    <ng-container ngbNavItem="advanced-configuration">
+      <a ngbNavLink i18n>Advanced configuration</a>
 
-    <ngb-tab id="advanced-configuration" i18n-title title="Advanced configuration">
-      <ng-template ngbTabContent>
+      <ng-template ngbNavContent>
 
         <div class="form-row mt-5"> <!-- transcoding grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
@@ -566,7 +573,7 @@
                   <ng-template ptTemplate="label">
                     <ng-container i18n>Transcoding enabled</ng-container>
                   </ng-template>
-    
+
                   <ng-template ptTemplate="help">
                     <ng-container i18n>If you disable transcoding, many videos from your users will not work!</ng-container>
                   </ng-template>
@@ -583,7 +590,7 @@
                         </ng-container>
                       </my-peertube-checkbox>
                     </div>
-    
+
                     <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
                       <my-peertube-checkbox
                         inputName="transcodingAllowAudioFiles" formControlName="allowAudioFiles"
@@ -604,7 +611,7 @@
                           <ng-template ptTemplate="help">
                             <ng-container i18n>
                               <strong>Experimental, we suggest you to not disable webtorrent support for now</strong>
-    
+
                               <p>If you also enabled HLS support, it will multiply videos storage by 2</p>
 
                               <br />
@@ -625,14 +632,14 @@
                           <ng-template ptTemplate="help">
                             <ng-container i18n>
                               <strong>Requires ffmpeg >= 4.1</strong>
-    
+
                               <p>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:</p>
                               <ul>
                                 <li>Resolution change is smoother</li>
                                 <li>Faster playback in particular with long videos</li>
                                 <li>More stable playback (less bugs/infinite loading)</li>
                               </ul>
-    
+
                               <p>If you also enabled WebTorrent support, it will multiply videos storage by 2</p>
                             </ng-container>
                           </ng-template>
@@ -785,8 +792,10 @@
         </div>
 
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </ng-container>
+  </div>
+
+  <div [ngbNavOutlet]="nav"></div>
 
   <div class="form-row mt-4"> <!-- submit placement block -->
     <div class="col-md-7 col-xl-5"></div>

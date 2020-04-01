@@ -19,6 +19,10 @@ my-peertube-checkbox {
   margin-bottom: 1rem;
 }
 
+.nav-tabs {
+  margin-bottom: 15px;
+}
+
 .video-edit {
   height: 100%;
   min-height: 300px;
@@ -145,10 +149,6 @@ p-calendar {
 }
 
 ::ng-deep {
-  .root-tabset > .nav {
-    margin-bottom: 15px;
-  }
-
   .ng2-tag-input {
     border: none !important;
   }

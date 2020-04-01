@@ -10,27 +10,37 @@
     <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
   </div>
 
-  <ngb-tabset class="video-add-tabset root-tabset bootstrap" [ngClass]="{ 'hide-nav': secondStepType !== undefined }">
+  <div ngbNav #nav="ngbNav" class="nav-tabs video-add-nav" [ngClass]="{ 'hide-nav': secondStepType !== undefined }">
+    <ng-container ngbNavItem>
+      <a ngbNavLink>
+        <span i18n>Upload a file</span>
+      </a>
 
-    <ngb-tab>
-      <ng-template ngbTabTitle><span i18n>Upload a file</span></ng-template>
-      <ng-template ngbTabContent>
+      <ng-template ngbNavContent>
         <my-video-upload #videoUpload (firstStepDone)="onFirstStepDone('upload', $event)" (firstStepError)="onError()"></my-video-upload>
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-    <ngb-tab *ngIf="isVideoImportHttpEnabled()">
-      <ng-template ngbTabTitle><span i18n>Import with URL</span></ng-template>
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem *ngIf="isVideoImportHttpEnabled()">
+      <a ngbNavLink>
+        <span i18n>Import with URL</span>
+      </a>
+
+      <ng-template ngbNavContent>
         <my-video-import-url #videoImportUrl (firstStepDone)="onFirstStepDone('import-url', $event)" (firstStepError)="onError()"></my-video-import-url>
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-    <ngb-tab *ngIf="isVideoImportTorrentEnabled()">
-      <ng-template ngbTabTitle><span i18n>Import with torrent</span></ng-template>
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem *ngIf="isVideoImportTorrentEnabled()">
+      <a ngbNavLink>
+        <span i18n>Import with torrent</span>
+      </a>
+
+      <ng-template ngbNavContent>
         <my-video-import-torrent #videoImportTorrent (firstStepDone)="onFirstStepDone('import-torrent', $event)" (firstStepError)="onError()"></my-video-import-torrent>
       </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
+    </ng-container>
+  </div>
+
+  <div [ngbNavOutlet]="nav"></div>
 </div>

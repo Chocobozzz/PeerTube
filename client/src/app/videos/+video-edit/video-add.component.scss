@@ -13,52 +13,41 @@ $border-color: #EAEAEA;
   font-size: 15px;
 }
 
-::ng-deep .root-tabset.video-add-tabset {
-  margin-top: 50px;
+::ng-deep .video-add-nav {
+  border-bottom: $border-width $border-type $border-color;
+  margin: 50px 0 0 0 !important;
 
-  &.hide-nav > .nav {
-    display: none !important;
-  }
+  a.nav-link {
+    @include disable-default-a-behaviour;
 
-  & > .nav {
-    border-bottom: $border-width $border-type $border-color;
-    margin: 0 !important;
+    margin-bottom: -$border-width;
+    height: 40px !important;
+    padding: 0 30px !important;
+    font-size: 15px;
 
-    & > li {
-      margin-bottom: -$border-width;
-    }
+    &.active {
+      border: $border-width $border-type $border-color;
+      border-bottom: none;
+      background-color: var(--submenuColor) !important;
 
-    a.nav-link {
-      @include disable-default-a-behaviour;
-
-      height: 40px !important;
-      padding: 0 30px !important;
-      font-size: 15px;
-
-      &.active {
-        border: $border-width $border-type $border-color;
-        border-bottom: none;
-        background-color: var(--submenuColor) !important;
-
-        span {
-          border-bottom: 2px solid var(--mainColor);
-          font-weight: $font-bold;
-        }
+      span {
+        border-bottom: 2px solid var(--mainColor);
+        font-weight: $font-bold;
       }
     }
   }
+}
 
-  .upload-video-container {
-    border: $border-width $border-type $border-color;
-    border-top: none;
+::ng-deep .upload-video-container {
+  border: $border-width $border-type $border-color;
+  border-top: none;
 
-    background-color: var(--submenuColor);
-    border-radius: 3px;
-    width: 100%;
-    min-height: 440px;
-    padding-bottom: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+  background-color: var(--submenuColor);
+  border-radius: 3px;
+  width: 100%;
+  min-height: 440px;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

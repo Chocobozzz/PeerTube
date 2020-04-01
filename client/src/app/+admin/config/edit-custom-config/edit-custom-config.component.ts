@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewChecked, ViewChild } from '@angular/core'
+import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { ServerService } from '@app/core/server/server.service'
 import { CustomConfigValidatorsService, FormReactive, UserValidatorsService } from '@app/shared'
@@ -10,7 +10,7 @@ import { SelectItem } from 'primeng/api'
 import { forkJoin } from 'rxjs'
 import { ServerConfig } from '@shared/models'
 import { ViewportScroller } from '@angular/common'
-import { NgbTabset } from '@ng-bootstrap/ng-bootstrap'
+import { NgbNav } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-edit-custom-config',
@@ -18,7 +18,8 @@ import { NgbTabset } from '@ng-bootstrap/ng-bootstrap'
   styleUrls: [ './edit-custom-config.component.scss' ]
 })
 export class EditCustomConfigComponent extends FormReactive implements OnInit, AfterViewChecked {
-  @ViewChild('tabs') tabs: NgbTabset
+  // FIXME: use built-in router
+  @ViewChild('nav') nav: NgbNav
 
   initDone = false
   customConfig: CustomConfig
@@ -286,13 +287,13 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
   }
 
   gotoAnchor () {
-    const hashToTab = {
+    const hashToNav = {
       'customizations': 'advanced-configuration'
     }
     const hash = window.location.hash.replace('#', '')
 
-    if (hash && Object.keys(hashToTab).includes(hash)) {
-      this.tabs.select(hashToTab[hash])
+    if (hash && Object.keys(hashToNav).includes(hash)) {
+      this.nav.select(hashToNav[hash])
       setTimeout(() => this.viewportScroller.scrollToAnchor(hash), 100)
     }
   }

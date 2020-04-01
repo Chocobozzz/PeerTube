@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { buildVideoEmbed, buildVideoLink } from '../../../../assets/player/utils'
-import { NgbModal, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal, NgbNavChangeEvent, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 
@@ -35,7 +35,7 @@ export class VideoShareComponent {
   @Input() videoCaptions: VideoCaption[] = []
   @Input() playlist: VideoPlaylist = null
 
-  activeId: 'url' | 'qrcode' | 'embed'
+  activeId: 'url' | 'qrcode' | 'embed' = 'url'
   customizations: Customizations
   isAdvancedCustomizationCollapsed = true
   includeVideoInPlaylist = false
@@ -99,10 +99,6 @@ export class VideoShareComponent {
 
   notSecure () {
     return window.location.protocol === 'http:'
-  }
-
-  onTabChange (event: NgbTabChangeEvent) {
-    this.activeId = event.nextId as any
   }
 
   isInEmbedTab () {

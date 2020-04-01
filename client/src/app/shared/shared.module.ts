@@ -58,7 +58,7 @@ import {
   NgbDropdownModule,
   NgbModalModule,
   NgbPopoverModule,
-  NgbTabsetModule,
+  NgbNavModule,
   NgbTooltipModule
 } from '@ng-bootstrap/ng-bootstrap'
 import { RemoteSubscribeComponent, SubscribeButtonComponent, UserSubscriptionService } from '@app/shared/user-subscription'
@@ -119,7 +119,7 @@ import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-i
     NgbDropdownModule,
     NgbModalModule,
     NgbPopoverModule,
-    NgbTabsetModule,
+    NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
 
@@ -204,7 +204,7 @@ import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-i
     NgbDropdownModule,
     NgbModalModule,
     NgbPopoverModule,
-    NgbTabsetModule,
+    NgbNavModule,
     NgbTooltipModule,
     NgbCollapseModule,
 

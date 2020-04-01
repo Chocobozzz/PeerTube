@@ -1,8 +1,10 @@
 <div class="video-edit" [formGroup]="form">
-  <ngb-tabset class="root-tabset bootstrap">
+  <div ngbNav #nav="ngbNav" class="nav-tabs">
 
-    <ngb-tab i18n-title title="Basic info">
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem>
+      <a ngbNavLink i18n>Basic info</a>
+
+      <ng-template ngbNavContent>
         <div class="row">
           <div class="col-md-8">
             <div class="form-group">
@@ -155,10 +157,12 @@
           </div>
         </div>
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-    <ngb-tab i18n-title title="Captions">
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem>
+      <a ngbNavLink i18n>Captions</a>
+
+      <ng-template ngbNavContent>
         <div class="captions">
 
           <div class="captions-header">
@@ -206,10 +210,12 @@
 
         </div>
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-    <ngb-tab i18n-title title="Advanced settings">
-      <ng-template ngbTabContent>
+    <ng-container ngbNavItem>
+      <a ngbNavLink i18n>Advanced settings</a>
+
+      <ng-template ngbNavContent>
         <div class="row advanced-settings">
           <div class="col-md-12 col-xl-8">
 
@@ -262,10 +268,11 @@
           </div>
         </div>
       </ng-template>
-    </ngb-tab>
+    </ng-container>
 
-  </ngb-tabset>
+  </div>
 
+  <div [ngbNavOutlet]="nav"></div>
 </div>
 
 <my-video-caption-add-modal
