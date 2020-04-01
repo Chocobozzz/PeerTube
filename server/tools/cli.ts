@@ -3,7 +3,7 @@ import { getAppNumber, isTestInstance } from '../helpers/core-utils'
 import { join } from 'path'
 import { root } from '../../shared/extra-utils/miscs/miscs'
 import { getVideoChannel } from '../../shared/extra-utils/videos/video-channels'
-import { Command } from 'commander'
+import { CommanderStatic } from 'commander'
 import { VideoChannel, VideoPrivacy } from '../../shared/models/videos'
 import { createLogger, format, transports } from 'winston'
 import { getMyUserInformation } from '@shared/extra-utils/users/users'
@@ -118,7 +118,7 @@ function getRemoteObjectOrDie (
   }
 }
 
-function buildCommonVideoOptions (command: Command) {
+function buildCommonVideoOptions (command: CommanderStatic) {
   function list (val) {
     return val.split(',')
   }
@@ -139,7 +139,7 @@ function buildCommonVideoOptions (command: Command) {
     .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
-async function buildVideoAttributesFromCommander (url: string, command: Command, defaultAttributes: any = {}) {
+async function buildVideoAttributesFromCommander (url: string, command: CommanderStatic, defaultAttributes: any = {}) {
   const defaultBooleanAttributes = {
     nsfw: false,
     commentsEnabled: true,
