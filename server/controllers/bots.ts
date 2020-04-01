@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { asyncMiddleware } from '../middlewares'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../initializers/constants'
-import * as sitemapModule from 'sitemap'
+import { SitemapStream, streamToPromise } from 'sitemap'
 import { VideoModel } from '../models/video/video'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { AccountModel } from '../models/account/account'
@@ -33,12 +33,14 @@ async function getSitemap (req: express.Request, res: express.Response) {
   urls = urls.concat(await getSitemapVideoChannelUrls())
   urls = urls.concat(await getSitemapAccountUrls())
 
-  const sitemap = sitemapModule.createSitemap({
-    hostname: WEBSERVER.URL,
-    urls: urls
-  })
+  const sitemapStream = new SitemapStream({ hostname: WEBSERVER.URL })
 
-  const xml = sitemap.toXML()
+  for (const url of urls) {
+    sitemapStream.write({ url })
+  }
+  sitemapStream.end()
+
+  const xml = await streamToPromise(sitemapStream)
 
   res.header('Content-Type', 'application/xml')
   res.send(xml)

@@ -12,7 +12,7 @@ class MockSmtpServer {
   private constructor () {
     this.emailChildProcess = fork(`${__dirname}/email-child-process`, [])
 
-    this.emailChildProcess.on('message', (msg) => {
+    this.emailChildProcess.on('message', (msg: any) => {
       if (msg.email) {
         return this.emails.push(msg.email)
       }
@@ -36,7 +36,7 @@ class MockSmtpServer {
       this.emailChildProcess.on('exit', () => {
         return rej(new Error('maildev exited unexpectedly, confirm port not in use'))
       })
-      this.emailChildProcess.on('message', (msg) => {
+      this.emailChildProcess.on('message', (msg: any) => {
         if (msg.err) {
           return rej(new Error(msg.err))
         }

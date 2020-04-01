@@ -64,6 +64,8 @@
       }
     ],
 
+    "@typescript-eslint/return-await": "off",
+    "@typescript-eslint/no-base-to-string": "off",
     "@typescript-eslint/quotes": "off",
     "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
