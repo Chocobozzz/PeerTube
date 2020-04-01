@@ -4660,7 +4660,7 @@
       </trans-unit>
       <trans-unit id="29d05ff33ed21fc97d9239e6e64952f35eba7a15" datatype="html">
         <source>Allow your users to upload .mkv, .mov, .avi and .flv videos.</source>
-        <target state="new">Allow your users to upload .mkv, .mov, .avi and .flv videos.</target>
+        <target state="translated">Pozwól użytkownikom wgrywać wideo typu .mkv, .mov, .avi and .flv.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">582</context>
