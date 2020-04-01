@@ -35,8 +35,8 @@ async function getSitemap (req: express.Request, res: express.Response) {
 
   const sitemapStream = new SitemapStream({ hostname: WEBSERVER.URL })
 
-  for (const url of urls) {
-    sitemapStream.write({ url })
+  for (const urlObj of urls) {
+    sitemapStream.write(urlObj)
   }
   sitemapStream.end()
 
