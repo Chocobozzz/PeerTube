@@ -16,11 +16,13 @@
     }
 
     .preview {
-      border: 2px solid grey;
+      object-fit: cover;
       border-radius: 4px;
+      max-width: 100%;
 
       &.no-image {
-        background-color: #ececec;
+        border: 2px solid grey;
+        background-color: var(--mainBackgroundColor);
       }
     }
   }

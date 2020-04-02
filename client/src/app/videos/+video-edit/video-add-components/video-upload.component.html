@@ -2,11 +2,10 @@
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
 
-    <div class="button-file form-control">
+    <div class="button-file form-control" [ngbTooltip]="'(extensions: ' + videoExtensions + ')'" container="body">
       <span i18n>Select the file to upload</span>
       <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" autofocus />
     </div>
-    <span class="button-file-extension">({{ videoExtensions }})</span>
 
     <div class="form-group form-group-channel">
       <label i18n for="first-step-channel">Channel</label>

@@ -43,10 +43,4 @@ $width-size: 190px;
   .button-file {
     @include peertube-button-file(max-content);
   }
-
-  .button-file-extension {
-    display: block;
-    font-size: 12px;
-    margin-top: 5px;
-  }
 }

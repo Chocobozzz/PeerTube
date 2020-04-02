@@ -1,13 +1,11 @@
 <div class="root">
   <div class="preview-container">
     <my-reactive-file
-      [inputName]="inputName" [inputLabel]="inputLabel" [extensions]="videoImageExtensions" [maxFileSize]="maxVideoImageSize"
-      icon="edit" (fileChanged)="onFileChanged($event)"
+      [inputName]="inputName" [inputLabel]="inputLabel" [extensions]="videoImageExtensions" [maxFileSize]="maxVideoImageSize" placement="right"
+      icon="edit" (fileChanged)="onFileChanged($event)" [ngbTooltip]="'(extensions: '+ videoImageExtensions +', '+ maxSizeText +': '+ maxVideoImageSizeInBytes +')'"
     ></my-reactive-file>
 
     <img *ngIf="imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" [src]="imageSrc" class="preview" />
     <div *ngIf="!imageSrc" [ngStyle]="{ width: previewWidth, height: previewHeight }" class="preview no-image"></div>
   </div>
-
-  <div i18n class="file-constraints">(extensions: {{ allowedExtensionsMessage }}, max size: {{ maxVideoImageSize | bytes }})</div>
 </div>

@@ -1,5 +1,11 @@
-@import '_variables';
-@import '_mixins';
+// Bootstrap grid utilities require functions, variables and mixins
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/grid';
+
+@import 'variables';
+@import 'mixins';
 
 label {
   font-weight: $font-regular;
@@ -54,6 +60,7 @@ my-peertube-checkbox {
 
   .captions-header {
     text-align: right;
+    margin-bottom: 1rem;
 
     .create-caption {
       @include create-button;
@@ -68,6 +75,7 @@ my-peertube-checkbox {
     a.caption-entry-label {
       @include disable-default-a-behaviour;
 
+      flex-grow: 1;
       color: #000;
 
       &:hover {
@@ -153,4 +161,49 @@ p-calendar {
   }
 }
 
-@include ng2-tags
+::ng-deep my-markdown-textarea {
+  .root {
+    @include media-breakpoint-down(xl) {
+      flex-direction: column !important;
+    }
+
+    textarea {
+      max-width: 100%;
+    }
+  }
+}
+
+@include ng2-tags;
+
+// columns for the video
+.col-video-edit {
+  @include make-col-ready();
+
+  @include media-breakpoint-up(md) {
+    @include make-col(7);
+
+    & + .col-video-edit {
+      @include make-col(5);
+    }
+  }
+
+  @include media-breakpoint-up(xl) {
+    @include make-col(8);
+
+    & + .col-video-edit {
+      @include make-col(4);
+    }
+  }
+}
+
+:host-context(.expanded) {
+  .col-video-edit {
+    @include media-breakpoint-up(md) {
+      @include make-col(8);
+  
+      & + .col-video-edit {
+        @include make-col(4);
+      }
+    }
+  }
+}

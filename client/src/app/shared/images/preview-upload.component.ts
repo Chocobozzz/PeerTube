@@ -3,6 +3,8 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
 import { ServerConfig } from '@shared/models'
+import { BytesPipe } from 'ngx-pipes'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-preview-upload',
@@ -24,14 +26,20 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
 
   imageSrc: SafeResourceUrl
   allowedExtensionsMessage = ''
+  maxSizeText: string
 
   private serverConfig: ServerConfig
+  private bytesPipe: BytesPipe
   private file: Blob
 
   constructor (
     private sanitizer: DomSanitizer,
-    private serverService: ServerService
-  ) {}
+    private serverService: ServerService,
+    private i18n: I18n
+  ) {
+    this.bytesPipe = new BytesPipe()
+    this.maxSizeText = this.i18n('max size')
+  }
 
   get videoImageExtensions () {
     return this.serverConfig.video.image.extensions
@@ -39,6 +47,10 @@ export class PreviewUploadComponent implements OnInit, ControlValueAccessor {
 
   get maxVideoImageSize () {
     return this.serverConfig.video.image.size.max
+  }
+
+  get maxVideoImageSizeInBytes () {
+    return this.bytesPipe.transform(this.maxVideoImageSize)
   }
 
   ngOnInit () {
