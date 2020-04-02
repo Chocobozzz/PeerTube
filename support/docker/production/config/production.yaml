@@ -45,6 +45,7 @@ storage:
   tmp: '../data/tmp/'
   avatars: '../data/avatars/'
   videos: '../data/videos/'
+  streaming_playlists: '../data/streaming-playlists'
   redundancy: '../data/redundancy/'
   logs: '../data/logs/'
   previews: '../data/previews/'
@@ -53,7 +54,6 @@ storage:
   captions: '../data/captions/'
   cache: '../data/cache/'
   plugins: '../data/plugins/'
-  streaming-playlists: '../data/streaming-playlists'
 
 log:
   level: 'info' # debug/info/warning/error
