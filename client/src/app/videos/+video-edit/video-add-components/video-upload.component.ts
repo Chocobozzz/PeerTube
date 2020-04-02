@@ -108,6 +108,11 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
     return this.videofileInput.nativeElement.files[0]
   }
 
+  setVideoFile (files: FileList) {
+    this.videofileInput.nativeElement.files = files
+    this.fileChange()
+  }
+
   getAudioUploadLabel () {
     const videofile = this.getVideoFile()
     if (!videofile) return this.i18n('Upload')

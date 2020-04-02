@@ -15,13 +15,13 @@
         </ng-template>
       </my-help>
 
-      <input type="text" id="targetUrl" [(ngModel)]="targetUrl" />
+      <input type="text" id="targetUrl" [(ngModel)]="targetUrl" class="form-control" />
     </div>
 
     <div class="form-group">
       <label i18n for="first-step-channel">Channel</label>
       <div class="peertube-select-container">
-        <select id="first-step-channel" [(ngModel)]="firstStepChannelId">
+        <select id="first-step-channel" [(ngModel)]="firstStepChannelId" class="form-control">
           <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
         </select>
       </div>
@@ -30,7 +30,7 @@
     <div class="form-group">
       <label i18n for="first-step-privacy">Privacy</label>
       <div class="peertube-select-container">
-        <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
+        <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId" class="form-control">
           <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
         </select>
       </div>

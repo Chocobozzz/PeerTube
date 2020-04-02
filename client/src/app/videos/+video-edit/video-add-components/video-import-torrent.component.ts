@@ -72,6 +72,11 @@ export class VideoImportTorrentComponent extends VideoSend implements OnInit, Ca
     this.importVideo(torrentfile)
   }
 
+  setTorrentFile (files: FileList) {
+    this.torrentfileInput.nativeElement.files = files
+    this.fileChange()
+  }
+
   importVideo (torrentfile?: Blob) {
     this.isImportingVideo = true
 

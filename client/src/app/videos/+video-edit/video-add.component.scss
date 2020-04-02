@@ -40,14 +40,19 @@ $border-color: #EAEAEA;
 
 ::ng-deep .upload-video-container {
   border: $border-width $border-type $border-color;
-  border-top: none;
+  border-top: transparent;
 
   background-color: var(--submenuColor);
-  border-radius: 3px;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
   width: 100%;
   min-height: 440px;
   padding-bottom: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  &.dragover {
+    border: 3px dashed var(--mainColor);
+  }
 }
