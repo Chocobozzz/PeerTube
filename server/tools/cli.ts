@@ -35,19 +35,17 @@ interface Settings {
   default: number
 }
 
-function getSettings () {
-  return new Promise<Settings>((res, rej) => {
-    const defaultSettings = {
-      remotes: [],
-      default: -1
-    }
+async function getSettings (): Promise<Settings> {
+  const defaultSettings = {
+    remotes: [],
+    default: -1
+  }
 
-    config.read((err, data) => {
-      if (err) return rej(err)
+  const data = await config.read()
 
-      return res(Object.keys(data).length === 0 ? defaultSettings : data)
-    })
-  })
+  return Object.keys(data).length === 0
+    ? defaultSettings
+    : data
 }
 
 async function getNetrc () {
@@ -62,24 +60,12 @@ async function getNetrc () {
   return netrc
 }
 
-function writeSettings (settings) {
-  return new Promise((res, rej) => {
-    config.write(settings, err => {
-      if (err) return rej(err)
-
-      return res()
-    })
-  })
+function writeSettings (settings: Settings) {
+  return config.write(settings)
 }
 
 function deleteSettings () {
-  return new Promise((res, rej) => {
-    config.trash((err) => {
-      if (err) return rej(err)
-
-      return res()
-    })
-  })
+  return config.trash()
 }
 
 function getRemoteObjectOrDie (
@@ -227,7 +213,6 @@ function getLogger (logLevel = 'info') {
 
 export {
   version,
-  config,
   getLogger,
   getSettings,
   getNetrc,

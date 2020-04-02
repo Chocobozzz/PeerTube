@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "application-config": "^1.0.1",
-    "cli-table3": "^0.5.1",
+    "application-config": "^2.0.0",
+    "cli-table3": "^0.6.0",
     "netrc-parser": "^3.1.6",
     "webtorrent-hybrid": "^4.0.1"
   },
