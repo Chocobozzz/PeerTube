@@ -129,7 +129,7 @@
     "vtt.js": "^0.13.0",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.0.8",
-    "webtorrent": "^0.107.16",
+    "webtorrent": "^0.108.1",
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.10.2"
   },
