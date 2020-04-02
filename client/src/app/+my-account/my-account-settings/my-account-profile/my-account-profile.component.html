@@ -5,7 +5,7 @@
   <div class="form-group">
     <label i18n for="display-name">Display name</label>
     <input
-      type="text" id="display-name"
+      type="text" id="display-name" class="form-control"
       formControlName="display-name" [ngClass]="{ 'input-error': formErrors['display-name'] }"
     >
     <div *ngIf="formErrors['display-name']" class="form-error">
@@ -16,7 +16,7 @@
   <div class="form-group">
     <label i18n for="description">Description</label>
     <textarea
-      id="description" formControlName="description"
+      id="description" formControlName="description" class="form-control"
       [ngClass]="{ 'input-error': formErrors['description'] }"
     ></textarea>
     <div *ngIf="formErrors.description" class="form-error">

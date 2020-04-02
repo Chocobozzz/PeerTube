@@ -40,7 +40,10 @@
 
     </my-peertube-checkbox>
 
-    <span i18n class="action-button action-button-cancel" (click)="hide()">Close</span>
+    <input
+      type="button" role="button" i18n-value value="Close" class="action-button action-button-cancel"
+      (click)="hide()" (key.enter)="hide()"
+    >
   </div>
 
 </ng-template>

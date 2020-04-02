@@ -52,7 +52,7 @@
     <div class="video-actions">
       <!-- FIXME: remove bottom placement when overflow is fixed in bootstrap dropdown: https://github.com/ng-bootstrap/ng-bootstrap/issues/3495 -->
       <my-video-actions-dropdown
-        *ngIf="showActions" [video]="video" [displayOptions]="videoActionsDisplayOptions" placement="bottom-left bottom-right left"
+        *ngIf="showActions" [video]="video" [displayOptions]="videoActionsDisplayOptions" placement="bottom-left bottom-right left auto"
         (videoRemoved)="onVideoRemoved()" (videoBlacklisted)="onVideoBlacklisted()" (videoUnblacklisted)="onVideoUnblacklisted()"
       ></my-video-actions-dropdown>
     </div>

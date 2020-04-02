@@ -82,7 +82,7 @@
       <div class="form-group" *ngIf="isCreation()">
         <label i18n for="username">Username</label>
         <input
-          type="text" id="username" i18n-placeholder placeholder="john"
+          type="text" id="username" i18n-placeholder placeholder="john" class="form-control"
           formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
         >
         <div *ngIf="formErrors.username" class="form-error">
@@ -93,7 +93,7 @@
       <div class="form-group">
         <label i18n for="email">Email</label>
         <input
-          type="text" id="email" i18n-placeholder placeholder="mail@example.com"
+          type="text" id="email" i18n-placeholder placeholder="mail@example.com" class="form-control"
           formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
           autocomplete="off"
         >
@@ -112,7 +112,7 @@
           </ng-template>
         </my-help>
         <input
-          type="password" id="password" autocomplete="new-password"
+          type="password" id="password" autocomplete="new-password" class="form-control"
           formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
         >
         <div *ngIf="formErrors.password" class="form-error">

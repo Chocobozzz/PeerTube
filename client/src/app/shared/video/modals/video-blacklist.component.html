@@ -8,8 +8,10 @@
 
     <form novalidate [formGroup]="form" (ngSubmit)="blacklist()">
       <div class="form-group">
-        <textarea i18n-placeholder placeholder="Reason..." formControlName="reason" [ngClass]="{ 'input-error': formErrors['reason'] }">
-        </textarea>
+        <textarea
+          i18n-placeholder placeholder="Reason..." formControlName="reason"
+          [ngClass]="{ 'input-error': formErrors['reason'] }" class="form-control"
+        ></textarea>
         <div *ngIf="formErrors.reason" class="form-error">
           {{ formErrors.reason }}
         </div>
@@ -27,9 +29,10 @@
       </div>
 
       <div class="form-group inputs">
-        <span i18n class="action-button action-button-cancel" (click)="hide()">
-          Cancel
-        </span>
+        <input
+          type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+          (click)="hide()" (key.enter)="hide()"
+        >
 
         <input
           type="submit" i18n-value value="Submit" class="action-button-submit"

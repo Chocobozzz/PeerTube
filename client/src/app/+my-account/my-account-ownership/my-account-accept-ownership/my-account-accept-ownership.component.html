@@ -21,9 +21,10 @@
 
   <div class="modal-footer inputs">
     <div class="form-group inputs">
-      <span i18n class="action-button action-button-cancel" (click)="dismiss()">
-        Cancel
-      </span>
+      <input
+        type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+        (click)="dismiss()" (key.enter)="dismiss()"
+      >
 
       <input
           type="submit" i18n-value value="Submit" class="action-button-submit"

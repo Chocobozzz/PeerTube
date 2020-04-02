@@ -80,9 +80,10 @@
   }
 }
 
-@mixin button-focus-visible-shadow($color) {
+@mixin button-focus($color) {
+  &:focus,
   &.focus-visible {
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 4px $color;
+    box-shadow: 0 0 0 .2rem $color;
   }
 }
 
@@ -127,7 +128,7 @@
 }
 
 @mixin orange-button {
-  @include button-focus-visible-shadow(var(--mainHoverColor));
+  @include button-focus(var(--mainColorLightest));
 
   &, &:active, &:focus {
     color: #fff;
@@ -151,6 +152,8 @@
 }
 
 @mixin tertiary-button {
+  @include button-focus($grey-button-outline-color);
+
   color: $grey-foreground-color;
   background-color: transparent;
 
@@ -164,6 +167,8 @@
 }
 
 @mixin grey-button {
+  @include button-focus($grey-button-outline-color);
+
   &, &:active, &:focus {
     background-color: $grey-background-color;
     color: $grey-foreground-color;
@@ -274,10 +279,8 @@
 @mixin peertube-select-container ($width) {
   padding: 0;
   margin: 0;
-  border: 1px solid #C6C6C6;
   width: $width;
   border-radius: 3px;
-  overflow: hidden;
   background: var(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
@@ -303,8 +306,7 @@
     width: calc(100% + 2px);
     position: relative;
     left: 1px;
-    border: none;
-    box-shadow: none;
+    border: 1px solid #C6C6C6;
     background: transparent none;
     appearance: none;
     cursor: pointer;
@@ -370,7 +372,7 @@
   position: absolute;
 
   &:focus + span {
-    box-shadow: 0 0 0 .1rem rgba(87, 85, 217, .2);
+    box-shadow: 0 0 0 .2rem var(--mainColorLightest);
   }
 
   & + span {
@@ -701,5 +703,74 @@
     font-size: 90%;
     color: var(--inputPlaceholderColor);
     text-align: center;
+  }
+}
+
+@mixin ng2-tags {
+  ::ng-deep {
+    .ng2-tag-input {
+      border: none !important;
+    }
+
+    .ng2-tags-container {
+      display: flex;
+      align-items: center;
+      border: 1px solid #C6C6C6;
+      border-radius: 3px;
+      padding: 5px !important;
+      height: max-content;
+
+      &:focus-within {
+        box-shadow: 0 0 0 .2rem var(--mainColorLightest);
+      }
+    }
+
+    tag-input-form {
+      input {
+        height: 30px !important;
+        font-size: 12px !important;
+
+        background-color: var(--mainBackgroundColor) !important;
+        color: var(--mainForegroundColor) !important;
+      }
+    }
+
+    tag {
+      background-color: $grey-background-color !important;
+      color: #000 !important;
+      border-radius: 3px !important;
+      font-size: 12px !important;
+      height: 30px !important;
+      line-height: 30px !important;
+      margin: 0 5px 0 0 !important;
+      cursor: default !important;
+      padding: 0 8px 0 10px !important;
+
+      div {
+        height: 100% !important;
+      }
+    }
+
+    delete-icon {
+      cursor: pointer !important;
+      height: auto !important;
+      vertical-align: middle !important;
+      padding-left: 6px !important;
+
+      svg {
+        position: relative;
+        top: -1px;
+        height: auto !important;
+        vertical-align: middle !important;
+
+        path  {
+          fill: $grey-foreground-color !important;
+        }
+      }
+
+      &:hover {
+        transform: none !important;
+      }
+    }
   }
 }

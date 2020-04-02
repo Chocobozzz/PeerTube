@@ -76,10 +76,14 @@
   </div>
 
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-understood" (click)="hide()">Remind me later</span>
+    <input
+      type="button" role="button" i18n-value value="Remind me later" class="action-button action-button-understood"
+      (click)="hide()" (key.enter)="hide()"
+    >
 
-    <a i18n (click)="doNotOpenAgain(); hide()" class="configure-instance-button" href="/admin/config/edit-custom" target="_blank"
-       rel="noopener noreferrer">
+    <a i18n (click)="doNotOpenAgain(); hide()" (key.enter)="doNotOpenAgain(); hide()"
+       class="configure-instance-button" href="/admin/config/edit-custom" target="_blank"
+       rel="noopener noreferrer" ngbAutofocus>
       Configure my instance
     </a>
   </div>

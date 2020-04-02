@@ -32,9 +32,10 @@
     </div>
 
     <div class="modal-footer inputs">
-      <span i18n class="action-button action-button-cancel" (click)="hide()">
-        Cancel
-      </span>
+      <input
+        type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+        (click)="hide()" (key.enter)="hide()"
+      >
 
       <input
         type="submit" i18n-value value="Add this caption" class="action-button-submit"

@@ -10,7 +10,7 @@
       <div class="form-group">
         <label i18n for="fromName">Your name</label>
         <input
-          type="text" id="fromName"
+          type="text" id="fromName" class="form-control"
           formControlName="fromName" [ngClass]="{ 'input-error': formErrors.fromName }"
         >
         <div *ngIf="formErrors.fromName" class="form-error">{{ formErrors.fromName }}</div>
@@ -19,7 +19,7 @@
       <div class="form-group">
         <label i18n for="fromEmail">Your email</label>
         <input
-          type="text" id="fromEmail"
+          type="text" id="fromEmail" class="form-control"
           formControlName="fromEmail" [ngClass]="{ 'input-error': formErrors['fromEmail'] }"
         >
         <div *ngIf="formErrors.fromEmail" class="form-error">{{ formErrors.fromEmail }}</div>
@@ -28,7 +28,7 @@
       <div class="form-group">
         <label i18n for="subject">Subject</label>
         <input
-          type="text" id="subject"
+          type="text" id="subject" class="form-control"
           formControlName="subject" [ngClass]="{ 'input-error': formErrors['subject'] }"
         >
         <div *ngIf="formErrors.subject" class="form-error">{{ formErrors.subject }}</div>
@@ -36,7 +36,7 @@
 
       <div class="form-group">
         <label i18n for="body">Your message</label>
-        <textarea id="body" formControlName="body" [ngClass]="{ 'input-error': formErrors['body'] }">
+        <textarea id="body" formControlName="body" class="form-control" [ngClass]="{ 'input-error': formErrors['body'] }">
         </textarea>
         <div *ngIf="formErrors.body" class="form-error">{{ formErrors.body }}</div>
       </div>
@@ -44,9 +44,10 @@
       <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
 
       <div class="form-group inputs">
-        <span i18n class="action-button action-button-cancel" (click)="hide()">
-          Cancel
-        </span>
+        <input
+          type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+          (click)="hide()" (key.enter)="hide()"
+        >
 
         <input
           type="submit" i18n-value value="Submit" class="action-button-submit"

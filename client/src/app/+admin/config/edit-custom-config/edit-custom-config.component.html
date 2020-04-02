@@ -19,7 +19,7 @@
               <div class="form-group">
                 <label i18n for="instanceName">Name</label>
                 <input
-                  type="text" id="instanceName"
+                  type="text" id="instanceName" class="form-control"
                   formControlName="name" [ngClass]="{ 'input-error': formErrors.instance.name }"
                 >
                 <div *ngIf="formErrors.instance.name" class="form-error">{{ formErrors.instance.name }}</div>
@@ -28,7 +28,7 @@
               <div class="form-group">
                 <label i18n for="instanceShortDescription">Short description</label>
                 <textarea
-                  id="instanceShortDescription" formControlName="shortDescription" class="small"
+                  id="instanceShortDescription" formControlName="shortDescription" class="form-control small"
                   [ngClass]="{ 'input-error': formErrors['instance.shortDescription'] }"
                 ></textarea>
                 <div *ngIf="formErrors.instance.shortDescription" class="form-error">{{ formErrors.instance.shortDescription }}</div>
@@ -107,7 +107,7 @@
                 </my-help>
 
                 <div class="peertube-select-container">
-                  <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy">
+                  <select id="instanceDefaultNSFWPolicy" formControlName="defaultNSFWPolicy" class="form-control">
                     <option i18n value="do_not_list">Do not list</option>
                     <option i18n value="blur">Blur thumbnails</option>
                     <option i18n value="display">Display</option>
@@ -172,7 +172,7 @@
                 <div i18n class="label-small-info">To share your personal videos? To open registrations and allow people to upload what they want?</div>
 
                 <textarea
-                  id="instanceCreationReason" formControlName="creationReason" class="small"
+                  id="instanceCreationReason" formControlName="creationReason" class="small" class="form-control"
                   [ngClass]="{ 'input-error': formErrors['instance.creationReason'] }"
                 ></textarea>
                 <div *ngIf="formErrors.instance.creationReason" class="form-error">{{ formErrors.instance.creationReason }}</div>
@@ -183,7 +183,7 @@
                 <div i18n class="label-small-info">It's important to know for users who want to register on your instance</div>
 
                 <textarea
-                  id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="small"
+                  id="instanceMaintenanceLifetime" formControlName="maintenanceLifetime" class="form-control small"
                   [ngClass]="{ 'input-error': formErrors['instance.maintenanceLifetime'] }"
                 ></textarea>
                 <div *ngIf="formErrors.instance.maintenanceLifetime" class="form-error">{{ formErrors.instance.maintenanceLifetime }}</div>
@@ -194,7 +194,7 @@
                 <div i18n class="label-small-info">With your own funds? With user donations? Advertising?</div>
 
                 <textarea
-                  id="instanceBusinessModel" formControlName="businessModel" class="small"
+                  id="instanceBusinessModel" formControlName="businessModel" class="form-control small"
                   [ngClass]="{ 'input-error': formErrors['instance.businessModel'] }"
                 ></textarea>
                 <div *ngIf="formErrors.instance.businessModel" class="form-error">{{ formErrors.instance.businessModel }}</div>
@@ -249,7 +249,7 @@
                 <label i18n for="themeDefault">Theme</label>
 
                 <div class="peertube-select-container">
-                  <select formControlName="default" id="themeDefault">
+                  <select formControlName="default" id="themeDefault" class="form-control">
                     <option i18n value="default">default</option>
 
                     <option *ngFor="let theme of availableThemes" [value]="theme">{{ theme }}</option>
@@ -261,7 +261,7 @@
             <div class="form-group" formGroupName="instance">
               <label i18n for="instanceDefaultClientRoute">Landing page</label>
               <div class="peertube-select-container">
-                <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute">
+                <select id="instanceDefaultClientRoute" formControlName="defaultClientRoute" class="form-control">
                   <option i18n value="/videos/overview">Discover videos</option>
                   <option i18n value="/videos/trending">Trending videos</option>
                   <option i18n value="/videos/most-liked">Most liked videos</option>
@@ -303,7 +303,7 @@
                     <div [ngClass]="{ 'disabled-checkbox-extra': !isSignupEnabled() }" class="mt-3">
                       <label i18n for="signupLimit">Signup limit</label>
                       <input
-                        type="number" min="-1" id="signupLimit"
+                        type="number" min="-1" id="signupLimit" class="form-control"
                         formControlName="limit" [ngClass]="{ 'input-error': formErrors['signup.limit'] }"
                       >
                       <div *ngIf="formErrors.signup.limit" class="form-error">{{ formErrors.signup.limit }}</div>
@@ -318,7 +318,7 @@
               <div class="form-group">
                 <label i18n for="userVideoQuota">Default video quota per user</label>
                 <div class="peertube-select-container">
-                  <select id="userVideoQuota" formControlName="videoQuota">
+                  <select id="userVideoQuota" formControlName="videoQuota" class="form-control">
                     <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
                       {{ videoQuotaOption.label }}
                     </option>
@@ -330,7 +330,7 @@
               <div class="form-group">
                 <label i18n for="userVideoQuotaDaily">Default daily upload limit per user</label>
                 <div class="peertube-select-container">
-                  <select id="userVideoQuotaDaily" formControlName="videoQuotaDaily">
+                  <select id="userVideoQuotaDaily" formControlName="videoQuotaDaily" class="form-control">
                     <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
                       {{ videoQuotaDailyOption.label }}
                     </option>
@@ -451,7 +451,7 @@
                         <div [ngClass]="{ 'disabled-checkbox-extra': !isAutoFollowIndexEnabled() }">
                           <label i18n for="followingsInstanceAutoFollowIndexUrl">Index URL</label>
                           <input
-                            type="text" id="followingsInstanceAutoFollowIndexUrl"
+                            type="text" id="followingsInstanceAutoFollowIndexUrl" class="form-control"
                             formControlName="indexUrl" [ngClass]="{ 'input-error': formErrors['followings.instance.autoFollowIndex.indexUrl'] }"
                           >
                           <div *ngIf="formErrors.followings.instance.autoFollowIndex.indexUrl" class="form-error">{{ formErrors.followings.instance.autoFollowIndex.indexUrl }}</div>
@@ -477,7 +477,7 @@
             <div class="form-group" formGroupName="admin">
               <label i18n for="adminEmail">Admin email</label>
               <input
-                type="text" id="adminEmail"
+                type="text" id="adminEmail" class="form-control"
                 formControlName="email" [ngClass]="{ 'input-error': formErrors['admin.email'] }"
               >
               <div *ngIf="formErrors.admin.email" class="form-error">{{ formErrors.admin.email }}</div>
@@ -518,7 +518,7 @@
                   <label i18n for="signupLimit">Your Twitter username</label>
 
                   <input
-                    type="text" id="servicesTwitterUsername"
+                    type="text" id="servicesTwitterUsername" class="form-control"
                     formControlName="username" [ngClass]="{ 'input-error': formErrors['services.twitter.username'] }"
                   >
                   <div *ngIf="formErrors.services.twitter.username" class="form-error">{{ formErrors.services.twitter.username }}</div>
@@ -656,7 +656,7 @@
                 <div class="form-group" [ngClass]="{ 'disabled-checkbox-extra': !isTranscodingEnabled() }">
                   <label i18n for="transcodingThreads">Transcoding threads</label>
                   <div class="peertube-select-container">
-                    <select id="transcodingThreads" formControlName="threads">
+                    <select id="transcodingThreads" formControlName="threads" class="form-control">
                       <option *ngFor="let transcodingThreadOption of transcodingThreadOptions" [value]="transcodingThreadOption.value">
                         {{ transcodingThreadOption.label }}
                       </option>
@@ -707,7 +707,7 @@
               <div class="form-group" formGroupName="previews">
                 <label i18n for="cachePreviewsSize">Number of previews to keep in cache</label>
                 <input
-                  type="number" min="0" id="cachePreviewsSize"
+                  type="number" min="0" id="cachePreviewsSize" class="form-control"
                   formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.previews.size'] }"
                 >
                 <div *ngIf="formErrors.cache.previews.size" class="form-error">{{ formErrors.cache.previews.size }}</div>
@@ -716,7 +716,7 @@
               <div class="form-group" formGroupName="captions">
                 <label i18n for="cacheCaptionsSize">Number of video captions to keep in cache</label>
                 <input
-                  type="number" min="0" id="cacheCaptionsSize"
+                  type="number" min="0" id="cacheCaptionsSize" class="form-control"
                   formControlName="size" [ngClass]="{ 'input-error': formErrors['cache.captions.size'] }"
                 >
                 <div *ngIf="formErrors.cache.captions.size" class="form-error">{{ formErrors.cache.captions.size }}</div>
@@ -750,7 +750,7 @@
                   </my-help>
 
                   <textarea
-                    id="customizationJavascript" formControlName="javascript"
+                    id="customizationJavascript" formControlName="javascript" class="form-control"
                     [ngClass]="{ 'input-error': formErrors['instance.customizations.javascript'] }"
                   ></textarea>
 
@@ -780,7 +780,7 @@
                   </my-help>
 
                   <textarea
-                    id="customizationCSS" formControlName="css"
+                    id="customizationCSS" formControlName="css" class="form-control"
                     [ngClass]="{ 'input-error': formErrors['instance.customizations.css'] }"
                   ></textarea>
                   <div *ngIf="formErrors.instance.customizations.css" class="form-error">{{ formErrors.instance.customizations.css }}</div>

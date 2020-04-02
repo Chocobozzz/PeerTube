@@ -21,7 +21,7 @@
     <div class="input-group">
       <input
         type="text" id="username" i18n-placeholder placeholder="Example: jane_doe"
-        formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }"
+        formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }"
       >
       <div class="input-group-append">
         <span class="input-group-text">@{{ instanceHost }}</span>
@@ -41,7 +41,7 @@
     <label for="email" i18n>Email</label>
     <input
       type="text" id="email" i18n-placeholder placeholder="Email"
-      formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
+      formControlName="email" class="form-control" [ngClass]="{ 'input-error': formErrors['email'] }"
     >
     <div *ngIf="formErrors.email" class="form-error">
       {{ formErrors.email }}
@@ -52,7 +52,7 @@
     <label for="password" i18n>Password</label>
     <input
       type="password" id="password" i18n-placeholder placeholder="Password" autocomplete="new-password"
-      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+      formControlName="password" class="form-control" [ngClass]="{ 'input-error': formErrors['password'] }"
     >
     <div *ngIf="formErrors.password" class="form-error">
       {{ formErrors.password }}

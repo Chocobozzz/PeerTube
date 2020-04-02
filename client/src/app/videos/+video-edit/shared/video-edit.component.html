@@ -9,7 +9,7 @@
           <div class="col-md-8">
             <div class="form-group">
               <label i18n for="name">Title</label>
-              <input type="text" id="name" formControlName="name" />
+              <input type="text" id="name" class="form-control" formControlName="name" />
               <div *ngIf="formErrors.name" class="form-error">
                 {{ formErrors.name }}
               </div>
@@ -58,7 +58,7 @@
             <div class="form-group">
               <label i18n>Channel</label>
               <div class="peertube-select-container">
-                <select formControlName="channelId">
+                <select formControlName="channelId" class="form-control">
                   <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
                 </select>
               </div>
@@ -67,7 +67,7 @@
             <div class="form-group">
               <label i18n for="category">Category</label>
               <div class="peertube-select-container">
-                <select id="category" formControlName="category">
+                <select id="category" formControlName="category" class="form-control">
                   <option></option>
                   <option *ngFor="let category of videoCategories" [value]="category.id">{{ category.label }}</option>
                 </select>
@@ -81,7 +81,7 @@
             <div class="form-group">
               <label i18n for="licence">Licence</label>
               <div class="peertube-select-container">
-                <select id="licence" formControlName="licence">
+                <select id="licence" formControlName="licence" class="form-control">
                   <option></option>
                   <option *ngFor="let licence of videoLicences" [value]="licence.id">{{ licence.label }}</option>
                 </select>
@@ -95,7 +95,7 @@
             <div class="form-group">
               <label i18n for="language">Language</label>
               <div class="peertube-select-container">
-                <select id="language" formControlName="language">
+                <select id="language" formControlName="language" class="form-control">
                   <option></option>
                   <option *ngFor="let language of videoLanguages" [value]="language.id">{{ language.label }}</option>
                 </select>
@@ -109,7 +109,7 @@
             <div class="form-group">
               <label i18n for="privacy">Privacy</label>
               <div class="peertube-select-container">
-                <select id="privacy" formControlName="privacy">
+                <select id="privacy" formControlName="privacy" class="form-control">
                   <option></option>
                   <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
                   <option *ngIf="schedulePublicationPossible" [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>

@@ -16,11 +16,15 @@
   </div>
 
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-cancel" (click)="dismiss()" role="button">Cancel</span>
+    <input
+      type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+      (click)="dismiss()" (key.enter)="dismiss()"
+    >
 
     <input
+      ngbAutofocus
       type="submit" [value]="confirmButtonText" class="action-button-submit" [disabled]="isConfirmationDisabled()"
-      (click)="close()"
+      (click)="close()" (key.enter)="confirm()"
     >
   </div>
 </ng-template>

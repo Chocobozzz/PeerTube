@@ -7,6 +7,9 @@
   <div class="modal-body" [innerHTML]="videoHTMLSupport"></div>
 
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-cancel" (click)="hide()">Maybe later</span>
+    <input
+      type="button" role="button" i18n-value value="Maybe later" class="action-button action-button-cancel"
+      (click)="hide()" (key.enter)="hide()"
+    >
   </div>
 </ng-template>

@@ -8,7 +8,7 @@
       <label i18n for="verify-email-email">Email</label>
       <input
         type="email" id="verify-email-email" i18n-placeholder placeholder="Email address" required
-        formControlName="verify-email-email" [ngClass]="{ 'input-error': formErrors['verify-email-email'] }"
+        formControlName="verify-email-email" class="form-control" [ngClass]="{ 'input-error': formErrors['verify-email-email'] }"
       >
       <div *ngIf="formErrors['verify-email-email']" class="form-error">
           {{ formErrors['verify-email-email'] }}

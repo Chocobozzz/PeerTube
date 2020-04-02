@@ -2,16 +2,16 @@
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
 
-    <div class="button-file">
+    <div class="button-file form-control">
       <span i18n>Select the file to upload</span>
-      <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" />
+      <input #videofileInput type="file" name="videofile" id="videofile" [accept]="videoExtensions" (change)="fileChange()" autofocus />
     </div>
     <span class="button-file-extension">({{ videoExtensions }})</span>
 
     <div class="form-group form-group-channel">
       <label i18n for="first-step-channel">Channel</label>
       <div class="peertube-select-container">
-        <select id="first-step-channel" [(ngModel)]="firstStepChannelId">
+        <select id="first-step-channel" [(ngModel)]="firstStepChannelId" class="form-control">
           <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
         </select>
       </div>
@@ -20,7 +20,7 @@
     <div class="form-group">
       <label i18n for="first-step-privacy">Privacy</label>
       <div class="peertube-select-container">
-        <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId">
+        <select id="first-step-privacy" [(ngModel)]="firstStepPrivacyId" class="form-control">
           <option *ngFor="let privacy of videoPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
           <option i18n [value]="SPECIAL_SCHEDULED_PRIVACY">Scheduled</option>
         </select>

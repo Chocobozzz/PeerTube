@@ -43,9 +43,10 @@
     <my-remote-subscribe [interact]="true" [uri]="getUri()"></my-remote-subscribe>
   </div>
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-cancel" role="button" (click)="hideVisitorModal()">
-      Cancel
-    </span>
+    <input
+      type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+      (click)="hideVisitorModal()" (key.enter)="hideVisitorModal()"
+    >
 
     <input
       type="submit" i18n-value value="Login to comment" class="action-button-submit"

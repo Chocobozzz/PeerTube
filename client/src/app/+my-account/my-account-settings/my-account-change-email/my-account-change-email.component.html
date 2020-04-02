@@ -14,7 +14,7 @@
   <div class="form-group">
     <label i18n for="new-email">New email</label>
     <input
-      type="email" id="new-email" i18n-placeholder placeholder="Your new email"
+      type="email" id="new-email" i18n-placeholder placeholder="Your new email" class="form-control"
       formControlName="new-email" [ngClass]="{ 'input-error': formErrors['new-email'] }"
     >
     <div *ngIf="formErrors['new-email']" class="form-error">
@@ -25,7 +25,7 @@
   <div class="form-group">
     <input
       type="password" id="password" i18n-placeholder placeholder="Your password" autocomplete="off"
-      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+      formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }" class="form-control"
     >
     <div *ngIf="formErrors['password']" class="form-error">
       {{ formErrors['password'] }}

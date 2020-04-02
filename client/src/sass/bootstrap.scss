@@ -230,3 +230,20 @@ ngb-tooltip-window {
     background-color: var(--secondaryColor);
   }
 }
+
+// input box-shadow on focus
+.form-control {
+  font-size: 15px;
+  color: var(--mainForegroundColor);
+  background-color: var(--inputBackgroundColor);
+  outline: none;
+
+  &:focus-within,
+  &:focus {
+    box-shadow: 0 0 0 .2rem var(--mainColorLightest);
+
+    &.input-error {
+      box-shadow: 0 0 0 .2rem #{scale-color($red, $alpha: -75%)};
+    }
+  }
+}

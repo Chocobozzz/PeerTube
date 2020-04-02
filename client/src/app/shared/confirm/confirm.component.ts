@@ -45,7 +45,6 @@ export class ConfirmComponent implements OnInit {
     )
   }
 
-  @HostListener('document:keydown.enter')
   confirm () {
     if (this.openedModal) this.openedModal.close()
   }

@@ -28,7 +28,7 @@
         <label i18n for="username">User</label>
         <input
           type="text" id="username" i18n-placeholder placeholder="Username or email address" required tabindex="1"
-          formControlName="username" [ngClass]="{ 'input-error': formErrors['username'] }" #emailInput
+          formControlName="username" class="form-control" [ngClass]="{ 'input-error': formErrors['username'] }" #emailInput
         >
         <a i18n *ngIf="signupAllowed === true" routerLink="/signup" class="create-an-account">
           or create an account
@@ -45,7 +45,7 @@
       <div>
         <input
           type="password" name="password" id="password" i18n-placeholder placeholder="Password" required tabindex="2" autocomplete="current-password"
-          formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }"
+          formControlName="password" class="form-control" [ngClass]="{ 'input-error': formErrors['password'] }"
         >
         <a i18n-title class="forgot-password-button" (click)="openForgotPasswordModal()" title="Click here to reset your password">I forgot my password</a>
       </div>
@@ -81,7 +81,10 @@
   </div>
 
   <div class="modal-footer inputs">
-    <span i18n class="action-button action-button-cancel" (click)="hideForgotPasswordModal()">Cancel</span>
+    <input
+      type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+      (click)="hideForgotPasswordModal()" (key.enter)="hideForgotPasswordModal()"
+    >
 
     <input
       type="submit" i18n-value value="Send me an email to reset my password" class="action-button-submit"

@@ -25,6 +25,7 @@ body {
   // for css custom properties #{$var}
   --mainColor: #{$main-color};
   --mainColorLighter: #{$main-color-lighter};
+  --mainColorLightest: #{$main-color-lightest};
   --mainHoverColor: #{$main-hover-color};
   --mainBackgroundColor: #{$bg-color};
   --mainForegroundColor: #{$fg-color};
@@ -113,6 +114,7 @@ label {
 .main-col {
   margin-left: $menu-width;
   width: calc(100% - #{$menu-width});
+  outline: none;
 
   .margin-content {
     margin-left: $not-expanded-horizontal-margins;
