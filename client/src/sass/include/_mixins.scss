@@ -774,3 +774,26 @@
     }
   }
 }
+
+@mixin divider($color: var(--submenuColor), $background: var(--mainBackgroundColor)) {
+  width: 95%;
+  border-top: .05rem solid $color;
+  height: .05rem;
+  text-align: center;
+  display: block;
+  position: relative;
+
+  &[data-content] {
+    margin: .8rem 0;
+
+    &::after {
+      background: $background;
+      color: $color;
+      content: attr(data-content);
+      display: inline-block;
+      font-size: .7rem;
+      padding: 0 .4rem;
+      transform: translateY(-.65rem);
+    }
+  }
+}

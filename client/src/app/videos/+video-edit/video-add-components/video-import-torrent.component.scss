@@ -3,7 +3,11 @@
 
 .first-step-block {
   .torrent-or-magnet {
-    margin: 10px 0;
+    @include divider($color: var(--inputPlaceholderColor), $background: var(--submenuColor));
+    
+    &[data-content] {
+      margin: 1.5rem 0;
+    }
   }
 
   .form-group-magnet-uri {
