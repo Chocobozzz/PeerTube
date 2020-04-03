@@ -462,7 +462,7 @@
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
-        <target state="new">Format</target>
+        <target state="translated">Format</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="be745b3dc0df310871766eb6c8f78c3ce652a2b4" datatype="html">
@@ -527,9 +527,7 @@
       </trans-unit>
       <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target state="new">
-      Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-    </target>
+        <target state="translated">Twoje zgłoszenie zostanie przesłane do moderatorów <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> oraz zostanie przekazane do (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1566,7 +1564,7 @@
       </trans-unit>
       <trans-unit id="cc37c9e1ceff31dc1227cc8c2f4bdadb2f239173" datatype="html">
         <source>Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></source>
-        <target state="new">Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
+        <target state="translated">Rażące: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1806,7 +1804,7 @@
       </trans-unit>
       <trans-unit id="7ef9c50b8735e25780026b93da26cfcab1546653" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></source>
-        <target state="new">using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
+        <target state="translated">używając <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1914,10 +1912,7 @@
       </trans-unit>
       <trans-unit id="17ebc377c617be81cff7c2f2edbb7d405595d73a" datatype="html">
         <source>Jump to channel <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-    Jump to channel
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
+        <target state="translated">Przejdź do kanału <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2222,7 +2217,7 @@
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target state="new">FAQ</target>
+        <target state="translated">Często zadawane pytania</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">165</context>
@@ -2928,9 +2923,7 @@
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="new">
-          the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
-        </target>
+        <target state="translated">system udostępniania pliku wideo zakłada, że część informacji o Twoim systemie (takich jak adres IP) zostanie udostępniona innym członkom sieci.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">262</context>
@@ -3075,11 +3068,7 @@
       </trans-unit>
       <trans-unit id="2c6453cc150c9f652a7f1238d2f172e625f0f117" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance. On most platforms, you can find the video by typing its URL in the search bar and then comment it from within the software's interface.</source>
-        <target state="new">
-      You can comment using an account on any ActivityPub-compatible instance.
-      On most platforms, you can find the video by typing its URL in the search bar and then comment it
-      from within the software's interface.
-    </target>
+        <target state="translated">Możesz komentować używając każdego konta instancji zgodnych z ActivityPub. Na większości z nich możesz znaleźć film wpisując adres URL w wyszukiwarkę, a następnie skomentować używając ich wewnętrznego interfejsu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">35</context>
@@ -3347,7 +3336,7 @@
       </trans-unit>
       <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a">
         <source>john</source>
-        <target>jan</target>
+        <target>Jan</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -3356,7 +3345,7 @@
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05">
         <source>mail@example.com</source>
-        <target>mail@example.com</target>
+        <target>przykladowy@mail.pl</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -3365,9 +3354,7 @@
       </trans-unit>
       <trans-unit id="8861667a66c0000e6ae144520026d55123cea117" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Jeżeli pozostawisz puste hasło - email zostanie wysłany do użytkownika.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">109</context>
@@ -3411,7 +3398,7 @@
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="new">Doesn't need review before a video goes public</target>
+        <target state="translated">Nie potrzebuje recenzji przed opublikowaniem filmu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">168</context>
