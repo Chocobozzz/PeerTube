@@ -221,10 +221,23 @@ ngb-tooltip-window {
   z-index: z(tooltip) !important;
 }
 
+.btn-outline-secondary {
+  border-color: $input-border-color;
+
+  &:focus-within,
+  &:focus,
+  &:hover {
+    color: #fff;
+    background-color: #6c757d;
+  }
+}
+
 .btn-outline-tertiary {
   color: var(--secondaryColor);
   border-color: var(--secondaryColor);
 
+  &:focus-within,
+  &:focus,
   &:hover {
     color: var(--mainBackgroundColor);
     background-color: var(--secondaryColor);
@@ -246,4 +259,8 @@ ngb-tooltip-window {
       box-shadow: #{$focus-box-shadow-form} #{scale-color($red, $alpha: -75%)};
     }
   }
+}
+
+.input-group > .form-control {
+  flex: initial;
 }

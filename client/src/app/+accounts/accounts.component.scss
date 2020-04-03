@@ -1,3 +1,9 @@
+// Bootstrap grid utilities require functions, variables and mixins
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/grid';
+
 @import '_variables';
 @import '_mixins';
 
@@ -13,7 +19,16 @@
   display: flex;
   height: max-content;
   margin-left: auto;
-  margin-top: 20px;
+  margin-top: 10px;
+
+  @include media-breakpoint-down(lg) {
+    flex-flow: column-reverse;
+
+    a {
+      margin-top: 0.25rem;
+      margin-right: 0 !important;
+    }
+  }
 
   a {
     @include peertube-button-outline;

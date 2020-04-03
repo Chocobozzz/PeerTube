@@ -13,8 +13,16 @@
     font-size: 15px;
   }
 
+  &:not(.big) {
+    white-space: nowrap;
+  }
+
   &.big {
     height: 35px;
+
+    & > button:first-child {
+      width: 175px;
+    }
 
     button .extra-text {
       span:first-child {

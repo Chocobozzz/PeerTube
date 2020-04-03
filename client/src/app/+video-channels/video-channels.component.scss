@@ -1,3 +1,9 @@
+// Bootstrap grid utilities require functions, variables and mixins
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/mixins';
+@import 'node_modules/bootstrap/scss/grid';
+
 @import '_variables';
 @import '_mixins';
 
@@ -14,7 +20,7 @@
     grid-template-rows: 1fr auto / 1fr auto;
     grid-template-areas: "name buttons" "lower buttons";
 
-    @media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
+    @include media-breakpoint-down(lg) {
       grid-template-areas: "name name" "lower buttons";
     }
   }
@@ -38,10 +44,19 @@
   display: flex;
   height: max-content;
   margin-left: auto;
-  margin-top: 20px;
+  margin-top: 10px;
 
   grid-row: buttons-start / span buttons-end;
   grid-column: buttons-start;
+
+  @include media-breakpoint-down(lg) {
+    flex-flow: column-reverse;
+
+    a {
+      margin-top: 0.25rem;
+      margin-right: 0 !important;
+    }
+  }
 
   a {
     @include peertube-button-outline;

@@ -77,10 +77,6 @@ input, textarea {
   color: var(--mainForegroundColor);
 }
 
-.btn-outline-secondary {
-  border-color: $input-border-color;
-}
-
 label {
   font-weight: $font-bold;
   font-size: 15px;
@@ -108,7 +104,7 @@ label {
 }
 
 .row {
-  margin: 0;
+  margin: 0 !important;
 }
 
 .main-col {
@@ -280,6 +276,7 @@ table {
 
       .sub-menu {
         padding-left: 50px;
+        padding-right: 50px;
 
         .title-page {
           font-size: 17px;
