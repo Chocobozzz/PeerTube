@@ -16,6 +16,7 @@ export type YoutubeDLInfo = {
   nsfw?: boolean
   tags?: string[]
   thumbnailUrl?: string
+  fileExt?: string
   originallyPublishedAt?: Date
 }
 
@@ -44,11 +45,11 @@ function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo>
   })
 }
 
-function downloadYoutubeDLVideo (url: string, timeout: number) {
-  const path = generateVideoImportTmpPath(url)
+function downloadYoutubeDLVideo (url: string, extension: string, timeout: number) {
+  const path = generateVideoImportTmpPath(url, extension)
   let timer
 
-  logger.info('Importing youtubeDL video %s', url)
+  logger.info('Importing youtubeDL video %s to %s', url, path)
 
   let options = [ '-f', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best', '-o', path ]
   options = wrapWithProxyOptions(options)
@@ -219,7 +220,8 @@ function buildVideoInfo (obj: any) {
     nsfw: isNSFW(obj),
     tags: getTags(obj.tags),
     thumbnailUrl: obj.thumbnail || undefined,
-    originallyPublishedAt: buildOriginallyPublishedAt(obj)
+    originallyPublishedAt: buildOriginallyPublishedAt(obj),
+    fileExt: obj.ext
   }
 }
 

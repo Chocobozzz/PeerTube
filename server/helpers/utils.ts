@@ -7,6 +7,7 @@ import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
 import * as memoizee from 'memoizee'
 import { CONFIG } from '../initializers/config'
+import { isVideoFileExtnameValid } from './custom-validators/videos'
 
 function deleteFileAsync (path: string) {
   remove(path)
@@ -42,11 +43,18 @@ const getServerActor = memoizee(async function () {
   return actor
 }, { promise: true })
 
-function generateVideoImportTmpPath (target: string | ParseTorrent) {
-  const id = typeof target === 'string' ? target : target.infoHash
+function generateVideoImportTmpPath (target: string | ParseTorrent, extensionArg?: string) {
+  const id = typeof target === 'string'
+    ? target
+    : target.infoHash
+
+  let extension = '.mp4'
+  if (extensionArg && isVideoFileExtnameValid(extensionArg)) {
+    extension = extensionArg
+  }
 
   const hash = sha256(id)
-  return join(CONFIG.STORAGE.TMP_DIR, hash + '-import.mp4')
+  return join(CONFIG.STORAGE.TMP_DIR, `${hash}-import${extension}`)
 }
 
 function getSecureTorrentName (originalName: string) {

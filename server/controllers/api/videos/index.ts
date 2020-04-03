@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { extname } from 'path'
 import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../shared'
-import { getVideoFileFPS, getVideoFileResolution, getMetadataFromFile } from '../../../helpers/ffmpeg-utils'
+import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
 import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
@@ -32,13 +32,13 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
+  videoFileMetadataGetValidator,
   videosAddValidator,
   videosCustomGetValidator,
   videosGetValidator,
   videosRemoveValidator,
   videosSortValidator,
-  videosUpdateValidator,
-  videoFileMetadataGetValidator
+  videosUpdateValidator
 } from '../../../middlewares'
 import { TagModel } from '../../../models/video/tag'
 import { VideoModel } from '../../../models/video/video'
@@ -62,12 +62,12 @@ import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { createVideoMiniatureFromExisting, generateVideoMiniature } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
-import { VideoTranscodingPayload } from '../../../lib/job-queue/handlers/video-transcoding'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import toInt from 'validator/lib/toInt'
+import { addOptimizeOrMergeAudioJob } from '@server/lib/videos'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()
@@ -296,25 +296,7 @@ async function addVideo (req: express.Request, res: express.Response) {
   Notifier.Instance.notifyOnNewVideoIfNeeded(videoCreated)
 
   if (video.state === VideoState.TO_TRANSCODE) {
-    // Put uuid because we don't have id auto incremented for now
-    let dataInput: VideoTranscodingPayload
-
-    if (videoFile.isAudio()) {
-      dataInput = {
-        type: 'merge-audio' as 'merge-audio',
-        resolution: DEFAULT_AUDIO_RESOLUTION,
-        videoUUID: videoCreated.uuid,
-        isNewVideo: true
-      }
-    } else {
-      dataInput = {
-        type: 'optimize' as 'optimize',
-        videoUUID: videoCreated.uuid,
-        isNewVideo: true
-      }
-    }
-
-    await JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput })
+    await addOptimizeOrMergeAudioJob(videoCreated, videoFile)
   }
 
   Hooks.runAction('action:api.video.uploaded', { video: videoCreated })

@@ -8,7 +8,6 @@ import { extname } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
 import { VideoState } from '../../../../shared'
-import { JobQueue } from '../index'
 import { federateVideoIfNeeded } from '../../activitypub'
 import { VideoModel } from '../../../models/video/video'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
@@ -22,6 +21,7 @@ import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { MThumbnail } from '../../../typings/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
 import { getVideoFilePath } from '@server/lib/video-paths'
+import { addOptimizeOrMergeAudioJob } from '@server/lib/videos'
 
 type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
@@ -30,6 +30,8 @@ type VideoImportYoutubeDLPayload = {
   thumbnailUrl: string
   downloadThumbnail: boolean
   downloadPreview: boolean
+
+  fileExt?: string
 }
 
 type VideoImportTorrentPayload = {
@@ -90,7 +92,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
     generatePreview: false
   }
 
-  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl, VIDEO_IMPORT_TIMEOUT), videoImport, options)
+  return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT), videoImport, options)
 }
 
 async function getVideoImportOrDie (videoImportId: number) {
@@ -154,16 +156,28 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     // Process thumbnail
     let thumbnailModel: MThumbnail
     if (options.downloadThumbnail && options.thumbnailUrl) {
-      thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.MINIATURE)
-    } else if (options.generateThumbnail || options.downloadThumbnail) {
+      try {
+        thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.MINIATURE)
+      } catch (err) {
+        logger.warn('Cannot generate video thumbnail %s for %s.', options.thumbnailUrl, videoImportWithFiles.Video.url, { err })
+      }
+    }
+
+    if (!thumbnailModel && (options.generateThumbnail || options.downloadThumbnail)) {
       thumbnailModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.MINIATURE)
     }
 
     // Process preview
     let previewModel: MThumbnail
     if (options.downloadPreview && options.thumbnailUrl) {
-      previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.PREVIEW)
-    } else if (options.generatePreview || options.downloadPreview) {
+      try {
+        previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.PREVIEW)
+      } catch (err) {
+        logger.warn('Cannot generate video preview %s for %s.', options.thumbnailUrl, videoImportWithFiles.Video.url, { err })
+      }
+    }
+
+    if (!previewModel && (options.generatePreview || options.downloadPreview)) {
       previewModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.PREVIEW)
     }
 
@@ -214,14 +228,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Create transcoding jobs?
     if (video.state === VideoState.TO_TRANSCODE) {
-      // Put uuid because we don't have id auto incremented for now
-      const dataInput = {
-        type: 'optimize' as 'optimize',
-        videoUUID: videoImportUpdated.Video.uuid,
-        isNewVideo: true
-      }
-
-      await JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput })
+      await addOptimizeOrMergeAudioJob(videoImportUpdated.Video, videoFile)
     }
 
   } catch (err) {
