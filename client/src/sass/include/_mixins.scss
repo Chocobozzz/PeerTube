@@ -83,7 +83,7 @@
 @mixin button-focus($color) {
   &:focus,
   &.focus-visible {
-    box-shadow: 0 0 0 .2rem $color;
+    box-shadow: #{$focus-box-shadow-form} $color;
   }
 }
 
@@ -372,7 +372,7 @@
   position: absolute;
 
   &:focus + span {
-    box-shadow: 0 0 0 .2rem var(--mainColorLightest);
+    box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
   }
 
   & + span {
@@ -721,7 +721,7 @@
       height: max-content;
 
       &:focus-within {
-        box-shadow: 0 0 0 .2rem var(--mainColorLightest);
+        box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
       }
     }
 

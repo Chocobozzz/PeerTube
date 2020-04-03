@@ -80,7 +80,8 @@ $play-overlay-width: 18px;
   }
 
   &.focus-visible {
-    box-shadow: 0 0 0 2px var(--mainColor);
+    box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+    outline: none;
   }
 
   img {

@@ -241,6 +241,21 @@ p-table {
 
 // multiselect customizations
 p-multiselect {
+  .ui-multiselect {
+    border-color: #C6C6C6;
+
+    &:not(.ui-state-disabled) {
+      &:hover {
+        border-color: #C6C6C6;
+      }
+
+      &:focus,
+      &.ui-state-focus {
+        box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+      }
+    }
+  }
+
   .ui-multiselect-label {
     font-size: 15px !important;
     padding: 4px 30px 4px 12px !important;

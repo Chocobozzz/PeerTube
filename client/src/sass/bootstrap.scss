@@ -240,10 +240,10 @@ ngb-tooltip-window {
 
   &:focus-within,
   &:focus {
-    box-shadow: 0 0 0 .2rem var(--mainColorLightest);
+    box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
 
     &.input-error {
-      box-shadow: 0 0 0 .2rem #{scale-color($red, $alpha: -75%)};
+      box-shadow: #{$focus-box-shadow-form} #{scale-color($red, $alpha: -75%)};
     }
   }
 }

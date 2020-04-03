@@ -8,10 +8,6 @@
 
   &:first-child {
     font-size: 16px;
-
-    & > div {
-      font-weight: $font-semibold;
-    }
   }
 
   & > div {
