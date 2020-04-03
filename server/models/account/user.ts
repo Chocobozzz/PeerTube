@@ -233,7 +233,7 @@ export class UserModel extends Model<UserModel> {
   password: string
 
   @AllowNull(false)
-  @Is('UserPassword', value => throwIfNotValid(value, isUserUsernameValid, 'user name'))
+  @Is('UserUsername', value => throwIfNotValid(value, isUserUsernameValid, 'user name'))
   @Column
   username: string
 
