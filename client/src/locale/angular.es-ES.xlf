@@ -536,9 +536,7 @@
       </trans-unit>
       <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target state="new">
-      Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-    </target>
+        <target state="translated">Su informe será enviado a los moderadores de <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>y se reenviará al origen del video (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) también<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">9</context>
@@ -773,7 +771,7 @@
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
         <source>Recommended</source>
-        <target state="new">Recommended</target>
+        <target state="translated">Recomendado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/peertube-checkbox.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3461,9 +3459,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8861667a66c0000e6ae144520026d55123cea117" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Si deja la contraseña vacía, se enviará un correo electrónico al usuario.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">109</context>
@@ -3485,10 +3481,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new">
-          Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-        </target>
+        <target state="translated">La transcodificación está habilitada. La cuota de video solo tiene en cuenta<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tamaño de vídeo. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Como máximo, este usuario podría subir ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">148</context>
@@ -3510,7 +3503,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="new">Doesn't need review before a video goes public</target>
+        <target state="translated">No necesita revisión antes de que un video se haga público</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">168</context>
@@ -4131,7 +4124,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
         <source>The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="new">The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</target>
+        <target state="translated">El<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sistema de intercambio<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implica que cierta información técnica sobre su sistema (como una dirección IP pública) puede enviarse a otros pares, pero ayuda en gran medida a reducir la carga del servidor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">46</context>
@@ -4139,7 +4132,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
         <source>Help share videos being played</source>
-        <target state="new">Help share videos being played</target>
+        <target state="translated">Ayuda a compartir videos que se están reproduciendo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">43</context>
@@ -4147,7 +4140,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="new">When on a video page, directly start playing the video.</target>
+        <target state="translated">Cuando esté en una página de video, comience a reproducir el video directamente.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">57</context>
@@ -4155,7 +4148,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="new">Automatically play videos</target>
+        <target state="translated">Reproduce videos automáticamente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">54</context>
@@ -4163,7 +4156,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="new">When a video ends, follow up with the next suggested video.</target>
+        <target state="translated">Cuando termina un video, siga con el siguiente video sugerido.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">68</context>
@@ -4171,7 +4164,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="new">Automatically start playing the next video</target>
+        <target state="translated">Comienza a reproducir automáticamente el siguiente video</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">65</context>
@@ -4438,7 +4431,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Video} otros {Videos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4450,7 +4443,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Channel} otros {Channels} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -4462,7 +4455,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriber} otros {Subscribers} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -4474,7 +4467,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="89f26f7ae43839fb1c983c6dc82d7bb9f559ac98" datatype="html">
         <source>Incriminated in reports</source>
-        <target state="new">Incriminated in reports</target>
+        <target state="translated">Incriminado en informes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -4486,7 +4479,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="374b01a6d0311b4e675834b47db9e34d3fb833e7" datatype="html">
         <source>Authored reports accepted</source>
-        <target state="new">Authored reports accepted</target>
+        <target state="translated">Informes creados aceptados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -4498,7 +4491,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comment} otros {Comments} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -4510,7 +4503,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="53ddc7cf814d93205e987d607dbcfcf9cd74b59a" datatype="html">
         <source>NEW USER</source>
-        <target state="new">NEW USER</target>
+        <target state="translated">NUEVO USUARIO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">73</context>
@@ -4709,7 +4702,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="3223b992b14f2fa5690676fa57317bffa7275f90" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi and .flv videos.</source>
-        <target state="new">Allows users to upload .mkv, .mov, .avi and .flv videos.</target>
+        <target state="translated">Permite a los usuarios subir videos .mkv, .mov, .avi y .flv.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">589</context>
@@ -4725,7 +4718,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="abdec139a0b513ddbd4549284c38dc60e96bb477" datatype="html">
         <source>Allows users to upload audio files that will be merged with the preview file on upload.</source>
-        <target state="new">Allows users to upload audio files that will be merged with the preview file on upload.</target>
+        <target state="translated">Permite a los usuarios cargar archivos de audio que se fusionarán con el archivo de vista previa en la carga.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">600</context>
@@ -4738,15 +4731,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> </source>
-        <target state="new">
-                              <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-
-                              <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-
-                              <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-
-                              <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-                            </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimental, le sugerimos que no desactive el soporte de webtorrent por ahora<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si también habilitó el soporte HLS, multiplicará el almacenamiento de videos por 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Si está deshabilitado, rompe la federación con instancias de PeerTube &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">612</context>
@@ -4759,18 +4744,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </source>
-        <target state="new">
-                              <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-
-                              <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                              <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/>
-                                <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-                                <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-                                <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/>
-                              <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/>
-
-                              <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/>
-                            </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requiere ffmpeg&gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Genera listas de reproducción HLS y archivos MP4 fragmentados que resulten en una mejor reproducción que con el reproductor predeterminado actual:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>El cambio de resolución es más suave<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reproducción más rápida en particular con videos largos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Reproducción más estable (menos errores / carga infinita)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si también habilitaste el soporte de WebTorrent, multiplicará el almacenamiento de videos por 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">633</context>
@@ -5281,7 +5255,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source>
-        <target state="new">Once you delete your account, there is no going back. You will be asked to confirm this action.</target>
+        <target state="translated">Una vez que elimine su cuenta, no hay vuelta atrás. Se le pedirá que confirme esta acción.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
           <context context-type="linenumber">2</context>
@@ -5383,7 +5357,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9d7a1c199570d42b4cc40d7886fcc7c06b0a35d2" datatype="html">
         <source>My Playlists</source>
-        <target state="new">My Playlists</target>
+        <target state="translated">Mis listas de reproducción</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5395,7 +5369,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="b91219836ab865fd8aa041a8d6c3d84dd78115a4" datatype="html">
         <source>NEW PLAYLIST</source>
-        <target state="new">NEW PLAYLIST</target>
+        <target state="translated">NUEVA LISTA DE REPRODUCCIÓN</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context>
           <context context-type="linenumber">25</context>
@@ -5407,7 +5381,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="33ce1814b1079cb3a0c0605fc5b4e6f439d2b035" datatype="html">
         <source>PLAYLIST</source>
-        <target state="new">PLAYLIST</target>
+        <target state="translated">PLAYLIST</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlist-edit.component.html</context>
           <context context-type="linenumber">26</context>
@@ -5583,7 +5557,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="d5f0913d08d01648d7e6165c168a99ccd06d1f4c" datatype="html">
         <source>My Channels</source>
-        <target state="new">My Channels</target>
+        <target state="translated">Mis Canales</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-edit.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5595,7 +5569,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="dff0536e48bacc3a4b568f32f9ed8ffc14767cbb" datatype="html">
         <source>NEW CHANNEL</source>
-        <target state="new">NEW CHANNEL</target>
+        <target state="translated">NUEVO CANAL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-edit.component.html</context>
           <context context-type="linenumber">25</context>
@@ -6035,11 +6009,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="new">
-          For each request sent, the tracker returns random peers at a limited number.
-          For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50
-          requests sent to know every peer in the swarm
-        </target>
+        <target state="translated">Por cada solicitud enviada, el rastreador devuelve pares aleatorios en un número limitado. Por ejemplo, si hay 1000 pares en el enjambre y el rastreador envía solo 20 pares por cada solicitud, debe haber al menos 50 solicitudes enviadas para conocer a todos los pares en el enjambre</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">98</context>
@@ -7132,7 +7102,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="53f1b1c721870641753bde76831e4c75b969ac1b" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{user.username}}"/> updated.</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{user.username}}"/> updated.</target>
+        <target state="translated">Usuario<x id="INTERPOLATION" equiv-text="{{user.username}}"/> actualizado.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7365,7 +7335,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="e814805b1d5d1d36eb28904b984ec9aaa8fed239" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">¿Estás seguro de que deseas eliminar tu cuenta? Esto eliminará todos sus datos, incluidos canales, videos y comentarios. El contenido almacenado en caché por otros servidores y otros terceros puede demorar más en eliminarse.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7598,7 +7568,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="690c61d85b87df8fab4fd958bceb3849b7f8c64b" datatype="html">
         <source>Views for the day</source>
-        <target state="new">Views for the day</target>
+        <target state="translated">Vistas para el día</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
