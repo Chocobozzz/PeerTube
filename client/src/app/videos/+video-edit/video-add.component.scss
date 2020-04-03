@@ -17,6 +17,10 @@ $border-color: #EAEAEA;
   border-bottom: $border-width $border-type $border-color;
   margin: 50px 0 0 0 !important;
 
+  &.hide-nav {
+    display: none !important;
+  }
+
   a.nav-link {
     @include disable-default-a-behaviour;
 
