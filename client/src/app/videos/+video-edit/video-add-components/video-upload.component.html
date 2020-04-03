@@ -1,4 +1,4 @@
-<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (onFileDropped)="setVideoFile($event)">
+<div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="setVideoFile($event)">
   <div class="first-step-block">
     <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
 
