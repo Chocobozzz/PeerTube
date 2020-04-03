@@ -125,7 +125,8 @@ async function getVideoStreamCodec (path: string) {
     baseProfile = baseProfileMatrix['High'] // Fallback
   }
 
-  const level = videoStream.level.toString(16)
+  let level = videoStream.level.toString(16)
+  if (level.length === 1) level = `0${level}`
 
   return `${videoCodec}.${baseProfile}${level}`
 }
