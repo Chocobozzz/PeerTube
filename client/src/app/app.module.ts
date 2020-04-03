@@ -81,12 +81,12 @@ export function metaFactory (serverService: ServerService): MetaLoader {
     {
       provide: TRANSLATIONS,
       useFactory: (locale: string) => {
-                // Default locale, nothing to translate
+        // Default locale, nothing to translate
         const completeLocale = getCompleteLocale(locale)
         if (isDefaultLocale(completeLocale)) return ''
 
         const fileLocale = buildFileLocale(locale)
-        return require(`raw-loader!../locale/angular.${fileLocale}.xlf`)
+        return require(`raw-loader!../locale/angular.${fileLocale}.xlf`).default
       },
       deps: [ LOCALE_ID ]
     },
