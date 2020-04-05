@@ -152,7 +152,7 @@ export class PeertubePlayerManager {
             src: options.common.manifestUrl,
             // baseUrl is the (optional) prepended base to each image url in the .vtt, which if unset defaults to thumbnailUrl's
             baseUrl: environment.apiUrl || '/', // either use the apiUrl if set, or default to the host of thumbnailsUrl
-            preloadStrategy: 'all'
+            preloadStrategy: null // null = no preload
           })
         }
 

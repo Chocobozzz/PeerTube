@@ -215,7 +215,8 @@ export class PeerTubeEmbed {
 
         serverUrl: window.location.origin,
         language: navigator.language,
-        embedUrl: window.location.origin + videoInfo.embedPath
+        embedUrl: window.location.origin + videoInfo.embedPath,
+        manifestUrl: videoInfo.vttThumbnailsPath ? window.location.origin + videoInfo.vttThumbnailsPath : undefined
       },
 
       webtorrent: {
