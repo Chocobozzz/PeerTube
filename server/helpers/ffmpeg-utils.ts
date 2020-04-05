@@ -376,7 +376,7 @@ async function generateTimecodeThumbnailsFromVideoFile (
         await createThumbnailFromFunction({
           thumbnailCreator: async () => {
             await sharp(result.image)
-              .jpeg({ quality: 80 })
+              .jpeg({ quality: 80, progressive: true })
               .toFile(join(CONFIG.STORAGE.TIMECODE_SPRITESHEETS_DIR, finalImageName(index)))
           },
           filename: finalImageName(index),
