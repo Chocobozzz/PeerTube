@@ -8349,7 +8349,7 @@
       </trans-unit>
       <trans-unit id="7d5d2f4e2aebe4977c5e3daff4283814f869c609" datatype="html">
         <source>any language</source>
-        <target state="new">any language</target>
+        <target state="translated">tota lenga</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8357,7 +8357,7 @@
       </trans-unit>
       <trans-unit id="6e998fc06a19659c22cca43efa1b35515761cbb2" datatype="html">
         <source>hide</source>
-        <target state="new">hide</target>
+        <target state="translated">amagar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8373,7 +8373,7 @@
       </trans-unit>
       <trans-unit id="890d991273787485fc939391676762a90edd8f34" datatype="html">
         <source>display</source>
-        <target state="new">display</target>
+        <target state="translated">mostrar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8570,7 +8570,7 @@
       </trans-unit>
       <trans-unit id="d77271b9b87017d22ff6ed6611a7c893fd994f06" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{hours}}"/> h <x id="INTERPOLATION_1" equiv-text="{{minutes}}"/> min <x id="INTERPOLATION_2" equiv-text="{{seconds}}"/> sec</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{hours}}"/> h <x id="INTERPOLATION_1" equiv-text="{{minutes}}"/> min <x id="INTERPOLATION_2" equiv-text="{{seconds}}"/> sec</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{hours}}"/> h <x id="INTERPOLATION_1" equiv-text="{{minutes}}"/> min <x id="INTERPOLATION_2" equiv-text="{{seconds}}"/> seg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/video-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8578,7 +8578,7 @@
       </trans-unit>
       <trans-unit id="944a2981992f97de6285d03906ed88e6bef19c99" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{minutes}}"/> min <x id="INTERPOLATION_1" equiv-text="{{seconds}}"/> sec</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{minutes}}"/> min <x id="INTERPOLATION_1" equiv-text="{{seconds}}"/> sec</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{minutes}}"/> min <x id="INTERPOLATION_1" equiv-text="{{seconds}}"/> seg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/video-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8586,7 +8586,7 @@
       </trans-unit>
       <trans-unit id="c0b663b59790503f778a85d21ddeaef81758f681" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> sec</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> sec</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{seconds}}"/> seg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/video-duration-formatter.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -9954,7 +9954,7 @@
       </trans-unit>
       <trans-unit id="632e8b20c98e8eec4059a605a4b011bb476137af" datatype="html">
         <source>Edit user</source>
-        <target state="new">Edit user</target>
+        <target state="translated">Modificar l’utilizaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9970,7 +9970,7 @@
       </trans-unit>
       <trans-unit id="95b95a9c79e4fd9ed41f6855e37b3b06af25bcab" datatype="html">
         <source>Delete user</source>
-        <target state="new">Delete user</target>
+        <target state="translated">Suprimir l’utilizaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10276,7 +10276,7 @@
       </trans-unit>
       <trans-unit id="5f316500cde1925ffcdf053a7427b44795161f4e" datatype="html">
         <source>Encoder</source>
-        <target state="new">Encoder</target>
+        <target state="translated">Encodar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10284,7 +10284,7 @@
       </trans-unit>
       <trans-unit id="c01d52b4f10668adeded397b0b1a9a4bfefd4f37" datatype="html">
         <source>Format name</source>
-        <target state="new">Format name</target>
+        <target state="translated">Nom del format</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10292,7 +10292,7 @@
       </trans-unit>
       <trans-unit id="7faaaa08f56427999f3be41df1093ce4089bbd75" datatype="html">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target state="translated">Talha</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10312,7 +10312,7 @@
       </trans-unit>
       <trans-unit id="205c33d626f4654f36d9d7dcea6f9d9e9b2a7ec7" datatype="html">
         <source>Codec</source>
-        <target state="new">Codec</target>
+        <target state="translated">Codec</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10370,7 +10370,7 @@
       </trans-unit>
       <trans-unit id="fb6f1916659a093d943fab8322777922796efe27" datatype="html">
         <source>Duplicate (redundancy)</source>
-        <target state="new">Duplicate (redundancy)</target>
+        <target state="translated">Duplicar (redondància)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10426,7 +10426,7 @@
       </trans-unit>
       <trans-unit id="b41da527dd2f804519e13b78b5dae42897213545" datatype="html">
         <source>Add to watch later</source>
-        <target state="new">Add to watch later</target>
+        <target state="translated">Agachar mai tard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10434,7 +10434,7 @@
       </trans-unit>
       <trans-unit id="2660edf82b9bf5d6ee25fbefd3bbb23172687ccc" datatype="html">
         <source>Remove from watch later</source>
-        <target state="new">Remove from watch later</target>
+        <target state="translated">Agachar pas mai tard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10466,7 +10466,7 @@
       </trans-unit>
       <trans-unit id="ed3394ad721212bca2a1da43ad6063b6d4f9a008" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="new">Only users of this instance can see this video</target>
+        <target state="translated">Pas que los utilizaires d’aquesta instància pòdon veire aquesta vidèo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10587,7 +10587,7 @@
       </trans-unit>
       <trans-unit id="0663c85b5bc0806356ab768f411299c29cf39360" datatype="html">
         <source>Autoplay next video</source>
-        <target state="new">Autoplay next video</target>
+        <target state="translated">Lectura automatica de la vidèo venenta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10643,7 +10643,7 @@
       </trans-unit>
       <trans-unit id="43ee7c4bd1ed4766ec0c13974a1e08881071c927" datatype="html">
         <source>Up Next</source>
-        <target state="new">Up Next</target>
+        <target state="translated">Seguent</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
