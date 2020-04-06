@@ -53,8 +53,6 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         languages=(["el"]="el-GR")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-es" ]; then
         languages=(["es"]="es-ES")
-    elif [ ! -z ${1+x} ] && [ "$1" == "--light-oc" ]; then
-        languages=(["oc"]="oc")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-pt" ]; then
         languages=(["pt"]="pt-BR")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-pt-PT" ]; then
@@ -95,7 +93,6 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
             ["gd"]="gd"
             ["el"]="el-GR"
             ["es"]="es-ES"
-            ["oc"]="oc"
             ["pt"]="pt-BR"
             ["pt-PT"]="pt-PT"
             ["sv"]="sv-SE"

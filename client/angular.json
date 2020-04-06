@@ -41,10 +41,6 @@
             "translation": "src/locale/angular.es-ES.xlf",
             "baseHref": "/client/es-ES/"
           },
-          "oc": {
-            "translation": "src/locale/angular.oc.xlf",
-            "baseHref": "/client/oc/"
-          },
           "pt": {
             "translation": "src/locale/angular.pt-BR.xlf",
             "baseHref": "/client/pt-BR/"
@@ -211,9 +207,6 @@
             },
             "es-ES": {
               "localize":  [ "es" ]
-            },
-            "oc": {
-              "localize":  [ "oc" ]
             },
             "pt-BR": {
               "localize":  [ "pt" ]
