@@ -23,8 +23,10 @@ function isVideoImportStateValid (value: any) {
   return exists(value) && VIDEO_IMPORT_STATES[value] !== undefined
 }
 
-const videoTorrentImportTypes = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT).map(m => `(${m})`)
-const videoTorrentImportRegex = videoTorrentImportTypes.join('|')
+const videoTorrentImportRegex = Object.keys(MIMETYPES.TORRENT.MIMETYPE_EXT)
+                                      .concat([ 'application/octet-stream' ]) // MacOS sends application/octet-stream
+                                      .map(m => `(${m})`)
+                                      .join('|')
 function isVideoImportTorrentFile (files: { [ fieldname: string ]: Express.Multer.File[] } | Express.Multer.File[]) {
   return isFileValid(files, videoTorrentImportRegex, 'torrentfile', CONSTRAINTS_FIELDS.VIDEO_IMPORTS.TORRENT_FILE.FILE_SIZE.max, true)
 }
