@@ -236,7 +236,7 @@ export class PeertubePlayerManager {
         : undefined, // Undefined so the player knows it has to check the local storage
 
       autoplay: autoplay === true
-        ? 'any' // Use 'any' instead of true to get notifier by videojs if autoplay fails
+        ? 'play' // Use 'any' instead of true to get notifier by videojs if autoplay fails
         : autoplay,
 
       poster: commonOptions.poster,
