@@ -134,7 +134,7 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
     )
   }
 
-  handleKeyUp (event: KeyboardEvent) {
+  handleKey (event: KeyboardEvent) {
     event.stopImmediatePropagation()
     if (!this.keyboardEventsManager) return
 
@@ -143,14 +143,11 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
       case 'ArrowUp':
         this.keyboardEventsManager.onKeydown(event)
         break
-      case 'Enter':
-        this.newSearch = false
-        this.doSearch()
-        break
     }
   }
 
   doSearch () {
+    this.newSearch = false
     const queryParams: Params = {}
 
     if (window.location.pathname === '/search' && this.route.snapshot.queryParams) {
