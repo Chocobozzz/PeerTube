@@ -16,6 +16,7 @@ import { PlaylistObject } from '../../../../shared/models/activitypub/objects/pl
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 import { MActorSignature, MAccountIdActor } from '../../../typings/models'
+import { isRedundancyAccepted } from '@server/lib/redundancy'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {
   const { activity, byActor } = options
@@ -78,6 +79,8 @@ async function processUpdateVideo (actor: MActorSignature, activity: ActivityUpd
 }
 
 async function processUpdateCacheFile (byActor: MActorSignature, activity: ActivityUpdate) {
+  if (await isRedundancyAccepted(activity, byActor) !== true) return
+
   const cacheFileObject = activity.object as CacheFileObject
 
   if (!isCacheFileObjectValid(cacheFileObject)) {

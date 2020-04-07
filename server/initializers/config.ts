@@ -5,6 +5,7 @@ import { VideosRedundancyStrategy } from '../../shared/models'
 import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import * as bytes from 'bytes'
+import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -115,6 +116,11 @@ const CONFIG = {
     VIDEOS: {
       CHECK_INTERVAL: parseDurationToMs(config.get<string>('redundancy.videos.check_interval')),
       STRATEGIES: buildVideosRedundancy(config.get<any[]>('redundancy.videos.strategies'))
+    }
+  },
+  REMOTE_REDUNDANCY: {
+    VIDEOS: {
+      ACCEPT_FROM: config.get<VideoRedundancyConfigFilter>('remote_redundancy.videos.accept_from')
     }
   },
   CSP: {

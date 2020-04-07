@@ -11,6 +11,7 @@ import { RecentlyAddedStrategy } from '../../shared/models/redundancy'
 import { isArray } from '../helpers/custom-validators/misc'
 import { uniq } from 'lodash'
 import { WEBSERVER } from './constants'
+import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
 
 async function checkActivityPubUrls () {
   const actor = await getServerActor()
@@ -85,6 +86,13 @@ function checkConfig () {
     }
   } else {
     return 'Videos redundancy should be an array (you must uncomment lines containing - too)'
+  }
+
+  // Remote redundancies
+  const acceptFrom = CONFIG.REMOTE_REDUNDANCY.VIDEOS.ACCEPT_FROM
+  const acceptFromValues = new Set<VideoRedundancyConfigFilter>([ 'nobody', 'anybody', 'followings' ])
+  if (acceptFromValues.has(acceptFrom) === false) {
+    return 'remote_redundancy.videos.accept_from has an incorrect value'
   }
 
   // Check storage directory locations

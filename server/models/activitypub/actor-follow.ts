@@ -36,6 +36,7 @@ import {
   MActorFollowSubscriptions
 } from '@server/typings/models'
 import { ActivityPubActorType } from '@shared/models'
+import { VideoModel } from '@server/models/video/video'
 
 @Table({
   tableName: 'actorFollow',
@@ -149,6 +150,18 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
     const numberOfActorFollowsRemoved = actorFollows.length
 
     if (numberOfActorFollowsRemoved) logger.info('Removed bad %d actor follows.', numberOfActorFollowsRemoved)
+  }
+
+  static isFollowedBy (actorId: number, followerActorId: number) {
+    const query = 'SELECT 1 FROM "actorFollow" WHERE "actorId" = $followerActorId AND "targetActorId" = $actorId LIMIT 1'
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      bind: { actorId, followerActorId },
+      raw: true
+    }
+
+    return VideoModel.sequelize.query(query, options)
+                     .then(results => results.length === 1)
   }
 
   static loadByActorAndTarget (actorId: number, targetActorId: number, t?: Transaction): Bluebird<MActorFollowActorsDefault> {

@@ -12,6 +12,7 @@ import { PlaylistObject } from '../../../../shared/models/activitypub/objects/pl
 import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../typings/models'
+import { isRedundancyAccepted } from '@server/lib/redundancy'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -60,6 +61,8 @@ async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
 }
 
 async function processCreateCacheFile (activity: ActivityCreate, byActor: MActorSignature) {
+  if (await isRedundancyAccepted(activity, byActor) !== true) return
+
   const cacheFile = activity.object as CacheFileObject
 
   const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: cacheFile.object })

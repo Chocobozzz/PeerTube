@@ -127,6 +127,14 @@ redundancy:
 #        strategy: 'recently-added' # Cache recently added videos
 #        min_views: 10 # Having at least x views
 
+# Other instances that duplicate your content
+remote_redundancy:
+  videos:
+    # 'nobody': Do not accept remote redundancies
+    # 'anybody': Accept remote redundancies from anybody
+    # 'followings': Accept redundancies from instance followings
+    accept_from: 'anybody'
+
 csp:
   enabled: false
   report_only: true # CSP directives are still being tested, so disable the report only mode at your own risk!
