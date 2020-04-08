@@ -330,23 +330,17 @@
       </trans-unit>
       <trans-unit id="78dea99c581be394bf509426e114c9cda9f5825d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded </source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> succeeded
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Zure bideoaren inportazioa<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> ongi burutu da </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">94</context></context-group>
       </trans-unit>
       <trans-unit id="dc586a7c70baa9217d98f58f4701fc3a29cd9d4d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed </source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Your video import<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> failed
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Zure bideoren inportazioak<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.videoImportIdentifier }}"/> huts egin du </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">102</context></context-group>
       </trans-unit>
       <trans-unit id="55c81d14a4e11004f0bcda5a47575f316e85e43e" datatype="html">
         <source>User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> registered on your instance </source>
-        <target state="new">
-          User <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> registered on your instance
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.account.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> erabiltzaileak izena eman du zure zerbitzarian </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">110</context>
@@ -354,12 +348,7 @@
       </trans-unit>
       <trans-unit id="0f146c0a4152eb93ec2ad119e1dec613864d64c6" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is following <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your account<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target state="new">
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> is following
-
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your channel <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-          <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>your account<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated"><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.follower.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> erabiltzaileak <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>zure kanala <x id="INTERPOLATION_1" equiv-text="{{ notification.actorFollow.following.displayName }}"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> <x id="START_TAG_NG-CONTAINER_1" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>zure kontua<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> jarraitzen ditu </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">120</context></context-group>
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
@@ -369,10 +358,7 @@
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target state="new">
-          Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>)
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target state="translated">Zure zerbitzariak <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>jarratzaile berria du<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> zure onartzearen zain<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
@@ -632,7 +618,7 @@
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {bistaratze 1} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> bistaratze} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d">
@@ -650,7 +636,7 @@
       </trans-unit>
       <trans-unit id="99dea2d567d6e6d610d97608c3850ddb76df9a9a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Bideorik ez} =1 {Bideo 1} other {<x id="INTERPOLATION" equiv-text="{{ playlist.videosLength }}"/> bideo} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">9</context>
@@ -666,7 +652,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4" datatype="html">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
-        <target state="new">Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
+        <target state="translated">Eguneratua <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">29</context>
@@ -674,7 +660,7 @@
       </trans-unit>
       <trans-unit id="15c02cb6b6c3be53477e502d3e1ee26955b23af0" datatype="html">
         <source>Unavailable</source>
-        <target state="new">Unavailable</target>
+        <target state="translated">Eskuraezin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">32</context>
@@ -707,7 +693,7 @@
       </trans-unit>
       <trans-unit id="b9dee3108a18796bd69c6be316c8fb985b58fb8e" datatype="html">
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
-        <target state="new">Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/>tik ezabatu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">85</context>
@@ -785,7 +771,7 @@
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
         <source>Recommended</source>
-        <target state="new">Recommended</target>
+        <target state="translated">Gomendatuak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/peertube-checkbox.component.html</context>
           <context context-type="linenumber">33</context>
@@ -852,7 +838,7 @@
       </trans-unit>
       <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </source>
-        <target state="new"/>
+        <target state="translated">You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">17</context>
@@ -860,7 +846,7 @@
       </trans-unit>
       <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target state="new"/>
+        <target state="translated">You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26</context>
@@ -876,12 +862,12 @@
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </source>
-        <target state="new"/>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c" datatype="html">
         <source>User registration allowed</source>
-        <target state="new">User registration allowed</target>
+        <target state="translated">Erabiltzaileen izen ematea baimenduta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
@@ -892,7 +878,7 @@
       </trans-unit>
       <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target state="new">Transcoding in multiple resolutions</target>
+        <target state="translated">Hainbat erresoluzioetan transkodeatzen</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="7deebcf3491b27625e9b308179a6635b48368dcb" datatype="html">
@@ -1372,7 +1358,7 @@
       </trans-unit>
       <trans-unit id="054dd8ba0dece8069a5a7e538efaca9f58cf81f9" datatype="html">
         <source>Administer documentation</source>
-        <target state="new"/>
+        <target state="translated">Administer documentation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">19</context>
