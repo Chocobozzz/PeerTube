@@ -28,7 +28,7 @@ import { PeerTubePlayer } from '@peertube/embed-api'
 Or use the minified build from NPM CDN in your HTML file:
 
 ```
-<script src="https://unpkg.com/@peertube/embed-api@0.0.1/build/player.min.js"></script>
+<script src="https://unpkg.com/@peertube/embed-api/build/player.min.js"></script>
 
 <script>
   const PeerTubePlayer = window['PeerTubePlayer']
