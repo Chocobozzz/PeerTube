@@ -15,8 +15,8 @@
 
   <ng-template pTemplate="body" let-expanded="expanded" let-videoImport>
     <tr>
-      <td>
-        <span *ngIf="videoImport.error" class="expander" [pRowToggler]="videoImport">
+      <td class="expand-cell">
+        <span *ngIf="videoImport.error" class="expander" [pRowToggler]="videoImport" i18n-ngbTooltip ngbTooltip="See the error">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>

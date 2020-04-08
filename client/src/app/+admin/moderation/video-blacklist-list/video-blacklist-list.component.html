@@ -15,8 +15,9 @@
 
   <ng-template pTemplate="body" let-videoBlacklist let-expanded="expanded">
     <tr>
+
       <td class="expand-cell">
-        <span *ngIf="videoBlacklist.reason" class="expander" [pRowToggler]="videoBlacklist">
+        <span *ngIf="videoBlacklist.reason" class="expander" i18n-ngbTooltip ngbTooltip="More information" [pRowToggler]="videoBlacklist">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>

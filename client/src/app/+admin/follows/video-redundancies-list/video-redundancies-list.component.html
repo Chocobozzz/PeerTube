@@ -1,6 +1,4 @@
 <div class="admin-sub-header">
-  <div i18n class="form-sub-title">Video redundancies list</div>
-
   <div class="select-filter-block">
     <label for="displayType" i18n>Display</label>
 
@@ -19,6 +17,7 @@
 >
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 40px"></th>
       <th i18n *ngIf="isDisplayingRemoteVideos()">Strategy</th>
       <th i18n pSortableColumn="name">Video name <p-sortIcon field="name"></p-sortIcon></th>
       <th i18n>Video URL</th>
@@ -27,8 +26,15 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-redundancy>
-    <tr class="expander" [pRowToggler]="redundancy">
+  <ng-template pTemplate="body" let-expanded="expanded" let-redundancy>
+    <tr>
+
+      <td class="expand-cell">
+        <span class="expander" i18n-ngbTooltip ngbTooltip="List redundancies" [pRowToggler]="redundancy">
+          <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
+        </span>
+      </td>
+
       <td *ngIf="isDisplayingRemoteVideos()">{{ getRedundancyStrategy(redundancy) }}</td>
 
       <td>{{ redundancy.name }}</td>
@@ -46,16 +52,16 @@
   </ng-template>
 
   <ng-template pTemplate="rowexpansion" let-redundancy>
-    <tr>
-      <td colspan="2">
+    <tr *ngIf="redundancy.redundancies.files.length !== 0">
+      <td [attr.colspan]="getColspan()">
         <div *ngFor="let file of redundancy.redundancies.files" class="expansion-block">
           <my-video-redundancy-information [redundancyElement]="file"></my-video-redundancy-information>
         </div>
       </td>
     </tr>
 
-    <tr>
-      <td colspan="2">
+    <tr *ngIf="redundancy.redundancies.streamingPlaylists.length !== 0">
+      <td [attr.colspan]="getColspan()">
         <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
           <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
         </div>

@@ -18,7 +18,7 @@
 }
 
 .admin-sub-header {
-  align-items: flex-end;
+  justify-content: flex-end;
 
   .select-filter-block {
     &:not(:last-child) {
