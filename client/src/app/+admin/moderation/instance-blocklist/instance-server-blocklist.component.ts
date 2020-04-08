@@ -30,6 +30,10 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'InstanceServerBlocklistComponent'
+  }
+
   unblockServer (serverBlock: ServerBlock) {
     const host = serverBlock.blockedServer.host
 

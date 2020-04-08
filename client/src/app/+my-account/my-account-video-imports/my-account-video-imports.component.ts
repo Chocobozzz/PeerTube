@@ -20,14 +20,17 @@ export class MyAccountVideoImportsComponent extends RestTable implements OnInit 
 
   constructor (
     private notifier: Notifier,
-    private videoImportService: VideoImportService,
-    private i18n: I18n
+    private videoImportService: VideoImportService
   ) {
     super()
   }
 
   ngOnInit () {
     this.initialize()
+  }
+
+  getIdentifier () {
+    return 'MyAccountVideoImportsComponent'
   }
 
   isVideoImportSuccess (videoImport: VideoImport) {

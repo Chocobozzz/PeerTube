@@ -62,6 +62,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'VideoAbuseListComponent'
+  }
+
   openModerationCommentModal (videoAbuse: VideoAbuse) {
     this.moderationCommentModal.openModal(videoAbuse)
   }

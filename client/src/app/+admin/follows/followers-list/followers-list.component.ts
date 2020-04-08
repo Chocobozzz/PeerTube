@@ -31,6 +31,10 @@ export class FollowersListComponent extends RestTable implements OnInit {
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'FollowersListComponent'
+  }
+
   acceptFollower (follow: ActorFollow) {
     follow.state = 'accepted'
 

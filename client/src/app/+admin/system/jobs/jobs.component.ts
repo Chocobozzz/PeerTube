@@ -57,6 +57,10 @@ export class JobsComponent extends RestTable implements OnInit {
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'JobsComponent'
+  }
+
   onJobStateOrTypeChanged () {
     this.pagination.start = 0
 

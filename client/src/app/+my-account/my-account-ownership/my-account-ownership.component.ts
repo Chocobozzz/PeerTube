@@ -31,6 +31,10 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'MyAccountOwnershipComponent'
+  }
+
   createByString (account: Account) {
     return Account.CREATE_BY_STRING(account.name, account.host)
   }

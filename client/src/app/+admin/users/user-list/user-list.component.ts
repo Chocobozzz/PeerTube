@@ -86,6 +86,10 @@ export class UserListComponent extends RestTable implements OnInit {
     ]
   }
 
+  getIdentifier () {
+    return 'UserListComponent'
+  }
+
   openBanUserModal (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {

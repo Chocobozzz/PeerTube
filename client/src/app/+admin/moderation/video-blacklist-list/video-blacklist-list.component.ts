@@ -54,6 +54,10 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
     ]
   }
 
+  getIdentifier () {
+    return 'VideoBlacklistListComponent'
+  }
+
   getVideoUrl (videoBlacklist: VideoBlacklist) {
     return Video.buildClientUrl(videoBlacklist.video.uuid)
   }

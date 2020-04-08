@@ -32,6 +32,10 @@ export class FollowingListComponent extends RestTable implements OnInit {
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'FollowingListComponent'
+  }
+
   async removeFollowing (follow: ActorFollow) {
     const res = await this.confirmService.confirm(
       this.i18n('Do you really want to unfollow {{host}}?', { host: follow.following.host }),

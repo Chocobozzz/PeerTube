@@ -13,7 +13,8 @@ export abstract class RestTable {
 
   protected search: string
   private searchStream: Subject<string>
-  private sortLocalStorageKey = 'rest-table-sort-' + this.constructor.name
+
+  abstract getIdentifier (): string
 
   initialize () {
     this.loadSort()
@@ -21,13 +22,13 @@ export abstract class RestTable {
   }
 
   loadSort () {
-    const result = peertubeLocalStorage.getItem(this.sortLocalStorageKey)
+    const result = peertubeLocalStorage.getItem(this.getSortLocalStorageKey())
 
     if (result) {
       try {
         this.sort = JSON.parse(result)
       } catch (err) {
-        console.error('Cannot load sort of local storage key ' + this.sortLocalStorageKey, err)
+        console.error('Cannot load sort of local storage key ' + this.getSortLocalStorageKey(), err)
       }
     }
   }
@@ -48,7 +49,7 @@ export abstract class RestTable {
   }
 
   saveSort () {
-    peertubeLocalStorage.setItem(this.sortLocalStorageKey, JSON.stringify(this.sort))
+    peertubeLocalStorage.setItem(this.getSortLocalStorageKey(), JSON.stringify(this.sort))
   }
 
   initSearch () {
@@ -71,4 +72,8 @@ export abstract class RestTable {
   }
 
   protected abstract loadData (): void
+
+  private getSortLocalStorageKey () {
+    return 'rest-table-sort-' + this.getIdentifier()
+  }
 }

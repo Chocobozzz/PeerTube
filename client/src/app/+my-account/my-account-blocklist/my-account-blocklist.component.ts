@@ -29,6 +29,10 @@ export class MyAccountBlocklistComponent extends RestTable implements OnInit {
     this.initialize()
   }
 
+  getIdentifier () {
+    return 'MyAccountBlocklistComponent'
+  }
+
   unblockAccount (accountBlock: AccountBlock) {
     const blockedAccount = accountBlock.blockedAccount
 
