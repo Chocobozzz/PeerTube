@@ -126,7 +126,6 @@
     "videojs-dock": "^2.0.2",
     "videojs-hotkeys": "^0.2.21",
     "videostream": "~3.2.1",
-    "vtt.js": "^0.13.0",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.0.8",
     "webtorrent": "^0.108.1",

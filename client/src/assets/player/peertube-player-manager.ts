@@ -29,9 +29,6 @@ import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
 import { TranslationsManager } from './translations-manager'
 
-// For VideoJS
-(window as any).WebVTT = require('vtt.js/lib/vtt.js').WebVTT;
-
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
 

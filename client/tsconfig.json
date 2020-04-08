@@ -26,7 +26,7 @@
     "paths": {
       "@app/*": [ "src/app/*" ],
       "@shared/*": [ "../shared/*" ],
-      "video.js": [ "node_modules/video.js/dist/alt/video.core.novtt" ],
+      "video.js": [ "node_modules/video.js/dist/alt/video.core" ],
       "fs": [ "src/shims/noop" ],
       "http": [ "src/shims/http" ],
       "https": [ "src/shims/https" ],
