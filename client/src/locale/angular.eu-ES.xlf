@@ -868,7 +868,7 @@
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
         <source>PeerTube version</source>
-        <target state="new">PeerTube version</target>
+        <target state="translated">PeerTube bertsioa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">5</context>
@@ -959,12 +959,12 @@
       </trans-unit>
       <trans-unit id="59bdc3dfa4075f92c734588899485db702c8f120" datatype="html">
         <source>Player</source>
-        <target state="new">Player</target>
+        <target state="translated">Erreproduzitzailea</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
         <source>P2P enabled</source>
-        <target state="new">P2P enabled</target>
+        <target state="translated">P2P gaituta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="b8b6a001cca6fa2ba15600ca3a78dfeebf685d60" datatype="html">
@@ -1205,7 +1205,7 @@
       </trans-unit>
       <trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source>
-        <target state="new">Click here to reset your password</target>
+        <target state="translated">Egin klik hemen zure pasahitza berrezartzeko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1356,7 +1356,7 @@
       </trans-unit>
       <trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c" datatype="html">
         <source>CLI documentation</source>
-        <target state="new"/>
+        <target state="translated">Komando lerroko interfazearen dokumentazioa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1404,7 +1404,7 @@
       </trans-unit>
       <trans-unit id="6b705cdf0d567cf608b9891a1d912daebac3523e" datatype="html">
         <source>Useful links</source>
-        <target state="new">Useful links</target>
+        <target state="translated">Esteka baliagarriak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">41</context>
