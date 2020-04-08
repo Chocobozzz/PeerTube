@@ -85,12 +85,14 @@ export class PeerTubeEmbedApi {
     setInterval(() => {
       const position = this.element.currentTime
       const volume = this.element.volume
+      const duration = this.element.duration
 
       this.channel.notify({
         method: 'playbackStatusUpdate',
         params: {
           position,
           volume,
+          duration: this.embed.player.duration(),
           playbackState: currentState
         }
       })

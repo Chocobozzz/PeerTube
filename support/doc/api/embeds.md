@@ -113,12 +113,14 @@ You can subscribe to events by using `addEventListener()`. See above for details
 
 ## Event `playbackStatusUpdate`
 
-Fired every half second to provide the current status of playback. The parameter of the callback will resemble:
+Fired every half second to provide the current status of playback. 
+The parameter of the callback will resemble:
 
 ```json
 {
   "position": 22.3,
   "volume": 0.9,
+  "duration": "171.37499",
   "playbackState": "playing"
 }
 ```
