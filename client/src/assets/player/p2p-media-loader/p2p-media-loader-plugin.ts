@@ -4,7 +4,7 @@ import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-medi
 import { Events, Segment } from 'p2p-media-loader-core'
 import { timeToInt } from '../utils'
 import { registerConfigPlugin, registerSourceHandler } from './hls-plugin'
-import * as Hlsjs from 'hls.js'
+import * as Hlsjs from 'hls.js/dist/hls.light.js'
 
 registerConfigPlugin(videojs)
 registerSourceHandler(videojs)

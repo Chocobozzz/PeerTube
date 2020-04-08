@@ -1,7 +1,7 @@
 // Thanks https://github.com/streamroot/videojs-hlsjs-plugin
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
-import * as Hlsjs from 'hls.js'
+import * as Hlsjs from 'hls.js/dist/hls.light.js'
 import videojs, { VideoJsPlayer } from 'video.js'
 import { HlsjsConfigHandlerOptions, QualityLevelRepresentation, QualityLevels, VideoJSTechHLS } from '../peertube-videojs-typings'
 
