@@ -6269,8 +6269,7 @@
       </trans-unit>
       <trans-unit id="a1b892a310faf2ee74544d659ce968314997d56a" datatype="html">
         <source>Contribute on PeerTube</source>
-        <target state="new">Contribute on
-            PeerTube</target>
+        <target state="translated">Kontribui en PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">54</context>
@@ -6278,9 +6277,7 @@
       </trans-unit>
       <trans-unit id="2c4788d7843d80bf5aad6283aba75c8151807e8c" datatype="html">
         <source>Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!</source>
-        <target state="new">
-          Want to help to improve PeerTube? You can translate the web interface, give your feedback or directly contribute to the code!
-        </target>
+        <target state="translated">Ĉu vi volas helpi plibonigojn de PeerTube? Vi povas traduki la retan fasadon, sendi viajn rimarkojn, aŭ rekte kontribui al la kodo!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">58</context>
@@ -6296,11 +6293,7 @@
       </trans-unit>
       <trans-unit id="d0a97e9255fb49b92504d36516f902f440bc8878" datatype="html">
         <source>PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server, but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What follows applies only if you want to keep using the P2P mode of PeerTube.</source>
-        <target state="new">
-        PeerTube uses the BitTorrent protocol to share bandwidth between users by default to help lower the load on the server,
-        but ultimately leaves you the choice to switch back to regular streaming exclusively from the server of the video. What
-        follows applies only if you want to keep using the P2P mode of PeerTube.
-      </target>
+        <target state="translated">PeerTube uzas la protokolon «BitTorrent» por implice kunhavigi kapaciton inter uzantoj, por malpliigi la ŝarĝon de la servilo, sed fine lasas vin elekti ĉu vi volas anstataŭe uzi la ordinaran elsendadon el la servilo de la filmo. La sekvo nur aplikiĝas se vi volas daŭre uzadi la samtavolan reĝimon de PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="e4ce50f3019e3ebe9a479784c6cb68a31c7a8231">
@@ -6313,10 +6306,7 @@
       </trans-unit>
       <trans-unit id="14d3bc3dafb4a09f3c79daac07ebf30e76457f63" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="new">
-        In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video.
-        In practice, this is much more difficult because:
-      </target>
+        <target state="translated">Teorie, iu sufiĉe teĥnike lerta povus krei skripton, kiu spionas, kiu IP-adreso elŝutas kiun filmon. Sed efektive tio multe pli malfacilas, ĉar:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
