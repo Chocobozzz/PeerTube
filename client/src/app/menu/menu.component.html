@@ -149,29 +149,29 @@
         </a>
       </div>
 
-      <div class="d-flex flex-column">
+      <div class="bottom-links">
+
         <div class="footer-links">
-          <a i18n routerLink="/about/instance">Contact</a>
-          <a i18n routerLink="/about/instance">Terms of Service</a>
-          <a i18n routerLink="/about/instance" fragment="statistics">Stats</a>
-          <a (click)="openLanguageChooser()" class="c-hand">
-            <span i18n>Interface: {{ language }}</span>
-          </a>
+          <div *ngIf="isLoggedIn === false">
+            <span role="button" (click)="openLanguageChooser()" class="c-hand" i18n>Interface: {{ language }}</span>
+          </div>
+
+          <div>
+            <a i18n routerLink="/about/instance">Contact</a>
+            <a i18n href="https://joinpeertube.org/help" i18n-title title="Get help using PeerTube" target="_blank" rel="noopener noreferrer">Help</a>
+            <a i18n href="https://joinpeertube.org/faq" i18n-title title="Frequently asked questions about PeerTube" target="_blank" rel="noopener noreferrer">FAQ</a>
+            <a i18n routerLink="/about/instance" fragment="statistics">Stats</a>
+            <a i18n href="https://docs.joinpeertube.org/api-rest-reference.html" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">API</a>
+            <a (click)="openHotkeysCheatSheet()" class="c-hand" i18n>Shortcuts</a>
+          </div>
         </div>
-        <div class="footer-links">
-          <a i18n href="https://joinpeertube.org/#you-are-a-video-maker" i18n-title title="Creator guide" target="_blank" rel="noopener noreferrer">Creators</a>
-          <a i18n href="https://docs.joinpeertube.org/#/contribute-getting-started" i18n-title title="PeerTube license" target="_blank" rel="noopener noreferrer">Contributors</a>
-          <a i18n routerLink="/about/peertube" i18n-title title="More information about privacy within PeerTube">Privacy</a>
-          <a i18n href="https://joinpeertube.org/faq" i18n-title title="Frequently asked questions about PeerTube" target="_blank" rel="noopener noreferrer">FAQ</a>
-          <a i18n href="https://docs.joinpeertube.org/api-rest-reference.html" i18n-title title="API documentation" target="_blank" rel="noopener noreferrer">API</a>
-          <a i18n href="https://joinpeertube.org/help" i18n-title title="Get help using PeerTube" target="_blank" rel="noopener noreferrer">Help</a>
-          <a (click)="openHotkeysCheatSheet()" class="c-hand" i18n>Shortcuts</a>
-        </div>
+
         <div class="footer-copyleft">
           <small class="d-inline" i18n-title title="powered by PeerTube - CopyLeft 2015-2020">
             <a href="https://joinpeertube.org" i18n-title title="PeerTube website" target="_blank" rel="noopener noreferrer" i18n>
               powered by PeerTube
             </a>
+
             <a href="https://github.com/Chocobozzz/PeerTube/blob/develop/LICENSE" i18n-title title="PeerTube license" target="_blank" rel="noopener noreferrer">
               <span aria-label="copyleft" class="d-inline-block" style="transform: rotateY(180deg)">&copy;</span> 2015-2020
             </a>

@@ -185,21 +185,21 @@ menu {
     width: $menu-width;
     padding-bottom: 15px;
 
-    & > div:not(.panel-block) {
-      padding-left: $menu-lateral-padding;
-      padding-right: $menu-lateral-padding;
-      row-gap: 1em;
+    .bottom-links {
+      display: flex;
+      flex-direction: column;
+      padding: 0 $menu-lateral-padding;
     }
 
     $footer-links-base-opacity: .8;
 
     .footer-links {
-      display: inline-flex;
-      flex-wrap: wrap;
+      &, > div {
+        display: flex;
+        flex-wrap: wrap;
+      }
 
-      & > a {
-        @include disable-default-a-behaviour;
-
+      a, span[role=button] {
         display: inline-block;
         text-decoration: none;
         color: var(--mainBackgroundColor);
@@ -218,7 +218,7 @@ menu {
 
           my-global-icon {
             @include apply-svg-color(var(--mainBackgroundColor));
-        
+
             display: flex;
             width: auto;
             height: 90%;
