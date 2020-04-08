@@ -80,7 +80,7 @@ export class PeerTubeEmbedApi {
   }
 
   private setupStateTracking () {
-    let currentState: 'playing' | 'paused' | 'unstarted' = 'unstarted'
+    let currentState: 'playing' | 'paused' | 'unstarted' | 'ended' = 'unstarted'
 
     setInterval(() => {
       const position = this.element.currentTime
@@ -104,6 +104,11 @@ export class PeerTubeEmbedApi {
     this.element.addEventListener('pause', ev => {
       currentState = 'paused'
       this.channel.notify({ method: 'playbackStatusChange', params: 'paused' })
+    })
+
+    this.element.addEventListener('ended', ev => {
+      currentState = 'ended'
+      this.channel.notify({ method: 'playbackStatusChange', params: 'ended' })
     })
 
     // PeerTube specific capabilities

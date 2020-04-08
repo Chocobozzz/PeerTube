@@ -123,7 +123,8 @@ Fired every half second to provide the current status of playback. The parameter
 }
 ```
 
-The `volume` field contains the volume from `0` (silent) to `1` (full volume). The `playbackState` can be `playing` or `paused`. More states may be added later.
+The `volume` field contains the volume from `0` (silent) to `1` (full volume).
+The `playbackState` can be `unstarted`, `playing`, `paused` or `ended`. More states may be added later.
 
 ## Event `playbackStatusChange`
 
