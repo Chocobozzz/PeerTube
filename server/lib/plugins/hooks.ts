@@ -25,7 +25,7 @@ const Hooks = {
   },
 
   runAction: <T, U extends ServerActionHookName>(hookName: U, params?: T) => {
-    PluginManager.Instance.runHook(hookName, params)
+    PluginManager.Instance.runHook(hookName, undefined, params)
       .catch(err => logger.error('Fatal hook error.', { err }))
   }
 }

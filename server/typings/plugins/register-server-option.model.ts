@@ -13,6 +13,10 @@ export type PeerTubeHelpers = {
   database: {
     query: Function
   }
+
+  videos: {
+    removeVideo: (videoId: number) => Promise<void>
+  }
 }
 
 export type RegisterServerOptions = {
