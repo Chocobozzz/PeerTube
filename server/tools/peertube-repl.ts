@@ -1,11 +1,12 @@
 import { registerTSPaths } from '../helpers/register-ts-paths'
+registerTSPaths()
+
 import * as repl from 'repl'
 import * as path from 'path'
 import * as _ from 'lodash'
 import { uuidv1, uuidv3, uuidv4, uuidv5 } from 'uuid'
 import * as Sequelize from 'sequelize'
 import * as YoutubeDL from 'youtube-dl'
-
 import { initDatabaseModels, sequelizeTypescript } from '../initializers'
 import * as cli from '../tools/cli'
 import { logger } from '../helpers/logger'
@@ -17,8 +18,6 @@ import * as peertubeCryptoUtils from '../helpers/peertube-crypto'
 import * as signupUtils from '../helpers/signup'
 import * as utils from '../helpers/utils'
 import * as YoutubeDLUtils from '../helpers/youtube-dl'
-
-registerTSPaths()
 
 const start = async () => {
   await initDatabaseModels(true)
