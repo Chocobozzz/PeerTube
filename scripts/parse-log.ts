@@ -40,7 +40,7 @@ const logger = winston.createLogger({
       stderrLevels: [],
       format: winston.format.combine(
         winston.format.splat(),
-        labelFormatter,
+        labelFormatter(),
         winston.format.colorize(),
         loggerFormat
       )

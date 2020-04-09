@@ -285,7 +285,7 @@ function cleanupTests (servers: ServerInfo[]) {
   return Promise.all(p)
 }
 
-async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
+async function waitUntilLog (server: ServerInfo, str: string, count = 1, strictCount = true) {
   const logfile = join(root(), 'test' + server.internalServerNumber, 'logs/peertube.log')
 
   while (true) {
@@ -293,6 +293,7 @@ async function waitUntilLog (server: ServerInfo, str: string, count = 1) {
 
     const matches = buf.toString().match(new RegExp(str, 'g'))
     if (matches && matches.length === count) return
+    if (matches && strictCount === false && matches.length >= count) return
 
     await wait(1000)
   }

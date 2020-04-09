@@ -9,6 +9,10 @@ import { Logger } from 'winston'
 
 export type PeerTubeHelpers = {
   logger: Logger
+
+  database: {
+    query: Function
+  }
 }
 
 export type RegisterServerOptions = {

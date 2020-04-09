@@ -36,7 +36,7 @@ const auditLogger = winston.createLogger({
       maxFiles: 5,
       format: winston.format.combine(
         winston.format.timestamp(),
-        labelFormatter,
+        labelFormatter(),
         winston.format.splat(),
         jsonLoggerFormat
       )

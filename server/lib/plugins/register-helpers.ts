@@ -35,7 +35,7 @@ function buildRegisterHelpers (npmName: string, plugin: PluginModel): Omit<Regis
   const videoCategoryManager = buildVideoCategoryManager(npmName)
   const videoLicenceManager = buildVideoLicenceManager(npmName)
 
-  const peertubeHelpers = buildPluginHelpers(npmName, plugin)
+  const peertubeHelpers = buildPluginHelpers(npmName)
 
   return {
     settingsManager,

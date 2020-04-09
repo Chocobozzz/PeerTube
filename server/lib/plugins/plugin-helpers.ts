@@ -1,11 +1,15 @@
-import { PluginModel } from '@server/models/server/plugin'
 import { PeerTubeHelpers } from '@server/typings/plugins'
+import { sequelizeTypescript } from '@server/initializers/database'
+import { buildLogger } from '@server/helpers/logger'
 
-function buildPluginHelpers (npmName: string, plugin: PluginModel): PeerTubeHelpers {
-  const logger = buildLogger(npmName)
+function buildPluginHelpers (npmName: string): PeerTubeHelpers {
+  const logger = buildPluginLogger(npmName)
+
+  const database = buildDatabaseHelpers()
 
   return {
-    logger
+    logger,
+    database
   }
 }
 
@@ -15,6 +19,12 @@ export {
 
 // ---------------------------------------------------------------------------
 
-function buildLogger (npmName: string) {
+function buildPluginLogger (npmName: string) {
   return buildLogger(npmName)
+}
+
+function buildDatabaseHelpers () {
+  return {
+    query: sequelizeTypescript.query.bind(sequelizeTypescript)
+  }
 }
