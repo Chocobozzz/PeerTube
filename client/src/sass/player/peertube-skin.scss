@@ -271,6 +271,7 @@ body {
       line-height: $control-bar-height;
       text-align: right;
       margin-right: 6px;
+      overflow: hidden;
 
       .vjs-peertube-displayed {
         display: block;
