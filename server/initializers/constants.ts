@@ -464,7 +464,7 @@ const ACTIVITY_PUB = {
   ACCEPT_HEADER: 'application/activity+json, application/ld+json',
   PUBLIC: 'https://www.w3.org/ns/activitystreams#Public',
   COLLECTION_ITEMS_PER_PAGE: 10,
-  FETCH_PAGE_LIMIT: 100,
+  FETCH_PAGE_LIMIT: 2000,
   URL_MIME_TYPES: {
     VIDEO: [] as string[],
     TORRENT: [ 'application/x-bittorrent' ],
