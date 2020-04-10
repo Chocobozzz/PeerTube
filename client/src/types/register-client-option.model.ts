@@ -10,6 +10,8 @@ export type RegisterClientOptions = {
 export type RegisterClientHelpers = {
   getBaseStaticRoute: () => string
 
+  getBaseClientScriptsRoute: () => string
+
   isLoggedIn: () => boolean
 
   getSettings: () => Promise<{ [ name: string ]: string }>
