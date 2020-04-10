@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { body, param, query } from 'express-validator'
+import { body, param, query, ValidationChain } from 'express-validator'
 import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
@@ -10,24 +10,43 @@ import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-pl
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { CONFIG } from '../../initializers/config'
 
-const servePluginStaticDirectoryValidator = (pluginType: PluginType) => [
-  param('pluginName').custom(isPluginNameValid).withMessage('Should have a valid plugin name'),
-  param('pluginVersion').custom(isPluginVersionValid).withMessage('Should have a valid plugin version'),
+const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
+  const validators: (ValidationChain | express.Handler)[] = [
+    param('pluginName').custom(isPluginNameValid).withMessage('Should have a valid plugin name')
+  ]
+
+  if (withVersion) {
+    validators.push(
+      param('pluginVersion').custom(isPluginVersionValid).withMessage('Should have a valid plugin version')
+    )
+  }
+
+  return validators.concat([
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      logger.debug('Checking getPluginValidator parameters', { parameters: req.params })
+
+      if (areValidationErrors(req, res)) return
+
+      const npmName = PluginModel.buildNpmName(req.params.pluginName, pluginType)
+      const plugin = PluginManager.Instance.getRegisteredPluginOrTheme(npmName)
+
+      if (!plugin) return res.sendStatus(404)
+      if (withVersion && plugin.version !== req.params.pluginVersion) return res.sendStatus(404)
+
+      res.locals.registeredPlugin = plugin
+
+      return next()
+    }
+  ])
+}
+
+const pluginStaticDirectoryValidator = [
   param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
 
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    logger.debug('Checking servePluginStaticDirectory parameters', { parameters: req.params })
+    logger.debug('Checking pluginStaticDirectoryValidator parameters', { parameters: req.params })
 
     if (areValidationErrors(req, res)) return
-
-    const npmName = PluginModel.buildNpmName(req.params.pluginName, pluginType)
-    const plugin = PluginManager.Instance.getRegisteredPluginOrTheme(npmName)
-
-    if (!plugin || plugin.version !== req.params.pluginVersion) {
-      return res.sendStatus(404)
-    }
-
-    res.locals.registeredPlugin = plugin
 
     return next()
   }
@@ -149,7 +168,8 @@ const listAvailablePluginsValidator = [
 // ---------------------------------------------------------------------------
 
 export {
-  servePluginStaticDirectoryValidator,
+  pluginStaticDirectoryValidator,
+  getPluginValidator,
   updatePluginSettingsValidator,
   uninstallPluginValidator,
   listAvailablePluginsValidator,

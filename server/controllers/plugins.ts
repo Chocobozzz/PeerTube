@@ -2,7 +2,7 @@ import * as express from 'express'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
 import { join } from 'path'
 import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
-import { servePluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
+import { getPluginValidator, pluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
 import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
@@ -24,22 +24,36 @@ pluginsRouter.get('/plugins/translations/:locale.json',
 )
 
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
-  servePluginStaticDirectoryValidator(PluginType.PLUGIN),
+  getPluginValidator(PluginType.PLUGIN),
+  pluginStaticDirectoryValidator,
   servePluginStaticDirectory
 )
 
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
-  servePluginStaticDirectoryValidator(PluginType.PLUGIN),
+  getPluginValidator(PluginType.PLUGIN),
+  pluginStaticDirectoryValidator,
   servePluginClientScripts
 )
 
+pluginsRouter.use('/plugins/:pluginName/router',
+  getPluginValidator(PluginType.PLUGIN, false),
+  servePluginCustomRoutes
+)
+
+pluginsRouter.use('/plugins/:pluginName/:pluginVersion/router',
+  getPluginValidator(PluginType.PLUGIN),
+  servePluginCustomRoutes
+)
+
 pluginsRouter.get('/themes/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
-  servePluginStaticDirectoryValidator(PluginType.THEME),
+  getPluginValidator(PluginType.THEME),
+  pluginStaticDirectoryValidator,
   servePluginStaticDirectory
 )
 
 pluginsRouter.get('/themes/:pluginName/:pluginVersion/client-scripts/:staticEndpoint(*)',
-  servePluginStaticDirectoryValidator(PluginType.THEME),
+  getPluginValidator(PluginType.THEME),
+  pluginStaticDirectoryValidator,
   servePluginClientScripts
 )
 
@@ -85,12 +99,19 @@ function servePluginStaticDirectory (req: express.Request, res: express.Response
   const [ directory, ...file ] = staticEndpoint.split('/')
 
   const staticPath = plugin.staticDirs[directory]
-  if (!staticPath) {
-    return res.sendStatus(404)
-  }
+  if (!staticPath) return res.sendStatus(404)
 
   const filepath = file.join('/')
   return res.sendFile(join(plugin.path, staticPath, filepath), sendFileOptions)
+}
+
+function servePluginCustomRoutes (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const plugin: RegisteredPlugin = res.locals.registeredPlugin
+  const router = PluginManager.Instance.getRouter(plugin.npmName)
+
+  if (!router) return res.sendStatus(404)
+
+  return router(req, res, next)
 }
 
 function servePluginClientScripts (req: express.Request, res: express.Response) {
@@ -98,9 +119,7 @@ function servePluginClientScripts (req: express.Request, res: express.Response) 
   const staticEndpoint = req.params.staticEndpoint
 
   const file = plugin.clientScripts[staticEndpoint]
-  if (!file) {
-    return res.sendStatus(404)
-  }
+  if (!file) return res.sendStatus(404)
 
   return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
 }

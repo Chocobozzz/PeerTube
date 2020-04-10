@@ -6,6 +6,7 @@ import { PluginVideoCategoryManager } from '../../../shared/models/plugins/plugi
 import { PluginVideoLanguageManager } from '../../../shared/models/plugins/plugin-video-language-manager.model'
 import { PluginVideoLicenceManager } from '../../../shared/models/plugins/plugin-video-licence-manager.model'
 import { Logger } from 'winston'
+import { Router } from 'express'
 
 export type PeerTubeHelpers = {
   logger: Logger
@@ -31,6 +32,12 @@ export type RegisterServerOptions = {
   videoCategoryManager: PluginVideoCategoryManager
   videoLanguageManager: PluginVideoLanguageManager
   videoLicenceManager: PluginVideoLicenceManager
+
+  // Get plugin router to create custom routes
+  // Base routes of this router are
+  //  * /plugins/:pluginName/:pluginVersion/router/...
+  //  * /plugins/:pluginName/router/...
+  getRouter(): Router
 
   peertubeHelpers: PeerTubeHelpers
 }

@@ -13,15 +13,14 @@ import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 import { outputFile, readJSON } from 'fs-extra'
-import { ServerHook, ServerHookName, serverHookObject } from '../../../shared/models/plugins/server-hook.model'
+import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
 import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
 import { RegisterServerOptions } from '../../typings/plugins/register-server-option.model'
 import { PluginLibrary } from '../../typings/plugins'
 import { ClientHtml } from '../client-html'
-import { RegisterServerHookOptions } from '../../../shared/models/plugins/register-server-hook.model'
-import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
 import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
-import { buildRegisterHelpers, reinitVideoConstants } from './register-helpers'
+import { RegisterHelpersStore } from './register-helpers-store'
+import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -59,9 +58,10 @@ export class PluginManager implements ServerHook {
   private static instance: PluginManager
 
   private registeredPlugins: { [name: string]: RegisteredPlugin } = {}
-  private settings: { [name: string]: RegisterServerSettingOptions[] } = {}
   private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
+
+  private registerHelpersStore: { [npmName: string]: RegisterHelpersStore } = {}
 
   private constructor () {
   }
@@ -103,7 +103,17 @@ export class PluginManager implements ServerHook {
   }
 
   getRegisteredSettings (npmName: string) {
-    return this.settings[npmName] || []
+    const store = this.registerHelpersStore[npmName]
+    if (store) return store.getSettings()
+
+    return []
+  }
+
+  getRouter (npmName: string) {
+    const store = this.registerHelpersStore[npmName]
+    if (!store) return null
+
+    return store.getRouter()
   }
 
   getTranslations (locale: string) {
@@ -164,7 +174,6 @@ export class PluginManager implements ServerHook {
     }
 
     delete this.registeredPlugins[plugin.npmName]
-    delete this.settings[plugin.npmName]
 
     this.deleteTranslations(plugin.npmName)
 
@@ -176,7 +185,10 @@ export class PluginManager implements ServerHook {
         this.hooks[key] = this.hooks[key].filter(h => h.npmName !== npmName)
       }
 
-      reinitVideoConstants(plugin.npmName)
+      const store = this.registerHelpersStore[plugin.npmName]
+      store.reinitVideoConstants(plugin.npmName)
+
+      delete this.registerHelpersStore[plugin.npmName]
 
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
@@ -429,34 +441,21 @@ export class PluginManager implements ServerHook {
   // ###################### Generate register helpers ######################
 
   private getRegisterHelpers (npmName: string, plugin: PluginModel): RegisterServerOptions {
-    const registerHook = (options: RegisterServerHookOptions) => {
-      if (serverHookObject[options.target] !== true) {
-        logger.warn('Unknown hook %s of plugin %s. Skipping.', options.target, npmName)
-        return
-      }
-
+    const onHookAdded = (options: RegisterServerHookOptions) => {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
       this.hooks[options.target].push({
-        npmName,
+        npmName: npmName,
         pluginName: plugin.name,
         handler: options.handler,
         priority: options.priority || 0
       })
     }
 
-    const registerSetting = (options: RegisterServerSettingOptions) => {
-      if (!this.settings[npmName]) this.settings[npmName] = []
+    const registerHelpersStore = new RegisterHelpersStore(npmName, plugin, onHookAdded.bind(this))
+    this.registerHelpersStore[npmName] = registerHelpersStore
 
-      this.settings[npmName].push(options)
-    }
-
-    const registerHelpers = buildRegisterHelpers(npmName, plugin)
-
-    return Object.assign(registerHelpers, {
-      registerHook,
-      registerSetting
-    })
+    return registerHelpersStore.buildRegisterHelpers()
   }
 
   private sanitizeAndCheckPackageJSONOrThrow (packageJSON: PluginPackageJson, pluginType: PluginType) {

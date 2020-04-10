@@ -12,6 +12,7 @@
     - [Settings](#settings)
     - [Storage](#storage)
     - [Update video constants](#update-video-constants)
+    - [Add custom routes](#add-custom-routes)
   - [Client helpers (themes & plugins)](#client-helpers-themes--plugins)
   - [Plugin static route](#plugin-static-route)
     - [Translate](#translate)
@@ -71,7 +72,9 @@ async function register ({
   storageManager,
   videoCategoryManager,
   videoLicenceManager,
-  videoLanguageManager
+  videoLanguageManager,
+  peertubeHelpers,
+  getRouter
 }) {
   registerHook({
     target: 'action:application.listening',
@@ -177,6 +180,20 @@ videoCategoryManager.deleteCategory(1) // Music
 videoLicenceManager.addLicence(42, 'Best licence')
 videoLicenceManager.deleteLicence(7) // Public domain
 ```
+
+#### Add custom routes
+
+You can create custom routes using an [express Router](https://expressjs.com/en/4x/api.html#router) for your plugin:
+
+```js
+const router = getRouter()
+router.get('/ping', (req, res) => res.json({ message: 'pong' }))
+```
+
+The `ping` route can be accessed using:
+ * `/plugins/:pluginName/:pluginVersion/router/ping`
+ * Or `/plugins/:pluginName/router/ping`
+
 
 ### Client helpers (themes & plugins)
 
