@@ -38,7 +38,8 @@
       (nearOfBottom)="onNearOfBottom()"
       [dataObservable]="onDataSubject.asObservable()"
     >
-      <div #commentHighlightBlock id="highlighted-comment">
+      <div>
+        <div class="anchor" #commentHighlightBlock id="highlighted-comment"></div>
         <my-video-comment
           *ngIf="highlightedThread"
           [comment]="highlightedThread"

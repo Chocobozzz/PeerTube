@@ -36,6 +36,12 @@ form {
 
   button {
     @include peertube-button;
+    @include disable-outline;
+    @include disable-default-a-behaviour;
+
+    &:not(:last-child) {
+      margin-right: .5rem;
+    }
 
     &:last-child {
       @include orange-button;
