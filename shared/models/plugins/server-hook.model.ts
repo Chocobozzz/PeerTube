@@ -9,9 +9,11 @@ export const serverFilterHookObject = {
   // Used to get detailed video information (video watch page for example)
   'filter:api.video.get.result': true,
 
-  // Filter the result of the accept upload function
+  // Filter the result of the accept upload, import via torrent or url functions
   // If this function returns false then the upload is aborted with an error
   'filter:api.video.upload.accept.result': true,
+  'filter:api.video.torrent-import.accept.result': true,
+  'filter:api.video.url-import.accept.result': true,
   // Filter the result of the accept comment (thread or reply) functions
   // If the functions return false then the user cannot post its comment
   'filter:api.video-thread.create.accept.result': true,

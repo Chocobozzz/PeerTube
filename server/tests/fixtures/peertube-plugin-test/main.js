@@ -50,7 +50,27 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     target: 'filter:api.video.upload.accept.result',
     handler: ({ accepted }, { videoBody }) => {
       if (!accepted) return { accepted: false }
-      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word '}
+      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
+
+      return { accepted: true }
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.video.url-import.accept.result',
+    handler: ({ accepted }, { videoBody }) => {
+      if (!accepted) return { accepted: false }
+      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
+
+      return { accepted: true }
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.video.torrent-import.accept.result',
+    handler: ({ accepted }, { videoBody }) => {
+      if (!accepted) return { accepted: false }
+      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
 
       return { accepted: true }
     }

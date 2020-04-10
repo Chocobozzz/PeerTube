@@ -21,10 +21,11 @@ import {
   setDefaultVideoChannel,
   updateVideo,
   uploadVideo,
-  waitJobs
+  waitJobs,
+  immutableAssign
 } from '../../../shared/extra-utils'
 import { VideoCommentThreadTree } from '../../../shared/models/videos/video-comment.model'
-import { VideoDetails } from '../../../shared/models/videos'
+import { VideoDetails, VideoPrivacy } from '../../../shared/models/videos'
 import { getYoutubeVideoUrl, importVideo } from '../../../shared/extra-utils/videos/video-imports'
 import { ServerConfig } from '@shared/models'
 
@@ -85,6 +86,24 @@ describe('Test plugin filter hooks', function () {
 
   it('Should run filter:api.video.upload.accept.result', async function () {
     await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video with bad word' }, 403)
+  })
+
+  it('Should run filter:api.video.url-import.accept.result', async function () {
+    const baseAttributes = {
+      name: 'title with bad word',
+      privacy: VideoPrivacy.PUBLIC,
+      channelId: servers[0].videoChannel.id
+    }
+    await importVideo(servers[0].url, servers[0].accessToken, immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() }))
+  })
+
+  it('Should run filter:api.video.torrent-import.accept.result', async function () {
+    const baseAttributes = {
+      name: 'title with bad word',
+      privacy: VideoPrivacy.PUBLIC,
+      channelId: servers[0].videoChannel.id
+    }
+    await importVideo(servers[0].url, servers[0].accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' }))
   })
 
   it('Should run filter:api.video-thread.create.accept.result', async function () {

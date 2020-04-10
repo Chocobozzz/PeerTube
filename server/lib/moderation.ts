@@ -7,6 +7,9 @@ import { VideoTorrentObject } from '../../shared/models/activitypub/objects'
 import { ActivityCreate } from '../../shared/models/activitypub'
 import { ActorModel } from '../models/activitypub/actor'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
+import { VideoFileModel } from '@server/models/video/video-file'
+import { PathLike } from 'fs-extra'
+import { MUser } from '@server/typings/models'
 
 export type AcceptResult = {
   accepted: boolean
@@ -55,10 +58,19 @@ function isRemoteVideoCommentAccepted (_object: {
   return { accepted: true }
 }
 
+function isImportVideoAccepted (object: {
+  videoFilePath: PathLike
+  videoFile: VideoFileModel
+  user: MUser
+}): AcceptResult {
+  return { accepted: true }
+}
+
 export {
   isLocalVideoAccepted,
   isLocalVideoThreadAccepted,
   isRemoteVideoAccepted,
   isRemoteVideoCommentAccepted,
-  isLocalVideoCommentReplyAccepted
+  isLocalVideoCommentReplyAccepted,
+  isImportVideoAccepted
 }

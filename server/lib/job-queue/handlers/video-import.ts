@@ -22,6 +22,28 @@ import { MThumbnail } from '../../../typings/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
+import { Hooks } from '@server/lib/plugins/hooks'
+import { isImportVideoAccepted } from '@server/lib/moderation'
+
+type VideoImportYoutubeDLPayloadType = 'youtube-dl'
+type VideoImportYoutubeDLPayload = {
+  type: VideoImportYoutubeDLPayloadType
+  videoImportId: number
+
+  thumbnailUrl: string
+  downloadThumbnail: boolean
+  downloadPreview: boolean
+
+  fileExt?: string
+}
+
+type VideoImportTorrentPayloadType = 'magnet-uri' | 'torrent-file'
+type VideoImportTorrentPayload = {
+  type: VideoImportTorrentPayloadType
+  videoImportId: number
+}
+
+export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
 
 async function processVideoImport (job: Bull.Job) {
   const payload = job.data as VideoImportPayload
@@ -44,6 +66,7 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
 
   const options = {
+    type: payload.type,
     videoImportId: payload.videoImportId,
 
     generateThumbnail: true,
@@ -61,6 +84,7 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
 
   const videoImport = await getVideoImportOrDie(payload.videoImportId)
   const options = {
+    type: payload.type,
     videoImportId: videoImport.id,
 
     generateThumbnail: payload.generateThumbnail,
@@ -80,6 +104,7 @@ async function getVideoImportOrDie (videoImportId: number) {
 }
 
 type ProcessFileOptions = {
+  type: VideoImportYoutubeDLPayloadType | VideoImportTorrentPayloadType
   videoImportId: number
 
   generateThumbnail: boolean
@@ -105,7 +130,7 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     const fps = await getVideoFileFPS(tempVideoPath)
     const duration = await getDurationFromVideoFile(tempVideoPath)
 
-    // Create video file object in database
+    // Prepare video file object for creation in database
     const videoFileData = {
       extname: extname(tempVideoPath),
       resolution: videoFileResolution,
@@ -115,6 +140,29 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
     videoFile = new VideoFileModel(videoFileData)
 
+    // Check we accept this video
+    const acceptParameters = {
+      videoFilePath: tempVideoPath,
+      videoFile,
+      user: videoImport.User
+    }
+    const acceptedResult = options.type === 'youtube-dl'
+      ? await Hooks.wrapFun(
+        isImportVideoAccepted,
+        acceptParameters,
+        'filter:api.video.url-import.accept.result'
+      )
+      : await Hooks.wrapFun(
+        isImportVideoAccepted,
+        acceptParameters,
+        'filter:api.video.torrent-import.accept.result'
+      )
+    if (acceptedResult.accepted === false) {
+      logger.info('Refused imported video.', { acceptedResult, acceptParameters })
+      throw new Error(acceptedResult.errorMessage)
+    }
+
+    // Video is accepted, resuming preparation
     const videoWithFiles = Object.assign(videoImport.Video, { VideoFiles: [ videoFile ], VideoStreamingPlaylists: [] })
     // To clean files if the import fails
     const videoImportWithFiles: MVideoImportDefaultFiles = Object.assign(videoImport, { Video: videoWithFiles })
