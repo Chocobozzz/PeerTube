@@ -6353,21 +6353,12 @@
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the WebTorrent library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information </source>
-        <target state="new">
-          Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the
-          WebTorrent library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent.
-          When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers
-          to forward the information to.
-          See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information
-        </target>
+        <target state="translated">Retaj samtavolanoj ne estas publike alireblaj: ĉar ni uzas la protokolon WebRTC en la foliumilo (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>kun la biblioteko WebTorrent<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), la protokolo malsamas de la normala BitTorrent. Kiam vi uzas retan foliumilon, vi sendas signalon kun via IP-adreso al la kunordiga servilo, kiu hazarde elektos aliajn samtavolanojn, kiu ricevos tiun informon. Vidu pliajn informojn en <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>ĉi tiu dokumento<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
         <source>The worst-case scenario of an average person spying on their friends is quite unlikely. There are much more effective ways to get that kind of information.</source>
-        <target state="new">
-        The worst-case scenario of an average person spying on their friends is quite unlikely.
-        There are much more effective ways to get that kind of information.
-      </target>
+        <target state="translated">La plej malbona okazo de normala persono spionanta siajn amikojn estas tre malprobabla. Ekzistas multe pli efikaj manieroj akiri tiajn informojn.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">126</context></context-group>
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf">
@@ -6380,11 +6371,7 @@
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
         <source>The threats to privacy with YouTube are different from PeerTube's. In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you. Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).</source>
-        <target state="new">
-        The threats to privacy with YouTube are different from PeerTube's.
-        In YouTube's case, the platform gathers a huge amount of your personal information (not only your IP) to analyze them and track you.
-        Moreover, YouTube is owned by Google/Alphabet, a company that tracks you across many websites (via AdSense or Google Analytics).
-      </target>
+        <target state="translated">La minacoj al privateco malsamas ĉe YouTube de tiuj ĉe PeerTube. Ĉe YouTube, la platformo kolektas grandegajn kvantojn de viaj personaj informoj (ne nur vian IP-adreson) por ilin analizi kaj vin spuri. Plie, YouTube estas posedata de Google/Alphabet, kompanio kiu vin spuras trans multegaj retpaĝoj (per AdSense aŭ Google Analytics).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">133</context></context-group>
       </trans-unit>
       <trans-unit id="3c2990d5e452bdf2317ff23745db70705d848d99">
@@ -6483,7 +6470,7 @@
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
         <source>Developed with ❤ by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new">Developed with ❤ by <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Evoluigita kun ❤ de <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Framasoft<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube-contributors.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6612,9 +6599,7 @@
       </trans-unit>
       <trans-unit id="4a935862bd3120d5878e9635a9d46dfc1bcaedb4" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">La nomo de kanalo estas unika identigilo de via kanalo sur ĉi tiu kaj ĉiuj aliaj nodoj. Ĝi estas same unika kiel retpoŝtadreso, pro kio aliaj homoj povas facile interagi kun ĝi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6640,9 +6625,7 @@
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="new">
-      The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.
-    </target>
+        <target state="translated">La salutnomo estas unika identigilo de via konto sur ĉi tiu kaj ĉiuj aliaj nodoj. Ĝi estas same unika kiel retpoŝtadreso, pro kio aliaj homoj povas facile interagi kun ĝi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6706,7 +6689,7 @@
       </trans-unit>
       <trans-unit id="e1979668b5d368a2a5d476ba4949bc518a4316a0" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{followers}}"/> direct account followers</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{followers}}"/> direct account followers</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{followers}}"/> rektaj abonantoj de konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6714,7 +6697,7 @@
       </trans-unit>
       <trans-unit id="55d67844f534a75a89f86bb19d51c0703280a6ad" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="new">VIDEO CHANNELS</target>
+        <target state="translated">FILMAJ KANALOJ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6722,7 +6705,7 @@
       </trans-unit>
       <trans-unit id="2ccc315673e88d7490220d465da566e3acff72d5" datatype="html">
         <source>ABOUT</source>
-        <target state="new">ABOUT</target>
+        <target state="translated">PRIO</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6743,7 +6726,7 @@
       </trans-unit>
       <trans-unit id="f1a851fd8b39e5544e3eec438ebd7f4ccfcc34dc" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> subscribers} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 abonanto} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> abonantoj} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6751,7 +6734,7 @@
       </trans-unit>
       <trans-unit id="00437b281d12d04c60a57bd329cff5e3c5febd93" datatype="html">
         <source>Audio-only</source>
-        <target state="new">Audio-only</target>
+        <target state="translated">Nur sono</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6759,7 +6742,7 @@
       </trans-unit>
       <trans-unit id="b867165f9a29f4af6d0c37bcb1f48e53850a0d2d" datatype="html">
         <source>A <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> that keeps the original audio track, with no video</source>
-        <target state="new">A <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> that keeps the original audio track, with no video</target>
+        <target state="translated"><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> kiu retenas la originalan sonparton, sen filmoparto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7095,7 +7078,7 @@
       </trans-unit>
       <trans-unit id="fb2e1bed329dc5b84197808c778abb9edcbdb335" datatype="html">
         <source>Used</source>
-        <target state="new">Used</target>
+        <target state="translated">Uzita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7103,7 +7086,7 @@
       </trans-unit>
       <trans-unit id="b7da3e3505cc80f9bf3cffc8444c53e8a9ec70a5" datatype="html">
         <source>Available</source>
-        <target state="new">Available</target>
+        <target state="translated">Disponebla</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7111,7 +7094,7 @@
       </trans-unit>
       <trans-unit id="aea95ff7fb86826539cc9c81c90e766d82f9cbb5" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="new">Do you really want to remove this video redundancy?</target>
+        <target state="translated">Ĉu vi vere volas forigi ĉi tiun filman ripetaĵon?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7119,7 +7102,7 @@
       </trans-unit>
       <trans-unit id="9eef7dd291945247d4aefb3994b617d73a0c96e2" datatype="html">
         <source>Remove redundancy</source>
-        <target state="new">Remove redundancy</target>
+        <target state="translated">Forigi ripetaĵon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7127,7 +7110,7 @@
       </trans-unit>
       <trans-unit id="1009a5a3eab4ef49f45fe10392d8685c1ff03df9" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="new">Video redundancies removed!</target>
+        <target state="translated">Filmaj ripetaĵoj estas forigitaj!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7429,7 +7412,7 @@
       </trans-unit>
       <trans-unit id="36c42d3ca8973e91a59cbfda455d5a2e60ee460d" datatype="html">
         <source>Standard logs</source>
-        <target state="new">Standard logs</target>
+        <target state="translated">Normaj protokoloj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7469,7 +7452,7 @@
       </trans-unit>
       <trans-unit id="53f1b1c721870641753bde76831e4c75b969ac1b" datatype="html">
         <source>User <x id="INTERPOLATION" equiv-text="{{user.username}}"/> updated.</source>
-        <target state="new">User <x id="INTERPOLATION" equiv-text="{{user.username}}"/> updated.</target>
+        <target state="translated">Uzanto <x id="INTERPOLATION" equiv-text="{{user.username}}"/> ĝisdatiĝis.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8155,7 +8138,7 @@
       </trans-unit>
       <trans-unit id="33e9ca3aab38821eeaf966493df042d4202414df" datatype="html">
         <source>VIDEO PLAYLISTS</source>
-        <target state="new">VIDEO PLAYLISTS</target>
+        <target state="translated">FILMAJ LUDLISTOJ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8316,7 +8299,7 @@
       </trans-unit>
       <trans-unit id="7d5d2f4e2aebe4977c5e3daff4283814f869c609" datatype="html">
         <source>any language</source>
-        <target state="new">any language</target>
+        <target state="translated">ajna lingvo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8324,7 +8307,7 @@
       </trans-unit>
       <trans-unit id="6e998fc06a19659c22cca43efa1b35515761cbb2" datatype="html">
         <source>hide</source>
-        <target state="new">hide</target>
+        <target state="translated">kaŝi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
