@@ -10,6 +10,8 @@ import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom
 import { CONFIG } from '../../../initializers/config'
 import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
 import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
+import { isPreImportVideoAccepted } from '@server/lib/moderation'
+import { Hooks } from '@server/lib/plugins/hooks'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -64,6 +66,8 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
         .end()
     }
 
+    if (!await isImportAccepted(req, res)) return cleanUpReqFiles(req)
+
     return next()
   }
 ])
@@ -75,3 +79,26 @@ export {
 }
 
 // ---------------------------------------------------------------------------
+
+async function isImportAccepted (req: express.Request, res: express.Response) {
+  // Check we accept this video
+  const acceptParameters = {
+    videoImportBody: req.body,
+    user: res.locals.oauth.token.User
+  }
+  const acceptedResult = await Hooks.wrapFun(
+    isPreImportVideoAccepted,
+    acceptParameters,
+    'filter:api.video.pre-import-url.accept.result'
+  )
+
+  if (!acceptedResult || acceptedResult.accepted !== true) {
+    logger.info('Refused to import video.', { acceptedResult, acceptParameters })
+    res.status(403)
+       .json({ error: acceptedResult.errorMessage || 'Refused to import video' })
+
+    return false
+  }
+
+  return true
+}

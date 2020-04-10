@@ -1,7 +1,7 @@
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
 import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
-import { VideoCreate } from '../../shared/models/videos'
+import { VideoCreate, VideoImportCreate } from '../../shared/models/videos'
 import { UserModel } from '../models/account/user'
 import { VideoTorrentObject } from '../../shared/models/activitypub/objects'
 import { ActivityCreate } from '../../shared/models/activitypub'
@@ -58,7 +58,14 @@ function isRemoteVideoCommentAccepted (_object: {
   return { accepted: true }
 }
 
-function isImportVideoAccepted (object: {
+function isPreImportVideoAccepted (object: {
+  videoImportBody: VideoImportCreate
+  user: MUser
+}): AcceptResult {
+  return { accepted: true }
+}
+
+function isPostImportVideoAccepted (object: {
   videoFilePath: PathLike
   videoFile: VideoFileModel
   user: MUser
@@ -72,5 +79,6 @@ export {
   isRemoteVideoAccepted,
   isRemoteVideoCommentAccepted,
   isLocalVideoCommentReplyAccepted,
-  isImportVideoAccepted
+  isPreImportVideoAccepted,
+  isPostImportVideoAccepted
 }

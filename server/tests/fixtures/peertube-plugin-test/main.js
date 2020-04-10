@@ -57,20 +57,40 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
   })
 
   registerHook({
-    target: 'filter:api.video.url-import.accept.result',
-    handler: ({ accepted }, { videoBody }) => {
+    target: 'filter:api.video.pre-import-url.accept.result',
+    handler: ({ accepted }, { videoImportBody }) => {
       if (!accepted) return { accepted: false }
-      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
+      if (videoImportBody.targetUrl.indexOf('bad') !== -1) return { accepted: false, errorMessage: 'bad target url' }
 
       return { accepted: true }
     }
   })
 
   registerHook({
-    target: 'filter:api.video.torrent-import.accept.result',
-    handler: ({ accepted }, { videoBody }) => {
+    target: 'filter:api.video.pre-import-torrent.accept.result',
+    handler: ({ accepted }, { videoImportBody }) => {
       if (!accepted) return { accepted: false }
-      if (videoBody.name.indexOf('bad word') !== -1) return { accepted: false, errorMessage: 'bad word' }
+      if (videoImportBody.fps > 30) return { accepted: false, errorMessage: 'bad fps' }
+
+      return { accepted: true }
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.video.post-import-url.accept.result',
+    handler: ({ accepted }, { videoFile }) => {
+      if (!accepted) return { accepted: false }
+      if (videoFile.fps > 30) return { accepted: false, errorMessage: 'bad fps' }
+
+      return { accepted: true }
+    }
+  })
+
+  registerHook({
+    target: 'filter:api.video.post-import-torrent.accept.result',
+    handler: ({ accepted }, { videoFile }) => {
+      if (!accepted) return { accepted: false }
+      if (videoFile.fps > 30) return { accepted: false, errorMessage: 'bad fps' }
 
       return { accepted: true }
     }

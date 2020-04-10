@@ -23,7 +23,7 @@ import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from
 import { getVideoFilePath } from '@server/lib/video-paths'
 import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { isImportVideoAccepted } from '@server/lib/moderation'
+import { isPostImportVideoAccepted } from '@server/lib/moderation'
 
 type VideoImportYoutubeDLPayloadType = 'youtube-dl'
 type VideoImportYoutubeDLPayload = {
@@ -148,14 +148,14 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
     const acceptedResult = options.type === 'youtube-dl'
       ? await Hooks.wrapFun(
-        isImportVideoAccepted,
+        isPostImportVideoAccepted,
         acceptParameters,
-        'filter:api.video.url-import.accept.result'
+        'filter:api.video.post-import-url.accept.result'
       )
       : await Hooks.wrapFun(
-        isImportVideoAccepted,
+        isPostImportVideoAccepted,
         acceptParameters,
-        'filter:api.video.torrent-import.accept.result'
+        'filter:api.video.post-import-torrent.accept.result'
       )
     if (acceptedResult.accepted === false) {
       logger.info('Refused imported video.', { acceptedResult, acceptParameters })

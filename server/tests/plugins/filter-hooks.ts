@@ -88,7 +88,25 @@ describe('Test plugin filter hooks', function () {
     await uploadVideo(servers[0].url, servers[0].accessToken, { name: 'video with bad word' }, 403)
   })
 
-  it('Should run filter:api.video.url-import.accept.result', async function () {
+  it('Should run filter:api.video.pre-import-url.accept.result', async function () {
+    const baseAttributes = {
+      name: 'normal title',
+      privacy: VideoPrivacy.PUBLIC,
+      channelId: servers[0].videoChannel.id
+    }
+    await importVideo(servers[0].url, servers[0].accessToken, immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() + 'bad' }))
+  })
+
+  it('Should run filter:api.video.pre-import-torrent.accept.result', async function () {
+    const baseAttributes = {
+      name: 'normal title',
+      privacy: VideoPrivacy.PUBLIC,
+      channelId: servers[0].videoChannel.id
+    }
+    await importVideo(servers[0].url, servers[0].accessToken, immutableAssign(baseAttributes, { torrentfile: 'video-720p.torrent' }))
+  })
+
+  it('Should run filter:api.video.post-import-url.accept.result', async function () {
     const baseAttributes = {
       name: 'title with bad word',
       privacy: VideoPrivacy.PUBLIC,
@@ -97,7 +115,7 @@ describe('Test plugin filter hooks', function () {
     await importVideo(servers[0].url, servers[0].accessToken, immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() }))
   })
 
-  it('Should run filter:api.video.torrent-import.accept.result', async function () {
+  it('Should run filter:api.video.post-import-torrent.accept.result', async function () {
     const baseAttributes = {
       name: 'title with bad word',
       privacy: VideoPrivacy.PUBLIC,

@@ -12,8 +12,10 @@ export const serverFilterHookObject = {
   // Filter the result of the accept upload, import via torrent or url functions
   // If this function returns false then the upload is aborted with an error
   'filter:api.video.upload.accept.result': true,
-  'filter:api.video.torrent-import.accept.result': true,
-  'filter:api.video.url-import.accept.result': true,
+  'filter:api.video.pre-import-url.accept.result': true,
+  'filter:api.video.pre-import-torrent.accept.result': true,
+  'filter:api.video.post-import-url.accept.result': true,
+  'filter:api.video.post-import-torrent.accept.result': true,
   // Filter the result of the accept comment (thread or reply) functions
   // If the functions return false then the user cannot post its comment
   'filter:api.video-thread.create.accept.result': true,
