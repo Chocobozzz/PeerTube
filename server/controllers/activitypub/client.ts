@@ -1,4 +1,5 @@
 import * as express from 'express'
+import * as cors from 'cors'
 import { VideoPrivacy, VideoRateType } from '../../../shared/models/videos'
 import { activityPubCollectionPagination, activityPubContextify } from '../../helpers/activitypub'
 import { ROUTE_CACHE_LIFETIME, WEBSERVER } from '../../initializers/constants'
@@ -39,6 +40,7 @@ import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/vid
 import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId } from '@server/typings/models'
 
 const activityPubClientRouter = express.Router()
+activityPubClientRouter.use(cors())
 
 // Intercept ActivityPub client requests
 
