@@ -8,7 +8,7 @@ export class FromNowPipe implements PipeTransform {
 
   constructor (private i18n: I18n) { }
 
-  transform (arg: number | Date | string) {
+  transform (arg: number | Date | string, short = true) {
     const argDate = new Date(arg)
     const seconds = Math.floor((Date.now() - argDate.getTime()) / 1000)
     let intervals = [
@@ -48,19 +48,22 @@ export class FromNowPipe implements PipeTransform {
         plural: (i: number) => this.i18n('{{i}} min', { i })
       }
     ]
-      .map(i => ({ ...i, interval: Math.floor(seconds / i.unit) })) // absolute interval
-      .map((i, index, array) => ({ // interval relative to remainder
+      // compute the number of units each unit of time has, store it in "interval"
+      .map(i => ({
+        ...i,
+        interval: Math.floor(seconds / i.unit)
+      }))
+      // compute the number of units each unit of time has, from the remainder of the previous bigger unit, store it in "interval"
+      .map((i, index, array) => ({
         ...i,
         interval: index === 0
           ? i.interval
           : Math.floor((seconds - array[index - 1].interval * array[index - 1].unit) / i.unit)
       }))
-      .map(i => ({ // value, interval put in its translated text wrt max value
+      // compute the final string from the "interval", cap it to the max value for the time unit
+      .map(i => ({
         ...i,
-        value: (i.interval > 1
-          ? i.plural
-          : i.singular
-        )(Math.min(i.max, i.interval)) // respect the max value
+        value: (i.interval > 1 ? i.plural : i.singular)(Math.min(i.max, i.interval))
       }))
 
     // only keep the first two intervals with enough seconds to be considered
@@ -73,7 +76,7 @@ export class FromNowPipe implements PipeTransform {
       return this.i18n('just now')
     }
 
-    return intervals.length == 1
+    return intervals.length === 1 || short
       ? this.i18n('{{interval}} ago', { interval: intervals[0].value })
       : this.i18n('{{big_interval}} {{small_interval}} ago', { 
           big_interval: intervals[0].value,

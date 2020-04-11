@@ -232,6 +232,11 @@ p-table {
               color: #fff !important;
               background-color: var(--mainColor) !important;
             }
+
+            &.focus-within,
+            &:focus {
+              box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+            }
           }
         }
       }
