@@ -5,6 +5,11 @@
   @include peertube-button-link;
   @include orange-button;
 
+  &.focus-visible,
+  &:focus {
+    box-shadow: none;
+  }
+
   border-radius: 0;
 }
 
