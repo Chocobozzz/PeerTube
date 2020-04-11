@@ -18,6 +18,9 @@
     </ng-container>
   </div>
 
+  <div class="video-thumbnail-label-overlay warning"><ng-content select="label-warning"></ng-content></div>
+  <div class="video-thumbnail-label-overlay danger"><ng-content select="label-danger"></ng-content></div>
+
   <div class="video-thumbnail-duration-overlay">{{ video.durationLabel }}</div>
 
   <div class="play-overlay">

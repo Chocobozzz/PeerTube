@@ -19,6 +19,7 @@
   }
 
   .video-thumbnail-watch-later-overlay,
+  .video-thumbnail-label-overlay,
   .video-thumbnail-duration-overlay {
     @include static-thumbnail-overlay;
 
@@ -26,6 +27,16 @@
     font-size: 12px;
     font-weight: $font-bold;
     z-index: z(miniature);
+  }
+
+  .video-thumbnail-label-overlay {
+    position: absolute;
+    padding: 0 5px;
+    left: 5px;
+    top: 5px;
+
+    &.warning { background-color: orange; }
+    &.danger { background-color: red; }
   }
 
   .video-thumbnail-duration-overlay {
