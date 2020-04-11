@@ -3,11 +3,13 @@ import * as magnetUtil from 'magnet-uri'
 import { auditLoggerFactory, getAuditIdFromRes, VideoImportAuditView } from '../../../helpers/audit-logger'
 import { asyncMiddleware, asyncRetryTransactionMiddleware, authenticate, videoImportAddValidator } from '../../../middlewares'
 import { MIMETYPES } from '../../../initializers/constants'
-import { getYoutubeDLInfo, YoutubeDLInfo } from '../../../helpers/youtube-dl'
+import { getYoutubeDLInfo, YoutubeDLInfo, getYoutubeDLSubs } from '../../../helpers/youtube-dl'
 import { createReqFiles } from '../../../helpers/express-utils'
 import { logger } from '../../../helpers/logger'
 import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '../../../../shared'
 import { VideoModel } from '../../../models/video/video'
+import { VideoCaptionModel } from '../../../models/video/video-caption'
+import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { getVideoActivityPubUrl } from '../../../lib/activitypub'
 import { TagModel } from '../../../models/video/tag'
 import { VideoImportModel } from '../../../models/video/video-import'
@@ -28,6 +30,7 @@ import {
   MThumbnail,
   MUser,
   MVideoAccountDefault,
+  MVideoCaptionVideo,
   MVideoTag,
   MVideoThumbnailAccountDefault,
   MVideoWithBlacklistLight
@@ -136,6 +139,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const targetUrl = body.targetUrl
   const user = res.locals.oauth.token.User
 
+  // Get video infos
   let youtubeDLInfo: YoutubeDLInfo
   try {
     youtubeDLInfo = await getYoutubeDLInfo(targetUrl)
@@ -167,6 +171,29 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     videoImportAttributes,
     user
   })
+
+
+  // Get video subtitles
+  try {
+    const subtitles = await getYoutubeDLSubs(targetUrl)
+
+    for (const subtitle of subtitles) {
+      const videoCaption = new VideoCaptionModel({
+        videoId: video.id,
+        language: subtitle.language
+      }) as MVideoCaptionVideo
+      videoCaption.Video = video
+
+      // Move physical file
+      await moveAndProcessCaptionFile(subtitle, videoCaption)
+
+      await sequelizeTypescript.transaction(async t => {
+        await VideoCaptionModel.insertOrReplaceLanguage(video.id, subtitle.language, null, t)
+      })
+    }
+  } catch (err) {
+    logger.warn('Cannot get video subtitles.', { err })
+  }
 
   // Create job to import the video
   const payload = {

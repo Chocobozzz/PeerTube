@@ -20,6 +20,12 @@ export type YoutubeDLInfo = {
   originallyPublishedAt?: Date
 }
 
+export type YoutubeDLSubs = {
+  language: string,
+  filename: string,
+  path: string
+}[]
+
 const processOptions = {
   maxBuffer: 1024 * 1024 * 10 // 10MB
 }
@@ -39,6 +45,35 @@ function getYoutubeDLInfo (url: string, opts?: string[]): Promise<YoutubeDLInfo>
           if (obj.name && obj.name.length < CONSTRAINTS_FIELDS.VIDEOS.NAME.min) obj.name += ' video'
 
           return res(obj)
+        })
+      })
+      .catch(err => rej(err))
+  })
+}
+
+function getYoutubeDLSubs (url: string, opts?: object): Promise<YoutubeDLSubs> {
+  return new Promise<YoutubeDLSubs>((res, rej) => {
+    const cwd = CONFIG.STORAGE.TMP_DIR
+    const options = opts || { all: true, format: 'vtt', cwd }
+
+    safeGetYoutubeDL()
+      .then(youtubeDL => {
+        youtubeDL.getSubs(url, options, (err, files) => {
+          if (err) return rej(err)
+
+          const subtitles = files.reduce((acc, filename) => {
+            const matched = filename.match(/\.([a-z]{2})\.(vtt|ttml)/i)
+
+            if (matched[1]) {
+              return [...acc, {
+                language: matched[1],
+                path: join(cwd, filename),
+                filename
+              }]
+            }
+          }, [])
+
+          return res(subtitles)
         })
       })
       .catch(err => rej(err))
@@ -185,6 +220,7 @@ function buildOriginallyPublishedAt (obj: any) {
 export {
   updateYoutubeDLBinary,
   downloadYoutubeDLVideo,
+  getYoutubeDLSubs,
   getYoutubeDLInfo,
   safeGetYoutubeDL,
   buildOriginallyPublishedAt
