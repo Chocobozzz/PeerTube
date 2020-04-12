@@ -28,13 +28,14 @@
         </ng-template>
       </td>
 
-      <td *ngIf="isVideoImportPending(videoImport)">
-        {{ videoImport.video?.name }}
+      <td>
+        <ng-container *ngIf="isVideoImportPending(videoImport)">{{ videoImport.video?.name }}</ng-container>
+        <ng-container *ngIf="isVideoImportSuccess(videoImport) && videoImport.video">
+          <a [href]="getVideoUrl(videoImport.video)" target="_blank" rel="noopener noreferrer">{{ videoImport.video?.name }}</a>
+        </ng-container>
+        <ng-container *ngIf="isVideoImportSuccess(videoImport) && !videoImport.video" i18n>This video was deleted</ng-container>
+        <ng-container *ngIf="isVideoImportFailed(videoImport)"></ng-container>
       </td>
-      <td *ngIf="isVideoImportSuccess(videoImport) && videoImport.video">
-        <a [href]="getVideoUrl(videoImport.video)" target="_blank" rel="noopener noreferrer">{{ videoImport.video?.name }}</a>
-      </td>
-      <td *ngIf="isVideoImportFailed(videoImport)"></td>
 
       <td>{{ videoImport.state.label }}</td>
       <td>{{ videoImport.createdAt }}</td>
