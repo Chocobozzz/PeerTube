@@ -20,6 +20,7 @@ import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
 import { RegisterClientHelpers } from '../../../types/register-client-option.model'
 import { PluginTranslation } from '@shared/models/plugins/plugin-translation.model'
 import { importModule } from '@app/shared/misc/utils'
+import { CustomModalComponent } from '@app/modal/custom-modal.component'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -48,6 +49,8 @@ export class PluginService implements ClientHook {
   }
 
   translationsObservable: Observable<PluginTranslation>
+
+  customModal: CustomModalComponent
 
   private plugins: ServerConfigPlugin[] = []
   private scopes: { [ scopeName: string ]: PluginInfo[] } = {}
@@ -79,6 +82,10 @@ export class PluginService implements ClientHook {
 
         this.pluginsBuilt.next(true)
       })
+  }
+
+  initializeCustomModal (customModal: CustomModalComponent) {
+    this.customModal = customModal
   }
 
   ensurePluginsAreBuilt () {
@@ -277,6 +284,16 @@ export class PluginService implements ClientHook {
         info: (text: string, title?: string, timeout?: number) => this.notifier.info(text, title, timeout),
         error: (text: string, title?: string, timeout?: number) => this.notifier.error(text, title, timeout),
         success: (text: string, title?: string, timeout?: number) => this.notifier.success(text, title, timeout)
+      },
+
+      showModal: (input: {
+        title: string,
+        content: string,
+        close?: boolean,
+        cancel?: { value: string, action?: () => void },
+        confirm?: { value: string, action?: () => void }
+      }) => {
+        this.customModal.show(input)
       },
 
       translate: (value: string) => {

@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
+import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { ServerConfig, UserRole } from '@shared/models'
 import { User } from '@app/shared'
 import { InstanceService } from '@app/shared/instance/instance.service'
@@ -27,6 +28,7 @@ import { MenuService } from './core/menu/menu.service'
 export class AppComponent implements OnInit {
   @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
+  @ViewChild('customModal') customModal: CustomModalComponent
 
   customCSS: SafeHtml
 
@@ -191,6 +193,8 @@ export class AppComponent implements OnInit {
 
   private async loadPlugins () {
     this.pluginService.initializePlugins()
+
+    setTimeout(() => this.pluginService.initializeCustomModal(this.customModal))
 
     this.hooks.runAction('action:application.init', 'common')
   }

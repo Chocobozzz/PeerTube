@@ -8,14 +8,14 @@
     {{content}}
   </div>
 
-  <div ng-if="typeof(cancel) !== 'undefined' || typeof(confirm) !== 'undefined'" class="modal-footer inputs">
+  <div ng-if='typeof(cancel) !== "undefined" || typeof(confirm) !== "undefined"' class="modal-footer inputs">
     <input
-      ng-if="typeof(cancel) !== 'undefined'" type="button" role="button" ng-value="cancel.value" class="action-button action-button-cancel"
+      ng-if='typeof(cancel) !== "undefined"' type="button" role="button" ng-value="cancel.value" class="action-button action-button-cancel"
       (click)="hide(); cancel.action && cancel.action()" (key.enter)="hide(); cancel.action && cancel.action()"
     >
 
     <input
-      ng-if="typeof(confirm) !== 'undefined'" type="button" role="button" ng-value="confirm.value" class="action-button action-button-confirm"
+      ng-if='typeof(confirm) !== "undefined"' type="button" role="button" ng-value="confirm.value" class="action-button action-button-confirm"
       (click)="hide(); confirm.action && confirm.action()" (key.enter)="hide(); confirm.action && confirm.action()"
     >
   </div>
