@@ -6384,12 +6384,7 @@
       </trans-unit>
       <trans-unit id="301e86f807ed659ff42d3b4bba6e03b88bff7907" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="new">
-        Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing
-        your IP in their connection logs: ISP/routers/trackers/CDN and more.
-        PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser.
-        Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.
-      </target>
+        <target state="translated">Via IP-adreso estas publika, sekve ĉiufoje, kiam vi vizitas retpaĝon, pluraj partoprenantoj (aldone al la fina retpaĝo) vidas vian IP-adreson en siaj protokoloj de konektoj: provizanto de retservoj, enkursigiloj, spuriloj, provizantoj de enhavo, kaj aliaj. PeerTube ne kaŝas tion: ni avertas vin, ke se vi volas teni vian IP-adreson privata, vi devas uzi virtualan privatan reton (VPN) aŭ foliumilon de Tor (Tor Browser). Pensi, ke forigo de samtavola teĥnikaro de PeerTube sennomigos vin, ne sencas.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
@@ -6402,38 +6397,32 @@
       </trans-unit>
       <trans-unit id="db4d65ed605b948169d51eac4c1b2ff662088eb7" datatype="html">
         <source>PeerTube wants to deliver the best countermeasures possible, to give you more choice and render attacks less likely. Here is what we put in place so far:</source>
-        <target state="new">
-        PeerTube wants to deliver the best countermeasures possible, to give you more choice
-        and render attacks less likely. Here is what we put in place so far:
-      </target>
+        <target state="translated">PeerTube volas provizi la plej bonajn kontraŭrimedojn, por doni al vi pliajn elekteblojn kaj malprobabligi atakojn. Jen kion ni efektivigis ĝis nun:</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="new">We set a limit to the number of peers sent by the tracker</target>
+        <target state="translated">Ni limigis la nombron de samtavolanoj sendatan de la kunordiga servilo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
         <source>We set a limit on the request frequency received by the tracker</source>
-        <target state="new">We set a limit on the request frequency received by the tracker</target>
+        <target state="translated">Ni limigis oftecon de petoj al la kunordiga servilo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">157</context></context-group>
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="new">Allow instance admins to disable P2P from the administration interface</target>
+        <target state="translated">Permeso malŝalti samtavolan teĥnikaron al administrantoj de nodoj, de la administra fasado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
         <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target state="new">Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</target>
+        <target state="translated">Memagaj ripetaĵoj de filmoj el kelkaj nodoj; oni ne scias, ĉu la IP-adreso cele elŝutis la filmon, aŭ ĉu ĝi estis servilo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="new">
-        Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling
-        WebRTC in your browser.
-      </target>
+        <target state="translated">Finfine memoru, ke vi ĉiam povas malŝalti samtavolan teĥnikaron per baskulo en la filmludilo, aŭ per malŝalto de WebRTC en via foliumilo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
@@ -9936,7 +9925,7 @@
       </trans-unit>
       <trans-unit id="f7044a58ed834f7380eaac0e670dc817b19d9209" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="new">Allow the user to login and create videos/comments again</target>
+        <target state="translated">Permesi al la uzanto ree saluti kaj krei filmojn/komentojn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9952,7 +9941,7 @@
       </trans-unit>
       <trans-unit id="5f4ea46bfaffa09963d51fa969cb45b82a3c377f" datatype="html">
         <source>Hide any content from that user for you.</source>
-        <target state="new">Hide any content from that user for you.</target>
+        <target state="translated">Kaŝi ĉiun enhavon de tiu uzanto por vi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9968,7 +9957,7 @@
       </trans-unit>
       <trans-unit id="896713adfa81db9a514ba3214ea1b9a7b59543bb" datatype="html">
         <source>Show back content from that user for you.</source>
-        <target state="new">Show back content from that user for you.</target>
+        <target state="translated">Remontri enhavon de tiu uzanto por vi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9984,7 +9973,7 @@
       </trans-unit>
       <trans-unit id="b67a9b47f49012501f2aa71c74d7fccc9e331cdb" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="new">Hide any content from that instance for you.</target>
+        <target state="translated">Kaŝi ĉiun enhavon de tiu nodo por vi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10000,7 +9989,7 @@
       </trans-unit>
       <trans-unit id="7e80d54718404d853b9e51a3b8d5210a2bedaf6f" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="new">Show back content from that instance for you.</target>
+        <target state="translated">Remontri ĉiun enhavon de tiu nodo por vi.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10016,7 +10005,7 @@
       </trans-unit>
       <trans-unit id="ec993f2e1ecd979ff28871591b6f253afb3b3138" datatype="html">
         <source>Hide any content from that user for you, your instance and its users.</source>
-        <target state="new">Hide any content from that user for you, your instance and its users.</target>
+        <target state="translated">Kaŝi ĉiun enhavon de tiu uzanto por vi, via nodo, kaj ties uzantoj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10032,7 +10021,7 @@
       </trans-unit>
       <trans-unit id="a50c42119c5ffaa4ecb61e996c432f1ab0f8d0ff" datatype="html">
         <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="new">Show back content from that user for you, your instance and its users.</target>
+        <target state="translated">Remontri enhavon de tiu uzanto por vi, via nodo, kaj ties uzantoj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10048,7 +10037,7 @@
       </trans-unit>
       <trans-unit id="1a4ed1f8e28636212f1bcf06c36644d2627b682a" datatype="html">
         <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="new">Hide any content from that instance for you, your instance and its users.</target>
+        <target state="translated">Kaŝi ĉiun enhavon de tiu nodo por vi, via nodo, kaj ties uzantoj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10064,7 +10053,7 @@
       </trans-unit>
       <trans-unit id="d97d7d9b0c359f7b900652b547678841369691b1" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="new">Show back content from that instance for you, your instance and its users.</target>
+        <target state="translated">Remontri ĉiun enhavon de tiu nodo por vi, via nodo, kaj ties uzantoj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10104,7 +10093,7 @@
       </trans-unit>
       <trans-unit id="4104d2ac06bd0103868795086100a871c8dbeb49" datatype="html">
         <source>Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Abonanta ĉiujn nunajn kanalojn de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vi sciiĝos pri ĉiuj ĝiaj novaj filmoj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10112,7 +10101,7 @@
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Abonanta je <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vi sciiĝos pri ĉiuj ĝiaj novaj filmoj.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10128,7 +10117,7 @@
       </trans-unit>
       <trans-unit id="3bd3791d3b0ab933981a0b884396af74b0c95e2a" datatype="html">
         <source>Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target state="new">Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target state="translated">Malabonis ĉiujn kanalojn de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10226,7 +10215,7 @@
       </trans-unit>
       <trans-unit id="5f316500cde1925ffcdf053a7427b44795161f4e" datatype="html">
         <source>Encoder</source>
-        <target state="new">Encoder</target>
+        <target state="translated">Kodilo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10234,7 +10223,7 @@
       </trans-unit>
       <trans-unit id="c01d52b4f10668adeded397b0b1a9a4bfefd4f37" datatype="html">
         <source>Format name</source>
-        <target state="new">Format name</target>
+        <target state="translated">Nomo de formo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10242,7 +10231,7 @@
       </trans-unit>
       <trans-unit id="7faaaa08f56427999f3be41df1093ce4089bbd75" datatype="html">
         <source>Size</source>
-        <target state="new">Size</target>
+        <target state="translated">Grandeco</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10250,7 +10239,7 @@
       </trans-unit>
       <trans-unit id="c1226821b3c276dc443b3e5a2dce10e14dcd6244" datatype="html">
         <source>Bitrate</source>
-        <target state="new">Bitrate</target>
+        <target state="translated">Bitrapido</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10262,7 +10251,7 @@
       </trans-unit>
       <trans-unit id="205c33d626f4654f36d9d7dcea6f9d9e9b2a7ec7" datatype="html">
         <source>Codec</source>
-        <target state="new">Codec</target>
+        <target state="translated">Kodeko</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10295,7 +10284,7 @@
       </trans-unit>
       <trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="new">This video will be duplicated by your instance.</target>
+        <target state="translated">Via nodo duobligos ĉi tiun filmon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10320,7 +10309,7 @@
       </trans-unit>
       <trans-unit id="fb6f1916659a093d943fab8322777922796efe27" datatype="html">
         <source>Duplicate (redundancy)</source>
-        <target state="new">Duplicate (redundancy)</target>
+        <target state="translated">Duoblo (ripetaĵo)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10376,7 +10365,7 @@
       </trans-unit>
       <trans-unit id="b41da527dd2f804519e13b78b5dae42897213545" datatype="html">
         <source>Add to watch later</source>
-        <target state="new">Add to watch later</target>
+        <target state="translated">Aldoni al spektotaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10384,7 +10373,7 @@
       </trans-unit>
       <trans-unit id="2660edf82b9bf5d6ee25fbefd3bbb23172687ccc" datatype="html">
         <source>Remove from watch later</source>
-        <target state="new">Remove from watch later</target>
+        <target state="translated">Forigi el spektotaj</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-thumbnail.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10416,7 +10405,7 @@
       </trans-unit>
       <trans-unit id="ed3394ad721212bca2a1da43ad6063b6d4f9a008" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="new">Only users of this instance can see this video</target>
+        <target state="translated">Nur uzantoj de ĉi tiu nodo povas vidi ĉi tiun filmon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10529,7 +10518,7 @@
       </trans-unit>
       <trans-unit id="4334a60889af951a137a22cd862f2675daad3292" datatype="html">
         <source>Stop autoplaying next video</source>
-        <target state="new">Stop autoplaying next video</target>
+        <target state="translated">Ĉesi memludi sekvajn filmojn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10537,7 +10526,7 @@
       </trans-unit>
       <trans-unit id="0663c85b5bc0806356ab768f411299c29cf39360" datatype="html">
         <source>Autoplay next video</source>
-        <target state="new">Autoplay next video</target>
+        <target state="translated">Memludi sekvajn filmojn</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10545,7 +10534,7 @@
       </trans-unit>
       <trans-unit id="77fde72fafe6a5272b7d5e3ffedd179ec2d7f8b0" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="new">Stop looping playlist videos</target>
+        <target state="translated">Ĉesi ripetadi ludliston</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10553,7 +10542,7 @@
       </trans-unit>
       <trans-unit id="54428deb88d7bc58721d6839d9406ff607eccef4" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="new">Loop playlist videos</target>
+        <target state="translated">Ripetadi ludliston</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10561,7 +10550,7 @@
       </trans-unit>
       <trans-unit id="74e95a8a42bc8e07d3459f86184ce798e6189ec6" datatype="html">
         <source>You need to be connected to rate this content.</source>
-        <target state="new">You need to be connected to rate this content.</target>
+        <target state="translated">Vi devas konektiĝi por taksi ĉi tiun enhavon.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10593,7 +10582,7 @@
       </trans-unit>
       <trans-unit id="43ee7c4bd1ed4766ec0c13974a1e08881071c927" datatype="html">
         <source>Up Next</source>
-        <target state="new">Up Next</target>
+        <target state="translated">Sekve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10601,7 +10590,7 @@
       </trans-unit>
       <trans-unit id="3a592fe9ee94c99deb20352edd7e994debf5c4c8" datatype="html">
         <source>Autoplay is suspended</source>
-        <target state="new">Autoplay is suspended</target>
+        <target state="translated">Memludado estas haltigita</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10609,7 +10598,7 @@
       </trans-unit>
       <trans-unit id="fe51624a8ab9f682f7f21d485eb64fdb4b15e91e" datatype="html">
         <source>Enter/exit fullscreen (requires player focus)</source>
-        <target state="new">Enter/exit fullscreen (requires player focus)</target>
+        <target state="translated">Eniĝi/eliĝi tutekranan reĝimon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10617,7 +10606,7 @@
       </trans-unit>
       <trans-unit id="d5916006cb404a4d3663ac20ad299c45e57a30a6" datatype="html">
         <source>Play/Pause the video (requires player focus)</source>
-        <target state="new">Play/Pause the video (requires player focus)</target>
+        <target state="translated">Ludi/Paŭzgi la filmon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10625,7 +10614,7 @@
       </trans-unit>
       <trans-unit id="c797465d457fbb14d62c08c52be9115b60e5605c" datatype="html">
         <source>Mute/unmute the video (requires player focus)</source>
-        <target state="new">Mute/unmute the video (requires player focus)</target>
+        <target state="translated">Silentigi/Malsilentigi la filmon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10633,7 +10622,7 @@
       </trans-unit>
       <trans-unit id="6ec9800a89e1489861dd08b93d0ff42fd5f20f50" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</source>
-        <target state="new">Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</target>
+        <target state="translated">Salti al elcenta progreso en la filmo: 0 estas 0% kaj 9 estas 90% (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10641,7 +10630,7 @@
       </trans-unit>
       <trans-unit id="567024b923c37475ef4b2632ec95d07c3f7263f5" datatype="html">
         <source>Increase the volume (requires player focus)</source>
-        <target state="new">Increase the volume (requires player focus)</target>
+        <target state="translated">Plilaŭtigi (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10649,7 +10638,7 @@
       </trans-unit>
       <trans-unit id="bb7e8567023b189bba28de767769192f5fe28430" datatype="html">
         <source>Decrease the volume (requires player focus)</source>
-        <target state="new">Decrease the volume (requires player focus)</target>
+        <target state="translated">Mallaŭtigi (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10657,7 +10646,7 @@
       </trans-unit>
       <trans-unit id="3fcdc3072de455c3816dc7976ff96ea1bf09eb7b" datatype="html">
         <source>Seek the video forward (requires player focus)</source>
-        <target state="new">Seek the video forward (requires player focus)</target>
+        <target state="translated">Pluigi la filmon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10665,7 +10654,7 @@
       </trans-unit>
       <trans-unit id="ea2c30e5c87a4923cbf3cdcac9fc8818f79f9a0b" datatype="html">
         <source>Seek the video backward (requires player focus)</source>
-        <target state="new">Seek the video backward (requires player focus)</target>
+        <target state="translated">Malpluigi la filmon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10673,7 +10662,7 @@
       </trans-unit>
       <trans-unit id="a06ba404b91694a9788bf243582ba437b2bd9490" datatype="html">
         <source>Increase playback rate (requires player focus)</source>
-        <target state="new">Increase playback rate (requires player focus)</target>
+        <target state="translated">Plirapidigi la filmon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10681,7 +10670,7 @@
       </trans-unit>
       <trans-unit id="68bb1ba6ae67f97934797d79e582fb6f7c3e825d" datatype="html">
         <source>Decrease playback rate (requires player focus)</source>
-        <target state="new">Decrease playback rate (requires player focus)</target>
+        <target state="translated">Malrapidigi la filmon (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10689,7 +10678,7 @@
       </trans-unit>
       <trans-unit id="0fc28c34013089209a65fadcad0a552094ef2104" datatype="html">
         <source>Navigate in the video frame by frame (requires player focus)</source>
-        <target state="new">Navigate in the video frame by frame (requires player focus)</target>
+        <target state="translated">Navigi tra la filmo po filmeroj (bezonas fokusitan ludilon)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10713,7 +10702,7 @@
       </trans-unit>
       <trans-unit id="1d9b6c0c66a4a5baa73617b1106c3746bc13f003" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="new">When active, the next video is automatically played after the current one.</target>
+        <target state="translated">Ĉi-aktive, la sekva filmo estos memage ludata post la nuna.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.ts</context>
           <context context-type="linenumber">1</context>
