@@ -1,0 +1,23 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <my-global-icon ng-if="close === true" iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+    
+  <div class="modal-body">
+    {{content}}
+  </div>
+
+  <div ng-if="typeof(cancel) !== 'undefined' || typeof(confirm) !== 'undefined'" class="modal-footer inputs">
+    <input
+      ng-if="typeof(cancel) !== 'undefined'" type="button" role="button" ng-value="cancel.value" class="action-button action-button-cancel"
+      (click)="hide(); cancel.action && cancel.action()" (key.enter)="hide(); cancel.action && cancel.action()"
+    >
+
+    <input
+      ng-if="typeof(confirm) !== 'undefined'" type="button" role="button" ng-value="confirm.value" class="action-button action-button-confirm"
+      (click)="hide(); confirm.action && confirm.action()" (key.enter)="hide(); confirm.action && confirm.action()"
+    >
+  </div>
+</ng-template>
+  
