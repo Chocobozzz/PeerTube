@@ -57,6 +57,15 @@
       <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.reasonHtml"></span>
     </div>
 
+    <div *ngIf="predefinedReasons" class="mt-2 d-flex">
+      <span class="col-3"></span>
+      <span class="col-9">
+        <div class="chip bg-secondary text-light" *ngFor="let reason of predefinedReasons">
+          <div>{{ reason }}</div>
+        </div>
+      </span>
+    </div>
+
     <div class="mt-3 d-flex" *ngIf="videoAbuse.moderationComment">
       <span class="col-3 moderation-expanded-label" i18n>Note</span>
       <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.moderationCommentHtml"></span>

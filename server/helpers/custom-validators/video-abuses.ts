@@ -10,6 +10,14 @@ function isVideoAbuseReasonValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
 }
 
+function isVideoAbusePredefinedReasonsValid (value: {}) {
+  return exists(value)
+}
+
+function isVideoAbuseTimestampValid (value: {}) {
+  return exists(value)
+}
+
 function isVideoAbuseModerationCommentValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.MODERATION_COMMENT)
 }
@@ -28,8 +36,10 @@ function isAbuseVideoIsValid (value: VideoAbuseVideoIs) {
 // ---------------------------------------------------------------------------
 
 export {
-  isVideoAbuseStateValid,
   isVideoAbuseReasonValid,
-  isAbuseVideoIsValid,
-  isVideoAbuseModerationCommentValid
+  isVideoAbusePredefinedReasonsValid,
+  isVideoAbuseTimestampValid,
+  isVideoAbuseModerationCommentValid,
+  isVideoAbuseStateValid,
+  isAbuseVideoIsValid
 }

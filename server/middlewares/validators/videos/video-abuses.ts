@@ -5,15 +5,31 @@ import {
   isAbuseVideoIsValid,
   isVideoAbuseModerationCommentValid,
   isVideoAbuseReasonValid,
-  isVideoAbuseStateValid
+  isVideoAbuseStateValid,
+  isVideoAbusePredefinedReasonsValid,
+  isVideoAbuseTimestampValid
 } from '../../../helpers/custom-validators/video-abuses'
 import { logger } from '../../../helpers/logger'
 import { doesVideoAbuseExist, doesVideoExist } from '../../../helpers/middlewares'
 import { areValidationErrors } from '../utils'
 
 const videoAbuseReportValidator = [
-  param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
-  body('reason').custom(isVideoAbuseReasonValid).withMessage('Should have a valid reason'),
+  param('videoId')
+    .custom(isIdOrUUIDValid)
+    .not()
+    .isEmpty()
+    .withMessage('Should have a valid videoId'),
+  body('reason')
+    .custom(isVideoAbuseReasonValid)
+    .withMessage('Should have a valid reason'),
+  body('predefinedReasons')
+    .optional()
+    .custom(isVideoAbusePredefinedReasonsValid)
+    .withMessage('Should have a valid list of predefined reasons'),
+  body('timestamp')
+    .optional()
+    .custom(isVideoAbuseTimestampValid)
+    .withMessage('Should have valid timestamp definition'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })

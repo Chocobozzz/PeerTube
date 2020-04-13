@@ -6,6 +6,7 @@ import { VideoChannel } from '../channel/video-channel.model'
 export interface VideoAbuse {
   id: number
   reason: string
+  predefinedReasons?: number[]
   reporterAccount: Account
 
   state: VideoConstant<VideoAbuseState>
@@ -24,6 +25,9 @@ export interface VideoAbuse {
 
   createdAt: Date
   updatedAt: Date
+
+  startAt: number
+  endAt: number
 
   count?: number
   nth?: number

@@ -1,6 +1,6 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Blocklist video</h4>
+    <h4 i18n class="modal-title">Block video "{{ video.name }}"</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
@@ -9,7 +9,7 @@
     <form novalidate [formGroup]="form" (ngSubmit)="block()">
       <div class="form-group">
         <textarea
-          i18n-placeholder placeholder="Reason..." formControlName="reason"
+          i18n-placeholder placeholder="Please describe the reason..." formControlName="reason"
           [ngClass]="{ 'input-error': formErrors['reason'] }" class="form-control"
         ></textarea>
         <div *ngIf="formErrors.reason" class="form-error">

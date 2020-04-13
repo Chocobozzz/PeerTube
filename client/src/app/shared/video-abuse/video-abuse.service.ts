@@ -6,6 +6,7 @@ import { Observable } from 'rxjs'
 import { ResultList, VideoAbuse, VideoAbuseUpdate, VideoAbuseState } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
+import { VideoAbusePredefinedReasons } from './video-abuse-predefined-reasons.model'
 
 @Injectable()
 export class VideoAbuseService {
@@ -63,9 +64,11 @@ export class VideoAbuseService {
                )
   }
 
-  reportVideo (id: number, reason: string) {
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + id + '/abuse'
-    const body = { reason }
+  reportVideo (parameters: { id: number, reason: string, predefinedReasons?: VideoAbusePredefinedReasons, timestamp: any }) {
+    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + parameters.id + '/abuse'
+
+    delete parameters.id
+    const body = { ...parameters }
 
     return this.authHttp.post(url, body)
                .pipe(

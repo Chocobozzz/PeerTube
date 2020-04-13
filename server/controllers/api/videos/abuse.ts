@@ -25,6 +25,9 @@ import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
 import { MVideoAbuseAccountVideo } from '../../../types/models/video'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountDefault } from '@server/types/models'
+import { keys, pickBy } from 'lodash'
+import { AbuseReasonModel } from '@server/models/video/abuse-reason'
+import { VideoAbusePredefinedReasonsIn } from '@shared/models/videos/abuse/video-abuse-reason.model'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -123,17 +126,33 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
   const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
     reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
+    const predefinedReasons = keys(pickBy(body.predefinedReasons)).map(r => VideoAbusePredefinedReasonsIn[r])
+    const timestamp = body.timestamp
+    const startAt = timestamp['hasStart'] && timestamp['startAt'] ? timestamp['startAt'] : undefined
+    const endAt = timestamp['hasEnd'] && timestamp['endAt'] ? timestamp['endAt'] : undefined
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,
       reason: body.reason,
       videoId: videoInstance.id,
-      state: VideoAbuseState.PENDING
+      state: VideoAbuseState.PENDING,
+      startAt,
+      endAt
     }
 
     const videoAbuseInstance: MVideoAbuseAccountVideo = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
     videoAbuseInstance.Video = videoInstance
     videoAbuseInstance.Account = reporterAccount
+
+    // Add eventual predefined reasons
+    if (predefinedReasons.length > 0) {
+      const reasons = []
+      for (const reasonId of predefinedReasons) {
+        reasons.push(await AbuseReasonModel.findByPk(reasonId + 1, { transaction: t }))
+      }
+      await videoAbuseInstance.$set('PredefinedReasons', reasons, { transaction: t })
+      videoAbuseInstance.PredefinedReasons = reasons
+    }
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
@@ -152,7 +171,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
     reporter: reporterAccount.Actor.getIdentifier()
   })
 
-  logger.info('Abuse report for video %s created.', videoInstance.name)
+  logger.info('Abuse report for video "%s" created.', videoInstance.name)
 
   return res.json({ videoAbuse: videoAbuseJSON }).end()
 }
