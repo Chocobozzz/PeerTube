@@ -8,7 +8,9 @@
   <div class="modal-body">
     <form novalidate [formGroup]="form" (ngSubmit)="banUser()">
       <div class="form-group">
-        <textarea formControlName="moderationComment" [ngClass]="{ 'input-error': formErrors['moderationComment'] }">
+        <textarea
+          formControlName="moderationComment" ngbAutofocus i18-placeholder placeholder="Comment this report…"
+          [ngClass]="{ 'input-error': formErrors['moderationComment'] }" class="form-control">
         </textarea>
         <div *ngIf="formErrors.moderationComment" class="form-error">
           {{ formErrors.moderationComment }}

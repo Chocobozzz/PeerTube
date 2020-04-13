@@ -1,18 +1,18 @@
 <div class="header">
   <div class="peertube-select-container">
-    <select [(ngModel)]="logType" (ngModelChange)="refresh()">
+    <select [(ngModel)]="logType" (ngModelChange)="refresh()" class="form-control">
       <option *ngFor="let logTypeChoice of logTypeChoices" [value]="logTypeChoice.id">{{ logTypeChoice.label }}</option>
     </select>
   </div>
 
   <div class="peertube-select-container">
-    <select [(ngModel)]="startDate" (ngModelChange)="refresh()">
+    <select [(ngModel)]="startDate" (ngModelChange)="refresh()" class="form-control">
       <option *ngFor="let timeChoice of timeChoices" [value]="timeChoice.id">{{ timeChoice.label }}</option>
     </select>
   </div>
 
   <div class="peertube-select-container" *ngIf="!isAuditLog()">
-    <select [(ngModel)]="level" (ngModelChange)="refresh()">
+    <select [(ngModel)]="level" (ngModelChange)="refresh()" class="form-control">
       <option *ngFor="let levelChoice of levelChoices" [value]="levelChoice.id">{{ levelChoice.label }}</option>
     </select>
   </div>

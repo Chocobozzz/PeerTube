@@ -2,7 +2,7 @@
   <div class="select-filter-block">
     <label for="jobType" i18n>Job type</label>
     <div class="peertube-select-container">
-      <select id="jobType" name="jobType" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()">
+      <select id="jobType" name="jobType" [(ngModel)]="jobType" (ngModelChange)="onJobStateOrTypeChanged()" class="form-control">
         <option *ngFor="let jobType of jobTypes" [value]="jobType">{{ jobType }}</option>
       </select>
     </div>
@@ -11,7 +11,7 @@
   <div class="select-filter-block">
     <label for="jobState" i18n>Job state</label>
     <div class="peertube-select-container">
-      <select id="jobState" name="jobState" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()">
+      <select id="jobState" name="jobState" [(ngModel)]="jobState" (ngModelChange)="onJobStateOrTypeChanged()" class="form-control">
         <option *ngFor="let state of jobStates" [value]="state">{{ state }}</option>
       </select>
     </div>

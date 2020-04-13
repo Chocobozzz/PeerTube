@@ -66,9 +66,9 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
   }
 
   getColspan () {
-    if (this.isDisplayingRemoteVideos()) return 3
+    if (this.isDisplayingRemoteVideos()) return 5
 
-    return 2
+    return 4
   }
 
   isDisplayingRemoteVideos () {

@@ -17,6 +17,11 @@ my-button {
   height: max-content;
 }
 
+// focus box-shadow for primeng
+.ui-inputtext:enabled:focus:not(.ui-state-error) {
+  box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest) !important;
+}
+
 // data table customizations
 p-table {
   .ui-table-caption {
@@ -178,6 +183,16 @@ p-table {
       justify-content: center;
       align-items: center;
 
+      .ui-dropdown {
+        position: absolute;
+        left: 0;
+      }
+
+      .ui-paginator-current {
+        position: absolute;
+        right: 0;
+      }
+
       .ui-paginator-first,
       .ui-paginator-prev,
       .ui-paginator-next,
@@ -188,6 +203,11 @@ p-table {
         outline: none;
         font-size: 13px;
         top: -1px;
+
+        &.focus-within,
+        &:focus {
+          box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+        }
 
         &.ui-state-disabled:hover {
           background-color: #fff !important;
@@ -217,6 +237,13 @@ p-table {
       .ui-paginator-pages {
         height: auto !important;
 
+        .ui-paginator-page {
+          &.focus-within,
+          &:focus {
+            box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest) !important;
+          } 
+        }
+
         a {
           color: var(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
@@ -231,11 +258,6 @@ p-table {
             &, &:hover, &:active, &:focus {
               color: #fff !important;
               background-color: var(--mainColor) !important;
-            }
-
-            &.focus-within,
-            &:focus {
-              box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
             }
           }
         }

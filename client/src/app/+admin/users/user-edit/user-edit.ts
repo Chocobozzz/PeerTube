@@ -8,8 +8,8 @@ import { User } from '@app/shared/users/user.model'
 import { ScreenService } from '@app/shared/misc/screen.service'
 
 export abstract class UserEdit extends FormReactive implements OnInit {
-  videoQuotaOptions: { value: string, label: string }[] = []
-  videoQuotaDailyOptions: { value: string, label: string }[] = []
+  videoQuotaOptions: { value: string, label: string, disabled?: boolean }[] = []
+  videoQuotaDailyOptions: { value: string, label: string, disabled?: boolean }[] = []
   username: string
   user: User
 
@@ -94,9 +94,14 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   protected buildQuotaOptions () {
     // These are used by a HTML select, so convert key into strings
     this.videoQuotaOptions = this.configService
-                                 .videoQuotaOptions.map(q => ({ value: q.value.toString(), label: q.label }))
+                                 .videoQuotaOptions.map(q => ({ value: q.value?.toString(), label: q.label, disabled: q.disabled }))
 
     this.videoQuotaDailyOptions = this.configService
-                                      .videoQuotaDailyOptions.map(q => ({ value: q.value.toString(), label: q.label }))
+                                      .videoQuotaDailyOptions.map(q => ({ value: q.value?.toString(), label: q.label, disabled: q.disabled }))
+
+    console.log(
+      this.videoQuotaOptions,
+      this.videoQuotaDailyOptions
+    )
   }
 }

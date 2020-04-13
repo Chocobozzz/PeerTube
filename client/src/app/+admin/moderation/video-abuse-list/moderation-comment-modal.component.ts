@@ -32,7 +32,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
 
   ngOnInit () {
     this.buildForm({
-      moderationComment: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON
+      moderationComment: this.videoAbuseValidatorsService.VIDEO_ABUSE_MODERATION_COMMENT
     })
   }
 

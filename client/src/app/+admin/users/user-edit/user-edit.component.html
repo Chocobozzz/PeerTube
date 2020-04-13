@@ -139,7 +139,7 @@
         <label i18n for="videoQuota">Video quota</label>
         <div class="peertube-select-container">
           <select id="videoQuota" formControlName="videoQuota" class="form-control">
-            <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value">
+            <option *ngFor="let videoQuotaOption of videoQuotaOptions" [value]="videoQuotaOption.value" [disabled]="videoQuotaOption.disabled">
               {{ videoQuotaOption.label }}
             </option>
           </select>
@@ -155,7 +155,7 @@
         <label i18n for="videoQuotaDaily">Daily video quota</label>
         <div class="peertube-select-container">
           <select id="videoQuotaDaily" formControlName="videoQuotaDaily" class="form-control">
-            <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value">
+            <option *ngFor="let videoQuotaDailyOption of videoQuotaDailyOptions" [value]="videoQuotaDailyOption.value" [disabled]="videoQuotaDailyOption.disabled">
               {{ videoQuotaDailyOption.label }}
             </option>
           </select>

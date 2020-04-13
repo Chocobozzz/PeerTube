@@ -10,8 +10,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class ConfigService {
   private static BASE_APPLICATION_URL = environment.apiUrl + '/api/v1/config'
 
-  videoQuotaOptions: { value: number, label: string }[] = []
-  videoQuotaDailyOptions: { value: number, label: string }[] = []
+  videoQuotaOptions: { value: number, label: string, disabled?: boolean }[] = []
+  videoQuotaDailyOptions: { value: number, label: string, disabled?: boolean }[] = []
 
   constructor (
     private authHttp: HttpClient,
@@ -19,8 +19,10 @@ export class ConfigService {
     private i18n: I18n
   ) {
     this.videoQuotaOptions = [
+      { value: undefined, label: 'Default quota', disabled: true },
       { value: -1, label: this.i18n('Unlimited') },
-      { value: 0, label: '0' },
+      { value: undefined, label: '─────', disabled: true },
+      { value: 0, label: this.i18n('None - no upload possible') },
       { value: 100 * 1024 * 1024, label: this.i18n('100MB') },
       { value: 500 * 1024 * 1024, label: this.i18n('500MB') },
       { value: 1024 * 1024 * 1024, label: this.i18n('1GB') },
@@ -30,8 +32,10 @@ export class ConfigService {
     ]
 
     this.videoQuotaDailyOptions = [
+      { value: undefined, label: 'Default daily upload limit', disabled: true },
       { value: -1, label: this.i18n('Unlimited') },
-      { value: 0, label: '0' },
+      { value: undefined, label: '─────', disabled: true },
+      { value: 0, label: this.i18n('None - no upload possible') },
       { value: 10 * 1024 * 1024, label: this.i18n('10MB') },
       { value: 50 * 1024 * 1024, label: this.i18n('50MB') },
       { value: 100 * 1024 * 1024, label: this.i18n('100MB') },

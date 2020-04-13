@@ -1,13 +1,15 @@
 <p-table
   [value]="blockedServers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} muted instances"
 >
 
   <ng-template pTemplate="header">
     <tr>
       <th i18n>Instance</th>
       <th i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th></th>
+      <th></th> <!-- column for action buttons -->
     </tr>
   </ng-template>
 

@@ -24,3 +24,8 @@ tr.banned {
     @include peertube-input-text(250px);
   }
 }
+
+p-tableCheckbox {
+  position: relative;
+  top: -2.5px;
+}

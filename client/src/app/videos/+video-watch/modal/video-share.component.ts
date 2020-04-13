@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core'
 import { VideoDetails } from '../../../shared/video/video-details.model'
 import { buildVideoEmbed, buildVideoLink } from '../../../../assets/player/utils'
-import { NgbModal, NgbNavChangeEvent, NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCaption } from '@shared/models'
 import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
 

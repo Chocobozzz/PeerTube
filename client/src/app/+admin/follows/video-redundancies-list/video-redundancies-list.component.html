@@ -3,9 +3,9 @@
     <label for="displayType" i18n>Display</label>
 
     <div class="peertube-select-container">
-      <select id="displayType" name="displayType" [(ngModel)]="displayType" (ngModelChange)="onDisplayTypeChanged()">
-        <option value="my-videos">My videos duplicated by remote instances</option>
-        <option value="remote-videos">Remote videos duplicated by my instance</option>
+      <select id="displayType" name="displayType" [(ngModel)]="displayType" (ngModelChange)="onDisplayTypeChanged()" class="form-control">
+        <option value="my-videos" i18n>My videos duplicated by remote instances</option>
+        <option value="remote-videos" i18n>Remote videos duplicated by my instance</option>
       </select>
     </div>
   </div>
@@ -22,14 +22,14 @@
       <th i18n pSortableColumn="name">Video name <p-sortIcon field="name"></p-sortIcon></th>
       <th i18n>Video URL</th>
       <th i18n *ngIf="isDisplayingRemoteVideos()">Total size</th>
-      <th></th>
+      <th style="width: 80px;"></th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-redundancy>
     <tr>
 
-      <td class="expand-cell">
+      <td>
         <span class="expander" i18n-ngbTooltip ngbTooltip="List redundancies" [pRowToggler]="redundancy">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
@@ -53,7 +53,7 @@
 
   <ng-template pTemplate="rowexpansion" let-redundancy>
     <tr *ngIf="redundancy.redundancies.files.length !== 0">
-      <td [attr.colspan]="getColspan()">
+      <td class="expand-cell" [attr.colspan]="getColspan()">
         <div *ngFor="let file of redundancy.redundancies.files" class="expansion-block">
           <my-video-redundancy-information [redundancyElement]="file"></my-video-redundancy-information>
         </div>
@@ -61,7 +61,7 @@
     </tr>
 
     <tr *ngIf="redundancy.redundancies.streamingPlaylists.length !== 0">
-      <td [attr.colspan]="getColspan()">
+      <td class="expand-cell" [attr.colspan]="getColspan()">
         <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
           <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
         </div>
