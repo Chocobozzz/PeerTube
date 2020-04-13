@@ -10,7 +10,7 @@ export class FromNowPipe implements PipeTransform {
   transform (arg: number | Date | string) {
     const argDate = new Date(arg)
     const seconds = Math.floor((Date.now() - argDate.getTime()) / 1000)
-    
+
     let interval = Math.floor(seconds / 31536000)
     if (interval > 1) return this.i18n('{{interval}} years ago', { interval })
     if (interval === 1) return this.i18n('{{interval}} year ago', { interval })

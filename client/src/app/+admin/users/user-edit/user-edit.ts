@@ -94,10 +94,18 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   protected buildQuotaOptions () {
     // These are used by a HTML select, so convert key into strings
     this.videoQuotaOptions = this.configService
-                                 .videoQuotaOptions.map(q => ({ value: q.value?.toString(), label: q.label, disabled: q.disabled }))
+                                 .videoQuotaOptions.map(q => ({ 
+                                   value: q.value?.toString(),
+                                   label: q.label,
+                                   disabled: q.disabled
+                                  }))
 
     this.videoQuotaDailyOptions = this.configService
-                                      .videoQuotaDailyOptions.map(q => ({ value: q.value?.toString(), label: q.label, disabled: q.disabled }))
+                                      .videoQuotaDailyOptions.map(q => ({
+                                        value: q.value?.toString(),
+                                        label: q.label,
+                                        disabled: q.disabled
+                                      }))
 
     console.log(
       this.videoQuotaOptions,
