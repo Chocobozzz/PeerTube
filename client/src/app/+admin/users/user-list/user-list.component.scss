@@ -29,3 +29,7 @@ p-tableCheckbox {
   position: relative;
   top: -2.5px;
 }
+
+.chip {
+  @include chip;
+}

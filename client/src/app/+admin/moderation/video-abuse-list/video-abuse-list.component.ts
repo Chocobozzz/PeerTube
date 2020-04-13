@@ -10,6 +10,10 @@ import { ConfirmService } from '../../../core/index'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 import { Video } from '../../../shared/video/video.model'
 import { MarkdownService } from '@app/shared/renderer'
+import { Actor } from '@app/shared/actor/actor.model'
+import { buildVideoLink, buildVideoEmbed } from 'src/assets/player/utils'
+import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
+import { DomSanitizer } from '@angular/platform-browser'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -32,7 +36,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     private videoAbuseService: VideoAbuseService,
     private confirmService: ConfirmService,
     private i18n: I18n,
-    private markdownRenderer: MarkdownService
+    private markdownRenderer: MarkdownService,
+    private sanitizer: DomSanitizer
   ) {
     super()
 
@@ -42,8 +47,14 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
         handler: videoAbuse => this.removeVideoAbuse(videoAbuse)
       },
       {
-        label: this.i18n('Update moderation comment'),
-        handler: videoAbuse => this.openModerationCommentModal(videoAbuse)
+        label: this.i18n('Add note'),
+        handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
+        isDisplayed: videoAbuse => !videoAbuse.moderationComment
+      },
+      {
+        label: this.i18n('Update note'),
+        handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
+        isDisplayed: videoAbuse => !!videoAbuse.moderationComment
       },
       {
         label: this.i18n('Mark as accepted'),
@@ -90,6 +101,19 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     return Video.buildClientUrl(videoAbuse.video.uuid)
   }
 
+  getVideoEmbed (videoAbuse: VideoAbuse) {
+    const absoluteAPIUrl = 'http://localhost:9000' || getAbsoluteAPIUrl()
+    const embedUrl = buildVideoLink({
+      baseUrl: absoluteAPIUrl + '/videos/embed/' + videoAbuse.video.uuid,
+      warningTitle: false
+    })
+    return buildVideoEmbed(embedUrl)
+  }
+
+  switchToDefaultAvatar ($event: Event) {
+    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
+  }
+
   async removeVideoAbuse (videoAbuse: VideoAbuse) {
     const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this abuse report?'), this.i18n('Delete'))
     if (res === false) return
@@ -125,7 +149,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
                    for (const abuse of this.videoAbuses) {
                      Object.assign(abuse, {
                        reasonHtml: await this.toHtml(abuse.reason),
-                       moderationCommentHtml: await this.toHtml(abuse.moderationComment)
+                       moderationCommentHtml: await this.toHtml(abuse.moderationComment),
+                       embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse))
                      })
                    }
 

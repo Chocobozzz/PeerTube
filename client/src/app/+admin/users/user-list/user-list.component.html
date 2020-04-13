@@ -51,19 +51,30 @@
   <ng-template pTemplate="body" let-expanded="expanded" let-user>
 
     <tr [pSelectableRow]="user" [ngClass]="{ banned: user.blocked }">
-      <td class="expand-cell">
+      <td>
         <p-tableCheckbox [value]="user"></p-tableCheckbox>
       </td>
 
-      <td>
+      <td class="expand-cell">
         <span *ngIf="user.blockedReason" class="expander" [pRowToggler]="user">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
 
       <td>
-        <a i18n-title title="Go to the account page" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
-          {{ user.username }}
+        <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
+          <div class="chip two-lines">
+            <img
+              class="avatar"
+              [src]="user?.account?.avatar?.path"
+              (error)="switchToDefaultAvatar($event)"
+              alt="Avatar"
+            >
+            <div>
+              {{ user.account.displayName }}
+              <span class="text-muted">{{ user.username }}</span>
+            </div>
+          </div>
           <span i18n *ngIf="user.blocked" class="banned-info">(banned)</span>
         </a>
       </td>

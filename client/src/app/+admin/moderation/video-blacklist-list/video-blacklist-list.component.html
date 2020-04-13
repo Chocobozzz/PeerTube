@@ -42,9 +42,9 @@
 
   <ng-template pTemplate="rowexpansion" let-videoBlacklist>
     <tr>
-      <td class="moderation-expanded" colspan="6">
-        <span i18n class="moderation-expanded-label">Blacklist reason:</span>
-        <span class="moderation-expanded-text" [innerHTML]="videoBlacklist.reasonHtml"></span>
+      <td class="expand-cell" colspan="6">
+        <span class="col-2 moderation-expanded-label" i18n>Blacklist reason:</span>
+        <span class="col-9 moderation-expanded-text" [innerHTML]="videoBlacklist.reasonHtml"></span>
       </td>
     </tr>
   </ng-template>

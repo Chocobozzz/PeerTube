@@ -7,6 +7,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, User } from '../../../../../../shared'
 import { UserBanModalComponent } from '@app/shared/moderation'
 import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
+import { Actor } from '@app/shared/actor/actor.model'
 
 @Component({
   selector: 'my-user-list',
@@ -103,6 +104,10 @@ export class UserListComponent extends RestTable implements OnInit {
 
   onUserChanged () {
     this.loadData()
+  }
+
+  switchToDefaultAvatar ($event: Event) {
+    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
 
   async unbanUsers (users: User[]) {

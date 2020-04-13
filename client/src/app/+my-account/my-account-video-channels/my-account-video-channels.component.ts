@@ -56,7 +56,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
           display: false,
           ticks: {
             min: Math.max(0, this.videoChannelsMinimumDailyViews - (3 * this.videoChannelsMaximumDailyViews / 100)),
-            max: this.videoChannelsMaximumDailyViews
+            max: Math.max(1, this.videoChannelsMaximumDailyViews)
           }
         }]
       },
