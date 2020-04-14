@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { Account } from '../../../shared/account/account.model'
+import { Account } from '@app/shared/account/account.model'
 import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
 import { VideoAbuse, VideoAbuseState } from '../../../../../../shared'
-import { RestPagination, RestTable, VideoAbuseService } from '../../../shared'
+import { RestPagination, RestTable, VideoAbuseService, VideoBlacklistService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
 import { ConfirmService } from '../../../core/index'
@@ -14,6 +14,7 @@ import { Actor } from '@app/shared/actor/actor.model'
 import { buildVideoLink, buildVideoEmbed } from 'src/assets/player/utils'
 import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 import { DomSanitizer } from '@angular/platform-browser'
+import { BlocklistService } from '@app/shared/blocklist'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -29,11 +30,13 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
-  videoAbuseActions: DropdownAction<VideoAbuse>[] = []
+  videoAbuseActions: DropdownAction<VideoAbuse>[][] = []
 
   constructor (
     private notifier: Notifier,
     private videoAbuseService: VideoAbuseService,
+    private blocklistService: BlocklistService,
+    private videoBlacklistService: VideoBlacklistService,
     private confirmService: ConfirmService,
     private i18n: I18n,
     private markdownRenderer: MarkdownService,
@@ -42,30 +45,57 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     super()
 
     this.videoAbuseActions = [
-      {
-        label: this.i18n('Delete this report'),
-        handler: videoAbuse => this.removeVideoAbuse(videoAbuse)
-      },
-      {
-        label: this.i18n('Add note'),
-        handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
-        isDisplayed: videoAbuse => !videoAbuse.moderationComment
-      },
-      {
-        label: this.i18n('Update note'),
-        handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
-        isDisplayed: videoAbuse => !!videoAbuse.moderationComment
-      },
-      {
-        label: this.i18n('Mark as accepted'),
-        handler: videoAbuse => this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED),
-        isDisplayed: videoAbuse => !this.isVideoAbuseAccepted(videoAbuse)
-      },
-      {
-        label: this.i18n('Mark as rejected'),
-        handler: videoAbuse => this.updateVideoAbuseState(videoAbuse, VideoAbuseState.REJECTED),
-        isDisplayed: videoAbuse => !this.isVideoAbuseRejected(videoAbuse)
-      }
+      [
+        {
+          label: this.i18n('Internal actions'),
+          isHeader: true
+        },
+        {
+          label: this.i18n('Delete report'),
+          handler: videoAbuse => this.removeVideoAbuse(videoAbuse)
+        },
+        {
+          label: this.i18n('Add note'),
+          handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
+          isDisplayed: videoAbuse => !videoAbuse.moderationComment
+        },
+        {
+          label: this.i18n('Update note'),
+          handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
+          isDisplayed: videoAbuse => !!videoAbuse.moderationComment
+        },
+        {
+          label: this.i18n('Mark as accepted'),
+          handler: videoAbuse => this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED),
+          isDisplayed: videoAbuse => !this.isVideoAbuseAccepted(videoAbuse)
+        },
+        {
+          label: this.i18n('Mark as rejected'),
+          handler: videoAbuse => this.updateVideoAbuseState(videoAbuse, VideoAbuseState.REJECTED),
+          isDisplayed: videoAbuse => !this.isVideoAbuseRejected(videoAbuse)
+        }
+      ],
+      [
+        {
+          label: this.i18n('Actions for the video'),
+          isHeader: true
+        },
+        {
+          label: this.i18n('Blacklist video'),
+          handler: videoAbuse => {
+            this.videoBlacklistService.blacklistVideo(videoAbuse.video.id, undefined, true)
+              .subscribe(
+                () => {
+                  this.notifier.success(this.i18n('Video blacklisted.'))
+
+                  this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                },
+
+                err => this.notifier.error(err.message)
+              )
+          }
+        }
+      ]
     ]
   }
 

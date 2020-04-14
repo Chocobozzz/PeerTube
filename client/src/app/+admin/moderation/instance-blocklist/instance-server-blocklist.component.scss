@@ -5,3 +5,7 @@
   @include peertube-button;
   @include grey-button;
 }
+
+.block-button {
+  @include create-button;
+}

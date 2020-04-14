@@ -51,6 +51,10 @@
 }
 
 .dropdown-menu {
+  .dropdown-header {
+    padding: 0.2rem 1rem;
+  }
+
   .dropdown-item {
     display: flex;
     cursor: pointer;

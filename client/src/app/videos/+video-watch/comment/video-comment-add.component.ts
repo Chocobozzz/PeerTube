@@ -11,7 +11,6 @@ import { VideoCommentService } from './video-comment.service'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { VideoCommentValidatorsService } from '@app/shared/forms/form-validators/video-comment-validators.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { AuthService } from '@app/core/auth'
 
 @Component({
   selector: 'my-video-comment-add',
@@ -38,7 +37,6 @@ export class VideoCommentAddComponent extends FormReactive implements OnInit {
     private videoCommentValidatorsService: VideoCommentValidatorsService,
     private notifier: Notifier,
     private videoCommentService: VideoCommentService,
-    private authService: AuthService,
     private modalService: NgbModal,
     private router: Router
   ) {

@@ -2,7 +2,6 @@ import { Routes } from '@angular/router'
 
 import { UserRightGuard } from '../../core'
 import { FollowsComponent } from './follows.component'
-import { FollowingAddComponent } from './following-add'
 import { FollowersListComponent } from './followers-list'
 import { UserRight } from '../../../../../shared'
 import { FollowingListComponent } from './following-list/following-list.component'
@@ -42,12 +41,7 @@ export const FollowsRoutes: Routes = [
       },
       {
         path: 'following-add',
-        component: FollowingAddComponent,
-        data: {
-          meta: {
-            title: 'Add follow'
-          }
-        }
+        redirectTo: 'following-list'
       },
       {
         path: 'video-redundancies-list',

@@ -84,11 +84,9 @@ const blockServerValidator = [
         .end()
     }
 
-    const server = await ServerModel.loadByHost(host)
+    let server = await ServerModel.loadByHost(host)
     if (!server) {
-      return res.status(404)
-                .send({ error: 'Server host not found.' })
-                .end()
+      server = await ServerModel.create({ host })
     }
 
     res.locals.server = server

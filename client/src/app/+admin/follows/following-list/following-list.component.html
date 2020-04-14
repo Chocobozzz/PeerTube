@@ -4,12 +4,16 @@
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div>
+      <div class="ml-auto">
         <input
           type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
           (keyup)="onSearch($event)"
         >
       </div>
+      <a class="ml-2 follow-button" (click)="addDomainsToFollow()" (key.enter)="addDomainsToFollow()">
+        <my-global-icon iconName="add"></my-global-icon>
+        <ng-container i18n>Follow domain</ng-container>
+      </a>
     </div>
   </ng-template>
 
@@ -42,3 +46,5 @@
     </tr>
   </ng-template>
 </p-table>
+
+<my-batch-domains-modal #batchDomainsModal i18n-action action="Follow domains" (domains)="addFollowing($event)"></my-batch-domains-modal>
