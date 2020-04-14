@@ -93,12 +93,16 @@ async function run (url: string, user: UserInfo) {
     log.info('Will download and upload %d videos.\n', infoArray.length)
 
     for (const info of infoArray) {
-      await processVideo({
-        cwd: program['tmpdir'],
-        url,
-        user,
-        youtubeInfo: info
-      })
+      try {
+        await processVideo({
+          cwd: program['tmpdir'],
+          url,
+          user,
+          youtubeInfo: info
+        })
+      } catch (err) {
+        console.error('Cannot process video.', { info, url })
+      }
     }
 
     log.info('Video/s for user %s imported: %s', user.username, program['targetUrl'])
