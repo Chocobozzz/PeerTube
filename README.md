@@ -73,7 +73,12 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 Introduction
 ----------------------------------------------------------------
 
-PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper: But one organization hosting PeerTube alone may not have enough money to pay for bandwidth and video storage of its servers, all servers of PeerTube are interoperable as a federated network, and non-PeerTube servers can be part of the larger Vidiverse (federated video network) by talking our implementation of ActivityPub. Video load is reduced thanks to P2P (BitTorrent) in the web browser via <a href="https://github.com/webtorrent/webtorrent">WebTorrent</a>.
+PeerTube is a free, decentralized and federated video platform developed as an alternative to other platforms that centralize our data and attention, such as YouTube, Dailymotion or Vimeo. :clapper:
+
+But one organization hosting PeerTube alone may not have enough money to pay for bandwidth and video storage of its servers,
+all servers of PeerTube are interoperable as a federated network, and non-PeerTube servers can be part of the larger Vidiverse
+(federated video network) by talking our implementation of ActivityPub.
+Video load is reduced thanks to P2P in the web browser using <a href="https://github.com/webtorrent/webtorrent">WebTorrent</a> or <a href="https://github.com/novage/p2p-media-loader">p2p-media-loader</a>.
 
 To learn more, see:
 * This [two-minute video](https://framatube.org/videos/watch/217eefeb-883d-45be-b7fc-a788ad8507d3) (hosted on PeerTube) explaining what PeerTube is and how it works
