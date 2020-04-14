@@ -15,7 +15,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
   followers: ActorFollow[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'createdAt', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
   constructor (

@@ -24,16 +24,26 @@
             </div>
           </ng-template>
 
-          <a *ngIf="action.linkBuilder" [ngClass]="{ 'with-icon': !!action.iconName }" class="dropdown-item" [routerLink]="action.linkBuilder(entry)" [title]="action.title || ''">
+          <a
+            *ngIf="action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
+            class="dropdown-item"  [routerLink]="action.linkBuilder(entry)" [title]="action.title || ''"
+          >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </a>
 
           <span
-            *ngIf="!action.linkBuilder" [ngClass]="{ 'with-icon': !!action.iconName }" (click)="action.handler(entry)"
-            class="custom-action dropdown-item" role="button" [title]="action.title || ''"
+            *ngIf="!action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
+            class="custom-action dropdown-item" role="button" [title]="action.title || ''" (click)="action.handler(entry)"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </span>
+
+          <h6
+            *ngIf="!action.linkBuilder && action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
+            class="dropdown-header" role="button" [title]="action.title || ''" (click)="action.handler(entry)"
+          >
+            <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
+          </h6>
 
         </ng-container>
       </ng-container>

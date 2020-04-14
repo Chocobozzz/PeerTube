@@ -175,13 +175,13 @@ describe('Test blocklist API validators', function () {
           })
         })
 
-        it('Should fail with an unknown server', async function () {
+        it('Should succeed with an unknown server', async function () {
           await makePostBodyRequest({
             url: server.url,
             token: server.accessToken,
             path,
             fields: { host: 'localhost:9003' },
-            statusCodeExpected: 404
+            statusCodeExpected: 204
           })
         })
 
@@ -218,7 +218,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unknown server block', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9003',
+            path: path + '/localhost:9004',
             token: server.accessToken,
             statusCodeExpected: 404
           })
@@ -415,13 +415,13 @@ describe('Test blocklist API validators', function () {
           })
         })
 
-        it('Should fail with an unknown server', async function () {
+        it('Should succeed with an unknown server', async function () {
           await makePostBodyRequest({
             url: server.url,
             token: server.accessToken,
             path,
             fields: { host: 'localhost:9003' },
-            statusCodeExpected: 404
+            statusCodeExpected: 204
           })
         })
 
@@ -467,7 +467,7 @@ describe('Test blocklist API validators', function () {
         it('Should fail with an unknown server block', async function () {
           await makeDeleteRequest({
             url: server.url,
-            path: path + '/localhost:9003',
+            path: path + '/localhost:9004',
             token: server.accessToken,
             statusCodeExpected: 404
           })

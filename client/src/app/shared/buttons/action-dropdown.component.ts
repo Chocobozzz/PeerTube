@@ -9,6 +9,7 @@ export type DropdownAction<T> = {
   handler?: (a: T) => any
   linkBuilder?: (a: T) => (string | number)[]
   isDisplayed?: (a: T) => boolean
+  isHeader?: boolean
 }
 
 export type DropdownButtonSize = 'normal' | 'small'

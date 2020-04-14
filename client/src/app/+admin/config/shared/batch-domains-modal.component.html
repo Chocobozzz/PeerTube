@@ -1,0 +1,43 @@
+<ng-template #modal>
+  <div class="modal-header">
+    <h4 i18n class="modal-title">{{ action }}</h4>
+
+    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+  </div>
+
+  <div class="modal-body">
+    <form novalidate [formGroup]="form" (ngSubmit)="submit()">
+      <div class="form-group">
+        <label i18n for="hosts">1 host (without "http://") per line</label>
+
+        <textarea
+          [placeholder]="placeholder" formControlName="domains" type="text" id="hosts" name="hosts"
+          class="form-control" [ngClass]="{ 'input-error': formErrors['domains'] }" ngbAutofocus
+        ></textarea>
+
+        <div *ngIf="formErrors.domains" class="form-error">
+          {{ formErrors.domains }}
+
+          <div *ngIf="form.controls['domains'].errors.validDomains">
+            {{ form.controls['domains'].errors.validDomains.value }}
+          </div>
+        </div>
+      </div>
+
+      <ng-content select="warning"></ng-content>
+
+      <div class="form-group inputs">
+        <input
+          type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+          (click)="hide()" (key.enter)="hide()"
+        >
+
+        <input
+          type="submit" [value]="action" class="action-button-submit"
+          [disabled]="!form.valid"
+        >
+      </div>
+    </form>
+  </div>
+
+</ng-template>

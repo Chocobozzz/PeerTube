@@ -48,13 +48,13 @@
         </a>
       </td>
 
-      <td>
+      <td class="c-hand" [pRowToggler]="videoAbuse">
         <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
         <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
       </td>
 
       <td class="action-cell">
-        <my-action-dropdown placement="bottom-right" i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
+        <my-action-dropdown placement="bottom-right auto" i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
       </td>
     </tr>
   </ng-template>

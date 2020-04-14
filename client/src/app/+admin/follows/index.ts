@@ -1,4 +1,3 @@
-export * from './following-add'
 export * from './followers-list'
 export * from './following-list'
 export * from './video-redundancies-list'

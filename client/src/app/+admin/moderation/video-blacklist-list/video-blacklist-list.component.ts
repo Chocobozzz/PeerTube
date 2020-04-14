@@ -18,7 +18,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   blacklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
   rowsPerPage = 10
-  sort: SortMeta = { field: 'createdAt', order: 1 }
+  sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   listBlacklistTypeFilter: VideoBlacklistType = undefined
 

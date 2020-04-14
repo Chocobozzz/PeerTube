@@ -8,3 +8,7 @@
     @include peertube-input-text(250px);
   }
 }
+
+.follow-button {
+  @include create-button;
+}
