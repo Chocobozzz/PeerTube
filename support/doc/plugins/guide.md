@@ -206,15 +206,6 @@ const baseStaticUrl = peertubeHelpers.getBaseStaticRoute()
 const imageUrl = baseStaticUrl + '/images/chocobo.png'
 ```
 
-#### Plugin client-scripts route
-
-To get your plugin client-scripts route:
-
-```js
-const baseClientScriptsUrl = peertubeHelpers.getBaseClientScriptsRoute()
-const scriptUrl = baseClientScriptsUrl + '/dist/bundle.js'
-```
-
 #### Notifier
 
 To notify the user with the PeerTube ToastModule:
