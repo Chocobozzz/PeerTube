@@ -127,9 +127,13 @@ export class VideoUploadComponent extends VideoSend implements OnInit, OnDestroy
   cancelUpload () {
     if (this.videoUploadObservable !== null) {
       this.videoUploadObservable.unsubscribe()
+
       this.isUploadingVideo = false
       this.videoUploadPercents = 0
       this.videoUploadObservable = null
+
+      this.firstStepError.emit()
+
       this.notifier.info(this.i18n('Upload cancelled'))
     }
   }
