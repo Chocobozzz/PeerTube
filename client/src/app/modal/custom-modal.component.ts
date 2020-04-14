@@ -28,7 +28,7 @@ export class CustomModalComponent {
     cancel?: { value: string, action?: () => void },
     confirm?: { value: string, action?: () => void }
   }) {
-    if (this.modalRef instanceof NgbModalRef) {
+    if (this.modalRef instanceof NgbModalRef && this.modalService.hasOpenModals()) {
       console.error('Cannot open another custom modal, one is already opened.')
       return
     }
@@ -49,7 +49,7 @@ export class CustomModalComponent {
     })
   }
 
-  onClickCancel () {
+  onCancelClick () {
     this.modalRef.close()
 
     if (typeof this.cancel.action === 'function') {
@@ -59,12 +59,12 @@ export class CustomModalComponent {
     this.destroy()
   }
 
-  onClickClose () {
+  onCloseClick () {
     this.modalRef.close()
     this.destroy()
   }
 
-  onClickConfirm () {
+  onConfirmClick () {
     this.modalRef.close()
 
     if (typeof this.confirm.action === 'function') {
