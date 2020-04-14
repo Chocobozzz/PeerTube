@@ -170,11 +170,9 @@ See [how to create your own instance](https://github.com/Chocobozzz/PeerTube/blo
 
 See the more general [admin documentation](https://docs.joinpeertube.org/#/admin-following-instances).
 
-#### Tools
+### Tools documentation
 
- * [Import videos (YouTube, Dailymotion, Vimeo...)](https://github.com/Chocobozzz/PeerTube/blob/develop/support/doc/tools.md)
- * [Upload videos from the CLI](https://github.com/Chocobozzz/PeerTube/blob/support/doc/tools.md)
- * [Admin server tools (create transcoding jobs, prune storage...)](https://github.com/Chocobozzz/PeerTube/blob/support/doc/tools.md#server-tools)
+Learn how to import/upload videos from CLI or admin your PeerTube instance with the [tools documentation](https://docs.joinpeertube.org/#/maintain-tools).
 
 ### Technical documentation
 
