@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { VideoDetails, VideoImport, VideoPrivacy } from '../../../../shared/models/videos'
+import { VideoDetails, VideoImport, VideoPrivacy, VideoCaption } from '../../../../shared/models/videos'
 import {
   cleanupTests,
   doubleFollow,
@@ -11,6 +11,8 @@ import {
   getMyVideos,
   getVideo,
   getVideosList,
+  listVideoCaptions,
+  testCaptionFile,
   immutableAssign,
   ServerInfo,
   setAccessTokensToServers
@@ -110,6 +112,46 @@ describe('Test video imports', function () {
       const attributes = immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() })
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       expect(res.body.video.name).to.equal('small video - youtube')
+
+      const resCaptions = await listVideoCaptions(servers[0].url, res.body.video.id)
+      const videoCaptions: VideoCaption[] = resCaptions.body
+      expect(videoCaptions).to.have.lengthOf(2)
+
+      const enCaption = videoCaptions.filter(caption => caption.language.label === 'en')[0]
+      expect(enCaption).to.not(undefined)
+      expect(enCaption.language.label).to.equal('en')
+      expect(enCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-en.vtt`)
+      await testCaptionFile(servers[0].url, enCaption.captionPath, `WEBVTT
+
+      1
+      00:00:01.600 --> 00:00:04.200
+      English (US)
+
+      2
+      00:00:05.900 --> 00:00:07.999
+      This is a subtitle in American English
+
+      3
+      00:00:10.000 --> 00:00:14.000
+      Adding subtitles is very easy to do`)
+
+      const frCaption = videoCaptions.filter(caption => caption.language.label === 'fr')[0]
+      expect(frCaption).to.not(undefined)
+      expect(frCaption.language.label).to.equal('fr')
+      expect(frCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-en.vtt`)
+      await testCaptionFile(servers[0].url, frCaption.captionPath, `WEBVTT
+
+      1
+      00:00:01,600 --> 00:00:04.200
+      Français (FR)
+
+      2
+      00:00:05,900 --> 00:00:07.999
+      C'est un sous-titre français
+
+      3
+      00:00:10,000 --> 00:00:14.000
+      Ajouter un sous-titre est vraiment facile`)
     }
 
     {
