@@ -45,8 +45,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <br />
 
-  <a href="https://travis-ci.org/github/Chocobozzz/PeerTube">
-    <img alt="pipeline status" src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=develop" />
+  <a href="https://travis-ci.com/github/Chocobozzz/PeerTube">
+    <img alt="pipeline status" src="https://travis-ci.com/Chocobozzz/PeerTube.svg?branch=develop" />
   </a>
 
   <a href="https://david-dm.org/Chocobozzz/PeerTube">
