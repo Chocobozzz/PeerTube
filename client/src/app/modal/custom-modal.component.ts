@@ -49,27 +49,10 @@ export class CustomModalComponent {
     })
   }
 
-  private hasCancel () {
-    return typeof this.cancel !== 'undefined'
-  }
-
-  private hasConfirm () {
-    return typeof this.confirm !== 'undefined'
-  }
-
-  private destroy () {
-    delete this.modalRef
-    delete this.title
-    delete this.content
-    delete this.close
-    delete this.cancel
-    delete this.confirm
-  }
-
   onClickCancel () {
     this.modalRef.close()
 
-    if (this.hasCancel() && (typeof this.cancel.action === 'function')) {
+    if (typeof this.cancel.action === 'function') {
       this.cancel.action()
     }
 
@@ -84,10 +67,27 @@ export class CustomModalComponent {
   onClickConfirm () {
     this.modalRef.close()
 
-    if (this.hasConfirm() && (typeof this.confirm.action === 'function')) {
+    if (typeof this.confirm.action === 'function') {
       this.confirm.action()
     }
 
     this.destroy()
+  }
+
+  hasCancel () {
+    return typeof this.cancel !== 'undefined'
+  }
+
+  hasConfirm () {
+    return typeof this.confirm !== 'undefined'
+  }
+
+  private destroy () {
+    delete this.modalRef
+    delete this.title
+    delete this.content
+    delete this.close
+    delete this.cancel
+    delete this.confirm
   }
 }
