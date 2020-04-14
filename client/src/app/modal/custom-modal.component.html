@@ -6,14 +6,14 @@
     
   <div class="modal-body" [innerHTML]="content"></div>
 
-  <div ng-show="hasCancel() || hasConfirm()" class="modal-footer inputs">
+  <div *ngIf="hasCancel() || hasConfirm()" class="modal-footer inputs">
     <input
-      ng-show="hasCancel()" type="button" role="button" value="{{cancel && cancel.value}}" class="action-button action-button-cancel"
+      *ngIf="hasCancel()" type="button" role="button" value="{{cancel.value}}" class="action-button action-button-cancel"
       (click)="onClickCancel()" (key.enter)="onClickCancel()"
     >
 
     <input
-      ng-show="hasConfirm()" type="button" role="button" value="{{confirm && confirm.value}}" class="action-button action-button-confirm"
+      *ngIf="hasConfirm()" type="button" role="button" value="{{confirm.value}}" class="action-button action-button-confirm"
       (click)="onClickConfirm()" (key.enter)="onClickConfirm()"
     >
   </div>
