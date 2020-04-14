@@ -89,6 +89,10 @@ export class AppComponent implements OnInit {
     this.openModalsIfNeeded()
   }
 
+  ngAfterViewInit() {
+    this.pluginService.initializeCustomModal(this.customModal)
+  }
+
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
   }
@@ -193,8 +197,6 @@ export class AppComponent implements OnInit {
 
   private async loadPlugins () {
     this.pluginService.initializePlugins()
-
-    setTimeout(() => this.pluginService.initializeCustomModal(this.customModal))
 
     this.hooks.runAction('action:application.init', 'common')
   }
