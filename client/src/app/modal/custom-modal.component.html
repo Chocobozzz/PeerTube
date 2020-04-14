@@ -1,7 +1,7 @@
 <ng-template #modal let-hide="close">
   <div class="modal-header">
     <h4 class="modal-title">{{title}}</h4>
-    <my-global-icon *ngIf="close" iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+    <my-global-icon *ngIf="close" iconName="cross" aria-label="Close" role="button" (click)="onClickClose()"></my-global-icon>
   </div>
     
   <div class="modal-body" [innerHTML]="content"></div>

@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild, Input } from '@angular/core'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-custom-modal',
@@ -15,6 +15,8 @@ export class CustomModalComponent {
   @Input() cancel?: { value: string, action?: () => void }
   @Input() confirm?: { value: string, action?: () => void }
 
+  private modalRef: NgbModalRef
+
   constructor (
     private modalService: NgbModal
   ) { }
@@ -26,6 +28,11 @@ export class CustomModalComponent {
     cancel?: { value: string, action?: () => void },
     confirm?: { value: string, action?: () => void }
   }) {
+    if (this.modalRef instanceof NgbModalRef) {
+      console.error('Cannot open another custom modal, one is already opened.')
+      return
+    }
+
     const { title, content, close, cancel, confirm } = input
 
     this.title = title
@@ -34,7 +41,7 @@ export class CustomModalComponent {
     this.cancel = cancel
     this.confirm = confirm
 
-    this.modalService.open(this.modal, {
+    this.modalRef = this.modalService.open(this.modal, {
       centered: true,
       backdrop: 'static',
       keyboard: false,
@@ -50,33 +57,37 @@ export class CustomModalComponent {
     return typeof this.confirm !== 'undefined'
   }
 
-  onClickCancel () {
-    this.modalService.dismissAll()
-
+  private destroy () {
+    delete this.modalRef
     delete this.title
     delete this.content
     delete this.close
+    delete this.cancel
     delete this.confirm
+  }
+
+  onClickCancel () {
+    this.modalRef.close()
 
     if (this.hasCancel() && (typeof this.cancel.action === 'function')) {
       this.cancel.action()
     }
 
-    delete this.cancel
+    this.destroy()
+  }
+
+  onClickClose () {
+    this.modalRef.close()
+    this.destroy()
   }
 
   onClickConfirm () {
-    this.modalService.dismissAll()
-
-    delete this.title
-    delete this.content
-    delete this.close
-    delete this.cancel
+    this.modalRef.close()
 
     if (this.hasConfirm() && (typeof this.confirm.action === 'function')) {
       this.confirm.action()
     }
 
-    delete this.confirm
+    this.destroy()
   }
 }
