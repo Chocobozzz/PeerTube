@@ -45,8 +45,8 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 
   <br />
 
-  <a href="https://framagit.org/framasoft/peertube/PeerTube/commits/develop">
-    <img alt="pipeline status" src="https://framagit.org/framasoft/peertube/PeerTube/badges/develop/pipeline.svg" />
+  <a href="https://travis-ci.org/github/Chocobozzz/PeerTube">
+    <img alt="pipeline status" src="https://travis-ci.org/Chocobozzz/PeerTube.svg?branch=develop" />
   </a>
 
   <a href="https://david-dm.org/Chocobozzz/PeerTube">
