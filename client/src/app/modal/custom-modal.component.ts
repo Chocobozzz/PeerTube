@@ -41,4 +41,42 @@ export class CustomModalComponent {
       size: 'lg'
     })
   }
+
+  private hasCancel () {
+    return typeof this.cancel !== 'undefined'
+  }
+
+  private hasConfirm () {
+    return typeof this.confirm !== 'undefined'
+  }
+
+  onClickCancel () {
+    this.modalService.dismissAll()
+
+    delete this.title
+    delete this.content
+    delete this.close
+    delete this.confirm
+
+    if (this.hasCancel() && (typeof this.cancel.action === 'function')) {
+      this.cancel.action()
+    }
+
+    delete this.cancel
+  }
+
+  onClickConfirm () {
+    this.modalService.dismissAll()
+
+    delete this.title
+    delete this.content
+    delete this.close
+    delete this.cancel
+
+    if (this.hasConfirm() && (typeof this.confirm.action === 'function')) {
+      this.confirm.action()
+    }
+
+    delete this.confirm
+  }
 }

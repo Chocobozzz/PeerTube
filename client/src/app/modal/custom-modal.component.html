@@ -6,15 +6,15 @@
     
   <div class="modal-body" [innerHTML]="content"></div>
 
-  <div ng-show='typeof(cancel) !== "undefined" || typeof(confirm) !== "undefined"' class="modal-footer inputs">
+  <div ng-show="hasCancel() || hasConfirm()" class="modal-footer inputs">
     <input
-      ng-show='typeof(cancel) !== "undefined"' type="button" role="button" value="{{cancel && cancel.value}}" class="action-button action-button-cancel"
-      (click)="hide(); cancel.action && cancel.action()" (key.enter)="hide(); cancel.action && cancel.action()"
+      ng-show="hasCancel()" type="button" role="button" value="{{cancel && cancel.value}}" class="action-button action-button-cancel"
+      (click)="onClickCancel()" (key.enter)="onClickCancel()"
     >
 
     <input
-      ng-show='typeof(confirm) !== "undefined"' type="button" role="button" value="{{confirm && confirm.value}}" class="action-button action-button-confirm"
-      (click)="hide(); confirm.action && confirm.action()" (key.enter)="hide(); confirm.action && confirm.action()"
+      ng-show="hasConfirm()" type="button" role="button" value="{{confirm && confirm.value}}" class="action-button action-button-confirm"
+      (click)="onClickConfirm()" (key.enter)="onClickConfirm()"
     >
   </div>
 </ng-template>
