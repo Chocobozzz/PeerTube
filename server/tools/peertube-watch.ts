@@ -43,5 +43,10 @@ function run (url: string, program: any) {
     url.replace('videos/watch', 'download/torrents') +
     `-${program.resolution}.torrent`
 
-  execSync(cmd + args)
+  try {
+    execSync(cmd + args)
+  } catch (err) {
+    console.error('Cannto exec command.', err)
+    process.exit(-1)
+  }
 }
