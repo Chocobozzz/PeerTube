@@ -197,13 +197,23 @@ The `ping` route can be accessed using:
 
 ### Client helpers (themes & plugins)
 
-### Plugin static route
+#### Plugin static route
 
 To get your plugin static route:
 
 ```js
 const baseStaticUrl = peertubeHelpers.getBaseStaticRoute()
 const imageUrl = baseStaticUrl + '/images/chocobo.png'
+```
+
+#### Notifier
+
+To notify the user with the PeerTube ToastModule:
+
+```js
+const { notifier } = peertubeHelpers
+notifier.success('Success message content.')
+notifier.error('Error message content.')
 ```
 
 #### Translate

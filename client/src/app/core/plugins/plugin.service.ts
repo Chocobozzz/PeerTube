@@ -12,7 +12,7 @@ import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plu
 import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
 import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
 import { HttpClient } from '@angular/common/http'
-import { AuthService } from '@app/core/auth'
+import { AuthService, Notifier } from '@app/core'
 import { RestExtractor } from '@app/shared/rest'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 import { PublicServerSetting } from '@shared/models/plugins/public-server.setting'
@@ -60,6 +60,7 @@ export class PluginService implements ClientHook {
   constructor (
     private router: Router,
     private authService: AuthService,
+    private notifier: Notifier,
     private server: ServerService,
     private zone: NgZone,
     private authHttp: HttpClient,
@@ -271,6 +272,8 @@ export class PluginService implements ClientHook {
       isLoggedIn: () => {
         return this.authService.isLoggedIn()
       },
+
+      notifier: this.notifier,
 
       translate: (value: string) => {
         return this.translationsObservable
