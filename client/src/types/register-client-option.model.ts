@@ -19,5 +19,13 @@ export type RegisterClientHelpers = {
     success: (text: string, title?: string, timeout?: number) => void
   }
 
+  showModal: (input: {
+    title: string,
+    content: string,
+    close?: boolean,
+    cancel?: { value: string, action?: () => void },
+    confirm?: { value: string, action?: () => void }
+  }) => void
+
   translate: (toTranslate: string) => Promise<string>
 }

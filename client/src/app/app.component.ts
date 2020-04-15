@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
@@ -14,6 +14,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { POP_STATE_MODAL_DISMISS } from '@app/shared/misc/constants'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
+import { CustomModalComponent } from '@app/modal/custom-modal.component'
 import { ServerConfig, UserRole } from '@shared/models'
 import { User } from '@app/shared'
 import { InstanceService } from '@app/shared/instance/instance.service'
@@ -24,9 +25,10 @@ import { MenuService } from './core/menu/menu.service'
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
+  @ViewChild('customModal') customModal: CustomModalComponent
 
   customCSS: SafeHtml
 
@@ -85,6 +87,10 @@ export class AppComponent implements OnInit {
     this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
 
     this.openModalsIfNeeded()
+  }
+
+  ngAfterViewInit () {
+    this.pluginService.initializeCustomModal(this.customModal)
   }
 
   isUserLoggedIn () {

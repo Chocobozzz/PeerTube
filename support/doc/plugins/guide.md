@@ -216,6 +216,24 @@ notifier.success('Success message content.')
 notifier.error('Error message content.')
 ```
 
+#### Custom Modal
+
+To show a custom modal:
+
+```js
+ peertubeHelpers.showModal({
+   title: 'My custom modal title',
+   content: '<p>My custom modal content</p>',
+   // Optionals parameters :
+   // show close icon
+   close: true,
+   // show cancel button and call action() after hiding modal
+   cancel: { value: 'cancel', action: () => {} },
+   // show confirm button and call action() after hiding modal
+   confirm: { value: 'confirm', action: () => {} },
+ })
+```
+
 #### Translate
 
 You can translate some strings of your plugin (PeerTube will use your `translations` object of your `package.json` file):

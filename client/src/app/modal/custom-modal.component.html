@@ -1,0 +1,20 @@
+<ng-template #modal let-hide="close">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <my-global-icon *ngIf="close" iconName="cross" aria-label="Close" role="button" (click)="onCloseClick()"></my-global-icon>
+  </div>
+    
+  <div class="modal-body" [innerHTML]="content"></div>
+
+  <div *ngIf="hasCancel() || hasConfirm()" class="modal-footer inputs">
+    <input
+      *ngIf="hasCancel()" type="button" role="button" value="{{cancel.value}}" class="action-button action-button-cancel"
+      (click)="onCancelClick()" (key.enter)="onCancelClick()"
+    >
+
+    <input
+      *ngIf="hasConfirm()" type="button" role="button" value="{{confirm.value}}" class="action-button action-button-confirm"
+      (click)="onConfirmClick()" (key.enter)="onConfirmClick()"
+    >
+  </div>
+</ng-template>
