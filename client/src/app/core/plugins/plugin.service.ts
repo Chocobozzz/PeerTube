@@ -273,7 +273,11 @@ export class PluginService implements ClientHook {
         return this.authService.isLoggedIn()
       },
 
-      notifier: this.notifier,
+      notifier: {
+        info: (text: string, title?: string, timeout?: number) => this.notifier.info(text, title, timeout),
+        error: (text: string, title?: string, timeout?: number) => this.notifier.error(text, title, timeout),
+        success: (text: string, title?: string, timeout?: number) => this.notifier.success(text, title, timeout)
+      },
 
       translate: (value: string) => {
         return this.translationsObservable

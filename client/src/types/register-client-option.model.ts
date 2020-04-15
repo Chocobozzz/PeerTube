@@ -1,5 +1,4 @@
 import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
-import { Notifier } from '@app/core'
 
 export type RegisterClientOptions = {
   registerHook: (options: RegisterClientHookOptions) => void
@@ -14,7 +13,11 @@ export type RegisterClientHelpers = {
 
   getSettings: () => Promise<{ [ name: string ]: string }>
 
-  notifier: Notifier
+  notifier: {
+    info: (text: string, title?: string, timeout?: number) => void,
+    error: (text: string, title?: string, timeout?: number) => void,
+    success: (text: string, title?: string, timeout?: number) => void
+  }
 
   translate: (toTranslate: string) => Promise<string>
 }
