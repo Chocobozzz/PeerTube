@@ -21,8 +21,8 @@ export type YoutubeDLInfo = {
 }
 
 export type YoutubeDLSubs = {
-  language: string,
-  filename: string,
+  language: string
+  filename: string
   path: string
 }[]
 
@@ -61,15 +61,20 @@ function getYoutubeDLSubs (url: string, opts?: object): Promise<YoutubeDLSubs> {
         youtubeDL.getSubs(url, options, (err, files) => {
           if (err) return rej(err)
 
+          logger.debug('Get subtitles from youtube dl.', { url, files })
+
           const subtitles = files.reduce((acc, filename) => {
             const matched = filename.match(/\.([a-z]{2})\.(vtt|ttml)/i)
 
             if (matched[1]) {
-              return [...acc, {
-                language: matched[1],
-                path: join(cwd, filename),
-                filename
-              }]
+              return [
+                ...acc,
+                {
+                  language: matched[1],
+                  path: join(cwd, filename),
+                  filename
+                }
+              ]
             }
           }, [])
 

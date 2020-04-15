@@ -172,10 +172,11 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
     user
   })
 
-
   // Get video subtitles
   try {
     const subtitles = await getYoutubeDLSubs(targetUrl)
+
+    logger.info('Will create %s subtitles from youtube import %s.', subtitles.length, targetUrl)
 
     for (const subtitle of subtitles) {
       const videoCaption = new VideoCaptionModel({

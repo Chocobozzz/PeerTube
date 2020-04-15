@@ -62,11 +62,14 @@ describe('Test video imports', function () {
 
     expect(videoTorrent.name).to.contain('你好 世界 720p.mp4')
     expect(videoMagnet.name).to.contain('super peertube2 video')
+
+    const resCaptions = await listVideoCaptions(url, idHttp)
+    expect(resCaptions.body.total).to.equal(2)
   }
 
   async function checkVideoServer2 (url: string, id: number | string) {
     const res = await getVideo(url, id)
-    const video = res.body
+    const video: VideoDetails = res.body
 
     expect(video.name).to.equal('my super name')
     expect(video.category.label).to.equal('Entertainment')
@@ -77,6 +80,9 @@ describe('Test video imports', function () {
     expect(video.tags).to.deep.equal([ 'supertag1', 'supertag2' ])
 
     expect(video.files).to.have.lengthOf(1)
+
+    const resCaptions = await listVideoCaptions(url, id)
+    expect(resCaptions.body.total).to.equal(2)
   }
 
   before(async function () {
@@ -114,44 +120,42 @@ describe('Test video imports', function () {
       expect(res.body.video.name).to.equal('small video - youtube')
 
       const resCaptions = await listVideoCaptions(servers[0].url, res.body.video.id)
-      const videoCaptions: VideoCaption[] = resCaptions.body
+      const videoCaptions: VideoCaption[] = resCaptions.body.data
       expect(videoCaptions).to.have.lengthOf(2)
 
-      const enCaption = videoCaptions.filter(caption => caption.language.label === 'en')[0]
-      expect(enCaption).to.not(undefined)
-      expect(enCaption.language.label).to.equal('en')
+      const enCaption = videoCaptions.find(caption => caption.language.id === 'en')
+      expect(enCaption).to.exist
+      expect(enCaption.language.label).to.equal('English')
       expect(enCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-en.vtt`)
       await testCaptionFile(servers[0].url, enCaption.captionPath, `WEBVTT
+Kind: captions
+Language: en
 
-      1
-      00:00:01.600 --> 00:00:04.200
-      English (US)
+00:00:01.600 --> 00:00:04.200
+English (US)
 
-      2
-      00:00:05.900 --> 00:00:07.999
-      This is a subtitle in American English
+00:00:05.900 --> 00:00:07.999
+This is a subtitle in American English
 
-      3
-      00:00:10.000 --> 00:00:14.000
-      Adding subtitles is very easy to do`)
+00:00:10.000 --> 00:00:14.000
+Adding subtitles is very easy to do`)
 
-      const frCaption = videoCaptions.filter(caption => caption.language.label === 'fr')[0]
-      expect(frCaption).to.not(undefined)
-      expect(frCaption.language.label).to.equal('fr')
-      expect(frCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-en.vtt`)
+      const frCaption = videoCaptions.find(caption => caption.language.id === 'fr')
+      expect(frCaption).to.exist
+      expect(frCaption.language.label).to.equal('French')
+      expect(frCaption.captionPath).to.equal(`/static/video-captions/${res.body.video.uuid}-fr.vtt`)
       await testCaptionFile(servers[0].url, frCaption.captionPath, `WEBVTT
+Kind: captions
+Language: fr
 
-      1
-      00:00:01,600 --> 00:00:04.200
-      Français (FR)
+00:00:01.600 --> 00:00:04.200
+Français (FR)
 
-      2
-      00:00:05,900 --> 00:00:07.999
-      C'est un sous-titre français
+00:00:05.900 --> 00:00:07.999
+C'est un sous-titre français
 
-      3
-      00:00:10,000 --> 00:00:14.000
-      Ajouter un sous-titre est vraiment facile`)
+00:00:10.000 --> 00:00:14.000
+Ajouter un sous-titre est vraiment facile`)
     }
 
     {
