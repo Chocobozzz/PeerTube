@@ -129,6 +129,7 @@ export class VideoImportModel extends Model<VideoImportModel> {
       distinct: true,
       include: [
         {
+          attributes: [ 'id' ],
           model: UserModel.unscoped(), // FIXME: Without this, sequelize try to COUNT(DISTINCT(*)) which is an invalid SQL query
           required: true
         }
