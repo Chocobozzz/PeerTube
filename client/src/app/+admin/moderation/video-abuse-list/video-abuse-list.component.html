@@ -2,7 +2,7 @@
   [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} reports"
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
 >
   <ng-template pTemplate="header">
     <tr> <!-- header -->
@@ -73,7 +73,7 @@
                 <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.moderationCommentHtml"></span>
               </div>
             </div>
-  
+
             <div class="col-4">
               <div class="screenratio" [innerHTML]="videoAbuse.embedHtml"></div>
             </div>

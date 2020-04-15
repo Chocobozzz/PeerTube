@@ -12,7 +12,7 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [(selection)]="selectedUsers"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
-  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} users"
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
