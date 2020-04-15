@@ -11,7 +11,7 @@ export class CustomModalComponent {
 
   @Input() title: string
   @Input() content: string
-  @Input() close?: boolean = false
+  @Input() close?: boolean
   @Input() cancel?: { value: string, action?: () => void }
   @Input() confirm?: { value: string, action?: () => void }
 

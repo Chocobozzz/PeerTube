@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
@@ -25,7 +25,7 @@ import { MenuService } from './core/menu/menu.service'
   templateUrl: './app.component.html',
   styleUrls: [ './app.component.scss' ]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
   @ViewChild('customModal') customModal: CustomModalComponent
@@ -89,7 +89,7 @@ export class AppComponent implements OnInit {
     this.openModalsIfNeeded()
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit () {
     this.pluginService.initializeCustomModal(this.customModal)
   }
 
