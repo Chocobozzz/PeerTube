@@ -17,6 +17,7 @@ export type ActivitypubFollowPayload = {
   name: string
   host: string
   isAutoFollow?: boolean
+  assertIsChannel?: boolean
 }
 
 async function processActivityPubFollow (job: Bull.Job) {
@@ -32,6 +33,11 @@ async function processActivityPubFollow (job: Bull.Job) {
     const sanitizedHost = sanitizeHost(host, REMOTE_SCHEME.HTTP)
     const actorUrl = await loadActorUrlOrGetFromWebfinger(payload.name + '@' + sanitizedHost)
     targetActor = await getOrCreateActorAndServerAndModel(actorUrl, 'all')
+  }
+
+  if (payload.assertIsChannel && !targetActor.VideoChannel) {
+    logger.warn('Do not follow %s@%s because it is not a channel.', name, host)
+    return
   }
 
   const fromActor = await ActorModel.load(payload.followerActorId)

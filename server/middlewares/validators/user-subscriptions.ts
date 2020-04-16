@@ -53,7 +53,6 @@ const userSubscriptionGetValidator = [
         .json({
           error: `Subscription ${req.params.uri} not found.`
         })
-        .end()
     }
 
     res.locals.subscription = subscription

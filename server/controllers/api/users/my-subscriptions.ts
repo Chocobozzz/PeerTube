@@ -112,6 +112,7 @@ function addUserSubscription (req: express.Request, res: express.Response) {
   const payload = {
     name,
     host,
+    assertIsChannel: true,
     followerActorId: user.Account.Actor.id
   }
 
