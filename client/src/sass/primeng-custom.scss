@@ -191,12 +191,22 @@ p-table {
 
       .ui-dropdown {
         position: absolute;
+        top: 3px;
         left: 0;
+
+        &.ui-state-focus {
+          box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+        }
+
+        .ui-dropdown-label {
+          color: var(--inputPlaceholderColor);
+        }
       }
 
       .ui-paginator-current {
         position: absolute;
         right: 0;
+        color: var(--inputPlaceholderColor);
       }
 
       .ui-paginator-first,
