@@ -1,4 +1,4 @@
-import { FindOptions, literal, Op, QueryTypes, where, fn, col, WhereOptions } from 'sequelize'
+import { col, FindOptions, fn, literal, Op, QueryTypes, where, WhereOptions } from 'sequelize'
 import {
   AfterDestroy,
   AfterUpdate,
@@ -19,7 +19,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, VideoPlaylistType, VideoPrivacy, VideoAbuseState } from '../../../shared'
+import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, VideoAbuseState, VideoPlaylistType, VideoPrivacy } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isNoInstanceConfigWarningModal,
@@ -69,22 +69,6 @@ import {
   MUserWithNotificationSetting,
   MVideoFullLight
 } from '@server/typings/models'
-
-const literalVideoQuotaUsed: any = [
-  literal(
-    '(' +
-      'SELECT COALESCE(SUM("size"), 0) ' +
-      'FROM (' +
-        'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-        'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-        'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-        'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-        'WHERE "account"."userId" = "UserModel"."id" GROUP BY "video"."id"' +
-      ') t' +
-    ')'
-  ),
-  'videoQuotaUsed'
-]
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',
@@ -156,7 +140,17 @@ enum ScopeNames {
   [ScopeNames.WITH_STATS]: {
     attributes: {
       include: [
-        literalVideoQuotaUsed,
+        [
+          literal(
+            '(' +
+              UserModel.generateUserQuotaBaseSQL({
+                withSelect: false,
+                whereUserId: '"UserModel"."id"'
+              }) +
+            ')'
+          ),
+          'videoQuotaUsed'
+        ],
         [
           literal(
             '(' +
@@ -430,7 +424,19 @@ export class UserModel extends Model<UserModel> {
 
     const query: FindOptions = {
       attributes: {
-        include: [ literalVideoQuotaUsed ]
+        include: [
+          [
+            literal(
+              '(' +
+                UserModel.generateUserQuotaBaseSQL({
+                  withSelect: false,
+                  whereUserId: '"UserModel"."id"'
+                }) +
+              ')'
+            ),
+            'videoQuotaUsed'
+          ] as any // FIXME: typings
+        ]
       },
       offset: start,
       limit: count,
@@ -659,7 +665,10 @@ export class UserModel extends Model<UserModel> {
 
   static getOriginalVideoFileTotalFromUser (user: MUserId) {
     // Don't use sequelize because we need to use a sub query
-    const query = UserModel.generateUserQuotaBaseSQL()
+    const query = UserModel.generateUserQuotaBaseSQL({
+      withSelect: true,
+      whereUserId: '$userId'
+    })
 
     return UserModel.getTotalRawQuery(query, user.id)
   }
@@ -667,7 +676,11 @@ export class UserModel extends Model<UserModel> {
   // Returns cumulative size of all video files uploaded in the last 24 hours.
   static getOriginalVideoFileTotalDailyFromUser (user: MUserId) {
     // Don't use sequelize because we need to use a sub query
-    const query = UserModel.generateUserQuotaBaseSQL('"video"."createdAt" > now() - interval \'24 hours\'')
+    const query = UserModel.generateUserQuotaBaseSQL({
+      withSelect: true,
+      whereUserId: '$userId',
+      where: '"video"."createdAt" > now() - interval \'24 hours\''
+    })
 
     return UserModel.getTotalRawQuery(query, user.id)
   }
@@ -835,18 +848,33 @@ export class UserModel extends Model<UserModel> {
     return uploadedTotal < this.videoQuota && uploadedDaily < this.videoQuotaDaily
   }
 
-  private static generateUserQuotaBaseSQL (where?: string) {
-    const andWhere = where ? 'AND ' + where : ''
+  private static generateUserQuotaBaseSQL (options: {
+    whereUserId: '$userId' | '"UserModel"."id"'
+    withSelect: boolean
+    where?: string
+  }) {
+    const andWhere = options.where
+      ? 'AND ' + options.where
+      : ''
 
-    return 'SELECT SUM("size") AS "total" ' +
-      'FROM (' +
-      'SELECT MAX("videoFile"."size") AS "size" FROM "videoFile" ' +
-      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
-      'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+    const videoChannelJoin = 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
       'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-      'WHERE "account"."userId" = $userId ' + andWhere +
-      'GROUP BY "video"."id"' +
-      ') t'
+      `WHERE "account"."userId" = ${options.whereUserId} ${andWhere}`
+
+    const webtorrentFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+      'INNER JOIN "video" ON "videoFile"."videoId" = "video"."id" ' +
+      videoChannelJoin
+
+    const hlsFiles = 'SELECT "videoFile"."size" AS "size", "video"."id" AS "videoId" FROM "videoFile" ' +
+      'INNER JOIN "videoStreamingPlaylist" ON "videoFile"."videoStreamingPlaylistId" = "videoStreamingPlaylist".id ' +
+      'INNER JOIN "video" ON "videoStreamingPlaylist"."videoId" = "video"."id" ' +
+      videoChannelJoin
+
+    return 'SELECT COALESCE(SUM("size"), 0) AS "total" ' +
+      'FROM (' +
+        `SELECT MAX("t1"."size") AS "size" FROM (${webtorrentFiles} UNION ${hlsFiles}) t1 ` +
+        'GROUP BY "t1"."videoId"' +
+      ') t2'
   }
 
   private static getTotalRawQuery (query: string, userId: number) {

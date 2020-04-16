@@ -37,12 +37,13 @@ import {
   reportVideoAbuse,
   addVideoCommentThread,
   updateVideoAbuse,
-  getVideoAbusesList
+  getVideoAbusesList, updateCustomSubConfig, getCustomConfig, waitJobs
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
+import { CustomConfig } from '@shared/models/server'
 
 const expect = chai.expect
 
@@ -293,7 +294,7 @@ describe('Test users', function () {
   describe('My videos & quotas', function () {
 
     it('Should be able to upload a video with this user', async function () {
-      this.timeout(5000)
+      this.timeout(10000)
 
       const videoAttributes = {
         name: 'super user video',
@@ -343,6 +344,36 @@ describe('Test users', function () {
 
         const videos = res.body.data
         expect(videos).to.have.lengthOf(0)
+      }
+    })
+
+    it('Should disable webtorrent, enable HLS, and update my quota', async function () {
+      this.timeout(60000)
+
+      {
+        const res = await getCustomConfig(server.url, server.accessToken)
+        const config = res.body as CustomConfig
+        config.transcoding.webtorrent.enabled = false
+        config.transcoding.hls.enabled = true
+        config.transcoding.enabled = true
+        await updateCustomSubConfig(server.url, server.accessToken, config)
+      }
+
+      {
+        const videoAttributes = {
+          name: 'super user video 2',
+          fixture: 'video_short.webm'
+        }
+        await uploadVideo(server.url, accessTokenUser, videoAttributes)
+
+        await waitJobs([ server ])
+      }
+
+      {
+        const res = await getMyUserVideoQuotaUsed(server.url, accessTokenUser)
+        const data = res.body
+
+        expect(data.videoQuotaUsed).to.be.greaterThan(220000)
       }
     })
   })
