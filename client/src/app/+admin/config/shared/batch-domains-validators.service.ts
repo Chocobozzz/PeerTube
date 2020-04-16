@@ -1,7 +1,7 @@
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Validators, ValidatorFn } from '@angular/forms'
 import { Injectable } from '@angular/core'
-import { BuildFormValidator, validateHost } from '@app/shared'
+import { BuildFormValidator, validateHost } from '@app/shared/forms/form-validators'
 
 @Injectable()
 export class BatchDomainsValidatorsService {
