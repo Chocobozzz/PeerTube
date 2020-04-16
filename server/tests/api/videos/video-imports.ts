@@ -19,6 +19,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
+import { testImage } from '../../../../shared/extra-utils/miscs/miscs'
 
 const expect = chai.expect
 
@@ -156,6 +157,11 @@ C'est un sous-titre français
 
 00:00:10.000 --> 00:00:14.000
 Ajouter un sous-titre est vraiment facile`)
+
+      expect(res.body.video.thumbnailPath).to.equal(`/static/thumbnails/${res.body.video.uuid}.jpg`)
+      expect(res.body.video.previewPath).to.equal(`/static/previews/${res.body.video.uuid}.jpg`)
+      await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
+      await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
     }
 
     {
