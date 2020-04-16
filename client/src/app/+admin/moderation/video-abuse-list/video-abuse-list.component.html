@@ -48,9 +48,10 @@
         </a>
       </td>
 
-      <td class="c-hand" [pRowToggler]="videoAbuse">
+      <td class="c-hand video-abuse-states" [pRowToggler]="videoAbuse">
         <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
         <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
+        <span *ngIf="videoAbuse.moderationComment" [title]="videoAbuse.moderationComment" class="glyphicon glyphicon-comment"></span>
       </td>
 
       <td class="action-cell">
@@ -75,7 +76,12 @@
             </div>
 
             <div class="col-4">
-              <div class="screenratio" [innerHTML]="videoAbuse.embedHtml"></div>
+              <div class="screenratio">
+                <div *ngIf="videoAbuse.video.deleted">
+                  <span i18n>The video was {{ videoAbuse.video.deleted ? 'deleted' : 'blacklisted' }}</span>
+                </div>
+                <div *ngIf="!videoAbuse.video.deleted" [innerHTML]="videoAbuse.embedHtml"></div>
+              </div>
             </div>
           </div>
         </td>

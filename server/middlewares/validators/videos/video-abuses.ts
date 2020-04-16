@@ -32,8 +32,7 @@ const videoAbuseGetValidator = [
     logger.debug('Checking videoAbuseGetValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoAbuseExist(req.params.id, res.locals.videoAll.id, res)) return
+    if (!await doesVideoAbuseExist(req.params.id, req.params.videoId, res)) return
 
     return next()
   }
@@ -53,8 +52,7 @@ const videoAbuseUpdateValidator = [
     logger.debug('Checking videoAbuseUpdateValidator parameters', { parameters: req.body })
 
     if (areValidationErrors(req, res)) return
-    if (!await doesVideoExist(req.params.videoId, res)) return
-    if (!await doesVideoAbuseExist(req.params.id, res.locals.videoAll.id, res)) return
+    if (!await doesVideoAbuseExist(req.params.id, req.params.videoId, res)) return
 
     return next()
   }
