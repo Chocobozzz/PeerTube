@@ -166,6 +166,8 @@ export class MenuComponent implements OnInit {
   }
 
   langForLocale (localeId: string) {
+    if (localeId === '_unknown') return this.i18n('Unknown')
+
     return this.languages.find(lang => lang.id === localeId).label
   }
 
