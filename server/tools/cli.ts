@@ -119,9 +119,10 @@ function buildCommonVideoOptions (command: CommanderStatic) {
     .option('-d, --video-description <description>', 'Video description')
     .option('-P, --privacy <privacy_number>', 'Privacy')
     .option('-C, --channel-name <channel_name>', 'Channel name')
-    .option('-m, --comments-enabled', 'Enable comments')
+    .option('--no-comments-enabled', 'Disable video comments')
     .option('-s, --support <support>', 'Video support text')
-    .option('-w, --wait-transcoding', 'Wait transcoding before publishing the video')
+    .option('--no-wait-transcoding', 'Do not wait transcoding before publishing the video')
+    .option('--no-download-enabled', 'Disable video download')
     .option('-v, --verbose <verbose>', 'Verbosity, from 0/\'error\' to 4/\'debug\'', 'info')
 }
 
