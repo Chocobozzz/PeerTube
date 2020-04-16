@@ -203,23 +203,28 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
   }
 
   if (options.languageOneOf) {
-    replacements.languageOneOf = options.languageOneOf.filter(l => l && l !== '_unknown')
+    const languages = options.languageOneOf.filter(l => l && l !== '_unknown')
+    const languagesQueryParts: string[] = []
 
-    let languagesQuery = '("video"."language" IN (:languageOneOf) OR '
+    if (languages.length !== 0) {
+      languagesQueryParts.push('("video"."language" IN (:languageOneOf)')
+      replacements.languageOneOf = languages
 
-    if (options.languageOneOf.includes('_unknown')) {
-      languagesQuery += '"video"."language" IS NULL OR '
+      languagesQueryParts.push(
+        '  EXISTS (' +
+        '    SELECT 1 FROM "videoCaption" WHERE "videoCaption"."language" ' +
+        '    IN (' + createSafeIn(model, languages) + ') AND ' +
+        '    "videoCaption"."videoId" = "video"."id"' +
+        '  )' +
+        ')'
+      )
     }
 
-    and.push(
-      languagesQuery +
-      '  EXISTS (' +
-      '    SELECT 1 FROM "videoCaption" WHERE "videoCaption"."language" ' +
-      '    IN (' + createSafeIn(model, options.languageOneOf) + ') AND ' +
-      '    "videoCaption"."videoId" = "video"."id"' +
-      '  )' +
-      ')'
-    )
+    if (options.languageOneOf.includes('_unknown')) {
+      languagesQueryParts.push('"video"."language" IS NULL')
+    }
+
+    and.push(languagesQueryParts.join(' OR '))
   }
 
   // We don't exclude results in this if so if we do a count we don't need to add this complex clauses
