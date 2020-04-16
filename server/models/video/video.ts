@@ -628,9 +628,9 @@ export class VideoModel extends Model<VideoModel> {
   @HasMany(() => VideoAbuseModel, {
     foreignKey: {
       name: 'videoId',
-      allowNull: false
+      allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'set null'
   })
   VideoAbuses: VideoAbuseModel[]
 
@@ -796,6 +796,35 @@ export class VideoModel extends Model<VideoModel> {
   @BeforeDestroy
   static invalidateCache (instance: VideoModel) {
     ModelCache.Instance.invalidateCache('video', instance.id)
+  }
+
+  @BeforeDestroy
+  static async saveEssentialDataToAbuses (instance: VideoModel, options) {
+    const tasks: Promise<any>[] = []
+
+    logger.info('Saving video abuses details of video %s.', instance.url)
+
+    if (!Array.isArray(instance.VideoAbuses)) {
+      instance.VideoAbuses = await instance.$get('VideoAbuses')
+
+      if (instance.VideoAbuses.length === 0) return undefined
+    }
+
+    const details = instance.toFormattedJSON()
+
+    for (const abuse of instance.VideoAbuses) {
+      tasks.push((_ => {
+        abuse.deletedVideo = details
+        return abuse.save({ transaction: options.transaction })
+      })())
+    }
+
+    Promise.all(tasks)
+           .catch(err => {
+             logger.error('Some errors when saving details of video %s in its abuses before destroy hook.', instance.uuid, { err })
+           })
+
+    return undefined
   }
 
   static listLocal (): Bluebird<MVideoWithAllFiles[]> {

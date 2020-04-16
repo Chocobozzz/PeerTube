@@ -9,7 +9,7 @@ import {
 import { AccountModel } from '../account/account'
 import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { VideoAbuseState } from '../../../shared'
+import { VideoAbuseState, Video } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
@@ -46,6 +46,11 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_ABUSES.MODERATION_COMMENT.max))
   moderationComment: string
 
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.JSONB)
+  deletedVideo: Video
+
   @CreatedAt
   createdAt: Date
 
@@ -58,9 +63,9 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
   @BelongsTo(() => AccountModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'set null'
   })
   Account: AccountModel
 
@@ -70,17 +75,21 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
   @BelongsTo(() => VideoModel, {
     foreignKey: {
-      allowNull: false
+      allowNull: true
     },
-    onDelete: 'cascade'
+    onDelete: 'set null'
   })
   Video: VideoModel
 
-  static loadByIdAndVideoId (id: number, videoId: number): Bluebird<MVideoAbuse> {
+  static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MVideoAbuse> {
+    const videoAttributes = {}
+    if (videoId) videoAttributes['videoId'] = videoId
+    if (uuid) videoAttributes['deletedVideo'] = { uuid }
+
     const query = {
       where: {
         id,
-        videoId
+        ...videoAttributes
       }
     }
     return VideoAbuseModel.findOne(query)
@@ -112,7 +121,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
         },
         {
           model: VideoModel,
-          required: true
+          required: false
         }
       ]
     }
@@ -124,6 +133,10 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
+    const video = this.Video
+      ? this.Video
+      : this.deletedVideo
+
     return {
       id: this.id,
       reason: this.reason,
@@ -134,9 +147,11 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       },
       moderationComment: this.moderationComment,
       video: {
-        id: this.Video.id,
-        uuid: this.Video.uuid,
-        name: this.Video.name
+        id: video.id,
+        uuid: video.uuid,
+        name: video.name,
+        nsfw: video.nsfw,
+        deleted: !this.Video
       },
       createdAt: this.createdAt
     }

@@ -14,6 +14,8 @@ export interface VideoAbuse {
     id: number
     name: string
     uuid: string
+    nsfw: boolean
+    deleted: boolean
   }
 
   createdAt: Date

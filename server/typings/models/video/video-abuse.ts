@@ -31,4 +31,4 @@ export type MVideoAbuseAccountVideo =
 export type MVideoAbuseFormattable =
   MVideoAbuse &
   Use<'Account', MAccountFormattable> &
-  Use<'Video', Pick<MVideo, 'id' | 'uuid' | 'name'>>
+  Use<'Video', Pick<MVideo, 'id' | 'uuid' | 'name' | 'nsfw'>>
