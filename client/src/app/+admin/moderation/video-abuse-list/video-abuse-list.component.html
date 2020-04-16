@@ -1,15 +1,15 @@
 <p-table
-  [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
 >
   <ng-template pTemplate="header">
     <tr> <!-- header -->
       <th style="width: 40px;"></th>
-      <th i18n>Reporter</th>
-      <th style="width: 200px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th i18n>Video</th>
+      <th style="width:190px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 120px;"></th>
     </tr>
@@ -40,13 +40,14 @@
         </a>
       </td>
 
-      <td>{{ videoAbuse.createdAt }}</td>
-
       <td>
+        <span *ngIf="videoAbuse.video.deleted" i18n-title title="Video was deleted" class="glyphicon glyphicon-trash"></span>
         <a [href]="getVideoUrl(videoAbuse)" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
           {{ videoAbuse.video.name }}
         </a>
       </td>
+
+      <td>{{ videoAbuse.createdAt }}</td>
 
       <td class="c-hand video-abuse-states" [pRowToggler]="videoAbuse">
         <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
@@ -55,7 +56,7 @@
       </td>
 
       <td class="action-cell">
-        <my-action-dropdown placement="bottom-right auto" i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
+        <my-action-dropdown placement="bottom-right auto" container="body" i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"></my-action-dropdown>
       </td>
     </tr>
   </ng-template>

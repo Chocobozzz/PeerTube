@@ -15,6 +15,7 @@ import { buildVideoLink, buildVideoEmbed } from 'src/assets/player/utils'
 import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 import { DomSanitizer } from '@angular/platform-browser'
 import { BlocklistService } from '@app/shared/blocklist'
+import { VideoService } from '@app/shared/video/video.service'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -26,7 +27,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
   videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
   totalRecords = 0
-  rowsPerPage = 10
+  rowsPerPageOptions = [ 20, 50, 100 ]
+  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
@@ -36,6 +38,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     private notifier: Notifier,
     private videoAbuseService: VideoAbuseService,
     private blocklistService: BlocklistService,
+    private videoService: VideoService,
     private videoBlacklistService: VideoBlacklistService,
     private confirmService: ConfirmService,
     private i18n: I18n,
@@ -78,10 +81,12 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
       [
         {
           label: this.i18n('Actions for the video'),
-          isHeader: true
+          isHeader: true,
+          isDisplayed: videoAbuse => !videoAbuse.video.deleted
         },
         {
           label: this.i18n('Blacklist video'),
+          isDisplayed: videoAbuse => !videoAbuse.video.deleted,
           handler: videoAbuse => {
             this.videoBlacklistService.blacklistVideo(videoAbuse.video.id, undefined, true)
               .subscribe(
@@ -89,6 +94,48 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
                   this.notifier.success(this.i18n('Video blacklisted.'))
 
                   this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                },
+
+                err => this.notifier.error(err.message)
+              )
+          }
+        },
+        {
+          label: this.i18n('Delete video'),
+          isDisplayed: videoAbuse => !videoAbuse.video.deleted,
+          handler: async videoAbuse => {
+            const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this video?'), this.i18n('Delete'))
+            if (res === false) return
+
+            this.videoService.removeVideo(videoAbuse.video.id)
+              .subscribe(
+                () => {
+                  this.notifier.success(this.i18n('Video deleted.'))
+
+                  this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                },
+
+                err => this.notifier.error(err.message)
+              )
+          }
+        }
+      ],
+      [
+        {
+          label: this.i18n('Actions for the reporter'),
+          isHeader: true
+        },
+        {
+          label: this.i18n('Mute reporter'),
+          handler: async videoAbuse => {
+            const account = videoAbuse.reporterAccount as Account
+
+            this.blocklistService.blockAccountByInstance(account)
+              .subscribe(
+                () => {
+                  this.notifier.success(this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost }))
+
+                  account.mutedByInstance = true
                 },
 
                 err => this.notifier.error(err.message)
@@ -180,7 +227,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
                      Object.assign(abuse, {
                        reasonHtml: await this.toHtml(abuse.reason),
                        moderationCommentHtml: await this.toHtml(abuse.moderationComment),
-                       embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse))
+                       embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse)),
+                       reporterAccount: new Account(abuse.reporterAccount)
                      })
                    }
 

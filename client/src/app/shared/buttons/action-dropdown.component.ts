@@ -27,6 +27,7 @@ export class ActionDropdownComponent<T> {
   @Input() entry: T
 
   @Input() placement = 'bottom-left auto'
+  @Input() container: null | 'body'
 
   @Input() buttonSize: DropdownButtonSize = 'normal'
   @Input() buttonDirection: DropdownDirection = 'horizontal'
