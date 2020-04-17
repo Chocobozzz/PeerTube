@@ -810,7 +810,7 @@ export class VideoModel extends Model<VideoModel> {
       if (instance.VideoAbuses.length === 0) return undefined
     }
 
-    const details = instance.toFormattedJSON()
+    const details = instance.toFormattedDetailsJSON()
 
     for (const abuse of instance.VideoAbuses) {
       tasks.push((_ => {

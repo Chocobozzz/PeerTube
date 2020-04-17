@@ -29,10 +29,6 @@
   }
 }
 
-.glyphicon-trash {
-  font-size: 80%;
-}
-
 .screenratio {
   position: relative;
   width: 100%;
@@ -47,6 +43,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    color: var(--inputPlaceholderColor);
   }
 
   ::ng-deep iframe {
