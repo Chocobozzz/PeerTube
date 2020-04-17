@@ -13,7 +13,7 @@ rates_limit:
   api:
     # 50 attempts in 10 seconds
     window: 10 seconds
-    max: 50
+    max: 100
   login:
     # 15 attempts in 5 min
     window: 5 minutes
