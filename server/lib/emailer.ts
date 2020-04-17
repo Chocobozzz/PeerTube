@@ -292,7 +292,7 @@ class Emailer {
     const videoUrl = WEBSERVER.URL + videoAbuse.Video.getWatchStaticPath()
 
     const text = 'Hi,\n\n' +
-      `${WEBSERVER.HOST} received an abuse for the following video ${videoUrl}\n\n` +
+      `${WEBSERVER.HOST} received an abuse for the following video: ${videoUrl}\n\n` +
       'Cheers,\n' +
       `${CONFIG.EMAIL.BODY.SIGNATURE}`
 

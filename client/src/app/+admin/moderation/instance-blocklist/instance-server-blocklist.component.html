@@ -23,7 +23,12 @@
 
   <ng-template pTemplate="body" let-serverBlock>
     <tr>
-      <td>{{ serverBlock.blockedServer.host }}</td>
+      <td>
+        <a [href]="'https://' + serverBlock.blockedServer.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
+          {{ serverBlock.blockedServer.host }}
+          <span class="glyphicon glyphicon-new-window"></span>
+        </a>
+      </td>
       <td>{{ serverBlock.createdAt }}</td>
       <td class="action-cell">
         <button class="unblock-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>

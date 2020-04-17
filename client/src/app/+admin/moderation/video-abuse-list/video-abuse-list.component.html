@@ -41,9 +41,22 @@
       </td>
 
       <td>
-        <span *ngIf="videoAbuse.video.deleted" i18n-title title="Video was deleted" class="glyphicon glyphicon-trash"></span>
-        <a [href]="getVideoUrl(videoAbuse)" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
-          {{ videoAbuse.video.name }}
+        <a [href]="getVideoUrl(videoAbuse)" class="video-abuse-video-link" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
+          <div class="video-abuse-video">
+            <div class="video-abuse-video-image">
+              <img *ngIf="!videoAbuse.video.deleted" [src]="videoAbuse.video.thumbnailPath">
+              <span *ngIf="videoAbuse.video.deleted" i18n>Deleted</span>
+            </div>
+            <div class="video-abuse-video-text">
+              <div>
+                {{ videoAbuse.video.name }}
+                <span *ngIf="!videoAbuse.video.deleted && !videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
+                <span *ngIf="videoAbuse.video.deleted" i18n-title title="Video was deleted" class="glyphicon glyphicon-trash"></span>
+                <span *ngIf="videoAbuse.video.blacklisted" i18n-title title="Video was blacklisted" class="glyphicon glyphicon-ban-circle"></span>
+              </div>
+              <div class="text-muted">by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
+            </div>
+          </div>
         </a>
       </td>
 
@@ -78,10 +91,10 @@
 
             <div class="col-4">
               <div class="screenratio">
-                <div *ngIf="videoAbuse.video.deleted">
+                <div *ngIf="videoAbuse.video.deleted || videoAbuse.video.blacklisted">
                   <span i18n>The video was {{ videoAbuse.video.deleted ? 'deleted' : 'blacklisted' }}</span>
                 </div>
-                <div *ngIf="!videoAbuse.video.deleted" [innerHTML]="videoAbuse.embedHtml"></div>
+                <div *ngIf="!videoAbuse.video.deleted && !videoAbuse.video.blacklisted" [innerHTML]="videoAbuse.embedHtml"></div>
               </div>
             </div>
           </div>

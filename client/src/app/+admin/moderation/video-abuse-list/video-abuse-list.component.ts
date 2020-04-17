@@ -20,14 +20,14 @@ import { VideoService } from '@app/shared/video/video.service'
 @Component({
   selector: 'my-video-abuse-list',
   templateUrl: './video-abuse-list.component.html',
-  styleUrls: [ '../moderation.component.scss']
+  styleUrls: [ '../moderation.component.scss', './video-abuse-list.component.scss' ]
 })
 export class VideoAbuseListComponent extends RestTable implements OnInit {
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
 
   videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
   totalRecords = 0
-  rowsPerPageOptions = [ 20, 50, 100 ]
+  rowsPerPageOptions = [ 20, 50, 100 ]
   rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
@@ -86,7 +86,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
         },
         {
           label: this.i18n('Blacklist video'),
-          isDisplayed: videoAbuse => !videoAbuse.video.deleted,
+          isDisplayed: videoAbuse => !videoAbuse.video.deleted && !videoAbuse.video.blacklisted,
           handler: videoAbuse => {
             this.videoBlacklistService.blacklistVideo(videoAbuse.video.id, undefined, true)
               .subscribe(
@@ -101,10 +101,29 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
           }
         },
         {
+          label: this.i18n('Unblacklist video'),
+          isDisplayed: videoAbuse => !videoAbuse.video.deleted && videoAbuse.video.blacklisted,
+          handler: videoAbuse => {
+            this.videoBlacklistService.removeVideoFromBlacklist(videoAbuse.video.id)
+              .subscribe(
+                () => {
+                  this.notifier.success(this.i18n('Video unblacklisted.'))
+
+                  this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                },
+
+                err => this.notifier.error(err.message)
+              )
+          }
+        },
+        {
           label: this.i18n('Delete video'),
           isDisplayed: videoAbuse => !videoAbuse.video.deleted,
           handler: async videoAbuse => {
-            const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this video?'), this.i18n('Delete'))
+            const res = await this.confirmService.confirm(
+              this.i18n('Do you really want to delete this video?'),
+              this.i18n('Delete')
+            )
             if (res === false) return
 
             this.videoService.removeVideo(videoAbuse.video.id)
@@ -126,16 +145,34 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
           isHeader: true
         },
         {
-          label: this.i18n('Mute reporter'),
+          label: this.i18n('Mute reporter'),
           handler: async videoAbuse => {
             const account = videoAbuse.reporterAccount as Account
 
             this.blocklistService.blockAccountByInstance(account)
               .subscribe(
                 () => {
-                  this.notifier.success(this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost }))
+                  this.notifier.success(
+                    this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost })
+                  )
 
                   account.mutedByInstance = true
+                },
+
+                err => this.notifier.error(err.message)
+              )
+          }
+        },
+        {
+          label: this.i18n('Mute server'),
+          isDisplayed: videoAbuse => !videoAbuse.reporterAccount.userId,
+          handler: async videoAbuse => {
+            this.blocklistService.blockServerByInstance(videoAbuse.reporterAccount.host)
+              .subscribe(
+                () => {
+                  this.notifier.success(
+                    this.i18n('Server {{host}} muted by the instance.', { host: videoAbuse.reporterAccount.host })
+                  )
                 },
 
                 err => this.notifier.error(err.message)

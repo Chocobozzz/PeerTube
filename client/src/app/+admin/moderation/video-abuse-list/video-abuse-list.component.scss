@@ -1,0 +1,57 @@
+@import 'mixins';
+@import 'miniature';
+
+.video-abuse-video-link {
+  @include disable-outline;
+  position: relative;
+  top: 3px;
+}
+
+.video-abuse-video {
+  display: inline-flex;
+
+  .video-abuse-video-image {
+    @include miniature-thumbnail;
+
+    $image-height: 45px;
+
+    height: $image-height;
+    width: #{(16/9) * $image-height};
+    margin-right: 0.5rem;
+    border-radius: 2px;
+    border: none;
+    background: transparent;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      height: 100%;
+      width: 100%;
+      border-radius: 2px;
+    }
+
+    span {
+      color: var(--inputPlaceholderColor);
+    }
+  }
+
+  .video-abuse-video-text {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 90%;
+    color: var(--mainForegroundColor);
+    line-height: 1rem;
+
+    div .glyphicon {
+      font-size: 80%;
+      color: gray;
+      margin-left: 0.1rem;
+    }
+
+    div + div {
+      font-size: 80%;
+    }
+  }
+}

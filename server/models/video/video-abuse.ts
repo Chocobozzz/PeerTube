@@ -1,4 +1,6 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import {
+  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt, DefaultScope
+} from 'sequelize-typescript'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { VideoAbuse } from '../../../shared/models/videos'
 import {
@@ -14,7 +16,40 @@ import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/const
 import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 import { literal, Op } from 'sequelize'
+import { ThumbnailModel } from './thumbnail'
+import { VideoChannelModel } from './video-channel'
+import { ActorModel } from '../activitypub/actor'
+import { VideoBlacklistModel } from './video-blacklist'
 
+@DefaultScope(() => ({
+  include: [
+    {
+      model: AccountModel,
+      required: true
+    },
+    {
+      model: VideoModel,
+      required: false,
+      include: [
+        {
+          model: ThumbnailModel
+        },
+        {
+          model: VideoChannelModel.unscoped(),
+          include: [
+            {
+              model: ActorModel
+            }
+          ]
+        },
+        {
+          attributes: [ 'id', 'reason', 'unfederated' ],
+          model: VideoBlacklistModel
+        }
+      ]
+    }
+  ]
+}))
 @Table({
   tableName: 'videoAbuse',
   indexes: [
@@ -114,16 +149,8 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
           [Op.notIn]: literal('(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')')
         }
       },
-      include: [
-        {
-          model: AccountModel,
-          required: true
-        },
-        {
-          model: VideoModel,
-          required: false
-        }
-      ]
+      col: 'VideoAbuseModel.id',
+      distinct: true
     }
 
     return VideoAbuseModel.findAndCountAll(query)
@@ -151,7 +178,10 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
         uuid: video.uuid,
         name: video.name,
         nsfw: video.nsfw,
-        deleted: !this.Video
+        deleted: !this.Video,
+        blacklisted: this.Video && this.Video.isBlacklisted(),
+        thumbnailPath: this.Video?.getMiniatureStaticPath(),
+        channel: this.Video?.VideoChannel.toFormattedSummaryJSON() || this.deletedVideo?.channel
       },
       createdAt: this.createdAt
     }
