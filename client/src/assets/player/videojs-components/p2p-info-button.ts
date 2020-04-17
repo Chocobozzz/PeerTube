@@ -1,5 +1,5 @@
 import { PlayerNetworkInfo } from '../peertube-videojs-typings'
-import videojs from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import { bytes } from '../utils'
 
 const Button = videojs.getComponent('Button')

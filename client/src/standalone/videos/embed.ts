@@ -15,14 +15,14 @@ import {
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { PeerTubeEmbedApi } from './embed-api'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 
 type Translations = { [ id: string ]: string }
 
 export class PeerTubeEmbed {
   videoElement: HTMLVideoElement
-  player: VideoJsPlayer
+  player: videojs.Player
   api: PeerTubeEmbedApi = null
   autoplay: boolean
   controls: boolean
@@ -237,7 +237,7 @@ export class PeerTubeEmbed {
       })
     }
 
-    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: VideoJsPlayer) => this.player = player)
+    this.player = await PeertubePlayerManager.initialize(this.mode, options, (player: videojs.Player) => this.player = player)
     this.player.on('customError', (event: any, data: any) => this.handleError(data.err, serverTranslations))
 
     window[ 'videojsPlayer' ] = this.player

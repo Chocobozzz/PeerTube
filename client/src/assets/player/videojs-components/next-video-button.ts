@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 const Button = videojs.getComponent('Button')
 
@@ -9,7 +9,7 @@ export interface NextVideoButtonOptions extends videojs.ComponentOptions {
 class NextVideoButton extends Button {
   private readonly nextVideoButtonOptions: NextVideoButtonOptions
 
-  constructor (player: VideoJsPlayer, options?: NextVideoButtonOptions) {
+  constructor (player: videojs.Player, options?: NextVideoButtonOptions) {
     super(player, options)
 
     this.nextVideoButtonOptions = options

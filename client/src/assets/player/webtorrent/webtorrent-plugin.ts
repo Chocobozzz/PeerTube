@@ -1,5 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
-
+import videojs from 'video.js/dist/alt/video.core.js'
 import * as WebTorrent from 'webtorrent'
 import { renderVideo } from './video-renderer'
 import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
@@ -31,7 +30,7 @@ class WebTorrentPlugin extends Plugin {
 
   private readonly autoplay: boolean = false
   private readonly startTime: number = 0
-  private readonly savePlayerSrcFunction: VideoJsPlayer['src']
+  private readonly savePlayerSrcFunction: videojs.Player['src']
   private readonly videoDuration: number
   private readonly CONSTANTS = {
     INFO_SCHEDULER: 1000, // Don't change this
@@ -69,7 +68,7 @@ class WebTorrentPlugin extends Plugin {
 
   private downloadSpeeds: number[] = []
 
-  constructor (player: VideoJsPlayer, options?: WebtorrentPluginOptions) {
+  constructor (player: videojs.Player, options?: WebtorrentPluginOptions) {
     super(player)
 
     this.startTime = timeToInt(options.startTime)

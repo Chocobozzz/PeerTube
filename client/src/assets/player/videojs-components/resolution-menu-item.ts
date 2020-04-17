@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import { AutoResolutionUpdateData, ResolutionUpdateData } from '../peertube-videojs-typings'
 
 const MenuItem = videojs.getComponent('MenuItem')
@@ -19,7 +19,7 @@ class ResolutionMenuItem extends MenuItem {
   private autoResolutionPossible: boolean
   private currentResolutionLabel: string
 
-  constructor (player: VideoJsPlayer, options?: ResolutionMenuItemOptions) {
+  constructor (player: videojs.Player, options?: ResolutionMenuItemOptions) {
     options.selectable = true
 
     super(player, options)

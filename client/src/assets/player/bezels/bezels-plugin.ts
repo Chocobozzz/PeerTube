@@ -1,11 +1,11 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import './pause-bezel'
 
 const Plugin = videojs.getPlugin('plugin')
 
 class BezelsPlugin extends Plugin {
 
-  constructor (player: VideoJsPlayer, options?: videojs.ComponentOptions) {
+  constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
     super(player)
 
     this.player.ready(() => {

@@ -1,5 +1,5 @@
 import { VideoFile } from '../../../../shared/models/videos'
-import videojs, { VideoJsPlayer, VideoJsPlayerOptions } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import 'videojs-hotkeys'
 import 'videojs-dock'
 import 'videojs-contextmenu-ui'
@@ -99,9 +99,9 @@ export type PeertubePlayerManagerOptions = {
 
 export class PeertubePlayerManager {
   private static playerElementClassName: string
-  private static onPlayerChange: (player: VideoJsPlayer) => void
+  private static onPlayerChange: (player: videojs.Player) => void
 
-  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: VideoJsPlayer) => void) {
+  static async initialize (mode: PlayerMode, options: PeertubePlayerManagerOptions, onPlayerChange: (player: videojs.Player) => void) {
     let p2pMediaLoader: any
 
     this.onPlayerChange = onPlayerChange
@@ -121,7 +121,7 @@ export class PeertubePlayerManager {
 
     const self = this
     return new Promise(res => {
-      videojs(options.common.playerElement, videojsOptions, function (this: VideoJsPlayer) {
+      videojs(options.common.playerElement, videojsOptions, function (this: videojs.Player) {
         const player = this
 
         let alreadyFallback = false
@@ -171,7 +171,7 @@ export class PeertubePlayerManager {
     const videojsOptions = this.getVideojsOptions(mode, options)
 
     const self = this
-    videojs(newVideoElement, videojsOptions, function (this: VideoJsPlayer) {
+    videojs(newVideoElement, videojsOptions, function (this: videojs.Player) {
       const player = this
 
       self.addContextMenu(mode, player, options.common.embedUrl)
@@ -184,7 +184,7 @@ export class PeertubePlayerManager {
     mode: PlayerMode,
     options: PeertubePlayerManagerOptions,
     p2pMediaLoaderModule?: any
-  ): VideoJsPlayerOptions {
+  ): videojs.PlayerOptions {
     const commonOptions = options.common
 
     let autoplay = commonOptions.autoplay
@@ -417,7 +417,7 @@ export class PeertubePlayerManager {
     return children
   }
 
-  private static addContextMenu (mode: PlayerMode, player: VideoJsPlayer, videoEmbedUrl: string) {
+  private static addContextMenu (mode: PlayerMode, player: videojs.Player, videoEmbedUrl: string) {
     const content = [
       {
         label: player.localize('Copy the video URL'),
@@ -427,7 +427,7 @@ export class PeertubePlayerManager {
       },
       {
         label: player.localize('Copy the video URL at the current time'),
-        listener: function (this: VideoJsPlayer) {
+        listener: function (this: videojs.Player) {
           copyToClipboard(buildVideoLink({ startTime: this.currentTime() }))
         }
       },
@@ -442,7 +442,7 @@ export class PeertubePlayerManager {
     if (mode === 'webtorrent') {
       content.push({
         label: player.localize('Copy magnet URI'),
-        listener: function (this: VideoJsPlayer) {
+        listener: function (this: videojs.Player) {
           copyToClipboard(this.webtorrent().getCurrentVideoFile().magnetUri)
         }
       })

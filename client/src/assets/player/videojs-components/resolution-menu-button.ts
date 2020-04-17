@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 import { LoadedQualityData } from '../peertube-videojs-typings'
 import { ResolutionMenuItem } from './resolution-menu-item'
@@ -8,7 +8,7 @@ const MenuButton = videojs.getComponent('MenuButton')
 class ResolutionMenuButton extends MenuButton {
   labelEl_: HTMLElement
 
-  constructor (player: VideoJsPlayer, options?: videojs.MenuButtonOptions) {
+  constructor (player: videojs.Player, options?: videojs.MenuButtonOptions) {
     super(player, options)
 
     this.controlText('Quality')

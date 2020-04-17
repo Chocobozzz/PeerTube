@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 function getMainTemplate (options: any) {
   return `
@@ -50,7 +50,7 @@ class EndCard extends Component {
   suspendedMessage: HTMLElement
   nextButton: HTMLElement
 
-  constructor (player: VideoJsPlayer, options: EndCardOptions) {
+  constructor (player: videojs.Player, options: EndCardOptions) {
     super(player, options)
 
     this.totalTicks = this.options_.timeout / this.interval

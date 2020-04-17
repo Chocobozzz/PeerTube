@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core'
 import './videojs-components/settings-menu-button'
 import {
   PeerTubePluginOptions,
@@ -36,7 +36,7 @@ class PeerTubePlugin extends Plugin {
   private mouseInControlBar = false
   private readonly savedInactivityTimeout: number
 
-  constructor (player: VideoJsPlayer, options?: PeerTubePluginOptions) {
+  constructor (player: videojs.Player, options?: PeerTubePluginOptions) {
     super(player)
 
     this.videoViewUrl = options.videoViewUrl

@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 function getPauseBezel () {
   return `
@@ -34,7 +34,7 @@ const Component = videojs.getComponent('Component')
 class PauseBezel extends Component {
   container: HTMLDivElement
 
-  constructor (player: VideoJsPlayer, options?: videojs.ComponentOptions) {
+  constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
     super(player, options)
 
     player.on('pause', (_: any) => {

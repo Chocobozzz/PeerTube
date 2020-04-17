@@ -1,4 +1,4 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import { P2PMediaLoaderPluginOptions, PlayerNetworkInfo } from '../peertube-videojs-typings'
 import { Engine, initHlsJsPlayer, initVideoJsContribHlsJsPlayer } from 'p2p-media-loader-hlsjs'
 import { Events, Segment } from 'p2p-media-loader-core'
@@ -36,7 +36,7 @@ class P2pMediaLoaderPlugin extends Plugin {
 
   private networkInfoInterval: any
 
-  constructor (player: VideoJsPlayer, options?: P2PMediaLoaderPluginOptions) {
+  constructor (player: videojs.Player, options?: P2PMediaLoaderPluginOptions) {
     super(player)
 
     this.options = options

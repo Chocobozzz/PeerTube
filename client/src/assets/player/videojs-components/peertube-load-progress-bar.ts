@@ -1,10 +1,10 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 const Component = videojs.getComponent('Component')
 
 class PeerTubeLoadProgressBar extends Component {
 
-  constructor (player: VideoJsPlayer, options?: videojs.ComponentOptions) {
+  constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
     super(player, options)
 
     this.on(player, 'progress', this.update)

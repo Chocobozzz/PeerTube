@@ -1,10 +1,10 @@
 import { buildVideoLink } from '../utils'
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 const Button = videojs.getComponent('Button')
 class PeerTubeLinkButton extends Button {
 
-  constructor (player: VideoJsPlayer, options?: videojs.ComponentOptions) {
+  constructor (player: videojs.Player, options?: videojs.ComponentOptions) {
     super(player, options)
   }
 

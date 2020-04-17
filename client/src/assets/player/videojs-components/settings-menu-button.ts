@@ -1,7 +1,7 @@
 // Thanks to Yanko Shterev: https://github.com/yshterev/videojs-settings-menu
 import { SettingsMenuItem } from './settings-menu-item'
 import { toTitleCase } from '../utils'
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 
 import { SettingsDialog } from './settings-dialog'
 import { SettingsPanel } from './settings-panel'
@@ -32,7 +32,7 @@ class SettingsButton extends Button {
 
   private settingsButtonOptions: SettingsButtonOptions
 
-  constructor (player: VideoJsPlayer, options?: SettingsButtonOptions) {
+  constructor (player: videojs.Player, options?: SettingsButtonOptions) {
     super(player, options)
 
     this.settingsButtonOptions = options

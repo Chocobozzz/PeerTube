@@ -1,11 +1,11 @@
-import videojs, { VideoJsPlayer } from 'video.js'
+import videojs from 'video.js/dist/alt/video.core.js'
 import { EndCardOptions } from './end-card'
 
 const Plugin = videojs.getPlugin('plugin')
 
 class UpNextPlugin extends Plugin {
 
-  constructor (player: VideoJsPlayer, options: Partial<EndCardOptions> = {}) {
+  constructor (player: videojs.Player, options: Partial<EndCardOptions> = {}) {
     const settings = {
       next: options.next,
       getTitle: options.getTitle,

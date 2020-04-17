@@ -26,13 +26,12 @@
     "paths": {
       "@app/*": [ "src/app/*" ],
       "@shared/*": [ "../shared/*" ],
-      "video.js": [ "node_modules/video.js/dist/alt/video.core" ],
-      "fs": [ "src/shims/noop" ],
-      "http": [ "src/shims/http" ],
-      "https": [ "src/shims/https" ],
-      "path": [ "src/shims/path" ],
-      "stream": [ "src/shims/noop" ],
-      "crypto": [ "src/shims/noop" ]
+      "fs": [ "src/shims/noop.ts" ],
+      "http": [ "src/shims/http.ts" ],
+      "https": [ "src/shims/https.ts" ],
+      "path": [ "src/shims/path.ts" ],
+      "stream": [ "src/shims/noop.ts" ],
+      "crypto": [ "src/shims/noop.ts" ]
     }
   },
   "angularCompilerOptions": {
