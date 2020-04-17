@@ -231,7 +231,7 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     privacy: body.privacy || VideoPrivacy.PRIVATE,
     duration: 0, // duration will be set by the import job
     channelId: channelId,
-    originallyPublishedAt: importData.originallyPublishedAt
+    originallyPublishedAt: body.originallyPublishedAt || importData.originallyPublishedAt
   }
   const video = new VideoModel(videoData)
   video.url = getVideoActivityPubUrl(video)
