@@ -27,5 +27,10 @@ export type RegisterClientHelpers = {
     confirm?: { value: string, action?: () => void }
   }) => void
 
+  markdownRenderer: {
+    textMarkdownToHTML: (textMarkdown: string) => void
+    enhancedMarkdownToHTML: (enhancedMarkdown: string) => void
+  }
+
   translate: (toTranslate: string) => Promise<string>
 }

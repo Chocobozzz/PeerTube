@@ -15,6 +15,7 @@ import { HttpClient } from '@angular/common/http'
 import { AuthService } from '@app/core/auth'
 import { Notifier } from '@app/core/notification'
 import { RestExtractor } from '@app/shared/rest'
+import { MarkdownService } from '@app/shared/renderer'
 import { PluginType } from '@shared/models/plugins/plugin.type'
 import { PublicServerSetting } from '@shared/models/plugins/public-server.setting'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
@@ -65,6 +66,7 @@ export class PluginService implements ClientHook {
     private router: Router,
     private authService: AuthService,
     private notifier: Notifier,
+    private markdownRenderer: MarkdownService,
     private server: ServerService,
     private zone: NgZone,
     private authHttp: HttpClient,
@@ -295,6 +297,16 @@ export class PluginService implements ClientHook {
         confirm?: { value: string, action?: () => void }
       }) => {
         this.customModal.show(input)
+      },
+
+      markdownRenderer: {
+        textMarkdownToHTML: (textMarkdown: string) => {
+          return this.markdownRenderer.textMarkdownToHTML(textMarkdown)
+        },
+
+        enhancedMarkdownToHTML: (enhancedMarkdown: string) => {
+          return this.markdownRenderer.enhancedMarkdownToHTML(enhancedMarkdown)
+        }
       },
 
       translate: (value: string) => {
