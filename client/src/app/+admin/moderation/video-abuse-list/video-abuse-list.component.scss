@@ -1,6 +1,14 @@
 @import 'mixins';
 @import 'miniature';
 
+.caption {
+  justify-content: flex-end;
+
+  input {
+    @include peertube-input-text(250px);
+  }
+}
+
 .video-abuse-video-link {
   @include disable-outline;
   position: relative;

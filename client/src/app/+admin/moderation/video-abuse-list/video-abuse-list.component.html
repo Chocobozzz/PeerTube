@@ -4,6 +4,17 @@
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
 >
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="ml-auto">
+        <input
+          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+          (keyup)="onSearch($event)"
+        >
+      </div>
+    </div>
+  </ng-template>
+
   <ng-template pTemplate="header">
     <tr> <!-- header -->
       <th style="width: 40px;"></th>
@@ -40,18 +51,14 @@
         </a>
       </td>
 
-      <td>
+      <td *ngIf="!videoAbuse.video.deleted">
         <a [href]="getVideoUrl(videoAbuse)" class="video-abuse-video-link" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="video-abuse-video">
-            <div class="video-abuse-video-image">
-              <img *ngIf="!videoAbuse.video.deleted" [src]="videoAbuse.video.thumbnailPath">
-              <span *ngIf="videoAbuse.video.deleted" i18n>Deleted</span>
-            </div>
+            <div class="video-abuse-video-image"><img [src]="videoAbuse.video.thumbnailPath"></div>
             <div class="video-abuse-video-text">
               <div>
                 {{ videoAbuse.video.name }}
-                <span *ngIf="!videoAbuse.video.deleted && !videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
-                <span *ngIf="videoAbuse.video.deleted" i18n-title title="Video was deleted" class="glyphicon glyphicon-trash"></span>
+                <span *ngIf="!videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
                 <span *ngIf="videoAbuse.video.blacklisted" i18n-title title="Video was blacklisted" class="glyphicon glyphicon-ban-circle"></span>
               </div>
               <div class="text-muted">by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
@@ -60,7 +67,20 @@
         </a>
       </td>
 
-      <td>{{ videoAbuse.createdAt }}</td>
+      <td *ngIf="videoAbuse.video.deleted" class="c-hand" [pRowToggler]="videoAbuse">
+        <div class="video-abuse-video" i18n-title title="Video was deleted">
+          <div class="video-abuse-video-image"><span i18n>Deleted</span></div>
+          <div class="video-abuse-video-text">
+            <div>
+              {{ videoAbuse.video.name }}
+              <span class="glyphicon glyphicon-trash"></span>
+            </div>
+            <div class="text-muted">by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
+          </div>
+        </div>
+      </td>
+
+      <td class="c-hand" [pRowToggler]="videoAbuse">{{ videoAbuse.createdAt }}</td>
 
       <td class="c-hand video-abuse-states" [pRowToggler]="videoAbuse">
         <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>

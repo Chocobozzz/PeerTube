@@ -1,5 +1,5 @@
 import {
-  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt, DefaultScope
+  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt, Scopes
 } from 'sequelize-typescript'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { VideoAbuse } from '../../../shared/models/videos'
@@ -21,34 +21,99 @@ import { VideoChannelModel } from './video-channel'
 import { ActorModel } from '../activitypub/actor'
 import { VideoBlacklistModel } from './video-blacklist'
 
-@DefaultScope(() => ({
-  include: [
-    {
-      model: AccountModel,
-      required: true
-    },
-    {
-      model: VideoModel,
-      required: false,
+export enum ScopeNames {
+  FOR_API = 'FOR_API'
+}
+
+@Scopes(() => ({
+  [ScopeNames.FOR_API]: (options: {
+    search?: string
+    searchReporter?: string
+    searchVideo?: string
+    searchVideoChannel?: string
+    serverAccountId: number
+    userAccountId: any
+  }) => {
+    const search = (sourceField, targetField) => sourceField ? ({
+      [targetField]: {
+        [Op.iLike]: `%${sourceField}%`
+      }
+    }) : {}
+
+    let where = {
+      reporterAccountId: {
+        [Op.notIn]: literal('(' + buildBlockedAccountSQL(options.serverAccountId, options.userAccountId) + ')')
+      }
+    }
+
+    if (options.search) {
+      where = Object.assign(where, {
+        [Op.or]: [
+          {
+            [Op.and]: [
+              { videoId: { [Op.not]: null } },
+              { '$Video.name$': { [Op.iLike]: `%${options.search}%` } }
+            ]
+          },
+          {
+            [Op.and]: [
+              { videoId: { [Op.not]: null } },
+              { '$Video.VideoChannel.name$': { [Op.iLike]: `%${options.search}%` } }
+            ]
+          },
+          {
+            [Op.and]: [
+              { deletedVideo: { [Op.not]: null } },
+              { deletedVideo: { name: { [Op.iLike]: `%${options.search}%` } } }
+            ]
+          },
+          {
+            [Op.and]: [
+              { deletedVideo: { [Op.not]: null } },
+              { deletedVideo: { channel: { displayName: { [Op.iLike]: `%${options.search}%` } } } }
+            ]
+          },
+          { '$Account.name$': { [Op.iLike]: `%${options.search}%` } }
+        ]
+      })
+    }
+
+    console.log(where)
+
+    return {
       include: [
         {
-          model: ThumbnailModel
+          model: AccountModel,
+          required: true,
+          where: { ...search(options.searchReporter, 'name') }
         },
         {
-          model: VideoChannelModel.unscoped(),
+          model: VideoModel,
+          required: false,
+          where: { ...search(options.searchVideo, 'name') },
           include: [
             {
-              model: ActorModel
+              model: ThumbnailModel
+            },
+            {
+              model: VideoChannelModel.unscoped(),
+              where: { ...search(options.searchVideoChannel, 'name') },
+              include: [
+                {
+                  model: ActorModel
+                }
+              ]
+            },
+            {
+              attributes: [ 'id', 'reason', 'unfederated' ],
+              model: VideoBlacklistModel
             }
           ]
-        },
-        {
-          attributes: [ 'id', 'reason', 'unfederated' ],
-          model: VideoBlacklistModel
         }
-      ]
+      ],
+      where
     }
-  ]
+  }
 }))
 @Table({
   tableName: 'videoAbuse',
@@ -134,26 +199,30 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     start: number
     count: number
     sort: string
+    search?: string
     serverAccountId: number
     user?: MUserAccountId
   }) {
-    const { start, count, sort, user, serverAccountId } = parameters
+    const { start, count, sort, search, user, serverAccountId } = parameters
     const userAccountId = user ? user.Account.id : undefined
 
     const query = {
       offset: start,
       limit: count,
       order: getSort(sort),
-      where: {
-        reporterAccountId: {
-          [Op.notIn]: literal('(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')')
-        }
-      },
       col: 'VideoAbuseModel.id',
       distinct: true
     }
 
-    return VideoAbuseModel.findAndCountAll(query)
+    const filters = {
+      search,
+      serverAccountId,
+      userAccountId
+    }
+
+    return VideoAbuseModel
+      .scope({ method: [ ScopeNames.FOR_API, filters ] })
+      .findAndCountAll(query)
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })

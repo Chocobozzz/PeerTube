@@ -69,6 +69,7 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    search: req.query.search,
     serverAccountId: serverActor.Account.id,
     user
   })

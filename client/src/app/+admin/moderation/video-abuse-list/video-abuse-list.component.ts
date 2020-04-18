@@ -16,6 +16,8 @@ import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 import { DomSanitizer } from '@angular/platform-browser'
 import { BlocklistService } from '@app/shared/blocklist'
 import { VideoService } from '@app/shared/video/video.service'
+import { ActivatedRoute } from '@angular/router'
+import { first } from 'rxjs/operators'
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -43,7 +45,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private i18n: I18n,
     private markdownRenderer: MarkdownService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private route: ActivatedRoute,
   ) {
     super()
 
@@ -185,6 +188,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
   ngOnInit () {
     this.initialize()
+
+    this.route.queryParams
+      .pipe(first(params => params.search !== undefined && params.search !== null))
+      .subscribe(params => this.search = params.search)
   }
 
   getIdentifier () {
@@ -253,26 +260,29 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   protected loadData () {
-    return this.videoAbuseService.getVideoAbuses(this.pagination, this.sort)
-               .subscribe(
-                 async resultList => {
-                   this.totalRecords = resultList.total
+    return this.videoAbuseService.getVideoAbuses({
+      pagination: this.pagination,
+      sort: this.sort,
+      search: this.search
+    }).subscribe(
+        async resultList => {
+          this.totalRecords = resultList.total
 
-                   this.videoAbuses = resultList.data
+          this.videoAbuses = resultList.data
 
-                   for (const abuse of this.videoAbuses) {
-                     Object.assign(abuse, {
-                       reasonHtml: await this.toHtml(abuse.reason),
-                       moderationCommentHtml: await this.toHtml(abuse.moderationComment),
-                       embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse)),
-                       reporterAccount: new Account(abuse.reporterAccount)
-                     })
-                   }
+          for (const abuse of this.videoAbuses) {
+            Object.assign(abuse, {
+              reasonHtml: await this.toHtml(abuse.reason),
+              moderationCommentHtml: await this.toHtml(abuse.moderationComment),
+              embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse)),
+              reporterAccount: new Account(abuse.reporterAccount)
+            })
+          }
 
-                 },
+        },
 
-                 err => this.notifier.error(err.message)
-               )
+        err => this.notifier.error(err.message)
+      )
   }
 
   private toHtml (text: string) {
