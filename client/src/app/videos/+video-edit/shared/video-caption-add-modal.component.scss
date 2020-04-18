@@ -7,6 +7,11 @@
 
 .caption-file {
   margin-top: 20px;
+  width: max-content;
+
+  ::ng-deep .root {
+    width: max-content;
+  }
 }
 
 .warning-replace-caption {
