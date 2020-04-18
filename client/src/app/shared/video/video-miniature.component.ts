@@ -65,7 +65,7 @@ export class VideoMiniatureComponent implements OnInit {
     blacklist: true,
     delete: true,
     report: true,
-    duplicate: false
+    duplicate: true
   }
   showActions = false
   serverConfig: ServerConfig
