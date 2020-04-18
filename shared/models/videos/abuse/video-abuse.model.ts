@@ -1,7 +1,7 @@
 import { Account } from '../../actors/index'
 import { VideoConstant } from '../video-constant.model'
 import { VideoAbuseState } from './video-abuse-state.model'
-import { VideoChannelSummary } from '../channel/video-channel.model'
+import { VideoChannel } from '../channel/video-channel.model'
 
 export interface VideoAbuse {
   id: number
@@ -19,8 +19,15 @@ export interface VideoAbuse {
     deleted: boolean
     blacklisted: boolean
     thumbnailPath?: string
-    channel?: VideoChannelSummary
+    channel?: VideoChannel
   }
 
   createdAt: Date
+  updatedAt: Date
+
+  count?: number
+  nth?: number
+
+  countReportsForReporter?: number
+  countReportsForReportee?: number
 }

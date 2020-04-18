@@ -30,9 +30,16 @@
         </a>
       </td>
 
-      <td>{{ booleanToText(videoBlacklist.video.nsfw) }}</td>
-      <td>{{ booleanToText(videoBlacklist.unfederated) }}</td>
-      <td>{{ videoBlacklist.createdAt }}</td>
+      <ng-container *ngIf="videoBlacklist.reason">
+        <td class="c-hand" [pRowToggler]="videoBlacklist">{{ booleanToText(videoBlacklist.video.nsfw) }}</td>
+        <td class="c-hand" [pRowToggler]="videoBlacklist">{{ booleanToText(videoBlacklist.unfederated) }}</td>
+        <td class="c-hand" [pRowToggler]="videoBlacklist">{{ videoBlacklist.createdAt }}</td>
+      </ng-container>
+      <ng-container *ngIf="!videoBlacklist.reason">
+        <td>{{ booleanToText(videoBlacklist.video.nsfw) }}</td>
+        <td>{{ booleanToText(videoBlacklist.unfederated) }}</td>
+        <td>{{ videoBlacklist.createdAt }}</td>
+      </ng-container>
 
       <td class="action-cell">
         <my-action-dropdown i18n-label  placement="bottom-right" label="Actions" [actions]="videoBlacklistActions" [entry]="videoBlacklist"></my-action-dropdown>

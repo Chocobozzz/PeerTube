@@ -46,7 +46,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     private i18n: I18n,
     private markdownRenderer: MarkdownService,
     private sanitizer: DomSanitizer,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {
     super()
 
@@ -223,7 +223,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   getVideoEmbed (videoAbuse: VideoAbuse) {
-    const absoluteAPIUrl = 'http://localhost:9000' || getAbsoluteAPIUrl()
+    const absoluteAPIUrl = 'http://localhost:9000' || getAbsoluteAPIUrl() // TODO
     const embedUrl = buildVideoLink({
       baseUrl: absoluteAPIUrl + '/videos/embed/' + videoAbuse.video.uuid,
       warningTitle: false

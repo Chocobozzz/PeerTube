@@ -7,19 +7,23 @@
   margin-right: 30px;
 }
 
-.moderation-expanded-label {
-  font-weight: $font-semibold;
-  display: inline-block;
-  vertical-align: top;
-  text-align: right;
-}
+.moderation-expanded {
+  font-size: 90%;
 
-.moderation-expanded-text {
-  display: inline-block;
-  word-wrap: break-word;
-
-  ::ng-deep p:last-child {
-    margin-bottom: 0px !important;
+  .moderation-expanded-label {
+    font-weight: $font-semibold;
+    display: inline-block;
+    vertical-align: top;
+    text-align: right;
+  }
+  
+  .moderation-expanded-text {
+    display: inline-flex;
+    word-wrap: break-word;
+  
+    ::ng-deep p:last-child {
+      margin-bottom: 0px !important;
+    }
   }
 }
 
@@ -57,4 +61,10 @@
 
 .chip {
   @include chip;
+}
+
+my-action-dropdown.show {
+  ::ng-deep .dropdown-root {
+    display: block !important;
+  }
 }
