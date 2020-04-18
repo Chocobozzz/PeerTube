@@ -17,11 +17,18 @@ export class VideoAbuseService {
     private restExtractor: RestExtractor
   ) {}
 
-  getVideoAbuses (pagination: RestPagination, sort: SortMeta): Observable<ResultList<VideoAbuse>> {
+  getVideoAbuses (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string
+  }): Observable<ResultList<VideoAbuse>> {
+    const { pagination, sort, search } = options
     const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse'
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<VideoAbuse>>(url, { params })
                .pipe(
