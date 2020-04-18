@@ -11,14 +11,13 @@ import {
 import { AccountModel } from '../account/account'
 import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
-import { VideoAbuseState, Video } from '../../../shared'
+import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 import { literal, Op } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
 import { VideoChannelModel } from './video-channel'
-import { ActorModel } from '../activitypub/actor'
 import { VideoBlacklistModel } from './video-blacklist'
 
 export enum ScopeNames {
@@ -78,9 +77,73 @@ export enum ScopeNames {
       })
     }
 
-    console.log(where)
-
     return {
+      attributes: {
+        include: [
+          [
+            literal(
+              '(' +
+                'SELECT t.count ' +
+                'FROM ( ' +
+                  'SELECT id, ' +
+                         'count(id) OVER (PARTITION BY "videoId") ' +
+                  'FROM "videoAbuse" ' +
+                ') t ' +
+                'WHERE t.id = "VideoAbuseModel".id ' +
+              ')'
+            ),
+            'countReportsForVideo'
+          ],
+          [
+            literal(
+              '(' +
+                'SELECT t.nth ' +
+                'FROM ( ' +
+                  'SELECT id, ' +
+                         'row_number() OVER (PARTITION BY "videoId" ORDER BY "createdAt") AS nth ' +
+                  'FROM "videoAbuse" ' +
+                ') t ' +
+                'WHERE t.id = "VideoAbuseModel".id ' +
+              ')'
+            ),
+            'nthReportForVideo'
+          ],
+          [
+            literal(
+              '(' +
+                'SELECT count("videoAbuse"."id") ' +
+                'FROM "videoAbuse" ' +
+                'INNER JOIN "video" ON "video"."id" = "videoAbuse"."videoId" ' +
+                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+                'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+                'WHERE "account"."id" = "VideoAbuseModel"."reporterAccountId" ' +
+              ')'
+            ),
+            'countReportsForReporter'
+          ],
+          [
+            literal(
+              '(' +
+                'WITH ' +
+                  'ids AS ( ' +
+                    'SELECT "account"."id" ' +
+                    'FROM "account" ' +
+                    'INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ' +
+                    'INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" ' +
+                    'WHERE "video"."id" = "VideoAbuseModel"."videoId" ' +
+                  ') ' +
+                'SELECT count("videoAbuse"."id") ' +
+                'FROM "videoAbuse" ' +
+                'INNER JOIN "video" ON "video"."id" = "videoAbuse"."videoId" ' +
+                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
+                'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
+                'INNER JOIN ids ON "account"."id" = ids.id ' +
+              ')'
+            ),
+            'countReportsForReportee'
+          ]
+        ]
+      },
       include: [
         {
           model: AccountModel,
@@ -96,13 +159,8 @@ export enum ScopeNames {
               model: ThumbnailModel
             },
             {
-              model: VideoChannelModel.unscoped(),
-              where: { ...search(options.searchVideoChannel, 'name') },
-              include: [
-                {
-                  model: ActorModel
-                }
-              ]
+              model: VideoChannelModel.scope([ 'WITH_ACTOR', 'WITH_ACCOUNT' ]),
+              where: { ...search(options.searchVideoChannel, 'name') }
             },
             {
               attributes: [ 'id', 'reason', 'unfederated' ],
@@ -149,7 +207,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   @AllowNull(true)
   @Default(null)
   @Column(DataType.JSONB)
-  deletedVideo: Video
+  deletedVideo: VideoDetails
 
   @CreatedAt
   createdAt: Date
@@ -229,6 +287,11 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
+    const countReportsForVideo = this.get('countReportsForVideo') as number
+    const nthReportForVideo = this.get('nthReportForVideo') as number
+    const countReportsForReporter = this.get('countReportsForReporter') as number
+    const countReportsForReportee = this.get('countReportsForReportee') as number
+
     const video = this.Video
       ? this.Video
       : this.deletedVideo
@@ -250,9 +313,14 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
         deleted: !this.Video,
         blacklisted: this.Video && this.Video.isBlacklisted(),
         thumbnailPath: this.Video?.getMiniatureStaticPath(),
-        channel: this.Video?.VideoChannel.toFormattedSummaryJSON() || this.deletedVideo?.channel
+        channel: this.Video?.VideoChannel.toFormattedJSON() || this.deletedVideo?.channel
       },
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      count: countReportsForVideo || 0,
+      nth: nthReportForVideo || 0,
+      countReportsForReporter: countReportsForReporter || 0,
+      countReportsForReportee: countReportsForReportee || 0
     }
   }
 
