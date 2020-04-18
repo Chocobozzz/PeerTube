@@ -251,7 +251,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoUnblacklistable()
         },
         {
-          label: this.i18n('Duplicate (redundancy)'),
+          label: this.i18n('Mirror'),
           handler: () => this.duplicateVideo(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.duplicate && this.canVideoBeDuplicated(),
           iconName: 'cloud-download'
