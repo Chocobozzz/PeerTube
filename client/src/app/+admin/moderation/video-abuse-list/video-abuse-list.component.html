@@ -39,7 +39,7 @@
           <div class="chip two-lines">
             <img
               class="avatar"
-              [src]="videoAbuse.reporterAccount.avatar.path"
+              [src]="videoAbuse.reporterAccount.avatar?.path"
               (error)="switchToDefaultAvatar($event)"
               alt="Avatar"
             >
@@ -174,6 +174,17 @@
           </div>
         </td>
       </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">
+        <div class="empty-table-message">
+          <ng-container *ngIf="search" i18n>No video abuses found matching current filters.</ng-container>
+          <ng-container *ngIf="!search" i18n>No video abuses found.</ng-container>
+        </div>
+      </td>
+    </tr>
   </ng-template>
 </p-table>
 

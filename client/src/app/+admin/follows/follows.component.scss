@@ -1,4 +1,10 @@
+@import "mixins";
+
 .form-sub-title {
   flex-grow: 0;
   margin-right: 30px;
+}
+
+.empty-table-message {
+  @include empty-state;
 }
