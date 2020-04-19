@@ -7,11 +7,12 @@ export enum VideoBlacklistType {
 
 export interface VideoBlacklist {
   id: number
-  createdAt: Date
-  updatedAt: Date
   unfederated: boolean
   reason?: string
   type: VideoBlacklistType
 
   video: Video
+
+  createdAt: Date
+  updatedAt: Date
 }

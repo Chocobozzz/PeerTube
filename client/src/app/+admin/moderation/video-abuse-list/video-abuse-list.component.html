@@ -52,16 +52,16 @@
       </td>
 
       <td *ngIf="!videoAbuse.video.deleted">
-        <a [href]="getVideoUrl(videoAbuse)" class="video-abuse-video-link" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
-          <div class="video-abuse-video">
-            <div class="video-abuse-video-image">
+        <a [href]="getVideoUrl(videoAbuse)" class="video-table-video-link" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
+          <div class="video-table-video">
+            <div class="video-table-video-image">
               <img [src]="videoAbuse.video.thumbnailPath">
               <span
-                class="video-abuse-video-image-label" *ngIf="videoAbuse.count > 1"
+                class="video-table-video-image-label" *ngIf="videoAbuse.count > 1"
                 i18n-title title="This video has been reported multiple times."
               >{{ videoAbuse.nth }}/{{ videoAbuse.count }}</span>
             </div>
-            <div class="video-abuse-video-text">
+            <div class="video-table-video-text">
               <div>
                 {{ videoAbuse.video.name }}
                 <span *ngIf="!videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
@@ -74,9 +74,9 @@
       </td>
 
       <td *ngIf="videoAbuse.video.deleted" class="c-hand" [pRowToggler]="videoAbuse">
-        <div class="video-abuse-video" i18n-title title="Video was deleted">
-          <div class="video-abuse-video-image"><span i18n>Deleted</span></div>
-          <div class="video-abuse-video-text">
+        <div class="video-table-video" i18n-title title="Video was deleted">
+          <div class="video-table-video-image"><span i18n>Deleted</span></div>
+          <div class="video-table-video-text">
             <div>
               {{ videoAbuse.video.name }}
               <span class="glyphicon glyphicon-trash"></span>
@@ -123,7 +123,7 @@
                       <span class="text-muted">{{ createByString(videoAbuse.reporterAccount) }}</span>
                     </div>
                   </div>
-                  <a routerLink="/admin/moderation/video-abuses/list" class="ml-auto text-muted video-abuse-links" i18n>
+                  <a routerLink="/admin/moderation/video-abuses/list" class="ml-auto text-muted video-details-links" i18n>
                     {videoAbuse.countReportsForReporter, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReporter }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
@@ -142,14 +142,14 @@
                       <span class="text-muted">{{ videoAbuse.video.channel.ownerAccount ? createByString(videoAbuse.video.channel.ownerAccount) : '' }}</span>
                     </div>
                   </div>
-                  <a routerLink="/admin/moderation/video-abuses/list" class="ml-auto text-muted video-abuse-links" *ngIf="!videoAbuse.video.deleted" i18n>
+                  <a routerLink="/admin/moderation/video-abuses/list" class="ml-auto text-muted video-details-links" *ngIf="!videoAbuse.video.deleted" i18n>
                     {videoAbuse.countReportsForReportee, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReportee }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
               </div>
               <div class="d-flex">
                 <span class="col-3 moderation-expanded-label" i18n>Updated</span>
-                <time class="col-9 moderation-expanded-text video-abuse-date-updated">{{ videoAbuse.updatedAt | date: 'medium' }}</time>
+                <time class="col-9 moderation-expanded-text video-details-date-updated">{{ videoAbuse.updatedAt | date: 'medium' }}</time>
               </div>
 
               <!-- report text -->
