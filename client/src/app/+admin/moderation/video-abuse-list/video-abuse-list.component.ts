@@ -223,7 +223,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   }
 
   getVideoEmbed (videoAbuse: VideoAbuse) {
-    const absoluteAPIUrl = 'http://localhost:9000' || getAbsoluteAPIUrl() // TODO
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
     const embedUrl = buildVideoLink({
       baseUrl: absoluteAPIUrl + '/videos/embed/' + videoAbuse.video.uuid,
       warningTitle: false
@@ -262,7 +262,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
   protected loadData () {
     return this.videoAbuseService.getVideoAbuses({
       pagination: this.pagination,
-      sort: this.sort,
+      sort: this.sort,
       search: this.search
     }).subscribe(
         async resultList => {
