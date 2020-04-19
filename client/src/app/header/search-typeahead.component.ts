@@ -36,7 +36,7 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
 
   ngOnInit () {
     this.route.queryParams
-      .pipe(first(params => params.search !== undefined && params.search !== null))
+      .pipe(first(params => this.isOnSearch() && params.search !== undefined && params.search !== null))
       .subscribe(params => this.search = params.search)
     this.serverService.getConfig()
       .subscribe(config => this.serverConfig = config)
@@ -146,11 +146,15 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
     }
   }
 
+  isOnSearch () {
+    return window.location.pathname === '/search'
+  }
+
   doSearch () {
     this.newSearch = false
     const queryParams: Params = {}
 
-    if (window.location.pathname === '/search' && this.route.snapshot.queryParams) {
+    if (this.isOnSearch() && this.route.snapshot.queryParams) {
       Object.assign(queryParams, this.route.snapshot.queryParams)
     }
 

@@ -1,5 +1,5 @@
 <p-table
-  [value]="videoAbuses" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [value]="videoAbuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
@@ -123,7 +123,7 @@
                       <span class="text-muted">{{ createByString(videoAbuse.reporterAccount) }}</span>
                     </div>
                   </div>
-                  <a routerLink="/admin/moderation/video-abuses/list" class="ml-auto text-muted video-details-links" i18n>
+                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': videoAbuse.reporterAccount.displayName }" class="ml-auto text-muted video-details-links" i18n>
                     {videoAbuse.countReportsForReporter, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReporter }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
@@ -142,7 +142,7 @@
                       <span class="text-muted">{{ videoAbuse.video.channel.ownerAccount ? createByString(videoAbuse.video.channel.ownerAccount) : '' }}</span>
                     </div>
                   </div>
-                  <a routerLink="/admin/moderation/video-abuses/list" class="ml-auto text-muted video-details-links" *ngIf="!videoAbuse.video.deleted" i18n>
+                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': videoAbuse.video.channel.ownerAccount.displayName }" class="ml-auto text-muted video-details-links" *ngIf="!videoAbuse.video.deleted" i18n>
                     {videoAbuse.countReportsForReportee, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReportee }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
