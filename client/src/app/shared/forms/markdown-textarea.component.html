@@ -1,4 +1,4 @@
-<div class="root" [ngStyle]="{ 'flex-direction': flexDirection }">
+<div class="root" [ngClass]="{ 'maximized': isMaximized, 'column': flexDirection === 'column' }" [ngStyle]="{ 'flex-direction': flexDirection }">
   <textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="classes"
@@ -22,6 +22,9 @@
         <div [innerHTML]="previewHTML"></div>
       </ng-template>
     </ng-container>
+
+    <my-button *ngIf="!isMaximized" icon="arrows-angle-expand" (click)="onMaximizeClick()"></my-button>
+    <my-button *ngIf="isMaximized" icon="arrows-angle-contract" (click)="onMaximizeClick()"></my-button>
   </div>
 
   <div [ngbNavOutlet]="nav"></div>

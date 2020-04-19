@@ -34,6 +34,7 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   flexDirection = 'column'
   truncatedPreviewHTML = ''
   previewHTML = ''
+  isMaximized = false
 
   private contentChanged = new Subject<string>()
 
@@ -78,6 +79,14 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     this.propagateChange(this.content)
 
     this.contentChanged.next(this.content)
+  }
+
+  onMaximizeClick () {
+    if (this.isMaximized) {
+      this.isMaximized = false
+    } else {
+      this.isMaximized = true
+    }
   }
 
   arePreviewsDisplayed () {

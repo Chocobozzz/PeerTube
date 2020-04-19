@@ -8,12 +8,36 @@
     @include peertube-textarea(100%, 150px);
 
     margin-bottom: 15px;
+    background-color: var(--textareaBackgroundColor);
+    font-family: courier, monospace;
+    font-size: 13px;
+  }
+
+  &.column textarea {
+    margin-bottom: 0px;
+    border-bottom: none;
+    border-bottom-left-radius: unset;
+    border-bottom-right-radius: unset;
   }
 
   .previews {
     max-height: 150px;
     overflow-y: auto;
     flex-grow: 1;
+  }
+
+  &.column .previews {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px dashed #C6C6C6;
+    border-left: 1px solid #C6C6C6;
+    border-right: 1px solid #C6C6C6;
+    border-bottom: 2px solid var(--mainColor);
+
+    @media screen and (max-width: $mobile-view) {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
   }
 
   ::ng-deep {
@@ -26,11 +50,139 @@
       opacity: .7;
     }
 
+    .action-button {
+      margin-left: 5px;
+
+      padding: 0 12px 0 12px;
+
+      @media screen and (max-width: $mobile-view) {
+        display: none;
+      }
+    }
+
     .tab-content {
       min-height: 75px;
+      max-height: 210px;
       padding: 15px;
+      overflow-y: auto;
       font-size: 15px;
       word-wrap: break-word;
+    }
+  }
+
+  &.column {
+    ::ng-deep {
+      .nav-link {
+        &:first-child {
+          margin-left: 15px;
+        }
+
+        @media screen and (max-width: $mobile-view) {
+          width: 100%;
+          margin-left: auto !important;
+          border-radius: unset;
+        }
+      }
+
+      .tab-content {
+        border: 1px solid #C6C6C6;
+        border-top: none;
+        border-bottom-left-radius: 3px;
+        border-bottom-right-radius: 3px;
+      }
+    }
+  }
+
+  &.maximized {
+    @media screen and (min-width: $mobile-view) {
+      flex-direction: row !important;
+      z-index: #{z(header) - 1};
+      position: fixed;
+      top: $header-height;
+      left: $menu-width;
+      width: calc(100% - #{$menu-width});
+      height: calc(100vh - #{$header-height}) !important;
+
+      :host-context(.expanded)  {
+        .root.maximized {
+          left: 0;
+          width: 100%;
+        }
+      }
+
+      textarea, .tab-content  {
+        margin-top: 70px !important;
+        height: calc(100vh - #{$header-height} - 70px) !important;
+        width: 50% !important;
+        overflow-y: auto;
+        border: none;
+        border-radius: unset;
+      }
+
+      textarea {
+        padding: 15px;
+        margin-right: 0 !important;
+        border-right: 1px dashed #C6C6C6;
+        margin-bottom: 0 !important;
+        outline: none;
+        resize: none;
+        scrollbar-color: var(--actionButtonColor) var(--textareaBackgroundColor);
+        &:focus {
+          box-shadow: none;
+        }
+      }
+
+      .tab-content {
+        max-height: none;
+        background-color: var(--mainBackgroundColor);
+        scrollbar-color: var(--actionButtonColor) var(--mainBackgroundColor);
+      }
+
+      .previews {
+        padding-top: 20px;
+        padding-bottom: 20px;
+        position: absolute;
+        background: var(--mainBackgroundColor);
+        width: 100%;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 2px solid var(--mainColor);
+
+        :first-child {
+          margin-left: auto;
+        }
+
+        :last-child {
+          margin-right: $not-expanded-horizontal-margins;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $mobile-view) and (max-width: #{$small-view + 135px}) {
+  .root:not(.maximized)::ng-deep {
+    .previews {
+      flex-wrap: unset;
+    }
+
+    .nav-link {
+      font-size: 70% !important;
+    }
+  }
+}
+
+:host-context(.expanded) {
+  @media screen and (min-width: $mobile-view) and (max-width: #{$small-view + 135px}) {
+    .root::ng-deep {
+      .previews {
+        flex-wrap: wrap;
+      }
+
+      .nav-link {
+        font-size: 85% !important;
+      }
     }
   }
 }
