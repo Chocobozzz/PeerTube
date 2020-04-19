@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
 import { Account } from '@app/shared/account/account.model'
 import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
@@ -17,14 +17,14 @@ import { DomSanitizer } from '@angular/platform-browser'
 import { BlocklistService } from '@app/shared/blocklist'
 import { VideoService } from '@app/shared/video/video.service'
 import { ActivatedRoute } from '@angular/router'
-import { first } from 'rxjs/operators'
+import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'my-video-abuse-list',
   templateUrl: './video-abuse-list.component.html',
   styleUrls: [ '../moderation.component.scss', './video-abuse-list.component.scss' ]
 })
-export class VideoAbuseListComponent extends RestTable implements OnInit {
+export class VideoAbuseListComponent extends RestTable implements OnInit, AfterViewInit {
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
 
   videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
@@ -190,8 +190,16 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
     this.initialize()
 
     this.route.queryParams
-      .pipe(first(params => params.search !== undefined && params.search !== null))
-      .subscribe(params => this.search = params.search)
+      .pipe(filter(params => params.search !== undefined && params.search !== null))
+      .subscribe(params => {
+        this.search = params.search
+        this.setTableFilter(params.search)
+        this.loadData()
+      })
+  }
+
+  ngAfterViewInit () {
+    this.setTableFilter(this.search)
   }
 
   getIdentifier () {
@@ -208,6 +216,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit {
 
   createByString (account: Account) {
     return Account.CREATE_BY_STRING(account.name, account.host)
+  }
+
+  setTableFilter (filter: string) {
+    const filterInput = document.getElementById('table-filter') as HTMLInputElement
+    if (filterInput) filterInput.value = filter
   }
 
   isVideoAbuseAccepted (videoAbuse: VideoAbuse) {
