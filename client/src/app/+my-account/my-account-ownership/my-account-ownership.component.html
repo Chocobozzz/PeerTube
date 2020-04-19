@@ -1,7 +1,7 @@
 <p-table
     [value]="videoChangeOwnerships"
     [lazy]="true"
-    [paginator]="true"
+    [paginator]="totalRecords > 0"
     [totalRecords]="totalRecords"
     [rows]="rowsPerPage"
     [sortField]="sort.field"

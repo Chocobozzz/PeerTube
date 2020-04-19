@@ -51,10 +51,6 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
       )
   }
 
-  httpEnabled () {
-    return window.location.protocol === 'https:'
-  }
-
   addServersToBlock () {
     this.batchDomainsModal.openModal()
   }

@@ -8,7 +8,7 @@
 </div>
 
 <p-table
-  [value]="users" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="users" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [(selection)]="selectedUsers"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate

@@ -154,7 +154,7 @@
 
               <!-- report text -->
               <div class="mt-3 d-flex">
-                <span class="col-3 moderation-expanded-label" i18n>Report</span>
+                <span class="col-3 moderation-expanded-label" i18n>Report #{{ videoAbuse.id }}</span>
                 <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.reasonHtml"></span>
               </div>
               <div class="mt-3 d-flex" *ngIf="videoAbuse.moderationComment">
