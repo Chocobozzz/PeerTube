@@ -38,7 +38,7 @@ export class VideoBlacklistListComponent extends RestTable implements OnInit {
   ngOnInit () {
     this.serverService.getConfig()
         .subscribe(config => {
-          // don't filter if auto-blacklist not enabled as this will be only list
+          // don't filter if auto-blacklist not enabled as this will be the only list
           if (config.autoBlacklist.videos.ofUsers.enabled) {
             this.listBlacklistTypeFilter = VideoBlacklistType.MANUAL
           }
