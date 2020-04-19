@@ -102,7 +102,13 @@ async function updateVideoBlacklistController (req: express.Request, res: expres
 }
 
 async function listBlacklist (req: express.Request, res: express.Response) {
-  const resultList = await VideoBlacklistModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.type)
+  const resultList = await VideoBlacklistModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    type: req.query.type
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

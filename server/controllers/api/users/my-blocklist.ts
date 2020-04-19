@@ -74,7 +74,13 @@ export {
 async function listBlockedAccounts (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
-  const resultList = await AccountBlocklistModel.listForApi(user.Account.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await AccountBlocklistModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    accountId: user.Account.id
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }
@@ -99,7 +105,13 @@ async function unblockAccount (req: express.Request, res: express.Response) {
 async function listBlockedServers (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.User
 
-  const resultList = await ServerBlocklistModel.listForApi(user.Account.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await ServerBlocklistModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    accountId: user.Account.id
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

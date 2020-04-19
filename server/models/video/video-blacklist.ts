@@ -1,5 +1,5 @@
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { getBlacklistSort, SortType, throwIfNotValid } from '../utils'
+import { getBlacklistSort, SortType, throwIfNotValid, searchAttribute } from '../utils'
 import { VideoModel } from './video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
@@ -54,7 +54,15 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   })
   Video: VideoModel
 
-  static listForApi (start: number, count: number, sort: SortType, type?: VideoBlacklistType) {
+  static listForApi (parameters: {
+    start: number
+    count: number
+    sort: SortType
+    search?: string
+    type?: VideoBlacklistType
+  }) {
+    const { start, count, sort, search, type } = parameters
+
     function buildBaseQuery (): FindOptions {
       return {
         offset: start,
@@ -70,6 +78,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       {
         model: VideoModel,
         required: true,
+        where: { ...searchAttribute(search, 'name') },
         include: [
           {
             model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),

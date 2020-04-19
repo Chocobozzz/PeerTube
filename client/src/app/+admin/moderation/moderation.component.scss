@@ -7,6 +7,14 @@
   margin-right: 30px;
 }
 
+.caption {
+  justify-content: flex-end;
+
+  input {
+    @include peertube-input-text(250px);
+  }
+}
+
 .moderation-expanded {
   font-size: 90%;
 

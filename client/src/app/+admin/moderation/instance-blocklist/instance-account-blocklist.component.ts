@@ -7,13 +7,14 @@ import { AccountBlock, BlocklistService } from '@app/shared/blocklist'
 
 @Component({
   selector: 'my-instance-account-blocklist',
-  styleUrls: [ './instance-account-blocklist.component.scss' ],
+  styleUrls: [ '../moderation.component.scss', './instance-account-blocklist.component.scss' ],
   templateUrl: './instance-account-blocklist.component.html'
 })
 export class InstanceAccountBlocklistComponent extends RestTable implements OnInit {
   blockedAccounts: AccountBlock[] = []
   totalRecords = 0
-  rowsPerPage = 10
+  rowsPerPageOptions = [ 20, 50, 100 ]
+  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
@@ -49,7 +50,11 @@ export class InstanceAccountBlocklistComponent extends RestTable implements OnIn
   }
 
   protected loadData () {
-    return this.blocklistService.getInstanceAccountBlocklist(this.pagination, this.sort)
+    return this.blocklistService.getInstanceAccountBlocklist({
+      pagination: this.pagination,
+      sort: this.sort,
+      search: this.search
+    })
       .subscribe(
         resultList => {
           this.blockedAccounts = resultList.data

@@ -1,14 +1,6 @@
 @import 'mixins';
 @import 'miniature';
 
-.caption {
-  justify-content: flex-end;
-
-  input {
-    @include peertube-input-text(250px);
-  }
-}
-
 .video-details-date-updated {
   font-size: 90%;
   margin-top: .1rem;

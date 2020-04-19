@@ -1,9 +1,20 @@
 <p-table
-  [value]="blacklist" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="blacklist" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} blacklisted videos"
 >
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="ml-auto">
+        <input
+          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+          (keyup)="onSearch($event)"
+        >
+      </div>
+    </div>
+  </ng-template>
+
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
@@ -33,7 +44,7 @@
             <div class="video-table-video-text">
               <div>
                 {{ videoBlacklist.video.name }}
-                <span class="glyphicon glyphicon-new-window"></span>
+                <span i18n-title title="Video was blacklisted" class="glyphicon glyphicon-ban-circle"></span>
               </div>
               <div class="text-muted">by {{ videoBlacklist.video.channel?.displayName }} on {{ videoBlacklist.video.channel?.host }} </div>
             </div>
@@ -53,7 +64,10 @@
       </ng-container>
 
       <td class="action-cell">
-        <my-action-dropdown i18n-label  placement="bottom-right" label="Actions" [actions]="videoBlacklistActions" [entry]="videoBlacklist"></my-action-dropdown>
+        <my-action-dropdown
+          [ngClass]="{ 'show': expanded }" placement="bottom-right" container="body"
+          i18n-label label="Actions" [actions]="videoBlacklistActions" [entry]="videoBlacklist"
+        ></my-action-dropdown>
       </td>
     </tr>
   </ng-template>
@@ -61,8 +75,10 @@
   <ng-template pTemplate="rowexpansion" let-videoBlacklist>
     <tr>
       <td class="expand-cell" colspan="6">
-        <span class="col-2 moderation-expanded-label" i18n>Blacklist reason:</span>
-        <span class="col-9 moderation-expanded-text" [innerHTML]="videoBlacklist.reasonHtml"></span>
+        <div class="d-flex moderation-expanded">
+          <span class="col-2 moderation-expanded-label" i18n>Blacklist reason:</span>
+          <span class="col-9 moderation-expanded-text" [innerHTML]="videoBlacklist.reasonHtml"></span>
+        </div>
       </td>
     </tr>
   </ng-template>

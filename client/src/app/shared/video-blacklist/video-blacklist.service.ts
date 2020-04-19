@@ -19,13 +19,19 @@ export class VideoBlacklistService {
     private restExtractor: RestExtractor
   ) {}
 
-  listBlacklist (pagination: RestPagination, sort: SortMeta, type?: VideoBlacklistType): Observable<ResultList<VideoBlacklist>> {
+  listBlacklist (options: {
+    pagination: RestPagination,
+    sort: SortMeta,
+    search?: string
+    type?: VideoBlacklistType
+  }): Observable<ResultList<VideoBlacklist>> {
+    const { pagination, sort, search, type } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (type) {
-      params = params.set('type', type.toString())
-    }
+    if (search) params = params.append('search', search)
+    if (type) params = params.append('type', type.toString())
 
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlacklistService.BASE_VIDEOS_URL + 'blacklist', { params })
                .pipe(

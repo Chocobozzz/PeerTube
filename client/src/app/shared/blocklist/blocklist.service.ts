@@ -76,9 +76,13 @@ export class BlocklistService {
 
   /*********************** Instance -> Account blocklist ***********************/
 
-  getInstanceAccountBlocklist (pagination: RestPagination, sort: SortMeta) {
+  getInstanceAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search: string }) {
+    const { pagination, sort, search } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<AccountBlock>>(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts', { params })
                .pipe(
@@ -104,9 +108,13 @@ export class BlocklistService {
 
   /*********************** Instance -> Server blocklist ***********************/
 
-  getInstanceServerBlocklist (pagination: RestPagination, sort: SortMeta) {
+  getInstanceServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search: string }) {
+    const { pagination, sort, search } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<ServerBlock>>(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/servers', { params })
                .pipe(
