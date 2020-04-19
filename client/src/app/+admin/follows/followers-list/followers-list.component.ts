@@ -9,7 +9,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 @Component({
   selector: 'my-followers-list',
   templateUrl: './followers-list.component.html',
-  styleUrls: [ './followers-list.component.scss' ]
+  styleUrls: [ '../follows.component.scss', './followers-list.component.scss' ]
 })
 export class FollowersListComponent extends RestTable implements OnInit {
   followers: ActorFollow[] = []

@@ -21,7 +21,7 @@
 
   <ng-template pTemplate="header">
     <tr>
-      <th i18n>Instance</th>
+      <th style="width: 100%;" i18n>Instance</th>
       <th style="width: 190px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 100px;"></th> <!-- column for action buttons -->
     </tr>
@@ -38,6 +38,17 @@
       <td>{{ serverBlock.createdAt }}</td>
       <td class="action-cell">
         <button class="unblock-button" (click)="unblockServer(serverBlock)" i18n>Unmute</button>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">
+        <div class="empty-table-message">
+          <ng-container *ngIf="search" i18n>No server found matching current filters.</ng-container>
+          <ng-container *ngIf="!search" i18n>No server found.</ng-container>
+        </div>
       </td>
     </tr>
   </ng-template>

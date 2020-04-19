@@ -82,5 +82,16 @@
       </td>
     </tr>
   </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">
+        <div class="empty-table-message">
+          <ng-container *ngIf="search" i18n>No blacklisted video found matching current filters.</ng-container>
+          <ng-container *ngIf="!search" i18n>No blacklisted video found.</ng-container>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
 </p-table>
 

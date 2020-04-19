@@ -19,7 +19,7 @@
     <tr>
       <th style="width: 40px;"></th>
       <th style="width: 160px;" i18n *ngIf="isDisplayingRemoteVideos()">Strategy</th>
-      <th i18n pSortableColumn="name">Video name <p-sortIcon field="name"></p-sortIcon></th>
+      <th i18n pSortableColumn="name">Video name <p-sortIcon field="name"></p-sortIcon></th >
       <th i18n>Video URL</th>
       <th style="width: 100px;" i18n *ngIf="isDisplayingRemoteVideos()">Total size</th>
       <th style="width: 80px;"></th>
@@ -64,6 +64,17 @@
       <td class="expand-cell" [attr.colspan]="getColspan()">
         <div *ngFor="let playlist of redundancy.redundancies.streamingPlaylists">
           <my-video-redundancy-information [redundancyElement]="playlist"></my-video-redundancy-information>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">
+        <div class="empty-table-message">
+          <ng-container *ngIf="isDisplayingRemoteVideos()" i18n>Your instance doesn't mirror any video.</ng-container>
+          <ng-container *ngIf="!isDisplayingRemoteVideos()" i18n>Your instance has no mirrored videos.</ng-container>
         </div>
       </td>
     </tr>

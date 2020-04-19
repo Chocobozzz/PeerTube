@@ -4,6 +4,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/api'
 import { AccountBlock, BlocklistService } from '@app/shared/blocklist'
+import { Actor } from '@app/shared/actor/actor.model'
 
 @Component({
   selector: 'my-instance-account-blocklist',
@@ -32,6 +33,10 @@ export class InstanceAccountBlocklistComponent extends RestTable implements OnIn
 
   getIdentifier () {
     return 'InstanceAccountBlocklistComponent'
+  }
+
+  switchToDefaultAvatar ($event: Event) {
+    ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
 
   unblockAccount (accountBlock: AccountBlock) {

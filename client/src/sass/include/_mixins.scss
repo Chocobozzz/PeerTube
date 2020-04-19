@@ -876,6 +876,15 @@
   }
 }
 
+@mixin empty-state {
+  min-height: 40vh;
+  max-height: 500px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @mixin admin-sub-header-responsive ($horizontal-margins) {
   flex-direction: column;
 

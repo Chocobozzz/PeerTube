@@ -11,7 +11,7 @@ import { BatchDomainsModalComponent } from '@app/+admin/config/shared/batch-doma
 @Component({
   selector: 'my-followers-list',
   templateUrl: './following-list.component.html',
-  styleUrls: [ './following-list.component.scss' ]
+  styleUrls: [ '../follows.component.scss', './following-list.component.scss' ]
 })
 export class FollowingListComponent extends RestTable implements OnInit {
   @ViewChild('batchDomainsModal') batchDomainsModal: BatchDomainsModalComponent

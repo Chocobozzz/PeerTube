@@ -15,6 +15,10 @@
   }
 }
 
+.empty-table-message {
+  @include empty-state;
+}
+
 .moderation-expanded {
   font-size: 90%;
 
