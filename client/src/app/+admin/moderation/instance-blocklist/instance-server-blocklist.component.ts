@@ -9,7 +9,7 @@ import { BatchDomainsModalComponent } from '@app/+admin/config/shared/batch-doma
 
 @Component({
   selector: 'my-instance-server-blocklist',
-  styleUrls: [ './instance-server-blocklist.component.scss' ],
+  styleUrls: [ '../moderation.component.scss', './instance-server-blocklist.component.scss' ],
   templateUrl: './instance-server-blocklist.component.html'
 })
 export class InstanceServerBlocklistComponent extends RestTable implements OnInit {
@@ -17,7 +17,8 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
 
   blockedServers: ServerBlock[] = []
   totalRecords = 0
-  rowsPerPage = 10
+  rowsPerPageOptions = [ 20, 50, 100 ]
+  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
@@ -72,7 +73,11 @@ export class InstanceServerBlocklistComponent extends RestTable implements OnIni
   }
 
   protected loadData () {
-    return this.blocklistService.getInstanceServerBlocklist(this.pagination, this.sort)
+    return this.blocklistService.getInstanceServerBlocklist({
+      pagination: this.pagination,
+      sort: this.sort,
+      search: this.search
+    })
       .subscribe(
         resultList => {
           this.blockedServers = resultList.data

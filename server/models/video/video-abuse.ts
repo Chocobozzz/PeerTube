@@ -9,7 +9,7 @@ import {
   isVideoAbuseStateValid
 } from '../../helpers/custom-validators/video-abuses'
 import { AccountModel } from '../account/account'
-import { buildBlockedAccountSQL, getSort, throwIfNotValid } from '../utils'
+import { buildBlockedAccountSQL, getSort, throwIfNotValid, searchAttribute } from '../utils'
 import { VideoModel } from './video'
 import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
@@ -17,8 +17,8 @@ import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo }
 import * as Bluebird from 'bluebird'
 import { literal, Op } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
-import { VideoChannelModel } from './video-channel'
 import { VideoBlacklistModel } from './video-blacklist'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API'
@@ -33,12 +33,6 @@ export enum ScopeNames {
     serverAccountId: number
     userAccountId: any
   }) => {
-    const search = (sourceField, targetField) => sourceField ? ({
-      [targetField]: {
-        [Op.iLike]: `%${sourceField}%`
-      }
-    }) : {}
-
     let where = {
       reporterAccountId: {
         [Op.notIn]: literal('(' + buildBlockedAccountSQL(options.serverAccountId, options.userAccountId) + ')')
@@ -148,19 +142,19 @@ export enum ScopeNames {
         {
           model: AccountModel,
           required: true,
-          where: { ...search(options.searchReporter, 'name') }
+          where: { ...searchAttribute(options.searchReporter, 'name') }
         },
         {
           model: VideoModel,
           required: false,
-          where: { ...search(options.searchVideo, 'name') },
+          where: { ...searchAttribute(options.searchVideo, 'name') },
           include: [
             {
               model: ThumbnailModel
             },
             {
-              model: VideoChannelModel.scope([ 'WITH_ACTOR', 'WITH_ACCOUNT' ]),
-              where: { ...search(options.searchVideoChannel, 'name') }
+              model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
+              where: { ...searchAttribute(options.searchVideoChannel, 'name') }
             },
             {
               attributes: [ 'id', 'reason', 'unfederated' ],

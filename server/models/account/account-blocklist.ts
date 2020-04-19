@@ -1,6 +1,6 @@
 import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { AccountModel } from './account'
-import { getSort } from '../utils'
+import { getSort, searchAttribute } from '../utils'
 import { AccountBlock } from '../../../shared/models/blocklist'
 import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
@@ -111,15 +111,35 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
     return AccountBlocklistModel.findOne(query)
   }
 
-  static listForApi (accountId: number, start: number, count: number, sort: string) {
+  static listForApi (parameters: {
+    start: number
+    count: number
+    sort: string
+    search?: string
+    accountId: number
+  }) {
+    const { start, count, sort, search, accountId } = parameters
+
     const query = {
       offset: start,
       limit: count,
-      order: getSort(sort),
-      where: {
-        accountId
-      }
+      order: getSort(sort)
     }
+
+    const where = {
+      accountId
+    }
+
+    if (search) {
+      Object.assign(where, {
+        [Op.or]: [
+          { ...searchAttribute(search, '$BlockedAccount.name$') },
+          { ...searchAttribute(search, '$BlockedAccount.Actor.url$') }
+        ]
+      })
+    }
+
+    Object.assign(query, { where })
 
     return AccountBlocklistModel
       .scope([ ScopeNames.WITH_ACCOUNTS ])

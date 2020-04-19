@@ -1,7 +1,7 @@
 import { Model, Sequelize } from 'sequelize-typescript'
 import validator from 'validator'
 import { Col } from 'sequelize/types/lib/utils'
-import { literal, OrderItem } from 'sequelize'
+import { literal, OrderItem, Op } from 'sequelize'
 
 type Primitive = string | Function | number | boolean | Symbol | undefined | null
 type DeepOmitHelper<T, K extends keyof T> = {
@@ -207,6 +207,16 @@ function buildDirectionAndField (value: string) {
   return { direction, field }
 }
 
+function searchAttribute (sourceField, targetField) {
+  return sourceField
+    ? {
+      [targetField]: {
+        [Op.iLike]: `%${sourceField}%`
+      }
+    }
+    : {}
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -228,7 +238,8 @@ export {
   parseAggregateResult,
   getFollowsSort,
   buildDirectionAndField,
-  createSafeIn
+  createSafeIn,
+  searchAttribute
 }
 
 // ---------------------------------------------------------------------------

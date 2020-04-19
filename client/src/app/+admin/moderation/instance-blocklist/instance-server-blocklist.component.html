@@ -1,12 +1,18 @@
 <p-table
-  [value]="blockedServers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="blockedServers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} muted instances"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <a class="ml-auto block-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
+      <div class="ml-auto">
+        <input
+          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+          (keyup)="onSearch($event)"
+        >
+      </div>
+      <a class="ml-2 block-button" (click)="addServersToBlock()" (key.enter)="addServersToBlock()">
         <my-global-icon iconName="add"></my-global-icon>
         <ng-container i18n>Mute domain</ng-container>
       </a>

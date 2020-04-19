@@ -1,9 +1,19 @@
 <p-table
-  [value]="blockedAccounts" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="blockedAccounts" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} muted accounts"
 >
+  <ng-template pTemplate="caption">
+    <div class="caption">
+      <div class="ml-auto">
+        <input
+          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+          (keyup)="onSearch($event)"
+        >
+      </div>
+    </div>
+  </ng-template>
 
   <ng-template pTemplate="header">
     <tr>
