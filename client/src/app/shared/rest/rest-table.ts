@@ -11,7 +11,7 @@ export abstract class RestTable {
   abstract sort: SortMeta
   abstract pagination: RestPagination
 
-  protected search: string
+  search: string
   private searchStream: Subject<string>
 
   abstract getIdentifier (): string
