@@ -18,7 +18,8 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   following: ActorFollow[] = []
   totalRecords = 0
-  rowsPerPage = 10
+  rowsPerPageOptions = [ 20, 50, 100 ]
+  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
@@ -41,6 +42,10 @@ export class FollowingListComponent extends RestTable implements OnInit {
 
   addDomainsToFollow () {
     this.batchDomainsModal.openModal()
+  }
+
+  httpEnabled () {
+    return window.location.protocol === 'https:'
   }
 
   async addFollowing (hosts: string[]) {

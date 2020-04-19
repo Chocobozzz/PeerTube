@@ -14,7 +14,8 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class FollowersListComponent extends RestTable implements OnInit {
   followers: ActorFollow[] = []
   totalRecords = 0
-  rowsPerPage = 10
+  rowsPerPageOptions = [ 20, 50, 100 ]
+  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 

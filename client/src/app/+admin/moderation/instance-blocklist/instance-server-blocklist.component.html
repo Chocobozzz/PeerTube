@@ -1,5 +1,5 @@
 <p-table
-  [value]="blockedServers" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [value]="blockedServers" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} muted instances"
@@ -54,10 +54,4 @@
   </ng-template>
 </p-table>
 
-<my-batch-domains-modal #batchDomainsModal i18n-action action="Mute domains" (domains)="onDomainsToBlock($event)">
-  <ng-container ngProjectAs="warning">
-    <div i18n *ngIf="httpEnabled() === false"  class="alert alert-warning">
-      It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
-    </div>
-  </ng-container>
-</my-batch-domains-modal>
+<my-batch-domains-modal #batchDomainsModal i18n-action action="Mute domains" (domains)="onDomainsToBlock($event)"></my-batch-domains-modal>

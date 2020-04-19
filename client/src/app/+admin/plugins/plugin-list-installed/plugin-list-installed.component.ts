@@ -89,10 +89,10 @@ export class PluginListInstalledComponent implements OnInit {
 
   getNoResultMessage () {
     if (this.pluginType === PluginType.PLUGIN) {
-      return this.i18n('You don\'t have plugins installed yet.')
+      return this.i18n("You don't have plugins installed yet.")
     }
 
-    return this.i18n('You don\'t have themes installed yet.')
+    return this.i18n("You don't have themes installed yet.")
   }
 
   isUpdateAvailable (plugin: PeerTubePlugin) {

@@ -19,7 +19,7 @@
 </div>
 
 <p-table
-  [value]="jobs" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="uniqId"
+  [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="uniqId"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [first]="pagination.start"
   [tableStyle]="{'table-layout':'auto'}"
 >

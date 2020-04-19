@@ -12,7 +12,7 @@
 </div>
 
 <p-table
-  [value]="videoRedundancies" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="videoRedundancies" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
 >
   <ng-template pTemplate="header">

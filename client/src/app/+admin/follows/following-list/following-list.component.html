@@ -1,6 +1,8 @@
 <p-table
-  [value]="following" [lazy]="true" [paginator]="true" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="following" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} hosts"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
@@ -29,7 +31,12 @@
 
   <ng-template pTemplate="body" let-follow>
     <tr>
-      <td>{{ follow.following.host }}</td>
+      <td>
+        <a [href]="'https://' + follow.following.host" i18n-title title="Open instance in a new tab" target="_blank" rel="noopener noreferrer">
+          {{ follow.following.host }}
+          <span class="glyphicon glyphicon-new-window"></span>
+        </a>
+      </td>
 
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
       <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
@@ -51,11 +58,17 @@
       <td colspan="6">
         <div class="empty-table-message">
           <ng-container *ngIf="search" i18n>No host found matching current filters.</ng-container>
-          <ng-container *ngIf="!search" i18n>Your instance is not follwing any host.</ng-container>
+          <ng-container *ngIf="!search" i18n>Your instance is not following anyone.</ng-container>
         </div>
       </td>
     </tr>
   </ng-template>
 </p-table>
 
-<my-batch-domains-modal #batchDomainsModal i18n-action action="Follow domains" (domains)="addFollowing($event)"></my-batch-domains-modal>
+<my-batch-domains-modal #batchDomainsModal i18n-action action="Follow domains" (domains)="addFollowing($event)">
+  <ng-container ngProjectAs="warning">
+    <div i18n *ngIf="httpEnabled() === false"  class="alert alert-warning">
+      It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
+    </div>
+  </ng-container>
+</my-batch-domains-modal>
