@@ -38,6 +38,8 @@ body {
   --inputBackgroundColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
 
+  --textareaBackgroundColor: #{$textarea-background-color};
+
   --actionButtonColor: #{$grey-foreground-color};
   --supportButtonBackgroundColor: #{transparent};
   --supportButtonColor: #{var(--actionButtonColor)};

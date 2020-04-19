@@ -68,6 +68,8 @@ $theater-bottom-space: 115px;
 $input-background-color: $bg-color;
 $input-placeholder-color: #898989;
 
+$textarea-background-color: $grey-background-hover-color;
+
 $sub-menu-margin-bottom: 30px;
 $sub-menu-margin-bottom-small-view: 10px;
 
@@ -94,6 +96,8 @@ $variables: (
 
   --inputBackgroundColor: var(--inputBackgroundColor),
   --inputPlaceholderColor: var(--inputPlaceholderColor),
+
+  --textareaBackgroundColor: var(--textareaBackgroundColor),
 
   --actionButtonColor: var(--actionButtonColor),
   --supportButtonColor: var(--supportButtonColor),
