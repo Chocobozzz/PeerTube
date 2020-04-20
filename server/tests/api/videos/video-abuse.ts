@@ -13,7 +13,8 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   updateVideoAbuse,
-  uploadVideo
+  uploadVideo,
+  removeVideo
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -97,6 +98,11 @@ describe('Test video abuses', function () {
     expect(abuse.reporterAccount.name).to.equal('root')
     expect(abuse.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse.video.id).to.equal(servers[0].video.id)
+    expect(abuse.video.channel).to.exist
+    expect(abuse.count).to.equal(1)
+    expect(abuse.nth).to.equal(1)
+    expect(abuse.countReportsForReporter).to.equal(1)
+    expect(abuse.countReportsForReportee).to.equal(1)
 
     const res2 = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
     expect(res2.body.total).to.equal(0)
@@ -128,6 +134,8 @@ describe('Test video abuses', function () {
     expect(abuse1.state.id).to.equal(VideoAbuseState.PENDING)
     expect(abuse1.state.label).to.equal('Pending')
     expect(abuse1.moderationComment).to.be.null
+    expect(abuse1.count).to.equal(1)
+    expect(abuse1.nth).to.equal(1)
 
     const abuse2: VideoAbuse = res1.body.data[1]
     expect(abuse2.reason).to.equal('my super bad reason 2')
@@ -218,6 +226,26 @@ describe('Test video abuses', function () {
 
       const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
       expect(res.body.total).to.equal(3)
+    }
+  })
+
+  it('Should keep the video abuse when deleting the video', async function () {
+    this.timeout(10000)
+
+    await removeVideo(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid)
+
+    await waitJobs(servers)
+
+    {
+      const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
+      expect(res.body.total).to.equal(2)
+      expect(res.body.data.length).to.equal(2)
+      expect(res.body.data[0].id).to.equal(abuseServer2.id)
+
+      const abuse: VideoAbuse = res.body.data[1]
+      expect(abuse.video.deleted).to.be.true
+      expect(abuse.video.id).to.equal(abuseServer2.video.id)
+      expect(abuse.video.channel).to.exist
     }
   })
 
