@@ -16,7 +16,7 @@ import { move, remove, stat } from 'fs-extra'
 import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoMiniatureFromUrl, generateVideoMiniature } from '../../thumbnail'
+import { generateVideoMiniature } from '../../thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { MThumbnail } from '../../../typings/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
@@ -27,9 +27,8 @@ type VideoImportYoutubeDLPayload = {
   type: 'youtube-dl'
   videoImportId: number
 
-  thumbnailUrl: string
-  downloadThumbnail: boolean
-  downloadPreview: boolean
+  generateThumbnail: boolean
+  generatePreview: boolean
 
   fileExt?: string
 }
@@ -64,9 +63,6 @@ async function processTorrentImport (job: Bull.Job, payload: VideoImportTorrentP
   const options = {
     videoImportId: payload.videoImportId,
 
-    downloadThumbnail: false,
-    downloadPreview: false,
-
     generateThumbnail: true,
     generatePreview: true
   }
@@ -84,12 +80,8 @@ async function processYoutubeDLImport (job: Bull.Job, payload: VideoImportYoutub
   const options = {
     videoImportId: videoImport.id,
 
-    downloadThumbnail: payload.downloadThumbnail,
-    downloadPreview: payload.downloadPreview,
-    thumbnailUrl: payload.thumbnailUrl,
-
-    generateThumbnail: false,
-    generatePreview: false
+    generateThumbnail: payload.generateThumbnail,
+    generatePreview: payload.generatePreview
   }
 
   return processFile(() => downloadYoutubeDLVideo(videoImport.targetUrl, payload.fileExt, VIDEO_IMPORT_TIMEOUT), videoImport, options)
@@ -106,10 +98,6 @@ async function getVideoImportOrDie (videoImportId: number) {
 
 type ProcessFileOptions = {
   videoImportId: number
-
-  downloadThumbnail: boolean
-  downloadPreview: boolean
-  thumbnailUrl?: string
 
   generateThumbnail: boolean
   generatePreview: boolean
@@ -155,29 +143,13 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
 
     // Process thumbnail
     let thumbnailModel: MThumbnail
-    if (options.downloadThumbnail && options.thumbnailUrl) {
-      try {
-        thumbnailModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.MINIATURE)
-      } catch (err) {
-        logger.warn('Cannot generate video thumbnail %s for %s.', options.thumbnailUrl, videoImportWithFiles.Video.url, { err })
-      }
-    }
-
-    if (!thumbnailModel && (options.generateThumbnail || options.downloadThumbnail)) {
+    if (options.generateThumbnail) {
       thumbnailModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.MINIATURE)
     }
 
     // Process preview
     let previewModel: MThumbnail
-    if (options.downloadPreview && options.thumbnailUrl) {
-      try {
-        previewModel = await createVideoMiniatureFromUrl(options.thumbnailUrl, videoImportWithFiles.Video, ThumbnailType.PREVIEW)
-      } catch (err) {
-        logger.warn('Cannot generate video preview %s for %s.', options.thumbnailUrl, videoImportWithFiles.Video.url, { err })
-      }
-    }
-
-    if (!previewModel && (options.generatePreview || options.downloadPreview)) {
+    if (options.generatePreview) {
       previewModel = await generateVideoMiniature(videoImportWithFiles.Video, videoFile, ThumbnailType.PREVIEW)
     }
 

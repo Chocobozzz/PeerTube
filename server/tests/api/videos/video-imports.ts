@@ -19,6 +19,7 @@ import {
 } from '../../../../shared/extra-utils'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { getMagnetURI, getMyVideoImports, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
+import { testImage } from '../../../../shared/extra-utils/miscs/miscs'
 
 const expect = chai.expect
 
@@ -118,6 +119,10 @@ describe('Test video imports', function () {
       const attributes = immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() })
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       expect(res.body.video.name).to.equal('small video - youtube')
+      expect(res.body.video.thumbnailPath).to.equal(`/static/thumbnails/${res.body.video.uuid}.jpg`)
+      expect(res.body.video.previewPath).to.equal(`/static/previews/${res.body.video.uuid}.jpg`)
+      await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
+      await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
 
       const resCaptions = await listVideoCaptions(servers[0].url, res.body.video.id)
       const videoCaptions: VideoCaption[] = resCaptions.body.data

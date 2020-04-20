@@ -23,7 +23,7 @@ import { move, readFile } from 'fs-extra'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { createVideoMiniatureFromExisting } from '../../../lib/thumbnail'
+import { createVideoMiniatureFromExisting, createVideoMiniatureFromUrl } from '../../../lib/thumbnail'
 import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import {
   MChannelAccountDefault,
@@ -153,8 +153,25 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
 
   const video = buildVideo(res.locals.videoChannel.id, body, youtubeDLInfo)
 
-  const thumbnailModel = await processThumbnail(req, video)
-  const previewModel = await processPreview(req, video)
+  let thumbnailModel: MThumbnail
+
+  // Process video thumbnail from request.files
+  thumbnailModel = await processThumbnail(req, video)
+
+  // Process video thumbnail from url if processing from request.files failed
+  if (!thumbnailModel) {
+    thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
+  }
+
+  let previewModel: MThumbnail
+
+  // Process video preview from request.files
+  previewModel = await processPreview(req, video)
+
+  // Process video preview from url if processing from request.files failed
+  if (!previewModel) {
+    previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
+  }
 
   const tags = body.tags || youtubeDLInfo.tags
   const videoImportAttributes = {
@@ -200,9 +217,8 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   const payload = {
     type: 'youtube-dl' as 'youtube-dl',
     videoImportId: videoImport.id,
-    thumbnailUrl: youtubeDLInfo.thumbnailUrl,
-    downloadThumbnail: !thumbnailModel,
-    downloadPreview: !previewModel,
+    generateThumbnail: !thumbnailModel,
+    generatePreview: !previewModel,
     fileExt: youtubeDLInfo.fileExt
       ? `.${youtubeDLInfo.fileExt}`
       : '.mp4'
@@ -259,6 +275,24 @@ async function processPreview (req: express.Request, video: VideoModel) {
   }
 
   return undefined
+}
+
+async function processThumbnailFromUrl (url: string, video: VideoModel) {
+  try {
+    return createVideoMiniatureFromUrl(url, video, ThumbnailType.MINIATURE)
+  } catch (err) {
+    logger.warn('Cannot generate video thumbnail %s for %s.', url, video.url, { err })
+    return undefined
+  }
+}
+
+async function processPreviewFromUrl (url: string, video: VideoModel) {
+  try {
+    return createVideoMiniatureFromUrl(url, video, ThumbnailType.PREVIEW)
+  } catch (err) {
+    logger.warn('Cannot generate video preview %s for %s.', url, video.url, { err })
+    return undefined
+  }
 }
 
 function insertIntoDB (parameters: {

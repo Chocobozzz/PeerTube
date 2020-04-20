@@ -11,7 +11,7 @@ import { VideoEdit } from '@app/shared/video/video-edit.model'
 import { FormValidatorService } from '@app/shared'
 import { VideoCaptionService } from '@app/shared/video-caption'
 import { VideoImportService } from '@app/shared/video-import'
-import { scrollToTop } from '@app/shared/misc/utils'
+import { scrollToTop, getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 import { switchMap, map } from 'rxjs/operators'
 
 @Component({
@@ -95,12 +95,22 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
             this.isImportingVideo = false
             this.hasImportedVideo = true
 
+            const absoluteAPIUrl = getAbsoluteAPIUrl()
+
+            const thumbnailUrl = video.thumbnailPath
+              ? absoluteAPIUrl + video.thumbnailPath
+              : null
+
+            const previewUrl = video.previewPath
+              ? absoluteAPIUrl + video.previewPath
+              : null
+
             this.video = new VideoEdit(Object.assign(video, {
               commentsEnabled: videoUpdate.commentsEnabled,
               downloadEnabled: videoUpdate.downloadEnabled,
               support: null,
-              thumbnailUrl: null,
-              previewUrl: null
+              thumbnailUrl,
+              previewUrl
             }))
 
             this.videoCaptions = videoCaptions
@@ -147,5 +157,26 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
 
   private hydrateFormFromVideo () {
     this.form.patchValue(this.video.toFormPatch())
+
+    const objects = [
+      {
+        url: 'thumbnailUrl',
+        name: 'thumbnailfile'
+      },
+      {
+        url: 'previewUrl',
+        name: 'previewfile'
+      }
+    ]
+
+    for (const obj of objects) {
+      fetch(this.video[obj.url])
+        .then(response => response.blob())
+        .then(data => {
+          this.form.patchValue({
+            [ obj.name ]: data
+          })
+        })
+    }
   }
 }
