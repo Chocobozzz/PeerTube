@@ -321,6 +321,10 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
   if (options.isCount !== true) {
 
     if (exists(options.sort)) {
+      if (options.sort === '-originallyPublishedAt' || options.sort === 'originallyPublishedAt') {
+        attributes.push('COALESCE("video"."originallyPublishedAt", "video"."publishedAt") AS "publishedAtForOrder"')
+      }
+
       order = buildOrder(model, options.sort)
       suffix += `${order} `
     }
@@ -365,6 +369,8 @@ function buildOrder (model: typeof Model, value: string) {
 
   if (field.toLowerCase() === 'match') { // Search
     firstSort = '"similarity"'
+  } else if (field === 'originallyPublishedAt') {
+    firstSort = '"publishedAtForOrder"'
   } else if (field.includes('.')) {
     firstSort = field
   } else {

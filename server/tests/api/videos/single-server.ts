@@ -34,6 +34,7 @@ const expect = chai.expect
 describe('Test a single server', function () {
   let server: ServerInfo = null
   let videoId = -1
+  let videoId2 = -1
   let videoUUID = ''
   let videosListBase: any[] = null
 
@@ -237,12 +238,11 @@ describe('Test a single server', function () {
   it('Should upload 6 videos', async function () {
     this.timeout(25000)
 
-    const videos = [
+    const videos = new Set([
       'video_short.mp4', 'video_short.ogv', 'video_short.webm',
       'video_short1.webm', 'video_short2.webm', 'video_short3.webm'
-    ]
+    ])
 
-    const tasks: Promise<any>[] = []
     for (const video of videos) {
       const videoAttributes = {
         name: video + ' name',
@@ -255,11 +255,8 @@ describe('Test a single server', function () {
         fixture: video
       }
 
-      const p = uploadVideo(server.url, server.accessToken, videoAttributes)
-      tasks.push(p)
+      await uploadVideo(server.url, server.accessToken, videoAttributes)
     }
-
-    await Promise.all(tasks)
   })
 
   it('Should have the correct durations', async function () {
@@ -345,6 +342,7 @@ describe('Test a single server', function () {
     expect(videos[5].name).to.equal('video_short1.webm name')
 
     videoId = videos[3].uuid
+    videoId2 = videos[5].uuid
   })
 
   it('Should list and sort by trending in descending order', async function () {
@@ -431,6 +429,43 @@ describe('Test a single server', function () {
 
     expect(video.likes).to.equal(0)
     expect(video.dislikes).to.equal(1)
+  })
+
+  it('Should sort by originallyPublishedAt', async function () {
+    {
+
+      {
+        const now = new Date()
+        const attributes = { originallyPublishedAt: now.toISOString() }
+        await updateVideo(server.url, server.accessToken, videoId, attributes)
+
+        const res = await getVideosListSort(server.url, '-originallyPublishedAt')
+        const names = res.body.data.map(v => v.name)
+
+        expect(names[0]).to.equal('my super video updated')
+        expect(names[1]).to.equal('video_short2.webm name')
+        expect(names[2]).to.equal('video_short1.webm name')
+        expect(names[3]).to.equal('video_short.webm name')
+        expect(names[4]).to.equal('video_short.ogv name')
+        expect(names[5]).to.equal('video_short.mp4 name')
+      }
+
+      {
+        const now = new Date()
+        const attributes = { originallyPublishedAt: now.toISOString() }
+        await updateVideo(server.url, server.accessToken, videoId2, attributes)
+
+        const res = await getVideosListSort(server.url, '-originallyPublishedAt')
+        const names = res.body.data.map(v => v.name)
+
+        expect(names[0]).to.equal('video_short1.webm name')
+        expect(names[1]).to.equal('my super video updated')
+        expect(names[2]).to.equal('video_short2.webm name')
+        expect(names[3]).to.equal('video_short.webm name')
+        expect(names[4]).to.equal('video_short.ogv name')
+        expect(names[5]).to.equal('video_short.mp4 name')
+      }
+    }
   })
 
   after(async function () {
