@@ -119,6 +119,10 @@ describe('Test video imports', function () {
       const attributes = immutableAssign(baseAttributes, { targetUrl: getYoutubeVideoUrl() })
       const res = await importVideo(servers[0].url, servers[0].accessToken, attributes)
       expect(res.body.video.name).to.equal('small video - youtube')
+      expect(res.body.video.thumbnailPath).to.equal(`/static/thumbnails/${res.body.video.uuid}.jpg`)
+      expect(res.body.video.previewPath).to.equal(`/static/previews/${res.body.video.uuid}.jpg`)
+      await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
+      await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
 
       const resCaptions = await listVideoCaptions(servers[0].url, res.body.video.id)
       const videoCaptions: VideoCaption[] = resCaptions.body.data
@@ -157,11 +161,6 @@ C'est un sous-titre français
 
 00:00:10.000 --> 00:00:14.000
 Ajouter un sous-titre est vraiment facile`)
-
-      expect(res.body.video.thumbnailPath).to.equal(`/static/thumbnails/${res.body.video.uuid}.jpg`)
-      expect(res.body.video.previewPath).to.equal(`/static/previews/${res.body.video.uuid}.jpg`)
-      await testImage(servers[0].url, 'video_import_thumbnail', res.body.video.thumbnailPath)
-      await testImage(servers[0].url, 'video_import_preview', res.body.video.previewPath)
     }
 
     {
