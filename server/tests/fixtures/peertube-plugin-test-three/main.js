@@ -5,7 +5,9 @@ async function register ({
   storageManager,
   videoCategoryManager,
   videoLicenceManager,
-  videoLanguageManager
+  videoLanguageManager,
+  videoPrivacyManager,
+  playlistPrivacyManager
 }) {
   videoLanguageManager.addLanguage('al_bhed', 'Al Bhed')
   videoLanguageManager.addLanguage('al_bhed2', 'Al Bhed 2')
@@ -21,6 +23,9 @@ async function register ({
   videoLicenceManager.addLicence(43, 'High best licence')
   videoLicenceManager.deleteLicence(1) // Attribution
   videoLicenceManager.deleteLicence(7) // Public domain
+
+  videoPrivacyManager.deletePrivacy(2)
+  playlistPrivacyManager.deletePlaylistPrivacy(3)
 }
 
 async function unregister () {

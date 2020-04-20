@@ -7,6 +7,8 @@ import { PluginVideoLanguageManager } from '../../../shared/models/plugins/plugi
 import { PluginVideoLicenceManager } from '../../../shared/models/plugins/plugin-video-licence-manager.model'
 import { Logger } from 'winston'
 import { Router } from 'express'
+import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
+import { PluginPlaylistPrivacyManager } from '@shared/models/plugins/plugin-playlist-privacy-manager.model'
 
 export type PeerTubeHelpers = {
   logger: Logger
@@ -32,6 +34,9 @@ export type RegisterServerOptions = {
   videoCategoryManager: PluginVideoCategoryManager
   videoLanguageManager: PluginVideoLanguageManager
   videoLicenceManager: PluginVideoLicenceManager
+
+  videoPrivacyManager: PluginVideoPrivacyManager
+  playlistPrivacyManager: PluginPlaylistPrivacyManager
 
   // Get plugin router to create custom routes
   // Base routes of this router are

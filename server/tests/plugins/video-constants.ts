@@ -4,17 +4,18 @@ import * as chai from 'chai'
 import 'mocha'
 import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
 import {
+  createVideoPlaylist,
   getPluginTestPath,
   getVideo,
   getVideoCategories,
   getVideoLanguages,
-  getVideoLicences,
+  getVideoLicences, getVideoPlaylistPrivacies, getVideoPrivacies,
   installPlugin,
   setAccessTokensToServers,
   uninstallPlugin,
   uploadVideo
 } from '../../../shared/extra-utils'
-import { VideoDetails } from '../../../shared/models/videos'
+import { VideoDetails, VideoPlaylistPrivacy } from '../../../shared/models/videos'
 
 const expect = chai.expect
 
@@ -67,6 +68,35 @@ describe('Test plugin altering video constants', function () {
     expect(licences[43]).to.equal('High best licence')
   })
 
+  it('Should have updated video privacies', async function () {
+    const res = await getVideoPrivacies(server.url)
+    const privacies = res.body
+
+    expect(privacies[1]).to.exist
+    expect(privacies[2]).to.not.exist
+    expect(privacies[3]).to.exist
+    expect(privacies[4]).to.exist
+  })
+
+  it('Should have updated playlist privacies', async function () {
+    const res = await getVideoPlaylistPrivacies(server.url)
+    const playlistPrivacies = res.body
+
+    expect(playlistPrivacies[1]).to.exist
+    expect(playlistPrivacies[2]).to.exist
+    expect(playlistPrivacies[3]).to.not.exist
+  })
+
+  it('Should not be able to create a video with this privacy', async function () {
+    const attrs = { name: 'video', privacy: 2 }
+    await uploadVideo(server.url, server.accessToken, attrs, 400)
+  })
+
+  it('Should not be able to create a video with this privacy', async function () {
+    const attrs = { displayName: 'video playlist', privacy: VideoPlaylistPrivacy.PRIVATE }
+    await createVideoPlaylist({ url: server.url, token: server.accessToken, playlistAttrs: attrs, expectedStatus: 400 })
+  })
+
   it('Should be able to upload a video with these values', async function () {
     const attrs = { name: 'video', category: 42, licence: 42, language: 'al_bhed2' }
     const resUpload = await uploadVideo(server.url, server.accessToken, attrs)
@@ -79,7 +109,7 @@ describe('Test plugin altering video constants', function () {
     expect(video.category.label).to.equal('Best category')
   })
 
-  it('Should uninstall the plugin and reset languages, categories and licences', async function () {
+  it('Should uninstall the plugin and reset languages, categories, licences and privacies', async function () {
     await uninstallPlugin({ url: server.url, accessToken: server.accessToken, npmName: 'peertube-plugin-test-three' })
 
     {
@@ -113,6 +143,25 @@ describe('Test plugin altering video constants', function () {
 
       expect(licences[42]).to.not.exist
       expect(licences[43]).to.not.exist
+    }
+
+    {
+      const res = await getVideoPrivacies(server.url)
+      const privacies = res.body
+
+      expect(privacies[1]).to.exist
+      expect(privacies[2]).to.exist
+      expect(privacies[3]).to.exist
+      expect(privacies[4]).to.exist
+    }
+
+    {
+      const res = await getVideoPlaylistPrivacies(server.url)
+      const playlistPrivacies = res.body
+
+      expect(playlistPrivacies[1]).to.exist
+      expect(playlistPrivacies[2]).to.exist
+      expect(playlistPrivacies[3]).to.exist
     }
   })
 

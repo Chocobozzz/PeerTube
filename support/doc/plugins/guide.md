@@ -14,7 +14,10 @@
     - [Update video constants](#update-video-constants)
     - [Add custom routes](#add-custom-routes)
   - [Client helpers (themes & plugins)](#client-helpers-themes--plugins)
-  - [Plugin static route](#plugin-static-route)
+    - [Plugin static route](#plugin-static-route)
+    - [Notifier](#notifier)
+    - [Markdown Renderer](#markdown-renderer)
+    - [Custom Modal](#custom-modal)
     - [Translate](#translate)
     - [Get public settings](#get-public-settings)
   - [Publishing](#publishing)
@@ -180,6 +183,9 @@ videoCategoryManager.deleteCategory(1) // Music
 
 videoLicenceManager.addLicence(42, 'Best licence')
 videoLicenceManager.deleteLicence(7) // Public domain
+
+videoPrivacyManager.deletePrivacy(2) // Remove Unlisted video privacy
+playlistPrivacyManager.deletePlaylistPrivacy(3) // Remove Private video playlist privacy
 ```
 
 #### Add custom routes

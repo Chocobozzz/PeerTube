@@ -2,7 +2,13 @@ import { PluginSettingsManager } from '@shared/models/plugins/plugin-settings-ma
 import { PluginModel } from '@server/models/server/plugin'
 import { PluginStorageManager } from '@shared/models/plugins/plugin-storage-manager.model'
 import { PluginVideoLanguageManager } from '@shared/models/plugins/plugin-video-language-manager.model'
-import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '@server/initializers/constants'
+import {
+  VIDEO_CATEGORIES,
+  VIDEO_LANGUAGES,
+  VIDEO_LICENCES,
+  VIDEO_PLAYLIST_PRIVACIES,
+  VIDEO_PRIVACIES
+} from '@server/initializers/constants'
 import { PluginVideoLicenceManager } from '@shared/models/plugins/plugin-video-licence-manager.model'
 import { PluginVideoCategoryManager } from '@shared/models/plugins/plugin-video-category-manager.model'
 import { RegisterServerOptions } from '@server/typings/plugins'
@@ -12,8 +18,10 @@ import { RegisterServerHookOptions } from '@shared/models/plugins/register-serve
 import { serverHookObject } from '@shared/models/plugins/server-hook.model'
 import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
 import * as express from 'express'
+import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
+import { PluginPlaylistPrivacyManager } from '@shared/models/plugins/plugin-playlist-privacy-manager.model'
 
-type AlterableVideoConstant = 'language' | 'licence' | 'category'
+type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
 type VideoConstant = { [key in number | string]: string }
 
 type UpdatedVideoConstant = {
@@ -25,6 +33,8 @@ type UpdatedVideoConstant = {
 
 export class RegisterHelpersStore {
   private readonly updatedVideoConstants: UpdatedVideoConstant = {
+    playlistPrivacy: { added: [], deleted: [] },
+    privacy: { added: [], deleted: [] },
     language: { added: [], deleted: [] },
     licence: { added: [], deleted: [] },
     category: { added: [], deleted: [] }
@@ -56,6 +66,9 @@ export class RegisterHelpersStore {
     const videoLicenceManager = this.buildVideoLicenceManager()
     const videoCategoryManager = this.buildVideoCategoryManager()
 
+    const videoPrivacyManager = this.buildVideoPrivacyManager()
+    const playlistPrivacyManager = this.buildPlaylistPrivacyManager()
+
     const peertubeHelpers = buildPluginHelpers(this.npmName)
 
     return {
@@ -71,6 +84,9 @@ export class RegisterHelpersStore {
       videoCategoryManager,
       videoLicenceManager,
 
+      videoPrivacyManager,
+      playlistPrivacyManager,
+
       peertubeHelpers
     }
   }
@@ -79,9 +95,11 @@ export class RegisterHelpersStore {
     const hash = {
       language: VIDEO_LANGUAGES,
       licence: VIDEO_LICENCES,
-      category: VIDEO_CATEGORIES
+      category: VIDEO_CATEGORIES,
+      privacy: VIDEO_PRIVACIES,
+      playlistPrivacy: VIDEO_PLAYLIST_PRIVACIES
     }
-    const types: AlterableVideoConstant[] = [ 'language', 'licence', 'category' ]
+    const types: AlterableVideoConstant[] = [ 'language', 'licence', 'category', 'privacy', 'playlistPrivacy' ]
 
     for (const type of types) {
       const updatedConstants = this.updatedVideoConstants[type][npmName]
@@ -164,6 +182,22 @@ export class RegisterHelpersStore {
 
       deleteCategory: (key: number) => {
         return this.deleteConstant({ npmName: this.npmName, type: 'category', obj: VIDEO_CATEGORIES, key })
+      }
+    }
+  }
+
+  private buildVideoPrivacyManager (): PluginVideoPrivacyManager {
+    return {
+      deletePrivacy: (key: number) => {
+        return this.deleteConstant({ npmName: this.npmName, type: 'privacy', obj: VIDEO_PRIVACIES, key })
+      }
+    }
+  }
+
+  private buildPlaylistPrivacyManager (): PluginPlaylistPrivacyManager {
+    return {
+      deletePlaylistPrivacy: (key: number) => {
+        return this.deleteConstant({ npmName: this.npmName, type: 'playlistPrivacy', obj: VIDEO_PLAYLIST_PRIVACIES, key })
       }
     }
   }
