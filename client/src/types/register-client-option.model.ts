@@ -28,8 +28,8 @@ export type RegisterClientHelpers = {
   }) => void
 
   markdownRenderer: {
-    textMarkdownToHTML: (textMarkdown: string) => void
-    enhancedMarkdownToHTML: (enhancedMarkdown: string) => void
+    textMarkdownToHTML: (textMarkdown: string) => Promise<string>
+    enhancedMarkdownToHTML: (enhancedMarkdown: string) => Promise<string>
   }
 
   translate: (toTranslate: string) => Promise<string>

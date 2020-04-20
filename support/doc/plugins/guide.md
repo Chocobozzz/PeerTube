@@ -224,10 +224,10 @@ To render a formatted markdown text to HTML:
 ```js
 const { markdownRenderer } = peertubeHelpers
 
-markdownRenderer.textMarkdownToHTML('**My Bold Text**')
+await markdownRenderer.textMarkdownToHTML('**My Bold Text**')
 // return <strong>My Bold Text</strong>
 
-markdownRenderer.enhancedMarkdownToHTML('![alt-img](http://.../my-image.jpg)')
+await markdownRenderer.enhancedMarkdownToHTML('![alt-img](http://.../my-image.jpg)')
 // return <img alt=alt-img src=http://.../my-image.jpg />
 ```
 
