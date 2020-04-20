@@ -149,7 +149,7 @@
                       <span class="text-muted">{{ videoAbuse.video.channel.ownerAccount ? createByString(videoAbuse.video.channel.ownerAccount) : '' }}</span>
                     </div>
                   </div>
-                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': videoAbuse.video.channel.ownerAccount.displayName }" class="ml-auto text-muted video-details-links" *ngIf="!videoAbuse.video.deleted" i18n>
+                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': videoAbuse.video.channel.ownerAccount.displayName }" class="ml-auto text-muted video-details-links" i18n>
                     {videoAbuse.countReportsForReportee, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReportee }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
