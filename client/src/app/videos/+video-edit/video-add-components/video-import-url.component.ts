@@ -97,15 +97,13 @@ export class VideoImportUrlComponent extends VideoSend implements OnInit, CanCom
 
             const absoluteAPIUrl = getAbsoluteAPIUrl()
 
-            let thumbnailUrl = null
-            if (video.thumbnailPath) {
-              thumbnailUrl = absoluteAPIUrl + video.thumbnailPath
-            }
+            const thumbnailUrl = video.thumbnailPath
+              ? absoluteAPIUrl + video.thumbnailPath
+              : null
 
-            let previewUrl = null
-            if (video.previewPath) {
-              previewUrl = absoluteAPIUrl + video.previewPath
-            }
+            const previewUrl = video.previewPath
+              ? absoluteAPIUrl + video.previewPath
+              : null
 
             this.video = new VideoEdit(Object.assign(video, {
               commentsEnabled: videoUpdate.commentsEnabled,
