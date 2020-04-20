@@ -15,7 +15,7 @@ import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
-import { literal, Op, Sequelize } from 'sequelize'
+import { literal, Op } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
 import { VideoBlacklistModel } from './video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
@@ -75,6 +75,7 @@ export enum ScopeNames {
       attributes: {
         include: [
           [
+            // we don't care about this count for deleted videos, so there are not included
             literal(
               '(' +
                 'SELECT count(*) ' +
@@ -85,6 +86,7 @@ export enum ScopeNames {
             'countReportsForVideo'
           ],
           [
+            // we don't care about this count for deleted videos, so there are not included
             literal(
               '(' +
                 'SELECT t.nth ' +
@@ -109,7 +111,17 @@ export enum ScopeNames {
                 'WHERE "account"."id" = "VideoAbuseModel"."reporterAccountId" ' +
               ')'
             ),
-            'countReportsForReporter'
+            'countReportsForReporter__video'
+          ],
+          [
+            literal(
+              '(' +
+                'SELECT count(DISTINCT "videoAbuse"."id") ' +
+                'FROM "videoAbuse" ' +
+                `WHERE CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = "VideoAbuseModel"."reporterAccountId" ` +
+              ')'
+            ),
+            'countReportsForReporter__deletedVideo'
           ],
           [
             literal(
@@ -118,10 +130,23 @@ export enum ScopeNames {
                 'FROM "videoAbuse" ' +
                 'INNER JOIN "video" ON "video"."id" = "videoAbuse"."videoId" ' +
                 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'INNER JOIN "account" ON "videoChannel"."accountId" = "Video->VideoChannel"."accountId" ' +
+                'INNER JOIN "account" ON ' +
+                      '"videoChannel"."accountId" = "Video->VideoChannel"."accountId" ' +
+                   `OR "videoChannel"."accountId" = CAST("VideoAbuseModel"."deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) ` +
               ')'
             ),
-            'countReportsForReportee'
+            'countReportsForReportee__video'
+          ],
+          [
+            literal(
+              '(' +
+                'SELECT count(DISTINCT "videoAbuse"."id") ' +
+                'FROM "videoAbuse" ' +
+                `WHERE CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = "Video->VideoChannel"."accountId" ` +
+                   `OR CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = CAST("VideoAbuseModel"."deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) ` +
+              ')'
+            ),
+            'countReportsForReportee__deletedVideo'
           ]
         ]
       },
@@ -270,8 +295,10 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
     const countReportsForVideo = this.get('countReportsForVideo') as number
     const nthReportForVideo = this.get('nthReportForVideo') as number
-    const countReportsForReporter = this.get('countReportsForReporter') as number
-    const countReportsForReportee = this.get('countReportsForReportee') as number
+    const countReportsForReporterVideo = this.get('countReportsForReporter__video') as number
+    const countReportsForReporterDeletedVideo = this.get('countReportsForReporter__deletedVideo') as number
+    const countReportsForReporteeVideo = this.get('countReportsForReportee__video') as number
+    const countReportsForReporteeDeletedVideo = this.get('countReportsForReportee__deletedVideo') as number
 
     const video = this.Video
       ? this.Video
@@ -300,8 +327,8 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       updatedAt: this.updatedAt,
       count: countReportsForVideo || 0,
       nth: nthReportForVideo || 0,
-      countReportsForReporter: countReportsForReporter || 0,
-      countReportsForReportee: countReportsForReportee || 0
+      countReportsForReporter: (countReportsForReporterVideo || 0) + (countReportsForReporterDeletedVideo || 0),
+      countReportsForReportee: (countReportsForReporteeVideo || 0) + (countReportsForReporteeDeletedVideo || 0)
     }
   }
 
