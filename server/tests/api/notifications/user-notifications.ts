@@ -1035,15 +1035,15 @@ describe('Test users notifications', function () {
     //   await checkNewActorFollow(baseParams, 'account', 'root', 'super root name', myUserName, 'presence')
     // })
 
-    it('Should notify when a remote account is following one of our channel', async function () {
-      this.timeout(10000)
-
-      await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:' + servers[0].port)
-
-      await waitJobs(servers)
-
-      await checkNewActorFollow(baseParams, 'account', 'root', 'super root 2 name', myUserName, 'presence')
-    })
+    // it('Should notify when a remote account is following one of our channel', async function () {
+    //   this.timeout(10000)
+    //
+    //   await addUserSubscription(servers[1].url, servers[1].accessToken, 'user_1@localhost:' + servers[0].port)
+    //
+    //   await waitJobs(servers)
+    //
+    //   await checkNewActorFollow(baseParams, 'account', 'root', 'super root 2 name', myUserName, 'presence')
+    // })
   })
 
   describe('Video-related notifications when video auto-blacklist is enabled', function () {
