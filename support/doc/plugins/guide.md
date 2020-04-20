@@ -149,6 +149,7 @@ registerSetting({
   name: 'admin-name',
   label: 'Admin name',
   type: 'input',
+  // type: input | input-checkbox | input-textarea | markdown-text | markdown-enhanced
   default: 'my super name'
 })
 
@@ -214,6 +215,20 @@ To notify the user with the PeerTube ToastModule:
 const { notifier } = peertubeHelpers
 notifier.success('Success message content.')
 notifier.error('Error message content.')
+```
+
+#### Markdown Renderer
+
+To render a formatted markdown text to HTML:
+
+```js
+const { markdownRenderer } = peertubeHelpers
+
+await markdownRenderer.textMarkdownToHTML('**My Bold Text**')
+// return <strong>My Bold Text</strong>
+
+await markdownRenderer.enhancedMarkdownToHTML('![alt-img](http://.../my-image.jpg)')
+// return <img alt=alt-img src=http://.../my-image.jpg />
 ```
 
 #### Custom Modal
