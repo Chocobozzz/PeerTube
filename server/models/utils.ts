@@ -208,13 +208,15 @@ function buildDirectionAndField (value: string) {
 }
 
 function searchAttribute (sourceField, targetField) {
-  return sourceField
-    ? {
+  if (sourceField) {
+    return {
       [targetField]: {
         [Op.iLike]: `%${sourceField}%`
       }
     }
-    : {}
+  } else {
+    return {}
+  }
 }
 
 // ---------------------------------------------------------------------------

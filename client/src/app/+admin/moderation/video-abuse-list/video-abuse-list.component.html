@@ -20,7 +20,7 @@
       <th style="width: 40px;"></th>
       <th style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th i18n>Video</th>
-      <th style="width:190px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 190px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 120px;"></th>
     </tr>
@@ -59,7 +59,9 @@
               <span
                 class="video-table-video-image-label" *ngIf="videoAbuse.count > 1"
                 i18n-title title="This video has been reported multiple times."
-              >{{ videoAbuse.nth }}/{{ videoAbuse.count }}</span>
+              >
+                {{ videoAbuse.nth }}/{{ videoAbuse.count }}
+              </span>
             </div>
             <div class="video-table-video-text">
               <div>
@@ -67,7 +69,7 @@
                 <span *ngIf="!videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
                 <span *ngIf="videoAbuse.video.blacklisted" i18n-title title="Video was blacklisted" class="glyphicon glyphicon-ban-circle"></span>
               </div>
-              <div class="text-muted">by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
+              <div class="text-muted" i18n>by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
             </div>
           </div>
         </a>
@@ -75,13 +77,15 @@
 
       <td *ngIf="videoAbuse.video.deleted" class="c-hand" [pRowToggler]="videoAbuse">
         <div class="video-table-video" i18n-title title="Video was deleted">
-          <div class="video-table-video-image"><span i18n>Deleted</span></div>
+          <div class="video-table-video-image">
+            <span i18n>Deleted</span>
+          </div>
           <div class="video-table-video-text">
             <div>
               {{ videoAbuse.video.name }}
               <span class="glyphicon glyphicon-trash"></span>
             </div>
-            <div class="text-muted">by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
+            <div class="text-muted" i18n>by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
           </div>
         </div>
       </td>
@@ -107,8 +111,10 @@
       <tr>
         <td class="expand-cell" colspan="6">
           <div class="d-flex moderation-expanded">
-            <!-- report metadata -->
+            <!-- report left part (report details) -->
             <div class="col-8">
+
+              <!-- report metadata -->
               <div class="d-flex">
                 <span class="col-3 moderation-expanded-label" i18n>Reporter</span>
                 <span class="col-9 moderation-expanded-text">
@@ -128,6 +134,7 @@
                   </a>
                 </span>
               </div>
+
               <div class="d-flex">
                 <span class="col-3 moderation-expanded-label" i18n>Reportee</span>
                 <span class="col-9 moderation-expanded-text">
@@ -147,6 +154,7 @@
                   </a>
                 </span>
               </div>
+
               <div class="d-flex">
                 <span class="col-3 moderation-expanded-label" i18n>Updated</span>
                 <time class="col-9 moderation-expanded-text video-details-date-updated">{{ videoAbuse.updatedAt | date: 'medium' }}</time>
@@ -157,16 +165,20 @@
                 <span class="col-3 moderation-expanded-label" i18n>Report #{{ videoAbuse.id }}</span>
                 <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.reasonHtml"></span>
               </div>
+
               <div class="mt-3 d-flex" *ngIf="videoAbuse.moderationComment">
                 <span class="col-3 moderation-expanded-label" i18n>Note</span>
                 <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.moderationCommentHtml"></span>
               </div>
+
             </div>
 
+            <!-- report right part (video details) -->
             <div class="col-4">
               <div class="screenratio">
                 <div *ngIf="videoAbuse.video.deleted || videoAbuse.video.blacklisted">
-                  <span i18n>The video was {{ videoAbuse.video.deleted ? 'deleted' : 'blacklisted' }}</span>
+                  <span i18n *ngIf="videoAbuse.video.deleted">The video was deleted</span>
+                  <span i18n *ngIf="!videoAbuse.video.deleted">The video was blacklisted</span>
                 </div>
                 <div *ngIf="!videoAbuse.video.deleted && !videoAbuse.video.blacklisted" [innerHTML]="videoAbuse.embedHtml"></div>
               </div>

@@ -17,8 +17,6 @@ import { MarkdownService } from '@app/shared/renderer'
 export class VideoBlacklistListComponent extends RestTable implements OnInit {
   blacklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
-  rowsPerPageOptions = [ 20, 50, 100 ]
-  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
   listBlacklistTypeFilter: VideoBlacklistType = undefined

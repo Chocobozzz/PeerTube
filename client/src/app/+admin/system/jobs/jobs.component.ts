@@ -40,7 +40,6 @@ export class JobsComponent extends RestTable implements OnInit {
 
   jobs: Job[] = []
   totalRecords: number
-  rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 

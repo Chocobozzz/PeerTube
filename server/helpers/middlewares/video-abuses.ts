@@ -7,7 +7,7 @@ async function doesVideoAbuseExist (abuseIdArg: number | string, videoUUID: stri
   let videoAbuse = await VideoAbuseModel.loadByIdAndVideoId(abuseId, null, videoUUID)
 
   if (!videoAbuse) {
-    const userId = res.locals.oauth ? res.locals.oauth.token.User.id : undefined
+    const userId = res.locals.oauth?.token.User.id
     const video = await fetchVideo(videoUUID, 'all', userId)
 
     if (video) videoAbuse = await VideoAbuseModel.loadByIdAndVideoId(abuseId, video.id)

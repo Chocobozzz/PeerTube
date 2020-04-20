@@ -78,7 +78,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
       {
         model: VideoModel,
         required: true,
-        where: { ...searchAttribute(search, 'name') },
+        where: searchAttribute(search, 'name'),
         include: [
           {
             model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),

@@ -19,7 +19,6 @@ export class UserListComponent extends RestTable implements OnInit {
 
   users: User[] = []
   totalRecords = 0
-  rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
