@@ -143,7 +143,8 @@ export enum ScopeNames {
                 'SELECT count(DISTINCT "videoAbuse"."id") ' +
                 'FROM "videoAbuse" ' +
                 `WHERE CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = "Video->VideoChannel"."accountId" ` +
-                   `OR CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = CAST("VideoAbuseModel"."deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) ` +
+                   `OR CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = ` +
+                      `CAST("VideoAbuseModel"."deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) ` +
               ')'
             ),
             'countReportsForReportee__deletedVideo'
