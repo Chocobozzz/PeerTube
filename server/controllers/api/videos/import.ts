@@ -159,7 +159,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   thumbnailModel = await processThumbnail(req, video)
 
   // Process video thumbnail from url if processing from request.files failed
-  if (!thumbnailModel) {
+  if (!thumbnailModel && youtubeDLInfo.thumbnailUrl) {
     thumbnailModel = await processThumbnailFromUrl(youtubeDLInfo.thumbnailUrl, video)
   }
 
@@ -169,7 +169,7 @@ async function addYoutubeDLImport (req: express.Request, res: express.Response) 
   previewModel = await processPreview(req, video)
 
   // Process video preview from url if processing from request.files failed
-  if (!previewModel) {
+  if (!previewModel && youtubeDLInfo.thumbnailUrl) {
     previewModel = await processPreviewFromUrl(youtubeDLInfo.thumbnailUrl, video)
   }
 
@@ -236,7 +236,7 @@ function buildVideo (channelId: number, body: VideoImportCreate, importData: You
     remote: false,
     category: body.category || importData.category,
     licence: body.licence || importData.licence,
-    language: body.language || undefined,
+    language: body.language || importData.language,
     commentsEnabled: body.commentsEnabled !== false, // If the value is not "false", the default is "true"
     downloadEnabled: body.downloadEnabled !== false,
     waitTranscoding: body.waitTranscoding || false,

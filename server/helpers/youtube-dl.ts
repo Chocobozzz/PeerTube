@@ -1,4 +1,4 @@
-import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES } from '../initializers/constants'
+import { CONSTRAINTS_FIELDS, VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES } from '../initializers/constants'
 import { logger } from './logger'
 import { generateVideoImportTmpPath } from './utils'
 import { join } from 'path'
@@ -12,6 +12,7 @@ export type YoutubeDLInfo = {
   name?: string
   description?: string
   category?: number
+  language?: string
   licence?: number
   nsfw?: boolean
   tags?: string[]
@@ -252,12 +253,13 @@ function normalizeObject (obj: any) {
   return newObj
 }
 
-function buildVideoInfo (obj: any) {
+function buildVideoInfo (obj: any): YoutubeDLInfo {
   return {
     name: titleTruncation(obj.title),
     description: descriptionTruncation(obj.description),
     category: getCategory(obj.categories),
     licence: getLicence(obj.license),
+    language: getLanguage(obj.language),
     nsfw: isNSFW(obj),
     tags: getTags(obj.tags),
     thumbnailUrl: obj.thumbnail || undefined,
@@ -302,6 +304,11 @@ function getLicence (licence: string) {
 
   if (licence.includes('Creative Commons Attribution')) return 1
 
+  for (const key of Object.keys(VIDEO_LICENCES)) {
+    const peertubeLicence = VIDEO_LICENCES[key]
+    if (peertubeLicence.toLowerCase() === licence.toLowerCase()) return parseInt(key, 10)
+  }
+
   return undefined
 }
 
@@ -319,6 +326,10 @@ function getCategory (categories: string[]) {
   }
 
   return undefined
+}
+
+function getLanguage (language: string) {
+  return VIDEO_LANGUAGES[language] ? language : undefined
 }
 
 function wrapWithProxyOptions (options: string[]) {
