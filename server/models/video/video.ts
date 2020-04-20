@@ -813,10 +813,8 @@ export class VideoModel extends Model<VideoModel> {
     const details = instance.toFormattedDetailsJSON()
 
     for (const abuse of instance.VideoAbuses) {
-      tasks.push((_ => {
-        abuse.deletedVideo = details
-        return abuse.save({ transaction: options.transaction })
-      })())
+      abuse.deletedVideo = details
+      tasks.push(abuse.save({ transaction: options.transaction }))
     }
 
     Promise.all(tasks)

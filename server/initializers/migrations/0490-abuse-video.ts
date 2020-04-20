@@ -11,10 +11,8 @@ async function up (utils: {
     allowNull: true
   }
   await utils.queryInterface.addColumn('videoAbuse', 'deletedVideo', deletedVideo)
-  await utils.sequelize.query(`ALTER TABLE "videoAbsue" ALTER COLUMN "videoId" DROP NOT NULL;`)
+  await utils.sequelize.query(`ALTER TABLE "videoAbuse" ALTER COLUMN "videoId" DROP NOT NULL;`)
   await utils.sequelize.query(`ALTER TABLE "videoAbuse" DROP CONSTRAINT IF EXISTS "videoAbuse_videoId_fkey";`)
-  await utils.sequelize.query(`ALTER TABLE "videoAbuse" ADD CONSTRAINT "videoAbuse_videoId_fkey" 
-  FOREIGN KEY ("videoId") REFERENCES video(id) ON UPDATE CASCADE ON DELETE SET NULL;`)
 
 }
 

@@ -133,8 +133,8 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
     if (search) {
       Object.assign(where, {
         [Op.or]: [
-          { ...searchAttribute(search, '$BlockedAccount.name$') },
-          { ...searchAttribute(search, '$BlockedAccount.Actor.url$') }
+          searchAttribute(search, '$BlockedAccount.name$'),
+          searchAttribute(search, '$BlockedAccount.Actor.url$')
         ]
       })
     }

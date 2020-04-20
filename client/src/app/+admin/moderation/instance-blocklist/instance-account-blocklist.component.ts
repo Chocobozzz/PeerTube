@@ -14,8 +14,6 @@ import { Actor } from '@app/shared/actor/actor.model'
 export class InstanceAccountBlocklistComponent extends RestTable implements OnInit {
   blockedAccounts: AccountBlock[] = []
   totalRecords = 0
-  rowsPerPageOptions = [ 20, 50, 100 ]
-  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 

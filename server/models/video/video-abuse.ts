@@ -15,7 +15,7 @@ import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
 import * as Bluebird from 'bluebird'
-import { literal, Op } from 'sequelize'
+import { literal, Op, Sequelize } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
 import { VideoBlacklistModel } from './video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
@@ -31,7 +31,7 @@ export enum ScopeNames {
     searchVideo?: string
     searchVideoChannel?: string
     serverAccountId: number
-    userAccountId: any
+    userAccountId: number
   }) => {
     let where = {
       reporterAccountId: {
@@ -45,28 +45,28 @@ export enum ScopeNames {
           {
             [Op.and]: [
               { videoId: { [Op.not]: null } },
-              { '$Video.name$': { [Op.iLike]: `%${options.search}%` } }
+              searchAttribute(options.search, '$Video.name$')
             ]
           },
           {
             [Op.and]: [
               { videoId: { [Op.not]: null } },
-              { '$Video.VideoChannel.name$': { [Op.iLike]: `%${options.search}%` } }
+              searchAttribute(options.search, '$Video.VideoChannel.name$')
             ]
           },
           {
             [Op.and]: [
               { deletedVideo: { [Op.not]: null } },
-              { deletedVideo: { name: { [Op.iLike]: `%${options.search}%` } } }
+              { deletedVideo: searchAttribute(options.search, 'name') }
             ]
           },
           {
             [Op.and]: [
               { deletedVideo: { [Op.not]: null } },
-              { deletedVideo: { channel: { displayName: { [Op.iLike]: `%${options.search}%` } } } }
+              { deletedVideo: { channel: searchAttribute(options.search, 'displayName') } }
             ]
           },
-          { '$Account.name$': { [Op.iLike]: `%${options.search}%` } }
+          searchAttribute(options.search, '$Account.name$')
         ]
       })
     }
@@ -77,13 +77,9 @@ export enum ScopeNames {
           [
             literal(
               '(' +
-                'SELECT t.count ' +
-                'FROM ( ' +
-                  'SELECT id, ' +
-                         'count(id) OVER (PARTITION BY "videoId") ' +
-                  'FROM "videoAbuse" ' +
-                ') t ' +
-                'WHERE t.id = "VideoAbuseModel".id ' +
+                'SELECT count(*) ' +
+                'FROM "videoAbuse" ' +
+                'WHERE "videoId" = "VideoAbuseModel"."videoId" ' +
               ')'
             ),
             'countReportsForVideo'
@@ -118,20 +114,11 @@ export enum ScopeNames {
           [
             literal(
               '(' +
-                'WITH ' +
-                  'ids AS ( ' +
-                    'SELECT "account"."id" ' +
-                    'FROM "account" ' +
-                    'INNER JOIN "videoChannel" ON "videoChannel"."accountId" = "account"."id" ' +
-                    'INNER JOIN "video" ON "video"."channelId" = "videoChannel"."id" ' +
-                    'WHERE "video"."id" = "VideoAbuseModel"."videoId" ' +
-                  ') ' +
-                'SELECT count("videoAbuse"."id") ' +
+                'SELECT count(DISTINCT "videoAbuse"."id") ' +
                 'FROM "videoAbuse" ' +
                 'INNER JOIN "video" ON "video"."id" = "videoAbuse"."videoId" ' +
                 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-                'INNER JOIN ids ON "account"."id" = ids.id ' +
+                'INNER JOIN "account" ON "videoChannel"."accountId" = "Video->VideoChannel"."accountId" ' +
               ')'
             ),
             'countReportsForReportee'
@@ -142,19 +129,19 @@ export enum ScopeNames {
         {
           model: AccountModel,
           required: true,
-          where: { ...searchAttribute(options.searchReporter, 'name') }
+          where: searchAttribute(options.searchReporter, 'name')
         },
         {
           model: VideoModel,
           required: false,
-          where: { ...searchAttribute(options.searchVideo, 'name') },
+          where: searchAttribute(options.searchVideo, 'name'),
           include: [
             {
               model: ThumbnailModel
             },
             {
               model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
-              where: { ...searchAttribute(options.searchVideoChannel, 'name') }
+              where: searchAttribute(options.searchVideoChannel, 'name')
             },
             {
               attributes: [ 'id', 'reason', 'unfederated' ],

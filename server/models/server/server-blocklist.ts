@@ -139,8 +139,6 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
       }
     }
 
-    console.log(search)
-
     return ServerBlocklistModel
       .scope([ ScopeNames.WITH_ACCOUNT, ScopeNames.WITH_SERVER ])
       .findAndCountAll<MServerBlocklistAccountServer>(query)

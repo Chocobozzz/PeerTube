@@ -29,8 +29,6 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
 
   videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
   totalRecords = 0
-  rowsPerPageOptions = [ 20, 50, 100 ]
-  rowsPerPage = this.rowsPerPageOptions[0]
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
@@ -199,7 +197,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   }
 
   ngAfterViewInit () {
-    this.setTableFilter(this.search)
+    if (this.search) this.setTableFilter(this.search)
   }
 
   getIdentifier () {

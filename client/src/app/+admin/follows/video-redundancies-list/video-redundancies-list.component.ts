@@ -20,7 +20,6 @@ export class VideoRedundanciesListComponent extends RestTable implements OnInit 
 
   videoRedundancies: VideoRedundancy[] = []
   totalRecords = 0
-  rowsPerPage = 10
 
   sort: SortMeta = { field: 'name', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }

@@ -7,11 +7,13 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 export abstract class RestTable {
 
   abstract totalRecords: number
-  abstract rowsPerPage: number
   abstract sort: SortMeta
   abstract pagination: RestPagination
 
   search: string
+  rowsPerPageOptions = [ 10, 20, 50, 100 ]
+  rowsPerPage = this.rowsPerPageOptions[0]
+
   private searchStream: Subject<string>
 
   abstract getIdentifier (): string

@@ -14,7 +14,6 @@ import { BlocklistService } from '@app/shared/blocklist'
 export class MyAccountServerBlocklistComponent extends RestTable implements OnInit {
   blockedServers: ServerBlock[] = []
   totalRecords = 0
-  rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 

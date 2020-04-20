@@ -14,7 +14,6 @@ import { MyAccountAcceptOwnershipComponent } from './my-account-accept-ownership
 export class MyAccountOwnershipComponent extends RestTable implements OnInit {
   videoChangeOwnerships: VideoChangeOwnership[] = []
   totalRecords = 0
-  rowsPerPage = 10
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
