@@ -1024,15 +1024,16 @@ describe('Test users notifications', function () {
       await removeUserSubscription(servers[1].url, servers[1].accessToken, 'user_1_channel@localhost:' + servers[0].port)
     })
 
-    it('Should notify when a local account is following one of our channel', async function () {
-      this.timeout(10000)
-
-      await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:' + servers[0].port)
-
-      await waitJobs(servers)
-
-      await checkNewActorFollow(baseParams, 'account', 'root', 'super root name', myUserName, 'presence')
-    })
+    // PeerTube does not support accout -> account follows
+    // it('Should notify when a local account is following one of our channel', async function () {
+    //   this.timeout(10000)
+    //
+    //   await addUserSubscription(servers[0].url, servers[0].accessToken, 'user_1@localhost:' + servers[0].port)
+    //
+    //   await waitJobs(servers)
+    //
+    //   await checkNewActorFollow(baseParams, 'account', 'root', 'super root name', myUserName, 'presence')
+    // })
 
     it('Should notify when a remote account is following one of our channel', async function () {
       this.timeout(10000)

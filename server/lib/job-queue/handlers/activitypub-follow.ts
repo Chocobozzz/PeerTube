@@ -36,7 +36,7 @@ async function processActivityPubFollow (job: Bull.Job) {
   }
 
   if (payload.assertIsChannel && !targetActor.VideoChannel) {
-    logger.warn('Do not follow %s@%s because it is not a channel.', name, host)
+    logger.warn('Do not follow %s@%s because it is not a channel.', payload.name, host)
     return
   }
 
