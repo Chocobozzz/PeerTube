@@ -24,6 +24,7 @@
     ],
     "baseUrl": "./",
     "paths": {
+      "video.js": [ "node_modules/video.js/core" ],
       "@app/*": [ "src/app/*" ],
       "@shared/*": [ "../shared/*" ],
       "fs": [ "src/shims/noop.ts" ],

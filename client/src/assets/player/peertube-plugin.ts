@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core'
+import videojs from 'video.js'
 import './videojs-components/settings-menu-button'
 import {
   PeerTubePluginOptions,

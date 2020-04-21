@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { AutoResolutionUpdateData, ResolutionUpdateData } from '../peertube-videojs-typings'
 
 const MenuItem = videojs.getComponent('MenuItem')

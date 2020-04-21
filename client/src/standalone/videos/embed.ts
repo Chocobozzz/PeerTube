@@ -15,7 +15,7 @@ import {
 import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
 import { PeerTubeEmbedApi } from './embed-api'
 import { TranslationsManager } from '../../assets/player/translations-manager'
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
 
 type Translations = { [ id: string ]: string }

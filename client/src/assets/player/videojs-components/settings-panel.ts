@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 
 const Component = videojs.getComponent('Component')
 

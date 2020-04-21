@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { EndCardOptions } from './end-card'
 
 const Plugin = videojs.getPlugin('plugin')

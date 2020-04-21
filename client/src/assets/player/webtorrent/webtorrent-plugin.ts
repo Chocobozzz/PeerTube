@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { renderVideo } from './video-renderer'
 import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'

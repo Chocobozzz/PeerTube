@@ -2,7 +2,7 @@
 // We duplicated this plugin to choose the hls.js version we want, because streamroot only provide a bundled file
 
 import * as Hlsjs from 'hls.js/dist/hls.light.js'
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { HlsjsConfigHandlerOptions, QualityLevelRepresentation, QualityLevels, VideoJSTechHLS } from '../peertube-videojs-typings'
 
 type ErrorCounts = {

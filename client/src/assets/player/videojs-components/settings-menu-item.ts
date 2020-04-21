@@ -1,6 +1,6 @@
 // Thanks to Yanko Shterev: https://github.com/yshterev/videojs-settings-menu
 import { toTitleCase } from '../utils'
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { SettingsButton } from './settings-menu-button'
 import { SettingsDialog } from './settings-dialog'
 import { SettingsPanel } from './settings-panel'

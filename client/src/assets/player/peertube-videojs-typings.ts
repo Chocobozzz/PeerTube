@@ -4,7 +4,7 @@ import { P2pMediaLoaderPlugin } from './p2p-media-loader/p2p-media-loader-plugin
 import { PlayerMode } from './peertube-player-manager'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
 import { VideoFile } from '@shared/models'
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { Config, Level } from 'hls.js'
 
 declare module 'video.js' {

@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import { saveTheaterInStore, getStoredTheater } from '../peertube-player-local-storage'
 
 const Button = videojs.getComponent('Button')

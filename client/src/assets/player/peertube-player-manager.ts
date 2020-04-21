@@ -1,6 +1,6 @@
 import { VideoFile } from '../../../../shared/models/videos'
-import videojs from 'video.js/dist/alt/video.core.js'
-import 'videojs-hotkeys'
+import videojs from 'video.js'
+import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
 import 'videojs-contextmenu-ui'
 import 'videojs-contrib-quality-levels'

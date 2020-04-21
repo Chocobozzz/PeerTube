@@ -1,4 +1,4 @@
-import videojs from 'video.js/dist/alt/video.core.js'
+import videojs from 'video.js'
 import './pause-bezel'
 
 const Plugin = videojs.getPlugin('plugin')
