@@ -1808,6 +1808,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: 'Text comment'
+              required:
+                - text
+
   '/videos/{id}/comment-threads/{threadId}':
     get:
       summary: Get a thread
@@ -1840,6 +1852,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                  description: 'Text comment'
+              required:
+                - text
+
     delete:
       summary: Delete a comment or a reply
       security:
