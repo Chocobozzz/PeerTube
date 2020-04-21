@@ -692,6 +692,8 @@
     margin-bottom: 10px;
 
     & > a {
+      @include disable-default-a-behaviour;
+
       text-decoration: none;
       color: inherit;
       display: block;

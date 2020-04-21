@@ -37,13 +37,13 @@
       </a>
     </div>
     <div>
-      <a>
+      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': user?.account.displayName }">
         <div class="dashboard-num">{{ user.videoAbusesCount }}</div>
         <div class="dashboard-label" i18n>Incriminated in reports</div>
       </a>
     </div>
     <div>
-      <a>
+      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': user?.account.displayName }">
         <div class="dashboard-num">{{ user.videoAbusesAcceptedCount }} / {{ user.videoAbusesCreatedCount }}</div>
         <div class="dashboard-label" i18n>Authored reports accepted</div>
       </a>

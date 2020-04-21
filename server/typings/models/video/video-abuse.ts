@@ -1,6 +1,6 @@
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { PickWith } from '../../utils'
-import { MVideoAccountLightBlacklistAllFiles } from './video'
+import { MVideoAccountLightBlacklistAllFiles, MVideo } from './video'
 import { MAccountDefault, MAccountFormattable } from '../account'
 
 type Use<K extends keyof VideoAbuseModel, M> = PickWith<VideoAbuseModel, K, M>
@@ -16,7 +16,7 @@ export type MVideoAbuseId = Pick<VideoAbuseModel, 'id'>
 export type MVideoAbuseVideo =
   MVideoAbuse &
   Pick<VideoAbuseModel, 'toActivityPubObject'> &
-  Use<'Video', MVideoAccountLightBlacklistAllFiles>
+  Use<'Video', MVideo>
 
 export type MVideoAbuseAccountVideo =
   MVideoAbuse &

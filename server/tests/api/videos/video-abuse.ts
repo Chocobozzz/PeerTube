@@ -14,7 +14,9 @@ import {
   setAccessTokensToServers,
   updateVideoAbuse,
   uploadVideo,
-  removeVideo
+  removeVideo,
+  createUser,
+  userLogin
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
@@ -236,16 +238,56 @@ describe('Test video abuses', function () {
 
     await waitJobs(servers)
 
-    {
-      const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
-      expect(res.body.total).to.equal(2)
-      expect(res.body.data.length).to.equal(2)
-      expect(res.body.data[0].id).to.equal(abuseServer2.id)
+    const res = await getVideoAbusesList(servers[1].url, servers[1].accessToken)
+    expect(res.body.total).to.equal(2, "wrong number of videos returned")
+    expect(res.body.data.length).to.equal(2, "wrong number of videos returned")
+    expect(res.body.data[0].id).to.equal(abuseServer2.id, "wrong origin server id for first video")
 
-      const abuse: VideoAbuse = res.body.data[1]
-      expect(abuse.video.deleted).to.be.true
-      expect(abuse.video.id).to.equal(abuseServer2.video.id)
-      expect(abuse.video.channel).to.exist
+    const abuse: VideoAbuse = res.body.data[0]
+    expect(abuse.video.id).to.equal(abuseServer2.video.id, "wrong video id")
+    expect(abuse.video.channel).to.exist
+    expect(abuse.video.deleted).to.be.true
+  })
+
+  it('Should include counts of reports from reporter and reportee', async function () {
+    this.timeout(10000)
+
+    // register a second user to have two reporters/reportees
+    const user = { username: 'user2', password: 'password' }
+    await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, ...user })
+    const userAccessToken = await userLogin(servers[0], user)
+
+    // upload a third video via this user
+    const video3Attributes = {
+      name: 'my second super name for server 1',
+      description: 'my second super description for server 1'
+    }
+    await uploadVideo(servers[0].url, userAccessToken, video3Attributes)
+
+    const res1 = await getVideosList(servers[0].url)
+    const videos = res1.body.data
+    const video3 = videos.find(video => video.name === 'my second super name for server 1')
+
+    // resume with the test
+    const reason3 = 'my super bad reason 3'
+    await reportVideoAbuse(servers[0].url, servers[0].accessToken, video3.id, reason3)
+    const reason4 = 'my super bad reason 4'
+    await reportVideoAbuse(servers[0].url, userAccessToken, servers[0].video.id, reason4)
+
+    const res2 = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
+
+    {
+      for (const abuse of res2.body.data as VideoAbuse[]) {
+        if (abuse.video.id === video3.id) {
+          expect(abuse.count).to.equal(1, "wrong reports count for video 3")
+          expect(abuse.nth).to.equal(1, "wrong report position in report list for video 3")
+          expect(abuse.countReportsForReportee).to.equal(1, "wrong reports count for reporter on video 3 abuse")
+          expect(abuse.countReportsForReporter).to.equal(3, "wrong reports count for reportee on video 3 abuse")
+        }
+        if (abuse.video.id === servers[0].video.id) {
+          expect(abuse.countReportsForReportee).to.equal(3, "wrong reports count for reporter on video 1 abuse")
+        }
+      }
     }
   })
 
@@ -265,7 +307,7 @@ describe('Test video abuses', function () {
 
     {
       const res = await getVideoAbusesList(servers[0].url, servers[0].accessToken)
-      expect(res.body.total).to.equal(3)
+      expect(res.body.total).to.equal(5)
     }
   })
 
