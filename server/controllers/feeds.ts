@@ -67,7 +67,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
   const feed = initFeed(name, description)
 
   // Adding video items to the feed, one at a time
-  comments.forEach(comment => {
+  for (const comment of comments) {
     const link = WEBSERVER.URL + comment.getCommentStaticPath()
 
     let title = comment.Video.name
@@ -89,7 +89,7 @@ async function generateVideoCommentsFeed (req: express.Request, res: express.Res
       author,
       date: comment.createdAt
     })
-  })
+  }
 
   // Now the feed generation is done, let's send it!
   return sendFeed(feed, req, res)

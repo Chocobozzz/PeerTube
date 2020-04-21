@@ -19,6 +19,7 @@ import * as libxmljs from 'libxmljs'
 import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { User } from '../../../shared/models/users'
+import { VideoPrivacy } from '@shared/models'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -75,6 +76,14 @@ describe('Test syndication feeds', () => {
 
       await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'super comment 1')
       await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'super comment 2')
+    }
+
+    {
+      const videoAttributes = { name: 'unlisted video', privacy: VideoPrivacy.UNLISTED }
+      const res = await uploadVideo(servers[0].url, servers[0].accessToken, videoAttributes)
+      const videoId = res.body.video.id
+
+      await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoId, 'comment on unlisted video')
     }
 
     await waitJobs(servers)
@@ -196,7 +205,8 @@ describe('Test syndication feeds', () => {
   })
 
   describe('Video comments feed', function () {
-    it('Should contain valid comments (covers JSON feed 1.0 endpoint)', async function () {
+
+    it('Should contain valid comments (covers JSON feed 1.0 endpoint) and not from unlisted videos', async function () {
       for (const server of servers) {
         const json = await getJSONfeed(server.url, 'video-comments')
 

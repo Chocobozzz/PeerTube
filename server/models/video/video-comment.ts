@@ -27,6 +27,7 @@ import {
   MCommentOwnerVideoReply
 } from '../../typings/models/video'
 import { MUserAccountId } from '@server/typings/models'
+import { VideoPrivacy } from '@shared/models'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -390,7 +391,10 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         {
           attributes: [ 'name', 'uuid' ],
           model: VideoModel.unscoped(),
-          required: true
+          required: true,
+          where: {
+            privacy: VideoPrivacy.PUBLIC
+          }
         }
       ]
     }
