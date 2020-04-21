@@ -63,7 +63,7 @@ tags:
       server then deals with inter-server ActivityPub operations and propagates
       information across its social graph by posting activities to actors' inbox
       endpoints.
-  - name: Video Abuse
+  - name: Video Abuses
     description: |
       Video abuses deal with reports of local or remote videos alike.
   - name: Video
@@ -116,7 +116,7 @@ x-tagGroups:
       - Search
   - name: Moderation
     tags:
-      - Video Abuse
+      - Video Abuses
       - Video Blacklist
   - name: Instance Configuration
     tags:
@@ -538,7 +538,7 @@ paths:
                 type: number
   '/users/me/videos/{videoId}/rating':
     get:
-      summary: Get rate of my user of a video
+      summary: Get rate of my user for a video
       security:
         - OAuth2: []
       tags:
@@ -1197,7 +1197,7 @@ paths:
             - admin
             - moderator
       tags:
-        - Video Abuse
+        - Video Abuses
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1217,12 +1217,63 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - Video Abuse
+        - Video Abuses
+        - Videos
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reason:
+                  description: Reason why the user reports this video
+                  type: string
       responses:
         '204':
           description: successful operation
+  '/videos/{id}/abuse/{abuseId}':
+    put:
+      summary: Update an abuse
+      security:
+        - OAuth2:
+          - admin
+          - moderator
+      tags:
+        - Video Abuses
+      responses:
+        '204':
+          description: successful operation
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/abuseId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  $ref: '#/components/schemas/VideoAbuseStateSet'
+                moderationComment:
+                  type: string
+                  description: 'Update the comment of the video abuse for other admin/moderators'
+    delete:
+      summary: Delete an abuse
+      security:
+        - OAuth2:
+            - admin
+            - moderator
+      tags:
+        - Video Abuses
+      responses:
+        '204':
+          description: successful operation
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/abuseId'
+
   '/videos/{id}/blacklist':
     post:
       summary: Blacklist a video
@@ -1973,6 +2024,13 @@ components:
       description: Playlist element id
       schema:
         type: number
+    abuseId:
+      name: abuseId
+      in: path
+      required: true
+      description: Video abuse id
+      schema:
+        type: number
     captionLanguage:
       name: captionLanguage
       in: path
@@ -2183,6 +2241,7 @@ components:
           $ref: '#/components/schemas/VideoPrivacySet'
         label:
           type: string
+
     VideoStateConstant:
       properties:
         id:
@@ -2194,6 +2253,21 @@ components:
           description: 'The video state (Published = 1, to transcode = 2, to import = 3)'
         label:
           type: string
+
+    VideoAbuseStateSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 'The video playlist privacy (Pending = 1, Rejected = 2, Accepted = 3)'
+    VideoAbuseStateConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoAbuseStateSet'
+        label:
+          type: string
+
     VideoResolutionConstant:
       properties:
         id:
@@ -2440,6 +2514,10 @@ components:
           type: string
         reporterAccount:
           $ref: '#/components/schemas/Account'
+        state:
+          $ref: '#/components/schemas/VideoAbuseStateConstant'
+        moderationComment:
+          type: string
         video:
           type: object
           properties:
@@ -2448,8 +2526,6 @@ components:
             name:
               type: string
             uuid:
-              type: string
-            url:
               type: string
         createdAt:
           type: string
