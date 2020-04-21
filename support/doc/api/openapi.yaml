@@ -148,6 +148,17 @@ paths:
       summary: 'List videos of an account'
       parameters:
         - $ref: '#/components/parameters/name'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/skipCount'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/videosSort'
       responses:
         '200':
           description: successful operation
@@ -630,9 +641,17 @@ paths:
         - My Subscriptions
         - Videos
       parameters:
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/videosSort'
       responses:
         '200':
           description: successful operation
@@ -768,6 +787,7 @@ paths:
         - $ref: '#/components/parameters/languageOneOf'
         - $ref: '#/components/parameters/nsfw'
         - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/videosSort'
@@ -1459,6 +1479,17 @@ paths:
         - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/skipCount'
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/videosSort'
       responses:
         '200':
           description: successful operation
@@ -1894,8 +1925,17 @@ paths:
         - Search
       summary: Search videos
       parameters:
+        - $ref: '#/components/parameters/categoryOneOf'
+        - $ref: '#/components/parameters/tagsOneOf'
+        - $ref: '#/components/parameters/tagsAllOf'
+        - $ref: '#/components/parameters/licenceOneOf'
+        - $ref: '#/components/parameters/languageOneOf'
+        - $ref: '#/components/parameters/nsfw'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/videosSort'
         - $ref: '#/components/parameters/videosSearchSort'
         - name: search
           in: query
@@ -2094,7 +2134,7 @@ components:
       name: categoryOneOf
       in: query
       required: false
-      description: category id of the video
+      description: category id of the video (see /videos/categories)
       schema:
         oneOf:
         - type: number
@@ -2133,7 +2173,7 @@ components:
       name: languageOneOf
       in: query
       required: false
-      description: language id of the video
+      description: language id of the video (see /videos/languages). Use _unknown to filter on videos that don't have a video language
       schema:
         oneOf:
         - type: string
@@ -2146,7 +2186,7 @@ components:
       name: licenceOneOf
       in: query
       required: false
-      description: licence id of the video
+      description: licence id of the video (see /videos/licences)
       schema:
         oneOf:
         - type: number
@@ -2155,6 +2195,16 @@ components:
             type: number
       style: form
       explode: false
+    skipCount:
+      name: skipCount
+      in: query
+      required: false
+      description: if you don't need the `total` in the response
+      schema:
+        type: string
+        enum:
+          - 'true'
+          - 'false'
     nsfw:
       name: nsfw
       in: query
