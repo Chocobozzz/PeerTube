@@ -1722,7 +1722,7 @@ paths:
                 - startPosition
                 - insertAfterPosition
 
-  /video-playlists/{id}/videos/:playlistElementId:
+  /video-playlists/{id}/videos/{playlistElementId}:
     put:
       summary: 'Update a playlist element'
       security:
