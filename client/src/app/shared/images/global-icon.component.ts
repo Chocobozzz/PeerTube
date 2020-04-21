@@ -55,8 +55,8 @@ const icons = {
   'search': require('!!raw-loader?!../../../assets/images/global/search.svg').default,
   'refresh': require('!!raw-loader?!../../../assets/images/global/refresh.svg').default,
   'npm': require('!!raw-loader?!../../../assets/images/global/npm.svg').default,
-  'arrows-angle-expand': require('!!raw-loader?!../../../assets/images/global/arrows-angle-expand.svg').default,
-  'arrows-angle-contract': require('!!raw-loader?!../../../assets/images/global/arrows-angle-contract.svg').default
+  'fullscreen': require('!!raw-loader?!../../../assets/images/global/fullscreen.svg').default,
+  'exit-fullscreen': require('!!raw-loader?!../../../assets/images/global/exit-fullscreen.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons

@@ -1,0 +1,16 @@
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs/>
+  <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linejoin="round">
+    <g id="Artboard-4" transform="translate(-400.000000, -1046.000000)" stroke="#333333" stroke-width="2">
+      <g id="Extras" transform="translate(48.000000, 1046.000000)">
+        <g id="exit-fullscreen" transform="translate(352.000000, 0.000000)">
+          <rect id="Rectangle-433" x="6" y="8" width="12" height="8"/>
+          <polyline id="Path-42" stroke-linecap="round" transform="translate(21.500000, 5.500000) scale(-1, -1) translate(-21.500000, -5.500000) " points="23 7 23 4 20 4"/>
+          <polyline id="Path-42" stroke-linecap="round" transform="translate(2.500000, 18.500000) scale(-1, -1) translate(-2.500000, -18.500000) " points="4 20 1 20 1 17"/>
+          <polyline id="Path-42" stroke-linecap="round" transform="translate(21.500000, 18.500000) scale(-1, 1) translate(-21.500000, -18.500000) " points="23 20 23 17 20 17"/>
+          <polyline id="Path-42" stroke-linecap="round" transform="translate(2.500000, 5.500000) scale(-1, 1) translate(-2.500000, -5.500000) " points="4 7 1 7 1 4"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
