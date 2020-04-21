@@ -1,5 +1,5 @@
 <div class="root" [ngClass]="{ 'maximized': isMaximized }">
-  <textarea
+  <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="classes"
     [ngStyle]="{ width: textareaWidth, height: textareaHeight }"

@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { Component, forwardRef, Input, OnInit, OnDestroy } from '@angular/core'
+import { Component, forwardRef, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Subject, Observable, Subscription, fromEvent } from 'rxjs'
 import truncate from 'lodash-es/truncate'
@@ -29,13 +29,17 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   @Input() markdownVideo = false
   @Input() name = 'description'
 
+  @ViewChild('textarea') textareaElement: ElementRef
+
   truncatedPreviewHTML = ''
   previewHTML = ''
   isMaximized = false
 
   private contentChanged = new Subject<string>()
-  private resizeObserver: Observable<Event>
+  private resizeObserver: Observable<Event> | any
   private resizeSubscription: Subscription
+  private orientationChangeObserver: Observable<Event>
+  private orientationChangeSubscription: Subscription
 
   constructor (
     private screenService: ScreenService,
@@ -52,21 +56,30 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
     this.contentChanged.next(this.content)
 
-    if (typeof window.ResizeObserver === 'function') {
-      this.resizeObserver = new ResizeObserver(this.onWindowResize)
-      this.resizeObserver.observe(window)
+    // Make sure the window has scrollbars if resized to a small view and exit maximized mode
+    // By observing resize event
+    if (typeof window.ResizeObserver === 'function') { /* tslint:disable */
+      this.resizeObserver = new ResizeObserver(() => this.onWindowResize()) /* tslint:disable */
+      this.resizeObserver.observe(document.body) /* tslint:disable */
     } else {
       this.resizeObserver = fromEvent(window, 'resize')
-      this.resizeSubscription = this.resizeObserver.subscribe(this.onWindowResize)
+      this.resizeSubscription = this.resizeObserver.subscribe(() => this.onWindowResize())
     }
+
+    // Make sure the window has scrollbars if orientation change to a small view and exit maximized mode
+    // By observing orientationchange event
+    this.orientationChangeObserver = fromEvent(window, 'onrientationchange')
+    this.orientationChangeSubscription = this.orientationChangeObserver.subscribe(() => this.onWindowResize())
   }
 
   ngOnDestroy () {
-    if (typeof window.ResizeObserver === 'function') {
-      this.resizeObserver.unobserve(window)
+    if (typeof window.ResizeObserver === 'function') { /* tslint:disable */
+      this.resizeObserver.unobserve(document.body) /* tslint:disable */
     } else {
       this.resizeSubscription.unsubscribe()
     }
+
+    this.orientationChangeSubscription.unsubscribe()
   }
 
   propagateChange = (_: any) => { /* empty */ }
@@ -91,39 +104,51 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
     this.contentChanged.next(this.content)
   }
 
-  onMaximizeClick () {
+  onMaximizeClick() {
+    this.isMaximized = !this.isMaximized
+
+    // Make sure textarea have the focus
+    this.textareaElement.nativeElement.focus()
+
     const contentElement = document.getElementById('content')
 
-    if (this.isMaximized) {
-      this.isMaximized = false
-
-      contentElement
-        .firstElementChild
-        .lastElementChild
-        .classList.remove('fixed')
+    // Make sure the window has no scrollbars
+    if (!this.isMaximized) {
+      this.unfixMainContentComponent(contentElement)
     } else {
-      this.isMaximized = true
-
-      contentElement
-        .firstElementChild
-        .lastElementChild
-        .classList.add('fixed')
+      this.fixMainContentComponent(contentElement)
     }
   }
 
-  onWindowResize () {
-    if (this.isMaximized && this.screenService.isInMobileView()) {
+  arePreviewsDisplayed() {
+    // Unused
+    return this.screenService.isInSmallView() === false
+  }
+
+  private fixMainContentComponent(element: Element) {
+    element
+      .firstElementChild
+      .lastElementChild
+      .classList.add('fixed')
+  }
+
+  private unfixMainContentComponent(element: Element) {
+    element
+      .firstElementChild
+      .lastElementChild
+      .classList.remove('fixed')
+  }
+
+  private onWindowResize() {
+    if (this.isMaximized) {
       const contentElement = document.getElementById('content')
 
-      contentElement
-        .firstElementChild
-        .lastElementChild
-        .classList.remove('fixed')
+      if (this.screenService.isInMobileView()) {
+        this.unfixMainContentComponent(contentElement)
+      } else {
+        this.fixMainContentComponent(contentElement)
+      }
     }
-  }
-
-  arePreviewsDisplayed () {
-    return this.screenService.isInSmallView() === false
   }
 
   private async updatePreviews () {
