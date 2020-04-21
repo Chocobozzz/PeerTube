@@ -386,7 +386,9 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       order: [ [ 'createdAt', 'DESC' ] ] as Order,
       offset: start,
       limit: count,
-      where: {},
+      where: {
+        deletedAt: null
+      },
       include: [
         {
           attributes: [ 'name', 'uuid' ],
