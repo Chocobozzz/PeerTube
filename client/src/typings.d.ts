@@ -6,8 +6,8 @@ interface NodeModule {
 }
 
 /* ResizeObserver API definition */
-declare global { /* tslint:disable */
+declare global { // tslint:disable-line
   interface Window { ResizeObserver: any }
 }
 
-window.ResizeObserver = window.ResizeObserver || {} /* tslint:disable */
+window.ResizeObserver = window.ResizeObserver || {} // tslint:disable-line
