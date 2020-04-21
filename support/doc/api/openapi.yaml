@@ -1760,6 +1760,44 @@ paths:
         '204':
           description: successful operation
 
+  '/users/me/video-playlists/videos-exist':
+    get:
+      summary: 'Check video exists in my playlists'
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      parameters:
+        - name: videoIds
+          in: query
+          required: true
+          description: The video ids to check
+          schema:
+            type: array
+            items:
+              type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoId:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        playlistElementId:
+                          type: number
+                        playlistId:
+                          type: number
+                        startTimestamp:
+                          type: number
+                        stopTimestamp:
+                          type: number
+
   '/accounts/{name}/video-channels':
     get:
       summary: List video channels of an account
@@ -2316,6 +2354,21 @@ components:
         label:
           type: string
 
+    NSFWPolicy:
+      type: string
+      enum:
+        - display
+        - blur
+        - do_not_list
+
+    UserRole:
+      type: number
+      enum:
+        - 0
+        - 1
+        - 2
+      description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
+
     VideoStateConstant:
       properties:
         id:
@@ -2756,17 +2809,20 @@ components:
           type: string
         email:
           type: string
-        displayNSFW:
+        theme:
+          type: string
+          description: 'Theme enabled by this user'
+        emailVerified:
+          type: boolean
+          description: 'Is email verified?'
+        nsfwPolicy:
+          $ref: '#/components/schemas/NSFWPolicy'
+        webtorrentEnabled:
           type: boolean
         autoPlayVideo:
           type: boolean
         role:
-          type: integer
-          enum:
-            - 0
-            - 1
-            - 2
-          description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
+          $ref: '#/components/schemas/UserRole'
         roleLabel:
           type: string
           enum:
@@ -2777,6 +2833,24 @@ components:
           type: number
         videoQuotaDaily:
           type: number
+        videosCount:
+          type: number
+        videoAbusesCount:
+          type: number
+        videoAbusesAcceptedCount:
+          type: number
+        videoAbusesCreatedCount:
+          type: number
+        videoCommentsCount:
+          type: number
+        noInstanceConfigWarningModal:
+          type: boolean
+        noWelcomeModal:
+          type: boolean
+        blocked:
+          type: boolean
+        blockedReason:
+          type: string
         createdAt:
           type: string
         account:
@@ -3242,12 +3316,7 @@ components:
           type: string
           description: 'The user daily video quota '
         role:
-          type: integer
-          enum:
-            - 0
-            - 1
-            - 2
-          description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
+          $ref: '#/components/schemas/UserRole'
       required:
         - username
         - password
@@ -3270,12 +3339,7 @@ components:
           type: string
           description: 'The updated daily video quota of the user '
         role:
-          type: integer
-          enum:
-            - 0
-            - 1
-            - 2
-          description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
+          $ref: '#/components/schemas/UserRole'
       required:
         - id
         - email
