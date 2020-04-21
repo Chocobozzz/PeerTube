@@ -217,6 +217,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   }
 
   setTableFilter (filter: string) {
+    // FIXME: cannot use ViewChild, so create a component for the filter input
     const filterInput = document.getElementById('table-filter') as HTMLInputElement
     if (filterInput) filterInput.value = filter
   }
