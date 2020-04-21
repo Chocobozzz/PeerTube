@@ -522,7 +522,9 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       updatedAt: this.updatedAt,
 
       ownerAccount: this.OwnerAccount.toFormattedSummaryJSON(),
-      videoChannel: this.VideoChannel ? this.VideoChannel.toFormattedSummaryJSON() : null
+      videoChannel: this.VideoChannel
+        ? this.VideoChannel.toFormattedSummaryJSON()
+        : null
     }
   }
 

@@ -362,7 +362,7 @@ paths:
       summary: Follow a server
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
       requestBody:
         content:
           application/json:
@@ -421,7 +421,7 @@ paths:
         - $ref: '#/components/parameters/id'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
     get:
       summary: Get a user
       security:
@@ -447,7 +447,7 @@ paths:
         - $ref: '#/components/parameters/id'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
       requestBody:
         content:
           application/json:
@@ -461,7 +461,7 @@ paths:
         - Users
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
       requestBody:
         content:
           application/json:
@@ -717,7 +717,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/videos/ownership/{id}/refuse':
     post:
       summary: Refuse ownership change request
@@ -729,7 +729,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/videos/{id}/give-ownership':
     post:
       summary: Request ownership change
@@ -752,7 +752,7 @@ paths:
                 - username
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
         '400':
           description: 'Changing video ownership to a remote account is not supported yet'
   /videos:
@@ -869,6 +869,8 @@ paths:
                 language:
                   description: Video language
                   type: string
+                privacy:
+                  $ref: '#/components/schemas/VideoPrivacySet'
                 description:
                   description: Video description
                   type: string
@@ -930,7 +932,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/videos/{id}/description':
     get:
       summary: Get complete video description
@@ -954,7 +956,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/videos/{id}/watching':
     put:
       summary: Set watching progress of a video
@@ -972,7 +974,7 @@ paths:
         required: true
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   /videos/upload:
     post:
       summary: Upload a video
@@ -1220,7 +1222,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/videos/{id}/blacklist':
     post:
       summary: Blacklist a video
@@ -1234,7 +1236,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
     delete:
       summary: Delete an entry of the blacklist of a video by its id
       security:
@@ -1247,7 +1249,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   /videos/blacklist:
     get:
       summary: List blacklisted videos
@@ -1314,7 +1316,7 @@ paths:
                 contentType: text/vtt, application/x-subrip, text/plain
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
     delete:
       summary: Delete a video caption
       tags:
@@ -1324,7 +1326,7 @@ paths:
         - $ref: '#/components/parameters/captionLanguage'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   /video-channels:
     get:
       summary: List video channels
@@ -1351,7 +1353,7 @@ paths:
         - Video Channels
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
       requestBody:
         content:
           application/json:
@@ -1381,7 +1383,7 @@ paths:
         - $ref: '#/components/parameters/channelHandle'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
       requestBody:
         content:
           application/json:
@@ -1397,7 +1399,7 @@ paths:
         - $ref: '#/components/parameters/channelHandle'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/video-channels/{channelHandle}/videos':
     get:
       summary: List videos of a video channel
@@ -1413,6 +1415,22 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+
+  /video-playlists/privacies:
+    get:
+      summary: List available playlist privacies
+      tags:
+        - Video Playlists
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+
   /video-playlists:
     get:
       summary: List video playlists
@@ -1431,6 +1449,235 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoPlaylist'
+    post:
+      summary: Create a video playlist
+      description: 'If the video playlist is set as public, the videoChannelId is mandatory.'
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoPlaylist:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      uuid:
+                        type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  description: Video playlist display name
+                  type: string
+                thumbnailfile:
+                  description: Video playlist thumbnail file
+                  type: string
+                  format: binary
+                privacy:
+                  $ref: '#/components/schemas/VideoPlaylistPrivacySet'
+                description:
+                  description: Video playlist description
+                  type: string
+                videoChannelId:
+                  description: Video channel in which the playlist will be published
+                  type: number
+              required:
+                - displayName
+
+  /video-playlists/{id}:
+    get:
+      summary: Get a video playlist
+      tags:
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoPlaylist'
+    put:
+      summary: Update a video playlist
+      description: 'If the video playlist is set as public, the playlist must have a assigned channel.'
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      responses:
+        '204':
+          description: successful operation
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  description: Video playlist display name
+                  type: string
+                thumbnailfile:
+                  description: Video playlist thumbnail file
+                  type: string
+                  format: binary
+                privacy:
+                  $ref: '#/components/schemas/VideoPlaylistPrivacySet'
+                description:
+                  description: Video playlist description
+                  type: string
+                videoChannelId:
+                  description: Video channel in which the playlist will be published
+                  type: number
+    delete:
+      summary: Delete a video playlist
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+
+  /video-playlists/{id}/videos:
+    get:
+      summary: 'List videos of a playlist'
+      tags:
+        - Videos
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+    post:
+      summary: 'Add a video in a playlist'
+      security:
+        - OAuth2: []
+      tags:
+        - Videos
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  videoPlaylistElement:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                videoId:
+                  type: number
+                  description: 'Video to add in the playlist'
+                startTimestamp:
+                  type: number
+                  description: 'Start the video at this specific timestamp (in seconds)'
+                stopTimestamp:
+                  type: number
+                  description: 'Stop the video at this specific timestamp (in seconds)'
+              required:
+                - videoId
+
+  /video-playlists/{id}/videos/reorder:
+    post:
+      summary: 'Reorder a playlist'
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startPosition:
+                  type: number
+                  description: 'Start position of the element to reorder (starts from 1)'
+                insertAfterPosition:
+                  type: number
+                  description: 'New position for the block to reorder (starts from 0, to add the block before the first element)'
+                reorderLength:
+                  type: number
+                  description: 'How many element from startPosition to reorder (minimum length is 1)'
+              required:
+                - startPosition
+                - insertAfterPosition
+
+  /video-playlists/{id}/videos/:playlistElementId:
+    put:
+      summary: 'Update a playlist element'
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/playlistElementId'
+      responses:
+        '204':
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                startTimestamp:
+                  type: number
+                  description: 'Start the video at this specific timestamp (in seconds)'
+                stopTimestamp:
+                  type: number
+                  description: 'Stop the video at this specific timestamp (in seconds)'
+    delete:
+      summary: 'Delete an element from a playlist'
+      security:
+        - OAuth2: []
+      tags:
+        - Video Playlists
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+        - $ref: '#/components/parameters/playlistElementId'
+      responses:
+        '204':
+          description: successful operation
+
   '/accounts/{name}/video-channels':
     get:
       summary: List video channels of an account
@@ -1553,7 +1800,7 @@ paths:
         - $ref: '#/components/parameters/commentId'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   '/videos/{id}/rate':
     put:
       summary: Like/dislike a video
@@ -1565,7 +1812,7 @@ paths:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
+          description: successful operation
   /search/videos:
     get:
       tags:
@@ -1716,9 +1963,16 @@ components:
       name: id
       in: path
       required: true
-      description: The video id or uuid
+      description: The object id or uuid
       schema:
         type: string
+    playlistElementId:
+      name: playlistElementId
+      in: path
+      required: true
+      description: Playlist element id
+      schema:
+        type: number
     captionLanguage:
       name: captionLanguage
       in: path
@@ -1887,21 +2141,46 @@ components:
           type: string
         label:
           type: string
+
+    VideoPlaylistPrivacySet:
+      type: integer
+      enum:
+        - 1
+        - 2
+        - 3
+      description: 'The video playlist privacy (Public = 1, Unlisted = 2, Private = 3)'
+    VideoPlaylistPrivacyConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoPlaylistPrivacySet'
+        label:
+          type: string
+
+    VideoPlaylistTypeSet:
+      type: integer
+      enum:
+        - 1
+        - 2
+      description: 'The video playlist type (Regular = 1, Watch Later = 2)'
+    VideoPlaylistTypeConstant:
+      properties:
+        id:
+          $ref: '#/components/schemas/VideoPlaylistTypeSet'
+        label:
+          type: string
+
     VideoPrivacySet:
       type: integer
       enum:
         - 1
         - 2
         - 3
-      description: 'The video privacy (Public = 1, Unlisted = 2, Private = 3)'
+        - 4
+      description: 'The video privacy (Public = 1, Unlisted = 2, Private = 3, Internal = 4)'
     VideoPrivacyConstant:
       properties:
         id:
-          type: integer
-          enum:
-            - 1
-            - 2
-            - 3
+          $ref: '#/components/schemas/VideoPrivacySet'
         label:
           type: string
     VideoStateConstant:
@@ -1926,14 +2205,13 @@ components:
       properties:
         privacy:
           $ref: '#/components/schemas/VideoPrivacySet'
-          description: Video privacy target
         updateAt:
           type: string
           format: date
           description: When to update the video
       required:
         - updateAt
-    VideoAccountSummary:
+    AccountSummary:
       properties:
         id:
           type: number
@@ -1947,7 +2225,8 @@ components:
           type: string
         avatar:
           nullable: true
-          $ref: '#/components/schemas/Avatar'
+          allOf:
+            - $ref: '#/components/schemas/Avatar'
     VideoChannelSummary:
       properties:
         id:
@@ -1962,7 +2241,8 @@ components:
           type: string
         avatar:
           nullable: true
-          $ref: '#/components/schemas/Avatar'
+          allOf:
+            - $ref: '#/components/schemas/Avatar'
     PlaylistElement:
       properties:
         position:
@@ -1973,7 +2253,8 @@ components:
           type: number
         video:
           nullable: true
-          $ref: '#/components/schemas/Video'
+          allOf:
+            - $ref: '#/components/schemas/Video'
     VideoFile:
       properties:
         magnetUri:
@@ -2064,7 +2345,8 @@ components:
           $ref: '#/components/schemas/VideoStateConstant'
         scheduledUpdate:
           nullable: true
-          $ref: '#/components/schemas/VideoScheduledUpdate'
+          allOf:
+            - $ref: '#/components/schemas/VideoScheduledUpdate'
         blacklisted:
           nullable: true
           type: boolean
@@ -2072,7 +2354,7 @@ components:
           nullable: true
           type: string
         account:
-          $ref: '#/components/schemas/VideoAccountSummary'
+          $ref: '#/components/schemas/AccountSummary'
         channel:
           $ref: '#/components/schemas/VideoChannelSummary'
         userHistory:
@@ -2233,32 +2515,13 @@ components:
         thumbnailPath:
           type: string
         privacy:
-          type: object
-          properties:
-            id:
-              type: number
-            label:
-              type: string
+          $ref: '#/components/schemas/VideoPlaylistPrivacyConstant'
         type:
-          type: object
-          properties:
-            id:
-              type: number
-            label:
-              type: string
+          $ref: '#/components/schemas/VideoPlaylistTypeConstant'
         ownerAccount:
-          type: object
-          properties:
-            id:
-              type: number
-            name:
-              type: string
-            displayName:
-              type: string
-            url:
-              type: string
-            host:
-              type: string
+          $ref: '#/components/schemas/AccountSummary'
+        videoChannel:
+          $ref: '#/components/schemas/VideoChannelSummary'
     VideoComment:
       properties:
         id:
