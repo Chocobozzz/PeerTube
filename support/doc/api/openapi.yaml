@@ -14,13 +14,13 @@ info:
   description: |
     # Introduction
 
-    The PeerTube API is built on HTTP(S). Our API is RESTful. It has predictable
-    resource URLs. It returns HTTP response codes to indicate errors. It also
-    accepts and returns JSON in the HTTP body. You can use your favorite
+    The PeerTube API is built on HTTP(S) and is RESTful. You can use your favorite
     HTTP/REST library for your programming language to use PeerTube. No official
     SDK is currently provided, but the spec API is fully compatible with
     [openapi-generator](https://github.com/OpenAPITools/openapi-generator/wiki/API-client-generator-HOWTO)
     which generates a client SDK in the language of your choice.
+
+    See the [Quick Start guide](https://docs.joinpeertube.org/#/api-rest-getting-started) so you can play with the PeerTube API.
 
     # Authentication
 
@@ -56,7 +56,7 @@ tags:
     description: >
       Jobs are long-running tasks enqueued and processed by the instance
       itself. No additional worker registration is currently available.
-  - name: Server Following
+  - name: Instance Follows
     description: >
       Managing servers which the instance interacts with is crucial to the
       concept of federation in PeerTube and external video indexation. The PeerTube
@@ -75,15 +75,15 @@ tags:
       Videos from other instances federated by the instance (that is, instances
       followed by the instance) can be found via keywords and other criteria of
       the advanced search.
-  - name: Video Comment
+  - name: Video Comments
     description: >
       Operations dealing with comments to a video. Comments are organized in
       threads.
-  - name: Video Playlist
+  - name: Video Playlists
     description: >
       Operations dealing with playlists of videos. Playlists are bound to users
       and/or channels.
-  - name: Video Channel
+  - name: Video Channels
     description: >
       Operations dealing with creation, modification and video listing of a
       user's channels.
@@ -91,23 +91,29 @@ tags:
     description: >
       Operations dealing with blacklisting videos (removing them from view and
       preventing interactions).
-  - name: Video Rate
+  - name: Video Rates
     description: >
-      Voting for a video.
+      Like/dislike a video.
 x-tagGroups:
   - name: Accounts
     tags:
       - Accounts
-      - User
+      - Users
       - My User
+      - My Subscriptions
   - name: Videos
     tags:
       - Video
       - Video Caption
-      - Video Channel
-      - Video Comment
+      - Video Channels
+      - Video Comments
       - Video Following
-      - Video Rate
+      - Video Rates
+      - Video Playlists
+      - Video Ownership Change
+  - name: Search
+    tags:
+      - Search
   - name: Moderation
     tags:
       - Video Abuse
@@ -115,19 +121,16 @@ x-tagGroups:
   - name: Instance Configuration
     tags:
       - Config
-      - Server Following
+      - Instance Follows
   - name: Jobs
     tags:
       - Job
-  - name: Search
-    tags:
-      - Search
 paths:
   '/accounts/{name}':
     get:
       tags:
         - Accounts
-      summary: Get the account by name
+      summary: Get an account
       parameters:
         - $ref: '#/components/parameters/name'
       responses:
@@ -142,7 +145,7 @@ paths:
       tags:
         - Accounts
         - Video
-      summary: 'Get videos for an account, provided the name of that account'
+      summary: 'List videos of an account'
       parameters:
         - $ref: '#/components/parameters/name'
       responses:
@@ -190,7 +193,7 @@ paths:
     get:
       tags:
         - Accounts
-      summary: Get all accounts
+      summary: List accounts
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -208,7 +211,7 @@ paths:
     get:
       tags:
         - Config
-      summary: Get the public configuration of the server
+      summary: Get instance public configuration
       responses:
         '200':
           description: successful operation
@@ -218,7 +221,7 @@ paths:
                 $ref: '#/components/schemas/ServerConfig'
   /config/about:
     get:
-      summary: Get the instance about page content
+      summary: Get instance "About" information
       tags:
         - Config
       responses:
@@ -230,7 +233,7 @@ paths:
                 $ref: '#/components/schemas/ServerConfigAbout'
   /config/custom:
     get:
-      summary: Get the runtime configuration of the server
+      summary: Get instance runtime configuration
       tags:
         - Config
       security:
@@ -244,7 +247,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ServerConfigCustom'
     put:
-      summary: Set the runtime configuration of the server
+      summary: Set instance runtime configuration
       tags:
         - Config
       security:
@@ -254,7 +257,7 @@ paths:
         '200':
           description: successful operation
     delete:
-      summary: Delete the runtime configuration of the server
+      summary: Delete instance runtime configuration
       tags:
         - Config
       security:
@@ -265,7 +268,7 @@ paths:
           description: successful operation
   /jobs/{state}:
     get:
-      summary: Get list of jobs
+      summary: List instance jobs
       security:
         - OAuth2:
             - admin
@@ -302,8 +305,8 @@ paths:
         - OAuth2:
             - admin
       tags:
-        - Server Following
-      summary: Unfollow a server by hostname
+        - Instance Follows
+      summary: Unfollow a server
       parameters:
         - name: host
           in: path
@@ -317,8 +320,8 @@ paths:
   /server/followers:
     get:
       tags:
-        - Server Following
-      summary: Get followers of the server
+        - Instance Follows
+      summary: List instance followers
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -335,8 +338,8 @@ paths:
   /server/following:
     get:
       tags:
-        - Server Following
-      summary: Get servers followed by the server
+        - Instance Follows
+      summary: List instance followings
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -355,7 +358,7 @@ paths:
         - OAuth2:
             - admin
       tags:
-        - Server Following
+        - Instance Follows
       summary: Follow a server
       responses:
         '204':
@@ -367,12 +370,12 @@ paths:
               $ref: '#/components/schemas/Follow'
   /users:
     post:
-      summary: Creates user
+      summary: Create a user
       security:
         - OAuth2:
             - admin
       tags:
-        - User
+        - Users
       responses:
         '200':
           description: successful operation
@@ -388,11 +391,11 @@ paths:
         description: User to create
         required: true
     get:
-      summary: Get a list of users
+      summary: List users
       security:
         - OAuth2: []
       tags:
-        - User
+        - Users
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -408,23 +411,23 @@ paths:
                   $ref: '#/components/schemas/User'
   '/users/{id}':
     delete:
-      summary: Delete a user by its id
+      summary: Delete a user
       security:
         - OAuth2:
             - admin
       tags:
-        - User
+        - Users
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
     get:
-      summary: Get user by its id
+      summary: Get a user
       security:
         - OAuth2: []
       tags:
-        - User
+        - Users
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
@@ -435,11 +438,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
     put:
-      summary: Update user profile by its id
+      summary: Update a user
       security:
         - OAuth2: []
       tags:
-        - User
+        - Users
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
@@ -455,7 +458,7 @@ paths:
     post:
       summary: Register a user
       tags:
-        - User
+        - Users
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -467,7 +470,7 @@ paths:
         required: true
   /users/me:
     get:
-      summary: Get current user information
+      summary: Get my user information
       security:
         - OAuth2:
           - user
@@ -483,7 +486,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
     put:
-      summary: Update current user information
+      summary: Update my user information
       security:
         - OAuth2:
           - user
@@ -500,11 +503,12 @@ paths:
         required: true
   /users/me/videos/imports:
     get:
-      summary: Get video imports of current user
+      summary: Get video imports of my user
       security:
         - OAuth2:
             - user
       tags:
+        - Videos
         - My User
       parameters:
         - $ref: '#/components/parameters/start'
@@ -519,7 +523,7 @@ paths:
                 $ref: '#/components/schemas/VideoImport'
   /users/me/video-quota-used:
     get:
-      summary: Get current user used quota
+      summary: Get my user used quota
       security:
         - OAuth2:
           - user
@@ -534,11 +538,12 @@ paths:
                 type: number
   '/users/me/videos/{videoId}/rating':
     get:
-      summary: 'Get rating of video by its id, among those of the current user'
+      summary: Get rate of my user of a video
       security:
         - OAuth2: []
       tags:
         - My User
+        - Video Rates
       parameters:
         - name: videoId
           in: path
@@ -555,12 +560,13 @@ paths:
                 $ref: '#/components/schemas/GetMeVideoRating'
   /users/me/videos:
     get:
-      summary: Get videos of the current user
+      summary: Get videos of my user
       security:
         - OAuth2:
           - user
       tags:
         - My User
+        - Videos
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -574,12 +580,12 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
   /users/me/subscriptions:
     get:
-      summary: Get subscriptions of the current user
+      summary: Get my user subscriptions
       security:
         - OAuth2:
             - user
       tags:
-        - My User
+        - My Subscriptions
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -588,23 +594,23 @@ paths:
         '200':
           description: successful operation
     post:
-      summary: Add subscription to the current user
+      summary: Add subscription to my user
       security:
         - OAuth2:
             - user
       tags:
-        - My User
+        - My Subscriptions
       responses:
         '200':
           description: successful operation
   /users/me/subscriptions/exist:
     get:
-      summary: Get if subscriptions exist for the current user
+      summary: Get if subscriptions exist for my user
       security:
         - OAuth2:
             - user
       tags:
-        - My User
+        - My Subscriptions
       parameters:
         - $ref: '#/components/parameters/subscriptionsUris'
       responses:
@@ -616,12 +622,13 @@ paths:
                 type: object
   /users/me/subscriptions/videos:
     get:
-      summary: Get videos of subscriptions of the current user
+      summary: List videos of subscriptions of my user
       security:
         - OAuth2:
           - user
       tags:
-        - My User
+        - My Subscriptions
+        - Videos
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -635,12 +642,12 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
   '/users/me/subscriptions/{subscriptionHandle}':
     get:
-      summary: Get subscription of the current user for a given uri
+      summary: Get subscription of my user
       security:
         - OAuth2:
             - user
       tags:
-        - My User
+        - My Subscriptions
       parameters:
         - $ref: '#/components/parameters/subscriptionHandle'
       responses:
@@ -651,12 +658,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoChannel'
     delete:
-      summary: Delete subscription of the current user for a given uri
+      summary: Delete subscription of my user
       security:
         - OAuth2:
             - user
       tags:
-        - My User
+        - My Subscriptions
       parameters:
         - $ref: '#/components/parameters/subscriptionHandle'
       responses:
@@ -664,7 +671,7 @@ paths:
           description: successful operation
   /users/me/avatar/pick:
     post:
-      summary: Update current user avatar
+      summary: Update my user avatar
       security:
         - OAuth2: []
       tags:
@@ -689,9 +696,68 @@ paths:
             encoding:
               avatarfile:
                 contentType: image/png, image/jpeg
+  /videos/ownership:
+    get:
+      summary: List video ownership changes
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      responses:
+        '200':
+          description: successful operation
+  '/videos/ownership/{id}/accept':
+    post:
+      summary: Accept ownership change request
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/ownership/{id}/refuse':
+    post:
+      summary: Refuse ownership change request
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+  '/videos/{id}/give-ownership':
+    post:
+      summary: Request ownership change
+      tags:
+        - Video Ownership Change
+      security:
+        - OAuth2: []
+      parameters:
+        - $ref: '#/components/parameters/idOrUUID'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+      responses:
+        '204':
+          $ref: '#/paths/~1users~1me/put/responses/204'
+        '400':
+          description: 'Changing video ownership to a remote account is not supported yet'
   /videos:
     get:
-      summary: Get list of videos
+      summary: List videos
       tags:
         - Video
       parameters:
@@ -714,7 +780,7 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
   /videos/categories:
     get:
-      summary: Get list of video categories known by the server
+      summary: List available video categories
       tags:
         - Video
       responses:
@@ -728,7 +794,7 @@ paths:
                   type: string
   /videos/licences:
     get:
-      summary: Get list of video licences known by the server
+      summary: List available video licences
       tags:
         - Video
       responses:
@@ -742,7 +808,7 @@ paths:
                   type: string
   /videos/languages:
     get:
-      summary: Get list of languages known by the server
+      summary: List available video languages
       tags:
         - Video
       responses:
@@ -756,7 +822,7 @@ paths:
                   type: string
   /videos/privacies:
     get:
-      summary: Get list of privacy policies supported by the server
+      summary: List available video privacies
       tags:
         - Video
       responses:
@@ -770,7 +836,7 @@ paths:
                   type: string
   '/videos/{id}':
     put:
-      summary: Update metadata for a video by its id
+      summary: Update a video
       security:
         - OAuth2: []
       tags:
@@ -842,7 +908,7 @@ paths:
               previewfile:
                 contentType: image/jpeg
     get:
-      summary: Get a video by its id
+      summary: Get a video
       tags:
         - Video
       parameters:
@@ -855,7 +921,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoDetails'
     delete:
-      summary: Delete a video by its id
+      summary: Delete a video
       security:
         - OAuth2: []
       tags:
@@ -867,7 +933,7 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/videos/{id}/description':
     get:
-      summary: Get a video description by its id
+      summary: Get complete video description
       tags:
         - Video
       parameters:
@@ -881,7 +947,7 @@ paths:
                 type: string
   '/videos/{id}/views':
     post:
-      summary: Add a view to the video by its id
+      summary: Add a view to a video
       tags:
         - Video
       parameters:
@@ -891,7 +957,7 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/videos/{id}/watching':
     put:
-      summary: Set watching progress of a video by its id for a user
+      summary: Set watching progress of a video
       tags:
         - Video
       security:
@@ -907,68 +973,9 @@ paths:
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
-  /videos/ownership:
-    get:
-      summary: Get list of video ownership changes requests
-      tags:
-        - Video
-      security:
-        - OAuth2: []
-      responses:
-        '200':
-          description: successful operation
-  '/videos/ownership/{id}/accept':
-    post:
-      summary: Refuse ownership change request for video by its id
-      tags:
-        - Video
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-      responses:
-        '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
-  '/videos/ownership/{id}/refuse':
-    post:
-      summary: Accept ownership change request for video by its id
-      tags:
-        - Video
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-      responses:
-        '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
-  '/videos/{id}/give-ownership':
-    post:
-      summary: Request change of ownership for a video you own, by its id
-      tags:
-        - Video
-      security:
-        - OAuth2: []
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                username:
-                  type: string
-              required:
-                - username
-      responses:
-        '204':
-          $ref: '#/paths/~1users~1me/put/responses/204'
-        '400':
-          description: 'Changing video ownership to a remote account is not supported yet'
   /videos/upload:
     post:
-      summary: Upload a video file with its metadata
+      summary: Upload a video
       security:
         - OAuth2: []
       tags:
@@ -1090,7 +1097,8 @@ paths:
               "Authorization:Bearer $token"
   /videos/imports:
     post:
-      summary: Import a torrent or magnetURI or HTTP resource (if enabled by the instance administrator)
+      summary: Import a video
+      description: Import a torrent or magnetURI or HTTP resource (if enabled by the instance administrator)
       security:
         - OAuth2: []
       tags:
@@ -1181,9 +1189,11 @@ paths:
                 contentType: image/jpeg
   /videos/abuse:
     get:
-      summary: Get list of reported video abuses
+      summary: List video abuses
       security:
-        - OAuth2: []
+        - OAuth2:
+            - admin
+            - moderator
       tags:
         - Video Abuse
       parameters:
@@ -1201,7 +1211,7 @@ paths:
                   $ref: '#/components/schemas/VideoAbuse'
   '/videos/{id}/abuse':
     post:
-      summary: 'Report an abuse, on a video by its id'
+      summary: Report an abuse
       security:
         - OAuth2: []
       tags:
@@ -1213,7 +1223,7 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/videos/{id}/blacklist':
     post:
-      summary: Put on blacklist a video by its id
+      summary: Blacklist a video
       security:
         - OAuth2:
             - admin
@@ -1240,7 +1250,7 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   /videos/blacklist:
     get:
-      summary: Get list of videos on blacklist
+      summary: List blacklisted videos
       security:
         - OAuth2:
             - admin
@@ -1262,7 +1272,7 @@ paths:
                   $ref: '#/components/schemas/VideoBlacklist'
   /videos/{id}/captions:
     get:
-      summary: Get list of video's captions
+      summary: List captions of a video
       tags:
         - Video Caption
       parameters:
@@ -1317,9 +1327,9 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   /video-channels:
     get:
-      summary: Get list of video channels
+      summary: List video channels
       tags:
-        - Video Channel
+        - Video Channels
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1334,11 +1344,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/VideoChannel'
     post:
-      summary: Creates a video channel for the current user
+      summary: Create a video channel
       security:
         - OAuth2: []
       tags:
-        - Video Channel
+        - Video Channels
       responses:
         '204':
           $ref: '#/paths/~1users~1me/put/responses/204'
@@ -1349,9 +1359,9 @@ paths:
               $ref: '#/components/schemas/VideoChannelCreate'
   '/video-channels/{channelHandle}':
     get:
-      summary: Get a video channel by its id
+      summary: Get a video channel
       tags:
-        - Video Channel
+        - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
       responses:
@@ -1362,11 +1372,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/VideoChannel'
     put:
-      summary: Update a video channel by its id
+      summary: Update a video channel
       security:
         - OAuth2: []
       tags:
-        - Video Channel
+        - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
       responses:
@@ -1378,11 +1388,11 @@ paths:
             schema:
               $ref: '#/components/schemas/VideoChannelUpdate'
     delete:
-      summary: Delete a video channel by its id
+      summary: Delete a video channel
       security:
         - OAuth2: []
       tags:
-        - Video Channel
+        - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
       responses:
@@ -1390,10 +1400,10 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/video-channels/{channelHandle}/videos':
     get:
-      summary: Get videos of a video channel by its id
+      summary: List videos of a video channel
       tags:
         - Video
-        - Video Channel
+        - Video Channels
       parameters:
         - $ref: '#/components/parameters/channelHandle'
       responses:
@@ -1405,9 +1415,9 @@ paths:
                 $ref: '#/components/schemas/VideoListResponse'
   /video-playlists:
     get:
-      summary: Get list of video playlists
+      summary: List video playlists
       tags:
-        - Video Playlist
+        - Video Playlists
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1423,9 +1433,10 @@ paths:
                   $ref: '#/components/schemas/VideoPlaylist'
   '/accounts/{name}/video-channels':
     get:
-      summary: Get video channels of an account by its name
+      summary: List video channels of an account
       tags:
-        - Video Channel
+        - Video Channels
+        - Accounts
       parameters:
         - $ref: '#/components/parameters/name'
       responses:
@@ -1439,11 +1450,11 @@ paths:
                   $ref: '#/components/schemas/VideoChannel'
   '/accounts/{name}/ratings':
     get:
-      summary: Get ratings of an account by its name
+      summary: List ratings of an account
       security:
         - OAuth2: []
       tags:
-        - User
+        - Accounts
       parameters:
         - $ref: '#/components/parameters/name'
         - $ref: '#/components/parameters/start'
@@ -1469,9 +1480,9 @@ paths:
                   $ref: '#/components/schemas/VideoRating'
   '/videos/{id}/comment-threads':
     get:
-      summary: Get the comment threads of a video by its id
+      summary: List threads of a video
       tags:
-        - Video Comment
+        - Video Comments
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/start'
@@ -1485,11 +1496,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentThreadResponse'
     post:
-      summary: 'Creates a comment thread, on a video by its id'
+      summary: Create a thread
       security:
         - OAuth2: []
       tags:
-        - Video Comment
+        - Video Comments
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
@@ -1501,9 +1512,9 @@ paths:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
   '/videos/{id}/comment-threads/{threadId}':
     get:
-      summary: 'Get the comment thread by its id, of a video by its id'
+      summary: Get a thread
       tags:
-        - Video Comment
+        - Video Comments
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/threadId'
@@ -1516,11 +1527,11 @@ paths:
                 $ref: '#/components/schemas/VideoCommentThreadTree'
   '/videos/{id}/comments/{commentId}':
     post:
-      summary: 'Creates a comment in a comment thread by its id, of a video by its id'
+      summary: Reply to a thread of a video
       security:
         - OAuth2: []
       tags:
-        - Video Comment
+        - Video Comments
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/commentId'
@@ -1532,11 +1543,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
     delete:
-      summary: 'Delete a comment in a comment thread by its id, of a video by its id'
+      summary: Delete a comment or a reply
       security:
         - OAuth2: []
       tags:
-        - Video Comment
+        - Video Comments
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/commentId'
@@ -1545,11 +1556,11 @@ paths:
           $ref: '#/paths/~1users~1me/put/responses/204'
   '/videos/{id}/rate':
     put:
-      summary: Vote for a video by its id
+      summary: Like/dislike a video
       security:
         - OAuth2: []
       tags:
-        - Video Rate
+        - Video Rates
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
@@ -1559,7 +1570,7 @@ paths:
     get:
       tags:
         - Search
-      summary: Get the videos corresponding to a given query
+      summary: Search videos
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1581,9 +1592,9 @@ servers:
   - url: 'https://peertube.cpy.re/api/v1'
     description: Live Test Server (live data - stable version)
   - url: 'https://peertube2.cpy.re/api/v1'
-    description: Live Test Server (live data - bleeding edge version)
+    description: Live Test Server (live data - latest nighlty version)
   - url: 'https://peertube3.cpy.re/api/v1'
-    description: Live Test Server (live data - bleeding edge version)
+    description: Live Test Server (live data - latest RC version)
 components:
   parameters:
     start:
