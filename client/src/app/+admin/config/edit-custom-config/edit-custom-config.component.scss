@@ -71,7 +71,7 @@ textarea {
 my-markdown-textarea ::ng-deep {
   .root {
     @media screen and (max-width: 1400px) {
-      flex-direction: column !important;
+      //flex-direction: column !important;
     }
 
     textarea {

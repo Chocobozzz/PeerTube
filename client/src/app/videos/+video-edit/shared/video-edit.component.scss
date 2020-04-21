@@ -164,7 +164,7 @@ p-calendar {
 ::ng-deep my-markdown-textarea {
   .root {
     @include media-breakpoint-down(xl) {
-      flex-direction: column !important;
+      //flex-direction: column !important;
     }
 
     textarea {
@@ -200,7 +200,7 @@ p-calendar {
   .col-video-edit {
     @include media-breakpoint-up(md) {
       @include make-col(8);
-  
+
       & + .col-video-edit {
         @include make-col(4);
       }

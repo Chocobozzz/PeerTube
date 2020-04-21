@@ -1,7 +1,7 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { Component, forwardRef, Input, OnInit } from '@angular/core'
+import { Component, forwardRef, Input, OnInit, OnDestroy } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Subject } from 'rxjs'
+import { Subject, Observable, Subscription, fromEvent } from 'rxjs'
 import truncate from 'lodash-es/truncate'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { MarkdownService } from '@app/shared/renderer'
@@ -19,24 +19,23 @@ import { MarkdownService } from '@app/shared/renderer'
   ]
 })
 
-export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
+export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() content = ''
   @Input() classes: string[] | { [klass: string]: any[] | any } = []
   @Input() textareaWidth = '100%'
   @Input() textareaHeight = '150px'
-  @Input() previewColumn = false
   @Input() truncate: number
   @Input() markdownType: 'text' | 'enhanced' = 'text'
   @Input() markdownVideo = false
   @Input() name = 'description'
 
-  textareaMarginRight = '0'
-  flexDirection = 'column'
   truncatedPreviewHTML = ''
   previewHTML = ''
   isMaximized = false
 
   private contentChanged = new Subject<string>()
+  private resizeObserver: Observable<Event>
+  private resizeSubscription: Subscription
 
   constructor (
     private screenService: ScreenService,
@@ -53,9 +52,20 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
 
     this.contentChanged.next(this.content)
 
-    if (this.previewColumn) {
-      this.flexDirection = 'row'
-      this.textareaMarginRight = '15px'
+    if (typeof window.ResizeObserver === 'function') {
+      this.resizeObserver = new ResizeObserver(this.onWindowResize)
+      this.resizeObserver.observe(window)
+    } else {
+      this.resizeObserver = fromEvent(window, 'resize')
+      this.resizeSubscription = this.resizeObserver.subscribe(this.onWindowResize)
+    }
+  }
+
+  ngOnDestroy () {
+    if (typeof window.ResizeObserver === 'function') {
+      this.resizeObserver.unobserve(window)
+    } else {
+      this.resizeSubscription.unsubscribe()
     }
   }
 
@@ -82,10 +92,33 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   }
 
   onMaximizeClick () {
+    const contentElement = document.getElementById('content')
+
     if (this.isMaximized) {
       this.isMaximized = false
+
+      contentElement
+        .firstElementChild
+        .lastElementChild
+        .classList.remove('fixed')
     } else {
       this.isMaximized = true
+
+      contentElement
+        .firstElementChild
+        .lastElementChild
+        .classList.add('fixed')
+    }
+  }
+
+  onWindowResize () {
+    if (this.isMaximized && this.screenService.isInMobileView()) {
+      const contentElement = document.getElementById('content')
+
+      contentElement
+        .firstElementChild
+        .lastElementChild
+        .classList.remove('fixed')
     }
   }
 

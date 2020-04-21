@@ -1,12 +1,12 @@
-<div class="root" [ngClass]="{ 'maximized': isMaximized, 'column': flexDirection === 'column' }" [ngStyle]="{ 'flex-direction': flexDirection }">
+<div class="root" [ngClass]="{ 'maximized': isMaximized }">
   <textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="classes"
-    [ngStyle]="{ width: textareaWidth, height: textareaHeight, 'margin-right': textareaMarginRight }"
+    [ngStyle]="{ width: textareaWidth, height: textareaHeight }"
     [id]="name" [name]="name">
   </textarea>
 
-  <div ngbNav #nav="ngbNav" class="nav-pills previews">
+  <div ngbNav #nav="ngbNav" class="nav-pills nav-preview" [ngStyle]="{ width: textareaWidth }">
     <ng-container ngbNavItem *ngIf="truncate !== undefined">
       <a ngbNavLink i18n>Truncated preview</a>
 
@@ -23,9 +23,14 @@
       </ng-template>
     </ng-container>
 
-    <my-button *ngIf="!isMaximized" icon="arrows-angle-expand" (click)="onMaximizeClick()"></my-button>
-    <my-button *ngIf="isMaximized" icon="arrows-angle-contract" (click)="onMaximizeClick()"></my-button>
+    <my-button
+      *ngIf="!isMaximized" icon="arrows-angle-expand" (click)="onMaximizeClick()"
+    ></my-button>
+
+    <my-button
+      *ngIf="isMaximized" icon="arrows-angle-contract" (click)="onMaximizeClick()"
+    ></my-button>
   </div>
 
-  <div [ngbNavOutlet]="nav"></div>
+  <div [ngbNavOutlet]="nav" [ngStyle]="{ width: textareaWidth }"></div>
 </div>
