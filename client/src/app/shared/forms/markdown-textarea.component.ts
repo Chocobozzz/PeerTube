@@ -58,13 +58,13 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
     // Make sure the window has scrollbars if resized to a small view and exit maximized mode
     // By observing resize event
-    if (typeof window.ResizeObserver === 'function') { // tslint:disable-line
-      this.resizeObserver = new ResizeObserver(() => this.onWindowResize()) // tslint:disable-line
-      this.resizeObserver.observe(document.body)  // tslint:disable-line
-    } else {
+    //if (typeof window.ResizeObserver === 'function') { // @ts-ignore
+    //  this.resizeObserver = new ResizeObserver(() => this.onWindowResize()) // @ts-ignore
+    //  this.resizeObserver.observe(document.body) // @ts-ignore
+    //} else {
       this.resizeObserver = fromEvent(window, 'resize')
       this.resizeSubscription = this.resizeObserver.subscribe(() => this.onWindowResize())
-    }
+    //}
 
     // Make sure the window has scrollbars if orientation change to a small view and exit maximized mode
     // By observing orientationchange event
@@ -73,11 +73,11 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   }
 
   ngOnDestroy () {
-    if (typeof window.ResizeObserver === 'function') { // tslint:disable-line
-      this.resizeObserver.unobserve(document.body) // tslint:disable-line
-    } else {
+    //if (typeof window.ResizeObserver === 'function') { // @ts-ignore
+    //  this.resizeObserver.unobserve(document.body) // @ts-ignore
+    //} else {
       this.resizeSubscription.unsubscribe()
-    }
+    //}
 
     this.orientationChangeSubscription.unsubscribe()
   }
