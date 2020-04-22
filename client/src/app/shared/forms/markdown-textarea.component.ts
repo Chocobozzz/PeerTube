@@ -125,10 +125,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   private observeBodyResize () {
     // Make sure the window has scrollbars if resized to a small view and exit maximized mode
     // By observing resize event
-    // Ignore type checking while ResizeObserver not implemented in TypeScript
-    if (typeof window.ResizeObserver === 'function') { // @ts-ignore
-      this.resizeObserver = new ResizeObserver(() => this.onBodyResize()) // @ts-ignore
-      this.resizeObserver.observe(document.body) // @ts-ignore
+    if (typeof window.ResizeObserver === 'function') {
+      // Use window.ResizeObserver while ResizeObserver not implemented in TypeScript
+      this.resizeObserver = new window.ResizeObserver(() => this.onBodyResize())
+      this.resizeObserver.observe(document.body)
     } else {
       this.resizeObserver = fromEvent(window, 'resize')
       this.resizeSubscription = this.resizeObserver.subscribe(() => this.onBodyResize())
@@ -142,9 +142,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   private unobserveBodyResize () {
     if (this.resizeObserver) {
-      // Ignore type checking while ResizeObserver not implemented in TypeScript
-      if (typeof window.ResizeObserver === 'function') { // @ts-ignore
-        this.resizeObserver.unobserve(document.body) // @ts-ignore
+      if (typeof window.ResizeObserver === 'function') {
+        this.resizeObserver.unobserve(document.body)
       } else {
         this.resizeSubscription.unsubscribe()
         delete this.resizeSubscription
