@@ -19,3 +19,9 @@
   width: 500px;
   max-width: 100%;
 }
+
+@media screen and (max-width: $small-view) {
+  .progress {
+    width: 100%;
+  }
+}

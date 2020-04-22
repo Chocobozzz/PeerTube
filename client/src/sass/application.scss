@@ -304,7 +304,9 @@ table {
         margin-bottom: 10px;
       }
 
-      input[type=text], input[type=password] {
+      input[type=text],
+      input[type=password],
+      input[type=email] {
         width: 100% !important;
       }
     }
