@@ -17,7 +17,6 @@ import {
   paginationValidator,
   setDefaultPagination,
   setDefaultSort,
-  token,
   userAutocompleteValidator,
   usersAddValidator,
   usersGetValidator,
@@ -50,6 +49,7 @@ import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
 import { MUser, MUserAccountDefault } from '@server/typings/models'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { handleIdAndPassLogin } from '@server/lib/auth'
 
 const auditLogger = auditLoggerFactory('users')
 
@@ -170,7 +170,17 @@ usersRouter.post('/:id/verify-email',
 
 usersRouter.post('/token',
   loginRateLimiter,
-  token,
+  handleIdAndPassLogin,
+  tokenSuccess
+)
+usersRouter.post('/token',
+  loginRateLimiter,
+  handleIdAndPassLogin,
+  tokenSuccess
+)
+usersRouter.post('/revoke-token',
+  loginRateLimiter,
+  handleIdAndPassLogin,
   tokenSuccess
 )
 // TODO: Once https://github.com/oauthjs/node-oauth2-server/pull/289 is merged, implement revoke token route

@@ -1,4 +1,5 @@
 import * as Bluebird from 'bluebird'
+import * as express from 'express'
 import { AccessDeniedError } from 'oauth2-server'
 import { logger } from '../helpers/logger'
 import { UserModel } from '../models/account/user'
@@ -9,6 +10,10 @@ import { Transaction } from 'sequelize'
 import { CONFIG } from '../initializers/config'
 import * as LRUCache from 'lru-cache'
 import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
+import { MUser } from '@server/typings/models/user/user'
+import { UserAdminFlag } from '@shared/models/users/user-flag.model'
+import { createUserAccountAndChannelAndPlaylist } from './user'
+import { UserRole } from '@shared/models/users/user-role'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
@@ -49,14 +54,14 @@ function getAccessToken (bearerToken: string) {
   if (accessTokenCache.has(bearerToken)) return Bluebird.resolve(accessTokenCache.get(bearerToken))
 
   return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
-    .then(tokenModel => {
-      if (tokenModel) {
-        accessTokenCache.set(bearerToken, tokenModel)
-        userHavingToken.set(tokenModel.userId, tokenModel.accessToken)
-      }
+                        .then(tokenModel => {
+                          if (tokenModel) {
+                            accessTokenCache.set(bearerToken, tokenModel)
+                            userHavingToken.set(tokenModel.userId, tokenModel.accessToken)
+                          }
 
-      return tokenModel
-    })
+                          return tokenModel
+                        })
 }
 
 function getClient (clientId: string, clientSecret: string) {
@@ -72,6 +77,20 @@ function getRefreshToken (refreshToken: string) {
 }
 
 async function getUser (usernameOrEmail: string, password: string) {
+  const res: express.Response = this.request.res
+  if (res.locals.bypassLogin && res.locals.bypassLogin.bypass === true) {
+    const obj = res.locals.bypassLogin
+    logger.info('Bypassing oauth login by plugin %s.', obj.pluginName)
+
+    let user = await UserModel.loadByEmail(obj.user.username)
+    if (!user) user = await createUserFromExternal(obj.pluginName, obj.user)
+
+    // This user does not belong to this plugin, skip it
+    if (user.pluginAuth !== obj.pluginName) return null
+
+    return user
+  }
+
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
   const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
@@ -96,19 +115,11 @@ async function revokeToken (tokenInfo: TokenInfo) {
 
     token.destroy()
          .catch(err => logger.error('Cannot destroy token when revoking token.', { err }))
+
+    return true
   }
 
-  /*
-    * Thanks to https://github.com/manjeshpv/node-oauth2-server-implementation/blob/master/components/oauth/mongo-models.js
-    * "As per the discussion we need set older date
-    * revokeToken will expected return a boolean in future version
-    * https://github.com/oauthjs/node-oauth2-server/pull/274
-    * https://github.com/oauthjs/node-oauth2-server/issues/290"
-  */
-  const expiredToken = token
-  expiredToken.refreshTokenExpiresAt = new Date('2015-05-28T06:59:53.000Z')
-
-  return expiredToken
+  return false
 }
 
 async function saveToken (token: TokenInfo, client: OAuthClientModel, user: UserModel) {
@@ -140,4 +151,31 @@ export {
   getUser,
   revokeToken,
   saveToken
+}
+
+async function createUserFromExternal (pluginAuth: string, options: {
+  username: string
+  email: string
+  role: UserRole
+  displayName: string
+}) {
+  const userToCreate = new UserModel({
+    username: options.username,
+    password: null,
+    email: options.email,
+    nsfwPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
+    autoPlayVideo: true,
+    role: options.role,
+    videoQuota: CONFIG.USER.VIDEO_QUOTA,
+    videoQuotaDaily: CONFIG.USER.VIDEO_QUOTA_DAILY,
+    adminFlags: UserAdminFlag.NONE,
+    pluginAuth
+  }) as MUser
+
+  const { user } = await createUserAccountAndChannelAndPlaylist({
+    userToCreate,
+    userDisplayName: options.displayName
+  })
+
+  return user
 }

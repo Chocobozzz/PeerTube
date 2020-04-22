@@ -40,7 +40,7 @@ import {
   getVideoAbusesList, updateCustomSubConfig, getCustomConfig, waitJobs
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
-import { setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
+import { setAccessTokensToServers, logout } from '../../../../shared/extra-utils/users/login'
 import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { CustomConfig } from '@shared/models/server'
@@ -205,11 +205,17 @@ describe('Test users', function () {
   })
 
   describe('Logout', function () {
-    it('Should logout (revoke token)')
+    it('Should logout (revoke token)', async function () {
+      await logout(server.url, server.accessToken)
+    })
 
-    it('Should not be able to get the user information')
+    it('Should not be able to get the user information', async function () {
+      await getMyUserInformation(server.url, server.accessToken, 401)
+    })
 
-    it('Should not be able to upload a video')
+    it('Should not be able to upload a video', async function () {
+      await uploadVideo(server.url, server.accessToken, { name: 'video' }, 401)
+    })
 
     it('Should not be able to remove a video')
 

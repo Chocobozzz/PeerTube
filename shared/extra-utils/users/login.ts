@@ -27,6 +27,16 @@ function login (url: string, client: Client, user: User, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
+function logout (url: string, token: string, expectedStatus = 200) {
+  const path = '/api/v1/users/revoke-token'
+
+  return request(url)
+    .post(path)
+    .set('Authorization', 'Bearer ' + token)
+    .type('form')
+    .expect(expectedStatus)
+}
+
 async function serverLogin (server: Server) {
   const res = await login(server.url, server.client, server.user, 200)
 
@@ -71,6 +81,7 @@ function setAccessTokensToServers (servers: ServerInfo[]) {
 
 export {
   login,
+  logout,
   serverLogin,
   userLogin,
   getAccessToken,

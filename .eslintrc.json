@@ -63,6 +63,13 @@
         "allowNumber": "true"
       }
     ],
+    "@typescript-eslint/no-this-alias": [
+      "error",
+      {
+        "allowDestructuring": true, // Allow `const { props, state } = this`; false by default
+        "allowedNames": ["self"] // Allow `const self = this`; `[]` by default
+      }
+    ],
 
     "@typescript-eslint/return-await": "off",
     "@typescript-eslint/no-base-to-string": "off",

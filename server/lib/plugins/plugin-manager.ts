@@ -39,6 +39,7 @@ export interface RegisteredPlugin {
   css: string[]
 
   // Only if this is a plugin
+  registerHelpersStore?: RegisterHelpersStore
   unregister?: Function
 }
 
@@ -58,10 +59,9 @@ export class PluginManager implements ServerHook {
   private static instance: PluginManager
 
   private registeredPlugins: { [name: string]: RegisteredPlugin } = {}
+
   private hooks: { [name: string]: HookInformationValue[] } = {}
   private translations: PluginLocalesTranslations = {}
-
-  private registerHelpersStore: { [npmName: string]: RegisterHelpersStore } = {}
 
   private constructor () {
   }
@@ -102,18 +102,30 @@ export class PluginManager implements ServerHook {
     return this.getRegisteredPluginsOrThemes(PluginType.THEME)
   }
 
-  getRegisteredSettings (npmName: string) {
-    const store = this.registerHelpersStore[npmName]
-    if (store) return store.getSettings()
+  getIdAndPassAuths () {
+    return this.getRegisteredPlugins()
+      .map(p => ({ npmName: p.npmName, idAndPassAuths: p.registerHelpersStore.getIdAndPassAuths() }))
+      .filter(v => v.idAndPassAuths.length !== 0)
+  }
 
-    return []
+  getExternalAuths () {
+    return this.getRegisteredPlugins()
+               .map(p => ({ npmName: p.npmName, externalAuths: p.registerHelpersStore.getExternalAuths() }))
+               .filter(v => v.externalAuths.length !== 0)
+  }
+
+  getRegisteredSettings (npmName: string) {
+    const result = this.getRegisteredPluginOrTheme(npmName)
+    if (!result || result.type !== PluginType.PLUGIN) return []
+
+    return result.registerHelpersStore.getSettings()
   }
 
   getRouter (npmName: string) {
-    const store = this.registerHelpersStore[npmName]
-    if (!store) return null
+    const result = this.getRegisteredPluginOrTheme(npmName)
+    if (!result || result.type !== PluginType.PLUGIN) return null
 
-    return store.getRouter()
+    return result.registerHelpersStore.getRouter()
   }
 
   getTranslations (locale: string) {
@@ -185,10 +197,8 @@ export class PluginManager implements ServerHook {
         this.hooks[key] = this.hooks[key].filter(h => h.npmName !== npmName)
       }
 
-      const store = this.registerHelpersStore[plugin.npmName]
+      const store = plugin.registerHelpersStore
       store.reinitVideoConstants(plugin.npmName)
-
-      delete this.registerHelpersStore[plugin.npmName]
 
       logger.info('Regenerating registered plugin CSS to global file.')
       await this.regeneratePluginGlobalCSS()
@@ -294,8 +304,11 @@ export class PluginManager implements ServerHook {
     this.sanitizeAndCheckPackageJSONOrThrow(packageJSON, plugin.type)
 
     let library: PluginLibrary
+    let registerHelpersStore: RegisterHelpersStore
     if (plugin.type === PluginType.PLUGIN) {
-      library = await this.registerPlugin(plugin, pluginPath, packageJSON)
+      const result = await this.registerPlugin(plugin, pluginPath, packageJSON)
+      library = result.library
+      registerHelpersStore = result.registerStore
     }
 
     const clientScripts: { [id: string]: ClientScript } = {}
@@ -314,6 +327,7 @@ export class PluginManager implements ServerHook {
       staticDirs: packageJSON.staticDirs,
       clientScripts,
       css: packageJSON.css,
+      registerHelpersStore: registerHelpersStore || undefined,
       unregister: library ? library.unregister : undefined
     }
 
@@ -332,15 +346,15 @@ export class PluginManager implements ServerHook {
       throw new Error('Library code is not valid (miss register or unregister function)')
     }
 
-    const registerHelpers = this.getRegisterHelpers(npmName, plugin)
-    library.register(registerHelpers)
+    const { registerOptions, registerStore } = this.getRegisterHelpers(npmName, plugin)
+    library.register(registerOptions)
            .catch(err => logger.error('Cannot register plugin %s.', npmName, { err }))
 
     logger.info('Add plugin %s CSS to global file.', npmName)
 
     await this.addCSSToGlobalFile(pluginPath, packageJSON.css)
 
-    return library
+    return { library, registerStore }
   }
 
   // ###################### Translations ######################
@@ -440,7 +454,10 @@ export class PluginManager implements ServerHook {
 
   // ###################### Generate register helpers ######################
 
-  private getRegisterHelpers (npmName: string, plugin: PluginModel): RegisterServerOptions {
+  private getRegisterHelpers (
+    npmName: string,
+    plugin: PluginModel
+  ): { registerStore: RegisterHelpersStore, registerOptions: RegisterServerOptions } {
     const onHookAdded = (options: RegisterServerHookOptions) => {
       if (!this.hooks[options.target]) this.hooks[options.target] = []
 
@@ -453,9 +470,11 @@ export class PluginManager implements ServerHook {
     }
 
     const registerHelpersStore = new RegisterHelpersStore(npmName, plugin, onHookAdded.bind(this))
-    this.registerHelpersStore[npmName] = registerHelpersStore
 
-    return registerHelpersStore.buildRegisterHelpers()
+    return {
+      registerStore: registerHelpersStore,
+      registerOptions: registerHelpersStore.buildRegisterHelpers()
+    }
   }
 
   private sanitizeAndCheckPackageJSONOrThrow (packageJSON: PluginPackageJson, pluginType: PluginType) {

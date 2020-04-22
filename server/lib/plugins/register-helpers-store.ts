@@ -20,6 +20,12 @@ import { RegisterServerSettingOptions } from '@shared/models/plugins/register-se
 import * as express from 'express'
 import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
 import { PluginPlaylistPrivacyManager } from '@shared/models/plugins/plugin-playlist-privacy-manager.model'
+import {
+  RegisterServerAuthExternalOptions,
+  RegisterServerAuthExternalResult,
+  RegisterServerAuthPassOptions
+} from '@shared/models/plugins/register-server-auth.model'
+import { onExternalAuthPlugin } from '@server/lib/auth'
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
 type VideoConstant = { [key in number | string]: string }
@@ -41,6 +47,9 @@ export class RegisterHelpersStore {
   }
 
   private readonly settings: RegisterServerSettingOptions[] = []
+
+  private readonly idAndPassAuths: RegisterServerAuthPassOptions[] = []
+  private readonly externalAuths: RegisterServerAuthExternalOptions[] = []
 
   private readonly router: express.Router
 
@@ -69,6 +78,9 @@ export class RegisterHelpersStore {
     const videoPrivacyManager = this.buildVideoPrivacyManager()
     const playlistPrivacyManager = this.buildPlaylistPrivacyManager()
 
+    const registerIdAndPassAuth = this.buildRegisterIdAndPassAuth()
+    const registerExternalAuth = this.buildRegisterExternalAuth()
+
     const peertubeHelpers = buildPluginHelpers(this.npmName)
 
     return {
@@ -86,6 +98,9 @@ export class RegisterHelpersStore {
 
       videoPrivacyManager,
       playlistPrivacyManager,
+
+      registerIdAndPassAuth,
+      registerExternalAuth,
 
       peertubeHelpers
     }
@@ -125,6 +140,14 @@ export class RegisterHelpersStore {
     return this.router
   }
 
+  getIdAndPassAuths () {
+    return this.idAndPassAuths
+  }
+
+  getExternalAuths () {
+    return this.externalAuths
+  }
+
   private buildGetRouter () {
     return () => this.router
   }
@@ -143,6 +166,26 @@ export class RegisterHelpersStore {
       }
 
       return this.onHookAdded(options)
+    }
+  }
+
+  private buildRegisterIdAndPassAuth () {
+    return (options: RegisterServerAuthPassOptions) => {
+      this.idAndPassAuths.push(options)
+    }
+  }
+
+  private buildRegisterExternalAuth () {
+    const self = this
+
+    return (options: RegisterServerAuthExternalOptions) => {
+      this.externalAuths.push(options)
+
+      return {
+        onAuth (options: { username: string, email: string }): void {
+          onExternalAuthPlugin(self.npmName, options.username, options.email)
+        }
+      } as RegisterServerAuthExternalResult
     }
   }
 
