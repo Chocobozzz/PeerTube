@@ -143,7 +143,7 @@ $nav-preview-tab-height: 30px;
     max-height: none !important;
     max-width: none !important;
     margin-top: #{$nav-preview-tab-height + $nav-preview-vertical-padding} !important;
-    height: calc(100vh - #{$header-height - ($nav-preview-tab-height + $nav-preview-vertical-padding)}) !important;
+    height: calc(100vh - #{$header-height + $nav-preview-tab-height + $nav-preview-vertical-padding}) !important;
     width: 50% !important;
     border: none !important;
     border-radius: unset !important;
