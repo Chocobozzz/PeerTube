@@ -55,31 +55,10 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
         .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content)
-
-    // Make sure the window has scrollbars if resized to a small view and exit maximized mode
-    // By observing resize event
-    //if (typeof window.ResizeObserver === 'function') { // @ts-ignore
-    //  this.resizeObserver = new ResizeObserver(() => this.onWindowResize()) // @ts-ignore
-    //  this.resizeObserver.observe(document.body) // @ts-ignore
-    //} else {
-      this.resizeObserver = fromEvent(window, 'resize')
-      this.resizeSubscription = this.resizeObserver.subscribe(() => this.onWindowResize())
-    //}
-
-    // Make sure the window has scrollbars if orientation change to a small view and exit maximized mode
-    // By observing orientationchange event
-    this.orientationChangeObserver = fromEvent(window, 'onrientationchange')
-    this.orientationChangeSubscription = this.orientationChangeObserver.subscribe(() => this.onWindowResize())
   }
 
   ngOnDestroy () {
-    //if (typeof window.ResizeObserver === 'function') { // @ts-ignore
-    //  this.resizeObserver.unobserve(document.body) // @ts-ignore
-    //} else {
-      this.resizeSubscription.unsubscribe()
-    //}
-
-    this.orientationChangeSubscription.unsubscribe()
+    this.unobserveBodyResize()
   }
 
   propagateChange = (_: any) => { /* empty */ }
@@ -104,49 +83,88 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
     this.contentChanged.next(this.content)
   }
 
-  onMaximizeClick() {
+  onMaximizeClick () {
     this.isMaximized = !this.isMaximized
 
     // Make sure textarea have the focus
     this.textareaElement.nativeElement.focus()
 
-    const contentElement = document.getElementById('content')
-
     // Make sure the window has no scrollbars
     if (!this.isMaximized) {
-      this.unfixMainContentComponent(contentElement)
+      this.unobserveBodyResize()
+      this.unlockBodyScroll()
     } else {
-      this.fixMainContentComponent(contentElement)
+      this.observeBodyResize()
+      this.lockBodyScroll()
     }
   }
 
-  arePreviewsDisplayed() {
+  arePreviewsDisplayed () {
     // Unused
     return this.screenService.isInSmallView() === false
   }
 
-  private fixMainContentComponent(element: Element) {
-    element
+  private lockBodyScroll () {
+    const contentElement = document.getElementById('content')
+
+    contentElement
       .firstElementChild
       .lastElementChild
       .classList.add('fixed')
   }
 
-  private unfixMainContentComponent(element: Element) {
-    element
+  private unlockBodyScroll () {
+    const contentElement = document.getElementById('content')
+
+    contentElement
       .firstElementChild
       .lastElementChild
       .classList.remove('fixed')
   }
 
-  private onWindowResize() {
-    if (this.isMaximized) {
-      const contentElement = document.getElementById('content')
+  private observeBodyResize () {
+    // Make sure the window has scrollbars if resized to a small view and exit maximized mode
+    // By observing resize event
+    // Ignore type checking while ResizeObserver not implemented in TypeScript
+    if (typeof window.ResizeObserver === 'function') { // @ts-ignore
+      this.resizeObserver = new ResizeObserver(() => this.onBodyResize()) // @ts-ignore
+      this.resizeObserver.observe(document.body) // @ts-ignore
+    } else {
+      this.resizeObserver = fromEvent(window, 'resize')
+      this.resizeSubscription = this.resizeObserver.subscribe(() => this.onBodyResize())
+    }
 
-      if (this.screenService.isInMobileView()) {
-        this.unfixMainContentComponent(contentElement)
+    // Make sure the window has scrollbars if orientation change to a small view and exit maximized mode
+    // By observing orientationchange event
+    this.orientationChangeObserver = fromEvent(window, 'onrientationchange')
+    this.orientationChangeSubscription = this.orientationChangeObserver.subscribe(() => this.onBodyResize())
+  }
+
+  private unobserveBodyResize () {
+    if (this.resizeObserver) {
+      // Ignore type checking while ResizeObserver not implemented in TypeScript
+      if (typeof window.ResizeObserver === 'function') { // @ts-ignore
+        this.resizeObserver.unobserve(document.body) // @ts-ignore
       } else {
-        this.fixMainContentComponent(contentElement)
+        this.resizeSubscription.unsubscribe()
+        delete this.resizeSubscription
+      }
+
+      delete this.resizeObserver
+    }
+
+    if (this.orientationChangeSubscription) {
+      this.orientationChangeSubscription.unsubscribe()
+      delete this.orientationChangeSubscription
+    }
+  }
+
+  private onBodyResize () {
+    if (this.isMaximized) {
+      if (this.screenService.isInMobileView()) {
+        this.unlockBodyScroll()
+      } else {
+        this.lockBodyScroll()
       }
     }
   }
