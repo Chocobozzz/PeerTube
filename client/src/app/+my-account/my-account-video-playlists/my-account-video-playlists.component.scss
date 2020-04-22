@@ -67,3 +67,22 @@
     }
   }
 }
+
+@media screen and (min-width: $mobile-view) and (max-width: $small-view) {
+  .video-playlists-header  {
+     input[type=text] {
+      width: 42% !important;
+     }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .video-playlists-header {
+    flex-direction: column;
+
+    input[type=text] {
+      width: 100% !important;
+      margin-bottom: 12px;
+    }
+  }
+}
