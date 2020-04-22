@@ -307,6 +307,12 @@ table {
         margin-bottom: $sub-menu-margin-bottom-small-view;
       }
 
+      my-markdown-textarea {
+        .root {
+          max-width: 100% !important;
+        }
+      }
+
       input[type=text],
       input[type=password],
       input[type=email],
