@@ -1,4 +1,5 @@
 import './action-hooks'
+import './id-and-pass-auth'
 import './filter-hooks'
 import './translations'
 import './video-constants'

@@ -2,9 +2,11 @@ import * as Sequelize from 'sequelize'
 import { v4 as uuidv4 } from 'uuid'
 import { VideoChannelCreate } from '../../shared/models'
 import { VideoChannelModel } from '../models/video/video-channel'
-import { buildActorInstance, federateVideoIfNeeded, getVideoChannelActivityPubUrl } from './activitypub'
+import { buildActorInstance } from './activitypub/actor'
 import { VideoModel } from '../models/video/video'
 import { MAccountId, MChannelDefault, MChannelId } from '../typings/models'
+import { getVideoChannelActivityPubUrl } from './activitypub/url'
+import { federateVideoIfNeeded } from './activitypub/videos'
 
 type CustomVideoChannelModelAccount <T extends MAccountId> = MChannelDefault & { Account?: T }
 

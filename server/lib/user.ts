@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { SERVER_ACTOR_NAME, WEBSERVER } from '../initializers/constants'
 import { AccountModel } from '../models/account/account'
-import { buildActorInstance, getAccountActivityPubUrl, setAsyncActorKeys } from './activitypub'
+import { buildActorInstance, setAsyncActorKeys } from './activitypub/actor'
 import { createLocalVideoChannel } from './video-channel'
 import { ActorModel } from '../models/activitypub/actor'
 import { UserNotificationSettingModel } from '../models/account/user-notification-setting'
@@ -14,6 +14,7 @@ import { Redis } from './redis'
 import { Emailer } from './emailer'
 import { MAccountDefault, MActorDefault, MChannelActor } from '../typings/models'
 import { MUser, MUserDefault, MUserId } from '../typings/models/user'
+import { getAccountActivityPubUrl } from './activitypub/url'
 
 type ChannelNames = { name: string, displayName: string }
 

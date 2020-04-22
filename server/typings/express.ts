@@ -28,12 +28,23 @@ import { MVideoChangeOwnershipFull } from './models/video/video-change-ownership
 import { MPlugin, MServer } from '@server/typings/models/server'
 import { MServerBlocklist } from './models/server/server-blocklist'
 import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
+import { UserRole } from '@shared/models'
 
 declare module 'express' {
-
   interface Response {
 
     locals: {
+      bypassLogin?: {
+        bypass: boolean
+        pluginName: string
+        user: {
+          username: string
+          email: string
+          displayName: string
+          role: UserRole
+        }
+      }
+
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable
       onlyVideo?: MVideoThumbnail

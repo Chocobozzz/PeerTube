@@ -221,7 +221,7 @@ enum ScopeNames {
 })
 export class UserModel extends Model<UserModel> {
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password'))
   @Column
   password: string
@@ -347,6 +347,11 @@ export class UserModel extends Model<UserModel> {
   )
   @Column
   noWelcomeModal: boolean
+
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  pluginAuth: string
 
   @CreatedAt
   createdAt: Date
