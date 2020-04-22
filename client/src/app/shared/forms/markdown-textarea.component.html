@@ -1,12 +1,12 @@
-<div class="root" [ngClass]="{ 'maximized': isMaximized }">
+<div class="root" [ngClass]="{ 'maximized': isMaximized }" [ngStyle]="{ 'max-width': textareaMaxWidth }">
   <textarea #textarea
     [(ngModel)]="content" (ngModelChange)="onModelChange()"
     class="form-control" [ngClass]="classes"
-    [ngStyle]="{ width: textareaWidth, height: textareaHeight }"
+    [ngStyle]="{ height: textareaHeight }"
     [id]="name" [name]="name">
   </textarea>
 
-  <div ngbNav #nav="ngbNav" class="nav-pills nav-preview" [ngStyle]="{ width: textareaWidth }">
+  <div ngbNav #nav="ngbNav" class="nav-pills nav-preview">
     <ng-container ngbNavItem *ngIf="truncate !== undefined">
       <a ngbNavLink i18n>Truncated preview</a>
 
@@ -32,5 +32,5 @@
     ></my-button>
   </div>
 
-  <div [ngbNavOutlet]="nav" [ngStyle]="{ width: textareaWidth }"></div>
+  <div [ngbNavOutlet]="nav"></div>
 </div>

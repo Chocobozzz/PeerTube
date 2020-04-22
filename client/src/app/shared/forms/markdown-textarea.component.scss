@@ -107,6 +107,8 @@ $nav-preview-tab-height: 30px;
   position: fixed;
   top: $header-height;
   left: $menu-width;
+  max-height: none !important;
+  max-width: none !important;
   width: calc(100% - #{$menu-width});
   height: calc(100vh - #{$header-height}) !important;
 

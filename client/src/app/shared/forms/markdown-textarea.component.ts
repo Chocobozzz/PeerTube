@@ -22,7 +22,7 @@ import { MarkdownService } from '@app/shared/renderer'
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, OnDestroy {
   @Input() content = ''
   @Input() classes: string[] | { [klass: string]: any[] | any } = []
-  @Input() textareaWidth = '100%'
+  @Input() textareaMaxWidth = '100%'
   @Input() textareaHeight = '150px'
   @Input() truncate: number
   @Input() markdownType: 'text' | 'enhanced' = 'text'

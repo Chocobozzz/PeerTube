@@ -37,7 +37,7 @@
               <div class="form-group">
                 <label i18n for="instanceDescription">Description</label><my-help helpType="markdownText"></my-help>
                 <my-markdown-textarea
-                  name="instanceDescription" formControlName="description" textareaWidth="500px"
+                  name="instanceDescription" formControlName="description" textareaMaxWidth="500px"
                   [classes]="{ 'input-error': formErrors['instance.description'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.description" class="form-error">{{ formErrors.instance.description }}</div>
@@ -120,7 +120,7 @@
               <div class="form-group">
                 <label i18n for="instanceTerms">Terms</label><my-help helpType="markdownText"></my-help>
                 <my-markdown-textarea
-                  name="instanceTerms" formControlName="terms" textareaWidth="500px"
+                  name="instanceTerms" formControlName="terms" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.terms'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.terms" class="form-error">{{ formErrors.instance.terms }}</div>
@@ -129,7 +129,7 @@
               <div class="form-group">
                 <label i18n for="instanceCodeOfConduct">Code of conduct</label><my-help helpType="markdownText"></my-help>
                 <my-markdown-textarea
-                  name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaWidth="500px"
+                  name="instanceCodeOfConduct" formControlName="codeOfConduct" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.codeOfConduct'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.codeOfConduct" class="form-error">{{ formErrors.instance.codeOfConduct }}</div>
@@ -140,7 +140,7 @@
                 <div i18n class="label-small-info">Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</div>
 
                 <my-markdown-textarea
-                  name="instanceModerationInformation" formControlName="moderationInformation" textareaWidth="500px"
+                  name="instanceModerationInformation" formControlName="moderationInformation" textareaMaxWidth="500px"
                   [ngClass]="{ 'input-error': formErrors['instance.moderationInformation'] }"
                 ></my-markdown-textarea>
                 <div *ngIf="formErrors.instance.moderationInformation" class="form-error">{{ formErrors.instance.moderationInformation }}</div>
@@ -161,7 +161,7 @@
                 <div i18n class="label-small-info">A single person? A non-profit? A company?</div>
 
                 <my-markdown-textarea
-                  name="instanceAdministrator" formControlName="administrator" textareaWidth="500px" textareaHeight="75px"
+                  name="instanceAdministrator" formControlName="administrator" textareaMaxWidth="500px" textareaHeight="75px"
                   [classes]="{ 'input-error': formErrors['instance.administrator'] }"
                 ></my-markdown-textarea>
 
@@ -216,7 +216,7 @@
                 <div i18n class="label-small-info">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</div>
 
                 <my-markdown-textarea
-                  name="instanceHardwareInformation" formControlName="hardwareInformation" textareaWidth="500px" textareaHeight="75px"
+                  name="instanceHardwareInformation" formControlName="hardwareInformation" textareaMaxWidth="500px" textareaHeight="75px"
                   [classes]="{ 'input-error': formErrors['instance.hardwareInformation'] }"
                 ></my-markdown-textarea>
 

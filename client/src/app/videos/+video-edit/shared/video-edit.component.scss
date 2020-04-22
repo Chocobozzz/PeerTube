@@ -166,10 +166,6 @@ p-calendar {
     @include media-breakpoint-down(xl) {
       //flex-direction: column !important;
     }
-
-    textarea {
-      max-width: 100%;
-    }
   }
 }
 

@@ -78,7 +78,7 @@
     When you will upload a video in this channel, the video support field will be automatically filled by this text."
         ></my-help>
         <my-markdown-textarea
-            id="support" formControlName="support" textareaWidth="500px" markdownType="enhanced"
+            id="support" formControlName="support" textareaMaxWidth="500px" markdownType="enhanced"
             [classes]="{ 'input-error': formErrors['support'] }"
         ></my-markdown-textarea>
         <div *ngIf="formErrors.support" class="form-error">
