@@ -2,6 +2,7 @@
 @import '_mixins';
 
 $nav-preview-tab-height: 30px;
+$base-padding: 15px;
 
 @mixin in-mobile-view {
   .root {
@@ -95,7 +96,7 @@ $nav-preview-tab-height: 30px;
 @mixin content-preview-base {
   display: block;
   min-height: 75px;
-  padding: 15px;
+  padding: $base-padding;
   overflow-y: auto;
   font-size: 15px;
   word-wrap: break-word;
@@ -195,7 +196,7 @@ $nav-preview-tab-height: 30px;
 
     textarea {
       display: block;
-      padding: 15px;
+      padding: $base-padding;
       border-right: 1px dashed var(--inputBorderColor) !important;
       resize: none;
       scrollbar-color: var(--actionButtonColor) var(--textareaBackgroundColor);
