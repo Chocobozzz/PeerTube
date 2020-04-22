@@ -68,14 +68,6 @@ textarea {
   pointer-events: none;
 }
 
-my-markdown-textarea ::ng-deep {
-  .root {
-    @media screen and (max-width: 1400px) {
-      //flex-direction: column !important;
-    }
-  }
-}
-
 .form-group-right {
   padding-top: 2px;
 }

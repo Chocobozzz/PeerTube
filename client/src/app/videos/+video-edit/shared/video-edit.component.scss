@@ -161,14 +161,6 @@ p-calendar {
   }
 }
 
-::ng-deep my-markdown-textarea {
-  .root {
-    @include media-breakpoint-down(xl) {
-      //flex-direction: column !important;
-    }
-  }
-}
-
 @include ng2-tags;
 
 // columns for the video
