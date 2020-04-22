@@ -23,3 +23,13 @@
 my-user-notifications {
   font-size: 15px;
 }
+
+@media screen and (max-width: $mobile-view) {
+  .header {
+    flex-direction: column;
+
+    & >:first-child {
+      margin-bottom: 15px;
+    }
+  }
+}
