@@ -1973,7 +1973,6 @@ paths:
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
-        - $ref: '#/components/parameters/videosSort'
         - $ref: '#/components/parameters/videosSearchSort'
         - name: search
           in: query
