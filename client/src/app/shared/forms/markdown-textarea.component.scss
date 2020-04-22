@@ -1,6 +1,8 @@
 @import '_variables';
 @import '_mixins';
 
+$nav-preview-tab-height: 30px;
+
 @mixin in-mobile-view {
   .root {
     textarea {
@@ -43,13 +45,13 @@
       padding-bottom: 10px;
       padding-left: 10px;
       padding-right: 10px;
-      border-top: 1px dashed #C6C6C6;
-      border-left: 1px solid #C6C6C6;
-      border-right: 1px solid #C6C6C6;
-      border-bottom: 1px solid #C6C6C6;
-      border-bottom-right-radius: 3px;
+      border-top: 1px dashed var(--inputBorderColor);
+      border-left: 1px solid var(--inputBorderColor);
+      border-right: 1px solid var(--inputBorderColor);
+      border-bottom: 1px solid var(--inputBorderColor);
+      border-bottom-right-radius: $input-border-radius;
 
-      border-bottom-left-radius: 3px;
+      border-bottom-left-radius: $input-border-radius;
       ::ng-deep {
         .nav-link {
           display: none !important;
@@ -78,7 +80,7 @@
     .nav-link {
       display: flex !important;
       align-items: center;
-      height: 30px !important;
+      height: $nav-preview-tab-height !important;
       padding: 0 15px !important;
       font-size: 85% !important;
       opacity: .7;
@@ -108,10 +110,12 @@
   width: calc(100% - #{$menu-width});
   height: calc(100vh - #{$header-height}) !important;
 
+  $nav-preview-vertical-padding: 40px;
+
   .nav-preview {
     @include nav-preview-medium();
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: #{$nav-preview-vertical-padding / 2};
+    padding-bottom: #{$nav-preview-vertical-padding / 2};
     padding-left: 0px;
     padding-right: 0px;
     position: absolute;
@@ -128,15 +132,16 @@
 
   ::ng-deep .tab-content {
     @include content-preview-base();
-    max-height: none !important;
     background-color: var(--mainBackgroundColor);
     scrollbar-color: var(--actionButtonColor) var(--mainBackgroundColor);
   }
 
   textarea,
   ::ng-deep .tab-content {
-    margin-top: 70px !important;
-    height: calc(100vh - #{$header-height} - 70px) !important;
+    max-height: none !important;
+    max-width: none !important;
+    margin-top: #{$nav-preview-tab-height + $nav-preview-vertical-padding} !important;
+    height: calc(100vh - #{$header-height - ($nav-preview-tab-height + $nav-preview-vertical-padding)}) !important;
     width: 50% !important;
     border: none !important;
     border-radius: unset !important;
@@ -173,11 +178,11 @@
     ::ng-deep .tab-content {
       @include content-preview-base();
       max-height: 210px;
-      border-bottom: 1px solid #C6C6C6;
-      border-left: 1px solid #C6C6C6;
-      border-right: 1px solid #C6C6C6;
-      border-bottom-left-radius: 3px;
-      border-bottom-right-radius: 3px;
+      border-bottom: 1px solid var(--inputBorderColor);
+      border-left: 1px solid var(--inputBorderColor);
+      border-right: 1px solid var(--inputBorderColor);
+      border-bottom-left-radius: $input-border-radius;
+      border-bottom-right-radius: $input-border-radius;
     }
   }
 }
@@ -189,7 +194,7 @@
     textarea {
       display: block;
       padding: 15px;
-      border-right: 1px dashed #C6C6C6 !important;
+      border-right: 1px dashed var(--inputBorderColor) !important;
       resize: none;
       scrollbar-color: var(--actionButtonColor) var(--textareaBackgroundColor);
 
