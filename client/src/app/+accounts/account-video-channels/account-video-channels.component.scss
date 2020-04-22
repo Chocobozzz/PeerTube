@@ -29,4 +29,11 @@
   }
 }
 
-
+@media screen and (max-width: $mobile-view) {
+  .section {
+    .section-title {
+      flex-direction: column;
+      align-items: normal;
+    }
+  }
+}
