@@ -64,9 +64,10 @@ my-edit-button {
     .video-miniature {
       align-items: center;
 
+      .video-bottom,
       .video-bottom .video-miniature-information {
-        // .video-bottom max-width
-        max-width: 350px !important;
+        /* same width than a.video-thumbnail */
+        max-width: 223px !important;
       }
     }
   }
@@ -89,31 +90,8 @@ my-edit-button {
 
     ::ng-deep {
       .action-button {
-        width: 60%;
-      }
-    }
-  }
-}
-
-@media screen and (min-width: $mobile-view) and (max-width: $small-view) {
-  my-delete-button,
-  my-edit-button,
-  my-button {
-    ::ng-deep {
-      .action-button {
-        width: 50%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: $mobile-view) {
-  ::ng-deep {
-    .video-miniature {
-      .video-bottom,
-      .video-bottom .video-miniature-information {
-        // same width than a.video-thumbnail
-        max-width: 223px !important;
+        /* same width than a.video-thumbnail */
+        width: 223px;
       }
     }
   }
