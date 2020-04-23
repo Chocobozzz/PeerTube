@@ -14,6 +14,7 @@ import { MUser } from '@server/typings/models/user/user'
 import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { createUserAccountAndChannelAndPlaylist } from './user'
 import { UserRole } from '@shared/models/users/user-role'
+import { PluginManager } from '@server/lib/plugins/plugin-manager'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
@@ -82,7 +83,7 @@ async function getUser (usernameOrEmail: string, password: string) {
     const obj = res.locals.bypassLogin
     logger.info('Bypassing oauth login by plugin %s.', obj.pluginName)
 
-    let user = await UserModel.loadByEmail(obj.user.username)
+    let user = await UserModel.loadByEmail(obj.user.email)
     if (!user) user = await createUserFromExternal(obj.pluginName, obj.user)
 
     // This user does not belong to this plugin, skip it
@@ -94,7 +95,8 @@ async function getUser (usernameOrEmail: string, password: string) {
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
 
   const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
-  if (!user) return null
+  // If we don't find the user, or if the user belongs to a plugin
+  if (!user || user.pluginAuth !== null) return null
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch === false) return null
@@ -109,8 +111,14 @@ async function getUser (usernameOrEmail: string, password: string) {
 }
 
 async function revokeToken (tokenInfo: TokenInfo) {
+  const res: express.Response = this.request.res
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
+
   if (token) {
+    if (res.locals.explicitLogout === true && token.User.pluginAuth && token.authName) {
+      PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName)
+    }
+
     clearCacheByToken(token.accessToken)
 
     token.destroy()
@@ -123,6 +131,12 @@ async function revokeToken (tokenInfo: TokenInfo) {
 }
 
 async function saveToken (token: TokenInfo, client: OAuthClientModel, user: UserModel) {
+  const res: express.Response = this.request.res
+
+  const authName = res.locals.bypassLogin?.bypass === true
+    ? res.locals.bypassLogin.authName
+    : null
+
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 
   const tokenToCreate = {
@@ -130,6 +144,7 @@ async function saveToken (token: TokenInfo, client: OAuthClientModel, user: User
     accessTokenExpiresAt: token.accessTokenExpiresAt,
     refreshToken: token.refreshToken,
     refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+    authName,
     oAuthClientId: client.id,
     userId: user.id
   }

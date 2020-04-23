@@ -37,6 +37,7 @@ declare module 'express' {
       bypassLogin?: {
         bypass: boolean
         pluginName: string
+        authName?: string
         user: {
           username: string
           email: string
@@ -44,6 +45,8 @@ declare module 'express' {
           role: UserRole
         }
       }
+
+      explicitLogout: boolean
 
       videoAll?: MVideoFullLight
       onlyImmutableVideo?: MVideoImmutable

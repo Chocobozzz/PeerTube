@@ -2,9 +2,16 @@ import * as Bull from 'bull'
 import {
   ActivitypubFollowPayload,
   ActivitypubHttpBroadcastPayload,
-  ActivitypubHttpFetcherPayload, ActivitypubHttpUnicastPayload, EmailPayload,
+  ActivitypubHttpFetcherPayload,
+  ActivitypubHttpUnicastPayload,
+  EmailPayload,
   JobState,
-  JobType, RefreshPayload, VideoFileImportPayload, VideoImportPayload, VideoRedundancyPayload, VideoTranscodingPayload
+  JobType,
+  RefreshPayload,
+  VideoFileImportPayload,
+  VideoImportPayload,
+  VideoRedundancyPayload,
+  VideoTranscodingPayload
 } from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { Redis } from '../redis'
@@ -13,13 +20,13 @@ import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-bro
 import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
 import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
 import { processEmail } from './handlers/email'
-import { processVideoTranscoding} from './handlers/video-transcoding'
+import { processVideoTranscoding } from './handlers/video-transcoding'
 import { processActivityPubFollow } from './handlers/activitypub-follow'
-import { processVideoImport} from './handlers/video-import'
+import { processVideoImport } from './handlers/video-import'
 import { processVideosViews } from './handlers/video-views'
-import { refreshAPObject} from './handlers/activitypub-refresher'
-import { processVideoFileImport} from './handlers/video-file-import'
-import { processVideoRedundancy} from '@server/lib/job-queue/handlers/video-redundancy'
+import { refreshAPObject } from './handlers/activitypub-refresher'
+import { processVideoFileImport } from './handlers/video-file-import'
+import { processVideoRedundancy } from '@server/lib/job-queue/handlers/video-redundancy'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |
@@ -117,7 +124,7 @@ class JobQueue {
 
   createJob (obj: CreateJobArgument): void {
     this.createJobWithPromise(obj)
-         .catch(err => logger.error('Cannot create job.', { err, obj }))
+        .catch(err => logger.error('Cannot create job.', { err, obj }))
   }
 
   createJobWithPromise (obj: CreateJobArgument) {

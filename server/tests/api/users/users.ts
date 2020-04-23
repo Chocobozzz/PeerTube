@@ -2,8 +2,9 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { MyUser, User, UserRole, Video, VideoPlaylistType, VideoAbuseState, VideoAbuseUpdate } from '../../../../shared/index'
+import { MyUser, User, UserRole, Video, VideoAbuseState, VideoAbuseUpdate, VideoPlaylistType } from '../../../../shared/index'
 import {
+  addVideoCommentThread,
   blockUser,
   cleanupTests,
   createUser,
@@ -11,12 +12,14 @@ import {
   flushAndRunServer,
   getAccountRatings,
   getBlacklistedVideosList,
+  getCustomConfig,
   getMyUserInformation,
   getMyUserVideoQuotaUsed,
   getMyUserVideoRating,
   getUserInformation,
   getUsersList,
   getUsersListPaginationAndSort,
+  getVideoAbusesList,
   getVideoChannel,
   getVideosList,
   installPlugin,
@@ -26,21 +29,21 @@ import {
   registerUserWithChannel,
   removeUser,
   removeVideo,
+  reportVideoAbuse,
   ServerInfo,
   testImage,
   unblockUser,
+  updateCustomSubConfig,
   updateMyAvatar,
   updateMyUser,
   updateUser,
+  updateVideoAbuse,
   uploadVideo,
   userLogin,
-  reportVideoAbuse,
-  addVideoCommentThread,
-  updateVideoAbuse,
-  getVideoAbusesList, updateCustomSubConfig, getCustomConfig, waitJobs
+  waitJobs
 } from '../../../../shared/extra-utils'
 import { follow } from '../../../../shared/extra-utils/server/follows'
-import { setAccessTokensToServers, logout } from '../../../../shared/extra-utils/users/login'
+import { logout, serverLogin, setAccessTokensToServers } from '../../../../shared/extra-utils/users/login'
 import { getMyVideos } from '../../../../shared/extra-utils/videos/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { CustomConfig } from '@shared/models/server'
@@ -60,7 +63,14 @@ describe('Test users', function () {
 
   before(async function () {
     this.timeout(30000)
-    server = await flushAndRunServer(1)
+
+    server = await flushAndRunServer(1, {
+      rates_limit: {
+        login: {
+          max: 30
+        }
+      }
+    })
 
     await setAccessTokensToServers([ server ])
 
@@ -217,8 +227,6 @@ describe('Test users', function () {
       await uploadVideo(server.url, server.accessToken, { name: 'video' }, 401)
     })
 
-    it('Should not be able to remove a video')
-
     it('Should not be able to rate a video', async function () {
       const path = '/api/v1/videos/'
       const data = {
@@ -235,13 +243,17 @@ describe('Test users', function () {
       await makePutBodyRequest(options)
     })
 
-    it('Should be able to login again')
+    it('Should be able to login again', async function () {
+      server.accessToken = await serverLogin(server)
+    })
 
     it('Should have an expired access token')
 
     it('Should refresh the token')
 
-    it('Should be able to upload a video again')
+    it('Should be able to get my user information again', async function () {
+      await getMyUserInformation(server.url, server.accessToken)
+    })
   })
 
   describe('Creating a user', function () {

@@ -222,7 +222,7 @@ enum ScopeNames {
 export class UserModel extends Model<UserModel> {
 
   @AllowNull(true)
-  @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password'))
+  @Is('UserPassword', value => throwIfNotValid(value, isUserPasswordValid, 'user password', true))
   @Column
   password: string
 
@@ -388,7 +388,7 @@ export class UserModel extends Model<UserModel> {
   @BeforeCreate
   @BeforeUpdate
   static cryptPasswordIfNeeded (instance: UserModel) {
-    if (instance.changed('password')) {
+    if (instance.changed('password') && instance.password) {
       return cryptPassword(instance.password)
         .then(hash => {
           instance.password = hash

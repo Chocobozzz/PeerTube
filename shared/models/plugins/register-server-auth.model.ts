@@ -3,10 +3,12 @@ import { UserRole } from '@shared/models'
 export type RegisterServerAuthOptions = RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions
 
 export interface RegisterServerAuthPassOptions {
-  type: 'id-and-pass'
+  // Authentication name (a plugin can register multiple auth strategies)
+  authName: string
 
   onLogout?: Function
 
+  // Weight of this authentication so PeerTube tries the auth methods in DESC weight order
   getWeight(): number
 
   // Used by PeerTube to login a user
@@ -23,7 +25,8 @@ export interface RegisterServerAuthPassOptions {
 }
 
 export interface RegisterServerAuthExternalOptions {
-  type: 'external'
+  // Authentication name (a plugin can register multiple auth strategies)
+  authName: string
 
   onLogout?: Function
 }

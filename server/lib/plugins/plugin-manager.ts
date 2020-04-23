@@ -76,7 +76,7 @@ export class PluginManager implements ServerHook {
     return this.registeredPlugins[npmName]
   }
 
-  getRegisteredPlugin (name: string) {
+  getRegisteredPluginByShortName (name: string) {
     const npmName = PluginModel.buildNpmName(name, PluginType.PLUGIN)
     const registered = this.getRegisteredPluginOrTheme(npmName)
 
@@ -85,7 +85,7 @@ export class PluginManager implements ServerHook {
     return registered
   }
 
-  getRegisteredTheme (name: string) {
+  getRegisteredThemeByShortName (name: string) {
     const npmName = PluginModel.buildNpmName(name, PluginType.THEME)
     const registered = this.getRegisteredPluginOrTheme(npmName)
 
@@ -130,6 +130,22 @@ export class PluginManager implements ServerHook {
 
   getTranslations (locale: string) {
     return this.translations[locale] || {}
+  }
+
+  onLogout (npmName: string, authName: string) {
+    const plugin = this.getRegisteredPluginOrTheme(npmName)
+    if (!plugin || plugin.type !== PluginType.PLUGIN) return
+
+    const auth = plugin.registerHelpersStore.getIdAndPassAuths()
+      .find(a => a.authName === authName)
+
+    if (auth.onLogout) {
+      try {
+        auth.onLogout()
+      } catch (err) {
+        logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
+      }
+    }
   }
 
   // ###################### Hooks ######################
