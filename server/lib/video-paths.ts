@@ -1,8 +1,8 @@
 import { isStreamingPlaylist, MStreamingPlaylistVideo, MVideo, MVideoFile, MVideoUUID } from '@server/typings/models'
-import { extractVideo } from './videos'
 import { join } from 'path'
 import { CONFIG } from '@server/initializers/config'
 import { HLS_REDUNDANCY_DIRECTORY, HLS_STREAMING_PLAYLIST_DIRECTORY } from '@server/initializers/constants'
+import { extractVideo } from '@server/helpers/video'
 
 // ################## Video file name ##################
 

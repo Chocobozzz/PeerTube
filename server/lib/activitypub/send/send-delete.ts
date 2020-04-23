@@ -7,9 +7,9 @@ import { getDeleteActivityPubUrl } from '../url'
 import { broadcastToActors, broadcastToFollowers, sendVideoRelatedActivity, unicastTo } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getVideoCommentAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { getServerActor } from '../../../helpers/utils'
 import { MCommentOwnerVideoReply, MVideoAccountLight, MVideoPlaylistFullSummary } from '../../../typings/models/video'
 import { MActorUrl } from '../../../typings/models'
+import { getServerActor } from '@server/models/application/application'
 
 async function sendDeleteVideo (video: MVideoAccountLight, transaction: Transaction) {
   logger.info('Creating job to broadcast delete of video %s.', video.url)

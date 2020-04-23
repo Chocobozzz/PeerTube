@@ -24,20 +24,20 @@ import { cacheRoute } from '../../middlewares/cache'
 import { activityPubResponse } from './utils'
 import { AccountVideoRateModel } from '../../models/account/account-video-rate'
 import {
-  getRateUrl,
   getVideoCommentsActivityPubUrl,
   getVideoDislikesActivityPubUrl,
   getVideoLikesActivityPubUrl,
   getVideoSharesActivityPubUrl
-} from '../../lib/activitypub'
+} from '../../lib/activitypub/url'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { videoFileRedundancyGetValidator, videoPlaylistRedundancyGetValidator } from '../../middlewares/validators/redundancy'
-import { getServerActor } from '../../helpers/utils'
 import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId } from '@server/typings/models'
+import { getServerActor } from '@server/models/application/application'
+import { getRateUrl } from '@server/lib/activitypub/video-rates'
 
 const activityPubClientRouter = express.Router()
 activityPubClientRouter.use(cors())

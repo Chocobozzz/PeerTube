@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { getFormattedObjects, getServerActor } from '../../helpers/utils'
+import { getFormattedObjects} from '../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -21,7 +21,7 @@ import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
 import { buildNSFWFilter, createReqFiles, getCountVideos, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
-import { setAsyncActorKeys } from '../../lib/activitypub'
+import { setAsyncActorKeys } from '../../lib/activitypub/actor'
 import { AccountModel } from '../../models/account/account'
 import { MIMETYPES } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
@@ -36,6 +36,7 @@ import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validator
 import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
 import { MChannelAccountDefault } from '@server/typings/models'
+import { getServerActor } from '@server/models/application/application'
 
 const auditLogger = auditLoggerFactory('channels')
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })

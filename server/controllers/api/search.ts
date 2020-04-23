@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { buildNSFWFilter, isUserAbleToSearchRemoteURI } from '../../helpers/express-utils'
-import { getFormattedObjects, getServerActor } from '../../helpers/utils'
+import { getFormattedObjects } from '../../helpers/utils'
 import { VideoModel } from '../../models/video/video'
 import {
   asyncMiddleware,
@@ -15,11 +15,13 @@ import {
   videosSearchValidator
 } from '../../middlewares'
 import { VideoChannelsSearchQuery, VideosSearchQuery } from '../../../shared/models/search'
-import { getOrCreateActorAndServerAndModel, getOrCreateVideoAndAccountAndChannel } from '../../lib/activitypub'
+import { getOrCreateActorAndServerAndModel } from '../../lib/activitypub/actor'
 import { logger } from '../../helpers/logger'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 import { MChannelAccountDefault, MVideoAccountLightBlacklistAllFiles } from '../../typings/models'
+import { getServerActor } from '@server/models/application/application'
+import { getOrCreateVideoAndAccountAndChannel } from '@server/lib/activitypub/videos'
 
 const searchRouter = express.Router()
 

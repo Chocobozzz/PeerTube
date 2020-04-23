@@ -9,7 +9,6 @@ import { broadcastToFollowers, sendVideoRelatedActivity } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { getServerActor } from '../../../helpers/utils'
 import {
   MAccountDefault,
   MActor,
@@ -20,6 +19,7 @@ import {
   MVideoPlaylistFull,
   MVideoRedundancyVideo
 } from '../../../typings/models'
+import { getServerActor } from '@server/models/application/application'
 
 async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction, overrodeByActor?: MActor) {
   const video = videoArg as MVideoAP

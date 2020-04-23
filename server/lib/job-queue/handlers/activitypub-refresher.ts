@@ -1,14 +1,12 @@
 import * as Bull from 'bull'
 import { logger } from '../../../helpers/logger'
 import { fetchVideoByUrl } from '../../../helpers/video'
-import { refreshActorIfNeeded, refreshVideoIfNeeded, refreshVideoPlaylistIfNeeded } from '../../activitypub'
+import { refreshActorIfNeeded } from '../../activitypub/actor'
+import { refreshVideoIfNeeded } from '../../activitypub/videos'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-
-export type RefreshPayload = {
-  type: 'video' | 'video-playlist' | 'actor'
-  url: string
-}
+import { RefreshPayload } from '@shared/models'
+import { refreshVideoPlaylistIfNeeded } from '@server/lib/activitypub/playlist'
 
 async function refreshAPObject (job: Bull.Job) {
   const payload = job.data as RefreshPayload

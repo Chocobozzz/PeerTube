@@ -6,7 +6,7 @@ import { chunk } from 'lodash'
 import { doRequest } from '@server/helpers/requests'
 import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
 import { JobQueue } from '@server/lib/job-queue'
-import { getServerActor } from '@server/helpers/utils'
+import { getServerActor } from '@server/models/application/application'
 
 export class AutoFollowIndexInstances extends AbstractScheduler {
 

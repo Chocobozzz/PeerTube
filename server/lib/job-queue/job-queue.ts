@@ -1,19 +1,25 @@
 import * as Bull from 'bull'
-import { JobState, JobType } from '../../../shared/models'
+import {
+  ActivitypubFollowPayload,
+  ActivitypubHttpBroadcastPayload,
+  ActivitypubHttpFetcherPayload, ActivitypubHttpUnicastPayload, EmailPayload,
+  JobState,
+  JobType, RefreshPayload, VideoFileImportPayload, VideoImportPayload, VideoRedundancyPayload, VideoTranscodingPayload
+} from '../../../shared/models'
 import { logger } from '../../helpers/logger'
 import { Redis } from '../redis'
 import { JOB_ATTEMPTS, JOB_COMPLETED_LIFETIME, JOB_CONCURRENCY, JOB_TTL, REPEAT_JOBS, WEBSERVER } from '../../initializers/constants'
-import { ActivitypubHttpBroadcastPayload, processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
-import { ActivitypubHttpFetcherPayload, processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
-import { ActivitypubHttpUnicastPayload, processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
-import { EmailPayload, processEmail } from './handlers/email'
-import { processVideoTranscoding, VideoTranscodingPayload } from './handlers/video-transcoding'
-import { ActivitypubFollowPayload, processActivityPubFollow } from './handlers/activitypub-follow'
-import { processVideoImport, VideoImportPayload } from './handlers/video-import'
+import { processActivityPubHttpBroadcast } from './handlers/activitypub-http-broadcast'
+import { processActivityPubHttpFetcher } from './handlers/activitypub-http-fetcher'
+import { processActivityPubHttpUnicast } from './handlers/activitypub-http-unicast'
+import { processEmail } from './handlers/email'
+import { processVideoTranscoding} from './handlers/video-transcoding'
+import { processActivityPubFollow } from './handlers/activitypub-follow'
+import { processVideoImport} from './handlers/video-import'
 import { processVideosViews } from './handlers/video-views'
-import { refreshAPObject, RefreshPayload } from './handlers/activitypub-refresher'
-import { processVideoFileImport, VideoFileImportPayload } from './handlers/video-file-import'
-import { processVideoRedundancy, VideoRedundancyPayload } from '@server/lib/job-queue/handlers/video-redundancy'
+import { refreshAPObject} from './handlers/activitypub-refresher'
+import { processVideoFileImport} from './handlers/video-file-import'
+import { processVideoRedundancy} from '@server/lib/job-queue/handlers/video-redundancy'
 
 type CreateJobArgument =
   { type: 'activitypub-http-broadcast', payload: ActivitypubHttpBroadcastPayload } |

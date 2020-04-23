@@ -1,11 +1,9 @@
 import { ResultList } from '../../shared'
-import { ApplicationModel } from '../models/application/application'
 import { execPromise, execPromise2, randomBytesPromise, sha256 } from './core-utils'
 import { logger } from './logger'
 import { join } from 'path'
 import { Instance as ParseTorrent } from 'parse-torrent'
 import { remove } from 'fs-extra'
-import * as memoizee from 'memoizee'
 import { CONFIG } from '../initializers/config'
 import { isVideoFileExtnameValid } from './custom-validators/videos'
 
@@ -32,16 +30,6 @@ function getFormattedObjects<U, V, T extends FormattableToJSON<U, V>> (objects: 
     data: formattedObjects
   } as ResultList<V>
 }
-
-const getServerActor = memoizee(async function () {
-  const application = await ApplicationModel.load()
-  if (!application) throw Error('Could not load Application from database.')
-
-  const actor = application.Account.Actor
-  actor.Account = application.Account
-
-  return actor
-}, { promise: true })
 
 function generateVideoImportTmpPath (target: string | ParseTorrent, extensionArg?: string) {
   const id = typeof target === 'string'
@@ -105,7 +93,6 @@ export {
   generateRandomString,
   getFormattedObjects,
   getSecureTorrentName,
-  getServerActor,
   getServerCommit,
   generateVideoImportTmpPath,
   getUUIDFromFilename

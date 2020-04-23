@@ -9,11 +9,7 @@ import { extname } from 'path'
 import { MVideoFile, MVideoWithFile } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
-
-export type VideoFileImportPayload = {
-  videoUUID: string
-  filePath: string
-}
+import { VideoFileImportPayload } from '@shared/models'
 
 async function processVideoFileImport (job: Bull.Job) {
   const payload = job.data as VideoFileImportPayload

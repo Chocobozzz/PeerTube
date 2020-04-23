@@ -7,11 +7,11 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { sendAccept, sendReject } from '../send'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
-import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 import { MActorFollowActors, MActorSignature } from '../../../typings/models'
 import { autoFollowBackIfNeeded } from '../follow'
+import { getServerActor } from '@server/models/application/application'
 
 async function processFollowActivity (options: APProcessorOptions<ActivityFollow>) {
   const { activity, byActor } = options

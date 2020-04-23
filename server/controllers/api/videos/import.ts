@@ -10,7 +10,7 @@ import { VideoImportCreate, VideoImportState, VideoPrivacy, VideoState } from '.
 import { VideoModel } from '../../../models/video/video'
 import { VideoCaptionModel } from '../../../models/video/video-caption'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
-import { getVideoActivityPubUrl } from '../../../lib/activitypub'
+import { getVideoActivityPubUrl } from '../../../lib/activitypub/url'
 import { TagModel } from '../../../models/video/tag'
 import { VideoImportModel } from '../../../models/video/video-import'
 import { JobQueue } from '../../../lib/job-queue/job-queue'

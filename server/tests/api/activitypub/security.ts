@@ -4,10 +4,11 @@ import 'mocha'
 
 import { cleanupTests, closeAllSequelize, flushAndRunMultipleServers, ServerInfo, setActorField } from '../../../../shared/extra-utils'
 import { HTTP_SIGNATURE } from '../../../initializers/constants'
-import { buildDigest, buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
+import { buildGlobalHeaders } from '../../../lib/job-queue/handlers/utils/activitypub-http-utils'
 import * as chai from 'chai'
 import { activityPubContextify, buildSignedActivity } from '../../../helpers/activitypub'
 import { makeFollowRequest, makePOSTAPRequest } from '../../../../shared/extra-utils/requests/activitypub'
+import { buildDigest } from '@server/helpers/peertube-crypto'
 
 const expect = chai.expect
 

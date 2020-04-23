@@ -1,3 +1,7 @@
+import { ContextType } from '@server/helpers/activitypub'
+import { SendEmailOptions } from './emailer.model'
+import { VideoResolution } from '@shared/models'
+
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
 
 export type JobType =
@@ -23,3 +27,99 @@ export interface Job {
   finishedOn: Date | string
   processedOn: Date | string
 }
+
+export type ActivitypubHttpBroadcastPayload = {
+  uris: string[]
+  signatureActorId?: number
+  body: any
+  contextType?: ContextType
+}
+
+export type ActivitypubFollowPayload = {
+  followerActorId: number
+  name: string
+  host: string
+  isAutoFollow?: boolean
+  assertIsChannel?: boolean
+}
+
+export type FetchType = 'activity' | 'video-likes' | 'video-dislikes' | 'video-shares' | 'video-comments' | 'account-playlists'
+export type ActivitypubHttpFetcherPayload = {
+  uri: string
+  type: FetchType
+  videoId?: number
+  accountId?: number
+}
+
+export type ActivitypubHttpUnicastPayload = {
+  uri: string
+  signatureActorId?: number
+  body: any
+  contextType?: ContextType
+}
+
+export type RefreshPayload = {
+  type: 'video' | 'video-playlist' | 'actor'
+  url: string
+}
+
+export type EmailPayload = SendEmailOptions
+
+export type VideoFileImportPayload = {
+  videoUUID: string
+  filePath: string
+}
+
+export type VideoImportYoutubeDLPayload = {
+  type: 'youtube-dl'
+  videoImportId: number
+
+  generateThumbnail: boolean
+  generatePreview: boolean
+
+  fileExt?: string
+}
+export type VideoImportTorrentPayload = {
+  type: 'magnet-uri' | 'torrent-file'
+  videoImportId: number
+}
+export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
+
+export type VideoRedundancyPayload = {
+  videoId: number
+}
+
+// Video transcoding payloads
+
+interface BaseTranscodingPayload {
+  videoUUID: string
+  isNewVideo?: boolean
+}
+
+interface HLSTranscodingPayload extends BaseTranscodingPayload {
+  type: 'hls'
+  isPortraitMode?: boolean
+  resolution: VideoResolution
+  copyCodecs: boolean
+}
+
+export interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
+  type: 'new-resolution'
+  isPortraitMode?: boolean
+  resolution: VideoResolution
+}
+
+export interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
+  type: 'merge-audio'
+  resolution: VideoResolution
+}
+
+export interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
+  type: 'optimize'
+}
+
+export type VideoTranscodingPayload =
+  HLSTranscodingPayload
+  | NewResolutionTranscodingPayload
+  | OptimizeTranscodingPayload
+  | MergeAudioTranscodingPayload

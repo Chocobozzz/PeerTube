@@ -1,9 +1,9 @@
 import { buildSignedActivity, ContextType } from '../../../../helpers/activitypub'
-import { getServerActor } from '../../../../helpers/utils'
 import { ActorModel } from '../../../../models/activitypub/actor'
-import { sha256 } from '../../../../helpers/core-utils'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '../../../../initializers/constants'
 import { MActor } from '../../../../typings/models'
+import { getServerActor } from '@server/models/application/application'
+import { buildDigest } from '@server/helpers/peertube-crypto'
 
 type Payload = { body: any, contextType?: ContextType, signatureActorId?: number }
 
@@ -48,14 +48,7 @@ function buildGlobalHeaders (body: any) {
   }
 }
 
-function buildDigest (body: any) {
-  const rawBody = typeof body === 'string' ? body : JSON.stringify(body)
-
-  return 'SHA-256=' + sha256(rawBody, 'base64')
-}
-
 export {
-  buildDigest,
   buildGlobalHeaders,
   computeBody,
   buildSignedRequestOptions

@@ -17,7 +17,6 @@ import { getSort, getVideoSort, parseAggregateResult, throwIfNotValid } from '..
 import { isActivityPubUrlValid, isUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS, MIMETYPES } from '../../initializers/constants'
 import { VideoFileModel } from '../video/video-file'
-import { getServerActor } from '../../helpers/utils'
 import { VideoModel } from '../video/video'
 import { VideoRedundancyStrategy, VideoRedundancyStrategyWithManual } from '../../../shared/models/redundancy'
 import { logger } from '../../helpers/logger'
@@ -37,6 +36,7 @@ import {
   StreamingPlaylistRedundancyInformation,
   VideoRedundancy
 } from '@shared/models/redundancy/video-redundancy.model'
+import { getServerActor } from '@server/models/application/application'
 
 export enum ScopeNames {
   WITH_VIDEO = 'WITH_VIDEO'

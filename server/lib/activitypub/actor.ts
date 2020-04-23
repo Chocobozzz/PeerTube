@@ -19,7 +19,6 @@ import { AvatarModel } from '../../models/avatar/avatar'
 import { ServerModel } from '../../models/server/server'
 import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../job-queue'
-import { getServerActor } from '../../helpers/utils'
 import { ActorFetchByUrlType, fetchActorByUrl } from '../../helpers/actor'
 import { sequelizeTypescript } from '../../initializers/database'
 import {
@@ -36,6 +35,7 @@ import {
   MChannel
 } from '../../typings/models'
 import { extname } from 'path'
+import { getServerActor } from '@server/models/application/application'
 
 // Set account keys, this could be long so process after the account creation and do not block the client
 function setAsyncActorKeys <T extends MActor> (actor: T) {

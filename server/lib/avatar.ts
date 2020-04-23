@@ -1,7 +1,7 @@
 import 'multer'
 import { sendUpdateActor } from './activitypub/send'
 import { AVATARS_SIZE, LRU_CACHE, QUEUE_CONCURRENCY } from '../initializers/constants'
-import { updateActorAvatarInstance } from './activitypub'
+import { updateActorAvatarInstance } from './activitypub/actor'
 import { processImage } from '../helpers/image-utils'
 import { extname, join } from 'path'
 import { retryTransactionWrapper } from '../helpers/database-utils'

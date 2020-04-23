@@ -8,7 +8,7 @@ import {
   getVideoDislikesActivityPubUrl,
   getVideoLikesActivityPubUrl,
   getVideoSharesActivityPubUrl
-} from '../../lib/activitypub'
+} from '../../lib/activitypub/url'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoStreamingPlaylist } from '../../../shared/models/videos/video-streaming-playlist.model'
 import {
@@ -23,7 +23,7 @@ import {
 import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
-import { extractVideo } from '@server/lib/videos'
+import { extractVideo } from '@server/helpers/video'
 
 export type VideoFormattingJSONOptions = {
   completeDescription?: boolean
