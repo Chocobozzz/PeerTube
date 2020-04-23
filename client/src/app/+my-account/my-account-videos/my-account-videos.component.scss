@@ -112,8 +112,8 @@ my-edit-button {
     .video-miniature {
       .video-bottom,
       .video-bottom .video-miniature-information {
-        // $minimum-view - (.video container) padding-left + padding-right
-        max-width: #{$minimum-view - (20px + 20px)} !important;
+        // same width than a.video-thumbnail
+        max-width: 223px !important;
       }
     }
   }
