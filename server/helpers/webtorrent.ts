@@ -13,8 +13,8 @@ import { WEBSERVER } from '@server/initializers/constants'
 import * as parseTorrent from 'parse-torrent'
 import * as magnetUtil from 'magnet-uri'
 import { isArray } from '@server/helpers/custom-validators/misc'
-import { extractVideo } from '@server/lib/videos'
 import { getTorrentFileName, getVideoFilePath } from '@server/lib/video-paths'
+import { extractVideo } from '@server/helpers/video'
 
 const createTorrentPromise = promisify2<string, any, any>(createTorrent)
 

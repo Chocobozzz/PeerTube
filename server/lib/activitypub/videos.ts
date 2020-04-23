@@ -6,7 +6,7 @@ import {
   ActivityHashTagObject,
   ActivityMagnetUrlObject,
   ActivityPlaylistSegmentHashesObject,
-  ActivityPlaylistUrlObject,
+  ActivityPlaylistUrlObject, ActivitypubHttpFetcherPayload,
   ActivityTagObject,
   ActivityUrlObject,
   ActivityVideoUrlObject,
@@ -38,7 +38,6 @@ import { sendCreateVideo, sendUpdateVideo } from './send'
 import { isArray } from '../../helpers/custom-validators/misc'
 import { VideoCaptionModel } from '../../models/video/video-caption'
 import { JobQueue } from '../job-queue'
-import { ActivitypubHttpFetcherPayload } from '../job-queue/handlers/activitypub-http-fetcher'
 import { createRates } from './video-rates'
 import { addVideoShares, shareVideoByServerAndChannel } from './share'
 import { fetchVideoByUrl, VideoFetchByUrlType } from '../../helpers/video'

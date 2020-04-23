@@ -5,22 +5,15 @@ import { processActivities } from '../../activitypub/process'
 import { addVideoComments } from '../../activitypub/video-comments'
 import { crawlCollectionPage } from '../../activitypub/crawl'
 import { VideoModel } from '../../../models/video/video'
-import { addVideoShares, createRates } from '../../activitypub'
+import { addVideoShares } from '../../activitypub/share'
+import { createRates } from '../../activitypub/video-rates'
 import { createAccountPlaylists } from '../../activitypub/playlist'
 import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoCommentModel } from '../../../models/video/video-comment'
 import { MAccountDefault, MVideoFullLight } from '../../../typings/models'
-
-type FetchType = 'activity' | 'video-likes' | 'video-dislikes' | 'video-shares' | 'video-comments' | 'account-playlists'
-
-export type ActivitypubHttpFetcherPayload = {
-  uri: string
-  type: FetchType
-  videoId?: number
-  accountId?: number
-}
+import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
 
 async function processActivityPubHttpFetcher (job: Bull.Job) {
   logger.info('Processing ActivityPub fetcher in job %d.', job.id)

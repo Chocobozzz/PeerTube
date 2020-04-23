@@ -1,14 +1,21 @@
 import { VideoModel } from '../models/video/video'
 import * as Bluebird from 'bluebird'
 import {
+  isStreamingPlaylist,
+  MStreamingPlaylistVideo,
+  MVideo,
   MVideoAccountLightBlacklistAllFiles,
+  MVideoFile,
   MVideoFullLight,
   MVideoIdThumbnail,
+  MVideoImmutable,
   MVideoThumbnail,
-  MVideoWithRights,
-  MVideoImmutable
+  MVideoWithRights
 } from '@server/typings/models'
 import { Response } from 'express'
+import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
+import { JobQueue } from '@server/lib/job-queue'
+import { VideoTranscodingPayload } from '@shared/models'
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
@@ -62,10 +69,39 @@ function getVideoWithAttributes (res: Response) {
   return res.locals.videoAll || res.locals.onlyVideo || res.locals.onlyVideoWithRights
 }
 
+function addOptimizeOrMergeAudioJob (video: MVideo, videoFile: MVideoFile) {
+  let dataInput: VideoTranscodingPayload
+
+  if (videoFile.isAudio()) {
+    dataInput = {
+      type: 'merge-audio' as 'merge-audio',
+      resolution: DEFAULT_AUDIO_RESOLUTION,
+      videoUUID: video.uuid,
+      isNewVideo: true
+    }
+  } else {
+    dataInput = {
+      type: 'optimize' as 'optimize',
+      videoUUID: video.uuid,
+      isNewVideo: true
+    }
+  }
+
+  return JobQueue.Instance.createJobWithPromise({ type: 'video-transcoding', payload: dataInput })
+}
+
+function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {
+  return isStreamingPlaylist(videoOrPlaylist)
+    ? videoOrPlaylist.Video
+    : videoOrPlaylist
+}
+
 export {
   VideoFetchType,
   VideoFetchByUrlType,
   fetchVideo,
   getVideoWithAttributes,
-  fetchVideoByUrl
+  fetchVideoByUrl,
+  addOptimizeOrMergeAudioJob,
+  extractVideo
 }

@@ -38,7 +38,6 @@ import { checkUserCanTerminateOwnershipChange, doesChangeVideoOwnershipExist } f
 import { VideoChangeOwnershipAccept } from '../../../../shared/models/videos/video-change-ownership-accept.model'
 import { AccountModel } from '../../../models/account/account'
 import { isNSFWQueryValid, isNumberArray, isStringArray } from '../../../helpers/custom-validators/search'
-import { getServerActor } from '../../../helpers/utils'
 import { CONFIG } from '../../../initializers/config'
 import { isLocalVideoAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
@@ -50,6 +49,7 @@ import {
 } from '../../../helpers/middlewares'
 import { MVideoFullLight } from '@server/typings/models'
 import { getVideoWithAttributes } from '../../../helpers/video'
+import { getServerActor } from '@server/models/application/application'
 
 const videosAddValidator = getCommonVideoEditAttributes().concat([
   body('videofile')

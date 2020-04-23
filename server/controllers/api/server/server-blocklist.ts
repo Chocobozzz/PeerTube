@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'multer'
-import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
+import { getFormattedObjects} from '../../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -22,6 +22,7 @@ import { AccountBlocklistModel } from '../../../models/account/account-blocklist
 import { addAccountInBlocklist, addServerInBlocklist, removeAccountFromBlocklist, removeServerFromBlocklist } from '../../../lib/blocklist'
 import { ServerBlocklistModel } from '../../../models/server/server-blocklist'
 import { UserRight } from '../../../../shared/models/users'
+import { getServerActor } from '@server/models/application/application'
 
 const serverBlocklistRouter = express.Router()
 

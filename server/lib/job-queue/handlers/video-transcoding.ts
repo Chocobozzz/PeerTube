@@ -1,9 +1,14 @@
 import * as Bull from 'bull'
-import { VideoResolution } from '../../../../shared'
+import {
+  MergeAudioTranscodingPayload,
+  NewResolutionTranscodingPayload,
+  OptimizeTranscodingPayload,
+  VideoTranscodingPayload
+} from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { JobQueue } from '../job-queue'
-import { federateVideoIfNeeded } from '../../activitypub'
+import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { sequelizeTypescript } from '../../../initializers'
 import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
@@ -11,39 +16,6 @@ import { generateHlsPlaylist, mergeAudioVideofile, optimizeOriginalVideofile, tr
 import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
 import { MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/typings/models'
-
-interface BaseTranscodingPayload {
-  videoUUID: string
-  isNewVideo?: boolean
-}
-
-interface HLSTranscodingPayload extends BaseTranscodingPayload {
-  type: 'hls'
-  isPortraitMode?: boolean
-  resolution: VideoResolution
-  copyCodecs: boolean
-}
-
-interface NewResolutionTranscodingPayload extends BaseTranscodingPayload {
-  type: 'new-resolution'
-  isPortraitMode?: boolean
-  resolution: VideoResolution
-}
-
-interface MergeAudioTranscodingPayload extends BaseTranscodingPayload {
-  type: 'merge-audio'
-  resolution: VideoResolution
-}
-
-interface OptimizeTranscodingPayload extends BaseTranscodingPayload {
-  type: 'optimize'
-}
-
-export type VideoTranscodingPayload =
-  HLSTranscodingPayload
-  | NewResolutionTranscodingPayload
-  | OptimizeTranscodingPayload
-  | MergeAudioTranscodingPayload
 
 async function processVideoTranscoding (job: Bull.Job) {
   const payload = job.data as VideoTranscodingPayload

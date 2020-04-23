@@ -43,7 +43,6 @@ import {
 } from '../../helpers/custom-validators/videos'
 import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
-import { getServerActor } from '../../helpers/utils'
 import {
   ACTIVITY_PUB,
   API_VERSION,
@@ -126,6 +125,7 @@ import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilena
 import { ModelCache } from '@server/models/model-cache'
 import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
+import { getServerActor } from '@server/models/application/application'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',

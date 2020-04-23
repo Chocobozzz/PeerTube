@@ -2,7 +2,7 @@ import * as Sequelize from 'sequelize'
 import { ResultList } from '../../shared/models'
 import { VideoCommentThreadTree } from '../../shared/models/videos/video-comment.model'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { getVideoCommentActivityPubUrl } from './activitypub'
+import { getVideoCommentActivityPubUrl } from './activitypub/url'
 import { sendCreateVideoComment } from './activitypub/send'
 import { MAccountDefault, MComment, MCommentOwnerVideoReply, MVideoFullLight } from '../typings/models'
 

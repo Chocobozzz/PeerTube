@@ -26,7 +26,7 @@ import {
 import { MAccountDefault, MActorFollowFull } from '../typings/models'
 import { MVideoImportVideo } from '@server/typings/models/video/video-import'
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
-import { getServerActor } from '@server/helpers/utils'
+import { getServerActor } from '@server/models/application/application'
 
 class Notifier {
 

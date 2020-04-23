@@ -3,7 +3,6 @@ import { isTestInstance } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
 import { JobQueue } from './job-queue'
-import { EmailPayload } from './job-queue/handlers/email'
 import { readFileSync } from 'fs-extra'
 import { WEBSERVER } from '../initializers/constants'
 import {
@@ -16,15 +15,7 @@ import {
 } from '../typings/models/video'
 import { MActorFollowActors, MActorFollowFull, MUser } from '../typings/models'
 import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
-
-type SendEmailOptions = {
-  to: string[]
-  subject: string
-  text: string
-
-  fromDisplayName?: string
-  replyTo?: string
-}
+import { EmailPayload } from '@shared/models'
 
 class Emailer {
 
@@ -507,6 +498,5 @@ class Emailer {
 // ---------------------------------------------------------------------------
 
 export {
-  Emailer,
-  SendEmailOptions
+  Emailer
 }

@@ -1,7 +1,7 @@
 import * as Sequelize from 'sequelize'
 import { VideoPlaylistModel } from '../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { getVideoPlaylistActivityPubUrl } from './activitypub'
+import { getVideoPlaylistActivityPubUrl } from './activitypub/url'
 import { VideoPlaylistType } from '../../shared/models/videos/playlist/video-playlist-type.model'
 import { MAccount } from '../typings/models'
 import { MVideoPlaylistOwner } from '../typings/models/video/video-playlist'

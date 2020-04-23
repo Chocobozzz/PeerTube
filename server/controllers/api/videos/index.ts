@@ -4,7 +4,7 @@ import { VideoCreate, VideoPrivacy, VideoState, VideoUpdate } from '../../../../
 import { getMetadataFromFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
 import { logger } from '../../../helpers/logger'
 import { auditLoggerFactory, getAuditIdFromRes, VideoAuditView } from '../../../helpers/audit-logger'
-import { getFormattedObjects, getServerActor } from '../../../helpers/utils'
+import { getFormattedObjects } from '../../../helpers/utils'
 import { autoBlacklistVideoIfNeeded } from '../../../lib/video-blacklist'
 import {
   DEFAULT_AUDIO_RESOLUTION,
@@ -14,12 +14,7 @@ import {
   VIDEO_LICENCES,
   VIDEO_PRIVACIES
 } from '../../../initializers/constants'
-import {
-  changeVideoChannelShare,
-  federateVideoIfNeeded,
-  fetchRemoteVideoDescription,
-  getVideoActivityPubUrl
-} from '../../../lib/activitypub'
+import { federateVideoIfNeeded, fetchRemoteVideoDescription } from '../../../lib/activitypub/videos'
 import { JobQueue } from '../../../lib/job-queue'
 import { Redis } from '../../../lib/redis'
 import {
@@ -67,7 +62,10 @@ import { MVideoDetails, MVideoFullLight } from '@server/typings/models'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getVideoFilePath } from '@server/lib/video-paths'
 import toInt from 'validator/lib/toInt'
-import { addOptimizeOrMergeAudioJob } from '@server/lib/videos'
+import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
+import { getServerActor } from '@server/models/application/application'
+import { changeVideoChannelShare } from '@server/lib/activitypub/share'
+import { getVideoActivityPubUrl } from '@server/lib/activitypub/url'
 
 const auditLogger = auditLoggerFactory('videos')
 const videosRouter = express.Router()

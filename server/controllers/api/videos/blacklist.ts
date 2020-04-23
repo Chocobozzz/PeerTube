@@ -19,7 +19,7 @@ import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
 import { sequelizeTypescript } from '../../../initializers'
 import { Notifier } from '../../../lib/notifier'
 import { sendDeleteVideo } from '../../../lib/activitypub/send'
-import { federateVideoIfNeeded } from '../../../lib/activitypub'
+import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
 import { MVideoBlacklistVideo } from '@server/typings/models'
 
 const blacklistRouter = express.Router()

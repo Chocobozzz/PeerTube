@@ -7,8 +7,8 @@ import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } fro
 import { extname } from 'path'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
-import { VideoState } from '../../../../shared'
-import { federateVideoIfNeeded } from '../../activitypub'
+import { VideoImportPayload, VideoImportTorrentPayload, VideoImportYoutubeDLPayload, VideoState } from '../../../../shared'
+import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { VideoModel } from '../../../models/video/video'
 import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
 import { getSecureTorrentName } from '../../../helpers/utils'
@@ -21,24 +21,7 @@ import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
 import { MThumbnail } from '../../../typings/models/video/thumbnail'
 import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
 import { getVideoFilePath } from '@server/lib/video-paths'
-import { addOptimizeOrMergeAudioJob } from '@server/lib/videos'
-
-type VideoImportYoutubeDLPayload = {
-  type: 'youtube-dl'
-  videoImportId: number
-
-  generateThumbnail: boolean
-  generatePreview: boolean
-
-  fileExt?: string
-}
-
-type VideoImportTorrentPayload = {
-  type: 'magnet-uri' | 'torrent-file'
-  videoImportId: number
-}
-
-export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
+import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 
 async function processVideoImport (job: Bull.Job) {
   const payload = job.data as VideoImportPayload

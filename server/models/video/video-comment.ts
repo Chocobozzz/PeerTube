@@ -9,7 +9,6 @@ import { ActorModel } from '../activitypub/actor'
 import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
-import { getServerActor } from '../../helpers/utils'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
 import { regexpCapture } from '../../helpers/regexp'
 import { uniq } from 'lodash'
@@ -28,6 +27,7 @@ import {
 } from '../../typings/models/video'
 import { MUserAccountId } from '@server/typings/models'
 import { VideoPrivacy } from '@shared/models'
+import { getServerActor } from '@server/models/application/application'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',

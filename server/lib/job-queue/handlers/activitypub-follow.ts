@@ -11,14 +11,7 @@ import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { MActor, MActorFollowActors, MActorFull } from '../../../typings/models'
-
-export type ActivitypubFollowPayload = {
-  followerActorId: number
-  name: string
-  host: string
-  isAutoFollow?: boolean
-  assertIsChannel?: boolean
-}
+import { ActivitypubFollowPayload } from '@shared/models'
 
 async function processActivityPubFollow (job: Bull.Job) {
   const payload = job.data as ActivitypubFollowPayload

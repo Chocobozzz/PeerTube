@@ -1,5 +1,16 @@
 import { AllowNull, Column, Default, DefaultScope, HasOne, IsInt, Model, Table } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
+import * as memoizee from 'memoizee'
+
+export const getServerActor = memoizee(async function () {
+  const application = await ApplicationModel.load()
+  if (!application) throw Error('Could not load Application from database.')
+
+  const actor = application.Account.Actor
+  actor.Account = application.Account
+
+  return actor
+}, { promise: true })
 
 @DefaultScope(() => ({
   include: [

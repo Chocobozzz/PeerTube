@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { getFormattedObjects, getServerActor } from '../../helpers/utils'
+import { getFormattedObjects} from '../../helpers/utils'
 import {
   asyncMiddleware,
   authenticate,
@@ -28,6 +28,7 @@ import { VideoChannelModel } from '../../models/video/video-channel'
 import { JobQueue } from '../../lib/job-queue'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { commonVideoPlaylistFiltersValidator, videoPlaylistsSearchValidator } from '../../middlewares/validators/videos/video-playlists'
+import { getServerActor } from '@server/models/application/application'
 
 const accountsRouter = express.Router()
 

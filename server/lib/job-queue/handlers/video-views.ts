@@ -3,7 +3,7 @@ import { logger } from '../../../helpers/logger'
 import { VideoModel } from '../../../models/video/video'
 import { VideoViewModel } from '../../../models/video/video-views'
 import { isTestInstance } from '../../../helpers/core-utils'
-import { federateVideoIfNeeded } from '../../activitypub'
+import { federateVideoIfNeeded } from '../../activitypub/videos'
 
 async function processVideosViews () {
   const lastHour = new Date()

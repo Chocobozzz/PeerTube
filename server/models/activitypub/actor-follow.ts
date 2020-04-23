@@ -20,7 +20,6 @@ import {
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
-import { getServerActor } from '../../helpers/utils'
 import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
 import { createSafeIn, getFollowsSort, getSort } from '../utils'
@@ -37,6 +36,7 @@ import {
 } from '@server/typings/models'
 import { ActivityPubActorType } from '@shared/models'
 import { VideoModel } from '@server/models/video/video'
+import { getServerActor } from '@server/models/application/application'
 
 @Table({
   tableName: 'actorFollow',
