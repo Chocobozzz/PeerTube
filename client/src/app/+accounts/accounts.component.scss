@@ -61,6 +61,11 @@ my-user-moderation-dropdown,
   .sub-menu {
     .actor {
       flex-direction: column;
+
+      .actor-info .actor-names {
+        flex-direction: column;
+        align-items: normal;
+      }
     }
   }
 }

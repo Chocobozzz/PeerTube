@@ -67,3 +67,16 @@
     height: min-content;
   }
 }
+
+@media screen and (max-width: $mobile-view) {
+  .sub-menu {
+    .actor {
+      flex-direction: column;
+
+      .actor-info .actor-names {
+        flex-direction: column;
+        align-items: normal;
+      }
+    }
+  }
+}
