@@ -5,6 +5,7 @@ import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { RegisterServerAuthPassOptions } from '@shared/models/plugins/register-server-auth.model'
 import { logger } from '@server/helpers/logger'
 import { UserRole } from '@shared/models'
+import { revokeToken } from '@server/lib/oauth-model'
 
 const oAuthServer = new OAuthServer({
   useErrorHandler: true,
@@ -37,8 +38,9 @@ async function handleIdAndPassLogin (req: express.Request, res: express.Response
     const aWeight = a.registerAuthOptions.getWeight()
     const bWeight = b.registerAuthOptions.getWeight()
 
+    // DESC weight order
     if (aWeight === bWeight) return 0
-    if (aWeight > bWeight) return 1
+    if (aWeight < bWeight) return 1
     return -1
   })
 
@@ -48,18 +50,24 @@ async function handleIdAndPassLogin (req: express.Request, res: express.Response
   }
 
   for (const pluginAuth of pluginAuths) {
+    const authOptions = pluginAuth.registerAuthOptions
+
     logger.debug(
-      'Using auth method of %s to login %s with weight %d.',
-      pluginAuth.npmName, loginOptions.id, pluginAuth.registerAuthOptions.getWeight()
+      'Using auth method %s of plugin %s to login %s with weight %d.',
+      authOptions.authName, pluginAuth.npmName, loginOptions.id, authOptions.getWeight()
     )
 
-    const loginResult = await pluginAuth.registerAuthOptions.login(loginOptions)
+    const loginResult = await authOptions.login(loginOptions)
     if (loginResult) {
-      logger.info('Login success with plugin %s for %s.', pluginAuth.npmName, loginOptions.id)
+      logger.info(
+        'Login success with auth method %s of plugin %s for %s.',
+        authOptions.authName, pluginAuth.npmName, loginOptions.id
+      )
 
       res.locals.bypassLogin = {
         bypass: true,
         pluginName: pluginAuth.npmName,
+        authName: authOptions.authName,
         user: {
           username: loginResult.username,
           email: loginResult.email,
@@ -75,12 +83,40 @@ async function handleIdAndPassLogin (req: express.Request, res: express.Response
   return localLogin(req, res, next)
 }
 
+async function handleTokenRevocation (req: express.Request, res: express.Response) {
+  const token = res.locals.oauth.token
+
+  PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName)
+
+  await revokeToken(token)
+    .catch(err => {
+      logger.error('Cannot revoke token.', err)
+    })
+
+  // FIXME: uncomment when https://github.com/oauthjs/node-oauth2-server/pull/289 is released
+  // oAuthServer.revoke(req, res, err => {
+  //   if (err) {
+  //     logger.warn('Error in revoke token handler.', { err })
+  //
+  //     return res.status(err.status)
+  //               .json({
+  //                 error: err.message,
+  //                 code: err.name
+  //               })
+  //               .end()
+  //   }
+  // })
+
+  return res.sendStatus(200)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   oAuthServer,
   handleIdAndPassLogin,
-  onExternalAuthPlugin
+  onExternalAuthPlugin,
+  handleTokenRevocation
 }
 
 // ---------------------------------------------------------------------------
@@ -88,6 +124,8 @@ export {
 function localLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
   return oAuthServer.token()(req, res, err => {
     if (err) {
+      logger.warn('Login error.', { err })
+
       return res.status(err.status)
                 .json({
                   error: err.message,

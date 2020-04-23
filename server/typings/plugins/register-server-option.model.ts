@@ -9,7 +9,11 @@ import { Logger } from 'winston'
 import { Router } from 'express'
 import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
 import { PluginPlaylistPrivacyManager } from '@shared/models/plugins/plugin-playlist-privacy-manager.model'
-import { RegisterServerAuthPassOptions, RegisterServerAuthExternalOptions, RegisterServerAuthExternalResult } from '@shared/models/plugins/register-server-auth.model'
+import {
+  RegisterServerAuthExternalOptions,
+  RegisterServerAuthExternalResult,
+  RegisterServerAuthPassOptions
+} from '@shared/models/plugins/register-server-auth.model'
 
 export type PeerTubeHelpers = {
   logger: Logger

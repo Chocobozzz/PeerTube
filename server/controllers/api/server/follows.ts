@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { UserRight } from '../../../../shared/models/users'
 import { logger } from '../../../helpers/logger'
-import { getFormattedObjects} from '../../../helpers/utils'
+import { getFormattedObjects } from '../../../helpers/utils'
 import { SERVER_ACTOR_NAME } from '../../../initializers/constants'
 import { sendAccept, sendReject, sendUndoFollow } from '../../../lib/activitypub/send'
 import {

@@ -2,7 +2,7 @@ import * as express from 'express'
 import { logger } from '../helpers/logger'
 import { Socket } from 'socket.io'
 import { getAccessToken } from '../lib/oauth-model'
-import { handleIdAndPassLogin, oAuthServer } from '@server/lib/auth'
+import { oAuthServer } from '@server/lib/auth'
 
 function authenticate (req: express.Request, res: express.Response, next: express.NextFunction, authenticateInQuery = false) {
   const options = authenticateInQuery ? { allowBearerTokensInQueryString: true } : {}

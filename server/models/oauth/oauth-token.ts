@@ -97,6 +97,9 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
   @Column
   refreshTokenExpiresAt: Date
 
+  @Column
+  authName: string
+
   @CreatedAt
   createdAt: Date
 

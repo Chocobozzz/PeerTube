@@ -11,15 +11,15 @@ import {
   getVideoAnnounceActivityPubUrl,
   getVideoChannelActivityPubUrl,
   getVideoCommentActivityPubUrl
-} from '../server/lib/activitypub'
+} from '../server/lib/activitypub/url'
 import { VideoShareModel } from '../server/models/video/video-share'
 import { VideoCommentModel } from '../server/models/video/video-comment'
-import { getServerActor } from '../server/helpers/utils'
 import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
 import { VideoStreamingPlaylistModel } from '../server/models/video/video-streaming-playlist'
 import { initDatabaseModels } from '../server/initializers'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
+import { getServerActor } from '@server/models/application/application'
 
 run()
   .then(() => process.exit(0))

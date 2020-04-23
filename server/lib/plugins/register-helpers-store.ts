@@ -171,6 +171,11 @@ export class RegisterHelpersStore {
 
   private buildRegisterIdAndPassAuth () {
     return (options: RegisterServerAuthPassOptions) => {
+      if (!options.authName || typeof options.getWeight !== 'function' || typeof options.login !== 'function') {
+        logger.error('Cannot register auth plugin %s: authName of getWeight or login are not valid.', this.npmName)
+        return
+      }
+
       this.idAndPassAuths.push(options)
     }
   }

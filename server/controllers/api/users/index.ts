@@ -26,12 +26,12 @@ import {
   usersUpdateValidator
 } from '../../../middlewares'
 import {
+  ensureCanManageUser,
   usersAskResetPasswordValidator,
   usersAskSendVerifyEmailValidator,
   usersBlockingValidator,
   usersResetPasswordValidator,
-  usersVerifyEmailValidator,
-  ensureCanManageUser
+  usersVerifyEmailValidator
 } from '../../../middlewares/validators'
 import { UserModel } from '../../../models/account/user'
 import { auditLoggerFactory, getAuditIdFromRes, UserAuditView } from '../../../helpers/audit-logger'
@@ -49,14 +49,9 @@ import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
 import { MUser, MUserAccountDefault } from '@server/typings/models'
 import { Hooks } from '@server/lib/plugins/hooks'
-import { handleIdAndPassLogin } from '@server/lib/auth'
+import { tokensRouter } from '@server/controllers/api/users/token'
 
 const auditLogger = auditLoggerFactory('users')
-
-const loginRateLimiter = RateLimit({
-  windowMs: CONFIG.RATES_LIMIT.LOGIN.WINDOW_MS,
-  max: CONFIG.RATES_LIMIT.LOGIN.MAX
-})
 
 // @ts-ignore
 const signupRateLimiter = RateLimit({
@@ -72,6 +67,7 @@ const askSendEmailLimiter = new RateLimit({
 })
 
 const usersRouter = express.Router()
+usersRouter.use('/', tokensRouter)
 usersRouter.use('/', myNotificationsRouter)
 usersRouter.use('/', mySubscriptionsRouter)
 usersRouter.use('/', myBlocklistRouter)
@@ -167,23 +163,6 @@ usersRouter.post('/:id/verify-email',
   asyncMiddleware(usersVerifyEmailValidator),
   asyncMiddleware(verifyUserEmail)
 )
-
-usersRouter.post('/token',
-  loginRateLimiter,
-  handleIdAndPassLogin,
-  tokenSuccess
-)
-usersRouter.post('/token',
-  loginRateLimiter,
-  handleIdAndPassLogin,
-  tokenSuccess
-)
-usersRouter.post('/revoke-token',
-  loginRateLimiter,
-  handleIdAndPassLogin,
-  tokenSuccess
-)
-// TODO: Once https://github.com/oauthjs/node-oauth2-server/pull/289 is merged, implement revoke token route
 
 // ---------------------------------------------------------------------------
 
@@ -389,12 +368,6 @@ async function verifyUserEmail (req: express.Request, res: express.Response) {
   await user.save()
 
   return res.status(204).end()
-}
-
-function tokenSuccess (req: express.Request) {
-  const username = req.body.username
-
-  Hooks.runAction('action:api.user.oauth2-got-token', { username, ip: req.ip })
 }
 
 async function changeUserBlock (res: express.Response, user: MUserAccountDefault, block: boolean, reason?: string) {

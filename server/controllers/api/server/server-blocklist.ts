@@ -1,6 +1,6 @@
 import * as express from 'express'
 import 'multer'
-import { getFormattedObjects} from '../../../helpers/utils'
+import { getFormattedObjects } from '../../../helpers/utils'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,

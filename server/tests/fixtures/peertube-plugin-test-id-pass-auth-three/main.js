@@ -3,7 +3,7 @@ async function register ({
   peertubeHelpers
 }) {
   registerIdAndPassAuth({
-    type: 'id-and-pass',
+    authName: 'laguna-bad-auth',
 
     onLogout: () => {
       peertubeHelpers.logger.info('On logout for auth 3 - 1')

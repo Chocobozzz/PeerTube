@@ -16,7 +16,7 @@ const serveThemeCSSValidator = [
 
     if (areValidationErrors(req, res)) return
 
-    const theme = PluginManager.Instance.getRegisteredTheme(req.params.themeName)
+    const theme = PluginManager.Instance.getRegisteredThemeByShortName(req.params.themeName)
 
     if (!theme || theme.version !== req.params.themeVersion) {
       return res.sendStatus(404)

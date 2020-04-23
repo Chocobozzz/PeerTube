@@ -3,7 +3,7 @@ async function register ({
   peertubeHelpers
 }) {
   registerIdAndPassAuth({
-    type: 'id-and-pass',
+    authName: 'spyro-auth',
 
     onLogout: () => {
       peertubeHelpers.logger.info('On logout for auth 1 - 1')
@@ -16,7 +16,7 @@ async function register ({
         return Promise.resolve({
           username: 'spyro',
           email: 'spyro@example.com',
-          role: 0,
+          role: 2,
           displayName: 'Spyro the Dragon'
         })
       }
@@ -26,7 +26,7 @@ async function register ({
   })
 
   registerIdAndPassAuth({
-    type: 'id-and-pass',
+    authName: 'crash-auth',
 
     onLogout: () => {
       peertubeHelpers.logger.info('On logout for auth 1 - 2')
@@ -39,7 +39,7 @@ async function register ({
         return Promise.resolve({
           username: 'crash',
           email: 'crash@example.com',
-          role: 2,
+          role: 1,
           displayName: 'Crash Bandicoot'
         })
       }
