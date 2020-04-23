@@ -82,11 +82,27 @@
 }
 
 @media screen and (max-width: $small-view) {
-  .video-channel-names {
-    flex-direction: column !important;
+  .search-result {
+    .entry.video-channel,
+    .entry.video {
+      flex-direction: column;
+      height: auto;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
 
-    .video-channel-name {
-      margin-left: 0 !important;
+      .video-channel-info .video-channel-names {
+        align-items: center;
+        flex-direction: column !important;
+
+        .video-channel-name {
+          margin-left: 0 !important;
+        }
+      }
+
+      my-subscribe-button {
+        margin-top: 5px;
+      }
     }
   }
 }
@@ -100,12 +116,6 @@
     }
 
     .entry {
-      flex-direction: column;
-      height: auto;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-
       &.video {
         .video-info-name,
         .video-info-account {
@@ -124,16 +134,6 @@
               height: auto;
             }
           }
-        }
-      }
-
-      &.video-channel {
-        .video-channel-info .video-channel-names {
-          align-items: center;
-        }
-
-        my-subscribe-button {
-          margin-top: 5px;
         }
       }
     }
