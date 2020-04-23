@@ -60,6 +60,17 @@ my-edit-button {
     flex-direction: column;
   }
 
+  ::ng-deep {
+    .video-miniature {
+      align-items: center;
+
+      .video-bottom .video-miniature-information {
+        // .video-bottom max-width
+        max-width: 350px !important;
+      }
+    }
+  }
+
   my-delete-button,
   my-edit-button {
     margin-right: 0px;
@@ -91,6 +102,18 @@ my-edit-button {
     ::ng-deep {
       .action-button {
         width: 50%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  ::ng-deep {
+    .video-miniature {
+      .video-bottom,
+      .video-bottom .video-miniature-information {
+        // $minimum-view - (.video container) padding-left + padding-right
+        max-width: #{$minimum-view - (20px + 20px)} !important;
       }
     }
   }
