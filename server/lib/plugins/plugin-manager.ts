@@ -21,6 +21,7 @@ import { ClientHtml } from '../client-html'
 import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
 import { RegisterHelpersStore } from './register-helpers-store'
 import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
+import { MOAuthTokenUser } from '@server/typings/models'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -133,19 +134,39 @@ export class PluginManager implements ServerHook {
   }
 
   onLogout (npmName: string, authName: string) {
-    const plugin = this.getRegisteredPluginOrTheme(npmName)
-    if (!plugin || plugin.type !== PluginType.PLUGIN) return
+    const auth = this.getAuth(npmName, authName)
 
-    const auth = plugin.registerHelpersStore.getIdAndPassAuths()
-      .find(a => a.authName === authName)
+    if (auth?.onLogout) {
+      logger.info('Running onLogout function from auth %s of plugin %s', authName, npmName)
 
-    if (auth.onLogout) {
       try {
         auth.onLogout()
       } catch (err) {
         logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
       }
     }
+  }
+
+  async isTokenValid (token: MOAuthTokenUser, type: 'access' | 'refresh') {
+    const auth = this.getAuth(token.User.pluginAuth, token.authName)
+    if (!auth) return true
+
+    if (auth.hookTokenValidity) {
+      try {
+        const { valid } = await auth.hookTokenValidity({ token, type })
+
+        if (valid === false) {
+          logger.info('Rejecting %s token validity from auth %s of plugin %s', type, token.authName, token.User.pluginAuth)
+        }
+
+        return valid
+      } catch (err) {
+        logger.warn('Cannot run check token validity from auth %s of plugin %s.', token.authName, token.User.pluginAuth, { err })
+        return true
+      }
+    }
+
+    return true
   }
 
   // ###################### Hooks ######################
@@ -451,6 +472,14 @@ export class PluginManager implements ServerHook {
     const npmName = PluginModel.buildNpmName(pluginName, pluginType)
 
     return join(CONFIG.STORAGE.PLUGINS_DIR, 'node_modules', npmName)
+  }
+
+  private getAuth (npmName: string, authName: string) {
+    const plugin = this.getRegisteredPluginOrTheme(npmName)
+    if (!plugin || plugin.type !== PluginType.PLUGIN) return null
+
+    return plugin.registerHelpersStore.getIdAndPassAuths()
+                 .find(a => a.authName === authName)
   }
 
   // ###################### Private getters ######################

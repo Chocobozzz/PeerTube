@@ -7,8 +7,7 @@ import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
 import { URL } from 'url'
 import { MActor, MVideoAccountLight } from '../typings/models'
-
-export type ContextType = 'All' | 'View' | 'Announce' | 'CacheFile'
+import { ContextType } from '@shared/models/activitypub/context'
 
 function getContextData (type: ContextType) {
   const context: any[] = [

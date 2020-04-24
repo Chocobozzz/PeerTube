@@ -30,6 +30,7 @@ export type OAuthTokenInfo = {
   user: {
     id: number
   }
+  token: MOAuthTokenUser
 }
 
 enum ScopeNames {
@@ -136,33 +137,43 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
     return clearCacheByToken(token.accessToken)
   }
 
+  static loadByRefreshToken (refreshToken: string) {
+    const query = {
+      where: { refreshToken }
+    }
+
+    return OAuthTokenModel.findOne(query)
+  }
+
   static getByRefreshTokenAndPopulateClient (refreshToken: string) {
     const query = {
       where: {
-        refreshToken: refreshToken
+        refreshToken
       },
       include: [ OAuthClientModel ]
     }
 
-    return OAuthTokenModel.findOne(query)
-      .then(token => {
-        if (!token) return null
+    return OAuthTokenModel.scope(ScopeNames.WITH_USER)
+                          .findOne(query)
+                          .then(token => {
+                            if (!token) return null
 
-        return {
-          refreshToken: token.refreshToken,
-          refreshTokenExpiresAt: token.refreshTokenExpiresAt,
-          client: {
-            id: token.oAuthClientId
-          },
-          user: {
-            id: token.userId
-          }
-        } as OAuthTokenInfo
-      })
-      .catch(err => {
-        logger.error('getRefreshToken error.', { err })
-        throw err
-      })
+                            return {
+                              refreshToken: token.refreshToken,
+                              refreshTokenExpiresAt: token.refreshTokenExpiresAt,
+                              client: {
+                                id: token.oAuthClientId
+                              },
+                              user: {
+                                id: token.userId
+                              },
+                              token
+                            } as OAuthTokenInfo
+                          })
+                          .catch(err => {
+                            logger.error('getRefreshToken error.', { err })
+                            throw err
+                          })
   }
 
   static getByTokenAndPopulateUser (bearerToken: string): Bluebird<MOAuthTokenUser> {
@@ -184,14 +195,14 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
   static getByRefreshTokenAndPopulateUser (refreshToken: string): Bluebird<MOAuthTokenUser> {
     const query = {
       where: {
-        refreshToken: refreshToken
+        refreshToken
       }
     }
 
     return OAuthTokenModel.scope(ScopeNames.WITH_USER)
       .findOne(query)
       .then(token => {
-        if (!token) return new OAuthTokenModel()
+        if (!token) return undefined
 
         return Object.assign(token, { user: token.User })
       })

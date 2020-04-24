@@ -43,6 +43,24 @@ async function serverLogin (server: Server) {
   return res.body.access_token as string
 }
 
+function refreshToken (server: ServerInfo, refreshToken: string, expectedStatus = 200) {
+  const path = '/api/v1/users/token'
+
+  const body = {
+    client_id: server.client.id,
+    client_secret: server.client.secret,
+    refresh_token: refreshToken,
+    response_type: 'code',
+    grant_type: 'refresh_token'
+  }
+
+  return request(server.url)
+    .post(path)
+    .type('form')
+    .send(body)
+    .expect(expectedStatus)
+}
+
 async function userLogin (server: Server, user: User, expectedStatus = 200) {
   const res = await login(server.url, server.client, user, expectedStatus)
 
@@ -83,6 +101,7 @@ export {
   login,
   logout,
   serverLogin,
+  refreshToken,
   userLogin,
   getAccessToken,
   setAccessTokensToServers,

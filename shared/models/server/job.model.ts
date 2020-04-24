@@ -1,6 +1,6 @@
-import { ContextType } from '@server/helpers/activitypub'
 import { SendEmailOptions } from './emailer.model'
 import { VideoResolution } from '@shared/models'
+import { ContextType } from '../activitypub/context'
 
 export type JobState = 'active' | 'completed' | 'failed' | 'waiting' | 'delayed'
 

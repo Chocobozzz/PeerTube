@@ -6,6 +6,7 @@ import { RegisterServerAuthPassOptions } from '@shared/models/plugins/register-s
 import { logger } from '@server/helpers/logger'
 import { UserRole } from '@shared/models'
 import { revokeToken } from '@server/lib/oauth-model'
+import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
 
 const oAuthServer = new OAuthServer({
   useErrorHandler: true,
@@ -20,6 +21,74 @@ function onExternalAuthPlugin (npmName: string, username: string, email: string)
 }
 
 async function handleIdAndPassLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
+  const grantType = req.body.grant_type
+
+  if (grantType === 'password') await proxifyPasswordGrant(req, res)
+  else if (grantType === 'refresh_token') await proxifyRefreshGrant(req, res)
+
+  return forwardTokenReq(req, res, next)
+}
+
+async function handleTokenRevocation (req: express.Request, res: express.Response) {
+  const token = res.locals.oauth.token
+
+  res.locals.explicitLogout = true
+  await revokeToken(token)
+
+  // FIXME: uncomment when https://github.com/oauthjs/node-oauth2-server/pull/289 is released
+  // oAuthServer.revoke(req, res, err => {
+  //   if (err) {
+  //     logger.warn('Error in revoke token handler.', { err })
+  //
+  //     return res.status(err.status)
+  //               .json({
+  //                 error: err.message,
+  //                 code: err.name
+  //               })
+  //               .end()
+  //   }
+  // })
+
+  return res.sendStatus(200)
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  oAuthServer,
+  handleIdAndPassLogin,
+  onExternalAuthPlugin,
+  handleTokenRevocation
+}
+
+// ---------------------------------------------------------------------------
+
+function forwardTokenReq (req: express.Request, res: express.Response, next: express.NextFunction) {
+  return oAuthServer.token()(req, res, err => {
+    if (err) {
+      logger.warn('Login error.', { err })
+
+      return res.status(err.status)
+                .json({
+                  error: err.message,
+                  code: err.name
+                })
+                .end()
+    }
+
+    return next()
+  })
+}
+
+async function proxifyRefreshGrant (req: express.Request, res: express.Response) {
+  const refreshToken = req.body.refresh_token
+  if (!refreshToken) return
+
+  const tokenModel = await OAuthTokenModel.loadByRefreshToken(refreshToken)
+  if (tokenModel?.authName) res.locals.refreshTokenAuthName = tokenModel.authName
+}
+
+async function proxifyPasswordGrant (req: express.Request, res: express.Response) {
   const plugins = PluginManager.Instance.getIdAndPassAuths()
   const pluginAuths: { npmName?: string, registerAuthOptions: RegisterServerAuthPassOptions }[] = []
 
@@ -76,64 +145,7 @@ async function handleIdAndPassLogin (req: express.Request, res: express.Response
         }
       }
 
-      break
+      return
     }
   }
-
-  return localLogin(req, res, next)
-}
-
-async function handleTokenRevocation (req: express.Request, res: express.Response) {
-  const token = res.locals.oauth.token
-
-  PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName)
-
-  await revokeToken(token)
-    .catch(err => {
-      logger.error('Cannot revoke token.', err)
-    })
-
-  // FIXME: uncomment when https://github.com/oauthjs/node-oauth2-server/pull/289 is released
-  // oAuthServer.revoke(req, res, err => {
-  //   if (err) {
-  //     logger.warn('Error in revoke token handler.', { err })
-  //
-  //     return res.status(err.status)
-  //               .json({
-  //                 error: err.message,
-  //                 code: err.name
-  //               })
-  //               .end()
-  //   }
-  // })
-
-  return res.sendStatus(200)
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  oAuthServer,
-  handleIdAndPassLogin,
-  onExternalAuthPlugin,
-  handleTokenRevocation
-}
-
-// ---------------------------------------------------------------------------
-
-function localLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
-  return oAuthServer.token()(req, res, err => {
-    if (err) {
-      logger.warn('Login error.', { err })
-
-      return res.status(err.status)
-                .json({
-                  error: err.message,
-                  code: err.name
-                })
-                .end()
-    }
-
-    return next()
-  })
 }

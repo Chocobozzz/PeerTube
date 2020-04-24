@@ -20,8 +20,7 @@ tokensRouter.post('/token',
 
 tokensRouter.post('/revoke-token',
   authenticate,
-  asyncMiddleware(handleTokenRevocation),
-  tokenSuccess
+  asyncMiddleware(handleTokenRevocation)
 )
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird'
 import * as express from 'express'
 import { AccessDeniedError } from 'oauth2-server'
 import { logger } from '../helpers/logger'
@@ -47,22 +46,33 @@ function clearCacheByToken (token: string) {
   }
 }
 
-function getAccessToken (bearerToken: string) {
+async function getAccessToken (bearerToken: string) {
   logger.debug('Getting access token (bearerToken: ' + bearerToken + ').')
 
-  if (!bearerToken) return Bluebird.resolve(undefined)
+  if (!bearerToken) return undefined
 
-  if (accessTokenCache.has(bearerToken)) return Bluebird.resolve(accessTokenCache.get(bearerToken))
+  let tokenModel: MOAuthTokenUser
 
-  return OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
-                        .then(tokenModel => {
-                          if (tokenModel) {
-                            accessTokenCache.set(bearerToken, tokenModel)
-                            userHavingToken.set(tokenModel.userId, tokenModel.accessToken)
-                          }
+  if (accessTokenCache.has(bearerToken)) {
+    tokenModel = accessTokenCache.get(bearerToken)
+  } else {
+    tokenModel = await OAuthTokenModel.getByTokenAndPopulateUser(bearerToken)
 
-                          return tokenModel
-                        })
+    if (tokenModel) {
+      accessTokenCache.set(bearerToken, tokenModel)
+      userHavingToken.set(tokenModel.userId, tokenModel.accessToken)
+    }
+  }
+
+  if (!tokenModel) return undefined
+
+  if (tokenModel.User.pluginAuth) {
+    const valid = await PluginManager.Instance.isTokenValid(tokenModel, 'access')
+
+    if (valid !== true) return undefined
+  }
+
+  return tokenModel
 }
 
 function getClient (clientId: string, clientSecret: string) {
@@ -71,14 +81,27 @@ function getClient (clientId: string, clientSecret: string) {
   return OAuthClientModel.getByIdAndSecret(clientId, clientSecret)
 }
 
-function getRefreshToken (refreshToken: string) {
+async function getRefreshToken (refreshToken: string) {
   logger.debug('Getting RefreshToken (refreshToken: ' + refreshToken + ').')
 
-  return OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
+  const tokenInfo = await OAuthTokenModel.getByRefreshTokenAndPopulateClient(refreshToken)
+  if (!tokenInfo) return undefined
+
+  const tokenModel = tokenInfo.token
+
+  if (tokenModel.User.pluginAuth) {
+    const valid = await PluginManager.Instance.isTokenValid(tokenModel, 'refresh')
+
+    if (valid !== true) return undefined
+  }
+
+  return tokenInfo
 }
 
 async function getUser (usernameOrEmail: string, password: string) {
   const res: express.Response = this.request.res
+
+  // Special treatment coming from a plugin
   if (res.locals.bypassLogin && res.locals.bypassLogin.bypass === true) {
     const obj = res.locals.bypassLogin
     logger.info('Bypassing oauth login by plugin %s.', obj.pluginName)
@@ -110,7 +133,7 @@ async function getUser (usernameOrEmail: string, password: string) {
   return user
 }
 
-async function revokeToken (tokenInfo: TokenInfo) {
+async function revokeToken (tokenInfo: { refreshToken: string }) {
   const res: express.Response = this.request.res
   const token = await OAuthTokenModel.getByRefreshTokenAndPopulateUser(tokenInfo.refreshToken)
 
@@ -133,9 +156,12 @@ async function revokeToken (tokenInfo: TokenInfo) {
 async function saveToken (token: TokenInfo, client: OAuthClientModel, user: UserModel) {
   const res: express.Response = this.request.res
 
-  const authName = res.locals.bypassLogin?.bypass === true
-    ? res.locals.bypassLogin.authName
-    : null
+  let authName: string = null
+  if (res.locals.bypassLogin?.bypass === true) {
+    authName = res.locals.bypassLogin.authName
+  } else if (res.locals.refreshTokenAuthName) {
+    authName = res.locals.refreshTokenAuthName
+  }
 
   logger.debug('Saving token ' + token.accessToken + ' for client ' + client.id + ' and user ' + user.id + '.')
 

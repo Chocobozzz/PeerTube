@@ -15,8 +15,8 @@ import {
   MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo
 } from '../../../typings/models'
-import { ContextType } from '@server/helpers/activitypub'
 import { getServerActor } from '@server/models/application/application'
+import { ContextType } from '@shared/models/activitypub/context'
 
 async function sendCreateVideo (video: MVideoAP, t: Transaction) {
   if (!video.hasPrivacyForFederation()) return undefined
