@@ -7,8 +7,8 @@ import { JobQueue } from '../../job-queue'
 import { getActorsInvolvedInVideo, getAudienceFromFollowersOf, getRemoteVideoAudience } from '../audience'
 import { afterCommitIfTransaction } from '../../../helpers/database-utils'
 import { MActor, MActorId, MActorLight, MActorWithInboxes, MVideoAccountLight, MVideoId, MVideoImmutable } from '../../../typings/models'
-import { ContextType } from '@server/helpers/activitypub'
 import { getServerActor } from '@server/models/application/application'
+import { ContextType } from '@shared/models/activitypub/context'
 
 async function sendVideoRelatedActivity (activityBuilder: (audience: ActivityAudience) => Activity, options: {
   byActor: MActorLight

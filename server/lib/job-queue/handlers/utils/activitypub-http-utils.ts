@@ -1,9 +1,10 @@
-import { buildSignedActivity, ContextType } from '../../../../helpers/activitypub'
+import { buildSignedActivity } from '../../../../helpers/activitypub'
 import { ActorModel } from '../../../../models/activitypub/actor'
 import { ACTIVITY_PUB, HTTP_SIGNATURE } from '../../../../initializers/constants'
 import { MActor } from '../../../../typings/models'
 import { getServerActor } from '@server/models/application/application'
 import { buildDigest } from '@server/helpers/peertube-crypto'
+import { ContextType } from '@shared/models/activitypub/context'
 
 type Payload = { body: any, contextType?: ContextType, signatureActorId?: number }
 

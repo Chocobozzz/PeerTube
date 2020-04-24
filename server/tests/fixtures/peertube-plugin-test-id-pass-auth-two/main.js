@@ -11,6 +11,24 @@ async function register ({
 
     getWeight: () => 30,
 
+    hookTokenValidity: (options) => {
+      if (options.type === 'refresh') {
+        return { valid: false }
+      }
+
+      if (options.type === 'access') {
+        const token = options.token
+        const now = new Date()
+        now.setTime(now.getTime() - 5000)
+
+        const createdAt = new Date(token.createdAt)
+
+        return { valid: createdAt.getTime() >= now.getTime() }
+      }
+
+      return { valid: true }
+    },
+
     login (body) {
       if (body.id === 'laguna' && body.password === 'laguna password') {
         return Promise.resolve({

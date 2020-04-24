@@ -46,6 +46,8 @@ declare module 'express' {
         }
       }
 
+      refreshTokenAuthName?: string
+
       explicitLogout: boolean
 
       videoAll?: MVideoFullLight
