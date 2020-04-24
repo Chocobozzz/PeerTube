@@ -88,12 +88,15 @@ my-video-thumbnail,
     @include ellipsis;
   }
 
-  .more {
+  .more, my-edit-button {
     justify-self: flex-end;
     margin-left: auto;
     cursor: pointer;
-    opacity: 0;
     min-width: 24px;
+  }
+
+  .more {
+    opacity: 0;
 
     &.show {
       opacity: 1;
@@ -130,5 +133,86 @@ my-video-thumbnail,
         margin-top: 10px;
       }
     }
+  }
+}
+
+@mixin more-dropdown-control {
+  .video {
+    my-edit-button {
+      display: none;
+
+      + .more {
+        display: inline-flex;
+      }
+    }
+  }
+}
+
+@mixin edit-button-control {
+  .video {
+    my-edit-button {
+      display: none;
+    }
+
+    &.playing {
+      my-edit-button {
+        display: inline-flex;
+        height: max-content;
+      }
+    }
+
+    my-edit-button + .more {
+      display: none;
+    }
+  }
+}
+
+@mixin edit-button-in-mobile-view {
+  .video {
+    my-edit-button {
+      ::ng-deep .action-button-edit {
+        padding: 0 13px;
+
+        .button-label {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $small-view) {
+  :host-context(.expanded) {
+    @include more-dropdown-control();
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  :host-context(.expanded) {
+    @include edit-button-control();
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  :host-context(.expanded) {
+    @include edit-button-in-mobile-view();
+  }
+}
+
+@media screen and (min-width: #{$small-view + $menu-width}) {
+  :host-context(.main-col:not(.expanded)) {
+    @include more-dropdown-control();
+  }
+}
+
+@media screen and (max-width: #{$small-view + $menu-width}) {
+  :host-context(.main-col:not(.expanded)) {
+    @include edit-button-control();
+  }
+}
+
+@media screen and (max-width: #{$mobile-view + $menu-width}) {
+  :host-context(.main-col:not(.expanded)) {
+    @include edit-button-in-mobile-view();
   }
 }

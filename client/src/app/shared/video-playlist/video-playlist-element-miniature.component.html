@@ -36,7 +36,9 @@
     </div>
   </a>
 
-  <div *ngIf="owned" class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="bottom-right"
+  <my-edit-button *ngIf="owned && touchScreenEditButton" [routerLink]="[ '/my-account', 'video-playlists', playlist.uuid ]"></my-edit-button>
+
+  <div *ngIf="owned" class="more" ngbDropdown #moreDropdown="ngbDropdown" placement="bottom auto"
        (openChange)="onDropdownOpenChange()" autoClose="outside"
   >
     <my-global-icon iconName="more-vertical" ngbDropdownToggle role="button" class="icon-more" (click)="$event.preventDefault()"></my-global-icon>
@@ -82,8 +84,9 @@
       </ng-container>
 
       <span class="dropdown-item" (click)="removeFromPlaylist(playlistElement)">
-            <my-global-icon iconName="delete"></my-global-icon> <ng-container i18n>Delete from {{ playlist?.displayName }}</ng-container>
-          </span>
+        <my-global-icon iconName="delete"></my-global-icon>
+        <ng-container i18n>Delete from {{ playlist?.displayName }}</ng-container>
+      </span>
     </div>
   </div>
 </div>
