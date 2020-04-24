@@ -147,6 +147,16 @@ label {
       padding-right: $expanded-horizontal-margins;
     }
   }
+
+  &.lock-scroll .main-row > router-outlet + * {
+    // Lock and hide body scrollbars
+    position: fixed;
+
+    // Lock and hide sub-menu scrollbars
+    .sub-menu {
+      overflow-x: hidden;
+    }
+  }
 }
 
 .title-page {

@@ -105,21 +105,11 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   }
 
   private lockBodyScroll () {
-    const contentElement = document.getElementById('content')
-
-    contentElement
-      .firstElementChild
-      .lastElementChild
-      .classList.add('fixed')
+    document.getElementById('content').classList.add('lock-scroll')
   }
 
   private unlockBodyScroll () {
-    const contentElement = document.getElementById('content')
-
-    contentElement
-      .firstElementChild
-      .lastElementChild
-      .classList.remove('fixed')
+    document.getElementById('content').classList.remove('lock-scroll')
   }
 
   private observeBodyResize () {
