@@ -72,9 +72,15 @@
   .video-channel {
     padding-bottom: 10px;
 
-    .video-channel-names {
-      flex-direction: column;
-      align-items: center !important;
+    .video-channel-info {
+      padding-bottom: 10px;
+      text-align: center;
+
+      .video-channel-names {
+        flex-direction: column;
+        align-items: center !important;
+        margin: auto;
+      }
     }
 
     img {
