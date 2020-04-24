@@ -25,3 +25,32 @@
 
   top: -1px;
 }
+
+.sub-menu.no-scroll {
+  overflow-x: hidden;
+}
+
+.modal-body {
+  .hidden {
+    display: none;
+  }
+
+  a {
+    @include disable-default-a-behaviour;
+
+    color: currentColor;
+    box-sizing: border-box;
+    display: block;
+    font-size: 1.2rem;
+    padding: 9px 12px;
+    text-align: initial;
+    text-transform: unset;
+    width: 100%;
+
+    &.active {
+      color: var(--mainBackgroundColor) !important;
+      background-color: var(--mainHoverColor);
+      opacity: .9;
+    }
+  }
+}
