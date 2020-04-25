@@ -1,7 +1,7 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { Component, forwardRef, Input, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core'
+import { Component, forwardRef, Input, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
-import { Subject, Observable, Subscription, fromEvent } from 'rxjs'
+import { Subject } from 'rxjs'
 import truncate from 'lodash-es/truncate'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { MarkdownService } from '@app/shared/renderer'
@@ -19,7 +19,7 @@ import { MarkdownService } from '@app/shared/renderer'
   ]
 })
 
-export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
   @Input() classes: string[] | { [klass: string]: any[] | any } = []
   @Input() textareaMaxWidth = '100%'
@@ -36,10 +36,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
   isMaximized = false
 
   private contentChanged = new Subject<string>()
-  private resizeObserver: Observable<Event> | any
-  private resizeSubscription: Subscription
-  private orientationChangeObserver: Observable<Event>
-  private orientationChangeSubscription: Subscription
 
   constructor (
     private screenService: ScreenService,
@@ -55,10 +51,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
         .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content)
-  }
-
-  ngOnDestroy () {
-    this.unobserveBodyResize()
   }
 
   propagateChange = (_: any) => { /* empty */ }
@@ -91,10 +83,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
     // Make sure the window has no scrollbars
     if (!this.isMaximized) {
-      this.unobserveBodyResize()
       this.unlockBodyScroll()
     } else {
-      this.observeBodyResize()
       this.lockBodyScroll()
     }
   }
@@ -110,52 +100,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit, 
 
   private unlockBodyScroll () {
     document.getElementById('content').classList.remove('lock-scroll')
-  }
-
-  private observeBodyResize () {
-    // Make sure the window has scrollbars if resized to a small view and exit maximized mode
-    // By observing resize event
-    if (typeof window.ResizeObserver === 'function') {
-      // Use window.ResizeObserver while ResizeObserver not implemented in TypeScript
-      this.resizeObserver = new window.ResizeObserver(() => this.onBodyResize())
-      this.resizeObserver.observe(document.body)
-    } else {
-      this.resizeObserver = fromEvent(window, 'resize')
-      this.resizeSubscription = this.resizeObserver.subscribe(() => this.onBodyResize())
-    }
-
-    // Make sure the window has scrollbars if orientation change to a small view and exit maximized mode
-    // By observing orientationchange event
-    this.orientationChangeObserver = fromEvent(window, 'onrientationchange')
-    this.orientationChangeSubscription = this.orientationChangeObserver.subscribe(() => this.onBodyResize())
-  }
-
-  private unobserveBodyResize () {
-    if (this.resizeObserver) {
-      if (typeof window.ResizeObserver === 'function') {
-        this.resizeObserver.unobserve(document.body)
-      } else {
-        this.resizeSubscription.unsubscribe()
-        delete this.resizeSubscription
-      }
-
-      delete this.resizeObserver
-    }
-
-    if (this.orientationChangeSubscription) {
-      this.orientationChangeSubscription.unsubscribe()
-      delete this.orientationChangeSubscription
-    }
-  }
-
-  private onBodyResize () {
-    if (this.isMaximized) {
-      if (this.screenService.isInMobileView()) {
-        this.unlockBodyScroll()
-      } else {
-        this.lockBodyScroll()
-      }
-    }
   }
 
   private async updatePreviews () {

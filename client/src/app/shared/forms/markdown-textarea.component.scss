@@ -4,36 +4,17 @@
 $nav-preview-tab-height: 30px;
 $base-padding: 15px;
 
-@mixin in-mobile-view {
-  .root {
-    textarea {
-      @include peertube-textarea(100%, 150px);
-
-      margin-bottom: 15px;
-      background-color: var(--textareaBackgroundColor);
-      font-family: courier, monospace;
-      font-size: 13px;
-    }
-
-    .nav-preview {
-      display: none;
-    }
-
-    ::ng-deep {
-      .tab-content {
-        display: none;
-      }
-    }
-  }
-}
-
 @mixin in-small-view {
   .root {
     display: flex;
     flex-direction: column;
 
     textarea {
-      margin-bottom: 0px;
+      @include peertube-textarea(100%, 150px);
+
+      background-color: var(--textareaBackgroundColor);
+      font-family: courier, monospace;
+      font-size: 13px;
       border-bottom: none;
       border-bottom-left-radius: unset;
       border-bottom-right-radius: unset;
@@ -61,6 +42,12 @@ $base-padding: 15px;
         .grey-button {
           padding: 0 12px 0 12px;
         }
+      }
+    }
+
+    ::ng-deep {
+      .tab-content {
+        display: none;
       }
     }
   }
@@ -172,6 +159,31 @@ $base-padding: 15px;
   }
 }
 
+@mixin maximized-tabs-in-mobile-view {
+  // Ellipsis on tabs for mobile view
+  .root.maximized {
+    .nav-preview {
+      ::ng-deep .nav-link {
+        @include ellipsis();
+
+        display: block !important;
+        max-width: 45% !important;
+        padding: 5px 0 !important;
+        margin-right: 10px !important;
+        text-align: center;
+
+        &:not(.active) {
+          max-width: 15% !important;
+        }
+
+        &.active {
+          padding: 5px 15px !important;
+        }
+      }
+    }
+  }
+}
+
 @mixin in-medium-view {
   .root {
     .nav-preview {
@@ -208,12 +220,17 @@ $base-padding: 15px;
   }
 }
 
-@include in-mobile-view();
+@include in-small-view();
+@include maximized-in-small-view();
 
-@media only screen and (min-width: $mobile-view) {
-  @include in-small-view();
+@media only screen and (max-width: $mobile-view) {
+  @include maximized-tabs-in-mobile-view();
+}
 
-  @include maximized-in-small-view();
+@media only screen and (max-width: $mobile-view + $menu-width) {
+  :host-context(.main-col:not(.expanded)) {
+    @include maximized-tabs-in-mobile-view();
+  }
 }
 
 @media only screen and (min-width: $small-view) {
