@@ -61,10 +61,26 @@ my-user-moderation-dropdown,
   .sub-menu {
     .actor {
       flex-direction: column;
+      align-items: center;
 
-      .actor-info .actor-names {
-        flex-direction: column;
-        align-items: normal;
+      img,
+      .actor-info .actor-names .actor-display-name {
+        margin-right: 0;
+      }
+
+      .actor-info  {
+        .actor-names {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        my-user-moderation-dropdown {
+          margin-left: 0;
+        }
+
+        .actor-followers {
+          text-align: center;
+        }
       }
     }
   }
