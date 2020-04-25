@@ -227,7 +227,7 @@ $base-padding: 15px;
   @include maximized-tabs-in-mobile-view();
 }
 
-@media only screen and (max-width: $mobile-view + $menu-width) {
+@media only screen and (max-width: #{$mobile-view + $menu-width}) {
   :host-context(.main-col:not(.expanded)) {
     @include maximized-tabs-in-mobile-view();
   }
