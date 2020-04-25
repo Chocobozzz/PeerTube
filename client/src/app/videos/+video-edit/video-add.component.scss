@@ -62,8 +62,7 @@ $nav-link-height: 40px;
   }
 }
 
-/* Make .video-add-nav tabs scrollable on small devices */
-@media screen and (max-width: $small-view) {
+@mixin nav-scroll {
   ::ng-deep .video-add-nav {
     height: #{$nav-link-height + $border-width * 2};
     overflow-x: auto;
@@ -75,5 +74,16 @@ $nav-link-height: 40px;
       border: none;
       background-color: var(--mainBackgroundColor) !important;
     }
+  }
+}
+
+/* Make .video-add-nav tabs scrollable on small devices */
+@media screen and (max-width: $small-view) {
+  @include nav-scroll();
+}
+
+@media screen and (max-width: #{$small-view + $menu-width}) {
+  :host-context(.main-col:not(.expanded)) {
+    @include nav-scroll();
   }
 }
