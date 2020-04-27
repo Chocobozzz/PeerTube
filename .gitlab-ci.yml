@@ -5,6 +5,7 @@ stages:
   - test
   - clients
   - docker-nightly
+  - external-plugins
 
 #before_script:
 #  - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
@@ -93,7 +94,7 @@ build-openapi-clients:
       - schedules
     changes:
       - support/doc/api/openapi.yaml
-  script: 
+  script:
     - apt-get update -qq
     - apt-get -yqqq install openjdk-8-jre
     - yarn install --pure-lockfile
@@ -145,3 +146,31 @@ build-docker-master:
     - master
   variables:
     DOCKER_IMAGE_NAME: chocobozzz/peertube:production-buster
+
+test-external-plugins:
+  stage: external-plugins
+  only:
+    - schedules
+  services:
+    - name: postgres:9.6
+      alias: postgres
+    - name: redis:latest
+      alias: redis
+    - name: rroemhild/test-openldap
+      alias: ldap
+  variables:
+    PGHOST: postgres
+    PGUSER: postgres
+    REDIS_HOST: redis
+  artifacts:
+   expire_in: 1 day
+   paths:
+     - test*/logs
+   when: always
+  before_script:
+    - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
+    - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
+    - psql -c "create user peertube with password 'peertube';"; fi
+    - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
+  script:
+    - npm run ci -- "external-plugins"
