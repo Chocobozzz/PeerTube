@@ -151,6 +151,20 @@ describe('Test id and pass auth plugins', function () {
     await getMyUserInformation(server.url, lagunaAccessToken, 401)
   })
 
+  it('Should reject an invalid username, email, role or display name', async function () {
+    await userLogin(server, { username: 'ward', password: 'ward password' }, 400)
+    await waitUntilLog(server, 'valid username')
+
+    await userLogin(server, { username: 'kiros', password: 'kiros password' }, 400)
+    await waitUntilLog(server, 'valid display name')
+
+    await userLogin(server, { username: 'raine', password: 'raine password' }, 400)
+    await waitUntilLog(server, 'valid role')
+
+    await userLogin(server, { username: 'ellone', password: 'elonne password' }, 400)
+    await waitUntilLog(server, 'valid email')
+  })
+
   it('Should uninstall the plugin one and do not login existing Crash', async function () {
     await uninstallPlugin({
       url: server.url,

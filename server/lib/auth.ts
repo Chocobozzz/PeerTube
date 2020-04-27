@@ -7,6 +7,7 @@ import { logger } from '@server/helpers/logger'
 import { UserRole } from '@shared/models'
 import { revokeToken } from '@server/lib/oauth-model'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
+import { isUserUsernameValid, isUserRoleValid, isUserDisplayNameValid } from '@server/helpers/custom-validators/users'
 
 const oAuthServer = new OAuthServer({
   useErrorHandler: true,
@@ -120,10 +121,12 @@ async function proxifyPasswordGrant (req: express.Request, res: express.Response
 
   for (const pluginAuth of pluginAuths) {
     const authOptions = pluginAuth.registerAuthOptions
+    const authName = authOptions.authName
+    const npmName = pluginAuth.npmName
 
     logger.debug(
       'Using auth method %s of plugin %s to login %s with weight %d.',
-      authOptions.authName, pluginAuth.npmName, loginOptions.id, authOptions.getWeight()
+      authName, npmName, loginOptions.id, authOptions.getWeight()
     )
 
     try {
@@ -131,8 +134,30 @@ async function proxifyPasswordGrant (req: express.Request, res: express.Response
       if (loginResult) {
         logger.info(
           'Login success with auth method %s of plugin %s for %s.',
-          authOptions.authName, pluginAuth.npmName, loginOptions.id
+          authName, npmName, loginOptions.id
         )
+
+        if (!isUserUsernameValid(loginResult.username)) {
+          logger.error('Auth method %s of plugin %s did not provide a valid username.', authName, npmName, { loginResult })
+          continue
+        }
+
+        if (!loginResult.email) {
+          logger.error('Auth method %s of plugin %s did not provide a valid email.', authName, npmName, { loginResult })
+          continue
+        }
+
+        // role is optional
+        if (loginResult.role && !isUserRoleValid(loginResult.role)) {
+          logger.error('Auth method %s of plugin %s did not provide a valid role.', authName, npmName, { loginResult })
+          continue
+        }
+
+        // display name is optional
+        if (loginResult.displayName && !isUserDisplayNameValid(loginResult.displayName)) {
+          logger.error('Auth method %s of plugin %s did not provide a valid display name.', authName, npmName, { loginResult })
+          continue
+        }
 
         res.locals.bypassLogin = {
           bypass: true,
