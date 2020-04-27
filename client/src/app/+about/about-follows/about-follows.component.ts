@@ -97,7 +97,7 @@ export class AboutFollowsComponent implements OnInit {
         .subscribe(
           resultList => {
             const newFollowings = resultList.data.map(r => r.following.host)
-            if (this.followings.length===0) this.followings = this.followings.concat(newFollowings)
+            if (this.followings.length === 0) this.followings = this.followings.concat(newFollowings)
 
             else this.moreFollowings = this.moreFollowings.concat(newFollowings)
 
