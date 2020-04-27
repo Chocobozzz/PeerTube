@@ -4,6 +4,7 @@
 $border-width: 3px;
 $border-type: solid;
 $border-color: #EAEAEA;
+$nav-link-height: 40px;
 
 .margin-content {
   padding-top: 50px;
@@ -25,7 +26,7 @@ $border-color: #EAEAEA;
     @include disable-default-a-behaviour;
 
     margin-bottom: -$border-width;
-    height: 40px !important;
+    height: $nav-link-height !important;
     padding: 0 30px !important;
     font-size: 15px;
 
@@ -58,5 +59,31 @@ $border-color: #EAEAEA;
 
   &.dragover {
     border: 3px dashed var(--mainColor);
+  }
+}
+
+@mixin nav-scroll {
+  ::ng-deep .video-add-nav {
+    height: #{$nav-link-height + $border-width * 2};
+    overflow-x: auto;
+    white-space: nowrap;
+    flex-wrap: unset;
+
+    /* Hide active tab style to not have a moving tab effect */
+    a.nav-link.active {
+      border: none;
+      background-color: var(--mainBackgroundColor) !important;
+    }
+  }
+}
+
+/* Make .video-add-nav tabs scrollable on small devices */
+@media screen and (max-width: $small-view) {
+  @include nav-scroll();
+}
+
+@media screen and (max-width: #{$small-view + $menu-width}) {
+  :host-context(.main-col:not(.expanded)) {
+    @include nav-scroll();
   }
 }
