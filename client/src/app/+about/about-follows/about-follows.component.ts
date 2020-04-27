@@ -13,6 +13,8 @@ import { InstanceFollowService } from '@app/shared/shared-instance'
 export class AboutFollowsComponent implements OnInit {
   followers: string[] = []
   followings: string[] = []
+  moreFollowers: string[] = []
+  moreFollowings: string[] = []
 
   showMoreFollowers = false
   showMoreFollowings = false
@@ -75,7 +77,9 @@ export class AboutFollowsComponent implements OnInit {
         .subscribe(
           resultList => {
             const newFollowers = resultList.data.map(r => r.follower.host)
-            this.followers = this.followers.concat(newFollowers)
+            if (this.followers.length === 0) this.followers = this.followers.concat(newFollowers)
+
+            else this.moreFollowers = this.moreFollowers.concat(newFollowers)
 
             this.followersPagination.totalItems = resultList.total
 
@@ -93,7 +97,9 @@ export class AboutFollowsComponent implements OnInit {
         .subscribe(
           resultList => {
             const newFollowings = resultList.data.map(r => r.following.host)
-            this.followings = this.followings.concat(newFollowings)
+            if (this.followings.length===0) this.followings = this.followings.concat(newFollowings)
+
+            else this.moreFollowings = this.moreFollowings.concat(newFollowings)
 
             this.followingsPagination.totalItems = resultList.total
 
