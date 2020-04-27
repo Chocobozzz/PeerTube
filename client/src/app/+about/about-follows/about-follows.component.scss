@@ -17,6 +17,8 @@ a {
   justify-content: flex-start;
 }
 
-#showMore {
-  color: black;
+.showMore {
+  @include peertube-button-link;
+  padding: 0;
+  text-align: left;
 }
