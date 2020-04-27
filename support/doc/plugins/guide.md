@@ -157,6 +157,9 @@ registerSetting({
 })
 
 const adminName = await settingsManager.getSetting('admin-name')
+
+const result = await settingsManager.getSettings([ 'admin-name', 'admin-password' ])
+result['admin-name]
 ```
 
 #### Storage
