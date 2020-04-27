@@ -116,8 +116,8 @@
   height: $button-height;
   width: $width;
   background: var(--inputBackgroundColor);
-  border: 1px solid var(--inputBorderColor);
-  border-radius: $input-border-radius;
+  border: 1px solid #C6C6C6;
+  border-radius: 3px;
   padding-left: 15px;
   padding-right: 15px;
   font-size: 15px;
@@ -167,7 +167,7 @@
   &[disabled], &.disabled {
     cursor: default;
     color: #fff;
-    background-color: var(--inputBorderColor);
+    background-color: #C6C6C6;
   }
 
   my-global-icon {
@@ -218,7 +218,7 @@
   font-size: 15px;
   height: $button-height;
   line-height: $button-height;
-  border-radius: $input-border-radius;
+  border-radius: 3px;
   text-align: center;
   padding: 0 17px 0 13px;
   cursor: pointer;
@@ -304,7 +304,7 @@
   padding: 0;
   margin: 0;
   width: $width;
-  border-radius: $input-border-radius;
+  border-radius: 3px;
   background: var(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
@@ -330,7 +330,7 @@
     width: calc(100% + 2px);
     position: relative;
     left: 1px;
-    border: 1px solid var(--inputBorderColor);
+    border: 1px solid #C6C6C6;
     background: transparent none;
     appearance: none;
     cursor: pointer;
@@ -404,8 +404,8 @@
     width: 18px;
     min-width: 18px;
     height: 18px;
-    border: $border-width solid var(--inputBorderColor);
-    border-radius: $input-border-radius;
+    border: $border-width solid #C6C6C6;
+    border-radius: 3px;
     vertical-align: middle;
     cursor: pointer;
 
@@ -602,7 +602,7 @@
   min-height: 130px;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--inputBorderColor);
+  border-bottom: 1px solid #C6C6C6;
 
   @media screen and (max-width: 800px) {
     flex-direction: column;
@@ -739,8 +739,8 @@
     .ng2-tags-container {
       display: flex;
       align-items: center;
-      border: 1px solid var(--inputBorderColor);
-      border-radius: $input-border-radius;
+      border: 1px solid #C6C6C6;
+      border-radius: 3px;
       padding: 5px !important;
       height: max-content;
 

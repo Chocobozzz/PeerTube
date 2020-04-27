@@ -3,6 +3,8 @@
 
 $nav-preview-tab-height: 30px;
 $base-padding: 15px;
+$input-border-color: #C6C6C6;
+$input-border-radius: 3px;
 
 @mixin in-small-view {
   .root {
@@ -27,10 +29,10 @@ $base-padding: 15px;
       padding-bottom: 10px;
       padding-left: 10px;
       padding-right: 10px;
-      border-top: 1px dashed var(--inputBorderColor);
-      border-left: 1px solid var(--inputBorderColor);
-      border-right: 1px solid var(--inputBorderColor);
-      border-bottom: 1px solid var(--inputBorderColor);
+      border-top: 1px dashed $input-border-color;
+      border-left: 1px solid $input-border-color;
+      border-right: 1px solid $input-border-color;
+      border-bottom: 1px solid $input-border-color;
       border-bottom-right-radius: $input-border-radius;
 
       border-bottom-left-radius: $input-border-radius;
@@ -193,9 +195,9 @@ $base-padding: 15px;
     ::ng-deep .tab-content {
       @include content-preview-base();
       max-height: 210px;
-      border-bottom: 1px solid var(--inputBorderColor);
-      border-left: 1px solid var(--inputBorderColor);
-      border-right: 1px solid var(--inputBorderColor);
+      border-bottom: 1px solid $input-border-color;
+      border-left: 1px solid $input-border-color;
+      border-right: 1px solid $input-border-color;
       border-bottom-left-radius: $input-border-radius;
       border-bottom-right-radius: $input-border-radius;
     }
@@ -209,7 +211,7 @@ $base-padding: 15px;
     textarea {
       display: block;
       padding: $base-padding;
-      border-right: 1px dashed var(--inputBorderColor) !important;
+      border-right: 1px dashed $input-border-color !important;
       resize: none;
       scrollbar-color: var(--actionButtonColor) var(--textareaBackgroundColor);
 
