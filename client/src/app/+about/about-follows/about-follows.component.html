@@ -9,7 +9,7 @@
       {{ follower }}
     </a>
 
-    <a id="showMore" href="javascript:;" *ngIf="!showMoreFollowers" (click)="loadAllFollowers()" (click)= "showMoreFollowers=true">Show full list</a> 
+    <a i18n class="showMore" *ngIf="!showMoreFollowers" (click)="loadAllFollowers()" (click)= "showMoreFollowers=true">Show full list</a>
   </div>
 
   <div class="col-xl-6 col-md-12">
@@ -17,11 +17,19 @@
 
     <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">This instance is not following any other.</div>
 
+<<<<<<< HEAD
+||||||| parent of 932e04c48 (Change button)
+    <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">This instance does not have instances followings.</div>
+    
+=======
+    <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">This instance does not have instances followings.</div>
+
+>>>>>>> 932e04c48 (Change button)
     <a *ngFor="let following of followings" [href]="buildLink(following)" target="_blank" rel="noopener noreferrer">
       {{ following }}
     </a>
-    
-    <a id="showMore" href="javascript:;" *ngIf="!showMoreFollowings" (click)="loadAllFollowings()" (click)= "showMoreFollowings=true">Show full list</a>   
+
+    <a i18n class="showMore" *ngIf="!showMoreFollowings" (click)="loadAllFollowings()" (click)= "showMoreFollowings=true">Show full list</a>
   </div>
 
 </div>
