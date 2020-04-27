@@ -129,6 +129,31 @@ export class PluginModel extends Model<PluginModel> {
       })
   }
 
+  static getSettings (pluginName: string, pluginType: PluginType, settingNames: string[]) {
+    const query = {
+      attributes: [ 'settings' ],
+      where: {
+        name: pluginName,
+        type: pluginType
+      }
+    }
+
+    return PluginModel.findOne(query)
+      .then(p => {
+        if (!p || !p.settings) return {}
+
+        const result: { [settingName: string ]: string } = {}
+
+        for (const key of Object.keys(p.settings)) {
+          if (settingNames.includes(key)) {
+            result[key] = p.settings[key]
+          }
+        }
+
+        return result
+      })
+  }
+
   static setSetting (pluginName: string, pluginType: PluginType, settingName: string, settingValue: string) {
     const query = {
       where: {

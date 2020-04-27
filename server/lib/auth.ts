@@ -126,26 +126,30 @@ async function proxifyPasswordGrant (req: express.Request, res: express.Response
       authOptions.authName, pluginAuth.npmName, loginOptions.id, authOptions.getWeight()
     )
 
-    const loginResult = await authOptions.login(loginOptions)
-    if (loginResult) {
-      logger.info(
-        'Login success with auth method %s of plugin %s for %s.',
-        authOptions.authName, pluginAuth.npmName, loginOptions.id
-      )
+    try {
+      const loginResult = await authOptions.login(loginOptions)
+      if (loginResult) {
+        logger.info(
+          'Login success with auth method %s of plugin %s for %s.',
+          authOptions.authName, pluginAuth.npmName, loginOptions.id
+        )
 
-      res.locals.bypassLogin = {
-        bypass: true,
-        pluginName: pluginAuth.npmName,
-        authName: authOptions.authName,
-        user: {
-          username: loginResult.username,
-          email: loginResult.email,
-          role: loginResult.role || UserRole.USER,
-          displayName: loginResult.displayName || loginResult.username
+        res.locals.bypassLogin = {
+          bypass: true,
+          pluginName: pluginAuth.npmName,
+          authName: authOptions.authName,
+          user: {
+            username: loginResult.username,
+            email: loginResult.email,
+            role: loginResult.role || UserRole.USER,
+            displayName: loginResult.displayName || loginResult.username
+          }
         }
-      }
 
-      return
+        return
+      }
+    } catch (err) {
+      logger.error('Error in auth method %s of plugin %s', authOptions.authName, pluginAuth.npmName, { err })
     }
   }
 }
