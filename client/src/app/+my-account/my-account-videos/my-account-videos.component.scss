@@ -76,8 +76,10 @@ my-edit-button {
   my-edit-button {
     margin-right: 0px;
 
-    ::ng-deep span {
-      margin-right: 0px;
+    ::ng-deep {
+      span, a {
+        margin-right: 0px;
+      }
     }
   }
 

@@ -91,6 +91,10 @@
       align-items: center;
       text-align: center;
 
+      img {
+        margin: 0;
+      }
+
       .video-channel-info .video-channel-names {
         align-items: center;
         flex-direction: column !important;
