@@ -65,8 +65,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     this.propagateChange = fn
   }
 
-  registerOnTouched () {
-    // Unused
+  registerOntouched () {
+    // unused
   }
 
   onModelChange () {
@@ -87,11 +87,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     } else {
       this.lockBodyScroll()
     }
-  }
-
-  arePreviewsDisplayed () {
-    // Unused
-    return this.screenService.isInSmallView() === false
   }
 
   private lockBodyScroll () {
