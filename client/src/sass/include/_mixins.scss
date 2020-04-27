@@ -29,6 +29,31 @@
   line-height: $font-size;
   overflow: hidden;
   text-overflow: ellipsis;
+  /* Let space at right for dots */
+  position: relative;
+  margin-right: -1em;
+  padding-right: 1em;
+
+  /* Display dots if the max number of lines is exceeded */
+  &::before {
+    content: "...";
+    /* set position to right bottom corner of block */
+    position: absolute;
+    bottom: 0;
+    right: 0;
+  }
+
+  /* Hide dots if the max number of lines is not exceeded */
+  &:after {
+    content: '';
+    background-color: var(--mainBackgroundColor);
+    /* set position to right bottom corner of text */
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+  }
 }
 
 @mixin prefix($property, $parameters...) {

@@ -56,3 +56,32 @@ my-user-moderation-dropdown,
   padding: 5px;
   margin-top: -2px;
 }
+
+@media screen and (max-width: $mobile-view) {
+  .sub-menu {
+    .actor {
+      flex-direction: column;
+      align-items: center;
+
+      img,
+      .actor-info .actor-names .actor-display-name {
+        margin-right: 0;
+      }
+
+      .actor-info  {
+        .actor-names {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        my-user-moderation-dropdown {
+          margin-left: 0;
+        }
+
+        .actor-followers {
+          text-align: center;
+        }
+      }
+    }
+  }
+}

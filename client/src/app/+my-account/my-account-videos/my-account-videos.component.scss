@@ -54,3 +54,47 @@ my-delete-button,
 my-edit-button {
   margin-right: 10px;
 }
+
+@media screen and (max-width: $small-view) {
+  .videos-header {
+    flex-direction: column;
+  }
+
+  ::ng-deep {
+    .video-miniature {
+      align-items: center;
+
+      .video-bottom,
+      .video-bottom .video-miniature-information {
+        /* same width than a.video-thumbnail */
+        max-width: 223px !important;
+      }
+    }
+  }
+
+  my-delete-button,
+  my-edit-button {
+    margin-right: 0px;
+
+    ::ng-deep {
+      span, a {
+        margin-right: 0px;
+      }
+    }
+  }
+
+  my-delete-button,
+  my-edit-button,
+  my-button {
+    margin-top: 15px;
+    width: 100%;
+    text-align: center;
+
+    ::ng-deep {
+      .action-button {
+        /* same width than a.video-thumbnail */
+        width: 223px;
+      }
+    }
+  }
+}

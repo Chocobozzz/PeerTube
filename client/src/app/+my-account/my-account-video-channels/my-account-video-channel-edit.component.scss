@@ -26,9 +26,9 @@ my-actor-avatar-info {
 input {
   &[type=text] {
     @include peertube-input-text(340px);
-  
+
     display: block;
-  
+
     &#name {
       width: auto;
       flex-grow: 1;
@@ -62,4 +62,14 @@ my-markdown-textarea ::ng-deep {
 
 .breadcrumb {
   @include breadcrumb;
+}
+
+@media screen and (max-width: $small-view) {
+  input[type=text]#name {
+    width: auto !important;
+  }
+
+  label[for=name] + div, textarea {
+    width: 100%;
+  }
 }
