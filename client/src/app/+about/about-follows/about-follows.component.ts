@@ -14,6 +14,9 @@ export class AboutFollowsComponent implements OnInit {
   followers: string[] = []
   followings: string[] = []
 
+  showMoreFollowers = false;
+  showMoreFollowings = false;
+
   followersPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 20,
@@ -45,24 +48,20 @@ export class AboutFollowsComponent implements OnInit {
     this.loadMoreFollowings()
   }
 
-  onNearOfBottom () {
-    this.onNearOfFollowersBottom()
+  loadAllFollowings () {
+    while(hasMoreItems(this.followingsPagination)) {
+      this.followingsPagination.currentPage += 1
 
-    this.onNearOfFollowingsBottom()
+      this.loadMoreFollowings()
+    }
   }
 
-  onNearOfFollowersBottom () {
-    if (!hasMoreItems(this.followersPagination)) return
-
-    this.followersPagination.currentPage += 1
-    this.loadMoreFollowers()
-  }
-
-  onNearOfFollowingsBottom () {
-    if (!hasMoreItems(this.followingsPagination)) return
-
-    this.followingsPagination.currentPage += 1
-    this.loadMoreFollowings()
+  loadAllFollowers () {
+    while(hasMoreItems(this.followersPagination)) {
+      this.followersPagination.currentPage += 1
+      
+      this.loadMoreFollowers();
+    }
   }
 
   buildLink (host: string) {
