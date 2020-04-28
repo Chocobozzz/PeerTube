@@ -22,6 +22,7 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   error: string = null
   forgotPasswordEmail = ''
+  isAuthenticatedWithExternalAuth = false
 
   private openedForgotPasswordModal: NgbModalRef
   private serverConfig: ServerConfig
@@ -49,7 +50,14 @@ export class LoginComponent extends FormReactive implements OnInit {
   }
 
   ngOnInit () {
-    this.serverConfig = this.route.snapshot.data.serverConfig
+    const snapshot = this.route.snapshot
+
+    this.serverConfig = snapshot.data.serverConfig
+
+    if (snapshot.queryParams.externalAuthToken) {
+      this.loadExternalAuthToken(snapshot.queryParams.username, snapshot.queryParams.externalAuthToken)
+      return
+    }
 
     this.buildForm({
       username: this.loginValidatorsService.LOGIN_USERNAME,
@@ -68,11 +76,7 @@ export class LoginComponent extends FormReactive implements OnInit {
       .subscribe(
         () => this.redirectService.redirectToPreviousRoute(),
 
-        err => {
-          if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
-          else if (err.message.indexOf('blocked') !== -1) this.error = this.i18n('You account is blocked.')
-          else this.error = err.message
-        }
+        err => this.handleError(err)
       )
   }
 
@@ -98,5 +102,25 @@ export class LoginComponent extends FormReactive implements OnInit {
 
   hideForgotPasswordModal () {
     this.openedForgotPasswordModal.close()
+  }
+
+  private loadExternalAuthToken (username: string, token: string) {
+    this.isAuthenticatedWithExternalAuth = true
+
+    this.authService.login(username, null, token)
+    .subscribe(
+      () => this.redirectService.redirectToPreviousRoute(),
+
+      err => {
+        this.handleError(err)
+        this.isAuthenticatedWithExternalAuth = false
+      }
+    )
+  }
+
+  private handleError (err: any) {
+    if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
+    else if (err.message.indexOf('blocked') !== -1) this.error = this.i18n('You account is blocked.')
+    else this.error = err.message
   }
 }

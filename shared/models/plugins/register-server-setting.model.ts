@@ -9,7 +9,7 @@ export interface RegisterServerSettingOptions {
   private: boolean
 
   // Default setting value
-  default?: string
+  default?: string | boolean
 }
 
 export interface RegisteredServerSettings {

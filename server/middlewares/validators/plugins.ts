@@ -4,7 +4,7 @@ import { logger } from '../../helpers/logger'
 import { areValidationErrors } from './utils'
 import { isNpmPluginNameValid, isPluginNameValid, isPluginTypeValid, isPluginVersionValid } from '../../helpers/custom-validators/plugins'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
-import { isBooleanValid, isSafePath, toBooleanOrNull } from '../../helpers/custom-validators/misc'
+import { isBooleanValid, isSafePath, toBooleanOrNull, exists } from '../../helpers/custom-validators/misc'
 import { PluginModel } from '../../models/server/plugin'
 import { InstallOrUpdatePlugin } from '../../../shared/models/plugins/install-plugin.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
@@ -39,6 +39,26 @@ const getPluginValidator = (pluginType: PluginType, withVersion = true) => {
     }
   ])
 }
+
+const getExternalAuthValidator = [
+  param('authName').custom(exists).withMessage('Should have a valid auth name'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking getExternalAuthValidator parameters', { parameters: req.params })
+
+    if (areValidationErrors(req, res)) return
+
+    const plugin = res.locals.registeredPlugin
+    if (!plugin.registerHelpersStore) return res.sendStatus(404)
+
+    const externalAuth = plugin.registerHelpersStore.getExternalAuths().find(a => a.authName === req.params.authName)
+    if (!externalAuth) return res.sendStatus(404)
+
+    res.locals.externalAuth = externalAuth
+
+    return next()
+  }
+]
 
 const pluginStaticDirectoryValidator = [
   param('staticEndpoint').custom(isSafePath).withMessage('Should have a valid static endpoint'),
@@ -175,5 +195,6 @@ export {
   listAvailablePluginsValidator,
   existingPluginValidator,
   installOrUpdatePluginValidator,
-  listPluginsValidator
+  listPluginsValidator,
+  getExternalAuthValidator
 }

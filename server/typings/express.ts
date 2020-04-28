@@ -29,6 +29,7 @@ import { MPlugin, MServer } from '@server/typings/models/server'
 import { MServerBlocklist } from './models/server/server-blocklist'
 import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
 import { UserRole } from '@shared/models'
+import { RegisterServerAuthExternalOptions } from '@shared/models/plugins/register-server-auth.model'
 
 declare module 'express' {
   interface Response {
@@ -114,6 +115,8 @@ declare module 'express' {
       authenticated?: boolean
 
       registeredPlugin?: RegisteredPlugin
+
+      externalAuth?: RegisterServerAuthExternalOptions
 
       plugin?: MPlugin
     }
