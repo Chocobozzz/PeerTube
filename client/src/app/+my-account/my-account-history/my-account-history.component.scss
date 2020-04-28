@@ -12,6 +12,8 @@
 .top-buttons {
   margin-bottom: 20px;
   display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 
   .history-switch {
     display: flex;
@@ -36,5 +38,22 @@
 
   .my-video-miniature {
     flex-grow: 1;
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .top-buttons {
+    .history-switch label, .delete-history {
+      @include ellipsis;
+    }
+
+    .history-switch label {
+      width: 60%;
+    }
+
+    .delete-history {
+      margin-left: auto;
+      max-width: 32%;
+    }
   }
 }
