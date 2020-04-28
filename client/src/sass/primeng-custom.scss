@@ -277,10 +277,10 @@ p-table {
   p-table {
     .ui-table-wrapper {
       overflow-x: auto;
-      max-width: calc(100vw - #{$horizontal-margins *2});
+      max-width: calc(100vw - #{$horizontal-margins});
 
       table {
-        min-width: $table-min-width;
+        min-width: #{$table-min-width - $horizontal-margins};
       }
     }
 

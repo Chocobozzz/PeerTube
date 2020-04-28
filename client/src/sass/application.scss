@@ -340,6 +340,16 @@ table {
         width: 100% !important;
       }
     }
+
+    &.expanded {
+      @include overflow-datatable($small-view, $expanded-horizontal-margins/3);
+    }
+  }
+}
+
+@media screen and (max-width: #{$small-view + $menu-width}) {
+  .main-col:not(.expanded) {
+    @include overflow-datatable($small-view, $not-expanded-horizontal-margins);
   }
 }
 
