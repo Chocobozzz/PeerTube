@@ -65,8 +65,8 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     this.propagateChange = fn
   }
 
-  registerOntouched () {
-    // unused
+  registerOnTouched () {
+    // Unused
   }
 
   onModelChange () {
