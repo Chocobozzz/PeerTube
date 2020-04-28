@@ -1,5 +1,5 @@
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
-import { Component, forwardRef, Input, OnInit } from '@angular/core'
+import { Component, forwardRef, Input, OnInit, ViewChild, ElementRef } from '@angular/core'
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'
 import { Subject } from 'rxjs'
 import truncate from 'lodash-es/truncate'
@@ -22,18 +22,18 @@ import { MarkdownService } from '@app/shared/renderer'
 export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
   @Input() content = ''
   @Input() classes: string[] | { [klass: string]: any[] | any } = []
-  @Input() textareaWidth = '100%'
+  @Input() textareaMaxWidth = '100%'
   @Input() textareaHeight = '150px'
-  @Input() previewColumn = false
   @Input() truncate: number
   @Input() markdownType: 'text' | 'enhanced' = 'text'
   @Input() markdownVideo = false
   @Input() name = 'description'
 
-  textareaMarginRight = '0'
-  flexDirection = 'column'
+  @ViewChild('textarea') textareaElement: ElementRef
+
   truncatedPreviewHTML = ''
   previewHTML = ''
+  isMaximized = false
 
   private contentChanged = new Subject<string>()
 
@@ -51,11 +51,6 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
         .subscribe(() => this.updatePreviews())
 
     this.contentChanged.next(this.content)
-
-    if (this.previewColumn) {
-      this.flexDirection = 'row'
-      this.textareaMarginRight = '15px'
-    }
   }
 
   propagateChange = (_: any) => { /* empty */ }
@@ -80,8 +75,26 @@ export class MarkdownTextareaComponent implements ControlValueAccessor, OnInit {
     this.contentChanged.next(this.content)
   }
 
-  arePreviewsDisplayed () {
-    return this.screenService.isInSmallView() === false
+  onMaximizeClick () {
+    this.isMaximized = !this.isMaximized
+
+    // Make sure textarea have the focus
+    this.textareaElement.nativeElement.focus()
+
+    // Make sure the window has no scrollbars
+    if (!this.isMaximized) {
+      this.unlockBodyScroll()
+    } else {
+      this.lockBodyScroll()
+    }
+  }
+
+  private lockBodyScroll () {
+    document.getElementById('content').classList.add('lock-scroll')
+  }
+
+  private unlockBodyScroll () {
+    document.getElementById('content').classList.remove('lock-scroll')
   }
 
   private async updatePreviews () {

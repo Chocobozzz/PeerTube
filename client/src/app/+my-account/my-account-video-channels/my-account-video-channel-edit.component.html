@@ -59,7 +59,7 @@
           {{ formErrors['display-name'] }}
         </div>
       </div>
-    
+
       <div class="form-group">
         <label i18n for="description">Description</label>
         <textarea
@@ -70,7 +70,7 @@
           {{ formErrors.description }}
         </div>
       </div>
-    
+
       <div class="form-group">
         <label for="support">Support</label>
         <my-help
@@ -78,14 +78,14 @@
     When you will upload a video in this channel, the video support field will be automatically filled by this text."
         ></my-help>
         <my-markdown-textarea
-            id="support" formControlName="support" textareaWidth="500px" [previewColumn]="true" markdownType="enhanced"
+            id="support" formControlName="support" textareaMaxWidth="500px" markdownType="enhanced"
             [classes]="{ 'input-error': formErrors['support'] }"
         ></my-markdown-textarea>
         <div *ngIf="formErrors.support" class="form-error">
           {{ formErrors.support }}
         </div>
       </div>
-    
+
       <div class="form-group" *ngIf="isBulkUpdateVideosDisplayed()">
         <my-peertube-checkbox
           inputName="bulkVideosSupportUpdate" formControlName="bulkVideosSupportUpdate"

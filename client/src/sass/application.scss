@@ -38,6 +38,8 @@ body {
   --inputBackgroundColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
 
+  --textareaBackgroundColor: #{$textarea-background-color};
+
   --actionButtonColor: #{$grey-foreground-color};
   --supportButtonBackgroundColor: #{transparent};
   --supportButtonColor: #{var(--actionButtonColor)};
@@ -142,6 +144,16 @@ label {
     .sub-menu {
       padding-left: $expanded-horizontal-margins;
       padding-right: $expanded-horizontal-margins;
+    }
+  }
+
+  &.lock-scroll .main-row > router-outlet + * {
+    // Lock and hide body scrollbars
+    position: fixed;
+
+    // Lock and hide sub-menu scrollbars
+    .sub-menu {
+      overflow-x: hidden;
     }
   }
 }
@@ -302,6 +314,12 @@ table {
         padding-left: 15px;
         padding-right: 15px;
         margin-bottom: $sub-menu-margin-bottom-small-view;
+      }
+
+      my-markdown-textarea {
+        .root {
+          max-width: 100% !important;
+        }
       }
 
       input[type=text],

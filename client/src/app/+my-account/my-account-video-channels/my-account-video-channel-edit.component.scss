@@ -48,14 +48,6 @@ textarea {
   display: block;
 }
 
-my-markdown-textarea ::ng-deep {
-  .root {
-    @media screen and (max-width: 1400px) {
-      flex-direction: column !important;
-    }
-  }
-}
-
 .peertube-select-container {
   @include peertube-select-container(340px);
 }

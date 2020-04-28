@@ -19,13 +19,13 @@
 
       <my-markdown-textarea
         *ngIf="setting.type === 'markdown-text'"
-        markdownType="text" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px" [previewColumn]="false"
+        markdownType="text" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
         [classes]="{ 'input-error': formErrors['settings.name'] }"
       ></my-markdown-textarea>
 
       <my-markdown-textarea
         *ngIf="setting.type === 'markdown-enhanced'"
-        markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px" [previewColumn]="false"
+        markdownType="enhanced" [id]="setting.name" [formControlName]="setting.name" textareaWidth="500px"
         [classes]="{ 'input-error': formErrors['settings.name'] }"
       ></my-markdown-textarea>
 

@@ -161,18 +161,6 @@ p-calendar {
   }
 }
 
-::ng-deep my-markdown-textarea {
-  .root {
-    @include media-breakpoint-down(xl) {
-      flex-direction: column !important;
-    }
-
-    textarea {
-      max-width: 100%;
-    }
-  }
-}
-
 @include ng2-tags;
 
 // columns for the video
@@ -200,7 +188,7 @@ p-calendar {
   .col-video-edit {
     @include media-breakpoint-up(md) {
       @include make-col(8);
-  
+
       & + .col-video-edit {
         @include make-col(4);
       }
