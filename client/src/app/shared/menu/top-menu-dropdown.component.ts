@@ -1,7 +1,5 @@
 import {
-  AfterViewInit,
   Component,
-  HostListener,
   Input,
   OnDestroy,
   OnInit,
@@ -31,7 +29,7 @@ export type TopMenuDropdownParam = {
   templateUrl: './top-menu-dropdown.component.html',
   styleUrls: [ './top-menu-dropdown.component.scss' ]
 })
-export class TopMenuDropdownComponent implements OnInit, OnDestroy, AfterViewInit {
+export class TopMenuDropdownComponent implements OnInit, OnDestroy {
   @Input() menuEntries: TopMenuDropdownParam[] = []
 
   @ViewChild('modal', { static: true }) modal: NgbModal
@@ -39,7 +37,6 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy, AfterViewIni
   suffixLabels: { [ parentLabel: string ]: string }
   hasIcons = false
   container: undefined | 'body' = undefined
-  isInSmallView = false
   isModalOpened = false
   currentMenuEntryIndex: number
 
@@ -50,7 +47,11 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy, AfterViewIni
     private router: Router,
     private modalService: NgbModal,
     private screen: ScreenService
-  ) {}
+  ) { }
+
+  get isInSmallView () {
+    return this.screen.isInSmallView()
+  }
 
   ngOnInit () {
     this.updateChildLabels(window.location.pathname)
@@ -64,14 +65,9 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy, AfterViewIni
     )
 
     // We have to set body for the container to avoid scroll overflow on mobile and small views
-    if (this.screen.isInSmallView()) {
+    if (this.isInSmallView) {
       this.container = 'body'
-      this.isInSmallView = true
     }
-  }
-
-  ngAfterViewInit () {
-    setTimeout(() => this.onWindowResize(), 0)
   }
 
   ngOnDestroy () {
@@ -102,11 +98,6 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy, AfterViewIni
 
     dropdown.close()
     this.openedOnHover = false
-  }
-
-  @HostListener('window:resize')
-  onWindowResize () {
-    this.isInSmallView = !!this.screen.isInSmallView()
   }
 
   openModal (index: number) {
