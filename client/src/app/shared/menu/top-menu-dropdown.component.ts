@@ -35,7 +35,7 @@ export type TopMenuDropdownParam = {
 export class TopMenuDropdownComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() menuEntries: TopMenuDropdownParam[] = []
 
-  @ViewChild('modal', { static: true }) modal: ElementRef
+  @ViewChild('modal', { static: true }) modal: NgbModal
 
   suffixLabels: { [ parentLabel: string ]: string }
   hasIcons = false
