@@ -12,6 +12,18 @@ export interface ServerConfigTheme extends ServerConfigPlugin {
   css: string[]
 }
 
+export interface RegisteredExternalAuthConfig {
+  npmName: string
+  authName: string
+  authDisplayName: string
+}
+
+export interface RegisteredIdAndPassAuthConfig {
+  npmName: string
+  authName: string
+  weight: number
+}
+
 export interface ServerConfig {
   serverVersion: string
   serverCommit?: string
@@ -37,6 +49,10 @@ export interface ServerConfig {
 
   plugin: {
     registered: ServerConfigPlugin[]
+
+    registeredExternalAuths: RegisteredExternalAuthConfig[]
+
+    registeredIdAndPassAuths: RegisteredIdAndPassAuthConfig[]
   }
 
   theme: {

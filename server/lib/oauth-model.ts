@@ -98,7 +98,7 @@ async function getRefreshToken (refreshToken: string) {
   return tokenInfo
 }
 
-async function getUser (usernameOrEmail: string, password: string) {
+async function getUser (usernameOrEmail?: string, password?: string) {
   const res: express.Response = this.request.res
 
   // Special treatment coming from a plugin

@@ -1,31 +1,21 @@
-import { PluginSettingsManager } from '@shared/models/plugins/plugin-settings-manager.model'
-import { PluginModel } from '@server/models/server/plugin'
-import { PluginStorageManager } from '@shared/models/plugins/plugin-storage-manager.model'
-import { PluginVideoLanguageManager } from '@shared/models/plugins/plugin-video-language-manager.model'
-import {
-  VIDEO_CATEGORIES,
-  VIDEO_LANGUAGES,
-  VIDEO_LICENCES,
-  VIDEO_PLAYLIST_PRIVACIES,
-  VIDEO_PRIVACIES
-} from '@server/initializers/constants'
-import { PluginVideoLicenceManager } from '@shared/models/plugins/plugin-video-licence-manager.model'
-import { PluginVideoCategoryManager } from '@shared/models/plugins/plugin-video-category-manager.model'
-import { RegisterServerOptions } from '@server/typings/plugins'
-import { buildPluginHelpers } from './plugin-helpers'
 import { logger } from '@server/helpers/logger'
-import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
-import { serverHookObject } from '@shared/models/plugins/server-hook.model'
-import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
-import * as express from 'express'
-import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
+import { VIDEO_CATEGORIES, VIDEO_LANGUAGES, VIDEO_LICENCES, VIDEO_PLAYLIST_PRIVACIES, VIDEO_PRIVACIES } from '@server/initializers/constants'
+import { onExternalUserAuthenticated } from '@server/lib/auth'
+import { PluginModel } from '@server/models/server/plugin'
+import { RegisterServerOptions } from '@server/typings/plugins'
 import { PluginPlaylistPrivacyManager } from '@shared/models/plugins/plugin-playlist-privacy-manager.model'
-import {
-  RegisterServerAuthExternalOptions,
-  RegisterServerAuthExternalResult,
-  RegisterServerAuthPassOptions
-} from '@shared/models/plugins/register-server-auth.model'
-import { onExternalAuthPlugin } from '@server/lib/auth'
+import { PluginSettingsManager } from '@shared/models/plugins/plugin-settings-manager.model'
+import { PluginStorageManager } from '@shared/models/plugins/plugin-storage-manager.model'
+import { PluginVideoCategoryManager } from '@shared/models/plugins/plugin-video-category-manager.model'
+import { PluginVideoLanguageManager } from '@shared/models/plugins/plugin-video-language-manager.model'
+import { PluginVideoLicenceManager } from '@shared/models/plugins/plugin-video-licence-manager.model'
+import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
+import { RegisterServerAuthExternalOptions, RegisterServerAuthExternalResult, RegisterServerAuthPassOptions, RegisterServerExternalAuthenticatedResult } from '@shared/models/plugins/register-server-auth.model'
+import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
+import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
+import { serverHookObject } from '@shared/models/plugins/server-hook.model'
+import * as express from 'express'
+import { buildPluginHelpers } from './plugin-helpers'
 
 type AlterableVideoConstant = 'language' | 'licence' | 'category' | 'privacy' | 'playlistPrivacy'
 type VideoConstant = { [key in number | string]: string }
@@ -187,8 +177,14 @@ export class RegisterHelpersStore {
       this.externalAuths.push(options)
 
       return {
-        onAuth (options: { username: string, email: string }): void {
-          onExternalAuthPlugin(self.npmName, options.username, options.email)
+        userAuthenticated (result: RegisterServerExternalAuthenticatedResult): void {
+          onExternalUserAuthenticated({
+            npmName: self.npmName,
+            authName: options.authName,
+            authResult: result
+          }).catch(err => {
+            logger.error('Cannot execute onExternalUserAuthenticated.', { npmName: self.npmName, authName: options.authName, err })
+          })
         }
       } as RegisterServerAuthExternalResult
     }

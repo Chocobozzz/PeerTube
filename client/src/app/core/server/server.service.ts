@@ -54,7 +54,9 @@ export class ServerService {
       }
     },
     plugin: {
-      registered: []
+      registered: [],
+      registeredExternalAuths: [],
+      registeredIdAndPassAuths: []
     },
     theme: {
       registered: [],

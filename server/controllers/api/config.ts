@@ -1,22 +1,22 @@
+import { Hooks } from '@server/lib/plugins/hooks'
 import * as express from 'express'
+import { remove, writeJSON } from 'fs-extra'
 import { snakeCase } from 'lodash'
-import { ServerConfig, UserRight } from '../../../shared'
+import validator from 'validator'
+import { RegisteredExternalAuthConfig, RegisteredIdAndPassAuthConfig, ServerConfig, UserRight } from '../../../shared'
 import { About } from '../../../shared/models/server/about.model'
 import { CustomConfig } from '../../../shared/models/server/custom-config.model'
-import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
-import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '../../initializers/constants'
-import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
-import { customConfigUpdateValidator } from '../../middlewares/validators/config'
-import { ClientHtml } from '../../lib/client-html'
 import { auditLoggerFactory, CustomConfigAuditView, getAuditIdFromRes } from '../../helpers/audit-logger'
-import { remove, writeJSON } from 'fs-extra'
-import { getServerCommit } from '../../helpers/utils'
-import validator from 'validator'
 import { objectConverter } from '../../helpers/core-utils'
+import { isSignupAllowed, isSignupAllowedForCurrentIP } from '../../helpers/signup'
+import { getServerCommit } from '../../helpers/utils'
 import { CONFIG, isEmailEnabled, reloadConfig } from '../../initializers/config'
+import { CONSTRAINTS_FIELDS, DEFAULT_THEME_NAME, PEERTUBE_VERSION } from '../../initializers/constants'
+import { ClientHtml } from '../../lib/client-html'
 import { PluginManager } from '../../lib/plugins/plugin-manager'
 import { getThemeOrDefault } from '../../lib/plugins/theme-utils'
-import { Hooks } from '@server/lib/plugins/hooks'
+import { asyncMiddleware, authenticate, ensureUserHasRight } from '../../middlewares'
+import { customConfigUpdateValidator } from '../../middlewares/validators/config'
 
 const configRouter = express.Router()
 
@@ -79,7 +79,9 @@ async function getConfig (req: express.Request, res: express.Response) {
       }
     },
     plugin: {
-      registered: getRegisteredPlugins()
+      registered: getRegisteredPlugins(),
+      registeredExternalAuths: getExternalAuthsPlugins(),
+      registeredIdAndPassAuths: getIdAndPassAuthPlugins()
     },
     theme: {
       registered: getRegisteredThemes(),
@@ -267,6 +269,38 @@ function getRegisteredPlugins () {
                         description: p.description,
                         clientScripts: p.clientScripts
                       }))
+}
+
+function getIdAndPassAuthPlugins () {
+  const result: RegisteredIdAndPassAuthConfig[] = []
+
+  for (const p of PluginManager.Instance.getIdAndPassAuths()) {
+    for (const auth of p.idAndPassAuths) {
+      result.push({
+        npmName: p.npmName,
+        authName: auth.authName,
+        weight: auth.getWeight()
+      })
+    }
+  }
+
+  return result
+}
+
+function getExternalAuthsPlugins () {
+  const result: RegisteredExternalAuthConfig[] = []
+
+  for (const p of PluginManager.Instance.getExternalAuths()) {
+    for (const auth of p.externalAuths) {
+      result.push({
+        npmName: p.npmName,
+        authName: auth.authName,
+        authDisplayName: auth.authDisplayName
+      })
+    }
+  }
+
+  return result
 }
 
 // ---------------------------------------------------------------------------

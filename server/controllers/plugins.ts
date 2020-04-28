@@ -2,11 +2,12 @@ import * as express from 'express'
 import { PLUGIN_GLOBAL_CSS_PATH } from '../initializers/constants'
 import { join } from 'path'
 import { PluginManager, RegisteredPlugin } from '../lib/plugins/plugin-manager'
-import { getPluginValidator, pluginStaticDirectoryValidator } from '../middlewares/validators/plugins'
+import { getPluginValidator, pluginStaticDirectoryValidator, getExternalAuthValidator } from '../middlewares/validators/plugins'
 import { serveThemeCSSValidator } from '../middlewares/validators/themes'
 import { PluginType } from '../../shared/models/plugins/plugin.type'
 import { isTestInstance } from '../helpers/core-utils'
 import { getCompleteLocale, is18nLocale } from '../../shared/models/i18n'
+import { logger } from '@server/helpers/logger'
 
 const sendFileOptions = {
   maxAge: '30 days',
@@ -21,6 +22,12 @@ pluginsRouter.get('/plugins/global.css',
 
 pluginsRouter.get('/plugins/translations/:locale.json',
   getPluginTranslations
+)
+
+pluginsRouter.get('/plugins/:pluginName/:pluginVersion/auth/:authName',
+  getPluginValidator(PluginType.PLUGIN),
+  getExternalAuthValidator,
+  handleAuthInPlugin
 )
 
 pluginsRouter.get('/plugins/:pluginName/:pluginVersion/static/:staticEndpoint(*)',
@@ -133,4 +140,15 @@ function serveThemeCSSDirectory (req: express.Request, res: express.Response) {
   }
 
   return res.sendFile(join(plugin.path, staticEndpoint), sendFileOptions)
+}
+
+function handleAuthInPlugin (req: express.Request, res: express.Response) {
+  const authOptions = res.locals.externalAuth
+
+  try {
+    logger.debug('Forwarding auth plugin request in %s of plugin %s.', authOptions.authName, res.locals.registeredPlugin.npmName)
+    authOptions.onAuthRequest(req, res)
+  } catch (err) {
+    logger.error('Forward request error in auth %s of plugin %s.', authOptions.authName, res.locals.registeredPlugin.npmName)
+  }
 }

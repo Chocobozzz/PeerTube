@@ -145,7 +145,7 @@ export class AuthService {
     return !!this.getAccessToken()
   }
 
-  login (username: string, password: string) {
+  login (username: string, password: string, token?: string) {
     // Form url encoded
     const body = {
       client_id: this.clientId,
@@ -156,6 +156,8 @@ export class AuthService {
       username,
       password
     }
+
+    if (token) Object.assign(body, { externalAuthToken: token })
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
     return this.http.post<UserLogin>(AuthService.BASE_TOKEN_URL, objectToUrlEncoded(body), { headers })
