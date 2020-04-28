@@ -283,6 +283,19 @@ p-table {
         min-width: #{$table-min-width - $horizontal-margins};
       }
     }
+
+    p-paginator .ui-paginator-bottom {
+      display: block;
+
+      .ui-paginator-current {
+        position: relative;
+        display: block;
+      }
+
+      a, .ui-paginator-pages {
+        vertical-align: middle;
+      }
+    }
   }
 }
 
