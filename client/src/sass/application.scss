@@ -298,6 +298,12 @@ table {
   }
 }
 
+@media screen and (max-width: #{$mobile-view + $menu-width}) {
+  .main-col {
+    width: 100%;
+  }
+}
+
 @media screen and (max-width: $small-view) {
   .main-col {
     margin-left: 0;
