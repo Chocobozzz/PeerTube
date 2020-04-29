@@ -27,6 +27,10 @@ menu {
     overflow-y: auto;
   }
 
+  @media not all and (hover: hover) and (pointer: fine) {
+    overflow-y: auto;
+  }
+
   &.logged-in {
     .panel-block {
       margin-bottom: 20px;
