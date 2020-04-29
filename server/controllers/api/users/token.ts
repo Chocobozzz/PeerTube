@@ -1,4 +1,4 @@
-import { handleIdAndPassLogin, handleTokenRevocation } from '@server/lib/auth'
+import { handleLogin, handleTokenRevocation } from '@server/lib/auth'
 import * as RateLimit from 'express-rate-limit'
 import { CONFIG } from '@server/initializers/config'
 import * as express from 'express'
@@ -14,7 +14,7 @@ const loginRateLimiter = RateLimit({
 
 tokensRouter.post('/token',
   loginRateLimiter,
-  handleIdAndPassLogin,
+  handleLogin,
   tokenSuccess
 )
 

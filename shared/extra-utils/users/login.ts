@@ -95,6 +95,26 @@ function setAccessTokensToServers (servers: ServerInfo[]) {
   return Promise.all(tasks)
 }
 
+function loginUsingExternalToken (server: Server, username: string, externalAuthToken: string, expectedStatus = 200) {
+  const path = '/api/v1/users/token'
+
+  const body = {
+    client_id: server.client.id,
+    client_secret: server.client.secret,
+    username: username,
+    response_type: 'code',
+    grant_type: 'password',
+    scope: 'upload',
+    externalAuthToken
+  }
+
+  return request(server.url)
+          .post(path)
+          .type('form')
+          .send(body)
+          .expect(expectedStatus)
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -107,5 +127,6 @@ export {
   setAccessTokensToServers,
   Server,
   Client,
-  User
+  User,
+  loginUsingExternalToken
 }

@@ -64,6 +64,7 @@ describe('Test server plugins API validators', function () {
   describe('With static plugin routes', function () {
     it('Should fail with an unknown plugin name/plugin version', async function () {
       const paths = [
+        '/plugins/' + pluginName + '/0.0.1/auth/fake-auth',
         '/plugins/' + pluginName + '/0.0.1/static/images/chocobo.png',
         '/plugins/' + pluginName + '/0.0.1/client-scripts/client/common-client-plugin.js',
         '/themes/' + themeName + '/0.0.1/static/images/chocobo.png',
@@ -86,6 +87,7 @@ describe('Test server plugins API validators', function () {
 
     it('Should fail with invalid versions', async function () {
       const paths = [
+        '/plugins/' + pluginName + '/0.0.1.1/auth/fake-auth',
         '/plugins/' + pluginName + '/0.0.1.1/static/images/chocobo.png',
         '/plugins/' + pluginName + '/0.1/client-scripts/client/common-client-plugin.js',
         '/themes/' + themeName + '/1/static/images/chocobo.png',
@@ -110,6 +112,12 @@ describe('Test server plugins API validators', function () {
       for (const p of paths) {
         await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 400 })
       }
+    })
+
+    it('Should fail with an unknown auth name', async function () {
+      const path = '/plugins/' + pluginName + '/' + npmVersion + '/auth/bad-auth'
+
+      await makeGetRequest({ url: server.url, path, statusCodeExpected: 404 })
     })
 
     it('Should fail with an unknown static file', async function () {
@@ -145,6 +153,9 @@ describe('Test server plugins API validators', function () {
       for (const p of paths) {
         await makeGetRequest({ url: server.url, path: p, statusCodeExpected: 200 })
       }
+
+      const authPath = '/plugins/' + pluginName + '/' + npmVersion + '/auth/fake-auth'
+      await makeGetRequest({ url: server.url, path: authPath, statusCodeExpected: 302 })
     })
   })
 
@@ -462,6 +473,8 @@ describe('Test server plugins API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
+      this.timeout(10000)
+
       const it = [
         { suffix: 'install', status: 200 },
         { suffix: 'update', status: 200 },

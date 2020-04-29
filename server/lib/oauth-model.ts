@@ -139,7 +139,7 @@ async function revokeToken (tokenInfo: { refreshToken: string }) {
 
   if (token) {
     if (res.locals.explicitLogout === true && token.User.pluginAuth && token.authName) {
-      PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName)
+      PluginManager.Instance.onLogout(token.User.pluginAuth, token.authName, token.User)
     }
 
     clearCacheByToken(token.accessToken)

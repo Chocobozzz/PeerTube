@@ -235,6 +235,27 @@ function getPluginTestPath (suffix = '') {
   return join(root(), 'server', 'tests', 'fixtures', 'peertube-plugin-test' + suffix)
 }
 
+function getExternalAuth (options: {
+  url: string
+  npmName: string
+  npmVersion: string
+  authName: string
+  query?: any
+  statusCodeExpected?: number
+}) {
+  const { url, npmName, npmVersion, authName, statusCodeExpected, query } = options
+
+  const path = '/plugins/' + npmName + '/' + npmVersion + '/auth/' + authName
+
+  return makeGetRequest({
+    url,
+    path,
+    query,
+    statusCodeExpected: statusCodeExpected || 200,
+    redirects: 0
+  })
+}
+
 export {
   listPlugins,
   listAvailablePlugins,
@@ -250,5 +271,6 @@ export {
   updatePluginPackageJSON,
   getPluginPackageJSON,
   getPluginTestPath,
-  getPublicSettings
+  getPublicSettings,
+  getExternalAuth
 }
