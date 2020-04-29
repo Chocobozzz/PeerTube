@@ -340,16 +340,41 @@ table {
         width: 100% !important;
       }
     }
+  }
+}
 
+// overflow-databale responsive rules
+
+@media screen and (max-width: #{map-get($grid-breakpoints, xxl)}) {
+  .main-col {
     &.expanded {
-      @include overflow-datatable($small-view, $expanded-horizontal-margins/3);
+      @include overflow-datatable(map-get($grid-breakpoints, lg), $expanded-horizontal-margins/2);
+    }
+
+    &:not(.expanded) {
+      @include overflow-datatable(map-get($grid-breakpoints, lg), $not-expanded-horizontal-margins + $menu-width/2);
     }
   }
 }
 
-@media screen and (max-width: #{$small-view + $menu-width}) {
-  .main-col:not(.expanded) {
-    @include overflow-datatable($small-view, $not-expanded-horizontal-margins);
+@media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
+  .main-col {
+    &.expanded {
+      @include overflow-datatable(map-get($grid-breakpoints, lg), $expanded-horizontal-margins/3);
+    }
+
+    &:not(.expanded) {
+      // TODO: $horizontal-margins might change to $expanded-horizontal-margins/3 + $menu-width/2
+      @include overflow-datatable(map-get($grid-breakpoints, lg), $not-expanded-horizontal-margins + $menu-width/2);
+    }
+  }
+}
+
+@media screen and (max-width: $small-view) {
+  .main-col {
+    &, &.expanded {
+      @include overflow-datatable(map-get($grid-breakpoints, lg), 15px);
+    }
   }
 }
 
