@@ -278,6 +278,8 @@ function getIdAndPassAuthPlugins () {
     for (const auth of p.idAndPassAuths) {
       result.push({
         npmName: p.npmName,
+        name: p.name,
+        version: p.version,
         authName: auth.authName,
         weight: auth.getWeight()
       })
@@ -294,6 +296,8 @@ function getExternalAuthsPlugins () {
     for (const auth of p.externalAuths) {
       result.push({
         npmName: p.npmName,
+        name: p.name,
+        version: p.version,
         authName: auth.authName,
         authDisplayName: auth.authDisplayName
       })

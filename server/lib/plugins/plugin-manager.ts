@@ -106,14 +106,24 @@ export class PluginManager implements ServerHook {
 
   getIdAndPassAuths () {
     return this.getRegisteredPlugins()
-      .map(p => ({ npmName: p.npmName, idAndPassAuths: p.registerHelpersStore.getIdAndPassAuths() }))
+      .map(p => ({
+        npmName: p.npmName,
+        name: p.name,
+        version: p.version,
+        idAndPassAuths: p.registerHelpersStore.getIdAndPassAuths()
+      }))
       .filter(v => v.idAndPassAuths.length !== 0)
   }
 
   getExternalAuths () {
     return this.getRegisteredPlugins()
-               .map(p => ({ npmName: p.npmName, externalAuths: p.registerHelpersStore.getExternalAuths() }))
-               .filter(v => v.externalAuths.length !== 0)
+      .map(p => ({
+        npmName: p.npmName,
+        name: p.name,
+        version: p.version,
+        externalAuths: p.registerHelpersStore.getExternalAuths()
+      }))
+      .filter(v => v.externalAuths.length !== 0)
   }
 
   getRegisteredSettings (npmName: string) {

@@ -14,12 +14,16 @@ export interface ServerConfigTheme extends ServerConfigPlugin {
 
 export interface RegisteredExternalAuthConfig {
   npmName: string
+  name: string
+  version: string
   authName: string
   authDisplayName: string
 }
 
 export interface RegisteredIdAndPassAuthConfig {
   npmName: string
+  name: string
+  version: string
   authName: string
   weight: number
 }
