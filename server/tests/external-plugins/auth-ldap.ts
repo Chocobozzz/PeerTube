@@ -1,10 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { getMyUserInformation, installPlugin, setAccessTokensToServers, updatePluginSettings, userLogin, uploadVideo, uninstallPlugin } from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
-import { User } from '@shared/models/users/user.model'
 import { expect } from 'chai'
+import { User } from '@shared/models/users/user.model'
+import {
+  getMyUserInformation,
+  installPlugin,
+  setAccessTokensToServers,
+  uninstallPlugin,
+  updatePluginSettings,
+  uploadVideo,
+  userLogin
+} from '../../../shared/extra-utils'
+import { cleanupTests, flushAndRunServer, ServerInfo } from '../../../shared/extra-utils/server/servers'
 
 describe('Official plugin auth-ldap', function () {
   let server: ServerInfo

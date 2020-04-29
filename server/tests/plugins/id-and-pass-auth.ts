@@ -12,9 +12,9 @@ import {
   updateMyUser,
   userLogin,
   wait,
-  login, refreshToken
+  login, refreshToken, getConfig
 } from '../../../shared/extra-utils'
-import { User, UserRole } from '@shared/models'
+import { User, UserRole, ServerConfig } from '@shared/models'
 import { expect } from 'chai'
 
 describe('Test id and pass auth plugins', function () {
@@ -39,6 +39,20 @@ describe('Test id and pass auth plugins', function () {
         path: getPluginTestPath('-id-pass-auth-' + suffix)
       })
     }
+  })
+
+  it('Should display the correct configuration', async function () {
+    const res = await getConfig(server.url)
+
+    const config: ServerConfig = res.body
+
+    const auths = config.plugin.registeredIdAndPassAuths
+    expect(auths).to.have.lengthOf(8)
+
+    const crashAuth = auths.find(a => a.authName === 'crash-auth')
+    expect(crashAuth).to.exist
+    expect(crashAuth.npmName).to.equal('peertube-plugin-test-id-pass-auth-one')
+    expect(crashAuth.weight).to.equal(50)
   })
 
   it('Should not login', async function () {
@@ -173,6 +187,18 @@ describe('Test id and pass auth plugins', function () {
     })
 
     await userLogin(server, { username: 'crash', password: 'crash password' }, 400)
+  })
+
+  it('Should display the correct configuration', async function () {
+    const res = await getConfig(server.url)
+
+    const config: ServerConfig = res.body
+
+    const auths = config.plugin.registeredIdAndPassAuths
+    expect(auths).to.have.lengthOf(6)
+
+    const crashAuth = auths.find(a => a.authName === 'crash-auth')
+    expect(crashAuth).to.not.exist
   })
 
   after(async function () {

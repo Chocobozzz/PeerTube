@@ -4,6 +4,7 @@ import * as request from 'supertest'
 import { buildAbsoluteFixturePath, root } from '../miscs/miscs'
 import { isAbsolute, join } from 'path'
 import { URL } from 'url'
+import { decode } from 'querystring'
 
 function get4KFileUrl () {
   return 'https://download.cpy.re/peertube/4k_file.txt'
@@ -23,6 +24,7 @@ function makeGetRequest (options: {
   statusCodeExpected?: number
   contentType?: string
   range?: string
+  redirects?: number
 }) {
   if (!options.statusCodeExpected) options.statusCodeExpected = 400
   if (options.contentType === undefined) options.contentType = 'application/json'
@@ -33,6 +35,7 @@ function makeGetRequest (options: {
   if (options.token) req.set('Authorization', 'Bearer ' + options.token)
   if (options.query) req.query(options.query)
   if (options.range) req.set('Range', options.range)
+  if (options.redirects) req.redirects(options.redirects)
 
   return req.expect(options.statusCodeExpected)
 }
@@ -171,12 +174,17 @@ function updateAvatarRequest (options: {
   })
 }
 
+function decodeQueryString (path: string) {
+  return decode(path.split('?')[1])
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   get4KFileUrl,
   makeHTMLRequest,
   makeGetRequest,
+  decodeQueryString,
   makeUploadRequest,
   makePostBodyRequest,
   makePutBodyRequest,

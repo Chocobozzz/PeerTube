@@ -1,7 +1,7 @@
 import { isUserDisplayNameValid, isUserRoleValid, isUserUsernameValid } from '@server/helpers/custom-validators/users'
 import { logger } from '@server/helpers/logger'
 import { generateRandomString } from '@server/helpers/utils'
-import { OAUTH_LIFETIME, WEBSERVER } from '@server/initializers/constants'
+import { OAUTH_LIFETIME, PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME } from '@server/initializers/constants'
 import { revokeToken } from '@server/lib/oauth-model'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
@@ -35,7 +35,7 @@ const authBypassTokens = new Map<string, {
   npmName: string
 }>()
 
-async function handleIdAndPassLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
+async function handleLogin (req: express.Request, res: express.Response, next: express.NextFunction) {
   const grantType = req.body.grant_type
 
   if (grantType === 'password') {
@@ -90,10 +90,9 @@ async function onExternalUserAuthenticated (options: {
   logger.info('Generating auth bypass token for %s in auth %s of plugin %s.', authResult.username, authName, npmName)
 
   const bypassToken = await generateRandomString(32)
-  const tokenLifetime = 1000 * 60 * 5 // 5 minutes
 
   const expires = new Date()
-  expires.setTime(expires.getTime() + tokenLifetime)
+  expires.setTime(expires.getTime() + PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME)
 
   const user = buildUserResult(authResult)
   authBypassTokens.set(bypassToken, {
@@ -108,7 +107,7 @@ async function onExternalUserAuthenticated (options: {
 
 // ---------------------------------------------------------------------------
 
-export { oAuthServer, handleIdAndPassLogin, onExternalUserAuthenticated, handleTokenRevocation }
+export { oAuthServer, handleLogin, onExternalUserAuthenticated, handleTokenRevocation }
 
 // ---------------------------------------------------------------------------
 
@@ -212,7 +211,7 @@ function proxifyExternalAuthBypass (req: express.Request, res: express.Response)
 
   const now = new Date()
   if (now.getTime() > expires.getTime()) {
-    logger.error('Cannot authenticate user with an expired bypass token')
+    logger.error('Cannot authenticate user with an expired external auth token')
     return res.sendStatus(400)
   }
 
@@ -267,7 +266,7 @@ function buildUserResult (pluginResult: RegisterServerAuthenticatedResult) {
   return {
     username: pluginResult.username,
     email: pluginResult.email,
-    role: pluginResult.role || UserRole.USER,
+    role: pluginResult.role ?? UserRole.USER,
     displayName: pluginResult.displayName || pluginResult.username
   }
 }

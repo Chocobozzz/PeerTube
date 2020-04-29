@@ -21,7 +21,8 @@ import { ClientHtml } from '../client-html'
 import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
 import { RegisterHelpersStore } from './register-helpers-store'
 import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
-import { MOAuthTokenUser } from '@server/typings/models'
+import { MOAuthTokenUser, MUser } from '@server/typings/models'
+import { RegisterServerAuthPassOptions, RegisterServerAuthExternalOptions } from '@shared/models/plugins/register-server-auth.model'
 
 export interface RegisteredPlugin {
   npmName: string
@@ -133,14 +134,14 @@ export class PluginManager implements ServerHook {
     return this.translations[locale] || {}
   }
 
-  onLogout (npmName: string, authName: string) {
+  onLogout (npmName: string, authName: string, user: MUser) {
     const auth = this.getAuth(npmName, authName)
 
     if (auth?.onLogout) {
       logger.info('Running onLogout function from auth %s of plugin %s', authName, npmName)
 
       try {
-        auth.onLogout()
+        auth.onLogout(user)
       } catch (err) {
         logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
       }
@@ -478,8 +479,10 @@ export class PluginManager implements ServerHook {
     const plugin = this.getRegisteredPluginOrTheme(npmName)
     if (!plugin || plugin.type !== PluginType.PLUGIN) return null
 
-    return plugin.registerHelpersStore.getIdAndPassAuths()
-                 .find(a => a.authName === authName)
+    let auths: (RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions)[] = plugin.registerHelpersStore.getIdAndPassAuths()
+    auths = auths.concat(plugin.registerHelpersStore.getExternalAuths())
+
+    return auths.find(a => a.authName === authName)
   }
 
   // ###################### Private getters ######################

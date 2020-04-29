@@ -1,5 +1,5 @@
 import { UserRole } from '@shared/models'
-import { MOAuthToken } from '@server/typings/models'
+import { MOAuthToken, MUser } from '@server/typings/models'
 import * as express from 'express'
 
 export type RegisterServerAuthOptions = RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions
@@ -21,7 +21,7 @@ interface RegisterServerAuthBase {
   authName: string
 
   // Called by PeerTube when a user from your plugin logged out
-  onLogout?(): void
+  onLogout?(user: MUser): void
 
   // Your plugin can hook PeerTube access/refresh token validity
   // So you can control for your plugin the user session lifetime
