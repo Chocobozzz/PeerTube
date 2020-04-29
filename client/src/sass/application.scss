@@ -325,7 +325,8 @@ table {
       input[type=text],
       input[type=password],
       input[type=email],
-      textarea {
+      textarea,
+      .peertube-select-container {
         width: 100% !important;
       }
     }
