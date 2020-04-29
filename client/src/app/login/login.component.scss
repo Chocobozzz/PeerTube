@@ -21,9 +21,49 @@ input[type=submit] {
   color: var(--mainForegroundColor);
   cursor: pointer;
   transition: opacity cubic-bezier(0.39, 0.575, 0.565, 1);
-  
+
   &:hover {
     text-decoration: none !important;
     opacity: .7 !important;
+  }
+}
+
+.login-form-and-externals {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 15px;
+
+  form {
+    margin: 0 50px 20px 0;
+  }
+
+  .external-login-blocks {
+    padding: 0 10px 10px 10px;
+    min-width: 200px;
+
+    .block-title {
+      font-weight: $font-semibold;
+    }
+
+    .external-login-block {
+      cursor: pointer;
+      border: 1px solid #d1d7e0;
+      border-radius: 5px;
+      margin: 10px 10px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 35px;
+      min-width: 100px;
+
+      &:hover {
+        background-color: rgba(209, 215, 224, 0.5)
+      }
+
+      a {
+        @include disable-default-a-behaviour;
+        color: var(--mainForegroundColor);
+      }
+    }
   }
 }
