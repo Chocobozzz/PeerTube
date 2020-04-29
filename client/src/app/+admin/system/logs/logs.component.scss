@@ -57,3 +57,19 @@
   }
 }
 
+@media screen and (max-width: $mobile-view) {
+  .header {
+    flex-direction: column;
+
+    .peertube-select-container,
+    my-button {
+      width: 100% !important;
+      margin-left: 0px !important;
+      margin-bottom: 10px !important;
+    }
+
+    my-button {
+      text-align: center;
+    }
+  }
+}

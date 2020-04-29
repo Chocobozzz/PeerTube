@@ -322,6 +322,36 @@ table {
         margin-bottom: $sub-menu-margin-bottom-small-view;
       }
 
+      .admin-sub-header:first {
+        flex-direction: column;
+
+        .admin-sub-nav {
+          width: 100%;
+        }
+
+        > :first-child {
+          margin-right: 0px !important;
+          margin-bottom: 10px;
+        }
+
+        .form-sub-title {
+          text-align: center;
+        }
+
+        .admin-sub-nav {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+          height: 50px;
+          padding: 10px 0;
+          width: calc(100vw - 15px - 15px);
+
+          a {
+            margin-left: 5px;
+          }
+        }
+      }
+
       my-markdown-textarea {
         .root {
           max-width: 100% !important;
