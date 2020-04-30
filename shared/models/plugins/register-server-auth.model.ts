@@ -42,7 +42,7 @@ export interface RegisterServerAuthPassOptions extends RegisterServerAuthBase {
 
 export interface RegisterServerAuthExternalOptions extends RegisterServerAuthBase {
   // Will be displayed in a block next to the login form
-  authDisplayName: string
+  authDisplayName: () => string
 
   onAuthRequest: (req: express.Request, res: express.Response) => void
 }

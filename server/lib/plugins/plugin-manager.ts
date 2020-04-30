@@ -144,20 +144,6 @@ export class PluginManager implements ServerHook {
     return this.translations[locale] || {}
   }
 
-  onLogout (npmName: string, authName: string, user: MUser) {
-    const auth = this.getAuth(npmName, authName)
-
-    if (auth?.onLogout) {
-      logger.info('Running onLogout function from auth %s of plugin %s', authName, npmName)
-
-      try {
-        auth.onLogout(user)
-      } catch (err) {
-        logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
-      }
-    }
-  }
-
   async isTokenValid (token: MOAuthTokenUser, type: 'access' | 'refresh') {
     const auth = this.getAuth(token.User.pluginAuth, token.authName)
     if (!auth) return true
@@ -178,6 +164,37 @@ export class PluginManager implements ServerHook {
     }
 
     return true
+  }
+
+  // ###################### External events ######################
+
+  onLogout (npmName: string, authName: string, user: MUser) {
+    const auth = this.getAuth(npmName, authName)
+
+    if (auth?.onLogout) {
+      logger.info('Running onLogout function from auth %s of plugin %s', authName, npmName)
+
+      try {
+        auth.onLogout(user)
+      } catch (err) {
+        logger.warn('Cannot run onLogout function from auth %s of plugin %s.', authName, npmName, { err })
+      }
+    }
+  }
+
+  onSettingsChanged (name: string, settings: any) {
+    const registered = this.getRegisteredPluginByShortName(name)
+    if (!registered) {
+      logger.error('Cannot find plugin %s to call on settings changed.', name)
+    }
+
+    for (const cb of registered.registerHelpersStore.getOnSettingsChangedCallbacks()) {
+      try {
+        cb(settings)
+      } catch (err) {
+        logger.error('Cannot run on settings changed callback for %s.', registered.npmName, { err })
+      }
+    }
   }
 
   // ###################### Hooks ######################
