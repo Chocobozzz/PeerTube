@@ -299,7 +299,7 @@ function getExternalAuthsPlugins () {
         name: p.name,
         version: p.version,
         authName: auth.authName,
-        authDisplayName: auth.authDisplayName
+        authDisplayName: auth.authDisplayName()
       })
     }
   }

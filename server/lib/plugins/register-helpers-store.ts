@@ -52,6 +52,8 @@ export class RegisterHelpersStore {
   private readonly idAndPassAuths: RegisterServerAuthPassOptions[] = []
   private readonly externalAuths: RegisterServerAuthExternalOptions[] = []
 
+  private readonly onSettingsChangeCallbacks: ((settings: any) => void)[] = []
+
   private readonly router: express.Router
 
   constructor (
@@ -149,6 +151,10 @@ export class RegisterHelpersStore {
     return this.externalAuths
   }
 
+  getOnSettingsChangedCallbacks () {
+    return this.onSettingsChangeCallbacks
+  }
+
   private buildGetRouter () {
     return () => this.router
   }
@@ -185,7 +191,7 @@ export class RegisterHelpersStore {
     const self = this
 
     return (options: RegisterServerAuthExternalOptions) => {
-      if (!options.authName || !options.onAuthRequest || typeof options.onAuthRequest !== 'function') {
+      if (!options.authName || typeof options.authDisplayName !== 'function' || typeof options.onAuthRequest !== 'function') {
         logger.error('Cannot register auth plugin %s: authName of getWeight or login are not valid.', this.npmName)
         return
       }
@@ -212,7 +218,9 @@ export class RegisterHelpersStore {
 
       getSettings: (names: string[]) => PluginModel.getSettings(this.plugin.name, this.plugin.type, names),
 
-      setSetting: (name: string, value: string) => PluginModel.setSetting(this.plugin.name, this.plugin.type, name, value)
+      setSetting: (name: string, value: string) => PluginModel.setSetting(this.plugin.name, this.plugin.type, name, value),
+
+      onSettingsChange: (cb: (settings: any) => void) => this.onSettingsChangeCallbacks.push(cb)
     }
   }
 

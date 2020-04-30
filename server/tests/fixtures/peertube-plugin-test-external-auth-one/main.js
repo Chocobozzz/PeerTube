@@ -5,7 +5,7 @@ async function register ({
   {
     const result = registerExternalAuth({
       authName: 'external-auth-1',
-      authDisplayName: 'External Auth 1',
+      authDisplayName: () => 'External Auth 1',
       onLogout: user => peertubeHelpers.logger.info('On logout %s', user.username),
       onAuthRequest: (req, res) => {
         const username = req.query.username
@@ -23,7 +23,7 @@ async function register ({
   {
     const result = registerExternalAuth({
       authName: 'external-auth-2',
-      authDisplayName: 'External Auth 2',
+      authDisplayName: () => 'External Auth 2',
       onAuthRequest: (req, res) => {
         result.userAuthenticated({
           req,

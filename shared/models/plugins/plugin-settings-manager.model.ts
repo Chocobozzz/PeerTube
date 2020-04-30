@@ -6,4 +6,6 @@ export interface PluginSettingsManager {
   getSettings: (names: string[]) => Bluebird<{ [settingName: string]: string | boolean }>
 
   setSetting: (name: string, value: string) => Bluebird<any>
+
+  onSettingsChange: (cb: (names: string[]) => void) => void
 }

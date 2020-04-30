@@ -27,7 +27,8 @@ import {
   updatePlugin,
   updatePluginPackageJSON,
   updatePluginSettings,
-  wait
+  wait,
+  waitUntilLog
 } from '../../../../shared/extra-utils'
 import { PluginType } from '../../../../shared/models/plugins/plugin.type'
 import { PeerTubePluginIndex } from '../../../../shared/models/plugins/peertube-plugin-index.model'
@@ -142,7 +143,7 @@ describe('Test plugins', function () {
   it('Should have the correct global css', async function () {
     const res = await getPluginsCSS(server.url)
 
-    expect(res.text).to.contain('--mainBackgroundColor')
+    expect(res.text).to.contain('background-color: red')
   })
 
   it('Should have the plugin loaded in the configuration', async function () {
@@ -256,6 +257,12 @@ describe('Test plugins', function () {
       npmName: 'peertube-plugin-hello-world',
       settings
     })
+  })
+
+  it('Should have watched settings changes', async function () {
+    this.timeout(10000)
+
+    await waitUntilLog(server, 'Settings changed!')
   })
 
   it('Should get a plugin and a theme', async function () {

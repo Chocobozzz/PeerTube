@@ -5,7 +5,7 @@ async function register ({
   {
     const result = registerExternalAuth({
       authName: 'external-auth-3',
-      authDisplayName: 'External Auth 3',
+      authDisplayName: () => 'External Auth 3',
       onAuthRequest: (req, res) => {
         result.userAuthenticated({
           req,

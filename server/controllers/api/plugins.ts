@@ -191,6 +191,8 @@ async function updatePluginSettings (req: express.Request, res: express.Response
   plugin.settings = req.body.settings
   await plugin.save()
 
+  await PluginManager.Instance.onSettingsChanged(plugin.name, plugin.settings)
+
   return res.sendStatus(204)
 }
 
