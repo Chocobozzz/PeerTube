@@ -73,3 +73,22 @@
     }
   }
 }
+
+@media screen and (max-width: #{$small-view + $menu-width}) {
+  :host-context(.main-col:not(.expanded)) {
+    .header {
+      flex-direction: column;
+
+      .peertube-select-container,
+      my-button {
+        width: 100% !important;
+        margin-left: 0px !important;
+        margin-bottom: 10px !important;
+      }
+
+      my-button {
+        text-align: center;
+      }
+    }
+  }
+}

@@ -325,10 +325,6 @@ table {
       .admin-sub-header {
         flex-direction: column;
 
-        .admin-sub-nav {
-          width: 100%;
-        }
-
         .form-sub-title {
           margin-right: 0px !important;
           margin-bottom: 10px;
@@ -361,6 +357,35 @@ table {
       textarea,
       .peertube-select-container {
         width: 100% !important;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $small-view) and  (max-width: #{$small-view + $menu-width}) {
+  .main-col {
+    &:not(.expanded) {
+      .admin-sub-header {
+        flex-direction: column;
+
+        .form-sub-title {
+          margin-right: 0px !important;
+          margin-bottom: 10px;
+          text-align: center;
+        }
+
+        .admin-sub-nav {
+          display: block;
+          overflow-x: auto;
+          white-space: nowrap;
+          height: 50px;
+          padding: 10px 0;
+          width: calc(100vw - #{$menu-width + ($expanded-horizontal-margins/3) *2});
+
+          a {
+            margin-left: 5px;
+          }
+        }
       }
     }
   }
