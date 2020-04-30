@@ -49,8 +49,8 @@ export class RegisterHelpersStore {
 
   private readonly settings: RegisterServerSettingOptions[] = []
 
-  private readonly idAndPassAuths: RegisterServerAuthPassOptions[] = []
-  private readonly externalAuths: RegisterServerAuthExternalOptions[] = []
+  private idAndPassAuths: RegisterServerAuthPassOptions[] = []
+  private externalAuths: RegisterServerAuthExternalOptions[] = []
 
   private readonly onSettingsChangeCallbacks: ((settings: any) => void)[] = []
 
@@ -83,6 +83,8 @@ export class RegisterHelpersStore {
 
     const registerIdAndPassAuth = this.buildRegisterIdAndPassAuth()
     const registerExternalAuth = this.buildRegisterExternalAuth()
+    const unregisterIdAndPassAuth = this.buildUnregisterIdAndPassAuth()
+    const unregisterExternalAuth = this.buildUnregisterExternalAuth()
 
     const peertubeHelpers = buildPluginHelpers(this.npmName)
 
@@ -104,6 +106,8 @@ export class RegisterHelpersStore {
 
       registerIdAndPassAuth,
       registerExternalAuth,
+      unregisterIdAndPassAuth,
+      unregisterExternalAuth,
 
       peertubeHelpers
     }
@@ -179,7 +183,7 @@ export class RegisterHelpersStore {
   private buildRegisterIdAndPassAuth () {
     return (options: RegisterServerAuthPassOptions) => {
       if (!options.authName || typeof options.getWeight !== 'function' || typeof options.login !== 'function') {
-        logger.error('Cannot register auth plugin %s: authName of getWeight or login are not valid.', this.npmName)
+        logger.error('Cannot register auth plugin %s: authName, getWeight or login are not valid.', this.npmName, { options })
         return
       }
 
@@ -192,7 +196,7 @@ export class RegisterHelpersStore {
 
     return (options: RegisterServerAuthExternalOptions) => {
       if (!options.authName || typeof options.authDisplayName !== 'function' || typeof options.onAuthRequest !== 'function') {
-        logger.error('Cannot register auth plugin %s: authName of getWeight or login are not valid.', this.npmName)
+        logger.error('Cannot register auth plugin %s: authName, authDisplayName or onAuthRequest are not valid.', this.npmName, { options })
         return
       }
 
@@ -209,6 +213,18 @@ export class RegisterHelpersStore {
           })
         }
       } as RegisterServerAuthExternalResult
+    }
+  }
+
+  private buildUnregisterExternalAuth () {
+    return (authName: string) => {
+      this.externalAuths = this.externalAuths.filter(a => a.authName !== authName)
+    }
+  }
+
+  private buildUnregisterIdAndPassAuth () {
+    return (authName: string) => {
+      this.idAndPassAuths = this.idAndPassAuths.filter(a => a.authName !== authName)
     }
   }
 

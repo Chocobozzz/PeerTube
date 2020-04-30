@@ -16,7 +16,9 @@ import {
   setAccessTokensToServers,
   uninstallPlugin,
   updateMyUser,
-  wait
+  wait,
+  userLogin,
+  updatePluginSettings
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 
@@ -256,6 +258,40 @@ describe('Test external auth plugins', function () {
     await wait(5000)
 
     await getMyUserInformation(server.url, kefkaAccessToken, 401)
+  })
+
+  it('Should unregister external-auth-2 and do not login existing Kefka', async function () {
+    await updatePluginSettings({
+      url: server.url,
+      accessToken: server.accessToken,
+      npmName: 'peertube-plugin-test-external-auth-one',
+      settings: { disableKefka: true }
+    })
+
+    await userLogin(server, { username: 'kefka', password: 'fake' }, 400)
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-one',
+      authName: 'external-auth-2',
+      query: {
+        username: 'kefka'
+      },
+      username: 'kefka',
+      statusCodeExpected: 404
+    })
+  })
+
+  it('Should have disabled this auth', async function () {
+    const res = await getConfig(server.url)
+
+    const config: ServerConfig = res.body
+
+    const auths = config.plugin.registeredExternalAuths
+    expect(auths).to.have.lengthOf(2)
+
+    const auth1 = auths.find(a => a.authName === 'external-auth-2')
+    expect(auth1).to.not.exist
   })
 
   it('Should uninstall the plugin one and do not login Cyan', async function () {

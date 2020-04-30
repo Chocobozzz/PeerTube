@@ -1,6 +1,8 @@
 async function register ({
   registerIdAndPassAuth,
-  peertubeHelpers
+  peertubeHelpers,
+  settingsManager,
+  unregisterIdAndPassAuth
 }) {
   registerIdAndPassAuth({
     authName: 'spyro-auth',
@@ -45,6 +47,12 @@ async function register ({
       }
 
       return null
+    }
+  })
+
+  settingsManager.onSettingsChange(settings => {
+    if (settings.disableSpyro) {
+      unregisterIdAndPassAuth('spyro-auth')
     }
   })
 }
