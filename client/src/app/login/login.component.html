@@ -3,7 +3,11 @@
     Login
   </div>
 
-  <ng-container *ngIf="!isAuthenticatedWithExternalAuth">
+  <div class="alert alert-danger" i18n *ngIf="externalAuthError">
+    Sorry but there was an issue with the external login process. Please <a routerLink="/about">contact an administrator</a>.
+  </div>
+
+  <ng-container *ngIf="!externalAuthError && !isAuthenticatedWithExternalAuth">
     <div class="alert alert-info" *ngIf="signupAllowed === false" role="alert">
       <h6 class="alert-heading" i18n>
         If you are looking for an account…
@@ -63,8 +67,8 @@
       <div class="external-login-blocks" *ngIf="getExternalLogins().length !== 0">
         <div class="block-title" i18n>Or sign in with</div>
 
-        <div class="external-login-block">
-          <a *ngFor="let auth of getExternalLogins()" [href]="getAuthHref(auth)" role="button">
+        <div>
+          <a class="external-login-block" *ngFor="let auth of getExternalLogins()" [href]="getAuthHref(auth)" role="button">
             {{ auth.authDisplayName }}
           </a>
         </div>

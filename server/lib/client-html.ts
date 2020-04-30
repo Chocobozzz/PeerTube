@@ -119,7 +119,7 @@ export class ClientHtml {
       // Save locale in cookies
       res.cookie('clientLanguage', lang, {
         secure: WEBSERVER.SCHEME === 'https',
-        sameSite: true,
+        sameSite: 'none',
         maxAge: 1000 * 3600 * 24 * 90 // 3 months
       })
 

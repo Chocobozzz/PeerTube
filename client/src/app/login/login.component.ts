@@ -23,7 +23,9 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   error: string = null
   forgotPasswordEmail = ''
+
   isAuthenticatedWithExternalAuth = false
+  externalAuthError = false
   externalLogins: string[] = []
 
   private openedForgotPasswordModal: NgbModalRef
@@ -58,6 +60,11 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
     if (snapshot.queryParams.externalAuthToken) {
       this.loadExternalAuthToken(snapshot.queryParams.username, snapshot.queryParams.externalAuthToken)
+      return
+    }
+
+    if (snapshot.queryParams.externalAuthError) {
+      this.externalAuthError = true
       return
     }
 
