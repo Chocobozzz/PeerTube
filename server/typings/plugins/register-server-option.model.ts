@@ -25,6 +25,10 @@ export type PeerTubeHelpers = {
   videos: {
     removeVideo: (videoId: number) => Promise<void>
   }
+
+  config: {
+    getWebserverUrl: () => string
+  }
 }
 
 export type RegisterServerOptions = {
