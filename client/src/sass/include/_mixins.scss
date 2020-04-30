@@ -875,3 +875,26 @@
     }
   }
 }
+
+@mixin admin-sub-header-responsive ($horizontal-margins) {
+  flex-direction: column;
+
+  .form-sub-title {
+    margin-right: 0px !important;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .admin-sub-nav {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    height: 50px;
+    padding: 10px 0;
+    width: calc(100vw - #{$horizontal-margins*2});
+
+    a {
+      margin-left: 5px;
+    }
+  }
+}
