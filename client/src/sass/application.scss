@@ -267,7 +267,7 @@ table {
   top: #{-($header-height + 20px)};
 }
 
-@media screen and (max-width: #{map-get($grid-breakpoints, xxl)}) {
+@media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
     &.expanded {
       .margin-content {
@@ -278,7 +278,7 @@ table {
   }
 }
 
-@media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
+@media screen and (max-width: #{breakpoint(lg)}) {
   /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
   .main-col {
     &, &.expanded {
@@ -345,27 +345,27 @@ table {
 
 // overflow-databale responsive rules
 
-@media screen and (max-width: #{map-get($grid-breakpoints, xxl)}) {
+@media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
     &.expanded {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $expanded-horizontal-margins/2);
+      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/2);
     }
 
     &:not(.expanded) {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $not-expanded-horizontal-margins + $menu-width/2);
+      @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2);
     }
   }
 }
 
-@media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
+@media screen and (max-width: #{breakpoint(lg)}) {
   .main-col {
     &.expanded {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $expanded-horizontal-margins/3);
+      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/3);
     }
 
     &:not(.expanded) {
       // TODO: $horizontal-margins might change to $expanded-horizontal-margins/3 + $menu-width/2
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $not-expanded-horizontal-margins + $menu-width/2);
+      @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2);
     }
   }
 }
@@ -373,7 +373,7 @@ table {
 @media screen and (max-width: $small-view) {
   .main-col {
     &, &.expanded {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), 15px);
+      @include overflow-datatable(breakpoint(lg), 15px);
     }
   }
 }

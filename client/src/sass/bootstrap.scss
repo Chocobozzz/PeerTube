@@ -66,7 +66,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 
-@media screen and (min-width: #{map-get($grid-breakpoints, md)}) {
+@media screen and (min-width: #{breakpoint(md)}) {
   .modal:before {
     vertical-align: middle;
     content: " ";
