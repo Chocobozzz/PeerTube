@@ -29,6 +29,7 @@ type UserLoginWithUserInformation = UserLoginWithUsername & User
 export class AuthService {
   private static BASE_CLIENT_URL = environment.apiUrl + '/api/v1/oauth-clients/local'
   private static BASE_TOKEN_URL = environment.apiUrl + '/api/v1/users/token'
+  private static BASE_REVOKE_TOKEN_URL = environment.apiUrl + '/api/v1/users/revoke-token'
   private static BASE_USER_INFORMATION_URL = environment.apiUrl + '/api/v1/users/me'
   private static LOCAL_STORAGE_OAUTH_CLIENT_KEYS = {
     CLIENT_ID: 'client_id',
@@ -170,7 +171,17 @@ export class AuthService {
   }
 
   logout () {
-    // TODO: make an HTTP request to revoke the tokens
+    const authHeaderValue = this.getRequestHeaderValue()
+    const headers = new HttpHeaders().set('Authorization', authHeaderValue)
+
+    this.http.post<void>(AuthService.BASE_REVOKE_TOKEN_URL, {}, { headers })
+    .subscribe(
+      () => { /* nothing to do */ },
+
+      err => console.error(err)
+    )
+
+
     this.user = null
 
     AuthUser.flush()
