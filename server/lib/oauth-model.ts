@@ -109,10 +109,14 @@ async function getUser (usernameOrEmail?: string, password?: string) {
     let user = await UserModel.loadByEmail(obj.user.email)
     if (!user) user = await createUserFromExternal(obj.pluginName, obj.user)
 
-    // This user does not belong to this plugin, skip it
-    if (user.pluginAuth !== obj.pluginName) return null
+    // If the user does not belongs to a plugin, it was created before its installation
+    // Then we just go through a regular login process
+    if (user.pluginAuth !== null) {
+      // This user does not belong to this plugin, skip it
+      if (user.pluginAuth !== obj.pluginName) return null
 
-    return user
+      return user
+    }
   }
 
   logger.debug('Getting User (username/email: ' + usernameOrEmail + ', password: ******).')
@@ -122,7 +126,7 @@ async function getUser (usernameOrEmail?: string, password?: string) {
   if (!user || user.pluginAuth !== null) return null
 
   const passwordMatch = await user.isPasswordMatch(password)
-  if (passwordMatch === false) return null
+  if (passwordMatch !== true) return null
 
   if (user.blocked) throw new AccessDeniedError('User is blocked.')
 
