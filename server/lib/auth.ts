@@ -68,7 +68,7 @@ async function handleTokenRevocation (req: express.Request, res: express.Respons
   //   }
   // })
 
-  return res.sendStatus(200)
+  return res.json()
 }
 
 async function onExternalUserAuthenticated (options: {

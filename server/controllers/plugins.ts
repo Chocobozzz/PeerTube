@@ -149,6 +149,6 @@ function handleAuthInPlugin (req: express.Request, res: express.Response) {
     logger.debug('Forwarding auth plugin request in %s of plugin %s.', authOptions.authName, res.locals.registeredPlugin.npmName)
     authOptions.onAuthRequest(req, res)
   } catch (err) {
-    logger.error('Forward request error in auth %s of plugin %s.', authOptions.authName, res.locals.registeredPlugin.npmName)
+    logger.error('Forward request error in auth %s of plugin %s.', authOptions.authName, res.locals.registeredPlugin.npmName, { err })
   }
 }
