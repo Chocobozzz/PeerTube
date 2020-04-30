@@ -57,7 +57,7 @@
   }
 }
 
-@media screen and (max-width: $mobile-view) {
+@media screen and (max-width: $small-view) {
   .header {
     flex-direction: column;
 
