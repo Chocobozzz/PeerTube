@@ -5,7 +5,7 @@
 <div class="peertube-container" [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
   <div class="header">
 
-    <div class="top-left-block" [ngClass]="{ 'border-bottom': menu.isMenuDisplayed === false }">
+    <div class="top-left-block">
       <span class="icon icon-menu" (click)="menu.toggleMenu()"></span>
 
       <a class="peertube-title" [routerLink]="defaultRoute" title="Homepage" i18n-title>
@@ -14,7 +14,7 @@
       </a>
     </div>
 
-    <div class="header-right" [ngClass]="{ 'border-bottom': menu.isMenuDisplayed === false }">
+    <div class="header-right">
       <my-header class="w-100 d-flex justify-content-end"></my-header>
     </div>
   </div>
