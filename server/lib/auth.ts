@@ -83,9 +83,12 @@ async function onExternalUserAuthenticated (options: {
     return
   }
 
-  if (!isAuthResultValid(npmName, authName, authResult)) return
-
   const { res } = authResult
+
+  if (!isAuthResultValid(npmName, authName, authResult)) {
+    res.redirect('/login?externalAuthError=true')
+    return
+  }
 
   logger.info('Generating auth bypass token for %s in auth %s of plugin %s.', authResult.username, authName, npmName)
 
@@ -238,24 +241,27 @@ function proxifyExternalAuthBypass (req: express.Request, res: express.Response)
 
 function isAuthResultValid (npmName: string, authName: string, result: RegisterServerAuthenticatedResult) {
   if (!isUserUsernameValid(result.username)) {
-    logger.error('Auth method %s of plugin %s did not provide a valid username.', authName, npmName, { result })
+    logger.error('Auth method %s of plugin %s did not provide a valid username.', authName, npmName, { username: result.username })
     return false
   }
 
   if (!result.email) {
-    logger.error('Auth method %s of plugin %s did not provide a valid email.', authName, npmName, { result })
+    logger.error('Auth method %s of plugin %s did not provide a valid email.', authName, npmName, { email: result.email })
     return false
   }
 
   // role is optional
   if (result.role && !isUserRoleValid(result.role)) {
-    logger.error('Auth method %s of plugin %s did not provide a valid role.', authName, npmName, { result })
+    logger.error('Auth method %s of plugin %s did not provide a valid role.', authName, npmName, { role: result.role })
     return false
   }
 
   // display name is optional
   if (result.displayName && !isUserDisplayNameValid(result.displayName)) {
-    logger.error('Auth method %s of plugin %s did not provide a valid display name.', authName, npmName, { result })
+    logger.error(
+      'Auth method %s of plugin %s did not provide a valid display name.',
+      authName, npmName, { displayName: result.displayName }
+    )
     return false
   }
 

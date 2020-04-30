@@ -230,9 +230,9 @@ export class RegisterHelpersStore {
 
   private buildSettingsManager (): PluginSettingsManager {
     return {
-      getSetting: (name: string) => PluginModel.getSetting(this.plugin.name, this.plugin.type, name),
+      getSetting: (name: string) => PluginModel.getSetting(this.plugin.name, this.plugin.type, name, this.settings),
 
-      getSettings: (names: string[]) => PluginModel.getSettings(this.plugin.name, this.plugin.type, names),
+      getSettings: (names: string[]) => PluginModel.getSettings(this.plugin.name, this.plugin.type, names, this.settings),
 
       setSetting: (name: string, value: string) => PluginModel.setSetting(this.plugin.name, this.plugin.type, name, value),
 

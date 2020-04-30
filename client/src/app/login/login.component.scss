@@ -38,7 +38,6 @@ input[type=submit] {
   }
 
   .external-login-blocks {
-    padding: 0 10px 10px 10px;
     min-width: 200px;
 
     .block-title {
@@ -46,9 +45,12 @@ input[type=submit] {
     }
 
     .external-login-block {
+      @include disable-default-a-behaviour;
+
       cursor: pointer;
       border: 1px solid #d1d7e0;
       border-radius: 5px;
+      color: var(--mainForegroundColor);
       margin: 10px 10px 0 0;
       display: flex;
       justify-content: center;
@@ -58,11 +60,6 @@ input[type=submit] {
 
       &:hover {
         background-color: rgba(209, 215, 224, 0.5)
-      }
-
-      a {
-        @include disable-default-a-behaviour;
-        color: var(--mainForegroundColor);
       }
     }
   }
