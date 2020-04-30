@@ -279,18 +279,21 @@ table {
 }
 
 @media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
+  /* the following applies from 500px to 900px and is partially overriden from 500px to 800px by changes below to $small-view */
   .main-col {
-    .margin-content {
-      margin-left: $expanded-horizontal-margins/3;
-      margin-right: $expanded-horizontal-margins/3;
-    }
+    &, &.expanded {
+      .margin-content {
+        margin-left: $expanded-horizontal-margins/3;
+        margin-right: $expanded-horizontal-margins/3;
+      }
 
-    .sub-menu {
-      padding-left: 50px;
-      padding-right: 50px;
+      .sub-menu {
+        padding-left: 50px;
+        padding-right: 50px;
 
-      .title-page {
-        font-size: 17px;
+        .title-page {
+          font-size: 17px;
+        }
       }
     }
   }
@@ -314,7 +317,6 @@ table {
 
       .sub-menu {
         width: 100vw;
-        overflow-x: auto;
         padding-left: 15px;
         padding-right: 15px;
         margin-bottom: $sub-menu-margin-bottom-small-view;
