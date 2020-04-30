@@ -123,7 +123,7 @@ export class PluginModel extends Model<PluginModel> {
 
     return PluginModel.findOne(query)
       .then(p => {
-        if (!p || p.settings === undefined) {
+        if (!p || !p.settings || p.settings === undefined) {
           const registered = registeredSettings.find(s => s.name === settingName)
           if (!registered || registered.default === undefined) return undefined
 
@@ -153,7 +153,7 @@ export class PluginModel extends Model<PluginModel> {
         const result: { [settingName: string ]: string | boolean } = {}
 
         for (const name of settingNames) {
-          if (!p || p.settings[name] === undefined) {
+          if (!p || !p.settings || p.settings[name] === undefined) {
             const registered = registeredSettings.find(s => s.name === name)
 
             if (registered?.default !== undefined) {
