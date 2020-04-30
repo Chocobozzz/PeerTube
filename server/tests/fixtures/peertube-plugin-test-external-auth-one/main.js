@@ -1,6 +1,8 @@
 async function register ({
   registerExternalAuth,
-  peertubeHelpers
+  peertubeHelpers,
+  settingsManager,
+  unregisterExternalAuth
 }) {
   {
     const result = registerExternalAuth({
@@ -53,6 +55,12 @@ async function register ({
       }
     })
   }
+
+  settingsManager.onSettingsChange(settings => {
+    if (settings.disableKefka) {
+      unregisterExternalAuth('external-auth-2')
+    }
+  })
 }
 
 async function unregister () {

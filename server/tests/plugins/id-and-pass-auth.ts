@@ -12,7 +12,7 @@ import {
   updateMyUser,
   userLogin,
   wait,
-  login, refreshToken, getConfig
+  login, refreshToken, getConfig, updatePluginSettings
 } from '../../../shared/extra-utils'
 import { User, UserRole, ServerConfig } from '@shared/models'
 import { expect } from 'chai'
@@ -177,6 +177,30 @@ describe('Test id and pass auth plugins', function () {
 
     await userLogin(server, { username: 'ellone', password: 'elonne password' }, 400)
     await waitUntilLog(server, 'valid email')
+  })
+
+  it('Should unregister spyro-auth and do not login existing Spyro', async function () {
+    await updatePluginSettings({
+      url: server.url,
+      accessToken: server.accessToken,
+      npmName: 'peertube-plugin-test-id-pass-auth-one',
+      settings: { disableSpyro: true }
+    })
+
+    await userLogin(server, { username: 'spyro', password: 'spyro password' }, 400)
+    await userLogin(server, { username: 'spyro', password: 'fake' }, 400)
+  })
+
+  it('Should have disabled this auth', async function () {
+    const res = await getConfig(server.url)
+
+    const config: ServerConfig = res.body
+
+    const auths = config.plugin.registeredIdAndPassAuths
+    expect(auths).to.have.lengthOf(7)
+
+    const spyroAuth = auths.find(a => a.authName === 'spyro-auth')
+    expect(spyroAuth).to.not.exist
   })
 
   it('Should uninstall the plugin one and do not login existing Crash', async function () {

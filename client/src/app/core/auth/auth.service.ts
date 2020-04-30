@@ -181,7 +181,6 @@ export class AuthService {
       err => console.error(err)
     )
 
-
     this.user = null
 
     AuthUser.flush()

@@ -49,6 +49,8 @@ export type RegisterServerOptions = {
 
   registerIdAndPassAuth: (options: RegisterServerAuthPassOptions) => void
   registerExternalAuth: (options: RegisterServerAuthExternalOptions) => RegisterServerAuthExternalResult
+  unregisterIdAndPassAuth: (authName: string) => void
+  unregisterExternalAuth: (authName: string) => void
 
   // Get plugin router to create custom routes
   // Base routes of this router are
