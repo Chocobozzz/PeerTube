@@ -322,6 +322,10 @@ table {
         margin-bottom: $sub-menu-margin-bottom-small-view;
       }
 
+      .admin-sub-header {
+        @include admin-sub-header-responsive(15px*2);
+      }
+
       my-markdown-textarea {
         .root {
           max-width: 100% !important;
@@ -334,6 +338,16 @@ table {
       textarea,
       .peertube-select-container {
         width: 100% !important;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $small-view) and (max-width: #{$small-view + $menu-width}) {
+  .main-col {
+    &:not(.expanded) {
+      .admin-sub-header {
+        @include admin-sub-header-responsive($menu-width/2 + $expanded-horizontal-margins/3);
       }
     }
   }
