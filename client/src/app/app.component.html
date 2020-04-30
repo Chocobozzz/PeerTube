@@ -2,7 +2,7 @@
 
 <my-hotkeys-cheatsheet></my-hotkeys-cheatsheet>
 
-<div class="peertube-container" [ngClass]="{ 'border-bottom': menu.isMenuDisplayed === false, 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
+<div class="peertube-container" [ngClass]="{ 'user-logged-in': isUserLoggedIn(), 'user-not-logged-in': !isUserLoggedIn() }">
   <div class="header">
 
     <div class="top-left-block">
