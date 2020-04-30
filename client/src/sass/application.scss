@@ -322,19 +322,16 @@ table {
         margin-bottom: $sub-menu-margin-bottom-small-view;
       }
 
-      .admin-sub-header:first {
+      .admin-sub-header {
         flex-direction: column;
 
         .admin-sub-nav {
           width: 100%;
         }
 
-        > :first-child {
+        .form-sub-title {
           margin-right: 0px !important;
           margin-bottom: 10px;
-        }
-
-        .form-sub-title {
           text-align: center;
         }
 
