@@ -8,6 +8,7 @@ import { HotkeysService } from 'angular2-hotkeys'
 import { ServerConfig, VideoConstant } from '@shared/models'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ScreenService } from '@app/shared/misc/screen.service'
 
 @Component({
   selector: 'my-menu',
@@ -43,8 +44,21 @@ export class MenuComponent implements OnInit {
     private serverService: ServerService,
     private redirectService: RedirectService,
     private hotkeysService: HotkeysService,
+    private screenService: ScreenService,
     private i18n: I18n
-  ) {}
+  ) { }
+
+  get isInMobileView() {
+    return this.screenService.isInMobileView()
+  }
+
+  get placement () {
+    if (this.isInMobileView) {
+      return 'left-top auto'
+    } else {
+      return 'right-top auto'
+    }
+  }
 
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
