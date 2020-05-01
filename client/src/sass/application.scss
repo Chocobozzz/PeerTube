@@ -344,7 +344,6 @@ table {
 }
 
 // overflow-databale responsive rules
-
 @media screen and (max-width: #{breakpoint(xxl)}) {
   .main-col {
     &.expanded {
@@ -364,7 +363,6 @@ table {
     }
 
     &:not(.expanded) {
-      // TODO: $horizontal-margins might change to $expanded-horizontal-margins/3 + $menu-width/2
       @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2);
     }
   }
@@ -372,43 +370,9 @@ table {
 
 @media screen and (max-width: $small-view) {
   .main-col {
-    &, &.expanded {
+    &:not(.expanded),
+    &.expanded {
       @include overflow-datatable(breakpoint(lg), 15px);
-    }
-  }
-}
-
-// overflow-databale responsive rules
-
-@media screen and (max-width: #{map-get($grid-breakpoints, xxl)}) {
-  .main-col {
-    &.expanded {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $expanded-horizontal-margins/2);
-    }
-
-    &:not(.expanded) {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $not-expanded-horizontal-margins + $menu-width/2);
-    }
-  }
-}
-
-@media screen and (max-width: #{map-get($grid-breakpoints, lg)}) {
-  .main-col {
-    &.expanded {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $expanded-horizontal-margins/3);
-    }
-
-    &:not(.expanded) {
-      // TODO: $horizontal-margins might change to $expanded-horizontal-margins/3 + $menu-width/2
-      @include overflow-datatable(map-get($grid-breakpoints, lg), $not-expanded-horizontal-margins + $menu-width/2);
-    }
-  }
-}
-
-@media screen and (max-width: $small-view) {
-  .main-col {
-    &, &.expanded {
-      @include overflow-datatable(map-get($grid-breakpoints, lg), 15px);
     }
   }
 }
