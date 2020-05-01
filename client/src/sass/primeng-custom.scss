@@ -80,7 +80,7 @@ p-table {
           my-edit-button,
           my-delete-button,
           my-button {
-            display: block !important;
+            display: inline-block !important;
           }
         }
       }
@@ -160,14 +160,20 @@ p-table {
     my-delete-button,
     my-button {
       display: none !important;
+      margin-left: 5px;
 
       &.show {
-        display: block !important;
+        display: inline-block !important;
       }
-    }
 
-    my-edit-button + my-delete-button {
-      margin-left: 5px;
+      // keep displaying on touchscreen
+      @media not all and (hover: hover) and (pointer: fine) {
+        display: inline-block !important;
+      }
+
+      :first-child {
+        margin-left: 0
+      }
     }
   }
 
@@ -241,7 +247,7 @@ p-table {
           &.focus-within,
           &:focus {
             box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest) !important;
-          } 
+          }
         }
 
         a {
@@ -261,6 +267,33 @@ p-table {
             }
           }
         }
+      }
+    }
+  }
+}
+
+// overflow data table
+@mixin overflow-datatable ($table-min-width, $horizontal-margins) {
+  p-table {
+    .ui-table-wrapper {
+      overflow-x: auto;
+      max-width: calc(100vw - #{$horizontal-margins * 2});
+
+      table {
+        min-width: $table-min-width;
+      }
+    }
+
+    p-paginator .ui-paginator-bottom {
+      display: block;
+
+      .ui-paginator-current {
+        position: relative;
+        display: block;
+      }
+
+      a, .ui-paginator-pages {
+        vertical-align: middle;
       }
     }
   }
