@@ -7,6 +7,7 @@ import { debounceTime } from 'rxjs/operators'
 export class MenuService {
   isMenuDisplayed = true
   isMenuChangedByUser = false
+  menuWidth = 240
 
   constructor (
     private screenService: ScreenService

@@ -387,6 +387,7 @@ table {
 
       .sub-menu {
         overflow-x: auto;
+        width: calc(100vw - #{$menu-width});
       }
     }
   }

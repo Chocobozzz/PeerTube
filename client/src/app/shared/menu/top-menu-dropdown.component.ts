@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs'
 import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconName } from '@app/shared/images/global-icon.component'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { MenuService } from '@app/core/menu'
 
 export type TopMenuDropdownParam = {
   label: string
@@ -46,10 +47,16 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
   constructor (
     private router: Router,
     private modalService: NgbModal,
-    private screen: ScreenService
+    private screen: ScreenService,
+    private menuService: MenuService
   ) { }
 
   get isInSmallView () {
+    if (this.menuService.isMenuDisplayed) {
+      const contentWidth = this.screen.getWindowInnerWidth() - this.menuService.menuWidth
+      return contentWidth < 800
+    }
+
     return this.screen.isInSmallView()
   }
 
