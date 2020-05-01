@@ -127,9 +127,9 @@ $play-overlay-width: 18px;
     }
 
     .video-thumbnail {
-      margin: 0 -15px 10px -15px;
-      width: 100vw;
-      height: calc(100vw / #{$video-thumbnail-ratio});
+      margin-bottom: 10px;
+      width: 100%;
+      height: calc(100% / #{$video-thumbnail-ratio});
       border-radius: 0;
 
       img {

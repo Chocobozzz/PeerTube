@@ -283,7 +283,7 @@ p-table {
 }
 
 // overflow data table
-@mixin overflow-datatable ($table-min-width, $horizontal-margins) {
+@mixin overflow-datatable ($table-min-width, $horizontal-margins, $mobile-paginator: true) {
   p-table {
     .ui-table-wrapper {
       overflow-x: auto;
@@ -294,16 +294,18 @@ p-table {
       }
     }
 
-    p-paginator .ui-paginator-bottom {
-      display: block;
-
-      .ui-paginator-current {
-        position: relative;
+    @if $mobile-paginator {
+      p-paginator .ui-paginator-bottom {
         display: block;
-      }
-
-      a, .ui-paginator-pages {
-        vertical-align: middle;
+  
+        .ui-paginator-current {
+          position: relative;
+          display: block;
+        }
+  
+        a, .ui-paginator-pages {
+          vertical-align: middle;
+        }
       }
     }
   }

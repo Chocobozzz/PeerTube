@@ -344,14 +344,14 @@ table {
 }
 
 // overflow-databale responsive rules
-@media screen and (max-width: #{breakpoint(xxl)}) {
+@media screen and (min-width: #{breakpoint(lg)}) {
   .main-col {
     &.expanded {
-      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/2);
+      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/2, $mobile-paginator: false);
     }
 
     &:not(.expanded) {
-      @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2);
+      @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2, $mobile-paginator: false);
     }
   }
 }
@@ -363,7 +363,7 @@ table {
     }
 
     &:not(.expanded) {
-      @include overflow-datatable(breakpoint(lg), $not-expanded-horizontal-margins + $menu-width/2);
+      @include overflow-datatable(breakpoint(lg), $expanded-horizontal-margins/3 + $menu-width/2);
     }
   }
 }
@@ -381,7 +381,7 @@ table {
   .main-col {
     &:not(.expanded) {
       .admin-sub-header {
-        @include admin-sub-header-responsive($menu-width/2 + $expanded-horizontal-margins/3);
+        @include admin-sub-header-responsive($expanded-horizontal-margins/3 + $menu-width/2);
       }
     }
   }
