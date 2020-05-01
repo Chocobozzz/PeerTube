@@ -48,7 +48,7 @@ export class MenuComponent implements OnInit {
     private i18n: I18n
   ) { }
 
-  get isInMobileView() {
+  get isInMobileView () {
     return this.screenService.isInMobileView()
   }
 
