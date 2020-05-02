@@ -58,10 +58,6 @@
   @include peertube-input-group(400px);
 }
 
-.input-group-append {
-  height: 30px;
-}
-
 input:not([type=submit]) {
   @include peertube-input-text(400px);
 

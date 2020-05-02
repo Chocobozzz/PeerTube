@@ -9,7 +9,7 @@ import {
   isVideoAbuseStateValid
 } from '../../helpers/custom-validators/video-abuses'
 import { AccountModel } from '../account/account'
-import { buildBlockedAccountSQL, getSort, throwIfNotValid, searchAttribute } from '../utils'
+import { buildBlockedAccountSQL, getSort, throwIfNotValid, searchAttribute, parseQueryStringFilter } from '../utils'
 import { VideoModel } from './video'
 import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
@@ -26,10 +26,17 @@ export enum ScopeNames {
 
 @Scopes(() => ({
   [ScopeNames.FOR_API]: (options: {
+    // search
     search?: string
     searchReporter?: string
+    searchReportee?: string
     searchVideo?: string
     searchVideoChannel?: string
+    // filters
+    id?: number
+    state?: VideoAbuseState
+    is?: any
+    // accountIds
     serverAccountId: number
     userAccountId: number
   }) => {
@@ -68,6 +75,24 @@ export enum ScopeNames {
           },
           searchAttribute(options.search, '$Account.name$')
         ]
+      })
+    }
+
+    if (options.id) {
+      where = Object.assign(where, {
+        id: options.id
+      })
+    }
+
+    if (options.state) {
+      where = Object.assign(where, {
+        state: options.state
+      })
+    }
+
+    if (options.is) {
+      where = Object.assign(where, {
+        ...options.is
       })
     }
 
@@ -167,7 +192,13 @@ export enum ScopeNames {
             },
             {
               model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: true } as SummaryOptions ] }),
-              where: searchAttribute(options.searchVideoChannel, 'name')
+              where: searchAttribute(options.searchVideoChannel, 'name'),
+              include: [
+                {
+                  model: AccountModel,
+                  where: searchAttribute(options.searchReportee, 'name')
+                }
+              ]
             },
             {
               attributes: [ 'id', 'reason', 'unfederated' ],
@@ -280,7 +311,36 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     }
 
     const filters = {
-      search,
+      ...parseQueryStringFilter(search, {
+        id: {
+          prefix: '#',
+          handler: v => v
+        },
+        state: {
+          prefix: 'state:',
+          handler: v => {
+            if (v === "accepted") return VideoAbuseState.ACCEPTED
+            if (v === "pending") return VideoAbuseState.PENDING
+            if (v === "rejected") return VideoAbuseState.REJECTED
+            return undefined
+          }
+        },
+        is: {
+          prefix: 'is:',
+          handler: v => {
+            if (v === "deleted") return { deletedVideo: { [Op.not]: null } }
+            return undefined
+          }
+        },
+        searchReporter: {
+          prefix: 'reporter:',
+          handler: v => v
+        },
+        searchReportee: {
+          prefix: 'reportee:',
+          handler: v => v
+        }
+      }),
       serverAccountId,
       userAccountId
     }
