@@ -219,6 +219,54 @@ function searchAttribute (sourceField, targetField) {
   }
 }
 
+interface QueryStringFilterPrefixes {
+  [key: string]: string | { prefix: string, handler: Function, multiple?: boolean }
+}
+
+function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes) {
+  const tokens = q // tokenize only if we have a querystring
+    ? [].concat.apply([], q.split('"').map((v, i) => i % 2 ? v : v.split(' '))).filter(Boolean)
+    : []
+
+  // TODO: when Typescript supports Object.fromEntries, replace with the Object method
+  function fromEntries<T> (entries: [keyof T, T[keyof T]][]): T {
+    return entries.reduce(
+      (acc, [ key, value ]) => ({ ...acc, [key]: value }),
+      {} as T
+    )
+  }
+
+  const objectMap = (obj, fn) => fromEntries(
+    Object.entries(obj).map(
+      ([ k, v ], i) => [ k, fn(v, k, i) ]
+    )
+  )
+
+  return {
+    // search is the querystring minus defined filters
+    search: tokens.filter(e => !Object.values(prefixes).some(p => {
+      if (typeof p === "string") {
+        return e.startsWith(p)
+      } else {
+        return e.startsWith(p.prefix)
+      }
+    })).join(' '),
+    // filters defined in prefixes are added under their own name
+    ...objectMap(prefixes, v => {
+      if (typeof v === "string") {
+        return tokens.filter(e => e.startsWith(v)).map(e => e.slice(v.length))
+      } else {
+        const _tokens = tokens.filter(e => e.startsWith(v.prefix)).map(e => e.slice(v.prefix.length)).map(v.handler)
+        return !v.multiple
+          ? _tokens.length > 0
+            ? _tokens[0]
+            : ''
+          : _tokens
+      }
+    })
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
@@ -241,7 +289,8 @@ export {
   getFollowsSort,
   buildDirectionAndField,
   createSafeIn,
-  searchAttribute
+  searchAttribute,
+  parseQueryStringFilter
 }
 
 // ---------------------------------------------------------------------------

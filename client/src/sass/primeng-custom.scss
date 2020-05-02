@@ -32,6 +32,10 @@ p-table {
       height: 40px;
       display: flex;
       align-items: center;
+
+      .input-group-text {
+        background-color: transparent;
+      }
     }
   }
 

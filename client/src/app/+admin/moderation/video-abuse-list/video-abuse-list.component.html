@@ -7,10 +7,32 @@
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="ml-auto">
-        <input
-          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-          (keyup)="onSearch($event)"
-        >
+        <div class="input-group">
+          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
+            <div class="input-group-text" ngbDropdownToggle>
+              <span class="caret" aria-haspopup="menu" role="button"></span>
+            </div>
+
+            <div role="menu" ngbDropdownMenu>
+              <h6 class="dropdown-header" i18n>Filter reports</h6>
+
+              <!-- TODO:
+              <div class="dropdown-item" i18n>Reports opened by admins</div>
+              <div class="dropdown-item" i18n>Reports on videos with multiple reports</div>
+              <div class="dropdown-item" i18n>Unassigned reports</div>
+              -->
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'is:blocked' }" class="dropdown-item" i18n>Reports with blocked videos</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'is:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
+            </div>
+          </div>
+          <input
+            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+            (keyup)="onSearch($event)"
+          >
+        </div>
       </div>
     </div>
   </ng-template>
@@ -100,7 +122,7 @@
 
       <td class="action-cell">
         <my-action-dropdown
-          [ngClass]="{ 'show': expanded }" placement="bottom-right auto" container="body"
+          [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
           i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"
         ></my-action-dropdown>
       </td>
@@ -118,7 +140,7 @@
               <div class="d-flex">
                 <span class="col-3 moderation-expanded-label" i18n>Reporter</span>
                 <span class="col-9 moderation-expanded-text">
-                  <div class="chip">
+                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + videoAbuse.reporterAccount.displayName + '&quot;' }" class="chip">
                     <img
                       class="avatar"
                       [src]="videoAbuse.reporterAccount.avatar.path"
@@ -128,8 +150,8 @@
                     <div>
                       <span class="text-muted">{{ createByString(videoAbuse.reporterAccount) }}</span>
                     </div>
-                  </div>
-                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': videoAbuse.reporterAccount.displayName }" class="ml-auto text-muted video-details-links" i18n>
+                  </a>
+                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + videoAbuse.reporterAccount.displayName + '&quot;' }" class="ml-auto text-muted video-details-links" i18n>
                     {videoAbuse.countReportsForReporter, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReporter }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
@@ -149,7 +171,7 @@
                       <span class="text-muted">{{ videoAbuse.video.channel.ownerAccount ? createByString(videoAbuse.video.channel.ownerAccount) : '' }}</span>
                     </div>
                   </div>
-                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': videoAbuse.video.channel.ownerAccount.displayName }" class="ml-auto text-muted video-details-links" i18n>
+                  <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' +videoAbuse.video.channel.ownerAccount.displayName + '&quot;' }" class="ml-auto text-muted video-details-links" i18n>
                     {videoAbuse.countReportsForReportee, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReportee }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
                   </a>
                 </span>
