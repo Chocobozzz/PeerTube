@@ -32,7 +32,6 @@ export class VideoAbuseService {
 
     return this.authHttp.get<ResultList<VideoAbuse>>(url, { params })
                .pipe(
-                 map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
