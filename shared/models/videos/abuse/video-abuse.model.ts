@@ -23,7 +23,7 @@ export interface VideoAbuse {
   }
 
   createdAt: Date
-  updatedAt?: Date
+  updatedAt: Date
 
   count?: number
   nth?: number

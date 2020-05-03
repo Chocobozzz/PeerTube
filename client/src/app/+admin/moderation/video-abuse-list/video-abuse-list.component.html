@@ -3,25 +3,19 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
-  (onPage)="onPage()" [expandedRowKeys]="expandedRows"
+  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
       <div class="ml-auto">
-        <div class="input-group">
+        <div class="input-group has-feedback has-clear">
           <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
             <div class="input-group-text" ngbDropdownToggle>
               <span class="caret" aria-haspopup="menu" role="button"></span>
             </div>
 
             <div role="menu" ngbDropdownMenu>
-              <h6 class="dropdown-header" i18n>Filter reports</h6>
-
-              <!-- TODO:
-              <div class="dropdown-item" i18n>Reports opened by admins</div>
-              <div class="dropdown-item" i18n>Reports on videos with multiple reports</div>
-              <div class="dropdown-item" i18n>Unassigned reports</div>
-              -->
+              <h6 class="dropdown-header" i18n>Advanced report filters</h6>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
@@ -31,8 +25,10 @@
           </div>
           <input
             type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-            (keyup)="onSearch($event)"
+            (keyup)="onAbuseSearch($event)"
           >
+          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
+          <span class="sr-only" i18n>Clear filters</span>
         </div>
       </div>
     </div>
@@ -68,7 +64,7 @@
             >
             <div>
               {{ videoAbuse.reporterAccount.displayName }}
-              <span class="text-muted">{{ createByString(videoAbuse.reporterAccount) }}</span>
+              <span class="text-muted">{{ videoAbuse.reporterAccount.nameWithHost }}</span>
             </div>
           </div>
         </a>

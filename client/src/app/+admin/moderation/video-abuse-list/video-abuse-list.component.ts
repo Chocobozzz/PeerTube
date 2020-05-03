@@ -16,8 +16,22 @@ import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
 import { DomSanitizer } from '@angular/platform-browser'
 import { BlocklistService } from '@app/shared/blocklist'
 import { VideoService } from '@app/shared/video/video.service'
-import { ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, Params, Router } from '@angular/router'
 import { filter } from 'rxjs/operators'
+
+export type ProcessedVideoAbuse = VideoAbuse & {
+  moderationCommentHtml?: string,
+  reasonHtml?: string
+  embedHtml?: string
+  updatedAt?: Date
+  // override bare server-side definitions with rich client-side definitions
+  reporterAccount: Account
+  video: VideoAbuse['video'] & {
+    channel: VideoAbuse['video']['channel'] & {
+      ownerAccount: Account
+    }
+  }
+}
 
 @Component({
   selector: 'my-video-abuse-list',
@@ -27,7 +41,7 @@ import { filter } from 'rxjs/operators'
 export class VideoAbuseListComponent extends RestTable implements OnInit, AfterViewInit {
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
 
-  videoAbuses: (VideoAbuse & { moderationCommentHtml?: string, reasonHtml?: string })[] = []
+  videoAbuses: ProcessedVideoAbuse[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
@@ -44,7 +58,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     private i18n: I18n,
     private markdownRenderer: MarkdownService,
     private sanitizer: DomSanitizer,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) {
     super()
 
@@ -212,15 +227,24 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     this.loadData()
   }
 
-  createByString (account: Account) {
-    return Account.CREATE_BY_STRING(account.name, account.host)
+  /* Table filter functions */
+  onAbuseSearch (event: Event) {
+    this.onSearch(event)
+    this.setQueryParams((event.target as HTMLInputElement).value)
   }
 
-  setTableFilter (filter: string) {
-    // FIXME: cannot use ViewChild, so create a component for the filter input
-    const filterInput = document.getElementById('table-filter') as HTMLInputElement
-    if (filterInput) filterInput.value = filter
+  setQueryParams (search: string) {
+    const queryParams: Params = {}
+    if (search) Object.assign(queryParams, { search })
+    this.router.navigate([ '/admin/moderation/video-abuses/list' ], { queryParams })
   }
+
+  resetTableFilter () {
+    this.setTableFilter('')
+    this.setQueryParams('')
+    this.resetSearch()
+  }
+  /* END Table filter functions */
 
   isVideoAbuseAccepted (videoAbuse: VideoAbuse) {
     return videoAbuse.state.id === VideoAbuseState.ACCEPTED
@@ -279,17 +303,20 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     }).subscribe(
         async resultList => {
           this.totalRecords = resultList.total
+          this.videoAbuses = []
 
-          this.videoAbuses = resultList.data
-
-          for (const abuse of this.videoAbuses) {
+          for (const abuse of resultList.data) {
             Object.assign(abuse, {
               reasonHtml: await this.toHtml(abuse.reason),
               moderationCommentHtml: await this.toHtml(abuse.moderationComment),
               embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse)),
               reporterAccount: new Account(abuse.reporterAccount)
             })
+
+            if (abuse.video.channel?.ownerAccount) abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
             if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
+
+            this.videoAbuses.push(abuse as ProcessedVideoAbuse)
           }
 
         },

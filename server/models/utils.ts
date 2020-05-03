@@ -223,9 +223,12 @@ interface QueryStringFilterPrefixes {
   [key: string]: string | { prefix: string, handler: Function, multiple?: boolean }
 }
 
-function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes) {
+function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes): {
+  search: string
+  [key: string]: string | number | string[] | number[]
+} {
   const tokens = q // tokenize only if we have a querystring
-    ? [].concat.apply([], q.split('"').map((v, i) => i % 2 ? v : v.split(' '))).filter(Boolean)
+    ? [].concat.apply([], q.split('"').map((v, i) => i % 2 ? v : v.split(' '))).filter(Boolean) // split by space unless using double quotes
     : []
 
   // TODO: when Typescript supports Object.fromEntries, replace with the Object method
@@ -252,16 +255,18 @@ function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes)
       }
     })).join(' '),
     // filters defined in prefixes are added under their own name
-    ...objectMap(prefixes, v => {
-      if (typeof v === "string") {
-        return tokens.filter(e => e.startsWith(v)).map(e => e.slice(v.length))
+    ...objectMap(prefixes, p => {
+      if (typeof p === "string") {
+        return tokens.filter(e => e.startsWith(p)).map(e => e.slice(p.length)) // we keep the matched item, and remove its prefix
       } else {
-        const _tokens = tokens.filter(e => e.startsWith(v.prefix)).map(e => e.slice(v.prefix.length)).map(v.handler)
-        return !v.multiple
-          ? _tokens.length > 0
-            ? _tokens[0]
-            : ''
-          : _tokens
+        const _tokens = tokens.filter(e => e.startsWith(p.prefix)).map(e => e.slice(p.prefix.length)).map(p.handler)
+        // multiple is false by default, meaning we usually just keep the first occurence of a given prefix
+        if (!p.multiple && _tokens.length > 0) {
+          return _tokens[0]
+        } else if (!p.multiple) {
+          return ''
+        }
+        return _tokens
       }
     })
   }

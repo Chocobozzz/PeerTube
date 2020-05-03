@@ -8,12 +8,12 @@
 </div>
 
 <p-table
-  [value]="users" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="users" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [(selection)]="selectedUsers"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
-  (onPage)="onPage()" [expandedRowKeys]="expandedRows"
+  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
@@ -25,11 +25,13 @@
         </my-action-dropdown>
       </div>
 
-      <div>
+      <div class="has-feedback has-clear">
         <input
           type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
           (keyup)="onSearch($event)"
         >
+        <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+        <span class="sr-only" i18n>Clear filters</span>
       </div>
     </div>
   </ng-template>

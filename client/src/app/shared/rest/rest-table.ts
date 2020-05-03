@@ -74,8 +74,27 @@ export abstract class RestTable {
     this.searchStream.next(target.value)
   }
 
-  onPage () {
+  onPage (event: { first: number, rows: number }) {
+    if (this.rowsPerPage !== event.rows) {
+      this.rowsPerPage = event.rows
+      this.pagination = {
+        start: event.first,
+        count: this.rowsPerPage
+      }
+      this.loadData()
+    }
     this.expandedRows = {}
+  }
+
+  setTableFilter (filter: string) {
+    // FIXME: cannot use ViewChild, so create a component for the filter input
+    const filterInput = document.getElementById('table-filter') as HTMLInputElement
+    if (filterInput) filterInput.value = filter
+  }
+
+  resetSearch () {
+    this.searchStream.next('')
+    this.setTableFilter('')
   }
 
   protected abstract loadData (): void

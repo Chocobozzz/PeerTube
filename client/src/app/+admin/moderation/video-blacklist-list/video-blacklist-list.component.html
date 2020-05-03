@@ -3,15 +3,17 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} blacklisted videos"
-  (onPage)="onPage()" [expandedRowKeys]="expandedRows"
+  (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
-      <div class="ml-auto">
+      <div class="ml-auto has-feedback has-clear">
         <input
           type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
           (keyup)="onSearch($event)"
         >
+        <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+        <span class="sr-only" i18n>Clear filters</span>
       </div>
     </div>
   </ng-template>

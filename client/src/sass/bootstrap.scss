@@ -27,7 +27,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 /* rules for dropdowns excepts when in button group, to avoid impacting the dropdown-toggle */
-.dropdown:not(.btn-group):not(.dropdown-root):not(.action-dropdown) {
+.dropdown:not(.btn-group):not(.dropdown-root):not(.action-dropdown):not(.input-group-prepend) {
   z-index: z(dropdown) !important;
 
   &.list-overflow-menu,
@@ -270,14 +270,45 @@ ngb-tooltip-window {
   & > .form-control {
     flex: initial;
   }
-
-  .input-group-prepend,
-  .input-group-append {
-    height: 30px;
+  input.form-control {
+    width: unset !important;
+    flex-grow: 1;
   }
 
   .input-group-prepend + input {
     border-top-left-radius: 0 !important;
     border-bottom-left-radius: 0 !important;
+  }
+}
+
+.has-feedback.has-clear {
+  position: relative;
+
+  input {
+    padding-right: 1.5rem !important;
+  }
+
+  .form-control-clear {
+    color: rgba(0, 0, 0, 0.4);
+    /*
+     * Enable pointer events as they have been disabled since Bootstrap 3.3
+     * See https://github.com/twbs/bootstrap/pull/14104
+     */
+    pointer-events: all;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: .5rem;
+    height: 95%;
+
+    &:hover {
+      color: rgba(0, 0, 0, 0.7);
+      cursor: pointer;
+    }
+  }
+
+  input:placeholder-shown + .form-control-clear {
+    display: none;
   }
 }
