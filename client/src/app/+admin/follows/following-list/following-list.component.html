@@ -23,7 +23,7 @@
     <tr>
       <th i18n>Host</th>
       <th style="width: 100px;" i18n pSortableColumn="state">State <p-sortIcon field="state"></p-sortIcon></th>
-      <th style="width: 200px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 140px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 160px;" i18n pSortableColumn="redundancyAllowed">Redundancy allowed <p-sortIcon field="redundancyAllowed"></p-sortIcon></th>
       <th style="width: 100px;"></th>
     </tr>
@@ -41,7 +41,7 @@
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
       <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
 
-      <td>{{ follow.createdAt }}</td>
+      <td>{{ follow.createdAt | date: 'short' }}</td>
       <td>
         <my-redundancy-checkbox
           [host]="follow.following.host" [redundancyAllowed]="follow.following.hostRedundancyAllowed"

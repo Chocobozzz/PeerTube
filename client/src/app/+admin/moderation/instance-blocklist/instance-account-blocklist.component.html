@@ -18,7 +18,7 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 100%;" i18n>Account</th>
-      <th style="width: 190px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 140px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 100px;"></th> <!-- column for action buttons --> 
     </tr>
   </ng-template>
@@ -42,7 +42,7 @@
         </a>
       </td>
 
-      <td>{{ accountBlock.createdAt }}</td>
+      <td>{{ accountBlock.createdAt | date: 'short' }}</td>
       <td class="action-cell">
         <button class="unblock-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
       </td>
