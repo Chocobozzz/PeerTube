@@ -90,10 +90,13 @@ export enum ScopeNames {
       })
     }
 
-    if (options.is) {
+    let onlyBlacklisted = false
+    if (options.is === "deleted") {
       where = Object.assign(where, {
-        ...options.is
+        deletedVideo: { [Op.not]: null }
       })
+    } else if (options.is === "blacklisted") {
+      onlyBlacklisted = true
     }
 
     return {
@@ -184,7 +187,7 @@ export enum ScopeNames {
         },
         {
           model: VideoModel,
-          required: false,
+          required: onlyBlacklisted,
           where: searchAttribute(options.searchVideo, 'name'),
           include: [
             {
@@ -202,7 +205,8 @@ export enum ScopeNames {
             },
             {
               attributes: [ 'id', 'reason', 'unfederated' ],
-              model: VideoBlacklistModel
+              model: VideoBlacklistModel,
+              required: onlyBlacklisted
             }
           ]
         }
@@ -328,7 +332,8 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
         is: {
           prefix: 'is:',
           handler: v => {
-            if (v === "deleted") return { deletedVideo: { [Op.not]: null } }
+            if (v === "deleted") return v
+            if (v === "blacklisted") return v
             return undefined
           }
         },
