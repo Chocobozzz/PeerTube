@@ -13,6 +13,7 @@
   [(selection)]="selectedUsers"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
+  (onPage)="onPage()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">

@@ -21,7 +21,7 @@
 <p-table
   [value]="jobs" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" dataKey="uniqId"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" [first]="pagination.start"
-  [tableStyle]="{'table-layout':'auto'}"
+  [tableStyle]="{'table-layout':'auto'}" (onPage)="onPage()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>
