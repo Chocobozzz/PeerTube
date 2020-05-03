@@ -339,6 +339,11 @@ table {
       .peertube-select-container {
         width: 100% !important;
       }
+
+      .caption input[type=text] {
+        width: unset !important;
+        flex-grow: 1;
+      }
     }
   }
 }

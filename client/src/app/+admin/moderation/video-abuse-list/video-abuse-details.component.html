@@ -14,7 +14,7 @@
             alt="Avatar"
           >
           <div>
-            <span class="text-muted">{{ createByString(videoAbuse.reporterAccount) }}</span>
+            <span class="text-muted">{{ videoAbuse.reporterAccount.nameWithHost }}</span>
           </div>
         </a>
         <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + videoAbuse.reporterAccount.displayName + '&quot;' }" class="ml-auto text-muted video-details-links" i18n>
@@ -34,7 +34,7 @@
             alt="Avatar"
           >
           <div>
-            <span class="text-muted">{{ videoAbuse.video.channel.ownerAccount ? createByString(videoAbuse.video.channel.ownerAccount) : '' }}</span>
+            <span class="text-muted">{{ videoAbuse.video.channel.ownerAccount ? videoAbuse.video.channel.ownerAccount.nameWithHost : '' }}</span>
           </div>
         </a>
         <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' +videoAbuse.video.channel.ownerAccount.displayName + '&quot;' }" class="ml-auto text-muted video-details-links" i18n>
