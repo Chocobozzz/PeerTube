@@ -42,7 +42,7 @@
       <th style="width: 40px;"></th>
       <th style="width: 20%;" pResizableColumn i18n>Reporter</th>
       <th i18n>Video</th>
-      <th style="width: 190px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 140px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
       <th style="width: 120px;"></th>
     </tr>
@@ -112,7 +112,7 @@
         </div>
       </td>
 
-      <td class="c-hand" [pRowToggler]="videoAbuse">{{ videoAbuse.createdAt }}</td>
+      <td class="c-hand" [pRowToggler]="videoAbuse">{{ videoAbuse.createdAt | date: 'short'  }}</td>
 
       <td class="c-hand video-abuse-states" [pRowToggler]="videoAbuse">
         <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
