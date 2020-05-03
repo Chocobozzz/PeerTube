@@ -289,6 +289,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
               embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse)),
               reporterAccount: new Account(abuse.reporterAccount)
             })
+            if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
           }
 
         },
