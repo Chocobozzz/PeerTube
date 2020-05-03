@@ -3,6 +3,7 @@
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
+  (onPage)="onPage()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="caption">
     <div class="caption">

@@ -1,6 +1,7 @@
 <p-table
   [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  (onPage)="onPage()" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
     <tr>

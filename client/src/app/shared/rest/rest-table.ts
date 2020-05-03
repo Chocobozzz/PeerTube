@@ -13,6 +13,7 @@ export abstract class RestTable {
   search: string
   rowsPerPageOptions = [ 10, 20, 50, 100 ]
   rowsPerPage = this.rowsPerPageOptions[0]
+  expandedRows = {}
 
   private searchStream: Subject<string>
 
@@ -71,6 +72,10 @@ export abstract class RestTable {
   onSearch (event: Event) {
     const target = event.target as HTMLInputElement
     this.searchStream.next(target.value)
+  }
+
+  onPage () {
+    this.expandedRows = {}
   }
 
   protected abstract loadData (): void
