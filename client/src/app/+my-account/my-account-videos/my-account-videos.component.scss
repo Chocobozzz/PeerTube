@@ -29,6 +29,10 @@
 }
 
 ::ng-deep {
+  .video {
+    flex-wrap: wrap;
+  }
+
   .action-button span {
     white-space: nowrap;
   }
@@ -50,6 +54,13 @@
   }
 }
 
+.action-button {
+  display: flex;
+  margin-left: 55px;
+  margin-top: 10px;
+  align-self: flex-end;
+}
+
 my-delete-button,
 my-edit-button {
   margin-right: 10px;
@@ -58,6 +69,12 @@ my-edit-button {
 @media screen and (max-width: $small-view) {
   .videos-header {
     flex-direction: column;
+  }
+
+  .action-button {
+    flex-direction: column;
+    align-self: center;
+    margin-left: 0px;
   }
 
   ::ng-deep {
@@ -94,6 +111,21 @@ my-edit-button {
       .action-button {
         /* same width than a.video-thumbnail */
         width: 223px;
+      }
+    }
+  }
+}
+
+// Adapt my-video-miniature on small screens with menu
+@media screen and (min-width: $small-view) and (max-width: #{breakpoint(lg) + ($not-expanded-horizontal-margins / 3) * 2}) {
+  :host-context(.main-col:not(.expanded)) {
+    ::ng-deep {
+      .video-miniature {
+        flex-direction: column;
+
+        .video-miniature-name {
+          max-width: 223px;
+        }
       }
     }
   }
