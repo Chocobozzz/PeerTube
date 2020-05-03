@@ -81,6 +81,48 @@
   }
 }
 
+@media screen and (min-width: $small-view) and (max-width: breakpoint(xl)) {
+  .video-channel-info .video-channel-names {
+    flex-direction: column !important;
+
+    .video-channel-name {
+      @include ellipsis; // Ellipsis and max-width on channel-name to not break screen
+
+      max-width: 250px;
+      margin-left: 0 !important;
+    }
+  }
+
+  :host-context(.main-col:not(.expanded)) {
+    // Override the min-width: 500px to not break screen
+    ::ng-deep .video-miniature-information {
+      min-width: 300px !important;
+    }
+  }
+}
+
+@media screen and (min-width: $small-view) and (max-width: breakpoint(lg)) {
+  :host-context(.main-col:not(.expanded)) {
+    .video-channel-info .video-channel-names {
+      .video-channel-name {
+        max-width: 160px;
+      }
+    }
+
+    // Override the min-width: 500px to not break screen
+    ::ng-deep .video-miniature-information {
+      min-width: 223px !important;
+    }
+  }
+
+  :host-context(.expanded) {
+    // Override the min-width: 500px to not break screen
+    ::ng-deep .video-miniature-information {
+      min-width: 300px !important;
+    }
+  }
+}
+
 @media screen and (max-width: $small-view) {
   .search-result {
     .entry.video-channel,
@@ -90,7 +132,7 @@
       justify-content: center;
       align-items: center;
       text-align: center;
-      
+
       img {
         margin: 0;
       }
