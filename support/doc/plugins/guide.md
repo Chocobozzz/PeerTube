@@ -13,6 +13,7 @@
     - [Storage](#storage)
     - [Update video constants](#update-video-constants)
     - [Add custom routes](#add-custom-routes)
+    - [Add external auth methods](#add-external-auth-methods)
   - [Client helpers (themes & plugins)](#client-helpers-themes--plugins)
     - [Plugin static route](#plugin-static-route)
     - [Notifier](#notifier)
