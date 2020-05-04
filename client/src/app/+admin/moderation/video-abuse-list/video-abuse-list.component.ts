@@ -303,7 +303,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     }).subscribe(
         async resultList => {
           this.totalRecords = resultList.total
-          this.videoAbuses = []
+          const videoAbuses = []
 
           for (const abuse of resultList.data) {
             Object.assign(abuse, {
@@ -316,9 +316,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
             if (abuse.video.channel?.ownerAccount) abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
             if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
 
-            this.videoAbuses.push(abuse as ProcessedVideoAbuse)
+            videoAbuses.push(abuse as ProcessedVideoAbuse)
           }
 
+          this.videoAbuses = videoAbuses
         },
 
         err => this.notifier.error(err.message)
