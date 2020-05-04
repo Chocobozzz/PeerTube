@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { FindAndCountOptions, json } from 'sequelize'
+import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/typings/models'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
@@ -212,18 +212,17 @@ export class PluginModel extends Model<PluginModel> {
   }
 
   static storeData (pluginName: string, pluginType: PluginType, key: string, data: any) {
-    const query = {
-      where: {
-        name: pluginName,
-        type: pluginType
-      }
+    const query = 'UPDATE "plugin" SET "storage" = jsonb_set(coalesce("storage", \'{}\'), :key, :data::jsonb) ' +
+    'WHERE "name" = :pluginName AND "type" = :pluginType'
+
+    const jsonPath = '{' + key + '}'
+
+    const options = {
+      replacements: { pluginName, pluginType, key: jsonPath, data: JSON.stringify(data) },
+      type: QueryTypes.UPDATE
     }
 
-    const toSave = {
-      [`storage.${key}`]: data
-    }
-
-    return PluginModel.update(toSave, query)
+    return PluginModel.sequelize.query(query, options)
                       .then(() => undefined)
   }
 
