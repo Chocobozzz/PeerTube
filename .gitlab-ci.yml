@@ -122,6 +122,7 @@ build-nightly:
     name: gcr.io/kaniko-project/executor:debug
     entrypoint: [""]
   before_script:
+    - mkdir -p /kaniko/.docker
     - echo "{\"auths\":{\"$CI_REGISTRY\":{\"auth\":\"$CI_REGISTRY_AUTH\",\"email\":\"$CI_REGISTRY_EMAIL\"}}}" > /kaniko/.docker/config.json
   script:
     - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/support/docker/production/Dockerfile.buster --destination $DOCKER_IMAGE_NAME
