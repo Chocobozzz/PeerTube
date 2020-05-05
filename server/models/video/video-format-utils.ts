@@ -323,7 +323,10 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     })
   }
 
-  const icons = [ video.getMiniature(), video.getPreview() ]
+  // FIXME: remove and uncomment in PT 2.3
+  // Breaks compatibility with PT <= 2.1
+  // const icons = [ video.getMiniature(), video.getPreview() ]
+  const miniature = video.getMiniature()
 
   return {
     type: 'Video' as 'Video',
@@ -348,13 +351,20 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     content: video.getTruncatedDescription(),
     support: video.support,
     subtitleLanguage,
-    icon: icons.map(i => ({
+    icon: {
       type: 'Image',
-      url: i.getFileUrl(video),
+      url: miniature.getFileUrl(video),
       mediaType: 'image/jpeg',
-      width: i.width,
-      height: i.height
-    })),
+      width: miniature.width,
+      height: miniature.height
+    } as any,
+    // icon: icons.map(i => ({
+    //   type: 'Image',
+    //   url: i.getFileUrl(video),
+    //   mediaType: 'image/jpeg',
+    //   width: i.width,
+    //   height: i.height
+    // })),
     url,
     likes: getVideoLikesActivityPubUrl(video),
     dislikes: getVideoDislikesActivityPubUrl(video),
