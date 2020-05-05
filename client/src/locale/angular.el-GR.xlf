@@ -625,7 +625,7 @@
       </trans-unit><trans-unit id="28df1b02fd88d2deb0212bc5d7ff34cf9492fa54" datatype="html">
         <source>Deleted</source><target state="new">Deleted</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">34</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">49</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">34</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">100</context></context-group></trans-unit>
       <trans-unit id="2edccfda908b57c073dc0811eaa58818de2be2dc">
         <source>Edit starts/stops at</source>
         <target>Επεξεργασία ξεκινά/σταματά στο</target>
@@ -958,7 +958,7 @@
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">99</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context><context context-type="linenumber">33</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/confirm/confirm.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">85</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">47</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-modal.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">48</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">99</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context><context context-type="linenumber">33</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/moderation/user-ban-modal.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/confirm/confirm.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">105</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">47</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-modal.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-videos/video-change-ownership/video-change-ownership.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-accept-ownership/my-account-accept-ownership.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/contact-admin-modal.component.html</context><context context-type="linenumber">48</context></context-group></trans-unit>
       <trans-unit id="35fdca47605de8113a0db7f587f7c099abec8020">
         <source>Ban this user</source>
         <target>Αποκλεισμός χρήστη</target>
@@ -972,7 +972,7 @@
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/menu/top-menu-dropdown.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/menu/top-menu-dropdown.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/menu/top-menu-dropdown.component.html</context><context context-type="linenumber">21</context></context-group></trans-unit>
       
       <trans-unit id="12910217fdcdbca64bee06f511639b653d5428ea">
         <source>
@@ -984,35 +984,45 @@
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">2</context></context-group></trans-unit><trans-unit id="d780b02074a6317126378e0365e1066c890a3570" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">2</context></context-group></trans-unit><trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>
-      If you are looking for an account…
-    </source><target state="new">
-      If you are looking for an account…
-    </target>
+    Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
+  </source><target state="new">
+    Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
+  </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="linenumber">6</context>
         </context-group>
-      </trans-unit><trans-unit id="79dacac459775e2cf163bce6c3f05ed814f82ba2" datatype="html">
+      </trans-unit><trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
         <source>
-      Currently this instance doesn't allow for user registration, but you can find an instance
-      that gives you the possibility to sign up for an account and upload your videos there.
-
-      <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-
-      Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
-    </source><target state="new">
-      Currently this instance doesn't allow for user registration, but you can find an instance
-      that gives you the possibility to sign up for an account and upload your videos there.
-
-      <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
-
-      Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
-    </target>
+        If you are looking for an account…
+      </source><target state="new">
+        If you are looking for an account…
+      </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+      </trans-unit><trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
+        <source>
+        Currently this instance doesn't allow for user registration, but you can find an instance
+        that gives you the possibility to sign up for an account and upload your videos there.
+
+        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+
+        Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
+      </source><target state="new">
+        Currently this instance doesn't allow for user registration, but you can find an instance
+        that gives you the possibility to sign up for an account and upload your videos there.
+
+        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
+
+        Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a>"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a>"/>.
+      </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
@@ -1021,32 +1031,32 @@
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
       <trans-unit id="e08a77594f3d89311cdf6da5090044270909c194">
         <source>User</source>
         <target>Χρήστης</target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">28</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478">
         <source>Username or email address</source>
         <target>Όνομα χρήστη ή διεύθυνση e-mail</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit>
-      <trans-unit id="02c4360c2d956e74ed6bb1f71e86812af0e19b87">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit><trans-unit id="9fed9d6f57dafb967ffaaf3c63f54ad976cab926" datatype="html">
         <source>
-          or create an account
-        </source>
-        <target>
-          ή δημιουργήστε ένα λογαριασμό
-        </target>
-        <context-group name="null">
-          <context context-type="linenumber">18</context>
+              or create an account
+            </source><target state="new">
+              or create an account
+            </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">40</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit>
+      </trans-unit>
+      
       
       
       <trans-unit id="c32ef07f8803a223a83ed17024b38e8d82292407">
@@ -1055,13 +1065,10 @@
         <context-group name="null">
           <context context-type="linenumber">54</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">44</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">47</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">106</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">106</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">52</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">54</context></context-group></trans-unit><trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">51</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">54</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/reset-password/reset-password.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">106</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">106</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">52</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">54</context></context-group></trans-unit><trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source><target state="new">Click here to reset your password</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/login/login.component.html</context>
-          <context context-type="linenumber">50</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">57</context></context-group></trans-unit>
       
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
@@ -1069,42 +1076,48 @@
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">57</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">77</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">64</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">77</context></context-group></trans-unit><trans-unit id="f5d783c0613d323fdd20074ffbc519ee715a4f2b" datatype="html">
+        <source>Or sign in with</source><target state="new">Or sign in with</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/login/login.component.html</context>
+          <context context-type="linenumber">68</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
         <source>Forgot your password</source>
         <target>Ξεχάσατε τον κωδικό σύνδεσης</target>
         <context-group name="null">
           <context context-type="linenumber">58</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">63</context></context-group></trans-unit><trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">83</context></context-group></trans-unit><trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>
       We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
     </source><target state="new">
       We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
     </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">70</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">90</context></context-group></trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
         <source>Email</source>
         <target>E-mail</target>
         <context-group name="null">
           <context context-type="linenumber">43</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">75</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.html</context><context context-type="linenumber">4</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">95</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">94</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">46</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.html</context><context context-type="linenumber">4</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
       <trans-unit id="69b6ac577a19acc39fc0c22342092f327fff2529">
         <source>Email address</source>
         <target>Διεύθυνση e-mail</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">77</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">97</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-ask-send-email/verify-account-ask-send-email.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit>
       <trans-unit id="78be69e4d26b3b654c49962839d8545e61bf8b55">
         <source>Send me an email to reset my password</source>
         <target>Στείλτε μου ένα e-mail για επαναφορά του κωδικού μου</target>
         <context-group name="null">
           <context context-type="linenumber">82</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">90</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">110</context></context-group></trans-unit>
       <trans-unit id="2ba14c37f3b23553b2602c5e535d0ff4916f24aa">
         <source>
     Reset my password
@@ -1896,7 +1909,7 @@
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">30</context></context-group></trans-unit>
       
       <trans-unit id="39702b643cfe3d5b96a4587c1b44a29fa665406c">
         <source>Add this caption</source>
@@ -1904,7 +1917,7 @@
         <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">41</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/shared/video-caption-add-modal.component.html</context><context context-type="linenumber">42</context></context-group></trans-unit>
       <trans-unit id="fdf7cbdc140d0aab0f0b6c06065a0fd448ed6a2e">
         <source>Title</source>
         <target>Τίτλος</target>
@@ -2696,7 +2709,7 @@
         <context-group name="null">
           <context context-type="linenumber">215</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">266</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">21</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">20</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">266</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">50</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">39</context></context-group></trans-unit>
       <trans-unit id="bd499ca7913bb5408fd139a4cb4f863852d5f318">
         <source>Get more information</source>
         <target>Δείτε περισσότερες πληροφορίες</target>
@@ -2903,11 +2916,8 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-modal.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit><trans-unit id="3a23875897fb8099f85410700fcca415626621a3" datatype="html">
         <source>Follow domain</source><target state="new">Follow domain</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
-          <context context-type="linenumber">15</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
       
       
       <trans-unit id="25925fc5826bc5b3eeae7c45b08b0ed74b9e2954">
@@ -2916,7 +2926,37 @@
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">8</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">9</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">30</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit><trans-unit id="1e5e23363e949f7dcbaf034bdb141a561132a10e" datatype="html">
+        <source>Clear filters</source><target state="new">Clear filters</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
+          <context context-type="linenumber">34</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="45cc8ca94b5a50842a9a8ef804a5ab089a38ae5c">
         <source>ID</source>
         <target>ID</target>
@@ -2930,14 +2970,14 @@
         <context-group name="null">
           <context context-type="linenumber">17</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">16</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="873b72903b1858a9cd6c8967521030b4d7d1435b">
         <source>State</source>
         <target>Κατάσταση</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="029bd95d7fe7f3660953c216bf96f6b5243b30ec" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">32</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit><trans-unit id="029bd95d7fe7f3660953c216bf96f6b5243b30ec" datatype="html">
         <source>Delayed.</source><target state="new">Delayed.</target>
         
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">47</context></context-group></trans-unit><trans-unit id="03d7f3be3358b206b0cf38f0149836526f2e97ab" datatype="html">
@@ -2960,35 +3000,53 @@
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">19</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">24</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">46</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">25</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">28</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">42</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">31</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit>
       <trans-unit id="7823909fb1d8d313382f6f4bd842f1a7ef6f08d1">
         <source>Accepted</source>
         <target>Έγινε αποδοχή</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">28</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">34</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit>
       <trans-unit id="e6a27066251ca1e04c5be86ad758380856df2506">
         <source>Pending</source>
         <target>Εκκρεμεί</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">29</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">35</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">35</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">44</context></context-group></trans-unit>
       <trans-unit id="6fc5e65900ae1415d3170d5d2842f0dcae1b6645">
         <source>Accept</source>
         <target>Αποδοχή</target>
         <context-group name="null">
           <context context-type="linenumber">41</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">36</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">41</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">42</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">41</context></context-group></trans-unit>
       <trans-unit id="4a5613f6b472c1ed863dff1be932913a251f27a2">
         <source>Refuse</source>
         <target>Άρνηση</target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">37</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="270a185f179774aa3cee3120ed4f5650e8816b9f" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">43</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">42</context></context-group></trans-unit><trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
+        <source>No follower found matching current filters.</source><target state="new">No follower found matching current filters.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
+          <context context-type="linenumber">55</context>
+        </context-group>
+      </trans-unit><trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
+        <source>Your instance doesn't have any follower.</source><target state="new">Your instance doesn't have any follower.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+      </trans-unit><trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
+        <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> followers</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> followers</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit><trans-unit id="270a185f179774aa3cee3120ed4f5650e8816b9f" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action }}"/></source><target state="new"><x id="INTERPOLATION" equiv-text="{{ action }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-modal.component.html</context>
@@ -3001,16 +3059,41 @@
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">22</context></context-group></trans-unit><trans-unit id="107f0fef40ba00a1a183a03eba85054ed8413f92" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">26</context></context-group></trans-unit><trans-unit id="107f0fef40ba00a1a183a03eba85054ed8413f92" datatype="html">
         <source>Redundancy allowed <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source><target state="new">Redundancy allowed <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">25</context></context-group></trans-unit><trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
-        <source>Follow domains</source><target state="new">Follow domains</target>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit><trans-unit id="8cffa679dff97a096d44fca9348eeaa1867d40aa" datatype="html">
+        <source>Open instance in a new tab</source><target state="new">Open instance in a new tab</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">37</context>
         </context-group>
-      </trans-unit><trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+      </trans-unit><trans-unit id="d9b4b939363bf385cbb7828c1535f2e2a5e0d362" datatype="html">
+        <source>No host found matching current filters.</source><target state="new">No host found matching current filters.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit><trans-unit id="6f635f2eba7fe60e4266192fbfef20948fbe3b0a" datatype="html">
+        <source>Your instance is not following anyone.</source><target state="new">Your instance is not following anyone.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
+          <context context-type="linenumber">63</context>
+        </context-group>
+      </trans-unit><trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
+        <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit><trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
+        <source>Follow domains</source><target state="new">Follow domains</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">70</context></context-group></trans-unit><trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source><target state="new">My videos duplicated by remote instances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
@@ -3073,7 +3156,7 @@
         <context-group name="null">
           <context context-type="linenumber">43</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">124</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">124</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit><trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">124</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">124</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">48</context></context-group></trans-unit><trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>
           Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong>"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong>"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/>"/>
           At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
@@ -3158,59 +3241,53 @@
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">21</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="08ea8692dc2a7050026df26fc39b22960bde9de5">
         <source>Username <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
         <target>Όνομα χρήστη <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">42</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">45</context></context-group></trans-unit>
       <trans-unit id="df84781eeb873f037ee688789bde034be9b49074">
         <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
         <target>Όριο ανεβάσματος βίντεο <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">44</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">47</context></context-group></trans-unit>
       <trans-unit id="adba7c8b43e42581460fbe5d08b5cb5ab60eba4b">
         <source>(banned)</source>
         <target>(έχει αποκλειστεί)</target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">78</context></context-group></trans-unit><trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">81</context></context-group></trans-unit><trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
         <source>Open account in a new tab</source><target state="new">Open account in a new tab</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
-          <context context-type="linenumber">65</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
-          <context context-type="linenumber">27</context>
-        </context-group>
-      </trans-unit>
+        
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">68</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">57</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">31</context></context-group></trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
         <source>User's email must be verified to login</source>
         <target>Το e-mail του χρήστη πρέπει να είναι επιβεβαιωμένο για τη σύνδεση</target>
         <context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">85</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">88</context></context-group></trans-unit>
       <trans-unit id="79cee9973620b2592ff2824c525aa8ed0b5e2b8b">
         <source>User's email is verified / User can login without email verification</source>
         <target>Το e-mail του χρήστη έχει επιβεβαιωθεί / Ο χρήστης μπορεί να συνδεθεί χωρίς επιβεβαίωση e-mail</target>
         <context-group name="null">
           <context context-type="linenumber">76</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">89</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">92</context></context-group></trans-unit>
       <trans-unit id="a9587caabf0dc5d824f817baae1c2f5521d9b1ee">
         <source>Ban reason:</source>
         <target>Λόγος αποκλεισμού:</target>
         <context-group name="null">
           <context context-type="linenumber">95</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">108</context></context-group></trans-unit><trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">111</context></context-group></trans-unit><trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
@@ -3260,82 +3337,110 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/moderation.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit><trans-unit id="91bd2d52b840951d3b1f5830b023bee8bca91293" datatype="html">
         <source>Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source><target state="new">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit>
       <trans-unit id="b14fd2fc28c5eecd05554d2bcbc3a938c599e2bf">
         <source>Video name <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
         <target>Όνομα βίντεο <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">22</context></context-group></trans-unit><trans-unit id="c6233e4d80607c136c6b4b590604db3af789ee9d" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="c6233e4d80607c136c6b4b590604db3af789ee9d" datatype="html">
         <source>Video URL</source><target state="new">Video URL</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit><trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
         <source>Total size</source><target state="new">Total size</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit><trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">25</context></context-group></trans-unit><trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
         <source>List redundancies</source><target state="new">List redundancies</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">34</context></context-group></trans-unit><trans-unit id="897116a91d135b1552880aed6050814a4a0df28a" datatype="html">
+        <source>Your instance doesn't mirror any video.</source><target state="new">Your instance doesn't mirror any video.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
-          <context context-type="linenumber">33</context>
+          <context context-type="linenumber">77</context>
+        </context-group>
+      </trans-unit><trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
+        <source>Your instance has no mirrored videos.</source><target state="new">Your instance has no mirrored videos.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
+          <context context-type="linenumber">78</context>
         </context-group>
       </trans-unit><trans-unit id="0e96ed54157e69989a2c0bcce2f62399accdaa27" datatype="html">
         <source>Enabled strategies stats</source><target state="new">Enabled strategies stats</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">75</context></context-group></trans-unit><trans-unit id="0f6e6ec286d43c14f16444a077639090f38e29de" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">87</context></context-group></trans-unit><trans-unit id="0f6e6ec286d43c14f16444a077639090f38e29de" datatype="html">
         <source>
       No redundancy strategy is enabled on your instance.
     </source><target state="new">
       No redundancy strategy is enabled on your instance.
     </target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">79</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">91</context></context-group></trans-unit>
       <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a">
         <source>Sensitive</source>
         <target>Ευαίσθητο</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">11</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">25</context></context-group></trans-unit>
       <trans-unit id="b748c96a1ee98d2fa9a645fb71838f5d4938855b">
         <source>Unfederated</source>
         <target>Εκτός ομόσπονδης αναμετάδοσης</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">26</context></context-group></trans-unit>
       <trans-unit id="a7f42da3bb4eea0b71b0a20a2aff6612a82cab99">
         <source>Date <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
         <target>Ημερομηνία <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">27</context></context-group></trans-unit><trans-unit id="1c16132124fd96151ccf858aad5a98108df6c93a" datatype="html">
+        <source>Video was blacklisted</source><target state="new">Video was blacklisted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
+          <context context-type="linenumber">50</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">89</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
         <source>Go to the video</source>
         <target>Μετάβαση στο βίντεο</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">28</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">33</context></context-group></trans-unit>
       <trans-unit id="030b4423b92167200e39519599f9b863b4f7c62c">
         <source>Actions</source>
         <target>Ενέργειες</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">38</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">57</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">72</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">123</context></context-group></trans-unit>
       <trans-unit id="7963019b5535b51efa399e6a62b163f3e04d296f">
         <source>Blacklist reason:</source>
         <target>Λόγος αναθεώρησης:</target>
         <context-group name="null">
           <context context-type="linenumber">43</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">46</context></context-group></trans-unit><trans-unit id="973655a52a60219d177a837cd2c75d640f7bc521" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">82</context></context-group></trans-unit><trans-unit id="88a2cc2d9ca0506186bbfab6c4e0c32c44a9ee98" datatype="html">
+        <source>No blacklisted video found matching current filters.</source><target state="new">No blacklisted video found matching current filters.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
+          <context context-type="linenumber">93</context>
+        </context-group>
+      </trans-unit><trans-unit id="294036a9ad4dd71531d3032678d9ff00d8ff9ebb" datatype="html">
+        <source>No blacklisted video found.</source><target state="new">No blacklisted video found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
+          <context context-type="linenumber">94</context>
+        </context-group>
+      </trans-unit><trans-unit id="973655a52a60219d177a837cd2c75d640f7bc521" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blacklisted videos</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blacklisted videos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
@@ -3366,40 +3471,104 @@
         <context-group name="null">
           <context context-type="linenumber">26</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">31</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/moderation-comment-modal.component.html</context><context context-type="linenumber">31</context></context-group></trans-unit><trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
+        <source>Advanced report filters</source><target state="new">Advanced report filters</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit><trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
+        <source>Unsolved reports</source><target state="new">Unsolved reports</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+      </trans-unit><trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
+        <source>Accepted reports</source><target state="new">Accepted reports</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit><trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
+        <source>Refused reports</source><target state="new">Refused reports</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit><trans-unit id="1c33f537774e1418d848442439b6c0fc62d9af47" datatype="html">
+        <source>Reports with blacklisted videos</source><target state="new">Reports with blacklisted videos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit><trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
+        <source>Reports with deleted videos</source><target state="new">Reports with deleted videos</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">23</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2">
         <source>Reporter</source>
         <target>Αναφέρθηκε από</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">40</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context><context context-type="linenumber">7</context></context-group></trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
         <source>Video</source>
         <target>Βίντεο</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">14</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">9</context></context-group></trans-unit><trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
-        <source>Open video in a new tab</source><target state="new">Open video in a new tab</target>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">41</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">14</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">10</context></context-group></trans-unit><trans-unit id="dee48932053451ee2dfafe5500a5262cd4220d5e" datatype="html">
+        <source>This video has been reported multiple times.</source><target state="new">This video has been reported multiple times.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
-          <context context-type="linenumber">46</context>
+          <context context-type="linenumber">80</context>
         </context-group>
-      </trans-unit>
+      </trans-unit><trans-unit id="70bedf516507a286eb030398795bdaef40500929" datatype="html">
+        <source>by <x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> on <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </source><target state="new">by <x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> on <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">91</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">107</context>
+        </context-group>
+      </trans-unit><trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
+        <source>Video was deleted</source><target state="new">Video was deleted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">98</context>
+        </context-group>
+      </trans-unit><trans-unit id="7c6eca36ec5dfbab2049ec1c58f8b6fe9d71c23b" datatype="html">
+        <source>No video abuses found matching current filters.</source><target state="new">No video abuses found matching current filters.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">141</context>
+        </context-group>
+      </trans-unit><trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
+        <source>No video abuses found.</source><target state="new">No video abuses found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit><trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
+        <source>Open video in a new tab</source><target state="new">Open video in a new tab</target>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">42</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">74</context></context-group></trans-unit>
       <trans-unit id="7e7ad19f1bcc2c33cdba4c1ad25e2b398ad453d9">
         <source>State <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
         <target>Κατάσταση <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">17</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit><trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">43</context></context-group></trans-unit><trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
         <source>Score <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source><target state="new">Score <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
-          <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">24</context></context-group></trans-unit>
       <trans-unit id="c6ab75e099e131d7a4f94e1732e7436d8fc386c7">
         <source>Go to the account</source>
         <target>Μετάβαση στον λογαριασμό</target>
@@ -3407,23 +3576,55 @@
           <context context-type="linenumber">27</context>
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-ownership/my-account-ownership.component.html</context><context context-type="linenumber">27</context></context-group></trans-unit>
-      <trans-unit id="e330cbadca2d8639aabf525d5fe7e5b62d324ee2">
-        <source>Reason:</source>
-        <target>Λόγος:</target>
-        <context-group name="null">
-          <context context-type="linenumber">53</context>
-        </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">68</context></context-group></trans-unit><trans-unit id="ba097ecce2dc3aeaf236f762938d8c8c4748c59a" datatype="html">
-        <source>Note:</source><target state="new">Note:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
-          <context context-type="linenumber">72</context>
-        </context-group>
-      </trans-unit><trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
+      <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit><trans-unit id="f0045181fddf6e1642314ee5464667098ac18d9d" datatype="html">
+        <source>
+          <x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>
+        </source><target state="new">
+          <x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit><trans-unit id="730ae657d91e79c45d0685a7060cfea40ea8ea85" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</source><target state="new">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit><trans-unit id="4dbabcc6e79125d4b798ba8139a40202db712475" datatype="html">
+        <source>Reportee</source><target state="new">Reportee</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">27</context>
+        </context-group>
+      </trans-unit><trans-unit id="28b2bd6301b8655f46a26faf4db7f11e06be1747" datatype="html">
+        <source>
+          <x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>
+        </source><target state="new">
+          <x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span>"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span>"/>
+        </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">40</context>
+        </context-group>
+      </trans-unit><trans-unit id="9f8e4923506fc6890efb71d403fc048f22dd616c" datatype="html">
+        <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reports} }</source><target state="new">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reports} }</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit><trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
+        <source>Updated</source><target state="new">Updated</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">47</context>
         </context-group>
       </trans-unit>
       
@@ -3435,32 +3636,41 @@
         </context-group>
       <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-auto-blacklist-list/video-auto-blacklist-list.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-auto-blacklist-list/video-auto-blacklist-list.component.html</context><context context-type="linenumber">17</context></context-group></trans-unit><trans-unit id="a3ae5c724857d00c006273db314041ab0664c269" datatype="html">
         <source>Mute domain</source><target state="new">Mute domain</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
-          <context context-type="linenumber">11</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group></trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
         <target>Κόμβος</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">18</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">5</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">26</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.html</context><context context-type="linenumber">12</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">5</context></context-group></trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4">
         <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></source>
         <target>Τέθηκε σε σίγαση σε <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon>"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon>"/></target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">11</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.html</context><context context-type="linenumber">13</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">27</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.html</context><context context-type="linenumber">13</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.html</context><context context-type="linenumber">13</context></context-group></trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
         <source>Unmute</source>
         <target>Εκτός σίγασης</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">29</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">21</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.html</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">42</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">49</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.html</context><context context-type="linenumber">23</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-server-blocklist.component.html</context><context context-type="linenumber">23</context></context-group></trans-unit><trans-unit id="4cac34ce105daa25964c217fdf0515a0a6ee5db9" datatype="html">
+        <source>No server found matching current filters.</source><target state="new">No server found matching current filters.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+      </trans-unit><trans-unit id="0ba22bd964baaf0c2f85d6731fccca31dbf06dae" datatype="html">
+        <source>No server found.</source><target state="new">No server found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+      </trans-unit><trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
@@ -3472,24 +3682,30 @@
     </source><target state="new">
       It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
     </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
-          <context context-type="linenumber">37</context>
-        </context-group>
-      </trans-unit><trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">72</context></context-group></trans-unit><trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source><target state="new">Mute domains</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
-          <context context-type="linenumber">35</context>
-        </context-group>
-      </trans-unit>
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">59</context></context-group></trans-unit>
       <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92">
         <source>Account</source>
         <target>Λογαριασμός</target>
         <context-group name="null">
           <context context-type="linenumber">12</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">10</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit><trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">22</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-blocklist/my-account-blocklist.component.html</context><context context-type="linenumber">12</context></context-group></trans-unit><trans-unit id="33c4091a2a2438ba655caa47ede7f7a82f5f0297" datatype="html">
+        <source>No account found matching current filters.</source><target state="new">No account found matching current filters.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
+          <context context-type="linenumber">58</context>
+        </context-group>
+      </trans-unit><trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
+        <source>No account found.</source><target state="new">No account found.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
+          <context context-type="linenumber">59</context>
+        </context-group>
+      </trans-unit><trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</source><target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
@@ -3617,7 +3833,7 @@
         <context-group name="null">
           <context context-type="linenumber">22</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">29</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">47</context></context-group></trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd">
         <source>System</source>
         <target>Σύστημα</target>
@@ -3788,7 +4004,7 @@
       <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">17</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">3</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">114</context></context-group></trans-unit><trans-unit id="05f5612d42b02be4d6d9e0a99585ae7e30a91780" datatype="html">
         <source>Strategy</source><target state="new">Strategy</target>
         
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">21</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">22</context></context-group></trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
         <source>Terms</source>
         <target>Όροι</target>
@@ -4720,19 +4936,13 @@
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">8</context></context-group></trans-unit><trans-unit id="a5707e9905e079605243397ee111b8be449941aa" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">9</context></context-group></trans-unit><trans-unit id="a5707e9905e079605243397ee111b8be449941aa" datatype="html">
         <source>See the error</source><target state="new">See the error</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context>
-          <context context-type="linenumber">19</context>
-        </context-group>
-      </trans-unit><trans-unit id="842b1f5e4942fb515ef790308ca9ea6a60b4b331" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">20</context></context-group></trans-unit><trans-unit id="842b1f5e4942fb515ef790308ca9ea6a60b4b331" datatype="html">
         <source>This video was deleted</source><target state="new">This video was deleted</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context>
-          <context context-type="linenumber">36</context>
-        </context-group>
-      </trans-unit><trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
+        
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">37</context></context-group></trans-unit><trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
         <source>Once you delete your account, there is no going back. You will be asked to confirm this action.</source><target state="new">Once you delete your account, there is no going back. You will be asked to confirm this action.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.html</context>
@@ -6495,8 +6705,8 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="53f1b1c721870641753bde76831e4c75b969ac1b" datatype="html">
-        <source>User <x id="INTERPOLATION" equiv-text="{{user.username}}"/> updated.</source><target state="new">User <x id="INTERPOLATION" equiv-text="{{user.username}}"/> updated.</target>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="964865a3cd90b4af99902f071644a4b2aede4c32" datatype="html">
+        <source>User <x id="INTERPOLATION" equiv-text="{{username}}"/> updated.</source><target state="new">User <x id="INTERPOLATION" equiv-text="{{username}}"/> updated.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-update.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7233,6 +7443,12 @@
         </context-group>
       </trans-unit><trans-unit id="890d991273787485fc939391676762a90edd8f34" datatype="html">
         <source>display</source><target state="new">display</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="e5d8bb389c702588877f039d72178f219453a72d" datatype="html">
+        <source>Unknown</source><target state="new">Unknown</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8557,7 +8773,19 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="88aea4de1e1b6ebea31b665286b388d0efb3a84b" datatype="html">
+        <source>Mute server</source><target state="new">Mute server</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="ecc473396f70a6ba41411c9449320f9e8d4cfbcf" datatype="html">
+        <source>Server <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source><target state="new">Server <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="8686834bc4afe42c1991c6c18f0bce174a0e17a6">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source>
         <target>Αφαιρέθηκε η σίγαση στον κόμβο για τον λογαριασμό <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>.</target>
@@ -8843,7 +9071,25 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="5f316500cde1925ffcdf053a7427b44795161f4e" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="c93a80b6a7d903886843ac3719b34b1794de171f" datatype="html">
+        <source>Unblacklist video</source><target state="new">Unblacklist video</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="9382291d6ebed56e5ae95e020d6b91f39cff468a" datatype="html">
+        <source>Video unblacklisted.</source><target state="new">Video unblacklisted.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="19e5e5956502d977d5dd28fe86cee763d5db2b77" datatype="html">
+        <source>Delete video</source><target state="new">Delete video</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="5f316500cde1925ffcdf053a7427b44795161f4e" datatype="html">
         <source>Encoder</source><target state="new">Encoder</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
@@ -8898,7 +9144,25 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context><context context-type="linenumber">1</context></context-group><context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="a36503b80133639322bcdb973f78bcadbd86b798" datatype="html">
+        <source>Video deleted.</source><target state="new">Video deleted.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="f145e822837d0d1f741db7540dc6cb1cdacd8220" datatype="html">
+        <source>Actions for the reporter</source><target state="new">Actions for the reporter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="2c33a2bd1e9f50f870366f281ff903cedf9b6a53" datatype="html">
+        <source>Mute reporter</source><target state="new">Mute reporter</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit><trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
         <source>This video will be duplicated by your instance.</source><target state="new">This video will be duplicated by your instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
@@ -8918,8 +9182,8 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="fb6f1916659a093d943fab8322777922796efe27" datatype="html">
-        <source>Duplicate (redundancy)</source><target state="new">Duplicate (redundancy)</target>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit><trans-unit id="5bad8678a5115610ba1bf56a35256a13e6b07a7b" datatype="html">
+        <source>Mirror</source><target state="new">Mirror</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8931,7 +9195,25 @@
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
-      <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context><context context-type="linenumber">1</context></context-group></trans-unit>
+      <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context><context context-type="linenumber">54</context></context-group></trans-unit><trans-unit id="5c54befce78d70e20c215f10a00e617245f53bc9" datatype="html">
+        <source>Note</source><target state="new">Note</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit><trans-unit id="1d3402b0e60154aaa071f390c63437b701d9048c" datatype="html">
+        <source>The video was deleted</source><target state="new">The video was deleted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">71</context>
+        </context-group>
+      </trans-unit><trans-unit id="076960cf44b4a0e89cc5024a75963844b068b284" datatype="html">
+        <source>The video was blacklisted</source><target state="new">The video was blacklisted</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="dd9f3264feed4935008861c15d81c947124e4ac3">
         <source>Published</source>
         <target>Δημοσιευμένο</target>
