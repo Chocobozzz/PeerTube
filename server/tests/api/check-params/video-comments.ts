@@ -133,7 +133,7 @@ describe('Test video comments API validator', function () {
 
     it('Should fail with a long comment', async function () {
       const fields = {
-        text: 'h'.repeat(3001)
+        text: 'h'.repeat(10001)
       }
       await makePostBodyRequest({ url: server.url, path: pathThread, token: server.accessToken, fields })
     })
@@ -176,7 +176,7 @@ describe('Test video comments API validator', function () {
 
     it('Should fail with a long comment', async function () {
       const fields = {
-        text: 'h'.repeat(3001)
+        text: 'h'.repeat(10001)
       }
       await makePostBodyRequest({ url: server.url, path: pathComment, token: server.accessToken, fields })
     })
