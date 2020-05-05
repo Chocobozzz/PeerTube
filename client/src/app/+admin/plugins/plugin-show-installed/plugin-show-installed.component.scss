@@ -5,9 +5,15 @@ h2 {
   margin-bottom: 20px;
 }
 
-textarea,
 input:not([type=submit]) {
   @include peertube-input-text(340px);
+
+  display: block;
+}
+
+textarea {
+  @include peertube-textarea(340px, 200px);
+
   display: block;
 }
 
