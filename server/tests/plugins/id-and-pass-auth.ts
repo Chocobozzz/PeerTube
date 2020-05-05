@@ -12,7 +12,7 @@ import {
   updateMyUser,
   userLogin,
   wait,
-  login, refreshToken, getConfig, updatePluginSettings
+  login, refreshToken, getConfig, updatePluginSettings, getUsersList
 } from '../../../shared/extra-utils'
 import { User, UserRole, ServerConfig } from '@shared/models'
 import { expect } from 'chai'
@@ -223,6 +223,20 @@ describe('Test id and pass auth plugins', function () {
 
     const crashAuth = auths.find(a => a.authName === 'crash-auth')
     expect(crashAuth).to.not.exist
+  })
+
+  it('Should display plugin auth information in users list', async function () {
+    const res = await getUsersList(server.url, server.accessToken)
+
+    const users: User[] = res.body.data
+
+    const root = users.find(u => u.username === 'root')
+    const crash = users.find(u => u.username === 'crash')
+    const laguna = users.find(u => u.username === 'laguna')
+
+    expect(root.pluginAuth).to.be.null
+    expect(crash.pluginAuth).to.equal('peertube-plugin-test-id-pass-auth-one')
+    expect(laguna.pluginAuth).to.equal('peertube-plugin-test-id-pass-auth-two')
   })
 
   after(async function () {

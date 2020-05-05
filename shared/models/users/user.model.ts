@@ -50,6 +50,8 @@ export interface User {
   noWelcomeModal: boolean
 
   createdAt: Date
+
+  pluginAuth: string | null
 }
 
 export interface MyUserSpecialPlaylist {

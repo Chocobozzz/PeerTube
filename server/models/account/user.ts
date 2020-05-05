@@ -806,7 +806,9 @@ export class UserModel extends Model<UserModel> {
 
       videoChannels: [],
 
-      createdAt: this.createdAt
+      createdAt: this.createdAt,
+
+      pluginAuth: this.pluginAuth
     }
 
     if (parameters.withAdminFlags) {

@@ -46,6 +46,7 @@
       <th i18n>Email</th>
       <th i18n pSortableColumn="videoQuotaUsed">Video quota <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
       <th i18n>Role</th>
+      <th i18n>Auth plugin</th>
       <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 50px;"></th>
     </tr>
@@ -97,7 +98,13 @@
 
       <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
       <td>{{ user.roleLabel }}</td>
+
+      <td>
+        <ng-container *ngIf="user.pluginAuth">{{ user.pluginAuth }}</ng-container>
+      </td>
+
       <td [title]="user.createdAt">{{ user.createdAt }}</td>
+
       <td class="action-cell">
         <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
         </my-user-moderation-dropdown>

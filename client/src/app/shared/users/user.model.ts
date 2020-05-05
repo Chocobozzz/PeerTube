@@ -69,6 +69,8 @@ export class User implements UserServerModel {
   noInstanceConfigWarningModal: boolean
   noWelcomeModal: boolean
 
+  pluginAuth: string | null
+
   createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {
@@ -111,6 +113,8 @@ export class User implements UserServerModel {
     this.notificationSettings = hash.notificationSettings
 
     this.createdAt = hash.createdAt
+
+    this.pluginAuth = hash.pluginAuth
 
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)
