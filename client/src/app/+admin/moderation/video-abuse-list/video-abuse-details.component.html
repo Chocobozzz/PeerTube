@@ -9,7 +9,7 @@
         <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + videoAbuse.reporterAccount.displayName + '&quot;' }" class="chip">
           <img
             class="avatar"
-            [src]="videoAbuse.reporterAccount.avatar.path"
+            [src]="videoAbuse.reporterAccount.avatar?.path"
             (error)="switchToDefaultAvatar($event)"
             alt="Avatar"
           >
@@ -29,7 +29,7 @@
         <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' +videoAbuse.video.channel.ownerAccount.displayName + '&quot;' }" class="chip">
           <img
             class="avatar"
-            [src]="videoAbuse.video.channel.ownerAccount?.avatar.path"
+            [src]="videoAbuse.video.channel.ownerAccount?.avatar?.path"
             (error)="switchToDefaultAvatar($event)"
             alt="Avatar"
           >
