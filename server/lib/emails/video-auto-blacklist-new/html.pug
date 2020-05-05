@@ -1,0 +1,17 @@
+extends ../common/greetings
+include ../common/mixins
+
+block title
+  | A video is pending moderation
+
+block content
+  p
+    | A recently added video was auto-blacklisted and requires moderator review before going public:
+    |
+    a(href=videoUrl) #{videoName}
+    |
+    | by #[+channel(channel)].
+  p.
+    Apart from the publisher and the moderation team, no one will be able to see the video until you
+    unblacklist it. If you trust the publisher, any admin can whitelist the user for later videos so
+    that they don't require approval before going public.

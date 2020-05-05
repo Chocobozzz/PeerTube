@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { UserRight, VideoAbuseCreate, VideoAbuseState } from '../../../../shared'
+import { UserRight, VideoAbuseCreate, VideoAbuseState, VideoAbuse } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -24,6 +24,7 @@ import { Notifier } from '../../../lib/notifier'
 import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
 import { MVideoAbuseAccountVideo } from '../../../typings/models/video'
 import { getServerActor } from '@server/models/application/application'
+import { MAccountDefault } from '@server/typings/models'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -117,9 +118,11 @@ async function deleteVideoAbuse (req: express.Request, res: express.Response) {
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoInstance = res.locals.videoAll
   const body: VideoAbuseCreate = req.body
+  let reporterAccount: MAccountDefault
+  let videoAbuseJSON: VideoAbuse
 
-  const videoAbuse = await sequelizeTypescript.transaction(async t => {
-    const reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
+  const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
+    reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,
@@ -137,14 +140,19 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
       await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance, t)
     }
 
-    auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseInstance.toFormattedJSON()))
+    videoAbuseJSON = videoAbuseInstance.toFormattedJSON()
+    auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseJSON))
 
     return videoAbuseInstance
   })
 
-  Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
+  Notifier.Instance.notifyOnNewVideoAbuse({
+    videoAbuse: videoAbuseJSON,
+    videoAbuseInstance,
+    reporter: reporterAccount.Actor.getIdentifier()
+  })
 
   logger.info('Abuse report for video %s created.', videoInstance.name)
 
-  return res.json({ videoAbuse: videoAbuse.toFormattedJSON() }).end()
+  return res.json({ videoAbuseJSON }).end()
 }

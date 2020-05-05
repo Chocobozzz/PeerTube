@@ -1,0 +1,10 @@
+extends ../common/greetings
+
+block title
+  | A new user registered
+
+block content
+  - var mail = user.email || user.pendingEmail;
+  p
+    | User #[a(href=`${WEBSERVER.URL}/accounts/${user.username}`) #{user.username}] just registered. 
+    | You might want to contact them at #[a(href=`mailto:${mail}`) #{mail}].

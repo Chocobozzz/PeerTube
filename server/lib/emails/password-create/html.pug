@@ -1,0 +1,10 @@
+extends ../common/greetings
+
+block title
+  | Password creation for your account
+
+block content
+  p.
+    Welcome to #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}], your PeerTube instance. Your username is: #{username}.
+    Please set your password by following #[a(href=createPasswordUrl) this link]: #[a(href=createPasswordUrl) #{createPasswordUrl}] 
+    (this link will expire within seven days).

@@ -1,0 +1,11 @@
+extends ../common/greetings
+
+block title
+  | Someone mentioned you
+
+block content
+  p.
+    #[a(href=accountUrl title=handle) #{accountName}] mentioned you in a comment on video 
+    "#[a(href=videoUrl) #{video.name}]":
+  blockquote #{comment.text}
+  br(style="display: none;")

@@ -1,0 +1,267 @@
+//-
+  The email background color is defined in three places:
+  1. body tag: for most email clients
+  2. center tag: for Gmail and Inbox mobile apps and web versions of Gmail, GSuite, Inbox, Yahoo, AOL, Libero, Comcast, freenet, Mail.ru, Orange.fr
+  3. mso conditional: For Windows 10 Mail
+- var backgroundColor = "#fff";
+- var mainColor = "#f2690d";
+doctype html
+head
+  // This template is heavily adapted from the Cerberus Fluid template. Kudos to them!
+  meta(charset='utf-8')
+  //- utf-8 works for most cases
+  meta(name='viewport' content='width=device-width')
+  //- Forcing initial-scale shouldn't be necessary
+  meta(http-equiv='X-UA-Compatible' content='IE=edge')
+  //- Use the latest (edge) version of IE rendering engine
+  meta(name='x-apple-disable-message-reformatting')
+  //- Disable auto-scale in iOS 10 Mail entirely
+  meta(name='format-detection' content='telephone=no,address=no,email=no,date=no,url=no')
+  //- Tell iOS not to automatically link certain text strings.
+  meta(name='color-scheme' content='light')
+  meta(name='supported-color-schemes' content='light')
+  //- The title tag shows in email notifications, like Android 4.4.
+  title #{subject}
+  //- What it does: Makes background images in 72ppi Outlook render at correct size.
+  //if gte mso 9
+    xml
+      o:officedocumentsettings
+        o:allowpng
+          o:pixelsperinch 96
+  //- CSS Reset : BEGIN
+  style.
+    /* What it does: Tells the email client that only light styles are provided but the client can transform them to dark. A duplicate of meta color-scheme meta tag above. */
+    :root {
+      color-scheme: light;
+      supported-color-schemes: light;
+    }
+    /* What it does: Remove spaces around the email design added by some email clients. */
+    /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
+    html,
+    body {
+      margin: 0 auto !important;
+      padding: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+    }
+    /* What it does: Stops email clients resizing small text. */
+    * {
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    }
+    /* What it does: Centers email on Android 4.4 */
+    div[style*="margin: 16px 0"] {
+      margin: 0 !important;
+    }
+    /* What it does: forces Samsung Android mail clients to use the entire viewport */
+    #MessageViewBody, #MessageWebViewDiv{
+      width: 100% !important;
+    }
+    /* What it does: Stops Outlook from adding extra spacing to tables. */
+    table,
+    td {
+      mso-table-lspace: 0pt !important;
+      mso-table-rspace: 0pt !important;
+    }
+    /* What it does: Fixes webkit padding issue. */
+    table {
+      border-spacing: 0 !important;
+      border-collapse: collapse !important;
+      table-layout: fixed !important;
+      margin: 0 auto !important;
+    }
+    /* What it does: Uses a better rendering method when resizing images in IE. */
+    img {
+      -ms-interpolation-mode:bicubic;
+    }
+    /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
+    a {
+      text-decoration: none;
+    }
+    a:not(.nocolor) {
+      color: #{mainColor};
+    }
+    a.nocolor {
+      color: inherit !important;
+    }
+    /* What it does: A work-around for email clients meddling in triggered links. */
+    a[x-apple-data-detectors],  /* iOS */
+    .unstyle-auto-detected-links a,
+    .aBn {
+      border-bottom: 0 !important;
+      cursor: default !important;
+      color: inherit !important;
+      text-decoration: none !important;
+      font-size: inherit !important;
+      font-family: inherit !important;
+      font-weight: inherit !important;
+      line-height: inherit !important;
+    }
+    /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
+    .a6S {
+      display: none !important;
+      opacity: 0.01 !important;
+    }
+    /* What it does: Prevents Gmail from changing the text color in conversation threads. */
+    .im {
+      color: inherit !important;
+    }
+    /* If the above doesn't work, add a .g-img class to any image in question. */
+    img.g-img + div {
+      display: none !important;
+    }
+    /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
+    /* Create one of these media queries for each additional viewport size you'd like to fix */
+    /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
+    @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
+      u ~ div .email-container {
+        min-width: 320px !important;
+      }
+    }
+    /* iPhone 6, 6S, 7, 8, and X */
+    @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
+      u ~ div .email-container {
+        min-width: 375px !important;
+      }
+    }
+    /* iPhone 6+, 7+, and 8+ */
+    @media only screen and (min-device-width: 414px) {
+      u ~ div .email-container {
+        min-width: 414px !important;
+      }
+    }
+  //- CSS Reset : END
+  //- CSS for PeerTube : START
+  style.
+    blockquote {
+      margin-left: 0;
+      padding-left: 20px;
+      border-left: 2px solid #f2690d;
+    }
+  //- CSS for PeerTube : END
+  //- Progressive Enhancements : BEGIN
+  style.
+    /* What it does: Hover styles for buttons */
+    .button-td,
+    .button-a {
+      transition: all 100ms ease-in;
+    }
+    .button-td-primary:hover,
+    .button-a-primary:hover {
+      background: #555555 !important;
+      border-color: #555555 !important;
+    }
+    /* Media Queries */
+    @media screen and (max-width: 600px) {
+      /* What it does: Adjust typography on small screens to improve readability */
+      .email-container p {
+        font-size: 17px !important;
+      }
+    }
+  //- Progressive Enhancements : END
+
+body(width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #{backgroundColor};")
+  center(role='article' aria-roledescription='email' lang='en' style='width: 100%; background-color: #{backgroundColor};')
+    //if mso | IE
+      table(role='presentation' border='0' cellpadding='0' cellspacing='0' width='100%' style='background-color: #fff;')
+        tr
+          td
+    //- Visually Hidden Preheader Text : BEGIN
+    div(style='max-height:0; overflow:hidden; mso-hide:all;' aria-hidden='true')
+      block preheader
+    //- Visually Hidden Preheader Text : END
+
+    //- Create white space after the desired preview text so email clients don’t pull other distracting text into the inbox preview. Extend as necessary.
+    //- Preview Text Spacing Hack : BEGIN
+    div(style='display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;')
+      | &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+    //- Preview Text Spacing Hack : END
+
+    //-
+      Set the email width. Defined in two places:
+      1. max-width for all clients except Desktop Windows Outlook, allowing the email to squish on narrow but never go wider than 600px.
+      2. MSO tags for Desktop Windows Outlook enforce a 600px width.
+    .email-container(style='max-width: 600px; margin: 0 auto;')
+      //if mso
+        table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='600')
+          tr
+            td
+      //- Email Body : BEGIN
+      table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;')
+        //- 1 Column Text + Button : BEGIN
+        tr
+          td(style='background-color: #ffffff;')
+            table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%')
+              tr
+                td(style='padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;')
+                  table(role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%")
+                    tr
+                      td(width="40px")
+                        img(src=`${WEBSERVER.URL}/client/assets/images/icons/icon-192x192.png` width="auto" height="30px" alt="icon" border="0" style="height: 30px; background: #ffffff; font-family: sans-serif; font-size: 15px; line-height: 15px; color: #555555;")
+                      td
+                        h1(style='margin: 10px 0 10px 0; font-family: sans-serif; font-size: 25px; line-height: 30px; color: #333333; font-weight: normal;') 
+                          block title
+                            if title
+                              | #{title}
+                            else
+                              | Something requires your attention
+                  p(style='margin: 0;')
+                    block body
+              if action
+                tr
+                  td(style='padding: 0 20px;')
+                    //- Button : BEGIN
+                    table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' style='margin: auto;')
+                      tr
+                        td.button-td.button-td-primary(style='border-radius: 4px; background: #222222;')
+                          a.button-a.button-a-primary(href=action.url style='background: #222222; border: 1px solid #000000; font-family: sans-serif; font-size: 15px; line-height: 15px; text-decoration: none; padding: 13px 17px; color: #ffffff; display: block; border-radius: 4px;') #{action.text}
+                    //- Button : END
+        //- 1 Column Text + Button : END
+        //- Clear Spacer : BEGIN
+        tr
+          td(aria-hidden='true' height='20' style='font-size: 0px; line-height: 0px;')
+        br
+        //- Clear Spacer : END
+        //- 1 Column Text : BEGIN
+        if username
+          tr
+            td(style='background-color: #cccccc;')
+              table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%')
+                tr
+                  td(style='padding: 20px; font-family: sans-serif; font-size: 15px; line-height: 20px; color: #555555;')
+                    p(style='margin: 0;')
+                      | You are receiving this email as part of your notification settings on #{WEBSERVER.HOST} for your account #{username}.
+        //- 1 Column Text : END
+      //- Email Body : END
+      //- Email Footer : BEGIN
+      table(align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;')
+        tr
+          td(style='padding: 20px; padding-bottom: 0px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
+            webversion
+              a.nocolor(href=`${WEBSERVER.URL}/my-account/notifications` style='color: #cccccc; font-weight: bold;') View in your notifications
+            br
+        tr
+          td(style='padding: 20px; padding-top: 10px; font-family: sans-serif; font-size: 12px; line-height: 15px; text-align: center; color: #888888;')
+            unsubscribe
+              a.nocolor(href=`${WEBSERVER.URL}/my-account/settings#notifications` style='color: #888888;') Manage your notification preferences in your profile
+            br
+      //- Email Footer : END
+      //if mso
+    //- Full Bleed Background Section : BEGIN
+    table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style=`background-color: ${mainColor};`)
+      tr
+        td
+          .email-container(align='center' style='max-width: 600px; margin: auto;')
+            //if mso
+              table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='600' align='center')
+                tr
+                  td
+            table(role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%')
+              tr
+                td(style='padding: 20px; text-align: left; font-family: sans-serif; font-size: 12px; line-height: 20px; color: #ffffff;')
+                  table(role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%")
+                    tr
+                      td(valign="top") #[a(href="https://github.com/Chocobozzz/PeerTube" style="color: white !important") PeerTube © 2015-#{new Date().getFullYear()}] #[a(href="https://github.com/Chocobozzz/PeerTube/blob/master/CREDITS.md" style="color: white !important") PeerTube Contributors]
+            //if mso
+    //- Full Bleed Background Section : END
+    //if mso | IE

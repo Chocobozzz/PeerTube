@@ -8,7 +8,8 @@ import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { getAPId } from '../../../helpers/activitypub'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature, MVideoAbuseVideo } from '../../../typings/models'
+import { MActorSignature, MVideoAbuseAccountVideo } from '../../../typings/models'
+import { AccountModel } from '@server/models/account/account'
 
 async function processFlagActivity (options: APProcessorOptions<ActivityCreate | ActivityFlag>) {
   const { activity, byActor } = options
@@ -36,8 +37,9 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
       logger.debug('Reporting remote abuse for video %s.', getAPId(object))
 
       const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: object })
+      const reporterAccount = await sequelizeTypescript.transaction(async t => AccountModel.load(account.id, t))
 
-      const videoAbuse = await sequelizeTypescript.transaction(async t => {
+      const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
         const videoAbuseData = {
           reporterAccountId: account.id,
           reason: flag.content,
@@ -45,15 +47,22 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
           state: VideoAbuseState.PENDING
         }
 
-        const videoAbuseInstance = await VideoAbuseModel.create(videoAbuseData, { transaction: t }) as MVideoAbuseVideo
+        const videoAbuseInstance: MVideoAbuseAccountVideo = await VideoAbuseModel.create(videoAbuseData, { transaction: t })
         videoAbuseInstance.Video = video
+        videoAbuseInstance.Account = reporterAccount
 
         logger.info('Remote abuse for video uuid %s created', flag.object)
 
         return videoAbuseInstance
       })
 
-      Notifier.Instance.notifyOnNewVideoAbuse(videoAbuse)
+      const videoAbuseJSON = videoAbuseInstance.toFormattedJSON()
+
+      Notifier.Instance.notifyOnNewVideoAbuse({
+        videoAbuse: videoAbuseJSON,
+        videoAbuseInstance,
+        reporter: reporterAccount.Actor.getIdentifier()
+      })
     } catch (err) {
       logger.debug('Cannot process report of %s. (Maybe not a video abuse).', getAPId(object), { err })
     }

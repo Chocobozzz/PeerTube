@@ -110,10 +110,10 @@ async function checkNotification (
 
     if (checkType === 'presence') {
       const obj = inspect(base.socketNotifications, { depth: 5 })
-      expect(socketNotification, 'The socket notification is absent. ' + obj).to.not.be.undefined
+      expect(socketNotification, 'The socket notification is absent when is should be present. ' + obj).to.not.be.undefined
     } else {
       const obj = inspect(socketNotification, { depth: 5 })
-      expect(socketNotification, 'The socket notification is present. ' + obj).to.be.undefined
+      expect(socketNotification, 'The socket notification is present when is should not be present. ' + obj).to.be.undefined
     }
   }
 
@@ -125,9 +125,9 @@ async function checkNotification (
                       .find(e => emailNotificationFinder(e))
 
     if (checkType === 'presence') {
-      expect(email, 'The email is absent. ' + inspect(base.emails)).to.not.be.undefined
+      expect(email, 'The email is absent when is should be present. ' + inspect(base.emails)).to.not.be.undefined
     } else {
-      expect(email, 'The email is present. ' + inspect(email)).to.be.undefined
+      expect(email, 'The email is present when is should not be present. ' + inspect(email)).to.be.undefined
     }
   }
 }
@@ -172,12 +172,12 @@ async function checkNewVideoFromSubscription (base: CheckerBaseParams, videoName
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf('Your subscription') !== -1
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkVideoIsPublished (base: CheckerBaseParams, videoName: string, videoUUID: string, type: CheckerType) {
@@ -195,12 +195,12 @@ async function checkVideoIsPublished (base: CheckerBaseParams, videoName: string
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
     return text.includes(videoUUID) && text.includes('Your video')
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkMyVideoImportIsFinished (
@@ -226,14 +226,14 @@ async function checkMyVideoImportIsFinished (
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
     const toFind = success ? ' finished' : ' error'
 
     return text.includes(url) && text.includes(toFind)
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkUserRegistered (base: CheckerBaseParams, username: string, type: CheckerType) {
@@ -251,13 +251,13 @@ async function checkUserRegistered (base: CheckerBaseParams, username: string, t
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
-    return text.includes(' registered ') && text.includes(username)
+    return text.includes(' registered.') && text.includes(username)
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkNewActorFollow (
@@ -291,13 +291,13 @@ async function checkNewActorFollow (
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
-    return text.includes('Your ' + followType) && text.includes(followingDisplayName) && text.includes(followerDisplayName)
+    return text.includes(followType) && text.includes(followingDisplayName) && text.includes(followerDisplayName)
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkNewInstanceFollower (base: CheckerBaseParams, followerHost: string, type: CheckerType) {
@@ -320,13 +320,13 @@ async function checkNewInstanceFollower (base: CheckerBaseParams, followerHost: 
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
     return text.includes('instance has a new follower') && text.includes(followerHost)
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkAutoInstanceFollowing (base: CheckerBaseParams, followerHost: string, followingHost: string, type: CheckerType) {
@@ -351,13 +351,13 @@ async function checkAutoInstanceFollowing (base: CheckerBaseParams, followerHost
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
     return text.includes(' automatically followed a new instance') && text.includes(followingHost)
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkCommentMention (
@@ -385,13 +385,13 @@ async function checkCommentMention (
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text: string = email['text']
 
     return text.includes(' mentioned ') && text.includes(uuid) && text.includes(byAccountDisplayName)
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 let lastEmailCount = 0
@@ -416,11 +416,11 @@ async function checkNewCommentOnMyVideo (base: CheckerBaseParams, uuid: string, 
 
   const commentUrl = `http://localhost:${base.server.port}/videos/watch/${uuid};threadId=${threadId}`
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     return email['text'].indexOf(commentUrl) !== -1
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 
   if (type === 'presence') {
     // We cannot detect email duplicates, so check we received another email
@@ -446,12 +446,12 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf('abuse') !== -1
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
@@ -471,12 +471,12 @@ async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, vi
     }
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text = email['text']
     return text.indexOf(videoUUID) !== -1 && email['text'].indexOf('video-auto-blacklist/list') !== -1
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, type)
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
 }
 
 async function checkNewBlacklistOnMyVideo (
@@ -498,12 +498,12 @@ async function checkNewBlacklistOnMyVideo (
     checkVideo(video, videoName, videoUUID)
   }
 
-  function emailFinder (email: object) {
+  function emailNotificationFinder (email: object) {
     const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf(' ' + blacklistType) !== -1
   }
 
-  await checkNotification(base, notificationChecker, emailFinder, 'presence')
+  await checkNotification(base, notificationChecker, emailNotificationFinder, 'presence')
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,14 @@
+extends ../common/greetings
+
+block title
+  | Account verification
+
+block content
+  p Welcome to PeerTube!
+  p.
+    You just created an account #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}], your new PeerTube instance. 
+    Your username there is: #{username}.
+  p.
+    To start using PeerTube on #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] you must verify your email first! 
+    Please follow #[a(href=verifyEmailUrl) this link] to verify this email belongs to you: #[a(href=verifyEmailUrl) #{verifyEmailUrl}] 
+    If you are not the person who initiated this request, please ignore this email.
