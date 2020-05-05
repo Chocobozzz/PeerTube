@@ -833,7 +833,7 @@
   font-size: 90%;
   color: var(--mainForegroundColor);
   height: $avatar-height;
-  line-height: .8rem;
+  line-height: .9rem;
   margin: .1rem;
   max-width: 320px;
   overflow: hidden;
@@ -857,7 +857,7 @@
   }
 
   &.two-lines {
-    $avatar-height: 1.8rem;
+    $avatar-height: 2rem;
 
     height: $avatar-height;
 
@@ -869,7 +869,6 @@
     div {
       display: flex;
       flex-direction: column;
-      font-size: 80%;
       height: $avatar-height;
       margin-left: .1rem;
       margin-right: .1rem;
