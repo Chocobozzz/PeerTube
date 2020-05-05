@@ -230,7 +230,7 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
 
   @AllowNull(true)
   @Is('VideoPlaylistDescription', value => throwIfNotValid(value, isVideoPlaylistDescriptionValid, 'description', true))
-  @Column
+  @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.DESCRIPTION.max))
   description: string
 
   @AllowNull(false)

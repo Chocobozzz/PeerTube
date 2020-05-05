@@ -92,6 +92,7 @@ async function onVideoFileOptimizerSuccess (videoArg: MVideoWithFile, payload: O
 
     let videoPublished = false
 
+    // Generate HLS version of the max quality file
     const hlsPayload = Object.assign({}, payload, { resolution: videoDatabase.getMaxQualityFile().resolution })
     await createHlsJobIfEnabled(hlsPayload)
 

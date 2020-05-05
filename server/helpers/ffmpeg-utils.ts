@@ -423,6 +423,7 @@ async function buildHLSCommand (command: ffmpeg.FfmpegCommand, options: HLSTrans
   const videoPath = getHLSVideoPath(options)
 
   if (options.copyCodecs) command = presetCopy(command)
+  else if (options.resolution === VideoResolution.H_NOVIDEO) command = presetOnlyAudio(command)
   else command = await buildx264Command(command, options)
 
   command = command.outputOption('-hls_time 4')
