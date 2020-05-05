@@ -1,0 +1,18 @@
+extends ../common/greetings
+include ../common/mixins.pug
+
+block title
+  | A video is pending moderation
+
+block content
+  p
+    | #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] received an abuse report for the #{videoAbuse.video.channel.isLocal ? '' : 'remote '}video "
+    a(href=videoUrl) #{videoAbuse.video.name}
+    | " by #[+channel(videoAbuse.video.channel)]
+    if videoPublishedAt
+      | , published the #{videoPublishedAt}.
+    else
+      | , uploaded the #{videoCreatedAt} but not yet published.
+  p The reporter, #{reporter}, cited the following reason(s):
+  blockquote #{videoAbuse.reason}
+  br(style="display: none;")

@@ -1,0 +1,11 @@
+extends base
+
+block body
+  if username
+    p Hi #{username},
+  else
+    p Hi,
+  block content
+  p
+    | Cheers,#[br]
+    | #{EMAIL.BODY.SIGNATURE}

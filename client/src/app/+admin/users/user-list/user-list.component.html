@@ -9,7 +9,7 @@
 
 <p-table
   [value]="users" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
   [(selection)]="selectedUsers"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
@@ -42,12 +42,12 @@
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th style="width: 40px"></th>
-      <th i18n pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
+      <th pResizableColumn i18n pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
       <th i18n>Email</th>
-      <th i18n pSortableColumn="videoQuotaUsed">Video quota <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
-      <th i18n>Role</th>
-      <th i18n>Auth plugin</th>
-      <th i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 140px;" i18n pSortableColumn="videoQuotaUsed">Video quota <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
+      <th style="width: 120px;" i18n>Role</th>
+      <th style="width: 140px;" pResizableColumn i18n>Auth plugin</th>
+      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th style="width: 50px;"></th>
     </tr>
   </ng-template>
@@ -103,7 +103,7 @@
         <ng-container *ngIf="user.pluginAuth">{{ user.pluginAuth }}</ng-container>
       </td>
 
-      <td [title]="user.createdAt">{{ user.createdAt }}</td>
+      <td [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
 
       <td class="action-cell">
         <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">

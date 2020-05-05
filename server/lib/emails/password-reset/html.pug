@@ -1,0 +1,12 @@
+extends ../common/greetings
+
+block title
+  | Password reset for your account
+
+block content
+  p.
+    A reset password procedure for your account ${to} has been requested on #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}].
+    Please follow #[a(href=resetPasswordUrl) this link] to reset it: #[a(href=resetPasswordUrl) #{resetPasswordUrl}] 
+    (the link will expire within 1 hour)
+  p.
+    If you are not the person who initiated this request, please ignore this email.

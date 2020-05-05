@@ -1,0 +1,11 @@
+extends ../common/greetings
+
+block title
+  | Someone commented your video
+
+block content
+  p.
+    #[a(href=accountUrl title=handle) #{accountName}] added a comment on your video 
+    "#[a(href=videoUrl) #{video.name}]":
+  blockquote #{comment.text}
+  br(style="display: none;")

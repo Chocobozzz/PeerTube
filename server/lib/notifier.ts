@@ -5,7 +5,7 @@ import { UserNotificationModel } from '../models/account/user-notification'
 import { UserModel } from '../models/account/user'
 import { PeerTubeSocket } from './peertube-socket'
 import { CONFIG } from '../initializers/config'
-import { VideoPrivacy, VideoState } from '../../shared/models/videos'
+import { VideoPrivacy, VideoState, VideoAbuse } from '../../shared/models/videos'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import {
   MCommentOwnerVideo,
@@ -77,9 +77,9 @@ class Notifier {
         .catch(err => logger.error('Cannot notify mentions of comment %s.', comment.url, { err }))
   }
 
-  notifyOnNewVideoAbuse (videoAbuse: MVideoAbuseVideo): void {
-    this.notifyModeratorsOfNewVideoAbuse(videoAbuse)
-        .catch(err => logger.error('Cannot notify of new video abuse of video %s.', videoAbuse.Video.url, { err }))
+  notifyOnNewVideoAbuse (parameters: { videoAbuse: VideoAbuse, videoAbuseInstance: MVideoAbuseVideo, reporter: string }): void {
+    this.notifyModeratorsOfNewVideoAbuse(parameters)
+        .catch(err => logger.error('Cannot notify of new video abuse of video %s.', parameters.videoAbuseInstance.Video.url, { err }))
   }
 
   notifyOnVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo): void {
@@ -350,11 +350,15 @@ class Notifier {
     return this.notify({ users: admins, settingGetter, notificationCreator, emailSender })
   }
 
-  private async notifyModeratorsOfNewVideoAbuse (videoAbuse: MVideoAbuseVideo) {
+  private async notifyModeratorsOfNewVideoAbuse (parameters: {
+    videoAbuse: VideoAbuse
+    videoAbuseInstance: MVideoAbuseVideo
+    reporter: string
+  }) {
     const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_ABUSES)
     if (moderators.length === 0) return
 
-    logger.info('Notifying %s user/moderators of new video abuse %s.', moderators.length, videoAbuse.Video.url)
+    logger.info('Notifying %s user/moderators of new video abuse %s.', moderators.length, parameters.videoAbuseInstance.Video.url)
 
     function settingGetter (user: MUserWithNotificationSetting) {
       return user.NotificationSetting.videoAbuseAsModerator
@@ -364,15 +368,15 @@ class Notifier {
       const notification: UserNotificationModelForApi = await UserNotificationModel.create<UserNotificationModelForApi>({
         type: UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS,
         userId: user.id,
-        videoAbuseId: videoAbuse.id
+        videoAbuseId: parameters.videoAbuse.id
       })
-      notification.VideoAbuse = videoAbuse
+      notification.VideoAbuse = parameters.videoAbuseInstance
 
       return notification
     }
 
     function emailSender (emails: string[]) {
-      return Emailer.Instance.addVideoAbuseModeratorsNotification(emails, videoAbuse)
+      return Emailer.Instance.addVideoAbuseModeratorsNotification(emails, parameters)
     }
 
     return this.notify({ users: moderators, settingGetter, notificationCreator, emailSender })

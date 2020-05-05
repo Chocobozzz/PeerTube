@@ -1,8 +1,12 @@
 export type SendEmailOptions = {
   to: string[]
-  subject: string
-  text: string
 
-  fromDisplayName?: string
+  template?: string
+  locals?: { [key: string]: any }
+
+  // override defaults
+  subject?: string
+  text?: string
+  from?: string | { name?: string, address: string }
   replyTo?: string
 }
