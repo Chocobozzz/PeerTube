@@ -9,8 +9,8 @@ import { areValidationErrors } from '../utils'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation'
 import { doesVideoExist } from '../../../helpers/middlewares'
-import { MCommentOwner, MVideo, MVideoFullLight, MVideoId } from '../../../typings/models/video'
-import { MUser } from '@server/typings/models'
+import { MCommentOwner, MVideo, MVideoFullLight, MVideoId, MCommentOwnerVideoReply } from '../../../typings/models/video'
+import { MUser, MUserAccountUrl } from '@server/typings/models'
 
 const listVideoCommentThreadsValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -188,7 +188,7 @@ function isVideoCommentsEnabled (video: MVideo, res: express.Response) {
   return true
 }
 
-function checkUserCanDeleteVideoComment (user: MUser, videoComment: MCommentOwner, res: express.Response) {
+function checkUserCanDeleteVideoComment (user: MUserAccountUrl, videoComment: MCommentOwnerVideoReply, res: express.Response) {
   if (videoComment.isDeleted()) {
     res.status(409)
       .json({ error: 'This comment is already deleted' })
@@ -196,11 +196,16 @@ function checkUserCanDeleteVideoComment (user: MUser, videoComment: MCommentOwne
     return false
   }
 
-  const account = videoComment.Account
-  if (user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) === false && account.userId !== user.id) {
+  const userAccount = user.Account
+
+  if (
+    user.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT) === false && // Not a moderator
+    videoComment.accountId !== userAccount.id && // Not the comment owner
+    videoComment.Video.VideoChannel.accountId !== userAccount.id // Not the video owner
+  ) {
     res.status(403)
       .json({ error: 'Cannot remove video comment of another user' })
-      .end()
+
     return false
   }
 
