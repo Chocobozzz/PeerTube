@@ -22,6 +22,7 @@
 - [Are you going to support advertisements?](#are-you-going-to-support-advertisements)
 - [What is "creation dynamic" and why not modify it?](#what-is-creation-dynamic-and-why-not-modify-it)
 - [I have found a security vulnerability in PeerTube. Where and how should I report it?](#i-have-found-a-security-vulnerability-in-peertube-where-and-how-should-i-report-it)
+- [Does PeerTube ensures federation compatibility with previous version?](#does-peertube-ensures-federation-compatibility-with-previous-version)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -164,3 +165,8 @@ We are always open to discussion about potential PRs bringing in features, even 
 ## I have found a security vulnerability in PeerTube. Where and how should I report it?
 
 We have a policy for contributions related to security. Please refer to [SECURITY.md](./SECURITY.md)
+
+## Does PeerTube ensures federation compatibility with previous version?
+
+We **try** to keep compatibility with the latest minor version (2.3.1 with 2.2 for example).
+We don't have resources to keep compatibility with other versions.
