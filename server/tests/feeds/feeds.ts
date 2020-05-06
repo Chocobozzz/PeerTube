@@ -20,6 +20,7 @@ import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
 import { User } from '../../../shared/models/users'
 import { VideoPrivacy } from '@shared/models'
+import { addAccountToServerBlocklist } from '@shared/extra-utils/users/blocklist'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -215,6 +216,17 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items[0].html_content).to.equal('super comment 2')
         expect(jsonObj.items[1].html_content).to.equal('super comment 1')
       }
+    })
+
+    it('Should not list comments from muted accounts or instances', async function () {
+      await addAccountToServerBlocklist(servers[1].url, servers[1].accessToken, 'root@localhost:' + servers[0].port)
+
+      {
+        const json = await getJSONfeed(servers[1].url, 'video-comments', { version: 2 })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(0)
+      }
+
     })
   })
 

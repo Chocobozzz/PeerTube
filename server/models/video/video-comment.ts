@@ -381,13 +381,20 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findAndCountAll<MComment>(query)
   }
 
-  static listForFeed (start: number, count: number, videoId?: number): Bluebird<MCommentOwnerVideoFeed[]> {
+  static async listForFeed (start: number, count: number, videoId?: number): Promise<MCommentOwnerVideoFeed[]> {
+    const serverActor = await getServerActor()
+
     const query = {
       order: [ [ 'createdAt', 'DESC' ] ] as Order,
       offset: start,
       limit: count,
       where: {
-        deletedAt: null
+        deletedAt: null,
+        accountId: {
+          [Op.notIn]: Sequelize.literal(
+            '(' + buildBlockedAccountSQL(serverActor.Account.id) + ')'
+          )
+        }
       },
       include: [
         {
