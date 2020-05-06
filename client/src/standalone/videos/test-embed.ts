@@ -1,6 +1,6 @@
 import './test-embed.scss'
 import { PeerTubePlayer } from '../player/player'
-import { PeerTubeResolution, PlayerEventType } from '../player/definitions'
+import { PeerTubeResolution, PlayerEventType, PeerTubeTextTrack } from '../player/definitions'
 
 window.addEventListener('load', async () => {
   const urlParts = window.location.href.split('/')
@@ -66,6 +66,36 @@ window.addEventListener('load', async () => {
     playbackRates = rates
     updateRates()
   })
+
+  const updateCaptions = async () => {
+    const captions = await player.getCaptions()
+
+    const captionEl = document.querySelector('#caption-list')
+    captionEl.innerHTML = ''
+
+    captions.forEach(c => {
+      console.log(c)
+
+      if (c.mode === 'showing') {
+        const itemEl = document.createElement('strong')
+        itemEl.innerText = `${c.label} (active)`
+        itemEl.style.display = 'block'
+        captionEl.appendChild(itemEl)
+      } else {
+        const itemEl = document.createElement('a')
+        itemEl.href = 'javascript:;'
+        itemEl.innerText = c.label
+        itemEl.addEventListener('click', () => {
+          player.setCaption(c.id)
+          updateCaptions()
+        })
+        itemEl.style.display = 'block'
+        captionEl.appendChild(itemEl)
+      }
+    })
+  }
+
+  updateCaptions()
 
   const updateResolutions = ((resolutions: PeerTubeResolution[]) => {
     const resolutionListEl = document.querySelector('#resolution-list')

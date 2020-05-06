@@ -16,3 +16,10 @@ export interface PeerTubeResolution {
   src?: string
   width?: number
 }
+
+export type PeerTubeTextTrack = {
+  id: string
+  label: string
+  src: string
+  mode: 'showing' | 'disabled'
+}

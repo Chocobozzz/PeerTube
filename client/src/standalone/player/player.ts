@@ -1,6 +1,6 @@
 import * as Channel from 'jschannel'
+import { EventHandler, PeerTubeResolution, PeerTubeTextTrack, PlayerEventType } from './definitions'
 import { EventRegistrar } from './events'
-import { EventHandler, PlayerEventType, PeerTubeResolution } from './definitions'
 
 const PASSTHROUGH_EVENTS = [
   'pause',
@@ -102,6 +102,21 @@ export class PeerTubePlayer {
    */
   async getVolume (): Promise<number> {
     return this.sendMessage<void, number>('getVolume')
+  }
+
+  /**
+   * Tell the embed to change the current caption
+   * @param value Caption id
+   */
+  async setCaption (value: string) {
+    await this.sendMessage('setCaption', value)
+  }
+
+  /**
+   * Get video captions
+   */
+  async getCaptions (): Promise<PeerTubeTextTrack[]> {
+    return this.sendMessage<void, PeerTubeTextTrack[]>('getCaptions')
   }
 
   /**

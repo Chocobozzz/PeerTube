@@ -38,7 +38,7 @@ declare module 'video.js' {
 
     textTracks (): TextTrackList & {
       on: Function
-      tracks_: { kind: string, mode: string, language: string }[]
+      tracks_: (TextTrack & { id: string, label: string, src: string })[]
     }
 
     audioTracks (): AudioTrackList
