@@ -1,9 +1,20 @@
-import { Injectable } from '@angular/core'
-import { HttpParams } from '@angular/common/http'
 import { SortMeta } from 'primeng/api'
-import { ComponentPagination, ComponentPaginationLight } from './component-pagination.model'
-
+import { HttpParams } from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { ComponentPaginationLight } from './component-pagination.model'
 import { RestPagination } from './rest-pagination'
+
+interface QueryStringFilterPrefixes {
+  [key: string]: {
+    prefix: string
+    handler?: (v: string) => string | number
+    multiple?: boolean
+  }
+}
+
+type ParseQueryStringFilterResult = {
+  [key: string]: string | number | (string | number)[]
+}
 
 @Injectable()
 export class RestService {
@@ -52,5 +63,49 @@ export class RestService {
     const count: number = componentPagination.itemsPerPage
 
     return { start, count }
+  }
+
+  parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes): ParseQueryStringFilterResult {
+    if (!q) return {}
+
+    // Tokenize the strings using spaces
+    const tokens = q.split(' ').filter(token => !!token)
+
+    // Build prefix array
+    const prefixeStrings = Object.values(prefixes)
+                           .map(p => p.prefix)
+
+    // Search is the querystring minus defined filters
+    const searchTokens = tokens.filter(t => {
+      return prefixeStrings.every(prefixString => t.startsWith(prefixString) === false)
+    })
+
+    const additionalFilters: ParseQueryStringFilterResult = {}
+
+    for (const prefixKey of Object.keys(prefixes)) {
+      const prefixObj = prefixes[prefixKey]
+      const prefix = prefixObj.prefix
+
+      const matchedTokens = tokens.filter(t => t.startsWith(prefix))
+                                  .map(t => t.slice(prefix.length)) // Keep the value filter
+                                  .map(t => {
+                                    if (prefixObj.handler) return prefixObj.handler(t)
+
+                                    return t
+                                  })
+                                  .filter(t => !!t)
+
+      if (matchedTokens.length === 0) continue
+
+      additionalFilters[prefixKey] = prefixObj.multiple === true
+        ? matchedTokens
+        : matchedTokens[0]
+    }
+
+    return {
+      search: searchTokens.join(' '),
+
+      ...additionalFilters
+    }
   }
 }

@@ -901,7 +901,7 @@ describe('Test users', function () {
       const reason = 'my super bad reason'
       await reportVideoAbuse(server.url, user17AccessToken, videoId, reason)
 
-      const res1 = await getVideoAbusesList(server.url, server.accessToken)
+      const res1 = await getVideoAbusesList({ url: server.url, token: server.accessToken })
       const abuseId = res1.body.data[0].id
 
       const res2 = await getUserInformation(server.url, server.accessToken, user17Id, true)

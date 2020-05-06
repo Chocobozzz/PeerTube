@@ -76,6 +76,22 @@ describe('Test video abuses API validators', function () {
         statusCodeExpected: 403
       })
     })
+
+    it('Should fail with a bad id filter', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { id: 'toto' } })
+    })
+
+    it('Should fail with a bad state filter', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { state: 'toto' } })
+    })
+
+    it('Should fail with a bad videoIs filter', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { videoIs: 'toto' } })
+    })
+
+    it('Should succeed with the correct params', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { id: 13 }, statusCodeExpected: 200 })
+    })
   })
 
   describe('When reporting a video abuse', function () {

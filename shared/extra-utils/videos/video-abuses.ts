@@ -1,6 +1,8 @@
 import * as request from 'supertest'
 import { VideoAbuseUpdate } from '../../models/videos/abuse/video-abuse-update.model'
-import { makeDeleteRequest, makePutBodyRequest } from '../requests/requests'
+import { makeDeleteRequest, makePutBodyRequest, makeGetRequest } from '../requests/requests'
+import { VideoAbuseState } from '@shared/models'
+import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
 
 function reportVideoAbuse (url: string, token: string, videoId: number | string, reason: string, specialStatus = 200) {
   const path = '/api/v1/videos/' + videoId + '/abuse'
@@ -13,16 +15,51 @@ function reportVideoAbuse (url: string, token: string, videoId: number | string,
           .expect(specialStatus)
 }
 
-function getVideoAbusesList (url: string, token: string) {
+function getVideoAbusesList (options: {
+  url: string
+  token: string
+  id?: number
+  search?: string
+  state?: VideoAbuseState
+  videoIs?: VideoAbuseVideoIs
+  searchReporter?: string
+  searchReportee?: string
+  searchVideo?: string
+  searchVideoChannel?: string
+}) {
+  const {
+    url,
+    token,
+    id,
+    search,
+    state,
+    videoIs,
+    searchReporter,
+    searchReportee,
+    searchVideo,
+    searchVideoChannel
+  } = options
   const path = '/api/v1/videos/abuse'
 
-  return request(url)
-          .get(path)
-          .query({ sort: 'createdAt' })
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .expect(200)
-          .expect('Content-Type', /json/)
+  const query = {
+    sort: 'createdAt',
+    id,
+    search,
+    state,
+    videoIs,
+    searchReporter,
+    searchReportee,
+    searchVideo,
+    searchVideoChannel
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    query,
+    statusCodeExpected: 200
+  })
 }
 
 function updateVideoAbuse (

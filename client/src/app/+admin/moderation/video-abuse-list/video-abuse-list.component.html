@@ -19,8 +19,8 @@
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'is:blacklisted' }" class="dropdown-item" i18n>Reports with blacklisted videos</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'is:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blacklisted videos</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
             </div>
           </div>
           <input
