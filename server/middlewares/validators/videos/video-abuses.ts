@@ -1,14 +1,15 @@
 import * as express from 'express'
-import { body, param } from 'express-validator'
-import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
-import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
+import { body, param, query } from 'express-validator'
+import { exists, isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import {
+  isAbuseVideoIsValid,
   isVideoAbuseModerationCommentValid,
   isVideoAbuseReasonValid,
   isVideoAbuseStateValid
 } from '../../../helpers/custom-validators/video-abuses'
+import { logger } from '../../../helpers/logger'
 import { doesVideoAbuseExist, doesVideoExist } from '../../../helpers/middlewares'
+import { areValidationErrors } from '../utils'
 
 const videoAbuseReportValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
@@ -58,9 +59,45 @@ const videoAbuseUpdateValidator = [
   }
 ]
 
+const videoAbuseListValidator = [
+  query('id')
+    .optional()
+    .custom(isIdValid).withMessage('Should have a valid id'),
+  query('search')
+    .optional()
+    .custom(exists).withMessage('Should have a valid search'),
+  query('state')
+    .optional()
+    .custom(isVideoAbuseStateValid).withMessage('Should have a valid video abuse state'),
+  query('videoIs')
+    .optional()
+    .custom(isAbuseVideoIsValid).withMessage('Should have a valid "video is" attribute'),
+  query('searchReporter')
+    .optional()
+    .custom(exists).withMessage('Should have a valid reporter search'),
+  query('searchReportee')
+    .optional()
+    .custom(exists).withMessage('Should have a valid reportee search'),
+  query('searchVideo')
+    .optional()
+    .custom(exists).withMessage('Should have a valid video search'),
+  query('searchVideoChannel')
+    .optional()
+    .custom(exists).withMessage('Should have a valid video channel search'),
+
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking videoAbuseListValidator parameters', { parameters: req.body })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 // ---------------------------------------------------------------------------
 
 export {
+  videoAbuseListValidator,
   videoAbuseReportValidator,
   videoAbuseGetValidator,
   videoAbuseUpdateValidator

@@ -207,60 +207,13 @@ function buildDirectionAndField (value: string) {
   return { direction, field }
 }
 
-function searchAttribute (sourceField, targetField) {
-  if (sourceField) {
-    return {
-      [targetField]: {
-        [Op.iLike]: `%${sourceField}%`
-      }
-    }
-  } else {
-    return {}
-  }
-}
-
-interface QueryStringFilterPrefixes {
-  [key: string]: string | { prefix: string, handler: Function, multiple?: boolean }
-}
-
-function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes): {
-  search: string
-  [key: string]: string | number | string[] | number[]
-} {
-  const tokens = q // tokenize only if we have a querystring
-    ? [].concat.apply([], q.split('"').map((v, i) => i % 2 ? v : v.split(' '))).filter(Boolean) // split by space unless using double quotes
-    : []
-
-  const objectMap = (obj, fn) => Object.fromEntries(
-    Object.entries(obj).map(
-      ([ k, v ], i) => [ k, fn(v, k, i) ]
-    )
-  )
+function searchAttribute (sourceField?: string, targetField?: string) {
+  if (!sourceField) return {}
 
   return {
-    // search is the querystring minus defined filters
-    search: tokens.filter(e => !Object.values(prefixes).some(p => {
-      if (typeof p === 'string') {
-        return e.startsWith(p)
-      } else {
-        return e.startsWith(p.prefix)
-      }
-    })).join(' '),
-    // filters defined in prefixes are added under their own name
-    ...objectMap(prefixes, p => {
-      if (typeof p === 'string') {
-        return tokens.filter(e => e.startsWith(p)).map(e => e.slice(p.length)) // we keep the matched item, and remove its prefix
-      } else {
-        const _tokens = tokens.filter(e => e.startsWith(p.prefix)).map(e => e.slice(p.prefix.length)).map(p.handler)
-        // multiple is false by default, meaning we usually just keep the first occurence of a given prefix
-        if (!p.multiple && _tokens.length > 0) {
-          return _tokens[0]
-        } else if (!p.multiple) {
-          return ''
-        }
-        return _tokens
-      }
-    })
+    [targetField]: {
+      [Op.iLike]: `%${sourceField}%`
+    }
   }
 }
 
@@ -286,8 +239,7 @@ export {
   getFollowsSort,
   buildDirectionAndField,
   createSafeIn,
-  searchAttribute,
-  parseQueryStringFilter
+  searchAttribute
 }
 
 // ---------------------------------------------------------------------------

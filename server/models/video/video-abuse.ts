@@ -1,6 +1,21 @@
+import * as Bluebird from 'bluebird'
+import { literal, Op } from 'sequelize'
 import {
-  AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt, Scopes
+  AllowNull,
+  BelongsTo,
+  Column,
+  CreatedAt,
+  DataType,
+  Default,
+  ForeignKey,
+  Is,
+  Model,
+  Scopes,
+  Table,
+  UpdatedAt
 } from 'sequelize-typescript'
+import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
+import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { VideoAbuse } from '../../../shared/models/videos'
 import {
@@ -8,15 +23,12 @@ import {
   isVideoAbuseReasonValid,
   isVideoAbuseStateValid
 } from '../../helpers/custom-validators/video-abuses'
-import { AccountModel } from '../account/account'
-import { buildBlockedAccountSQL, getSort, throwIfNotValid, searchAttribute, parseQueryStringFilter } from '../utils'
-import { VideoModel } from './video'
-import { VideoAbuseState, VideoDetails } from '../../../shared'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
 import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
-import * as Bluebird from 'bluebird'
-import { literal, Op } from 'sequelize'
+import { AccountModel } from '../account/account'
+import { buildBlockedAccountSQL, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from './thumbnail'
+import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 
@@ -35,21 +47,22 @@ export enum ScopeNames {
 
     // filters
     id?: number
+
     state?: VideoAbuseState
-    is?: 'deleted' | 'blacklisted'
+    videoIs?: VideoAbuseVideoIs
 
     // accountIds
     serverAccountId: number
     userAccountId: number
   }) => {
-    let where = {
+    const where = {
       reporterAccountId: {
         [Op.notIn]: literal('(' + buildBlockedAccountSQL(options.serverAccountId, options.userAccountId) + ')')
       }
     }
 
     if (options.search) {
-      where = Object.assign(where, {
+      Object.assign(where, {
         [Op.or]: [
           {
             [Op.and]: [
@@ -80,26 +93,18 @@ export enum ScopeNames {
       })
     }
 
-    if (options.id) {
-      where = Object.assign(where, {
-        id: options.id
+    if (options.id) Object.assign(where, { id: options.id })
+    if (options.state) Object.assign(where, { state: options.state })
+
+    if (options.videoIs === 'deleted') {
+      Object.assign(where, {
+        deletedVideo: {
+          [Op.not]: null
+        }
       })
     }
 
-    if (options.state) {
-      where = Object.assign(where, {
-        state: options.state
-      })
-    }
-
-    let onlyBlacklisted = false
-    if (options.is === 'deleted') {
-      where = Object.assign(where, {
-        deletedVideo: { [Op.not]: null }
-      })
-    } else if (options.is === 'blacklisted') {
-      onlyBlacklisted = true
-    }
+    const onlyBlacklisted = options.videoIs === 'blacklisted'
 
     return {
       attributes: {
@@ -189,7 +194,7 @@ export enum ScopeNames {
         },
         {
           model: VideoModel,
-          required: onlyBlacklisted,
+          required: !!(onlyBlacklisted || options.searchVideo || options.searchReportee || options.searchVideoChannel),
           where: searchAttribute(options.searchVideo, 'name'),
           include: [
             {
@@ -301,11 +306,36 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     start: number
     count: number
     sort: string
-    search?: string
+
     serverAccountId: number
     user?: MUserAccountId
+
+    id?: number
+    state?: VideoAbuseState
+    videoIs?: VideoAbuseVideoIs
+
+    search?: string
+    searchReporter?: string
+    searchReportee?: string
+    searchVideo?: string
+    searchVideoChannel?: string
   }) {
-    const { start, count, sort, search, user, serverAccountId } = parameters
+    const {
+      start,
+      count,
+      sort,
+      search,
+      user,
+      serverAccountId,
+      state,
+      videoIs,
+      searchReportee,
+      searchVideo,
+      searchVideoChannel,
+      searchReporter,
+      id
+    } = parameters
+
     const userAccountId = user ? user.Account.id : undefined
 
     const query = {
@@ -317,37 +347,14 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     }
 
     const filters = {
-      ...parseQueryStringFilter(search, {
-        id: {
-          prefix: '#',
-          handler: v => v
-        },
-        state: {
-          prefix: 'state:',
-          handler: v => {
-            if (v === 'accepted') return VideoAbuseState.ACCEPTED
-            if (v === 'pending') return VideoAbuseState.PENDING
-            if (v === 'rejected') return VideoAbuseState.REJECTED
-            return undefined
-          }
-        },
-        is: {
-          prefix: 'is:',
-          handler: v => {
-            if (v === 'deleted') return v
-            if (v === 'blacklisted') return v
-            return undefined
-          }
-        },
-        searchReporter: {
-          prefix: 'reporter:',
-          handler: v => v
-        },
-        searchReportee: {
-          prefix: 'reportee:',
-          handler: v => v
-        }
-      }),
+      id,
+      search,
+      state,
+      videoIs,
+      searchReportee,
+      searchVideo,
+      searchVideoChannel,
+      searchReporter,
       serverAccountId,
       userAccountId
     }

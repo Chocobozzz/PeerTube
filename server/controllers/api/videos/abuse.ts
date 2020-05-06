@@ -14,7 +14,8 @@ import {
   videoAbuseGetValidator,
   videoAbuseReportValidator,
   videoAbusesSortValidator,
-  videoAbuseUpdateValidator
+  videoAbuseUpdateValidator,
+  videoAbuseListValidator
 } from '../../../middlewares'
 import { AccountModel } from '../../../models/account/account'
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
@@ -34,6 +35,7 @@ abuseVideoRouter.get('/abuse',
   videoAbusesSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  videoAbuseListValidator,
   asyncMiddleware(listVideoAbuses)
 )
 abuseVideoRouter.put('/:videoId/abuse/:id',
@@ -70,7 +72,14 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
+    id: req.query.id,
     search: req.query.search,
+    state: req.query.state,
+    videoIs: req.query.videoIs,
+    searchReporter: req.query.searchReporter,
+    searchReportee: req.query.searchReportee,
+    searchVideo: req.query.searchVideo,
+    searchVideoChannel: req.query.searchVideoChannel,
     serverAccountId: serverActor.Account.id,
     user
   })
