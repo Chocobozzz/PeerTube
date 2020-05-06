@@ -10,6 +10,7 @@ import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { ActivatedRoute } from '@angular/router'
 import { ServerConfig, RegisteredExternalAuthConfig } from '@shared/models/server/server-config.model'
 import { environment } from 'src/environments/environment'
+import { HooksService } from '@app/core/plugins/hooks.service'
 
 @Component({
   selector: 'my-login',
@@ -40,6 +41,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     private userService: UserService,
     private redirectService: RedirectService,
     private notifier: Notifier,
+    private hooks: HooksService,
     private i18n: I18n
   ) {
     super()
@@ -78,6 +80,8 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
     if (this.usernameInput) {
       this.usernameInput.nativeElement.focus()
     }
+
+    this.hooks.runAction('action:login.init', 'login')
   }
 
   getExternalLogins () {

@@ -47,7 +47,8 @@ export class PluginService implements ClientHook {
     common: new ReplaySubject<boolean>(1),
     search: new ReplaySubject<boolean>(1),
     'video-watch': new ReplaySubject<boolean>(1),
-    signup: new ReplaySubject<boolean>(1)
+    signup: new ReplaySubject<boolean>(1),
+    login: new ReplaySubject<boolean>(1)
   }
 
   translationsObservable: Observable<PluginTranslation>

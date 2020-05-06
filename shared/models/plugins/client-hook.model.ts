@@ -70,6 +70,9 @@ export const clientActionHookObject = {
   // Fired when a user click on 'View x replies' and they're loaded
   'action:video-watch.video-thread-replies.loaded': true,
 
+  // Fired when the login page is being initialized
+  'action:login.init': true,
+
   // Fired when the search page is being initialized
   'action:search.init': true,
 
