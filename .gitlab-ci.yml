@@ -171,7 +171,7 @@ test-external-plugins:
   before_script:
     - 'sed -i -z "s/database:\n  hostname: ''localhost''/database:\n  hostname: ''postgres''/" config/test.yaml'
     - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
-    - psql -c "create user peertube with password 'peertube';"; fi
+    - psql -c "create user peertube with password 'peertube';"
     - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
   script:
     - npm run ci -- "external-plugins"
