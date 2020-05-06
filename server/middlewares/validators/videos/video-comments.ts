@@ -1,16 +1,16 @@
 import * as express from 'express'
 import { body, param } from 'express-validator'
+import { MUserAccountUrl } from '@server/typings/models'
 import { UserRight } from '../../../../shared'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments'
 import { logger } from '../../../helpers/logger'
-import { VideoCommentModel } from '../../../models/video/video-comment'
-import { areValidationErrors } from '../utils'
-import { Hooks } from '../../../lib/plugins/hooks'
-import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation'
 import { doesVideoExist } from '../../../helpers/middlewares'
-import { MCommentOwner, MVideo, MVideoFullLight, MVideoId, MCommentOwnerVideoReply } from '../../../typings/models/video'
-import { MUser, MUserAccountUrl } from '@server/typings/models'
+import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation'
+import { Hooks } from '../../../lib/plugins/hooks'
+import { VideoCommentModel } from '../../../models/video/video-comment'
+import { MCommentOwnerVideoReply, MVideo, MVideoFullLight, MVideoId } from '../../../typings/models/video'
+import { areValidationErrors } from '../utils'
 
 const listVideoCommentThreadsValidator = [
   param('videoId').custom(isIdOrUUIDValid).not().isEmpty().withMessage('Should have a valid videoId'),
