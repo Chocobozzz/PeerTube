@@ -85,8 +85,12 @@ $more-margin-right: 15px;
     }
 
     @media screen and (max-width: $small-view) {
-      .video-miniature-information .video-miniature-name {
-        margin-top: 0;
+      .video-miniature-information {
+        margin: 0 10px;
+
+        .video-miniature-name {
+          margin-top: 0;
+        }
       }
 
       .video-actions {
