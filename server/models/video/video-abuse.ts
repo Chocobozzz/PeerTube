@@ -32,10 +32,12 @@ export enum ScopeNames {
     searchReportee?: string
     searchVideo?: string
     searchVideoChannel?: string
+
     // filters
     id?: number
     state?: VideoAbuseState
-    is?: any
+    is?: 'deleted' | 'blacklisted'
+
     // accountIds
     serverAccountId: number
     userAccountId: number
@@ -91,11 +93,11 @@ export enum ScopeNames {
     }
 
     let onlyBlacklisted = false
-    if (options.is === "deleted") {
+    if (options.is === 'deleted') {
       where = Object.assign(where, {
         deletedVideo: { [Op.not]: null }
       })
-    } else if (options.is === "blacklisted") {
+    } else if (options.is === 'blacklisted') {
       onlyBlacklisted = true
     }
 
@@ -323,17 +325,17 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
         state: {
           prefix: 'state:',
           handler: v => {
-            if (v === "accepted") return VideoAbuseState.ACCEPTED
-            if (v === "pending") return VideoAbuseState.PENDING
-            if (v === "rejected") return VideoAbuseState.REJECTED
+            if (v === 'accepted') return VideoAbuseState.ACCEPTED
+            if (v === 'pending') return VideoAbuseState.PENDING
+            if (v === 'rejected') return VideoAbuseState.REJECTED
             return undefined
           }
         },
         is: {
           prefix: 'is:',
           handler: v => {
-            if (v === "deleted") return v
-            if (v === "blacklisted") return v
+            if (v === 'deleted') return v
+            if (v === 'blacklisted') return v
             return undefined
           }
         },

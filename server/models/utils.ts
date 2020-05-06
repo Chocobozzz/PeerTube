@@ -231,15 +231,7 @@ function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes)
     ? [].concat.apply([], q.split('"').map((v, i) => i % 2 ? v : v.split(' '))).filter(Boolean) // split by space unless using double quotes
     : []
 
-  // TODO: when Typescript supports Object.fromEntries, replace with the Object method
-  function fromEntries<T> (entries: [keyof T, T[keyof T]][]): T {
-    return entries.reduce(
-      (acc, [ key, value ]) => ({ ...acc, [key]: value }),
-      {} as T
-    )
-  }
-
-  const objectMap = (obj, fn) => fromEntries(
+  const objectMap = (obj, fn) => Object.fromEntries(
     Object.entries(obj).map(
       ([ k, v ], i) => [ k, fn(v, k, i) ]
     )
@@ -248,7 +240,7 @@ function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes)
   return {
     // search is the querystring minus defined filters
     search: tokens.filter(e => !Object.values(prefixes).some(p => {
-      if (typeof p === "string") {
+      if (typeof p === 'string') {
         return e.startsWith(p)
       } else {
         return e.startsWith(p.prefix)
@@ -256,7 +248,7 @@ function parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes)
     })).join(' '),
     // filters defined in prefixes are added under their own name
     ...objectMap(prefixes, p => {
-      if (typeof p === "string") {
+      if (typeof p === 'string') {
         return tokens.filter(e => e.startsWith(p)).map(e => e.slice(p.length)) // we keep the matched item, and remove its prefix
       } else {
         const _tokens = tokens.filter(e => e.startsWith(p.prefix)).map(e => e.slice(p.prefix.length)).map(p.handler)
