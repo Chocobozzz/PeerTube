@@ -17,7 +17,7 @@ import { VideoCommentModel } from '../server/models/video/video-comment'
 import { AccountModel } from '../server/models/account/account'
 import { VideoChannelModel } from '../server/models/video/video-channel'
 import { VideoStreamingPlaylistModel } from '../server/models/video/video-streaming-playlist'
-import { initDatabaseModels } from '../server/initializers'
+import { initDatabaseModels } from '../server/initializers/database'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'
 import { getServerActor } from '@server/models/application/application'
 

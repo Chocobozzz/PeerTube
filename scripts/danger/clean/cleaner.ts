@@ -3,7 +3,7 @@ registerTSPaths()
 
 import * as Promise from 'bluebird'
 import * as rimraf from 'rimraf'
-import { initDatabaseModels, sequelizeTypescript } from '../../../server/initializers'
+import { initDatabaseModels, sequelizeTypescript } from '../../../server/initializers/database'
 import { CONFIG } from '../../../server/initializers/config'
 
 initDatabaseModels(true)

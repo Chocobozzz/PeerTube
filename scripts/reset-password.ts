@@ -2,7 +2,7 @@ import { registerTSPaths } from '../server/helpers/register-ts-paths'
 registerTSPaths()
 
 import * as program from 'commander'
-import { initDatabaseModels } from '../server/initializers'
+import { initDatabaseModels } from '../server/initializers/database'
 import { UserModel } from '../server/models/account/user'
 import { isUserPasswordValid } from '../server/helpers/custom-validators/users'
 

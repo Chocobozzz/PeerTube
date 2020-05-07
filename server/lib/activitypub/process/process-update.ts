@@ -2,7 +2,7 @@ import { ActivityUpdate, CacheFileObject, VideoTorrentObject } from '../../../..
 import { ActivityPubActor } from '../../../../shared/models/activitypub/activitypub-actor'
 import { resetSequelizeInstance, retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
-import { sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript } from '../../../initializers/database'
 import { AccountModel } from '../../../models/account/account'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { VideoChannelModel } from '../../../models/video/video-channel'

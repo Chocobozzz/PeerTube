@@ -71,6 +71,13 @@ export class ServerModel extends Model<ServerModel> {
     return ServerModel.findOne(query)
   }
 
+  static async loadOrCreateByHost (host: string) {
+    let server = await ServerModel.loadByHost(host)
+    if (!server) server = await ServerModel.create({ host })
+
+    return server
+  }
+
   isBlocked () {
     return this.BlockedByAccounts && this.BlockedByAccounts.length !== 0
   }

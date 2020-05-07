@@ -1,12 +1,22 @@
 import { Transaction } from 'sequelize'
-import { CONFIG } from '../initializers/config'
-import { UserRight, VideoBlacklistType } from '../../shared/models'
-import { VideoBlacklistModel } from '../models/video/video-blacklist'
-import { logger } from '../helpers/logger'
+import { sequelizeTypescript } from '@server/initializers/database'
+import {
+  MUser,
+  MVideoAccountLight,
+  MVideoBlacklist,
+  MVideoBlacklistVideo,
+  MVideoFullLight,
+  MVideoWithBlacklistLight
+} from '@server/typings/models'
+import { UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../shared/models'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
-import { Hooks } from './plugins/hooks'
+import { logger } from '../helpers/logger'
+import { CONFIG } from '../initializers/config'
+import { VideoBlacklistModel } from '../models/video/video-blacklist'
+import { sendDeleteVideo } from './activitypub/send'
+import { federateVideoIfNeeded } from './activitypub/videos'
 import { Notifier } from './notifier'
-import { MUser, MVideoBlacklistVideo, MVideoWithBlacklistLight } from '@server/typings/models'
+import { Hooks } from './plugins/hooks'
 
 async function autoBlacklistVideoIfNeeded (parameters: {
   video: MVideoWithBlacklistLight
@@ -49,6 +59,60 @@ async function autoBlacklistVideoIfNeeded (parameters: {
   return true
 }
 
+async function blacklistVideo (videoInstance: MVideoAccountLight, options: VideoBlacklistCreate) {
+  const blacklist: MVideoBlacklistVideo = await VideoBlacklistModel.create({
+    videoId: videoInstance.id,
+    unfederated: options.unfederate === true,
+    reason: options.reason,
+    type: VideoBlacklistType.MANUAL
+  }
+  )
+  blacklist.Video = videoInstance
+
+  if (options.unfederate === true) {
+    await sendDeleteVideo(videoInstance, undefined)
+  }
+
+  Notifier.Instance.notifyOnVideoBlacklist(blacklist)
+}
+
+async function unblacklistVideo (videoBlacklist: MVideoBlacklist, video: MVideoFullLight) {
+  const videoBlacklistType = await sequelizeTypescript.transaction(async t => {
+    const unfederated = videoBlacklist.unfederated
+    const videoBlacklistType = videoBlacklist.type
+
+    await videoBlacklist.destroy({ transaction: t })
+    video.VideoBlacklist = undefined
+
+    // Re federate the video
+    if (unfederated === true) {
+      await federateVideoIfNeeded(video, true, t)
+    }
+
+    return videoBlacklistType
+  })
+
+  Notifier.Instance.notifyOnVideoUnblacklist(video)
+
+  if (videoBlacklistType === VideoBlacklistType.AUTO_BEFORE_PUBLISHED) {
+    Notifier.Instance.notifyOnVideoPublishedAfterRemovedFromAutoBlacklist(video)
+
+    // Delete on object so new video notifications will send
+    delete video.VideoBlacklist
+    Notifier.Instance.notifyOnNewVideoIfNeeded(video)
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+export {
+  autoBlacklistVideoIfNeeded,
+  blacklistVideo,
+  unblacklistVideo
+}
+
+// ---------------------------------------------------------------------------
+
 function autoBlacklistNeeded (parameters: {
   video: MVideoWithBlacklistLight
   isRemote: boolean
@@ -65,10 +129,4 @@ function autoBlacklistNeeded (parameters: {
   if (user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST)) return false
 
   return true
-}
-
-// ---------------------------------------------------------------------------
-
-export {
-  autoBlacklistVideoIfNeeded
 }

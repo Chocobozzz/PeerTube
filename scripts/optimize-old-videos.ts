@@ -6,7 +6,7 @@ import { getDurationFromVideoFile, getVideoFileBitrate, getVideoFileFPS, getVide
 import { getMaxBitrate } from '../shared/models/videos'
 import { VideoModel } from '../server/models/video/video'
 import { optimizeOriginalVideofile } from '../server/lib/video-transcoding'
-import { initDatabaseModels } from '../server/initializers'
+import { initDatabaseModels } from '../server/initializers/database'
 import { basename, dirname } from 'path'
 import { copy, move, remove } from 'fs-extra'
 import { createTorrentAndSetInfoHash } from '@server/helpers/webtorrent'

@@ -1,7 +1,7 @@
-import { sequelizeTypescript } from '../initializers'
+import { sequelizeTypescript } from '@server/initializers/database'
+import { MAccountBlocklist, MServerBlocklist } from '@server/typings/models'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
-import { MAccountBlocklist, MServerBlocklist } from '@server/typings/models'
 
 function addAccountInBlocklist (byAccountId: number, targetAccountId: number) {
   return sequelizeTypescript.transaction(async t => {

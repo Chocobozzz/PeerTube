@@ -4,7 +4,7 @@ registerTSPaths()
 import * as program from 'commander'
 import { resolve } from 'path'
 import { VideoModel } from '../server/models/video/video'
-import { initDatabaseModels } from '../server/initializers'
+import { initDatabaseModels } from '../server/initializers/database'
 import { JobQueue } from '../server/lib/job-queue'
 
 program

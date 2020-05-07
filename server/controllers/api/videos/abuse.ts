@@ -2,7 +2,7 @@ import * as express from 'express'
 import { UserRight, VideoAbuseCreate, VideoAbuseState } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript } from '../../../initializers/database'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,

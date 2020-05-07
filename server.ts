@@ -84,7 +84,7 @@ migrate()
 loadLanguages()
 
 // ----------- PeerTube modules -----------
-import { installApplication } from './server/initializers'
+import { installApplication } from './server/initializers/installer'
 import { Emailer } from './server/lib/emailer'
 import { JobQueue } from './server/lib/job-queue'
 import { VideosPreviewCache, VideosCaptionCache } from './server/lib/files-cache'

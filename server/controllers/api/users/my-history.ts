@@ -9,7 +9,7 @@ import {
 } from '../../../middlewares'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { UserVideoHistoryModel } from '../../../models/account/user-video-history'
-import { sequelizeTypescript } from '../../../initializers'
+import { sequelizeTypescript } from '../../../initializers/database'
 
 const myVideosHistoryRouter = express.Router()
 

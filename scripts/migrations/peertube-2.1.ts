@@ -1,7 +1,7 @@
 import { registerTSPaths } from '../../server/helpers/register-ts-paths'
 registerTSPaths()
 
-import { initDatabaseModels, sequelizeTypescript } from '../../server/initializers'
+import { initDatabaseModels, sequelizeTypescript } from '../../server/initializers/database'
 import * as Sequelize from 'sequelize'
 import { join } from 'path'
 import { HLS_STREAMING_PLAYLIST_DIRECTORY, STATIC_PATHS, WEBSERVER } from '@server/initializers/constants'

@@ -84,10 +84,7 @@ const blockServerValidator = [
         .end()
     }
 
-    let server = await ServerModel.loadByHost(host)
-    if (!server) {
-      server = await ServerModel.create({ host })
-    }
+    const server = await ServerModel.loadOrCreateByHost(host)
 
     res.locals.server = server
 
