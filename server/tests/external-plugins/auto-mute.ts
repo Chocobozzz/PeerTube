@@ -1,11 +1,25 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-
-import { installPlugin, MockBlocklist, setAccessTokensToServers, uploadVideoAndGetId, updatePluginSettings, doubleFollow, getVideosList, wait } from '../../../shared/extra-utils'
-import { cleanupTests, flushAndRunMultipleServers, ServerInfo } from '../../../shared/extra-utils/server/servers'
 import { expect } from 'chai'
+import { removeAccountFromServerBlocklist } from '@shared/extra-utils/users/blocklist'
+import {
+  doubleFollow,
+  getVideosList,
+  installPlugin,
+  MockBlocklist,
+  setAccessTokensToServers,
+  updatePluginSettings,
+  uploadVideoAndGetId,
+  wait
+} from '../../../shared/extra-utils'
+import {
+  cleanupTests,
+  flushAndRunMultipleServers,
+  killallServers,
+  reRunServer,
+  ServerInfo
+} from '../../../shared/extra-utils/server/servers'
 
 describe('Official plugin auto-mute', function () {
   let servers: ServerInfo[]
@@ -112,6 +126,44 @@ describe('Official plugin auto-mute', function () {
 
     const res = await getVideosList(servers[0].url)
     expect(res.body.total).to.equal(2)
+  })
+
+  it('Should auto mute an account, manually unmute it and do not remute it automatically', async function () {
+    this.timeout(20000)
+
+    const account = 'root@localhost:' + servers[1].port
+
+    blocklistServer.replace({
+      data: [
+        {
+          value: account,
+          updatedAt: new Date().toISOString()
+        }
+      ]
+    })
+
+    await wait(2000)
+
+    {
+      const res = await getVideosList(servers[0].url)
+      expect(res.body.total).to.equal(1)
+    }
+
+    await removeAccountFromServerBlocklist(servers[0].url, servers[0].accessToken, account)
+
+    {
+      const res = await getVideosList(servers[0].url)
+      expect(res.body.total).to.equal(2)
+    }
+
+    killallServers([ servers[0] ])
+    await reRunServer(servers[0])
+    await wait(2000)
+
+    {
+      const res = await getVideosList(servers[0].url)
+      expect(res.body.total).to.equal(2)
+    }
   })
 
   after(async function () {

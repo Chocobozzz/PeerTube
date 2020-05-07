@@ -4,6 +4,7 @@ type BlocklistResponse = {
   data: {
     value: string
     action?: 'add' | 'remove'
+    updatedAt?: string
   }[]
 }
 
