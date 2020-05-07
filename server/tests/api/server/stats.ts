@@ -12,7 +12,8 @@ import {
   ServerInfo, unfollow,
   uploadVideo,
   viewVideo,
-  wait
+  wait,
+  userLogin
 } from '../../../../shared/extra-utils'
 import { setAccessTokensToServers } from '../../../../shared/extra-utils/index'
 import { getStats } from '../../../../shared/extra-utils/server/stats'
@@ -23,6 +24,10 @@ const expect = chai.expect
 
 describe('Test stats (excluding redundancy)', function () {
   let servers: ServerInfo[] = []
+  const user = {
+    username: 'user1',
+    password: 'super_password'
+  }
 
   before(async function () {
     this.timeout(60000)
@@ -31,10 +36,6 @@ describe('Test stats (excluding redundancy)', function () {
 
     await doubleFollow(servers[0], servers[1])
 
-    const user = {
-      username: 'user1',
-      password: 'super_password'
-    }
     await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username: user.username, password: user.password })
 
     const resVideo = await uploadVideo(servers[0].url, servers[0].accessToken, { fixture: 'video_short.webm' })
@@ -96,6 +97,8 @@ describe('Test stats (excluding redundancy)', function () {
   })
 
   it('Should have the correct total videos stats after an unfollow', async function () {
+    this.timeout(15000)
+
     await unfollow(servers[2].url, servers[2].accessToken, servers[0])
     await waitJobs(servers)
 
@@ -103,6 +106,28 @@ describe('Test stats (excluding redundancy)', function () {
     const data: ServerStats = res.body
 
     expect(data.totalVideos).to.equal(0)
+  })
+
+  it('Should have the correct active users stats', async function () {
+    const server = servers[0]
+
+    {
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalDailyActiveUsers).to.equal(1)
+      expect(data.totalWeeklyActiveUsers).to.equal(1)
+      expect(data.totalMonthlyActiveUsers).to.equal(1)
+    }
+
+    {
+      await userLogin(server, user)
+
+      const res = await getStats(server.url)
+      const data: ServerStats = res.body
+      expect(data.totalDailyActiveUsers).to.equal(2)
+      expect(data.totalWeeklyActiveUsers).to.equal(2)
+      expect(data.totalMonthlyActiveUsers).to.equal(2)
+    }
   })
 
   after(async function () {

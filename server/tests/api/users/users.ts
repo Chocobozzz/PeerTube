@@ -418,6 +418,9 @@ describe('Test users', function () {
       expect(rootUser.email).to.equal('admin' + server.internalServerNumber + '@example.com')
       expect(user.nsfwPolicy).to.equal('display')
 
+      expect(rootUser.lastLoginDate).to.exist
+      expect(user.lastLoginDate).to.exist
+
       userId = user.id
     })
 

@@ -52,6 +52,8 @@ export interface User {
   createdAt: Date
 
   pluginAuth: string | null
+
+  lastLoginDate: Date | null
 }
 
 export interface MyUserSpecialPlaylist {

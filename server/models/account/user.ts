@@ -353,6 +353,11 @@ export class UserModel extends Model<UserModel> {
   @Column
   pluginAuth: string
 
+  @AllowNull(true)
+  @Default(null)
+  @Column
+  lastLoginDate: Date
+
   @CreatedAt
   createdAt: Date
 
@@ -691,10 +696,28 @@ export class UserModel extends Model<UserModel> {
   }
 
   static async getStats () {
+    function getActiveUsers (days: number) {
+      const query = {
+        where: {
+          [Op.and]: [
+            literal(`"lastLoginDate" > NOW() - INTERVAL '${days}d'`)
+          ]
+        }
+      }
+
+      return UserModel.count(query)
+    }
+
     const totalUsers = await UserModel.count()
+    const totalDailyActiveUsers = await getActiveUsers(1)
+    const totalWeeklyActiveUsers = await getActiveUsers(7)
+    const totalMonthlyActiveUsers = await getActiveUsers(30)
 
     return {
-      totalUsers
+      totalUsers,
+      totalDailyActiveUsers,
+      totalWeeklyActiveUsers,
+      totalMonthlyActiveUsers
     }
   }
 
@@ -808,7 +831,9 @@ export class UserModel extends Model<UserModel> {
 
       createdAt: this.createdAt,
 
-      pluginAuth: this.pluginAuth
+      pluginAuth: this.pluginAuth,
+
+      lastLoginDate: this.lastLoginDate
     }
 
     if (parameters.withAdminFlags) {

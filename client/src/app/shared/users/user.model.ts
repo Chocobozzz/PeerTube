@@ -71,6 +71,8 @@ export class User implements UserServerModel {
 
   pluginAuth: string | null
 
+  lastLoginDate: Date | null
+
   createdAt: Date
 
   constructor (hash: Partial<UserServerModel>) {
@@ -115,6 +117,7 @@ export class User implements UserServerModel {
     this.createdAt = hash.createdAt
 
     this.pluginAuth = hash.pluginAuth
+    this.lastLoginDate = hash.lastLoginDate
 
     if (hash.account !== undefined) {
       this.account = new Account(hash.account)

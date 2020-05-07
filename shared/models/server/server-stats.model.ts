@@ -2,6 +2,10 @@ import { VideoRedundancyStrategyWithManual } from '../redundancy'
 
 export interface ServerStats {
   totalUsers: number
+  totalDailyActiveUsers: number
+  totalWeeklyActiveUsers: number
+  totalMonthlyActiveUsers: number
+
   totalLocalVideos: number
   totalLocalVideoViews: number
   totalLocalVideoComments: number

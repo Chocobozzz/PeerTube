@@ -180,6 +180,10 @@ async function saveToken (token: TokenInfo, client: OAuthClientModel, user: User
   }
 
   const tokenCreated = await OAuthTokenModel.create(tokenToCreate)
+
+  user.lastLoginDate = new Date()
+  await user.save()
+
   return Object.assign(tokenCreated, { client, user })
 }
 
