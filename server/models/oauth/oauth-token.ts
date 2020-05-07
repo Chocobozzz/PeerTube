@@ -164,9 +164,7 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
                               client: {
                                 id: token.oAuthClientId
                               },
-                              user: {
-                                id: token.userId
-                              },
+                              user: token.User,
                               token
                             } as OAuthTokenInfo
                           })
