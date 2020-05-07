@@ -154,5 +154,5 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
   logger.info('Abuse report for video %s created.', videoInstance.name)
 
-  return res.json({ videoAbuseJSON }).end()
+  return res.json({ videoAbuse: videoAbuseJSON }).end()
 }
