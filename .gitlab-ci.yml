@@ -160,8 +160,9 @@ test-external-plugins:
     - name: rroemhild/test-openldap
       alias: ldap
   variables:
-    PGHOST: postgres
-    PGUSER: postgres
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ""
+    POSTGRES_HOST_AUTH_METHOD: trust
     REDIS_HOST: redis
   artifacts:
    expire_in: 1 day
