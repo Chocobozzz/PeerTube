@@ -9,6 +9,20 @@
   }
 }
 
+a {
+  @include disable-default-a-behaviour;
+  display: inline-block;
+
+  &, &:hover {
+    color: var(--mainForegroundColor);
+  }
+
+  span {
+    font-size: 80%;
+    color: var(--inputPlaceholderColor);
+  }
+}
+
 .action-cell {
   my-button:first-child {
     margin-right: 10px;

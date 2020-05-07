@@ -12,8 +12,8 @@
 </div>
 
 <p-table
-  [value]="videoRedundancies" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [value]="videoRedundancies" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" (onPage)="onPage($event)"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">

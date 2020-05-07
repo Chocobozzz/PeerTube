@@ -1,6 +1,6 @@
 <p-table
   [value]="followers" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" (onPage)="onPage($event)"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} followers"
 >
@@ -29,7 +29,12 @@
 
   <ng-template pTemplate="body" let-follow>
     <tr>
-      <td><a [href]="follow.follower.url" target="_blank" rel="noopener noreferrer">{{ follow.follower.name + '@' + follow.follower.host }}</a></td>
+      <td>
+        <a [href]="follow.follower.url" i18n-title title="Open actor page in a new tab" target="_blank" rel="noopener noreferrer">
+          {{ follow.follower.name + '@' + follow.follower.host }}
+          <span class="glyphicon glyphicon-new-window"></span>
+        </a>
+      </td>
 
       <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
       <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
