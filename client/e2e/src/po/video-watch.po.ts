@@ -73,7 +73,10 @@ export class VideoWatchPage {
   }
 
   async clickOnVideo (videoName: string) {
-    const video = element(by.css('.videos .video-miniature .video-thumbnail[title="' + videoName + '"]'))
+    const video = element.all(by.css('.videos .video-miniature .video-miniature-name'))
+    .filter(e => e.getText().then(t => t === videoName ))
+    .first()
+
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
     await video.click()
 
@@ -148,7 +151,7 @@ export class VideoWatchPage {
 
   private getVideoNameElement () {
     // We have 2 video info name block, pick the first that is not empty
-    return element.all(by.css('.video-bottom .video-info-name'))
+    return element.all(by.css('.video-info-first-row .video-info-name'))
                   .filter(e => e.getText().then(t => !!t))
                   .first()
   }
