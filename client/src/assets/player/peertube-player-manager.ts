@@ -187,7 +187,7 @@ export class PeertubePlayerManager {
   ): videojs.PlayerOptions {
     const commonOptions = options.common
 
-    let autoplay = commonOptions.autoplay
+    let autoplay = this.getAutoPlayValue(commonOptions.autoplay)
     let html5 = {}
 
     const plugins: VideoJSPluginOptions = {
@@ -232,9 +232,7 @@ export class PeertubePlayerManager {
         ? commonOptions.muted
         : undefined, // Undefined so the player knows it has to check the local storage
 
-      autoplay: autoplay === true
-        ? this.getAutoPlayValue()
-        : autoplay,
+      autoplay: this.getAutoPlayValue(autoplay),
 
       poster: commonOptions.poster,
       inactivityTimeout: commonOptions.inactivityTimeout,
@@ -510,8 +508,14 @@ export class PeertubePlayerManager {
     })
   }
 
-  private static getAutoPlayValue () {
+  private static getAutoPlayValue (autoplay: any) {
+    if (autoplay !== true) return autoplay
+
+    const isIOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
     const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
+    // Giving up with iOS
+    if (isIOS) return false
 
     // We have issues with autoplay and Safari.
     // any that tries to play using auto mute seems to work

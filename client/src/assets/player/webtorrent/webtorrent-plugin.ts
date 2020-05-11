@@ -417,7 +417,7 @@ class WebTorrentPlugin extends Plugin {
   private initializePlayer () {
     this.buildQualities()
 
-    if (this.autoplay === true) {
+    if (this.autoplay) {
       this.player.posterImage.hide()
 
       return this.updateVideoFile(undefined, { forcePlay: true, seek: this.startTime })
