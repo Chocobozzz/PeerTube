@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.2.0-RC.1
+## v2.2.0-rc.1
 
 ## IMPORTANT NOTES
 
@@ -85,7 +85,7 @@
    * Improve avatar upload UI ([@rigelk](https://github.com/rigelk))
    * Use progress bars for quota used in my account ([@rigelk](https://github.com/rigelk))
    * And many others!
-  * :tada: Improve video abuses admin table ([@rigelk](https://github.com/rigelk)):
+ * :tada: Improve video abuses admin table ([@rigelk](https://github.com/rigelk)):
    * Add search filters
    * Rich reporter field
    * Add video thumbnail
