@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs'
 import { NgbDropdown, NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { GlobalIconName } from '@app/shared/images/global-icon.component'
 import { ScreenService } from '@app/shared/misc/screen.service'
+import { MenuService } from '@app/core/menu'
 
 export type TopMenuDropdownParam = {
   label: string
@@ -36,7 +37,6 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
 
   suffixLabels: { [ parentLabel: string ]: string }
   hasIcons = false
-  container: undefined | 'body' = undefined
   isModalOpened = false
   currentMenuEntryIndex: number
 
@@ -46,11 +46,17 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
   constructor (
     private router: Router,
     private modalService: NgbModal,
-    private screen: ScreenService
+    private screen: ScreenService,
+    private menuService: MenuService
   ) { }
 
   get isInSmallView () {
-    return this.screen.isInSmallView()
+    let marginLeft = 0
+    if (this.menuService.isMenuDisplayed) {
+      marginLeft = this.menuService.menuWidth
+    }
+
+    return this.screen.isInSmallView(marginLeft)
   }
 
   ngOnInit () {
@@ -63,11 +69,6 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     this.hasIcons = this.menuEntries.some(
       e => e.children && e.children.some(c => !!c.iconName)
     )
-
-    // We have to set body for the container to avoid scroll overflow on mobile and small views
-    if (this.isInSmallView) {
-      this.container = 'body'
-    }
   }
 
   ngOnDestroy () {

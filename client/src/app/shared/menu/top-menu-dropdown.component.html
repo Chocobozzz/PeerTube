@@ -3,7 +3,7 @@
 
     <a *ngIf="menuEntry.routerLink" [routerLink]="menuEntry.routerLink" routerLinkActive="active" class="title-page title-page-settings">{{ menuEntry.label }}</a>
 
-    <div *ngIf="!menuEntry.routerLink" ngbDropdown [container]="container" class="parent-entry"
+    <div *ngIf="!menuEntry.routerLink" ngbDropdown container="body" class="parent-entry"
       #dropdown="ngbDropdown" (mouseleave)="closeDropdownIfHovered(dropdown)">
       <span
         *ngIf="isInSmallView"

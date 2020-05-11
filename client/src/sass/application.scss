@@ -320,6 +320,7 @@ table {
         padding-left: 15px;
         padding-right: 15px;
         margin-bottom: $sub-menu-margin-bottom-small-view;
+        overflow-x: auto;
       }
 
       .admin-sub-header {
@@ -387,6 +388,11 @@ table {
     &:not(.expanded) {
       .admin-sub-header {
         @include admin-sub-header-responsive($expanded-horizontal-margins/3 + $menu-width/2);
+      }
+
+      .sub-menu {
+        overflow-x: auto;
+        width: calc(100vw - #{$menu-width});
       }
     }
   }
