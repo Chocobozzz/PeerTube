@@ -84,12 +84,13 @@ export class VideoWatchPage {
   }
 
   async clickOnFirstVideo () {
-    const video = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
+    const video = element.all(by.css('.videos .video-miniature .video-thumbnail')).first()
+    const videoName = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
 
     // Don't know why but the expectation fails on Safari
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
 
-    const textToReturn = video.getText()
+    const textToReturn = videoName.getText()
     await video.click()
 
     await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))

@@ -19,14 +19,14 @@ exports.config = {
 
   multiCapabilities: [
     {
-      browserName: 'Chrome',
-      name: 'Latest Chrome Desktop',
-      resolution: '1280x1024'
-    },
-    {
       browserName: 'Safari',
       version: '11.1',
       name: 'Safari Desktop',
+      resolution: '1280x1024'
+    },
+    {
+      browserName: 'Chrome',
+      name: 'Latest Chrome Desktop',
       resolution: '1280x1024'
     },
     {
@@ -61,7 +61,7 @@ exports.config = {
     }
   ],
 
-  // maxSessions: 1,
+  maxSessions: 1,
   // BrowserStack compatible ports: https://www.browserstack.com/question/664
   baseUrl: 'http://localhost:3333/',
   framework: 'jasmine',
