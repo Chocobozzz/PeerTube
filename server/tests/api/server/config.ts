@@ -86,7 +86,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.followings.instance.autoFollowBack.enabled).to.be.false
   expect(data.followings.instance.autoFollowIndex.enabled).to.be.false
-  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('https://instances.joinpeertube.org')
+  expect(data.followings.instance.autoFollowIndex.indexUrl).to.equal('')
 }
 
 function checkUpdatedConfig (data: CustomConfig) {

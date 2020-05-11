@@ -2,53 +2,69 @@
 
  * Chocobozzz
  * Rigel Kent
- * Felix Ableitner
  * Filip Bengtsson
+ * Felix Ableitner
  * Gérald Niel
  * Julien Maulny
  * Jorropo
  * Josh Morel
+ * Kim
  * BO41
  * Francesc
- * Frank Sträter
  * Phongpanot
+ * Frank Sträter
+ * Tirifto
  * John Livingston
+ * Xabi
  * buoyantair
+ * Jeff Huang
+ * kimsible
  * Attila F
+ * Balázs Úr
  * Benjamin Bouvier
  * Jan Keromnes
  * Lucas Declercq
+ * knuxify
  * matograine
+ * Александр
  * David Libeau
  * Florent F
  * Luc Didry
  * Nassim Bounouas
+ * josé m
  * Anne-Gaelle Moulun
  * BRAINS YUM
+ * Berto Te
  * Côme 744
  * Dimitri Gilbert
  * Florent Poinsaut
  * Green-Star
  * Micah Elizabeth Scott
+ * Quentin PAGÈS
  * SVNET Libre
  * Thomas Kuntz
  * William Lahti
  * Wirebrass
  * Angristan
+ * Chris Sakura 佐倉くりす on Youtube
  * DontUseGithub
  * GunChleoc
  * Marcin Mikołajczak
+ * NorbiPeti
  * Okhin
  * Pierre-Alain TORET
+ * Serge Victor
  * Thomas Citharel
  * clementbrizard
  * kaiyou
+ * Alberto Teira
  * Andréas Livet
  * Andrés Maldonado
  * Aurélien Bertron
  * Hans Meiser
  * Jefferson Hernandez
  * Kemal Oktay Aktoğan
+ * Kiro
  * LecygneNoir
  * Leopere
  * Manuela Silva
@@ -58,10 +74,14 @@
  * dada
  * frankdelange
  * jonathanraes
+ * Al-Hassan Abdel-Raouf
  * Andrew Morgan
+ * Arne Uplegger
  * Aurélien Béranger
  * Average Dude
  * Axel Viala
+ * Balázs Meskó
+ * BitTube
  * ButterflyOfFire
  * Ch
  * Dashie
@@ -71,17 +91,16 @@
  * Florian
  * Frank de Lange
  * Gaëtan Rizio
- * Jeff Huang
  * Joan Montané
  * Jocelyn Jaubert
  * Julien Lemaire
- * Kim
  * Lucas Teixeira
  * Lukas Winkler
  * Manuel Viens
  * Millicent Billette
+ * Mondo Xíbaro
  * Moritz Warning
- * NorbiPeti
+ * Nojus
  * Pierre Jaury
  * Quentin
  * Ronan
@@ -90,10 +109,14 @@
  * ahmadsharifian
  * framail
  * les
+ * libertas
+ * merty
  * taziden
  * victor héry
+ * Àngel Pérez Beroy
  * 3risian
  * Acid Chicken (硫酸鶏)
+ * Adam Adamsky
  * Adam Gauthier
  * Adam Magnier
  * Adnane Belmadiaf
@@ -111,19 +134,26 @@
  * Brad Johnson
  * Cale
  * Charles de Lacombe
+ * Chris Sakura 佐倉くりす on Youtube - 日本語は第二言語やけ、間違っとったら思いっきり叩いてくださいｗ つたない日本語ばっかりやけど頑張りまーす♪
+ * Christoph Geschwind
  * Claude
  * Clément Brizard
+ * David Dobryakov
  * DeeJayBro
  * Edouard SCHWEISGUTH
  * Edwin Alberto Amado Baron
+ * Emmanuel Pret
  * Eric Brehault
  * Erwan Croze
  * Fabio Agreles Bezerra
  * Fernandez, ReK2
+ * Florian CUNY
  * Glandos
  * Haelwenn (lanodan) Monnier
  * HesioZ
  * ICabaleiro
+ * Ismaël Bouya
+ * Iván Cabaleiro
  * Jacen
  * Jacob
  * Jacques Foucry
@@ -131,6 +161,7 @@
  * Jarosław Maciejewski
  * Jessica Fairchild
  * Jorge Silva
+ * Jos
  * Julien Le Bras
  * Knackie
  * Kody
@@ -140,6 +171,7 @@
  * LiPeK
  * Lint
  * LoveIsGrief
+ * Lucien A
  * Léo Andrès
  * ManMade-cube42
  * Marco Zehe
@@ -165,7 +197,6 @@
  * Philip Durbin
  * Predatorix Phoenix
  * Quentin Dupont
- * Quentin PAGÈS
  * Quentí
  * ROPEDE
  * Raphael
@@ -173,6 +204,7 @@
  * Rech
  * Robin
  * Sankar
+ * Sebastian Paweł Wolski
  * Simon Gilliot
  * Simounet
  * Stefan Schüller
@@ -182,12 +214,15 @@
  * Yann Sionneau
  * Yorwba
  * Yun
+ * Yury Bulka
  * Zig-03
+ * [ Bie ] Watcharapong Suriyawan
  * anmol26s
  * augier
  * bikepunk
  * bsky
  * ctlaltdefeat
+ * dingycle
  * jomo
  * libertysoft3
  * lsde
@@ -205,6 +240,7 @@
  * tomamplius
  * tuxayo
  * victor-long
+ * xcffl
  * zacharystenger
  * ‮noisawe
  * abdhessuk
@@ -336,4 +372,3 @@
  * [Fork-Awesome](https://github.com/ForkAwesome/Fork-Awesome)
  * `playlist add` by Material UI
  * `language` by Aaron Jin
- * `npm` by Boboss74
