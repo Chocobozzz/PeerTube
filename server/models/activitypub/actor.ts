@@ -123,13 +123,13 @@ export const unusedActorAttributesForAPI = [
         }
       }
     },
-    // {
-    //   fields: [ 'preferredUsername' ],
-    //   unique: true,
-    //   where: {
-    //     serverId: null
-    //   }
-    // },
+    {
+      fields: [ 'preferredUsername' ],
+      unique: true,
+      where: {
+        serverId: null
+      }
+    },
     {
       fields: [ 'inboxUrl', 'sharedInboxUrl' ]
     },
