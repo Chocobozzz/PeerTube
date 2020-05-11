@@ -233,7 +233,7 @@ export class PeertubePlayerManager {
         : undefined, // Undefined so the player knows it has to check the local storage
 
       autoplay: autoplay === true
-        ? 'play' // Use 'any' instead of true to get notifier by videojs if autoplay fails
+        ? this.getAutoPlayValue()
         : autoplay,
 
       poster: commonOptions.poster,
@@ -508,6 +508,16 @@ export class PeertubePlayerManager {
         }
       }
     })
+  }
+
+  private static getAutoPlayValue () {
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
+    // We have issues with autoplay and Safari.
+    // any that tries to play using auto mute seems to work
+    if (isSafari) return 'any'
+
+    return 'play'
   }
 }
 
