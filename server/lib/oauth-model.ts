@@ -123,7 +123,7 @@ async function getUser (usernameOrEmail?: string, password?: string) {
 
   const user = await UserModel.loadByUsernameOrEmail(usernameOrEmail)
   // If we don't find the user, or if the user belongs to a plugin
-  if (!user || user.pluginAuth !== null) return null
+  if (!user || user.pluginAuth !== null || !password) return null
 
   const passwordMatch = await user.isPasswordMatch(password)
   if (passwordMatch !== true) return null

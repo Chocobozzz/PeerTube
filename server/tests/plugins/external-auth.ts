@@ -18,7 +18,8 @@ import {
   updateMyUser,
   wait,
   userLogin,
-  updatePluginSettings
+  updatePluginSettings,
+  createUser
 } from '../../../shared/extra-utils'
 import { cleanupTests, flushAndRunServer, ServerInfo, waitUntilLog } from '../../../shared/extra-utils/server/servers'
 
@@ -29,6 +30,7 @@ async function loginExternal (options: {
   username: string
   query?: any
   statusCodeExpected?: number
+  statusCodeExpectedStep2?: number
 }) {
   const res = await getExternalAuth({
     url: options.server.url,
@@ -47,7 +49,8 @@ async function loginExternal (options: {
   const resLogin = await loginUsingExternalToken(
     options.server,
     options.username,
-    externalAuthToken as string
+    externalAuthToken as string,
+    options.statusCodeExpectedStep2
   )
 
   return resLogin.body
@@ -85,7 +88,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(3)
+    expect(auths).to.have.lengthOf(6)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.exist
@@ -288,7 +291,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(2)
+    expect(auths).to.have.lengthOf(5)
 
     const auth1 = auths.find(a => a.authName === 'external-auth-2')
     expect(auth1).to.not.exist
@@ -311,6 +314,45 @@ describe('Test external auth plugins', function () {
       username: 'cyan',
       statusCodeExpected: 404
     })
+
+    await userLogin(server, { username: 'cyan', password: null }, 400)
+    await userLogin(server, { username: 'cyan', password: '' }, 400)
+    await userLogin(server, { username: 'cyan', password: 'fake' }, 400)
+  })
+
+  it('Should not login kefka with another plugin', async function () {
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-two',
+      authName: 'external-auth-4',
+      username: 'kefka2',
+      statusCodeExpectedStep2: 400
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-two',
+      authName: 'external-auth-4',
+      username: 'kefka',
+      statusCodeExpectedStep2: 400
+    })
+  })
+
+  it('Should not login an existing user', async function () {
+    await createUser({
+      url: server.url,
+      accessToken: server.accessToken,
+      username: 'existing_user',
+      password: 'super_password'
+    })
+
+    await loginExternal({
+      server,
+      npmName: 'test-external-auth-two',
+      authName: 'external-auth-6',
+      username: 'existing_user',
+      statusCodeExpectedStep2: 400
+    })
   })
 
   it('Should display the correct configuration', async function () {
@@ -319,7 +361,7 @@ describe('Test external auth plugins', function () {
     const config: ServerConfig = res.body
 
     const auths = config.plugin.registeredExternalAuths
-    expect(auths).to.have.lengthOf(1)
+    expect(auths).to.have.lengthOf(4)
 
     const auth2 = auths.find((a) => a.authName === 'external-auth-2')
     expect(auth2).to.not.exist
