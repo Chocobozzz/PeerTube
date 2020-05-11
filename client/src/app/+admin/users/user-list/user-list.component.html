@@ -106,7 +106,10 @@
       <td [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
 
       <td class="action-cell">
-        <my-user-moderation-dropdown *ngIf="!isInSelectionMode()" [user]="user" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()">
+        <my-user-moderation-dropdown
+          *ngIf="!isInSelectionMode()"
+          [user]="user" container="body" (userChanged)="onUserChanged()" (userDeleted)="onUserChanged()"
+        >
         </my-user-moderation-dropdown>
       </td>
     </tr>
