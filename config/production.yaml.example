@@ -381,7 +381,8 @@ followings:
     # /!\ Don't enable this if you don't have a reactive moderation team /!\
     auto_follow_index:
       enabled: false
-      index_url: 'https://instances.joinpeertube.org'
+      # Host your own using https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
+      index_url: ''
 
 theme:
   default: 'default'

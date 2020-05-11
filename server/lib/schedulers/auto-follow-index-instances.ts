@@ -42,6 +42,10 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
       this.lastCheck = new Date()
 
       const { body } = await doRequest<any>({ uri, qs, json: true })
+      if (!body.data || Array.isArray(body.data) === false) {
+        logger.error('Cannot auto follow instances of index %s: bad URL format. Please check the auto follow URL.', indexUrl)
+        return
+      }
 
       const hosts: string[] = body.data.map(o => o.host)
       const chunks = chunk(hosts, 20)

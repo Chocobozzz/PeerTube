@@ -61,7 +61,7 @@ exports.config = {
     }
   ],
 
-  maxSessions: 1,
+  // maxSessions: 1,
   // BrowserStack compatible ports: https://www.browserstack.com/question/664
   baseUrl: 'http://localhost:3333/',
   framework: 'jasmine',
