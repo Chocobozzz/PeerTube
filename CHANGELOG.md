@@ -11,8 +11,8 @@
     For every entry, you'll have to change the preferredUsername of the entry you want (so they are unique).
     The updated actors could have some federations issues
  * Changed `auto_follow_index` setting configuration: you now have to use the complete URL in `index_url`.
- If you used the default one, you now need to use `https://instances.joinpeertube.org/api/v1/instances/hosts`
- This way, you can also use a direct raw URL (Gitlab, Github, pastebin etc) using the following format: https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow
+ If you used the default one, you now need to use `https://instances.joinpeertube.org/api/v1/instances/hosts`.
+ This way, you can also use a direct raw URL (Gitlab, Github, pastebin, etc.) using [a simple text format](https://framagit.org/framasoft/peertube/instances-peertube#peertube-auto-follow) and easily maintain small communities or instance recommendation lists.
  * PeerTube requires NodeJS v10 or v12
 
 ### CLI tools
@@ -27,7 +27,7 @@
 
 ### Maintenance
 
- * Add nginx configuration to redirect videos to an S3 bucket ([@rigelk](https://github.com/rigelk))
+ * Add nginx configuration to redirect videos to an S3 bucket ([@rigelk](https://github.com/rigelk)) and update of the [corresponding documentation](https://docs.joinpeertube.org/#/admin-remote-storage).
 
 ### Plugins/Themes/Embed API
 
@@ -62,36 +62,42 @@
 
 ## Features
 
- * :tada: Add HTML support in PeerTube emails ([@rigelk](https://github.com/rigelk))
- * :tada: Add settings to anonymous users so they can change NSFW/P2P/autoplay/displayed videos policy ([@rigelk](https://github.com/rigelk))
+ * :tada: Add HTML support in PeerTube emails, improve text-only version ([@rigelk](https://github.com/rigelk))
+ * :tada: Add settings panel for anonymous users so they can change NSFW/P2P/autoplay/displayed videos policy ([@rigelk](https://github.com/rigelk))
  * :tada: Improve redundancy management:
    * Add quick action on video miniature to mirror a specific video using the web interface
    * Add admin dashboard to list remote and local redundancies
    * Add ability for admins to define remote redundancies policy (accept/reject)
  * :tada: Many responsive & UI improvements:
    * Add maximized mode to markdown textarea ([@kimsible](https://github.com/kimsible))
-   * Detect and prevent sub menu on small screens using a dropdown or a modal ([@rigelk](https://github.com/rigelk))
+   * Detect and prevent sub menu overflow on small screens using a dropdown or a modal ([@rigelk](https://github.com/rigelk))
    * Use a typeahead component for the search bar ([@rigelk](https://github.com/rigelk))
    * Use a modal instead of a dropdown menu in small/mobile views ([@kimsible](https://github.com/kimsible))
-   * Better display of accounts and channel pages on small and medium screens ([@rigelk](https://github.com/rigelk))
+   * Improve display of accounts and channel pages on small and medium screens ([@rigelk](https://github.com/rigelk))
    * Improve forms layout ([@rigelk](https://github.com/rigelk))
    * Replace helpers icons with descriptions in admin configuration ([@rigelk](https://github.com/rigelk))
-   * Improve tables on mobile devices ([@kimsible](https://github.com/kimsible))
+   * Improve tables on mobile devices to prevent layout breakage ([@kimsible](https://github.com/kimsible))
    * Fix multiple broken views on small screens ([@kimsible](https://github.com/kimsible))
    * Make video add tabs scrollable on small devices ([@kimsible](https://github.com/kimsible))
-   * Better use of space and icons in plugins administration interface ([@rigelk](https://github.com/rigelk))
+   * Better use of space and icons in the plugin administration interface ([@rigelk](https://github.com/rigelk))
    * Restyle toast notifications to tone down colors ([@rigelk](https://github.com/rigelk))
-   * Add links at the bottom of the left menu ([@rigelk](https://github.com/rigelk))
+   * Add/move links at the bottom of the left menu ([@rigelk](https://github.com/rigelk))
    * Improve avatar upload UI ([@rigelk](https://github.com/rigelk))
    * Use progress bars for quota used in my account ([@rigelk](https://github.com/rigelk))
+   * Add variable pagination size to all tables ([@rigelk](https://github.com/rigelk))
+   * Add empty states to all tables ([@rigelk](https://github.com/rigelk))
+   * Add generic text filter to all admin tables ([@rigelk](https://github.com/rigelk))
+   * Fix `z-index` for tooltips, modals and their button to prevent overlaps ([@rigelk](https://github.com/rigelk))
    * And many others!
  * :tada: Improve video abuses admin table ([@rigelk](https://github.com/rigelk)):
-   * Add search filters
+   * Add in-text specific search filters
+   * Reports can be linked to directly
    * Rich reporter field
-   * Add video thumbnail
-   * Expand row to see more information about the video
+   * Add video thumbnail with abuse count for the video and position of the abuse in that list
+   * Expand row to see more information about the video, the reporter and the reportee
    * Add many actions (on the video, on the reporter)
    * Don't remove a report when a video is deleted
+ * Add information on a video abuse within its notification email ([@rigelk](https://github.com/rigelk))
  * Add ability for video owners to delete comments
  * Add filter inputs for blacklisted videos and muted accounts/servers ([@rigelk](https://github.com/rigelk))
  * Video import improvements:
@@ -108,7 +114,7 @@
    * Add cache for some immutable models
    * Don't refresh videos when processing a view
    * Optimize view endpoint
-   * Completely rewrited SQL query to list videos
+   * Completely rewritten SQL query to list videos
    * Optimize SQL request when broadcasting an activity
  * Support infinite scrolling in the discover page
  * Add ability for admins to create a user without a password. PeerTube will send a reset password link to the user ([@JohnXLivingston](https://github.com/JohnXLivingston))
