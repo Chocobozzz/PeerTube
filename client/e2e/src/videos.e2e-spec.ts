@@ -53,6 +53,10 @@ describe('Videos workflow', () => {
     if (await isSafari()) {
       console.log('Safari detected.')
     }
+
+    if (!await isMobileDevice()) {
+      await browser.driver.manage().window().maximize()
+    }
   })
 
   it('Should log in', async () => {

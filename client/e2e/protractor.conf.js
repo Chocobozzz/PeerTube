@@ -12,7 +12,9 @@ exports.config = {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_KEY,
     'browserstack.local': true,
-    project: 'PeerTube'
+    'browserstack.console': 'info',
+    project: 'PeerTube',
+    name: 'Bstack-[Protractor] Parallel Test'
   },
 
   multiCapabilities: [

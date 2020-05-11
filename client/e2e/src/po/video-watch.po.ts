@@ -14,7 +14,7 @@ export class VideoWatchPage {
     await browser.get(url)
 
     // Waiting the following element does not work on Safari...
-    if (isSafari === true) return browser.sleep(3000)
+    if (isSafari) return browser.sleep(3000)
 
     const elem = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
     return browser.wait(browser.ExpectedConditions.visibilityOf(elem))
@@ -84,13 +84,12 @@ export class VideoWatchPage {
   }
 
   async clickOnFirstVideo () {
-    const video = element.all(by.css('.videos .video-miniature .video-thumbnail')).first()
-    const videoName = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
+    const video = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
 
     // Don't know why but the expectation fails on Safari
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(video))
 
-    const textToReturn = videoName.getText()
+    const textToReturn = video.getText()
     await video.click()
 
     await browser.wait(browser.ExpectedConditions.urlContains('/watch/'))
@@ -106,7 +105,7 @@ export class VideoWatchPage {
   }
 
   async goOnP2PMediaLoaderEmbed () {
-    return browser.get('https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50?mode=p2p-media-loader')
+    return browser.get('https://peertube2.cpy.re/videos/embed/969bf103-7818-43b5-94a0-de159e13de50')
   }
 
   async clickOnUpdate () {
