@@ -105,6 +105,14 @@ async function onExternalUserAuthenticated (options: {
     authName
   })
 
+  // Cleanup
+  const now = new Date()
+  for (const [ key, value ] of authBypassTokens) {
+    if (value.expires.getTime() < now.getTime()) {
+      authBypassTokens.delete(key)
+    }
+  }
+
   res.redirect(`/login?externalAuthToken=${bypassToken}&username=${user.username}`)
 }
 
