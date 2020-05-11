@@ -22,18 +22,6 @@ import { APP_BASE_HREF } from '@angular/common'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
 
-export function metaFactory (serverService: ServerService): MetaLoader {
-  return new MetaStaticLoader({
-    pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
-    pageTitleSeparator: ' - ',
-    get applicationName () { return serverService.getTmpConfig().instance.name },
-    defaults: {
-      get title () { return serverService.getTmpConfig().instance.name },
-      get description () { return serverService.getTmpConfig().instance.shortDescription }
-    }
-  })
-}
-
 @NgModule({
   bootstrap: [ AppComponent ],
   declarations: [
@@ -67,7 +55,17 @@ export function metaFactory (serverService: ServerService): MetaLoader {
 
     MetaModule.forRoot({
       provide: MetaLoader,
-      useFactory: (metaFactory),
+      useFactory: (serverService: ServerService) => {
+        return new MetaStaticLoader({
+          pageTitlePositioning: PageTitlePositioning.PrependPageTitle,
+          pageTitleSeparator: ' - ',
+          get applicationName () { return serverService.getTmpConfig().instance.name },
+          defaults: {
+            get title () { return serverService.getTmpConfig().instance.name },
+            get description () { return serverService.getTmpConfig().instance.shortDescription }
+          }
+        })
+      },
       deps: [ ServerService ]
     }),
 
