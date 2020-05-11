@@ -23,15 +23,17 @@
   </ng-template>
 
   <ng-template ptTemplate="rowButtons" let-video>
-    <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
+    <div class="action-button">
+      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
 
-    <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
+      <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
-    <my-button i18n-label label="Change ownership"
-               className="action-button-change-ownership grey-button"
-               icon="im-with-her"
-               (click)="changeOwnership($event, video)"
-    ></my-button>
+      <my-button i18n-label label="Change ownership"
+                 className="action-button-change-ownership grey-button"
+                 icon="im-with-her"
+                 (click)="changeOwnership($event, video)"
+      ></my-button>
+    </div>
   </ng-template>
 </my-videos-selection>
 
