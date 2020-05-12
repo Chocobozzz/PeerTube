@@ -1087,7 +1087,7 @@
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Elnézést, de valami probléma adódott a külső bejelentkezési folyamattal. Kérlek <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>értesíts egy adminisztrátort<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Sajnáljuk, de valami hiba történt a külső bejelentkezési folyamattal. <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Lépjen kapcsolatba egy rendszergazdával<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -1095,7 +1095,7 @@
       </trans-unit>
       <trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="translated">Ha fiókot szeretnél…</target>
+        <target state="translated">Ha egy fiókot keres…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1103,7 +1103,7 @@
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Jelenleg ez a példány nem enged felhasználói regisztrációt, de találhatsz egyet ami lehetővé teszi fiók létrehozását és a videóid feltöltését. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Keresd meg a hozzád illőt itt: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Jelenleg ezen a példányon nem engedélyezett a felhasználói regisztráció, de kereshet egy olyan példányt, amely lehetőséget ad egy fiók regisztrálására és a videók oda történő feltöltésére. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Keresse meg a sajátját több más példány mellett a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> oldalon. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1137,7 +1137,7 @@
       </trans-unit>
       <trans-unit id="9fed9d6f57dafb967ffaaf3c63f54ad976cab926" datatype="html">
         <source>or create an account</source>
-        <target state="translated">vagy hozz létre egy fiókot</target>
+        <target state="translated">vagy hozzon létre egy fiókot</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1174,7 +1174,7 @@
       </trans-unit>
       <trans-unit id="f5d783c0613d323fdd20074ffbc519ee715a4f2b" datatype="html">
         <source>Or sign in with</source>
-        <target state="translated">Vagy jelentkezz be ezzel:</target>
+        <target state="translated">Vagy jelentkezzen be ezzel:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">68</context>
@@ -3274,7 +3274,7 @@
       </trans-unit>
       <trans-unit id="9c9e0eb0ce8abea8b4c7c5dbb6e80a9a5f5b4193" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">Szereplő oldalának megnyitása új lapon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3315,17 +3315,17 @@
       </trans-unit>
       <trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="translated">Nem található követő a beállított szűrőkkel.</target>
+        <target state="translated">Nem található a jelenlegi szűrőkre illeszkedő követő.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="translated">A példányodnak nincs követője.</target>
+        <target state="translated">Az Ön példányának nincs egyetlen követője sem.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> followers</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> mutatása a <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> követőből</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> – <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> / <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> követő megjelenítése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3363,7 +3363,7 @@
       </trans-unit>
       <trans-unit id="d9b4b939363bf385cbb7828c1535f2e2a5e0d362" datatype="html">
         <source>No host found matching current filters.</source>
-        <target state="translated">Nem található hoszt a jelenlegi szűrőkkel.</target>
+        <target state="translated">Nem található a jelenlegi szűrőkre illeszkedő gép.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">62</context>
@@ -3371,7 +3371,7 @@
       </trans-unit>
       <trans-unit id="6f635f2eba7fe60e4266192fbfef20948fbe3b0a" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="translated">A példányod nem követ senkit.</target>
+        <target state="translated">Az Ön példánya nem követ senkit sem.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">63</context>
@@ -3379,7 +3379,7 @@
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/>-<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> mutatása <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosztból</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> – <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> / <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> gép megjelenítése</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3569,7 +3569,7 @@
       </trans-unit>
       <trans-unit id="c38a6a10b47b82463eda45f856348b51daa96b97" datatype="html">
         <source>Auth plugin</source>
-        <target state="new">Auth plugin</target>
+        <target state="translated">Hitelesítési bővítmény</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">49</context>
@@ -3689,7 +3689,7 @@
       </trans-unit>
       <trans-unit id="897116a91d135b1552880aed6050814a4a0df28a" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="translated">A példányod nem másol egy videót sem.</target>
+        <target state="translated">Az Ön példánya nem másol le egyetlen videót sem.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">77</context>
@@ -3697,7 +3697,7 @@
       </trans-unit>
       <trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target state="translated">A példányodnak nincs másolt videója.</target>
+        <target state="translated">Az Ön példányának nincsenek lemásolt videói.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">78</context>
@@ -3736,7 +3736,7 @@
       </trans-unit>
       <trans-unit id="1c16132124fd96151ccf858aad5a98108df6c93a" datatype="html">
         <source>Video was blacklisted</source>
-        <target state="translated">A videó feketelistára került</target>
+        <target state="translated">A videó feketelistára lett téve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">50</context>
@@ -3773,7 +3773,7 @@
       </trans-unit>
       <trans-unit id="88a2cc2d9ca0506186bbfab6c4e0c32c44a9ee98" datatype="html">
         <source>No blacklisted video found matching current filters.</source>
-        <target state="translated">Nem található a szűrőknek megfelelő feketelistás videó.</target>
+        <target state="translated">Nem található a jelenlegi szűrőkre illeszkedő feketelistára tett videó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">93</context>
@@ -3781,7 +3781,7 @@
       </trans-unit>
       <trans-unit id="294036a9ad4dd71531d3032678d9ff00d8ff9ebb" datatype="html">
         <source>No blacklisted video found.</source>
-        <target state="translated">Nem található feketlistás videó.</target>
+        <target state="translated">Nem található feketelistára tett videó.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">94</context>
@@ -3821,7 +3821,7 @@
       </trans-unit>
       <trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
         <source>Advanced report filters</source>
-        <target state="translated">Haladó jelentésszűrők</target>
+        <target state="translated">Speciális jelentésszűrők</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3853,7 +3853,7 @@
       </trans-unit>
       <trans-unit id="1c33f537774e1418d848442439b6c0fc62d9af47" datatype="html">
         <source>Reports with blacklisted videos</source>
-        <target state="translated">Jelentések feketelistás videókkal</target>
+        <target state="translated">Feketelistára tett videókkal rendelkező jelentések</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3861,7 +3861,7 @@
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="translated">Jelentések törölt videókkal</target>
+        <target state="translated">Törölt videókkal rendelkező jelentések</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3896,7 +3896,7 @@
       </trans-unit>
       <trans-unit id="70bedf516507a286eb030398795bdaef40500929" datatype="html">
         <source>by <x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> on <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> által itt: <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </target>
+        <target state="translated">– <x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> ezen: <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">91</context>
@@ -3908,7 +3908,7 @@
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
         <source>Video was deleted</source>
-        <target state="translated">Videó törölve</target>
+        <target state="translated">A videó törölve lett</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -3916,7 +3916,7 @@
       </trans-unit>
       <trans-unit id="7c6eca36ec5dfbab2049ec1c58f8b6fe9d71c23b" datatype="html">
         <source>No video abuses found matching current filters.</source>
-        <target state="translated">Nem található videó visszaélés a megadott szűrőkkel.</target>
+        <target state="translated">Nem találhatók a jelenlegi szűrőkre illeszkedő video-visszaélési jelentések.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -3924,7 +3924,7 @@
       </trans-unit>
       <trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
         <source>No video abuses found.</source>
-        <target state="translated">Nem található videó visszaélés.</target>
+        <target state="translated">Nem találhatók video-visszaélési jelentések.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">142</context>
@@ -3970,9 +3970,7 @@
       </trans-unit>
       <trans-unit id="f0045181fddf6e1642314ee5464667098ac18d9d" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-          <x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">20</context>
@@ -3980,7 +3978,7 @@
       </trans-unit>
       <trans-unit id="730ae657d91e79c45d0685a7060cfea40ea8ea85" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> jelentés} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 jelentés} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> jelentés} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3996,9 +3994,7 @@
       </trans-unit>
       <trans-unit id="28b2bd6301b8655f46a26faf4db7f11e06be1747" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-          <x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-        </target>
+        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">40</context>
@@ -4006,7 +4002,7 @@
       </trans-unit>
       <trans-unit id="9f8e4923506fc6890efb71d403fc048f22dd616c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reports} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> jelentés} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 jelentés} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> jelentés} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">41</context>
@@ -4068,7 +4064,7 @@
       </trans-unit>
       <trans-unit id="4cac34ce105daa25964c217fdf0515a0a6ee5db9" datatype="html">
         <source>No server found matching current filters.</source>
-        <target state="translated">Nem található szerver a megadott szűrőkkel.</target>
+        <target state="translated">Nem található a jelenlegi szűrőkre illeszkedő kiszolgáló.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">51</context>
@@ -4076,7 +4072,7 @@
       </trans-unit>
       <trans-unit id="0ba22bd964baaf0c2f85d6731fccca31dbf06dae" datatype="html">
         <source>No server found.</source>
-        <target state="translated">Nem található szerver.</target>
+        <target state="translated">Nem található kiszolgáló.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">52</context>
@@ -4111,7 +4107,7 @@
       </trans-unit>
       <trans-unit id="33c4091a2a2438ba655caa47ede7f7a82f5f0297" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="translated">Nem található fiók a megadott szűrőkkel.</target>
+        <target state="translated">Nem található a jelenlegi szűrőkre illeszkedő fiók.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">58</context>
@@ -9885,7 +9881,7 @@
       </trans-unit>
       <trans-unit id="88aea4de1e1b6ebea31b665286b388d0efb3a84b" datatype="html">
         <source>Mute server</source>
-        <target state="translated">Szerver némítása</target>
+        <target state="translated">Kiszolgáló némítása</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9893,7 +9889,7 @@
       </trans-unit>
       <trans-unit id="ecc473396f70a6ba41411c9449320f9e8d4cfbcf" datatype="html">
         <source>Server <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{host}}"/> szerver némítva a példány által.</target>
+        <target state="translated">A(z) <x id="INTERPOLATION" equiv-text="{{host}}"/> kiszolgálót némította a példány.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10251,7 +10247,7 @@
       </trans-unit>
       <trans-unit id="c93a80b6a7d903886843ac3719b34b1794de171f" datatype="html">
         <source>Unblacklist video</source>
-        <target state="translated">Videó levétele a feketelistáról</target>
+        <target state="translated">Videó eltávolítása a feketelistáról</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10259,7 +10255,7 @@
       </trans-unit>
       <trans-unit id="9382291d6ebed56e5ae95e020d6b91f39cff468a" datatype="html">
         <source>Video unblacklisted.</source>
-        <target state="translated">Videó levéve a feketelistáról.</target>
+        <target state="translated">A videó el lett távolítva a feketelistáról.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10339,7 +10335,7 @@
       </trans-unit>
       <trans-unit id="a36503b80133639322bcdb973f78bcadbd86b798" datatype="html">
         <source>Video deleted.</source>
-        <target state="translated">Videó törölve.</target>
+        <target state="translated">A videó törölve.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10385,7 +10381,7 @@
       </trans-unit>
       <trans-unit id="5bad8678a5115610ba1bf56a35256a13e6b07a7b" datatype="html">
         <source>Mirror</source>
-        <target state="translated">Másolás</target>
+        <target state="translated">Lemásolás</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10401,7 +10397,7 @@
       </trans-unit>
       <trans-unit id="5c54befce78d70e20c215f10a00e617245f53bc9" datatype="html">
         <source>Note</source>
-        <target state="translated">Megjegyzés</target>
+        <target state="translated">Jegyzet</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">61</context>
@@ -10409,7 +10405,7 @@
       </trans-unit>
       <trans-unit id="1d3402b0e60154aaa071f390c63437b701d9048c" datatype="html">
         <source>The video was deleted</source>
-        <target state="translated">A videó törölve</target>
+        <target state="translated">A videó törölve lett</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">71</context>
@@ -10417,7 +10413,7 @@
       </trans-unit>
       <trans-unit id="076960cf44b4a0e89cc5024a75963844b068b284" datatype="html">
         <source>The video was blacklisted</source>
-        <target state="translated">A videó feketelistázva</target>
+        <target state="translated">A videó feketelistára lett téve</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">72</context>
