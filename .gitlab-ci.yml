@@ -160,8 +160,10 @@ test-external-plugins:
     - name: rroemhild/test-openldap
       alias: ldap
   variables:
+    PGHOST: postgres
+    PGUSER: peertube
     POSTGRES_USER: peertube
-    POSTGRES_PASSWORD: "peertube"
+    POSTGRES_PASSWORD: peertube
     POSTGRES_HOST_AUTH_METHOD: trust
     REDIS_HOST: redis
   artifacts:
