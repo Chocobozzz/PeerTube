@@ -34,9 +34,9 @@ Be part of a network of multiple small federated, interoperable video hosting pr
   <a href="https://david-dm.org/Chocobozzz/PeerTube?path=client&type=dev">
     <img src="https://david-dm.org/Chocobozzz/PeerTube/dev-status.svg?path=client" alt="devDependency Status" />
   </a>
-  
-  <a href="https://automate.browserstack.com/public-build/cW5mYW43VDNUR1Jrb0Y5TnVoaC85Tk84SVhzSU9rS0ppWWJJYUVlRzVQRT0tLW9tVGIvK2ZmOGRld3lVVFRYTFM4aEE9PQ==--591b0056e00a2d1cbdfbcfa324634046132008ec">
-    <img src="https://automate.browserstack.com/badge.svg?badge_key=cW5mYW43VDNUR1Jrb0Y5TnVoaC85Tk84SVhzSU9rS0ppWWJJYUVlRzVQRT0tLW9tVGIvK2ZmOGRld3lVVFRYTFM4aEE9PQ==--591b0056e00a2d1cbdfbcfa324634046132008ec"/>
+
+  <a href="https://automate.browserstack.com/public-build/T2g0SVQyMTJtYVRWaEZQTE9LdU9UU1ZDSkY5dTJ6dGlNRUVIajd4QlIwST0tLVdTQ1NUZ0pUTzRZT3lyZzkvWGNSZ1E9PQ==--278d3c68ae0827ce57e245e9f5a3b8c35d6e2278%">
+    <img src="https://automate.browserstack.com/badge.svg?badge_key=T2g0SVQyMTJtYVRWaEZQTE9LdU9UU1ZDSkY5dTJ6dGlNRUVIajd4QlIwST0tLVdTQ1NUZ0pUTzRZT3lyZzkvWGNSZ1E9PQ==--278d3c68ae0827ce57e245e9f5a3b8c35d6e2278%"/>
   </a>
 </p>
 
@@ -141,7 +141,7 @@ You can also join the cheerful bunch that makes our community:
   * Matrix (bridged on IRC and [Discord](https://discord.gg/wj8DDUT)) : **[#peertube:matrix.org](https://matrix.to/#/#peertube:matrix.org)**
 * Forum:
   * Framacolibri: [https://framacolibri.org/c/peertube](https://framacolibri.org/c/peertube)
-    
+
 Feel free to reach out if you have any questions or ideas! :speech_balloon:
 
 :package: Create your own instance
@@ -203,7 +203,7 @@ Copyright (C) 2015-2020 PeerTube Contributors
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or 
+by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
