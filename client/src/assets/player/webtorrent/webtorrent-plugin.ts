@@ -2,7 +2,7 @@ import videojs from 'video.js'
 import * as WebTorrent from 'webtorrent'
 import { renderVideo } from './video-renderer'
 import { LoadedQualityData, PlayerNetworkInfo, WebtorrentPluginOptions } from '../peertube-videojs-typings'
-import { getRtcConfig, timeToInt, videoFileMaxByResolution, videoFileMinByResolution } from '../utils'
+import { getRtcConfig, timeToInt, videoFileMaxByResolution, videoFileMinByResolution, isIOS, isSafari } from '../utils'
 import { PeertubeChunkStore } from './peertube-chunk-store'
 import {
   getAverageBandwidthInStore,
@@ -74,7 +74,7 @@ class WebTorrentPlugin extends Plugin {
     this.startTime = timeToInt(options.startTime)
 
     // Disable auto play on iOS
-    this.autoplay = options.autoplay && this.isIOS() === false
+    this.autoplay = options.autoplay && isIOS() === false
     this.playerRefusedP2P = !getStoredP2PEnabled()
 
     this.videoFiles = options.videoFiles
@@ -158,7 +158,7 @@ class WebTorrentPlugin extends Plugin {
 
     // Don't try on iOS that does not support MediaSource
     // Or don't use P2P if webtorrent is disabled
-    if (this.isIOS() || this.playerRefusedP2P) {
+    if (isIOS() || this.playerRefusedP2P) {
       return this.fallbackToHttp(options, () => {
         this.player.playbackRate(oldPlaybackRate)
         return done()
@@ -328,6 +328,11 @@ class WebTorrentPlugin extends Plugin {
 
   private tryToPlay (done?: (err?: Error) => void) {
     if (!done) done = function () { /* empty */ }
+
+    // Try in mute mode because we have issues with Safari
+    if (isSafari() && this.player.muted() === false) {
+      this.player.muted(true)
+    }
 
     const playPromise = this.player.play()
     if (playPromise !== undefined) {
@@ -541,10 +546,6 @@ class WebTorrentPlugin extends Plugin {
 
   private disableErrorDisplay () {
     this.player.removeClass('vjs-error-display-enabled')
-  }
-
-  private isIOS () {
-    return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
   }
 
   private pickAverageVideoFile () {

@@ -1,5 +1,3 @@
-import { VideoFile } from '../../../../shared/models/videos'
-import videojs from 'video.js'
 import 'videojs-hotkeys/videojs.hotkeys'
 import 'videojs-dock'
 import 'videojs-contextmenu-ui'
@@ -20,14 +18,16 @@ import './videojs-components/settings-menu-item'
 import './videojs-components/settings-panel'
 import './videojs-components/settings-panel-child'
 import './videojs-components/theater-button'
-import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions } from './peertube-videojs-typings'
-import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig } from './utils'
+import videojs from 'video.js'
 import { isDefaultLocale } from '../../../../shared/models/i18n/i18n'
-import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
-import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
+import { VideoFile } from '../../../../shared/models/videos'
 import { RedundancyUrlManager } from './p2p-media-loader/redundancy-url-manager'
+import { segmentUrlBuilderFactory } from './p2p-media-loader/segment-url-builder'
+import { segmentValidatorFactory } from './p2p-media-loader/segment-validator'
 import { getStoredP2PEnabled } from './peertube-player-local-storage'
+import { P2PMediaLoaderPluginOptions, UserWatching, VideoJSCaption, VideoJSPluginOptions } from './peertube-videojs-typings'
 import { TranslationsManager } from './translations-manager'
+import { buildVideoEmbed, buildVideoLink, copyToClipboard, getRtcConfig, isIOS, isSafari } from './utils'
 
 // Change 'Playback Rate' to 'Speed' (smaller for our settings menu)
 (videojs.getComponent('PlaybackRateMenuButton') as any).prototype.controlText_ = 'Speed'
@@ -511,15 +511,12 @@ export class PeertubePlayerManager {
   private static getAutoPlayValue (autoplay: any) {
     if (autoplay !== true) return autoplay
 
-    const isIOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
-
     // Giving up with iOS
-    if (isIOS) return false
+    if (isIOS()) return false
 
     // We have issues with autoplay and Safari.
     // any that tries to play using auto mute seems to work
-    if (isSafari) return 'any'
+    if (isSafari()) return 'any'
 
     return 'play'
   }

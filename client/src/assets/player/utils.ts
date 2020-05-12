@@ -8,6 +8,14 @@ function isWebRTCDisabled () {
   return !!((window as any).RTCPeerConnection || (window as any).mozRTCPeerConnection || (window as any).webkitRTCPeerConnection) === false
 }
 
+function isIOS () {
+  return !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)
+}
+
+function isSafari () {
+  return /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+}
+
 // https://github.com/danrevah/ngx-pipes/blob/master/src/pipes/math/bytes.ts
 // Don't import all Angular stuff, just copy the code with shame
 const dictionaryBytes: Array<{max: number, type: string}> = [
@@ -192,5 +200,7 @@ export {
   videoFileMinByResolution,
   copyToClipboard,
   isMobile,
-  bytes
+  bytes,
+  isIOS,
+  isSafari
 }
