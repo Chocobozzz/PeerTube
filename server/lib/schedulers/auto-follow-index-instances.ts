@@ -1,12 +1,12 @@
-import { logger } from '../../helpers/logger'
-import { AbstractScheduler } from './abstract-scheduler'
-import { INSTANCES_INDEX, SCHEDULER_INTERVALS_MS, SERVER_ACTOR_NAME } from '../../initializers/constants'
-import { CONFIG } from '../../initializers/config'
 import { chunk } from 'lodash'
 import { doRequest } from '@server/helpers/requests'
-import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
 import { JobQueue } from '@server/lib/job-queue'
+import { ActorFollowModel } from '@server/models/activitypub/actor-follow'
 import { getServerActor } from '@server/models/application/application'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { SCHEDULER_INTERVALS_MS, SERVER_ACTOR_NAME } from '../../initializers/constants'
+import { AbstractScheduler } from './abstract-scheduler'
 
 export class AutoFollowIndexInstances extends AbstractScheduler {
 
@@ -34,16 +34,14 @@ export class AutoFollowIndexInstances extends AbstractScheduler {
     try {
       const serverActor = await getServerActor()
 
-      const uri = indexUrl + INSTANCES_INDEX.HOSTS_PATH
-
       const qs = { count: 1000 }
       if (this.lastCheck) Object.assign(qs, { since: this.lastCheck.toISOString() })
 
       this.lastCheck = new Date()
 
-      const { body } = await doRequest<any>({ uri, qs, json: true })
+      const { body } = await doRequest<any>({ uri: indexUrl, qs, json: true })
       if (!body.data || Array.isArray(body.data) === false) {
-        logger.error('Cannot auto follow instances of index %s: bad URL format. Please check the auto follow URL.', indexUrl)
+        logger.error('Cannot auto follow instances of index %s. Please check the auto follow URL.', indexUrl, { body })
         return
       }
 

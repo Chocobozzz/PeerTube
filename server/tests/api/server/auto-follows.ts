@@ -177,7 +177,7 @@ describe('Test auto follows', function () {
         followings: {
           instance: {
             autoFollowIndex: {
-              indexUrl: 'http://localhost:42100/api/v1/instances/hosts',
+              indexUrl: 'http://localhost:42101/api/v1/instances/hosts',
               enabled: true
             }
           }

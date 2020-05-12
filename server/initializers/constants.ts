@@ -178,10 +178,6 @@ const SCHEDULER_INTERVALS_MS = {
   removeOldHistory: 60000 * 60 * 24 // 1 day
 }
 
-const INSTANCES_INDEX = {
-  HOSTS_PATH: '/api/v1/instances/hosts'
-}
-
 // ---------------------------------------------------------------------------
 
 const CONSTRAINTS_FIELDS = {
@@ -730,7 +726,6 @@ export {
   PREVIEWS_SIZE,
   REMOTE_SCHEME,
   FOLLOW_STATES,
-  INSTANCES_INDEX,
   DEFAULT_USER_THEME_NAME,
   SERVER_ACTOR_NAME,
   PLUGIN_GLOBAL_CSS_FILE_NAME,
