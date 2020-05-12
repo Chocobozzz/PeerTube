@@ -30,7 +30,7 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
   selection: SelectionType = {}
   pagination: ComponentPagination = {
     currentPage: 1,
-    itemsPerPage: 5,
+    itemsPerPage: 10,
     totalItems: null
   }
   miniatureDisplayOptions: MiniatureDisplayOptions = {
