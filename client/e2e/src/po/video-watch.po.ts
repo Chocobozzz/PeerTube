@@ -1,4 +1,5 @@
 import { browser, by, element, ElementFinder, ExpectedConditions } from 'protractor'
+import { browserSleep } from '../utils'
 
 export class VideoWatchPage {
   async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
@@ -11,10 +12,10 @@ export class VideoWatchPage {
       url = '/videos/recently-added'
     }
 
-    await browser.get(url)
+    await browser.get(url, 20000)
 
     // Waiting the following element does not work on Safari...
-    if (isSafari) return browser.sleep(3000)
+    if (isSafari) return browserSleep(3000)
 
     const elem = element.all(by.css('.videos .video-miniature .video-miniature-name')).first()
     return browser.wait(browser.ExpectedConditions.visibilityOf(elem))
@@ -27,13 +28,12 @@ export class VideoWatchPage {
   }
 
   waitWatchVideoName (videoName: string, isMobileDevice: boolean, isSafari: boolean) {
+    if (isSafari) return browserSleep(5000)
+
     // On mobile we display the first node, on desktop the second
     const index = isMobileDevice ? 0 : 1
 
     const elem = element.all(by.css('.video-info .video-info-name')).get(index)
-
-    if (isSafari) return browser.sleep(5000)
-
     return browser.wait(browser.ExpectedConditions.textToBePresentInElement(elem, videoName))
   }
 
@@ -55,7 +55,7 @@ export class VideoWatchPage {
       await playButton.click()
     }
 
-    await browser.sleep(1000)
+    await browserSleep(1000)
     await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
 
     const videojsEl = element(by.css('div.video-js'))
@@ -63,13 +63,16 @@ export class VideoWatchPage {
 
     // On Android, we need to click twice on "play" (BrowserStack particularity)
     if (isMobileDevice) {
-      await browser.sleep(3000)
+      await browserSleep(3000)
+
       await videojsEl.click()
     }
 
-    await browser.sleep(7000)
+    browser.ignoreSynchronization = false
+    await browserSleep(7000)
+    browser.ignoreSynchronization = true
 
-    return videojsEl.click()
+    await videojsEl.click()
   }
 
   async clickOnVideo (videoName: string) {

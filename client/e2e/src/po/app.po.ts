@@ -10,12 +10,5 @@ export class AppPage {
     await element(by.css('.configure-instance-button')).click()
 
     await browser.switchTo().window(firstHandle)
-
-    await browser.refresh()
-
-    await element(by.css('.form-group-checkbox')).click()
-    await element(by.css('.action-button-cancel')).click()
-
-    await browser.switchTo().window(firstHandle)
   }
 }

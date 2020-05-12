@@ -12,52 +12,55 @@ exports.config = {
     'browserstack.user': process.env.BROWSERSTACK_USER,
     'browserstack.key': process.env.BROWSERSTACK_KEY,
     'browserstack.local': true,
-    'browserstack.console': 'info',
+    'browserstack.console': 'verbose',
+    'browserstack.networkLogs': true,
+    'browserstack.debug': true,
     project: 'PeerTube',
+    build: 'Main',
     name: 'Bstack-[Protractor] Parallel Test'
   },
 
   multiCapabilities: [
+    // {
+    //   browserName: 'Safari',
+    //   version: '11.1',
+    //   name: 'Safari Desktop',
+    //   resolution: '1280x1024'
+    // },
+    // {
+    //   browserName: 'Chrome',
+    //   name: 'Latest Chrome Desktop',
+    //   resolution: '1280x1024'
+    // },
+    // {
+    //   browserName: 'Firefox',
+    //   version: '60', // ESR,
+    //   name: 'Firefox ESR Desktop',
+    //   resolution: '1280x1024'
+    // },
+    // {
+    //   browserName: 'Firefox',
+    //   name: 'Latest Firefox Desktop',
+    //   resolution: '1280x1024'
+    // },
+    // {
+    //   browserName: 'Edge',
+    //   name: 'Latest Edge Desktop',
+    //   resolution: '1280x1024'
+    // },
+    // {
+    //   browserName: 'Chrome',
+    //   device: 'Google Nexus 6',
+    //   realMobile: 'true',
+    //   os_version: '5.0',
+    //   name: 'Latest Chrome Android'
+    // },
     {
       browserName: 'Safari',
-      version: '11.1',
-      name: 'Safari Desktop',
-      resolution: '1280x1024'
-    },
-    {
-      browserName: 'Chrome',
-      name: 'Latest Chrome Desktop',
-      resolution: '1280x1024'
-    },
-    {
-      browserName: 'Firefox',
-      version: '60', // ESR,
-      name: 'Firefox ESR Desktop',
-      resolution: '1280x1024'
-    },
-    {
-      browserName: 'Firefox',
-      name: 'Latest Firefox Desktop',
-      resolution: '1280x1024'
-    },
-    {
-      browserName: 'Edge',
-      name: 'Latest Edge Desktop',
-      resolution: '1280x1024'
-    },
-    {
-      browserName: 'Chrome',
-      device: 'Google Nexus 6',
+      device: 'iPhone 8',
       realMobile: 'true',
-      os_version: '5.0',
-      name: 'Latest Chrome Android'
-    },
-    {
-      browserName: 'Safari',
-      device: 'iPhone SE',
-      realMobile: 'true',
-      os_version: '11.2',
-      name: 'Latest Safari iPhone'
+      os_version: '12',
+      name: 'Safari iPhone'
     }
   ],
 
