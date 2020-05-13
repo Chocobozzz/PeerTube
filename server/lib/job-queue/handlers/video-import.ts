@@ -1,49 +1,36 @@
 import * as Bull from 'bull'
-import { logger } from '../../../helpers/logger'
-import { downloadYoutubeDLVideo } from '../../../helpers/youtube-dl'
-import { VideoImportModel } from '../../../models/video/video-import'
-import { VideoImportState } from '../../../../shared/models/videos'
-import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
-import { extname } from 'path'
-import { VideoFileModel } from '../../../models/video/video-file'
-import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
-import { VideoImportPayload, VideoImportTorrentPayload, VideoImportYoutubeDLPayload, VideoState } from '../../../../shared'
-import { federateVideoIfNeeded } from '../../activitypub/videos'
-import { VideoModel } from '../../../models/video/video'
-import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
-import { getSecureTorrentName } from '../../../helpers/utils'
 import { move, remove, stat } from 'fs-extra'
-import { Notifier } from '../../notifier'
-import { CONFIG } from '../../../initializers/config'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { generateVideoMiniature } from '../../thumbnail'
-import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
-import { MThumbnail } from '../../../typings/models/video/thumbnail'
-import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
-import { getVideoFilePath } from '@server/lib/video-paths'
+import { extname } from 'path'
 import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
-import { Hooks } from '@server/lib/plugins/hooks'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
-
-type VideoImportYoutubeDLPayloadType = 'youtube-dl'
-type VideoImportYoutubeDLPayload = {
-  type: VideoImportYoutubeDLPayloadType
-  videoImportId: number
-
-  thumbnailUrl: string
-  downloadThumbnail: boolean
-  downloadPreview: boolean
-
-  fileExt?: string
-}
-
-type VideoImportTorrentPayloadType = 'magnet-uri' | 'torrent-file'
-type VideoImportTorrentPayload = {
-  type: VideoImportTorrentPayloadType
-  videoImportId: number
-}
-
-export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
+import { Hooks } from '@server/lib/plugins/hooks'
+import { getVideoFilePath } from '@server/lib/video-paths'
+import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
+import {
+  VideoImportPayload,
+  VideoImportTorrentPayload,
+  VideoImportTorrentPayloadType,
+  VideoImportYoutubeDLPayload,
+  VideoImportYoutubeDLPayloadType,
+  VideoState
+} from '../../../../shared'
+import { VideoImportState } from '../../../../shared/models/videos'
+import { ThumbnailType } from '../../../../shared/models/videos/thumbnail.type'
+import { getDurationFromVideoFile, getVideoFileFPS, getVideoFileResolution } from '../../../helpers/ffmpeg-utils'
+import { logger } from '../../../helpers/logger'
+import { getSecureTorrentName } from '../../../helpers/utils'
+import { createTorrentAndSetInfoHash, downloadWebTorrentVideo } from '../../../helpers/webtorrent'
+import { downloadYoutubeDLVideo } from '../../../helpers/youtube-dl'
+import { CONFIG } from '../../../initializers/config'
+import { VIDEO_IMPORT_TIMEOUT } from '../../../initializers/constants'
+import { sequelizeTypescript } from '../../../initializers/database'
+import { VideoModel } from '../../../models/video/video'
+import { VideoFileModel } from '../../../models/video/video-file'
+import { VideoImportModel } from '../../../models/video/video-import'
+import { MThumbnail } from '../../../typings/models/video/thumbnail'
+import { federateVideoIfNeeded } from '../../activitypub/videos'
+import { Notifier } from '../../notifier'
+import { generateVideoMiniature } from '../../thumbnail'
 
 async function processVideoImport (job: Bull.Job) {
   const payload = job.data as VideoImportPayload

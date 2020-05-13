@@ -70,8 +70,11 @@ export type VideoFileImportPayload = {
   filePath: string
 }
 
+export type VideoImportTorrentPayloadType = 'magnet-uri' | 'torrent-file'
+export type VideoImportYoutubeDLPayloadType = 'youtube-dl'
+
 export type VideoImportYoutubeDLPayload = {
-  type: 'youtube-dl'
+  type: VideoImportYoutubeDLPayloadType
   videoImportId: number
 
   generateThumbnail: boolean
@@ -80,7 +83,7 @@ export type VideoImportYoutubeDLPayload = {
   fileExt?: string
 }
 export type VideoImportTorrentPayload = {
-  type: 'magnet-uri' | 'torrent-file'
+  type: VideoImportTorrentPayloadType
   videoImportId: number
 }
 export type VideoImportPayload = VideoImportYoutubeDLPayload | VideoImportTorrentPayload
