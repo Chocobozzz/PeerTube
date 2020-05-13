@@ -2474,6 +2474,8 @@ components:
           type: string
         fps:
           type: number
+        metadataUrl:
+          type: string
     VideoStreamingPlaylists:
       properties:
         id:
@@ -2487,6 +2489,10 @@ components:
           type: string
         segmentsSha256Url:
           type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/VideoFile'
         redundancies:
           type: array
           items:
