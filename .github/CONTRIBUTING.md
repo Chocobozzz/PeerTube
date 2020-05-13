@@ -29,13 +29,13 @@ interested in, user interface, design, decentralized architecture...
 You can help to write the documentation of the REST API, code, architecture,
 demonstrations.
 
-For the REST API you can see the documentation in [/support/doc/api](/support/doc/api) directory.
+For the REST API you can see the documentation in [/support/doc/api](https://github.com/Chocobozzz/PeerTube/tree/develop/support/doc/api) directory.
 Then, you can just open the `openapi.yaml` file in a special editor like [http://editor.swagger.io/](http://editor.swagger.io/) to easily see and edit the documentation.
 
 Some hints:
- * Routes are defined in [/server/controllers/](/server/controllers/) directory
- * Parameters validators are defined in [/server/middlewares/validators](/server/middlewares/validators) directory
- * Models sent/received by the controllers are defined in [/shared/models](/shared/models) directory
+ * Routes are defined in [/server/controllers/](https://github.com/Chocobozzz/PeerTube/tree/develop/server/controllers) directory
+ * Parameters validators are defined in [/server/middlewares/validators](https://github.com/Chocobozzz/PeerTube/tree/develop/server/middlewares/validators) directory
+ * Models sent/received by the controllers are defined in [/shared/models](https://github.com/Chocobozzz/PeerTube/tree/develop/shared/models) directory
 
 
 ## Improve the website
