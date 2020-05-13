@@ -155,7 +155,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
           enabled: false
         },
         autoFollowIndex: {
-          indexUrl: 'https://instances.joinpeertube.org',
+          indexUrl: 'https://instances.joinpeertube.org/api/v1/instances/hosts',
           enabled: false
         }
       }

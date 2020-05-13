@@ -884,7 +884,7 @@ describe('Test users notifications', function () {
       followings: {
         instance: {
           autoFollowIndex: {
-            indexUrl: 'http://localhost:42100',
+            indexUrl: 'http://localhost:42101/api/v1/instances/hosts',
             enabled: true
           }
         }
