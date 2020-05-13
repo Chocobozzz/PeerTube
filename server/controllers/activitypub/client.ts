@@ -35,7 +35,7 @@ import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId } from '@server/typings/models'
+import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId, MChannelId } from '@server/typings/models'
 import { getServerActor } from '@server/models/application/application'
 import { getRateUrl } from '@server/lib/activitypub/video-rates'
 
@@ -137,6 +137,11 @@ activityPubClientRouter.get('/video-channels/:name/following',
   asyncMiddleware(localVideoChannelValidator),
   asyncMiddleware(videoChannelFollowingController)
 )
+activityPubClientRouter.get('/video-channels/:name/playlists',
+  executeIfActivityPub,
+  asyncMiddleware(localVideoChannelValidator),
+  asyncMiddleware(videoChannelPlaylistsController)
+)
 
 activityPubClientRouter.get('/redundancy/videos/:videoId/:resolution([0-9]+)(-:fps([0-9]+))?',
   executeIfActivityPub,
@@ -190,7 +195,14 @@ async function accountFollowingController (req: express.Request, res: express.Re
 
 async function accountPlaylistsController (req: express.Request, res: express.Response) {
   const account = res.locals.account
-  const activityPubResult = await actorPlaylists(req, account)
+  const activityPubResult = await actorPlaylists(req, { account })
+
+  return activityPubResponse(activityPubContextify(activityPubResult), res)
+}
+
+async function videoChannelPlaylistsController (req: express.Request, res: express.Response) {
+  const channel = res.locals.videoChannel
+  const activityPubResult = await actorPlaylists(req, { channel })
 
   return activityPubResponse(activityPubContextify(activityPubResult), res)
 }
@@ -381,9 +393,9 @@ async function actorFollowers (req: express.Request, actor: MActorId) {
   return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)
 }
 
-async function actorPlaylists (req: express.Request, account: MAccountId) {
+async function actorPlaylists (req: express.Request, options: { account: MAccountId } | { channel: MChannelId }) {
   const handler = (start: number, count: number) => {
-    return VideoPlaylistModel.listPublicUrlsOfForAP(account.id, start, count)
+    return VideoPlaylistModel.listPublicUrlsOfForAP(options, start, count)
   }
 
   return activityPubCollectionPagination(WEBSERVER.URL + req.path, handler, req.query.page)

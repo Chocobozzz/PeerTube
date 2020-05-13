@@ -53,6 +53,7 @@ import {
   MVideoPlaylistIdWithElements
 } from '../../typings/models/video/video-playlist'
 import { MThumbnail } from '../../typings/models/video/thumbnail'
+import { MAccountId, MChannelId } from '@server/typings/models'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',
@@ -340,15 +341,24 @@ export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
       })
   }
 
-  static listPublicUrlsOfForAP (accountId: number, start: number, count: number) {
+  static listPublicUrlsOfForAP (options: { account?: MAccountId, channel?: MChannelId }, start: number, count: number) {
+    const where = {
+      privacy: VideoPlaylistPrivacy.PUBLIC
+    }
+
+    if (options.account) {
+      Object.assign(where, { ownerAccountId: options.account.id })
+    }
+
+    if (options.channel) {
+      Object.assign(where, { videoChannelId: options.channel.id })
+    }
+
     const query = {
       attributes: [ 'url' ],
       offset: start,
       limit: count,
-      where: {
-        ownerAccountId: accountId,
-        privacy: VideoPlaylistPrivacy.PUBLIC
-      }
+      where
     }
 
     return VideoPlaylistModel.findAndCountAll(query)
