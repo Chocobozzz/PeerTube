@@ -717,6 +717,11 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       else mode = 'webtorrent'
     }
 
+    // p2p-media-loader needs TextEncoder, try to fallback on WebTorrent
+    if (typeof TextEncoder === 'undefined') {
+      mode = 'webtorrent'
+    }
+
     if (mode === 'p2p-media-loader') {
       const hlsPlaylist = video.getHlsPlaylist()
 
