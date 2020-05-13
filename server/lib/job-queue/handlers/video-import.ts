@@ -127,25 +127,26 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
     videoFile = new VideoFileModel(videoFileData)
 
+    const hookName = options.type === 'youtube-dl'
+      ? 'filter:api.video.post-import-url.accept.result'
+      : 'filter:api.video.post-import-torrent.accept.result'
+
     // Check we accept this video
     const acceptParameters = {
+      videoImport,
+      video: videoImport.Video,
       videoFilePath: tempVideoPath,
       videoFile,
       user: videoImport.User
     }
-    const acceptedResult = options.type === 'youtube-dl'
-      ? await Hooks.wrapFun(
-        isPostImportVideoAccepted,
-        acceptParameters,
-        'filter:api.video.post-import-url.accept.result'
-      )
-      : await Hooks.wrapFun(
-        isPostImportVideoAccepted,
-        acceptParameters,
-        'filter:api.video.post-import-torrent.accept.result'
-      )
-    if (acceptedResult.accepted === false) {
+    const acceptedResult = await Hooks.wrapFun(isPostImportVideoAccepted, acceptParameters, hookName)
+
+    if (acceptedResult.accepted !== true) {
       logger.info('Refused imported video.', { acceptedResult, acceptParameters })
+
+      videoImport.state = VideoImportState.REJECTED
+      await videoImport.save()
+
       throw new Error(acceptedResult.errorMessage)
     }
 
@@ -229,7 +230,9 @@ async function processFile (downloader: () => Promise<string>, videoImport: MVid
     }
 
     videoImport.error = err.message
-    videoImport.state = VideoImportState.FAILED
+    if (videoImport.state !== VideoImportState.REJECTED) {
+      videoImport.state = VideoImportState.FAILED
+    }
     await videoImport.save()
 
     Notifier.Instance.notifyOnFinishedVideoImport(videoImport, false)

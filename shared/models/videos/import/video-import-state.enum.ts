@@ -1,5 +1,6 @@
 export enum VideoImportState {
   PENDING = 1,
   SUCCESS = 2,
-  FAILED = 3
+  FAILED = 3,
+  REJECTED = 4
 }

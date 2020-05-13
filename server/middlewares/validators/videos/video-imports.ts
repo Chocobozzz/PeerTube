@@ -1,17 +1,18 @@
 import * as express from 'express'
 import { body } from 'express-validator'
-import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
-import { logger } from '../../../helpers/logger'
-import { areValidationErrors } from '../utils'
-import { getCommonVideoEditAttributes } from './videos'
-import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
-import { cleanUpReqFiles } from '../../../helpers/express-utils'
-import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
-import { CONFIG } from '../../../initializers/config'
-import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
-import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
 import { isPreImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
+import { VideoImportCreate } from '@shared/models/videos/import/video-import-create.model'
+import { isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
+import { isVideoImportTargetUrlValid, isVideoImportTorrentFile } from '../../../helpers/custom-validators/video-imports'
+import { isVideoMagnetUriValid, isVideoNameValid } from '../../../helpers/custom-validators/videos'
+import { cleanUpReqFiles } from '../../../helpers/express-utils'
+import { logger } from '../../../helpers/logger'
+import { doesVideoChannelOfAccountExist } from '../../../helpers/middlewares'
+import { CONFIG } from '../../../initializers/config'
+import { CONSTRAINTS_FIELDS } from '../../../initializers/constants'
+import { areValidationErrors } from '../utils'
+import { getCommonVideoEditAttributes } from './videos'
 
 const videoImportAddValidator = getCommonVideoEditAttributes().concat([
   body('channelId')
@@ -81,15 +82,20 @@ export {
 // ---------------------------------------------------------------------------
 
 async function isImportAccepted (req: express.Request, res: express.Response) {
+  const body: VideoImportCreate = req.body
+  const hookName = body.targetUrl
+    ? 'filter:api.video.pre-import-url.accept.result'
+    : 'filter:api.video.pre-import-torrent.accept.result'
+
   // Check we accept this video
   const acceptParameters = {
-    videoImportBody: req.body,
+    videoImportBody: body,
     user: res.locals.oauth.token.User
   }
   const acceptedResult = await Hooks.wrapFun(
     isPreImportVideoAccepted,
     acceptParameters,
-    'filter:api.video.pre-import-url.accept.result'
+    hookName
   )
 
   if (!acceptedResult || acceptedResult.accepted !== true) {

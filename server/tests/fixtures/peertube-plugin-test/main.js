@@ -60,7 +60,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     target: 'filter:api.video.pre-import-url.accept.result',
     handler: ({ accepted }, { videoImportBody }) => {
       if (!accepted) return { accepted: false }
-      if (videoImportBody.targetUrl.indexOf('bad') !== -1) return { accepted: false, errorMessage: 'bad target url' }
+      if (videoImportBody.targetUrl.includes('bad')) return { accepted: false, errorMessage: 'bad target url' }
 
       return { accepted: true }
     }
@@ -70,7 +70,7 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
     target: 'filter:api.video.pre-import-torrent.accept.result',
     handler: ({ accepted }, { videoImportBody }) => {
       if (!accepted) return { accepted: false }
-      if (videoImportBody.fps > 30) return { accepted: false, errorMessage: 'bad fps' }
+      if (videoImportBody.name.includes('bad torrent')) return { accepted: false, errorMessage: 'bad torrent' }
 
       return { accepted: true }
     }
@@ -78,9 +78,9 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.video.post-import-url.accept.result',
-    handler: ({ accepted }, { videoFile }) => {
+    handler: ({ accepted }, { video }) => {
       if (!accepted) return { accepted: false }
-      if (videoFile.fps > 30) return { accepted: false, errorMessage: 'bad fps' }
+      if (video.name.includes('bad word')) return { accepted: false, errorMessage: 'bad word' }
 
       return { accepted: true }
     }
@@ -88,9 +88,9 @@ async function register ({ registerHook, registerSetting, settingsManager, stora
 
   registerHook({
     target: 'filter:api.video.post-import-torrent.accept.result',
-    handler: ({ accepted }, { videoFile }) => {
+    handler: ({ accepted }, { video }) => {
       if (!accepted) return { accepted: false }
-      if (videoFile.fps > 30) return { accepted: false, errorMessage: 'bad fps' }
+      if (video.name.includes('bad word')) return { accepted: false, errorMessage: 'bad word' }
 
       return { accepted: true }
     }

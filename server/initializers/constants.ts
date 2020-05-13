@@ -372,7 +372,8 @@ const VIDEO_STATES = {
 const VIDEO_IMPORT_STATES = {
   [VideoImportState.FAILED]: 'Failed',
   [VideoImportState.PENDING]: 'Pending',
-  [VideoImportState.SUCCESS]: 'Success'
+  [VideoImportState.SUCCESS]: 'Success',
+  [VideoImportState.REJECTED]: 'Rejected'
 }
 
 const VIDEO_ABUSE_STATES = {
