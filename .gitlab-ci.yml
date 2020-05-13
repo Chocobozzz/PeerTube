@@ -160,10 +160,7 @@ test-external-plugins:
     - name: rroemhild/test-openldap
       alias: ldap
   variables:
-    PGHOST: postgres
-    PGUSER: peertube
     POSTGRES_USER: peertube
-    POSTGRES_PASSWORD: peertube
     POSTGRES_HOST_AUTH_METHOD: trust
     REDIS_HOST: redis
   artifacts:
@@ -176,4 +173,4 @@ test-external-plugins:
     - 'sed -i -z "s/redis:\n  hostname: ''localhost''/redis:\n  hostname: ''redis''/" config/test.yaml'
     - NOCLIENT=1 yarn install --pure-lockfile --cache-folder .yarn-cache
   script:
-    - npm run ci -- "external-plugins"
+    - PGHOST=postgres PGUSER=peertube npm run ci -- "external-plugins"
