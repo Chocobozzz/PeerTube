@@ -99,7 +99,7 @@ describe('Videos workflow', () => {
   it('Should play the video', async () => {
     videoWatchUrl = await browser.getCurrentUrl()
 
-    await videoWatchPage.playAndPauseVideo(true, await isMobileDevice())
+    await videoWatchPage.playAndPauseVideo(true)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
   })
 
@@ -108,7 +108,7 @@ describe('Videos workflow', () => {
 
     await videoWatchPage.goOnAssociatedEmbed()
 
-    await videoWatchPage.playAndPauseVideo(false, await isMobileDevice())
+    await videoWatchPage.playAndPauseVideo(false)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
 
     await browser.waitForAngularEnabled(true)
@@ -119,7 +119,7 @@ describe('Videos workflow', () => {
 
     await videoWatchPage.goOnP2PMediaLoaderEmbed()
 
-    await videoWatchPage.playAndPauseVideo(false, await isMobileDevice())
+    await videoWatchPage.playAndPauseVideo(false)
     expect(videoWatchPage.getWatchVideoPlayerCurrentTime()).toBeGreaterThanOrEqual(2)
 
     await browser.waitForAngularEnabled(true)

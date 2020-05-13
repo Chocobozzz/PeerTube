@@ -1,5 +1,5 @@
 import { browser, by, element, ElementFinder, ExpectedConditions } from 'protractor'
-import { browserSleep } from '../utils'
+import { browserSleep, isIOS, isMobileDevice } from '../utils'
 
 export class VideoWatchPage {
   async goOnVideosList (isMobileDevice: boolean, isSafari: boolean) {
@@ -48,22 +48,23 @@ export class VideoWatchPage {
     return this.getVideoNameElement().getText()
   }
 
-  async playAndPauseVideo (isAutoplay: boolean, isMobileDevice: boolean) {
-    if (isAutoplay === false) {
+  async playAndPauseVideo (isAutoplay: boolean) {
+    // Autoplay is disabled on iOS
+    if (isAutoplay === false || await isIOS()) {
       const playButton = element(by.css('.vjs-big-play-button'))
       await browser.wait(browser.ExpectedConditions.elementToBeClickable(playButton))
       await playButton.click()
     }
 
-    await browserSleep(1000)
+    await browserSleep(2000)
     await browser.wait(browser.ExpectedConditions.invisibilityOf(element(by.css('.vjs-loading-spinner'))))
 
     const videojsEl = element(by.css('div.video-js'))
     await browser.wait(browser.ExpectedConditions.elementToBeClickable(videojsEl))
 
     // On Android, we need to click twice on "play" (BrowserStack particularity)
-    if (isMobileDevice) {
-      await browserSleep(3000)
+    if (await isMobileDevice()) {
+      await browserSleep(5000)
 
       await videojsEl.click()
     }
