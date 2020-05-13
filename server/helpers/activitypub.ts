@@ -40,6 +40,9 @@ function getContextData (type: ContextType) {
         language: 'sc:inLanguage',
 
         Infohash: 'pt:Infohash',
+        Playlist: 'pt:Playlist',
+        PlaylistElement: 'pt:PlaylistElement',
+
         originallyPublishedAt: 'sc:datePublished',
         views: {
           '@type': 'sc:Number',
