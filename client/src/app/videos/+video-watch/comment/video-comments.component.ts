@@ -168,7 +168,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
   async onWantedToDelete (commentToDelete: VideoComment) {
     let message = 'Do you really want to delete this comment?'
 
-    if (commentToDelete.isLocal) {
+    if (commentToDelete.isLocal || this.video.isLocal) {
       message += this.i18n(' The deletion will be sent to remote instances so they can reflect the change.')
     } else {
       message += this.i18n(' It is a remote comment, so the deletion will only be effective on your instance.')
@@ -180,10 +180,14 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.videoCommentService.deleteVideoComment(commentToDelete.videoId, commentToDelete.id)
       .subscribe(
         () => {
+          if (this.highlightedThread?.id === commentToDelete.id) {
+            commentToDelete = this.comments.find(c => c.id === commentToDelete.id)
+
+            this.highlightedThread = undefined
+          }
+
           // Mark the comment as deleted
           this.softDeleteComment(commentToDelete)
-
-          if (this.highlightedThread?.id === commentToDelete.id) this.highlightedThread = undefined
         },
 
         err => this.notifier.error(err.message)
