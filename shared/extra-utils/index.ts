@@ -1,4 +1,5 @@
 export * from './server/activitypub'
+export * from './bulk/bulk'
 export * from './cli/cli'
 export * from './server/clients'
 export * from './server/config'

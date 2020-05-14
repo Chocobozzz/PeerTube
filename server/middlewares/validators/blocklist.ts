@@ -24,8 +24,7 @@ const blockAccountValidator = [
 
     if (user.Account.id === accountToBlock.id) {
       res.status(409)
-         .send({ error: 'You cannot block yourself.' })
-         .end()
+         .json({ error: 'You cannot block yourself.' })
 
       return
     }
@@ -80,8 +79,7 @@ const blockServerValidator = [
 
     if (host === WEBSERVER.HOST) {
       return res.status(409)
-        .send({ error: 'You cannot block your own server.' })
-        .end()
+        .json({ error: 'You cannot block your own server.' })
     }
 
     const server = await ServerModel.loadOrCreateByHost(host)
@@ -139,8 +137,7 @@ async function doesUnblockAccountExist (accountId: number, targetAccountId: numb
   const accountBlock = await AccountBlocklistModel.loadByAccountAndTarget(accountId, targetAccountId)
   if (!accountBlock) {
     res.status(404)
-       .send({ error: 'Account block entry not found.' })
-       .end()
+       .json({ error: 'Account block entry not found.' })
 
     return false
   }
@@ -154,8 +151,7 @@ async function doesUnblockServerExist (accountId: number, host: string, res: exp
   const serverBlock = await ServerBlocklistModel.loadByAccountAndHost(accountId, host)
   if (!serverBlock) {
     res.status(404)
-       .send({ error: 'Server block entry not found.' })
-       .end()
+       .json({ error: 'Server block entry not found.' })
 
     return false
   }

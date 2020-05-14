@@ -1,19 +1,17 @@
+import * as Bluebird from 'bluebird'
+import { uniq } from 'lodash'
+import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { getServerActor } from '@server/models/application/application'
+import { MAccount, MAccountId, MUserAccountId } from '@server/typings/models'
+import { VideoPrivacy } from '@shared/models'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
 import { VideoComment } from '../../../shared/models/videos/video-comment.model'
-import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
-import { AccountModel } from '../account/account'
-import { ActorModel } from '../activitypub/actor'
-import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
-import { VideoModel } from './video'
-import { VideoChannelModel } from './video-channel'
 import { actorNameAlphabet } from '../../helpers/custom-validators/activitypub/actor'
+import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { regexpCapture } from '../../helpers/regexp'
-import { uniq } from 'lodash'
-import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
-import * as Bluebird from 'bluebird'
+import { CONSTRAINTS_FIELDS, WEBSERVER } from '../../initializers/constants'
 import {
   MComment,
   MCommentAP,
@@ -25,9 +23,11 @@ import {
   MCommentOwnerVideoFeed,
   MCommentOwnerVideoReply
 } from '../../typings/models/video'
-import { MUserAccountId } from '@server/typings/models'
-import { VideoPrivacy } from '@shared/models'
-import { getServerActor } from '@server/models/application/application'
+import { AccountModel } from '../account/account'
+import { ActorModel } from '../activitypub/actor'
+import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
+import { VideoModel } from './video'
+import { VideoChannelModel } from './video-channel'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
@@ -415,6 +415,43 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findAll(query)
   }
 
+  static listForBulkDelete (ofAccount: MAccount, filter: { onVideosOfAccount?: MAccountId } = {}) {
+    const accountWhere = filter.onVideosOfAccount
+      ? { id: filter.onVideosOfAccount.id }
+      : {}
+
+    const query = {
+      limit: 1000,
+      where: {
+        deletedAt: null,
+        accountId: ofAccount.id
+      },
+      include: [
+        {
+          model: VideoModel,
+          required: true,
+          include: [
+            {
+              model: VideoChannelModel,
+              required: true,
+              include: [
+                {
+                  model: AccountModel,
+                  required: true,
+                  where: accountWhere
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return VideoCommentModel
+      .scope([ ScopeNames.WITH_ACCOUNT ])
+      .findAll(query)
+  }
+
   static async getStats () {
     const totalLocalVideoComments = await VideoCommentModel.count({
       include: [
@@ -450,7 +487,9 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         videoId,
         accountId: {
           [Op.notIn]: buildLocalAccountIdsIn()
-        }
+        },
+        // Do not delete Tombstones
+        deletedAt: null
       }
     }
 
