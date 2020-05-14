@@ -39,6 +39,11 @@
    * `action:login.init`
    * `action:video-watch.video-threads.loaded`
    * `action:video-watch.video-thread-replies.loaded` ([@ipbc-dev](https://github.com/ipbc-dev))
+ * Add server plugin hooks (https://docs.joinpeertube.org/#/api-plugins):
+   * `filter:api.video.pre-import-url.accept.result`
+   * `filter:api.video.pre-import-torrent.accept.result`
+   * `filter:api.video.post-import-url.accept.result`
+   * `filter:api.video.post-import-torrent.accept.result`
  * Add server helpers:
    * `database.query` to do SQL queries
    * `videos.removeVideo`
@@ -135,6 +140,8 @@
  * Fix load more comments on infinite scroll ([@ipbc-dev](https://github.com/ipbc-dev))
  * Fix CSP issue on WebFinger service ([@ZanyMonk](https://github.com/ZanyMonk))
  * Fix federation with Pleroma
+ * Fix Safari and iOS  video play
+ * Fix broken HLS player on old Edge
  * Fix running HLS transcoding on existing HLS video
  * Fix user role edition
  * Fix video duration display
