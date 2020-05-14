@@ -3,11 +3,13 @@
  * Fix remaining important bugs
  * Update [/CHANGELOG.md](/CHANGELOG.md)
  * Check migrations:
-    * `npm run clean:server:test`
-    * `git checkout master && rm -r ./node_modules && yarn install --pure-lockfile && npm run build:server`
-    * `NODE_APP_INSTANCE=6 NODE_ENV=test npm run start` and quit after initialization
-    * `git checkout develop && rm -r ./node_modules && yarn install --pure-lockfile && npm run build:server`
-    * `NODE_APP_INSTANCE=6 NODE_ENV=test npm run start` and check migrations do not fail
+```
+npm run clean:server:test
+git checkout master && rm -r ./node_modules && yarn install --pure-lockfile && npm run build:server
+NODE_APP_INSTANCE=6 NODE_ENV=test npm run start
+git checkout develop && rm -r ./node_modules && yarn install --pure-lockfile && npm run build:server
+NODE_APP_INSTANCE=6 NODE_ENV=test npm run start
+```
  * Run `rm -r node_modules && rm -r client/node_modules && yarn install --pure-lockfile && npm run build` to see if all the supported languages compile correctly
  * Update https://peertube2.cpy.re and check it works correctly
  * Check CI tests are green

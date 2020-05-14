@@ -91,7 +91,7 @@ and FLV formats when transcoding is enabled on their instance.
 
 ## I want to change my domain name, how can I do that?
 
-You can't. You'll need to reinstall an instance and reupload your videos.
+It's not officially supported, but you can try the `update-host` script: https://docs.joinpeertube.org/#/maintain-tools?id=update-hostjs
 
 
 ## Why do we have to put our Twitter username in PeerTube configuration?
