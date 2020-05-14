@@ -63,12 +63,15 @@
       }
 
       .comment-account {
-        @include disable-default-a-behaviour;
-
         word-break: break-all;
-        color: var(--mainForegroundColor);
         font-weight: 600;
         font-size: 90%;
+
+        a {
+          @include disable-default-a-behaviour;
+
+          color: var(--mainForegroundColor);
+        }
 
         .comment-account-fid {
           opacity: .6;
