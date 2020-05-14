@@ -1,11 +1,12 @@
 import * as express from 'express'
-import { cloneDeep } from 'lodash'
 import { ResultList } from '../../../../shared/models'
 import { VideoCommentCreate } from '../../../../shared/models/videos/video-comment.model'
-import { logger } from '../../../helpers/logger'
+import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { buildFormattedCommentTree, createVideoComment, markCommentAsDeleted } from '../../../lib/video-comment'
+import { Notifier } from '../../../lib/notifier'
+import { Hooks } from '../../../lib/plugins/hooks'
+import { buildFormattedCommentTree, createVideoComment, removeComment } from '../../../lib/video-comment'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -23,12 +24,8 @@ import {
   removeVideoCommentValidator,
   videoCommentThreadsSortValidator
 } from '../../../middlewares/validators'
-import { VideoCommentModel } from '../../../models/video/video-comment'
-import { auditLoggerFactory, CommentAuditView, getAuditIdFromRes } from '../../../helpers/audit-logger'
 import { AccountModel } from '../../../models/account/account'
-import { Notifier } from '../../../lib/notifier'
-import { Hooks } from '../../../lib/plugins/hooks'
-import { sendDeleteVideoComment } from '../../../lib/activitypub/send'
+import { VideoCommentModel } from '../../../models/video/video-comment'
 
 const auditLogger = auditLoggerFactory('comments')
 const videoCommentRouter = express.Router()
@@ -149,9 +146,7 @@ async function addVideoCommentThread (req: express.Request, res: express.Respons
 
   Hooks.runAction('action:api.video-thread.created', { comment })
 
-  return res.json({
-    comment: comment.toFormattedJSON()
-  }).end()
+  return res.json({ comment: comment.toFormattedJSON() })
 }
 
 async function addVideoCommentReply (req: express.Request, res: express.Response) {
@@ -173,27 +168,15 @@ async function addVideoCommentReply (req: express.Request, res: express.Response
 
   Hooks.runAction('action:api.video-comment-reply.created', { comment })
 
-  return res.json({ comment: comment.toFormattedJSON() }).end()
+  return res.json({ comment: comment.toFormattedJSON() })
 }
 
 async function removeVideoComment (req: express.Request, res: express.Response) {
   const videoCommentInstance = res.locals.videoCommentFull
-  const videoCommentInstanceBefore = cloneDeep(videoCommentInstance)
 
-  await sequelizeTypescript.transaction(async t => {
-    if (videoCommentInstance.isOwned() || videoCommentInstance.Video.isOwned()) {
-      await sendDeleteVideoComment(videoCommentInstance, t)
-    }
-
-    markCommentAsDeleted(videoCommentInstance)
-
-    await videoCommentInstance.save()
-  })
+  await removeComment(videoCommentInstance)
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
-  logger.info('Video comment %d deleted.', videoCommentInstance.id)
 
-  Hooks.runAction('action:api.video-comment.deleted', { comment: videoCommentInstanceBefore })
-
-  return res.type('json').status(204).end()
+  return res.type('json').status(204)
 }
