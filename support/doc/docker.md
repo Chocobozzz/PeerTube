@@ -84,7 +84,6 @@ vim ./.env
 In the downloaded example [.env](https://github.com/Chocobozzz/PeerTube/blob/master/support/docker/production/.env), you must replace:
 - `<MY POSTGRES USERNAME>`
 - `<MY POSTGRES PASSWORD>`
-- `<MY POSTGRES DB>`
 - `<MY DOMAIN>` without 'https://'
 - `<MY EMAIL ADDRESS>`
 
