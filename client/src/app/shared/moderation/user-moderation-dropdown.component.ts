@@ -7,7 +7,8 @@ import { AuthService, ConfirmService, Notifier, ServerService } from '@app/core'
 import { User, UserRight } from '../../../../../shared/models/users'
 import { Account } from '@app/shared/account/account.model'
 import { BlocklistService } from '@app/shared/blocklist'
-import { ServerConfig } from '@shared/models'
+import { ServerConfig, BulkRemoveCommentsOfBody } from '@shared/models'
+import { BulkService } from '../bulk/bulk.service'
 
 @Component({
   selector: 'my-user-moderation-dropdown',
@@ -38,6 +39,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
     private serverService: ServerService,
     private userService: UserService,
     private blocklistService: BlocklistService,
+    private bulkService: BulkService,
     private i18n: I18n
   ) { }
 
@@ -229,6 +231,21 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
         )
   }
 
+  async bulkRemoveCommentsOf (body: BulkRemoveCommentsOfBody) {
+    const message = this.i18n('Are you sure you want to remove all the comments of this account?')
+    const res = await this.confirmService.confirm(message, this.i18n('Delete account comments'))
+    if (res === false) return
+
+    this.bulkService.removeCommentsOf(body)
+        .subscribe(
+          () => {
+            this.notifier.success(this.i18n('Will remove comments of this account (may take several minutes).'))
+          },
+
+          err => this.notifier.error(err.message)
+        )
+  }
+
   getRouterUserEditLink (user: User) {
     return [ '/admin', 'users', 'update', user.id ]
   }
@@ -300,12 +317,17 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
             description: this.i18n('Show back content from that instance for you.'),
             isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
             handler: ({ account }) => this.unblockServerByUser(account.host)
+          },
+          {
+            label: this.i18n('Remove comments from your videos'),
+            description: this.i18n('Remove comments of this account from your videos.'),
+            handler: ({ account }) => this.bulkRemoveCommentsOf({ accountName: account.nameWithHost, scope: 'my-videos' })
           }
         ])
 
         let instanceActions: DropdownAction<{ user: User, account: Account }>[] = []
 
-        // Instance actions
+        // Instance actions on account blocklists
         if (authUser.hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)) {
           instanceActions = instanceActions.concat([
             {
@@ -323,7 +345,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
           ])
         }
 
-        // Instance actions
+        // Instance actions on server blocklists
         if (authUser.hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)) {
           instanceActions = instanceActions.concat([
             {
@@ -337,6 +359,16 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
               description: this.i18n('Show back content from that instance for you, your instance and its users.'),
               isDisplayed: ({ account }) => !account.userId && account.mutedServerByInstance === true,
               handler: ({ account }) => this.unblockServerByInstance(account.host)
+            }
+          ])
+        }
+
+        if (authUser.hasRight(UserRight.REMOVE_ANY_VIDEO_COMMENT)) {
+          instanceActions = instanceActions.concat([
+            {
+              label: this.i18n('Remove comments from your instance'),
+              description: this.i18n('Remove comments of this account from your instance.'),
+              handler: ({ account }) => this.bulkRemoveCommentsOf({ accountName: account.nameWithHost, scope: 'instance' })
             }
           ])
         }
