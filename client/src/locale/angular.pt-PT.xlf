@@ -1563,10 +1563,7 @@
       </trans-unit>
       <trans-unit id="7e76a185dbd8842cfea86afe863ed902a4447f7c" datatype="html">
         <source>Please consider to configure these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Without them, your instance may not be referenced on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-      Please consider to configure these fields to help people to choose <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>.
-      Without them, your instance may not be referenced on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>JoinPeerTube website<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-    </target>
+        <target state="translated">Por favor, considere preencher estes campos para ajudar pessoas na escolha <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>da instância apropriada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. Sem estes campos, a sua instância pode não ser referenciada no <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>website JoinPeerTube<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">24</context>
@@ -1644,7 +1641,7 @@
       </trans-unit>
       <trans-unit id="e472a6eaa2a51bd4a8ac19a1cf5567add4a04ff8" datatype="html">
         <source>Videos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></source>
-        <target state="new">Videos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></target>
+        <target state="translated">Vídeos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1652,7 +1649,7 @@
       </trans-unit>
       <trans-unit id="cc37c9e1ceff31dc1227cc8c2f4bdadb2f239173" datatype="html">
         <source>Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></source>
-        <target state="new">Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
+        <target state="translated">Impressionável: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1660,7 +1657,7 @@
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
         <source>Help share videos</source>
-        <target state="new">Help share videos</target>
+        <target state="translated">Ajude a partilhar vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">55</context>
@@ -1668,7 +1665,7 @@
       </trans-unit>
       <trans-unit id="cb17d0eefd7d4fc2633ffd351eae187a2c7d4b57" datatype="html">
         <source>More account settings</source>
-        <target state="new">More account settings</target>
+        <target state="translated">Mais definições de conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">60</context>
@@ -1676,7 +1673,7 @@
       </trans-unit>
       <trans-unit id="d2dcb25a3b90ccb169effc066d36335363546d17" datatype="html">
         <source>Keyboard shortcuts</source>
-        <target state="new">Keyboard shortcuts</target>
+        <target state="translated">Atalhos de teclado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">66</context>
@@ -1689,29 +1686,27 @@
       </trans-unit>
       <trans-unit id="0530eaf7a05c66b3167da49a57e5af4326f3af15" datatype="html">
         <source>Get help using PeerTube</source>
-        <target state="new">Get help using PeerTube</target>
+        <target state="translated">Obtenha ajuda para usar o PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="d3381fff430c3687ae1c6302af99d88baa4f480b" datatype="html">
         <source>Shortcuts</source>
-        <target state="new">Shortcuts</target>
+        <target state="translated">Atalhos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">165</context></context-group>
       </trans-unit>
       <trans-unit id="5c195f8d79bd19e8520c890a2513fe635529b7a7" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="new">
-              powered by PeerTube
-            </target>
+        <target state="translated">graças ao PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="018843afca0913de849c80fdf962a6a42f5190b4" datatype="html">
         <source>PeerTube website</source>
-        <target state="new">PeerTube website</target>
+        <target state="translated">Website PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">171</context></context-group>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2020</source>
-        <target state="new">powered by PeerTube - CopyLeft 2015-2020</target>
+        <target state="translated">graças ao PeerTube - CopyLeft 2015-2020</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344" datatype="html">
@@ -1877,7 +1872,7 @@
       </trans-unit>
       <trans-unit id="7ef9c50b8735e25780026b93da26cfcab1546653" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></source>
-        <target state="new">using <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
+        <target state="translated">a usar <x id="INTERPOLATION" equiv-text="{{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1885,7 +1880,7 @@
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="new">Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</target>
+        <target state="translated">Resultados serão aumentados por indexação dos terceiros. Apenas a informação necessária para fazer a solicitação irá ser enviada.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1901,7 +1896,7 @@
       </trans-unit>
       <trans-unit id="8e799fee4b3df7ea53786f096380f81c78a77efd" datatype="html">
         <source>any instance</source>
-        <target state="new">any instance</target>
+        <target state="translated">qualquer instância</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">32</context>
@@ -1909,7 +1904,7 @@
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target state="new">only followed instances</target>
+        <target state="translated">apenas instâncias seguidas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1917,7 +1912,7 @@
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="new">Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</target>
+        <target state="translated">Determina se você pode concluir o pedido a qualquer conteúdo distante, ou se esta instância apenas deixa fazê-lo para instâncias seguidas por esta instância.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1925,7 +1920,7 @@
       </trans-unit>
       <trans-unit id="c9af5a8f7fae61166a0cc135063ff16d76deef55" datatype="html">
         <source>channel</source>
-        <target state="new">channel</target>
+        <target state="translated">canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1937,7 +1932,7 @@
       </trans-unit>
       <trans-unit id="1dde6766dd298aa1e1b12afe67ad23dfbca88d2e" datatype="html">
         <source>Any other text will return matching video or channel names.</source>
-        <target state="new">Any other text will return matching video or channel names.</target>
+        <target state="translated">Qualquer outro texto irá retornar vídeos ou nomes de canais que correspondam.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1961,7 +1956,7 @@
       </trans-unit>
       <trans-unit id="2f8adf9966f3c287b193683af9e1eaba4f526d68" datatype="html">
         <source>In this channel</source>
-        <target state="new">In this channel</target>
+        <target state="translated">Neste canal</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1969,7 +1964,7 @@
       </trans-unit>
       <trans-unit id="2fb6c7364664174a205180f7173c4128b350c5ec" datatype="html">
         <source>In this instance</source>
-        <target state="new">In this instance</target>
+        <target state="translated">Nesta instância</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1977,7 +1972,7 @@
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
         <source>In the vidiverse</source>
-        <target state="new">In the vidiverse</target>
+        <target state="translated">No vídeoverso</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1985,10 +1980,7 @@
       </trans-unit>
       <trans-unit id="17ebc377c617be81cff7c2f2edbb7d405595d73a" datatype="html">
         <source>Jump to channel <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="new">
-    Jump to channel
-    <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>
-  </target>
+        <target state="translated">Vai para o canal <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>↵<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">18</context>
@@ -2308,7 +2300,7 @@
       </trans-unit>
       <trans-unit id="a2892dc0bd40629b160c490cdd4aff82204bbec6" datatype="html">
         <source>Frequently asked questions about PeerTube</source>
-        <target state="new">Frequently asked questions about PeerTube</target>
+        <target state="translated">Perguntas frequentes sobre PeerTube</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="e351b40b3869a5c7d19c3d4918cb1ac7aaab95c4" datatype="html">
@@ -2579,12 +2571,12 @@
       </trans-unit>
       <trans-unit id="dfd046dad933ba0a50926b9ab3c1b579c802312e" datatype="html">
         <source>Processing…</source>
-        <target state="new">Processing…</target>
+        <target state="translated">A processar…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
         <source>Total video quota</source>
-        <target state="new">Total video quota</target>
+        <target state="translated">Quota total de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
@@ -3050,7 +3042,7 @@
       </trans-unit>
       <trans-unit id="4c0ba3cde3b3c58b855ffb4beaa5804a2fc3826b" datatype="html">
         <source>Friendly Reminder:</source>
-        <target state="new">Friendly Reminder: </target>
+        <target state="translated">Nota Amigável:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">261</context>
@@ -3058,9 +3050,7 @@
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="new">
-          the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.
-        </target>
+        <target state="translated">o sistema de partilha utilizado neste vídeo implica que algumas informações técnicas acerca do seu sistema (como endereço de IP) podem ser enviadas a outros pares.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">262</context>
@@ -3210,11 +3200,7 @@
       </trans-unit>
       <trans-unit id="2c6453cc150c9f652a7f1238d2f172e625f0f117" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance. On most platforms, you can find the video by typing its URL in the search bar and then comment it from within the software's interface.</source>
-        <target state="new">
-      You can comment using an account on any ActivityPub-compatible instance.
-      On most platforms, you can find the video by typing its URL in the search bar and then comment it
-      from within the software's interface.
-    </target>
+        <target state="translated">Pode comentar usando uma conta de ActivityPub de qualquer instância compatível. Na maioria das plataformas, você pode encontrar o vídeo escrevendo o seu URL na barra de procura e depois pode comentar apartir da interface de software.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">35</context>
@@ -3232,7 +3218,7 @@
       </trans-unit>
       <trans-unit id="413bcc4a4c824366e17673f38cb2af4619e940e2" datatype="html">
         <source>Login to comment</source>
-        <target state="new">Login to comment</target>
+        <target state="translated">Autentique-se para comentar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">52</context></context-group>
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
@@ -3295,7 +3281,7 @@
       </trans-unit>
       <trans-unit id="3a23875897fb8099f85410700fcca415626621a3" datatype="html">
         <source>Follow domain</source>
-        <target state="new">Follow domain</target>
+        <target state="translated">Siga o domínio</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="25925fc5826bc5b3eeae7c45b08b0ed74b9e2954">
@@ -3314,7 +3300,7 @@
       </trans-unit>
       <trans-unit id="1e5e23363e949f7dcbaf034bdb141a561132a10e" datatype="html">
         <source>Clear filters</source>
-        <target state="new">Clear filters</target>
+        <target state="translated">Limpe os filtros</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -3406,7 +3392,7 @@
       </trans-unit>
       <trans-unit id="9c9e0eb0ce8abea8b4c7c5dbb6e80a9a5f5b4193" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">Abra a página do agente em uma nova tabulação</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3447,17 +3433,17 @@
       </trans-unit>
       <trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="new">No follower found matching current filters.</target>
+        <target state="translated">Não encontrou algum seguidor de acordo com os filtros actuais.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="new">Your instance doesn't have any follower.</target>
+        <target state="translated">A sua instância não tem algum seguidor.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> followers</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> followers</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> seguidores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3486,7 +3472,7 @@
       </trans-unit>
       <trans-unit id="8cffa679dff97a096d44fca9348eeaa1867d40aa" datatype="html">
         <source>Open instance in a new tab</source>
-        <target state="new">Open instance in a new tab</target>
+        <target state="translated">Abre instância numa nova tabulação</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">37</context>
@@ -3498,7 +3484,7 @@
       </trans-unit>
       <trans-unit id="d9b4b939363bf385cbb7828c1535f2e2a5e0d362" datatype="html">
         <source>No host found matching current filters.</source>
-        <target state="new">No host found matching current filters.</target>
+        <target state="translated">Não encontrou algum host que corresponda aos filtros actuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">62</context>
@@ -3506,7 +3492,7 @@
       </trans-unit>
       <trans-unit id="6f635f2eba7fe60e4266192fbfef20948fbe3b0a" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="new">Your instance is not following anyone.</target>
+        <target state="translated">A sua instância não está a seguir alguém.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">63</context>
@@ -3514,7 +3500,7 @@
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3522,12 +3508,12 @@
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
         <source>Follow domains</source>
-        <target state="new">Follow domains</target>
+        <target state="translated">Siga domínios</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="new">My videos duplicated by remote instances</target>
+        <target state="translated">Meus vídeos que estão duplicados em instâncias remotas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">7</context>
@@ -3535,7 +3521,7 @@
       </trans-unit>
       <trans-unit id="cb2281bf5c9f420429bbd5c5473ee7aacc879e1e" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="new">Remote videos duplicated by my instance</target>
+        <target state="translated">Vídeos remotos que estão duplicados na minha instância</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -3543,7 +3529,7 @@
       </trans-unit>
       <trans-unit id="31cf824034489eb42f6a388d5980b98b8e1de015">
         <source>Create user</source>
-        <target>Usuário criador</target>
+        <target>Crie utilizador</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -3551,7 +3537,7 @@
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
         <source>Username</source>
-        <target>Nome de usuário</target>
+        <target>Nome de utilizador</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
@@ -3579,9 +3565,7 @@
       </trans-unit>
       <trans-unit id="8861667a66c0000e6ae144520026d55123cea117" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Se deixar a senha vazia, um email será enviado ao utilizador.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">109</context>
@@ -3603,10 +3587,7 @@
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="new">
-          Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-          At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>.
-        </target>
+        <target state="translated">Transcodificação está activada. A quota de vídeos tem em conta apenas o tamanho de vídeo <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Este utilizador pode, no máximo, carregar ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">148</context>
@@ -3628,7 +3609,7 @@
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="new">Doesn't need review before a video goes public</target>
+        <target state="translated">Não necessita de revisão para o vídeo ficar público</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">168</context>
@@ -3703,7 +3684,7 @@
       </trans-unit>
       <trans-unit id="c38a6a10b47b82463eda45f856348b51daa96b97" datatype="html">
         <source>Auth plugin</source>
-        <target state="new">Auth plugin</target>
+        <target state="translated">Plugin Auth</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">49</context>
@@ -3750,7 +3731,7 @@
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> utilizadores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">15</context>
@@ -3818,12 +3799,12 @@
       </trans-unit>
       <trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
         <source>List redundancies</source>
-        <target state="new">List redundancies</target>
+        <target state="translated">Listar redundâncias</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="897116a91d135b1552880aed6050814a4a0df28a" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="new">Your instance doesn't mirror any video.</target>
+        <target state="translated">A sua instância não espelha qualquer vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">77</context>
@@ -3831,7 +3812,7 @@
       </trans-unit>
       <trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target state="new">Your instance has no mirrored videos.</target>
+        <target state="translated">A sua instância não tem qualquer vídeo espelhado.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">78</context>
@@ -3875,7 +3856,7 @@
       </trans-unit>
       <trans-unit id="1c16132124fd96151ccf858aad5a98108df6c93a" datatype="html">
         <source>Video was blacklisted</source>
-        <target state="new">Video was blacklisted</target>
+        <target state="translated">O vídeo foi posto na lista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">50</context>
@@ -3912,7 +3893,7 @@
       </trans-unit>
       <trans-unit id="88a2cc2d9ca0506186bbfab6c4e0c32c44a9ee98" datatype="html">
         <source>No blacklisted video found matching current filters.</source>
-        <target state="new">No blacklisted video found matching current filters.</target>
+        <target state="translated">Não encontrou algum vídeo de lista negra de acordo com os filtros actuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">93</context>
@@ -3920,7 +3901,7 @@
       </trans-unit>
       <trans-unit id="294036a9ad4dd71531d3032678d9ff00d8ff9ebb" datatype="html">
         <source>No blacklisted video found.</source>
-        <target state="new">No blacklisted video found.</target>
+        <target state="translated">Não encontrou algum vídeo de lista negra.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">94</context>
@@ -3928,7 +3909,7 @@
       </trans-unit>
       <trans-unit id="973655a52a60219d177a837cd2c75d640f7bc521" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blacklisted videos</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blacklisted videos</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> vídeos de lista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3962,7 +3943,7 @@
       </trans-unit>
       <trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
         <source>Advanced report filters</source>
-        <target state="new">Advanced report filters</target>
+        <target state="translated">Filtros avançados de denúncia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3970,7 +3951,7 @@
       </trans-unit>
       <trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
         <source>Unsolved reports</source>
-        <target state="new">Unsolved reports</target>
+        <target state="translated">Denúncias não resolvidas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3978,7 +3959,7 @@
       </trans-unit>
       <trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
         <source>Accepted reports</source>
-        <target state="new">Accepted reports</target>
+        <target state="translated">Denúncias aceites</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -3986,7 +3967,7 @@
       </trans-unit>
       <trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
         <source>Refused reports</source>
-        <target state="new">Refused reports</target>
+        <target state="translated">Denúncias recusadas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3994,7 +3975,7 @@
       </trans-unit>
       <trans-unit id="1c33f537774e1418d848442439b6c0fc62d9af47" datatype="html">
         <source>Reports with blacklisted videos</source>
-        <target state="new">Reports with blacklisted videos</target>
+        <target state="translated">Denúncias sobre vídeos de lista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4002,7 +3983,7 @@
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="new">Reports with deleted videos</target>
+        <target state="translated">Denúncias sobre videos apagados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -4029,7 +4010,7 @@
       </trans-unit>
       <trans-unit id="dee48932053451ee2dfafe5500a5262cd4220d5e" datatype="html">
         <source>This video has been reported multiple times.</source>
-        <target state="new">This video has been reported multiple times.</target>
+        <target state="translated">Este vídeo já foi denúnciado várias vezes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">80</context>
@@ -4049,7 +4030,7 @@
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
         <source>Video was deleted</source>
-        <target state="new">Video was deleted</target>
+        <target state="translated">Vídeo foi apagado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -4057,7 +4038,7 @@
       </trans-unit>
       <trans-unit id="7c6eca36ec5dfbab2049ec1c58f8b6fe9d71c23b" datatype="html">
         <source>No video abuses found matching current filters.</source>
-        <target state="new">No video abuses found matching current filters.</target>
+        <target state="translated">Sem qualquer abuso de vídeo encontrado de acordo com os filtros actuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -4065,7 +4046,7 @@
       </trans-unit>
       <trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
         <source>No video abuses found.</source>
-        <target state="new">No video abuses found.</target>
+        <target state="translated">Sem qualquer abuso de vídeo encontrado.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">142</context>
@@ -4103,7 +4084,7 @@
       </trans-unit>
       <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> denúncias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4129,7 +4110,7 @@
       </trans-unit>
       <trans-unit id="4dbabcc6e79125d4b798ba8139a40202db712475" datatype="html">
         <source>Reportee</source>
-        <target state="new">Reportee</target>
+        <target state="translated">Denúnciador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">27</context>
@@ -4155,7 +4136,7 @@
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
         <source>Updated</source>
-        <target state="new">Updated</target>
+        <target state="translated">Actualizado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">47</context>
@@ -4172,7 +4153,7 @@
       </trans-unit>
       <trans-unit id="a3ae5c724857d00c006273db314041ab0664c269" datatype="html">
         <source>Mute domain</source>
-        <target state="new">Mute domain</target>
+        <target state="translated">Silencie domínio</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
@@ -4209,7 +4190,7 @@
       </trans-unit>
       <trans-unit id="4cac34ce105daa25964c217fdf0515a0a6ee5db9" datatype="html">
         <source>No server found matching current filters.</source>
-        <target state="new">No server found matching current filters.</target>
+        <target state="translated">Não encontrou algum servidor de acordo com os filtros actuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">51</context>
@@ -4217,7 +4198,7 @@
       </trans-unit>
       <trans-unit id="0ba22bd964baaf0c2f85d6731fccca31dbf06dae" datatype="html">
         <source>No server found.</source>
-        <target state="new">No server found.</target>
+        <target state="translated">Não encontrou algum servidor.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">52</context>
@@ -4225,7 +4206,7 @@
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> instâncias silenciadas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4233,14 +4214,12 @@
       </trans-unit>
       <trans-unit id="2aebea85561b74dd33ae2481bb942b8c4beb5524" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="new">
-      It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
-    </target>
+        <target state="translated">Parece que não está em um servidor HTTPS. O seu servidor necessita de ter TLS activado para conseguir seguir outros servidores.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source>
-        <target state="new">Mute domains</target>
+        <target state="translated">Silenciar domínios</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92">
@@ -4254,7 +4233,7 @@
       </trans-unit>
       <trans-unit id="33c4091a2a2438ba655caa47ede7f7a82f5f0297" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="new">No account found matching current filters.</target>
+        <target state="translated">Não encontrou alguma conta de acordo com os filtros actuais.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">58</context>
@@ -4262,7 +4241,7 @@
       </trans-unit>
       <trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
         <source>No account found.</source>
-        <target state="new">No account found.</target>
+        <target state="translated">Não encontrou qualquer conta.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">59</context>
@@ -4270,7 +4249,7 @@
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> de <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> entre <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> contas silenciadas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4303,7 +4282,7 @@
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Utilizadores podem encontrar conteúdo distante</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">100</context>
@@ -4330,7 +4309,7 @@
       </trans-unit>
       <trans-unit id="3b79d221458541611e8508d3551dd1ddd76b49d9" datatype="html">
         <source>Display settings</source>
-        <target state="new">Display settings</target>
+        <target state="translated">Configurações de visualização</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/quick-settings-modal.component.html</context><context context-type="linenumber">8</context></context-group>
       </trans-unit>
       <trans-unit id="1dfba504a0d0bf41da961d89d402dedecde5e30d" datatype="html">
@@ -4384,7 +4363,7 @@
       </trans-unit>
       <trans-unit id="1e395fc65f656ebaf9384ca5452f0cc4e9512811" datatype="html">
         <source>Go to the plugin npm package</source>
-        <target state="new">Go to the plugin npm package</target>
+        <target state="translated">Vá ao pacote npm do plugin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44</context>
@@ -4454,7 +4433,7 @@
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
-        <target state="new">Loading...</target>
+        <target state="translated">A carregar...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4505,32 +4484,32 @@
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
         <source>The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="new">The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</target>
+        <target state="translated">Alguma informação técnica sobre o seu sistema (como endereço de IP) pode ser enviada para outros pares, devido ao <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sistema de partilha<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>, mas isto é uma imensa ajuda a reduzir a carga no servidor.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
         <source>Help share videos being played</source>
-        <target state="new">Help share videos being played</target>
+        <target state="translated">Ajuda a partilhar videos que estão a ser reproduzidos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="new">When on a video page, directly start playing the video.</target>
+        <target state="translated">Quando numa página de vídeo, reproduz de maneira directa o vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="new">Automatically play videos</target>
+        <target state="translated">Reproduzir vídeos automaticamente</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="new">When a video ends, follow up with the next suggested video.</target>
+        <target state="translated">Segue para o próximo vídeo sugerido, quando este vídeo terminar.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="new">Automatically start playing the next video</target>
+        <target state="translated">Reproduz o próximo vídeo automaticamente</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629" datatype="html">
@@ -4540,14 +4519,12 @@
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="new">MODERATION &amp; NSFW</target>
+        <target state="translated">MODERAÇÃO &amp; NSFW</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="f0716b4964f9dc6437aaed3ae0c78e94fd259fb9" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to build a moderation team. </source>
-        <target state="new">
-                Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to build a moderation team.
-              </target>
+        <target state="translated">Gere <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>utlizadores<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para criar uma equipa de moderação. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634" datatype="html">
@@ -4697,7 +4674,7 @@
       </trans-unit>
       <trans-unit id="4a58b1d4aff414350b701aa587aeb39a1276307a" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="new">i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</target>
+        <target state="translated">por exemplo, 2vCore 2GB RAM, uma link directo ao servidor que está a alugar, etc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">216</context></context-group>
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
