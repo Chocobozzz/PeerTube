@@ -195,7 +195,7 @@ describe('Test blocklist', function () {
       })
 
       it('Should hide its comments', async function () {
-        const resThreads = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 5, '-createdAt', servers[0].accessToken)
+        const resThreads = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 25, '-createdAt', servers[0].accessToken)
 
         const threads: VideoComment[] = resThreads.body.data
         expect(threads).to.have.lengthOf(1)
@@ -467,9 +467,11 @@ describe('Test blocklist', function () {
 
       it('Should hide its comments', async function () {
         for (const token of [ userModeratorToken, servers[0].accessToken ]) {
-          const resThreads = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 5, '-createdAt', token)
+          const resThreads = await getVideoCommentThreads(servers[0].url, videoUUID1, 0, 20, '-createdAt', token)
 
-          const threads: VideoComment[] = resThreads.body.data
+          let threads: VideoComment[] = resThreads.body.data
+          threads = threads.filter(t => t.isDeleted === false)
+
           expect(threads).to.have.lengthOf(1)
           expect(threads[0].totalReplies).to.equal(0)
 

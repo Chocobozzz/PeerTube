@@ -24,13 +24,14 @@ import {
   MCommentOwnerVideoReply
 } from '../../typings/models/video'
 import { AccountModel } from '../account/account'
-import { ActorModel } from '../activitypub/actor'
+import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoChannelModel } from './video-channel'
 
 enum ScopeNames {
   WITH_ACCOUNT = 'WITH_ACCOUNT',
+  WITH_ACCOUNT_FOR_API = 'WITH_ACCOUNT_FOR_API',
   WITH_IN_REPLY_TO = 'WITH_IN_REPLY_TO',
   WITH_VIDEO = 'WITH_VIDEO',
   ATTRIBUTES_FOR_API = 'ATTRIBUTES_FOR_API'
@@ -79,6 +80,22 @@ enum ScopeNames {
     include: [
       {
         model: AccountModel
+      }
+    ]
+  },
+  [ScopeNames.WITH_ACCOUNT_FOR_API]: {
+    include: [
+      {
+        model: AccountModel.unscoped(),
+        include: [
+          {
+            attributes: {
+              exclude: unusedActorAttributesForAPI
+            },
+            model: ActorModel, // Default scope includes avatar and server
+            required: true
+          }
+        ]
       }
     ]
   },
@@ -275,18 +292,33 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       limit: count,
       order: getCommentSort(sort),
       where: {
-        videoId,
-        inReplyToCommentId: null,
-        accountId: {
-          [Op.notIn]: Sequelize.literal(
-            '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
-          )
-        }
+        [Op.and]: [
+          {
+            videoId
+          },
+          {
+            inReplyToCommentId: null
+          },
+          {
+            [Op.or]: [
+              {
+                accountId: {
+                  [Op.notIn]: Sequelize.literal(
+                    '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
+                  )
+                }
+              },
+              {
+                accountId: null
+              }
+            ]
+          }
+        ]
       }
     }
 
     const scopes: (string | ScopeOptions)[] = [
-      ScopeNames.WITH_ACCOUNT,
+      ScopeNames.WITH_ACCOUNT_FOR_API,
       {
         method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
       }
@@ -328,7 +360,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
 
     const scopes: any[] = [
-      ScopeNames.WITH_ACCOUNT,
+      ScopeNames.WITH_ACCOUNT_FOR_API,
       {
         method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
       }

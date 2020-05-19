@@ -178,5 +178,5 @@ async function removeVideoComment (req: express.Request, res: express.Response) 
 
   auditLogger.delete(getAuditIdFromRes(res), new CommentAuditView(videoCommentInstance.toFormattedJSON()))
 
-  return res.type('json').status(204)
+  return res.type('json').status(204).end()
 }
