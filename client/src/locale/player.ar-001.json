@@ -94,7 +94,7 @@
     "restore all settings to the default values": "أعادة كافة الإعدادات إلى القيم الإفتراضية",
     "Done": "تم",
     "Caption Settings Dialog": "إعدادات التعليقات",
-    "Beginning of dialog window. Escape will cancel and close the window.": "الضغط على زر Esc في بداية نافذة الحوار سيلغي ويقفل النافذة",
-    "End of dialog window.": "نهاية نافذة الحوار",
-    "{1} is loading.": "{1} يحمل"
+    "Beginning of dialog window. Escape will cancel and close the window.": "الضغط على زر Esc في بداية نافذة الحوار سيلغي ويقفل النافذة.",
+    "End of dialog window.": "نهاية نافذة الحوار.",
+    "{1} is loading.": "جارٍ تحميل {1}."
 }
