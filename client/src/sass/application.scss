@@ -41,6 +41,7 @@ body {
 
   --textareaForegroundColor: #{$textarea-foreground-color};
   --textareaBackgroundColor: #{$textarea-background-color};
+  --markdownTextareaBackgroundColor: #{$markdown-textarea-background-color};
 
   --actionButtonColor: #{$grey-foreground-color};
   --supportButtonBackgroundColor: #{transparent};

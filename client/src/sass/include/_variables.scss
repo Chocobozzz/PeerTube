@@ -68,7 +68,8 @@ $input-background-color: $bg-color;
 $input-placeholder-color: #898989;
 
 $textarea-foreground-color: $fg-color;
-$textarea-background-color: $grey-background-hover-color;
+$textarea-background-color: $bg-color;
+$markdown-textarea-background-color: $grey-background-hover-color;
 
 $sub-menu-margin-bottom: 30px;
 $sub-menu-margin-bottom-small-view: 10px;
@@ -100,6 +101,7 @@ $variables: (
 
   --textareaForegroundColor: var(--textareaForegroundColor),
   --textareaBackgroundColor: var(--textareaBackgroundColor),
+  --markdownTextareaBackgroundColor: var(--markdownTextareaBackgroundColor),
 
   --actionButtonColor: var(--actionButtonColor),
   --supportButtonColor: var(--supportButtonColor),
