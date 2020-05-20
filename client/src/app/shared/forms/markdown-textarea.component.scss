@@ -14,7 +14,6 @@ $input-border-radius: 3px;
     textarea {
       @include peertube-textarea(100%, 150px);
 
-      background-color: var(--textareaBackgroundColor);
       font-family: monospace;
       font-size: 13px;
       border-bottom: none;
