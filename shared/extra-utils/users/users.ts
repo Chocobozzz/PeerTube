@@ -216,7 +216,7 @@ function unblockUser (url: string, userId: number | string, accessToken: string,
     .expect(expectedStatus)
 }
 
-function updateMyUser (options: { url: string, accessToken: string } & UserUpdateMe) {
+function updateMyUser (options: { url: string, accessToken: string, statusCodeExpected?: number } & UserUpdateMe) {
   const path = '/api/v1/users/me'
 
   const toSend: UserUpdateMe = omit(options, 'url', 'accessToken')
@@ -226,7 +226,7 @@ function updateMyUser (options: { url: string, accessToken: string } & UserUpdat
     path,
     token: options.accessToken,
     fields: toSend,
-    statusCodeExpected: 204
+    statusCodeExpected: options.statusCodeExpected || 204
   })
 }
 

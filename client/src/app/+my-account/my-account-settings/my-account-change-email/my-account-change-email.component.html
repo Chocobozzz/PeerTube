@@ -9,7 +9,7 @@
   <span class="email">{{ user.pendingEmail }}</span> is awaiting email verification
 </div>
 
-<form role="form" class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form">
+<form role="form" class="change-email" (ngSubmit)="changeEmail()" [formGroup]="form" *ngIf="user.pluginAuth === null">
 
   <div class="form-group">
     <label i18n for="new-email">New email</label>
@@ -23,6 +23,7 @@
   </div>
 
   <div class="form-group">
+    <label i18n for="new-email">Your current password</label>
     <input
       type="password" id="password" i18n-placeholder placeholder="Your password" autocomplete="off"
       formControlName="password" [ngClass]="{ 'input-error': formErrors['password'] }" class="form-control"

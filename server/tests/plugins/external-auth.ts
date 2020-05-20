@@ -255,6 +255,16 @@ describe('Test external auth plugins', function () {
     expect(body.role).to.equal(UserRole.USER)
   })
 
+  it('Should not update an external auth email', async function () {
+    await updateMyUser({
+      url: server.url,
+      accessToken: cyanAccessToken,
+      email: 'toto@example.com',
+      currentPassword: 'toto',
+      statusCodeExpected: 400
+    })
+  })
+
   it('Should reject token of Kefka by the plugin hook', async function () {
     this.timeout(10000)
 

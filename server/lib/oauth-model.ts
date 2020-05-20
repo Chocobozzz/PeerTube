@@ -14,6 +14,7 @@ import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { createUserAccountAndChannelAndPlaylist } from './user'
 import { UserRole } from '@shared/models/users/user-role'
 import { PluginManager } from '@server/lib/plugins/plugin-manager'
+import { ActorModel } from '@server/models/activitypub/actor'
 
 type TokenInfo = { accessToken: string, refreshToken: string, accessTokenExpiresAt: Date, refreshTokenExpiresAt: Date }
 
@@ -108,6 +109,9 @@ async function getUser (usernameOrEmail?: string, password?: string) {
 
     let user = await UserModel.loadByEmail(obj.user.email)
     if (!user) user = await createUserFromExternal(obj.pluginName, obj.user)
+
+    // Cannot create a user
+    if (!user) throw new AccessDeniedError('Cannot create such user: an actor with that name already exists.')
 
     // If the user does not belongs to a plugin, it was created before its installation
     // Then we just go through a regular login process
@@ -208,6 +212,10 @@ async function createUserFromExternal (pluginAuth: string, options: {
   role: UserRole
   displayName: string
 }) {
+  // Check an actor does not already exists with that name (removed user)
+  const actor = await ActorModel.loadLocalByName(options.username)
+  if (actor) return null
+
   const userToCreate = new UserModel({
     username: options.username,
     password: null,

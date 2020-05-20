@@ -58,7 +58,7 @@
   </div>
 </div>
 
-<div class="form-row mt-5"> <!-- password grid -->
+<div class="form-row mt-5" *ngIf="user.pluginAuth === null"> <!-- password grid -->
   <div class="form-group col-12 col-lg-4 col-xl-3">
     <div i18n class="account-title">PASSWORD</div>
   </div>

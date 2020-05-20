@@ -175,7 +175,7 @@ Ajouter un sous-titre est vraiment facile`)
 
     {
       const attributes = immutableAssign(baseAttributes, {
-        torrentfile: 'video-720p.torrent',
+        torrentfile: 'video-720p.torrent' as any,
         description: 'this is a super torrent description',
         tags: [ 'tag_torrent1', 'tag_torrent2' ]
       })
