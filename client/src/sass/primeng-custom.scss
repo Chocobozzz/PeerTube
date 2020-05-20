@@ -140,13 +140,13 @@ p-table {
         font-size: 11px !important;
         top: 0 !important;
 
-        &.pi-sort-up {
+        &.pi-sort-amount-up-alt {
           @extend .glyphicon-triangle-top;
 
           color: var(--mainForegroundColor) !important;
         }
 
-        &.pi-sort-down {
+        &.pi-sort-amount-down {
           @extend .glyphicon-triangle-bottom;
 
           color: var(--mainForegroundColor) !important;
@@ -302,12 +302,12 @@ p-table {
     @if $mobile-paginator {
       p-paginator .ui-paginator-bottom {
         display: block;
-  
+
         .ui-paginator-current {
           position: relative;
           display: block;
         }
-  
+
         a, .ui-paginator-pages {
           vertical-align: middle;
         }
@@ -345,7 +345,7 @@ p-multiselect {
     }
   }
 
-  .pi.pi-chevron-down{
+  .pi.pi-chevron-down {
     margin-left: 0 !important;
 
     &::after {
