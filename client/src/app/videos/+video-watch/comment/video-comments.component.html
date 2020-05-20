@@ -12,10 +12,10 @@
     <my-feed [syndicationItems]="syndicationItems"></my-feed>
 
     <div ngbDropdown class="d-inline-block ml-4">
-      <button class="btn btn-sm btn-outline-secondary" id="dropdownSortComments" ngbDropdownToggle i18n>
+      <button class="btn btn-sm btn-outline-secondary" id="dropdown-sort-comments" ngbDropdownToggle i18n>
         SORT BY
       </button>
-      <div ngbDropdownMenu aria-labelledby="dropdownSortComments">
+      <div ngbDropdownMenu aria-labelledby="dropdown-sort-comments">
         <button (click)="handleSortChange('-createdAt')" ngbDropdownItem i18n>Most recent first (default)</button>
         <button (click)="handleSortChange('-totalReplies')" ngbDropdownItem i18n>Most replies first</button>
       </div>
@@ -72,7 +72,7 @@
         >
           <div *ngIf="comment.totalReplies !== 0 && !threadComments[comment.id]" (click)="viewReplies(comment.id)" class="view-replies mb-2">
             <span class="glyphicon glyphicon-menu-down"></span>
-  
+
             <ng-container *ngIf="comment.totalRepliesFromVideoAuthor > 0; then hasAuthorComments; else noAuthorComments"></ng-container>
             <ng-template #hasAuthorComments>
               <ng-container *ngIf="comment.totalReplies !== comment.totalRepliesFromVideoAuthor; else onlyAuthorComments" i18n>
@@ -83,7 +83,7 @@
               </ng-template>
             </ng-template>
             <ng-template i18n #noAuthorComments>View {{ comment.totalReplies }} replies</ng-template>
-  
+
             <my-small-loader class="comment-thread-loading ml-1" [loading]="threadLoading[comment.id]"></my-small-loader>
           </div>
         </my-video-comment>

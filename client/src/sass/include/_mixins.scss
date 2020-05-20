@@ -90,7 +90,8 @@
   display: inline-block;
   height: $button-height;
   width: $width;
-  background: var(--inputBackgroundColor);
+  color: var(--inputForegroundColor);
+  background-color: var(--inputBackgroundColor);
   border: 1px solid #C6C6C6;
   border-radius: 3px;
   padding-left: 15px;
@@ -121,6 +122,8 @@
 @mixin peertube-textarea ($width, $height) {
   @include peertube-input-text($width);
 
+  color: var(--textareaForegroundColor);
+  background-color: var(--textareaBackgroundColor);
   height: $height;
   padding: 5px 15px;
   font-size: 15px;
@@ -280,6 +283,7 @@
   margin: 0;
   width: $width;
   border-radius: 3px;
+  color: var(--inputForegroundColor);
   background: var(--inputBackgroundColor);
   position: relative;
   font-size: 15px;

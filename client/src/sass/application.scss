@@ -35,10 +35,13 @@ body {
   --menuForegroundColor: #{$menu-color};
   --submenuColor: #{$sub-menu-color};
 
+  --inputForegroundColor: #{$input-foreground-color};
   --inputBackgroundColor: #{$input-background-color};
   --inputPlaceholderColor: #{$input-placeholder-color};
 
+  --textareaForegroundColor: #{$textarea-foreground-color};
   --textareaBackgroundColor: #{$textarea-background-color};
+  --markdownTextareaBackgroundColor: #{$markdown-textarea-background-color};
 
   --actionButtonColor: #{$grey-foreground-color};
   --supportButtonBackgroundColor: #{transparent};

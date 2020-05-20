@@ -234,14 +234,19 @@ const usersUpdateMeValidator = [
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersUpdateMe parameters', { parameters: omit(req.body, 'password') })
 
+    const user = res.locals.oauth.token.User
+
     if (req.body.password || req.body.email) {
+      if (user.pluginAuth !== null) {
+        return res.status(400)
+                  .json({ error: 'You cannot update your email or password that is associated with an external auth system.' })
+      }
+
       if (!req.body.currentPassword) {
         return res.status(400)
                   .json({ error: 'currentPassword parameter is missing.' })
-                  .end()
       }
 
-      const user = res.locals.oauth.token.User
       if (await user.isPasswordMatch(req.body.currentPassword) !== true) {
         return res.status(401)
                   .json({ error: 'currentPassword is invalid.' })
