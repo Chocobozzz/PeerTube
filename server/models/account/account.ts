@@ -32,9 +32,10 @@ import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequ
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { ActorFollowModel } from '../activitypub/actor-follow'
-import { MAccountActor, MAccountAP, MAccountDefault, MAccountFormattable, MAccountSummaryFormattable } from '../../typings/models'
+import { MAccountActor, MAccountAP, MAccountDefault, MAccountFormattable, MAccountSummaryFormattable, MAccount } from '../../typings/models'
 import * as Bluebird from 'bluebird'
 import { ModelCache } from '@server/models/model-cache'
+import { VideoModel } from '../video/video'
 
 export enum ScopeNames {
   SUMMARY = 'SUMMARY'
@@ -341,6 +342,29 @@ export class AccountModel extends Model<AccountModel> {
           total: count
         }
       })
+  }
+
+  static loadAccountIdFromVideo (videoId: number): Bluebird<MAccount> {
+    const query = {
+      include: [
+        {
+          attributes: [ 'id', 'accountId' ],
+          model: VideoChannelModel.unscoped(),
+          required: true,
+          include: [
+            {
+              attributes: [ 'id', 'channelId' ],
+              model: VideoModel.unscoped(),
+              where: {
+                id: videoId
+              }
+            }
+          ]
+        }
+      ]
+    }
+
+    return AccountModel.findOne(query)
   }
 
   static listLocalsForSitemap (sort: string): Bluebird<MAccountActor[]> {

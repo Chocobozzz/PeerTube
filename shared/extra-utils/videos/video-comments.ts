@@ -61,6 +61,12 @@ function addVideoCommentReply (
     .expect(expectedStatus)
 }
 
+async function findCommentId (url: string, videoId: number | string, text: string) {
+  const res = await getVideoCommentThreads(url, videoId, 0, 25, '-createdAt')
+
+  return res.body.data.find(c => c.text === text).id as number
+}
+
 function deleteVideoComment (
   url: string,
   token: string,
@@ -85,5 +91,6 @@ export {
   getVideoThreadComments,
   addVideoCommentThread,
   addVideoCommentReply,
+  findCommentId,
   deleteVideoComment
 }

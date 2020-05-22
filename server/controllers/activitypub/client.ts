@@ -285,7 +285,7 @@ async function videoCommentsController (req: express.Request, res: express.Respo
   const video = res.locals.onlyImmutableVideo
 
   const handler = async (start: number, count: number) => {
-    const result = await VideoCommentModel.listAndCountByVideoId(video.id, start, count)
+    const result = await VideoCommentModel.listAndCountByVideoForAP(video, start, count)
     return {
       total: result.count,
       data: result.rows.map(r => r.url)

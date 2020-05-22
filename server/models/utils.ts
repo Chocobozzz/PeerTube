@@ -136,10 +136,7 @@ function createSimilarityAttribute (col: string, value: string) {
   )
 }
 
-function buildBlockedAccountSQL (serverAccountId: number, userAccountId?: number) {
-  const blockerIds = [ serverAccountId ]
-  if (userAccountId) blockerIds.push(userAccountId)
-
+function buildBlockedAccountSQL (blockerIds: number[]) {
   const blockerIdsString = blockerIds.join(', ')
 
   return 'SELECT "targetAccountId" AS "id" FROM "accountBlocklist" WHERE "accountId" IN (' + blockerIdsString + ')' +

@@ -78,6 +78,7 @@ async function listVideoThreads (req: express.Request, res: express.Response) {
   if (video.commentsEnabled === true) {
     const apiOptions = await Hooks.wrapObject({
       videoId: video.id,
+      isVideoOwned: video.isOwned(),
       start: req.query.start,
       count: req.query.count,
       sort: req.query.sort,
@@ -108,6 +109,7 @@ async function listVideoThreadComments (req: express.Request, res: express.Respo
   if (video.commentsEnabled === true) {
     const apiOptions = await Hooks.wrapObject({
       videoId: video.id,
+      isVideoOwned: video.isOwned(),
       threadId: res.locals.videoCommentThread.id,
       user
     }, 'filter:api.video-thread-comments.list.params')

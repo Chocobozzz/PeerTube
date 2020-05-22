@@ -37,7 +37,8 @@ import {
   addVideoCommentThread,
   deleteVideoComment,
   getVideoCommentThreads,
-  getVideoThreadComments
+  getVideoThreadComments,
+  findCommentId
 } from '../../../../shared/extra-utils/videos/video-comments'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 
@@ -773,8 +774,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       {
-        const res = await getVideoCommentThreads(servers[1].url, videoUUID, 0, 5)
-        const threadId = res.body.data.find(c => c.text === 'my super first comment').id
+        const threadId = await findCommentId(servers[1].url, videoUUID, 'my super first comment')
 
         const text = 'my super answer to thread 1'
         await addVideoCommentReply(servers[1].url, servers[1].accessToken, videoUUID, threadId, text)
@@ -783,8 +783,7 @@ describe('Test multiple servers', function () {
       await waitJobs(servers)
 
       {
-        const res1 = await getVideoCommentThreads(servers[2].url, videoUUID, 0, 5)
-        const threadId = res1.body.data.find(c => c.text === 'my super first comment').id
+        const threadId = await findCommentId(servers[2].url, videoUUID, 'my super first comment')
 
         const res2 = await getVideoThreadComments(servers[2].url, videoUUID, threadId)
         const childCommentId = res2.body.children[0].comment.id
