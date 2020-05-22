@@ -22,7 +22,7 @@
     }
 
     .playlist-by-index {
-      color: $grey-foreground-color;
+      color: var(--greyForegroundColor);
       display: flex;
 
       .playlist-by {

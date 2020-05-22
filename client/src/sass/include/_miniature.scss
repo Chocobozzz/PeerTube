@@ -187,7 +187,7 @@ $play-overlay-width: 18px;
       }
 
       .followers {
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         font-weight: normal;
         font-size: 14px;
         margin-left: 10px;
@@ -203,7 +203,7 @@ $play-overlay-width: 18px;
     display: inline-block;
     font-size: 16px;
     text-transform: uppercase;
-    color: $grey-foreground-color;
+    color: var(--greyForegroundColor);
     margin-bottom: 10px;
     font-weight: $font-semibold;
     text-decoration: none;

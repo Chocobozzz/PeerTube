@@ -80,7 +80,7 @@
 
       .comment-date {
         font-size: 90%;
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         margin-left: 5px;
         text-decoration: none;
       }
@@ -108,7 +108,7 @@
       }
 
       &.comment-html-deleted {
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         margin-bottom: 1rem;
       }
     }
@@ -120,7 +120,7 @@
       ::ng-deep .dropdown-toggle,
       .comment-action-reply,
       .comment-action-delete {
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         cursor: pointer;
         margin-right: 10px;
 

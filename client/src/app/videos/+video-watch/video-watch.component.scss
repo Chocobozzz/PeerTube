@@ -356,7 +356,7 @@ $video-info-margin-left: 44px;
       .video-info-description-more {
         cursor: pointer;
         font-weight: $font-semibold;
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         font-size: 14px;
 
         .glyphicon {
@@ -379,7 +379,7 @@ $video-info-margin-left: 44px;
         min-width: 142px;
         padding-right: 5px;
         display: inline-block;
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         font-weight: $font-bold;
       }
 

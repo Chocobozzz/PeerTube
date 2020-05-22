@@ -58,11 +58,11 @@ my-video-thumbnail,
     .position {
       font-weight: $font-semibold;
       margin-right: 10px;
-      color: $grey-foreground-color;
+      color: var(--greyForegroundColor);
       min-width: 25px;
 
       my-global-icon {
-        @include apply-svg-color($grey-foreground-color);
+        @include apply-svg-color(var(--greyForegroundColor));
 
         width: 17px;
         position: relative;
@@ -81,7 +81,7 @@ my-video-thumbnail,
       }
 
       .video-info-account, .video-info-timestamp {
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
       }
     }
   }
@@ -109,7 +109,7 @@ my-video-thumbnail,
     }
 
     .icon-more {
-      @include apply-svg-color($grey-foreground-color);
+      @include apply-svg-color(var(--greyForegroundColor));
 
       display: flex;
 

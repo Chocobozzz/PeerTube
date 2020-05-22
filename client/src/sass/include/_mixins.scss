@@ -156,7 +156,7 @@
 @mixin tertiary-button {
   @include button-focus($grey-button-outline-color);
 
-  color: $grey-foreground-color;
+  color: var(--greyForegroundColor);
   background-color: transparent;
 
   &[disabled], &.disabled {
@@ -173,11 +173,11 @@
 
   &, &:active, &:focus {
     background-color: $grey-background-color;
-    color: $grey-foreground-color;
+    color: var(--greyForegroundColor);
   }
 
   &:hover, &:active, &:focus, &[disabled], &.disabled {
-    color: $grey-foreground-color;
+    color: var(--greyForegroundColor);
     background-color: $grey-background-hover-color;
   }
 
@@ -186,7 +186,7 @@
   }
 
   my-global-icon {
-    @include apply-svg-color($grey-foreground-color)
+    @include apply-svg-color(var(--greyForegroundColor))
   }
 }
 
@@ -769,7 +769,7 @@
         vertical-align: middle !important;
 
         path  {
-          fill: $grey-foreground-color !important;
+          fill: var(--greyForegroundColor) !important;
         }
       }
 
