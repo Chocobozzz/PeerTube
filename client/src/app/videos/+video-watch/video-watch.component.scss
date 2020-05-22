@@ -255,21 +255,21 @@ $video-info-margin-left: 44px;
 
             &.action-button-like.activated {
               .count {
-                color: $activated-action-button-color;
+                color: var(--activatedActionButtonColor);
               }
 
               my-global-icon {
-                @include apply-svg-color($activated-action-button-color);
+                @include apply-svg-color(var(--activatedActionButtonColor));
               }
             }
 
             &.action-button-dislike.activated {
               .count {
-                color: $activated-action-button-color;
+                color: var(--activatedActionButtonColor);
               }
 
               my-global-icon {
-                @include apply-svg-color($activated-action-button-color);
+                @include apply-svg-color(var(--activatedActionButtonColor));
               }
             }
 
@@ -325,7 +325,7 @@ $video-info-margin-left: 44px;
             background-color: #909090;
 
             &.liked {
-              background-color: $activated-action-button-color;
+              background-color: var(--activatedActionButtonColor);
             }
           }
         }

@@ -48,6 +48,8 @@ body {
   --supportButtonColor: #{var(--actionButtonColor)};
   --supportButtonHeartColor: #{$support-button-heart};
 
+  --activatedActionButtonColor: #{$activated-action-button-color};
+
   font-family: $main-fonts;
   font-weight: $font-regular;
   color: var(--mainForegroundColor);
