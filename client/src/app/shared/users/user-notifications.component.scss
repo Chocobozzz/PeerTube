@@ -44,7 +44,7 @@
 
   .from-date {
     font-size: 0.85em;
-    color: $grey-foreground-color;
+    color: var(--greyForegroundColor);
     padding-left: 5px;
     min-width: 70px;
     text-align: right;

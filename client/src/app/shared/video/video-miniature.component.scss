@@ -36,7 +36,7 @@ $more-margin-right: 15px;
 
         display: block;
         font-size: 13px;
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
 
         &:hover {
           color: $grey-foreground-hover-color;

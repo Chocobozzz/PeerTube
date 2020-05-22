@@ -91,6 +91,8 @@ $variables: (
   --mainForegroundColor: var(--mainForegroundColor),
   --secondaryColor: var(--secondaryColor),
 
+  --greyForegroundColor: var(--greyForegroundColor),
+
   --menuBackgroundColor: var(--menuBackgroundColor),
   --menuForegroundColor: var(--menuForegroundColor),
   --submenuColor: var(--submenuColor),
@@ -104,6 +106,8 @@ $variables: (
   --markdownTextareaBackgroundColor: var(--markdownTextareaBackgroundColor),
 
   --actionButtonColor: var(--actionButtonColor),
+  --activatedActionButtonColor: var(--activatedActionButtonColor),
+
   --supportButtonColor: var(--supportButtonColor),
   --supportButtonBackgroundColor: var(--supportButtonBackgroundColor),
   --supportButtonHeartColor: var(--supportButtonHeartColor),

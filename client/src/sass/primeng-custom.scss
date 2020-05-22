@@ -521,6 +521,7 @@ p-toast {
   .ui-toast-message {
     font-family: $main-fonts;
     background-color: var(--mainBackgroundColor) !important;
+    color: var(--mainForegroundColor) !important;
     border-radius: 5px;
     box-sizing: border-box;
     border: 1px solid #EBEEF5 !important;

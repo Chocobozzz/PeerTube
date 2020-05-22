@@ -255,21 +255,21 @@ $video-info-margin-left: 44px;
 
             &.action-button-like.activated {
               .count {
-                color: $activated-action-button-color;
+                color: var(--activatedActionButtonColor);
               }
 
               my-global-icon {
-                @include apply-svg-color($activated-action-button-color);
+                @include apply-svg-color(var(--activatedActionButtonColor));
               }
             }
 
             &.action-button-dislike.activated {
               .count {
-                color: $activated-action-button-color;
+                color: var(--activatedActionButtonColor);
               }
 
               my-global-icon {
-                @include apply-svg-color($activated-action-button-color);
+                @include apply-svg-color(var(--activatedActionButtonColor));
               }
             }
 
@@ -325,7 +325,7 @@ $video-info-margin-left: 44px;
             background-color: #909090;
 
             &.liked {
-              background-color: $activated-action-button-color;
+              background-color: var(--activatedActionButtonColor);
             }
           }
         }
@@ -356,7 +356,7 @@ $video-info-margin-left: 44px;
       .video-info-description-more {
         cursor: pointer;
         font-weight: $font-semibold;
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         font-size: 14px;
 
         .glyphicon {
@@ -379,7 +379,7 @@ $video-info-margin-left: 44px;
         min-width: 142px;
         padding-right: 5px;
         display: inline-block;
-        color: $grey-foreground-color;
+        color: var(--greyForegroundColor);
         font-weight: $font-bold;
       }
 

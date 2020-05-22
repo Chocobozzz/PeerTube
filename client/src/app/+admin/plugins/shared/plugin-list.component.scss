@@ -23,12 +23,12 @@
 
   .plugin-icon {
     margin-left: 10px;
-    
+
     my-global-icon {
-      @include apply-svg-color($grey-foreground-color);
-      
+      @include apply-svg-color(var(--greyForegroundColor));
+
       &[iconName="npm"] {
-        @include fill-svg-color($grey-foreground-color);
+        @include fill-svg-color(var(--greyForegroundColor));
       }
     }
   }
