@@ -1,5 +1,6 @@
 import { sequelizeTypescript } from '@server/initializers/database'
-import { MAccountBlocklist, MServerBlocklist } from '@server/typings/models'
+import { getServerActor } from '@server/models/application/application'
+import { MAccountBlocklist, MAccountId, MAccountServer, MServerBlocklist } from '@server/typings/models'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
 
@@ -33,9 +34,29 @@ function removeServerFromBlocklist (serverBlock: MServerBlocklist) {
   })
 }
 
+async function isBlockedByServerOrAccount (targetAccount: MAccountServer, userAccount?: MAccountId) {
+  const serverAccountId = (await getServerActor()).Account.id
+  const sourceAccounts = [ serverAccountId ]
+
+  if (userAccount) sourceAccounts.push(userAccount.id)
+
+  const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, targetAccount.id)
+  if (accountMutedHash[serverAccountId] || (userAccount && accountMutedHash[userAccount.id])) {
+    return true
+  }
+
+  const instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, targetAccount.Actor.serverId)
+  if (instanceMutedHash[serverAccountId] || (userAccount && instanceMutedHash[userAccount.id])) {
+    return true
+  }
+
+  return false
+}
+
 export {
   addAccountInBlocklist,
   addServerInBlocklist,
   removeAccountFromBlocklist,
-  removeServerFromBlocklist
+  removeServerFromBlocklist,
+  isBlockedByServerOrAccount
 }

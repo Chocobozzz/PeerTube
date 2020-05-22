@@ -1,18 +1,19 @@
+import { isRedundancyAccepted } from '@server/lib/redundancy'
 import { ActivityCreate, CacheFileObject, VideoTorrentObject } from '../../../../shared'
+import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { VideoCommentObject } from '../../../../shared/models/activitypub/objects/video-comment-object'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
 import { logger } from '../../../helpers/logger'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { resolveThread } from '../video-comments'
-import { getOrCreateVideoAndAccountAndChannel } from '../videos'
-import { forwardVideoRelatedActivity } from '../send/utils'
-import { createOrUpdateCacheFile } from '../cache-file'
-import { Notifier } from '../../notifier'
-import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
-import { createOrUpdateVideoPlaylist } from '../playlist'
 import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
 import { MActorSignature, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../../typings/models'
-import { isRedundancyAccepted } from '@server/lib/redundancy'
+import { Notifier } from '../../notifier'
+import { createOrUpdateCacheFile } from '../cache-file'
+import { createOrUpdateVideoPlaylist } from '../playlist'
+import { forwardVideoRelatedActivity } from '../send/utils'
+import { resolveThread } from '../video-comments'
+import { getOrCreateVideoAndAccountAndChannel } from '../videos'
+import { isBlockedByServerOrAccount } from '@server/lib/blocklist'
 
 async function processCreateActivity (options: APProcessorOptions<ActivityCreate>) {
   const { activity, byActor } = options
@@ -98,6 +99,12 @@ async function processCreateVideoComment (activity: ActivityCreate, byActor: MAc
       commentObject.inReplyTo,
       { err }
     )
+    return
+  }
+
+  // Try to not forward unwanted commments on our videos
+  if (video.isOwned() && await isBlockedByServerOrAccount(comment.Account, video.VideoChannel.Account)) {
+    logger.info('Skip comment forward from blocked account or server %s.', comment.Account.Actor.url)
     return
   }
 

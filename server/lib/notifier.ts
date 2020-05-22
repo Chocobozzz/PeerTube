@@ -1,20 +1,5 @@
-import { UserNotificationSettingValue, UserNotificationType, UserRight } from '../../shared/models/users'
-import { logger } from '../helpers/logger'
-import { Emailer } from './emailer'
-import { UserNotificationModel } from '../models/account/user-notification'
-import { UserModel } from '../models/account/user'
-import { PeerTubeSocket } from './peertube-socket'
-import { CONFIG } from '../initializers/config'
-import { VideoPrivacy, VideoState, VideoAbuse } from '../../shared/models/videos'
-import { AccountBlocklistModel } from '../models/account/account-blocklist'
-import {
-  MCommentOwnerVideo,
-  MVideoAbuseVideo,
-  MVideoAccountLight,
-  MVideoBlacklistLightVideo,
-  MVideoBlacklistVideo,
-  MVideoFullLight
-} from '../typings/models/video'
+import { getServerActor } from '@server/models/application/application'
+import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
 import {
   MUser,
   MUserAccount,
@@ -23,10 +8,26 @@ import {
   MUserWithNotificationSetting,
   UserNotificationModelForApi
 } from '@server/typings/models/user'
-import { MAccountDefault, MActorFollowFull } from '../typings/models'
 import { MVideoImportVideo } from '@server/typings/models/video/video-import'
-import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
-import { getServerActor } from '@server/models/application/application'
+import { UserNotificationSettingValue, UserNotificationType, UserRight } from '../../shared/models/users'
+import { VideoAbuse, VideoPrivacy, VideoState } from '../../shared/models/videos'
+import { logger } from '../helpers/logger'
+import { CONFIG } from '../initializers/config'
+import { AccountBlocklistModel } from '../models/account/account-blocklist'
+import { UserModel } from '../models/account/user'
+import { UserNotificationModel } from '../models/account/user-notification'
+import { MAccountServer, MActorFollowFull } from '../typings/models'
+import {
+  MCommentOwnerVideo,
+  MVideoAbuseVideo,
+  MVideoAccountLight,
+  MVideoBlacklistLightVideo,
+  MVideoBlacklistVideo,
+  MVideoFullLight
+} from '../typings/models/video'
+import { isBlockedByServerOrAccount } from './blocklist'
+import { Emailer } from './emailer'
+import { PeerTubeSocket } from './peertube-socket'
 
 class Notifier {
 
@@ -169,7 +170,7 @@ class Notifier {
     // Not our user or user comments its own video
     if (!user || comment.Account.userId === user.id) return
 
-    if (await this.isBlockedByServerOrAccount(user, comment.Account)) return
+    if (await this.isBlockedByServerOrUser(comment.Account, user)) return
 
     logger.info('Notifying user %s of new comment %s.', user.username, comment.url)
 
@@ -270,7 +271,7 @@ class Notifier {
     const followerAccount = actorFollow.ActorFollower.Account
     const followerAccountWithActor = Object.assign(followerAccount, { Actor: actorFollow.ActorFollower })
 
-    if (await this.isBlockedByServerOrAccount(user, followerAccountWithActor)) return
+    if (await this.isBlockedByServerOrUser(followerAccountWithActor, user)) return
 
     logger.info('Notifying user %s of new follower: %s.', user.username, followerAccount.getDisplayName())
 
@@ -298,6 +299,9 @@ class Notifier {
 
   private async notifyAdminsOfNewInstanceFollow (actorFollow: MActorFollowFull) {
     const admins = await UserModel.listWithRight(UserRight.MANAGE_SERVER_FOLLOW)
+
+    const follower = Object.assign(actorFollow.ActorFollower.Account, { Actor: actorFollow.ActorFollower })
+    if (await this.isBlockedByServerOrUser(follower)) return
 
     logger.info('Notifying %d administrators of new instance follower: %s.', admins.length, actorFollow.ActorFollower.url)
 
@@ -590,17 +594,8 @@ class Notifier {
     return value & UserNotificationSettingValue.WEB
   }
 
-  private async isBlockedByServerOrAccount (user: MUserAccount, targetAccount: MAccountDefault) {
-    const serverAccountId = (await getServerActor()).Account.id
-    const sourceAccounts = [ serverAccountId, user.Account.id ]
-
-    const accountMutedHash = await AccountBlocklistModel.isAccountMutedByMulti(sourceAccounts, targetAccount.id)
-    if (accountMutedHash[serverAccountId] || accountMutedHash[user.Account.id]) return true
-
-    const instanceMutedHash = await ServerBlocklistModel.isServerMutedByMulti(sourceAccounts, targetAccount.Actor.serverId)
-    if (instanceMutedHash[serverAccountId] || instanceMutedHash[user.Account.id]) return true
-
-    return false
+  private isBlockedByServerOrUser (targetAccount: MAccountServer, user?: MUserAccount) {
+    return isBlockedByServerOrAccount(targetAccount, user?.Account)
   }
 
   static get Instance () {

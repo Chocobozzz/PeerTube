@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
+import * as libxmljs from 'libxmljs'
+import {
+  addAccountToAccountBlocklist,
+  addAccountToServerBlocklist,
+  removeAccountFromServerBlocklist
+} from '@shared/extra-utils/users/blocklist'
+import { VideoPrivacy } from '@shared/models'
 import {
   cleanupTests,
   createUser,
@@ -13,14 +20,12 @@ import {
   ServerInfo,
   setAccessTokensToServers,
   uploadVideo,
+  uploadVideoAndGetId,
   userLogin
 } from '../../../shared/extra-utils'
-import * as libxmljs from 'libxmljs'
-import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import { waitJobs } from '../../../shared/extra-utils/server/jobs'
+import { addVideoCommentThread } from '../../../shared/extra-utils/videos/video-comments'
 import { User } from '../../../shared/models/users'
-import { VideoPrivacy } from '@shared/models'
-import { addAccountToServerBlocklist } from '@shared/extra-utils/users/blocklist'
 
 chai.use(require('chai-xml'))
 chai.use(require('chai-json-schema'))
@@ -219,7 +224,11 @@ describe('Test syndication feeds', () => {
     })
 
     it('Should not list comments from muted accounts or instances', async function () {
-      await addAccountToServerBlocklist(servers[1].url, servers[1].accessToken, 'root@localhost:' + servers[0].port)
+      this.timeout(30000)
+
+      const remoteHandle = 'root@localhost:' + servers[0].port
+
+      await addAccountToServerBlocklist(servers[1].url, servers[1].accessToken, remoteHandle)
 
       {
         const json = await getJSONfeed(servers[1].url, 'video-comments', { version: 2 })
@@ -227,6 +236,26 @@ describe('Test syndication feeds', () => {
         expect(jsonObj.items.length).to.be.equal(0)
       }
 
+      await removeAccountFromServerBlocklist(servers[1].url, servers[1].accessToken, remoteHandle)
+
+      {
+        const videoUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'server 2' })).uuid
+        await waitJobs(servers)
+        await addVideoCommentThread(servers[0].url, servers[0].accessToken, videoUUID, 'super comment')
+        await waitJobs(servers)
+
+        const json = await getJSONfeed(servers[1].url, 'video-comments', { version: 3 })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(3)
+      }
+
+      await addAccountToAccountBlocklist(servers[1].url, servers[1].accessToken, remoteHandle)
+
+      {
+        const json = await getJSONfeed(servers[1].url, 'video-comments', { version: 4 })
+        const jsonObj = JSON.parse(json.text)
+        expect(jsonObj.items.length).to.be.equal(2)
+      }
     })
   })
 

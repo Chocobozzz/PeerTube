@@ -95,6 +95,12 @@ function getVideo (url: string, id: number | string, expectedStatus = 200) {
           .expect(expectedStatus)
 }
 
+async function getVideoIdFromUUID (url: string, uuid: string) {
+  const res = await getVideo(url, uuid)
+
+  return res.body.id
+}
+
 function getVideoFileMetadataUrl (url: string) {
   return request(url)
     .get('/')
@@ -669,5 +675,6 @@ export {
   checkVideoFilesWereRemoved,
   getPlaylistVideos,
   uploadVideoAndGetId,
-  getLocalIdByUUID
+  getLocalIdByUUID,
+  getVideoIdFromUUID
 }

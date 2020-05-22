@@ -21,7 +21,8 @@ import {
   MCommentOwnerReplyVideoLight,
   MCommentOwnerVideo,
   MCommentOwnerVideoFeed,
-  MCommentOwnerVideoReply
+  MCommentOwnerVideoReply,
+  MVideoImmutable
 } from '../../typings/models/video'
 import { AccountModel } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
@@ -38,14 +39,14 @@ enum ScopeNames {
 }
 
 @Scopes(() => ({
-  [ScopeNames.ATTRIBUTES_FOR_API]: (serverAccountId: number, userAccountId?: number) => {
+  [ScopeNames.ATTRIBUTES_FOR_API]: (blockerAccountIds: number[]) => {
     return {
       attributes: {
         include: [
           [
             Sequelize.literal(
               '(' +
-                'WITH "blocklist" AS (' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')' +
+                'WITH "blocklist" AS (' + buildBlockedAccountSQL(blockerAccountIds) + ')' +
                 'SELECT COUNT("replies"."id") - (' +
                   'SELECT COUNT("replies"."id") ' +
                   'FROM "videoComment" AS "replies" ' +
@@ -276,16 +277,15 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   static async listThreadsForApi (parameters: {
     videoId: number
+    isVideoOwned: boolean
     start: number
     count: number
     sort: string
     user?: MUserAccountId
   }) {
-    const { videoId, start, count, sort, user } = parameters
+    const { videoId, isVideoOwned, start, count, sort, user } = parameters
 
-    const serverActor = await getServerActor()
-    const serverAccountId = serverActor.Account.id
-    const userAccountId = user ? user.Account.id : undefined
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ videoId, user, isVideoOwned })
 
     const query = {
       offset: start,
@@ -304,7 +304,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
               {
                 accountId: {
                   [Op.notIn]: Sequelize.literal(
-                    '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
+                    '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
                   )
                 }
               },
@@ -320,7 +320,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const scopes: (string | ScopeOptions)[] = [
       ScopeNames.WITH_ACCOUNT_FOR_API,
       {
-        method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
+        method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
       }
     ]
 
@@ -334,14 +334,13 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   static async listThreadCommentsForApi (parameters: {
     videoId: number
+    isVideoOwned: boolean
     threadId: number
     user?: MUserAccountId
   }) {
-    const { videoId, threadId, user } = parameters
+    const { videoId, threadId, user, isVideoOwned } = parameters
 
-    const serverActor = await getServerActor()
-    const serverAccountId = serverActor.Account.id
-    const userAccountId = user ? user.Account.id : undefined
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({ videoId, user, isVideoOwned })
 
     const query = {
       order: [ [ 'createdAt', 'ASC' ], [ 'updatedAt', 'ASC' ] ] as Order,
@@ -353,7 +352,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         ],
         accountId: {
           [Op.notIn]: Sequelize.literal(
-            '(' + buildBlockedAccountSQL(serverAccountId, userAccountId) + ')'
+            '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
           )
         }
       }
@@ -362,7 +361,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     const scopes: any[] = [
       ScopeNames.WITH_ACCOUNT_FOR_API,
       {
-        method: [ ScopeNames.ATTRIBUTES_FOR_API, serverAccountId, userAccountId ]
+        method: [ ScopeNames.ATTRIBUTES_FOR_API, blockerAccountIds ]
       }
     ]
 
@@ -399,13 +398,23 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       .findAll(query)
   }
 
-  static listAndCountByVideoId (videoId: number, start: number, count: number, t?: Transaction, order: 'ASC' | 'DESC' = 'ASC') {
+  static async listAndCountByVideoForAP (video: MVideoImmutable, start: number, count: number, t?: Transaction) {
+    const blockerAccountIds = await VideoCommentModel.buildBlockerAccountIds({
+      videoId: video.id,
+      isVideoOwned: video.isOwned()
+    })
+
     const query = {
-      order: [ [ 'createdAt', order ] ] as Order,
+      order: [ [ 'createdAt', 'ASC' ] ] as Order,
       offset: start,
       limit: count,
       where: {
-        videoId
+        videoId: video.id,
+        accountId: {
+          [Op.notIn]: Sequelize.literal(
+            '(' + buildBlockedAccountSQL(blockerAccountIds) + ')'
+          )
+        }
       },
       transaction: t
     }
@@ -424,7 +433,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
         deletedAt: null,
         accountId: {
           [Op.notIn]: Sequelize.literal(
-            '(' + buildBlockedAccountSQL(serverActor.Account.id) + ')'
+            '(' + buildBlockedAccountSQL([ serverActor.Account.id, '"Video->VideoChannel"."accountId"' ]) + ')'
           )
         }
       },
@@ -435,7 +444,14 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
           required: true,
           where: {
             privacy: VideoPrivacy.PUBLIC
-          }
+          },
+          include: [
+            {
+              attributes: [ 'accountId' ],
+              model: VideoChannelModel.unscoped(),
+              required: true
+            }
+          ]
         }
       ]
     }
@@ -649,5 +665,25 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       attributedTo: this.Account.Actor.url,
       tag
     }
+  }
+
+  private static async buildBlockerAccountIds (options: {
+    videoId: number
+    isVideoOwned: boolean
+    user?: MUserAccountId
+  }) {
+    const { videoId, user, isVideoOwned } = options
+
+    const serverActor = await getServerActor()
+    const blockerAccountIds = [ serverActor.Account.id ]
+
+    if (user) blockerAccountIds.push(user.Account.id)
+
+    if (isVideoOwned) {
+      const videoOwnerAccount = await AccountModel.loadAccountIdFromVideo(videoId)
+      blockerAccountIds.push(videoOwnerAccount.id)
+    }
+
+    return blockerAccountIds
   }
 }

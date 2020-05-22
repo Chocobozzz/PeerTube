@@ -57,7 +57,7 @@ export enum ScopeNames {
   }) => {
     const where = {
       reporterAccountId: {
-        [Op.notIn]: literal('(' + buildBlockedAccountSQL(options.serverAccountId, options.userAccountId) + ')')
+        [Op.notIn]: literal('(' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
       }
     }
 
