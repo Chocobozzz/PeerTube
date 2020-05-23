@@ -350,7 +350,7 @@
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target state="translated">您的站臺有 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>新的追蹤者<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> 正等候您的批准<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
+        <target state="translated">您的實例有 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>新的追蹤者<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> 正等候您的批准<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
@@ -1033,7 +1033,7 @@
       </trans-unit>
       <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7">
         <source>Federation</source>
-        <target>聯邦</target>
+        <target>聯盟</target>
         <context-group name="null">
           <context context-type="linenumber">58</context>
         </context-group>
@@ -1390,7 +1390,7 @@
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target>設定您的帳戶、管理視頻播放清單、探索第三方應用……</target>
+        <target>設定您的帳號、管理視頻播放清單、探索第三方應用……</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -1510,7 +1510,7 @@
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a">
         <source>How you plan to pay your instance</source>
-        <target>您計劃如何支付站臺的費用</target>
+        <target>您計劃如何支付實例的費用</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -1526,7 +1526,7 @@
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c">
         <source>Instance terms</source>
-        <target>實力條款</target>
+        <target>實例條款</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -1716,7 +1716,7 @@
       </trans-unit>
       <trans-unit id="a52dae09be10ca3a65da918533ced3d3f4992238">
         <source>Videos</source>
-        <target>影片</target>
+        <target>視頻</target>
         <context-group name="null">
           <context context-type="linenumber">24</context>
         </context-group>
@@ -1748,7 +1748,7 @@
       </trans-unit>
       <trans-unit id="165035acb08983753bcecc3e8b6b18c7caf26d35" datatype="html">
         <source>VIDEOS</source>
-        <target state="translated">影片</target>
+        <target state="translated">視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">107</context>
@@ -1847,7 +1847,7 @@
       </trans-unit>
       <trans-unit id="73216504c8903e04fdb415d876eb8969dd3afa60" datatype="html">
         <source>Search videos, channels…</source>
-        <target state="translated">搜尋影片、頻道……</target>
+        <target state="translated">搜尋視頻、頻道……</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="90ce30ddedd5892740bb41e9ead736cd2c0f9b53" datatype="html">
@@ -1884,7 +1884,7 @@
       </trans-unit>
       <trans-unit id="8e799fee4b3df7ea53786f096380f81c78a77efd" datatype="html">
         <source>any instance</source>
-        <target state="translated">任何站臺</target>
+        <target state="translated">任何實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">32</context>
@@ -1892,7 +1892,7 @@
       </trans-unit>
       <trans-unit id="36a1080014918cc9c4ef8c0d3d5f4d3ae88176bd" datatype="html">
         <source>only followed instances</source>
-        <target state="translated">僅已追蹤的站臺</target>
+        <target state="translated">僅已追蹤的實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">33</context>
@@ -1900,7 +1900,7 @@
       </trans-unit>
       <trans-unit id="e5a60e5f83aad776726b8b9e7ff1b69f047a8416" datatype="html">
         <source>Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.</source>
-        <target state="translated">確定您是否可以解析任何遠端內容，或僅允許其追蹤的站臺這麼做。</target>
+        <target state="translated">確定您是否可以解析任何遠端內容，或僅允許其追蹤的實例這麼做。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1920,7 +1920,7 @@
       </trans-unit>
       <trans-unit id="1dde6766dd298aa1e1b12afe67ad23dfbca88d2e" datatype="html">
         <source>Any other text will return matching video or channel names.</source>
-        <target state="translated">任何其他文字都將會回傳相符的影片或頻道名稱。</target>
+        <target state="translated">任何其他文字都將會回傳相符的視頻或頻道名稱。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1952,7 +1952,7 @@
       </trans-unit>
       <trans-unit id="2fb6c7364664174a205180f7173c4128b350c5ec" datatype="html">
         <source>In this instance</source>
-        <target state="translated">在此站臺</target>
+        <target state="translated">在此實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">13</context>
@@ -2142,7 +2142,7 @@
       </trans-unit>
       <trans-unit id="41ed53a3f1d4dfc57011d0aba13b8b074e8b41b6">
         <source>Display unlisted and private videos</source>
-        <target>顯示未列出與私密影片</target>
+        <target>顯示不列出與私密視頻</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
@@ -2251,9 +2251,7 @@
       </trans-unit>
       <trans-unit id="3b86a740c713742c3f7538c60b890fccdd0a5caf">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target>
-                    影片描述在預設情況下會被截斷，必須手動操作才能將其延展到原本的樣子。
-                  </target>
+        <target>視頻描述在預設情況下會被截斷，必須手動操作才能將其延展到原本的樣子。</target>
         <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
@@ -2317,7 +2315,7 @@
       </trans-unit>
       <trans-unit id="5ef7108218e096d09f4ee8525a05a8c90d7b95ee">
         <source>This video contains mature or explicit content</source>
-        <target>這個影片包含了成人或裸露內容</target>
+        <target>這個視頻包含了成人或裸露內容</target>
         <context-group name="null">
           <context context-type="linenumber">136</context>
         </context-group>
@@ -2325,7 +2323,7 @@
       </trans-unit>
       <trans-unit id="9daabdcaa2bbd83597099b10db22d056cf491644">
         <source>Some instances do not list videos containing mature or explicit content by default.</source>
-        <target>某些實體預設不會列出包含成人或裸露內容的影片。</target>
+        <target>某些實例預設不會列出包含成人或裸露內容的影片。</target>
         <context-group name="null">
           <context context-type="linenumber">140</context>
         </context-group>
@@ -2333,7 +2331,7 @@
       </trans-unit>
       <trans-unit id="7e549f41b715552ffe69b85c14a690d9d81c85f0">
         <source>Wait transcoding before publishing the video</source>
-        <target>正等待發佈影片前的轉換編碼</target>
+        <target>正等待發佈視頻前的轉換編碼</target>
         <context-group name="null">
           <context context-type="linenumber">146</context>
         </context-group>
@@ -2341,7 +2339,7 @@
       </trans-unit>
       <trans-unit id="24f468ce1148a096477d8dd0d00f0d1fd88d6c63">
         <source>If you decide not to wait for transcoding before publishing the video, it could be unplayable until transcoding ends.</source>
-        <target>如果您決定不要等待在發佈影片前的轉換編碼，它可能會在轉換編碼結束前都無法播放。</target>
+        <target>如果您決定不要等待在發佈視頻前的轉換編碼，它可能會在轉換編碼結束前都無法播放。</target>
         <context-group name="null">
           <context context-type="linenumber">150</context>
         </context-group>
@@ -2431,7 +2429,7 @@
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430">
         <source>Video preview</source>
-        <target>影片預覽</target>
+        <target>視頻預覽</target>
         <context-group name="null">
           <context context-type="linenumber">216</context>
         </context-group>
@@ -2471,7 +2469,7 @@
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
-        <target>啟用影片評論</target>
+        <target>啟用視頻評論</target>
         <context-group name="null">
           <context context-type="linenumber">254</context>
         </context-group>
@@ -2504,11 +2502,7 @@
       </trans-unit>
       <trans-unit id="d49ca01a7d3c689add2eb58a469a3919c7ee9af7">
         <source>You can import any URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>supported by youtube-dl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target>
-            您可以匯入任何 URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>supported by youtube-dl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-            或指向原始 MP4 檔案的 URL。
-            您應該確保您對您所指向的內容有傳播權，否則可能會為您與您的站臺惹上法律問題。
-          </target>
+        <target>您可以匯入任何 URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>supported by youtube-dl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 或指向原始 MP4 檔案的 URL。 您應該確保您對您所指向的內容有傳播權，否則可能會為您與您的實例惹上法律問題。 </target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -2526,7 +2520,7 @@
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
         <source>Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video. </source>
-        <target>恭喜，在 <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> 後的影片將會匯入！您已經可以加入關於此影片的資訊了。 </target>
+        <target>恭喜，在 <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> 後的視頻將會匯入！您已經可以加入關於此視頻的資訊了。 </target>
         <context-group name="null">
           <context context-type="linenumber">52</context>
         </context-group>
@@ -2561,7 +2555,7 @@
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d">
         <source>Video background image</source>
-        <target>影片背景圖片</target>
+        <target>視頻背景圖片</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
@@ -2586,15 +2580,13 @@
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">總影片配額</target>
+        <target state="translated">總視頻配額</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="6357683911e256c566259880de43ea9403de00d3">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target>
-  恭喜！您的影片現在已在您的私有媒體庫中可用。
-</target>
+        <target>恭喜！您的視頻現在已在您的私有媒體庫中可用。</target>
         <context-group name="null">
           <context context-type="linenumber">66</context>
         </context-group>
@@ -2642,10 +2634,7 @@
       </trans-unit>
       <trans-unit id="e39797d5be895f1b0c9ca9ba4e45429f9b95aa52">
         <source>You can import any torrent file that points to a mp4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance.</source>
-        <target>
-            您可以匯入任何指向 mp4 檔案的 torrent 檔案。
-            您應該確保您對您所指向的內容有傳播權，否則可能會讓您與您的站臺惹上法慮問題。
-          </target>
+        <target>您可以匯入任何指向 mp4 檔案的 torrent 檔案。 您應該確保您對您所指向的內容有傳播權，否則可能會讓您與您的實例惹上法律問題。</target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
         </context-group>
@@ -2653,7 +2642,7 @@
       </trans-unit>
       <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target>恭喜，影片將會使用 BitTorrent 匯入！您已經可以加入關於此影片的資訊了。</target>
+        <target>恭喜，視頻將會使用 BitTorrent 匯入！您已經可以加入關於此視頻的資訊了。</target>
         <context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
@@ -2661,7 +2650,7 @@
       </trans-unit>
       <trans-unit id="ebe5234338205e30a59cf703e2a2b6ef49fb75f8" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos. </source>
-        <target state="translated">我們建議您不要使用 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 使用者發佈您的影片，因為這是您站臺的超級管理員帳號。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>請<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>建立專用的帳號<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>來上傳您的影片。 </target>
+        <target state="translated">我們建議您不要使用 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 使用者發佈您的視頻，因為這是您實例的超級管理員帳號。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>請<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>建立專用的帳號<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>來上傳您的視頻。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-edit/video-add.component.html</context>
           <context context-type="linenumber">2</context>
@@ -2709,7 +2698,7 @@
       </trans-unit>
       <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>Other videos</source>
-        <target state="translated">其他影片</target>
+        <target state="translated">其他視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.html</context>
           <context context-type="linenumber">4</context>
@@ -2741,7 +2730,7 @@
       </trans-unit>
       <trans-unit id="dfc8701a2a6898d6784db0ebf9d3191552d81d89" datatype="html">
         <source>Share the playlist at this video position</source>
-        <target state="translated">在此影片位置分享播放清單</target>
+        <target state="translated">在此視頻位置分享播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context>
           <context context-type="linenumber">19</context>
@@ -2749,7 +2738,7 @@
       </trans-unit>
       <trans-unit id="51f7d84d38a304f7f056d2dcaf6d733c3ade35f9" datatype="html">
         <source>Share the video</source>
-        <target state="translated">分享影片</target>
+        <target state="translated">分享視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context>
           <context context-type="linenumber">28</context>
@@ -2765,7 +2754,7 @@
       </trans-unit>
       <trans-unit id="08c1bbb22df74b12c362fd114d0aa5a230ee4656" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="translated">URL 不安全（無 HTTPS），因此嵌入影片無法在 HTTPS 網站上運作（網路瀏覽器會在 HTTPS 網站上封鎖不安全的 HTTP 請求）。</target>
+        <target state="translated">URL 不安全（無 HTTPS），因此嵌入式視頻無法在 HTTPS 網站上運作（網路瀏覽器會在 HTTPS 網站上封鎖不安全的 HTTP 請求）。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
@@ -2834,7 +2823,7 @@
       </trans-unit>
       <trans-unit id="af3ab1a1035c222ccc88816baa236eb95cea7523">
         <source>Display video title</source>
-        <target>顯示影片標題</target>
+        <target>顯示視頻標題</target>
         <context-group name="null">
           <context context-type="linenumber">150</context>
         </context-group>
@@ -2866,9 +2855,7 @@
       </trans-unit>
       <trans-unit id="38e66e2d779d6d819cd7703ab73ab1bab75f8614">
         <source>The video is being imported, it will be available when the import is finished.</source>
-        <target>
-      正在匯入影片，匯入完成後就可以使用了。
-    </target>
+        <target>正在匯入視頻，匯入完成後就可以使用了。</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
@@ -2876,9 +2863,7 @@
       </trans-unit>
       <trans-unit id="d2a8e8e4e5345201c07ba03a7fafe8b663230246">
         <source>The video is being transcoded, it may not work properly.</source>
-        <target>
-      正在轉換影片編碼，可能無法正常運作。
-    </target>
+        <target>正在轉換視頻編碼，可能無法正常運作。</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
@@ -2886,9 +2871,7 @@
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </source>
-        <target>
-      此影片將會被發佈在 <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>。
-    </target>
+        <target>此視頻將會被發佈在 <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>。 </target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
@@ -2896,7 +2879,7 @@
       </trans-unit>
       <trans-unit id="bd7055d3e38beff538463e75d508d1c75c683710">
         <source>This video is blacklisted.</source>
-        <target>此影片已加入黑名單。</target>
+        <target>此視頻已加入黑名單。</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
@@ -2944,7 +2927,7 @@
       </trans-unit>
       <trans-unit id="82b59049f3f89d900c98da9319e156dd513e3ced">
         <source>Like this video</source>
-        <target>喜歡此影片</target>
+        <target>喜歡此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">63</context>
         </context-group>
@@ -2952,7 +2935,7 @@
       </trans-unit>
       <trans-unit id="623698f075025b2b2fc2e0c59fd95f4f4662a509">
         <source>Dislike this video</source>
-        <target>不喜歡此影片</target>
+        <target>不喜歡此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">71</context>
         </context-group>
@@ -2960,7 +2943,7 @@
       </trans-unit>
       <trans-unit id="d9b40e01fa146a1fbd189c13b01815a1d41c68ab" datatype="html">
         <source>Support options for this video</source>
-        <target state="translated">此影片的支援選項</target>
+        <target state="translated">此視頻的支援選項</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -2985,7 +2968,7 @@
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c">
         <source>Go to the account page</source>
-        <target>到帳號頁面</target>
+        <target>前往帳號頁面</target>
         <context-group name="null">
           <context context-type="linenumber">63</context>
         </context-group>
@@ -3042,7 +3025,7 @@
       </trans-unit>
       <trans-unit id="57bfd54c230fc20caff1f0b321ad42be3bf859a6" datatype="html">
         <source>Origin instance</source>
-        <target state="translated">來源站臺</target>
+        <target state="translated">來源實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">192</context>
@@ -3066,7 +3049,7 @@
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">此影片所使用的分享系統代表了其可以將您系統某些技術資訊（如公開 IP 位置）傳送給其他 peer。</target>
+        <target state="translated">此視頻所使用的分享系統代表了其可以將您系統某些技術資訊（如公開 IP 位置）傳送給其他端點。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">262</context>
@@ -3206,7 +3189,7 @@
       </trans-unit>
       <trans-unit id="2c6453cc150c9f652a7f1238d2f172e625f0f117" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance. On most platforms, you can find the video by typing its URL in the search bar and then comment it from within the software's interface.</source>
-        <target state="translated">您可以使用任何相容於 ActivityPub 的站臺上的帳號留言。在大多數的平臺上，您可以透過在搜尋列中輸入其 URL 來尋找影片，並從軟體界面中留言。</target>
+        <target state="translated">您可以使用任何相容於 ActivityPub 的實例上的帳號留言。在大多數的平臺上，您可以透過在搜尋列中輸入其 URL 來尋找視頻，並從軟體介面中留言。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment-add.component.html</context>
           <context context-type="linenumber">35</context>
@@ -3250,7 +3233,7 @@
       </trans-unit>
       <trans-unit id="fee25862814afd08fca2abe1452e6841e8b57b1e" datatype="html">
         <source>Follows &amp; redundancies</source>
-        <target state="translated">追蹤與冗餘</target>
+        <target state="translated">追蹤 &amp; 重複</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3274,7 +3257,7 @@
       </trans-unit>
       <trans-unit id="31e902955ed9501f124814901a0031c37a070f1f" datatype="html">
         <source>Video redundancies</source>
-        <target state="translated">影片冗餘</target>
+        <target state="translated">重複視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
@@ -3450,7 +3433,7 @@
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="translated">您的站臺沒有任何追隨者。</target>
+        <target state="translated">您的實例沒有任何追隨者。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
@@ -3484,7 +3467,7 @@
       </trans-unit>
       <trans-unit id="8cffa679dff97a096d44fca9348eeaa1867d40aa" datatype="html">
         <source>Open instance in a new tab</source>
-        <target state="translated">在新分頁中開啟站臺</target>
+        <target state="translated">在新分頁中開啟實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">37</context>
@@ -3504,7 +3487,7 @@
       </trans-unit>
       <trans-unit id="6f635f2eba7fe60e4266192fbfef20948fbe3b0a" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="translated">您的站臺並未追蹤任何人。</target>
+        <target state="translated">您的實例並未追蹤任何人。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">63</context>
@@ -3525,7 +3508,7 @@
       </trans-unit>
       <trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="translated">我的影片被遠端站臺複製了</target>
+        <target state="translated">我的視頻被遠端實例複製了</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">7</context>
@@ -3533,7 +3516,7 @@
       </trans-unit>
       <trans-unit id="cb2281bf5c9f420429bbd5c5473ee7aacc879e1e" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="translated">我的站臺複製了遠端影片</target>
+        <target state="translated">我的實例複製了遠端視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -3599,7 +3582,7 @@
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="translated">轉換編碼已啟用。影片配額僅考慮<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>原始<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>影片大小。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> 此使用者最多只能上傳 ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>。 </target>
+        <target state="translated">轉換編碼已啟用。視頻配額僅考慮<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>原始<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>視頻大小。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> 此使用者最多只能上傳 ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">148</context>
@@ -3611,7 +3594,7 @@
       </trans-unit>
       <trans-unit id="6ded52553dd8720fd3698b8fbc3a6d037c07b496">
         <source>Daily video quota</source>
-        <target>每日影片配額</target>
+        <target>每日視頻配額</target>
         <context-group name="null">
           <context context-type="linenumber">73</context>
         </context-group>
@@ -3621,7 +3604,7 @@
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="translated">影片公開前無須審核</target>
+        <target state="translated">視頻公開前無須審核</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">168</context>
@@ -3700,7 +3683,7 @@
       </trans-unit>
       <trans-unit id="df84781eeb873f037ee688789bde034be9b49074">
         <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>影片配額 <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target>視頻配額 <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
           <context context-type="linenumber">42</context>
         </context-group>
@@ -3771,7 +3754,7 @@
       </trans-unit>
       <trans-unit id="23a793ed0df2e10823dd469c5cea9b5c36be8f7e">
         <source>Video abuses</source>
-        <target>影片濫用</target>
+        <target>視頻濫用</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -3787,7 +3770,7 @@
       </trans-unit>
       <trans-unit id="6106bd52908f3f323ed1d6bdcd53230d55401d45">
         <source>Auto-blacklisted videos</source>
-        <target>自動列入黑名單的影片</target>
+        <target>自動列入黑名單的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
@@ -3812,7 +3795,7 @@
       </trans-unit>
       <trans-unit id="91bd2d52b840951d3b1f5830b023bee8bca91293" datatype="html">
         <source>Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">影片 <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">視頻 <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
@@ -3823,12 +3806,12 @@
       </trans-unit>
       <trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
         <source>List redundancies</source>
-        <target state="translated">列出冗餘</target>
+        <target state="translated">列出重複</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="897116a91d135b1552880aed6050814a4a0df28a" datatype="html">
         <source>Your instance doesn't mirror any video.</source>
-        <target state="translated">您的站臺並未鏡像任何影片。</target>
+        <target state="translated">您的實例並未鏡像任何視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">77</context>
@@ -3836,7 +3819,7 @@
       </trans-unit>
       <trans-unit id="afc5c2bbf66996ab213f6eca65b24ca423d36e31" datatype="html">
         <source>Your instance has no mirrored videos.</source>
-        <target state="translated">您的站臺沒有已鏡像的影片。</target>
+        <target state="translated">您的實例沒有已鏡像的視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">78</context>
@@ -3849,7 +3832,7 @@
       </trans-unit>
       <trans-unit id="0f6e6ec286d43c14f16444a077639090f38e29de" datatype="html">
         <source>No redundancy strategy is enabled on your instance.</source>
-        <target state="translated">您的站臺未啟用策略統計。</target>
+        <target state="translated">您的實例未啟用策略統計。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="96dfa3efa02bfafc0bc6d4ab186ebef2813a9e8a">
@@ -3878,7 +3861,7 @@
       </trans-unit>
       <trans-unit id="1c16132124fd96151ccf858aad5a98108df6c93a" datatype="html">
         <source>Video was blacklisted</source>
-        <target state="translated">影片已被加入黑名單</target>
+        <target state="translated">視頻已被加入黑名單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">50</context>
@@ -3890,7 +3873,7 @@
       </trans-unit>
       <trans-unit id="1cb8348c199d03e297d165e262237194f25fe3f5">
         <source>Go to the video</source>
-        <target>到影片</target>
+        <target>前往視頻</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
@@ -3915,7 +3898,7 @@
       </trans-unit>
       <trans-unit id="88a2cc2d9ca0506186bbfab6c4e0c32c44a9ee98" datatype="html">
         <source>No blacklisted video found matching current filters.</source>
-        <target state="translated">找不到符合目前過濾器的黑名單影片。</target>
+        <target state="translated">找不到符合目前過濾器的黑名單視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">93</context>
@@ -3923,7 +3906,7 @@
       </trans-unit>
       <trans-unit id="294036a9ad4dd71531d3032678d9ff00d8ff9ebb" datatype="html">
         <source>No blacklisted video found.</source>
-        <target state="translated">找不到黑名單影片。</target>
+        <target state="translated">找不到黑名單視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">94</context>
@@ -3931,7 +3914,7 @@
       </trans-unit>
       <trans-unit id="973655a52a60219d177a837cd2c75d640f7bc521" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blacklisted videos</source>
-        <target state="translated">正在顯示 <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> 到 <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> 的 <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> 已加入黑名單的影片</target>
+        <target state="translated">正在顯示 <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> 到 <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> 的 <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> 已加入黑名單的視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3947,9 +3930,7 @@
       </trans-unit>
       <trans-unit id="5731e5d5ac989bf08848b5a57a5586cf84d80964">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target>
-        此評論只能被您或其他版主看見。
-      </target>
+        <target>此評論只能被您或其他調解員看見。</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -3965,7 +3946,7 @@
       </trans-unit>
       <trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
         <source>Advanced report filters</source>
-        <target state="translated">進階回報過濾器</target>
+        <target state="translated">進階舉報過濾器</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3973,7 +3954,7 @@
       </trans-unit>
       <trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
         <source>Unsolved reports</source>
-        <target state="translated">未解決的回報</target>
+        <target state="translated">未解決的舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3981,7 +3962,7 @@
       </trans-unit>
       <trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
         <source>Accepted reports</source>
-        <target state="translated">已接受的回報</target>
+        <target state="translated">已接受的舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -3989,7 +3970,7 @@
       </trans-unit>
       <trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
         <source>Refused reports</source>
-        <target state="translated">已拒絕的回報</target>
+        <target state="translated">已拒絕的舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3997,7 +3978,7 @@
       </trans-unit>
       <trans-unit id="1c33f537774e1418d848442439b6c0fc62d9af47" datatype="html">
         <source>Reports with blacklisted videos</source>
-        <target state="translated">列入黑名單的影片回報</target>
+        <target state="translated">列入黑名單的視頻舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4005,7 +3986,7 @@
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="translated">已刪除的影片回報</target>
+        <target state="translated">已刪除的視頻舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -4013,7 +3994,7 @@
       </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2">
         <source>Reporter</source>
-        <target>回報者</target>
+        <target>舉報者</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -4022,7 +4003,7 @@
       </trans-unit>
       <trans-unit id="2d1ea268a6a9f483dbc2cbfe19bf4256a57a6af4">
         <source>Video</source>
-        <target>影片</target>
+        <target>視頻</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
@@ -4032,7 +4013,7 @@
       </trans-unit>
       <trans-unit id="dee48932053451ee2dfafe5500a5262cd4220d5e" datatype="html">
         <source>This video has been reported multiple times.</source>
-        <target state="translated">此影片已被多次回報。</target>
+        <target state="translated">此視頻已被多次舉報。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">80</context>
@@ -4052,7 +4033,7 @@
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
         <source>Video was deleted</source>
-        <target state="translated">影片已被刪除</target>
+        <target state="translated">視頻已被刪除</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -4060,7 +4041,7 @@
       </trans-unit>
       <trans-unit id="7c6eca36ec5dfbab2049ec1c58f8b6fe9d71c23b" datatype="html">
         <source>No video abuses found matching current filters.</source>
-        <target state="translated">找不到符合目前過濾器的影片濫用。</target>
+        <target state="translated">找不到符合目前過濾器的視頻濫用。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -4068,7 +4049,7 @@
       </trans-unit>
       <trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
         <source>No video abuses found.</source>
-        <target state="translated">找不到影片濫用。</target>
+        <target state="translated">找不到視頻濫用。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">142</context>
@@ -4076,7 +4057,7 @@
       </trans-unit>
       <trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
         <source>Open video in a new tab</source>
-        <target state="translated">在新分頁中開啟影片</target>
+        <target state="translated">在新分頁中開啟視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">74</context></context-group>
@@ -4098,7 +4079,7 @@
       </trans-unit>
       <trans-unit id="c6ab75e099e131d7a4f94e1732e7436d8fc386c7">
         <source>Go to the account</source>
-        <target>到帳號</target>
+        <target>前往帳號</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
@@ -4106,7 +4087,7 @@
       </trans-unit>
       <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source>
-        <target state="translated">正在顯示 <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> 到 <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> 的 <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> 回報</target>
+        <target state="translated">正在顯示 <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> 到 <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> 的 <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> 舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4114,7 +4095,7 @@
       </trans-unit>
       <trans-unit id="f0045181fddf6e1642314ee5464667098ac18d9d" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReporter, plural, =1 {...} 其他 {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">20</context>
@@ -4122,7 +4103,7 @@
       </trans-unit>
       <trans-unit id="730ae657d91e79c45d0685a7060cfea40ea8ea85" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 回報} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> 回報} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 舉報} 其他{<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> 舉報} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">21</context>
@@ -4130,7 +4111,7 @@
       </trans-unit>
       <trans-unit id="4dbabcc6e79125d4b798ba8139a40202db712475" datatype="html">
         <source>Reportee</source>
-        <target state="translated">回報者</target>
+        <target state="translated">舉報者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">27</context>
@@ -4138,7 +4119,7 @@
       </trans-unit>
       <trans-unit id="28b2bd6301b8655f46a26faf4db7f11e06be1747" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} 其他{...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">40</context>
@@ -4146,7 +4127,7 @@
       </trans-unit>
       <trans-unit id="9f8e4923506fc6890efb71d403fc048f22dd616c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reports} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 回報} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> 回報} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 舉報} 其他 {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> 舉報} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">41</context>
@@ -4176,7 +4157,7 @@
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
-        <target>實體</target>
+        <target>實例</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -4224,7 +4205,7 @@
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</source>
-        <target state="translated">正在顯示 <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> 到 <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> 的 <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> 靜音網域</target>
+        <target state="translated">正在顯示 <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> 到 <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> 的 <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> 靜音實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4316,7 +4297,7 @@
       </trans-unit>
       <trans-unit id="4962915f14d9b61bdd1b96b81c27e3f9d8910768">
         <source>Go to the plugin homepage</source>
-        <target>到外掛程式首頁</target>
+        <target>前往外掛程式首頁</target>
         <context-group name="null">
           <context context-type="linenumber">48</context>
         </context-group>
@@ -4394,7 +4375,7 @@
       </trans-unit>
       <trans-unit id="1e395fc65f656ebaf9384ca5452f0cc4e9512811" datatype="html">
         <source>Go to the plugin npm package</source>
-        <target state="translated">到外掛程式 npm 軟體包</target>
+        <target state="translated">前往外掛程式 npm 軟體包</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44</context>
@@ -4486,7 +4467,7 @@
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target state="translated">站臺</target>
+        <target state="translated">實例</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
@@ -4509,7 +4490,7 @@
       </trans-unit>
       <trans-unit id="f14028bddcf7760c635464db8a9d2f69afd81b92">
         <source>Main instance categories</source>
-        <target>主要站臺分類</target>
+        <target>主要實例分類</target>
         <context-group name="null">
           <context context-type="linenumber">40</context>
         </context-group>
@@ -4537,27 +4518,27 @@
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated">在影片頁面上時，直接開始播放影片。</target>
+        <target state="translated">在視頻頁面上時，直接開始播放視頻。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="translated">自動播放影片</target>
+        <target state="translated">自動播放視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="translated">當影片結束時，繼續播放下一部建議的影片。</target>
+        <target state="translated">當視頻結束時，繼續播放下一部建議的視頻。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="translated">自動開始播放下一部影片</target>
+        <target state="translated">自動開始播放下一部視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629">
         <source>Main languages you/your moderators speak</source>
-        <target>您／您的管理員主要說的語言</target>
+        <target>您／您的調解員主要使用的語言</target>
         <context-group name="null">
           <context context-type="linenumber">52</context>
         </context-group>
@@ -4575,7 +4556,7 @@
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634">
         <source>This instance is dedicated to sensitive or NSFW content</source>
-        <target>本站臺為敏感與 NSFW 內容專用</target>
+        <target>本實例為敏感與 NSFW 內容專用</target>
         <context-group name="null">
           <context context-type="linenumber">68</context>
         </context-group>
@@ -4583,12 +4564,12 @@
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
         <source>Enabling it will allow other administrators to know that you are mainly federating sensitive content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Moreover, the NSFW checkbox on video upload will be automatically checked by default. </source>
-        <target state="translated">啟用它會讓其他管理員知道您主要是在聯播敏感內容。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> 此外，預設情況下，系統會自動勾選影片上傳時的 NSFW 勾選框。 </target>
+        <target state="translated">啟用它會讓其他管理員知道您主要是在聯播敏感內容。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> 此外，預設情況下，系統會自動勾選視頻上傳時的 NSFW 勾選框。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="8551afadb69b3fef89e191f507e8ac84e624e8b9">
         <source>Policy on videos containing sensitive content</source>
-        <target>包含敏感內容的影片政策</target>
+        <target>包含敏感內容的視頻政策</target>
         <context-group name="null">
           <context context-type="linenumber">81</context>
         </context-group>
@@ -4596,7 +4577,7 @@
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated">有<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>不要列出<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>或<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>模糊縮圖<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>時，將會在請求觀看影片時顯示確認方塊。 </target>
+        <target state="translated">有<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>不要列出<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>或<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>模糊縮圖<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>時，將會在請求觀看視頻時顯示確認方塊。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">103</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -4664,17 +4645,17 @@
       </trans-unit>
       <trans-unit id="d635f94dd3214d8e5fb83a2af04e7b96c861e91f" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">誰管理此站臺？對 NSFW 影片有何政策？對政治影片呢？等等</target>
+        <target state="translated">誰管理此實例？對 NSFW 視頻有何政策？對政治視頻呢？等等</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">140</context></context-group>
       </trans-unit>
       <trans-unit id="b222d95cb22ff8c295920ca10c188c5d94cb0aa9" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target state="translated">您與您的站臺</target>
+        <target state="translated">您與您的實例</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">154</context></context-group>
       </trans-unit>
       <trans-unit id="fdbabe6f967747b657518384b54bcc58d3913063">
         <source>Who is behind the instance?</source>
-        <target>誰在管理站臺？</target>
+        <target>誰在管理實例？</target>
         <context-group name="null">
           <context context-type="linenumber">133</context>
         </context-group>
@@ -4687,7 +4668,7 @@
       </trans-unit>
       <trans-unit id="fef7c7a74c5646fe219d94db60e0652d6b878af5">
         <source>Why did you create this instance?</source>
-        <target>為什麼您要建立此站臺？</target>
+        <target>為什麼您要建立此實例？</target>
         <context-group name="null">
           <context context-type="linenumber">145</context>
         </context-group>
@@ -4695,12 +4676,12 @@
       </trans-unit>
       <trans-unit id="53fe4c724dc3f942c4d1eac4206a9686cbbf968e" datatype="html">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="translated">要分享您的個人影片？還是要開放註冊並讓人們可以上傳他們想要上傳的影片呢？</target>
+        <target state="translated">要分享您的個人視頻？還是要開放註冊並讓人們可以上傳他們想要上傳的視頻呢？</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="ac6b554b2f923239f6d7c5fcef8a7cce7d6b43b6">
         <source>How long do you plan to maintain this instance?</source>
-        <target>您打算維護此站臺多久？</target>
+        <target>您打算維護此實例多久？</target>
         <context-group name="null">
           <context context-type="linenumber">156</context>
         </context-group>
@@ -4708,7 +4689,7 @@
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="translated">這對想要在您的站臺上註冊的使用者來說是很重要的</target>
+        <target state="translated">這對想要在您的實例上註冊的使用者來說是很重要的</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d">
@@ -4731,7 +4712,7 @@
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d">
         <source>What server/hardware does the instance run on?</source>
-        <target>站臺在何種伺服器／硬體上執行？</target>
+        <target>實例在何種伺服器／硬體上執行？</target>
         <context-group name="null">
           <context context-type="linenumber">180</context>
         </context-group>
@@ -4744,7 +4725,7 @@
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a">
         <source>Instance information</source>
-        <target>站臺資訊</target>
+        <target>實例資訊</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -4775,7 +4756,7 @@
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9">
         <source>Discover videos</source>
-        <target>探索影片</target>
+        <target>探索視頻</target>
         <context-group name="null">
           <context context-type="linenumber">219</context>
         </context-group>
@@ -4783,7 +4764,7 @@
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d">
         <source>Trending videos</source>
-        <target>趨勢影片</target>
+        <target>熱門視頻</target>
         <context-group name="null">
           <context context-type="linenumber">220</context>
         </context-group>
@@ -4791,7 +4772,7 @@
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70">
         <source>Most liked videos</source>
-        <target>最喜歡的影片</target>
+        <target>最受歡迎的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">221</context>
         </context-group>
@@ -4799,7 +4780,7 @@
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8">
         <source>Recently added videos</source>
-        <target>最近新增的影片</target>
+        <target>最近新增的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">222</context>
         </context-group>
@@ -4807,7 +4788,7 @@
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
         <source>Local videos</source>
-        <target>本地影片</target>
+        <target>本地視頻</target>
         <context-group name="null">
           <context context-type="linenumber">223</context>
         </context-group>
@@ -4858,7 +4839,7 @@
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {影片} other {影片} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {視頻} other {視頻} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4894,7 +4875,7 @@
       </trans-unit>
       <trans-unit id="89f26f7ae43839fb1c983c6dc82d7bb9f559ac98" datatype="html">
         <source>Incriminated in reports</source>
-        <target state="translated">列入回報</target>
+        <target state="translated">列入舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -4906,7 +4887,7 @@
       </trans-unit>
       <trans-unit id="374b01a6d0311b4e675834b47db9e34d3fb833e7" datatype="html">
         <source>Authored reports accepted</source>
-        <target state="translated">接受撰寫的回報</target>
+        <target state="translated">接受撰寫的舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -4950,7 +4931,7 @@
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20">
         <source>Default video quota per user</source>
-        <target>每個使用者預設的影片配額</target>
+        <target>每個使用者預設的視頻配額</target>
         <context-group name="null">
           <context context-type="linenumber">261</context>
         </context-group>
@@ -4966,7 +4947,7 @@
       </trans-unit>
       <trans-unit id="e8835d4b5abe1ae304ffaaea6e96bf49805f54a2" datatype="html">
         <source>NEW VIDEOS</source>
-        <target state="translated">新影片</target>
+        <target state="translated">新視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">349</context></context-group>
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
@@ -4981,12 +4962,12 @@
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="translated">除非使用者被標記為受信任，否則他們的影片將會在版主審閱前保持私人影片的狀態。</target>
+        <target state="translated">除非使用者被標記為受信任，否則他們的視頻將會在調解員審閱前保持私密視頻的狀態。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">384</context></context-group>
       </trans-unit>
       <trans-unit id="680ef3c95b9b6264dfb992c82e91d64312b133db" datatype="html">
         <source>Blacklist new videos automatically</source>
-        <target state="translated">自動將新影片列入黑名單</target>
+        <target state="translated">自動將新視頻列入黑名單</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">381</context></context-group>
       </trans-unit>
       <trans-unit id="3f237e2a863d0308a21bdb0bb5d4b84e3376dbee" datatype="html">
@@ -4996,22 +4977,22 @@
       </trans-unit>
       <trans-unit id="2cc42a6b77d06f99a195ef8f3324d49267eedf87" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>relations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> with other instances. </source>
-        <target state="translated">管理與其他站臺的<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>關係<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
+        <target state="translated">管理與其他實例的<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>關係<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">399</context></context-group>
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
         <source>Other instances can follow yours</source>
-        <target state="translated">其他站臺可以追蹤您的</target>
+        <target state="translated">其他實例可以追蹤您的</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">412</context></context-group>
       </trans-unit>
       <trans-unit id="3d9ffce2b1f284cb60067de15a313d3ecde0875f" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target state="translated">手動批准新的站臺追蹤者</target>
+        <target state="translated">手動批准新的實例追蹤者</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">419</context></context-group>
       </trans-unit>
       <trans-unit id="9a3dd9c65ee3381ae3b78b9c56cc4e0d2e41f0e8" datatype="html">
         <source>Automatically follow back instances</source>
-        <target state="translated">自動追蹤站臺</target>
+        <target state="translated">自動追蹤實例</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">432</context></context-group>
       </trans-unit>
       <trans-unit id="6d247698b32e560146200812155feea437c3bc98" datatype="html">
@@ -5039,7 +5020,7 @@
       </trans-unit>
       <trans-unit id="62f023a56fd29518ab030384702362e6bf6a83e4" datatype="html">
         <source>Automatically follow instances of a public index</source>
-        <target state="translated">自動追蹤公開索引的站臺</target>
+        <target state="translated">自動追蹤公開索引上的實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">445</context>
@@ -5089,7 +5070,7 @@
       </trans-unit>
       <trans-unit id="31f11266d05b7a427477a8a9056a717ce332cfe3" datatype="html">
         <source>Optional. If any, provide the Twitter account representing your instance to improve link previews.</source>
-        <target state="translated">選擇性。如果有的話，請提供您站臺的 Twitter 帳號以改善連結預覽。</target>
+        <target state="translated">可選擇。如果有的話，請提供您實例的 Twitter 帳號以改善連結預覽。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">512</context></context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
@@ -5102,7 +5083,7 @@
       </trans-unit>
       <trans-unit id="c0716c28b9d4c9e0b2fd6031334394214e5f9605">
         <source>Instance whitelisted by Twitter</source>
-        <target>由 Twitter 列入白名單的實體</target>
+        <target>已被 Twitter 列入白名單的實例</target>
         <context-group name="null">
           <context context-type="linenumber">431</context>
         </context-group>
@@ -5110,7 +5091,7 @@
       </trans-unit>
       <trans-unit id="5c3526524f8f9f50390e39f56cb12e2091d883cd" datatype="html">
         <source>If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is whitelisted. </source>
-        <target state="translated">如果您的站臺被 Twitter 列在白名單，Twitter 的推文中就會嵌入 PeerTube 的影片分享播放器。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>如果站臺不在白名單內，我們會使用圖片連結卡來重新導向到您的 PeerTube 站臺。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>將此勾選框打勾，儲存設定並使用您站臺的影片 URL 測試 (https://example.com/videos/watch/blabla)，在 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 檢視您的站臺是否在白名單中。 </target>
+        <target state="translated">如果您的實例被 Twitter 列在白名單，Twitter 的推文中就會嵌入 PeerTube 的視頻分享播放器。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>如果實例不在白名單內，我們會使用圖片連結卡來重新導向到您的 PeerTube 實例。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>將此勾選框打勾，儲存設定並使用您實例的視頻 URL 測試 (https://example.com/videos/watch/blabla)，在 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> 檢視您的實例是否在白名單中。 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">539</context></context-group>
       </trans-unit>
       <trans-unit id="419d940613972cc3fae9c8ea0a4306dbf80616e5">
@@ -5128,7 +5109,7 @@
       </trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="translated">處理上傳的影片，以讓它們變成任何裝置都可以播放的串流形式。儘管這相當耗費資源，但這是 PeerTube 的關鍵組成部分，所以請小心處理。</target>
+        <target state="translated">處理上傳的視頻，以讓它們變成任何裝置都可以播放的串流形式。儘管這相當耗費資源，但這是 PeerTube 的關鍵組成部分，所以請小心處理。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">566</context></context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
@@ -5141,7 +5122,7 @@
       </trans-unit>
       <trans-unit id="6ef2ab819d4441fa8bddf6759b6936783d06616f">
         <source>If you disable transcoding, many videos from your users will not work!</source>
-        <target>若您停用轉換編碼，從您的使用者們而來的許多影片將會無法運作！</target>
+        <target>若您停用轉換編碼，從您的使用者們而來的許多視頻將會無法運作！</target>
         <context-group name="null">
           <context context-type="linenumber">465</context>
         </context-group>
@@ -5149,7 +5130,7 @@
       </trans-unit>
       <trans-unit id="3223b992b14f2fa5690676fa57317bffa7275f90" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi and .flv videos.</source>
-        <target state="translated">允許使用者上傳 .mkv、.mov、.avi 與 .flv 影片。</target>
+        <target state="translated">允許使用者上傳 .mkv、.mov、.avi 與 .flv 視頻。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">594</context></context-group>
       </trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f">
@@ -5175,7 +5156,7 @@
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Experimental, we suggest you to not disable webtorrent support for now<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled HLS support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>If disabled, breaks federation with PeerTube instances &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>實驗性，我們建議您暫時不要停用 webtorrent 支援<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>如果您也啟用了 HLS 支援，它將會讓影片的儲存空間需求乘以 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>若停用，將會破壞與其他 PeerTube 站臺的聯盟 &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>實驗性，我們建議您暫時不要停用 webtorrent 支援<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>如果您也啟用了 HLS 支援，它將會讓視頻的儲存空間需求乘以 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>若停用，將會破壞與其他 PeerTube 實例的聯盟 &lt; 2.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">617</context></context-group>
       </trans-unit>
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
@@ -5185,7 +5166,7 @@
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>依賴於 ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>生成 HLS 播放清單與碎片化的 MP4 檔案以取得比目前預設的播放器更好的結果：<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>解析度變更會更加平順<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>播放會更加快速，特別是長影片<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>播放更穩定（較少臭蟲／無限載入）<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>若您也啟用了 WebTorrent 支援，其將會讓儲存空間的需求量乘以 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>依賴於 ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>生成 HLS 播放清單與碎片化的 MP4 檔案以取得比目前預設的播放器更好的結果：<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>解析度變更會更加平順<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>播放會更加快速，特別是長視頻<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>播放更穩定（較少臭蟲／無限載入）<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>若您也啟用了 WebTorrent 支援，其將會讓儲存空間的需求量乘以 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">638</context></context-group>
       </trans-unit>
       <trans-unit id="94213e7007705d887db1d366b5abc163122d9202">
@@ -5226,7 +5207,7 @@
       </trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
         <source>Number of video captions to keep in cache</source>
-        <target state="translated">要保留在快取中的影片字幕數量</target>
+        <target state="translated">要保留在快取中的視頻字幕數量</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">718</context></context-group>
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
@@ -5236,7 +5217,7 @@
       </trans-unit>
       <trans-unit id="7473fbca4ff699b020fc8894bad4c88611c76f5c" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="translated">只是要少量修改您的 PeerTube 站臺的話，建立外掛程式或佈景主題有點太過頭了。</target>
+        <target state="translated">爲了建立外掛程式或佈景主題而對您的 PeerTube 實例進行少量修改，這有點太多了。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">734</context></context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
@@ -5249,7 +5230,7 @@
       </trans-unit>
       <trans-unit id="782afa7c58d912592d73fce888ffce8542a4acf3" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> </source>
-        <target state="translated">直接編寫 JavaScript 程式碼。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>範例：<x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('我的站臺超棒的');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> </target>
+        <target state="translated">直接編寫 JavaScript 程式碼。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>範例：<x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('我的實例超棒的');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">747</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
@@ -5291,7 +5272,7 @@
       </trans-unit>
       <trans-unit id="e09928fe11389fd1ea310890ba5dc9df05d53509" datatype="html">
         <source>VIDEO SETTINGS</source>
-        <target state="translated">影片設定</target>
+        <target state="translated">視頻設定</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5394,7 +5375,7 @@
       </trans-unit>
       <trans-unit id="b5398623f87ee72ed23f5023918db1707771e925">
         <source>Video settings</source>
-        <target>影片設定</target>
+        <target>視頻設定</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -5440,7 +5421,7 @@
       </trans-unit>
       <trans-unit id="20f62f24170d57b1efeb2387a0949f482cd4d129">
         <source>Default policy on videos containing sensitive content</source>
-        <target>包含敏感內容的影片的預設政策</target>
+        <target>包含敏感內容的視頻的預設政策</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -5448,9 +5429,7 @@
       </trans-unit>
       <trans-unit id="8fbbb5d7bbc4df74ac19fe046f7b9d4f2fd80737">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target>
-          有了 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>不要列出<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 或 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>模糊縮圖<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>，觀看影片時將會要求確認。
-        </target>
+        <target>有了 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>不要列出<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> 或 <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>模糊縮圖<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>，觀看視頻時將會要求確認。 </target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -5458,7 +5437,7 @@
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="translated">敏感影片的政策</target>
+        <target state="translated">敏感視頻的政策</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">14</context>
@@ -5470,7 +5449,7 @@
       </trans-unit>
       <trans-unit id="ea8e7b15807cce2fea74798db2396a4de016e5c7" datatype="html">
         <source>Only display videos in the following languages/subtitles</source>
-        <target state="translated">僅顯示以下語言／字幕的影片</target>
+        <target state="translated">僅顯示以下語言／字幕的視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="db930d0e3dbcb12963bec15cfec67fac6534542d" datatype="html">
@@ -5541,7 +5520,7 @@
       </trans-unit>
       <trans-unit id="2fb6d9783b2c3ce93df9cee3542cda87aa60a808">
         <source>instance default</source>
-        <target>站臺預設</target>
+        <target>實例預設</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>
@@ -5574,7 +5553,7 @@
       </trans-unit>
       <trans-unit id="7cb7f53b151a060db53d748d3973e345013f1af6" datatype="html">
         <source>Videos <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></source>
-        <target state="translated">影片 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
+        <target state="translated">視頻 <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.html</context>
           <context context-type="linenumber">2</context>
@@ -5582,7 +5561,7 @@
       </trans-unit>
       <trans-unit id="addd26e1d0d8a38fcfceeb76642c6f838f9525e3" datatype="html">
         <source>Search your videos</source>
-        <target state="translated">搜尋您的影片</target>
+        <target state="translated">搜尋您的視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-videos/my-account-videos.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="fbc450919a486e8ed311a7e91a41987d47d83804">
@@ -5646,7 +5625,7 @@
       </trans-unit>
       <trans-unit id="574cce019fb31925d11095591d4321847ff1c7a5" datatype="html">
         <source>Create video channel</source>
-        <target state="translated">建立影片頻道</target>
+        <target state="translated">建立視頻頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channels.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5654,7 +5633,7 @@
       </trans-unit>
       <trans-unit id="30fcac6c20aac1f24e000efc4a889cbb93d4baf2">
         <source>Go to the channel</source>
-        <target>到頻道</target>
+        <target>前往頻道</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -5686,13 +5665,13 @@
       </trans-unit>
       <trans-unit id="66ad6eb3f06251c75325b780943a07f94c949df7" datatype="html">
         <source>Short text to tell people how they can support your channel (membership platform...).&lt;br /&gt;&lt;br /&gt; When you will upload a video in this channel, the video support field will be automatically filled by this text.</source>
-        <target state="translated">告訴人們他們可以怎麼支持您頻道的簡短文字（會員平台等……）。&lt;br /&gt;&lt;br /&gt; 當您要在此頻道上傳影片時，影片支援欄位將會自動填入這些文字。</target>
+        <target state="translated">告訴人們他們可以怎麼支持您頻道的簡短文字（會員平台等……）。&lt;br /&gt;&lt;br /&gt; 當您要在此頻道上傳視頻時，視頻支援欄位將會自動填入這些文字。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="6ff0350d2659cdb4722370bf5dafbad651f441cd">
         <source>Overwrite support field of all videos of this channel</source>
-        <target>覆寫此頻道所有影片的支援欄位</target>
+        <target>覆寫此頻道所有視頻的支援欄位</target>
         <context-group name="null">
           <context context-type="linenumber">67</context>
         </context-group>
@@ -5722,7 +5701,7 @@
       </trans-unit>
       <trans-unit id="842b1f5e4942fb515ef790308ca9ea6a60b4b331" datatype="html">
         <source>This video was deleted</source>
-        <target state="translated">此影片已刪除</target>
+        <target state="translated">此視頻已刪除</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
       <trans-unit id="0b68f86015522b0dbd374822caefe74a62e3470f" datatype="html">
@@ -5768,7 +5747,7 @@
       </trans-unit>
       <trans-unit id="2bc7533f8c8e7d183950ba1094a0acd9efc22e5e">
         <source>Muted instances</source>
-        <target>已靜音的實體</target>
+        <target>已靜音的實例</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -5776,7 +5755,7 @@
       </trans-unit>
       <trans-unit id="cb6fc818d4547d66ac5ea65f2c5d5cbfb6ebc04e" datatype="html">
         <source>Video history</source>
-        <target state="translated">影片歷史</target>
+        <target state="translated">視頻歷史記錄</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.html</context>
           <context context-type="linenumber">4</context>
@@ -5795,7 +5774,7 @@
       </trans-unit>
       <trans-unit id="355c9f9d50ed1c6f12729332a44c1fd0f7576638" datatype="html">
         <source>You don't have any video history yet.</source>
-        <target state="translated">您尚未有任何訊息歷史。</target>
+        <target state="translated">您尚未有任何視頻歷史記錄。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-history/my-account-history.component.html</context>
           <context context-type="linenumber">14</context>
@@ -5898,7 +5877,7 @@
       </trans-unit>
       <trans-unit id="188014887f7188d90b39e41d9606b91c77c17861">
         <source>No videos in this playlist.</source>
-        <target>此播放清單中沒有影片。</target>
+        <target>此播放清單中沒有視頻。</target>
         <context-group name="null">
           <context context-type="linenumber">11</context>
         </context-group>
@@ -5979,7 +5958,7 @@
       </trans-unit>
       <trans-unit id="a08080316e052053fd20647731a6de826dc8072f">
         <source>This instance does not require email verification.</source>
-        <target>此實體不需要電子郵件驗證。</target>
+        <target>此實例不需要電子郵件驗證。</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
         </context-group>
@@ -5995,7 +5974,7 @@
       </trans-unit>
       <trans-unit id="44bd08a7ec1e407356620967d65d8fe2d8639d0a">
         <source>Instance muted</source>
-        <target>實體已靜音</target>
+        <target>實例已靜音</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -6003,7 +5982,7 @@
       </trans-unit>
       <trans-unit id="48bbf6dbdb22e0ef4bd257eae2ab356f2ea66c89">
         <source>Muted by your instance</source>
-        <target>被您的實體靜音</target>
+        <target>被您的實例靜音</target>
         <context-group name="null">
           <context context-type="linenumber">22</context>
         </context-group>
@@ -6011,7 +5990,7 @@
       </trans-unit>
       <trans-unit id="1a6443bb7ed01046dd83cf78806f795f1204ffa1">
         <source>Instance muted by your instance</source>
-        <target>被您的實體靜音的實體</target>
+        <target>被您的實例靜音的實例</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
@@ -6066,7 +6045,7 @@
       </trans-unit>
       <trans-unit id="f36bd6a1570cb9b0a5023870f35160957cad2a8f">
         <source>See this video channel</source>
-        <target>檢視這個影片頻道</target>
+        <target>檢視這個視頻頻道</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -6074,7 +6053,7 @@
       </trans-unit>
       <trans-unit id="7bfe8fdef5d1a90e5bf286ec6ed4c079522a9b44" datatype="html">
         <source>This channel doesn't have any videos.</source>
-        <target state="translated">此頻道沒有任何影片。</target>
+        <target state="translated">此頻道沒有任何視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">19</context>
@@ -6257,7 +6236,7 @@
       </trans-unit>
       <trans-unit id="aaa2830aa30a5565ec06c852178ea7f181c693ea">
         <source>This instance is dedicated to sensitive/NSFW content.</source>
-        <target>此站臺專門託管敏感／NSFW 內容。</target>
+        <target>此實例專門託管敏感／NSFW 內容。</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
@@ -6281,7 +6260,7 @@
       </trans-unit>
       <trans-unit id="911fb379526b62e9a62590722830c146ebd31be8">
         <source>Why we created this instance</source>
-        <target>為什麼我們要建立此站臺</target>
+        <target>為什麼我們要建立此實例</target>
         <context-group name="null">
           <context context-type="linenumber">33</context>
         </context-group>
@@ -6289,7 +6268,7 @@
       </trans-unit>
       <trans-unit id="3f264e961636eb6eff1dbae7e3887447e22be154">
         <source>How long we plan to maintain this instance</source>
-        <target>我們打算維護此站臺多久</target>
+        <target>我們打算維護此實例多久</target>
         <context-group name="null">
           <context context-type="linenumber">39</context>
         </context-group>
@@ -6297,7 +6276,7 @@
       </trans-unit>
       <trans-unit id="2646614e3af5f103885f64e4f097e45569091fd6" datatype="html">
         <source>How we will pay for this instance</source>
-        <target state="translated">我們會如何支付此站臺所需的費用</target>
+        <target state="translated">我們會如何支付此實例所需的費用</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">45</context>
@@ -6337,7 +6316,7 @@
       </trans-unit>
       <trans-unit id="fa48c3ddc2ef8e40e5c317e68bc05ae62c93b0c1">
         <source>Features found on this instance</source>
-        <target>在此實體上找到的功能</target>
+        <target>在此實例上找到的功能</target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
         </context-group>
@@ -6362,7 +6341,7 @@
       </trans-unit>
       <trans-unit id="b3e11d554239b002489fbfd1e7d82d12e7f64a43" datatype="html">
         <source>PeerTube is a self hosted federated (ActivityPub) video streaming platform using P2P directly in the web browser.</source>
-        <target state="translated">PeerTube 是直接在瀏覽器中使用 P2P 的可自行託管聯盟式 (ActivityPub) 影片串流平臺。</target>
+        <target state="translated">PeerTube 是直接在瀏覽器中使用 P2P 的可自行託管聯播式 （ActivityPub）視頻串流平臺。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">9</context>
@@ -6455,17 +6434,17 @@
       </trans-unit>
       <trans-unit id="14d3bc3dafb4a09f3c79daac07ebf30e76457f63" datatype="html">
         <source>In theory, someone with enough technical skills could create a script that tracks which IP is downloading which video. In practice, this is much more difficult because:</source>
-        <target state="translated">理論上，有足夠技術知識的人可以建立指令稿來追蹤哪個 IP 正在下載哪個影片。實際上，這相當困難，因為：</target>
+        <target state="translated">理論上，有足夠技術知識的人可以建立腳本來追蹤哪個 IP 正在下載哪個視頻。實際上，這相當困難，因為：</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="fc899a02306f4fd2ce20978136d252dd6eb346cf" datatype="html">
         <source>An HTTP request has to be sent on each tracker for each video to spy. If we want to spy all PeerTube's videos, we have to send as many requests as there are videos (so potentially a lot)</source>
-        <target state="translated">必須在每個追蹤器上發送 HTTP 請求以監視每個影片。如果我們想要監視所有 PeerTube 影片，我們必須傳送與影片一樣多的請求（因此會非常多）</target>
+        <target state="translated">必須在每個追蹤器上發送 HTTP 請求以監視每個視頻。如果我們想要監視所有 PeerTube 視頻，我們必須傳送與視頻一樣多的請求（因此會非常多）</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">93</context></context-group>
       </trans-unit>
       <trans-unit id="278669a7857ee77786cf4578b11bb601002cf7a8" datatype="html">
         <source>For each request sent, the tracker returns random peers at a limited number. For instance, if there are 1000 peers in the swarm and the tracker sends only 20 peers for each request, there must be at least 50 requests sent to know every peer in the swarm</source>
-        <target state="translated">對於每個傳送的請求，tracker 將會回傳隨機但有限的 peer。舉例來說，如果群體中有 1000 個 peer，而 tracker 僅為每個請求傳送 20 個 peer，那就必須至少傳送 50 個請求才能知道群體中所有的 peer</target>
+        <target state="translated">對於每個傳送的請求，追蹤器將會回傳有限的隨機端點。舉例來說，如果群體中有 1000 個端點，而追蹤器僅為每個請求傳送 20 個端點，那就必須至少傳送 50 個請求才能知道群體中所有的端點</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context>
           <context context-type="linenumber">98</context>
@@ -6473,12 +6452,12 @@
       </trans-unit>
       <trans-unit id="3f47eec5fb00ae46a0035cc8f9e428e3d549e337" datatype="html">
         <source>Those requests have to be sent regularly to know who starts/stops watching a video. It is easy to detect that kind of behaviour</source>
-        <target state="translated">必須定期發送請求才能知道誰開始／停止觀看影片。但這種行為很容易偵測到</target>
+        <target state="translated">必須定期發送請求才能知道誰開始／停止觀看視頻。但這種行為很容易偵測到</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="a5089b43b2fd8a2639bc7a4cdfaa90e869f51cc3" datatype="html">
         <source>If an IP address is stored in the tracker, it doesn't mean that the person behind the IP (if this person exists) has watched the video</source>
-        <target state="translated">如果 IP 被儲存在追蹤器中，也不代表在 IP 背後的人（如果這個人存在的話）看過了影片</target>
+        <target state="translated">如果 IP 被儲存在追蹤器中，也不代表在 IP 背後的人（如果這個人存在的話）看過了視頻</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">108</context></context-group>
       </trans-unit>
       <trans-unit id="ff5458261525060246f1f49a740c8d094dc4bac4" datatype="html">
@@ -6488,7 +6467,7 @@
       </trans-unit>
       <trans-unit id="31c95b65cb16d779069e65e82e68690f712c4a5c" datatype="html">
         <source>Web peers are not publicly accessible: because we use WebRTC inside the web browser (<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>with the WebTorrent library<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>), the protocol is different from classic BitTorrent. When you are in a web browser, you send a signal containing your IP address to the tracker that will randomly choose other peers to forward the information to. See <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>this document<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more information </source>
-        <target state="translated">網路的 peer 並無法公開存取：因為我們在瀏覽器中使用 WebRTC（<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>使用 WebTorrent 函式庫<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>），這個協定與經典的 BitTorrent 不同。當您在網路瀏覽器中，您就會傳送一個包含您 IP 位置的訊號給追蹤器，其將會隨機選擇其他 peer 轉發資訊。看看<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>此文件<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>來取得更多資訊 </target>
+        <target state="translated">網路端點並無法被公開存取：因為我們在瀏覽器中使用 WebRTC（<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>使用 WebTorrent 函式庫<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>），這個協定與經典的 BitTorrent 不同。當您在網路瀏覽器中，您就會傳送一個包含您 IP 位置的訊號給追蹤器，其將會隨機選擇其他端點轉發資訊。看看<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>此文件<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>來取得更多資訊 </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">117</context></context-group>
       </trans-unit>
       <trans-unit id="e916a82a25fb892f83d2b63ca55594dc7d02f36a" datatype="html">
@@ -6519,7 +6498,7 @@
       </trans-unit>
       <trans-unit id="301e86f807ed659ff42d3b4bba6e03b88bff7907" datatype="html">
         <source>Your IP address is public so every time you consult a website, there is a number of actors (in addition to the final website) seeing your IP in their connection logs: ISP/routers/trackers/CDN and more. PeerTube is transparent about it: we warn you that if you want to keep your IP private, you must use a VPN or Tor Browser. Thinking that removing P2P from PeerTube will give you back anonymity doesn't make sense.</source>
-        <target state="translated">您的 IP 是公開的，因此您每次存取網站時，都會有許多的參與者（除了最終網站以外）可以在其連線日誌中看到您的 IP：ISP／路由器／追蹤器／CDN 以及更多。PeerTube 對此相當透明：我們會警告您，如果您想要讓您的 IP 保持隱密，請使用 VPN 或 Tor 瀏覽器。認為從 PeerTube 移除 P2P 就能為您帶來匿名性是沒有道理的。</target>
+        <target state="translated">您的 IP 是公開的，因此您每次存取網站時，都會有許多的參與者（除了最終網站以外）可以在其連線日誌中看到您的 IP：ISP／路由器／追蹤器／CDN 以及更多。PeerTube 對此相當透明：我們會警告您，如果您想要讓您的 IP 保持隱密，請使用 VPN 或 Tor 瀏覽器。認為從 PeerTube 移除 P2P 就能為您帶來匿名性是不理性的。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="8ce78dd287b9a9dde5079916425ea66466530e41">
@@ -6537,7 +6516,7 @@
       </trans-unit>
       <trans-unit id="89c0c2c3150b99bbea20214895df56c8f8d6125d" datatype="html">
         <source>We set a limit to the number of peers sent by the tracker</source>
-        <target state="translated">我們對追蹤器可以傳送的對等點數量進行了限制</target>
+        <target state="translated">我們對追蹤器可以傳送的端點數量進行了限制</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">156</context></context-group>
       </trans-unit>
       <trans-unit id="b23c2b01db8b09f1a9bc6144d66291e28f02daf4" datatype="html">
@@ -6547,22 +6526,22 @@
       </trans-unit>
       <trans-unit id="b6f5d5d1aab25c1e675c66ea5dbb987654e9c0b0" datatype="html">
         <source>Allow instance admins to disable P2P from the administration interface</source>
-        <target state="translated">允許站臺管理員從管理介面停用 P2P</target>
+        <target state="translated">允許實例管理員從管理介面停用 P2P</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="85755719c08571f7f5b7c5b391329b7e4e7ccc7b" datatype="html">
         <source>Automatic video redundancy from some instances: one doesn't know if the IP downloaded the video on purpose or if it a server</source>
-        <target state="translated">在某些情況下有自動影片冗餘功能：人們不知道 IP 是故意下載了影片或是它是伺服器</target>
+        <target state="translated">在某些實例上有自動重複視頻：人們不知道 IP 是人爲下載了視頻或是它是伺服器</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">159</context></context-group>
       </trans-unit>
       <trans-unit id="a4a403ca6ccc6c4bd590cdfb045474270625ea12" datatype="html">
         <source>Ultimately, remember you can always disable P2P by toggling it in the video player, or just by disabling WebRTC in your browser.</source>
-        <target state="translated">最後，請記住您一直都可以透過在影片播放器中切換 P2P 來停用它，或者僅在瀏覽器中停用 WebRTC。</target>
+        <target state="translated">最後，請記住您一直都可以透過在視頻播放器中切換 P2P 來停用它，或者僅在瀏覽器中停用 WebRTC。</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
-        <target state="translated">追蹤者站臺</target>
+        <target state="translated">追蹤者實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">3</context>
@@ -6570,7 +6549,7 @@
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
         <source>This instance does not have instances followers.</source>
-        <target state="translated">此站臺沒有站臺追蹤者。</target>
+        <target state="translated">此實例沒有實例追蹤者。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">5</context>
@@ -6578,7 +6557,7 @@
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="translated">正在追蹤的站臺</target>
+        <target state="translated">正在追蹤的實例</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">13</context>
@@ -6586,7 +6565,7 @@
       </trans-unit>
       <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
         <source>This instance does not have instances followings.</source>
-        <target state="translated">此站臺沒有正在追蹤的站臺。</target>
+        <target state="translated">此實例沒有正在追蹤的實例。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6652,7 +6631,7 @@
       </trans-unit>
       <trans-unit id="05db4afa3e85d23d29fcfacaa5a61f0d2ae02dc0">
         <source>How long do we plan to maintain this instance?</source>
-        <target>我們計劃維護此站臺多久？</target>
+        <target>我們計劃維護此實例多久？</target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
@@ -6660,7 +6639,7 @@
       </trans-unit>
       <trans-unit id="b7ad73ca1e5e4a530ca4eaa5285e4fd0c376c089">
         <source>How will we finance this instance?</source>
-        <target>我們要如何支付此站臺的費用？</target>
+        <target>我們要如何支付此實例的費用？</target>
         <context-group name="null">
           <context context-type="linenumber">70</context>
         </context-group>
@@ -6676,7 +6655,7 @@
       </trans-unit>
       <trans-unit id="6c7534a7c0265f2285e952978b4241211199172b">
         <source>A channel is an entity in which you upload your videos. Creating several of them helps you to organize and separate your content.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For example, you could decide to have a channel to publish your piano concerts, and another channel in which you publish your videos talking about ecology. </source>
-        <target>頻道是您視頻上傳後儲存的實體。建立數個頻道有助於組織並分離您的內容。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> 舉例來說，您可以決定其中一個頻道發佈您鋼琴演奏會的影片，而另一個頻道則發佈關於生態學的影片。 </target>
+        <target>頻道是您視頻上傳後儲存的實體。建立數個頻道有助於組織並分離您的內容。<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> 舉例來說，您可以決定其中一個頻道發佈您鋼琴演奏會的視頻，而另一個頻道則發佈關於生態學的視頻。 </target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -6684,9 +6663,7 @@
       </trans-unit>
       <trans-unit id="df3021e29cbce57c12151ae6e1e0bf8c640e87da">
         <source>Other users can decide to subscribe any channel they want, to be notified when you publish a new video.</source>
-        <target>
-      其他使用者可以決定訂閱任何他們想要的頻道，並在您發佈新影片時收到通知。
-    </target>
+        <target>其他使用者可以決定訂閱任何他們想要的頻道，並在您發佈新視頻時收到通知。</target>
         <context-group name="null">
           <context context-type="linenumber">9</context>
         </context-group>
@@ -6718,7 +6695,7 @@
       </trans-unit>
       <trans-unit id="4a935862bd3120d5878e9635a9d46dfc1bcaedb4" datatype="html">
         <source>The channel name is a unique identifier of your channel on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">頻道名稱是在這個與其他所有站臺上對您的頻道的唯一識別記號。它就跟電子郵件地址一樣獨一無二，讓其他人更容易找到並與其互動。</target>
+        <target state="translated">頻道名稱是在這個與其他所有實例上對您的頻道的唯一識別記號。它就跟電子郵件地址一樣獨一無二，讓其他人更容易找到並與其互動。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-channel.component.html</context>
           <context context-type="linenumber">42</context>
@@ -6744,7 +6721,7 @@
       </trans-unit>
       <trans-unit id="095664da04cb19afa1c2bb5992db6e253a664dd6" datatype="html">
         <source>The username is a unique identifier of your account on this and all the other instances. It's as unique as an email address, which makes it easy for other people to interact with it.</source>
-        <target state="translated">使用者名稱是在這個與其他所有站臺上對您的帳號的唯一識別記號。它就跟電子郵件地址一樣獨一無二，讓其他人更容易找到並與其互動。</target>
+        <target state="translated">使用者名稱是在這個與其他所有實例上對您的帳號的唯一識別記號。它就跟電子郵件地址一樣獨一無二，讓其他人更容易找到並與其互動。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+register/register-step-user.component.html</context>
           <context context-type="linenumber">31</context>
@@ -6752,11 +6729,7 @@
       </trans-unit>
       <trans-unit id="d315d635144b1104f1c1e9ef80ff3d07fcfa571c">
         <source>I am at least 16 years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and to the <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target>
-          我至少 16 歲並同意此站臺的
-          <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>條款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>與<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>行為守則<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-        </target>
+        <target>我至少 16 歲並同意此實例的 <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>條款<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/>與<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>行為守則<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
@@ -6799,7 +6772,7 @@
       </trans-unit>
       <trans-unit id="a19e1f9aa381f05f5ba2ecb9d18a400228416ad4">
         <source>Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos</source>
-        <target>發佈的 <x id="INTERPOLATION" equiv-text="{{total}}"/> 影片</target>
+        <target>已發佈的 <x id="INTERPOLATION" equiv-text="{{total}}"/>視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -6815,7 +6788,7 @@
       </trans-unit>
       <trans-unit id="55d67844f534a75a89f86bb19d51c0703280a6ad" datatype="html">
         <source>VIDEO CHANNELS</source>
-        <target state="translated">影片頻道</target>
+        <target state="translated">視頻頻道</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6860,7 +6833,7 @@
       </trans-unit>
       <trans-unit id="b867165f9a29f4af6d0c37bcb1f48e53850a0d2d" datatype="html">
         <source>A <x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> that keeps the original audio track, with no video</source>
-        <target state="translated"><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> 保留了原始音訊軌，但沒有影片</target>
+        <target state="translated"><x id="START_TAG_CODE" ctype="x-code" equiv-text="&lt;code&gt;"/>.mp4<x id="CLOSE_TAG_CODE" ctype="x-code" equiv-text="&lt;/code&gt;"/> 保留了原始音軌，但沒有視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7096,7 +7069,7 @@
       </trans-unit>
       <trans-unit id="44e174dd30570e69f7cbf216477a01f956ce058b">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> accepted in instance followers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> 在實體追蹤者中接受了</target>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> 在實例追蹤者中被接受</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7120,7 +7093,7 @@
       </trans-unit>
       <trans-unit id="7faa627518f768d9ea813d018c121608af5cbd79">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> rejected from instance followers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> 拒絕了實體追蹤者</target>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> 拒絕了實例追蹤者</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7136,7 +7109,7 @@
       </trans-unit>
       <trans-unit id="53fb638407fb04c8b403fa392cc628a699e2c0bc">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> removed from instance followers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> 已從實體追蹤者中移除</target>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> 已從實例追蹤者中移除</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7224,7 +7197,7 @@
       </trans-unit>
       <trans-unit id="aea95ff7fb86826539cc9c81c90e766d82f9cbb5" datatype="html">
         <source>Do you really want to remove this video redundancy?</source>
-        <target state="translated">您真的想要移除此重複影片嗎？</target>
+        <target state="translated">您真的想要移除此重複視頻嗎？</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7240,7 +7213,7 @@
       </trans-unit>
       <trans-unit id="1009a5a3eab4ef49f45fe10392d8685c1ff03df9" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="translated">重複影片已刪除！</target>
+        <target state="translated">重複視頻已刪除！</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7248,7 +7221,7 @@
       </trans-unit>
       <trans-unit id="53cc0f4a4566c4139c65f93b5dce2fe8302e78da">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by your instance.</source>
-        <target>帳號 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 已被您的實體解除靜音。</target>
+        <target>帳號 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 已被您的實例解除靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7256,7 +7229,7 @@
       </trans-unit>
       <trans-unit id="468b52e3c04fb9a3d8c8213555dfcad0cbcae330">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by your instance.</source>
-        <target>實體 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已被您的實體解除靜音。</target>
+        <target>實例 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已被您的實例解除靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7264,7 +7237,7 @@
       </trans-unit>
       <trans-unit id="cf70037e436f2c5547cbdf1a02e1348c8642467a" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> muted by your instance.</source>
-        <target state="translated">站臺 <x id="INTERPOLATION" equiv-text="{{domain}}"/> 已被您的站臺靜音。</target>
+        <target state="translated">實例 <x id="INTERPOLATION" equiv-text="{{domain}}"/> 已被您的實例靜音。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7288,7 +7261,7 @@
       </trans-unit>
       <trans-unit id="0db581a9122258b2897ad3e915e2d00d7f6d33f5" datatype="html">
         <source>Delete report</source>
-        <target state="translated">刪除回報</target>
+        <target state="translated">刪除舉報</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7328,7 +7301,7 @@
       </trans-unit>
       <trans-unit id="0e546f4a26ddb8a098fb5c8db211ab44d8f2966b" datatype="html">
         <source>Actions for the video</source>
-        <target state="translated">對影片的動作</target>
+        <target state="translated">對視頻的動作</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7336,7 +7309,7 @@
       </trans-unit>
       <trans-unit id="73b70e37cddaa6494d8a666b6cba90dc80595599">
         <source>Do you really want to delete this abuse report?</source>
-        <target>您真的想要刪除這份濫用回報嗎？</target>
+        <target>您真的想要刪除這份濫用舉報嗎？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7352,7 +7325,7 @@
       </trans-unit>
       <trans-unit id="36e4cdb23056253e5ef0c62b7d4bbeb3f759f611">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from blacklist.</source>
-        <target>影片 <x id="INTERPOLATION" equiv-text="{{name}}"/> 已從黑名單中移除。</target>
+        <target>視頻 <x id="INTERPOLATION" equiv-text="{{name}}"/> 已從黑名單中移除。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7360,7 +7333,7 @@
       </trans-unit>
       <trans-unit id="3d651e314544825348900b3120e2cd5ff38c7fa5">
         <source><x id="INTERPOLATION" equiv-text="{{num}}"/> videos removed from blacklist.</source>
-        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> 部影片已從黑名單中移除。</target>
+        <target><x id="INTERPOLATION" equiv-text="{{num}}"/> 部視頻已從黑名單中移除。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7384,7 +7357,7 @@
       </trans-unit>
       <trans-unit id="652845b2b32b2e117b9b02879b1af07859b0e223">
         <source>Do you really want to remove this video from the blacklist? It will be available again in the videos list.</source>
-        <target>您真的想要從黑名單移除此影片嗎？它將會再次出現在影片列表中。</target>
+        <target>您真的想要從黑名單移除此視頻嗎？它將會再次出現在視頻列表中。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7393,7 +7366,7 @@
       </trans-unit>
       <trans-unit id="1585babc36806e20e225ac27dbba0e7c7cd09e0f">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> removed from the blacklist.</source>
-        <target>影片 <x id="INTERPOLATION" equiv-text="{{name}}"/> 已從黑名單中移除。</target>
+        <target>視頻 <x id="INTERPOLATION" equiv-text="{{name}}"/> 已從黑名單中移除。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7458,7 +7431,7 @@
       </trans-unit>
       <trans-unit id="b2e83b683cbef07c420a431ae679c52ebba8a8f0">
         <source>Please only install plugins or themes you trust, since they can execute any code on your instance.</source>
-        <target>請只安裝您信任的外掛程式或佈景主題，因為它們可能會在您的站臺上執行任何程式碼。</target>
+        <target>請只安裝您信任的外掛程式或佈景主題，因為它們可能會在您的實例上執行任何程式碼。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7638,7 +7611,7 @@
       </trans-unit>
       <trans-unit id="a3f529c8552196571418065c5b81a44ae2f94972" datatype="html">
         <source>Videos will be deleted, comments will be tombstoned.</source>
-        <target state="translated">影片與留言都將會被刪除。</target>
+        <target state="translated">視頻與留言都將會被刪除。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7650,7 +7623,7 @@
       </trans-unit>
       <trans-unit id="319c89ebc6de62d35b794da23c9794af9b16514e" datatype="html">
         <source>User won't be able to login anymore, but videos and comments will be kept as is.</source>
-        <target state="translated">使用者將無法登入，但影片與留言將會保持原樣。</target>
+        <target state="translated">使用者將無法登入，但視頻與留言將會保持原樣。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7749,7 +7722,7 @@
       </trans-unit>
       <trans-unit id="c6af80b42938d4a49e6f6c4f60ce26228916994c">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted.</source>
-        <target>實體 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已解除靜音。</target>
+        <target>實例 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已解除靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7758,7 +7731,7 @@
       </trans-unit>
       <trans-unit id="80057baa3b97a4349304bdaa0a880e6f4778561f">
         <source>My videos history</source>
-        <target>我的影片歷史紀錄</target>
+        <target>我的視頻歷史紀錄</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7766,7 +7739,7 @@
       </trans-unit>
       <trans-unit id="05f6dda1754741495451b8658bd2248856765d95">
         <source>Videos history is enabled</source>
-        <target>影片歷史紀錄已啟用</target>
+        <target>視頻歷史紀錄已啟用</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7774,7 +7747,7 @@
       </trans-unit>
       <trans-unit id="6bb9ade8637c5e35fb5cb36cf7dbec71c65d4013">
         <source>Videos history is disabled</source>
-        <target>影片歷史紀錄已停用</target>
+        <target>視頻歷史紀錄已停用</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7782,7 +7755,7 @@
       </trans-unit>
       <trans-unit id="8453a7a55b8b23bbbc293cd0939fb59a73307de8">
         <source>Delete videos history</source>
-        <target>刪除影片歷史紀錄</target>
+        <target>刪除視頻歷史紀錄</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7790,7 +7763,7 @@
       </trans-unit>
       <trans-unit id="f8f86df8a1ae711944c3ab819bb19bf360dfa7a4">
         <source>Are you sure you want to delete all your videos history?</source>
-        <target>您確定您想要刪除您所有的影片歷史嗎？</target>
+        <target>您確定您想要刪除您所有的視頻歷史記錄嗎？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7798,7 +7771,7 @@
       </trans-unit>
       <trans-unit id="195d5ba6c8bd05762d9318d0afd0b094fd776164">
         <source>Videos history deleted</source>
-        <target>影片歷史已刪除</target>
+        <target>視頻歷史記錄已刪除</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7847,7 +7820,7 @@
       </trans-unit>
       <trans-unit id="e814805b1d5d1d36eb28904b984ec9aaa8fed239" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="translated">您確定您想要刪除您的帳號嗎？這將會刪除您所有的資料，包含頻道、影片與留言。已被其他伺服器快取的內容與其他第三方可能需要更長的時間才會被刪除。</target>
+        <target state="translated">您確定您想要刪除您的帳號嗎？這將會刪除您所有的資料，包含頻道、視頻與留言。已被其他伺服器快取的內容與其他第三方可能需要更長的時間才會被刪除。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7887,7 +7860,7 @@
       </trans-unit>
       <trans-unit id="7c193bf704577e514b63497c4f366511afdb6585">
         <source>New video from your subscriptions</source>
-        <target>從您的訂閱而來的新影片</target>
+        <target>從您的訂閱而來的新視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7895,7 +7868,7 @@
       </trans-unit>
       <trans-unit id="ba897defa2e6c34d5ee3d10edf8d797a35e7e3e5">
         <source>New comment on your video</source>
-        <target>您影片的新留言</target>
+        <target>您視頻的新留言</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7903,7 +7876,7 @@
       </trans-unit>
       <trans-unit id="f536b58345161afa5cd859cce5a0b66a39327ad8">
         <source>New video abuse</source>
-        <target>新影片濫用</target>
+        <target>新視頻濫用</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7911,7 +7884,7 @@
       </trans-unit>
       <trans-unit id="051dd48c3e6254785c6f366656aaee58f8b46c47">
         <source>Video auto-blacklisted waiting review</source>
-        <target>影片自動列入黑名單等待審閱</target>
+        <target>視頻自動列入黑名單等待審閱</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7919,7 +7892,7 @@
       </trans-unit>
       <trans-unit id="abac8b7629cfcd85bff25770f83ea229f646f996">
         <source>One of your video is blacklisted/unblacklisted</source>
-        <target>您的其中一部影片已被加入黑名單／移出黑名單</target>
+        <target>您的其中一部視頻已被加入黑名單／移出黑名單</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7927,7 +7900,7 @@
       </trans-unit>
       <trans-unit id="f3eff4df9e4aa9dab411e6eb83833a33016a88bc">
         <source>Video published (after transcoding/scheduled update)</source>
-        <target>影片已發佈（在轉碼／排定的更新後）</target>
+        <target>視頻已發佈（在轉碼／排定的更新後）</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7935,7 +7908,7 @@
       </trans-unit>
       <trans-unit id="ec7ddc265da1df78011ae7677d62a2ae10aef7a4">
         <source>Video import finished</source>
-        <target>影片匯入完成</target>
+        <target>視頻匯入完成</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7943,7 +7916,7 @@
       </trans-unit>
       <trans-unit id="c327bbac87cca61f5c52f5825d564878e98b9034">
         <source>A new user registered on your instance</source>
-        <target>您實體上有新使用者註冊</target>
+        <target>您實例上有新使用者註冊</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7959,7 +7932,7 @@
       </trans-unit>
       <trans-unit id="14c3050a9da4c1bc49d555c45d5660804d08e83b">
         <source>Someone mentioned you in video comments</source>
-        <target>某人在影片留言中提及您</target>
+        <target>某人在視頻留言中提及您</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7967,7 +7940,7 @@
       </trans-unit>
       <trans-unit id="f4bb57154f8b6b30f3272f340dc40e143af8607f">
         <source>Your instance has a new follower</source>
-        <target>您的實體有 1 個新的追蹤者</target>
+        <target>您的實例有 1 個新的追蹤者</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7975,7 +7948,7 @@
       </trans-unit>
       <trans-unit id="516cb5fae75f1c90af643abf6c66bf58787c0869">
         <source>Your instance auto followed another instance</source>
-        <target>您的站臺已自動追蹤其他站臺</target>
+        <target>您的實例已自動追蹤其他實例</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8016,7 +7989,7 @@
       </trans-unit>
       <trans-unit id="732fe7ff80eca196d9825b0ca16134ce8101e93e">
         <source>Video settings updated.</source>
-        <target>影片設定已更新。</target>
+        <target>視頻設定已更新。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8024,7 +7997,7 @@
       </trans-unit>
       <trans-unit id="9763d47eba525cfe3f0007f99e70b1dbc5e20c46" datatype="html">
         <source>Display/Video settings updated.</source>
-        <target state="translated">顯示／視訊設定已更新。</target>
+        <target state="translated">顯示／視頻設定已更新。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8032,7 +8005,7 @@
       </trans-unit>
       <trans-unit id="3ef8bf973a9a481a08c6f0aaa875f0259b3ea645">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> created.</source>
-        <target>影片頻道 <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> 已更新。</target>
+        <target>視頻頻道 <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> 已更新。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8040,7 +8013,7 @@
       </trans-unit>
       <trans-unit id="f359f6adf6cccca7770019f947ed594169ee7d47">
         <source>This name already exists on this instance.</source>
-        <target>此名稱已存在於此實體上。</target>
+        <target>此名稱已存在於此實例上。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8048,7 +8021,7 @@
       </trans-unit>
       <trans-unit id="98ab64f0af924a60a48b40835c1b655bd17c6559">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> updated.</source>
-        <target>影片頻道 <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> 已更新。</target>
+        <target>視頻頻道 <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> 已更新。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8056,7 +8029,7 @@
       </trans-unit>
       <trans-unit id="4e613272923d6f1976e3c73e8b857ac45c37b791">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</source>
-        <target>您真的想要刪除 <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/> 嗎？其將會刪除所有在此頻道上傳的影片，而您將無法建立相同名稱的頻道 (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</target>
+        <target>您真的想要刪除 <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/> 嗎？其將會刪除所有在此頻道上傳的視頻，而您將無法建立相同名稱的頻道 (<x id="INTERPOLATION_1" equiv-text="{{channelName}}"/>)!</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8064,7 +8037,7 @@
       </trans-unit>
       <trans-unit id="3859ca2a7577ba8797058d7d97eb8054bc56ec99">
         <source>Please type the display name of the video channel (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) to confirm</source>
-        <target>請輸入影片頻道的顯示名稱 (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) 以確認</target>
+        <target>請輸入視頻頻道的顯示名稱 (<x id="INTERPOLATION" equiv-text="{{displayName}}"/>) 以確認</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8072,7 +8045,7 @@
       </trans-unit>
       <trans-unit id="a81a33275b683729ad938b6102e7e34a057537a2">
         <source>Video channel <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> deleted.</source>
-        <target>影片頻道 <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> 已刪除。</target>
+        <target>視頻頻道 <x id="INTERPOLATION" equiv-text="{{videoChannelName}}"/> 已刪除。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8120,7 +8093,7 @@
       </trans-unit>
       <trans-unit id="d02888c485d3aeab6de628508f4a00312a722894">
         <source>My videos</source>
-        <target>我的影片</target>
+        <target>我的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8129,7 +8102,7 @@
       </trans-unit>
       <trans-unit id="00e16d1f1c5cc936ec0881cd02cbf66aa1b4cddd">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos?</source>
-        <target>您真的想要刪除 <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> 影片嗎？</target>
+        <target>您真的想要刪除 <x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> 視頻嗎？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8137,7 +8110,7 @@
       </trans-unit>
       <trans-unit id="dff7d4574cfaa785cbd4c0a5ffb5befec19a5d83">
         <source><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> videos deleted.</source>
-        <target><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> 影片已刪除。</target>
+        <target><x id="INTERPOLATION" equiv-text="{{deleteLength}}"/> 視頻已刪除。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8153,7 +8126,7 @@
       </trans-unit>
       <trans-unit id="d39a0bfa616a9a8473b2e379eefe17d8ed1af118">
         <source>Video <x id="INTERPOLATION" equiv-text="{{videoName}}"/> deleted.</source>
-        <target>影片 <x id="INTERPOLATION" equiv-text="{{videoName}}"/> 已刪除。</target>
+        <target>視頻 <x id="INTERPOLATION" equiv-text="{{videoName}}"/> 已刪除。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8273,7 +8246,7 @@
       </trans-unit>
       <trans-unit id="2f03e577e8f81a9f8be0095f93e1f9376c6eedc9">
         <source>Published videos</source>
-        <target>已發佈的影片</target>
+        <target>已發佈的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8281,7 +8254,7 @@
       </trans-unit>
       <trans-unit id="897e90115ad2bc3d07469e0d80bc6f390961723d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> 部影片} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> 部視頻} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8298,7 +8271,7 @@
       </trans-unit>
       <trans-unit id="33e9ca3aab38821eeaf966493df042d4202414df" datatype="html">
         <source>VIDEO PLAYLISTS</source>
-        <target state="translated">影片播放清單</target>
+        <target state="translated">視頻播放清單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8322,7 +8295,7 @@
       </trans-unit>
       <trans-unit id="2cd6194ce733174d2e542c65c46d730581f70b81">
         <source>Go to the discover videos page</source>
-        <target>到探索影片頁面</target>
+        <target>前往探索視頻頁面</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8330,7 +8303,7 @@
       </trans-unit>
       <trans-unit id="1e919c88a3f889d6659288e69d3e178da0ea7ab0">
         <source>Go to the trending videos page</source>
-        <target>到熱門影片頁面</target>
+        <target>前往熱門視頻頁面</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8338,7 +8311,7 @@
       </trans-unit>
       <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d">
         <source>Go to the recently added videos page</source>
-        <target>到最近新增影片頁面</target>
+        <target>前往最近新增視頻頁面</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8346,7 +8319,7 @@
       </trans-unit>
       <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5">
         <source>Go to the local videos page</source>
-        <target>到本地影片頁面</target>
+        <target>前往本地視頻頁面</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8354,7 +8327,7 @@
       </trans-unit>
       <trans-unit id="f1fb6204f39a7338e5110b2f113643c9288496ba">
         <source>Go to the videos upload page</source>
-        <target>到影片上傳頁面</target>
+        <target>前往視頻上傳頁面</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8362,7 +8335,7 @@
       </trans-unit>
       <trans-unit id="badd4b24618ccc8a34620acb9053fc654b9612b2">
         <source>Go to my subscriptions</source>
-        <target>到我的訂閱</target>
+        <target>前往我的訂閱</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8370,7 +8343,7 @@
       </trans-unit>
       <trans-unit id="b7184b5a236618e8edd747529869c392ab6dace1">
         <source>Go to my videos</source>
-        <target>到我的影片</target>
+        <target>前往我的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8378,7 +8351,7 @@
       </trans-unit>
       <trans-unit id="acf985bd42886b9b3030b5f68f0e8417c39b40a7">
         <source>Go to my imports</source>
-        <target>到我們的匯入</target>
+        <target>前往我的匯入</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8386,7 +8359,7 @@
       </trans-unit>
       <trans-unit id="cfe3c51f0ae9385dc2ce6df740d87e5514aa9390">
         <source>Go to my channels</source>
-        <target>到我的頻道</target>
+        <target>前往我的頻道</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8728,7 +8701,7 @@
       </trans-unit>
       <trans-unit id="b67c8e57904c67c4566610363b7f82c748d04323">
         <source>Instance name is required.</source>
-        <target>實體名稱必填。</target>
+        <target>實例名稱必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9036,7 +9009,7 @@
       </trans-unit>
       <trans-unit id="abede840116d58f04a55d99a6cbd68da8a3e1bbf">
         <source>Video quota is required.</source>
-        <target>影片配額必填。</target>
+        <target>視頻配額必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9096,7 +9069,7 @@
       </trans-unit>
       <trans-unit id="1d973f9ee250b94d31ceb5c763edcd9b255ea524">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target>您必須同意站臺條款以在其上註冊。</target>
+        <target>您必須同意實例條款以在其上註冊。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9149,7 +9122,7 @@
       </trans-unit>
       <trans-unit id="b3cf1889d2fdd6b15e697c270c9b80772fe2cae6">
         <source>Report reason is required.</source>
-        <target>回報理由必填。</target>
+        <target>舉報理由必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9157,7 +9130,7 @@
       </trans-unit>
       <trans-unit id="993f9f5703d449a1d467243db75253d288a2947e">
         <source>Report reason must be at least 2 characters long.</source>
-        <target>回報理由必須至少 2 個字元長。</target>
+        <target>舉報理由必須至少 2 個字元長。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9165,7 +9138,7 @@
       </trans-unit>
       <trans-unit id="8c7d4c82b057aea5dbae811e16935f9bcae4c2aa">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target>回報理由不能多於 3000 個字元。</target>
+        <target>舉報理由不能多於 3000 個字元。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9221,7 +9194,7 @@
       </trans-unit>
       <trans-unit id="c9eadf8830b3bc09bd444d739af86414eed9bd9e">
         <source>Video caption language is required.</source>
-        <target>影片字幕語言必填。</target>
+        <target>視頻字幕語言必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9229,7 +9202,7 @@
       </trans-unit>
       <trans-unit id="82083ae96724851ff37e1c7e4e9f907c25677963">
         <source>Video caption file is required.</source>
-        <target>影片字幕檔案必填。</target>
+        <target>視頻字幕檔案必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9349,7 +9322,7 @@
       </trans-unit>
       <trans-unit id="cdc51eaeab88683610a28af8645cf91d136b39e1">
         <source>Video name is required.</source>
-        <target>影片名稱為必填。</target>
+        <target>視頻名稱為必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9357,7 +9330,7 @@
       </trans-unit>
       <trans-unit id="c27cc734f76efd221663921dd0898ea7c8bcbb5c">
         <source>Video name must be at least 3 characters long.</source>
-        <target>影片名稱必須至少 3 個字元長。</target>
+        <target>視頻名稱必須至少 3 個字元長。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9365,7 +9338,7 @@
       </trans-unit>
       <trans-unit id="0320d0f7f8eec2341e27ca53d7875217a3d99695">
         <source>Video name cannot be more than 120 characters long.</source>
-        <target>影片名稱不能多於 120 個字元長。</target>
+        <target>視頻名稱不能多於 120 個字元長。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9373,7 +9346,7 @@
       </trans-unit>
       <trans-unit id="a627c58cf1849d7d838696e7f36c1bae1a8b31a4">
         <source>Video privacy is required.</source>
-        <target>影片隱私為必填。</target>
+        <target>視頻隱私為必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9381,7 +9354,7 @@
       </trans-unit>
       <trans-unit id="97afb789c1ab09074495d49aaadb92a1c3e71a16">
         <source>Video channel is required.</source>
-        <target>影片頻道為必填。</target>
+        <target>視頻頻道為必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9389,7 +9362,7 @@
       </trans-unit>
       <trans-unit id="af5e2d5f3ac817c735fb7ff9ca16322789f66fef">
         <source>Video description must be at least 3 characters long.</source>
-        <target>影片描述必須至少 3 個字元長。</target>
+        <target>視頻描述必須至少 3 個字元長。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9397,7 +9370,7 @@
       </trans-unit>
       <trans-unit id="ce28a9403c2d7e5da2e59af27118f8b6d109e906">
         <source>Video description cannot be more than 10000 characters long.</source>
-        <target>影片描述不能多於 10000 個字元。</target>
+        <target>視頻描述不能多於 10000 個字元。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9421,7 +9394,7 @@
       </trans-unit>
       <trans-unit id="665092574f9af9fec262f8349b67b14192391ae6">
         <source>Video support must be at least 3 characters long.</source>
-        <target>影片支援必須至少 3 個字元長。</target>
+        <target>視頻支援必須至少 3 個字元長。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9429,7 +9402,7 @@
       </trans-unit>
       <trans-unit id="f17de746af56840511cae11559539b6d8b6955ad">
         <source>Video support cannot be more than 1000 characters long.</source>
-        <target>影片支援不能超過 1000 的字元長。</target>
+        <target>視頻支援不能超過 1000 的字元長。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9437,7 +9410,7 @@
       </trans-unit>
       <trans-unit id="453413bf387dea681958871319bab489dd5e6ec0">
         <source>A date is required to schedule video update.</source>
-        <target>日期為排定影片更新必填。</target>
+        <target>日期為排定視頻更新必填。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9904,7 +9877,7 @@
       </trans-unit>
       <trans-unit id="10ffa5c3dbcee491d66f80d8d4dce3e119a6ec86">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of full HD videos</source>
-        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> 的 Full HD 影片</target>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> 的 Full HD 視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9912,7 +9885,7 @@
       </trans-unit>
       <trans-unit id="344ddae9f45b344e98e7b28cd5e33243982700f8">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of HD videos</source>
-        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> 的 HD 影片</target>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> 的 HD 視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9920,7 +9893,7 @@
       </trans-unit>
       <trans-unit id="435c012df6dd990a1ccb7ee73dd79c488bde28b5">
         <source><x id="INTERPOLATION" equiv-text="{{seconds}}"/> of average quality videos</source>
-        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> 的平均畫質影片</target>
+        <target><x id="INTERPOLATION" equiv-text="{{seconds}}"/> 的平均畫質視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10040,7 +10013,7 @@
       </trans-unit>
       <trans-unit id="086eda792aeb1b0d131d633b50fdd1792f5f24c6">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted.</source>
-        <target>實體 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已解除靜音。</target>
+        <target>實例 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已解除靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10048,7 +10021,7 @@
       </trans-unit>
       <trans-unit id="bb72d6d1219e89d182e9fd09d853d83baf8d6499">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> muted by the instance.</source>
-        <target>帳號 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 已被實體靜音。</target>
+        <target>帳號 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 已被實例靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10065,7 +10038,7 @@
       </trans-unit>
       <trans-unit id="ecc473396f70a6ba41411c9449320f9e8d4cfbcf" datatype="html">
         <source>Server <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
-        <target state="translated">伺服器 <x id="INTERPOLATION" equiv-text="{{host}}"/> 由站臺靜音。</target>
+        <target state="translated">伺服器 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已被實例靜音。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10073,7 +10046,7 @@
       </trans-unit>
       <trans-unit id="8686834bc4afe42c1991c6c18f0bce174a0e17a6">
         <source>Account <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> unmuted by the instance.</source>
-        <target>帳號 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 已被實體解除靜音。</target>
+        <target>帳號 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 已被實例解除靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10081,7 +10054,7 @@
       </trans-unit>
       <trans-unit id="35d3509161861a610b0895bf084c781e56ba2830">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
-        <target>實體 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已被實體靜音。</target>
+        <target>實例<x id="INTERPOLATION" equiv-text="{{host}}"/> 已被實例靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10089,7 +10062,7 @@
       </trans-unit>
       <trans-unit id="978aeec5613fa97e8a5336d3599cebb23ee5a90f">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{host}}"/> unmuted by the instance.</source>
-        <target>實體 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已被實體解除靜音。</target>
+        <target>實例 <x id="INTERPOLATION" equiv-text="{{host}}"/> 已被實例解除靜音。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10129,7 +10102,7 @@
       </trans-unit>
       <trans-unit id="f7044a58ed834f7380eaac0e670dc817b19d9209" datatype="html">
         <source>Allow the user to login and create videos/comments again</source>
-        <target state="translated">再次允許使用者登入並建立影片／留言</target>
+        <target state="translated">再次允許使用者登入並建立視頻／留言</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10169,7 +10142,7 @@
       </trans-unit>
       <trans-unit id="e17218983b1de76e5a920b04e1c2ecbdb6e3e06d">
         <source>Mute the instance</source>
-        <target>靜音實體</target>
+        <target>靜音實例</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10177,7 +10150,7 @@
       </trans-unit>
       <trans-unit id="b67a9b47f49012501f2aa71c74d7fccc9e331cdb" datatype="html">
         <source>Hide any content from that instance for you.</source>
-        <target state="translated">對您隱藏此站臺的任何內容。</target>
+        <target state="translated">對您隱藏此實例的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10185,7 +10158,7 @@
       </trans-unit>
       <trans-unit id="a23514d8aca2f8633622dda0e86b399dc576a2b9">
         <source>Unmute the instance</source>
-        <target>解除靜音實體</target>
+        <target>解除靜音實例</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10193,7 +10166,7 @@
       </trans-unit>
       <trans-unit id="7e80d54718404d853b9e51a3b8d5210a2bedaf6f" datatype="html">
         <source>Show back content from that instance for you.</source>
-        <target state="translated">對您顯示該站臺的內容。</target>
+        <target state="translated">對您顯示該實例的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10201,7 +10174,7 @@
       </trans-unit>
       <trans-unit id="4e4107055b44eee44b6954c41120de1cb4d46432">
         <source>Mute this account by your instance</source>
-        <target>您的實體靜音此帳號</target>
+        <target>您的實例靜音此帳號</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10209,7 +10182,7 @@
       </trans-unit>
       <trans-unit id="ec993f2e1ecd979ff28871591b6f253afb3b3138" datatype="html">
         <source>Hide any content from that user for you, your instance and its users.</source>
-        <target state="translated">對您、您的站臺與其使用者隱藏此使用者的任何內容。</target>
+        <target state="translated">對您、您的實例與其使用者隱藏此使用者的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10217,7 +10190,7 @@
       </trans-unit>
       <trans-unit id="a51c59cb5ecb7004a6a8ddd2855b5c52266ad957">
         <source>Unmute this account by your instance</source>
-        <target>您的實體解除靜音此帳號</target>
+        <target>您的實例解除靜音此帳號</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10225,7 +10198,7 @@
       </trans-unit>
       <trans-unit id="a50c42119c5ffaa4ecb61e996c432f1ab0f8d0ff" datatype="html">
         <source>Show back content from that user for you, your instance and its users.</source>
-        <target state="translated">對您、您的站臺與其使用者顯示該使用者的內容。</target>
+        <target state="translated">對您、您的實例與其使用者顯示該使用者的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10233,7 +10206,7 @@
       </trans-unit>
       <trans-unit id="588073e831cec240d6bb0db0b133e45dab69f178">
         <source>Mute the instance by your instance</source>
-        <target>您的實體靜音此實體</target>
+        <target>您的實例靜音此實例</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10241,7 +10214,7 @@
       </trans-unit>
       <trans-unit id="1a4ed1f8e28636212f1bcf06c36644d2627b682a" datatype="html">
         <source>Hide any content from that instance for you, your instance and its users.</source>
-        <target state="translated">對您、您的站臺與其使用者隱藏此站臺的任何內容。</target>
+        <target state="translated">對您、您的實例與其使用者隱藏此實例的任何內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10249,7 +10222,7 @@
       </trans-unit>
       <trans-unit id="676221cdabd4805901343976988c028dbf71b20a">
         <source>Unmute the instance by your instance</source>
-        <target>您的實體解除靜音此實體</target>
+        <target>您的實例解除靜音此實例</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10257,7 +10230,7 @@
       </trans-unit>
       <trans-unit id="d97d7d9b0c359f7b900652b547678841369691b1" datatype="html">
         <source>Show back content from that instance for you, your instance and its users.</source>
-        <target state="translated">對您、您的站臺與其使用者顯示該站臺的內容。</target>
+        <target state="translated">對您、您的實例與其使用者顯示該實例的內容。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/moderation/user-moderation-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10297,7 +10270,7 @@
       </trans-unit>
       <trans-unit id="4104d2ac06bd0103868795086100a871c8dbeb49" datatype="html">
         <source>Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated">訂閱 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 目前的所有頻道。您將會收到它們所有的新影片。</target>
+        <target state="translated">訂閱 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> 目前的所有頻道。您將會收到它們所有的新視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10305,7 +10278,7 @@
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated">訂閱 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>。您將會收到它們所有的新影片。</target>
+        <target state="translated">訂閱 <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>。您將會收到它們所有的新視頻。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10345,7 +10318,7 @@
       </trans-unit>
       <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf">
         <source>Moderator</source>
-        <target>主持人</target>
+        <target>調解員</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10353,7 +10326,7 @@
       </trans-unit>
       <trans-unit id="5034e84fab7cd3d662d2483753e33caea0774b78">
         <source>Video removed from <x id="INTERPOLATION" equiv-text="{{name}}"/></source>
-        <target>影片已從 <x id="INTERPOLATION" equiv-text="{{name}}"/> 移除</target>
+        <target>視頻已從 <x id="INTERPOLATION" equiv-text="{{name}}"/> 移除</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10362,7 +10335,7 @@
       </trans-unit>
       <trans-unit id="5cbf881bedb548fda270e2b745c8cbe332a5e4de">
         <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/> at timestamps <x id="INTERPOLATION_1" equiv-text="{{t}}"/></source>
-        <target>影片新增於 <x id="INTERPOLATION" equiv-text="{{n}}"/> 在時間戳 <x id="INTERPOLATION_1" equiv-text="{{t}}"/></target>
+        <target>視頻新增於 <x id="INTERPOLATION" equiv-text="{{n}}"/> 在時間戳 <x id="INTERPOLATION_1" equiv-text="{{t}}"/></target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10370,7 +10343,7 @@
       </trans-unit>
       <trans-unit id="f69a06eee4963406efdbff8c3d9765832c30482f">
         <source>Video added in <x id="INTERPOLATION" equiv-text="{{n}}"/></source>
-        <target>影片已新增於 <x id="INTERPOLATION" equiv-text="{{n}}"/></target>
+        <target>視頻已新增於 <x id="INTERPOLATION" equiv-text="{{n}}"/></target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10411,7 +10384,7 @@
       </trans-unit>
       <trans-unit id="73c33d602da89a33d353d686f36c2fff39f0aee3">
         <source>Video blacklisted.</source>
-        <target>影片已被加入黑名單。</target>
+        <target>視頻已被加入黑名單。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10420,7 +10393,7 @@
       </trans-unit>
       <trans-unit id="c93a80b6a7d903886843ac3719b34b1794de171f" datatype="html">
         <source>Unblacklist video</source>
-        <target state="translated">取消影片黑名單</target>
+        <target state="translated">取消視頻黑名單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10428,7 +10401,7 @@
       </trans-unit>
       <trans-unit id="9382291d6ebed56e5ae95e020d6b91f39cff468a" datatype="html">
         <source>Video unblacklisted.</source>
-        <target state="translated">影片已解除黑名單。</target>
+        <target state="translated">視頻已解除黑名單。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10436,7 +10409,7 @@
       </trans-unit>
       <trans-unit id="19e5e5956502d977d5dd28fe86cee763d5db2b77" datatype="html">
         <source>Delete video</source>
-        <target state="translated">刪除影片</target>
+        <target state="translated">刪除視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10497,7 +10470,7 @@
       </trans-unit>
       <trans-unit id="fa2601e52cbf5725a13d33fe14458823b882ea50">
         <source>Video reported.</source>
-        <target>影片已回報。</target>
+        <target>視頻已舉報。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10505,7 +10478,7 @@
       </trans-unit>
       <trans-unit id="f1abd89c9280323209e939fa9c30f6e5cda20c95">
         <source>Do you really want to delete this video?</source>
-        <target>您真的想要刪除此影片嗎？</target>
+        <target>您真的想要刪除此視頻嗎？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10514,7 +10487,7 @@
       </trans-unit>
       <trans-unit id="a36503b80133639322bcdb973f78bcadbd86b798" datatype="html">
         <source>Video deleted.</source>
-        <target state="translated">影片已刪除。</target>
+        <target state="translated">視頻已刪除。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10522,7 +10495,7 @@
       </trans-unit>
       <trans-unit id="f145e822837d0d1f741db7540dc6cb1cdacd8220" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="translated">回報者的行動</target>
+        <target state="translated">舉報者的行動</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10530,7 +10503,7 @@
       </trans-unit>
       <trans-unit id="2c33a2bd1e9f50f870366f281ff903cedf9b6a53" datatype="html">
         <source>Mute reporter</source>
-        <target state="translated">靜音回報者</target>
+        <target state="translated">靜音舉報者</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10538,7 +10511,7 @@
       </trans-unit>
       <trans-unit id="c3ca1344a9cd638109e09c125e5185c1da3ca39c" datatype="html">
         <source>This video will be duplicated by your instance.</source>
-        <target state="translated">此影片將會被您的站臺複製。</target>
+        <target state="translated">此視頻將會被您的實例複製。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10571,7 +10544,7 @@
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
         <source>Report</source>
-        <target>回報</target>
+        <target>舉報</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10587,7 +10560,7 @@
       </trans-unit>
       <trans-unit id="1d3402b0e60154aaa071f390c63437b701d9048c" datatype="html">
         <source>The video was deleted</source>
-        <target state="translated">影片已被刪除</target>
+        <target state="translated">視頻已被刪除</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">71</context>
@@ -10595,7 +10568,7 @@
       </trans-unit>
       <trans-unit id="076960cf44b4a0e89cc5024a75963844b068b284" datatype="html">
         <source>The video was blacklisted</source>
-        <target state="translated">影片已加入黑名單</target>
+        <target state="translated">視頻已加入黑名單</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">72</context>
@@ -10659,7 +10632,7 @@
       </trans-unit>
       <trans-unit id="d4195053fd38eacf6dee1fc507296928978cc8fb">
         <source>Only I can see this video</source>
-        <target>只有我可以看見此影片</target>
+        <target>只有我可以看見此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10667,7 +10640,7 @@
       </trans-unit>
       <trans-unit id="17b62592e5fcabb5235bb25c4883a827ab37cf70">
         <source>Only people with the private link can see this video</source>
-        <target>只有知道連結的人可以看到此影片</target>
+        <target>只有知道連結的人可以看到此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10675,7 +10648,7 @@
       </trans-unit>
       <trans-unit id="15be15cbdc6e960f57e801f457c19165ab39632b">
         <source>Anyone can see this video</source>
-        <target>任何人都可以看到此影片</target>
+        <target>任何人都可以看到此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10683,7 +10656,7 @@
       </trans-unit>
       <trans-unit id="ed3394ad721212bca2a1da43ad6063b6d4f9a008" datatype="html">
         <source>Only users of this instance can see this video</source>
-        <target state="translated">僅此站臺的使用者才可觀看此影片</target>
+        <target state="translated">僅此實例的使用者才可觀看此視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -10691,7 +10664,7 @@
       </trans-unit>
       <trans-unit id="320c9c3482a0ebe46da42ce9e0cbdc5ba26ea8bb">
         <source>Video to import updated.</source>
-        <target>要匯入的影片已更新。</target>
+        <target>匯入的視頻已更新。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10700,7 +10673,7 @@
       </trans-unit>
       <trans-unit id="0e907e5a96537e464b192f8adce79ce6487cbb1c">
         <source>Your video was uploaded to your account and is private.</source>
-        <target>您的影片已上傳到您的帳號並為私人影片。</target>
+        <target>您的視頻已上傳到您的帳號並為私密視頻。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10716,7 +10689,7 @@
       </trans-unit>
       <trans-unit id="5af84926d631326e548573ebf0f6dff07845aeb4">
         <source>Your video is not uploaded yet, are you sure you want to leave this page?</source>
-        <target>您的影片尚未上傳，您確定您想要離開此頁面嗎？</target>
+        <target>您的視頻尚未上傳，您確定您想要離開此頁面嗎？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10740,7 +10713,7 @@
       </trans-unit>
       <trans-unit id="972fc644f847cf84e4732ec012915c4cdaf865ce">
         <source>Video published.</source>
-        <target>影片已發佈。</target>
+        <target>視頻已發佈。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10748,7 +10721,7 @@
       </trans-unit>
       <trans-unit id="a6019e856f511dbe1fe658790c71c594b26930ee">
         <source>Your video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>)</source>
-        <target>您的影片配額已因此影片超過（影片大小：<x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>，配額：<x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>）</target>
+        <target>您的視頻配額已因此視頻而超過限制（視頻大小：<x id="INTERPOLATION" equiv-text="{{videoSize}}"/>，占用：<x id="INTERPOLATION_1" equiv-text="{{videoQuotaUsed}}"/>，配額：<x id="INTERPOLATION_2" equiv-text="{{videoQuota}}"/>）</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10756,7 +10729,7 @@
       </trans-unit>
       <trans-unit id="c980896ac8e08e9751545db1b7ef0e93fb8a52cd">
         <source>Your daily video quota is exceeded with this video (video size: <x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>, quota: <x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>)</source>
-        <target>您的每日配額已因此影片超過（影片大小：<x id="INTERPOLATION" equiv-text="{{videoSize}}"/>, used: <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>，配額：<x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>）</target>
+        <target>您的每日配額已因此視頻而超過限制（視頻大小：<x id="INTERPOLATION" equiv-text="{{videoSize}}"/>，占用： <x id="INTERPOLATION_1" equiv-text="{{quotaUsedDaily}}"/>，配額：<x id="INTERPOLATION_2" equiv-text="{{quotaDaily}}"/>）</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10772,7 +10745,7 @@
       </trans-unit>
       <trans-unit id="757e9c083c8f3d578bd74f055cc337c72417e187">
         <source>Video updated.</source>
-        <target>影片已更新。</target>
+        <target>視頻已更新。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10780,7 +10753,7 @@
       </trans-unit>
       <trans-unit id="be448863f4919e200bdbc65ca95cb7bf208a30e7" datatype="html">
         <source>The deletion will be sent to remote instances so they can reflect the change.</source>
-        <target state="translated">刪除動作將會傳送到遠端站臺以讓它們反映變更。</target>
+        <target state="translated">刪除動作將會傳送到遠端實例以讓它們反映變更。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10788,7 +10761,7 @@
       </trans-unit>
       <trans-unit id="8d850ce30ecdacf4755d85cce1fe44cb0d1fc38d">
         <source>It is a remote comment, so the deletion will only be effective on your instance.</source>
-        <target>其為遠端留言，所以刪除只會在您的實體上生效。</target>
+        <target>其為遠端留言，所以刪除只會在您的實例上生效。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10796,7 +10769,7 @@
       </trans-unit>
       <trans-unit id="4334a60889af951a137a22cd862f2675daad3292" datatype="html">
         <source>Stop autoplaying next video</source>
-        <target state="translated">停止自動播放下一部影片</target>
+        <target state="translated">停止自動播放下一部視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10804,7 +10777,7 @@
       </trans-unit>
       <trans-unit id="0663c85b5bc0806356ab768f411299c29cf39360" datatype="html">
         <source>Autoplay next video</source>
-        <target state="translated">自動播放下一部影片</target>
+        <target state="translated">自動播放下一部視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10812,7 +10785,7 @@
       </trans-unit>
       <trans-unit id="77fde72fafe6a5272b7d5e3ffedd179ec2d7f8b0" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">停止循環播放播放清單中的影片</target>
+        <target state="translated">停止循環播放播放清單中的視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10820,7 +10793,7 @@
       </trans-unit>
       <trans-unit id="54428deb88d7bc58721d6839d9406ff607eccef4" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">循環播放播放清單中的影片</target>
+        <target state="translated">循環播放播放清單中的視頻</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10844,7 +10817,7 @@
       </trans-unit>
       <trans-unit id="ed013c2c29216501c688e9cb5f3a1c9fd9147b71">
         <source>This video contains mature or explicit content. Are you sure you want to watch it?</source>
-        <target>這部影片包含成人或裸露內容。您確定您想要觀看嗎？</target>
+        <target>這部視頻包含成人或裸露內容。您確定您想要觀看嗎？</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10884,7 +10857,7 @@
       </trans-unit>
       <trans-unit id="d5916006cb404a4d3663ac20ad299c45e57a30a6" datatype="html">
         <source>Play/Pause the video (requires player focus)</source>
-        <target state="translated">播放／暫停影片（需要播放器焦點）</target>
+        <target state="translated">播放／暫停視頻（需要播放器焦點）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10892,7 +10865,7 @@
       </trans-unit>
       <trans-unit id="c797465d457fbb14d62c08c52be9115b60e5605c" datatype="html">
         <source>Mute/unmute the video (requires player focus)</source>
-        <target state="translated">靜音／解除靜音影片（需要播放器焦點）</target>
+        <target state="translated">靜音／解除靜音視頻（需要播放器焦點）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10900,7 +10873,7 @@
       </trans-unit>
       <trans-unit id="6ec9800a89e1489861dd08b93d0ff42fd5f20f50" datatype="html">
         <source>Skip to a percentage of the video: 0 is 0% and 9 is 90% (requires player focus)</source>
-        <target state="translated">跳到影片的百分比：0 是 0%，9 是 90%（需要播放器焦點）</target>
+        <target state="translated">跳到視頻的百分比：0 是 0%，9 是 90%（需要播放器焦點）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10924,7 +10897,7 @@
       </trans-unit>
       <trans-unit id="3fcdc3072de455c3816dc7976ff96ea1bf09eb7b" datatype="html">
         <source>Seek the video forward (requires player focus)</source>
-        <target state="translated">快轉影片（需要播放器焦點）</target>
+        <target state="translated">快轉視頻（需要播放器焦點）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10932,7 +10905,7 @@
       </trans-unit>
       <trans-unit id="ea2c30e5c87a4923cbf3cdcac9fc8818f79f9a0b" datatype="html">
         <source>Seek the video backward (requires player focus)</source>
-        <target state="translated">快退影片（需要播放器焦點）</target>
+        <target state="translated">快退視頻（需要播放器焦點）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10956,7 +10929,7 @@
       </trans-unit>
       <trans-unit id="0fc28c34013089209a65fadcad0a552094ef2104" datatype="html">
         <source>Navigate in the video frame by frame (requires player focus)</source>
-        <target state="translated">逐畫面瀏覽影片（需要播放器焦點）</target>
+        <target state="translated">逐幀瀏覽視頻（需要播放器焦點）</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10964,7 +10937,7 @@
       </trans-unit>
       <trans-unit id="0e65067fdcc9d8725a41896cb1e229d1415a45f6">
         <source>Like the video</source>
-        <target>喜歡影片</target>
+        <target>喜歡此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10972,7 +10945,7 @@
       </trans-unit>
       <trans-unit id="1a999e06e1aca0a70cd7d0e3e5c2c63d0e1885c8">
         <source>Dislike the video</source>
-        <target>不喜歡影片</target>
+        <target>不喜歡此視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10980,7 +10953,7 @@
       </trans-unit>
       <trans-unit id="1d9b6c0c66a4a5baa73617b1106c3746bc13f003" datatype="html">
         <source>When active, the next video is automatically played after the current one.</source>
-        <target state="translated">啟用時，下一部影片將會在目前的播放完之後自動播放。</target>
+        <target state="translated">啟用時，下一部視頻將會在目前的播放完之後自動播放。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/recommendations/recommended-videos.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10988,7 +10961,7 @@
       </trans-unit>
       <trans-unit id="8da38a1074a420611eac466a45ef2decbbb45ab8">
         <source>Videos that have the higher number of likes.</source>
-        <target>喜愛數量更多的影片。</target>
+        <target>較高喜愛數的視頻。</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -11004,7 +10977,7 @@
       </trans-unit>
       <trans-unit id="6e9cb0b3b38312870471954abec8690170429a4e">
         <source>Trending videos are those totalizing the greatest number of views during the last 24 hours</source>
-        <target>趨勢影片是在過去24小時內總和最多觀看數的影片</target>
+        <target>熱門視頻是在過去24小時內總和最多點閱的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -11020,7 +10993,7 @@
       </trans-unit>
       <trans-unit id="caa0a70f34df9b60a71ed0ad6c82de7b07c0c509">
         <source>Trending videos are those totalizing the greatest number of views during the last <x id="INTERPOLATION" equiv-text="{{days}}"/> days</source>
-        <target>趨勢影片是過去 <x id="INTERPOLATION" equiv-text="{{days}}"/> 天內總和觀看數最多的影片</target>
+        <target>熱門視頻是過去 <x id="INTERPOLATION" equiv-text="{{days}}"/> 天內總點閱最多的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -11028,7 +11001,7 @@
       </trans-unit>
       <trans-unit id="1b157e15c434469d91e56d027b78bf69c9983165">
         <source>Videos from your subscriptions</source>
-        <target>從您的訂閱而來的影片</target>
+        <target>從您的訂閱而來的視頻</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
