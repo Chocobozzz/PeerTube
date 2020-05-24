@@ -3513,7 +3513,7 @@
       </trans-unit>
       <trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="translated">Meus vídeos que estão duplicados em instâncias remotas.</target>
+        <target state="translated">Meus vídeos duplicados em instâncias remotas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">7</context>
