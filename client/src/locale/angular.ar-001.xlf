@@ -6341,7 +6341,7 @@
       </trans-unit>
       <trans-unit id="4bf47a1ae952bf42a4682a5ecddb0bfb8c9adfaf" datatype="html">
         <source>How does PeerTube compare with YouTube?</source>
-        <target state="new">How does PeerTube compare with YouTube?</target>
+        <target state="translated">هل يمكن مقارنة PeerTube بـ Youtube؟</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-peertube/about-peertube.component.html</context><context context-type="linenumber">131</context></context-group>
       </trans-unit>
       <trans-unit id="1fd22031e4f7920db2300cc76ee9c8516b25f50d" datatype="html">
@@ -6831,7 +6831,7 @@
       </trans-unit>
       <trans-unit id="2f9439e4f986c94ed2ab6fec2b3dd82de1c6176f" datatype="html">
         <source>Domain is required.</source>
-        <target state="new">Domain is required.</target>
+        <target state="translated">اسم النطاق مطلوب.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6839,7 +6839,7 @@
       </trans-unit>
       <trans-unit id="a09570e386c8a76dd828525fde97eae2be1fc01c" datatype="html">
         <source>Domains entered are invalid.</source>
-        <target state="new">Domains entered are invalid.</target>
+        <target state="translated">أسماء النطاقات التي قمت بإدخالها غير صالحة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/shared/batch-domains-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -6994,7 +6994,7 @@
       </trans-unit>
       <trans-unit id="150d48f01a24d84c2bfffb2761419b9482074b61" datatype="html">
         <source>Do you really want to delete this follower?</source>
-        <target state="new">Do you really want to delete this follower?</target>
+        <target state="translated">أتريد حقا حذف هذا المتابِع؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7071,7 +7071,7 @@
       </trans-unit>
       <trans-unit id="fb2e1bed329dc5b84197808c778abb9edcbdb335" datatype="html">
         <source>Used</source>
-        <target state="new">Used</target>
+        <target state="translated">مُستعمَل</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7079,7 +7079,7 @@
       </trans-unit>
       <trans-unit id="b7da3e3505cc80f9bf3cffc8444c53e8a9ec70a5" datatype="html">
         <source>Available</source>
-        <target state="new">Available</target>
+        <target state="translated">متوفر</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7143,7 +7143,7 @@
       </trans-unit>
       <trans-unit id="37682f69f05be054bd72b44947af150734e302c3" datatype="html">
         <source>Internal actions</source>
-        <target state="new">Internal actions</target>
+        <target state="translated">الإجراءات الداخلية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7151,7 +7151,7 @@
       </trans-unit>
       <trans-unit id="0db581a9122258b2897ad3e915e2d00d7f6d33f5" datatype="html">
         <source>Delete report</source>
-        <target state="new">Delete report</target>
+        <target state="translated">احذف التقرير</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7159,7 +7159,7 @@
       </trans-unit>
       <trans-unit id="513acd6a54ffb7c9c494cfcac42a161aa12e69fe" datatype="html">
         <source>Add note</source>
-        <target state="new">Add note</target>
+        <target state="translated">إضافة ملاحظة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7167,7 +7167,7 @@
       </trans-unit>
       <trans-unit id="9fb13da3d22d6216b8a5a9c63777c9c0c506c7eb" datatype="html">
         <source>Update note</source>
-        <target state="new">Update note</target>
+        <target state="translated">تحديث الملاحظة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7191,7 +7191,7 @@
       </trans-unit>
       <trans-unit id="0e546f4a26ddb8a098fb5c8db211ab44d8f2966b" datatype="html">
         <source>Actions for the video</source>
-        <target state="new">Actions for the video</target>
+        <target state="translated">الإجراءات على هذه الفيديو</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7231,7 +7231,7 @@
       </trans-unit>
       <trans-unit id="0594812d4c50c2adbd1a892a3497c4e5c19e4b32" datatype="html">
         <source>yes</source>
-        <target state="new">yes</target>
+        <target state="translated">نعم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7239,7 +7239,7 @@
       </trans-unit>
       <trans-unit id="6320692861e01fa9c9d4e692d0d27b6c12b21c3b" datatype="html">
         <source>no</source>
-        <target state="new">no</target>
+        <target state="translated">لا</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7265,7 +7265,7 @@
       </trans-unit>
       <trans-unit id="9ab7a3efed2b78a4d4fd4365eb1b3385ced0d523" datatype="html">
         <source>You don't have plugins installed yet.</source>
-        <target state="new">You don't have plugins installed yet.</target>
+        <target state="translated">حاليا ليس لديك أية إضافة منصّبة.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7281,7 +7281,7 @@
       </trans-unit>
       <trans-unit id="ad387936929a1607027548688f55b9b643eee8b9" datatype="html">
         <source>Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></source>
-        <target state="new">Update to <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
+        <target state="translated">تحديث إلى <x id="INTERPOLATION" equiv-text="{{version}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7289,7 +7289,7 @@
       </trans-unit>
       <trans-unit id="ea0bd1b707d1bccaf650b085a8d3c6b525b2a702" datatype="html">
         <source>Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
-        <target state="new">Do you really want to uninstall <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <target state="translated">أتريد حقا إلغاء تثبيت <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7313,7 +7313,7 @@
       </trans-unit>
       <trans-unit id="53dd049a77e37ce7abc10e174904233f8788464d" datatype="html">
         <source>The plugin index is not available. Please retry later.</source>
-        <target state="new">The plugin index is not available. Please retry later.</target>
+        <target state="translated">قائمة الإضافات غير متوفرة حاليا. يرجى إعادة المحاولة لاحقا.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7329,7 +7329,7 @@
       </trans-unit>
       <trans-unit id="c7f120dadf78873a57fd9451bafc4653a548355b" datatype="html">
         <source>Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</source>
-        <target state="new">Install <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>?</target>
+        <target state="translated">تنصيب <x id="INTERPOLATION" equiv-text="{{pluginName}}"/>؟</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7345,7 +7345,7 @@
       </trans-unit>
       <trans-unit id="3554590f772dd4b9b4cc7d282ba00cdac8ad0d12" datatype="html">
         <source>Settings updated.</source>
-        <target state="new">Settings updated.</target>
+        <target state="translated">تم تحديث الإعدادات.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7353,7 +7353,7 @@
       </trans-unit>
       <trans-unit id="7099af5a120571be073bcfb7babafb38e91a3b50" datatype="html">
         <source>Plugins</source>
-        <target state="new">Plugins</target>
+        <target state="translated">الإضافات</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7361,7 +7361,7 @@
       </trans-unit>
       <trans-unit id="60c855c323706a04ccd2ff22d634bde9b6233bbf" datatype="html">
         <source>Themes</source>
-        <target state="new">Themes</target>
+        <target state="translated">القوالب</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/shared/plugin-api.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -7385,7 +7385,7 @@
       </trans-unit>
       <trans-unit id="3c91a10e15c752aaaf92c736b380efc5ba160b8f" datatype="html">
         <source>Last week</source>
-        <target state="new">Last week</target>
+        <target state="translated">الأسبوع الماضي</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7393,7 +7393,7 @@
       </trans-unit>
       <trans-unit id="76f7f502edd5c7a38bbf2a262db38f90cc440441" datatype="html">
         <source>Last day</source>
-        <target state="new">Last day</target>
+        <target state="translated">البارحة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7401,7 +7401,7 @@
       </trans-unit>
       <trans-unit id="9c152780247b402c410b861e521967dca7d9fd10" datatype="html">
         <source>Last hour</source>
-        <target state="new">Last hour</target>
+        <target state="translated">الساعة الماضية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7437,7 +7437,7 @@
       </trans-unit>
       <trans-unit id="36c42d3ca8973e91a59cbfda455d5a2e60ee460d" datatype="html">
         <source>Standard logs</source>
-        <target state="new">Standard logs</target>
+        <target state="translated">سجلات عادية</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7469,7 +7469,7 @@
       </trans-unit>
       <trans-unit id="2dbda576172f583154031550e251e5a1e49207b2" datatype="html">
         <source>Update user password</source>
-        <target state="new">Update user password</target>
+        <target state="translated">تحديث الكلمة السرية للمستخدم</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8980,7 +8980,7 @@
       </trans-unit>
       <trans-unit id="1d973f9ee250b94d31ceb5c763edcd9b255ea524" datatype="html">
         <source>You must agree with the instance terms in order to register on it.</source>
-        <target state="new">You must agree with the instance terms in order to register on it.</target>
+        <target state="translated">يجب عليك قبول شروط مثيل الخادم قبل أن تنشئ حسابًا عليه.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/form-validators/user-validators.service.ts</context>
           <context context-type="linenumber">1</context>
