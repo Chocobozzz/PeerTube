@@ -17,6 +17,18 @@ Be part of a network of multiple small federated, interoperable video hosting pr
 </p>
 
 <p align="center">
+:rocket::rocket::rocket:
+</p>
+
+<p align="center">
+<strong>Check, share and support PeerTube's v3 roadmap on https://joinpeertube.org/roadmap</strong>
+</p>
+
+<p align="center">
+:rocket: :rocket: :rocket:
+</p>
+
+<p align="center">
   <strong>Developed with &#10084; by <a href="https://framasoft.org">Framasoft</a></strong>
 </p>
 
