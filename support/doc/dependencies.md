@@ -36,9 +36,36 @@
 
 ```
 sudo apt update
-sudo apt install nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
+sudo apt install varnish nginx ffmpeg postgresql postgresql-contrib openssl g++ make redis-server git python-dev
 ffmpeg -version # Should be >= 3.x
 g++ -v # Should be >= 5.x
+```
+
+Configure Varnish for caching peertube in memory to improve website performance.
+
+```
+sudo vim /etc/default/varnish
+```
+
+serve varnish on 6081 so to use it at upstream to serve peertube on port 443 through varnish in nginx
+```
+DAEMON_OPTS="-a :6081 \
+             -T localhost:6082 \
+             -f /etc/varnish/default.vcl \
+             -S /etc/varnish/secret \
+             -s malloc,1G"
+```
+
+```
+sudo vim /etc/varnish/default.vcl
+```
+
+serve peertube with nginx on 8888 instead of 443, so that varnish can serve it out of memory not having to wait for hard drives to serve content.
+```
+backend default {
+    .host = "127.0.0.1";
+    .port = "8888";
+}
 ```
 
 If you still have a 2.x version of FFmpeg on Ubuntu:
