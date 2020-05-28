@@ -172,6 +172,13 @@ async function getConfig (req: express.Request, res: express.Response) {
           indexUrl: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
         }
       }
+    },
+
+    broadcastMessage: {
+      enabled: CONFIG.BROADCAST_MESSAGE.ENABLED,
+      message: CONFIG.BROADCAST_MESSAGE.MESSAGE,
+      level: CONFIG.BROADCAST_MESSAGE.LEVEL,
+      dismissable: CONFIG.BROADCAST_MESSAGE.DISMISSABLE
     }
   }
 
@@ -432,6 +439,12 @@ function customConfig (): CustomConfig {
           indexUrl: CONFIG.FOLLOWINGS.INSTANCE.AUTO_FOLLOW_INDEX.INDEX_URL
         }
       }
+    },
+    broadcastMessage: {
+      enabled: CONFIG.BROADCAST_MESSAGE.ENABLED,
+      message: CONFIG.BROADCAST_MESSAGE.MESSAGE,
+      level: CONFIG.BROADCAST_MESSAGE.LEVEL,
+      dismissable: CONFIG.BROADCAST_MESSAGE.DISMISSABLE
     }
   }
 }

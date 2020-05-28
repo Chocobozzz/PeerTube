@@ -55,6 +55,11 @@ const customConfigUpdateValidator = [
 
   body('theme.default').custom(v => isThemeNameValid(v) && isThemeRegistered(v)).withMessage('Should have a valid theme'),
 
+  body('broadcastMessage.enabled').isBoolean().withMessage('Should have a valid broadcast message enabled boolean'),
+  body('broadcastMessage.message').exists().withMessage('Should have a valid broadcast message'),
+  body('broadcastMessage.level').exists().withMessage('Should have a valid broadcast level'),
+  body('broadcastMessage.dismissable').exists().withMessage('Should have a valid broadcast dismissable boolean'),
+
   (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking customConfigUpdateValidator parameters', { parameters: req.body })
 

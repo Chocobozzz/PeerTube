@@ -215,6 +215,12 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
             indexUrl: this.customConfigValidatorsService.INDEX_URL
           }
         }
+      },
+      broadcastMessage: {
+        enabled: null,
+        level: null,
+        dismissable: null,
+        message: null
       }
     }
 

@@ -6,6 +6,7 @@ import { buildPath, parseBytes, parseDurationToMs, root } from '../helpers/core-
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
 import * as bytes from 'bytes'
 import { VideoRedundancyConfigFilter } from '@shared/models/redundancy/video-redundancy-config-filter.type'
+import { BroadcastMessageLevel } from '@shared/models/server'
 
 // Use a variable to reload the configuration if we need
 let config: IConfig = require('config')
@@ -285,6 +286,12 @@ const CONFIG = {
   },
   THEME: {
     get DEFAULT () { return config.get<string>('theme.default') }
+  },
+  BROADCAST_MESSAGE: {
+    get ENABLED () { return config.get<boolean>('broadcast_message.enabled') },
+    get MESSAGE () { return config.get<string>('broadcast_message.message') },
+    get LEVEL () { return config.get<BroadcastMessageLevel>('broadcast_message.level') },
+    get DISMISSABLE () { return config.get<boolean>('broadcast_message.dismissable') }
   }
 }
 

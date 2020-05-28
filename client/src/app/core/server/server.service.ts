@@ -21,7 +21,7 @@ export class ServerService {
 
   private static CONFIG_LOCAL_STORAGE_KEY = 'server-config'
 
-  configReloaded = new Subject<void>()
+  configReloaded = new Subject<ServerConfig>()
 
   private localeObservable: Observable<any>
   private videoLicensesObservable: Observable<VideoConstant<number>[]>
@@ -139,6 +139,12 @@ export class ServerService {
           indexUrl: 'https://instances.joinpeertube.org'
         }
       }
+    },
+    broadcastMessage: {
+      enabled: false,
+      message: '',
+      level: 'info',
+      dismissable: false
     }
   }
 
@@ -162,6 +168,11 @@ export class ServerService {
   resetConfig () {
     this.configLoaded = false
     this.configReset = true
+
+    // Notify config update
+    this.getConfig().subscribe(() => {
+      // empty, to fire a reset config event
+    })
   }
 
   getConfig () {
@@ -175,9 +186,9 @@ export class ServerService {
                                       this.config = config
                                       this.configLoaded = true
                                     }),
-                                    tap(() => {
+                                    tap(config => {
                                       if (this.configReset) {
-                                        this.configReloaded.next()
+                                        this.configReloaded.next(config)
                                         this.configReset = false
                                       }
                                     }),

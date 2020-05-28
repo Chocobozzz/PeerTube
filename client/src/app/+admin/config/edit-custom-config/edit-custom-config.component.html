@@ -276,6 +276,58 @@
           </div>
         </div>
 
+        <div class="form-row mt-4"> <!-- broadcast grid -->
+          <div class="form-group col-12 col-lg-4 col-xl-3">
+            <div i18n class="inner-form-title">BROADCAST MESSAGE</div>
+            <div i18n class="inner-for-description">
+              Display a message on your instance
+            </div>
+          </div>
+
+          <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
+
+            <ng-container formGroupName="broadcastMessage">
+
+              <div class="form-group">
+                <my-peertube-checkbox
+                  inputName="broadcastMessageEnabled" formControlName="enabled"
+                  i18n-labelText labelText="Enable broadcast message"
+                ></my-peertube-checkbox>
+              </div>
+
+              <div class="form-group">
+                <my-peertube-checkbox
+                  inputName="broadcastMessageDismissable" formControlName="dismissable"
+                  i18n-labelText labelText="Allow users to dismiss the broadcast message "
+                ></my-peertube-checkbox>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="broadcastMessageLevel">Broadcast message level</label>
+                <div class="peertube-select-container">
+                  <select id="broadcastMessageLevel" formControlName="level" class="form-control">
+                    <option value="info">info</option>
+                    <option value="warning">warning</option>
+                    <option value="error">error</option>
+                  </select>
+                </div>
+                <div *ngIf="formErrors.broadcastMessage.level" class="form-error">{{ formErrors.broadcastMessage.level }}</div>
+              </div>
+
+              <div class="form-group">
+                <label i18n for="broadcastMessageMessage">Message</label><my-help helpType="markdownText"></my-help>
+                <my-markdown-textarea
+                  name="broadcastMessageMessage" formControlName="message" textareaMaxWidth="500px"
+                  [classes]="{ 'input-error': formErrors['broadcastMessage.message'] }"
+                ></my-markdown-textarea>
+                <div *ngIf="formErrors.broadcastMessage.message" class="form-error">{{ formErrors.broadcastMessage.message }}</div>
+              </div>
+
+            </ng-container>
+
+          </div>
+        </div>
+
         <div class="form-row mt-4"> <!-- new users grid -->
           <div class="form-group col-12 col-lg-4 col-xl-3">
             <div i18n class="inner-form-title">NEW USERS</div>
@@ -801,8 +853,9 @@
   <div class="form-row mt-4"> <!-- submit placement block -->
     <div class="col-md-7 col-xl-5"></div>
     <div class="col-md-5 col-xl-5">
+      <span class="form-error submit-error" i18n *ngIf="!form.valid">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</span>
+
       <input (click)="formValidated()" type="submit" i18n-value value="Update configuration" [disabled]="!form.valid">
-      <span class="form-error" i18n *ngIf="!form.valid">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</span>
     </div>
   </div>
 </form>
