@@ -380,7 +380,7 @@
       </trans-unit>
       <trans-unit id="dde6b6ff4de622914ba78a2b584d070852eb710d" datatype="html">
         <source><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> mentioned you on <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>video <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target><x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.comment.account.displayName }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> ibder-ik.ikem-id deg <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>tvidyut <x id="INTERPOLATION_1" equiv-text="{{ notification.comment.video.name }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">133</context>
@@ -412,7 +412,7 @@
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">22</context>
@@ -420,7 +420,7 @@
       </trans-unit>
       <trans-unit id="b2b638f4333842009c258a23e59dbe4160d1e566" datatype="html">
         <source>Save to</source>
-        <target/>
+        <target>Sekles ɣer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">4</context>
@@ -428,7 +428,7 @@
       </trans-unit>
       <trans-unit id="24813b8a3e45f0b57136c18d003027262cfe2d1f" datatype="html">
         <source>Options</source>
-        <target>Options</target>
+        <target>Iɣewwaṛen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">9</context>
@@ -440,7 +440,7 @@
       </trans-unit>
       <trans-unit id="85e5d1de15d23cde43c530e3740a2a61aed24c2d" datatype="html">
         <source>Start at</source>
-        <target/>
+        <target>Bdu deg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">17</context>
@@ -456,7 +456,7 @@
       </trans-unit>
       <trans-unit id="4d20563f7e338a1d09eb756054564ccf7c6a30ef" datatype="html">
         <source>Stop at</source>
-        <target/>
+        <target>Ḥbes deg</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">31</context>
@@ -472,7 +472,7 @@
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
         <source>Search playlists</source>
-        <target/>
+        <target>Nadi tibdarin n tɣuri</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">45</context>
@@ -480,7 +480,7 @@
       </trans-unit>
       <trans-unit id="19fc45e7e0cab63a8c4422ea7158bf5c6228cee4" datatype="html">
         <source>Create a private playlist</source>
-        <target/>
+        <target>Rnu tabdert n tɣuri tusligt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">65</context>
@@ -564,7 +564,7 @@
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target/>
+        <target>Iduzwilen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -592,7 +592,7 @@
       </trans-unit>
       <trans-unit id="be745b3dc0df310871766eb6c8f78c3ce652a2b4" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></source>
-        <target/>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">49</context>
@@ -632,7 +632,7 @@
       </trans-unit>
       <trans-unit id="ac3a02ecd20f41278f1ef7c03f45c1117b4b796d" datatype="html">
         <source>Torrent (.torrent file)</source>
-        <target/>
+        <target>Torrent (afaylu .torrent)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">92</context>
@@ -752,7 +752,7 @@
       </trans-unit>
       <trans-unit id="f672385c803647b063687d3c912e2ce5738b51c8" datatype="html">
         <source>Blacklist video</source>
-        <target/>
+        <target>Gar tavidyut deg tebdert taberkant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">3</context>
@@ -836,7 +836,7 @@
       </trans-unit>
       <trans-unit id="4999ffd919bb9af482aa4c53badd6cd654468582" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </source>
-        <target/>
+        <target><x id="INTERPOLATION" equiv-text="{{ playlist.videoChannelBy }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">22</context>
@@ -7011,7 +7011,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf" datatype="html">
-        <source></source>
+        <source/>
         <target/>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+signup/+verify-account/verify-account-email/verify-account-email.component.html</context>
