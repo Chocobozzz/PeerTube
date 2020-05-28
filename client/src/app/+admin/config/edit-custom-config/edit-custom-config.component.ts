@@ -115,6 +115,7 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
         isNSFW: false,
         defaultNSFWPolicy: null,
+        federateUnlistedVideos: true,
 
         terms: null,
         codeOfConduct: null,

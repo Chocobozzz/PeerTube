@@ -325,6 +325,7 @@ instance:
   # By default, "do_not_list" or "blur" or "display" NSFW videos
   # Could be overridden per user with a setting
   default_nsfw_policy: 'do_not_list'
+  federate_unlisted_videos: true
 
   customizations:
     javascript: '' # Directly your JavaScript code (without <script> tags). Will be eval at runtime

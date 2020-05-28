@@ -246,6 +246,7 @@ const CONFIG = {
     get IS_NSFW () { return config.get<boolean>('instance.is_nsfw') },
     get DEFAULT_CLIENT_ROUTE () { return config.get<string>('instance.default_client_route') },
     get DEFAULT_NSFW_POLICY () { return config.get<NSFWPolicyType>('instance.default_nsfw_policy') },
+    get FEDERATE_UNLISTED_VIDEOS () { return config.get<boolean>('instance.federate_unlisted_videos') },
     CUSTOMIZATIONS: {
       get JAVASCRIPT () { return config.get<string>('instance.customizations.javascript') },
       get CSS () { return config.get<string>('instance.customizations.css') }

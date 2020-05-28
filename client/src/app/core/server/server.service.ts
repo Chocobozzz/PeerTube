@@ -42,6 +42,7 @@ export class ServerService {
       defaultClientRoute: '',
       isNSFW: false,
       defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
+      federateUnlistedVideos: true,
       customizations: {
         javascript: '',
         css: ''

@@ -21,6 +21,7 @@ export interface CustomConfig {
     isNSFW: boolean
     defaultClientRoute: string
     defaultNSFWPolicy: NSFWPolicyType
+    federateUnlistedVideos: boolean
     customizations: {
       javascript?: string
       css?: string
