@@ -2753,7 +2753,7 @@
       </trans-unit>
       <trans-unit id="3e10c53d0372db827bf38571e56d166f1df963bf" datatype="html">
         <source>Display player controls</source>
-        <target state="new">Display player controls</target>
+        <target state="translated">Erreproduktorearen kontrolak erakutsi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="3c4c080864b313cfdff5fdea6aae5da276246d99" datatype="html">
@@ -2782,7 +2782,7 @@
       </trans-unit>
       <trans-unit id="2dd4add38e83d8ec58e37735e76090e9738c974a" datatype="html">
         <source>This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </source>
-        <target state="new">This video will be published on <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/>. </target>
+        <target state="translated">Bideo hau <x id="INTERPOLATION" equiv-text="{{ video.scheduledUpdate.updateAt | date: 'full' }}"/> argitaratua izango da. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">27</context>
@@ -2936,7 +2936,7 @@
       </trans-unit>
       <trans-unit id="57bfd54c230fc20caff1f0b321ad42be3bf859a6" datatype="html">
         <source>Origin instance</source>
-        <target state="new">Origin instance</target>
+        <target state="translated">Jatorrizko instantzia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.html</context>
           <context context-type="linenumber">192</context>
@@ -3291,7 +3291,7 @@
       </trans-unit>
       <trans-unit id="9c9e0eb0ce8abea8b4c7c5dbb6e80a9a5f5b4193" datatype="html">
         <source>Open actor page in a new tab</source>
-        <target state="new">Open actor page in a new tab</target>
+        <target state="translated">Ireki aktorearen orria fitxa berri batean</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">33</context>
@@ -3332,12 +3332,12 @@
       </trans-unit>
       <trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="new">No follower found matching current filters.</target>
+        <target state="translated">Ez da iragazkiekin bat datorren jarraitzailerik aurkitu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="new">Your instance doesn't have any follower.</target>
+        <target state="translated">Zure instantziak ez du jarraitzailerik.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
@@ -3371,7 +3371,7 @@
       </trans-unit>
       <trans-unit id="8cffa679dff97a096d44fca9348eeaa1867d40aa" datatype="html">
         <source>Open instance in a new tab</source>
-        <target state="new">Open instance in a new tab</target>
+        <target state="translated">Zabaldu instantzia fitxa berri batean</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">37</context>
@@ -3383,7 +3383,7 @@
       </trans-unit>
       <trans-unit id="d9b4b939363bf385cbb7828c1535f2e2a5e0d362" datatype="html">
         <source>No host found matching current filters.</source>
-        <target state="new">No host found matching current filters.</target>
+        <target state="translated">Ez da aurkitu iragazkiekin bat datorren ostalaririk.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">62</context>
@@ -3391,7 +3391,7 @@
       </trans-unit>
       <trans-unit id="6f635f2eba7fe60e4266192fbfef20948fbe3b0a" datatype="html">
         <source>Your instance is not following anyone.</source>
-        <target state="new">Your instance is not following anyone.</target>
+        <target state="translated">Zure instantziak ez du besterik jarraitzen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">63</context>
@@ -3407,12 +3407,12 @@
       </trans-unit>
       <trans-unit id="f697b4a4f0b6413284269de48a9e1a43a362646f" datatype="html">
         <source>Follow domains</source>
-        <target state="new">Follow domains</target>
+        <target state="translated">Jarraitu domeinuak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="new">My videos duplicated by remote instances</target>
+        <target state="translated">Urruneko instantziek bikoiztutako nire bideoak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">7</context>
@@ -3420,7 +3420,7 @@
       </trans-unit>
       <trans-unit id="cb2281bf5c9f420429bbd5c5473ee7aacc879e1e" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="new">Remote videos duplicated by my instance</target>
+        <target state="translated">Nire instantziak bikoiztutako urruneko bideoak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -3464,9 +3464,7 @@
       </trans-unit>
       <trans-unit id="8861667a66c0000e6ae144520026d55123cea117" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="new">
-              If you leave the password empty, an email will be sent to the user.
-            </target>
+        <target state="translated">Pasahitza hutsik utziz gero, mezu elektroniko bat bidaliko zaio erabiltzaileari.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">109</context>
@@ -3513,7 +3511,7 @@
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="new">Doesn't need review before a video goes public</target>
+        <target state="translated">Ez da berrikuspenik behar bideo bat publiko egin aurretik</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">168</context>
@@ -3525,25 +3523,25 @@
       </trans-unit>
       <trans-unit id="27a8f947ecc46bcad10d965360f500a14128bd7d" datatype="html">
         <source>Send a link to reset the password by email to the user</source>
-        <target state="new">Send a link to reset the password by email to the user</target>
+        <target state="translated">Erabiltzaileari pasahitza berrezartzeko esteka bidali posta elektronikoz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">193</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">193</context></context-group>
       </trans-unit>
       <trans-unit id="950adafba22e3c85e889f2c38faebe98145bfb7f" datatype="html">
         <source>Ask for new password</source>
-        <target state="new">Ask for new password</target>
+        <target state="translated">Pasahitz berri bat eskatu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">194</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">194</context></context-group>
       </trans-unit>
       <trans-unit id="e6a48b1ed6160a99fba3a1607e27e9e93a4f4244" datatype="html">
         <source>Manually set the user password</source>
-        <target state="new">Manually set the user password</target>
+        <target state="translated">Ezarri erabiltzailearen pasahitza eskuz</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">198</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">198</context></context-group>
       </trans-unit>
       <trans-unit id="2aba1e87039819aca3b70faa9aa848c12bf139ca" datatype="html">
         <source>Show</source>
-        <target state="new">Show</target>
+        <target state="translated">Erakutsi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.html</context>
           <context context-type="linenumber">10</context>
@@ -3551,7 +3549,7 @@
       </trans-unit>
       <trans-unit id="1eede69e18c5ac9c0b0295b72cabb7e64e029e74" datatype="html">
         <source>Hide</source>
-        <target state="new">Hide</target>
+        <target state="translated">Ezkutatu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3601,7 +3599,7 @@
       </trans-unit>
       <trans-unit id="ed64ec2b14251cfbe9ab28abde51d3f052fde1e7" datatype="html">
         <source>Open account in a new tab</source>
-        <target state="new">Open account in a new tab</target>
+        <target state="translated">Zabaldu kontua fitxa berri batean</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">69</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">57</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context><context context-type="linenumber">31</context></context-group>
@@ -3695,7 +3693,7 @@
       </trans-unit>
       <trans-unit id="b7237eade678ae47485fbd27ec7f8c1079a8c6b7" datatype="html">
         <source>Total size</source>
-        <target state="new">Total size</target>
+        <target state="translated">Tamaina guztira</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="e536fc8b9a652aa7f7b87193cdfa143481da3bad" datatype="html">
@@ -3754,7 +3752,7 @@
       </trans-unit>
       <trans-unit id="1c16132124fd96151ccf858aad5a98108df6c93a" datatype="html">
         <source>Video was blacklisted</source>
-        <target state="new">Video was blacklisted</target>
+        <target state="translated">Bideoa zerrenda beltzean sartu da</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">50</context>
@@ -3791,7 +3789,7 @@
       </trans-unit>
       <trans-unit id="88a2cc2d9ca0506186bbfab6c4e0c32c44a9ee98" datatype="html">
         <source>No blacklisted video found matching current filters.</source>
-        <target state="new">No blacklisted video found matching current filters.</target>
+        <target state="translated">Ez dago iragazkiekin bat datorren bideorik aurkitu zerrenda beltzean.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">93</context>
@@ -3799,7 +3797,7 @@
       </trans-unit>
       <trans-unit id="294036a9ad4dd71531d3032678d9ff00d8ff9ebb" datatype="html">
         <source>No blacklisted video found.</source>
-        <target state="new">No blacklisted video found.</target>
+        <target state="translated">Ez da aurkitu bideorik zerrenda beltzean.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context>
           <context context-type="linenumber">94</context>
@@ -3841,7 +3839,7 @@
       </trans-unit>
       <trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
         <source>Advanced report filters</source>
-        <target state="new">Advanced report filters</target>
+        <target state="translated">Txosten-iragazki aurreratuak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3849,7 +3847,7 @@
       </trans-unit>
       <trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
         <source>Unsolved reports</source>
-        <target state="new">Unsolved reports</target>
+        <target state="translated">Ebatzi gabeko txostenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -3857,7 +3855,7 @@
       </trans-unit>
       <trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
         <source>Accepted reports</source>
-        <target state="new">Accepted reports</target>
+        <target state="translated">Onartutako txostenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -3865,7 +3863,7 @@
       </trans-unit>
       <trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
         <source>Refused reports</source>
-        <target state="new">Refused reports</target>
+        <target state="translated">Baztertutako txostenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3873,7 +3871,7 @@
       </trans-unit>
       <trans-unit id="1c33f537774e1418d848442439b6c0fc62d9af47" datatype="html">
         <source>Reports with blacklisted videos</source>
-        <target state="new">Reports with blacklisted videos</target>
+        <target state="translated">Zerrenda beltzeko bideoen txostenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3881,7 +3879,7 @@
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="new">Reports with deleted videos</target>
+        <target state="translated">Ezabatutako bideoen txostenak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3908,7 +3906,7 @@
       </trans-unit>
       <trans-unit id="dee48932053451ee2dfafe5500a5262cd4220d5e" datatype="html">
         <source>This video has been reported multiple times.</source>
-        <target state="new">This video has been reported multiple times.</target>
+        <target state="translated">Bideo hau hainbat alditan salatu da.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">80</context>
@@ -3928,7 +3926,7 @@
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
         <source>Video was deleted</source>
-        <target state="new">Video was deleted</target>
+        <target state="translated">Bideoa ezabatu da</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -3952,7 +3950,7 @@
       </trans-unit>
       <trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
         <source>Open video in a new tab</source>
-        <target state="new">Open video in a new tab</target>
+        <target state="translated">Zabaldu bideoa fitxa berri baten</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-blacklist-list/video-blacklist-list.component.html</context><context context-type="linenumber">42</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">74</context></context-group>
@@ -4034,7 +4032,7 @@
       </trans-unit>
       <trans-unit id="9da0107a35751e722c8b4bca7636fc7645dbdbdc" datatype="html">
         <source>Updated</source>
-        <target state="new">Updated</target>
+        <target state="translated">Eguneratua</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">47</context>
@@ -4051,7 +4049,7 @@
       </trans-unit>
       <trans-unit id="a3ae5c724857d00c006273db314041ab0664c269" datatype="html">
         <source>Mute domain</source>
-        <target state="new">Mute domain</target>
+        <target state="translated">Domeinua mututu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
@@ -4085,7 +4083,7 @@
       </trans-unit>
       <trans-unit id="4cac34ce105daa25964c217fdf0515a0a6ee5db9" datatype="html">
         <source>No server found matching current filters.</source>
-        <target state="new">No server found matching current filters.</target>
+        <target state="translated">Ez dago iragazkiekin bat datorren zerbitzaririk.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">51</context>
@@ -4093,7 +4091,7 @@
       </trans-unit>
       <trans-unit id="0ba22bd964baaf0c2f85d6731fccca31dbf06dae" datatype="html">
         <source>No server found.</source>
-        <target state="new">No server found.</target>
+        <target state="translated">Ez da zerbitzaririk aurkitu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">52</context>
@@ -4109,14 +4107,12 @@
       </trans-unit>
       <trans-unit id="2aebea85561b74dd33ae2481bb942b8c4beb5524" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="new">
-      It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.
-    </target>
+        <target state="translated">Badirudi ez zaudela HTTPS zerbitzari batean. Zure web zerbitzariak TLS aktibatuta eduki behar du zerbitzariak jarraitu ahal izateko.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source>
-        <target state="new">Mute domains</target>
+        <target state="translated">Mututu domeinuak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92">
@@ -4130,7 +4126,7 @@
       </trans-unit>
       <trans-unit id="33c4091a2a2438ba655caa47ede7f7a82f5f0297" datatype="html">
         <source>No account found matching current filters.</source>
-        <target state="new">No account found matching current filters.</target>
+        <target state="translated">Ez dago iragazkiekin bat datorren konturik.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">58</context>
@@ -4138,7 +4134,7 @@
       </trans-unit>
       <trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
         <source>No account found.</source>
-        <target state="new">No account found.</target>
+        <target state="translated">Ez da konturik aurkitu.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">59</context>
@@ -4179,7 +4175,7 @@
       </trans-unit>
       <trans-unit id="82c6fc1dfd67a87c2a9f54c221907d0d61c63b88" datatype="html">
         <source>Users can resolve distant content</source>
-        <target state="new">Users can resolve distant content</target>
+        <target state="translated">Erabiltzaileek urrutitik ebatz dezakete edukia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">100</context>
@@ -4187,12 +4183,12 @@
       </trans-unit>
       <trans-unit id="1cb86e649ad2e5cfc86efb2d28c06b1d959f8aa6" datatype="html">
         <source>Homepage</source>
-        <target state="new">Homepage</target>
+        <target state="translated">Hasiera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/app.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="4962915f14d9b61bdd1b96b81c27e3f9d8910768" datatype="html">
         <source>Go to the plugin homepage</source>
-        <target state="new">Go to the plugin homepage</target>
+        <target state="translated">Plugin-aren hasiera orrialdera joan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">17</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-list-installed/plugin-list-installed.component.html</context><context context-type="linenumber">21</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">40</context></context-group>
@@ -4216,7 +4212,7 @@
       </trans-unit>
       <trans-unit id="fcef699ec12dbd6fcf9881d527af2fd775ccfdc7" datatype="html">
         <source>To load your new installed plugins or themes, refresh the page.</source>
-        <target state="new">To load your new installed plugins or themes, refresh the page.</target>
+        <target state="translated">Instalatu berri diren plugin edo themeak ikusteko, berritu orria.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">9</context>
@@ -4246,7 +4242,7 @@
       </trans-unit>
       <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207" datatype="html">
         <source>No results.</source>
-        <target state="new">No results.</target>
+        <target state="translated">Ez dago emaitzarik.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">28</context>
@@ -4254,7 +4250,7 @@
       </trans-unit>
       <trans-unit id="1e395fc65f656ebaf9384ca5452f0cc4e9512811" datatype="html">
         <source>Go to the plugin npm package</source>
-        <target state="new">Go to the plugin npm package</target>
+        <target state="translated">Joan plugin-aren npm paketera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44</context>
@@ -4267,7 +4263,7 @@
       </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd" datatype="html">
         <source>System</source>
-        <target state="new">System</target>
+        <target state="translated">Sistema</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.component.html</context>
           <context context-type="linenumber">2</context>
@@ -4275,7 +4271,7 @@
       </trans-unit>
       <trans-unit id="43f1cc191ebc0b8ce89f6916aa634f5a57158798" datatype="html">
         <source>Jobs</source>
-        <target state="new">Jobs</target>
+        <target state="translated">Lanak</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/system.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4299,12 +4295,12 @@
       </trans-unit>
       <trans-unit id="555ae4dbd23d5056aeafc8f3f31ebbab170bb917" datatype="html">
         <source>Job type</source>
-        <target state="new">Job type</target>
+        <target state="translated">Lan mota</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="723c95b5d673a557fa120aa65814a9f05c03e610" datatype="html">
         <source>Job state</source>
-        <target state="new">Job state</target>
+        <target state="translated">Lanaren egoera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="f61c6867295f3b53d23557021f2f4e0aa1d0b8fc">
@@ -4317,12 +4313,12 @@
       </trans-unit>
       <trans-unit id="c8d1785038d461ec66b5799db21864182b35900a" datatype="html">
         <source>Refresh</source>
-        <target state="new">Refresh</target>
+        <target state="translated">Berritu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="94516fa213706c67ce5a5b5765681d7fb032033a" datatype="html">
         <source>Loading...</source>
-        <target state="new">Loading...</target>
+        <target state="translated">Kargatzen...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/system/logs/logs.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4338,7 +4334,7 @@
       </trans-unit>
       <trans-unit id="3441b78841dad60f36576d99e38241ae7fefa933" datatype="html">
         <source>INSTANCE</source>
-        <target state="new">INSTANCE</target>
+        <target state="translated">INSTANTZIA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59">
@@ -4361,12 +4357,12 @@
       </trans-unit>
       <trans-unit id="f14028bddcf7760c635464db8a9d2f69afd81b92" datatype="html">
         <source>Main instance categories</source>
-        <target state="new">Main instance categories</target>
+        <target state="translated">Instantziako kategoria nagusiak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="f871b41bfbdb193507cce2cd848c2d02bde77a03" datatype="html">
         <source>No results found</source>
-        <target state="new">No results found</target>
+        <target state="translated">Ez da emaitzarik aurkitu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">53</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">65</context></context-group>
@@ -4383,27 +4379,27 @@
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="new">When on a video page, directly start playing the video.</target>
+        <target state="translated">Bideo-orri batean zaudenean, hasi bideoa zuzenean erreproduzitzen.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="new">Automatically play videos</target>
+        <target state="translated">Bideoak automatikoki erreproduzitu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="new">When a video ends, follow up with the next suggested video.</target>
+        <target state="translated">Bideo bat amaitzen denean, jarraitu iradokitako hurrengo bideoarekin.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="new">Automatically start playing the next video</target>
+        <target state="translated">Hurrengo bideoa automatikoki erreproduzitzen hasi</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629" datatype="html">
         <source>Main languages you/your moderators speak</source>
-        <target state="new">Main languages you/your moderators speak</target>
+        <target state="translated">Zuk eta zure moderatzaileek hitz egiten dituzuen hizkuntza nagusiak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
