@@ -75,6 +75,31 @@ server {
     proxy_read_timeout          600;
     send_timeout                600;
   }
+
+  # Websocket tracker
+  location /tracker/socket {
+    # Peers send a message to the tracker every 15 minutes
+    # Don't close the websocket before this time
+    proxy_read_timeout 1200s;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_pass http://127.0.0.1:9000;
+  }
+
+  location /socket.io {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+
+    proxy_pass http://127.0.0.1:9000; 
+
+    # enable WebSockets
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+  }
 }
 
 server {
@@ -185,30 +210,5 @@ server {
     rewrite ^/static/streaming-playlists/(.*)$ /streaming-playlists/$1 break;
 
     try_files $uri /;
-  }
-
-  # Websocket tracker
-  location /tracker/socket {
-    # Peers send a message to the tracker every 15 minutes
-    # Don't close the websocket before this time
-    proxy_read_timeout 1200s;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-    proxy_http_version 1.1;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-    proxy_pass http://127.0.0.1:9000;
-  }
-
-  location /socket.io {
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header Host $host;
-
-    proxy_pass http://127.0.0.1:9000;
-
-    # enable WebSockets
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
   }
 }
