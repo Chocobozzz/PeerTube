@@ -421,7 +421,7 @@
       </trans-unit>
       <trans-unit id="19fc45e7e0cab63a8c4422ea7158bf5c6228cee4" datatype="html">
         <source>Create a private playlist</source>
-        <target state="translated">Créer une playlist privée</target>
+        <target state="translated">Créer une liste de lecture privée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">65</context>
@@ -536,7 +536,7 @@
       </trans-unit>
       <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target state="translated">Votre rapport sera envoyé aux modérateurs de <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> et sera également envoyé à l'instance hébergeant la vidéo (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
+        <target state="translated">Votre signalement sera envoyé aux modérateurs de <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> et également envoyé à l'instance hébergeant la vidéo (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>)<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">9</context>
@@ -654,7 +654,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
-        <target>Mise à jour <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
+        <target><x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/> mise à jour</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -1409,7 +1409,7 @@
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target>Paramétrer votre compte, gérer vos playlists, découvrir des applications tierces...</target>
+        <target>Paramétrer votre compte, gérer vos listes de lecture, découvrir des applications tierces...</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -2841,7 +2841,7 @@
       </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
         <source>Muted</source>
-        <target>Silencieux</target>
+        <target>Silencé</target>
         <context-group name="null">
           <context context-type="linenumber">20</context>
         </context-group>
@@ -3793,7 +3793,7 @@
       </trans-unit>
       <trans-unit id="23a793ed0df2e10823dd469c5cea9b5c36be8f7e">
         <source>Video abuses</source>
-        <target>Rapports de vidéos</target>
+        <target>Signalements de vidéos</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -3817,7 +3817,7 @@
       </trans-unit>
       <trans-unit id="b1ff109b26ae8f08650415454b9098c43eba2e2c">
         <source>Muted accounts</source>
-        <target>Comptes silencieux</target>
+        <target>Comptes silencés</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -3987,7 +3987,7 @@
       </trans-unit>
       <trans-unit id="f7753a5d0baa909f5860eb49e14c41fc4ae00fb4" datatype="html">
         <source>Advanced report filters</source>
-        <target state="translated">Filtres avancés pour rapports</target>
+        <target state="translated">Filtres avancés pour signalements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">18</context>
@@ -3995,7 +3995,7 @@
       </trans-unit>
       <trans-unit id="006dd388f1d14f58c33fb4ed4bb05a1dfbc42ffa" datatype="html">
         <source>Unsolved reports</source>
-        <target state="translated">Rapports non résolus</target>
+        <target state="translated">Signalements non résolus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">19</context>
@@ -4003,7 +4003,7 @@
       </trans-unit>
       <trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
         <source>Accepted reports</source>
-        <target state="translated">Rapports acceptés</target>
+        <target state="translated">Signalements acceptés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -4011,7 +4011,7 @@
       </trans-unit>
       <trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
         <source>Refused reports</source>
-        <target state="translated">Rapports refusés</target>
+        <target state="translated">Signalements refusés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">21</context>
@@ -4019,7 +4019,7 @@
       </trans-unit>
       <trans-unit id="1c33f537774e1418d848442439b6c0fc62d9af47" datatype="html">
         <source>Reports with blacklisted videos</source>
-        <target state="translated">Rapports dont les vidéos sont sur liste noire</target>
+        <target state="translated">Signalements dont les vidéos sont sur liste noire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -4027,7 +4027,7 @@
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="translated">Rapport dont les vidéos sont supprimées</target>
+        <target state="translated">Signalements dont les vidéos sont supprimées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -4082,7 +4082,7 @@
       </trans-unit>
       <trans-unit id="7c6eca36ec5dfbab2049ec1c58f8b6fe9d71c23b" datatype="html">
         <source>No video abuses found matching current filters.</source>
-        <target state="translated">Aucun rapport de vidéo ne correspond aux critères actuels.</target>
+        <target state="translated">Aucun signalement de vidéo ne correspond aux critères actuels.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -4090,7 +4090,7 @@
       </trans-unit>
       <trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
         <source>No video abuses found.</source>
-        <target state="translated">Aucun rapport de vidéo trouvé.</target>
+        <target state="translated">Aucun signalement de vidéo trouvé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">142</context>
@@ -4128,7 +4128,7 @@
       </trans-unit>
       <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source>
-        <target state="translated">Affiche les rapports <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> à <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> sur <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
+        <target state="translated">Affiche les signalements <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> à <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> sur <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4152,7 +4152,7 @@
       </trans-unit>
       <trans-unit id="4dbabcc6e79125d4b798ba8139a40202db712475" datatype="html">
         <source>Reportee</source>
-        <target state="translated">Rapporté</target>
+        <target state="translated">Cible du rapport</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">27</context>
@@ -4193,7 +4193,7 @@
       </trans-unit>
       <trans-unit id="a3ae5c724857d00c006273db314041ab0664c269" datatype="html">
         <source>Mute domain</source>
-        <target state="translated">Domaine mis en sourdine</target>
+        <target state="translated">Domaine silencé</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
@@ -4208,7 +4208,7 @@
       </trans-unit>
       <trans-unit id="079e99cce11c87b142e80fdd14dae98a61012fc4">
         <source>Muted at <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target>Rendu silencieux <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target>Silencé le <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group name="null">
           <context context-type="linenumber">13</context>
         </context-group>
@@ -4219,7 +4219,7 @@
       </trans-unit>
       <trans-unit id="1f689fada9748a830117f5b429a88ef8629082a8">
         <source>Unmute</source>
-        <target>Réactiver</target>
+        <target>Rétablir</target>
         <context-group name="null">
           <context context-type="linenumber">23</context>
         </context-group>
@@ -4246,7 +4246,7 @@
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</source>
-        <target state="translated">Affiche les instances <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> à <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> sur <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> silenciées</target>
+        <target state="translated">Affiche les instances <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> à <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> sur <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> silencées</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4259,7 +4259,7 @@
       </trans-unit>
       <trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source>
-        <target state="translated">Domaines en sourdine</target>
+        <target state="translated">Domaines silencés</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="29881a45dafbe5aa05cd9d0441a4c0c2fb06df92">
@@ -4289,7 +4289,7 @@
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</source>
-        <target state="translated">Affiche les comptes <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> à <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> sur <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> silenciés</target>
+        <target state="translated">Affiche les comptes <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> à <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> sur <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> silencés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-account-blocklist.component.html</context>
           <context context-type="linenumber">5</context>
@@ -4907,7 +4907,7 @@
       </trans-unit>
       <trans-unit id="89f26f7ae43839fb1c983c6dc82d7bb9f559ac98" datatype="html">
         <source>Incriminated in reports</source>
-        <target state="translated">Incriminé dans des rapports</target>
+        <target state="translated">Incriminé dans des signalements</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -4919,7 +4919,7 @@
       </trans-unit>
       <trans-unit id="374b01a6d0311b4e675834b47db9e34d3fb833e7" datatype="html">
         <source>Authored reports accepted</source>
-        <target state="translated">Rapports émis acceptés</target>
+        <target state="translated">Signalements émis acceptés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -5192,7 +5192,7 @@
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
         <source><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requires ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Generate HLS playlists and fragmented MP4 files resulting in a better playback than with the current default player:<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Resolution change is smoother<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Faster playback in particular with long videos<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>More stable playback (less bugs/infinite loading)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If you also enabled WebTorrent support, it will multiply videos storage by 2<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </source>
-        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requiert ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Génère des paylilst HLS et des MP4 fragmentés résaltant en une meilleur lecture de la vidéo qu'avec le lecteur traditionel :<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Le changement de résolution se fait sans heurts<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Chargement du buffer plus rapide au démarrage de la lecture<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Lecture plus stable (moins de bugs/plus de chargement infini)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si vous avez aussi laissé activé WebTorrent, multiplie par 2 le stockage requis<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </target>
+        <target state="translated"><x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Requiert ffmpeg &gt;= 4.1<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Génère des paylilst HLS et des MP4 fragmentés résaltant en une meilleure lecture de la vidéo qu'avec le lecteur traditionel :<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> <x id="START_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;ul&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Le changement de résolution se fait sans heurts<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Chargement du buffer plus rapide au démarrage de la lecture<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="START_LIST_ITEM" ctype="x-li" equiv-text="&lt;li&gt;"/>Lecture plus stable (moins de bugs/plus de chargement infini)<x id="CLOSE_LIST_ITEM" ctype="x-li" equiv-text="&lt;/li&gt;"/> <x id="CLOSE_UNORDERED_LIST" ctype="x-ul" equiv-text="&lt;/ul&gt;"/> <x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Si vous avez aussi laissé activé WebTorrent, multiplie par 2 le stockage requis<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">638</context></context-group>
       </trans-unit>
       <trans-unit id="94213e7007705d887db1d366b5abc163122d9202" datatype="html">
@@ -5892,7 +5892,7 @@
       </trans-unit>
       <trans-unit id="a85c7d7a8dcc1ae0d2f945d77f4db36f02ead69b" datatype="html">
         <source>Search your playlists</source>
-        <target state="translated">Recherchez vos listes de lecture</target>
+        <target state="translated">Cherchez parmis vos listes de lecture</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-video-playlists/my-account-video-playlists.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="188014887f7188d90b39e41d9606b91c77c17861">
@@ -7261,7 +7261,7 @@
       </trans-unit>
       <trans-unit id="cf70037e436f2c5547cbdf1a02e1348c8642467a" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> muted by your instance.</source>
-        <target state="translated">L'instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> a été silenciée par la votre.</target>
+        <target state="translated">L'instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> a été silencée par la votre.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/instance-blocklist/instance-server-blocklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7285,7 +7285,7 @@
       </trans-unit>
       <trans-unit id="0db581a9122258b2897ad3e915e2d00d7f6d33f5" datatype="html">
         <source>Delete report</source>
-        <target state="translated">Supprimer le rapport</target>
+        <target state="translated">Supprimer le signalement</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7333,7 +7333,7 @@
       </trans-unit>
       <trans-unit id="73b70e37cddaa6494d8a666b6cba90dc80595599">
         <source>Do you really want to delete this abuse report?</source>
-        <target>Voulez-vous vraiment supprimer ce rapport d'abus ?</target>
+        <target>Voulez-vous vraiment supprimer ce signalement ?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7341,7 +7341,7 @@
       </trans-unit>
       <trans-unit id="6a7938b8780c27540ea70cc0f8f4d928c8916cf9">
         <source>Abuse deleted.</source>
-        <target>Rapport supprimé.</target>
+        <target>Signalement supprimé.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -9162,7 +9162,7 @@
       </trans-unit>
       <trans-unit id="8c7d4c82b057aea5dbae811e16935f9bcae4c2aa">
         <source>Report reason cannot be more than 3000 characters long.</source>
-        <target>La raison du signalement ne doit pas être supérieur à 3000 caractères.</target>
+        <target>La raison du signalement ne doit pas être supérieure à 3000 caractères.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10054,7 +10054,7 @@
       </trans-unit>
       <trans-unit id="88aea4de1e1b6ebea31b665286b388d0efb3a84b" datatype="html">
         <source>Mute server</source>
-        <target state="translated">Silencier le serveur</target>
+        <target state="translated">Silencer le serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10062,7 +10062,7 @@
       </trans-unit>
       <trans-unit id="ecc473396f70a6ba41411c9449320f9e8d4cfbcf" datatype="html">
         <source>Server <x id="INTERPOLATION" equiv-text="{{host}}"/> muted by the instance.</source>
-        <target state="translated">Serveur <x id="INTERPOLATION" equiv-text="{{host}}"/> silencié par votre instance.</target>
+        <target state="translated">Serveur <x id="INTERPOLATION" equiv-text="{{host}}"/> silencé par votre instance.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10214,7 +10214,7 @@
       </trans-unit>
       <trans-unit id="a51c59cb5ecb7004a6a8ddd2855b5c52266ad957">
         <source>Unmute this account by your instance</source>
-        <target>Réactiver ce compte pour votre instance</target>
+        <target>Rétablir ce compte pour votre instance</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10246,7 +10246,7 @@
       </trans-unit>
       <trans-unit id="676221cdabd4805901343976988c028dbf71b20a">
         <source>Unmute the instance by your instance</source>
-        <target>Réactiver cette instance pour votre instance</target>
+        <target>Rétablir cette instance pour votre instance</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10527,7 +10527,7 @@
       </trans-unit>
       <trans-unit id="2c33a2bd1e9f50f870366f281ff903cedf9b6a53" datatype="html">
         <source>Mute reporter</source>
-        <target state="translated">Silencier le rapporteur</target>
+        <target state="translated">Silencer le rapporteur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10568,7 +10568,7 @@
       </trans-unit>
       <trans-unit id="f72992030f134408b675152c397f9d0ec00f3b2a">
         <source>Report</source>
-        <target>Signaler</target>
+        <target>Signalement</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10809,7 +10809,7 @@
       </trans-unit>
       <trans-unit id="77fde72fafe6a5272b7d5e3ffedd179ec2d7f8b0" datatype="html">
         <source>Stop looping playlist videos</source>
-        <target state="translated">Arrêter la mise en boucle des vidéos de la liste de lecture</target>
+        <target state="translated">Arrêter la lecture en boucle des vidéos de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10817,7 +10817,7 @@
       </trans-unit>
       <trans-unit id="54428deb88d7bc58721d6839d9406ff607eccef4" datatype="html">
         <source>Loop playlist videos</source>
-        <target state="translated">Vidéos de la liste de lecture en boucle</target>
+        <target state="translated">Lire en boucle les vidéos de la liste de lecture</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch-playlist.component.ts</context>
           <context context-type="linenumber">1</context>
