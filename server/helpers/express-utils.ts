@@ -6,6 +6,7 @@ import { deleteFileAsync, generateRandomString } from './utils'
 import { extname } from 'path'
 import { isArray } from './custom-validators/misc'
 import { CONFIG } from '../initializers/config'
+import { VideoPrivacy } from "../../shared/models";
 
 function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
   if (paramNSFW === 'true') return true
@@ -26,6 +27,19 @@ function buildNSFWFilter (res?: express.Response, paramNSFW?: string) {
 
   // Display all
   return null
+}
+
+function isPrivacyForFederation(privacy: VideoPrivacy) {
+  const castedPrivacy = parseInt(privacy + '', 10)
+
+  return castedPrivacy === VideoPrivacy.PUBLIC ||
+    (CONFIG.INSTANCE.FEDERATE_UNLISTED_VIDEOS === true && castedPrivacy === VideoPrivacy.UNLISTED)
+}
+
+function getPrivaciesForFederation() {
+  return (CONFIG.INSTANCE.FEDERATE_UNLISTED_VIDEOS === true) ?
+    [{ privacy: VideoPrivacy.PUBLIC }, {privacy: VideoPrivacy.UNLISTED}] :
+    [{ privacy: VideoPrivacy.PUBLIC }]
 }
 
 function cleanUpReqFiles (req: { files: { [fieldname: string]: Express.Multer.File[] } | Express.Multer.File[] }) {
@@ -125,6 +139,8 @@ function getCountVideos (req: express.Request) {
 
 export {
   buildNSFWFilter,
+  isPrivacyForFederation,
+  getPrivaciesForFederation,
   getHostWithPort,
   isUserAbleToSearchRemoteURI,
   badRequest,
