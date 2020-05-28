@@ -1,5 +1,7 @@
 @import '_variables';
 @import '_mixins';
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
 .peertube-container {
   padding-bottom: 20px;
@@ -86,5 +88,41 @@
     justify-content: flex-end;
     white-space: nowrap;
     flex: 1;
+  }
+}
+
+.broadcast-message {
+  min-height: 50px;
+  text-align: center;
+  margin-bottom: 0;
+  border-radius: 0;
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  column-gap: 10px;
+
+  my-global-icon {
+    justify-self: center;
+    align-self: center;
+    cursor: pointer;
+
+    width: 20px;
+  }
+
+  @each $color, $value in $theme-colors {
+    &.alert-#{$color} {
+      my-global-icon {
+        @include apply-svg-color(theme-color-level($color, $alert-color-level));
+      }
+    }
+  }
+
+  ::ng-deep {
+    p {
+      font-size: 16px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
 export interface CustomConfig {
   instance: {
@@ -130,5 +131,12 @@ export interface CustomConfig {
         indexUrl: string
       }
     }
+  }
+
+  broadcastMessage: {
+    enabled: boolean
+    message: string
+    level: BroadcastMessageLevel
+    dismissable: boolean
   }
 }

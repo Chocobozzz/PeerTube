@@ -159,6 +159,12 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
           enabled: false
         }
       }
+    },
+    broadcastMessage: {
+      enabled: true,
+      level: 'warning',
+      message: 'hello',
+      dismissable: true
     }
   }
 

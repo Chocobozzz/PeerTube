@@ -1,4 +1,5 @@
 export * from './about.model'
+export * from './broadcast-message-level.type'
 export * from './contact-form.model'
 export * from './custom-config.model'
 export * from './debug.model'

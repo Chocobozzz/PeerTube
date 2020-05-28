@@ -1,5 +1,6 @@
-import { NSFWPolicyType } from '../videos/nsfw-policy.type'
 import { ClientScript } from '../plugins/plugin-package-json.model'
+import { NSFWPolicyType } from '../videos/nsfw-policy.type'
+import { BroadcastMessageLevel } from './broadcast-message-level.type'
 
 export interface ServerConfigPlugin {
   name: string
@@ -160,5 +161,12 @@ export interface ServerConfig {
         indexUrl: string
       }
     }
+  }
+
+  broadcastMessage: {
+    enabled: boolean
+    message: string
+    level: BroadcastMessageLevel
+    dismissable: boolean
   }
 }

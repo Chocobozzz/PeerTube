@@ -4,7 +4,7 @@ import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
 import { is18nPath } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { filter, map, pairwise } from 'rxjs/operators'
+import { filter, map, pairwise, first } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { PlatformLocation, ViewportScroller } from '@angular/common'
@@ -19,6 +19,10 @@ import { ServerConfig, UserRole } from '@shared/models'
 import { User } from '@app/shared'
 import { InstanceService } from '@app/shared/instance/instance.service'
 import { MenuService } from './core/menu/menu.service'
+import { BroadcastMessageLevel } from '@shared/models/server'
+import { MarkdownService } from './shared/renderer'
+import { concat } from 'rxjs'
+import { peertubeLocalStorage } from './shared/misc/peertube-web-storage'
 
 @Component({
   selector: 'my-app',
@@ -26,11 +30,14 @@ import { MenuService } from './core/menu/menu.service'
   styleUrls: [ './app.component.scss' ]
 })
 export class AppComponent implements OnInit, AfterViewInit {
+  private static BROADCAST_MESSAGE_KEY = 'app-broadcast-message-dismissed'
+
   @ViewChild('welcomeModal') welcomeModal: WelcomeModalComponent
   @ViewChild('instanceConfigWarningModal') instanceConfigWarningModal: InstanceConfigWarningModalComponent
   @ViewChild('customModal') customModal: CustomModalComponent
 
   customCSS: SafeHtml
+  broadcastMessage: { message: string, dismissable: boolean, class: string } | null = null
 
   private serverConfig: ServerConfig
 
@@ -50,6 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private hooks: HooksService,
     private location: PlatformLocation,
     private modalService: NgbModal,
+    private markdownService: MarkdownService,
     public menu: MenuService
   ) { }
 
@@ -81,6 +89,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.initRouteEvents()
     this.injectJS()
     this.injectCSS()
+    this.injectBroadcastMessage()
 
     this.initHotkeys()
 
@@ -95,6 +104,12 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   isUserLoggedIn () {
     return this.authService.isLoggedIn()
+  }
+
+  hideBroadcastMessage () {
+    peertubeLocalStorage.setItem(AppComponent.BROADCAST_MESSAGE_KEY, this.serverConfig.broadcastMessage.message)
+
+    this.broadcastMessage = null
   }
 
   private initRouteEvents () {
@@ -165,6 +180,36 @@ export class AppComponent implements OnInit, AfterViewInit {
     ).subscribe(() => this.menu.isMenuDisplayed = false) // User clicked on a link in the menu, change the page
   }
 
+  private injectBroadcastMessage () {
+    concat(
+      this.serverService.getConfig().pipe(first()),
+      this.serverService.configReloaded
+    ).subscribe(async config => {
+      this.broadcastMessage = null
+
+      const messageConfig = config.broadcastMessage
+
+      if (messageConfig.enabled) {
+        // Already dismissed this message?
+        if (messageConfig.dismissable && localStorage.getItem(AppComponent.BROADCAST_MESSAGE_KEY) === messageConfig.message) {
+          return
+        }
+
+        const classes: { [id in BroadcastMessageLevel]: string } = {
+          info: 'alert-info',
+          warning: 'alert-warning',
+          error: 'alert-danger'
+        }
+
+        this.broadcastMessage = {
+          message: await this.markdownService.completeMarkdownToHTML(messageConfig.message),
+          dismissable: messageConfig.dismissable,
+          class: classes[messageConfig.level]
+        }
+      }
+    })
+  }
+
   private injectJS () {
     // Inject JS
     this.serverService.getConfig()
@@ -182,17 +227,19 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   private injectCSS () {
     // Inject CSS if modified (admin config settings)
-    this.serverService.configReloaded
-        .subscribe(() => {
-          const headStyle = document.querySelector('style.custom-css-style')
-          if (headStyle) headStyle.parentNode.removeChild(headStyle)
+    concat(
+      this.serverService.getConfig().pipe(first()),
+      this.serverService.configReloaded
+    ).subscribe(config => {
+      const headStyle = document.querySelector('style.custom-css-style')
+      if (headStyle) headStyle.parentNode.removeChild(headStyle)
 
-          // We test customCSS if the admin removed the css
-          if (this.customCSS || this.serverConfig.instance.customizations.css) {
-            const styleTag = '<style>' + this.serverConfig.instance.customizations.css + '</style>'
-            this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
-          }
-        })
+      // We test customCSS if the admin removed the css
+      if (this.customCSS || config.instance.customizations.css) {
+        const styleTag = '<style>' + config.instance.customizations.css + '</style>'
+        this.customCSS = this.domSanitizer.bypassSecurityTrustHtml(styleTag)
+      }
+    })
   }
 
   private async loadPlugins () {

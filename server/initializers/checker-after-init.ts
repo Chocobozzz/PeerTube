@@ -107,6 +107,10 @@ function checkConfig () {
     }
   }
 
+  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
+    logger.warn('Redundancy directory should be different than the videos folder.')
+  }
+
   // Transcoding
   if (CONFIG.TRANSCODING.ENABLED) {
     if (CONFIG.TRANSCODING.WEBTORRENT.ENABLED === false && CONFIG.TRANSCODING.HLS.ENABLED === false) {
@@ -114,8 +118,14 @@ function checkConfig () {
     }
   }
 
-  if (CONFIG.STORAGE.VIDEOS_DIR === CONFIG.STORAGE.REDUNDANCY_DIR) {
-    logger.warn('Redundancy directory should be different than the videos folder.')
+  // Broadcast message
+  if (CONFIG.BROADCAST_MESSAGE.ENABLED) {
+    const currentLevel = CONFIG.BROADCAST_MESSAGE.LEVEL
+    const available = [ 'info', 'warning', 'error' ]
+
+    if (available.includes(currentLevel) === false) {
+      return 'Broadcast message level should be ' + available.join(' or ') + ' instead of ' + currentLevel
+    }
   }
 
   return null

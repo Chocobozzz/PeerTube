@@ -25,6 +25,16 @@
     <div id="content" tabindex="-1" class="main-col" [ngClass]="{ expanded: menu.isMenuDisplayed === false }">
 
       <div class="main-row">
+
+        <div *ngIf="broadcastMessage" class="broadcast-message alert" [ngClass]="broadcastMessage.class">
+          <div [innerHTML]="broadcastMessage.message"></div>
+
+          <my-global-icon
+            *ngIf="broadcastMessage.dismissable" (click)="hideBroadcastMessage()"
+            iconName="cross" role="button" title="Close this message" i18n-title
+          ></my-global-icon>
+        </div>
+
         <router-outlet></router-outlet>
       </div>
     </div>

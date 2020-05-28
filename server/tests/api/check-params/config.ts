@@ -133,6 +133,12 @@ describe('Test config API validators', function () {
           indexUrl: 'https://index.example.com'
         }
       }
+    },
+    broadcastMessage: {
+      enabled: true,
+      dismissable: true,
+      message: 'super message',
+      level: 'warning'
     }
   }
 
