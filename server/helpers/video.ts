@@ -104,7 +104,7 @@ function isPrivacyForFederation (privacy: VideoPrivacy) {
     (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true && castedPrivacy === VideoPrivacy.UNLISTED)
 }
 
-function getPrivaciesForFederation() {
+function getPrivaciesForFederation () {
   return (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true)
     ? [ { privacy: VideoPrivacy.PUBLIC }, { privacy: VideoPrivacy.UNLISTED } ]
     : [ { privacy: VideoPrivacy.PUBLIC } ]

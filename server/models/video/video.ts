@@ -126,7 +126,7 @@ import { ModelCache } from '@server/models/model-cache'
 import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getServerActor } from '@server/models/application/application'
-import { getPrivaciesForFederation, isPrivacyForFederation } from "@server/helpers/video";
+import { getPrivaciesForFederation, isPrivacyForFederation } from "@server/helpers/video"
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
