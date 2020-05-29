@@ -2,7 +2,6 @@ import { LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular
 import { BrowserModule } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
 import { ResetPasswordModule } from '@app/reset-password'
-
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
 import 'focus-visible'
 
@@ -18,9 +17,12 @@ import { SearchModule } from '@app/search'
 import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
 import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/models'
-import { APP_BASE_HREF } from '@angular/common'
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
+import localeOc from '@app/shared/locale/oc'
+
+registerLocaleData(localeOc, 'oc')
 
 @NgModule({
   bootstrap: [ AppComponent ],
