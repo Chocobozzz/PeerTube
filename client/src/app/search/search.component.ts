@@ -1,16 +1,18 @@
+import { forkJoin, of, Subscription } from 'rxjs'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { AuthService, Notifier } from '@app/core'
-import { forkJoin, of, Subscription } from 'rxjs'
-import { SearchService } from '@app/search/search.service'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { MetaService } from '@ngx-meta/core'
-import { AdvancedSearch } from '@app/search/advanced-search.model'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { immutableAssign } from '@app/shared/misc/utils'
-import { Video } from '@app/shared/video/video.model'
+import { AuthService, Notifier, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { AdvancedSearch } from '@app/search/advanced-search.model'
+import { SearchService } from '@app/search/search.service'
+import { immutableAssign } from '@app/shared/misc/utils'
+import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
+import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
+import { Video } from '@app/shared/video/video.model'
+import { MetaService } from '@ngx-meta/core'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ServerConfig } from '@shared/models'
+import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-search',
@@ -29,6 +31,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   isSearchFilterCollapsed = true
   currentSearch: string
 
+  errorMessage: string
+  serverConfig: ServerConfig
+
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
   private firstSearch = true
@@ -43,7 +48,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     private notifier: Notifier,
     private searchService: SearchService,
     private authService: AuthService,
-    private hooks: HooksService
+    private hooks: HooksService,
+    private serverService: ServerService
   ) { }
 
   get user () {
@@ -51,8 +57,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit () {
+    this.serverService.getConfig()
+      .subscribe(config => this.serverConfig = config)
+
     this.subActivatedRoute = this.route.queryParams.subscribe(
-      queryParams => {
+      async queryParams => {
         const querySearch = queryParams['search']
 
         // Search updated, reset filters
@@ -65,6 +74,9 @@ export class SearchComponent implements OnInit, OnDestroy {
         }
 
         this.advancedSearch = new AdvancedSearch(queryParams)
+        if (!this.advancedSearch.searchTarget) {
+          this.advancedSearch.searchTarget = await this.serverService.getDefaultSearchTarget()
+        }
 
         // Don't hide filters if we have some of them AND the user just came on the webpage
         this.isSearchFilterCollapsed = this.isInitialLoad === false || !this.advancedSearch.containsValues()
@@ -99,28 +111,37 @@ export class SearchComponent implements OnInit, OnDestroy {
     forkJoin([
       this.getVideosObs(),
       this.getVideoChannelObs()
-    ])
-      .subscribe(
-        ([ videosResult, videoChannelsResult ]) => {
-          this.results = this.results
-                             .concat(videoChannelsResult.data)
-                             .concat(videosResult.data)
-          this.pagination.totalItems = videosResult.total + videoChannelsResult.total
+    ]).subscribe(
+      ([videosResult, videoChannelsResult]) => {
+        this.results = this.results
+          .concat(videoChannelsResult.data)
+          .concat(videosResult.data)
 
-          // Focus on channels if there are no enough videos
-          if (this.firstSearch === true && videosResult.data.length < this.pagination.itemsPerPage) {
-            this.resetPagination()
-            this.firstSearch = false
+        this.pagination.totalItems = videosResult.total + videoChannelsResult.total
 
-            this.channelsPerPage = 10
-            this.search()
-          }
-
+        // Focus on channels if there are no enough videos
+        if (this.firstSearch === true && videosResult.data.length < this.pagination.itemsPerPage) {
+          this.resetPagination()
           this.firstSearch = false
-        },
 
-        err => this.notifier.error(err.message)
-      )
+          this.channelsPerPage = 10
+          this.search()
+        }
+
+        this.firstSearch = false
+      },
+
+      err => {
+        if (this.advancedSearch.searchTarget !== 'search-index') this.notifier.error(err.message)
+
+        this.notifier.error(
+          this.i18n('Search index is unavailable. Retrying with instance results instead.'),
+          this.i18n('Search error')
+        )
+        this.advancedSearch.searchTarget = 'local'
+        this.search()
+      }
+    )
   }
 
   onNearOfBottom () {
@@ -144,6 +165,24 @@ export class SearchComponent implements OnInit, OnDestroy {
   // Add VideoChannel for typings, but the template already checks "video" argument is a video
   removeVideoFromArray (video: Video | VideoChannel) {
     this.results = this.results.filter(r => !this.isVideo(r) || r.id !== video.id)
+  }
+
+  getChannelUrl (channel: VideoChannel) {
+    if (this.advancedSearch.searchTarget === 'search-index' && channel.url) {
+      const remoteUriConfig = this.serverConfig.search.remoteUri
+
+      // Redirect on the external instance if not allowed to fetch remote data
+      const externalRedirect = (!this.authService.isLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users
+      const fromPath = window.location.pathname + window.location.search
+
+      return [ '/search/lazy-load-channel', { url: channel.url, externalRedirect, fromPath } ]
+    }
+
+    return [ '/video-channels', channel.nameWithHost ]
+  }
+
+  hideActions () {
+    return this.advancedSearch.searchTarget === 'search-index'
   }
 
   private resetPagination () {
@@ -189,7 +228,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     const params = {
       search: this.currentSearch,
-      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage })
+      componentPagination: immutableAssign(this.pagination, { itemsPerPage: this.channelsPerPage }),
+      searchTarget: this.advancedSearch.searchTarget
     }
 
     return this.hooks.wrapObsFun(

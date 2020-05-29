@@ -1,6 +1,6 @@
 <div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow, 'fit-width': fitWidth }" (mouseenter)="loadActions()">
   <my-video-thumbnail
-    [video]="video" [nsfw]="isVideoBlur"
+    [video]="video" [nsfw]="isVideoBlur" [routerLink]="videoLink"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"
   >
     <ng-container ngProjectAs="label-warning" *ngIf="displayOptions.privacyLabel && isUnlistedVideo()" i18n>Unlisted</ng-container>
@@ -12,7 +12,7 @@
       <a
         tabindex="-1"
         class="video-miniature-name"
-        [routerLink]="[ '/videos/watch', video.uuid ]" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
+        [routerLink]="videoLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
       >{{ video.name }}</a>
 
       <div class="d-inline-flex">

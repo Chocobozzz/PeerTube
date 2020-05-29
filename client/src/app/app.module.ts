@@ -8,7 +8,7 @@ import 'focus-visible'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CoreModule } from './core'
-import { HeaderComponent, SearchTypeaheadComponent, SuggestionsComponent, SuggestionComponent } from './header'
+import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { LoginModule } from './login'
 import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
 import { SharedModule } from './shared'
@@ -35,7 +35,6 @@ registerLocaleData(localeOc, 'oc')
     AvatarNotificationComponent,
     HeaderComponent,
     SearchTypeaheadComponent,
-    SuggestionsComponent,
     SuggestionComponent,
 
     CustomModalComponent,

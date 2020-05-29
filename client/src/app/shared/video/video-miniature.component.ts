@@ -1,3 +1,4 @@
+import { switchMap } from 'rxjs/operators'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -9,15 +10,14 @@ import {
   OnInit,
   Output
 } from '@angular/core'
-import { User } from '../users'
-import { Video } from './video.model'
 import { AuthService, ServerService } from '@app/core'
-import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '../../../../../shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { switchMap } from 'rxjs/operators'
+import { VideoActionsDisplayType } from '@app/shared/video/video-actions-dropdown.component'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '../../../../../shared'
+import { User } from '../users'
+import { Video } from './video.model'
 
 export type OwnerDisplayType = 'account' | 'videoChannel' | 'auto'
 export type MiniatureDisplayOptions = {
@@ -57,6 +57,8 @@ export class VideoMiniatureComponent implements OnInit {
   @Input() displayVideoActions = true
   @Input() fitWidth = false
 
+  @Input() useLazyLoadUrl = false
+
   @Output() videoBlacklisted = new EventEmitter()
   @Output() videoUnblacklisted = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
@@ -82,6 +84,8 @@ export class VideoMiniatureComponent implements OnInit {
     playlistElementId?: number
   }
 
+  videoLink: any[] = []
+
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
   constructor (
@@ -103,7 +107,10 @@ export class VideoMiniatureComponent implements OnInit {
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
-        .subscribe(config => this.serverConfig = config)
+        .subscribe(config => {
+          this.serverConfig = config
+          this.buildVideoLink()
+        })
 
     this.setUpBy()
 
@@ -111,6 +118,21 @@ export class VideoMiniatureComponent implements OnInit {
     if (this.screenService.isInTouchScreen()) {
       this.loadActions()
     }
+  }
+
+  buildVideoLink () {
+    if (this.useLazyLoadUrl && this.video.url) {
+      const remoteUriConfig = this.serverConfig.search.remoteUri
+
+      // Redirect on the external instance if not allowed to fetch remote data
+      const externalRedirect = (!this.authService.isLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users
+      const fromPath = window.location.pathname + window.location.search
+
+      this.videoLink = [ '/search/lazy-load-video', { url: this.video.url, externalRedirect, fromPath } ]
+      return
+    }
+
+    this.videoLink = [ '/videos/watch', this.video.uuid ]
   }
 
   displayOwnerAccount () {
@@ -203,7 +225,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   isWatchLaterPlaylistDisplayed () {
-    return this.isUserLoggedIn() && this.inWatchLaterPlaylist !== undefined
+    return this.displayVideoActions && this.isUserLoggedIn() && this.inWatchLaterPlaylist !== undefined
   }
 
   private setUpBy () {

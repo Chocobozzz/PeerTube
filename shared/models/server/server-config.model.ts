@@ -50,6 +50,13 @@ export interface ServerConfig {
       users: boolean
       anonymous: boolean
     }
+
+    searchIndex: {
+      enabled: boolean
+      url: string
+      disableLocalSearch: boolean
+      isDefaultSearch: boolean
+    }
   }
 
   plugin: {

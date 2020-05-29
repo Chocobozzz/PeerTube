@@ -98,3 +98,25 @@ instance:
 plugins:
   index:
     check_latest_versions_interval: '10 minutes'
+
+search:
+  # Add ability to fetch remote videos/actors by their URI, that may not be federated with your instance
+  # If enabled, the associated group will be able to "escape" from the instance follows
+  # That means they will be able to follow channels, watch videos, list videos of non followed instances
+  remote_uri:
+    users: true
+    anonymous: false
+
+  # Use a third party index instead of your local index, only for search results
+  # Useful to discover content outside of your instance
+  search_index:
+    enabled: true
+    # URL of the search index, that should use the same search API and routes
+    # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
+    # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
+    # and can use https://search.joinpeertube.org/ for tests, but keep in mind the latter is an unmoderated search index
+    url: 'http://localhost:3234'
+    # You can disable local search, so users only use the search index
+    disable_local_search: false
+    # If you did not disable local search, you can decide to use the search index by default
+    is_default_search: true

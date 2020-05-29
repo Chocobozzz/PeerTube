@@ -5,6 +5,8 @@ import { AccountBlock } from '../../../shared/models/blocklist'
 import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
 import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/typings/models'
+import { ActorModel } from '../activitypub/actor'
+import { ServerModel } from '../server/server'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS'
@@ -147,6 +149,42 @@ export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
       .then(({ rows, count }) => {
         return { total: count, data: rows }
       })
+  }
+
+  static listHandlesBlockedBy (accountIds: number[]): Bluebird<string[]> {
+    const query = {
+      attributes: [],
+      where: {
+        accountId: {
+          [Op.in]: accountIds
+        }
+      },
+      include: [
+        {
+          attributes: [ 'id' ],
+          model: AccountModel.unscoped(),
+          required: true,
+          as: 'BlockedAccount',
+          include: [
+            {
+              attributes: [ 'preferredUsername' ],
+              model: ActorModel.unscoped(),
+              required: true,
+              include: [
+                {
+                  attributes: [ 'host' ],
+                  model: ServerModel.unscoped(),
+                  required: true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+
+    return AccountBlocklistModel.findAll(query)
+      .then(entries => entries.map(e => `${e.BlockedAccount.Actor.preferredUsername}@${e.BlockedAccount.Actor.Server.host}`))
   }
 
   toFormattedJSON (this: MAccountBlocklistFormattable): AccountBlock {

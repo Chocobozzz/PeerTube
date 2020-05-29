@@ -11,19 +11,17 @@ export class HighlightPipe implements PipeTransform {
   /* use this for global search */
   static MULTI_MATCH = 'Multi-Match'
 
-  // tslint:disable-next-line:no-empty
-  constructor () {}
-
   transform (
-      contentString: string = null,
-      stringToHighlight: string = null,
-      option = 'Single-And-StartsWith-Match',
-      caseSensitive = false,
-      highlightStyleName = 'search-highlight'
+    contentString: string = null,
+    stringToHighlight: string = null,
+    option = 'Single-And-StartsWith-Match',
+    caseSensitive = false,
+    highlightStyleName = 'search-highlight'
   ): SafeHtml {
     if (stringToHighlight && contentString && option) {
       let regex: any = ''
       const caseFlag: string = !caseSensitive ? 'i' : ''
+
       switch (option) {
         case 'Single-Match': {
           regex = new RegExp(stringToHighlight, caseFlag)
@@ -42,10 +40,12 @@ export class HighlightPipe implements PipeTransform {
           regex = new RegExp(stringToHighlight, 'gi')
         }
       }
+
       const replaced = contentString.replace(
-          regex,
-          (match) => `<span class="${highlightStyleName}">${match}</span>`
+        regex,
+        (match) => `<span class="${highlightStyleName}">${match}</span>`
       )
+
       return replaced
     } else {
       return contentString

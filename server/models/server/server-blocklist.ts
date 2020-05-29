@@ -120,6 +120,27 @@ export class ServerBlocklistModel extends Model<ServerBlocklistModel> {
     return ServerBlocklistModel.findOne(query)
   }
 
+  static listHostsBlockedBy (accountIds: number[]): Bluebird<string[]> {
+    const query = {
+      attributes: [ ],
+      where: {
+        accountId: {
+          [Op.in]: accountIds
+        }
+      },
+      include: [
+        {
+          attributes: [ 'host' ],
+          model: ServerModel.unscoped(),
+          required: true
+        }
+      ]
+    }
+
+    return ServerBlocklistModel.findAll(query)
+      .then(entries => entries.map(e => e.BlockedServer.host))
+  }
+
   static listForApi (parameters: {
     start: number
     count: number

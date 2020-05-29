@@ -104,12 +104,6 @@ const CONFIG = {
     },
     ANONYMIZE_IP: config.get<boolean>('log.anonymizeIP')
   },
-  SEARCH: {
-    REMOTE_URI: {
-      USERS: config.get<boolean>('search.remote_uri.users'),
-      ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
-    }
-  },
   TRENDING: {
     VIDEOS: {
       INTERVAL_DAYS: config.get<number>('trending.videos.interval_days')
@@ -297,6 +291,18 @@ const CONFIG = {
     get MESSAGE () { return config.get<string>('broadcast_message.message') },
     get LEVEL () { return config.get<BroadcastMessageLevel>('broadcast_message.level') },
     get DISMISSABLE () { return config.get<boolean>('broadcast_message.dismissable') }
+  },
+  SEARCH: {
+    REMOTE_URI: {
+      USERS: config.get<boolean>('search.remote_uri.users'),
+      ANONYMOUS: config.get<boolean>('search.remote_uri.anonymous')
+    },
+    SEARCH_INDEX: {
+      get ENABLED () { return config.get<boolean>('search.search_index.enabled') },
+      get URL () { return config.get<string>('search.search_index.url') },
+      get DISABLE_LOCAL_SEARCH () { return config.get<boolean>('search.search_index.disable_local_search') },
+      get IS_DEFAULT_SEARCH () { return config.get<boolean>('search.search_index.is_default_search') }
+    }
   }
 }
 

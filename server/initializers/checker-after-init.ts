@@ -128,6 +128,13 @@ function checkConfig () {
     }
   }
 
+  // Search index
+  if (CONFIG.SEARCH.SEARCH_INDEX.ENABLED === true) {
+    if (CONFIG.SEARCH.REMOTE_URI.USERS === false) {
+      return 'You cannot enable search index without enabling remote URI search for users.'
+    }
+  }
+
   return null
 }
 

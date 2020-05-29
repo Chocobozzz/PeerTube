@@ -1,23 +1,24 @@
-import { Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild } from '@angular/core'
+import { of } from 'rxjs'
+import { first, tap, delay } from 'rxjs/operators'
+import { ListKeyManager } from '@angular/cdk/a11y'
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, AfterViewChecked } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
-import { first, tap } from 'rxjs/operators'
-import { ListKeyManager } from '@angular/cdk/a11y'
-import { Result, SuggestionComponent } from './suggestion.component'
-import { of } from 'rxjs'
 import { ServerConfig } from '@shared/models'
+import { SearchTargetType } from '@shared/models/search/search-target-query.model'
+import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
 
 @Component({
   selector: 'my-search-typeahead',
   templateUrl: './search-typeahead.component.html',
   styleUrls: [ './search-typeahead.component.scss' ]
 })
-export class SearchTypeaheadComponent implements OnInit, OnDestroy {
-  @ViewChild('searchVideo', { static: true }) searchInput: ElementRef<HTMLInputElement>
+export class SearchTypeaheadComponent implements OnInit, AfterViewInit, AfterViewChecked, OnDestroy {
+  @ViewChildren(SuggestionComponent) suggestionItems: QueryList<SuggestionComponent>
 
   hasChannel = false
   inChannel = false
-  newSearch = true
+  areSuggestionsOpened = true
 
   search = ''
   serverConfig: ServerConfig
@@ -25,7 +26,11 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
   inThisChannelText: string
 
   keyboardEventsManager: ListKeyManager<SuggestionComponent>
-  results: Result[] = []
+  results: SuggestionPayload[] = []
+
+  activeSearch: SuggestionPayloadType
+
+  private scheduleKeyboardEventsInit = false
 
   constructor (
     private authService: AuthService,
@@ -38,109 +43,138 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .pipe(first(params => this.isOnSearch() && params.search !== undefined && params.search !== null))
       .subscribe(params => this.search = params.search)
+  }
+
+  ngAfterViewInit () {
     this.serverService.getConfig()
-      .subscribe(config => this.serverConfig = config)
+      .subscribe(config => {
+        this.serverConfig = config
+
+        this.computeTypeahead()
+
+        this.serverService.configReloaded
+          .subscribe(config => {
+            this.serverConfig = config
+            this.computeTypeahead()
+          })
+      })
+  }
+
+  ngAfterViewChecked () {
+    if (this.scheduleKeyboardEventsInit && !this.keyboardEventsManager) {
+      // Avoid ExpressionChangedAfterItHasBeenCheckedError errors
+      setTimeout(() => this.initKeyboardEventsManager(), 0)
+    }
   }
 
   ngOnDestroy () {
     if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
   }
 
-  get activeResult () {
-    return this.keyboardEventsManager?.activeItem?.result
-  }
-
-  get areInstructionsDisplayed () {
+  areInstructionsDisplayed () {
     return !this.search
   }
 
-  get showHelp () {
-    return this.search && this.newSearch && this.activeResult?.type === 'search-global'
+  showSearchGlobalHelp () {
+    return this.search && this.areSuggestionsOpened && this.keyboardEventsManager?.activeItem?.result?.type === 'search-index'
   }
 
-  get canSearchAnyURI () {
+  canSearchAnyURI () {
     if (!this.serverConfig) return false
+
     return this.authService.isLoggedIn()
       ? this.serverConfig.search.remoteUri.users
       : this.serverConfig.search.remoteUri.anonymous
   }
 
   onSearchChange () {
-    this.computeResults()
+    this.computeTypeahead()
   }
 
-  computeResults () {
-    this.newSearch = true
-    let results: Result[] = []
+  initKeyboardEventsManager () {
+    if (this.keyboardEventsManager) return
 
-    if (this.search) {
-      results = [
-        /* Channel search is still unimplemented. Uncomment when it is.
-        {
-          text: this.search,
-          type: 'search-channel'
-        },
-        */
-        {
-          text: this.search,
-          type: 'search-instance',
-          default: true
-        },
-        /* Global search is still unimplemented. Uncomment when it is.
-        {
-          text: this.search,
-          type: 'search-global'
-        },
-        */
-        ...results
-      ]
+    this.keyboardEventsManager = new ListKeyManager(this.suggestionItems)
+
+    const activeIndex = this.suggestionItems.toArray().findIndex(i => i.result.default === true)
+    if (activeIndex === -1) {
+      console.error('Cannot find active index.', { suggestionItems: this.suggestionItems })
     }
 
-    this.results = results.filter(
-      (result: Result) => {
-        // if we're not in a channel or one of its videos/playlits, show all channel-related results
-        if (!(this.hasChannel || this.inChannel)) return !result.type.includes('channel')
-        // if we're in a channel, show all channel-related results except for the channel redirection itself
-        if (this.inChannel) return result.type !== 'channel'
-        // all other result types are kept
-        return true
-      }
-    )
-  }
-
-  setEventItems (event: { items: QueryList<SuggestionComponent>, index?: number }) {
-    event.items.forEach(e => {
-      if (this.keyboardEventsManager.activeItem && this.keyboardEventsManager.activeItem === e) {
-        this.keyboardEventsManager.activeItem.active = true
-      } else {
-        e.active = false
-      }
-    })
-  }
-
-  initKeyboardEventsManager (event: { items: QueryList<SuggestionComponent>, index?: number }) {
-    if (this.keyboardEventsManager) this.keyboardEventsManager.change.unsubscribe()
-
-    this.keyboardEventsManager = new ListKeyManager(event.items)
-
-    if (event.index !== undefined) {
-      this.keyboardEventsManager.setActiveItem(event.index)
-    } else {
-      this.keyboardEventsManager.setFirstItemActive()
-    }
+    this.updateItemsState(activeIndex)
 
     this.keyboardEventsManager.change.subscribe(
-      _ => this.setEventItems(event)
+      _ => this.updateItemsState()
     )
+  }
+
+  computeTypeahead () {
+    const searchIndexConfig = this.serverConfig.search.searchIndex
+
+    if (!this.activeSearch) {
+      if (searchIndexConfig.enabled && searchIndexConfig.isDefaultSearch) {
+        this.activeSearch = 'search-instance'
+      } else {
+        this.activeSearch = 'search-index'
+      }
+    }
+
+    this.areSuggestionsOpened = true
+    this.results = []
+
+    if (!this.search) return
+
+    if (searchIndexConfig.enabled === false || searchIndexConfig.disableLocalSearch !== true) {
+      this.results.push({
+        text: this.search,
+        type: 'search-instance',
+        default: this.activeSearch === 'search-instance'
+      })
+    }
+
+    if (searchIndexConfig.enabled) {
+      this.results.push({
+        text: this.search,
+        type: 'search-index',
+        default: this.activeSearch === 'search-index'
+      })
+    }
+
+    this.scheduleKeyboardEventsInit = true
+  }
+
+  updateItemsState (index?: number) {
+    if (index !== undefined) {
+      this.keyboardEventsManager.setActiveItem(index)
+    }
+
+    for (const item of this.suggestionItems) {
+      if (this.keyboardEventsManager.activeItem && this.keyboardEventsManager.activeItem === item) {
+        item.active = true
+        this.activeSearch = item.result.type
+        continue
+      }
+
+      item.active = false
+    }
+  }
+
+  onSuggestionlicked (payload: SuggestionPayload) {
+    this.doSearch(this.buildSearchTarget(payload))
+  }
+
+  onSuggestionHover (index: number) {
+    this.updateItemsState(index)
   }
 
   handleKey (event: KeyboardEvent) {
-    event.stopImmediatePropagation()
     if (!this.keyboardEventsManager) return
 
     switch (event.key) {
       case 'ArrowDown':
       case 'ArrowUp':
+        event.stopPropagation()
+
         this.keyboardEventsManager.onKeydown(event)
         break
     }
@@ -150,15 +184,19 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
     return window.location.pathname === '/search'
   }
 
-  doSearch () {
-    this.newSearch = false
+  doSearch (searchTarget?: SearchTargetType) {
+    this.areSuggestionsOpened = false
     const queryParams: Params = {}
 
     if (this.isOnSearch() && this.route.snapshot.queryParams) {
       Object.assign(queryParams, this.route.snapshot.queryParams)
     }
 
-    Object.assign(queryParams, { search: this.search })
+    if (!searchTarget) {
+      searchTarget = this.buildSearchTarget(this.keyboardEventsManager.activeItem.result)
+    }
+
+    Object.assign(queryParams, { search: this.search, searchTarget })
 
     const o = this.authService.isLoggedIn()
       ? this.loadUserLanguagesIfNeeded(queryParams)
@@ -175,5 +213,13 @@ export class SearchTypeaheadComponent implements OnInit, OnDestroy {
                  first(),
                  tap(() => Object.assign(queryParams, { languageOneOf: this.authService.getUser().videoLanguages }))
                )
+  }
+
+  private buildSearchTarget (result: SuggestionPayload): SearchTargetType {
+    if (result.type === 'search-index') {
+      return 'search-index'
+    }
+
+    return 'local'
   }
 }

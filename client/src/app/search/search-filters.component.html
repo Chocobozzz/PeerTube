@@ -18,6 +18,25 @@
 
       <div class="form-group">
         <div class="radio-label label-container">
+          <label i18n>Display sensitive content</label>
+          <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
+            Reset
+          </button>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="sensitiveContent" id="sensitiveContentYes" value="both" [(ngModel)]="advancedSearch.nsfw">
+          <label i18n for="sensitiveContentYes" class="radio">Yes</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="sensitiveContent" id="sensitiveContentNo" value="false" [(ngModel)]="advancedSearch.nsfw">
+          <label i18n for="sensitiveContentNo" class="radio">No</label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="radio-label label-container">
           <label i18n>Published date</label>
           <button i18n class="reset-button reset-button-small" (click)="resetLocalField('publishedDateRange')" *ngIf="publishedDateRange !== undefined">
             Reset
@@ -39,7 +58,7 @@
         </div>
 
         <div class="row">
-          <div class="col-sm-6">
+          <div class="pl-0 col-sm-6">
             <input
               (change)="inputUpdated()"
               (keydown.enter)="$event.preventDefault()"
@@ -49,7 +68,7 @@
               class="form-control"
             >
           </div>
-          <div class="col-sm-6">
+          <div class="pr-0 col-sm-6">
             <input
               (change)="inputUpdated()"
               (keydown.enter)="$event.preventDefault()"
@@ -62,6 +81,9 @@
         </div>
       </div>
 
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <div class="radio-label label-container">
           <label i18n>Duration</label>
@@ -76,28 +98,6 @@
         </div>
       </div>
 
-      <div class="form-group">
-        <div class="radio-label label-container">
-          <label i18n>Display sensitive content</label>
-          <button i18n class="reset-button reset-button-small" (click)="resetField('nsfw')" *ngIf="advancedSearch.nsfw !== undefined">
-            Reset
-          </button>
-        </div>
-
-        <div class="peertube-radio-container">
-          <input type="radio" name="sensitiveContent" id="sensitiveContentYes" value="both" [(ngModel)]="advancedSearch.nsfw">
-          <label i18n for="sensitiveContentYes" class="radio">Yes</label>
-        </div>
-
-        <div class="peertube-radio-container">
-          <input type="radio" name="sensitiveContent" id="sensitiveContentNo" value="false" [(ngModel)]="advancedSearch.nsfw">
-          <label i18n for="sensitiveContentNo" class="radio">No</label>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="col-lg-4 col-md-6 col-xs-12">
       <div class="form-group">
         <label i18n for="category">Category</label>
         <button i18n class="reset-button reset-button-small" (click)="resetField('categoryOneOf')" *ngIf="advancedSearch.categoryOneOf !== undefined">
@@ -163,6 +163,22 @@
           i18n-placeholder placeholder="+ Tag" i18n-secondaryPlaceholder secondaryPlaceholder="Enter a tag"
           [maxItems]="5" [modelAsStrings]="true"
         ></tag-input>
+      </div>
+
+      <div class="form-group" *ngIf="isSearchTargetEnabled()">
+        <div class="radio-label label-container">
+          <label i18n>Search target</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="searchTarget" id="searchTargetLocal" value="local" [(ngModel)]="advancedSearch.searchTarget">
+          <label i18n for="searchTargetLocal" class="radio">Instance</label>
+        </div>
+
+        <div class="peertube-radio-container">
+          <input type="radio" name="searchTarget" id="searchTargetSearchIndex" value="search-index" [(ngModel)]="advancedSearch.searchTarget">
+          <label i18n for="searchTargetSearchIndex" class="radio">Vidiverse</label>
+        </div>
       </div>
     </div>
   </div>

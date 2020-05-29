@@ -15,10 +15,14 @@ export abstract class Actor implements ActorServer {
 
   avatarUrl: string
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { path: string } }) {
-    const absoluteAPIUrl = getAbsoluteAPIUrl()
+  static GET_ACTOR_AVATAR_URL (actor: { avatar?: Avatar }) {
+    if (actor?.avatar?.url) return actor.avatar.url
 
-    if (actor && actor.avatar) return absoluteAPIUrl + actor.avatar.path
+    if (actor && actor.avatar) {
+      const absoluteAPIUrl = getAbsoluteAPIUrl()
+
+      return absoluteAPIUrl + actor.avatar.path
+    }
 
     return this.GET_DEFAULT_AVATAR_URL()
   }
