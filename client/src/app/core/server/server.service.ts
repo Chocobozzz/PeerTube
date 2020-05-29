@@ -42,7 +42,6 @@ export class ServerService {
       defaultClientRoute: '',
       isNSFW: false,
       defaultNSFWPolicy: 'do_not_list' as 'do_not_list',
-      federateUnlistedVideos: true,
       customizations: {
         javascript: '',
         css: ''
@@ -58,6 +57,11 @@ export class ServerService {
       registered: [],
       registeredExternalAuths: [],
       registeredIdAndPassAuths: []
+    },
+    federation: {
+      videos: {
+        federateUnlisted: true
+      }
     },
     theme: {
       registered: [],

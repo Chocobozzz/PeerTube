@@ -38,7 +38,6 @@ export interface ServerConfig {
     defaultClientRoute: string
     isNSFW: boolean
     defaultNSFWPolicy: NSFWPolicyType
-    federateUnlistedVideos: boolean
     customizations: {
       javascript: string
       css: string
@@ -58,6 +57,12 @@ export interface ServerConfig {
     registeredExternalAuths: RegisteredExternalAuthConfig[]
 
     registeredIdAndPassAuths: RegisteredIdAndPassAuthConfig[]
+  }
+
+  federation: {
+    videos: {
+      federateUnlisted: boolean
+    }
   }
 
   theme: {

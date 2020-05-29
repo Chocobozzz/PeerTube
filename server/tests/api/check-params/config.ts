@@ -42,10 +42,14 @@ describe('Test config API validators', function () {
       isNSFW: true,
       defaultClientRoute: '/videos/recently-added',
       defaultNSFWPolicy: 'blur',
-      federateUnlistedVideos: false,
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
+      }
+    },
+    federation: {
+      videos: {
+        federateUnlisted: false
       }
     },
     theme: {

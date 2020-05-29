@@ -67,7 +67,6 @@ async function getConfig (req: express.Request, res: express.Response) {
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-      federateUnlistedVideos: CONFIG.INSTANCE.FEDERATE_UNLISTED_VIDEOS,
       customizations: {
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT,
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS
@@ -83,6 +82,11 @@ async function getConfig (req: express.Request, res: express.Response) {
       registered: getRegisteredPlugins(),
       registeredExternalAuths: getExternalAuthsPlugins(),
       registeredIdAndPassAuths: getIdAndPassAuthPlugins()
+    },
+    federation: {
+      videos: {
+        federateUnlisted: CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED
+      }
     },
     theme: {
       registered: getRegisteredThemes(),
@@ -341,7 +345,6 @@ function customConfig (): CustomConfig {
       isNSFW: CONFIG.INSTANCE.IS_NSFW,
       defaultClientRoute: CONFIG.INSTANCE.DEFAULT_CLIENT_ROUTE,
       defaultNSFWPolicy: CONFIG.INSTANCE.DEFAULT_NSFW_POLICY,
-      federateUnlistedVideos: CONFIG.INSTANCE.FEDERATE_UNLISTED_VIDEOS,
       customizations: {
         css: CONFIG.INSTANCE.CUSTOMIZATIONS.CSS,
         javascript: CONFIG.INSTANCE.CUSTOMIZATIONS.JAVASCRIPT
@@ -349,6 +352,11 @@ function customConfig (): CustomConfig {
     },
     theme: {
       default: CONFIG.THEME.DEFAULT
+    },
+    federation: {
+      videos: {
+        federateUnlisted: CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED
+      }
     },
     services: {
       twitter: {

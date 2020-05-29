@@ -27,14 +27,15 @@ function checkMissedConfig () {
     'import.videos.http.enabled', 'import.videos.torrent.enabled', 'auto_blacklist.videos.of_users.enabled',
     'trending.videos.interval_days',
     'instance.name', 'instance.short_description', 'instance.description', 'instance.terms', 'instance.default_client_route',
-    'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.federate_unlisted_videos', 'instance.robots', 'instance.securitytxt',
+    'instance.is_nsfw', 'instance.default_nsfw_policy', 'instance.robots', 'instance.securitytxt',
     'services.twitter.username', 'services.twitter.whitelisted',
     'followers.instance.enabled', 'followers.instance.manual_approval',
     'tracker.enabled', 'tracker.private', 'tracker.reject_too_many_announces',
     'history.videos.max_age', 'views.videos.remote.max_age',
     'rates_limit.login.window', 'rates_limit.login.max', 'rates_limit.ask_send_email.window', 'rates_limit.ask_send_email.max',
     'theme.default',
-    'remote_redundancy.videos.accept_from'
+    'remote_redundancy.videos.accept_from',
+    'federation.videos.federate_unlisted'
   ]
   const requiredAlternatives = [
     [ // set

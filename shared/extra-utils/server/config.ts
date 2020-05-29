@@ -68,10 +68,14 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       defaultClientRoute: '/videos/recently-added',
       isNSFW: true,
       defaultNSFWPolicy: 'blur',
-      federateUnlistedVideos: false,
       customizations: {
         javascript: 'alert("coucou")',
         css: 'body { background-color: red; }'
+      }
+    },
+    federation: {
+      videos: {
+        federateUnlisted: false
       }
     },
     theme: {

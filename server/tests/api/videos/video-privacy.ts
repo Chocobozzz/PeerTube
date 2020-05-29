@@ -21,7 +21,7 @@ import { createUser } from '../../../../shared/extra-utils/users/users'
 import { getMyVideos, getVideo, getVideoWithToken, updateVideo } from '../../../../shared/extra-utils/videos/videos'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import { ServerConfig, Video } from '../../../../shared/models'
-import { CustomConfig } from "../../../../shared/models/server";
+import { CustomConfig } from "../../../../shared/models/server"
 
 const expect = chai.expect
 
@@ -178,12 +178,12 @@ describe('Test video privacy', function () {
   it('Should upload a non-federating unlisted video to server 2', async function () {
     this.timeout(30000)
 
-    customConfig.instance.federateUnlistedVideos = false
+    customConfig.federation.videos.federateUnlisted = false
     await updateCustomConfig(servers[1].url, servers[1].accessToken, customConfig)
     const resConfig = await getConfig(servers[1].url)
     const serverConfig: ServerConfig = resConfig.body
 
-    expect(serverConfig.instance.federateUnlistedVideos).to.be.false
+    expect(serverConfig.federation.videos.federateUnlisted).to.be.false
 
     const attributes = {
       name: 'unlisted video',
