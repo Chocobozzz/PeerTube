@@ -221,6 +221,18 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
         level: null,
         dismissable: null,
         message: null
+      },
+      search: {
+        remoteUri: {
+          users: null,
+          anonymous: null
+        },
+        searchIndex: {
+          enabled: null,
+          url: this.customConfigValidatorsService.SEARCH_INDEX_URL,
+          disableLocalSearch: null,
+          isDefaultSearch: null
+        }
       }
     }
 
@@ -252,6 +264,10 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
 
   isSignupEnabled () {
     return this.form.value['signup']['enabled'] === true
+  }
+
+  isSearchIndexEnabled () {
+    return this.form.value['search']['searchIndex']['enabled'] === true
   }
 
   isAutoFollowIndexEnabled () {

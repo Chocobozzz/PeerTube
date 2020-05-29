@@ -64,8 +64,10 @@ textarea {
 }
 
 .disabled-checkbox-extra {
-  opacity: .5;
-  pointer-events: none;
+  &, ::ng-deep label {
+    opacity: .5;
+    pointer-events: none;
+  }
 }
 
 .form-group-right {

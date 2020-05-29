@@ -44,7 +44,7 @@ export class SearchFiltersComponent implements OnInit {
     this.tagValidatorsMessages = this.videoValidatorsService.VIDEO_TAGS.MESSAGES
     this.publishedDateRanges = [
       {
-        id: undefined,
+        id: 'any_published_date',
         label: this.i18n('Any')
       },
       {
@@ -67,7 +67,7 @@ export class SearchFiltersComponent implements OnInit {
 
     this.durationRanges = [
       {
-        id: undefined,
+        id: 'any_duration',
         label: this.i18n('Any')
       },
       {
@@ -145,6 +145,10 @@ export class SearchFiltersComponent implements OnInit {
 
   resetOriginalPublicationYears () {
     this.originallyPublishedStartYear = this.originallyPublishedEndYear = undefined
+  }
+
+  isSearchTargetEnabled () {
+    return this.serverConfig.search.searchIndex.enabled && this.serverConfig.search.searchIndex.disableLocalSearch !== true
   }
 
   private loadOriginallyPublishedAtYears () {

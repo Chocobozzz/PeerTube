@@ -1,15 +1,16 @@
+import { Observable, of, Subject } from 'rxjs'
 import { first, map, share, shareReplay, switchMap, tap } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Inject, Injectable, LOCALE_ID } from '@angular/core'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
-import { Observable, of, Subject } from 'rxjs'
-import { getCompleteLocale, ServerConfig } from '../../../../../shared'
-import { environment } from '../../../environments/environment'
-import { VideoConstant } from '../../../../../shared/models/videos'
-import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
 import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { sortBy } from '@app/shared/misc/utils'
+import { SearchTargetType } from '@shared/models/search/search-target-query.model'
 import { ServerStats } from '@shared/models/server'
+import { getCompleteLocale, ServerConfig } from '../../../../../shared'
+import { isDefaultLocale, peertubeTranslate } from '../../../../../shared/models/i18n'
+import { VideoConstant } from '../../../../../shared/models/videos'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class ServerService {
@@ -45,12 +46,6 @@ export class ServerService {
       customizations: {
         javascript: '',
         css: ''
-      }
-    },
-    search: {
-      remoteUri: {
-        users: true,
-        anonymous: false
       }
     },
     plugin: {
@@ -145,6 +140,18 @@ export class ServerService {
       message: '',
       level: 'info',
       dismissable: false
+    },
+    search: {
+      remoteUri: {
+        users: true,
+        anonymous: false
+      },
+      searchIndex: {
+        enabled: false,
+        url: '',
+        disableLocalSearch: false,
+        isDefaultSearch: false
+      }
     }
   }
 
@@ -262,6 +269,20 @@ export class ServerService {
 
   getServerStats () {
     return this.http.get<ServerStats>(ServerService.BASE_STATS_URL)
+  }
+
+  getDefaultSearchTarget (): Promise<SearchTargetType> {
+    return this.getConfig().pipe(
+      map(config => {
+        const searchIndexConfig = config.search.searchIndex
+
+        if (searchIndexConfig.enabled && (searchIndexConfig.isDefaultSearch || searchIndexConfig.disableLocalSearch)) {
+          return 'search-index'
+        }
+
+        return 'local'
+      })
+    ).toPromise()
   }
 
   private loadAttributeEnum <T extends string | number> (

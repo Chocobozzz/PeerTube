@@ -1,17 +1,18 @@
+import { Observable } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
-import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
-import { VideoService } from '@app/shared/video/video.service'
-import { RestExtractor, RestService } from '@app/shared'
-import { environment } from '../../environments/environment'
-import { ResultList, Video as VideoServerModel, VideoChannel as VideoChannelServerModel } from '../../../../shared'
-import { Video } from '@app/shared/video/video.model'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
+import { RestExtractor, RestPagination, RestService } from '@app/shared'
+import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
+import { ComponentPaginationLight } from '@app/shared/rest/component-pagination.model'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
+import { Video } from '@app/shared/video/video.model'
+import { VideoService } from '@app/shared/video/video.service'
+import { ResultList, Video as VideoServerModel, VideoChannel as VideoChannelServerModel } from '../../../../shared'
+import { environment } from '../../environments/environment'
+import { SearchTargetType } from '@shared/models/search/search-target-query.model'
 
 @Injectable()
 export class SearchService {
@@ -30,21 +31,27 @@ export class SearchService {
 
   searchVideos (parameters: {
     search: string,
-    componentPagination: ComponentPaginationLight,
-    advancedSearch: AdvancedSearch
+    componentPagination?: ComponentPaginationLight,
+    advancedSearch?: AdvancedSearch
   }): Observable<ResultList<Video>> {
     const { search, componentPagination, advancedSearch } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'videos'
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    let pagination: RestPagination
+
+    if (componentPagination) {
+      pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    }
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
 
     if (search) params = params.append('search', search)
 
-    const advancedSearchObject = advancedSearch.toAPIObject()
-    params = this.restService.addObjectParams(params, advancedSearchObject)
+    if (advancedSearch) {
+      const advancedSearchObject = advancedSearch.toAPIObject()
+      params = this.restService.addObjectParams(params, advancedSearchObject)
+    }
 
     return this.authHttp
                .get<ResultList<VideoServerModel>>(url, { params })
@@ -56,16 +63,25 @@ export class SearchService {
 
   searchVideoChannels (parameters: {
     search: string,
-    componentPagination: ComponentPaginationLight
+    searchTarget?: SearchTargetType,
+    componentPagination?: ComponentPaginationLight
   }): Observable<ResultList<VideoChannel>> {
-    const { search, componentPagination } = parameters
+    const { search, componentPagination, searchTarget } = parameters
 
     const url = SearchService.BASE_SEARCH_URL + 'video-channels'
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+
+    let pagination: RestPagination
+    if (componentPagination) {
+      pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    }
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
     params = params.append('search', search)
+
+    if (searchTarget) {
+      params = params.append('searchTarget', searchTarget as string)
+    }
 
     return this.authHttp
                .get<ResultList<VideoChannelServerModel>>(url, { params })

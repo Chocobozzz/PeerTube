@@ -61,6 +61,7 @@ const SORTABLE_COLUMNS = {
 
   VIDEOS: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'trending' ],
 
+  // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
 
@@ -649,6 +650,15 @@ const DEFAULT_USER_THEME_NAME = 'instance-default'
 
 // ---------------------------------------------------------------------------
 
+const SEARCH_INDEX = {
+  ROUTES: {
+    VIDEOS: '/api/v1/search/videos',
+    VIDEO_CHANNELS: '/api/v1/search/video-channels'
+  }
+}
+
+// ---------------------------------------------------------------------------
+
 // Special constants for a test instance
 if (isTestInstance() === true) {
   PRIVATE_RSA_KEY_SIZE = 1024
@@ -704,6 +714,7 @@ export {
   API_VERSION,
   PEERTUBE_VERSION,
   LAZY_STATIC_PATHS,
+  SEARCH_INDEX,
   HLS_REDUNDANCY_DIRECTORY,
   P2P_MEDIA_LOADER_PEER_VERSION,
   AVATARS_SIZE,

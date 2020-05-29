@@ -1,38 +1,43 @@
 <div class="d-inline-flex position-relative" id="typeahead-container">
   <input
     type="text" id="search-video" name="search-video" #searchVideo i18n-placeholder placeholder="Search videos, channels…"
-    [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keyup)="handleKey($event)" (keydown.enter)="doSearch()"
-    aria-label="Search"
+    [(ngModel)]="search" (ngModelChange)="onSearchChange()" (keydown)="handleKey($event)" (keydown.enter)="doSearch()"
+    aria-label="Search" autocomplete="off"
   >
   <span class="icon icon-search" (click)="doSearch()"></span>
 
   <div class="position-absolute jump-to-suggestions">
-    <!-- suggestions -->
-    <my-suggestions *ngIf="search && newSearch" [results]="results" [highlight]="search" (init)="initKeyboardEventsManager($event)"></my-suggestions>
+
+    <ul [hidden]="!search || !areSuggestionsOpened" role="listbox" class="p-0 m-0">
+      <li
+        *ngFor="let result of results; let i = index" class="suggestion d-flex flex-justify-start flex-items-center p-0 f5"
+        role="option" aria-selected="true" (mouseenter)="onSuggestionHover(i)" (click)="onSuggestionlicked(result)"
+      >
+        <my-suggestion [result]="result" [highlight]="search"></my-suggestion>
+      </li>
+    </ul>
 
     <!-- suggestion help, not shown until one of the suggestions is selected and specific to that suggestion -->
-    <div *ngIf="showHelp" id="typeahead-help" class="overflow-hidden">
-      <ng-container *ngIf="activeResult.type === 'search-global'">
-        <div class="d-flex justify-content-between">
-          <label class="small-title" i18n>GLOBAL SEARCH</label>
-          <div class="advanced-search-status text-muted">
-            <span *ngIf="serverConfig" class="mr-1" i18n>using {{ serverConfig.followings.instance.autoFollowIndex.indexUrl }}</span>
-            <i class="glyphicon glyphicon-globe"></i>
-          </div>
+    <div *ngIf="showSearchGlobalHelp()" id="typeahead-help" class="overflow-hidden">
+      <div class="d-flex justify-content-between">
+        <label class="small-title" i18n>GLOBAL SEARCH</label>
+        <div class="advanced-search-status text-muted">
+          <span *ngIf="serverConfig" class="mr-1" i18n>using {{ serverConfig.search.searchIndex.url }}</span>
+          <i class="glyphicon glyphicon-globe"></i>
         </div>
-        <div class="text-muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
-      </ng-container>
+      </div>
+      <div class="text-muted" i18n>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</div>
     </div>
 
     <!-- search instructions, when search input is empty -->
-    <div *ngIf="areInstructionsDisplayed" id="typeahead-instructions" class="overflow-hidden">
+    <div *ngIf="areInstructionsDisplayed()" id="typeahead-instructions" class="overflow-hidden">
       <div class="d-flex justify-content-between">
         <label class="small-title" i18n>ADVANCED SEARCH</label>
         <div class="advanced-search-status c-help">
           <span [ngClass]="canSearchAnyURI ? 'text-success' : 'text-muted'" i18n-title title="Determines whether you can resolve any distant content, or if this instance only allows doing so for instances it follows.">
-            <span *ngIf="canSearchAnyURI" class="mr-1" i18n>any instance</span>
-            <span *ngIf="!canSearchAnyURI" class="mr-1" i18n>only followed instances</span>
-            <i [ngClass]="canSearchAnyURI ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
+            <span *ngIf="canSearchAnyURI()" class="mr-1" i18n>any instance</span>
+            <span *ngIf="!canSearchAnyURI()" class="mr-1" i18n>only followed instances</span>
+            <i [ngClass]="canSearchAnyURI() ? 'glyphicon glyphicon-ok-sign' : 'glyphicon glyphicon-exclamation-sign'"></i>
           </span>
         </div>
       </div>

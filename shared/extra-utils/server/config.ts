@@ -165,6 +165,18 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       level: 'warning',
       message: 'hello',
       dismissable: true
+    },
+    search: {
+      remoteUri: {
+        users: true,
+        anonymous: true
+      },
+      searchIndex: {
+        enabled: true,
+        url: 'https://search.joinpeertube.org',
+        disableLocalSearch: true,
+        isDefaultSearch: true
+      }
     }
   }
 

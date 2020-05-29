@@ -2,7 +2,11 @@
   <div class="results-header">
     <div class="first-line">
       <div class="results-counter" *ngIf="pagination.totalItems">
-        <span i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}}</span>
+        <span i18n>{{ pagination.totalItems | myNumberFormatter }} {pagination.totalItems, plural, =1 {result} other {results}} </span>
+
+        <span i18n *ngIf="advancedSearch.searchTarget === 'local'">on this instance</span>
+        <span i18n *ngIf="advancedSearch.searchTarget === 'search-index'">on the vidiverse</span>
+
         <span *ngIf="currentSearch" i18n>
           for <span class="search-value">{{ currentSearch }}</span>
         </span>
@@ -31,12 +35,12 @@
 
   <ng-container *ngFor="let result of results">
     <div *ngIf="isVideoChannel(result)" class="entry video-channel">
-      <a [routerLink]="[ '/video-channels', result.nameWithHost ]">
+      <a [routerLink]="getChannelUrl(result)">
         <img [src]="result.avatarUrl" alt="Avatar" />
       </a>
 
       <div class="video-channel-info">
-        <a [routerLink]="[ '/video-channels', result.nameWithHost ]" class="video-channel-names">
+        <a [routerLink]="getChannelUrl(result)" class="video-channel-names">
           <div class="video-channel-display-name">{{ result.displayName }}</div>
           <div class="video-channel-name">{{ result.nameWithHost }}</div>
         </a>
@@ -44,12 +48,13 @@
         <div i18n class="video-channel-followers">{{ result.followersCount }} subscribers</div>
       </div>
 
-      <my-subscribe-button [videoChannels]="[result]"></my-subscribe-button>
+      <my-subscribe-button *ngIf="!hideActions()" [videoChannels]="[result]"></my-subscribe-button>
     </div>
 
     <div *ngIf="isVideo(result)" class="entry video">
       <my-video-miniature
-        [video]="result" [user]="user" [displayAsRow]="true"
+        [video]="result" [user]="user" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
+        [useLazyLoadUrl]="advancedSearch.searchTarget === 'search-index'"
         (videoBlacklisted)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
       ></my-video-miniature>
     </div>

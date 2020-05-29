@@ -36,7 +36,7 @@
 
 #typeahead-help,
 #typeahead-instructions,
-my-suggestions ::ng-deep ul {
+li.suggestion {
   border: 1px solid pvar(--mainBackgroundColor);
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -90,7 +90,7 @@ my-suggestions ::ng-deep ul {
   }
 
   & > div:last-child {
-    // we have to switch the display and not the opacity, 
+    // we have to switch the display and not the opacity,
     // to avoid clashing with the rest of the interface.
     display: none;
   }
@@ -101,10 +101,10 @@ my-suggestions ::ng-deep ul {
       @media screen and (min-width: $mobile-view) {
         display: initial !important;
       }
-      
+
       #typeahead-help,
       #typeahead-instructions,
-      my-suggestions ::ng-deep ul {
+      li.suggestion {
         box-shadow: rgba(0, 0, 0, 0.2) 0px 10px 20px -5px;
       }
     }

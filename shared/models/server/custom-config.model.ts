@@ -139,4 +139,18 @@ export interface CustomConfig {
     level: BroadcastMessageLevel
     dismissable: boolean
   }
+
+  search: {
+    remoteUri: {
+      users: boolean
+      anonymous: boolean
+    }
+
+    searchIndex: {
+      enabled: boolean
+      url: string
+      disableLocalSearch: boolean
+      isDefaultSearch: boolean
+    }
+  }
 }

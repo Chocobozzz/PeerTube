@@ -1,4 +1,4 @@
-import { ActorInfo, FollowState, UserNotification as UserNotificationServer, UserNotificationType, VideoInfo } from '../../../../../shared'
+import { ActorInfo, FollowState, UserNotification as UserNotificationServer, UserNotificationType, VideoInfo, Avatar } from '../../../../../shared'
 import { Actor } from '@app/shared/actor/actor.model'
 
 export class UserNotification implements UserNotificationServer {
@@ -178,7 +178,7 @@ export class UserNotification implements UserNotificationServer {
     return videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
   }
 
-  private setAvatarUrl (actor: { avatarUrl?: string, avatar?: { path: string } }) {
+  private setAvatarUrl (actor: { avatarUrl?: string, avatar?: Avatar }) {
     actor.avatarUrl = Actor.GET_ACTOR_AVATAR_URL(actor)
   }
 }

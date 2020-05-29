@@ -340,6 +340,18 @@ describe('Test config', function () {
         level: 'error',
         message: 'super bad message',
         dismissable: true
+      },
+      search: {
+        remoteUri: {
+          anonymous: true,
+          users: true
+        },
+        searchIndex: {
+          enabled: true,
+          url: 'https://search.joinpeertube.org',
+          disableLocalSearch: true,
+          isDefaultSearch: true
+        }
       }
     }
     await updateCustomConfig(server.url, server.accessToken, newCustomConfig)

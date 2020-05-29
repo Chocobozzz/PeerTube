@@ -1,3 +1,4 @@
+import { SearchTargetType } from '@shared/models/search/search-target-query.model'
 import { NSFWQuery } from '../../../../shared/models/search'
 
 export class AdvancedSearch {
@@ -23,6 +24,11 @@ export class AdvancedSearch {
 
   sort: string
 
+  searchTarget: SearchTargetType
+
+  // Filters we don't want to count, because they are mandatory
+  private silentFilters = new Set([ 'sort', 'searchTarget' ])
+
   constructor (options?: {
     startDate?: string
     endDate?: string
@@ -37,6 +43,7 @@ export class AdvancedSearch {
     durationMin?: string
     durationMax?: string
     sort?: string
+    searchTarget?: SearchTargetType
   }) {
     if (!options) return
 
@@ -54,6 +61,8 @@ export class AdvancedSearch {
     this.durationMin = parseInt(options.durationMin, 10)
     this.durationMax = parseInt(options.durationMax, 10)
 
+    this.searchTarget = options.searchTarget || undefined
+
     if (isNaN(this.durationMin)) this.durationMin = undefined
     if (isNaN(this.durationMax)) this.durationMax = undefined
 
@@ -61,9 +70,11 @@ export class AdvancedSearch {
   }
 
   containsValues () {
+    const exceptions = new Set([ 'sort', 'searchTarget' ])
+
     const obj = this.toUrlObject()
     for (const k of Object.keys(obj)) {
-      if (k === 'sort') continue // Exception
+      if (this.silentFilters.has(k)) continue
 
       if (obj[k] !== undefined && obj[k] !== '') return true
     }
@@ -102,7 +113,8 @@ export class AdvancedSearch {
       tagsAllOf: this.tagsAllOf,
       durationMin: this.durationMin,
       durationMax: this.durationMax,
-      sort: this.sort
+      sort: this.sort,
+      searchTarget: this.searchTarget
     }
   }
 
@@ -120,7 +132,8 @@ export class AdvancedSearch {
       tagsAllOf: this.intoArray(this.tagsAllOf),
       durationMin: this.durationMin,
       durationMax: this.durationMax,
-      sort: this.sort
+      sort: this.sort,
+      searchTarget: this.searchTarget
     }
   }
 
@@ -129,7 +142,7 @@ export class AdvancedSearch {
 
     const obj = this.toUrlObject()
     for (const k of Object.keys(obj)) {
-      if (k === 'sort') continue // Exception
+      if (this.silentFilters.has(k)) continue
 
       if (obj[k] !== undefined && obj[k] !== '') acc++
     }

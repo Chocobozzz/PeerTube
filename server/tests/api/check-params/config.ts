@@ -139,6 +139,18 @@ describe('Test config API validators', function () {
       dismissable: true,
       message: 'super message',
       level: 'warning'
+    },
+    search: {
+      remoteUri: {
+        users: true,
+        anonymous: true
+      },
+      searchIndex: {
+        enabled: true,
+        url: 'https://search.joinpeertube.org',
+        disableLocalSearch: true,
+        isDefaultSearch: true
+      }
     }
   }
 

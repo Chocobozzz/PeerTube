@@ -1,24 +1,24 @@
-import { Input, Component, Output, EventEmitter, OnInit, ChangeDetectionStrategy } from '@angular/core'
+import { Input, Component, Output, EventEmitter, OnInit, ChangeDetectionStrategy, OnChanges } from '@angular/core'
 import { RouterLink } from '@angular/router'
 import { ListKeyManagerOption } from '@angular/cdk/a11y'
 
-export type Result = {
+export type SuggestionPayload = {
   text: string
-  type: 'channel' | 'suggestion' | 'search-channel' | 'search-instance' | 'search-global' | 'search-any'
-  routerLink?: RouterLink,
-  default?: boolean
+  type: SuggestionPayloadType
+  routerLink?: RouterLink
+  default: boolean
 }
+
+export type SuggestionPayloadType = 'search-instance' | 'search-index'
 
 @Component({
   selector: 'my-suggestion',
   templateUrl: './suggestion.component.html',
-  styleUrls: [ './suggestion.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: [ './suggestion.component.scss' ]
 })
 export class SuggestionComponent implements OnInit, ListKeyManagerOption {
-  @Input() result: Result
+  @Input() result: SuggestionPayload
   @Input() highlight: string
-  @Output() selected = new EventEmitter()
 
   disabled = false
   active = false
@@ -29,9 +29,5 @@ export class SuggestionComponent implements OnInit, ListKeyManagerOption {
 
   ngOnInit () {
     if (this.result.default) this.active = true
-  }
-
-  selectItem () {
-    this.selected.emit(this.result)
   }
 }

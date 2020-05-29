@@ -14,6 +14,7 @@ export class CustomConfigValidatorsService {
   readonly ADMIN_EMAIL: BuildFormValidator
   readonly TRANSCODING_THREADS: BuildFormValidator
   readonly INDEX_URL: BuildFormValidator
+  readonly SEARCH_INDEX_URL: BuildFormValidator
 
   constructor (private i18n: I18n) {
     this.INSTANCE_NAME = {
@@ -84,6 +85,13 @@ export class CustomConfigValidatorsService {
       VALIDATORS: [ Validators.pattern(/^https:\/\//) ],
       MESSAGES: {
         'pattern': this.i18n('Index URL should be a URL')
+      }
+    }
+
+    this.SEARCH_INDEX_URL = {
+      VALIDATORS: [ Validators.pattern(/^https?:\/\//) ],
+      MESSAGES: {
+        'pattern': this.i18n('Search index URL should be a URL')
       }
     }
   }

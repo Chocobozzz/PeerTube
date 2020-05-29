@@ -272,11 +272,22 @@ async function getOrCreateVideoAndAccountAndChannel (
 
   const actor = await getOrCreateVideoChannelFromVideoObject(fetchedVideo)
   const videoChannel = actor.VideoChannel
-  const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(createVideo, fetchedVideo, videoChannel, syncParam.thumbnail)
 
-  await syncVideoExternalAttributes(videoCreated, fetchedVideo, syncParam)
+  try {
+    const { autoBlacklisted, videoCreated } = await retryTransactionWrapper(createVideo, fetchedVideo, videoChannel, syncParam.thumbnail)
 
-  return { video: videoCreated, created: true, autoBlacklisted }
+    await syncVideoExternalAttributes(videoCreated, fetchedVideo, syncParam)
+
+    return { video: videoCreated, created: true, autoBlacklisted }
+  } catch (err) {
+    // Maybe a concurrent getOrCreateVideoAndAccountAndChannel call created this video
+    if (err.name === 'SequelizeUniqueConstraintError') {
+      const fallbackVideo = await fetchVideoByUrl(videoUrl, fetchType)
+      if (fallbackVideo) return { video: fallbackVideo, created: false }
+    }
+
+    throw err
+  }
 }
 
 async function updateVideoFromAP (options: {
