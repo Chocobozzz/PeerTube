@@ -355,16 +355,12 @@
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target state="new">
-          Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-        </target>
+        <target state="translated">A túa instancia seguiu automáticamente a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">150</context></context-group>
       </trans-unit>
       <trans-unit id="f61b49d5729bbd138f2a083fbaee2920811d31c5" datatype="html">
         <source>The notification points to a content now unavailable</source>
-        <target state="new">
-          The notification points to a content now unavailable
-        </target>
+        <target state="translated">A notificacións refírese a un contido non dispoñible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">158</context>
@@ -372,7 +368,7 @@
       </trans-unit>
       <trans-unit id="f9fdeb0495dd96319d13df9d9536760d0a98d9b5" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ action.label }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/buttons/action-dropdown.component.html</context>
           <context context-type="linenumber">22</context>
@@ -417,7 +413,7 @@
       </trans-unit>
       <trans-unit id="8efba03f22550a671ee2c2c6dfd1ff03ea047700" datatype="html">
         <source>Search playlists</source>
-        <target state="new">Search playlists</target>
+        <target state="translated">Buscar listas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">45</context>
@@ -425,7 +421,7 @@
       </trans-unit>
       <trans-unit id="19fc45e7e0cab63a8c4422ea7158bf5c6228cee4" datatype="html">
         <source>Create a private playlist</source>
-        <target state="new">Create a private playlist</target>
+        <target state="translated">Crear lista privada</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-add-to-playlist.component.html</context>
           <context context-type="linenumber">65</context>
@@ -461,13 +457,13 @@
       </trans-unit>
       <trans-unit id="e53246788ffa2660a170aa859691a55576df2e6c" datatype="html">
         <source>video</source>
-        <target state="new">video</target>
+        <target state="translated">vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">12</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">46</context></context-group>
       </trans-unit>
       <trans-unit id="7cdda05962b3123483985a6fe7da45a7a564ecf9" datatype="html">
         <source>subtitles</source>
-        <target state="new">subtitles</target>
+        <target state="translated">subtítulos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">11</context>
@@ -475,24 +471,24 @@
       </trans-unit>
       <trans-unit id="7722a92a1fc887570b4f4d8a7bb916f067f32028" datatype="html">
         <source>Format</source>
-        <target state="new">Format</target>
+        <target state="translated">Formato</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="be745b3dc0df310871766eb6c8f78c3ce652a2b4" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ item.value.label }}"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">61</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">73</context></context-group>
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target state="new">Video stream</target>
+        <target state="translated">Fluxo de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target state="new">Audio stream</target>
+        <target state="translated">Fluxo de audio</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
@@ -540,9 +536,7 @@
       </trans-unit>
       <trans-unit id="9430cb2c6ceed0b2addc7112a40317985e4193e1" datatype="html">
         <source>Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </source>
-        <target state="new">
-      Your report will be sent to moderators of <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and will be forwarded to the video origin (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) too<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>.
-    </target>
+        <target state="translated">O informe será enviado á moderación <x id="INTERPOLATION" equiv-text="{{ currentHost }}"/><x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> e tamén reenviado á orixe do vídeo (<x id="INTERPOLATION_1" equiv-text="{{ originHost }}"/>) <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">9</context>
@@ -590,12 +584,12 @@
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target state="new">This will ask remote instances to delete it</target>
+        <target state="translated">Esto solicitará a eliminación nas instancias remotas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="0cd0f27936731dabfd8d89277b781d5dd664bc89" datatype="html">
         <source>Unfederate the video</source>
-        <target state="new">Unfederate the video</target>
+        <target state="translated">Desfederar o vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
@@ -619,7 +613,7 @@
       </trans-unit>
       <trans-unit id="f73a82bb90c6c856cc0d2e3b2f5c109460074912" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {1 view} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 visualización} other {<x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizacións} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="4a806761798181e907e28ed1af053d466526800d">
@@ -668,7 +662,7 @@
       </trans-unit>
       <trans-unit id="15c02cb6b6c3be53477e502d3e1ee26955b23af0" datatype="html">
         <source>Unavailable</source>
-        <target state="new">Unavailable</target>
+        <target state="translated">Non dispoñible</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">32</context>
@@ -676,7 +670,7 @@
       </trans-unit>
       <trans-unit id="28df1b02fd88d2deb0212bc5d7ff34cf9492fa54" datatype="html">
         <source>Deleted</source>
-        <target state="new">Deleted</target>
+        <target state="translated">Eliminado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context><context context-type="linenumber">34</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comment.component.html</context><context context-type="linenumber">49</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context><context context-type="linenumber">100</context></context-group>
@@ -780,7 +774,7 @@
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
         <source>Recommended</source>
-        <target state="new">Recommended</target>
+        <target state="translated">Recomendado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/peertube-checkbox.component.html</context>
           <context context-type="linenumber">33</context>
@@ -796,7 +790,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target state="new">Subscribe with an account on this instance</target>
+        <target state="translated">Susbcríbete cunha conta desta instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">53</context>
@@ -847,10 +841,7 @@
       </trans-unit>
       <trans-unit id="01cf713559c39a17cf5c8fbcd33b004a77ce0963" datatype="html">
         <source>You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there. </source>
-        <target state="new">
-        You can subscribe to the channel via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-        For instance with Mastodon or Pleroma you can type the channel URL in the search box and subscribe there.
-      </target>
+        <target state="translated">Podes subscribirte ao canal a través dunha conta ActivityPub no fediverso.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Por exemplo con Mastodon ou Pleroma podes escribir o URL do canal na caixa de busca e susbscribirte desde alí. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">17</context>
@@ -858,10 +849,7 @@
       </trans-unit>
       <trans-unit id="c590f63488a5179f20a46930cf5e673f8136673d" datatype="html">
         <source>You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there. </source>
-        <target state="new">
-        You can interact with this via any ActivityPub-capable fediverse instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-        For instance with Mastodon or Pleroma you can type the current URL in the search box and interact with it there.
-      </target>
+        <target state="translated">Podes interactuar con este vídeo desde unha conta ActivityPub no fediverso.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Por exemplo cunha conta Mastodon ou Pleroma podes escribir o URL do vídeo na caixa de busca e interactuar con el desde alí. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">26</context>
@@ -869,7 +857,7 @@
       </trans-unit>
       <trans-unit id="6513f65441f986d9204122e01b4ab1df1d63d18e" datatype="html">
         <source>PeerTube version</source>
-        <target state="new">PeerTube version</target>
+        <target state="translated">Versión PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">5</context>
@@ -877,31 +865,28 @@
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </source>
-        <target state="new">
-        <x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-        <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/>
-      </target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>A política por omisión para vídeos NSFW/sensibles<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>pode ser redefinida polas usuarias<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c" datatype="html">
         <source>User registration allowed</source>
-        <target state="new">User registration allowed</target>
+        <target state="translated">Rexistro de usuarias permitido</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
         <source>Video uploads</source>
-        <target state="new">Video uploads</target>
+        <target state="translated">Subidas de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">27</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">38</context></context-group>
       </trans-unit>
       <trans-unit id="ba774dce7a0cbbc29d7086b8557939c7e8d9883d" datatype="html">
         <source>Transcoding in multiple resolutions</source>
-        <target state="new">Transcoding in multiple resolutions</target>
+        <target state="translated">Transcodificando a múltiples resolucións</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="7deebcf3491b27625e9b308179a6635b48368dcb" datatype="html">
         <source>Requires manual validation by moderators</source>
-        <target state="new">Requires manual validation by moderators</target>
+        <target state="translated">Require intervención manual dos moderadores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">40</context>
@@ -909,7 +894,7 @@
       </trans-unit>
       <trans-unit id="f1155367f44b4e3d2286db687d324a9b0cc1a7cb" datatype="html">
         <source>Automatically published</source>
-        <target state="new">Automatically published</target>
+        <target state="translated">Publicado automáticamente</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context>
           <context context-type="linenumber">41</context>
@@ -947,27 +932,27 @@
       </trans-unit>
       <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1" datatype="html">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target state="new">HTTP import (YouTube, Vimeo, direct URL...)</target>
+        <target state="translated">Importar HTTP (YouTube, Vimeo, URL directo...)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">70</context></context-group>
       </trans-unit>
       <trans-unit id="4e231a74ad4739e7b0606e8e66d5a656f5855a5a" datatype="html">
         <source>Torrent import</source>
-        <target state="new">Torrent import</target>
+        <target state="translated">Importar torrent</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">77</context></context-group>
       </trans-unit>
       <trans-unit id="59bdc3dfa4075f92c734588899485db702c8f120" datatype="html">
         <source>Player</source>
-        <target state="new">Player</target>
+        <target state="translated">Reprodutor</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
         <source>P2P enabled</source>
-        <target state="new">P2P enabled</target>
+        <target state="translated">P2P activado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">89</context></context-group>
       </trans-unit>
       <trans-unit id="b8b6a001cca6fa2ba15600ca3a78dfeebf685d60" datatype="html">
         <source>Loading instance statistics...</source>
-        <target state="new">Loading instance statistics...</target>
+        <target state="translated">Cargando estatísticas da instancia...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">1</context>
@@ -984,7 +969,7 @@
       </trans-unit>
       <trans-unit id="7c7f4be7b726e61c577e63842a58d9e435f7c597" datatype="html">
         <source>users</source>
-        <target state="new">users</target>
+        <target state="translated">usuarias</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">11</context>
@@ -992,7 +977,7 @@
       </trans-unit>
       <trans-unit id="5bc509bb72973f9895241127d5556e9e31051137" datatype="html">
         <source>videos</source>
-        <target state="new">videos</target>
+        <target state="translated">vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1004,7 +989,7 @@
       </trans-unit>
       <trans-unit id="bd21b1e6b5674003187e5cbec0e7e2854f9d8388" datatype="html">
         <source>video views</source>
-        <target state="new">video views</target>
+        <target state="translated">visualizacións</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">31</context>
@@ -1012,7 +997,7 @@
       </trans-unit>
       <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84" datatype="html">
         <source>video comments</source>
-        <target state="new">video comments</target>
+        <target state="translated">comentarios</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1024,7 +1009,7 @@
       </trans-unit>
       <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d" datatype="html">
         <source>of hosted video</source>
-        <target state="new">of hosted video</target>
+        <target state="translated">de vídeo hospedado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">51</context>
@@ -1032,7 +1017,7 @@
       </trans-unit>
       <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7" datatype="html">
         <source>Federation</source>
-        <target state="new">Federation</target>
+        <target state="translated">Federación</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">58</context>
@@ -1040,7 +1025,7 @@
       </trans-unit>
       <trans-unit id="8de9d3173fafc2c7a94352dec3de899b6cedf9c5" datatype="html">
         <source>followers</source>
-        <target state="new">followers</target>
+        <target state="translated">seguidoras</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">85</context>
@@ -1048,7 +1033,7 @@
       </trans-unit>
       <trans-unit id="1ec99ffe83830affef834fd7beeda8ee313203fe" datatype="html">
         <source>following</source>
-        <target state="new">following</target>
+        <target state="translated">seguindo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/instance/instance-statistics.component.html</context>
           <context context-type="linenumber">95</context>
@@ -1121,9 +1106,7 @@
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-    Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-  </target>
+        <target state="translated">Lamentámolo, pero algo pasou co proceso de conexión desde o exterior. Por favor <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contacta coa administración<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">6</context>
@@ -1131,9 +1114,7 @@
       </trans-unit>
       <trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="new">
-        If you are looking for an account…
-      </target>
+        <target state="translated">Se buscas unha conta…</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1141,14 +1122,7 @@
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-        Currently this instance doesn't allow for user registration, but you can find an instance
-        that gives you the possibility to sign up for an account and upload your videos there.
-
-        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-
-        Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-      </target>
+        <target state="translated">Esta instancia actualmente non permite o rexistro, pero podes atopar unha instancia que che permita abrir unha conta e subir alí os teus vídeos. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Atopa a túa instancia en <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1182,9 +1156,7 @@
       </trans-unit>
       <trans-unit id="9fed9d6f57dafb967ffaaf3c63f54ad976cab926" datatype="html">
         <source>or create an account</source>
-        <target state="new">
-              or create an account
-            </target>
+        <target state="translated">ou crea unha conta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">40</context>
@@ -1207,7 +1179,7 @@
       </trans-unit>
       <trans-unit id="48ff0628dcbb4d37e9687302df3023b8427b48f2" datatype="html">
         <source>Click here to reset your password</source>
-        <target state="new">Click here to reset your password</target>
+        <target state="translated">Preme aquí e restablece o contrasinal</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
@@ -1221,7 +1193,7 @@
       </trans-unit>
       <trans-unit id="f5d783c0613d323fdd20074ffbc519ee715a4f2b" datatype="html">
         <source>Or sign in with</source>
-        <target state="new">Or sign in with</target>
+        <target state="translated">Ou conéctate con</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">68</context>
@@ -1237,9 +1209,7 @@
       </trans-unit>
       <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="new">
-      We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.
-    </target>
+        <target state="translated">Lamentámolo, non podes recuperar o contrasinal porque a administración da instancia non configurou o sistema de email de PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/login/login.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -1310,7 +1280,7 @@
       </trans-unit>
       <trans-unit id="3c2c6b17d0326ab344e194b17abbee201d58dbea" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ pagination.totalItems | myNumberFormatter }}"/> <x id="ICU" equiv-text="{pagination.totalItems, plural, =1 {...} other {...}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/search/search.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1357,7 +1327,7 @@
       </trans-unit>
       <trans-unit id="5cf92a1d527e65908c75633e8484cdd3b6d16b9b" datatype="html">
         <source>Welcome to PeerTube, dear administrator!</source>
-        <target state="new">Welcome to PeerTube, dear administrator!</target>
+        <target state="translated">Benvida administradora de PeerTube!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1365,8 +1335,7 @@
       </trans-unit>
       <trans-unit id="fb2ab91ad6091b4a42f4ec08487650a0bc2d541c" datatype="html">
         <source>CLI documentation</source>
-        <target state="new">CLI
-            documentation</target>
+        <target state="translated">Documentación CLI</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1374,7 +1343,7 @@
       </trans-unit>
       <trans-unit id="65462878ca6d04c826906432816a3df3e048ac87" datatype="html">
         <source>Upload or import videos, parse logs, prune storage directories, reset user password...</source>
-        <target state="new">Upload or import videos, parse logs, prune storage directories, reset user password...</target>
+        <target state="translated">Subir ou importar vídeos, analizar logs, optimizar directorios, restablecer contrasinal de usuarias...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">15</context>
@@ -1382,8 +1351,7 @@
       </trans-unit>
       <trans-unit id="054dd8ba0dece8069a5a7e538efaca9f58cf81f9" datatype="html">
         <source>Administer documentation</source>
-        <target state="new">Administer
-            documentation</target>
+        <target state="translated">Documentación da administradora</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1391,7 +1359,7 @@
       </trans-unit>
       <trans-unit id="c38a3f5b5eff069d0097527fa40a3f8c4d9c1e4e" datatype="html">
         <source>Managing users, following other instances, dealing with spammers...</source>
-        <target state="new">Managing users, following other instances, dealing with spammers...</target>
+        <target state="translated">Xestión de usuarias, seguimento de outras instancias, tratar con spammers...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">22</context>
@@ -1399,8 +1367,7 @@
       </trans-unit>
       <trans-unit id="4e020f13aa4db2285047eba96e50dc716fb5f417" datatype="html">
         <source>Use documentation</source>
-        <target state="new">Use
-            documentation</target>
+        <target state="translated">Documentación de utilización</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">26</context>
@@ -1408,7 +1375,7 @@
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="new">Setup your account, managing video playlists, discover third-party applications...</target>
+        <target state="translated">Configurar a túa conta, xestión de listas de reprodución, descubrimento de aplicacións de terceiros...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1416,7 +1383,7 @@
       </trans-unit>
       <trans-unit id="6b705cdf0d567cf608b9891a1d912daebac3523e" datatype="html">
         <source>Useful links</source>
-        <target state="new">Useful links</target>
+        <target state="translated">Ligazóns útiles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">41</context>
@@ -1424,7 +1391,7 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target state="new">Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target state="translated">Sitio web oficial de PeerTube (novas, axuda, colaboración...) <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">44</context>
@@ -1432,8 +1399,7 @@
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target state="new">Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          </target>
+        <target state="translated">Sube a túa instancia ao índice público de PeerTube: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">47</context>
@@ -1441,7 +1407,7 @@
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="new">It's time to configure your instance!</target>
+        <target state="translated">Agora configura a túa instancia!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">59</context>
@@ -1449,11 +1415,7 @@
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
         <source>Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain your it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> is very important for visitors to understand on what type of instance they are. </source>
-        <target state="new">
-          Choosing your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance name<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>setting up a description<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, specifying <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>who you are<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>,
-          why <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>you created your instance<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>how long<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> you plan to <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>maintain your it<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          is very important for visitors to understand on what type of instance they are.
-        </target>
+        <target state="translated">Escollendo o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>nome da instancia<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>escribindo unha descrición<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, explicando <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>quen es<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, por que <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>creaches a instancia<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>canto tempo<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tes planeado <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>mantela <x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> é moi importante para as persoas que a visitan saiban o tipo de instancia na que se atopan. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">61</context>
@@ -1461,13 +1423,7 @@
       </trans-unit>
       <trans-unit id="bd6c91a86a18f512ade62e216efcfb5d2520711c" datatype="html">
         <source>If you want to open registrations, please decide what are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, fill your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> PeerTube instance. </source>
-        <target state="new">
-          If you want to open registrations, please decide what are <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your moderation rules<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, fill your <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>instance
-          terms<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          and specify the categories and languages you speak. This way, you will help users to register on <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>the
-          appropriate<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>
-          PeerTube instance.
-        </target>
+        <target state="translated">Se queres permitir o rexistro, decide cales son <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>as túas normas de moderación<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, completa os <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>termos da instancia<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> e indica as categorías e idiomas que falas. Deste xeito axudarás as usuarias para que se rexistren <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>na instancia PeerTube axeitada<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">67</context>
@@ -1475,19 +1431,17 @@
       </trans-unit>
       <trans-unit id="650b8c3e81746bc33ff276f2ef30bf89fa2d74dd" datatype="html">
         <source>Remind me later</source>
-        <target state="new">Remind me later</target>
+        <target state="translated">Lémbramo máis tarde</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">80</context></context-group>
       </trans-unit>
       <trans-unit id="b310fa17f1bbfc4dd61b80c1cfc4116a81a9c76c" datatype="html">
         <source>Configure my instance</source>
-        <target state="new">
-      Configure my instance
-    </target>
+        <target state="translated">Configurar a miña instancia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">86</context></context-group>
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target state="new">Configuration warning!</target>
+        <target state="translated">Aviso da configuración!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1495,7 +1449,7 @@
       </trans-unit>
       <trans-unit id="120796abeaabea4067c1cd739194cb6c86252155" datatype="html">
         <source>Hello dear administrator. You enabled user registration on your instance but you did not configure the following fields:</source>
-        <target state="new">Hello dear administrator. You enabled user registration on your instance but you did not configure the following fields:</target>
+        <target state="translated">Ola administradora. Activaches o rexistro na túa instancia pero non configuraches os seguintes campos:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">10</context>
@@ -1503,7 +1457,7 @@
       </trans-unit>
       <trans-unit id="ab7e3d0be94cc55ce997a5f38c679956e66f3936" datatype="html">
         <source>Instance name</source>
-        <target state="new">Instance name</target>
+        <target state="translated">Nome da instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">13</context>
@@ -1511,7 +1465,7 @@
       </trans-unit>
       <trans-unit id="b6e9a7a198c9882894677a0358d22ed79482808a" datatype="html">
         <source>Instance short description</source>
-        <target state="new">Instance short description</target>
+        <target state="translated">Descrición curta da instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1519,7 +1473,7 @@
       </trans-unit>
       <trans-unit id="801cb5b4cc93a5c0a4d89a46b96487d3638f0bc5" datatype="html">
         <source>Who you are</source>
-        <target state="new">Who you are</target>
+        <target state="translated">Quen es</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1527,7 +1481,7 @@
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="new">How long you plan to maintain your instance</target>
+        <target state="translated">Canto tempo pensas manter a instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1535,7 +1489,7 @@
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
         <source>How you plan to pay your instance</source>
-        <target state="new">How you plan to pay your instance</target>
+        <target state="translated">Como pensas financiar o mantemento</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1543,7 +1497,7 @@
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="new">How you will moderate your instance</target>
+        <target state="translated">Como vas moderar a instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1551,7 +1505,7 @@
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
         <source>Instance terms</source>
-        <target state="new">Instance terms</target>
+        <target state="translated">Termos da instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">21</context>
