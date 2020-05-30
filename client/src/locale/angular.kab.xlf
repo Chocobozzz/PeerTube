@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="ngb.carousel.previous" datatype="html">
         <source>Previous</source>
-        <target>Précédent</target>
+        <target>Γer deffir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/carousel/carousel.d.ts</context>
           <context context-type="linenumber">13</context>
@@ -40,7 +40,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month" datatype="html">
         <source>Next month</source>
-        <target>Aggur d-iteddun</target>
+        <target>Aggur i d-iteddun</target>
         <context-group purpose="location">
           <context context-type="sourcefile">node_modules/@ng-bootstrap/ng-bootstrap/datepicker/datepicker-navigation.d.ts</context>
           <context context-type="linenumber">26</context>
@@ -388,7 +388,7 @@
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target/>
+        <target>Tummant-inek tesεa <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>aneḍfar amaynut<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> yettṛaǧu asentem-inek <x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">141</context>
@@ -396,7 +396,7 @@
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
         <source>Your instance automatically followed <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/><x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/><x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target/>
+        <target state="translated">Tummant-inek tettwaḍfar s wudem awurman <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/> <x id="INTERPOLATION" equiv-text="{{ notification.actorFollow.following.host }}"/> <x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context>
           <context context-type="linenumber">150</context>
@@ -608,7 +608,7 @@
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target/>
+        <target state="translated">Asuddem n tvidyut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">57</context>
@@ -616,7 +616,7 @@
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target/>
+        <target state="translated">Asuddem awurman</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">69</context>
@@ -624,7 +624,7 @@
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c" datatype="html">
         <source>Direct download</source>
-        <target/>
+        <target state="translated">Asider usrid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.html</context>
           <context context-type="linenumber">87</context>
@@ -696,7 +696,7 @@
       </trans-unit>
       <trans-unit id="11749f4fc0aa1b5e37f38575e4d4e3b1b7e0e96b" datatype="html">
         <source>Report video</source>
-        <target/>
+        <target state="translated">Mmel tavidyut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">3</context>
@@ -712,7 +712,7 @@
       </trans-unit>
       <trans-unit id="bb44873ad8d4c5dbad0ac2a6a50e0ceee9119125" datatype="html">
         <source>Reason...</source>
-        <target/>
+        <target state="translated">Taɣẓint...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-report.component.html</context>
           <context context-type="linenumber">16</context>
@@ -760,7 +760,7 @@
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target/>
+        <target state="translated">Ayagi ad isuter deg tummanin i ibewden ad yettwakkes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-blacklist.component.html</context>
           <context context-type="linenumber">26</context>
@@ -820,7 +820,7 @@
       </trans-unit>
       <trans-unit id="fb8ccb136ab0ad1ff1dfbce739198be16a814f87" datatype="html">
         <source>Sensitive</source>
-        <target/>
+        <target state="translated">Aḥulfu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/video-miniature.component.html</context>
           <context context-type="linenumber">45</context>
@@ -844,7 +844,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4" datatype="html">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
-        <target/>
+        <target>Yettwaleqqem <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-miniature.component.html</context>
           <context context-type="linenumber">29</context>
@@ -904,7 +904,7 @@
       </trans-unit>
       <trans-unit id="b9dee3108a18796bd69c6be316c8fb985b58fb8e" datatype="html">
         <source>Delete from <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></source>
-        <target/>
+        <target state="translated">Yettwakkes si <x id="INTERPOLATION" equiv-text="{{ playlist?.displayName }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video-playlist/video-playlist-element-miniature.component.html</context>
           <context context-type="linenumber">88</context>
@@ -1032,7 +1032,7 @@
       </trans-unit>
       <trans-unit id="961a134583d6256df39fbc520d020ebc48e3128d" datatype="html">
         <source>Truncated preview</source>
-        <target/>
+        <target state="translated">Taskant yettwagezmen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">11</context>
@@ -1040,7 +1040,7 @@
       </trans-unit>
       <trans-unit id="f82f53a2544638939a8ba93c0fb1b0a4419c3196" datatype="html">
         <source>Complete preview</source>
-        <target/>
+        <target state="translated">Taskant taččurant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/forms/markdown-textarea.component.html</context>
           <context context-type="linenumber">19</context>
@@ -1064,7 +1064,7 @@
       </trans-unit>
       <trans-unit id="5cb397241041f7ad70997806227bafcdf7eb1b33" datatype="html">
         <source>Go the channel page</source>
-        <target/>
+        <target state="translated">Ṛuḥ ɣer usebter n ubadu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/channel/avatar.component.html</context>
           <context context-type="linenumber">2</context>
@@ -1076,7 +1076,7 @@
       </trans-unit>
       <trans-unit id="be73b652c2707f42b5d780d0c7b8fc5ea0b1706c" datatype="html">
         <source>Go to the account page</source>
-        <target/>
+        <target state="translated">Ṛuḥ ɣer usebter n umiḍan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/channel/avatar.component.html</context>
           <context context-type="linenumber">5</context>
@@ -1096,7 +1096,7 @@
       </trans-unit>
       <trans-unit id="6e215e23505768151b501b7e11dd5b864e604fd9" datatype="html">
         <source>Subscribe to all channels</source>
-        <target/>
+        <target state="translated">Jerred ɣer akk ibuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">9</context>
@@ -1120,7 +1120,7 @@
       </trans-unit>
       <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66" datatype="html">
         <source>Using an ActivityPub account</source>
-        <target/>
+        <target state="translated">Seqdec amiḍan ActivityPub</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">50</context>
@@ -1128,7 +1128,7 @@
       </trans-unit>
       <trans-unit id="c7e2b4c04a0459ebc4d2e54e419abb679bc713f2" datatype="html">
         <source>Subscribe with an account on this instance</source>
-        <target/>
+        <target state="translated">Jerred s umiḍan ɣer tummant-a</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">53</context>
@@ -1136,7 +1136,7 @@
       </trans-unit>
       <trans-unit id="e7adf422424a61b71465d183f9d44bf956482ef0" datatype="html">
         <source>Subscribe with your local account</source>
-        <target/>
+        <target state="translated">Jerred s umiḍan-inek adigan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">54</context>
@@ -1144,7 +1144,7 @@
       </trans-unit>
       <trans-unit id="5047522cc670b1f4a288bce07f9b1c5061e913ed" datatype="html">
         <source>Subscribe with a Mastodon account:</source>
-        <target/>
+        <target state="translated">Jerred s umiḍan n Masṭudun:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">57</context>
@@ -1160,7 +1160,7 @@
       </trans-unit>
       <trans-unit id="d5e5bc7d213694fc0414a76f0ff3085bae44268a" datatype="html">
         <source>Subscribe via RSS</source>
-        <target/>
+        <target state="translated">Jerred s RSS</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">63</context>
@@ -1168,7 +1168,7 @@
       </trans-unit>
       <trans-unit id="4913054c95f5ba14c351ab1b787f7abac97bfdd3" datatype="html">
         <source><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote subscribe<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> <x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Remote interact<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target/>
+        <target state="translated"><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/>Kkes ajerred<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/><x id="START_TAG_SPAN_1" ctype="x-span" equiv-text="&lt;span&gt;"/>Kkes asihel<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/remote-subscribe.component.html</context>
           <context context-type="linenumber">10</context>
