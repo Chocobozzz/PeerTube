@@ -214,7 +214,7 @@ $input-border-radius: 3px;
       padding: $base-padding;
       border-right: 1px dashed $input-border-color !important;
       resize: none;
-      scrollbar-color: var(--actionButtonColor) var(--textareaBackgroundColor);
+      scrollbar-color: var(--actionButtonColor) var(--markdownTextareaBackgroundColor);
 
       &:focus {
         box-shadow: none;
