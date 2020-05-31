@@ -29,11 +29,11 @@
     vertical-align: top;
     text-align: right;
   }
-  
+
   .moderation-expanded-text {
     display: inline-flex;
     word-wrap: break-word;
-  
+
     ::ng-deep p:last-child {
       margin-bottom: 0px !important;
     }
@@ -137,6 +137,10 @@ my-action-dropdown.show {
     font-size: 90%;
     color: var(--mainForegroundColor);
     line-height: 1rem;
+
+    > div {
+      white-space: normal;
+    }
 
     div .glyphicon {
       font-size: 80%;
