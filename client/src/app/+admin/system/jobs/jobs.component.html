@@ -36,7 +36,7 @@
   <ng-template pTemplate="body" let-expanded="expanded" let-job>
     <tr>
       <td class="expand-cell">
-        <span class="expander" [pRowToggler]="job" i18n-ngbTooltip ngbTooltip="More information">
+        <span class="expander" [pRowToggler]="job" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
@@ -44,7 +44,7 @@
       <td class="job-id" [title]="job.id">{{ job.id }}</td>
       <td class="job-type">{{ job.type }}</td>
       <td class="job-date">{{ job.createdAt }}</td>
-      <td class="job-state" *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed.</span></td>
+      <td class="job-state" *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed</span></td>
       <td class="job-state" *ngIf="job.state === 'waiting'" class="text-warning"><span class="glyphicon glyphicon-hourglass"></span> <span i18n>Will start soon...</span></td>
       <td class="job-state" *ngIf="job.state === 'active'" class="text-warning"><span class="glyphicon glyphicon-cog"></span> <span i18n>Running...</span></td>
       <td class="job-state" *ngIf="job.state === 'completed'" class="text-success"><span class="glyphicon glyphicon-ok"></span> <span i18n>Finished</span></td>
