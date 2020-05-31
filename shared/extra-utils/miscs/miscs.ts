@@ -56,11 +56,11 @@ async function testImage (url: string, imageName: string, imagePath: string, ext
   const body = res.body
 
   const data = await readFile(join(root(), 'server', 'tests', 'fixtures', imageName + extension))
-  const minLength = body.length - ((20 * body.length) / 100)
-  const maxLength = body.length + ((20 * body.length) / 100)
+  const minLength = body.length - ((30 * body.length) / 100)
+  const maxLength = body.length + ((30 * body.length) / 100)
 
-  expect(data.length).to.be.above(minLength)
-  expect(data.length).to.be.below(maxLength)
+  expect(data.length).to.be.above(minLength, "the generated image is way smaller than the recorded fixture")
+  expect(data.length).to.be.below(maxLength, "the generated image is way larger than the recorded fixture")
 }
 
 function buildAbsoluteFixturePath (path: string, customCIPath = false) {
