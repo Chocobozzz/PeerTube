@@ -350,7 +350,7 @@
       </trans-unit>
       <trans-unit id="790986a06ed0bbab17b7e91c166ea4dfd96e7d3d" datatype="html">
         <source>Your instance has <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>a new follower<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> awaiting your approval<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </source>
-        <target state="translated">Votre instance a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>un nouvel abonné<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> qui attend votre approbation<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
+        <target state="translated">Votre instance a <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>un·e nouvel·le abonné·e<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> (<x id="INTERPOLATION" equiv-text="{{ notification.actorFollow?.follower.host }}"/>) <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> qui attend votre approbation<x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/users/user-notifications.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="b5a16cb819b18286a1a85e2a311045b920bfd559" datatype="html">
@@ -1055,7 +1055,7 @@
       </trans-unit>
       <trans-unit id="8de9d3173fafc2c7a94352dec3de899b6cedf9c5">
         <source>followers</source>
-        <target>abonnés</target>
+        <target>abonné·e·s</target>
         <context-group name="null">
           <context context-type="linenumber">85</context>
         </context-group>
@@ -1353,7 +1353,7 @@
       </trans-unit>
       <trans-unit id="10341623e991a4185990a0c3c76ac2bc3543cc4a">
         <source><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> subscribers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> abonnés</target>
+        <target><x id="INTERPOLATION" equiv-text="{{ result.followersCount }}"/> abonné·e·s</target>
         <context-group name="null">
           <context context-type="linenumber">44</context>
         </context-group>
@@ -3272,7 +3272,7 @@
       </trans-unit>
       <trans-unit id="fee25862814afd08fca2abe1452e6841e8b57b1e" datatype="html">
         <source>Follows &amp; redundancies</source>
-        <target state="translated">Abonnés &amp; redondances</target>
+        <target state="translated">Abonné·e·s &amp; redondances</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context>
           <context context-type="linenumber">2</context>
@@ -3288,7 +3288,7 @@
       </trans-unit>
       <trans-unit id="9bee670725966ed477b4c33a545c8b5436b0065e">
         <source>Followers</source>
-        <target>Abonnés</target>
+        <target>Abonné·e·s</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -3368,7 +3368,7 @@
       </trans-unit>
       <trans-unit id="1d284acc5ec053b3cd87e4e9fcd7aaefec0c54fb">
         <source>Follower handle</source>
-        <target>Identifiant d'abonné</target>
+        <target>Identifiant d'abonné·e</target>
         <context-group name="null">
           <context context-type="linenumber">17</context>
         </context-group>
@@ -3467,12 +3467,12 @@
       </trans-unit>
       <trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="translated">Aucun abonné n'a pas être trouvé avec les filtres actuels.</target>
+        <target state="translated">Aucun·e abonné·e n'a pu être trouvé·e avec les filtres actuels.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
         <source>Your instance doesn't have any follower.</source>
-        <target state="translated">Votre instance n'a aucun abonné.</target>
+        <target state="translated">Votre instance n'a aucun·e abonné·e.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">61</context></context-group>
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
@@ -4895,7 +4895,7 @@
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Abonné} other {Abonnés} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Abonné·e} other {Abonné·e·s} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5662,7 +5662,7 @@
       </trans-unit>
       <trans-unit id="8fef247fd0c5bf790151f7661cafc4b7fd0397f3">
         <source><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> subscribers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> abonnés</target>
+        <target><x id="INTERPOLATION" equiv-text="{{ videoChannel.followersCount }}"/> abonné·e·s</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
@@ -5700,7 +5700,7 @@
       </trans-unit>
       <trans-unit id="4b50f2ef2e8b9a24e674d12012ee310f378a5503">
         <source><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> subscribers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> abonnés</target>
+        <target><x id="INTERPOLATION" equiv-text="{{ actor.followersCount }}"/> abonné·e·s</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -6583,7 +6583,7 @@
       </trans-unit>
       <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
         <source>This instance does not have instances followings.</source>
-        <target state="translated">Cette instance n’est pas abonnée à des instances.</target>
+        <target state="translated">Cette instance n’est pas abonnée à d'autres.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context>
           <context context-type="linenumber">15</context>
@@ -6804,7 +6804,7 @@
       </trans-unit>
       <trans-unit id="e1979668b5d368a2a5d476ba4949bc518a4316a0" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{followers}}"/> direct account followers</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{followers}}"/> comptes direct d'abonnés</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{followers}}"/> comptes abonnés</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -6841,7 +6841,7 @@
       </trans-unit>
       <trans-unit id="f1a851fd8b39e5544e3eec438ebd7f4ccfcc34dc" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 subscriber} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 abonné(e)} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> abonné(e)s} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 abonné·e} other {<x id="INTERPOLATION" equiv-text="{{count}}"/> abonné·e·s} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/accounts.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7125,7 +7125,7 @@
       </trans-unit>
       <trans-unit id="150d48f01a24d84c2bfffb2761419b9482074b61">
         <source>Do you really want to delete this follower?</source>
-        <target>Souhaitez-vous vraiment supprimer cet abonné ?</target>
+        <target>Souhaitez-vous vraiment supprimer cet·te abonné·e ?</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7133,7 +7133,7 @@
       </trans-unit>
       <trans-unit id="53fb638407fb04c8b403fa392cc628a699e2c0bc">
         <source><x id="INTERPOLATION" equiv-text="{{handle}}"/> removed from instance followers</source>
-        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> supprimé des abonnés de votre instance</target>
+        <target><x id="INTERPOLATION" equiv-text="{{handle}}"/> supprimé des abonné·e·s de votre instance</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7173,7 +7173,7 @@
       </trans-unit>
       <trans-unit id="fb4e35e2b0ea2abc1f71295a4b34830e57c07bd0">
         <source>You are not following <x id="INTERPOLATION" equiv-text="{{host}}"/> anymore.</source>
-        <target>Vous n'êtes plus abonné à <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
+        <target>Vous n'êtes plus abonné·e à <x id="INTERPOLATION" equiv-text="{{host}}"/>.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7948,7 +7948,7 @@
       </trans-unit>
       <trans-unit id="f407b90e99a04e2e0d1872c02f01eadbf53e08e2">
         <source>You or your channel(s) has a new follower</source>
-        <target>Vous (ou votre chaîne) avez un nouveau suiveur</target>
+        <target>Vous ou votre chaîne avez un·e nouvel·le abonné·e</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -7964,7 +7964,7 @@
       </trans-unit>
       <trans-unit id="f4bb57154f8b6b30f3272f340dc40e143af8607f">
         <source>Your instance has a new follower</source>
-        <target>Votre instance a un nouvel abonné</target>
+        <target>Votre instance a un·e nouvel·le abonné·e</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10294,7 +10294,7 @@
       </trans-unit>
       <trans-unit id="4104d2ac06bd0103868795086100a871c8dbeb49" datatype="html">
         <source>Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Abonné·e à toutes les chaînes actuelles de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Abonné·e à toutes les chaînes actuelles de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vous serez averti·e de toutes leurs nouvelles vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10302,7 +10302,7 @@
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="translated">Vous êtes abonné à <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vous serez averti de toutes leurs nouvelles vidéos.</target>
+        <target state="translated">Vous êtes abonné à <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Vous serez averti·e de toutes leurs nouvelles vidéos.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10310,7 +10310,7 @@
       </trans-unit>
       <trans-unit id="1cadbf82f0e91611321c5abd282f0c23d8ccbfa1">
         <source>Subscribed</source>
-        <target>Abonné</target>
+        <target>Abonné·e</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10326,7 +10326,7 @@
       </trans-unit>
       <trans-unit id="3e7735fa326fcdc9e1188b6d9ff4b4329312fc26">
         <source>Unsubscribed from <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target>Désabonné de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target>Désabonné·e de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -10334,7 +10334,7 @@
       </trans-unit>
       <trans-unit id="294395337b767af84f952ac28d58d54a13a11471">
         <source>Unsubscribed</source>
-        <target>Désabonné</target>
+        <target>Désabonné·e</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
