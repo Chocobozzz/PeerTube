@@ -4593,7 +4593,7 @@
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="new">Discover videos</target>
+        <target state="translated">Bideoak aurkitu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
@@ -4608,7 +4608,7 @@
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">Berriki gehitutako bideoak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">269</context></context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
@@ -4621,14 +4621,12 @@
       </trans-unit>
       <trans-unit id="0ea3c4f671addedc1fff64ba63adbf0629fab06a" datatype="html">
         <source>NEW USERS</source>
-        <target state="new">NEW USERS</target>
+        <target state="translated">ERABILTZAILE BERRIAK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">281</context></context-group>
       </trans-unit>
       <trans-unit id="eb55f6a974ace4bade90b976dba651c9545c979d" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to set their quota individually. </source>
-        <target state="new">
-              Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to set their quota individually.
-            </target>
+        <target state="translated">Kudeatu <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>erabiltzaileak<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> kuota banaka ezartzeko. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">282</context></context-group>
       </trans-unit>
       <trans-unit id="ca53e66e68986546b7ef820c934145fd7c9c4247">
@@ -4738,7 +4736,7 @@
       </trans-unit>
       <trans-unit id="53ddc7cf814d93205e987d607dbcfcf9cd74b59a" datatype="html">
         <source>NEW USER</source>
-        <target state="new">NEW USER</target>
+        <target state="translated">ERABILTZAILE BERRIA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">73</context>
@@ -4750,7 +4748,7 @@
       </trans-unit>
       <trans-unit id="4a41f824a35ba01d5bd7be61aa06b3e8145209d0" datatype="html">
         <source>Configuration</source>
-        <target state="new">Configuration</target>
+        <target state="translated">Konfigurazioa</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/admin.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -4758,37 +4756,37 @@
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
         <source>Default video quota per user</source>
-        <target state="new">Default video quota per user</target>
+        <target state="translated">Erabiltzaileen bideo kuota lehenetsia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">320</context></context-group>
       </trans-unit>
       <trans-unit id="493c65a11deddda45b42a39f503fc4bb3f876cf2" datatype="html">
         <source>Default daily upload limit per user</source>
-        <target state="new">Default daily upload limit per user</target>
+        <target state="translated">Erabiltzaileen eguneko igoera muga lehenetsia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">332</context></context-group>
       </trans-unit>
       <trans-unit id="e8835d4b5abe1ae304ffaaea6e96bf49805f54a2" datatype="html">
         <source>NEW VIDEOS</source>
-        <target state="new">NEW VIDEOS</target>
+        <target state="translated">BIDEO BERRIAK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">349</context></context-group>
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
         <source>Allow import with HTTP URL (i.e. YouTube)</source>
-        <target state="new">Allow import with HTTP URL (i.e. YouTube)</target>
+        <target state="translated">HTTP URL bidez inportatzea baimendu (adib, YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">360</context></context-group>
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="new">Allow import with a torrent file or a magnet URI</target>
+        <target state="translated">Torrent fitxategi edo magnet URI bidez inportatzea baimendu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">367</context></context-group>
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
         <source>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</source>
-        <target state="new">Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</target>
+        <target state="translated">Erabiltzaile bat konfiantzazko gisa markatu ezean, haren bideoak ez dira argitaratuko moderatzaile batek berrikusi arte.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">384</context></context-group>
       </trans-unit>
       <trans-unit id="680ef3c95b9b6264dfb992c82e91d64312b133db" datatype="html">
         <source>Blacklist new videos automatically</source>
-        <target state="new">Blacklist new videos automatically</target>
+        <target state="translated">Bideoak automatikoki zerrenda beltzean sartu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">381</context></context-group>
       </trans-unit>
       <trans-unit id="3f237e2a863d0308a21bdb0bb5d4b84e3376dbee" datatype="html">
@@ -4805,12 +4803,12 @@
       </trans-unit>
       <trans-unit id="a7f09999dbd1438d803b28abe1eb769f75126b3e" datatype="html">
         <source>Other instances can follow yours</source>
-        <target state="new">Other instances can follow yours</target>
+        <target state="translated">Beste instantziek zurea jarraitu dezakete</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">412</context></context-group>
       </trans-unit>
       <trans-unit id="3d9ffce2b1f284cb60067de15a313d3ecde0875f" datatype="html">
         <source>Manually approve new instance followers</source>
-        <target state="new">Manually approve new instance followers</target>
+        <target state="translated">Instantziaren jarraitzaile berriak eskuz onartu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">419</context></context-group>
       </trans-unit>
       <trans-unit id="9a3dd9c65ee3381ae3b78b9c56cc4e0d2e41f0e8" datatype="html">
@@ -4830,7 +4828,7 @@
       </trans-unit>
       <trans-unit id="9bef6fc7194e11d18fdcac6aaccc816fe9ffc5a7" datatype="html">
         <source>⚠️ This functionality requires a lot of attention and extra moderation.</source>
-        <target state="new">⚠️ This functionality requires a lot of attention and extra moderation.</target>
+        <target state="translated">⚠️ Funtzionalitate honek arreta handia eta moderazio lan gehigarria eskatzen ditu.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">296</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">435</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">448</context></context-group>
@@ -4842,7 +4840,7 @@
       </trans-unit>
       <trans-unit id="62f023a56fd29518ab030384702362e6bf6a83e4" datatype="html">
         <source>Automatically follow instances of a public index</source>
-        <target state="new">Automatically follow instances of a public index</target>
+        <target state="translated">Indize publiko bateko instantziak automatikoki jarraitu</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">445</context>
@@ -4850,7 +4848,7 @@
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
         <source>ADMINISTRATORS</source>
-        <target state="new">ADMINISTRATORS</target>
+        <target state="translated">ADMINISTRATZAILEAK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">477</context></context-group>
       </trans-unit>
       <trans-unit id="ca2283fc765b9f44b69f0175d685dc2443da6011">
@@ -4871,7 +4869,7 @@
       </trans-unit>
       <trans-unit id="f9bda6652199995a4bd4424f2e35b748eb0bda8a" datatype="html">
         <source>Enable contact form</source>
-        <target state="new">Enable contact form</target>
+        <target state="translated">Kontaktu formularioak gaitu</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">494</context></context-group>
       </trans-unit>
       <trans-unit id="50247a2f9711ea9e9a85aacc46668131e9b424a5">
@@ -4889,9 +4887,7 @@
       </trans-unit>
       <trans-unit id="31f11266d05b7a427477a8a9056a717ce332cfe3" datatype="html">
         <source>Optional. If any, provide the Twitter account representing your instance to improve link previews.</source>
-        <target state="new">
-              Optional. If any, provide the Twitter account representing your instance to improve link previews.
-            </target>
+        <target state="translated">Aukerakoa. Baldin badago, eman instantzia irudikatzen duen Twitterreko kontua, esteken aurrebistak hobetzeko.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">512</context></context-group>
       </trans-unit>
       <trans-unit id="7fdb41bbf2ee042ec5f68725a1c16a1c97f3e524">
@@ -4931,15 +4927,12 @@
       </trans-unit>
       <trans-unit id="9a6dbeb95c096daa71967ac36a043de69d0cf72b" datatype="html">
         <source>TRANSCODING</source>
-        <target state="new">TRANSCODING</target>
+        <target state="translated">TRANSKODIFIKATZEN</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">565</context></context-group>
       </trans-unit>
       <trans-unit id="ee4b28ab2d3293d453dec75c6654c6425705283c" datatype="html">
         <source>Process uploaded videos so that they are in a streamable form that any device can play. Though costly in resources, this is a critical part of PeerTube, so tread carefully.</source>
-        <target state="new">
-              Process uploaded videos so that they are in a streamable form that any device can play. Though costly in
-              resources, this is a critical part of PeerTube, so tread carefully.
-            </target>
+        <target state="translated">Prozesatu igotako bideoak, edozein gailuk erreproduzitu dezakeen modu streamable batean egon daitezen. Baliabideetan garestia bada ere, PeerTubeko alderdi kritikoa da, beraz, kontuz ibili.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">566</context></context-group>
       </trans-unit>
       <trans-unit id="fca29003c4ea1226ff8cbee89481758aab0e2be9">
@@ -4960,12 +4953,12 @@
       </trans-unit>
       <trans-unit id="3223b992b14f2fa5690676fa57317bffa7275f90" datatype="html">
         <source>Allows users to upload .mkv, .mov, .avi and .flv videos.</source>
-        <target state="new">Allows users to upload .mkv, .mov, .avi and .flv videos.</target>
+        <target state="translated">Gaitu erabiltzaileak .mkv, .mov, .avi eta .flv bideoak igotzeko.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">594</context></context-group>
       </trans-unit>
       <trans-unit id="0050a55afb9c565df1f9b3f750c2d4adb697698f" datatype="html">
         <source>Allow additional extensions</source>
-        <target state="new">Allow additional extensions</target>
+        <target state="translated">Gaitu hedapen gehigarriak</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">591</context></context-group>
       </trans-unit>
       <trans-unit id="abdec139a0b513ddbd4549284c38dc60e96bb477" datatype="html">
@@ -4975,7 +4968,7 @@
       </trans-unit>
       <trans-unit id="88cfa6e185dd938361d1d9c04314bbd3afb54fb6" datatype="html">
         <source>Allow audio files upload</source>
-        <target state="new">Allow audio files upload</target>
+        <target state="translated">Gaitu audio fitxategien igoera</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">602</context></context-group>
       </trans-unit>
       <trans-unit id="1f83d0ff227c35b5631a2b2f78067b3e915cdb59" datatype="html">
@@ -4993,7 +4986,7 @@
       </trans-unit>
       <trans-unit id="ff852c5a22beaff7a8c62447b0a96f9ced7c3ed6" datatype="html">
         <source>WebTorrent support enabled</source>
-        <target state="new">WebTorrent support enabled</target>
+        <target state="translated">WebTorrent gaituta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">614</context></context-group>
       </trans-unit>
       <trans-unit id="a0a116af355dfc3ac02f4501c2ffadb882768564" datatype="html">
@@ -5014,7 +5007,7 @@
       </trans-unit>
       <trans-unit id="94213e7007705d887db1d366b5abc163122d9202" datatype="html">
         <source>HLS support enabled</source>
-        <target state="new">HLS support enabled</target>
+        <target state="translated">HLS gaituta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">635</context></context-group>
       </trans-unit>
       <trans-unit id="a33feadefbb776217c2db96100736314f8b765c2">
@@ -5044,7 +5037,7 @@
       </trans-unit>
       <trans-unit id="e7845bb59f7887d60f1cf3b7b9fe5cfdb0b7e915" datatype="html">
         <source>Number of previews to keep in cache</source>
-        <target state="new">Number of previews to keep in cache</target>
+        <target state="translated">Cache memorian mantentzeko aurreikuspenen kopurua</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">709</context></context-group>
       </trans-unit>
       <trans-unit id="478d017e2701ae21cefab20e7226702d77f15727" datatype="html">
@@ -5054,14 +5047,12 @@
       </trans-unit>
       <trans-unit id="ede5494c4a39e72d3e21a5fefdc3d966da4a3e00" datatype="html">
         <source>CUSTOMIZATIONS</source>
-        <target state="new">CUSTOMIZATIONS</target>
+        <target state="translated">PERTSONALIZAZIOAK</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">733</context></context-group>
       </trans-unit>
       <trans-unit id="7473fbca4ff699b020fc8894bad4c88611c76f5c" datatype="html">
         <source>Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.</source>
-        <target state="new">
-              Slight modifications to your PeerTube instance for when creating a plugin or theme is overkill.
-            </target>
+        <target state="translated">Aldaketa txiki batzuk PeerTubeko zure instantzian, plugin edo gai bat sortzea gehiegizkoa denean.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">734</context></context-group>
       </trans-unit>
       <trans-unit id="0da9752916950ce6890d897b835c923a71ad9c5c">
@@ -5074,9 +5065,7 @@
       </trans-unit>
       <trans-unit id="782afa7c58d912592d73fce888ffce8542a4acf3" datatype="html">
         <source>Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> </source>
-        <target state="new">
-                        Write JavaScript code directly.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Example: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('my instance is amazing');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/>
-                      </target>
+        <target state="translated">Idatzi zuzenean JavaScript kodea.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Adib: <x id="START_TAG_PRE" ctype="x-pre" equiv-text="&lt;pre&gt;"/>console.log('Nire instantzia zoragarria da');<x id="CLOSE_TAG_PRE" ctype="x-pre" equiv-text="&lt;/pre&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">747</context></context-group>
       </trans-unit>
       <trans-unit id="ef86c28e82ac4b08e6914d2a067e5455b4d4f4f7" datatype="html">
@@ -5113,7 +5102,7 @@
       </trans-unit>
       <trans-unit id="f8f8fca3139cba7d4fd6d9578d93e601f639cc83" datatype="html">
         <source>It seems like the configuration is invalid. Please search for potential errors in the different tabs.</source>
-        <target state="new">It seems like the configuration is invalid. Please search for potential errors in the different tabs.</target>
+        <target state="translated">Konfigurazioa baliogabea dela dirudi. Bilatu, mesedez, balizko erroreak fitxa desberdinetan.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">805</context></context-group>
       </trans-unit>
       <trans-unit id="824c2b28d0d9e771e3caf1d02021b740ac97076d" datatype="html">
@@ -5126,7 +5115,7 @@
       </trans-unit>
       <trans-unit id="e09928fe11389fd1ea310890ba5dc9df05d53509" datatype="html">
         <source>VIDEO SETTINGS</source>
-        <target state="new">VIDEO SETTINGS</target>
+        <target state="translated">BIDEO EZARPENAK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">32</context>
@@ -5134,7 +5123,7 @@
       </trans-unit>
       <trans-unit id="f70dbe547767b3a0f0006d44688beee60c884417" datatype="html">
         <source>NOTIFICATIONS</source>
-        <target state="new">NOTIFICATIONS</target>
+        <target state="translated">JAKINARAZPENAK</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">43</context>
@@ -5142,7 +5131,7 @@
       </trans-unit>
       <trans-unit id="8e4cafda991c13b5103e45195f7f2488974a913e" datatype="html">
         <source>INTERFACE</source>
-        <target state="new">INTERFACE</target>
+        <target state="translated">INTERFAZEA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">53</context>
@@ -5150,7 +5139,7 @@
       </trans-unit>
       <trans-unit id="ce43cc343ed3bd908e593db994ca3f6dbff079df" datatype="html">
         <source>PASSWORD</source>
-        <target state="new">PASSWORD</target>
+        <target state="translated">PASAHITZA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">63</context>
@@ -5158,7 +5147,7 @@
       </trans-unit>
       <trans-unit id="d5e31741c591719630b5bba1ba38f8c1a04c10e3" datatype="html">
         <source>EMAIL</source>
-        <target state="new">EMAIL</target>
+        <target state="translated">EMAILA</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">73</context>
@@ -5166,7 +5155,7 @@
       </trans-unit>
       <trans-unit id="e6c299a11dadb59bf789ecc5d85eb1a1ebff4613" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="new">DANGER ZONE</target>
+        <target state="translated">ARRISKU GUNEA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">186</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">186</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">83</context></context-group>
