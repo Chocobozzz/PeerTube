@@ -473,7 +473,7 @@ class Emailer {
       },
       transport: this.transporter,
       views: {
-        root: join(root(), 'server', 'lib', 'emails')
+        root: join(root(), 'dist', 'server', 'lib', 'emails')
       },
       subjectPrefix: CONFIG.EMAIL.SUBJECT.PREFIX
     })
@@ -498,8 +498,8 @@ class Emailer {
           },
           options // overriden/new variables given for a specific template in the payload
         ) as SendEmailOptions)
-        .then(logger.info)
-        .catch(logger.error)
+        .then(res => logger.debug('Sent email.', { res }))
+        .catch(err => logger.error('Error in email sender.', { err }))
     }
   }
 

@@ -1,6 +1,8 @@
 # Changelog
 
-## v2.2.0-rc.1
+## v2.2.0
+
+**Since v2.1.0**
 
 ## IMPORTANT NOTES
 
@@ -163,6 +165,33 @@
  * Fix playlist creation/update with a long description
  * Fix links of same instance in video description
  * Fix REPL script
+ * Fix broken client when cookies are disabled
+ * Fix upload button color in dark mode
+ * Explicit theme colors for inputs and textarea
+ * Fix input/textarea themes
+ * Fix action button icons theme
+ * Fix grey color theme
+ * Fix regression scrollbar bgcolor mdtextarea maximized-mode ([@kimsible](https://github.com/kimsible))
+
+
+**since v2.2.0-rc.1**
+
+### Bug fixes
+
+ * Fix broken migration introduced in 2.2.0-rc.1 in docker
+ * Fix sort icons in tables
+ * Fix action button overflow in tables
+ * Fix broken client when cookies are disabled
+ * Fix upload button color in dark mode
+ * Explicit theme colors for inputs and textarea
+ * Fix input/textarea themes
+ * Fix dropdown menu overflow
+ * Fix notifications with dark theme
+ * Fix action button icons theme
+ * Fix grey color theme
+ * Fix regression scrollbar bgcolor mdtextarea maximized-mode ([@kimsible](https://github.com/kimsible))
+ * Fix broken emails
+
 
 
 ## v2.1.1
