@@ -58,11 +58,6 @@ export class ServerService {
       registeredExternalAuths: [],
       registeredIdAndPassAuths: []
     },
-    federation: {
-      videos: {
-        federateUnlisted: true
-      }
-    },
     theme: {
       registered: [],
       default: 'default'

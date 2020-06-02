@@ -156,7 +156,7 @@ const CONFIG = {
   },
   FEDERATION: {
     VIDEOS: {
-      get FEDERATE_UNLISTED () { return config.get<boolean>('federation.videos.federate_unlisted') }
+      FEDERATE_UNLISTED: config.get<boolean>('federation.videos.federate_unlisted')
     }
   },
   ADMIN: {

@@ -73,11 +73,6 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
         css: 'body { background-color: red; }'
       }
     },
-    federation: {
-      videos: {
-        federateUnlisted: false
-      }
-    },
     theme: {
       default: 'default'
     },

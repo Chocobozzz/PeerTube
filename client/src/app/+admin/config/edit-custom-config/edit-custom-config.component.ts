@@ -137,11 +137,6 @@ export class EditCustomConfigComponent extends FormReactive implements OnInit, A
           css: null
         }
       },
-      federation: {
-        videos: {
-          federateUnlisted: true
-        }
-      },
       theme: {
         default: null
       },

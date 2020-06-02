@@ -27,12 +27,6 @@ export interface CustomConfig {
     }
   }
 
-  federation: {
-    videos: {
-      federateUnlisted: boolean
-    }
-  }
-
   theme: {
     default: string
   }

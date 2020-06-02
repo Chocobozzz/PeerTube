@@ -64,7 +64,3 @@ tracker:
 
 admin:
   email: null
-
-federation:
-  videos:
-    federate_unlisted: true

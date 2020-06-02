@@ -83,11 +83,6 @@ async function getConfig (req: express.Request, res: express.Response) {
       registeredExternalAuths: getExternalAuthsPlugins(),
       registeredIdAndPassAuths: getIdAndPassAuthPlugins()
     },
-    federation: {
-      videos: {
-        federateUnlisted: CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED
-      }
-    },
     theme: {
       registered: getRegisteredThemes(),
       default: defaultTheme
@@ -352,11 +347,6 @@ function customConfig (): CustomConfig {
     },
     theme: {
       default: CONFIG.THEME.DEFAULT
-    },
-    federation: {
-      videos: {
-        federateUnlisted: CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED
-      }
     },
     services: {
       twitter: {

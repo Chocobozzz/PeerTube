@@ -59,12 +59,6 @@ export interface ServerConfig {
     registeredIdAndPassAuths: RegisteredIdAndPassAuthConfig[]
   }
 
-  federation: {
-    videos: {
-      federateUnlisted: boolean
-    }
-  }
-
   theme: {
     registered: ServerConfigTheme[]
     default: string

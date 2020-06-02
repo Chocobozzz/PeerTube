@@ -47,11 +47,6 @@ describe('Test config API validators', function () {
         css: 'body { background-color: red; }'
       }
     },
-    federation: {
-      videos: {
-        federateUnlisted: false
-      }
-    },
     theme: {
       default: 'default'
     },
