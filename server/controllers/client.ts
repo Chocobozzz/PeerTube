@@ -29,7 +29,8 @@ clientsRouter.use(
   embedCSPMiddleware,
   (req: express.Request, res: express.Response) => {
     res.removeHeader('X-Frame-Options')
-    res.sendFile(embedPath)
+    // Don't cache HTML file since it's an index to the immutable JS/CSS files
+    res.sendFile(embedPath, { maxAge: 0 })
   }
 )
 clientsRouter.use(
