@@ -17,6 +17,6 @@
   <div class="video" *ngFor="let video of videos">
     <my-video-miniature
       [video]="video" [displayAsRow]="true"
-      (videoRemoved)="removeVideoFromArray(video)" (videoBlacklisted)="removeVideoFromArray(video)"></my-video-miniature>
+      (videoRemoved)="removeVideoFromArray(video)" (videoBlocked)="removeVideoFromArray(video)"></my-video-miniature>
   </div>
 </div>

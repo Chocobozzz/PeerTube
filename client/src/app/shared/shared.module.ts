@@ -35,7 +35,7 @@ import {
   UserValidatorsService,
   VideoAbuseValidatorsService,
   VideoAcceptOwnershipValidatorsService,
-  VideoBlacklistValidatorsService,
+  VideoBlockValidatorsService,
   VideoChangeOwnershipValidatorsService,
   VideoChannelValidatorsService,
   VideoCommentValidatorsService,
@@ -78,7 +78,7 @@ import { VideoPlaylistElementMiniatureComponent } from '@app/shared/video-playli
 import { VideoPlaylistMiniatureComponent } from '@app/shared/video-playlist/video-playlist-miniature.component'
 import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
 import { InfiniteScrollerDirective } from '@app/shared/video/infinite-scroller.directive'
-import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklist.component'
+import { VideoBlockComponent } from '@app/shared/video/modals/video-block.component'
 import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.component'
 import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
 import { RedundancyService } from '@app/shared/video/redundancy.service'
@@ -102,7 +102,7 @@ import { LoaderComponent } from './misc/loader.component'
 import { RestExtractor, RestService } from './rest'
 import { UserService } from './users'
 import { VideoAbuseService } from './video-abuse'
-import { VideoBlacklistService } from './video-blacklist'
+import { VideoBlockService } from './video-block'
 import { VideoOwnershipService } from './video-ownership'
 import { FeedComponent } from './video/feed.component'
 import { VideoMiniatureComponent } from './video/video-miniature.component'
@@ -147,7 +147,7 @@ import { VideoService } from './video/video.service'
 
     VideoDownloadComponent,
     VideoReportComponent,
-    VideoBlacklistComponent,
+    VideoBlockComponent,
 
     FeedComponent,
 
@@ -230,7 +230,7 @@ import { VideoService } from './video/video.service'
 
     VideoDownloadComponent,
     VideoReportComponent,
-    VideoBlacklistComponent,
+    VideoBlockComponent,
 
     FeedComponent,
 
@@ -282,7 +282,7 @@ import { VideoService } from './video/video.service'
     RestExtractor,
     RestService,
     VideoAbuseService,
-    VideoBlacklistService,
+    VideoBlockService,
     VideoOwnershipService,
     UserService,
     VideoService,
@@ -305,7 +305,7 @@ import { VideoService } from './video/video.service'
     VideoCommentValidatorsService,
     VideoValidatorsService,
     VideoCaptionsValidatorsService,
-    VideoBlacklistValidatorsService,
+    VideoBlockValidatorsService,
     OverviewService,
     VideoChangeOwnershipValidatorsService,
     VideoAcceptOwnershipValidatorsService,

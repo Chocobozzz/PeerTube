@@ -24,7 +24,7 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoBlacklistType, VideoDetails } from '../../../../shared/models/videos'
+import { VideoBlockType, VideoDetails } from '../../../../shared/models/videos'
 import { expect } from 'chai'
 
 describe('Test video blacklist API validators', function () {
@@ -243,7 +243,7 @@ describe('Test video blacklist API validators', function () {
     })
 
     it('Should succeed with the correct parameters', async function () {
-      await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken, type: VideoBlacklistType.MANUAL })
+      await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken, type: VideoBlockType.MANUAL })
     })
   })
 

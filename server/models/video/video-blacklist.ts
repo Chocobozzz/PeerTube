@@ -3,7 +3,7 @@ import { getBlacklistSort, SortType, throwIfNotValid, searchAttribute } from '..
 import { VideoModel } from './video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
 import { isVideoBlacklistReasonValid, isVideoBlacklistTypeValid } from '../../helpers/custom-validators/video-blacklist'
-import { VideoBlacklist, VideoBlacklistType } from '../../../shared/models/videos'
+import { VideoBlocklist, VideoBlockType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { FindOptions } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
@@ -34,7 +34,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   @Default(null)
   @Is('VideoBlacklistType', value => throwIfNotValid(value, isVideoBlacklistTypeValid, 'type'))
   @Column
-  type: VideoBlacklistType
+  type: VideoBlockType
 
   @CreatedAt
   createdAt: Date
@@ -59,7 +59,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     count: number
     sort: SortType
     search?: string
-    type?: VideoBlacklistType
+    type?: VideoBlockType
   }) {
     const { start, count, sort, search, type } = parameters
 
@@ -119,7 +119,7 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
     return VideoBlacklistModel.findOne(query)
   }
 
-  toFormattedJSON (this: MVideoBlacklistFormattable): VideoBlacklist {
+  toFormattedJSON (this: MVideoBlacklistFormattable): VideoBlocklist {
     return {
       id: this.id,
       createdAt: this.createdAt,

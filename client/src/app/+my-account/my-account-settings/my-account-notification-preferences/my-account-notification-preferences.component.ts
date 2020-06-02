@@ -35,8 +35,8 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
       newCommentOnMyVideo: this.i18n('New comment on your video'),
       videoAbuseAsModerator: this.i18n('New video abuse'),
-      videoAutoBlacklistAsModerator: this.i18n('Video auto-blacklisted waiting review'),
-      blacklistOnMyVideo: this.i18n('One of your video is blacklisted/unblacklisted'),
+      videoAutoBlacklistAsModerator: this.i18n('Video blocked automatically waiting review'),
+      blacklistOnMyVideo: this.i18n('One of your video is blocked/unblocked'),
       myVideoPublished: this.i18n('Video published (after transcoding/scheduled update)'),
       myVideoImportFinished: this.i18n('Video import finished'),
       newUserRegistration: this.i18n('A new user registered on your instance'),
@@ -49,7 +49,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
 
     this.rightNotifications = {
       videoAbuseAsModerator: UserRight.MANAGE_VIDEO_ABUSES,
-      videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLACKLIST,
+      videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLOCKS,
       newUserRegistration: UserRight.MANAGE_USERS,
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
       autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION

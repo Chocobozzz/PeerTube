@@ -430,7 +430,7 @@
                   <div class="form-group">
                     <my-peertube-checkbox
                       inputName="autoBlacklistVideosOfUsersEnabled" formControlName="enabled"
-                      i18n-labelText labelText="Blacklist new videos automatically"
+                      i18n-labelText labelText="Block new videos automatically"
                     >
                     <ng-container ngProjectAs="description">
                       <span i18n>Unless a user is marked as trusted, their videos will stay private until a moderator reviews them.</span>
@@ -671,16 +671,16 @@
                 <div class="form-group">
                   <my-peertube-checkbox inputName="servicesTwitterWhitelisted" formControlName="whitelisted">
                     <ng-template ptTemplate="label">
-                      <ng-container i18n>Instance whitelisted by Twitter</ng-container>
+                      <ng-container i18n>Instance allowed by Twitter</ng-container>
                     </ng-template>
 
                     <ng-template ptTemplate="help">
                       <ng-container i18n>
-                        If your instance is whitelisted by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
-                        If the instance is not whitelisted, we use an image link card that will redirect on your PeerTube instance.<br /><br />
+                        If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<br />
+                        If the instance is not, we use an image link card that will redirect on your PeerTube instance.<br /><br />
                         Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on
                         <a target='_blank' rel='noopener noreferrer' href='https://cards-dev.twitter.com/validator'>https://cards-dev.twitter.com/validator</a>
-                        to see if you instance is whitelisted.
+                        to see if you instance is allowed.
                       </ng-container>
                     </ng-template>
                   </my-peertube-checkbox>

@@ -43,9 +43,9 @@
         </div>
       </div>
 
-      <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blacklisted">
-        <span class="blacklisted-label" i18n>Blacklisted</span>
-        <span class="blacklisted-reason" *ngIf="video.blacklistedReason">{{ video.blacklistedReason }}</span>
+      <div *ngIf="displayOptions.blacklistInfo && video.blacklisted" class="video-info-blocked">
+        <span class="blocked-label" i18n>Blocked</span>
+        <span class="blocked-reason" *ngIf="video.blockedReason">{{ video.blockedReason }}</span>
       </div>
 
       <div i18n *ngIf="displayOptions.nsfw && video.nsfw" class="video-info-nsfw">
@@ -57,7 +57,7 @@
       <!-- FIXME: remove bottom placement when overflow is fixed in bootstrap dropdown: https://github.com/ng-bootstrap/ng-bootstrap/issues/3495 -->
       <my-video-actions-dropdown
         *ngIf="showActions" [video]="video" [displayOptions]="videoActionsDisplayOptions" placement="bottom-left bottom-right left auto"
-        (videoRemoved)="onVideoRemoved()" (videoBlacklisted)="onVideoBlacklisted()" (videoUnblacklisted)="onVideoUnblacklisted()"
+        (videoRemoved)="onVideoRemoved()" (videoBlocked)="onVideoBlocked()" (videoUnblocked)="onVideoUnblocked()"
       ></my-video-actions-dropdown>
     </div>
   </div>

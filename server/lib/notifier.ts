@@ -387,7 +387,7 @@ class Notifier {
   }
 
   private async notifyModeratorsOfVideoAutoBlacklist (videoBlacklist: MVideoBlacklistLightVideo) {
-    const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+    const moderators = await UserModel.listWithRight(UserRight.MANAGE_VIDEO_BLOCKS)
     if (moderators.length === 0) return
 
     logger.info('Notifying %s moderators of video auto-blacklist %s.', moderators.length, videoBlacklist.Video.url)
@@ -398,7 +398,7 @@ class Notifier {
 
     async function notificationCreator (user: MUserWithNotificationSetting) {
       const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
-        type: UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS,
+        type: UserNotificationType.VIDEO_AUTO_BLOCK_FOR_MODERATORS,
         userId: user.id,
         videoBlacklistId: videoBlacklist.id
       })
@@ -426,7 +426,7 @@ class Notifier {
 
     async function notificationCreator (user: MUserWithNotificationSetting) {
       const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
-        type: UserNotificationType.BLACKLIST_ON_MY_VIDEO,
+        type: UserNotificationType.BLOCK_ON_MY_VIDEO,
         userId: user.id,
         videoBlacklistId: videoBlacklist.id
       })
@@ -454,7 +454,7 @@ class Notifier {
 
     async function notificationCreator (user: MUserWithNotificationSetting) {
       const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
-        type: UserNotificationType.UNBLACKLIST_ON_MY_VIDEO,
+        type: UserNotificationType.UNBLOCK_ON_MY_VIDEO,
         userId: user.id,
         videoId: video.id
       })

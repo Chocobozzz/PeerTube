@@ -55,7 +55,7 @@
       <my-video-miniature
         [video]="result" [user]="user" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
         [useLazyLoadUrl]="advancedSearch.searchTarget === 'search-index'"
-        (videoBlacklisted)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
+        (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
       ></my-video-miniature>
     </div>
   </ng-container>

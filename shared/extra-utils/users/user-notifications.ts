@@ -455,7 +455,7 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
 }
 
 async function checkVideoAutoBlacklistForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
-  const notificationType = UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
+  const notificationType = UserNotificationType.VIDEO_AUTO_BLOCK_FOR_MODERATORS
 
   function notificationChecker (notification: UserNotification, type: CheckerType) {
     if (type === 'presence') {
@@ -486,8 +486,8 @@ async function checkNewBlacklistOnMyVideo (
   blacklistType: 'blacklist' | 'unblacklist'
 ) {
   const notificationType = blacklistType === 'blacklist'
-    ? UserNotificationType.BLACKLIST_ON_MY_VIDEO
-    : UserNotificationType.UNBLACKLIST_ON_MY_VIDEO
+    ? UserNotificationType.BLOCK_ON_MY_VIDEO
+    : UserNotificationType.UNBLOCK_ON_MY_VIDEO
 
   function notificationChecker (notification: UserNotification) {
     expect(notification).to.not.be.undefined

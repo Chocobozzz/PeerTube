@@ -125,7 +125,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       role: userJson.role.toString(),
       videoQuota: userJson.videoQuota,
       videoQuotaDaily: userJson.videoQuotaDaily,
-      byPassAutoBlacklist: userJson.adminFlags & UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST
+      byPassAutoBlacklist: userJson.adminFlags & UserAdminFlag.BYPASS_VIDEO_AUTO_BLOCK
     })
   }
 }

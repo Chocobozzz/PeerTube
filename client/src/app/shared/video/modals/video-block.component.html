@@ -1,12 +1,12 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Blacklist video</h4>
+    <h4 i18n class="modal-title">Blocklist video</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
 
-    <form novalidate [formGroup]="form" (ngSubmit)="blacklist()">
+    <form novalidate [formGroup]="form" (ngSubmit)="block()">
       <div class="form-group">
         <textarea
           i18n-placeholder placeholder="Reason..." formControlName="reason"

@@ -69,7 +69,7 @@
     <div class="screenratio">
       <div *ngIf="videoAbuse.video.deleted || videoAbuse.video.blacklisted">
         <span i18n *ngIf="videoAbuse.video.deleted">The video was deleted</span>
-        <span i18n *ngIf="!videoAbuse.video.deleted">The video was blacklisted</span>
+        <span i18n *ngIf="!videoAbuse.video.deleted">The video was blocked</span>
       </div>
       <div *ngIf="!videoAbuse.video.deleted && !videoAbuse.video.blacklisted" [innerHTML]="videoAbuse.embedHtml"></div>
     </div>

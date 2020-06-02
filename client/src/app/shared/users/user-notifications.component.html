@@ -26,19 +26,19 @@
         </ng-template>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.UNBLACKLIST_ON_MY_VIDEO">
+      <ng-container *ngSwitchCase="UserNotificationType.UNBLOCK_ON_MY_VIDEO">
         <my-global-icon iconName="undo"></my-global-icon>
 
         <div class="message" i18n>
-          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been unblacklisted
+          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been unblocked
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.BLACKLIST_ON_MY_VIDEO">
+      <ng-container *ngSwitchCase="UserNotificationType.BLOCK_ON_MY_VIDEO">
         <my-global-icon iconName="no"></my-global-icon>
 
         <div class="message" i18n>
-          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been blacklisted
+          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been blocked
         </div>
       </ng-container>
 
@@ -50,11 +50,11 @@
         </div>
       </ng-container>
 
-      <ng-container *ngSwitchCase="UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS">
+      <ng-container *ngSwitchCase="UserNotificationType.VIDEO_AUTO_BLOCK_FOR_MODERATORS">
         <my-global-icon iconName="no"></my-global-icon>
 
         <div class="message" i18n>
-          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blacklisted</a>
+          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blocked</a>
         </div>
       </ng-container>
 

@@ -11,8 +11,7 @@ import { UserCreateComponent, UserListComponent, UserPasswordComponent, UsersCom
 import {
   ModerationCommentModalComponent,
   VideoAbuseListComponent,
-  VideoAutoBlacklistListComponent,
-  VideoBlacklistListComponent
+  VideoBlockListComponent
 } from './moderation'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { RedundancyCheckboxComponent } from '@app/+admin/follows/shared/redundancy-checkbox.component'
@@ -59,10 +58,9 @@ import { VideoAbuseDetailsComponent } from './moderation/video-abuse-list/video-
     UserListComponent,
 
     ModerationComponent,
-    VideoBlacklistListComponent,
+    VideoBlockListComponent,
     VideoAbuseListComponent,
     VideoAbuseDetailsComponent,
-    VideoAutoBlacklistListComponent,
     ModerationCommentModalComponent,
     InstanceServerBlocklistComponent,
     InstanceAccountBlocklistComponent,

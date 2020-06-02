@@ -33,7 +33,7 @@ export class MenuComponent implements OnInit {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
     [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/moderation/video-abuses',
-    [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/moderation/video-blacklist',
+    [UserRight.MANAGE_VIDEO_BLOCKS]: '/admin/moderation/video-blocks',
     [UserRight.MANAGE_JOBS]: '/admin/jobs',
     [UserRight.MANAGE_CONFIGURATION]: '/admin/config'
   }
@@ -131,7 +131,7 @@ export class MenuComponent implements OnInit {
       UserRight.MANAGE_USERS,
       UserRight.MANAGE_SERVER_FOLLOW,
       UserRight.MANAGE_VIDEO_ABUSES,
-      UserRight.MANAGE_VIDEO_BLACKLIST,
+      UserRight.MANAGE_VIDEO_BLOCKS,
       UserRight.MANAGE_JOBS,
       UserRight.MANAGE_CONFIGURATION
     ]

@@ -1,24 +1,24 @@
 import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier, RedirectService } from '@app/core'
-import { VideoBlacklistService } from '../../../shared/video-blacklist'
+import { VideoBlockService } from '../../video-block'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { FormReactive, VideoBlacklistValidatorsService } from '@app/shared/forms'
+import { FormReactive, VideoBlockValidatorsService } from '@app/shared/forms'
 import { Video } from '@app/shared/video/video.model'
 
 @Component({
-  selector: 'my-video-blacklist',
-  templateUrl: './video-blacklist.component.html',
-  styleUrls: [ './video-blacklist.component.scss' ]
+  selector: 'my-video-block',
+  templateUrl: './video-block.component.html',
+  styleUrls: [ './video-block.component.scss' ]
 })
-export class VideoBlacklistComponent extends FormReactive implements OnInit {
+export class VideoBlockComponent extends FormReactive implements OnInit {
   @Input() video: Video = null
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 
-  @Output() videoBlacklisted = new EventEmitter()
+  @Output() videoBlocked = new EventEmitter()
 
   error: string = null
 
@@ -27,10 +27,9 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private videoBlacklistValidatorsService: VideoBlacklistValidatorsService,
-    private videoBlacklistService: VideoBlacklistService,
+    private videoBlockValidatorsService: VideoBlockValidatorsService,
+    private videoBlocklistService: VideoBlockService,
     private notifier: Notifier,
-    private redirectService: RedirectService,
     private i18n: I18n
   ) {
     super()
@@ -40,7 +39,7 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
     const defaultValues = { unfederate: 'true' }
 
     this.buildForm({
-      reason: this.videoBlacklistValidatorsService.VIDEO_BLACKLIST_REASON,
+      reason: this.videoBlockValidatorsService.VIDEO_BLOCK_REASON,
       unfederate: null
     }, defaultValues)
   }
@@ -54,20 +53,20 @@ export class VideoBlacklistComponent extends FormReactive implements OnInit {
     this.openedModal = null
   }
 
-  blacklist () {
+  block () {
     const reason = this.form.value[ 'reason' ] || undefined
     const unfederate = this.video.isLocal ? this.form.value[ 'unfederate' ] : undefined
 
-    this.videoBlacklistService.blacklistVideo(this.video.id, reason, unfederate)
+    this.videoBlocklistService.blockVideo(this.video.id, reason, unfederate)
         .subscribe(
           () => {
-            this.notifier.success(this.i18n('Video blacklisted.'))
+            this.notifier.success(this.i18n('Video blocked.'))
             this.hide()
 
             this.video.blacklisted = true
-            this.video.blacklistedReason = reason
+            this.video.blockedReason = reason
 
-            this.videoBlacklisted.emit()
+            this.videoBlocked.emit()
           },
 
           err => this.notifier.error(err.message)
