@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, Inject } from '@angular/core'
+import { Component, OnInit, ViewChild, AfterViewInit, Inject, LOCALE_ID } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
@@ -43,6 +43,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   constructor (
     @Inject(DOCUMENT) private document: Document,
+    @Inject(LOCALE_ID) private localeId: string,
     private i18n: I18n,
     private viewportScroller: ViewportScroller,
     private router: Router,
@@ -97,6 +98,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.location.onPopState(() => this.modalService.dismissAll(POP_STATE_MODAL_DISMISS))
 
     this.openModalsIfNeeded()
+
+    this.document.documentElement.lang = getShortLocale(this.localeId)
   }
 
   ngAfterViewInit () {
@@ -170,16 +173,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       map(() => window.location.pathname),
       filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
     ).subscribe(() => this.redirectService.redirectToHomepage(true))
-
-    navigationEndEvent.pipe(
-      map(() => window.location.pathname),
-    ).subscribe(pathname => {
-      if (is18nPath(pathname)) {
-        this.document.documentElement.lang = getShortLocale(pathname.split('/')[1])
-      } else {
-        this.document.documentElement.lang = 'en'
-      }
-    })
 
     navigationEndEvent.subscribe(e => {
       this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
