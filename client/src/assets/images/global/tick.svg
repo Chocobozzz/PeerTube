@@ -1,10 +1,4 @@
-<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
-        <g transform="translate(-356.000000, -115.000000)" stroke="#000000" stroke-width="2">
-            <g id="8" transform="translate(356.000000, 115.000000)">
-                <path d="M21,6 L9,18" id="Path-14"></path>
-                <path d="M9,13 L4,18" id="Path-14" transform="translate(6.500000, 15.500000) scale(-1, 1) translate(-6.500000, -15.500000) "></path>
-            </g>
-        </g>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs/>
+  <path fill="#000" fill-rule="evenodd" d="M13 19a1 1 0 100 2 9 9 0 10-9-9h2a7 7 0 117 7zm-4-7H1l4 4 4-4z"/>
 </svg>

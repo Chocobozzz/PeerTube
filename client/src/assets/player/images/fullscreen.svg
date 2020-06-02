@@ -1,17 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 43.2 (39069) - http://www.bohemiancoding.com/sketch -->
     <title>fullscreen</title>
-    <desc>Created with Sketch.</desc>
     <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Artboard-4" transform="translate(-576.000000, -159.000000)" stroke="#fff" stroke-width="2">
-            <g id="33" transform="translate(576.000000, 159.000000)">
-                <rect id="Rectangle-433" x="1" y="4" width="22" height="16" rx="1"></rect>
-                <polyline id="Path-42" stroke-linecap="round" stroke-linejoin="round" points="20 10 20 7 17 7"></polyline>
-                <polyline id="Path-42" stroke-linecap="round" stroke-linejoin="round" points="7 17 4 17 4 14"></polyline>
-                <polyline id="Path-42" stroke-linecap="round" stroke-linejoin="round" transform="translate(18.500000, 15.500000) scale(1, -1) translate(-18.500000, -15.500000) " points="20 17 20 14 17 14"></polyline>
-                <polyline id="Path-42" stroke-linecap="round" stroke-linejoin="round" transform="translate(5.500000, 8.500000) scale(1, -1) translate(-5.500000, -8.500000) " points="7 10 4 10 4 7"></polyline>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(-576.000000, -159.000000)" stroke="#fff" stroke-width="2">
+            <g transform="translate(576.000000, 159.000000)">
+                <rect x="1" y="4" width="22" height="16" rx="1"></rect>
+                <polyline stroke-linecap="round" stroke-linejoin="round" points="20 10 20 7 17 7"></polyline>
+                <polyline stroke-linecap="round" stroke-linejoin="round" points="7 17 4 17 4 14"></polyline>
+                <polyline stroke-linecap="round" stroke-linejoin="round" transform="translate(18.500000, 15.500000) scale(1, -1) translate(-18.500000, -15.500000) " points="20 17 20 14 17 14"></polyline>
+                <polyline stroke-linecap="round" stroke-linejoin="round" transform="translate(5.500000, 8.500000) scale(1, -1) translate(-5.500000, -8.500000) " points="7 10 4 10 4 7"></polyline>
             </g>
         </g>
     </g>

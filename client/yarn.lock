@@ -1199,7 +1199,7 @@
   dependencies:
     tslib "^1.9.0"
 
-"@ngx-meta/core@9.0.0":
+"@ngx-meta/core@^9.0.0":
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/@ngx-meta/core/-/core-9.0.0.tgz#2c3b27bd32d41f7aaf0712d4007e0afed8e5dd3f"
   integrity sha512-WL/HyKM+4gJPS3TNTO0M+46LlIvGTSyofL//8hxoozAyRPsiMyR0xrwUvPBJkVqFyD6j0iI5FaNcQ9d0JCVJhg==
