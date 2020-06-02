@@ -1,13 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core'
+import { Component, OnInit, ViewChild, AfterViewInit, Inject } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Event, GuardsCheckStart, NavigationEnd, Router, Scroll } from '@angular/router'
 import { AuthService, RedirectService, ServerService, ThemeService } from '@app/core'
-import { is18nPath } from '../../../shared/models/i18n'
+import { is18nPath, getShortLocale } from '../../../shared/models/i18n'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { filter, map, pairwise, first } from 'rxjs/operators'
 import { Hotkey, HotkeysService } from 'angular2-hotkeys'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { PlatformLocation, ViewportScroller } from '@angular/common'
+import { PlatformLocation, ViewportScroller, DOCUMENT } from '@angular/common'
 import { PluginService } from '@app/core/plugins/plugin.service'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
@@ -42,6 +42,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private serverConfig: ServerConfig
 
   constructor (
+    @Inject(DOCUMENT) private document: Document,
     private i18n: I18n,
     private viewportScroller: ViewportScroller,
     private router: Router,
@@ -169,6 +170,16 @@ export class AppComponent implements OnInit, AfterViewInit {
       map(() => window.location.pathname),
       filter(pathname => !pathname || pathname === '/' || is18nPath(pathname))
     ).subscribe(() => this.redirectService.redirectToHomepage(true))
+
+    navigationEndEvent.pipe(
+      map(() => window.location.pathname),
+    ).subscribe(pathname => {
+      if (is18nPath(pathname)) {
+        this.document.documentElement.lang = getShortLocale(pathname.split('/')[1])
+      } else {
+        this.document.documentElement.lang = 'en'
+      }
+    })
 
     navigationEndEvent.subscribe(e => {
       this.hooks.runAction('action:router.navigation-end', 'common', { path: e.url })
