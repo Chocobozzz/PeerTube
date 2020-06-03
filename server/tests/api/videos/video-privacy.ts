@@ -5,7 +5,7 @@ import 'mocha'
 import { VideoPrivacy } from '../../../../shared/models/videos/video-privacy.enum'
 import {
   cleanupTests,
-  flushAndRunMultipleServers,
+  flushAndRunServer,
   getVideosList,
   getVideosListWithToken,
   ServerInfo,
@@ -22,7 +22,7 @@ import { Video } from '@shared/models'
 const expect = chai.expect
 
 describe('Test video privacy', function () {
-  let servers: ServerInfo[] = []
+  const servers: ServerInfo[] = []
   let anotherUserToken: string
 
   let privateVideoId: number
@@ -32,14 +32,24 @@ describe('Test video privacy', function () {
   let internalVideoUUID: string
 
   let unlistedVideoUUID: string
+  let nonFederatedUnlistedVideoUUID: string
 
   let now: number
+
+  const dontFederateUnlistedConfig = {
+    federation: {
+      videos: {
+        federate_unlisted: false
+      }
+    }
+  }
 
   before(async function () {
     this.timeout(50000)
 
     // Run servers
-    servers = await flushAndRunMultipleServers(2)
+    servers.push(await flushAndRunServer(1, dontFederateUnlistedConfig))
+    servers.push(await flushAndRunServer(2))
 
     // Get the access tokens
     await setAccessTokensToServers(servers)
@@ -164,6 +174,37 @@ describe('Test video privacy', function () {
     }
   })
 
+  it('Should upload a non-federating unlisted video to server 1', async function () {
+    this.timeout(30000)
+
+    const attributes = {
+      name: 'unlisted video',
+      privacy: VideoPrivacy.UNLISTED
+    }
+    await uploadVideo(servers[0].url, servers[0].accessToken, attributes)
+
+    await waitJobs(servers)
+  })
+
+  it('Should list my new unlisted video', async function () {
+    const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 3)
+
+    expect(res.body.total).to.equal(3)
+    expect(res.body.data).to.have.lengthOf(3)
+
+    nonFederatedUnlistedVideoUUID = res.body.data[0].uuid
+  })
+
+  it('Should be able to get non-federated unlisted video from origin', async function () {
+    const res = await getVideo(servers[0].url, nonFederatedUnlistedVideoUUID)
+
+    expect(res.body.name).to.equal('unlisted video')
+  })
+
+  it('Should not be able to get non-federated unlisted video from federated server', async function () {
+    await getVideo(servers[1].url, nonFederatedUnlistedVideoUUID, 404)
+  })
+
   it('Should update the private and internal videos to public on server 1', async function () {
     this.timeout(10000)
 
@@ -230,8 +271,8 @@ describe('Test video privacy', function () {
       const res = await getMyVideos(servers[0].url, servers[0].accessToken, 0, 5)
       const videos = res.body.data
 
-      expect(res.body.total).to.equal(2)
-      expect(videos).to.have.lengthOf(2)
+      expect(res.body.total).to.equal(3)
+      expect(videos).to.have.lengthOf(3)
 
       const privateVideo = videos.find(v => v.name === 'private video becomes public')
       const internalVideo = videos.find(v => v.name === 'internal video becomes public')

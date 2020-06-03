@@ -178,6 +178,10 @@ plugins:
     check_latest_versions_interval: '12 hours' # How often you want to check new plugins/themes versions
     url: 'https://packages.joinpeertube.org'
 
+federation:
+  videos:
+    federate_unlisted: true
+
 cache:
   previews:
     size: 500 # Max number of previews you want to cache

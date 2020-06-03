@@ -15,7 +15,8 @@ import {
 import { Response } from 'express'
 import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
 import { JobQueue } from '@server/lib/job-queue'
-import { VideoTranscodingPayload } from '@shared/models'
+import { VideoPrivacy, VideoTranscodingPayload } from '@shared/models'
+import { CONFIG } from "@server/initializers/config"
 
 type VideoFetchType = 'all' | 'only-video' | 'only-video-with-rights' | 'id' | 'none' | 'only-immutable-attributes'
 
@@ -96,6 +97,19 @@ function extractVideo (videoOrPlaylist: MVideo | MStreamingPlaylistVideo) {
     : videoOrPlaylist
 }
 
+function isPrivacyForFederation (privacy: VideoPrivacy) {
+  const castedPrivacy = parseInt(privacy + '', 10)
+
+  return castedPrivacy === VideoPrivacy.PUBLIC ||
+    (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true && castedPrivacy === VideoPrivacy.UNLISTED)
+}
+
+function getPrivaciesForFederation () {
+  return (CONFIG.FEDERATION.VIDEOS.FEDERATE_UNLISTED === true)
+    ? [ { privacy: VideoPrivacy.PUBLIC }, { privacy: VideoPrivacy.UNLISTED } ]
+    : [ { privacy: VideoPrivacy.PUBLIC } ]
+}
+
 export {
   VideoFetchType,
   VideoFetchByUrlType,
@@ -103,5 +117,7 @@ export {
   getVideoWithAttributes,
   fetchVideoByUrl,
   addOptimizeOrMergeAudioJob,
-  extractVideo
+  extractVideo,
+  isPrivacyForFederation,
+  getPrivaciesForFederation
 }

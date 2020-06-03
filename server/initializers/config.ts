@@ -155,6 +155,11 @@ const CONFIG = {
       URL: config.get<string>('plugins.index.url')
     }
   },
+  FEDERATION: {
+    VIDEOS: {
+      FEDERATE_UNLISTED: config.get<boolean>('federation.videos.federate_unlisted')
+    }
+  },
   ADMIN: {
     get EMAIL () { return config.get<string>('admin.email') }
   },

@@ -126,6 +126,7 @@ import { ModelCache } from '@server/models/model-cache'
 import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
 import { buildNSFWFilter } from '@server/helpers/express-utils'
 import { getServerActor } from '@server/models/application/application'
+import { getPrivaciesForFederation, isPrivacyForFederation } from "@server/helpers/video"
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',
@@ -864,10 +865,7 @@ export class VideoModel extends Model<VideoModel> {
         id: {
           [Op.in]: Sequelize.literal('(' + rawQuery + ')')
         },
-        [Op.or]: [
-          { privacy: VideoPrivacy.PUBLIC },
-          { privacy: VideoPrivacy.UNLISTED }
-        ]
+        [Op.or]: getPrivaciesForFederation()
       },
       include: [
         {
@@ -1582,12 +1580,6 @@ export class VideoModel extends Model<VideoModel> {
     return videos
   }
 
-  private static isPrivacyForFederation (privacy: VideoPrivacy) {
-    const castedPrivacy = parseInt(privacy + '', 10)
-
-    return castedPrivacy === VideoPrivacy.PUBLIC || castedPrivacy === VideoPrivacy.UNLISTED
-  }
-
   static getCategoryLabel (id: number) {
     return VIDEO_CATEGORIES[id] || 'Misc'
   }
@@ -1813,11 +1805,11 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   hasPrivacyForFederation () {
-    return VideoModel.isPrivacyForFederation(this.privacy)
+    return isPrivacyForFederation(this.privacy)
   }
 
   isNewVideo (newPrivacy: VideoPrivacy) {
-    return this.hasPrivacyForFederation() === false && VideoModel.isPrivacyForFederation(newPrivacy) === true
+    return this.hasPrivacyForFederation() === false && isPrivacyForFederation(newPrivacy) === true
   }
 
   setAsRefreshed () {
