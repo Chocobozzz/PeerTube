@@ -175,6 +175,12 @@ function streamingPlaylistsModelToFormattedJSON (video: MVideo, playlists: MStre
     })
 }
 
+function sortByResolutionDesc (fileA: MVideoFile, fileB: MVideoFile) {
+  if (fileA.resolution < fileB.resolution) return 1
+  if (fileA.resolution === fileB.resolution) return 0
+  return -1
+}
+
 function videoFilesModelToFormattedJSON (
   model: MVideo | MStreamingPlaylistVideo,
   baseUrlHttp: string,
@@ -183,7 +189,8 @@ function videoFilesModelToFormattedJSON (
 ): VideoFile[] {
   const video = extractVideo(model)
 
-  return videoFiles
+  return [ ...videoFiles ]
+    .sort(sortByResolutionDesc)
     .map(videoFile => {
       return {
         resolution: {
@@ -200,11 +207,6 @@ function videoFilesModelToFormattedJSON (
         metadataUrl: video.getVideoFileMetadataUrl(videoFile, baseUrlHttp)
       } as VideoFile
     })
-    .sort((a, b) => {
-      if (a.resolution.id < b.resolution.id) return 1
-      if (a.resolution.id === b.resolution.id) return 0
-      return -1
-    })
 }
 
 function addVideoFilesInAPAcc (
@@ -214,7 +216,9 @@ function addVideoFilesInAPAcc (
   baseUrlWs: string,
   files: MVideoFile[]
 ) {
-  for (const file of files) {
+  const sortedFiles = [ ...files ].sort(sortByResolutionDesc)
+
+  for (const file of sortedFiles) {
     acc.push({
       type: 'Link',
       mediaType: MIMETYPES.VIDEO.EXT_MIMETYPE[file.extname] as any,
