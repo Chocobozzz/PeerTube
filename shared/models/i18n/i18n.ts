@@ -4,6 +4,7 @@ export const I18N_LOCALES = {
   // Always first to avoid issues when using express acceptLanguages function when no accept language header is set
   'en-US': 'English',
 
+  'ar-001': 'العربية',
   'ca-ES': 'Català',
   'cs-CZ': 'Čeština',
   'de-DE': 'Deutsch',
@@ -30,6 +31,7 @@ export const I18N_LOCALES = {
 }
 
 const I18N_LOCALE_ALIAS = {
+  'ar': 'ar-001',
   'ca': 'ca-ES',
   'cs': 'cs-CZ',
   'de': 'de-DE',

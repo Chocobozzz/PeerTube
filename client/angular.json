@@ -13,6 +13,10 @@
           "baseHref": "/client/en-US/"
         },
         "locales": {
+          "ar": {
+            "translation": "src/locale/angular.ar-001.xlf",
+            "baseHref": "/client/ar-001/"
+          },
           "hu": {
             "translation": "src/locale/angular.hu-HU.xlf",
             "baseHref": "/client/hu-HU/"
@@ -190,6 +194,9 @@
                   "with": "src/environments/environment.e2e.ts"
                 }
               ]
+            },
+            "ar-001": {
+              "localize": [ "ar" ]
             },
             "hu-HU": {
               "localize": [ "hu" ]

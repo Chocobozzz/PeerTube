@@ -41,6 +41,8 @@ post_build_hook
 if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     if [ ! -z ${1+x} ] && [ "$1" == "--light-hu" ]; then
         languages=(["hu"]="hu-HU")
+    elif [ ! -z ${1+x} ] && [ "$1" == "--light-ar" ]; then
+        languages=(["ar"]="ar-001")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-th" ]; then
         languages=(["th"]="th-TH")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-fi" ]; then
@@ -88,6 +90,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     else
         # Supported languages
         languages=(
+            ["ar"]="ar-001"
             ["hu"]="hu-HU"
             ["th"]="th-TH"
             ["fi"]="fi-FI"
