@@ -30,5 +30,5 @@ Nothing to do here, Github will automatically send a webhook to Weblate that wil
 
  * Add it to [/shared/models/i18n/i18n.ts](/shared/models/i18n/i18n.ts)
  * Add it to [/scripts/build/client.sh](/scripts/build/client.sh)
- * Add it to [/client/angular.json](/client/angular.json) in `xliffmergeOptions` section, then **pull** and **generate**
+ * Add it to [/client/angular.json](/client/angular.json) (in multiple sections), then **pull** and **generate**
  * Build the application and check the new language correctly works

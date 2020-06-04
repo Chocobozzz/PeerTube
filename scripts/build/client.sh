@@ -43,6 +43,10 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         languages=(["hu"]="hu-HU")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-ar" ]; then
         languages=(["ar"]="ar-001")
+    elif [ ! -z ${1+x} ] && [ "$1" == "--light-vi" ]; then
+        languages=(["vi"]="vi-VN")
+    elif [ ! -z ${1+x} ] && [ "$1" == "--light-kab" ]; then
+        languages=(["kab"]="kab")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-th" ]; then
         languages=(["th"]="th-TH")
     elif [ ! -z ${1+x} ] && [ "$1" == "--light-fi" ]; then
@@ -91,6 +95,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
         # Supported languages
         languages=(
             ["ar"]="ar-001"
+            ["vi"]="vi-VN"
             ["hu"]="hu-HU"
             ["th"]="th-TH"
             ["fi"]="fi-FI"
@@ -114,6 +119,7 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
             ["eo"]="eo"
             ["de"]="de-DE"
             ["it"]="it-IT"
+            ["kab"]="kab"
         )
     fi
 

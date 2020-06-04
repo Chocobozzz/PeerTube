@@ -108,6 +108,14 @@
           "it": {
             "translation": "src/locale/angular.it-IT.xlf",
             "baseHref": "/client/it-IT/"
+          },
+          "vi": {
+            "translation": "src/locale/angular.vi-VN.xlf",
+            "baseHref": "/client/vi-VN/"
+          },
+          "kab": {
+            "translation": "src/locale/angular.kab.xlf",
+            "baseHref": "/client/kab/"
           }
         }
       },
@@ -266,6 +274,12 @@
             },
             "it-IT": {
               "localize":  [ "it" ]
+            },
+            "vi-VN": {
+              "localize":  [ "vi" ]
+            },
+            "kab": {
+              "localize":  [ "kab" ]
             }
           }
         },
@@ -354,6 +368,7 @@
                 "it-IT",
                 "ja-JP",
                 "jbo",
+                "kab",
                 "ko-KR",
                 "lt-LT",
                 "nb-NO",
