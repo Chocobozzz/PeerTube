@@ -327,10 +327,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     })
   }
 
-  // FIXME: remove and uncomment in PT 2.3
-  // Breaks compatibility with PT <= 2.1
-  // const icons = [ video.getMiniature(), video.getPreview() ]
-  const miniature = video.getMiniature()
+  const icons = [ video.getMiniature(), video.getPreview() ]
 
   return {
     type: 'Video' as 'Video',
@@ -355,20 +352,13 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     content: video.description,
     support: video.support,
     subtitleLanguage,
-    icon: {
+    icon: icons.map(i => ({
       type: 'Image',
-      url: miniature.getFileUrl(video),
+      url: i.getFileUrl(video),
       mediaType: 'image/jpeg',
-      width: miniature.width,
-      height: miniature.height
-    } as any,
-    // icon: icons.map(i => ({
-    //   type: 'Image',
-    //   url: i.getFileUrl(video),
-    //   mediaType: 'image/jpeg',
-    //   width: i.width,
-    //   height: i.height
-    // })),
+      width: i.width,
+      height: i.height
+    })),
     url,
     likes: getVideoLikesActivityPubUrl(video),
     dislikes: getVideoDislikesActivityPubUrl(video),
