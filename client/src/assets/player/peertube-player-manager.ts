@@ -452,6 +452,13 @@ export class PeertubePlayerManager {
   private static addHotkeysOptions (plugins: VideoJSPluginOptions) {
     Object.assign(plugins, {
       hotkeys: {
+        skipInitialFocus: true,
+        enableInactiveFocus: false,
+        captureDocumentHotkeys: true,
+        documentHotkeysFocusElementFilter: (e: HTMLElement) => {
+          return e.id === 'content' || e.tagName.toLowerCase() === 'body'
+        },
+
         enableVolumeScroll: false,
         enableModifiersForNumbers: false,
 
