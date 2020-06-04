@@ -1,5 +1,44 @@
+@import '_variables';
 @import '_mixins';
 @import '_miniature';
+
+.avl-item {
+  // variables
+  $gutter: 10px;
+
+  // local mixin
+  @mixin avl-miniatures($n) {
+    --nb_miniatures: #{$n};
+
+    &:nth-of-type(#{$n}n) {
+      margin-right: unset;
+    }
+  }
+
+  // .avl-item
+  @media screen and (max-width: 1000px) {
+    @include avl-miniatures(2);
+  }
+
+  @media screen and (min-width: 1001px) and (max-width: 1200px) {
+    @include avl-miniatures(3)
+  }
+
+  @media screen and (min-width: 1201px) and (max-width: 1600px) {
+    @include avl-miniatures(4);
+  }
+
+  @media screen and (min-width: 1601px) and (max-width: 1800px) {
+    @include avl-miniatures(5);
+  }
+
+  @media screen and (min-width: 1801px) {
+    @include avl-miniatures(6);
+  }
+
+  margin-right: #{$gutter};
+  width: calc(100% / var(--nb_miniatures) - (#{$gutter} * (var(--nb_miniatures) - 1) / var(--nb_miniatures)));
+}
 
 .videos-header {
   display: flex;
@@ -50,8 +89,10 @@
   }
 }
 
-.margin-content {
-  @include adapt-margin-content-width;
+:host-context(.main-col:not(.expanded)) .margin-content {
+  // TODO: use mixin variant of adapt-margin-content-width
+  margin-left: 3vw !important;
+  margin-right: 3vw !important;
 }
 
 @media screen and (max-width: $mobile-view) {

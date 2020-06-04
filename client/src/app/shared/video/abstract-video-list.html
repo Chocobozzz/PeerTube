@@ -36,6 +36,7 @@
       </div>
 
       <my-video-miniature
+        class="d-inline-flex avl-item" [fitWidth]="true"
         [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
         [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
         (videoBlacklisted)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
