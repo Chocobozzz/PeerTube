@@ -91,7 +91,7 @@ export class Video implements VideoServerModel {
     this.description = hash.description
 
     this.duration = hash.duration
-    this.durationLabel = durationToString(hash.duration)
+    this.durationLabel = durationToString(hash.duration).replace(/^0/, '')
 
     this.id = hash.id
     this.uuid = hash.uuid
