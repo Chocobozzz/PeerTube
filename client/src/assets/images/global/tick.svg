@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <defs/>
-  <path fill="#000" fill-rule="evenodd" d="M13 19a1 1 0 100 2 9 9 0 10-9-9h2a7 7 0 117 7zm-4-7H1l4 4 4-4z"/>
+  <g fill="none" fill-rule="evenodd" stroke="#000" stroke-linecap="round" stroke-width="2">
+    <path d="M21 6L9 18M4 13l5 5"/>
+  </g>
 </svg>

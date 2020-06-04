@@ -32,7 +32,7 @@
         <div class="form-group">
           <label i18n for="displayName">Display name</label>
           <input
-            type="text" id="displayName"
+            type="text" id="displayName" class="form-control"
             formControlName="displayName" [ngClass]="{ 'input-error': formErrors['displayName'] }"
           >
           <div *ngIf="formErrors['displayName']" class="form-error">
@@ -44,7 +44,7 @@
           <label i18n for="description">Description</label>
           <textarea
             id="description" formControlName="description"
-            [ngClass]="{ 'input-error': formErrors['description'] }"
+            class="form-control" [ngClass]="{ 'input-error': formErrors['description'] }"
           ></textarea>
           <div *ngIf="formErrors.description" class="form-error">
             {{ formErrors.description }}
@@ -56,7 +56,7 @@
         <div class="form-group">
           <label i18n for="privacy">Privacy</label>
           <div class="peertube-select-container">
-            <select id="privacy" formControlName="privacy">
+            <select id="privacy" formControlName="privacy" class="form-control">
               <option *ngFor="let privacy of videoPlaylistPrivacies" [value]="privacy.id">{{ privacy.label }}</option>
             </select>
           </div>
@@ -69,7 +69,7 @@
         <div class="form-group">
           <label i18n>Channel</label>
           <div class="peertube-select-container">
-            <select formControlName="videoChannelId">
+            <select formControlName="videoChannelId" class="form-control">
               <option></option>
               <option *ngFor="let channel of userVideoChannels" [value]="channel.id">{{ channel.label }}</option>
             </select>

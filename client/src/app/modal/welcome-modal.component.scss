@@ -12,9 +12,14 @@
   margin-top: 50px;
 }
 
+.mascot-fw {
+  width: 170px;
+}
+
 .mascot {
   display: block;
   min-width: 170px;
+  margin-right: 2rem;
 }
 
 .subtitle {
@@ -73,6 +78,7 @@ li {
 .configure-instance-button {
   @include peertube-button;
   @include orange-button;
+  @include disable-default-a-behaviour;
 
   display: inline-block;
 }

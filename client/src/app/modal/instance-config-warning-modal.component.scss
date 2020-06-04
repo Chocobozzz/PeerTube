@@ -13,17 +13,10 @@ li {
   margin-bottom: 10px;
 }
 
-.configure-instance {
-  text-align: center;
-  font-weight: 600;
-  font-size: 18px;
-  margin-top: 40px;
-  margin-bottom: 10px;
-}
-
 .mascot {
   display: block;
   margin: 0 auto 50px;
+  width: 25%;
 }
 
 .action-button-configure {
@@ -31,4 +24,5 @@ li {
 
   @include peertube-button;
   @include orange-button;
+  @include disable-default-a-behaviour;
 }
