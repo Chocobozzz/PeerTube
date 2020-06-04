@@ -10087,7 +10087,7 @@ Erstelle mein Konto</target>
       </trans-unit>
       <trans-unit id="8fb519ba47ea7806beeacdcd44829d85a2aa0cc5">
         <source>yy-mm-dd</source>
-        <target>jj-mm-tt</target>
+        <target>dd-mm-yy</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
