@@ -352,7 +352,7 @@ function videoModelToActivityPubObject (video: MVideoAP): VideoTorrentObject {
     originallyPublishedAt: video.originallyPublishedAt ? video.originallyPublishedAt.toISOString() : null,
     updated: video.updatedAt.toISOString(),
     mediaType: 'text/markdown',
-    content: video.getTruncatedDescription(),
+    content: video.description,
     support: video.support,
     subtitleLanguage,
     icon: {
