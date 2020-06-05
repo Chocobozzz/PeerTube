@@ -144,6 +144,11 @@ enum ScopeNames {
     },
     {
       fields: [ 'accountId' ]
+    },
+    {
+      fields: [
+        { name: 'createdAt', order: 'DESC' }
+      ]
     }
   ]
 })

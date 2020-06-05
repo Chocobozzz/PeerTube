@@ -23,7 +23,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { UserRight, VideoPrivacy, VideoState } from '../../../shared'
+import { UserRight, VideoPrivacy, VideoState, ResultList } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
@@ -1442,7 +1442,7 @@ export class VideoModel extends Model<VideoModel> {
   private static async getAvailableForApi (
     options: BuildVideosQueryOptions,
     countVideos = true
-  ) {
+  ): Promise<ResultList<VideoModel>> {
     function getCount () {
       if (countVideos !== true) return Promise.resolve(undefined)
 
