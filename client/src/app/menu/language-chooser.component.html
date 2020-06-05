@@ -10,6 +10,6 @@
   </a>
 
   <div class="modal-body">
-    <a *ngFor="let lang of languages" [href]="buildLanguageLink(lang)">{{ lang.label }}</a>
+    <a *ngFor="let lang of languages" [href]="buildLanguageLink(lang)" [lang]=lang.iso>{{ lang.label }}</a>
   </div>
 </ng-template>
