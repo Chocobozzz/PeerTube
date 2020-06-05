@@ -81,9 +81,8 @@ export class CustomConfigValidatorsService {
     }
 
     this.INDEX_URL = {
-      VALIDATORS: [ Validators.required, Validators.pattern(/^https:\/\//) ],
+      VALIDATORS: [ Validators.pattern(/^https:\/\//) ],
       MESSAGES: {
-        'required': this.i18n('Index URL is required.'),
         'pattern': this.i18n('Index URL should be a URL')
       }
     }
