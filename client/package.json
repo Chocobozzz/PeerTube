@@ -37,6 +37,7 @@
     "@angular/core": "~9.1.9",
     "@angular/forms": "~9.1.9",
     "@angular/language-service": "~9.1.9",
+    "@angular/localize": "^9.1.9",
     "@angular/platform-browser": "~9.1.9",
     "@angular/platform-browser-dynamic": "~9.1.9",
     "@angular/router": "~9.1.9",
@@ -45,6 +46,7 @@
     "@neos21/bootstrap3-glyphicons": "^1.0.1",
     "@ng-bootstrap/ng-bootstrap": "^6.0.2",
     "@ngx-i18nsupport/ngx-i18nsupport": "^1.1.6",
+    "@ngx-i18nsupport/tooling": "^8.0.3",
     "@ngx-loading-bar/core": "^4.2.0",
     "@ngx-loading-bar/http-client": "^4.2.0",
     "@ngx-loading-bar/router": "^4.2.0",
@@ -133,11 +135,5 @@
     "whatwg-fetch": "^3.0.0",
     "zone.js": "~0.10.2"
   },
-  "dependencies": {
-    "@angular/localize": "^9.1.9",
-    "@ngx-i18nsupport/tooling": "^8.0.3",
-    "junk": "^3.1.0",
-    "punycode": "^2.1.1",
-    "simple-get": "^3.1.0"
-  }
+  "dependencies": {}
 }
