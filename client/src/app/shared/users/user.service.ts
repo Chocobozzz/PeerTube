@@ -254,7 +254,7 @@ export class UserService {
       // local storage keys
       nsfwPolicy: this.localStorageService.getItem(User.KEYS.NSFW_POLICY) as NSFWPolicyType,
       webTorrentEnabled: this.localStorageService.getItem(User.KEYS.WEBTORRENT_ENABLED) !== 'false',
-      theme: this.localStorageService.getItem(User.KEYS.THEME) || 'default',
+      theme: this.localStorageService.getItem(User.KEYS.THEME) || 'instance-default',
       videoLanguages,
 
       autoPlayNextVideoPlaylist: this.localStorageService.getItem(User.KEYS.AUTO_PLAY_VIDEO_PLAYLIST) !== 'false',
