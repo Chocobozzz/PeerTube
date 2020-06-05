@@ -13,6 +13,7 @@
     "noImplicitThis": true,
     "suppressImplicitAnyIndexErrors":true,
     "alwaysStrict": true,
+    "importHelpers": true,
     "strictBindCallApply": true,
     "target": "es2015",
     "typeRoots": [
