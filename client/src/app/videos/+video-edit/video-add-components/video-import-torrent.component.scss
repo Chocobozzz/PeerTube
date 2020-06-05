@@ -3,7 +3,7 @@
 
 .first-step-block {
   .torrent-or-magnet {
-    @include divider($color: var(--inputPlaceholderColor), $background: var(--submenuColor));
+    @include divider($color: pvar(--inputPlaceholderColor), $background: pvar(--submenuColor));
     
     &[data-content] {
       margin: 1.5rem 0;

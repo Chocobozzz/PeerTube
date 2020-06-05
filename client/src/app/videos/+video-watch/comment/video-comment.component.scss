@@ -70,7 +70,7 @@
         a {
           @include disable-default-a-behaviour;
 
-          color: var(--mainForegroundColor);
+          color: pvar(--mainForegroundColor);
         }
 
         .comment-account-fid {
@@ -80,7 +80,7 @@
 
       .comment-date {
         font-size: 90%;
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
         margin-left: 5px;
         text-decoration: none;
       }
@@ -95,7 +95,7 @@
         &:not(.linkified-url) {
           @include disable-default-a-behaviour;
 
-          color: var(--mainForegroundColor);
+          color: pvar(--mainForegroundColor);
 
           font-weight: $font-semibold;
         }
@@ -108,7 +108,7 @@
       }
 
       &.comment-html-deleted {
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
         margin-bottom: 1rem;
       }
     }
@@ -120,12 +120,12 @@
       ::ng-deep .dropdown-toggle,
       .comment-action-reply,
       .comment-action-delete {
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
         cursor: pointer;
         margin-right: 10px;
 
         &:hover {
-          color: var(--mainForegroundColor);
+          color: pvar(--mainForegroundColor);
         }
       }
 

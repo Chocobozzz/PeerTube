@@ -116,7 +116,7 @@ $variables: (
   --embedBigPlayBackgroundColor: var(--embedBigPlayBackgroundColor)
 );
 
-@function var($variable) {
+@function pvar($variable) {
   @return map-get($variables, $variable);
 }
 

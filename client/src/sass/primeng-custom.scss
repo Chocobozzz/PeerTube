@@ -7,7 +7,7 @@
 @mixin glyphicon-light {
   font-family: 'Glyphicons Halflings';
   text-decoration: none !important;
-  color: var(--mainForegroundColor) !important;
+  color: pvar(--mainForegroundColor) !important;
   font-display: swap;
 }
 
@@ -19,14 +19,14 @@ my-button {
 
 // focus box-shadow for primeng
 .ui-inputtext:enabled:focus:not(.ui-state-error) {
-  box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest) !important;
+  box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
 }
 
 // data table customizations
 p-table {
   .ui-table-caption {
     border: none !important;
-    background-color: var(--mainBackgroundColor) !important;
+    background-color: pvar(--mainBackgroundColor) !important;
 
     .caption {
       height: 40px;
@@ -41,14 +41,14 @@ p-table {
   }
 
   th {
-    background-color: var(--mainBackgroundColor) !important;
+    background-color: pvar(--mainBackgroundColor) !important;
     outline: 0;
   }
 
   td, th {
     font-family: $main-fonts;
     font-size: 15px !important;
-    color: var(--mainForegroundColor) !important;
+    color: pvar(--mainForegroundColor) !important;
   }
 
   td {
@@ -63,14 +63,14 @@ p-table {
 
   tr {
     outline: 0;
-    background-color: var(--mainBackgroundColor) !important;
+    background-color: pvar(--mainBackgroundColor) !important;
     height: 46px;
 
     &.ui-state-highlight {
-      background-color: var(--submenuColor) !important;
+      background-color: pvar(--submenuColor) !important;
 
       td, td > a {
-        color: var(--mainForegroundColor) !important;
+        color: pvar(--mainForegroundColor) !important;
       }
     }
   }
@@ -78,7 +78,7 @@ p-table {
   .ui-table-tbody {
     tr {
       &:hover {
-        background-color: var(--submenuColor) !important;
+        background-color: pvar(--submenuColor) !important;
 
         .action-cell {
           .dropdown-root,
@@ -113,16 +113,16 @@ p-table {
   th {
     border: none !important;
     border-bottom: 1px solid !important;
-    border-color: var(--submenuColor) !important;
+    border-color: pvar(--submenuColor) !important;
     text-align: left !important;
     padding: 5px 0 5px 15px !important;
     font-weight: $font-semibold !important;
-    color: var(--mainForegroundColor) !important;
+    color: pvar(--mainForegroundColor) !important;
 
     &.ui-sortable-column:hover {
-      background-color: var(--submenuColor) !important;
+      background-color: pvar(--submenuColor) !important;
       border: 1px solid !important;
-      border-color: var(--submenuColor) !important;
+      border-color: pvar(--submenuColor) !important;
       border-width: 0 1px !important;
 
       &:first-child {
@@ -131,7 +131,7 @@ p-table {
     }
 
     &.ui-state-highlight {
-      background-color: var(--submenuColor) !important;
+      background-color: pvar(--submenuColor) !important;
 
       .pi {
         @extend .glyphicon;
@@ -143,13 +143,13 @@ p-table {
         &.pi-sort-amount-up-alt {
           @extend .glyphicon-triangle-top;
 
-          color: var(--mainForegroundColor) !important;
+          color: pvar(--mainForegroundColor) !important;
         }
 
         &.pi-sort-amount-down {
           @extend .glyphicon-triangle-bottom;
 
-          color: var(--mainForegroundColor) !important;
+          color: pvar(--mainForegroundColor) !important;
         }
       }
     }
@@ -184,11 +184,11 @@ p-table {
 
   p-paginator {
     .ui-paginator-bottom {
-      background-color: var(--mainBackgroundColor) !important;
+      background-color: pvar(--mainBackgroundColor) !important;
       position: relative;
       border: none;
       border-top: 1px solid !important;
-      border-color: var(--submenuColor) !important;
+      border-color: pvar(--submenuColor) !important;
       height: 40px;
       display: flex;
       justify-content: center;
@@ -200,18 +200,18 @@ p-table {
         left: 0;
 
         &.ui-state-focus {
-          box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+          box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
         }
 
         .ui-dropdown-label {
-          color: var(--inputPlaceholderColor);
+          color: pvar(--inputPlaceholderColor);
         }
       }
 
       .ui-paginator-current {
         position: absolute;
         right: 0;
-        color: var(--inputPlaceholderColor);
+        color: pvar(--inputPlaceholderColor);
       }
 
       .ui-paginator-first,
@@ -227,7 +227,7 @@ p-table {
 
         &.focus-within,
         &:focus {
-          box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+          box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
         }
 
         &.ui-state-disabled:hover {
@@ -261,12 +261,12 @@ p-table {
         .ui-paginator-page {
           &.focus-within,
           &:focus {
-            box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest) !important;
+            box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest) !important;
           }
         }
 
         a {
-          color: var(--mainForegroundColor) !important;
+          color: pvar(--mainForegroundColor) !important;
           font-weight: $font-semibold !important;
           margin: 0 5px !important;
           outline: 0 !important;
@@ -278,7 +278,7 @@ p-table {
           &.ui-state-active {
             &, &:hover, &:active, &:focus {
               color: #fff !important;
-              background-color: var(--mainColor) !important;
+              background-color: pvar(--mainColor) !important;
             }
           }
         }
@@ -328,7 +328,7 @@ p-multiselect {
 
       &:focus,
       &.ui-state-focus {
-        box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+        box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
       }
     }
   }
@@ -368,11 +368,11 @@ p-multiselect {
   }
 
   .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-highlight {
-    background-color: var(--mainColorLighter);
+    background-color: pvar(--mainColorLighter);
   }
 
   .ui-inputtext:enabled:focus:not(.ui-state-error) {
-    border-color: var(--mainColorLighter) !important;
+    border-color: pvar(--mainColorLighter) !important;
     box-shadow: none;
   }
 }
@@ -445,8 +445,8 @@ p-tablecheckbox:hover div .ui-chkbox-box {
 
   .ui-chkbox-box {
     &.ui-state-active {
-      border-color: var(--mainColor) !important;
-      background-color: var(--mainColor) !important;
+      border-color: pvar(--mainColor) !important;
+      background-color: pvar(--mainColor) !important;
     }
 
     .ui-chkbox-icon {
@@ -462,8 +462,8 @@ p-tablecheckbox:hover div .ui-chkbox-box {
         height: 12px;
         opacity: 0;
         transform: rotate(45deg) scale(0);
-        border-right: 2px solid var(--mainBackgroundColor);
-        border-bottom: 2px solid var(--mainBackgroundColor);
+        border-right: 2px solid pvar(--mainBackgroundColor);
+        border-bottom: 2px solid pvar(--mainBackgroundColor);
       }
 
       &.pi-check:after {
@@ -478,7 +478,7 @@ p-inputswitch {
   height: 26px;
 
   .ui-inputswitch-checked .ui-inputswitch-slider {
-    background-color: var(--mainColor) !important;
+    background-color: pvar(--mainColor) !important;
   }
 
   &.small {
@@ -520,8 +520,8 @@ p-toast {
 
   .ui-toast-message {
     font-family: $main-fonts;
-    background-color: var(--mainBackgroundColor) !important;
-    color: var(--mainForegroundColor) !important;
+    background-color: pvar(--mainBackgroundColor) !important;
+    color: pvar(--mainForegroundColor) !important;
     border-radius: 5px;
     box-sizing: border-box;
     border: 1px solid #EBEEF5 !important;

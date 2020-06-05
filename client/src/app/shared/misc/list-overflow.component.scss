@@ -24,7 +24,7 @@ button {
   &.routeActive {
     &::after {
       display: inherit;
-      border: 2px solid var(--mainColor);
+      border: 2px solid pvar(--mainColor);
       position: relative;
       right: 95%;
       top: 50%;
@@ -53,8 +53,8 @@ button {
     width: 100%;
 
     &.active {
-      color: var(--mainBackgroundColor) !important;
-      background-color: var(--mainHoverColor);
+      color: pvar(--mainBackgroundColor) !important;
+      background-color: pvar(--mainHoverColor);
       opacity: .9;
     }
   }

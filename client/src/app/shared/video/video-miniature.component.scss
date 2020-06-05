@@ -37,7 +37,7 @@ $more-margin-right: 15px;
 
         display: block;
         font-size: 95%;
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
 
         &:hover {
           color: $grey-foreground-hover-color;
@@ -88,10 +88,6 @@ $more-margin-right: 15px;
     @media screen and (max-width: $small-view) {
       .video-miniature-information {
         margin: 0 10px;
-
-        .video-miniature-name {
-          margin-top: 0;
-        }
       }
 
       .video-actions {

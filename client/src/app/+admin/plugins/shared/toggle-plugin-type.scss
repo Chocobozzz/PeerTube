@@ -19,12 +19,12 @@
       }
 
       .ui-button.ui-state-active {
-        background-color: var(--mainColor);
-        border-color: var(--mainColor);
+        background-color: pvar(--mainColor);
+        border-color: pvar(--mainColor);
 
         &:hover {
-          background-color: var(--mainHoverColor);
-          border-color: var(--mainHoverColor);
+          background-color: pvar(--mainHoverColor);
+          border-color: pvar(--mainHoverColor);
         }
       }
 

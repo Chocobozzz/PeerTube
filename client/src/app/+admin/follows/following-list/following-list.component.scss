@@ -6,12 +6,12 @@ a {
   display: inline-block;
 
   &, &:hover {
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
   }
 
   span {
     font-size: 80%;
-    color: var(--inputPlaceholderColor);
+    color: pvar(--inputPlaceholderColor);
   }
 }
 

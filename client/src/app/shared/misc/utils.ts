@@ -59,7 +59,9 @@ function durationToString (duration: number) {
   const secondsPadding = seconds >= 10 ? '' : '0'
   const displayedHours = hours > 0 ? hours.toString() + ':' : ''
 
-  return displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
+  return (
+    displayedHours + minutesPadding + minutes.toString() + ':' + secondsPadding + seconds.toString()
+  ).replace(/^0/, '')
 }
 
 function immutableAssign <A, B> (target: A, source: B) {

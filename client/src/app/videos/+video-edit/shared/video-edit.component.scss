@@ -17,7 +17,7 @@ label {
 }
 
 .title-page a {
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
 
   &:hover {
     text-decoration: none;
@@ -122,7 +122,7 @@ my-peertube-checkbox {
     display: inline-block;
     margin-right: 25px;
 
-    color: var(--greyForegroundColor);
+    color: pvar(--greyForegroundColor);
     font-size: 15px;
   }
 

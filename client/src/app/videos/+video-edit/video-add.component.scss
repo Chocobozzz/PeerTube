@@ -33,10 +33,10 @@ $nav-link-height: 40px;
     &.active {
       border: $border-width $border-type $border-color;
       border-bottom: none;
-      background-color: var(--submenuColor) !important;
+      background-color: pvar(--submenuColor) !important;
 
       span {
-        border-bottom: 2px solid var(--mainColor);
+        border-bottom: 2px solid pvar(--mainColor);
         font-weight: $font-bold;
       }
     }
@@ -47,7 +47,7 @@ $nav-link-height: 40px;
   border: $border-width $border-type $border-color;
   border-top: transparent;
 
-  background-color: var(--submenuColor);
+  background-color: pvar(--submenuColor);
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   width: 100%;
@@ -58,7 +58,7 @@ $nav-link-height: 40px;
   align-items: center;
 
   &.dragover {
-    border: 3px dashed var(--mainColor);
+    border: 3px dashed pvar(--mainColor);
   }
 }
 
@@ -72,7 +72,7 @@ $nav-link-height: 40px;
     /* Hide active tab style to not have a moving tab effect */
     a.nav-link.active {
       border: none;
-      background-color: var(--mainBackgroundColor) !important;
+      background-color: pvar(--mainBackgroundColor) !important;
     }
   }
 }

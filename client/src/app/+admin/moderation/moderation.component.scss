@@ -60,7 +60,7 @@
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: var(--inputPlaceholderColor);
+    color: pvar(--inputPlaceholderColor);
   }
 
   ::ng-deep iframe {
@@ -115,7 +115,7 @@ my-action-dropdown.show {
     }
 
     span {
-      color: var(--inputPlaceholderColor);
+      color: pvar(--inputPlaceholderColor);
     }
 
     .video-table-video-image-label {
@@ -135,7 +135,7 @@ my-action-dropdown.show {
     flex-direction: column;
     justify-content: center;
     font-size: 90%;
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
     line-height: 1rem;
 
     div .glyphicon {

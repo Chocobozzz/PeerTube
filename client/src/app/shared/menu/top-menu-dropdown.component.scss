@@ -48,8 +48,8 @@
     width: 100%;
 
     &.active {
-      color: var(--mainBackgroundColor) !important;
-      background-color: var(--mainHoverColor);
+      color: pvar(--mainBackgroundColor) !important;
+      background-color: pvar(--mainHoverColor);
       opacity: .9;
     }
   }

@@ -7,18 +7,18 @@
   padding: 0;
   width: $menu-width;
   z-index: z(menu);
-  scrollbar-color: var(--actionButtonColor) var(--menuBackgroundColor);
+  scrollbar-color: pvar(--actionButtonColor) pvar(--menuBackgroundColor);
 }
 
 menu {
   @include ellipsis;
 
-  background-color: var(--menuBackgroundColor);
+  background-color: pvar(--menuBackgroundColor);
   margin: 0;
   padding: 0;
   height: 100%;
   overflow-x: hidden;
-  color: var(--menuForegroundColor);
+  color: pvar(--menuForegroundColor);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -62,7 +62,7 @@ menu {
       .logged-in-display-name {
         font-size: 16px;
         font-weight: $font-semibold;
-        color: var(--menuForegroundColor);
+        color: pvar(--menuForegroundColor);
         cursor: pointer;
 
         @include disable-default-a-behaviour;
@@ -89,7 +89,7 @@ menu {
         }
 
         ::ng-deep {
-          @include apply-svg-color(var(--menuForegroundColor));
+          @include apply-svg-color(pvar(--menuForegroundColor));
         }
       }
     }
@@ -139,7 +139,7 @@ menu {
       display: flex;
       align-items: center;
       padding-left: $menu-lateral-padding;
-      color: var(--menuForegroundColor);
+      color: pvar(--menuForegroundColor);
       cursor: pointer;
       min-height: 40px;
       font-size: 16px;
@@ -206,7 +206,7 @@ menu {
       a, span[role=button] {
         display: inline-block;
         text-decoration: none;
-        color: var(--mainBackgroundColor);
+        color: pvar(--mainBackgroundColor);
         opacity: $footer-links-base-opacity;
         white-space: nowrap;
         font-size: 90%;
@@ -221,7 +221,7 @@ menu {
           height: 1.4rem;
 
           my-global-icon {
-            @include apply-svg-color(var(--mainBackgroundColor));
+            @include apply-svg-color(pvar(--mainBackgroundColor));
 
             display: flex;
             width: auto;
@@ -235,7 +235,7 @@ menu {
     .footer-copyleft small a {
       @include disable-default-a-behaviour;
 
-      color: var(--mainBackgroundColor);
+      color: pvar(--mainBackgroundColor);
       opacity: $footer-links-base-opacity - .2;
     }
   }
@@ -323,7 +323,7 @@ label {
     left: 3px;
     width: 14px;
     height: 14px;
-    background: var(--mainBackgroundColor);
+    background: pvar(--mainBackgroundColor);
     border-radius: 50%;
     transition: 0.3s ease-out;
   }
@@ -334,7 +334,7 @@ label {
 }
 
 input:checked + label {
-  background: var(--mainColor);
+  background: pvar(--mainColor);
 
   &:after {
     left: calc(100% - 3px);

@@ -51,7 +51,7 @@ li {
   .link-block {
     @include disable-default-a-behaviour;
 
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
     padding: 10px;
     transition: background-color 0.2s ease-in;
     flex-basis: 33%;

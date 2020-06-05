@@ -1,43 +1,22 @@
+@import '_bootstrap-variables';
 @import '_variables';
 @import '_mixins';
 @import '_miniature';
 
-.avl-item {
-  // variables
-  $gutter: 10px;
+.videos {
+  display: grid;
+  column-gap: calc(10px + .2%);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--miniature-min-width, #{$video-thumbnail-width}),
+      1fr
+    )
+  );
 
-  // local mixin
-  @mixin avl-miniatures($n) {
-    --nb_miniatures: #{$n};
-
-    &:nth-of-type(#{$n}n) {
-      margin-right: unset;
-    }
+  @media screen and (min-width: #{breakpoint(xxl)}) {
+    --miniature-min-width: 300px;
   }
-
-  // .avl-item
-  @media screen and (max-width: 1000px) {
-    @include avl-miniatures(2);
-  }
-
-  @media screen and (min-width: 1001px) and (max-width: 1200px) {
-    @include avl-miniatures(3)
-  }
-
-  @media screen and (min-width: 1201px) and (max-width: 1600px) {
-    @include avl-miniatures(4);
-  }
-
-  @media screen and (min-width: 1601px) and (max-width: 1800px) {
-    @include avl-miniatures(5);
-  }
-
-  @media screen and (min-width: 1801px) {
-    @include avl-miniatures(6);
-  }
-
-  margin-right: #{$gutter};
-  width: calc(100% / var(--nb_miniatures) - (#{$gutter} * (var(--nb_miniatures) - 1) / var(--nb_miniatures)));
 }
 
 .videos-header {
@@ -84,15 +63,16 @@
   margin-top: -10px;
   padding-top: 20px;
 
+  // make the element span a full grid row within .videos grid
+  grid-column: 1 / -1;
+
   &:not(:first-child) {
     border-top: 1px solid $separator-border-color;
   }
 }
 
 :host-context(.main-col:not(.expanded)) .margin-content {
-  // TODO: use mixin variant of adapt-margin-content-width
-  margin-left: 3vw !important;
-  margin-right: 3vw !important;
+  @include adapt-margin-content-width($fluid: true);
 }
 
 @media screen and (max-width: $mobile-view) {

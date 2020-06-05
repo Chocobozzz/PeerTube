@@ -9,7 +9,7 @@ p-inputmask {
 
     &:focus-within,
     &:focus {
-      box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+      box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
     }
   }
 }

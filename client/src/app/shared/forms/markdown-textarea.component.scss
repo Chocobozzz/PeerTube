@@ -14,7 +14,7 @@ $input-border-radius: 3px;
     textarea {
       @include peertube-textarea(100%, 150px);
 
-      background-color: var(--markdownTextareaBackgroundColor);
+      background-color: pvar(--markdownTextareaBackgroundColor);
 
       font-family: monospace;
       font-size: 13px;
@@ -61,7 +61,7 @@ $input-border-radius: 3px;
   flex-grow: 1;
   border-bottom-left-radius: unset;
   border-bottom-right-radius: unset;
-  border-bottom: 2px solid var(--mainColor);
+  border-bottom: 2px solid pvar(--mainColor);
 
   :first-child {
     margin-left: auto;
@@ -112,7 +112,7 @@ $input-border-radius: 3px;
     padding-left: 0px;
     padding-right: 0px;
     position: absolute;
-    background-color: var(--mainBackgroundColor);
+    background-color: pvar(--mainBackgroundColor);
     width: 100% !important;
     border-top: none;
     border-left: none;
@@ -125,8 +125,8 @@ $input-border-radius: 3px;
 
   ::ng-deep .tab-content {
     @include content-preview-base();
-    background-color: var(--mainBackgroundColor);
-    scrollbar-color: var(--actionButtonColor) var(--mainBackgroundColor);
+    background-color: pvar(--mainBackgroundColor);
+    scrollbar-color: pvar(--actionButtonColor) pvar(--mainBackgroundColor);
   }
 
   textarea,
@@ -214,7 +214,7 @@ $input-border-radius: 3px;
       padding: $base-padding;
       border-right: 1px dashed $input-border-color !important;
       resize: none;
-      scrollbar-color: var(--actionButtonColor) var(--markdownTextareaBackgroundColor);
+      scrollbar-color: pvar(--actionButtonColor) pvar(--markdownTextareaBackgroundColor);
 
       &:focus {
         box-shadow: none;

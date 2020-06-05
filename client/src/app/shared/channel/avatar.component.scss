@@ -30,9 +30,9 @@
   a:nth-of-type(2) img {
     height: 60%;
     width: 60%;
-    border: 2px solid var(--mainBackgroundColor);
+    border: 2px solid pvar(--mainBackgroundColor);
     transform: translateX(15%);
     position: relative;
-    background-color: var(--mainBackgroundColor);
+    background-color: pvar(--mainBackgroundColor);
   }
 }

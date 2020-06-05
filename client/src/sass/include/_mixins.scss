@@ -90,8 +90,8 @@
   display: inline-block;
   height: $button-height;
   width: $width;
-  color: var(--inputForegroundColor);
-  background-color: var(--inputBackgroundColor);
+  color: pvar(--inputForegroundColor);
+  background-color: pvar(--inputBackgroundColor);
   border: 1px solid #C6C6C6;
   border-radius: 3px;
   padding-left: 15px;
@@ -99,7 +99,7 @@
   font-size: 15px;
 
   &::placeholder {
-    color: var(--inputPlaceholderColor);
+    color: pvar(--inputPlaceholderColor);
   }
 
   @media screen and (max-width: $width) {
@@ -122,24 +122,24 @@
 @mixin peertube-textarea ($width, $height) {
   @include peertube-input-text($width);
 
-  color: var(--textareaForegroundColor);
-  background-color: var(--textareaBackgroundColor);
+  color: pvar(--textareaForegroundColor);
+  background-color: pvar(--textareaBackgroundColor);
   height: $height;
   padding: 5px 15px;
   font-size: 15px;
 }
 
 @mixin orange-button {
-  @include button-focus(var(--mainColorLightest));
+  @include button-focus(pvar(--mainColorLightest));
 
   &, &:active, &:focus {
     color: #fff;
-    background-color: var(--mainColor);
+    background-color: pvar(--mainColor);
   }
 
   &:hover {
     color: #fff;
-    background-color: var(--mainHoverColor);
+    background-color: pvar(--mainHoverColor);
   }
 
   &[disabled], &.disabled {
@@ -156,7 +156,7 @@
 @mixin tertiary-button {
   @include button-focus($grey-button-outline-color);
 
-  color: var(--greyForegroundColor);
+  color: pvar(--greyForegroundColor);
   background-color: transparent;
 
   &[disabled], &.disabled {
@@ -173,11 +173,11 @@
 
   &, &:active, &:focus {
     background-color: $grey-background-color;
-    color: var(--greyForegroundColor);
+    color: pvar(--greyForegroundColor);
   }
 
   &:hover, &:active, &:focus, &[disabled], &.disabled {
-    color: var(--greyForegroundColor);
+    color: pvar(--greyForegroundColor);
     background-color: $grey-background-hover-color;
   }
 
@@ -186,7 +186,7 @@
   }
 
   my-global-icon {
-    @include apply-svg-color(var(--greyForegroundColor))
+    @include apply-svg-color(pvar(--greyForegroundColor))
   }
 }
 
@@ -283,8 +283,8 @@
   margin: 0;
   width: $width;
   border-radius: 3px;
-  color: var(--inputForegroundColor);
-  background: var(--inputBackgroundColor);
+  color: pvar(--inputForegroundColor);
+  background: pvar(--inputBackgroundColor);
   position: relative;
   font-size: 15px;
 
@@ -315,7 +315,7 @@
     cursor: pointer;
     height: $button-height;
     text-overflow: ellipsis;
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
 
     &:focus {
       outline: none;
@@ -375,7 +375,7 @@
   position: absolute;
 
   &:focus + span {
-    box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+    box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
   }
 
   & + span {
@@ -404,7 +404,7 @@
 
   &:checked + span {
     border-color: transparent;
-    background: var(--mainColor);
+    background: pvar(--mainColor);
     animation: jelly 0.6s ease;
 
     &:after {
@@ -464,14 +464,14 @@
 
 @mixin in-content-small-title {
   text-transform: uppercase;
-  color: var(--mainColor);
+  color: pvar(--mainColor);
   font-weight: $font-bold;
   font-size: 13px;
 }
 
 @mixin settings-big-title {
   text-transform: uppercase;
-  color: var(--mainColor);
+  color: pvar(--mainColor);
   font-weight: $font-bold;
   font-size: 110%;
   margin-bottom: 10px;
@@ -482,7 +482,7 @@
 
   font-size: 13px;
   margin-top: 4px;
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
 
   span:hover {
     opacity: 0.8;
@@ -612,8 +612,8 @@
   border-radius: 0.25rem;
 
   .progress-bar {
-    color: var(--mainBackgroundColor);
-    background-color: var(--mainColor);
+    color: pvar(--mainBackgroundColor);
+    background-color: pvar(--mainColor);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -622,7 +622,7 @@
     transition: width 0.6s ease;
 
     &.secondary {
-      background-color: var(--secondaryColor);
+      background-color: pvar(--secondaryColor);
     }
   }
 }
@@ -633,14 +633,14 @@
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
   list-style: none;
-  background-color: var(--submenuColor);
+  background-color: pvar(--submenuColor);
   border-radius: 0.25rem;
 
   .breadcrumb-item {
     display: flex;
 
     a {
-      color: var(--mainColor);
+      color: pvar(--mainColor);
     }
 
     & + .breadcrumb-item {
@@ -688,7 +688,7 @@
     & > a,
     & > div {
       padding: 20px;
-      background: var(--submenuColor);
+      background: pvar(--submenuColor);
       border-radius: 4px;
       box-sizing: border-box;
       height: 100%;
@@ -699,14 +699,14 @@
     text-align: center;
     font-size: 130%;
     line-height: 21px;
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
     line-height: 30px;
     margin-bottom: 20px;
   }
 
   .dashboard-label {
     font-size: 90%;
-    color: var(--inputPlaceholderColor);
+    color: pvar(--inputPlaceholderColor);
     text-align: center;
   }
 }
@@ -726,7 +726,7 @@
       height: max-content;
 
       &:focus-within {
-        box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+        box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
       }
     }
 
@@ -735,8 +735,8 @@
         height: 30px !important;
         font-size: 12px !important;
 
-        background-color: var(--mainBackgroundColor) !important;
-        color: var(--mainForegroundColor) !important;
+        background-color: pvar(--mainBackgroundColor) !important;
+        color: pvar(--mainForegroundColor) !important;
       }
     }
 
@@ -769,7 +769,7 @@
         vertical-align: middle !important;
 
         path  {
-          fill: var(--greyForegroundColor) !important;
+          fill: pvar(--greyForegroundColor) !important;
         }
       }
 
@@ -780,7 +780,7 @@
   }
 }
 
-@mixin divider($color: var(--submenuColor), $background: var(--mainBackgroundColor)) {
+@mixin divider($color: pvar(--submenuColor), $background: pvar(--mainBackgroundColor)) {
   width: 95%;
   border-top: .05rem solid $color;
   height: .05rem;
@@ -810,7 +810,7 @@
   border-radius: 5rem;
   display: inline-flex;
   font-size: 90%;
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
   height: $avatar-height;
   line-height: 1rem;
   margin: .1rem;

@@ -17,7 +17,7 @@ body {
 
 .video-js.vjs-peertube-skin {
   font-size: $font-size;
-  color: var(--embedForegroundColor);
+  color: pvar(--embedForegroundColor);
 
   .vjs-dock-text {
     padding-right: 10px;
@@ -132,7 +132,7 @@ body {
   .vjs-control-bar,
   .vjs-big-play-button,
   .vjs-settings-dialog {
-    background-color: var(--embedBigPlayBackgroundColor);
+    background-color: pvar(--embedBigPlayBackgroundColor);
   }
 
   .vjs-poster {
@@ -157,7 +157,7 @@ body {
     .vjs-theater-control,
     .vjs-settings
     {
-      color: var(--embedForegroundColor) !important;
+      color: pvar(--embedForegroundColor) !important;
 
       opacity: $primary-foreground-opacity;
       transition: opacity .1s;
@@ -170,7 +170,7 @@ body {
     .vjs-current-time,
     .vjs-duration,
     .vjs-peertube {
-      color: var(--embedForegroundColor);
+      color: pvar(--embedForegroundColor);
       opacity: $primary-foreground-opacity;
     }
 
@@ -190,7 +190,7 @@ body {
         transition: none;
 
         .vjs-play-progress {
-          background: var(--embedForegroundColor);
+          background: pvar(--embedForegroundColor);
 
           // Not display the circle if the progress is not hovered
           &::before {

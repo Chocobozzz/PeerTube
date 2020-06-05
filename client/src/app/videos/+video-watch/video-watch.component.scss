@@ -166,7 +166,7 @@ $video-info-margin-left: 44px;
         a {
           @include disable-default-a-behaviour;
 
-          color: var(--mainForegroundColor);
+          color: pvar(--mainForegroundColor);
 
           &:hover {
             opacity: 0.8;
@@ -225,7 +225,7 @@ $video-info-margin-left: 44px;
           ::ng-deep.action-button {
             @include peertube-button;
             @include button-with-icon(21px, 0, -1px);
-            @include apply-svg-color(var(--actionButtonColor));
+            @include apply-svg-color(pvar(--actionButtonColor));
 
             font-size: 100%;
             font-weight: $font-semibold;
@@ -233,7 +233,7 @@ $video-info-margin-left: 44px;
             padding: 0 10px 0 10px;
             white-space: nowrap;
             background-color: transparent !important;
-            color: var(--actionButtonColor);
+            color: pvar(--actionButtonColor);
             text-transform: uppercase;
 
             &::after {
@@ -255,36 +255,36 @@ $video-info-margin-left: 44px;
 
             &.action-button-like.activated {
               .count {
-                color: var(--activatedActionButtonColor);
+                color: pvar(--activatedActionButtonColor);
               }
 
               my-global-icon {
-                @include apply-svg-color(var(--activatedActionButtonColor));
+                @include apply-svg-color(pvar(--activatedActionButtonColor));
               }
             }
 
             &.action-button-dislike.activated {
               .count {
-                color: var(--activatedActionButtonColor);
+                color: pvar(--activatedActionButtonColor);
               }
 
               my-global-icon {
-                @include apply-svg-color(var(--activatedActionButtonColor));
+                @include apply-svg-color(pvar(--activatedActionButtonColor));
               }
             }
 
             &.action-button-support {
-              color: var(--supportButtonColor);
+              color: pvar(--supportButtonColor);
 
               my-global-icon {
-                @include apply-svg-color(var(--supportButtonColor));
+                @include apply-svg-color(pvar(--supportButtonColor));
               }
             }
 
             &.action-button-support {
               my-global-icon {
                 ::ng-deep path:first-child {
-                  fill: var(--supportButtonHeartColor) !important;
+                  fill: pvar(--supportButtonHeartColor) !important;
                 }
               }
             }
@@ -325,7 +325,7 @@ $video-info-margin-left: 44px;
             background-color: #909090;
 
             &.liked {
-              background-color: var(--activatedActionButtonColor);
+              background-color: pvar(--activatedActionButtonColor);
             }
           }
         }
@@ -356,7 +356,7 @@ $video-info-margin-left: 44px;
       .video-info-description-more {
         cursor: pointer;
         font-weight: $font-semibold;
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
         font-size: 14px;
 
         .glyphicon {
@@ -379,13 +379,13 @@ $video-info-margin-left: 44px;
         min-width: 142px;
         padding-right: 5px;
         display: inline-block;
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
         font-weight: $font-bold;
       }
 
       a.video-attribute-value {
         @include disable-default-a-behaviour;
-        color: var(--mainForegroundColor);
+        color: pvar(--mainForegroundColor);
 
         &:hover {
           opacity: 0.9;
@@ -480,7 +480,7 @@ my-video-comments {
   a {
     @include disable-default-a-behaviour;
 
-    color: var(--mainColor);
+    color: pvar(--mainColor);
     transition: color 0.3s;
 
     &:hover {
@@ -503,7 +503,7 @@ my-video-comments {
   }
 
   .privacy-concerns-okay {
-    background-color: var(--mainColor);
+    background-color: pvar(--mainColor);
     margin-left: 10px;
   }
 }

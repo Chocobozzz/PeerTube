@@ -3,7 +3,7 @@
 
 .plugin {
   margin: 15px 0;
-  background-color: var(--submenuColor);
+  background-color: pvar(--submenuColor);
 }
 
 .first-row {
@@ -25,10 +25,10 @@
     margin-left: 10px;
 
     my-global-icon {
-      @include apply-svg-color(var(--greyForegroundColor));
+      @include apply-svg-color(pvar(--greyForegroundColor));
 
       &[iconName="npm"] {
-        @include fill-svg-color(var(--greyForegroundColor));
+        @include fill-svg-color(pvar(--greyForegroundColor));
       }
     }
   }
