@@ -56,6 +56,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     date: true,
     views: true,
     by: true,
+    avatar: true,
     privacyLabel: true,
     privacyText: false,
     state: false,

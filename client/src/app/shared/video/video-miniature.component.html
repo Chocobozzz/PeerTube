@@ -16,7 +16,7 @@
       >{{ video.name }}</a>
 
       <div class="d-inline-flex">
-        <avatar-channel class="mr-1 pt-1" [video]="video" size="sm"></avatar-channel>
+        <avatar-channel *ngIf="displayOptions.avatar" class="mr-1 pt-1" [video]="video" size="sm"></avatar-channel>
 
         <div class="d-flex flex-column">
           <span class="video-miniature-created-at-views">

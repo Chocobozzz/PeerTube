@@ -9,6 +9,7 @@ import { AuthService, Notifier } from '@app/core'
 import { UserService } from '@app/shared/users/user.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SessionStorageService } from '@app/shared/misc/storage.service'
+import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
 
 @Component({
   selector: 'my-recommended-videos',
@@ -23,6 +24,13 @@ export class RecommendedVideosComponent implements OnChanges {
 
   autoPlayNextVideo: boolean
   autoPlayNextVideoTooltip: string
+
+  displayOptions: MiniatureDisplayOptions = {
+    date: true,
+    views: true,
+    by: true,
+    avatar: true
+  }
 
   readonly hasVideos$: Observable<boolean>
   readonly videos$: Observable<Video[]>
