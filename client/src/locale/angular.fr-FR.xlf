@@ -10630,7 +10630,7 @@
       </trans-unit>
       <trans-unit id="0f829293d953936450158c2dd7b483d6b960ed2b">
         <source>Save to playlist</source>
-        <target>Sauvegarder dans la liste de lecture</target>
+        <target>Sauvegarder dans une liste de lecture</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
