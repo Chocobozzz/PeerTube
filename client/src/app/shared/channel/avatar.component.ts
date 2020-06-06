@@ -1,11 +1,25 @@
-import { Component, Input } from '@angular/core'
-import { VideoDetails } from '../video/video-details.model'
+import { Component, Input, OnInit } from '@angular/core'
+import { Video } from '../video/video.model'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'avatar-channel',
   templateUrl: './avatar.component.html',
   styleUrls: [ './avatar.component.scss' ]
 })
-export class AvatarComponent {
-  @Input() video: VideoDetails
+export class AvatarComponent implements OnInit {
+  @Input() video: Video
+  @Input() size: 'md' | 'sm' = 'md'
+
+  channelLinkTitle = ''
+  accountLinkTitle = ''
+
+  constructor (
+    private i18n: I18n
+  ) {}
+
+  ngOnInit () {
+    this.channelLinkTitle = this.i18n('Go to the channel page of {{name}} ({{handle}})', { name: this.video.channel.name, handle: this.video.byVideoChannel })
+    this.accountLinkTitle = this.i18n('Go to the account page of {{name}} ({{handle}})', { name: this.video.account.name, handle: this.video.byAccount })
+  }
 }

@@ -1,12 +1,19 @@
 @import '_mixins';
 
 .wrapper {
-  width: 35px;
-  height: 35px;
-  min-width: 35px;
-  min-height: 35px;
+  $avatar-size: 35px;
+
+  width: $avatar-size;
+  height: $avatar-size;
+  min-width: $avatar-size;
+  min-height: $avatar-size;
   position: relative;
   margin-right: 5px;
+
+  &.avatar-sm {
+    min-width: 28px;
+    min-height: 28px;
+  }
 
   a {
     @include disable-outline;
