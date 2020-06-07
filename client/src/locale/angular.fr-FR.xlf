@@ -1999,7 +1999,7 @@
       </trans-unit>
       <trans-unit id="31523e672b9f39a621e5d9e2a22b24bbf9aa8d4d">
         <source>Original publication year</source>
-        <target>Année originale de publication</target>
+        <target>Année de publication originale</target>
         <context-group name="null">
           <context context-type="linenumber">24</context>
         </context-group>
@@ -6781,12 +6781,7 @@
       </trans-unit>
       <trans-unit id="d315d635144b1104f1c1e9ef80ff3d07fcfa571c">
         <source>I am at least 16 years old and agree to the <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Terms<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> and to the <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Code of Conduct<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> of this instance </source>
-        <target>
-          J'ai au moins 16 ans et je suis d'accord
-          avec les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Conditions<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> et le <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>Code de Conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/>
-          de cette instance
-        </target>
+        <target>J'ai au moins 16 ans et j'accepte les <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>conditions d'utilisation<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> <x id="START_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;ng-container&gt;"/> et le <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>code de conduite<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/><x id="CLOSE_TAG_NG-CONTAINER" ctype="x-ng-container" equiv-text="&lt;/ng-container&gt;"/> de cette instance </target>
         <context-group name="null">
           <context context-type="linenumber">65</context>
         </context-group>
@@ -8636,7 +8631,7 @@
       </trans-unit>
       <trans-unit id="68f47e5ec9c7efd3c2a5cd317634ace12c3717ee" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> year ago</source>
-        <target state="translated">il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> années</target>
+        <target state="translated">il y a <x id="INTERPOLATION" equiv-text="{{interval}}"/> an</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
