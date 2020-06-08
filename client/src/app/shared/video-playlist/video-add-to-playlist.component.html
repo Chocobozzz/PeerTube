@@ -4,7 +4,7 @@
       <div i18n class="title">Save to</div>
 
       <div class="options" (click)="displayOptions = !displayOptions">
-        <my-global-icon iconName="cog"></my-global-icon>
+        <my-global-icon iconName="cog" aria-hidden="true"></my-global-icon>
 
         <span i18n>Options</span>
       </div>
@@ -60,7 +60,7 @@
   </div>
 
   <div class="new-playlist-button dropdown-item" (click)="openCreateBlock($event)" [hidden]="isNewPlaylistBlockOpened">
-    <my-global-icon iconName="add"></my-global-icon>
+    <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
 
     <span i18n>Create a private playlist</span>
   </div>
