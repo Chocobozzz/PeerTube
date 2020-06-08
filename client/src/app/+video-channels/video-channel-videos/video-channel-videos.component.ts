@@ -47,6 +47,10 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     super()
 
     this.titlePage = this.i18n('Published videos')
+    this.displayOptions = {
+      ...this.displayOptions,
+      avatar: false
+    }
   }
 
   ngOnInit () {
