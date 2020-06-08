@@ -47,29 +47,19 @@
 }
 
 .screenratio {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 56%;
-
   div {
     @include miniature-thumbnail;
-    position: absolute;
-    height: 100%;
-    width: 100%;
     display: inline-flex;
     justify-content: center;
     align-items: center;
     color: pvar(--inputPlaceholderColor);
   }
 
-  ::ng-deep iframe {
-    position: absolute;
+  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
     width: 100% !important;
     height: 100% !important;
     left: 0;
-    top: 0;
-  }
+  };
 }
 
 .chip {
