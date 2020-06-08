@@ -85,9 +85,10 @@ body {
       background-image: url('#{$assets-path}/player/images/big-play-button.svg');
     }
 
-    &:hover {
-      opacity: 0.8;
+    &.focus-visible, &:hover {
+      background-color: var(--mainColor);
     }
+
   }
 
   // Small effect when we click on the play button
