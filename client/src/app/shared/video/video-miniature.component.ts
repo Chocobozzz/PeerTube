@@ -24,6 +24,7 @@ export type MiniatureDisplayOptions = {
   date?: boolean
   views?: boolean
   by?: boolean
+  avatar?: boolean
   privacyLabel?: boolean
   privacyText?: boolean
   state?: boolean
@@ -46,6 +47,7 @@ export class VideoMiniatureComponent implements OnInit {
     date: true,
     views: true,
     by: true,
+    avatar: false,
     privacyLabel: false,
     privacyText: false,
     state: false,
