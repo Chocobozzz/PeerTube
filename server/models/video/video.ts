@@ -1366,7 +1366,7 @@ export class VideoModel extends Model<VideoModel> {
     // Instances only share videos
     const query = 'SELECT 1 FROM "videoShare" ' +
       'INNER JOIN "actorFollow" ON "actorFollow"."targetActorId" = "videoShare"."actorId" ' +
-      'WHERE "actorFollow"."actorId" = $followerActorId AND "videoShare"."videoId" = $videoId ' +
+      'WHERE "actorFollow"."actorId" = $followerActorId AND "actorFollow"."state" = \'accepted\' AND "videoShare"."videoId" = $videoId ' +
       'LIMIT 1'
 
     const options = {

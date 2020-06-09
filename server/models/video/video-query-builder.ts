@@ -135,12 +135,14 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
       '  EXISTS (' +
       '    SELECT 1 FROM "videoShare" ' +
       '    INNER JOIN "actorFollow" "actorFollowShare" ON "actorFollowShare"."targetActorId" = "videoShare"."actorId" ' +
-      '    AND "actorFollowShare"."actorId" = :followerActorId WHERE "videoShare"."videoId" = "video"."id"' +
+      '    AND "actorFollowShare"."actorId" = :followerActorId AND "actorFollowShare"."state" = \'accepted\' ' +
+      '    WHERE "videoShare"."videoId" = "video"."id"' +
       '  )' +
       '  OR' +
       '  EXISTS (' +
       '    SELECT 1 from "actorFollow" ' +
-      '    WHERE "actorFollow"."targetActorId" = "videoChannel"."actorId" AND "actorFollow"."actorId" = :followerActorId' +
+      '    WHERE "actorFollow"."targetActorId" = "videoChannel"."actorId" AND "actorFollow"."actorId" = :followerActorId ' +
+      '    AND "actorFollow"."state" = \'accepted\'' +
       '  )'
 
     if (options.includeLocalVideos) {
