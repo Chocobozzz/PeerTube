@@ -1,13 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-
-import { cleanupTests, flushAndRunServer, immutableAssign, makeGetRequest, ServerInfo } from '../../../../shared/extra-utils'
+import {
+  cleanupTests,
+  flushAndRunServer,
+  immutableAssign,
+  makeGetRequest,
+  ServerInfo,
+  updateCustomSubConfig,
+  setAccessTokensToServers
+} from '../../../../shared/extra-utils'
 import {
   checkBadCountPagination,
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
+
+function updateSearchIndex (server: ServerInfo, enabled: boolean, disableLocalSearch = false) {
+  return updateCustomSubConfig(server.url, server.accessToken, {
+    search: {
+      searchIndex: {
+        enabled,
+        disableLocalSearch
+      }
+    }
+  })
+}
 
 describe('Test videos API validator', function () {
   let server: ServerInfo
@@ -18,6 +36,7 @@ describe('Test videos API validator', function () {
     this.timeout(30000)
 
     server = await flushAndRunServer(1)
+    await setAccessTokensToServers([ server ])
   })
 
   describe('When searching videos', function () {
@@ -141,6 +160,62 @@ describe('Test videos API validator', function () {
 
     it('Should success with the correct parameters', async function () {
       await makeGetRequest({ url: server.url, path, query, statusCodeExpected: 200 })
+    })
+  })
+
+  describe('Search target', function () {
+
+    it('Should fail/succeed depending on the search target', async function () {
+      this.timeout(10000)
+
+      const query = { search: 'coucou' }
+      const paths = [
+        '/api/v1/search/video-channels/',
+        '/api/v1/search/videos/'
+      ]
+
+      for (const path of paths) {
+        {
+          const customQuery = immutableAssign(query, { searchTarget: 'hello' })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 400 })
+        }
+
+        {
+          const customQuery = immutableAssign(query, { searchTarget: undefined })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 200 })
+        }
+
+        {
+          const customQuery = immutableAssign(query, { searchTarget: 'local' })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 200 })
+        }
+
+        {
+          const customQuery = immutableAssign(query, { searchTarget: 'search-index' })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 400 })
+        }
+
+        await updateSearchIndex(server, true, true)
+
+        {
+          const customQuery = immutableAssign(query, { searchTarget: 'local' })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 400 })
+        }
+
+        {
+          const customQuery = immutableAssign(query, { searchTarget: 'search-index' })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 200 })
+        }
+
+        await updateSearchIndex(server, true, false)
+
+        {
+          const customQuery = immutableAssign(query, { searchTarget: 'local' })
+          await makeGetRequest({ url: server.url, path, query: customQuery, statusCodeExpected: 200 })
+        }
+
+        await updateSearchIndex(server, false, false)
+      }
     })
   })
 

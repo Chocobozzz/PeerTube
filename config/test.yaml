@@ -110,7 +110,7 @@ search:
   # Use a third party index instead of your local index, only for search results
   # Useful to discover content outside of your instance
   search_index:
-    enabled: true
+    enabled: false
     # URL of the search index, that should use the same search API and routes
     # than PeerTube: https://docs.joinpeertube.org/api-rest-reference.html
     # You should deploy your own with https://framagit.org/framasoft/peertube/search-index,
