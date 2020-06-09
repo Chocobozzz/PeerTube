@@ -96,7 +96,7 @@ export class UserNotification implements UserNotificationServer {
           this.videoUrl = this.buildVideoUrl(this.video)
           break
 
-        case UserNotificationType.UNBLOCK_ON_MY_VIDEO:
+        case UserNotificationType.UNBLACKLIST_ON_MY_VIDEO:
           this.videoUrl = this.buildVideoUrl(this.video)
           break
 
@@ -112,7 +112,7 @@ export class UserNotification implements UserNotificationServer {
           this.videoUrl = this.buildVideoUrl(this.videoAbuse.video)
           break
 
-        case UserNotificationType.VIDEO_AUTO_BLOCK_FOR_MODERATORS:
+        case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
           this.videoAutoBlacklistUrl = '/admin/moderation/video-auto-blacklist/list'
           // Backward compatibility where we did not assign videoBlacklist to this type of notification before
           if (!this.videoBlacklist) this.videoBlacklist = { id: null, video: this.video }
@@ -120,7 +120,7 @@ export class UserNotification implements UserNotificationServer {
           this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
           break
 
-        case UserNotificationType.BLOCK_ON_MY_VIDEO:
+        case UserNotificationType.BLACKLIST_ON_MY_VIDEO:
           this.videoUrl = this.buildVideoUrl(this.videoBlacklist.video)
           break
 

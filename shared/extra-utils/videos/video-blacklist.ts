@@ -1,5 +1,5 @@
 import * as request from 'supertest'
-import { VideoBlockType } from '../../models/videos'
+import { VideoBlacklistType } from '../../models/videos'
 import { makeGetRequest } from '..'
 
 function addVideoToBlacklist (
@@ -45,7 +45,7 @@ function getBlacklistedVideosList (parameters: {
   url: string
   token: string
   sort?: string
-  type?: VideoBlockType
+  type?: VideoBlacklistType
   specialStatus?: number
 }) {
   const { url, token, sort, type, specialStatus = 200 } = parameters

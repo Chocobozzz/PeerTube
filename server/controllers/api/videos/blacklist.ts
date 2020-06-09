@@ -23,14 +23,14 @@ const blacklistRouter = express.Router()
 
 blacklistRouter.post('/:videoId/blacklist',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLOCKS),
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistAddValidator),
   asyncMiddleware(addVideoToBlacklistController)
 )
 
 blacklistRouter.get('/blacklist',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLOCKS),
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   paginationValidator,
   blacklistSortValidator,
   setBlacklistSort,
@@ -41,14 +41,14 @@ blacklistRouter.get('/blacklist',
 
 blacklistRouter.put('/:videoId/blacklist',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLOCKS),
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistUpdateValidator),
   asyncMiddleware(updateVideoBlacklistController)
 )
 
 blacklistRouter.delete('/:videoId/blacklist',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLOCKS),
+  ensureUserHasRight(UserRight.MANAGE_VIDEO_BLACKLIST),
   asyncMiddleware(videosBlacklistRemoveValidator),
   asyncMiddleware(removeVideoFromBlacklistController)
 )

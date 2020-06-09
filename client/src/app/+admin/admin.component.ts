@@ -37,7 +37,7 @@ export class AdminComponent implements OnInit {
   }
 
   hasVideoBlocklistRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLOCKS)
+    return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
 
   hasConfigRight () {

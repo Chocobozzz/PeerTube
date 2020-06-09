@@ -25,7 +25,7 @@ import {
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
-import { VideoBlocklist, VideoBlockType } from '../../../../shared/models/videos'
+import { VideoBlacklist, VideoBlacklistType } from '../../../../shared/models/videos'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { User, UserRole } from '../../../../shared/models/users'
 import { getMagnetURI, getYoutubeVideoUrl, importVideo } from '../../../../shared/extra-utils/videos/video-imports'
@@ -127,7 +127,7 @@ describe('Test video blacklist', function () {
       const res = await getBlacklistedVideosList({
         url: servers[0].url,
         token: servers[0].accessToken,
-        type: VideoBlockType.MANUAL
+        type: VideoBlacklistType.MANUAL
       })
 
       expect(res.body.total).to.equal(2)
@@ -141,7 +141,7 @@ describe('Test video blacklist', function () {
       const res = await getBlacklistedVideosList({
         url: servers[0].url,
         token: servers[0].accessToken,
-        type: VideoBlockType.AUTO_BEFORE_PUBLISHED
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
       })
 
       expect(res.body.total).to.equal(0)
@@ -219,7 +219,7 @@ describe('Test video blacklist', function () {
   })
 
   describe('When removing a blacklisted video', function () {
-    let videoToRemove: VideoBlocklist
+    let videoToRemove: VideoBlacklist
     let blacklist = []
 
     it('Should not have any video in videos list on server 1', async function () {
@@ -328,7 +328,7 @@ describe('Test video blacklist', function () {
     it('Should have the correct video blacklist unfederate attribute', async function () {
       const res = await getBlacklistedVideosList({ url: servers[0].url, token: servers[0].accessToken, sort: 'createdAt' })
 
-      const blacklistedVideos: VideoBlocklist[] = res.body.data
+      const blacklistedVideos: VideoBlacklist[] = res.body.data
       const video3Blacklisted = blacklistedVideos.find(b => b.video.uuid === video3UUID)
       const video4Blacklisted = blacklistedVideos.find(b => b.video.uuid === video4UUID)
 
@@ -396,7 +396,7 @@ describe('Test video blacklist', function () {
           url: servers[0].url,
           accessToken: servers[0].accessToken,
           username: user.username,
-          adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLOCK,
+          adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST,
           password: user.password,
           role: UserRole.USER
         })
@@ -413,7 +413,7 @@ describe('Test video blacklist', function () {
       const res = await getBlacklistedVideosList({
         url: servers[0].url,
         token: servers[0].accessToken,
-        type: VideoBlockType.AUTO_BEFORE_PUBLISHED
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
       })
 
       expect(res.body.total).to.equal(1)
@@ -434,7 +434,7 @@ describe('Test video blacklist', function () {
         url: servers[0].url,
         token: servers[0].accessToken,
         sort: 'createdAt',
-        type: VideoBlockType.AUTO_BEFORE_PUBLISHED
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
       })
 
       expect(res.body.total).to.equal(2)
@@ -453,7 +453,7 @@ describe('Test video blacklist', function () {
         url: servers[0].url,
         token: servers[0].accessToken,
         sort: 'createdAt',
-        type: VideoBlockType.AUTO_BEFORE_PUBLISHED
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
       })
 
       expect(res.body.total).to.equal(3)
@@ -466,7 +466,7 @@ describe('Test video blacklist', function () {
       const res = await getBlacklistedVideosList({
         url: servers[0].url,
         token: servers[0].accessToken,
-        type: VideoBlockType.AUTO_BEFORE_PUBLISHED
+        type: VideoBlacklistType.AUTO_BEFORE_PUBLISHED
       })
 
       expect(res.body.total).to.equal(3)

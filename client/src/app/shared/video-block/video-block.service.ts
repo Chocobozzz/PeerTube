@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/api'
 import { from as observableFrom, Observable } from 'rxjs'
-import { VideoBlocklist, VideoBlockType, ResultList } from '../../../../../shared'
+import { VideoBlacklist, VideoBlacklistType, ResultList } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
 
@@ -21,8 +21,8 @@ export class VideoBlockService {
     pagination: RestPagination
     sort: SortMeta
     search?: string
-    type?: VideoBlockType
-  }): Observable<ResultList<VideoBlocklist>> {
+    type?: VideoBlacklistType
+  }): Observable<ResultList<VideoBlacklist>> {
     const { pagination, sort, search, type } = options
 
     let params = new HttpParams()
@@ -33,8 +33,8 @@ export class VideoBlockService {
         type: {
           prefix: 'type:',
           handler: v => {
-            if (v === 'manual') return VideoBlockType.MANUAL
-            if (v === 'auto') return VideoBlockType.AUTO_BEFORE_PUBLISHED
+            if (v === 'manual') return VideoBlacklistType.MANUAL
+            if (v === 'auto') return VideoBlacklistType.AUTO_BEFORE_PUBLISHED
 
             return undefined
           }
@@ -44,7 +44,7 @@ export class VideoBlockService {
       params = this.restService.addObjectParams(params, filters)
     }
 
-    return this.authHttp.get<ResultList<VideoBlocklist>>(VideoBlockService.BASE_VIDEOS_URL + 'blacklist', { params })
+    return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlockService.BASE_VIDEOS_URL + 'blacklist', { params })
                .pipe(
                  map(res => this.restExtractor.convertResultListDateToHuman(res)),
                  catchError(res => this.restExtractor.handleError(res))

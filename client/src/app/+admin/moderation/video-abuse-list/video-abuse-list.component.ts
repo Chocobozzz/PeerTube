@@ -107,7 +107,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
             this.videoBlocklistService.blockVideo(videoAbuse.video.id, undefined, true)
               .subscribe(
                 () => {
-                  this.notifier.success(this.i18n('Video blocklisted.'))
+                  this.notifier.success(this.i18n('Video blocked.'))
 
                   this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
                 },
@@ -123,7 +123,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
             this.videoBlocklistService.unblockVideo(videoAbuse.video.id)
               .subscribe(
                 () => {
-                  this.notifier.success(this.i18n('Video unblocklisted.'))
+                  this.notifier.success(this.i18n('Video unblocked.'))
 
                   this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
                 },

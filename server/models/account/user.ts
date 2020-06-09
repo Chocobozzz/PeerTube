@@ -739,11 +739,11 @@ export class UserModel extends Model<UserModel> {
     const videoUserId = video.VideoChannel.Account.userId
 
     if (video.isBlacklisted()) {
-      return videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLOCKS)
+      return videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
     }
 
     if (video.privacy === VideoPrivacy.PRIVATE) {
-      return video.VideoChannel && videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLOCKS)
+      return video.VideoChannel && videoUserId === this.id || this.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
     }
 
     if (video.privacy === VideoPrivacy.INTERNAL) return true

@@ -1,15 +1,15 @@
 import { Video } from '../video.model'
 
-export enum VideoBlockType {
+export enum VideoBlacklistType {
   MANUAL = 1,
   AUTO_BEFORE_PUBLISHED = 2
 }
 
-export interface VideoBlocklist {
+export interface VideoBlacklist {
   id: number
   unfederated: boolean
   reason?: string
-  type: VideoBlockType
+  type: VideoBlacklistType
 
   video: Video
 

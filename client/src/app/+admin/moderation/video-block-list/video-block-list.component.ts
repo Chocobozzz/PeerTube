@@ -3,7 +3,7 @@ import { SortMeta } from 'primeng/api'
 import { Notifier, ServerService } from '@app/core'
 import { ConfirmService } from '../../../core'
 import { RestPagination, RestTable, VideoBlockService } from '../../../shared'
-import { VideoBlocklist, VideoBlockType } from '../../../../../../shared'
+import { VideoBlacklist, VideoBlacklistType } from '../../../../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
 import { Video } from '../../../shared/video/video.model'
@@ -18,13 +18,13 @@ import { VideoService } from '@app/shared/video/video.service'
   styleUrls: [ '../moderation.component.scss', './video-block-list.component.scss' ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit {
-  blocklist: (VideoBlocklist & { reasonHtml?: string })[] = []
+  blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
-  listBlockTypeFilter: VideoBlockType = undefined
+  blocklistTypeFilter: VideoBlacklistType = undefined
 
-  videoBlocklistActions: DropdownAction<VideoBlocklist>[][] = []
+  videoBlocklistActions: DropdownAction<VideoBlacklist>[][] = []
 
   constructor (
     private notifier: Notifier,
@@ -99,7 +99,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
         .subscribe(config => {
           // don't filter if auto-blacklist is not enabled as this will be the only list
           if (config.autoBlacklist.videos.ofUsers.enabled) {
-            this.listBlockTypeFilter = VideoBlockType.MANUAL
+            this.blocklistTypeFilter = VideoBlacklistType.MANUAL
           }
         })
 
@@ -141,7 +141,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     return 'VideoBlockListComponent'
   }
 
-  getVideoUrl (videoBlock: VideoBlocklist) {
+  getVideoUrl (videoBlock: VideoBlacklist) {
     return Video.buildClientUrl(videoBlock.video.uuid)
   }
 
@@ -155,7 +155,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     return this.markdownRenderer.textMarkdownToHTML(text)
   }
 
-  async unblockVideo (entry: VideoBlocklist) {
+  async unblockVideo (entry: VideoBlacklist) {
     const confirmMessage = this.i18n(
       'Do you really want to unblock this video? It will be available again in the videos list.'
     )

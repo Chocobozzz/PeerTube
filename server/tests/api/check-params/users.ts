@@ -188,7 +188,7 @@ describe('Test users API validators', function () {
       videoQuota: -1,
       videoQuotaDaily: -1,
       role: UserRole.USER,
-      adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLOCK
+      adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
     }
 
     it('Should fail with a too small username', async function () {

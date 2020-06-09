@@ -164,11 +164,11 @@ export class Video implements VideoServerModel {
   }
 
   isBlockableBy (user: AuthUser) {
-    return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLOCKS) === true
+    return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 
   isUnblockableBy (user: AuthUser) {
-    return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLOCKS) === true
+    return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 
   isUpdatableBy (user: AuthUser) {

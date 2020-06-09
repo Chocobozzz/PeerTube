@@ -57,7 +57,7 @@ export const ModerationRoutes: Routes = [
         component: VideoBlockListComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_VIDEO_BLOCKS,
+          userRight: UserRight.MANAGE_VIDEO_BLACKLIST,
           meta: {
             title: 'Videos blocked'
           }

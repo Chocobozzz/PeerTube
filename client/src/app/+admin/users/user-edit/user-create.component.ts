@@ -52,7 +52,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
       role: this.userValidatorsService.USER_ROLE,
       videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
-      byPassAutoBlacklist: null
+      byPassAutoBlock: null
     }, defaultValues)
   }
 

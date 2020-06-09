@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { VideoBlockType } from '../../../shared/models/videos'
+import { VideoBlacklistType } from '../../../shared/models/videos'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -18,7 +18,7 @@ async function up (utils: {
   }
 
   {
-    const query = 'UPDATE "videoBlacklist" SET "type" = ' + VideoBlockType.MANUAL
+    const query = 'UPDATE "videoBlacklist" SET "type" = ' + VideoBlacklistType.MANUAL
     await utils.sequelize.query(query)
   }
 

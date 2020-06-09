@@ -335,7 +335,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
       this.videoCaptionService.listCaptions(videoId)
     ])
       .pipe(
-        // If 401, the video is private or blocklisted so redirect to 404
+        // If 401, the video is private or blocked so redirect to 404
         catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))
       )
       .subscribe(([ video, captionsResult ]) => {
@@ -364,7 +364,7 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
 
     this.playlistService.getVideoPlaylist(playlistId)
       .pipe(
-        // If 401, the video is private or blocklisted so redirect to 404
+        // If 401, the video is private or blocked so redirect to 404
         catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 401, 403, 404 ]))
       )
       .subscribe(playlist => {

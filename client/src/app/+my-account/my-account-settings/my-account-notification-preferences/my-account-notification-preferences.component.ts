@@ -49,7 +49,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
 
     this.rightNotifications = {
       videoAbuseAsModerator: UserRight.MANAGE_VIDEO_ABUSES,
-      videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLOCKS,
+      videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLACKLIST,
       newUserRegistration: UserRight.MANAGE_USERS,
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,
       autoInstanceFollowing: UserRight.MANAGE_CONFIGURATION
