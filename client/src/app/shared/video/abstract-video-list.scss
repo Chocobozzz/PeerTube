@@ -1,5 +1,23 @@
+@import '_bootstrap-variables';
+@import '_variables';
 @import '_mixins';
 @import '_miniature';
+
+.videos {
+  display: grid;
+  column-gap: calc(10px + .2%);
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(
+      var(--miniature-min-width, #{$video-thumbnail-width}),
+      1fr
+    )
+  );
+
+  @media screen and (min-width: #{breakpoint(xxl)}) {
+    --miniature-min-width: 300px;
+  }
+}
 
 .videos-header {
   display: flex;
@@ -45,13 +63,16 @@
   margin-top: -10px;
   padding-top: 20px;
 
+  // make the element span a full grid row within .videos grid
+  grid-column: 1 / -1;
+
   &:not(:first-child) {
     border-top: 1px solid $separator-border-color;
   }
 }
 
-.margin-content {
-  @include adapt-margin-content-width;
+:host-context(.main-col:not(.expanded)) .margin-content {
+  @include adapt-margin-content-width($fluid: true);
 }
 
 @media screen and (max-width: $mobile-view) {

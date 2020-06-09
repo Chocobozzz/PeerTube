@@ -19,7 +19,7 @@
       width: fit-content;
       display: flex;
       align-items: baseline;
-      color: var(--mainForegroundColor);
+      color: pvar(--mainForegroundColor);
 
       .video-channel-display-name {
         font-weight: $font-semibold;

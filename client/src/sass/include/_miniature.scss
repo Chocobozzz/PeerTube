@@ -6,7 +6,7 @@
 
   transition: color 0.2s;
   font-weight: $font-semibold;
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
   margin-top: 10px;
   margin-bottom: 5px;
 
@@ -80,7 +80,7 @@ $play-overlay-width: 18px;
   }
 
   &.focus-visible {
-    box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+    box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
     outline: none;
   }
 
@@ -168,7 +168,7 @@ $play-overlay-width: 18px;
         outline: none;
       }
 
-      color: var(--mainForegroundColor);
+      color: pvar(--mainForegroundColor);
     }
   }
 
@@ -187,7 +187,7 @@ $play-overlay-width: 18px;
       }
 
       .followers {
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
         font-weight: normal;
         font-size: 14px;
         margin-left: 10px;
@@ -203,7 +203,7 @@ $play-overlay-width: 18px;
     display: inline-block;
     font-size: 16px;
     text-transform: uppercase;
-    color: var(--greyForegroundColor);
+    color: pvar(--greyForegroundColor);
     margin-bottom: 10px;
     font-weight: $font-semibold;
     text-decoration: none;
@@ -221,32 +221,37 @@ $play-overlay-width: 18px;
   }
 }
 
-@mixin adapt-margin-content-width {
-  width: $video-miniature-width * 6;
-  margin: auto !important;
+@mixin adapt-margin-content-width($fluid: false) {
+  @if $fluid {
+    margin-left: 3vw !important;
+    margin-right: 3vw !important;
+  } @else {
+    width: $video-miniature-width * 6;
+    margin: auto !important;
 
-  @media screen and (max-width: 1800px) {
-    width: $video-miniature-width * 5;
-  }
+    @media screen and (max-width: 1800px) {
+      width: $video-miniature-width * 5;
+    }
 
-  @media screen and (max-width: 1800px - $video-miniature-width) {
-    width: $video-miniature-width * 4;
-  }
+    @media screen and (max-width: 1800px - $video-miniature-width) {
+      width: $video-miniature-width * 4;
+    }
 
-  @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
-    width: $video-miniature-width * 3;
-  }
+    @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
+      width: $video-miniature-width * 3;
+    }
 
-  @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
-    width: $video-miniature-width * 2;
-  }
+    @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
+      width: $video-miniature-width * 2;
+    }
 
-  @media screen and (max-width: $mobile-view) {
-    width: auto;
-    margin: 0 !important;
+    @media screen and (max-width: $mobile-view) {
+      width: auto;
+      margin: 0 !important;
 
-    .videos {
-      @include video-miniature-small-screen;
+      .videos {
+        @include video-miniature-small-screen;
+      }
     }
   }
 }

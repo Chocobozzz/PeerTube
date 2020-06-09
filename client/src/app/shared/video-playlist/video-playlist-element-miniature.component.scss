@@ -24,7 +24,7 @@ my-video-thumbnail,
 .video {
   display: flex;
   align-items: center;
-  background-color: var(--mainBackgroundColor);
+  background-color: pvar(--mainBackgroundColor);
   padding: 10px;
   border-bottom: 1px solid $separator-border-color;
 
@@ -49,7 +49,7 @@ my-video-thumbnail,
   a {
     @include disable-default-a-behaviour;
 
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
     display: flex;
     min-width: 0;
     align-items: center;
@@ -58,11 +58,11 @@ my-video-thumbnail,
     .position {
       font-weight: $font-semibold;
       margin-right: 10px;
-      color: var(--greyForegroundColor);
+      color: pvar(--greyForegroundColor);
       min-width: 25px;
 
       my-global-icon {
-        @include apply-svg-color(var(--greyForegroundColor));
+        @include apply-svg-color(pvar(--greyForegroundColor));
 
         width: 17px;
         position: relative;
@@ -81,7 +81,7 @@ my-video-thumbnail,
       }
 
       .video-info-account, .video-info-timestamp {
-        color: var(--greyForegroundColor);
+        color: pvar(--greyForegroundColor);
       }
     }
   }
@@ -109,7 +109,7 @@ my-video-thumbnail,
     }
 
     .icon-more {
-      @include apply-svg-color(var(--greyForegroundColor));
+      @include apply-svg-color(pvar(--greyForegroundColor));
 
       display: flex;
 

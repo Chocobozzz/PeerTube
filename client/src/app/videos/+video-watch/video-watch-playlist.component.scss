@@ -7,7 +7,7 @@
   min-width: 200px;
   max-width: 470px;
   height: 66vh;
-  background-color: var(--mainBackgroundColor);
+  background-color: pvar(--mainBackgroundColor);
   overflow-y: auto;
   border-bottom: 1px solid $separator-border-color;
 
@@ -22,7 +22,7 @@
     }
 
     .playlist-by-index {
-      color: var(--greyForegroundColor);
+      color: pvar(--greyForegroundColor);
       display: flex;
 
       .playlist-by {

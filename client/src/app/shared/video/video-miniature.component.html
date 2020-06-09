@@ -1,4 +1,4 @@
-<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow }" (mouseenter)="loadActions()">
+<div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow, 'fit-width': fitWidth }" (mouseenter)="loadActions()">
   <my-video-thumbnail
     [video]="video" [nsfw]="isVideoBlur"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"

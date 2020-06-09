@@ -6,7 +6,6 @@ $more-button-width: 41px;
 $more-margin-right: 15px;
 
 .video-miniature {
-  width: $video-miniature-width;
   display: inline-flex;
   flex-direction: column;
   margin-bottom: $video-miniature-margin-bottom;
@@ -19,14 +18,16 @@ $more-margin-right: 15px;
     .video-miniature-information {
       width: $video-miniature-width - $more-button-width - $more-margin-right;
       line-height: normal;
+      font-size: 13px;
 
       .video-miniature-name {
         @include miniature-name;
+        font-size: 110%;
       }
 
       .video-miniature-created-at-views {
         display: block;
-        font-size: 13px;
+        font-size: 95%;
       }
 
       .video-miniature-account,
@@ -35,8 +36,8 @@ $more-margin-right: 15px;
         @include ellipsis;
 
         display: block;
-        font-size: 13px;
-        color: var(--greyForegroundColor);
+        font-size: 95%;
+        color: pvar(--greyForegroundColor);
 
         &:hover {
           color: $grey-foreground-hover-color;
@@ -87,10 +88,6 @@ $more-margin-right: 15px;
     @media screen and (max-width: $small-view) {
       .video-miniature-information {
         margin: 0 10px;
-
-        .video-miniature-name {
-          margin-top: 0;
-        }
       }
 
       .video-actions {
@@ -107,6 +104,24 @@ $more-margin-right: 15px;
   &:hover ::ng-deep .video-thumbnail .video-thumbnail-actions-overlay,
   &:hover .video-bottom .video-actions ::ng-deep .dropdown-root {
     opacity: 1;
+  }
+
+  &.fit-width {
+    width: 100%;
+    height: unset;
+    margin-bottom: $video-miniature-margin-bottom / 2;
+
+    .video-bottom {
+      width: 100% !important;
+
+      .video-miniature-information {
+        width: calc(100% - 40px) !important;
+      }
+    }
+
+    my-video-thumbnail {
+      @include large-screen-ratio($selector: '::ng-deep .video-thumbnail');
+    }
   }
 
   &.display-as-row {
@@ -137,7 +152,7 @@ $more-margin-right: 15px;
         .video-miniature-created-at-views,
         .video-miniature-account,
         .video-miniature-channel {
-          font-size: 14px;
+          font-size: 95%;
           width: fit-content;
         }
 

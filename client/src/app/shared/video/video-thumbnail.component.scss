@@ -14,7 +14,7 @@
 
     div {
       height: 100%;
-      background-color: var(--mainColor);
+      background-color: pvar(--mainColor);
     }
   }
 
@@ -25,7 +25,8 @@
 
     border-radius: 3px;
     font-size: 12px;
-    font-weight: $font-bold;
+    font-weight: $font-semibold;
+    line-height: 1.2;
     z-index: z(miniature);
   }
 
@@ -34,6 +35,7 @@
     padding: 0 5px;
     left: 5px;
     top: 5px;
+    font-weight: $font-bold;
 
     &.warning { background-color: orange; }
     &.danger { background-color: red; }
@@ -41,7 +43,7 @@
 
   .video-thumbnail-duration-overlay {
     position: absolute;
-    padding: 0 5px;
+    padding: 0 3px;
     right: 5px;
     bottom: 5px;
   }

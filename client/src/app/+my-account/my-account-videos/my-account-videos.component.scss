@@ -84,7 +84,7 @@ my-edit-button {
       .video-bottom,
       .video-bottom .video-miniature-information {
         /* same width than a.video-thumbnail */
-        max-width: 223px !important;
+        max-width: $video-thumbnail-width !important;
       }
     }
   }
@@ -110,7 +110,7 @@ my-edit-button {
     ::ng-deep {
       .action-button {
         /* same width than a.video-thumbnail */
-        width: 223px;
+        width: $video-thumbnail-width;
       }
     }
   }
@@ -124,7 +124,7 @@ my-edit-button {
         flex-direction: column;
 
         .video-miniature-name {
-          max-width: 223px;
+          max-width: $video-thumbnail-width;
         }
       }
     }

@@ -28,7 +28,7 @@ header {
       margin-bottom: 10px;
 
       my-global-icon {
-        @include apply-svg-color(var(--mainBackgroundColor));
+        @include apply-svg-color(pvar(--mainBackgroundColor));
 
         width: 22px;
         height: 22px;
@@ -42,13 +42,13 @@ header {
     &.active,
     &.completed {
       .step-index {
-        border-color: var(--mainColor);
-        background-color: var(--mainColor);
-        color: var(--mainBackgroundColor);
+        border-color: pvar(--mainColor);
+        background-color: pvar(--mainColor);
+        color: pvar(--mainBackgroundColor);
       }
 
       .step-label {
-        color: var(--mainColor);
+        color: pvar(--mainColor);
       }
     }
 

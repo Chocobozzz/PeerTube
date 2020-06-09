@@ -18,7 +18,7 @@ input[type=submit] {
 }
 
 .create-an-account, .forgot-password-button {
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
   cursor: pointer;
   transition: opacity cubic-bezier(0.39, 0.575, 0.565, 1);
 
@@ -50,7 +50,7 @@ input[type=submit] {
       cursor: pointer;
       border: 1px solid #d1d7e0;
       border-radius: 5px;
-      color: var(--mainForegroundColor);
+      color: pvar(--mainForegroundColor);
       margin: 10px 10px 0 0;
       display: flex;
       justify-content: center;

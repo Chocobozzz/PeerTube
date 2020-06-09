@@ -5,21 +5,21 @@ a {
   width: 100%;
 
   &, &:hover {
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
 
     &.focus-visible {
-      background-color: var(--mainHoverColor);
-      color: var(--mainBackgroundColor);
+      background-color: pvar(--mainHoverColor);
+      color: pvar(--mainBackgroundColor);
     }
   }
 }
 
 .bg-gray {
-  background-color: var(--mainBackgroundColor);
+  background-color: pvar(--mainBackgroundColor);
 }
 
 .text-gray-light {
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
 }
 
 my-global-icon {
@@ -28,5 +28,5 @@ my-global-icon {
   top: -2px;
   margin: 5px;
 
-  @include apply-svg-color(var(--mainForegroundColor));
+  @include apply-svg-color(pvar(--mainForegroundColor));
 }

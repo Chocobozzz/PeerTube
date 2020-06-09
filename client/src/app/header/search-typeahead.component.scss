@@ -10,7 +10,7 @@
   font-size: 14px;
 
   &::placeholder {
-    color: var(--inputPlaceholderColor);
+    color: pvar(--inputPlaceholderColor);
   }
 }
 
@@ -18,7 +18,7 @@
   @include icon(25px);
   height: 21px;
 
-  background-color: var(--mainForegroundColor);
+  background-color: pvar(--mainForegroundColor);
   mask: url('../../assets/images/header/search.svg') no-repeat 50% 50%;
 
   // yolo
@@ -37,10 +37,10 @@
 #typeahead-help,
 #typeahead-instructions,
 my-suggestions ::ng-deep ul {
-  border: 1px solid var(--mainBackgroundColor);
+  border: 1px solid pvar(--mainBackgroundColor);
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
-  background: var(--mainBackgroundColor);
+  background: pvar(--mainBackgroundColor);
   transition: .3s ease;
   transition-property: box-shadow;
 }
@@ -67,7 +67,7 @@ my-suggestions ::ng-deep ul {
 
 #typeahead-container {
   input {
-    border: 1px solid var(--mainBackgroundColor) !important;
+    border: 1px solid pvar(--mainBackgroundColor) !important;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 20px 0px;
     flex-grow: 1;
     transition: box-shadow .3s ease, width .2s ease;

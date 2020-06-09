@@ -13,7 +13,7 @@
 
 .sub-header-container {
   margin-top: $header-height;
-  background-color: var(--mainBackgroundColor);
+  background-color: pvar(--mainBackgroundColor);
   width: 100%;
 }
 
@@ -22,7 +22,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  background-color: var(--mainBackgroundColor);
+  background-color: pvar(--mainBackgroundColor);
   z-index: z(header);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
   display: flex;
@@ -38,7 +38,7 @@
       @include icon(24px);
 
       &.icon-menu {
-        background-color: var(--mainForegroundColor);
+        background-color: pvar(--mainForegroundColor);
         mask-image: url('../assets/images/header/menu.svg');
         margin: 0 18px 0 20px;
       }
@@ -65,6 +65,7 @@
         background: url('../assets/images/logo.svg') no-repeat;
         width: 23px;
         height: 24px;
+        margin-right: .5rem;
       }
     }
 

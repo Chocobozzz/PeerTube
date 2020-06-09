@@ -39,7 +39,7 @@
       ngb-accordion ::ng-deep {
         .btn {
           font-weight: $font-semibold !important;
-          color: var(--mainForegroundColor) !important;
+          color: pvar(--mainForegroundColor) !important;
         }
       }
     }
@@ -94,7 +94,7 @@ button {
     margin-bottom: 20px;
 
     ::ng-deep .loader div {
-      border-color: var(--mainColor) transparent transparent transparent;
+      border-color: pvar(--mainColor) transparent transparent transparent;
     }
 
     & + div {

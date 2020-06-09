@@ -41,13 +41,13 @@
     min-width: 142px;
     padding-right: 5px;
     display: inline-block;
-    color: var(--greyForegroundColor);
+    color: pvar(--greyForegroundColor);
     font-weight: $font-bold;
   }
 
   a.metadata-attribute-value {
     @include disable-default-a-behaviour;
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
 
     &:hover {
       opacity: 0.9;

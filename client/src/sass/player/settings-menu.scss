@@ -38,7 +38,7 @@ $setting-transition-easing: ease-out;
     position: absolute;
     right: .5em;
     bottom: 3.5em;
-    color: var(--embedForegroundColor);
+    color: pvar(--embedForegroundColor);
     opacity: $primary-foreground-opacity;
     margin: 0 auto;
     font-size: $font-size !important;

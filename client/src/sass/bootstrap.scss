@@ -51,8 +51,8 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
     padding: 3px 15px;
 
     &.active {
-      color: var(--mainBackgroundColor) !important;
-      background-color: var(--mainHoverColor);
+      color: pvar(--mainBackgroundColor) !important;
+      background-color: pvar(--mainHoverColor);
       opacity: .9;
     }
 
@@ -94,7 +94,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   text-align: center;
 
   .modal-content {
-    background-color: var(--mainBackgroundColor);
+    background-color: pvar(--mainBackgroundColor);
   }
 
   .modal-header {
@@ -161,7 +161,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   a {
     @include disable-default-a-behaviour;
 
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
   }
 }
 
@@ -170,7 +170,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   .nav-link {
     @include disable-default-a-behaviour;
 
-    color: var(--mainForegroundColor) !important;
+    color: pvar(--mainForegroundColor) !important;
   }
 }
 
@@ -180,9 +180,9 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
   &.active {
     font-weight: $font-semibold;
-    background-color: var(--mainBackgroundColor) !important;
+    background-color: pvar(--mainBackgroundColor) !important;
     border: none;
-    border-bottom: 2px solid var(--mainColor);
+    border-bottom: 2px solid pvar(--mainColor);
   }
   &:hover {
     border-top-color: transparent;
@@ -192,7 +192,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 }
 
 .card {
-  background-color: var(--mainBackgroundColor);
+  background-color: pvar(--mainBackgroundColor);
   border-color: #dee2e6;
 }
 
@@ -240,27 +240,27 @@ ngb-tooltip-window {
 }
 
 .btn-outline-tertiary {
-  color: var(--secondaryColor);
-  border-color: var(--secondaryColor);
+  color: pvar(--secondaryColor);
+  border-color: pvar(--secondaryColor);
 
   &:focus-within,
   &:focus,
   &:hover {
-    color: var(--mainBackgroundColor);
-    background-color: var(--secondaryColor);
+    color: pvar(--mainBackgroundColor);
+    background-color: pvar(--secondaryColor);
   }
 }
 
 // input box-shadow on focus
 .form-control {
   font-size: 15px;
-  color: var(--mainForegroundColor);
-  background-color: var(--inputBackgroundColor);
+  color: pvar(--mainForegroundColor);
+  background-color: pvar(--inputBackgroundColor);
   outline: none;
 
   &:focus-within,
   &:focus {
-    box-shadow: #{$focus-box-shadow-form} var(--mainColorLightest);
+    box-shadow: #{$focus-box-shadow-form} pvar(--mainColorLightest);
 
     &.input-error {
       box-shadow: #{$focus-box-shadow-form} #{scale-color($red, $alpha: -75%)};

@@ -47,21 +47,21 @@ body {
 
   --actionButtonColor: #{$grey-foreground-color};
   --supportButtonBackgroundColor: #{transparent};
-  --supportButtonColor: #{var(--actionButtonColor)};
+  --supportButtonColor: #{pvar(--actionButtonColor)};
   --supportButtonHeartColor: #{$support-button-heart};
 
   --activatedActionButtonColor: #{$activated-action-button-color};
 
   font-family: $main-fonts;
   font-weight: $font-regular;
-  color: var(--mainForegroundColor);
-  background-color: var(--mainBackgroundColor);
+  color: pvar(--mainForegroundColor);
+  background-color: pvar(--mainBackgroundColor);
   font-size: 14px;
 }
 
 ::selection {
-  color: var(--mainBackgroundColor);
-  background-color: var(--mainHoverColor);
+  color: pvar(--mainBackgroundColor);
+  background-color: pvar(--mainHoverColor);
 }
 
 #incompatible-browser {
@@ -78,12 +78,12 @@ strong {
 
 input.readonly {
   /* Force blank on readonly inputs */
-  background-color: var(--inputBackgroundColor) !important;
+  background-color: pvar(--inputBackgroundColor) !important;
 }
 
 input, textarea {
   outline: none;
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
 }
 
 label {
@@ -128,7 +128,7 @@ label {
   }
 
   .sub-menu {
-    background-color: var(--submenuColor);
+    background-color: pvar(--submenuColor);
     width: 100%;
     height: 81px;
     margin-bottom: $sub-menu-margin-bottom;
@@ -166,7 +166,7 @@ label {
 }
 
 .title-page {
-  color: var(--mainForegroundColor);
+  color: pvar(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
   margin-right: 55px;
@@ -180,7 +180,7 @@ label {
 
   &.active {
     font-weight: $font-bold;
-    border-bottom: 2px solid var(--mainColor);
+    border-bottom: 2px solid pvar(--mainColor);
   }
 
   &.title-page-single {
@@ -188,7 +188,7 @@ label {
   }
 
   &:hover, &:active, &:focus {
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
   }
 
   @media screen and (max-width: $mobile-view) {
@@ -220,7 +220,7 @@ label {
     @include disable-default-a-behaviour;
 
     font-size: 16px;
-    color: var(--mainForegroundColor);
+    color: pvar(--mainForegroundColor);
     padding: 5px 15px;
     border-radius: 0.25rem;
 

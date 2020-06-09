@@ -55,6 +55,7 @@ export class VideoMiniatureComponent implements OnInit {
   }
   @Input() displayAsRow = false
   @Input() displayVideoActions = true
+  @Input() fitWidth = false
 
   @Output() videoBlacklisted = new EventEmitter()
   @Output() videoUnblacklisted = new EventEmitter()
