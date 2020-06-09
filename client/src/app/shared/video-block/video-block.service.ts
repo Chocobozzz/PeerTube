@@ -43,6 +43,7 @@ export class VideoBlockService {
 
       params = this.restService.addObjectParams(params, filters)
     }
+    if (type) params = params.append('type', type.toString())
 
     return this.authHttp.get<ResultList<VideoBlacklist>>(VideoBlockService.BASE_VIDEOS_URL + 'blacklist', { params })
                .pipe(
