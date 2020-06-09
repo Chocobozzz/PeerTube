@@ -13,6 +13,7 @@ import { MetaService } from '@ngx-meta/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 import { UserService } from '@app/shared'
+import { SearchTargetType } from '@shared/models/search/search-target-query.model'
 
 @Component({
   selector: 'my-search',
@@ -40,6 +41,8 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   private channelsPerPage = 2
 
+  private lastSearchTarget: SearchTargetType
+
   constructor (
     private i18n: I18n,
     private route: ActivatedRoute,
@@ -63,9 +66,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.subActivatedRoute = this.route.queryParams.subscribe(
       async queryParams => {
         const querySearch = queryParams['search']
+        const searchTarget = queryParams['searchTarget']
 
         // Search updated, reset filters
-        if (this.currentSearch !== querySearch) {
+        if (this.currentSearch !== querySearch || searchTarget !== this.advancedSearch.searchTarget) {
           this.resetPagination()
           this.advancedSearch.reset()
 
@@ -118,6 +122,7 @@ export class SearchComponent implements OnInit, OnDestroy {
           .concat(videosResult.data)
 
         this.pagination.totalItems = videosResult.total + videoChannelsResult.total
+        this.lastSearchTarget = this.advancedSearch.searchTarget
 
         // Focus on channels if there are no enough videos
         if (this.firstSearch === true && videosResult.data.length < this.pagination.itemsPerPage) {
@@ -182,7 +187,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   hideActions () {
-    return this.advancedSearch.searchTarget === 'search-index'
+    return this.lastSearchTarget === 'search-index'
   }
 
   private resetPagination () {
