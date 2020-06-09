@@ -112,10 +112,10 @@ export class SearchTypeaheadComponent implements OnInit, AfterViewInit, AfterVie
     const searchIndexConfig = this.serverConfig.search.searchIndex
 
     if (!this.activeSearch) {
-      if (searchIndexConfig.enabled && searchIndexConfig.isDefaultSearch) {
-        this.activeSearch = 'search-instance'
-      } else {
+      if (searchIndexConfig.enabled && (searchIndexConfig.isDefaultSearch || searchIndexConfig.disableLocalSearch)) {
         this.activeSearch = 'search-index'
+      } else {
+        this.activeSearch = 'search-instance'
       }
     }
 
