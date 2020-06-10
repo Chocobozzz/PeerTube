@@ -1,6 +1,6 @@
 <div *ngIf="!isUploadingVideo" class="upload-video-container" dragDrop (fileDropped)="setVideoFile($event)">
   <div class="first-step-block">
-    <my-global-icon class="upload-icon" iconName="upload"></my-global-icon>
+    <my-global-icon class="upload-icon" iconName="upload" aria-hidden="true"></my-global-icon>
 
     <div class="button-file form-control" [ngbTooltip]="'(extensions: ' + videoExtensions + ')'">
       <span i18n>Select the file to upload</span>

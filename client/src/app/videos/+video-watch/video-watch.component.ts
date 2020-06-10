@@ -74,7 +74,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
   tooltipDislike = ''
   tooltipSupport = ''
   tooltipSaveToPlaylist = ''
-  tooltipShare = ''
 
   private nextVideoUuid = ''
   private nextVideoTitle = ''
@@ -113,7 +112,6 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     this.tooltipDislike = this.i18n('Dislike this video')
     this.tooltipSupport = this.i18n('Support options for this video')
     this.tooltipSaveToPlaylist = this.i18n('Save to playlist')
-    this.tooltipShare = this.i18n('Share')
   }
 
   get user () {

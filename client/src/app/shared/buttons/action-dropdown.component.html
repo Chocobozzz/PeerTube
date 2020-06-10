@@ -16,7 +16,7 @@
         <ng-container *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
 
           <ng-template #templateActionLabel let-action>
-            <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName"></my-global-icon>
+            <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
 
             <div class="d-flex flex-column">
               <span i18n>{{ action.label }}</span>
