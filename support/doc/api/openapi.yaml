@@ -71,10 +71,13 @@ tags:
       Operations dealing with listing, uploading, fetching or modifying videos.
   - name: Search
     description: |
-      The search helps to find _videos_ from within the instance and beyond.
+      The search helps to find _videos_ or _channels_ from within the instance and beyond.
       Videos from other instances federated by the instance (that is, instances
       followed by the instance) can be found via keywords and other criteria of
       the advanced search.
+
+      Administrators can also enable the use of a remote search system, indexing
+      videos and channels not could be not federated by the instance.
   - name: Video Comments
     description: >
       Operations dealing with comments to a video. Comments are organized in
@@ -1973,11 +1976,81 @@ paths:
         - $ref: '#/components/parameters/skipCount'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/searchTarget'
         - $ref: '#/components/parameters/videosSearchSort'
         - name: search
           in: query
           required: true
-          description: String to search
+          description: >
+            String to search. If the user can make a remote URI search, and the string is an URI then the
+            PeerTube instance will fetch the remote object and add it to its database. Then,
+            you can use the REST API to fetch the complete video information and interact with it.
+          schema:
+            type: string
+        - name: startDate
+          in: query
+          required: true
+          description: Get videos that are published after this date
+          schema:
+            type: string
+            format: date-time
+        - name: endDate
+          in: query
+          required: true
+          description: Get videos that are published before this date
+          schema:
+            type: string
+            format: date-time
+        - name: originallyPublishedStartDate
+          in: query
+          required: true
+          description: Get videos that are originally published after this date
+          schema:
+            type: string
+            format: date-time
+        - name: originallyPublishedEndDate
+          in: query
+          required: true
+          description: Get videos that are originally published before this date
+          schema:
+            type: string
+            format: date-time
+        - name: durationMin
+          in: query
+          required: true
+          description: Get videos that have this minimum duration
+          schema:
+            type: number
+        - name: durationMax
+          in: query
+          required: true
+          description: Get videos that have this maximum duration
+          schema:
+            type: number
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoListResponse'
+  /search/video-channels:
+    get:
+      tags:
+        - Search
+      summary: Search channels
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/searchTarget'
+        - $ref: '#/components/parameters/sort'
+        - name: search
+          in: query
+          required: true
+          description: >
+            String to search. If the user can make a remote URI search, and the string is an URI then the
+            PeerTube instance will fetch the remote object and add it to its database. Then,
+            you can use the REST API to fetch the complete channel information and interact with it.
           schema:
             type: string
       responses:
@@ -1986,7 +2059,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VideoListResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoChannel'
 servers:
   - url: 'https://peertube.cpy.re/api/v1'
     description: Live Test Server (live data - stable version)
@@ -2017,6 +2092,26 @@ components:
       description: Sort column (-createdAt for example)
       schema:
         type: string
+    searchTarget:
+      name: searchTarget
+      in: query
+      required: false
+      description: >
+        If the administrator enabled search index support, you can override the default search target.
+
+
+        **Warning**: If you choose to make an index search, PeerTube will get results from a third party service.
+        It means the instance may not know the objects you fetched. If you want to load video/channel information:
+          * If the current user has the ability to make a remote URI search (this information is available in the config endpoint),
+          then reuse the search API to make a search using the object URI so PeerTube instance fetches the remote object and fill its database.
+          After that, you can use the classic REST API endpoints to fetch the complete object or interact with it
+          * If the current user has not the ability to make a remote URI search, then redirect the user on the origin instance or fetch
+          the data from the origin instance API
+      schema:
+        type: string
+        enum:
+          - 'local'
+          - 'search-index'
     videosSort:
       name: sort
       in: query
