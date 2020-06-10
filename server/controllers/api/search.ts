@@ -76,7 +76,7 @@ function searchVideoChannels (req: express.Request, res: express.Response) {
   // @username -> username to search in DB
   if (query.search.startsWith('@')) query.search = query.search.replace(/^@/, '')
 
-  if (isSearchIndexEnabled(query)) {
+  if (isSearchIndexSearch(query)) {
     return searchVideoChannelsIndex(query, res)
   }
 
@@ -157,7 +157,7 @@ function searchVideos (req: express.Request, res: express.Response) {
     return searchVideoURI(search, res)
   }
 
-  if (isSearchIndexEnabled(query)) {
+  if (isSearchIndexSearch(query)) {
     return searchVideosIndex(query, res)
   }
 
@@ -226,7 +226,7 @@ async function searchVideoURI (url: string, res: express.Response) {
   })
 }
 
-function isSearchIndexEnabled (query: SearchTargetQuery) {
+function isSearchIndexSearch (query: SearchTargetQuery) {
   if (query.searchTarget === 'search-index') return true
 
   const searchIndexConfig = CONFIG.SEARCH.SEARCH_INDEX
