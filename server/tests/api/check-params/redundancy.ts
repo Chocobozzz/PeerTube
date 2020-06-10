@@ -14,7 +14,7 @@ import {
   makePutBodyRequest,
   ServerInfo,
   setAccessTokensToServers, uploadVideoAndGetId,
-  userLogin, waitJobs
+  userLogin, waitJobs, getVideoIdFromUUID
 } from '../../../../shared/extra-utils'
 
 describe('Test server redundancy API validators', function () {
@@ -42,9 +42,12 @@ describe('Test server redundancy API validators', function () {
     userAccessToken = await userLogin(servers[0], user)
 
     videoIdLocal = (await uploadVideoAndGetId({ server: servers[0], videoName: 'video' })).id
-    videoIdRemote = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video' })).id
+
+    const remoteUUID = (await uploadVideoAndGetId({ server: servers[1], videoName: 'video' })).uuid
 
     await waitJobs(servers)
+
+    videoIdRemote = await getVideoIdFromUUID(servers[0].url, remoteUUID)
   })
 
   describe('When listing redundancies', function () {
