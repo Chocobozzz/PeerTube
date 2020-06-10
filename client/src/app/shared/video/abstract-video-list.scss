@@ -4,18 +4,20 @@
 @import '_miniature';
 
 .videos {
+  $column-width: #{$video-thumbnail-width - 25px};
+
   display: grid;
   column-gap: calc(10px + .2%);
   grid-template-columns: repeat(
     auto-fill,
     minmax(
-      var(--miniature-min-width, #{$video-thumbnail-width}),
+      var(--miniature-min-width, #{$column-width}),
       1fr
     )
   );
 
-  @media screen and (min-width: #{breakpoint(xxl)}) {
-    --miniature-min-width: 300px;
+  @media screen and (min-width: #{breakpoint(fhd)}) {
+    --miniature-min-width: #{$column-width + 100px};
   }
 }
 
@@ -61,12 +63,13 @@
   font-weight: $font-semibold;
   margin-bottom: 20px;
   margin-top: -10px;
-  padding-top: 20px;
 
   // make the element span a full grid row within .videos grid
   grid-column: 1 / -1;
 
   &:not(:first-child) {
+    margin-top: .5rem;
+    padding-top: 20px;
     border-top: 1px solid $separator-border-color;
   }
 }

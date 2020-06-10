@@ -4,6 +4,7 @@ $modal-footer-border-width: 0;
 $modal-md: 600px;
 
 $grid-breakpoints: (
+  // CLASSIC BREAKPOINTS GROUP
   // Extra small screen / phone
   xs: 0,
   // Small screen / phone
@@ -14,7 +15,12 @@ $grid-breakpoints: (
   lg: 900px,
   // Extra large screens / wide desktops
   xl: 1200px,
-  xxl: 1600px
+  xxl: 1600px,
+
+  // SCREEN GROUP
+  fhd: 1920px,
+  qhd: 2560px,
+  uhd: 3840px
 );
 
 @function breakpoint($label) {
