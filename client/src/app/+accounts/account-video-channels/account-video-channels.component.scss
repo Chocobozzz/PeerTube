@@ -3,7 +3,7 @@
 @import '_miniature';
 
 .margin-content {
-  @include adapt-margin-content-width;
+  @include fluid-videos-miniature-layout;
 }
 
 .section {

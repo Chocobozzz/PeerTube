@@ -108,38 +108,6 @@ $play-overlay-width: 18px;
   color: #fff;
 }
 
-@mixin video-miniature-small-screen {
-  text-align: center;
-
-  ::ng-deep .video-miniature {
-    padding-right: 0;
-    height: auto;
-    width: 100%;
-    margin-bottom: 20px;
-
-    .video-miniature-information {
-      width: 100% !important;
-      text-align: left;
-
-      span {
-        width: 100%;
-      }
-    }
-
-    .video-thumbnail {
-      margin-bottom: 10px;
-      width: 100%;
-      height: calc(100% / #{$video-thumbnail-ratio});
-      border-radius: 0;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-}
-
 @mixin miniature-rows {
   &:first-child {
     padding-top: 30px;
@@ -147,10 +115,6 @@ $play-overlay-width: 18px;
     .section-title {
       border-top: none !important;
     }
-  }
-
-  my-video-miniature {
-    text-align: left;
   }
 
   .section-title {
@@ -213,44 +177,81 @@ $play-overlay-width: 18px;
     max-height: initial;
     overflow: initial;
 
-    @include video-miniature-small-screen;
-
     .section-title {
       font-size: 17px;
+      margin-left: 10px;
     }
   }
 }
 
-@mixin adapt-margin-content-width($fluid: false) {
-  @if $fluid {
-    margin-left: 3vw !important;
-    margin-right: 3vw !important;
-  } @else {
-    width: $video-miniature-width * 6;
-    margin: auto !important;
+@mixin fluid-videos-miniature-layout {
+  margin-left: 3vw !important;
+  margin-right: 3vw !important;
 
-    @media screen and (max-width: 1800px) {
-      width: $video-miniature-width * 5;
+  @media screen and (max-width: $mobile-view) {
+    width: auto;
+    margin: 0 !important;
+
+    .videos {
+      text-align: center;
+
+      ::ng-deep .video-miniature {
+        padding-right: 0;
+        height: auto;
+        width: 100%;
+        margin-bottom: 25px;
+
+        .video-miniature-information {
+          width: 100% !important;
+          text-align: left;
+
+          span {
+            width: 100%;
+          }
+        }
+
+        .video-thumbnail {
+          border-radius: 0;
+        }
+      }
     }
+  }
 
-    @media screen and (max-width: 1800px - $video-miniature-width) {
-      width: $video-miniature-width * 4;
-    }
+  @media screen and (min-width: #{breakpoint(fhd)}) {
+    margin-left: 6vw !important;
+    margin-right: 6vw !important;
+  }
 
-    @media screen and (max-width: 1800px - (2* $video-miniature-width)) {
-      width: $video-miniature-width * 3;
-    }
+  @media screen and (min-width: $mobile-view) {
 
-    @media screen and (max-width: 1800px - (3* $video-miniature-width)) {
-      width: $video-miniature-width * 2;
-    }
+    .videos {
+      --miniature-min-width: #{$video-thumbnail-width - 15px};
+      --miniature-max-width: #{$video-thumbnail-width};
 
-    @media screen and (max-width: $mobile-view) {
-      width: auto;
-      margin: 0 !important;
+      display: grid;
+      column-gap: 5px;
+      grid-template-columns: repeat(
+        auto-fill,
+        minmax(
+          var(--miniature-min-width),
+          1fr
+        )
+      );
 
-      .videos {
-        @include video-miniature-small-screen;
+      @media screen and (min-width: #{breakpoint(fhd)}) {
+        column-gap: 1%;
+        --miniature-min-width: #{$video-thumbnail-width};
+      }
+
+      .video-wrapper {
+        margin: 0 auto;
+        width: 100%;
+
+        my-video-miniature {
+          display: block;
+          min-width: var(--miniature-min-width);
+          max-width: var(--miniature-max-width);
+        }
       }
     }
   }

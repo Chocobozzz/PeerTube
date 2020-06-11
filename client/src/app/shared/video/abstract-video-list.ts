@@ -56,7 +56,7 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     date: true,
     views: true,
     by: true,
-    avatar: true,
+    avatar: false,
     privacyLabel: true,
     privacyText: false,
     state: false,
@@ -139,6 +139,11 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
         if (this.hasDoneFirstQuery) this.reloadVideos()
       }
     )
+
+    // Display avatar in mobile view
+    if (this.screenService.isInMobileView()) {
+      this.displayOptions.avatar = true
+    }
   }
 
   ngOnDestroy () {
