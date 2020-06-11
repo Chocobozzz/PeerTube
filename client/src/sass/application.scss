@@ -86,6 +86,11 @@ input, textarea {
   color: pvar(--mainForegroundColor);
 }
 
+button {
+  background: unset;
+  @include disable-outline;
+}
+
 label {
   font-weight: $font-bold;
   font-size: 15px;
