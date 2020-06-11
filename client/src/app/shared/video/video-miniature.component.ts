@@ -59,8 +59,8 @@ export class VideoMiniatureComponent implements OnInit {
 
   @Input() useLazyLoadUrl = false
 
-  @Output() videoBlacklisted = new EventEmitter()
-  @Output() videoUnblacklisted = new EventEmitter()
+  @Output() videoBlocked = new EventEmitter()
+  @Output() videoUnblocked = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
 
   videoActionsDisplayOptions: VideoActionsDisplayType = {
@@ -184,12 +184,12 @@ export class VideoMiniatureComponent implements OnInit {
     this.loadWatchLater()
   }
 
-  onVideoBlacklisted () {
-    this.videoBlacklisted.emit()
+  onVideoBlocked () {
+    this.videoBlocked.emit()
   }
 
-  onVideoUnblacklisted () {
-    this.videoUnblacklisted.emit()
+  onVideoUnblocked () {
+    this.videoUnblocked.emit()
   }
 
   onVideoRemoved () {

@@ -88,7 +88,7 @@ export abstract class UserEdit extends FormReactive implements OnInit {
   }
 
   protected buildAdminFlags (formValue: any) {
-    return formValue.byPassAutoBlacklist ? UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST : UserAdminFlag.NONE
+    return formValue.byPassAutoBlock ? UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST : UserAdminFlag.NONE
   }
 
   protected buildQuotaOptions () {

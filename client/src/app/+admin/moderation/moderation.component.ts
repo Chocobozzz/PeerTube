@@ -7,7 +7,7 @@ import { AuthService, ServerService } from '@app/core'
   styleUrls: [ './moderation.component.scss' ]
 })
 export class ModerationComponent implements OnInit {
-  autoBlacklistVideosEnabled = false
+  autoBlockVideosEnabled = false
 
   constructor (
     private auth: AuthService,
@@ -16,7 +16,7 @@ export class ModerationComponent implements OnInit {
 
   ngOnInit (): void {
     this.serverService.getConfig()
-      .subscribe(config => this.autoBlacklistVideosEnabled = config.autoBlacklist.videos.ofUsers.enabled)
+      .subscribe(config => this.autoBlockVideosEnabled = config.autoBlacklist.videos.ofUsers.enabled)
 
   }
 
@@ -24,7 +24,7 @@ export class ModerationComponent implements OnInit {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_ABUSES)
   }
 
-  hasVideoBlacklistRight () {
+  hasVideoBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
 

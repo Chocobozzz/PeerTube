@@ -45,15 +45,15 @@ $more-margin-right: 15px;
       }
 
       .video-info-privacy,
-      .video-info-blacklisted .blacklisted-label,
+      .video-info-blocked .blocked-label,
       .video-info-nsfw {
         font-weight: $font-semibold;
       }
 
-      .video-info-blacklisted {
+      .video-info-blocked {
         color: red;
 
-        .blacklisted-reason::before {
+        .blocked-reason::before {
           content: ' - ';
         }
       }
@@ -160,7 +160,7 @@ $more-margin-right: 15px;
           margin-top: 5px;
         }
 
-        .video-info-blacklisted {
+        .video-info-blocked {
           margin-top: 3px;
         }
       }

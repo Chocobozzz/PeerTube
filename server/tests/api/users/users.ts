@@ -265,7 +265,7 @@ describe('Test users', function () {
         username: user.username,
         password: user.password,
         videoQuota: 2 * 1024 * 1024,
-        adminFlags: UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST
+        adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
       })
     })
 
@@ -292,7 +292,7 @@ describe('Test users', function () {
       }
 
       expect(userMe.adminFlags).to.be.undefined
-      expect(userGet.adminFlags).to.equal(UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST)
+      expect(userGet.adminFlags).to.equal(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)
 
       expect(userMe.specialPlaylists).to.have.lengthOf(1)
       expect(userMe.specialPlaylists[0].type).to.equal(VideoPlaylistType.WATCH_LATER)

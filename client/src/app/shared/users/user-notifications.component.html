@@ -30,7 +30,7 @@
         <my-global-icon iconName="undo"></my-global-icon>
 
         <div class="message" i18n>
-          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been unblacklisted
+          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been unblocked
         </div>
       </ng-container>
 
@@ -38,7 +38,7 @@
         <my-global-icon iconName="no"></my-global-icon>
 
         <div class="message" i18n>
-          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been blacklisted
+          Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been blocked
         </div>
       </ng-container>
 
@@ -54,7 +54,7 @@
         <my-global-icon iconName="no"></my-global-icon>
 
         <div class="message" i18n>
-          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">auto-blacklisted</a>
+          The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">automatically blocked</a>
         </div>
       </ng-container>
 

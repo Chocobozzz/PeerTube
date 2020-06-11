@@ -56,7 +56,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       role: this.userValidatorsService.USER_ROLE,
       videoQuota: this.userValidatorsService.USER_VIDEO_QUOTA,
       videoQuotaDaily: this.userValidatorsService.USER_VIDEO_QUOTA_DAILY,
-      byPassAutoBlacklist: null
+      byPassAutoBlock: null
     }, defaultValues)
 
     this.paramsSub = this.route.params.subscribe(routeParams => {
@@ -125,7 +125,7 @@ export class UserUpdateComponent extends UserEdit implements OnInit, OnDestroy {
       role: userJson.role.toString(),
       videoQuota: userJson.videoQuota,
       videoQuotaDaily: userJson.videoQuotaDaily,
-      byPassAutoBlacklist: userJson.adminFlags & UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST
+      byPassAutoBlock: userJson.adminFlags & UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST
     })
   }
 }

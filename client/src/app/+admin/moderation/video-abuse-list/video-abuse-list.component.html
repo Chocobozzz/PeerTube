@@ -19,7 +19,7 @@
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blacklisted videos</a>
+              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blocked videos</a>
               <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
             </div>
           </div>
@@ -84,9 +84,9 @@
             </div>
             <div class="video-table-video-text">
               <div>
-                {{ videoAbuse.video.name }}
                 <span *ngIf="!videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
-                <span *ngIf="videoAbuse.video.blacklisted" i18n-title title="Video was blacklisted" class="glyphicon glyphicon-ban-circle"></span>
+                <span *ngIf="videoAbuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
+                {{ videoAbuse.video.name }}
               </div>
               <div class="text-muted" i18n>by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
             </div>

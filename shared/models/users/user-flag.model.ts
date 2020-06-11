@@ -1,4 +1,4 @@
 export enum UserAdminFlag {
   NONE = 0,
-  BY_PASS_VIDEO_AUTO_BLACKLIST = 1 << 0
+  BYPASS_VIDEO_AUTO_BLACKLIST = 1 << 0
 }

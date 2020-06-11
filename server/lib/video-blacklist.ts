@@ -126,7 +126,7 @@ function autoBlacklistNeeded (parameters: {
   if (!CONFIG.AUTO_BLACKLIST.VIDEOS.OF_USERS.ENABLED || !user) return false
   if (isRemote || isNew === false) return false
 
-  if (user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST)) return false
+  if (user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) || user.hasAdminFlag(UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST)) return false
 
   return true
 }

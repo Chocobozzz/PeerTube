@@ -396,7 +396,7 @@ describe('Test video blacklist', function () {
           url: servers[0].url,
           accessToken: servers[0].accessToken,
           username: user.username,
-          adminFlags: UserAdminFlag.BY_PASS_VIDEO_AUTO_BLACKLIST,
+          adminFlags: UserAdminFlag.BYPASS_VIDEO_AUTO_BLACKLIST,
           password: user.password,
           role: UserRole.USER
         })

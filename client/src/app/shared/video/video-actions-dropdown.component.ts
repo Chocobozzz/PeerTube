@@ -9,8 +9,8 @@ import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap'
 import { VideoAddToPlaylistComponent } from '@app/shared/video-playlist/video-add-to-playlist.component'
 import { VideoDownloadComponent } from '@app/shared/video/modals/video-download.component'
 import { VideoReportComponent } from '@app/shared/video/modals/video-report.component'
-import { VideoBlacklistComponent } from '@app/shared/video/modals/video-blacklist.component'
-import { VideoBlacklistService } from '@app/shared/video-blacklist'
+import { VideoBlockComponent } from '@app/shared/video/modals/video-block.component'
+import { VideoBlockService } from '@app/shared/video-block'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoCaption } from '@shared/models'
 import { RedundancyService } from '@app/shared/video/redundancy.service'
@@ -36,7 +36,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   @ViewChild('videoDownloadModal') videoDownloadModal: VideoDownloadComponent
   @ViewChild('videoReportModal') videoReportModal: VideoReportComponent
-  @ViewChild('videoBlacklistModal') videoBlacklistModal: VideoBlacklistComponent
+  @ViewChild('videoBlockModal') videoBlockModal: VideoBlockComponent
 
   @Input() video: Video | VideoDetails
   @Input() videoCaptions: VideoCaption[] = []
@@ -59,8 +59,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
   @Input() buttonDirection: DropdownDirection = 'vertical'
 
   @Output() videoRemoved = new EventEmitter()
-  @Output() videoUnblacklisted = new EventEmitter()
-  @Output() videoBlacklisted = new EventEmitter()
+  @Output() videoUnblocked = new EventEmitter()
+  @Output() videoBlocked = new EventEmitter()
   @Output() modalOpened = new EventEmitter()
 
   videoActions: DropdownAction<{ video: Video }>[][] = []
@@ -71,7 +71,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
     private authService: AuthService,
     private notifier: Notifier,
     private confirmService: ConfirmService,
-    private videoBlacklistService: VideoBlacklistService,
+    private videoBlocklistService: VideoBlockService,
     private screenService: ScreenService,
     private videoService: VideoService,
     private redundancyService: RedundancyService,
@@ -117,10 +117,10 @@ export class VideoActionsDropdownComponent implements OnChanges {
     this.videoReportModal.show()
   }
 
-  showBlacklistModal () {
+  showBlockModal () {
     this.modalOpened.emit()
 
-    this.videoBlacklistModal.show()
+    this.videoBlockModal.show()
   }
 
   /* Actions checker */
@@ -133,12 +133,12 @@ export class VideoActionsDropdownComponent implements OnChanges {
     return this.video.isRemovableBy(this.user)
   }
 
-  isVideoBlacklistable () {
-    return this.video.isBlackistableBy(this.user)
+  isVideoBlockable () {
+    return this.video.isBlockableBy(this.user)
   }
 
-  isVideoUnblacklistable () {
-    return this.video.isUnblacklistableBy(this.user)
+  isVideoUnblockable () {
+    return this.video.isUnblockableBy(this.user)
   }
 
   isVideoDownloadable () {
@@ -151,22 +151,22 @@ export class VideoActionsDropdownComponent implements OnChanges {
 
   /* Action handlers */
 
-  async unblacklistVideo () {
+  async unblockVideo () {
     const confirmMessage = this.i18n(
-      'Do you really want to remove this video from the blacklist? It will be available again in the videos list.'
+      'Do you really want to unblock this video? It will be available again in the videos list.'
     )
 
-    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Unblacklist'))
+    const res = await this.confirmService.confirm(confirmMessage, this.i18n('Unblock'))
     if (res === false) return
 
-    this.videoBlacklistService.removeVideoFromBlacklist(this.video.id).subscribe(
+    this.videoBlocklistService.unblockVideo(this.video.id).subscribe(
       () => {
-        this.notifier.success(this.i18n('Video {{name}} removed from the blacklist.', { name: this.video.name }))
+        this.notifier.success(this.i18n('Video {{name}} unblocked.', { name: this.video.name }))
 
         this.video.blacklisted = false
-        this.video.blacklistedReason = null
+        this.video.blockedReason = null
 
-        this.videoUnblacklisted.emit()
+        this.videoUnblocked.emit()
       },
 
       err => this.notifier.error(err.message)
@@ -203,8 +203,8 @@ export class VideoActionsDropdownComponent implements OnChanges {
       )
   }
 
-  onVideoBlacklisted () {
-    this.videoBlacklisted.emit()
+  onVideoBlocked () {
+    this.videoBlocked.emit()
   }
 
   getPlaylistDropdownPlacement () {
@@ -239,16 +239,16 @@ export class VideoActionsDropdownComponent implements OnChanges {
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.update && this.isVideoUpdatable()
         },
         {
-          label: this.i18n('Blacklist'),
-          handler: () => this.showBlacklistModal(),
+          label: this.i18n('Block'),
+          handler: () => this.showBlockModal(),
           iconName: 'no',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoBlacklistable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoBlockable()
         },
         {
-          label: this.i18n('Unblacklist'),
-          handler: () => this.unblacklistVideo(),
+          label: this.i18n('Unblock'),
+          handler: () => this.unblockVideo(),
           iconName: 'undo',
-          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoUnblacklistable()
+          isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.blacklist && this.isVideoUnblockable()
         },
         {
           label: this.i18n('Mirror'),

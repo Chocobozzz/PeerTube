@@ -56,7 +56,8 @@ const icons = {
   'refresh': require('!!raw-loader?!../../../assets/images/global/refresh.svg').default,
   'npm': require('!!raw-loader?!../../../assets/images/global/npm.svg').default,
   'fullscreen': require('!!raw-loader?!../../../assets/images/global/fullscreen.svg').default,
-  'exit-fullscreen': require('!!raw-loader?!../../../assets/images/global/exit-fullscreen.svg').default
+  'exit-fullscreen': require('!!raw-loader?!../../../assets/images/global/exit-fullscreen.svg').default,
+  'robot': require('!!raw-loader?!../../../assets/images/global/robot.svg').default
 }
 
 export type GlobalIconName = keyof typeof icons

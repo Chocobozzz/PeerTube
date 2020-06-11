@@ -54,7 +54,7 @@ export class Video implements VideoServerModel {
   state?: VideoConstant<VideoState>
   scheduledUpdate?: VideoScheduleUpdate
   blacklisted?: boolean
-  blacklistedReason?: string
+  blockedReason?: string
 
   account: {
     id: number
@@ -140,7 +140,7 @@ export class Video implements VideoServerModel {
     if (this.state) this.state.label = peertubeTranslate(this.state.label, translations)
 
     this.blacklisted = hash.blacklisted
-    this.blacklistedReason = hash.blacklistedReason
+    this.blockedReason = hash.blacklistedReason
 
     this.userHistory = hash.userHistory
 
@@ -163,11 +163,11 @@ export class Video implements VideoServerModel {
     return user && this.isLocal === true && (this.account.name === user.username || user.hasRight(UserRight.REMOVE_ANY_VIDEO))
   }
 
-  isBlackistableBy (user: AuthUser) {
+  isBlockableBy (user: AuthUser) {
     return this.blacklisted !== true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 
-  isUnblacklistableBy (user: AuthUser) {
+  isUnblockableBy (user: AuthUser) {
     return this.blacklisted === true && user && user.hasRight(UserRight.MANAGE_VIDEO_BLACKLIST) === true
   }
 

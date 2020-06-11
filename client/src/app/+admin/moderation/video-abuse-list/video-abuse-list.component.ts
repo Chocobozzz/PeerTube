@@ -3,7 +3,7 @@ import { Account } from '@app/shared/account/account.model'
 import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
 import { VideoAbuse, VideoAbuseState } from '../../../../../../shared'
-import { RestPagination, RestTable, VideoAbuseService, VideoBlacklistService } from '../../../shared'
+import { RestPagination, RestTable, VideoAbuseService, VideoBlockService } from '../../../shared'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
 import { ConfirmService } from '../../../core/index'
@@ -53,7 +53,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     private videoAbuseService: VideoAbuseService,
     private blocklistService: BlocklistService,
     private videoService: VideoService,
-    private videoBlacklistService: VideoBlacklistService,
+    private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
     private i18n: I18n,
     private markdownRenderer: MarkdownService,
@@ -101,13 +101,13 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
           isDisplayed: videoAbuse => !videoAbuse.video.deleted
         },
         {
-          label: this.i18n('Blacklist video'),
+          label: this.i18n('Block video'),
           isDisplayed: videoAbuse => !videoAbuse.video.deleted && !videoAbuse.video.blacklisted,
           handler: videoAbuse => {
-            this.videoBlacklistService.blacklistVideo(videoAbuse.video.id, undefined, true)
+            this.videoBlocklistService.blockVideo(videoAbuse.video.id, undefined, true)
               .subscribe(
                 () => {
-                  this.notifier.success(this.i18n('Video blacklisted.'))
+                  this.notifier.success(this.i18n('Video blocked.'))
 
                   this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
                 },
@@ -117,13 +117,13 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
           }
         },
         {
-          label: this.i18n('Unblacklist video'),
+          label: this.i18n('Unblock video'),
           isDisplayed: videoAbuse => !videoAbuse.video.deleted && videoAbuse.video.blacklisted,
           handler: videoAbuse => {
-            this.videoBlacklistService.removeVideoFromBlacklist(videoAbuse.video.id)
+            this.videoBlocklistService.unblockVideo(videoAbuse.video.id)
               .subscribe(
                 () => {
-                  this.notifier.success(this.i18n('Video unblacklisted.'))
+                  this.notifier.success(this.i18n('Video unblocked.'))
 
                   this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
                 },
@@ -292,7 +292,6 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
 
         err => this.notifier.error(err.message)
       )
-
   }
 
   protected loadData () {

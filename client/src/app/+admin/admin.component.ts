@@ -18,7 +18,7 @@ export class AdminComponent implements OnInit {
   ngOnInit () {
     if (this.hasUsersRight()) this.items.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
     if (this.hasServerFollowRight()) this.items.push({ label: this.i18n('Follows & redundancies'), routerLink: '/admin/follows' })
-    if (this.hasVideoAbusesRight() || this.hasVideoBlacklistRight()) this.items.push({ label: this.i18n('Moderation'), routerLink: '/admin/moderation' })
+    if (this.hasVideoAbusesRight() || this.hasVideoBlocklistRight()) this.items.push({ label: this.i18n('Moderation'), routerLink: '/admin/moderation' })
     if (this.hasConfigRight()) this.items.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
     if (this.hasPluginsRight()) this.items.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
     if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) this.items.push({ label: this.i18n('System'), routerLink: '/admin/system' })
@@ -36,7 +36,7 @@ export class AdminComponent implements OnInit {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_ABUSES)
   }
 
-  hasVideoBlacklistRight () {
+  hasVideoBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
   }
 

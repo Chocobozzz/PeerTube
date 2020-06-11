@@ -13,7 +13,7 @@
     </div>
 
     <div *ngFor="let video of (videos$ | async); let i = index; let length = count">
-      <my-video-miniature [displayOptions]="displayOptions" [video]="video" [user]="user" (videoBlacklisted)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()">
+      <my-video-miniature [displayOptions]="displayOptions" [video]="video" [user]="user" (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()">
       </my-video-miniature>
       
       <hr *ngIf="!playlist && i == 0 && length > 1" />
