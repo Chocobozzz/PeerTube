@@ -148,10 +148,6 @@ if [ -z ${1+x} ] || [ "$1" != "--light" ]; then
     done
 fi
 
-if [ "$1" != "--analyze" ]; then
-  rm "./dist/en-US/stats-es2015.json"
-fi
-
 cd ../ && npm run build:embed && cd client/
 
 # Copy runtime locales

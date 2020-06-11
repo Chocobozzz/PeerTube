@@ -66,7 +66,7 @@ git commit package.json client/package.json ./support/doc/api/openapi.yaml -m "B
 git tag -s -a "$version" -m "$version"
 
 npm run build
-rm -f "./client/dist/en_US/stats.json"
+rm -f "./client/dist/en-US/stats.json"
 rm -f "./client/dist/embed-stats.json"
 
 # Creating the archives
