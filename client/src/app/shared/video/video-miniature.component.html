@@ -15,7 +15,7 @@
         [routerLink]="videoLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
       >{{ video.name }}</a>
 
-      <div class="d-inline-flex">
+      <div class="d-inline-flex video-miniature-meta">
         <avatar-channel *ngIf="displayOptions.avatar" class="mr-1 pt-1" [video]="video" size="sm"></avatar-channel>
 
         <div class="d-flex flex-column">
