@@ -1,41 +1,42 @@
 <div class="feature-table">
 
   <table class="table" *ngIf="serverConfig">
+    <caption i18n>Features found on this instance</caption>
     <tr>
-      <td i18n class="label">PeerTube version</td>
+      <th i18n class="label" scope="row">PeerTube version</th>
 
       <td class="value">{{ getServerVersionAndCommit() }}</td>
     </tr>
 
     <tr>
-      <td i18n class="label">
+      <th i18n class="label" scope="row">
         <div>Default NSFW/sensitive videos policy</div>
         <div class="more-info">can be redefined by the users</div>
-      </td>
+      </th>
 
       <td class="value">{{ buildNSFWLabel() }}</td>
     </tr>
 
     <tr>
-      <td i18n class="label">User registration allowed</td>
+      <th i18n class="label" scope="row">User registration allowed</th>
       <td>
         <my-feature-boolean [value]="serverConfig.signup.allowed"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <td i18n class="label" colspan="2">Video uploads</td>
+      <th i18n class="label" colspan="2">Video uploads</th>
     </tr>
 
     <tr>
-      <td i18n class="sub-label">Transcoding in multiple resolutions</td>
+      <th i18n class="sub-label" scope="row">Transcoding in multiple resolutions</th>
       <td>
         <my-feature-boolean [value]="serverConfig.transcoding.enabledResolutions.length !== 0"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <td i18n class="sub-label">Video uploads</td>
+      <th i18n class="sub-label" scope="row">Video uploads</th>
       <td>
         <span i18n *ngIf="serverConfig.autoBlacklist.videos.ofUsers.enabled">Requires manual validation by moderators</span>
         <span i18n *ngIf="!serverConfig.autoBlacklist.videos.ofUsers.enabled">Automatically published</span>
@@ -43,7 +44,7 @@
     </tr>
 
     <tr>
-      <td i18n class="sub-label">Video quota</td>
+      <th i18n class="sub-label" scope="row">Video quota</th>
 
       <td class="value">
         <ng-container *ngIf="initialUserVideoQuota !== -1">
@@ -63,18 +64,18 @@
     </tr>
 
     <tr>
-      <td i18n class="label" colspan="2">Import</td>
+      <th i18n class="label" colspan="2">Import</th>
     </tr>
 
     <tr>
-      <td i18n class="sub-label">HTTP import (YouTube, Vimeo, direct URL...)</td>
+      <th i18n class="sub-label" scope="row">HTTP import (YouTube, Vimeo, direct URL...)</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.videos.http.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <td i18n class="sub-label">Torrent import</td>
+      <th i18n class="sub-label" scope="row">Torrent import</th>
       <td>
         <my-feature-boolean [value]="serverConfig.import.videos.torrent.enabled"></my-feature-boolean>
       </td>
@@ -82,22 +83,22 @@
 
 
     <tr>
-      <td i18n class="label" colspan="2">Player</td>
+      <th i18n class="label" colspan="2">Player</th>
     </tr>
 
     <tr>
-      <td i18n class="sub-label">P2P enabled</td>
+      <th i18n class="sub-label" scope="row">P2P enabled</th>
       <td>
         <my-feature-boolean [value]="serverConfig.tracker.enabled"></my-feature-boolean>
       </td>
     </tr>
 
     <tr>
-      <td i18n class="label" colspan="2">Search</td>
+      <th i18n class="label" colspan="2">Search</th>
     </tr>
 
     <tr>
-      <td i18n class="sub-label">Users can resolve distant content</td>
+      <th i18n class="sub-label" scope="row">Users can resolve distant content</th>
       <td>
         <my-feature-boolean [value]="serverConfig.search.remoteUri.users"></my-feature-boolean>
       </td>

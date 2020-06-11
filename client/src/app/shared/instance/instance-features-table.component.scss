@@ -14,6 +14,7 @@ table {
     }
 
     &.sub-label {
+      font-weight: $font-regular;
       padding-left: 30px;
     }
 
@@ -26,6 +27,13 @@ table {
 
   td {
     vertical-align: middle;
+  }
+
+  caption {
+    caption-side: top;
+    font-size: 15px;
+    font-weight: $font-semibold;
+    color: pvar(--mainForegroundColor);
   }
 }
 
