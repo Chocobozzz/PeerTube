@@ -18,7 +18,7 @@
         </ng-template>
 
         <ng-template #noVideo>
-          <my-global-icon iconName="alert"></my-global-icon>
+          <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
   
           <div class="message" i18n>
             The notification concerns a video now unavailable
@@ -27,7 +27,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.UNBLACKLIST_ON_MY_VIDEO">
-        <my-global-icon iconName="undo"></my-global-icon>
+        <my-global-icon iconName="undo" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been unblocked
@@ -35,7 +35,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.BLACKLIST_ON_MY_VIDEO">
-        <my-global-icon iconName="no"></my-global-icon>
+        <my-global-icon iconName="no" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been blocked
@@ -43,7 +43,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS">
-        <my-global-icon iconName="alert"></my-global-icon>
+        <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           <a (click)="markAsRead(notification)" [routerLink]="notification.videoAbuseUrl">A new video abuse</a> has been created on video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoAbuse.video.name }}</a>
@@ -51,7 +51,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS">
-        <my-global-icon iconName="no"></my-global-icon>
+        <my-global-icon iconName="no" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           The recently added video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoBlacklist.video.name }}</a> has been <a (click)="markAsRead(notification)" [routerLink]="notification.videoAutoBlacklistUrl">automatically blocked</a>
@@ -72,7 +72,7 @@
         </ng-template>
 
         <ng-template #noComment>
-          <my-global-icon iconName="alert"></my-global-icon>
+          <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
   
           <div class="message" i18n>
             The notification concerns a comment now unavailable
@@ -105,7 +105,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_USER_REGISTRATION">
-        <my-global-icon iconName="user-add"></my-global-icon>
+        <my-global-icon iconName="user-add" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           User <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.account.name }}</a> registered on your instance
@@ -136,7 +136,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_INSTANCE_FOLLOWER">
-        <my-global-icon iconName="users"></my-global-icon>
+        <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           Your instance has <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">a new follower</a> ({{ notification.actorFollow?.follower.host }})
@@ -145,7 +145,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.AUTO_INSTANCE_FOLLOWING">
-        <my-global-icon iconName="users"></my-global-icon>
+        <my-global-icon iconName="users" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           Your instance automatically followed <a (click)="markAsRead(notification)" [routerLink]="notification.instanceFollowUrl">{{ notification.actorFollow.following.host }}</a>
@@ -153,7 +153,7 @@
       </ng-container>
 
       <ng-container *ngSwitchDefault>
-        <my-global-icon iconName="alert"></my-global-icon>
+        <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           The notification points to a content now unavailable

@@ -59,38 +59,38 @@
 
               <div class="video-actions-rates">
                 <div class="video-actions fullWidth justify-content-end">
-                  <div
-                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()"
-                    class="action-button action-button-like" role="button" [attr.aria-pressed]="userRating === 'like'"
+                  <button
+                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'like' }" (click)="setLike()" (keyup.enter)="setLike()"
+                    class="action-button action-button-like" [attr.aria-pressed]="userRating === 'like'" [attr.aria-label]="tooltipLike"
                     [ngbTooltip]="tooltipLike"
                     placement="bottom auto"
                   >
                     <my-global-icon iconName="like"></my-global-icon>
                     <span *ngIf="video.likes" class="count">{{ video.likes }}</span>
-                  </div>
+                </button>
 
-                  <div
-                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()"
-                    class="action-button action-button-dislike" role="button" [attr.aria-pressed]="userRating === 'dislike'"
+                  <button
+                    [ngbPopover]="getRatePopoverText()" [ngClass]="{ 'activated': userRating === 'dislike' }" (click)="setDislike()" (keyup.enter)="setDislike()"
+                    class="action-button action-button-dislike" [attr.aria-pressed]="userRating === 'dislike'" [attr.aria-label]="tooltipDislike"
                     [ngbTooltip]="tooltipDislike"
                     placement="bottom auto"
                   >
                     <my-global-icon iconName="dislike"></my-global-icon>
                     <span *ngIf="video.dislikes" class="count">{{ video.dislikes }}</span>
-                  </div>
+                  </button>
 
-                  <div *ngIf="video.support" (click)="showSupportModal()" class="action-button action-button-support"
+                  <button *ngIf="video.support" (click)="showSupportModal()" (keyup.enter)="showSupportModal()" class="action-button action-button-support" [attr.aria-label]="tooltipSupport"
                     [ngbTooltip]="tooltipSupport"
                     placement="bottom auto"
                   >
-                    <my-global-icon iconName="support"></my-global-icon>
+                    <my-global-icon iconName="support" aria-hidden="true"></my-global-icon>
                     <span class="icon-text" i18n>SUPPORT</span>
-                  </div>
+                  </button>
 
-                  <div (click)="showShareModal()" class="action-button" role="button">
+                  <button (click)="showShareModal()" (keyup.enter)="showShareModal()" class="action-button">
                     <my-global-icon iconName="share" aria-hidden="true"></my-global-icon>
                     <span class="icon-text" i18n>SHARE</span>
-                  </div>
+                  </button>
 
                   <div
                     class="action-dropdown" ngbDropdown placement="top" role="button" autoClose="outside"
@@ -98,10 +98,10 @@
                      [ngbTooltip]="tooltipSaveToPlaylist"
                      placement="bottom auto"
                   >
-                    <div class="action-button action-button-save" ngbDropdownToggle role="button">
+                    <button class="action-button action-button-save" ngbDropdownToggle>
                       <my-global-icon iconName="playlist-add" aria-hidden="true"></my-global-icon>
                       <span class="icon-text" i18n>SAVE</span>
-                    </div>
+                    </button>
 
                     <div ngbDropdownMenu>
                       <my-video-add-to-playlist #addContent [video]="video"></my-video-add-to-playlist>

@@ -1,5 +1,5 @@
 <div class="dropdown-root" ngbDropdown [placement]="placement" [container]="container" *ngIf="areActionsDisplayed(actions, entry)">
-  <div
+  <button
     class="action-button" [ngClass]="{ small: buttonSize === 'small', grey: theme === 'grey', orange: theme === 'orange', 'button-styled': buttonStyled }"
     ngbDropdownToggle role="button"
   >
@@ -7,7 +7,7 @@
     <my-global-icon *ngIf="!label && buttonDirection === 'vertical'" class="more-icon" iconName="more-vertical"></my-global-icon>
 
     <span *ngIf="label" class="dropdown-toggle">{{ label }}</span>
-  </div>
+</button>
 
   <div ngbDropdownMenu class="dropdown-menu">
     <ng-container *ngFor="let actions of getActions()">
@@ -16,7 +16,7 @@
         <ng-container *ngIf="action.isDisplayed === undefined || action.isDisplayed(entry) === true">
 
           <ng-template #templateActionLabel let-action>
-            <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName"></my-global-icon>
+            <my-global-icon *ngIf="action.iconName" [iconName]="action.iconName" [ngClass]="'icon-' + action.iconName" aria-hidden="true"></my-global-icon>
 
             <div class="d-flex flex-column">
               <span i18n>{{ action.label }}</span>
@@ -33,14 +33,14 @@
 
           <span
             *ngIf="!action.linkBuilder && !action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="custom-action dropdown-item" role="button" [title]="action.title || ''" (click)="action.handler(entry)"
+            class="custom-action dropdown-item" tabindex="0" role="button" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </span>
 
           <h6
             *ngIf="!action.linkBuilder && action.isHeader" [ngClass]="{ 'with-icon': !!action.iconName }"
-            class="dropdown-header" role="button" [title]="action.title || ''" (click)="action.handler(entry)"
+            class="dropdown-header" tabindex="0" role="button" [title]="action.title || ''" (click)="action.handler(entry)" (keyup.enter)="action.handler(entry)"
           >
             <ng-container *ngTemplateOutlet="templateActionLabel; context:{ $implicit: action }"></ng-container>
           </h6>

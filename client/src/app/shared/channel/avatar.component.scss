@@ -7,10 +7,12 @@
   height: $avatar-size;
   position: relative;
   margin-right: 5px;
+  margin-bottom: 5px;
 
   &.avatar-sm {
     width: 28px;
     height: 28px;
+    margin-bottom: 3px;
   }
 
   a {

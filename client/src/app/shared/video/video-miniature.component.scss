@@ -2,7 +2,7 @@
 @import '_mixins';
 @import '_miniature';
 
-$more-button-width: 41px;
+$more-button-width: 40px;
 $more-margin-right: 15px;
 
 .video-miniature {
@@ -11,7 +11,6 @@ $more-margin-right: 15px;
   padding-bottom: $video-miniature-margin-bottom;
   height: 195px;
   vertical-align: top;
-  overflow: hidden;
 
   .video-bottom {
     display: flex;
@@ -30,6 +29,11 @@ $more-margin-right: 15px;
 
       .video-miniature-name {
         @include miniature-name;
+      }
+
+      .video-miniature-meta {
+        width: calc(100% + #{$more-button-width});
+        overflow: hidden;
       }
 
       .video-miniature-created-at-views {
@@ -122,7 +126,7 @@ $more-margin-right: 15px;
       width: 100% !important;
 
       .video-miniature-information {
-        width: calc(100% - 40px) !important;
+        width: calc(100% - #{$more-button-width}) !important;
       }
     }
 

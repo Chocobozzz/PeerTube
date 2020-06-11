@@ -10,7 +10,7 @@
     <div class="action-block" *ngIf="actions.length > 0">
       <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
         <button class="btn">
-          <my-global-icon [iconName]="action.iconName"></my-global-icon>
+          <my-global-icon [iconName]="action.iconName" aria-hidden="true"></my-global-icon>
           <span>{{ action.label }}</span>
         </button>
       </a>
