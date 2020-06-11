@@ -9,32 +9,34 @@
 
   <div class="video-bottom">
     <div class="video-miniature-information">
-      <a
-        tabindex="-1"
-        class="video-miniature-name"
-        [routerLink]="videoLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
-      >{{ video.name }}</a>
-
       <div class="d-inline-flex video-miniature-meta">
-        <avatar-channel *ngIf="displayOptions.avatar" class="mr-1 pt-1" [video]="video" size="sm"></avatar-channel>
+        <div *ngIf="displayOptions.avatar" class="avatar">
+          <img [src]="getAvatarUrl()" alt="Avatar" />
+        </div>
 
         <div class="d-flex flex-column">
+          <a
+            tabindex="-1"
+            class="video-miniature-name"
+            [routerLink]="videoLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
+          >{{ video.name }}</a>
+
           <span class="video-miniature-created-at-views">
             <my-date-toggle *ngIf="displayOptions.date" [date]="video.publishedAt"></my-date-toggle>
-    
+
             <span class="views">
               <ng-container *ngIf="displayOptions.date && displayOptions.views"> • </ng-container>
               <ng-container i18n *ngIf="displayOptions.views">{video.views, plural, =1 {1 view} other {{{ video.views | myNumberFormatter }} views}}</ng-container>
             </span>
           </span>
-    
+
           <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerAccount()" class="video-miniature-account" [routerLink]="[ '/accounts', video.byAccount ]">
             {{ video.byAccount }}
           </a>
           <a tabindex="-1" *ngIf="displayOptions.by && displayOwnerVideoChannel()" class="video-miniature-channel" [routerLink]="[ '/video-channels', video.byVideoChannel ]">
             {{ video.byVideoChannel }}
           </a>
-    
+
           <div class="video-info-privacy">
             <ng-container *ngIf="displayOptions.privacyText">{{ video.privacy.label }}</ng-container>
             <ng-container *ngIf="displayOptions.privacyText && displayOptions.state && getStateLabel(video)"> - </ng-container>

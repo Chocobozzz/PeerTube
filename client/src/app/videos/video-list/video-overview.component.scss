@@ -2,8 +2,13 @@
 @import '_mixins';
 @import '_miniature';
 
+.section-title {
+  // make the element span a full grid row within .videos grid
+  grid-column: 1 / -1;
+}
+
 .margin-content {
-  @include adapt-margin-content-width;
+  @include fluid-videos-miniature-layout;
 }
 
 .section {

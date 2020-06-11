@@ -18,11 +18,17 @@ $more-margin-right: 15px;
     .video-miniature-information {
       width: $video-miniature-width - $more-button-width - $more-margin-right;
       line-height: normal;
-      font-size: 13px;
+
+      .avatar {
+        margin: 10px 10px 0 0;
+
+        img {
+          @include avatar(40px);
+        }
+      }
 
       .video-miniature-name {
         @include miniature-name;
-        font-size: 110%;
       }
 
       .video-miniature-meta {
@@ -32,7 +38,7 @@ $more-margin-right: 15px;
 
       .video-miniature-created-at-views {
         display: block;
-        font-size: 95%;
+        font-size: 13px;
       }
 
       .video-miniature-account,
@@ -41,7 +47,7 @@ $more-margin-right: 15px;
         @include ellipsis;
 
         display: block;
-        font-size: 95%;
+        font-size: 13px;
         color: pvar(--greyForegroundColor);
 
         &:hover {

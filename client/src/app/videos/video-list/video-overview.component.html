@@ -7,25 +7,29 @@
   >
     <ng-container *ngFor="let overview of overviews">
 
-      <div class="section" *ngFor="let object of overview.categories">
+      <div class="section videos" *ngFor="let object of overview.categories">
         <div class="section-title">
           <a routerLink="/search" [queryParams]="{ categoryOneOf: [ object.category.id ] }">{{ object.category.label }}</a>
         </div>
 
-        <my-video-miniature class="pr-2" *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
-        </my-video-miniature>
+        <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
+          <my-video-miniature [video]="video" [fitWidth]="true" [user]="user" [displayVideoActions]="false">
+          </my-video-miniature>
+        </div>
       </div>
 
-      <div class="section" *ngFor="let object of overview.tags">
+      <div class="section videos" *ngFor="let object of overview.tags">
         <div class="section-title">
           <a routerLink="/search" [queryParams]="{ tagsOneOf: [ object.tag ] }">#{{ object.tag }}</a>
         </div>
 
-        <my-video-miniature class="pr-2" *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
-        </my-video-miniature>
+        <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
+          <my-video-miniature [video]="video" [fitWidth]="true" [user]="user" [displayVideoActions]="false">
+          </my-video-miniature>
+        </div>
       </div>
 
-      <div class="section channel" *ngFor="let object of overview.channels">
+      <div class="section channel videos" *ngFor="let object of overview.channels">
         <div class="section-title">
           <a [routerLink]="[ '/video-channels', buildVideoChannelBy(object) ]">
             <img [src]="buildVideoChannelAvatarUrl(object)" alt="Avatar" />
@@ -34,8 +38,10 @@
           </a>
         </div>
 
-        <my-video-miniature class="pr-2" *ngFor="let video of buildVideos(object.videos)" [video]="video" [user]="user" [displayVideoActions]="false">
-        </my-video-miniature>
+        <div class="video-wrapper" *ngFor="let video of buildVideos(object.videos)">
+          <my-video-miniature [video]="video" [fitWidth]="true" [user]="user" [displayVideoActions]="false">
+          </my-video-miniature>
+        </div>
       </div>
 
     </ng-container>

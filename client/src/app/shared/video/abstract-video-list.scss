@@ -3,24 +3,6 @@
 @import '_mixins';
 @import '_miniature';
 
-.videos {
-  $column-width: #{$video-thumbnail-width - 25px};
-
-  display: grid;
-  column-gap: calc(10px + .2%);
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(
-      var(--miniature-min-width, #{$column-width}),
-      1fr
-    )
-  );
-
-  @media screen and (min-width: #{breakpoint(fhd)}) {
-    --miniature-min-width: #{$column-width + 100px};
-  }
-}
-
 .videos-header {
   display: flex;
   justify-content: space-between;
@@ -74,8 +56,8 @@
   }
 }
 
-:host-context(.main-col:not(.expanded)) .margin-content {
-  @include adapt-margin-content-width($fluid: true);
+.margin-content {
+  @include fluid-videos-miniature-layout;
 }
 
 @media screen and (max-width: $mobile-view) {
@@ -83,6 +65,7 @@
     flex-direction: column;
     align-items: center;
     height: auto;
+    margin-bottom: 10px;
 
     .title-page {
       margin-bottom: 10px;

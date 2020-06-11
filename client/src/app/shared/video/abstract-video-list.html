@@ -35,13 +35,15 @@
         {{ getCurrentGroupedDateLabel(video) }}
       </div>
 
-      <my-video-miniature
-        [fitWidth]="true"
-        [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
-        [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
-        (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
-      >
-      </my-video-miniature>
+      <div class="video-wrapper">
+        <my-video-miniature
+          [fitWidth]="true"
+          [video]="video" [user]="user" [ownerDisplayType]="ownerDisplayType"
+          [displayVideoActions]="displayVideoActions" [displayOptions]="displayOptions"
+          (videoBlocked)="removeVideoFromArray(video)" (videoRemoved)="removeVideoFromArray(video)"
+        >
+        </my-video-miniature>
+      </div>
     </ng-container>
   </div>
 </div>

@@ -178,6 +178,14 @@ export class VideoMiniatureComponent implements OnInit {
     return ''
   }
 
+  getAvatarUrl () {
+    if (this.ownerDisplayTypeChosen === 'account') {
+      return this.video.accountAvatarUrl
+    }
+
+    return this.video.videoChannelAvatarUrl
+  }
+
   loadActions () {
     if (this.displayVideoActions) this.showActions = true
 
