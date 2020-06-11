@@ -8,9 +8,10 @@ $more-margin-right: 15px;
 .video-miniature {
   display: inline-flex;
   flex-direction: column;
-  margin-bottom: $video-miniature-margin-bottom;
+  padding-bottom: $video-miniature-margin-bottom;
   height: 195px;
   vertical-align: top;
+  overflow: hidden;
 
   .video-bottom {
     display: flex;
@@ -109,7 +110,7 @@ $more-margin-right: 15px;
   &.fit-width {
     width: 100%;
     height: unset;
-    margin-bottom: $video-miniature-margin-bottom / 2;
+    padding-bottom: $video-miniature-margin-bottom / 2;
 
     .video-bottom {
       width: 100% !important;
@@ -126,7 +127,7 @@ $more-margin-right: 15px;
 
   &.display-as-row {
     flex-direction: row;
-    margin-bottom: 0;
+    padding-bottom: 0;
     height: auto;
     display: flex;
     flex-grow: 1;
