@@ -209,6 +209,37 @@ describe('Test videos search', function () {
       expect(res.body.total).to.be.greaterThan(5)
       expect(res.body.data).to.have.lengthOf(5)
     })
+
+    it('Should use the nsfw instance policy as default', async function () {
+      let nsfwUUID: string
+
+      {
+        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'display' } })
+
+        const res = await searchVideo(server.url, 'NSFW search index')
+        const video = res.body.data[0] as Video
+
+        expect(res.body.data).to.have.length.greaterThan(0)
+        expect(video.nsfw).to.be.true
+
+        nsfwUUID = video.uuid
+      }
+
+      {
+        await updateCustomSubConfig(server.url, server.accessToken, { instance: { defaultNSFWPolicy: 'do_not_list' } })
+
+        const res = await searchVideo(server.url, 'NSFW search index')
+
+        try {
+          expect(res.body.data).to.have.lengthOf(0)
+        } catch (err) {
+          //
+          const video = res.body.data[0] as Video
+
+          expect(video.uuid).not.equal(nsfwUUID)
+        }
+      }
+    })
   })
 
   describe('Channels search', async function () {

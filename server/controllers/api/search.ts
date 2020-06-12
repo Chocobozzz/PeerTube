@@ -169,7 +169,14 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
 
   const result = await buildMutedForSearchIndex(res)
 
-  const body = Object.assign(query, result)
+  const body: VideosSearchQuery = Object.assign(query, result)
+
+  // Use the default instance NSFW policy if not specified
+  if (!body.nsfw) {
+    body.nsfw = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
+      ? 'false'
+      : 'both'
+  }
 
   const url = sanitizeUrl(CONFIG.SEARCH.SEARCH_INDEX.URL) + '/api/v1/search/videos'
 
