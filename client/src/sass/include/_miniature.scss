@@ -124,7 +124,10 @@ $play-overlay-width: 18px;
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
-    border-top: 1px solid $separator-border-color;
+
+    &:not(h2) {
+      border-top: 1px solid $separator-border-color;
+    }
 
     a {
       &:hover, &:focus:not(.focus-visible), &:active {
