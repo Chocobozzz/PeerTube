@@ -122,7 +122,7 @@ $video-info-margin-left: 44px;
 
 .video-bottom {
   display: flex;
-  margin-top: 40px;
+  margin-top: 1.5rem;
 
   .video-info {
     flex-grow: 1;
@@ -418,7 +418,7 @@ $video-info-margin-left: 44px;
       display: flex;
       width: max-content;
       height: 100%;
-      margin-bottom: 20px;
+      padding-bottom: 20px;
       flex-wrap: wrap;
     }
 
@@ -552,7 +552,7 @@ my-video-comments {
 @media screen and (max-width: 600px) {
   .video-bottom {
     margin-top: 20px !important;
-    margin-bottom: 20px !important;
+    padding-bottom: 20px !important;
 
     .video-info {
       padding: 0;
