@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { SortMeta } from 'primeng/api'
 import { Notifier, ServerService } from '@app/core'
 import { ConfirmService } from '../../../core'
@@ -17,7 +17,7 @@ import { VideoService } from '@app/shared/video/video.service'
   templateUrl: './video-block-list.component.html',
   styleUrls: [ '../moderation.component.scss', './video-block-list.component.scss' ]
 })
-export class VideoBlockListComponent extends RestTable implements OnInit {
+export class VideoBlockListComponent extends RestTable implements OnInit, AfterViewInit {
   blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
@@ -55,7 +55,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
                 this.notifier.success(this.i18n('Video {{name}} switched to manual block.', { name: videoBlock.video.name }))
                 this.loadData()
               },
-        
+
               err => this.notifier.error(err.message)
             )
           }
@@ -64,7 +64,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
       [
         {
           label: this.i18n('Actions for the video'),
-          isHeader: true,
+          isHeader: true
         },
         {
           label: this.i18n('Unblock video'),
@@ -177,7 +177,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit {
     this.videoBlocklistService.listBlocks({
       pagination: this.pagination,
       sort: this.sort,
-      search: this.search,
+      search: this.search
     })
       .subscribe(
         async resultList => {

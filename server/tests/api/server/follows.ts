@@ -326,7 +326,7 @@ describe('Test follows', function () {
     let video4: Video
 
     before(async function () {
-      this.timeout(20000)
+      this.timeout(50000)
 
       const video4Attributes = {
         name: 'server3-4',
