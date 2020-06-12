@@ -41,6 +41,10 @@
   input[type=text] {
     @include peertube-input-text(300px);
   }
+
+  h1 {
+    font-size: 1.5rem;
+  }
 }
 
 @media screen and (max-width: $small-view) {

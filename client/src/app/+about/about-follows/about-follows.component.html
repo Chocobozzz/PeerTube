@@ -1,6 +1,7 @@
 <div class="row" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
+  <h1 class="sr-only" i18n>Follows</h1>
   <div class="col-xl-6 col-md-12">
-    <div i18n class="subtitle">Followers instances</div>
+    <h2 i18n class="subtitle">Followers instances</h2>
 
     <div i18n class="no-results" *ngIf="followersPagination.totalItems === 0">This instance does not have instances followers.</div>
 
@@ -10,7 +11,7 @@
   </div>
 
   <div class="col-xl-6 col-md-12">
-    <div i18n class="subtitle">Followings instances</div>
+    <h2 i18n class="subtitle">Followings instances</h2>
 
     <div i18n class="no-results" *ngIf="followingsPagination.totalItems === 0">This instance does not have instances followings.</div>
 
