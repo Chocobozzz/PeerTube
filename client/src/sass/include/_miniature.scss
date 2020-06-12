@@ -185,8 +185,8 @@ $play-overlay-width: 18px;
 }
 
 @mixin fluid-videos-miniature-layout {
-  margin-left: 3vw !important;
-  margin-right: 3vw !important;
+  margin-left: $not-expanded-horizontal-margins !important;
+  margin-right: $not-expanded-horizontal-margins !important;
 
   @media screen and (max-width: $mobile-view) {
     width: auto;
