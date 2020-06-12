@@ -366,6 +366,7 @@ describe('Test video channels', function () {
   })
 
   it('Should report correct channel statistics', async function () {
+    this.timeout(10000)
 
     {
       const res = await getAccountVideoChannelsList({

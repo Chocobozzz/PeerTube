@@ -181,20 +181,16 @@ export type SummaryOptions = {
                   'days AS ( ' +
                     `SELECT generate_series(date_trunc('day', now()) - '${daysPrior} day'::interval, ` +
                           `date_trunc('day', now()), '1 day'::interval) AS day ` +
-                  '), ' +
-                  'views AS ( ' +
-                    'SELECT v.* ' +
-                    'FROM "videoView" AS v ' +
-                    'INNER JOIN "video" ON "video"."id" = v."videoId" ' +
-                    'WHERE "video"."channelId" = "VideoChannelModel"."id" ' +
                   ') ' +
-                'SELECT days.day AS day, ' +
-                      'COALESCE(SUM(views.views), 0) AS views ' +
-                'FROM days ' +
-                `LEFT JOIN views ON date_trunc('day', "views"."startDate") = date_trunc('day', days.day) ` +
-                'GROUP BY day ' +
-                'ORDER BY day ' +
-              ') t' +
+                  'SELECT days.day AS day, COALESCE(SUM("videoView".views), 0) AS views ' +
+                  'FROM days ' +
+                  'LEFT JOIN (' +
+                    '"videoView" INNER JOIN "video" ON "videoView"."videoId" = "video"."id" ' +
+                    'AND "video"."channelId" = "VideoChannelModel"."id"' +
+                  `) ON date_trunc('day', "videoView"."startDate") = date_trunc('day', days.day) ` +
+                  'GROUP BY day ' +
+                  'ORDER BY day ' +
+                ') t' +
               ')'
             ),
             'viewsPerDay'
@@ -413,7 +409,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
 
     const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]
 
-    if (options.withStats) {
+    if (options.withStats === true) {
       scopes.push({
         method: [ ScopeNames.WITH_STATS, { daysPrior: 30 } as AvailableWithStatsOptions ]
       })
@@ -560,7 +556,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       ownerAccount: undefined,
-      viewsPerDay: viewsPerDay !== undefined
+      viewsPerDay: viewsPerDay
         ? viewsPerDay.split(',').map(v => {
           const o = v.split('|')
           return {
