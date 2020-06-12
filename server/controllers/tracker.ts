@@ -53,7 +53,7 @@ const trackerServer = new TrackerServer({
       const playlistExists = await VideoStreamingPlaylistModel.doesInfohashExist(infoHash)
       if (playlistExists === true) return cb()
 
-      return cb(new Error(`Unknown infoHash ${infoHash}`))
+      return cb(new Error(`Unknown infoHash ${infoHash} requested by ip ${ip}`))
     } catch (err) {
       logger.error('Error in tracker filter.', { err })
       return cb(err)
