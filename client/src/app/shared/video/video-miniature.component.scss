@@ -9,7 +9,6 @@ $more-margin-right: 15px;
   display: inline-flex;
   flex-direction: column;
   padding-bottom: $video-miniature-margin-bottom;
-  height: 195px;
   vertical-align: top;
 
   .video-bottom {
@@ -119,8 +118,6 @@ $more-margin-right: 15px;
 
   &.fit-width {
     width: 100%;
-    height: unset;
-    padding-bottom: $video-miniature-margin-bottom / 2;
 
     .video-bottom {
       width: 100% !important;

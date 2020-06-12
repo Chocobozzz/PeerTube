@@ -10,10 +10,10 @@
   <div class="video-bottom">
     <div class="video-miniature-information">
       <div class="d-inline-flex video-miniature-meta">
-        <div *ngIf="displayOptions.avatar" class="avatar">
-          <img [src]="getAvatarUrl()" alt="Avatar" />
-        </div>
-
+        <a *ngIf="displayOptions.avatar" class="avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
+          <img [src]="getAvatarUrl()" alt="" />
+        </a>
+        
         <div class="d-flex flex-column">
           <a
             tabindex="-1"

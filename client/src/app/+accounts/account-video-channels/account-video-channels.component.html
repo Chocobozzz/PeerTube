@@ -19,7 +19,6 @@
         <div class="no-results my-5" i18n *ngIf="getVideosOf(videoChannel).length === 0">This channel doesn't have any videos.</div>
 
         <my-video-miniature
-          class="pr-2"
           *ngFor="let video of getVideosOf(videoChannel)"
           [video]="video" [user]="user" [displayVideoActions]="true"
         ></my-video-miniature>

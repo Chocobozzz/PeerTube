@@ -78,6 +78,7 @@ export class VideoMiniatureComponent implements OnInit {
   addToWatchLaterText: string
   addedToWatchLaterText: string
   inWatchLaterPlaylist: boolean
+  channelLinkTitle = ''
 
   watchLaterPlaylist: {
     id: number
@@ -96,9 +97,7 @@ export class VideoMiniatureComponent implements OnInit {
     private videoPlaylistService: VideoPlaylistService,
     private cd: ChangeDetectorRef,
     @Inject(LOCALE_ID) private localeId: string
-  ) {
-
-  }
+  ) {}
 
   get isVideoBlur () {
     return this.video.isVideoNSFWForUser(this.user, this.serverConfig)
@@ -113,6 +112,11 @@ export class VideoMiniatureComponent implements OnInit {
         })
 
     this.setUpBy()
+
+    this.channelLinkTitle = this.i18n(
+      'Go to the channel page of {{name}} ({{handle}})',
+      { name: this.video.channel.name, handle: this.video.byVideoChannel }
+    )
 
     // We rely on mouseenter to lazy load actions
     if (this.screenService.isInTouchScreen()) {
