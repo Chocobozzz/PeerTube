@@ -1907,7 +1907,7 @@
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681" datatype="html">
         <source>Forgot your password</source>
-        <target state="new">Forgot your password</target>
+        <target state="translated">Tettuḍ awal-ik uffir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">83</context>
@@ -6196,7 +6196,7 @@
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
         <source>Most liked videos</source>
-        <target state="new">Most liked videos</target>
+        <target state="translated">Tividyutin yettwasmenyafen s waṭas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">268</context>
@@ -6212,7 +6212,7 @@
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
         <source>Local videos</source>
-        <target state="new">Local videos</target>
+        <target state="translated">Tividyutin tidiganin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">270</context>
@@ -6811,7 +6811,7 @@
       </trans-unit>
       <trans-unit id="ce43cc343ed3bd908e593db994ca3f6dbff079df" datatype="html">
         <source>PASSWORD</source>
-        <target state="new">PASSWORD</target>
+        <target state="translated">AWAL UFFIR</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context>
           <context context-type="linenumber">63</context>
@@ -6899,7 +6899,7 @@
       </trans-unit>
       <trans-unit id="3a83d433c5d27e1d06ece0475fac8ba409b6c9ac" datatype="html">
         <source>Your current password</source>
-        <target state="new">Your current password</target>
+        <target state="translated">Awal-ik uffir amiran</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">26</context>
@@ -6907,7 +6907,7 @@
       </trans-unit>
       <trans-unit id="5b5b91438db5731debea388908f788bab8d3d404" datatype="html">
         <source>Your password</source>
-        <target state="new">Your password</target>
+        <target state="translated">Awal-ik uffir</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-change-email/my-account-change-email.component.html</context>
           <context context-type="linenumber">28</context>
@@ -7396,7 +7396,7 @@
         </context-group>
       </trans-unit>
       <trans-unit id="d4c6a2c1a0980128921e991daccf1eca6e7d26bf" datatype="html">
-        <source></source>
+        <source/>
         <target state="new">
   </target>
         <context-group purpose="location">
@@ -10115,7 +10115,7 @@
       </trans-unit>
       <trans-unit id="7e194daef3a3509128c4300d4c7c292c49ebf3f5" datatype="html">
         <source>Go to the local videos page</source>
-        <target state="new">Go to the local videos page</target>
+        <target state="translated">Ddu ɣer usebter n tvidyutin tidiganin</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
