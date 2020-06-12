@@ -54,7 +54,8 @@ export {
 async function processCreateVideo (activity: ActivityCreate, notify: boolean) {
   const videoToCreateData = activity.object as VideoTorrentObject
 
-  const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData })
+  const syncParam = { likes: false, dislikes: false, shares: false, comments: false, thumbnail: true, refreshVideo: false }
+  const { video, created } = await getOrCreateVideoAndAccountAndChannel({ videoObject: videoToCreateData, syncParam })
 
   if (created && notify) Notifier.Instance.notifyOnNewVideoIfNeeded(video)
 
