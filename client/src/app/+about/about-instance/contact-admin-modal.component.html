@@ -1,7 +1,7 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Contact {{ instanceName }} administrator</h4>
-    <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
+    <h1 i18n class="modal-title">Contact {{ instanceName }} administrator</h1>
+    <my-global-icon iconName="cross" aria-label="Close" tabindex="0" role="button" (click)="hide()" (keydown.enter)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">

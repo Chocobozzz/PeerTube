@@ -1,9 +1,9 @@
 <div class="other-videos">
   <ng-container *ngIf="hasVideos$ | async">
     <div class="title-page-container">
-      <div i18n class="title-page title-page-single">
+      <h2 i18n class="title-page title-page-single">
         Other videos
-      </div>
+      </h2>
       <div *ngIf="!playlist" class="title-page-autoplay"
         [ngbTooltip]="autoPlayNextVideoTooltip" placement="bottom-right auto"
       >

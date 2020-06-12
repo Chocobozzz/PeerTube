@@ -1,11 +1,11 @@
 <div class="margin-content">
   <div class="videos-header">
-    <div *ngIf="titlePage" class="title-page title-page-single">
+    <h1 *ngIf="titlePage" class="title-page title-page-single">
       <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
         {{ titlePage }}
       </div>
       <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
-    </div>
+    </h1>
 
     <div class="action-block" *ngIf="actions.length > 0">
       <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
@@ -31,9 +31,9 @@
     class="videos"
   >
     <ng-container *ngFor="let video of videos; trackBy: videoById;">
-      <div class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
+      <h2 class="date-title" *ngIf="getCurrentGroupedDateLabel(video)">
         {{ getCurrentGroupedDateLabel(video) }}
-      </div>
+      </h2>
 
       <div class="video-wrapper">
         <my-video-miniature
