@@ -439,10 +439,20 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toActivityPubObject (this: MVideoAbuseVideo): VideoAbuseObject {
+    const predefinedReasons = this.PredefinedReasons || []
+    const startTime = this.startAt?.toString()
+    const endTime = this.endAt?.toString()
+
     return {
       type: 'Flag' as 'Flag',
       content: this.reason,
-      object: this.Video.url
+      object: this.Video.url,
+      tag: predefinedReasons.map(r => ({
+        type: 'Hashtag' as 'Hashtag',
+        name: r.predefinedReasonId.toString()
+      })),
+      startTime,
+      endTime
     }
   }
 

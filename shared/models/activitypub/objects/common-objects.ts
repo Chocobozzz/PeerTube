@@ -81,6 +81,12 @@ export interface ActivityMentionObject {
   name: string
 }
 
+export interface ActivityFlagReasonObject {
+  type: 'Hashtag' | 'Mention'
+  href?: string
+  name: string
+}
+
 export type ActivityTagObject =
   ActivityPlaylistSegmentHashesObject
   | ActivityPlaylistInfohashesObject
