@@ -56,7 +56,6 @@ export class VideoAbuseService {
         predefinedReasonId: {
           prefix: 'tag:',
           handler: v => {
-            console.log(v)
             try {
               const id = parseInt(v, 10)
               return id

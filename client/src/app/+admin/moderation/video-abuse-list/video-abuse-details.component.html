@@ -66,6 +66,13 @@
       </span>
     </div>
 
+    <div *ngIf="videoAbuse.startAt" class="mt-2 d-flex">
+      <span class="col-3 moderation-expanded-label" i18n>Reported parts</span>
+      <span class="col-9">
+        {{ startAt }}<ng-container *ngIf="videoAbuse.endAt"> - {{ endAt }}</ng-container>
+      </span>
+    </div>
+
     <div class="mt-3 d-flex" *ngIf="videoAbuse.moderationComment">
       <span class="col-3 moderation-expanded-label" i18n>Note</span>
       <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.moderationCommentHtml"></span>

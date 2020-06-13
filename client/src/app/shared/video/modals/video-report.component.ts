@@ -23,10 +23,9 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   error: string = null
   predefinedReasons: { id: PredefinedReasons, label: string, description?: string, help?: string }[] = []
+  embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
-
-  embedHtml: SafeHtml
 
   constructor (
     protected formValidatorService: FormValidatorService,

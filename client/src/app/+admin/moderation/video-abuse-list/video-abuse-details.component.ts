@@ -3,6 +3,7 @@ import { Actor } from '@app/shared/actor/actor.model'
 import { VideoAbusePredefinedReasons } from '../../../../../../shared/models/videos/abuse/video-abuse-reason.model'
 import { ProcessedVideoAbuse } from './video-abuse-list.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { durationToString } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-abuse-details',
@@ -30,10 +31,19 @@ export class VideoAbuseDetailsComponent {
   }
 
   get predefinedReasons () {
+    if (!this.videoAbuse.predefinedReasons) return []
     return this.videoAbuse.predefinedReasons.map(r => ({
       id: r,
       label: this.predefinedReasonsTranslations[r]
     }))
+  }
+
+  get startAt () {
+    return durationToString(this.videoAbuse.startAt)
+  }
+
+  get endAt () {
+    return durationToString(this.videoAbuse.endAt)
   }
 
   switchToDefaultAvatar ($event: Event) {
