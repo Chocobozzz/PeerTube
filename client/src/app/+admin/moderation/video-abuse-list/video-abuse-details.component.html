@@ -60,9 +60,9 @@
     <div *ngIf="predefinedReasons" class="mt-2 d-flex">
       <span class="col-3"></span>
       <span class="col-9">
-        <div class="chip bg-secondary text-light" *ngFor="let reason of predefinedReasons">
-          <div>{{ reason }}</div>
-        </div>
+        <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip bg-secondary text-light" *ngFor="let reason of predefinedReasons">
+          <div>{{ reason.label }}</div>
+        </a>
       </span>
     </div>
 

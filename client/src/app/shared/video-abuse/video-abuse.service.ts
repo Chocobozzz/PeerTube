@@ -52,7 +52,19 @@ export class VideoAbuseService {
           }
         },
         searchReporter: { prefix: 'reporter:' },
-        searchReportee: { prefix: 'reportee:' }
+        searchReportee: { prefix: 'reportee:' },
+        predefinedReasonId: {
+          prefix: 'tag:',
+          handler: v => {
+            console.log(v)
+            try {
+              const id = parseInt(v, 10)
+              return id
+            } catch {
+              return undefined
+            }
+          }
+        }
       })
 
       params = this.restService.addObjectParams(params, filters)

@@ -46,7 +46,7 @@ export class RestService {
   addObjectParams (params: HttpParams, object: { [ name: string ]: any }) {
     for (const name of Object.keys(object)) {
       const value = object[name]
-      if (!value) continue
+      if (value === undefined || value === null) continue
 
       if (Array.isArray(value) && value.length !== 0) {
         for (const v of value) params = params.append(name, v)
@@ -93,7 +93,7 @@ export class RestService {
 
                                     return t
                                   })
-                                  .filter(t => !!t)
+                                  .filter(t => !!t || t === 0)
 
       if (matchedTokens.length === 0) continue
 

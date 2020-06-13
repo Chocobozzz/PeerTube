@@ -114,6 +114,6 @@ export interface ActivityFlag extends BaseActivity {
   content: string
   object: APObject | APObject[]
   tag?: ActivityFlagReasonObject[]
-  startTime?: string
-  endTime?: string
+  startAt?: number
+  endAt?: number
 }

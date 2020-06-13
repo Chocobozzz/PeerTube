@@ -79,6 +79,9 @@ const videoAbuseListValidator = [
   query('id')
     .optional()
     .custom(isIdValid).withMessage('Should have a valid id'),
+  query('predefinedReasonId')
+    .optional()
+    .custom(isIdValid).withMessage('Should have a valid predefinedReasonId'),
   query('search')
     .optional()
     .custom(exists).withMessage('Should have a valid search'),

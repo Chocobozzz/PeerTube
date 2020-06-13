@@ -12,8 +12,7 @@ import {
   Model,
   Scopes,
   Table,
-  UpdatedAt,
-  BelongsToMany
+  UpdatedAt
 } from 'sequelize-typescript'
 import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
 import { VideoAbuseState, VideoDetails } from '../../../shared'
@@ -32,12 +31,9 @@ import { ThumbnailModel } from './thumbnail'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
-import { AbuseReasonModel } from './abuse-reason'
-import { VideoAbuseReasonModel } from './video-abuse-reason'
 
 export enum ScopeNames {
-  FOR_API = 'FOR_API',
-  WITH_ABUSE_REASON = 'WITH_ABUSE_REASON'
+  FOR_API = 'FOR_API'
 }
 
 @Scopes(() => ({
@@ -51,6 +47,7 @@ export enum ScopeNames {
 
     // filters
     id?: number
+    predefinedReasonId?: number
 
     state?: VideoAbuseState
     videoIs?: VideoAbuseVideoIs
@@ -104,6 +101,14 @@ export enum ScopeNames {
       Object.assign(where, {
         deletedVideo: {
           [Op.not]: null
+        }
+      })
+    }
+
+    if (options.predefinedReasonId) {
+      Object.assign(where, {
+        predefinedReasons: {
+          [Op.contains]: [ options.predefinedReasonId ]
         }
       })
     }
@@ -224,9 +229,6 @@ export enum ScopeNames {
       ],
       where
     }
-  },
-  [ScopeNames.WITH_ABUSE_REASON]: {
-    include: [ AbuseReasonModel ]
   }
 }))
 @Table({
@@ -264,6 +266,11 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   @Default(null)
   @Column(DataType.JSONB)
   deletedVideo: VideoDetails
+
+  @AllowNull(true)
+  @Default(null)
+  @Column(DataType.ARRAY(DataType.INTEGER))
+  predefinedReasons: number[]
 
   @AllowNull(true)
   @Default(null)
@@ -305,13 +312,6 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   })
   Video: VideoModel
 
-  @BelongsToMany(() => AbuseReasonModel, {
-    foreignKey: 'videoAbuseId',
-    through: () => VideoAbuseReasonModel,
-    onDelete: 'CASCADE'
-  })
-  PredefinedReasons: AbuseReasonModel[]
-
   static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MVideoAbuse> {
     const videoAttributes = {}
     if (videoId) videoAttributes['videoId'] = videoId
@@ -335,6 +335,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     user?: MUserAccountId
 
     id?: number
+    predefinedReasonId?: number
     state?: VideoAbuseState
     videoIs?: VideoAbuseVideoIs
 
@@ -353,6 +354,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       serverAccountId,
       state,
       videoIs,
+      predefinedReasonId,
       searchReportee,
       searchVideo,
       searchVideoChannel,
@@ -372,6 +374,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
     const filters = {
       id,
+      predefinedReasonId,
       search,
       state,
       videoIs,
@@ -385,8 +388,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
     return VideoAbuseModel
       .scope([
-        { method: [ ScopeNames.FOR_API, filters ] },
-        'WITH_ABUSE_REASON'
+        { method: [ ScopeNames.FOR_API, filters ] }
       ])
       .findAndCountAll(query)
       .then(({ rows, count }) => {
@@ -395,7 +397,6 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
-    const predefinedReasons = this.PredefinedReasons || []
     const countReportsForVideo = this.get('countReportsForVideo') as number
     const nthReportForVideo = this.get('nthReportForVideo') as number
     const countReportsForReporterVideo = this.get('countReportsForReporter__video') as number
@@ -410,7 +411,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     return {
       id: this.id,
       reason: this.reason,
-      predefinedReasons: predefinedReasons.map(r => r.predefinedReasonId),
+      predefinedReasons: this.predefinedReasons,
       reporterAccount: this.Account.toFormattedJSON(),
       state: {
         id: this.state,
@@ -439,20 +440,19 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toActivityPubObject (this: MVideoAbuseVideo): VideoAbuseObject {
-    const predefinedReasons = this.PredefinedReasons || []
-    const startTime = this.startAt?.toString()
-    const endTime = this.endAt?.toString()
+    const startAt = this.startAt
+    const endAt = this.endAt
 
     return {
       type: 'Flag' as 'Flag',
       content: this.reason,
       object: this.Video.url,
-      tag: predefinedReasons.map(r => ({
+      tag: this.predefinedReasons.map(r => ({
         type: 'Hashtag' as 'Hashtag',
-        name: r.predefinedReasonId.toString()
+        name: r.toString()
       })),
-      startTime,
-      endTime
+      startAt,
+      endAt
     }
   }
 

@@ -30,7 +30,10 @@ export class VideoAbuseDetailsComponent {
   }
 
   get predefinedReasons () {
-    return this.videoAbuse.predefinedReasons.map(r => this.predefinedReasonsTranslations[r])
+    return this.videoAbuse.predefinedReasons.map(r => ({
+      id: r,
+      label: this.predefinedReasonsTranslations[r]
+    }))
   }
 
   switchToDefaultAvatar ($event: Event) {

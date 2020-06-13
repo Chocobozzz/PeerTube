@@ -5,6 +5,6 @@ export interface VideoAbuseObject {
   content: string
   object: string | string[]
   tag?: ActivityFlagReasonObject[]
-  startTime?: string
-  endTime?: string
+  startAt?: number
+  endAt?: number
 }

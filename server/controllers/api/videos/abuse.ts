@@ -26,7 +26,6 @@ import { MVideoAbuseAccountVideo } from '../../../types/models/video'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountDefault } from '@server/types/models'
 import { keys, pickBy } from 'lodash'
-import { AbuseReasonModel } from '@server/models/video/abuse-reason'
 import { VideoAbusePredefinedReasonsIn } from '@shared/models/videos/abuse/video-abuse-reason.model'
 
 const auditLogger = auditLoggerFactory('abuse')
@@ -77,6 +76,7 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     id: req.query.id,
+    predefinedReasonId: req.query.predefinedReasonId,
     search: req.query.search,
     state: req.query.state,
     videoIs: req.query.videoIs,
@@ -136,6 +136,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
       reason: body.reason,
       videoId: videoInstance.id,
       state: VideoAbuseState.PENDING,
+      predefinedReasons,
       startAt,
       endAt
     }
@@ -143,16 +144,6 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
     const videoAbuseInstance: MVideoAbuseAccountVideo = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
     videoAbuseInstance.Video = videoInstance
     videoAbuseInstance.Account = reporterAccount
-
-    // Add eventual predefined reasons
-    if (predefinedReasons.length > 0) {
-      const reasons = []
-      for (const reasonId of predefinedReasons) {
-        reasons.push(await AbuseReasonModel.findByPk(reasonId + 1, { transaction: t }))
-      }
-      await videoAbuseInstance.$set('PredefinedReasons', reasons, { transaction: t })
-      videoAbuseInstance.PredefinedReasons = reasons
-    }
 
     // We send the video abuse to the origin server
     if (videoInstance.isOwned() === false) {
