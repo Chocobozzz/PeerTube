@@ -13,8 +13,8 @@
         <a *ngIf="displayOptions.avatar" class="avatar" [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
           <img [src]="getAvatarUrl()" alt="" />
         </a>
-        
-        <div class="d-flex flex-column">
+
+        <div class="w-100 d-flex flex-column">
           <a
             tabindex="-1"
             class="video-miniature-name"

@@ -28,6 +28,7 @@ $more-margin-right: 15px;
 
       .video-miniature-name {
         @include miniature-name;
+        width: calc(100% - #{$more-button-width});
       }
 
       .video-miniature-meta {

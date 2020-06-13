@@ -71,7 +71,7 @@
       </td>
 
       <td *ngIf="!videoAbuse.video.deleted">
-        <a [href]="getVideoUrl(videoAbuse)" class="video-table-video-link" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
+        <a [href]="getVideoUrl(videoAbuse)" class="video-table-video-link" [title]="videoAbuse.video.name" target="_blank" rel="noopener noreferrer">
           <div class="video-table-video">
             <div class="video-table-video-image">
               <img [src]="videoAbuse.video.thumbnailPath">

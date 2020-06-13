@@ -52,7 +52,7 @@
       </td>
 
       <td>
-        <a [href]="getVideoUrl(videoBlock)" class="video-table-video-link" i18n-title title="Open video in a new tab" target="_blank" rel="noopener noreferrer">
+        <a [href]="getVideoUrl(videoBlock)" class="video-table-video-link" [title]="videoBlock.video.name" target="_blank" rel="noopener noreferrer">
           <div class="video-table-video">
             <div class="video-table-video-image">
               <img [src]="videoBlock.video.thumbnailPath">
