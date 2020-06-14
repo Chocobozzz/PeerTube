@@ -258,6 +258,8 @@ table {
 
 .no-results {
   height: 40vh;
+  max-height: 500px;
+
   display: flex;
   align-items: center;
   justify-content: center;

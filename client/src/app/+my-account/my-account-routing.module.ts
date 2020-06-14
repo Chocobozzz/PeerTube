@@ -140,7 +140,7 @@ const myAccountRoutes: Routes = [
         component: MyAccountServerBlocklistComponent,
         data: {
           meta: {
-            title: 'Muted instances'
+            title: 'Muted servers'
           }
         }
       },

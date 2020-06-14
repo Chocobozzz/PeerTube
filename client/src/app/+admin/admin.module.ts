@@ -27,7 +27,6 @@ import { SelectButtonModule } from 'primeng/selectbutton'
 import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
 import { VideoRedundancyInformationComponent } from '@app/+admin/follows/video-redundancies-list/video-redundancy-information.component'
 import { ChartModule } from 'primeng/chart'
-import { BatchDomainsModalComponent } from './config/shared/batch-domains-modal.component'
 import { VideoAbuseDetailsComponent } from './moderation/video-abuse-list/video-abuse-details.component'
 
 @NgModule({
@@ -76,9 +75,7 @@ import { VideoAbuseDetailsComponent } from './moderation/video-abuse-list/video-
     DebugComponent,
 
     ConfigComponent,
-    EditCustomConfigComponent,
-
-    BatchDomainsModalComponent
+    EditCustomConfigComponent
   ],
 
   exports: [

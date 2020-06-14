@@ -72,7 +72,7 @@ export class MyAccountComponent implements OnInit {
           iconName: 'user'
         },
         {
-          label: this.i18n('Muted instances'),
+          label: this.i18n('Muted servers'),
           routerLink: '/my-account/blocklist/servers',
           iconName: 'server'
         },

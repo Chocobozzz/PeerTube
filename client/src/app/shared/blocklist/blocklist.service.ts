@@ -8,6 +8,8 @@ import { AccountBlock as AccountBlockServer, ResultList, ServerBlock } from '../
 import { Account } from '@app/shared/account/account.model'
 import { AccountBlock } from '@app/shared/blocklist/account-block.model'
 
+export enum BlocklistComponentType { Account, Instance }
+
 @Injectable()
 export class BlocklistService {
   static BASE_USER_BLOCKLIST_URL = environment.apiUrl + '/api/v1/users/me/blocklist'
@@ -21,9 +23,13 @@ export class BlocklistService {
 
   /*********************** User -> Account blocklist ***********************/
 
-  getUserAccountBlocklist (pagination: RestPagination, sort: SortMeta) {
+  getUserAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
+    const { pagination, sort, search } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<AccountBlock>>(BlocklistService.BASE_USER_BLOCKLIST_URL + '/accounts', { params })
                .pipe(
@@ -49,9 +55,13 @@ export class BlocklistService {
 
   /*********************** User -> Server blocklist ***********************/
 
-  getUserServerBlocklist (pagination: RestPagination, sort: SortMeta) {
+  getUserServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
+    const { pagination, sort, search } = options
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<ServerBlock>>(BlocklistService.BASE_USER_BLOCKLIST_URL + '/servers', { params })
                .pipe(
@@ -76,7 +86,7 @@ export class BlocklistService {
 
   /*********************** Instance -> Account blocklist ***********************/
 
-  getInstanceAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search: string }) {
+  getInstanceAccountBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
 
     let params = new HttpParams()
@@ -108,7 +118,7 @@ export class BlocklistService {
 
   /*********************** Instance -> Server blocklist ***********************/
 
-  getInstanceServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search: string }) {
+  getInstanceServerBlocklist (options: { pagination: RestPagination, sort: SortMeta, search?: string }) {
     const { pagination, sort, search } = options
 
     let params = new HttpParams()
