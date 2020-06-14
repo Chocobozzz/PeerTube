@@ -10554,7 +10554,7 @@
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">Sètz abonat a <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. Seretz avisat de las vidèos novèlas.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10570,7 +10570,7 @@
       </trans-unit>
       <trans-unit id="3bd3791d3b0ab933981a0b884396af74b0c95e2a" datatype="html">
         <source>Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></source>
-        <target state="new">Unsubscribed from all channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
+        <target state="translated">Pas mai abonat a las cadenas de <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10669,7 +10669,7 @@
       </trans-unit>
       <trans-unit id="c93a80b6a7d903886843ac3719b34b1794de171f" datatype="html">
         <source>Unblacklist video</source>
-        <target state="new">Unblacklist video</target>
+        <target state="translated">Tirar la vidèo de las lista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10677,7 +10677,7 @@
       </trans-unit>
       <trans-unit id="9382291d6ebed56e5ae95e020d6b91f39cff468a" datatype="html">
         <source>Video unblacklisted.</source>
-        <target state="new">Video unblacklisted.</target>
+        <target state="translated">Vidèo tirada de la lista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10685,7 +10685,7 @@
       </trans-unit>
       <trans-unit id="19e5e5956502d977d5dd28fe86cee763d5db2b77" datatype="html">
         <source>Delete video</source>
-        <target state="new">Delete video</target>
+        <target state="translated">Suprimir la vidèo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10717,7 +10717,7 @@
       </trans-unit>
       <trans-unit id="c1226821b3c276dc443b3e5a2dce10e14dcd6244" datatype="html">
         <source>Bitrate</source>
-        <target state="new">Bitrate</target>
+        <target state="translated">Debit binari</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/video/modals/video-download.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10763,7 +10763,7 @@
       </trans-unit>
       <trans-unit id="a36503b80133639322bcdb973f78bcadbd86b798" datatype="html">
         <source>Video deleted.</source>
-        <target state="new">Video deleted.</target>
+        <target state="translated">Vidèo suprimida.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10771,7 +10771,7 @@
       </trans-unit>
       <trans-unit id="f145e822837d0d1f741db7540dc6cb1cdacd8220" datatype="html">
         <source>Actions for the reporter</source>
-        <target state="new">Actions for the reporter</target>
+        <target state="translated">Accion pel senhalaire</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10779,7 +10779,7 @@
       </trans-unit>
       <trans-unit id="2c33a2bd1e9f50f870366f281ff903cedf9b6a53" datatype="html">
         <source>Mute reporter</source>
-        <target state="new">Mute reporter</target>
+        <target state="translated">Rendre lo senhalaire mut</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10844,7 +10844,7 @@
       </trans-unit>
       <trans-unit id="076960cf44b4a0e89cc5024a75963844b068b284" datatype="html">
         <source>The video was blacklisted</source>
-        <target state="new">The video was blacklisted</target>
+        <target state="translated">La vidèo es estada mesa en lista negra</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">72</context>
@@ -11117,7 +11117,7 @@
       </trans-unit>
       <trans-unit id="3a592fe9ee94c99deb20352edd7e994debf5c4c8" datatype="html">
         <source>Autoplay is suspended</source>
-        <target state="new">Autoplay is suspended</target>
+        <target state="translated">La lectura automatica es suspenduda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/video-watch.component.ts</context>
           <context context-type="linenumber">1</context>
