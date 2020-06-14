@@ -69,12 +69,6 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
   @Column
   score: number
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @ForeignKey(() => ActorModel)
   @Column
   actorId: number

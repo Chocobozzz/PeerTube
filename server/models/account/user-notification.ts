@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, Default, ForeignKey, Is, Model, Scopes, Table } from 'sequelize-typescript'
 import { UserNotification, UserNotificationType } from '../../../shared'
 import { getSort, throwIfNotValid } from '../utils'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
@@ -233,12 +233,6 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
   @Is('UserNotificationRead', value => throwIfNotValid(value, isBooleanValid, 'read'))
   @Column
   read: boolean
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => UserModel)
   @Column

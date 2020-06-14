@@ -1,4 +1,4 @@
-import { AllowNull, Column, CreatedAt, DataType, HasMany, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, DataType, HasMany, Model, Table } from 'sequelize-typescript'
 import { OAuthTokenModel } from './oauth-token'
 
 @Table({
@@ -29,12 +29,6 @@ export class OAuthClientModel extends Model<OAuthClientModel> {
 
   @Column(DataType.ARRAY(DataType.STRING))
   redirectUris: string[]
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @HasMany(() => OAuthTokenModel, {
     onDelete: 'cascade'

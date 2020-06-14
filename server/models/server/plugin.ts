@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
-import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, DataType, DefaultScope, Is, Model, Table } from 'sequelize-typescript'
 import { MPlugin, MPluginFormattable } from '@server/typings/models'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
@@ -80,12 +80,6 @@ export class PluginModel extends Model<PluginModel> {
   @AllowNull(true)
   @Column(DataType.JSONB)
   storage: any
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   static listEnabledPluginsAndThemes (): Bluebird<MPlugin[]> {
     const query = {

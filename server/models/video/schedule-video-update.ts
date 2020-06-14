@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, Default, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { Op, Transaction } from 'sequelize'
@@ -27,12 +27,6 @@ export class ScheduleVideoUpdateModel extends Model<ScheduleVideoUpdateModel> {
   @Default(null)
   @Column
   privacy: VideoPrivacy.PUBLIC | VideoPrivacy.UNLISTED | VideoPrivacy.INTERNAL
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column

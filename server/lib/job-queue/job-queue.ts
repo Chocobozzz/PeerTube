@@ -86,11 +86,14 @@ class JobQueue {
     this.initialized = true
 
     this.jobRedisPrefix = 'bull-' + WEBSERVER.HOST
-    const queueOptions = {
+    const queueOptions: Bull.QueueOptions = {
       prefix: this.jobRedisPrefix,
       redis: Redis.getRedisClientOptions(),
       settings: {
         maxStalledCount: 10 // transcoding could be long, so jobs can often be interrupted by restarts
+      },
+      defaultJobOptions: {
+        backoff: { delay: 60 * 1000, type: 'exponential' }
       }
     }
 
@@ -135,7 +138,6 @@ class JobQueue {
     }
 
     const jobArgs: Bull.JobOptions = {
-      backoff: { delay: 60 * 1000, type: 'exponential' },
       attempts: JOB_ATTEMPTS[obj.type],
       timeout: JOB_TTL[obj.type]
     }

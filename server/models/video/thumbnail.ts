@@ -4,13 +4,11 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   ForeignKey,
   Model,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { CONSTRAINTS_FIELDS, LAZY_STATIC_PATHS, STATIC_PATHS, WEBSERVER } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
@@ -85,12 +83,6 @@ export class ThumbnailModel extends Model<ThumbnailModel> {
     onDelete: 'CASCADE'
   })
   VideoPlaylist: VideoPlaylistModel
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   private static readonly types: { [ id in ThumbnailType ]: { label: string, directory: string, staticPath: string } } = {
     [ThumbnailType.MINIATURE]: {

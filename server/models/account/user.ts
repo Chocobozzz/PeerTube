@@ -358,12 +358,6 @@ export class UserModel extends Model<UserModel> {
   @Column
   lastLoginDate: Date
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @HasOne(() => AccountModel, {
     foreignKey: 'userId',
     onDelete: 'cascade',

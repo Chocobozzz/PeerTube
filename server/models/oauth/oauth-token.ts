@@ -101,12 +101,6 @@ export class OAuthTokenModel extends Model<OAuthTokenModel> {
   @Column
   authName: string
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @ForeignKey(() => UserModel)
   @Column
   userId: number

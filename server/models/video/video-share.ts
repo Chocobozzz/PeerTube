@@ -1,5 +1,5 @@
 import * as Bluebird from 'bluebird'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Is, Model, Scopes, Table } from 'sequelize-typescript'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { ActorModel } from '../activitypub/actor'
@@ -57,12 +57,6 @@ export class VideoShareModel extends Model<VideoShareModel> {
   @Is('VideoShareUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_SHARE.URL.max))
   url: string
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column

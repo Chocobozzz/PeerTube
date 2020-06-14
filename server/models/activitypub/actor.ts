@@ -208,12 +208,6 @@ export class ActorModel extends Model<ActorModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ACTORS.URL.max))
   followingUrl: string
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @ForeignKey(() => AvatarModel)
   @Column
   avatarId: number

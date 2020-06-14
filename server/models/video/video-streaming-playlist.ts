@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, HasMany, Is, Model, Table } from 'sequelize-typescript'
 import { isVideoFileInfoHashValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -41,12 +41,6 @@ import { logger } from '@server/helpers/logger'
   ]
 })
 export class VideoStreamingPlaylistModel extends Model<VideoStreamingPlaylistModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @Column
   type: VideoStreamingPlaylistType

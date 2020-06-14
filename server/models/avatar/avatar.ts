@@ -1,5 +1,5 @@
 import { join } from 'path'
-import { AfterDestroy, AllowNull, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AfterDestroy, AllowNull, Column, Is, Model, Table } from 'sequelize-typescript'
 import { Avatar } from '../../../shared/models/avatars/avatar.model'
 import { LAZY_STATIC_PATHS } from '../../initializers/constants'
 import { logger } from '../../helpers/logger'
@@ -32,12 +32,6 @@ export class AvatarModel extends Model<AvatarModel> {
   @AllowNull(false)
   @Column
   onDisk: boolean
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @AfterDestroy
   static removeFilesAndSendDelete (instance: AvatarModel) {

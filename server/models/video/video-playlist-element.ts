@@ -2,7 +2,6 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   ForeignKey,
@@ -10,8 +9,7 @@ import {
   IsInt,
   Min,
   Model,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { ForAPIOptions, ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
@@ -54,12 +52,6 @@ import { MUserAccountId } from '@server/typings/models'
   ]
 })
 export class VideoPlaylistElementModel extends Model<VideoPlaylistElementModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @Is('VideoPlaylistUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_PLAYLISTS.URL.max))

@@ -2,7 +2,6 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   ForeignKey,
@@ -12,8 +11,7 @@ import {
   IsUUID,
   Model,
   Scopes,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { buildServerIdsFollowedBy, buildWhereIdOrUUID, getSort, isOutdated, throwIfNotValid } from '../utils'
@@ -218,12 +216,6 @@ type AvailableForListOptions = {
   ]
 })
 export class VideoPlaylistModel extends Model<VideoPlaylistModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @Is('VideoPlaylistName', value => throwIfNotValid(value, isVideoPlaylistNameValid, 'name'))
   @Column

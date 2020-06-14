@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, ForeignKey, Model, Scopes, Table } from 'sequelize-typescript'
 import { AccountModel } from '../account/account'
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '../../../shared/models/videos'
@@ -54,12 +54,6 @@ enum ScopeNames {
   }
 }))
 export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @Column
   status: VideoChangeOwnershipStatus

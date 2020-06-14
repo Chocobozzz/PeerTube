@@ -1,6 +1,6 @@
 import { values } from 'lodash'
 import { FindOptions, Op, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Is, Model, Table } from 'sequelize-typescript'
 import { VideoRateType } from '../../../shared/models/videos'
 import { CONSTRAINTS_FIELDS, VIDEO_RATE_TYPES } from '../../initializers/constants'
 import { VideoModel } from '../video/video'
@@ -53,12 +53,6 @@ export class AccountVideoRateModel extends Model<AccountVideoRateModel> {
   @Is('AccountVideoRateUrl', value => throwIfNotValid(value, isActivityPubUrlValid, 'url'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_RATES.URL.max))
   url: string
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column

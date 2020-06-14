@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, IsInt, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, ForeignKey, IsInt, Model, Table } from 'sequelize-typescript'
 import { VideoModel } from '../video/video'
 import { UserModel } from './user'
 import { DestroyOptions, Op, Transaction } from 'sequelize'
@@ -20,12 +20,6 @@ import { MUserAccountId, MUserId } from '@server/typings/models'
   ]
 })
 export class UserVideoHistoryModel extends Model<UserVideoHistoryModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @IsInt
   @Column

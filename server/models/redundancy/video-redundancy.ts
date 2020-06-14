@@ -85,13 +85,6 @@ export enum ScopeNames {
   ]
 })
 export class VideoRedundancyModel extends Model<VideoRedundancyModel> {
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(true)
   @Column
   expiresOn: Date

@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, ForeignKey, Model, Table } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, ForeignKey, Model, Table } from 'sequelize-typescript'
 import { VideoModel } from './video'
 import * as Sequelize from 'sequelize'
 
@@ -15,9 +15,6 @@ import * as Sequelize from 'sequelize'
   ]
 })
 export class VideoViewModel extends Model<VideoViewModel> {
-  @CreatedAt
-  createdAt: Date
-
   @AllowNull(false)
   @Column(Sequelize.DATE)
   startDate: Date

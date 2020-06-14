@@ -4,15 +4,13 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   ForeignKey,
   Is,
   Model,
   Scopes,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
 import { VideoAbuseState, VideoDetails } from '../../../shared'
@@ -257,12 +255,6 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   @Default(null)
   @Column(DataType.JSONB)
   deletedVideo: VideoDetails
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => AccountModel)
   @Column

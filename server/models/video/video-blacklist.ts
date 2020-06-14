@@ -1,4 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, DataType, Default, ForeignKey, Is, Model, Table } from 'sequelize-typescript'
 import { getBlacklistSort, SortType, throwIfNotValid, searchAttribute } from '../utils'
 import { VideoModel } from './video'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
@@ -35,12 +35,6 @@ export class VideoBlacklistModel extends Model<VideoBlacklistModel> {
   @Is('VideoBlacklistType', value => throwIfNotValid(value, isVideoBlacklistTypeValid, 'type'))
   @Column
   type: VideoBlacklistType
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => VideoModel)
   @Column

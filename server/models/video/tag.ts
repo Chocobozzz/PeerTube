@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { fn, QueryTypes, Transaction, col } from 'sequelize'
-import { AllowNull, BelongsToMany, Column, CreatedAt, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsToMany, Column, Is, Model, Table } from 'sequelize-typescript'
 import { isVideoTagValid } from '../../helpers/custom-validators/videos'
 import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -28,12 +28,6 @@ export class TagModel extends Model<TagModel> {
   @Is('VideoTag', value => throwIfNotValid(value, isVideoTagValid, 'tag'))
   @Column
   name: string
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @BelongsToMany(() => VideoModel, {
     foreignKey: 'tagId',

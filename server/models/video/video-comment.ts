@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { uniq } from 'lodash'
 import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, BelongsTo, Column, DataType, ForeignKey, Is, Model, Scopes, Table } from 'sequelize-typescript'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/typings/models'
 import { VideoPrivacy } from '@shared/models'
@@ -153,12 +153,6 @@ enum ScopeNames {
   ]
 })
 export class VideoCommentModel extends Model<VideoCommentModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(true)
   @Column(DataType.DATE)
   deletedAt: Date

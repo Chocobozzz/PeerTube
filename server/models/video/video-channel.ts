@@ -3,7 +3,6 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   DefaultScope,
@@ -13,8 +12,7 @@ import {
   Model,
   Scopes,
   Sequelize,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { ActivityPubActor } from '../../../shared/models/activitypub'
 import { VideoChannel, VideoChannelSummary } from '../../../shared/models/videos'
@@ -231,12 +229,6 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   @Is('VideoChannelSupport', value => throwIfNotValid(value, isVideoChannelSupportValid, 'support', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.VIDEO_CHANNELS.SUPPORT.max))
   support: string
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @ForeignKey(() => ActorModel)
   @Column

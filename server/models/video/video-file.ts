@@ -2,7 +2,6 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   ForeignKey,
@@ -10,7 +9,6 @@ import {
   Is,
   Model,
   Table,
-  UpdatedAt,
   Scopes,
   DefaultScope
 } from 'sequelize-typescript'
@@ -102,12 +100,6 @@ export enum ScopeNames {
   ]
 })
 export class VideoFileModel extends Model<VideoFileModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @Is('VideoFileResolution', value => throwIfNotValid(value, isVideoFileResolutionValid, 'resolution'))
   @Column

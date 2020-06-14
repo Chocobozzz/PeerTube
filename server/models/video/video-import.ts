@@ -3,15 +3,13 @@ import {
   AllowNull,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   Default,
   DefaultScope,
   ForeignKey,
   Is,
   Model,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { CONSTRAINTS_FIELDS, VIDEO_IMPORT_STATES } from '../../initializers/constants'
 import { getSort, throwIfNotValid } from '../utils'
@@ -53,12 +51,6 @@ import { MVideoImportDefault, MVideoImportFormattable } from '@server/typings/mo
   ]
 })
 export class VideoImportModel extends Model<VideoImportModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(true)
   @Default(null)
   @Is('VideoImportTargetUrl', value => throwIfNotValid(value, isVideoImportTargetUrlValid, 'targetUrl', true))

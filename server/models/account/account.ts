@@ -141,12 +141,6 @@ export class AccountModel extends Model<AccountModel> {
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.USERS.DESCRIPTION.max))
   description: string
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @ForeignKey(() => ActorModel)
   @Column
   actorId: number

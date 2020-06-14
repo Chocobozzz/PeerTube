@@ -1,4 +1,4 @@
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { BelongsTo, Column, ForeignKey, Model, Scopes, Table } from 'sequelize-typescript'
 import { AccountModel } from './account'
 import { getSort, searchAttribute } from '../utils'
 import { AccountBlock } from '../../../shared/models/blocklist'
@@ -42,13 +42,6 @@ enum ScopeNames {
   ]
 })
 export class AccountBlocklistModel extends Model<AccountBlocklistModel> {
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @ForeignKey(() => AccountModel)
   @Column
   accountId: number

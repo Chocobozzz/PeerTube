@@ -1,4 +1,4 @@
-import { AllowNull, Column, CreatedAt, Default, HasMany, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
+import { AllowNull, Column, Default, HasMany, Is, Model, Table } from 'sequelize-typescript'
 import { isHostValid } from '../../helpers/custom-validators/servers'
 import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
@@ -26,12 +26,6 @@ export class ServerModel extends Model<ServerModel> {
   @Default(false)
   @Column
   redundancyAllowed: boolean
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @HasMany(() => ActorModel, {
     foreignKey: {

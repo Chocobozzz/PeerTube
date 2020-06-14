@@ -150,12 +150,6 @@ export class UserNotificationSettingModel extends Model<UserNotificationSettingM
   })
   User: UserModel
 
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AfterUpdate
   @AfterDestroy
   static removeTokenCache (instance: UserNotificationSettingModel) {

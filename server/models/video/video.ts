@@ -8,7 +8,6 @@ import {
   BelongsTo,
   BelongsToMany,
   Column,
-  CreatedAt,
   DataType,
   Default,
   ForeignKey,
@@ -20,8 +19,7 @@ import {
   Min,
   Model,
   Scopes,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { UserRight, VideoPrivacy, VideoState, ResultList } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
@@ -571,12 +569,6 @@ export class VideoModel extends Model<VideoModel> {
   @Is('VideoState', value => throwIfNotValid(value, isVideoStateValid, 'state'))
   @Column
   state: VideoState
-
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
 
   @AllowNull(false)
   @Default(DataType.NOW)

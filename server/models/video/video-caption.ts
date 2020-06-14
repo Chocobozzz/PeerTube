@@ -4,14 +4,12 @@ import {
   BeforeDestroy,
   BelongsTo,
   Column,
-  CreatedAt,
   DataType,
   ForeignKey,
   Is,
   Model,
   Scopes,
-  Table,
-  UpdatedAt
+  Table
 } from 'sequelize-typescript'
 import { buildWhereIdOrUUID, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
@@ -55,12 +53,6 @@ export enum ScopeNames {
   ]
 })
 export class VideoCaptionModel extends Model<VideoCaptionModel> {
-  @CreatedAt
-  createdAt: Date
-
-  @UpdatedAt
-  updatedAt: Date
-
   @AllowNull(false)
   @Is('VideoCaptionLanguage', value => throwIfNotValid(value, isVideoCaptionLanguageValid, 'language'))
   @Column
