@@ -20,11 +20,11 @@ export class AvatarComponent implements OnInit {
 
   ngOnInit () {
     this.channelLinkTitle = this.i18n(
-      'Go to the channel page of {{name}} ({{handle}})',
+      '{{name}} (channel page)',
       { name: this.video.channel.name, handle: this.video.byVideoChannel }
     )
     this.accountLinkTitle = this.i18n(
-      'Go to the account page of {{name}} ({{handle}})',
+      '{{name}} (account page)',
       { name: this.video.account.name, handle: this.video.byAccount }
     )
   }

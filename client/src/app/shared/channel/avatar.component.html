@@ -1,8 +1,8 @@
 <div class="wrapper" [ngClass]="'avatar-' + size">
   <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" [title]="channelLinkTitle">
-    <img [src]="video.videoChannelAvatarUrl" alt="Channel avatar" />
+    <img [src]="video.videoChannelAvatarUrl" i18n-alt alt="Channel avatar" />
   </a>
   <a [routerLink]="[ '/accounts', video.byAccount ]" [title]="accountLinkTitle">
-    <img [src]="video.accountAvatarUrl" alt="Account avatar" />
+    <img [src]="video.accountAvatarUrl" i18n-alt alt="Account avatar" />
   </a>
 </div>
