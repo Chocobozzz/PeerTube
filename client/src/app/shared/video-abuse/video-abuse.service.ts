@@ -3,10 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
-import { ResultList, VideoAbuse, VideoAbuseUpdate, VideoAbuseState } from '../../../../../shared'
+import { ResultList, VideoAbuse, VideoAbuseCreate, VideoAbuseState, VideoAbuseUpdate } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
-import { VideoAbusePredefinedReasons } from './video-abuse-predefined-reasons.model'
+import { omit } from 'lodash-es'
 
 @Injectable()
 export class VideoAbuseService {
@@ -59,7 +59,8 @@ export class VideoAbuseService {
             try {
               const id = parseInt(v, 10)
               return id
-            } catch {
+            } catch (e) {
+              console.error('Cannot parse predefinedReasonId in search.', e)
               return undefined
             }
           }
@@ -75,11 +76,10 @@ export class VideoAbuseService {
                )
   }
 
-  reportVideo (parameters: { id: number, reason: string, predefinedReasons?: VideoAbusePredefinedReasons, timestamp: any }) {
+  reportVideo (parameters: { id: number } & VideoAbuseCreate) {
     const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + parameters.id + '/abuse'
 
-    delete parameters.id
-    const body = { ...parameters }
+    const body = omit(parameters, [ 'id' ])
 
     return this.authHttp.post(url, body)
                .pipe(

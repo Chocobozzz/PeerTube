@@ -1,5 +1,6 @@
 export interface VideoAbuseCreate {
   reason: string
-  predefinedReasons: any
-  timestamp: any
+  predefinedReasons?: {[key: string]: boolean} // see VideoAbusePredefinedReasonsIn
+  startAt?: number
+  endAt?: number
 }

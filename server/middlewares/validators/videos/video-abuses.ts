@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
-import { exists, isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
+import { exists, isIdOrUUIDValid, isIdValid, toIntOrNull } from '../../../helpers/custom-validators/misc'
 import {
   isAbuseVideoIsValid,
   isVideoAbuseModerationCommentValid,
@@ -26,10 +26,14 @@ const videoAbuseReportValidator = [
     .optional()
     .custom(isVideoAbusePredefinedReasonsValid)
     .withMessage('Should have a valid list of predefined reasons'),
-  body('timestamp')
+  body('startAt')
     .optional()
-    .custom(isVideoAbuseTimestampValid)
-    .withMessage('Should have valid timestamp definition'),
+    .custom(toIntOrNull)
+    .withMessage('Should have valid starting time value'),
+  body('endAt')
+    .optional()
+    .custom(toIntOrNull)
+    .withMessage('Should have valid ending time value'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })

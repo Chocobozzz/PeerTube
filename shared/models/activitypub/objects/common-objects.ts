@@ -70,20 +70,19 @@ export type ActivityHtmlUrlObject = {
 }
 
 export interface ActivityHashTagObject {
-  type: 'Hashtag' | 'Mention'
+  type: 'Hashtag'
   href?: string
   name: string
 }
 
 export interface ActivityMentionObject {
-  type: 'Hashtag' | 'Mention'
+  type: 'Mention'
   href?: string
   name: string
 }
 
 export interface ActivityFlagReasonObject {
-  type: 'Hashtag' | 'Mention'
-  href?: string
+  type: 'Hashtag'
   name: string
 }
 

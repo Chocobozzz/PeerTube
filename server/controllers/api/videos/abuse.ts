@@ -127,9 +127,6 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
   const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
     reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
     const predefinedReasons = keys(pickBy(body.predefinedReasons)).map(r => VideoAbusePredefinedReasonsIn[r])
-    const timestamp = body.timestamp
-    const startAt = timestamp['hasStart'] && timestamp['startAt'] ? timestamp['startAt'] : undefined
-    const endAt = timestamp['hasEnd'] && timestamp['endAt'] ? timestamp['endAt'] : undefined
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,
@@ -137,8 +134,8 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
       videoId: videoInstance.id,
       state: VideoAbuseState.PENDING,
       predefinedReasons,
-      startAt,
-      endAt
+      startAt: body.startAt,
+      endAt: body.endAt
     }
 
     const videoAbuseInstance: MVideoAbuseAccountVideo = await VideoAbuseModel.create(abuseToCreate, { transaction: t })

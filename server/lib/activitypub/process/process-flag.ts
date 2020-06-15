@@ -38,9 +38,11 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
 
       const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: object })
       const reporterAccount = await sequelizeTypescript.transaction(async t => AccountModel.load(account.id, t))
-      const predefinedReasons = flag.tag?.map(tag => parseInt(tag.name, 10)) || []
+      const tags = Array.isArray(flag.tag) ? flag.tag : []
+      const predefinedReasons = tags.map(tag => parseInt(tag.name, 10))
+                                    .filter(v => !isNaN(v))
       const startAt = flag.startAt
-      const endAt = flag.startAt
+      const endAt = flag.endAt
 
       const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
         const videoAbuseData = {

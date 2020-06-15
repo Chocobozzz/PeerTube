@@ -103,7 +103,7 @@ export class RestService {
     }
 
     return {
-      search: searchTokens.join(' '),
+      search: searchTokens.join(' ') || undefined,
 
       ...additionalFilters
     }

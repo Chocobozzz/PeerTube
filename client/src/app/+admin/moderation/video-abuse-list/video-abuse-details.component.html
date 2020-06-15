@@ -57,17 +57,17 @@
       <span class="col-9 moderation-expanded-text" [innerHTML]="videoAbuse.reasonHtml"></span>
     </div>
 
-    <div *ngIf="predefinedReasons" class="mt-2 d-flex">
+    <div *ngIf="getPredefinedReasons()" class="mt-2 d-flex">
       <span class="col-3"></span>
       <span class="col-9">
-        <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip bg-secondary text-light" *ngFor="let reason of predefinedReasons">
+        <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'tag:' + reason.id  }" class="chip bg-secondary text-light" *ngFor="let reason of getPredefinedReasons()">
           <div>{{ reason.label }}</div>
         </a>
       </span>
     </div>
 
     <div *ngIf="videoAbuse.startAt" class="mt-2 d-flex">
-      <span class="col-3 moderation-expanded-label" i18n>Reported parts</span>
+      <span class="col-3 moderation-expanded-label" i18n>Reported part</span>
       <span class="col-9">
         {{ startAt }}<ng-container *ngIf="videoAbuse.endAt"> - {{ endAt }}</ng-container>
       </span>

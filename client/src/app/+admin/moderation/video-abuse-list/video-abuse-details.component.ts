@@ -30,20 +30,20 @@ export class VideoAbuseDetailsComponent {
     }
   }
 
-  get predefinedReasons () {
-    if (!this.videoAbuse.predefinedReasons) return []
-    return this.videoAbuse.predefinedReasons.map(r => ({
-      id: r,
-      label: this.predefinedReasonsTranslations[r]
-    }))
-  }
-
   get startAt () {
     return durationToString(this.videoAbuse.startAt)
   }
 
   get endAt () {
     return durationToString(this.videoAbuse.endAt)
+  }
+
+  getPredefinedReasons () {
+    if (!this.videoAbuse.predefinedReasons) return []
+    return this.videoAbuse.predefinedReasons.map(r => ({
+      id: r,
+      label: this.predefinedReasonsTranslations[r]
+    }))
   }
 
   switchToDefaultAvatar ($event: Event) {

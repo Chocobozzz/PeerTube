@@ -11,7 +11,7 @@ import { ModerationCommentModalComponent } from './moderation-comment-modal.comp
 import { Video } from '../../../shared/video/video.model'
 import { MarkdownService } from '@app/shared/renderer'
 import { Actor } from '@app/shared/actor/actor.model'
-import { buildVideoEmbed } from 'src/assets/player/utils'
+import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { DomSanitizer } from '@angular/platform-browser'
 import { BlocklistService } from '@app/shared/blocklist'
 import { VideoService } from '@app/shared/video/video.service'
@@ -259,7 +259,15 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   }
 
   getVideoEmbed (videoAbuse: VideoAbuse) {
-    return buildVideoEmbed(`${environment.embedUrl}/videos/embed/${videoAbuse.video.uuid}`)
+    return buildVideoEmbed(
+      buildVideoLink({
+        baseUrl: `${environment.embedUrl}/videos/embed/${videoAbuse.video.uuid}`,
+        title: false,
+        warningTitle: false,
+        startTime: videoAbuse.startAt,
+        stopTime: videoAbuse.endAt
+      })
+    )
   }
 
   switchToDefaultAvatar ($event: Event) {

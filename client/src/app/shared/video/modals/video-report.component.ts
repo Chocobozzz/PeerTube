@@ -6,10 +6,12 @@ import { FormValidatorService } from '@app/shared/forms/form-validators/form-val
 import { VideoAbuseValidatorsService } from '@app/shared/forms/form-validators/video-abuse-validators.service'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { VideoAbuseService, VideoAbusePredefinedReasons, PredefinedReasons } from '@app/shared/video-abuse'
+import { VideoAbuseService } from '@app/shared/video-abuse'
 import { Video } from '@app/shared/video/video.model'
-import { buildVideoEmbed } from 'src/assets/player/utils'
+import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { VideoAbusePredefinedReasonsIn } from '@shared/models/videos/abuse/video-abuse-reason.model'
+import { mapValues, pickBy, keys } from 'lodash-es'
 
 @Component({
   selector: 'my-video-report',
@@ -22,7 +24,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
-  predefinedReasons: { id: PredefinedReasons, label: string, description?: string, help?: string }[] = []
+  predefinedReasons: { id: keyof VideoAbusePredefinedReasonsIn, label: string, description?: string, help?: string }[] = []
   embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
@@ -57,25 +59,20 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   getVideoEmbed () {
     return this.sanitizer.bypassSecurityTrustHtml(
-      buildVideoEmbed(this.video.embedUrl)
+      buildVideoEmbed(
+        buildVideoLink({
+          baseUrl: this.video.embedUrl,
+          title: false,
+          warningTitle: false
+        })
+      )
     )
   }
 
   ngOnInit () {
-    const predefinedReasons: Required<VideoAbusePredefinedReasons> = {
-      violentOrRepulsive: null,
-      hatefulOrAbusive: null,
-      spamOrMisleading: null,
-      privacy: null,
-      rights: null,
-      serverRules: null,
-      captions: null,
-      thumbnails: null
-    }
-
     this.buildForm({
       reason: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON,
-      predefinedReasons: predefinedReasons as {[key: string]: null},
+      predefinedReasons: mapValues(VideoAbusePredefinedReasonsIn, r => null),
       timestamp: {
         hasStart: null,
         startAt: null,
@@ -86,42 +83,42 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
     this.predefinedReasons = [
       {
-        id: PredefinedReasons.violentOrRepulsive,
+        id: 'violentOrRepulsive',
         label: this.i18n('Violent or repulsive'),
         help: this.i18n('Contains offensive, violent, or coarse language or iconography.')
       },
       {
-        id: PredefinedReasons.hatefulOrAbusive,
+        id: 'hatefulOrAbusive',
         label: this.i18n('Hateful or abusive'),
         help: this.i18n('Contains abusive, racist or sexist language or iconography.')
       },
       {
-        id: PredefinedReasons.spamOrMisleading,
+        id: 'spamOrMisleading',
         label: this.i18n('Spam, ad or false news'),
         help: this.i18n('Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.')
       },
       {
-        id: PredefinedReasons.privacy,
+        id: 'privacy',
         label: this.i18n('Privacy breach or doxxing'),
         help: this.i18n('Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).')
       },
       {
-        id: PredefinedReasons.rights,
+        id: 'rights',
         label: this.i18n('Intellectual property violation'),
         help: this.i18n('Infringes my intellectual property or copyright, wrt. the regional rules with which the server must comply.')
       },
       {
-        id: PredefinedReasons.serverRules,
+        id: 'serverRules',
         label: this.i18n('Breaks server rules'),
         description: this.i18n('Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.')
       },
       {
-        id: PredefinedReasons.thumbnails,
+        id: 'thumbnails',
         label: this.i18n('Thumbnails'),
         help: this.i18n('The above can only be seen in thumbnails.')
       },
       {
-        id: PredefinedReasons.captions,
+        id: 'captions',
         label: this.i18n('Captions'),
         help: this.i18n('The above can only be seen in captions (please describe which).')
       }
@@ -140,15 +137,24 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   }
 
   report () {
-    this.videoAbuseService.reportVideo({ id: this.video.id, ...this.form.value })
-                          .subscribe(
-                            () => {
-                              this.notifier.success(this.i18n('Video reported.'))
-                              this.hide()
-                            },
+    const reason = this.form.get('reason').value
+    const predefinedReasons = pickBy(this.form.get('predefinedReasons').value)
+    const { hasStart, startAt, hasEnd, endAt } = this.form.get('timestamp').value
 
-                            err => this.notifier.error(err.message)
-                           )
+    this.videoAbuseService.reportVideo({
+      id: this.video.id,
+      reason,
+      predefinedReasons,
+      startAt: hasStart && startAt ? startAt : undefined,
+      endAt: hasEnd && endAt ? endAt : undefined
+    }).subscribe(
+      () => {
+        this.notifier.success(this.i18n('Video reported.'))
+        this.hide()
+      },
+
+      err => this.notifier.error(err.message)
+    )
   }
 
   isRemoteVideo () {
