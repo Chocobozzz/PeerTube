@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, OnInit } from '@angular/core'
 import { RecommendationService } from '@app/videos/recommendations/recommendations.service'
 import { Video } from '@app/shared/video/video.model'
 import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
@@ -7,6 +7,9 @@ import { map, switchMap } from 'rxjs/operators'
 import { Observable, of } from 'rxjs'
 import { SearchService } from '@app/search/search.service'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
+import { ServerService } from '@app/core'
+import { ServerConfig } from '@shared/models'
+import { truncate } from 'lodash'
 
 /**
  * Provides "recommendations" by providing the most recently uploaded videos.
@@ -15,10 +18,18 @@ import { AdvancedSearch } from '@app/search/advanced-search.model'
 export class RecentVideosRecommendationService implements RecommendationService {
   readonly pageSize = 5
 
+  private config: ServerConfig
+
   constructor (
     private videos: VideoService,
-    private searchService: SearchService
-  ) { }
+    private searchService: SearchService,
+    private serverService: ServerService
+  ) {
+    this.config = this.serverService.getTmpConfig()
+
+    this.serverService.getConfig()
+     .subscribe(config => this.config = config)
+   }
 
   getRecommendations (recommendation: RecommendationInfo): Observable<Video[]> {
     return this.fetchPage(1, recommendation)
@@ -35,12 +46,19 @@ export class RecentVideosRecommendationService implements RecommendationService 
     const defaultSubscription = this.videos.getVideos({ videoPagination: pagination, sort: '-createdAt' })
                                     .pipe(map(v => v.data))
 
-    if (!recommendation.tags || recommendation.tags.length === 0) return defaultSubscription
+    const tags = recommendation.tags
+    const searchIndexConfig = this.config.search.searchIndex
+    if (
+      !tags || tags.length === 0 ||
+      (searchIndexConfig.enabled === true && searchIndexConfig.disableLocalSearch === true)
+    ) {
+      return defaultSubscription
+    }
 
     const params = {
       search: '',
       componentPagination: pagination,
-      advancedSearch: new AdvancedSearch({ tagsOneOf: recommendation.tags.join(','), sort: '-createdAt' })
+      advancedSearch: new AdvancedSearch({ tagsOneOf: recommendation.tags.join(','), sort: '-createdAt', searchTarget: 'local' })
     }
 
     return this.searchService.searchVideos(params)
