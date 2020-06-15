@@ -2,14 +2,12 @@ import { map } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router'
 import { SearchService } from './search.service'
-import { RedirectService } from '@app/core'
 
 @Injectable()
 export class ChannelLazyLoadResolver implements Resolve<any> {
   constructor (
     private router: Router,
-    private searchService: SearchService,
-    private redirectService: RedirectService
+    private searchService: SearchService
   ) { }
 
   resolve (route: ActivatedRouteSnapshot) {
