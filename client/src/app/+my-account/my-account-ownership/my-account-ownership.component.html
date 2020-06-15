@@ -25,13 +25,13 @@
   <ng-template pTemplate="body" let-videoChangeOwnership>
     <tr>
       <td>
-        <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Go to the account"
+        <a [href]="videoChangeOwnership.initiatorAccount.url" i18n-title title="Account page"
            target="_blank" rel="noopener noreferrer">
           {{ createByString(videoChangeOwnership.initiatorAccount) }}
         </a>
       </td>
       <td>
-        <a [href]="videoChangeOwnership.video.url" i18n-title title="Go to the video" target="_blank" rel="noopener noreferrer">
+        <a [href]="videoChangeOwnership.video.url" i18n-title title="Video page" target="_blank" rel="noopener noreferrer">
           {{ videoChangeOwnership.video.name }}
         </a>
       </td>

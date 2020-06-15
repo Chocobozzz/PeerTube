@@ -114,7 +114,7 @@ export class VideoMiniatureComponent implements OnInit {
     this.setUpBy()
 
     this.channelLinkTitle = this.i18n(
-      'Go to the channel page of {{name}} ({{handle}})',
+      '{{name}} (channel page)',
       { name: this.video.channel.name, handle: this.video.byVideoChannel }
     )
 
