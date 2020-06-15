@@ -8599,7 +8599,7 @@
       </trans-unit>
       <trans-unit id="ed073fec00d699b7a97bb65b4f3a722b203c5bca">
         <source>Relevance</source>
-        <target>Approprié</target>
+        <target>Pertinence</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
