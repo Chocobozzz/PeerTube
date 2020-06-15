@@ -2,7 +2,7 @@ import { logger } from '../../helpers/logger'
 import { AbstractScheduler } from './abstract-scheduler'
 import { SCHEDULER_INTERVALS_MS } from '../../initializers/constants'
 import { CONFIG } from '../../initializers/config'
-import { VideoViewModel } from '../../models/video/video-views'
+import { VideoViewModel } from '../../models/video/video-view'
 
 export class RemoveOldViewsScheduler extends AbstractScheduler {
 

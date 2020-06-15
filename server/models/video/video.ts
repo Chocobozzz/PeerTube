@@ -76,7 +76,7 @@ import { ScheduleVideoUpdateModel } from './schedule-video-update'
 import { VideoCaptionModel } from './video-caption'
 import { VideoBlacklistModel } from './video-blacklist'
 import { remove } from 'fs-extra'
-import { VideoViewModel } from './video-views'
+import { VideoViewModel } from './video-view'
 import { VideoRedundancyModel } from '../redundancy/video-redundancy'
 import {
   videoFilesModelToFormattedJSON,
