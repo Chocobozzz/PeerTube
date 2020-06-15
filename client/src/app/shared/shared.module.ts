@@ -10,6 +10,7 @@ import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { BatchDomainsValidatorsService } from '@app/+admin/config/shared/batch-domains-validators.service'
+import { BatchDomainsModalComponent } from '@app/+admin/config/shared/batch-domains-modal.component'
 import { MyAccountInterfaceSettingsComponent } from '@app/+my-account/my-account-settings/my-account-interface'
 import { MyAccountVideoSettingsComponent } from '@app/+my-account/my-account-settings/my-account-video-settings'
 import { ActorAvatarInfoComponent } from '@app/+my-account/shared/actor-avatar-info.component'
@@ -192,7 +193,8 @@ import { VideoService } from './video/video.service'
 
     MyAccountVideoSettingsComponent,
     MyAccountInterfaceSettingsComponent,
-    ActorAvatarInfoComponent
+    ActorAvatarInfoComponent,
+    BatchDomainsModalComponent
   ],
 
   exports: [
@@ -274,7 +276,8 @@ import { VideoService } from './video/video.service'
 
     MyAccountVideoSettingsComponent,
     MyAccountInterfaceSettingsComponent,
-    ActorAvatarInfoComponent
+    ActorAvatarInfoComponent,
+    BatchDomainsModalComponent
   ],
 
   providers: [

@@ -73,7 +73,7 @@
   <ng-template pTemplate="emptymessage">
     <tr>
       <td colspan="6">
-        <div class="empty-table-message">
+        <div class="no-results">
           <ng-container *ngIf="isDisplayingRemoteVideos()" i18n>Your instance doesn't mirror any video.</ng-container>
           <ng-container *ngIf="!isDisplayingRemoteVideos()" i18n>Your instance has no mirrored videos.</ng-container>
         </div>
