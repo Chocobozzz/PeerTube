@@ -173,7 +173,11 @@ async function searchVideosIndex (query: VideosSearchQuery, res: express.Respons
 
   // Use the default instance NSFW policy if not specified
   if (!body.nsfw) {
-    body.nsfw = CONFIG.INSTANCE.DEFAULT_NSFW_POLICY === 'do_not_list'
+    const nsfwPolicy = res.locals.oauth
+      ? res.locals.oauth.token.User.nsfwPolicy
+      : CONFIG.INSTANCE.DEFAULT_NSFW_POLICY
+
+    body.nsfw = nsfwPolicy === 'do_not_list'
       ? 'false'
       : 'both'
   }
