@@ -148,7 +148,10 @@ export class SearchComponent implements OnInit, OnDestroy {
       },
 
       err => {
-        if (this.advancedSearch.searchTarget !== 'search-index') this.notifier.error(err.message)
+        if (this.advancedSearch.searchTarget !== 'search-index') {
+          this.notifier.error(err.message)
+          return
+        }
 
         this.notifier.error(
           this.i18n('Search index is unavailable. Retrying with instance results instead.'),
