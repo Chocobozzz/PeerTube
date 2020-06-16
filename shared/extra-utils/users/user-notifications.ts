@@ -1,10 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
-import { UserNotification, UserNotificationSetting, UserNotificationType } from '../../models/users'
-import { ServerInfo } from '..'
 import { expect } from 'chai'
 import { inspect } from 'util'
+import { UserNotification, UserNotificationSetting, UserNotificationSettingValue, UserNotificationType } from '../../models/users'
+import { MockSmtpServer } from '../miscs/email'
+import { makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
+import { doubleFollow } from '../server/follows'
+import { flushAndRunMultipleServers, ServerInfo } from '../server/servers'
+import { getUserNotificationSocket } from '../socket/socket-io'
+import { setAccessTokensToServers, userLogin } from './login'
+import { createUser, getMyUserInformation } from './users'
 
 function updateMyNotificationSettings (url: string, token: string, settings: UserNotificationSetting, statusCodeExpected = 204) {
   const path = '/api/v1/users/me/notification-settings'
@@ -76,7 +81,7 @@ async function getLastNotification (serverUrl: string, accessToken: string) {
 
 type CheckerBaseParams = {
   server: ServerInfo
-  emails: object[]
+  emails: any[]
   socketNotifications: UserNotification[]
   token: string
   check?: { web: boolean, mail: boolean }
@@ -110,10 +115,10 @@ async function checkNotification (
 
     if (checkType === 'presence') {
       const obj = inspect(base.socketNotifications, { depth: 5 })
-      expect(socketNotification, 'The socket notification is absent when is should be present. ' + obj).to.not.be.undefined
+      expect(socketNotification, 'The socket notification is absent when it should be present. ' + obj).to.not.be.undefined
     } else {
       const obj = inspect(socketNotification, { depth: 5 })
-      expect(socketNotification, 'The socket notification is present when is should not be present. ' + obj).to.be.undefined
+      expect(socketNotification, 'The socket notification is present when it should not be present. ' + obj).to.be.undefined
     }
   }
 
@@ -125,7 +130,8 @@ async function checkNotification (
                       .find(e => emailNotificationFinder(e))
 
     if (checkType === 'presence') {
-      expect(email, 'The email is absent when is should be present. ' + inspect(base.emails)).to.not.be.undefined
+      const emails = base.emails.map(e => e.text)
+      expect(email, 'The email is absent when is should be present. ' + inspect(emails)).to.not.be.undefined
     } else {
       expect(email, 'The email is present when is should not be present. ' + inspect(email)).to.be.undefined
     }
@@ -506,11 +512,96 @@ async function checkNewBlacklistOnMyVideo (
   await checkNotification(base, notificationChecker, emailNotificationFinder, 'presence')
 }
 
+function getAllNotificationsSettings () {
+  return {
+    newVideoFromSubscription: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newCommentOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoAbuseAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    blacklistOnMyVideo: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoImportFinished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    myVideoPublished: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    commentMention: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newFollow: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newUserRegistration: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    newInstanceFollower: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL,
+    autoInstanceFollowing: UserNotificationSettingValue.WEB | UserNotificationSettingValue.EMAIL
+  } as UserNotificationSetting
+}
+
+async function prepareNotificationsTest (serversCount = 3) {
+  const userNotifications: UserNotification[] = []
+  const adminNotifications: UserNotification[] = []
+  const adminNotificationsServer2: UserNotification[] = []
+  const emails: object[] = []
+
+  const port = await MockSmtpServer.Instance.collectEmails(emails)
+
+  const overrideConfig = {
+    smtp: {
+      hostname: 'localhost',
+      port
+    }
+  }
+  const servers = await flushAndRunMultipleServers(serversCount, overrideConfig)
+
+  await setAccessTokensToServers(servers)
+  await doubleFollow(servers[0], servers[1])
+
+  const user = {
+    username: 'user_1',
+    password: 'super password'
+  }
+  await createUser({
+    url: servers[0].url,
+    accessToken: servers[0].accessToken,
+    username: user.username,
+    password: user.password,
+    videoQuota: 10 * 1000 * 1000
+  })
+  const userAccessToken = await userLogin(servers[0], user)
+
+  await updateMyNotificationSettings(servers[0].url, userAccessToken, getAllNotificationsSettings())
+  await updateMyNotificationSettings(servers[0].url, servers[0].accessToken, getAllNotificationsSettings())
+
+  if (serversCount > 1) {
+    await updateMyNotificationSettings(servers[1].url, servers[1].accessToken, getAllNotificationsSettings())
+  }
+
+  {
+    const socket = getUserNotificationSocket(servers[0].url, userAccessToken)
+    socket.on('new-notification', n => userNotifications.push(n))
+  }
+  {
+    const socket = getUserNotificationSocket(servers[0].url, servers[0].accessToken)
+    socket.on('new-notification', n => adminNotifications.push(n))
+  }
+
+  if (serversCount > 1) {
+    const socket = getUserNotificationSocket(servers[1].url, servers[1].accessToken)
+    socket.on('new-notification', n => adminNotificationsServer2.push(n))
+  }
+
+  const resChannel = await getMyUserInformation(servers[0].url, servers[0].accessToken)
+  const channelId = resChannel.body.videoChannels[0].id
+
+  return {
+    userNotifications,
+    adminNotifications,
+    adminNotificationsServer2,
+    userAccessToken,
+    emails,
+    servers,
+    channelId
+  }
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   CheckerBaseParams,
   CheckerType,
+  getAllNotificationsSettings,
   checkNotification,
   markAsReadAllNotifications,
   checkMyVideoImportIsFinished,
@@ -528,5 +619,6 @@ export {
   getUserNotifications,
   markAsReadNotifications,
   getLastNotification,
-  checkNewInstanceFollower
+  checkNewInstanceFollower,
+  prepareNotificationsTest
 }

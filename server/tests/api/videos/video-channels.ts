@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { User, Video, VideoChannel, ViewsPerDate, VideoDetails } from '../../../../shared/index'
+import * as chai from 'chai'
 import {
   cleanupTests,
   createUser,
@@ -30,6 +29,7 @@ import {
   viewVideo
 } from '../../../../shared/extra-utils/index'
 import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
+import { User, Video, VideoChannel, VideoDetails } from '../../../../shared/index'
 
 const expect = chai.expect
 
