@@ -365,7 +365,7 @@ describe('Test video channels', function () {
     }
   })
 
-  it('Should report correct channel statistics', async function () {
+  it('Should report correct channel views per days', async function () {
     this.timeout(10000)
 
     {
@@ -374,14 +374,18 @@ describe('Test video channels', function () {
         accountName: userInfo.account.name + '@' + userInfo.account.host,
         withStats: true
       })
-      res.body.data.forEach((channel: VideoChannel) => {
+
+      const channels: VideoChannel[] = res.body.data
+
+      for (const channel of channels) {
         expect(channel).to.haveOwnProperty('viewsPerDay')
         expect(channel.viewsPerDay).to.have.length(30 + 1) // daysPrior + today
-        channel.viewsPerDay.forEach((v: ViewsPerDate) => {
+
+        for (const v of channel.viewsPerDay) {
           expect(v.date).to.be.an('string')
           expect(v.views).to.equal(0)
-        })
-      })
+        }
+      }
     }
 
     {
@@ -400,6 +404,21 @@ describe('Test video channels', function () {
       const channelWithView = res.body.data.find((channel: VideoChannel) => channel.id === firstVideoChannelId)
       expect(channelWithView.viewsPerDay.slice(-1)[0].views).to.equal(2)
     }
+  })
+
+  it('Should report correct videos count', async function () {
+    const res = await getAccountVideoChannelsList({
+      url: servers[0].url,
+      accountName: userInfo.account.name + '@' + userInfo.account.host,
+      withStats: true
+    })
+    const channels: VideoChannel[] = res.body.data
+
+    const totoChannel = channels.find(c => c.name === 'toto_channel')
+    const rootChannel = channels.find(c => c.name === 'root_channel')
+
+    expect(rootChannel.videosCount).to.equal(1)
+    expect(totoChannel.videosCount).to.equal(0)
   })
 
   after(async function () {

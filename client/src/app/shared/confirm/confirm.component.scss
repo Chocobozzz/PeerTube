@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+.modal-body {
+  font-size: 15px;
+}
+
 .button {
   padding: 0 13px;
 }

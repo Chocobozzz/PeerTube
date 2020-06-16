@@ -500,7 +500,7 @@ export class VideoModel extends Model<VideoModel> {
   @AllowNull(false)
   @Is('VideoPrivacy', value => throwIfNotValid(value, isVideoPrivacyValid, 'privacy'))
   @Column
-  privacy: number
+  privacy: VideoPrivacy
 
   @AllowNull(false)
   @Is('VideoNSFW', value => throwIfNotValid(value, isBooleanValid, 'NSFW boolean'))

@@ -9,9 +9,13 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
   isLocal: boolean
   nameWithHost: string
   nameWithHostForced: string
+
   ownerAccount?: Account
   ownerBy?: string
   ownerAvatarUrl?: string
+
+  videosCount?: number
+
   viewsPerDay?: ViewsPerDate[]
 
   constructor (hash: ServerVideoChannel) {
@@ -23,6 +27,8 @@ export class VideoChannel extends Actor implements ServerVideoChannel {
     this.isLocal = hash.isLocal
     this.nameWithHost = Actor.CREATE_BY_STRING(this.name, this.host)
     this.nameWithHostForced = Actor.CREATE_BY_STRING(this.name, this.host, true)
+
+    this.videosCount = hash.videosCount
 
     if (hash.viewsPerDay) {
       this.viewsPerDay = hash.viewsPerDay.map(v => ({ ...v, date: new Date(v.date) }))

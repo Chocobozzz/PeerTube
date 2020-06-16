@@ -96,8 +96,8 @@ export class MyAccountVideoChannelsComponent implements OnInit {
     const res = await this.confirmService.confirmWithInput(
       this.i18n(
         // tslint:disable
-        'Do you really want to delete {{channelDisplayName}}? It will delete all videos uploaded in this channel, and you will not be able to create another channel with the same name ({{channelName}})!',
-        { channelDisplayName: videoChannel.displayName, channelName: videoChannel.name }
+        'Do you really want to delete {{channelDisplayName}}? It will delete {{videosCount}} videos uploaded in this channel, and you will not be able to create another channel with the same name ({{channelName}})!',
+        { channelDisplayName: videoChannel.displayName, videosCount: videoChannel.videosCount, channelName: videoChannel.name }
       ),
       this.i18n(
         'Please type the display name of the video channel ({{displayName}}) to confirm',

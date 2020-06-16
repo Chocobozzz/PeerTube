@@ -13,6 +13,8 @@ export interface VideoChannel extends Actor {
   support: string
   isLocal: boolean
   ownerAccount?: Account
+
+  videosCount?: number
   viewsPerDay?: ViewsPerDate[] // chronologically ordered
 }
 

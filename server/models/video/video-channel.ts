@@ -173,6 +173,10 @@ export type SummaryOptions = {
       attributes: {
         include: [
           [
+            literal('(SELECT COUNT(*) FROM "video" WHERE "channelId" = "VideoChannelModel"."id")'),
+            'videosCount'
+          ],
+          [
             literal(
               '(' +
               `SELECT string_agg(concat_ws('|', t.day, t.views), ',') ` +
@@ -544,7 +548,22 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
   }
 
   toFormattedJSON (this: MChannelFormattable): VideoChannel {
-    const viewsPerDay = this.get('viewsPerDay') as string
+    const viewsPerDayString = this.get('viewsPerDay') as string
+    const videosCount = this.get('videosCount') as number
+
+    let viewsPerDay: { date: Date, views: number }[]
+
+    if (viewsPerDayString) {
+      viewsPerDay = viewsPerDayString.split(',')
+        .map(v => {
+          const [ dateString, amount ] = v.split('|')
+
+          return {
+            date: new Date(dateString),
+            views: +amount
+          }
+        })
+    }
 
     const actor = this.Actor.toFormattedJSON()
     const videoChannel = {
@@ -556,15 +575,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       ownerAccount: undefined,
-      viewsPerDay: viewsPerDay
-        ? viewsPerDay.split(',').map(v => {
-          const o = v.split('|')
-          return {
-            date: new Date(o[0]),
-            views: +o[1]
-          }
-        })
-        : undefined
+      videosCount,
+      viewsPerDay
     }
 
     if (this.Account) videoChannel.ownerAccount = this.Account.toFormattedJSON()
