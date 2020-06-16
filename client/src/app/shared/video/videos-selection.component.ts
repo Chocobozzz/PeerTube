@@ -14,7 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AbstractVideoList } from '@app/shared/video/abstract-video-list'
 import { AuthService, Notifier, ServerService } from '@app/core'
 import { ScreenService } from '@app/shared/misc/screen.service'
-import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
+import { MiniatureDisplayOptions, OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 import { Observable } from 'rxjs'
 import { Video } from '@app/shared/video/video.model'
 import { PeerTubeTemplateDirective } from '@app/shared/angular/peertube-template.directive'
@@ -36,7 +36,10 @@ export class VideosSelectionComponent extends AbstractVideoList implements OnIni
   @Input() pagination: ComponentPagination
   @Input() titlePage: string
   @Input() miniatureDisplayOptions: MiniatureDisplayOptions
+  @Input() ownerDisplayType: OwnerDisplayType
+
   @Input() getVideosObservableFunction: (page: number, sort?: VideoSortField) => Observable<ResultList<Video>>
+
   @ContentChildren(PeerTubeTemplateDirective) templates: QueryList<PeerTubeTemplateDirective<'rowButtons' | 'globalButtons'>>
 
   @Output() selectionChange = new EventEmitter<SelectionType>()

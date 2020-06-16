@@ -165,6 +165,10 @@ $more-margin-right: 15px;
           width: fit-content;
         }
 
+        .video-miniature-created-at-views + .video-miniature-channel {
+          margin-top: 5px;
+        }
+
         .video-info-privacy {
           margin-top: 5px;
         }

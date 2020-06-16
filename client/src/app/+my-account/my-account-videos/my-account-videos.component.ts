@@ -12,7 +12,7 @@ import { VideoService } from '../../shared/video/video.service'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ScreenService } from '@app/shared/misc/screen.service'
 import { VideoChangeOwnershipComponent } from './video-change-ownership/video-change-ownership.component'
-import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
+import { MiniatureDisplayOptions, OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 import { SelectionType, VideosSelectionComponent } from '@app/shared/video/videos-selection.component'
 import { VideoSortField } from '@app/shared/video/sort-field.type'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
@@ -36,12 +36,14 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
   miniatureDisplayOptions: MiniatureDisplayOptions = {
     date: true,
     views: true,
-    by: false,
+    by: true,
     privacyLabel: false,
     privacyText: true,
     state: true,
     blacklistInfo: true
   }
+  ownerDisplayType: OwnerDisplayType = 'videoChannel'
+
   videos: Video[] = []
   videosSearch: string
   videosSearchChanged = new Subject<string>()
