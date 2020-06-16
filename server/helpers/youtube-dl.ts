@@ -61,6 +61,7 @@ function getYoutubeDLSubs (url: string, opts?: object): Promise<YoutubeDLSubs> {
       .then(youtubeDL => {
         youtubeDL.getSubs(url, options, (err, files) => {
           if (err) return rej(err)
+          if (!files) return []
 
           logger.debug('Get subtitles from youtube dl.', { url, files })
 
