@@ -866,7 +866,7 @@
       </trans-unit>
       <trans-unit id="083e95bdf6f64257d2ddd399ecf9f48ab88e279f" datatype="html">
         <source><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>Default NSFW/sensitive videos policy<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </source>
-        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>ค่าเริ่มต้นสำหรับวิดีโอที่มีเนื้อหาไม่เหมาะสม<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>can be redefined by the users<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </target>
+        <target state="translated"><x id="START_TAG_DIV" ctype="x-div" equiv-text="&lt;div&gt;"/>ค่าเริ่มต้นสำหรับวิดีโอที่มีเนื้อหาไม่เหมาะสม<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> <x id="START_TAG_DIV_1" ctype="x-div" equiv-text="&lt;div&gt;"/>สามารถปรับเปลี่ยนได้โดยผู้ใช้<x id="CLOSE_TAG_DIV" ctype="x-div" equiv-text="&lt;/div&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/instance/instance-features-table.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="87ca23d62c168409ed040dae83dd8717cae3f08c" datatype="html">
@@ -1124,14 +1124,7 @@
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-        Currently this instance doesn't allow for user registration, but you can find an instance
-        that gives you the possibility to sign up for an account and upload your videos there.
-
-        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-
-        Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-      </target>
+        <target state="translated">ณ ตอนนี้ เว็บไซต์นี้ไม่อนุญาตให้ลงทะเบียนบัญชีผู้ใช้ แต่คุณสามารถหาเว็บไซต์ที่ให้คุณสมัครบัญชีและอัปโหลดวิดีโอของคุณได้ <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> หาเว็บไซต์ที่เหมาะกับคุณได้ที่ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/login/login.component.html</context>
           <context context-type="linenumber">16</context>
@@ -2341,7 +2334,7 @@
       </trans-unit>
       <trans-unit id="e687f6387adbaf61ce650b58f0e60ca42d843cee">
         <source>Already uploaded ✔</source>
-        <target>อัพโหลดแล้ว	✔</target>
+        <target>อัปโหลดแล้ว ✔</target>
         <context-group name="null">
           <context context-type="linenumber">179</context>
         </context-group>
@@ -4227,7 +4220,7 @@
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="new">Automatically play videos</target>
+        <target state="translated">เล่นวิดีโออัตโนมัติ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
@@ -4438,7 +4431,7 @@
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target state="new">Trending videos</target>
+        <target state="translated">วิดีโอมาแรง</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">267</context></context-group>
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
@@ -4448,7 +4441,7 @@
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target state="new">Recently added videos</target>
+        <target state="translated">วิดีโอที่เพิ่งเผยแพร่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">269</context></context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f" datatype="html">
@@ -4541,7 +4534,7 @@
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="new">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {วิดีโอ} other {วิดีโอ} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -4643,7 +4636,7 @@
       </trans-unit>
       <trans-unit id="e8835d4b5abe1ae304ffaaea6e96bf49805f54a2" datatype="html">
         <source>NEW VIDEOS</source>
-        <target state="new">NEW VIDEOS</target>
+        <target state="translated">วิดีโอใหม่</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">401</context></context-group>
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
@@ -5121,7 +5114,7 @@
       </trans-unit>
       <trans-unit id="be05139c85b590f407c8204605601ab510247f9f" datatype="html">
         <source>Policy for sensitive videos</source>
-        <target state="new">Policy for sensitive videos</target>
+        <target state="translated">นโยบายสำหรับวิดีโอที่มีเนื้อหาไม่เหมาะสม</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-video-settings/my-account-video-settings.component.html</context>
           <context context-type="linenumber">14</context>
@@ -7546,7 +7539,7 @@
       </trans-unit>
       <trans-unit id="e814805b1d5d1d36eb28904b984ec9aaa8fed239" datatype="html">
         <source>Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</source>
-        <target state="new">Are you sure you want to delete your account? This will delete all your data, including channels, videos and comments. Content cached by other servers and other third-parties might make longer to be deleted.</target>
+        <target state="translated">คุณแน่ใจว่าต้องการลบบัญชีของคุณหรือไม่ การกระทำนี้จะลบข้อมูลทั้งหมดของคุณ รวมถึงช่อง วิดีโอ และความคิดเห็น เนื้อหาที่ถูกแคชโดยเซิร์ฟเวอร์อื่นและบุคคลที่สามอาจใช้เวลานานก่อนที่จะถูกลบ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-danger-zone/my-account-danger-zone.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8052,7 +8045,7 @@
       </trans-unit>
       <trans-unit id="249618dcdd7fbdc863c0714e2eb9e8940bc9c37d" datatype="html">
         <source>Go to the recently added videos page</source>
-        <target state="translated">ไปที่หน้าวิดีโอที่เพิ่งเพิ่ม</target>
+        <target state="translated">ไปที่หน้าวิดีโอที่เพิ่งเผยแพร่</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/app.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10108,7 +10101,7 @@
       </trans-unit>
       <trans-unit id="4104d2ac06bd0103868795086100a871c8dbeb49" datatype="html">
         <source>Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to all current channels of <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">ติดตามทุกช่องในปัจจุบันของ <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> แล้ว คุณจะได้รับการแจ้งเตือนสำหรับวิดีโอใหม่ทุกวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10116,7 +10109,7 @@
       </trans-unit>
       <trans-unit id="71470cde6d46e469ed84c0c77b9662685cc830ab" datatype="html">
         <source>Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</source>
-        <target state="new">Subscribed to <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/>. You will be notified of all their new videos.</target>
+        <target state="translated">ติดตาม <x id="INTERPOLATION" equiv-text="{{nameWithHost}}"/> แล้ว คุณจะได้รับการแจ้งเตือนสำหรับวิดีโอใหม่ทุกวิดีโอ</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/user-subscription/subscribe-button.component.ts</context>
           <context context-type="linenumber">1</context>
