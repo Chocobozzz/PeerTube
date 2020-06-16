@@ -546,7 +546,10 @@ async function prepareNotificationsTest (serversCount = 3) {
   const servers = await flushAndRunMultipleServers(serversCount, overrideConfig)
 
   await setAccessTokensToServers(servers)
-  await doubleFollow(servers[0], servers[1])
+
+  if (serversCount > 1) {
+    await doubleFollow(servers[0], servers[1])
+  }
 
   const user = {
     username: 'user_1',
