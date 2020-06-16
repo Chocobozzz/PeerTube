@@ -1,7 +1,7 @@
 import { from, Subject, Subscription } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { UserService } from '@app/shared'
+import { User, UserService } from '@app/shared'
 import { Account } from '@app/shared/account/account.model'
 import { AccountService } from '@app/shared/account/account.service'
 import { ScreenService } from '@app/shared/misc/screen.service'
@@ -11,7 +11,6 @@ import { VideoChannelService } from '@app/shared/video-channel/video-channel.ser
 import { VideoSortField } from '@app/shared/video/sort-field.type'
 import { Video } from '@app/shared/video/video.model'
 import { VideoService } from '@app/shared/video/video.service'
-import { User } from '@shared/models'
 
 @Component({
   selector: 'my-account-video-channels',
