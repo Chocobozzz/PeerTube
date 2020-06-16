@@ -35,6 +35,8 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
 
   serverConfig: ServerConfig
 
+  private lastScrollHash: string
+
   constructor (
     private viewportScroller: ViewportScroller,
     private route: ActivatedRoute,
@@ -74,7 +76,11 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked () {
-    if (window.location.hash) this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
+    if (window.location.hash && window.location.hash !== this.lastScrollHash) {
+      this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
+
+      this.lastScrollHash = window.location.hash
+    }
   }
 
   openContactModal () {

@@ -23,6 +23,8 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
   userVideoQuotaUsedDaily = 0
   userVideoQuotaDailyPercentage = 15
 
+  private lastScrollHash: string
+
   constructor (
     private viewportScroller: ViewportScroller,
     private userService: UserService,
@@ -64,7 +66,11 @@ export class MyAccountSettingsComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked () {
-    if (window.location.hash) this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
+    if (window.location.hash && window.location.hash !== this.lastScrollHash) {
+      this.viewportScroller.scrollToAnchor(window.location.hash.replace('#', ''))
+
+      this.lastScrollHash = window.location.hash
+    }
   }
 
   onAvatarChange (formData: FormData) {

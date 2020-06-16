@@ -123,6 +123,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const scrollEvent = eventsObs.pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
 
     scrollEvent.subscribe(e => {
+      console.log(e)
       if (e.position) {
         return this.viewportScroller.scrollToPosition(e.position)
       }
