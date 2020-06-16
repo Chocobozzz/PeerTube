@@ -3,11 +3,15 @@
     <h4 i18n class="modal-title">Settings</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
-  
+
   <div class="modal-body">
     <div i18n class="mb-4 quick-settings-title">Display settings</div>
 
-    <my-account-video-settings *ngIf="!isUserLoggedIn()" [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true">
+    <my-account-video-settings
+      *ngIf="!isUserLoggedIn()"
+      [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"
+    >
+
       <ng-container ngProjectAs="inner-title">
         <div i18n class="mb-4 mt-4 quick-settings-title">Video settings</div>
       </ng-container>
@@ -15,6 +19,9 @@
 
     <div i18n class="mb-4 mt-4 quick-settings-title">Interface settings</div>
 
-    <my-account-interface-settings *ngIf="!isUserLoggedIn()" [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"></my-account-interface-settings>
+    <my-account-interface-settings
+      *ngIf="!isUserLoggedIn()"
+      [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"
+    ></my-account-interface-settings>
   </div>
 </ng-template>

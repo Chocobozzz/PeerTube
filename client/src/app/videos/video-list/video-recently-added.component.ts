@@ -22,7 +22,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
   sort: VideoSortField = '-publishedAt'
   groupByDate = true
 
-  useUserVideoLanguagePreferences = true
+  useUserVideoPreferences = true
 
   constructor (
     protected i18n: I18n,
@@ -59,6 +59,7 @@ export class VideoRecentlyAddedComponent extends AbstractVideoList implements On
       sort: this.sort,
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
+      nsfwPolicy: this.nsfwPolicy,
       skipCount: true
     }
 

@@ -32,9 +32,11 @@ export class QuickSettingsModalComponent extends FormReactive implements OnInit 
 
   ngOnInit () {
     this.user = this.userService.getAnonymousUser()
-    this.localStorageService.watch().subscribe(
-      () => this.user = this.userService.getAnonymousUser()
-    )
+    this.localStorageService.watch()
+      .subscribe(
+        () => this.user = this.userService.getAnonymousUser()
+      )
+
     this.userInformationLoaded.next(true)
 
     this.authService.loginChangedSource

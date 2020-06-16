@@ -1,19 +1,20 @@
-import { from, Observable } from 'rxjs'
-import { catchError, concatMap, map, shareReplay, toArray } from 'rxjs/operators'
+import { has } from 'lodash-es'
+import { BytesPipe } from 'ngx-pipes'
+import { SortMeta } from 'primeng/api'
+import { from, Observable, of } from 'rxjs'
+import { catchError, concatMap, first, map, shareReplay, toArray, throttleTime, filter } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { ResultList, User as UserServerModel, UserCreate, UserRole, UserUpdate, UserUpdateMe, UserVideoQuota } from '../../../../../shared'
-import { environment } from '../../../environments/environment'
-import { RestExtractor, RestPagination, RestService } from '../rest'
-import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
-import { SortMeta } from 'primeng/api'
-import { BytesPipe } from 'ngx-pipes'
+import { AuthService } from '@app/core/auth'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRegister } from '@shared/models/users/user-register.model'
-import { User } from './user.model'
 import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
-import { has } from 'lodash-es'
+import { ResultList, User as UserServerModel, UserCreate, UserRole, UserUpdate, UserUpdateMe, UserVideoQuota } from '../../../../../shared'
+import { Avatar } from '../../../../../shared/models/avatars/avatar.model'
+import { environment } from '../../../environments/environment'
 import { LocalStorageService, SessionStorageService } from '../misc/storage.service'
+import { RestExtractor, RestPagination, RestService } from '../rest'
+import { User } from './user.model'
 
 @Injectable()
 export class UserService {
@@ -25,6 +26,7 @@ export class UserService {
 
   constructor (
     private authHttp: HttpClient,
+    private authService: AuthService,
     private restExtractor: RestExtractor,
     private restService: RestService,
     private localStorageService: LocalStorageService,
@@ -92,6 +94,21 @@ export class UserService {
         console.error(`Cannot set item ${key} in localStorage. Likely due to a value impossible to stringify.`, err)
       }
     }
+  }
+
+  listenAnonymousUpdate () {
+    return this.localStorageService.watch([
+      User.KEYS.NSFW_POLICY,
+      User.KEYS.WEBTORRENT_ENABLED,
+      User.KEYS.AUTO_PLAY_VIDEO,
+      User.KEYS.AUTO_PLAY_VIDEO_PLAYLIST,
+      User.KEYS.THEME,
+      User.KEYS.VIDEO_LANGUAGES
+    ]).pipe(
+      throttleTime(200),
+      filter(() => this.authService.isLoggedIn() !== true),
+      map(() => this.getAnonymousUser())
+    )
   }
 
   deleteMe () {
@@ -241,7 +258,7 @@ export class UserService {
   }
 
   getAnonymousUser () {
-    let videoLanguages
+    let videoLanguages: string[]
 
     try {
       videoLanguages = JSON.parse(this.localStorageService.getItem(User.KEYS.VIDEO_LANGUAGES))
@@ -311,6 +328,18 @@ export class UserService {
         toArray(),
         catchError(err => this.restExtractor.handleError(err))
       )
+  }
+
+  getAnonymousOrLoggedUser () {
+    if (!this.authService.isLoggedIn()) {
+      return of(this.getAnonymousUser())
+    }
+
+    return this.authService.userInformationLoaded
+        .pipe(
+          first(),
+          map(() => this.authService.getUser())
+        )
   }
 
   private formatUser (user: UserServerModel) {

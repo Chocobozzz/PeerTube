@@ -77,7 +77,7 @@ export class VideoChannelVideosComponent extends AbstractVideoList implements On
     const newPagination = immutableAssign(this.pagination, { currentPage: page })
 
     return this.videoService
-               .getVideoChannelVideos(this.videoChannel, newPagination, this.sort)
+               .getVideoChannelVideos(this.videoChannel, newPagination, this.sort, this.nsfwPolicy)
                .pipe(
                  tap(({ total }) => {
                    this.titlePage = this.i18n(`{total, plural, =1 {Published 1 video} other {Published {{total}} videos}}`, { total })

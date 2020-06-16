@@ -1,15 +1,15 @@
-import { Injectable, OnInit } from '@angular/core'
-import { RecommendationService } from '@app/videos/recommendations/recommendations.service'
-import { Video } from '@app/shared/video/video.model'
-import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
-import { VideoService } from '@app/shared/video/video.service'
-import { map, switchMap } from 'rxjs/operators'
 import { Observable, of } from 'rxjs'
-import { SearchService } from '@app/search/search.service'
-import { AdvancedSearch } from '@app/search/advanced-search.model'
+import { map, switchMap } from 'rxjs/operators'
+import { Injectable } from '@angular/core'
 import { ServerService } from '@app/core'
+import { AdvancedSearch } from '@app/search/advanced-search.model'
+import { SearchService } from '@app/search/search.service'
+import { UserService } from '@app/shared'
+import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
+import { Video } from '@app/shared/video/video.model'
+import { VideoService } from '@app/shared/video/video.service'
+import { RecommendationService } from '@app/videos/recommendations/recommendations.service'
 import { ServerConfig } from '@shared/models'
-import { truncate } from 'lodash'
 
 /**
  * Provides "recommendations" by providing the most recently uploaded videos.
@@ -23,13 +23,14 @@ export class RecentVideosRecommendationService implements RecommendationService 
   constructor (
     private videos: VideoService,
     private searchService: SearchService,
+    private userService: UserService,
     private serverService: ServerService
   ) {
     this.config = this.serverService.getTmpConfig()
 
     this.serverService.getConfig()
      .subscribe(config => this.config = config)
-   }
+  }
 
   getRecommendations (recommendation: RecommendationInfo): Observable<Video[]> {
     return this.fetchPage(1, recommendation)
@@ -55,20 +56,29 @@ export class RecentVideosRecommendationService implements RecommendationService 
       return defaultSubscription
     }
 
-    const params = {
-      search: '',
-      componentPagination: pagination,
-      advancedSearch: new AdvancedSearch({ tagsOneOf: recommendation.tags.join(','), sort: '-createdAt', searchTarget: 'local' })
-    }
+    return this.userService.getAnonymousOrLoggedUser()
+      .pipe(
+        map(user => {
+          return {
+            search: '',
+            componentPagination: pagination,
+            advancedSearch: new AdvancedSearch({
+              tagsOneOf: recommendation.tags.join(','),
+              sort: '-createdAt',
+              searchTarget: 'local',
+              nsfw: user.nsfwPolicy
+                ? this.videos.nsfwPolicyToParam(user.nsfwPolicy)
+                : undefined
+            })
+          }
+        }),
+        switchMap(params => this.searchService.searchVideos(params)),
+        map(v => v.data),
+        switchMap(videos => {
+          if (videos.length <= 1) return defaultSubscription
 
-    return this.searchService.searchVideos(params)
-               .pipe(
-                 map(v => v.data),
-                 switchMap(videos => {
-                   if (videos.length <= 1) return defaultSubscription
-
-                   return of(videos)
-                 })
-               )
+          return of(videos)
+        })
+      )
   }
 }

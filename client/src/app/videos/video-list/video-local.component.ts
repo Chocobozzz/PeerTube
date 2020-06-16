@@ -24,7 +24,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
   sort = '-publishedAt' as VideoSortField
   filter: VideoFilter = 'local'
 
-  useUserVideoLanguagePreferences = true
+  useUserVideoPreferences = true
 
   constructor (
     protected i18n: I18n,
@@ -67,6 +67,7 @@ export class VideoLocalComponent extends AbstractVideoList implements OnInit, On
       filter: this.filter,
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
+      nsfwPolicy: this.nsfwPolicy,
       skipCount: true
     }
 

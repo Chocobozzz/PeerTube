@@ -5,6 +5,7 @@ import { AuthService, Notifier, ServerService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { SearchService } from '@app/search/search.service'
+import { UserService } from '@app/shared'
 import { immutableAssign } from '@app/shared/misc/utils'
 import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
@@ -12,7 +13,7 @@ import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.compo
 import { Video } from '@app/shared/video/video.model'
 import { MetaService } from '@ngx-meta/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ServerConfig } from '@shared/models'
+import { ServerConfig, User } from '@shared/models'
 import { SearchTargetType } from '@shared/models/search/search-target-query.model'
 
 @Component({
@@ -46,6 +47,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   errorMessage: string
   serverConfig: ServerConfig
 
+  userMiniature: User
+
   private subActivatedRoute: Subscription
   private isInitialLoad = false // set to false to show the search filters on first arrival
   private firstSearch = true
@@ -62,13 +65,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     private notifier: Notifier,
     private searchService: SearchService,
     private authService: AuthService,
+    private userService: UserService,
     private hooks: HooksService,
     private serverService: ServerService
   ) { }
-
-  get user () {
-    return this.authService.getUser()
-  }
 
   ngOnInit () {
     this.serverService.getConfig()
@@ -102,6 +102,9 @@ export class SearchComponent implements OnInit, OnDestroy {
 
       err => this.notifier.error(err.text)
     )
+
+    this.userService.getAnonymousOrLoggedUser()
+      .subscribe(user => this.userMiniature = user)
 
     this.hooks.runAction('action:search.init', 'search')
   }

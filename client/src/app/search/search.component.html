@@ -53,7 +53,7 @@
 
     <div *ngIf="isVideo(result)" class="entry video">
       <my-video-miniature
-        [video]="result" [user]="user" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
+        [video]="result" [user]="userMiniature" [displayAsRow]="true" [displayVideoActions]="!hideActions()"
         [displayOptions]="videoDisplayOptions" [useLazyLoadUrl]="advancedSearch.searchTarget === 'search-index'"
         (videoBlocked)="removeVideoFromArray(result)" (videoRemoved)="removeVideoFromArray(result)"
       ></my-video-miniature>

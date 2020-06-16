@@ -21,7 +21,7 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
   titlePage: string
   defaultSort: VideoSortField = '-likes'
 
-  useUserVideoLanguagePreferences = true
+  useUserVideoPreferences = true
 
   constructor (
     protected i18n: I18n,
@@ -55,6 +55,7 @@ export class VideoMostLikedComponent extends AbstractVideoList implements OnInit
       sort: this.sort,
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
+      nsfwPolicy: this.nsfwPolicy,
       skipCount: true
     }
 

@@ -39,8 +39,9 @@ export interface VideosProvider {
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     filter?: VideoFilter,
-    categoryOneOf?: number,
+    categoryOneOf?: number[],
     languageOneOf?: string[]
+    nsfwPolicy: NSFWPolicyType
   }): Observable<ResultList<Video>>
 }
 
@@ -161,12 +162,17 @@ export class VideoService implements VideosProvider {
   getVideoChannelVideos (
     videoChannel: VideoChannel,
     videoPagination: ComponentPaginationLight,
-    sort: VideoSortField
+    sort: VideoSortField,
+    nsfwPolicy?: NSFWPolicyType
   ): Observable<ResultList<Video>> {
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
+
+    if (nsfwPolicy) {
+      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
+    }
 
     return this.authHttp
                .get<ResultList<Video>>(VideoChannelService.BASE_VIDEO_CHANNEL_URL + videoChannel.nameWithHost + '/videos', { params })
@@ -201,12 +207,12 @@ export class VideoService implements VideosProvider {
     videoPagination: ComponentPaginationLight,
     sort: VideoSortField,
     filter?: VideoFilter,
-    categoryOneOf?: number,
+    categoryOneOf?: number[],
     languageOneOf?: string[],
     skipCount?: boolean,
-    nsfw?: boolean
+    nsfwPolicy?: NSFWPolicyType
   }): Observable<ResultList<Video>> {
-    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfw } = parameters
+    const { videoPagination, sort, filter, categoryOneOf, languageOneOf, skipCount, nsfwPolicy } = parameters
 
     const pagination = this.restService.componentPaginationToRestPagination(videoPagination)
 
@@ -214,21 +220,21 @@ export class VideoService implements VideosProvider {
     params = this.restService.addRestGetParams(params, pagination, sort)
 
     if (filter) params = params.set('filter', filter)
-    if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
     if (skipCount) params = params.set('skipCount', skipCount + '')
 
-    if (nsfw) {
-      params = params.set('nsfw', nsfw + '')
-    } else {
-      const nsfwPolicy = this.authService.isLoggedIn()
-        ? this.authService.getUser().nsfwPolicy
-        : this.userService.getAnonymousUser().nsfwPolicy
-      if (this.nsfwPolicyToFilter(nsfwPolicy)) params.set('nsfw', 'false')
+    if (nsfwPolicy) {
+      params = params.set('nsfw', this.nsfwPolicyToParam(nsfwPolicy))
     }
 
     if (languageOneOf) {
       for (const l of languageOneOf) {
         params = params.append('languageOneOf[]', l)
+      }
+    }
+
+    if (categoryOneOf) {
+      for (const c of categoryOneOf) {
+        params = params.append('categoryOneOf[]', c + '')
       }
     }
 
@@ -268,12 +274,16 @@ export class VideoService implements VideosProvider {
     return feeds
   }
 
-  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, categoryOneOf?: number) {
+  getVideoFeedUrls (sort: VideoSortField, filter?: VideoFilter, categoryOneOf?: number[]) {
     let params = this.restService.addRestGetParams(new HttpParams(), undefined, sort)
 
     if (filter) params = params.set('filter', filter)
 
-    if (categoryOneOf) params = params.set('categoryOneOf', categoryOneOf + '')
+    if (categoryOneOf) {
+      for (const c of categoryOneOf) {
+        params = params.append('categoryOneOf[]', c + '')
+      }
+    }
 
     return this.buildBaseFeedUrls(params)
   }
@@ -377,6 +387,12 @@ export class VideoService implements VideosProvider {
     return base.filter(o => !!privacies.find(p => p.id === o.id))
   }
 
+  nsfwPolicyToParam (nsfwPolicy: NSFWPolicyType) {
+    return nsfwPolicy === 'do_not_list'
+      ? 'false'
+      : 'both'
+  }
+
   private setVideoRate (id: number, rateType: UserVideoRateType) {
     const url = VideoService.BASE_VIDEO_URL + id + '/rate'
     const body: UserVideoRateUpdate = {
@@ -389,9 +405,5 @@ export class VideoService implements VideosProvider {
                  map(this.restExtractor.extractDataBool),
                  catchError(err => this.restExtractor.handleError(err))
                )
-  }
-
-  private nsfwPolicyToFilter (policy: NSFWPolicyType) {
-    return policy === 'do_not_list'
   }
 }

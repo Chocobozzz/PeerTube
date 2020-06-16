@@ -1,22 +1,23 @@
-import { debounceTime, first, tap, throttleTime } from 'rxjs/operators'
+import { fromEvent, Observable, of, Subject, Subscription } from 'rxjs'
+import { debounceTime, tap, throttleTime, switchMap } from 'rxjs/operators'
 import { OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { fromEvent, Observable, of, Subject, Subscription } from 'rxjs'
-import { AuthService } from '../../core/auth'
-import { ComponentPaginationLight } from '../rest/component-pagination.model'
-import { VideoSortField } from './sort-field.type'
-import { Video } from './video.model'
-import { ScreenService } from '@app/shared/misc/screen.service'
-import { MiniatureDisplayOptions, OwnerDisplayType } from '@app/shared/video/video-miniature.component'
-import { Syndication } from '@app/shared/video/syndication.model'
 import { Notifier, ServerService } from '@app/core'
 import { DisableForReuseHook } from '@app/core/routing/disable-for-reuse-hook'
+import { GlobalIconName } from '@app/shared/images/global-icon.component'
+import { ScreenService } from '@app/shared/misc/screen.service'
+import { Syndication } from '@app/shared/video/syndication.model'
+import { MiniatureDisplayOptions, OwnerDisplayType } from '@app/shared/video/video-miniature.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { isLastMonth, isLastWeek, isToday, isYesterday } from '@shared/core-utils/miscs/date'
 import { ServerConfig } from '@shared/models'
-import { GlobalIconName } from '@app/shared/images/global-icon.component'
-import { UserService, User } from '../users'
+import { NSFWPolicyType } from '@shared/models/videos/nsfw-policy.type'
+import { AuthService } from '../../core/auth'
 import { LocalStorageService } from '../misc/storage.service'
+import { ComponentPaginationLight } from '../rest/component-pagination.model'
+import { User, UserService } from '../users'
+import { VideoSortField } from './sort-field.type'
+import { Video } from './video.model'
 
 enum GroupDate {
   UNKNOWN = 0,
@@ -34,14 +35,15 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
   }
   sort: VideoSortField = '-publishedAt'
 
-  categoryOneOf?: number
+  categoryOneOf?: number[]
   languageOneOf?: string[]
+  nsfwPolicy?: NSFWPolicyType
   defaultSort: VideoSortField = '-publishedAt'
 
   syndicationItems: Syndication[] = []
 
   loadOnInit = true
-  useUserVideoLanguagePreferences = false
+  useUserVideoPreferences = false
   ownerDisplayType: OwnerDisplayType = 'account'
   displayModerationBlock = false
   titleTooltip: string
@@ -71,6 +73,8 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   onDataSubject = new Subject<any[]>()
 
+  userMiniature: User
+
   protected serverConfig: ServerConfig
 
   protected abstract notifier: Notifier
@@ -96,10 +100,6 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
   abstract generateSyndicationList (): void
 
-  get user () {
-    return this.authService.getUser()
-  }
-
   ngOnInit () {
     this.serverConfig = this.serverService.getTmpConfig()
     this.serverService.getConfig()
@@ -124,21 +124,17 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
 
     this.calcPageSizes()
 
-    const loadUserObservable = this.loadUserVideoLanguagesIfNeeded()
+    const loadUserObservable = this.loadUserAndSettings()
 
     if (this.loadOnInit === true) {
       loadUserObservable.subscribe(() => this.loadMoreVideos())
     }
 
-    this.storageService.watch([
-      User.KEYS.NSFW_POLICY,
-      User.KEYS.VIDEO_LANGUAGES
-    ]).pipe(throttleTime(200)).subscribe(
-      () => {
-        this.loadUserVideoLanguagesIfNeeded()
+    this.userService.listenAnonymousUpdate()
+      .pipe(switchMap(() => this.loadUserAndSettings()))
+      .subscribe(() => {
         if (this.hasDoneFirstQuery) this.reloadVideos()
-      }
-    )
+      })
 
     // Display avatar in mobile view
     if (this.screenService.isInMobileView()) {
@@ -298,20 +294,15 @@ export abstract class AbstractVideoList implements OnInit, OnDestroy, DisableFor
     this.router.navigate([ path ], { queryParams, replaceUrl: true, queryParamsHandling: 'merge' })
   }
 
-  private loadUserVideoLanguagesIfNeeded () {
-    if (!this.useUserVideoLanguagePreferences) {
-      return of(true)
-    }
+  private loadUserAndSettings () {
+    return this.userService.getAnonymousOrLoggedUser()
+      .pipe(tap(user => {
+        this.userMiniature = user
 
-    if (!this.authService.isLoggedIn()) {
-      this.languageOneOf = this.userService.getAnonymousUser().videoLanguages
-      return of(true)
-    }
+        if (!this.useUserVideoPreferences) return
 
-    return this.authService.userInformationLoaded
-        .pipe(
-          first(),
-          tap(() => this.languageOneOf = this.user.videoLanguages)
-        )
+        this.languageOneOf = user.videoLanguages
+        this.nsfwPolicy = user.nsfwPolicy
+      }))
   }
 }

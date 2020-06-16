@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideosOverview } from '@app/shared/overview/videos-overview.model'
-import { OverviewService } from '@app/shared/overview'
-import { Video } from '@app/shared/video/video.model'
-import { ScreenService } from '@app/shared/misc/screen.service'
 import { Subject } from 'rxjs'
+import { Component, OnInit } from '@angular/core'
+import { Notifier } from '@app/core'
+import { User, UserService } from '@app/shared'
+import { ScreenService } from '@app/shared/misc/screen.service'
+import { OverviewService } from '@app/shared/overview'
+import { VideosOverview } from '@app/shared/overview/videos-overview.model'
+import { Video } from '@app/shared/video/video.model'
 
 @Component({
   selector: 'my-video-overview',
@@ -18,6 +18,8 @@ export class VideoOverviewComponent implements OnInit {
   overviews: VideosOverview[] = []
   notResults = false
 
+  userMiniature: User
+
   private loaded = false
   private currentPage = 1
   private maxPage = 20
@@ -25,19 +27,20 @@ export class VideoOverviewComponent implements OnInit {
   private isLoading = false
 
   constructor (
-    private i18n: I18n,
     private notifier: Notifier,
-    private authService: AuthService,
+    private userService: UserService,
     private overviewService: OverviewService,
     private screenService: ScreenService
   ) { }
 
-  get user () {
-    return this.authService.getUser()
-  }
-
   ngOnInit () {
     this.loadMoreResults()
+
+    this.userService.getAnonymousOrLoggedUser()
+      .subscribe(user => this.userMiniature = user)
+
+    this.userService.listenAnonymousUpdate()
+      .subscribe(user => this.userMiniature = user)
   }
 
   buildVideoChannelBy (object: { videos: Video[] }) {

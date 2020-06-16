@@ -21,7 +21,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
   titlePage: string
   defaultSort: VideoSortField = '-trending'
 
-  useUserVideoLanguagePreferences = true
+  useUserVideoPreferences = true
 
   constructor (
     protected i18n: I18n,
@@ -72,6 +72,7 @@ export class VideoTrendingComponent extends AbstractVideoList implements OnInit,
       sort: this.sort,
       categoryOneOf: this.categoryOneOf,
       languageOneOf: this.languageOneOf,
+      nsfwPolicy: this.nsfwPolicy,
       skipCount: true
     }
 
