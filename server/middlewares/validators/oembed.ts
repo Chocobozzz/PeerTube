@@ -37,8 +37,11 @@ const oembedValidator = [
                 .end()
     }
 
-    const startIsOk = req.query.url.startsWith(urlShouldStartWith)
-    const matches = videoWatchRegex.exec(req.query.url)
+    const url = req.query.url as string
+
+    const startIsOk = url.startsWith(urlShouldStartWith)
+    const matches = videoWatchRegex.exec(url)
+
     if (startIsOk === false || matches === null) {
       return res.status(400)
                 .json({ error: 'Invalid url.' })
