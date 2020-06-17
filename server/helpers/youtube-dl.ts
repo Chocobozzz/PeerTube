@@ -67,17 +67,16 @@ function getYoutubeDLSubs (url: string, opts?: object): Promise<YoutubeDLSubs> {
 
           const subtitles = files.reduce((acc, filename) => {
             const matched = filename.match(/\.([a-z]{2})\.(vtt|ttml)/i)
+            if (!matched || !matched[1]) return acc
 
-            if (matched[1]) {
-              return [
-                ...acc,
-                {
-                  language: matched[1],
-                  path: join(cwd, filename),
-                  filename
-                }
-              ]
-            }
+            return [
+              ...acc,
+              {
+                language: matched[1],
+                path: join(cwd, filename),
+                filename
+              }
+            ]
           }, [])
 
           return res(subtitles)
