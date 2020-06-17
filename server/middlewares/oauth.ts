@@ -48,7 +48,7 @@ function authenticateSocket (socket: Socket, next: (err?: any) => void) {
 function authenticatePromiseIfNeeded (req: express.Request, res: express.Response, authenticateInQuery = false) {
   return new Promise(resolve => {
     // Already authenticated? (or tried to)
-    if (res.locals.oauth && res.locals.oauth.token.User) return resolve()
+    if (res.locals.oauth?.token.User) return resolve()
 
     if (res.locals.authenticated === false) return res.sendStatus(401)
 

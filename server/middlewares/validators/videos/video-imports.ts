@@ -38,7 +38,7 @@ const videoImportAddValidator = getCommonVideoEditAttributes().concat([
     logger.debug('Checking videoImportAddValidator parameters', { parameters: req.body })
 
     const user = res.locals.oauth.token.User
-    const torrentFile = req.files && req.files['torrentfile'] ? req.files['torrentfile'][0] : undefined
+    const torrentFile = req.files?.['torrentfile'] ? req.files['torrentfile'][0] : undefined
 
     if (areValidationErrors(req, res)) return cleanUpReqFiles(req)
 

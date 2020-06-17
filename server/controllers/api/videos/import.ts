@@ -68,7 +68,7 @@ export {
 function addVideoImport (req: express.Request, res: express.Response) {
   if (req.body.targetUrl) return addYoutubeDLImport(req, res)
 
-  const file = req.files && req.files['torrentfile'] ? req.files['torrentfile'][0] : undefined
+  const file = req.files?.['torrentfile']?.[0]
   if (req.body.magnetUri || file) return addTorrentImport(req, res, file)
 }
 

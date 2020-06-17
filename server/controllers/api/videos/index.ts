@@ -317,11 +317,11 @@ async function updateVideo (req: express.Request, res: express.Response) {
   const hadPrivacyForFederation = videoInstance.hasPrivacyForFederation()
 
   // Process thumbnail or create it from the video
-  const thumbnailModel = req.files && req.files['thumbnailfile']
+  const thumbnailModel = req.files?.['thumbnailfile']
     ? await createVideoMiniatureFromExisting(req.files['thumbnailfile'][0].path, videoInstance, ThumbnailType.MINIATURE, false)
     : undefined
 
-  const previewModel = req.files && req.files['previewfile']
+  const previewModel = req.files?.['previewfile']
     ? await createVideoMiniatureFromExisting(req.files['previewfile'][0].path, videoInstance, ThumbnailType.PREVIEW, false)
     : undefined
 

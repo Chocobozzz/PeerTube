@@ -1605,8 +1605,7 @@ export class VideoModel extends Model<VideoModel> {
   }
 
   isBlocked () {
-    return (this.VideoChannel.Account.Actor.Server && this.VideoChannel.Account.Actor.Server.isBlocked()) ||
-      this.VideoChannel.Account.isBlocked()
+    return this.VideoChannel.Account.Actor.Server?.isBlocked() || this.VideoChannel.Account.isBlocked()
   }
 
   getQualityFileBy<T extends MVideoWithFile> (this: T, fun: (files: MVideoFile[], it: (file: MVideoFile) => number) => MVideoFile) {

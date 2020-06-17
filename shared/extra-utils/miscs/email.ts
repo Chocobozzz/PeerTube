@@ -37,11 +37,11 @@ class MockSmtpServer {
         return rej(new Error('maildev exited unexpectedly, confirm port not in use'))
       })
       this.emailChildProcess.on('message', (msg: any) => {
-        if (msg.err) {
-          return rej(new Error(msg.err))
-        }
+        if (msg.err) return rej(new Error(msg.err))
+
         this.started = true
         this.emails = emailsCollection
+
         return res(port)
       })
     })

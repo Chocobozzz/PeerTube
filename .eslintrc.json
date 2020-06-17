@@ -72,6 +72,8 @@
     ],
 
     "@typescript-eslint/return-await": "off",
+    "@typescript-eslint/dot-notation": "off",
+    "@typescript-eslint/method-signature-style": "off",
     "@typescript-eslint/no-base-to-string": "off",
     "@typescript-eslint/quotes": "off",
     "@typescript-eslint/no-var-requires": "off",

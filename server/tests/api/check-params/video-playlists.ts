@@ -36,8 +36,6 @@ describe('Test video playlists API validator', function () {
   let privatePlaylistUUID: string
   let watchLaterPlaylistId: number
   let videoId: number
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let videoId2: number
   let playlistElementId: number
 
   // ---------------------------------------------------------------
@@ -52,7 +50,6 @@ describe('Test video playlists API validator', function () {
 
     userAccessToken = await generateUserAccessToken(server, 'user1')
     videoId = (await uploadVideoAndGetId({ server, videoName: 'video 1' })).id
-    videoId2 = (await uploadVideoAndGetId({ server, videoName: 'video 2' })).id
 
     {
       const res = await getAccountPlaylistsListWithToken(server.url, server.accessToken, 'root', 0, 5, VideoPlaylistType.WATCH_LATER)

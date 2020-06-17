@@ -394,7 +394,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
         name: video.name,
         nsfw: video.nsfw,
         deleted: !this.Video,
-        blacklisted: this.Video && this.Video.isBlacklisted(),
+        blacklisted: this.Video?.isBlacklisted() || false,
         thumbnailPath: this.Video?.getMiniatureStaticPath(),
         channel: this.Video?.VideoChannel.toFormattedJSON() || this.deletedVideo?.channel
       },

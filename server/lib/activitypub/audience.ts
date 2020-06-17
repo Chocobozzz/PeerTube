@@ -55,7 +55,7 @@ async function getActorsInvolvedInVideo (video: MVideoId, t: Transaction) {
 
   const videoAll = video as VideoModel
 
-  const videoActor = videoAll.VideoChannel && videoAll.VideoChannel.Account
+  const videoActor = videoAll.VideoChannel?.Account
     ? videoAll.VideoChannel.Account.Actor
     : await ActorModel.loadFromAccountByVideoId(video.id, t)
 

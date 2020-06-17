@@ -28,7 +28,7 @@ async function delInstance (url: string) {
 async function setInstance (url: string, username: string, password: string, isDefault: boolean) {
   const [ settings, netrc ] = await Promise.all([ getSettings(), getNetrc() ])
 
-  if (settings.remotes.indexOf(url) === -1) {
+  if (settings.remotes.includes(url) === false) {
     settings.remotes.push(url)
   }
 

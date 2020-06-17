@@ -166,7 +166,7 @@ async function updateActorInstance (actorInstance: ActorModel, attributes: Activ
   actorInstance.followersUrl = attributes.followers
   actorInstance.followingUrl = attributes.following
 
-  if (attributes.endpoints && attributes.endpoints.sharedInbox) {
+  if (attributes.endpoints?.sharedInbox) {
     actorInstance.sharedInboxUrl = attributes.endpoints.sharedInbox
   }
 }
@@ -457,7 +457,7 @@ async function fetchRemoteActor (actorUrl: string): Promise<{ statusCode?: numbe
     followersUrl: actorJSON.followers,
     followingUrl: actorJSON.following,
 
-    sharedInboxUrl: actorJSON.endpoints && actorJSON.endpoints.sharedInbox
+    sharedInboxUrl: actorJSON.endpoints?.sharedInbox
       ? actorJSON.endpoints.sharedInbox
       : null
   })

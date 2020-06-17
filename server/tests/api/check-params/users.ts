@@ -55,8 +55,6 @@ describe('Test users API validators', function () {
   let moderatorAccessToken = ''
   let emailPort: number
   let overrideConfig: Object
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let channelId: number
 
   // ---------------------------------------------------------------
 
@@ -127,11 +125,6 @@ describe('Test users API validators', function () {
         password: moderator.password,
         role: UserRole.MODERATOR
       })
-    }
-
-    {
-      const res = await getMyUserInformation(server.url, server.accessToken)
-      channelId = res.body.videoChannels[0].id
     }
 
     {

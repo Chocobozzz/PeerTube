@@ -32,6 +32,10 @@ import { UserRole } from '@shared/models'
 import { RegisterServerAuthExternalOptions } from '@shared/models/plugins/register-server-auth.model'
 
 declare module 'express' {
+  interface Request {
+    query: any
+  }
+
   interface Response {
 
     locals: {

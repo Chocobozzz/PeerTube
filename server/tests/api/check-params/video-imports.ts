@@ -29,8 +29,6 @@ describe('Test video imports API validator', function () {
   const path = '/api/v1/videos/imports'
   let server: ServerInfo
   let userAccessToken = ''
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  let accountName: string
   let channelId: number
 
   // ---------------------------------------------------------------
@@ -50,7 +48,6 @@ describe('Test video imports API validator', function () {
     {
       const res = await getMyUserInformation(server.url, server.accessToken)
       channelId = res.body.videoChannels[0].id
-      accountName = res.body.account.name + '@' + res.body.account.host
     }
   })
 

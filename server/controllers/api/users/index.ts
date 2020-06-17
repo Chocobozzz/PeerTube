@@ -53,15 +53,13 @@ import { tokensRouter } from '@server/controllers/api/users/token'
 
 const auditLogger = auditLoggerFactory('users')
 
-// @ts-ignore
 const signupRateLimiter = RateLimit({
   windowMs: CONFIG.RATES_LIMIT.SIGNUP.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.SIGNUP.MAX,
   skipFailedRequests: true
 })
 
-// @ts-ignore
-const askSendEmailLimiter = new RateLimit({
+const askSendEmailLimiter = RateLimit({
   windowMs: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.WINDOW_MS,
   max: CONFIG.RATES_LIMIT.ASK_SEND_EMAIL.MAX
 })

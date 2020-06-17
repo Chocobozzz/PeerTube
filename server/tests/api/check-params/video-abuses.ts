@@ -141,13 +141,6 @@ describe('Test video abuses API validators', function () {
   })
 
   describe('When updating a video abuse', function () {
-    const basePath = '/api/v1/videos/'
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let path: string
-
-    before(() => {
-      path = basePath + server.video.id + '/abuse/' + videoAbuseId
-    })
 
     it('Should fail with a non authenticated user', async function () {
       await updateVideoAbuse(server.url, 'blabla', server.video.uuid, videoAbuseId, {}, 401)
@@ -179,13 +172,6 @@ describe('Test video abuses API validators', function () {
   })
 
   describe('When deleting a video abuse', function () {
-    const basePath = '/api/v1/videos/'
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    let path: string
-
-    before(() => {
-      path = basePath + server.video.id + '/abuse/' + videoAbuseId
-    })
 
     it('Should fail with a non authenticated user', async function () {
       await deleteVideoAbuse(server.url, 'blabla', server.video.uuid, videoAbuseId, 401)

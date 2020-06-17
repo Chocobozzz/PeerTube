@@ -137,14 +137,14 @@ if (isTestInstance()) {
 }
 
 // For the logger
-morgan.token('remote-addr', req => {
+morgan.token<express.Request>('remote-addr', req => {
   if (CONFIG.LOG.ANONYMIZE_IP === true || req.get('DNT') === '1') {
     return anonymize(req.ip, 16, 16)
   }
 
   return req.ip
 })
-morgan.token('user-agent', req => {
+morgan.token<express.Request>('user-agent', req => {
   if (req.get('DNT') === '1') {
     return useragent.parse(req.get('user-agent')).family
   }
