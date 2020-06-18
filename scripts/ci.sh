@@ -13,7 +13,7 @@ perl -0777 -i  -pe 's#proxy:(\n\s+)enabled: false\n\s+url: ""#proxy:$1enabled: t
 
 if [ "$1" = "misc" ]; then
     npm run build -- --light
-    mocha --timeout 5000 --exit --require ts-node/register --require tsconfig-paths/register --bail server/tests/client.ts \
+    mocha --timeout 5000 --exit --require ts-node/register --files --require tsconfig-paths/register --bail server/tests/client.ts \
         server/tests/feeds/index.ts \
         server/tests/misc-endpoints.ts \
         server/tests/helpers/index.ts \

@@ -28,6 +28,7 @@
       "@shared/*": [ "shared/*" ]
     }
   },
+  "include": [ "." ],
   "exclude": [
     "server/tools/",
     "node_modules",
