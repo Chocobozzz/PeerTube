@@ -164,7 +164,7 @@ Feel free to reach out if you have any questions or ideas! :speech_balloon:
   * nginx
   * **PostgreSQL >= 9.6**
   * **Redis >= 2.8.18**
-  * **NodeJS >= 10.x**
+  * **NodeJS >= 10.x <15**
   * **yarn >= 1.x**
   * **FFmpeg >= 3.x**
 

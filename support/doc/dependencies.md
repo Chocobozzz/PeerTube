@@ -27,7 +27,7 @@
 
 3. Install certbot (choose instructions for nginx and your distribution) :    
 [https://certbot.eff.org/all-instructions](https://certbot.eff.org/all-instructions)
-4. Install NodeJS 10.x:    
+4. Install NodeJS 10.x:
 [https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions](https://nodejs.org/en/download/package-manager/#debian-and-ubuntu-based-linux-distributions)
 5. Install yarn, and be sure to have [a recent version](https://github.com/yarnpkg/yarn/releases/latest):    
 [https://yarnpkg.com/en/docs/install#linux-tab](https://yarnpkg.com/en/docs/install#linux-tab)
