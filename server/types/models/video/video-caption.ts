@@ -1,5 +1,5 @@
 import { VideoCaptionModel } from '../../../models/video/video-caption'
-import { FunctionProperties, PickWith } from '@server/typings/utils'
+import { FunctionProperties, PickWith } from '@server/types/utils'
 import { MVideo, MVideoUUID } from './video'
 
 type Use<K extends keyof VideoCaptionModel, M> = PickWith<VideoCaptionModel, K, M>

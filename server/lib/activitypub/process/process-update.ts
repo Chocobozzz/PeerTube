@@ -14,8 +14,8 @@ import { createOrUpdateCacheFile } from '../cache-file'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { PlaylistObject } from '../../../../shared/models/activitypub/objects/playlist-object'
 import { createOrUpdateVideoPlaylist } from '../playlist'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature, MAccountIdActor } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorSignature, MAccountIdActor } from '../../../types/models'
 import { isRedundancyAccepted } from '@server/lib/redundancy'
 
 async function processUpdateActivity (options: APProcessorOptions<ActivityUpdate>) {

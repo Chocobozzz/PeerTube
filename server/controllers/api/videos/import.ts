@@ -34,8 +34,8 @@ import {
   MVideoTag,
   MVideoThumbnailAccountDefault,
   MVideoWithBlacklistLight
-} from '@server/typings/models'
-import { MVideoImport, MVideoImportFormattable } from '@server/typings/models/video/video-import'
+} from '@server/types/models'
+import { MVideoImport, MVideoImportFormattable } from '@server/types/models/video/video-import'
 
 const auditLogger = auditLoggerFactory('video-imports')
 const videoImportsRouter = express.Router()

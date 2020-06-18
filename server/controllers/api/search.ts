@@ -28,7 +28,7 @@ import {
 } from '../../middlewares'
 import { VideoModel } from '../../models/video/video'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { MChannelAccountDefault, MVideoAccountLightBlacklistAllFiles } from '../../typings/models'
+import { MChannelAccountDefault, MVideoAccountLightBlacklistAllFiles } from '../../types/models'
 
 const searchRouter = express.Router()
 

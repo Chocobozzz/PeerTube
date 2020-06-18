@@ -10,8 +10,8 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorSignature } from '../../../types/models'
 
 async function processUndoActivity (options: APProcessorOptions<ActivityUndo>) {
   const { activity, byActor } = options

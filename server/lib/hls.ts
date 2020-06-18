@@ -11,7 +11,7 @@ import { flatten, uniq } from 'lodash'
 import { VideoFileModel } from '../models/video/video-file'
 import { CONFIG } from '../initializers/config'
 import { sequelizeTypescript } from '../initializers/database'
-import { MVideoWithFile } from '@server/typings/models'
+import { MVideoWithFile } from '@server/types/models'
 import { getVideoFilename, getVideoFilePath } from './video-paths'
 
 async function updateStreamingPlaylistsInfohashesIfNeeded () {

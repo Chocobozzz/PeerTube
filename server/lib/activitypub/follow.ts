@@ -1,4 +1,4 @@
-import { MActorFollowActors } from '../../typings/models'
+import { MActorFollowActors } from '../../types/models'
 import { CONFIG } from '../../initializers/config'
 import { SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { JobQueue } from '../job-queue'

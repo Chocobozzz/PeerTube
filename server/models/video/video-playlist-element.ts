@@ -31,8 +31,8 @@ import {
   MVideoPlaylistElementFormattable,
   MVideoPlaylistElementVideoUrlPlaylistPrivacy,
   MVideoPlaylistVideoThumbnail
-} from '@server/typings/models/video/video-playlist-element'
-import { MUserAccountId } from '@server/typings/models'
+} from '@server/types/models/video/video-playlist-element'
+import { MUserAccountId } from '@server/types/models'
 
 @Table({
   tableName: 'videoPlaylistElement',

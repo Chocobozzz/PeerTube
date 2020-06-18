@@ -10,7 +10,7 @@ import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { Notifier } from '../../notifier'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { MActor, MActorFollowActors, MActorFull } from '../../../typings/models'
+import { MActor, MActorFollowActors, MActorFull } from '../../../types/models'
 import { ActivitypubFollowPayload } from '@shared/models'
 
 async function processActivityPubFollow (job: Bull.Job) {

@@ -11,7 +11,7 @@ import { sequelizeTypescript } from '../initializers/database'
 import * as LRUCache from 'lru-cache'
 import { queue } from 'async'
 import { downloadImage } from '../helpers/requests'
-import { MAccountDefault, MChannelDefault } from '../typings/models'
+import { MAccountDefault, MChannelDefault } from '../types/models'
 
 async function updateActorAvatarFile (
   avatarPhysicalFile: Express.Multer.File,

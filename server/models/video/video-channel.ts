@@ -41,7 +41,7 @@ import {
   MChannelAP,
   MChannelFormattable,
   MChannelSummaryFormattable
-} from '../../typings/models/video'
+} from '../../types/models/video'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API',

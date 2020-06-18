@@ -7,7 +7,7 @@ import {
   MVideoBlacklistVideo,
   MVideoFullLight,
   MVideoWithBlacklistLight
-} from '@server/typings/models'
+} from '@server/types/models'
 import { UserRight, VideoBlacklistCreate, VideoBlacklistType } from '../../shared/models'
 import { UserAdminFlag } from '../../shared/models/users/user-flag.model'
 import { logger } from '../helpers/logger'

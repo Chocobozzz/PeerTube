@@ -4,7 +4,7 @@ import { ActorModel } from '../activitypub/actor'
 import { throwIfNotValid } from '../utils'
 import { ServerBlocklistModel } from './server-blocklist'
 import * as Bluebird from 'bluebird'
-import { MServer, MServerFormattable } from '@server/typings/models/server'
+import { MServer, MServerFormattable } from '@server/types/models/server'
 
 @Table({
   tableName: 'server',

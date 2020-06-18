@@ -35,7 +35,7 @@ import { buildDislikeActivity } from '../../lib/activitypub/send/send-dislike'
 import { videoPlaylistElementAPGetValidator, videoPlaylistsGetValidator } from '../../middlewares/validators/videos/video-playlists'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { VideoPlaylistPrivacy } from '../../../shared/models/videos/playlist/video-playlist-privacy.model'
-import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId, MChannelId } from '@server/typings/models'
+import { MAccountId, MActorId, MVideoAPWithoutCaption, MVideoId, MChannelId } from '@server/types/models'
 import { getServerActor } from '@server/models/application/application'
 import { getRateUrl } from '@server/lib/activitypub/video-rates'
 

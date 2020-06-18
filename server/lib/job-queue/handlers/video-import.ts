@@ -5,7 +5,7 @@ import { addOptimizeOrMergeAudioJob } from '@server/helpers/video'
 import { isPostImportVideoAccepted } from '@server/lib/moderation'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { getVideoFilePath } from '@server/lib/video-paths'
-import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/typings/models/video/video-import'
+import { MVideoImportDefault, MVideoImportDefaultFiles, MVideoImportVideo } from '@server/types/models/video/video-import'
 import {
   VideoImportPayload,
   VideoImportTorrentPayload,
@@ -27,7 +27,7 @@ import { sequelizeTypescript } from '../../../initializers/database'
 import { VideoModel } from '../../../models/video/video'
 import { VideoFileModel } from '../../../models/video/video-file'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { MThumbnail } from '../../../typings/models/video/thumbnail'
+import { MThumbnail } from '../../../types/models/video/thumbnail'
 import { federateVideoIfNeeded } from '../../activitypub/videos'
 import { Notifier } from '../../notifier'
 import { generateVideoMiniature } from '../../thumbnail'

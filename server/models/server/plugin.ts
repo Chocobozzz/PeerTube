@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird'
 import { FindAndCountOptions, json, QueryTypes } from 'sequelize'
 import { AllowNull, Column, CreatedAt, DataType, DefaultScope, Is, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { MPlugin, MPluginFormattable } from '@server/typings/models'
+import { MPlugin, MPluginFormattable } from '@server/types/models'
 import { PeerTubePlugin } from '../../../shared/models/plugins/peertube-plugin.model'
 import { PluginType } from '../../../shared/models/plugins/plugin.type'
 import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'

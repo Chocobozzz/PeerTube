@@ -1,8 +1,8 @@
 import { ActivityAccept } from '../../../../shared/models/activitypub'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
 import { addFetchOutboxJob } from '../actor'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorDefault, MActorSignature } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorDefault, MActorSignature } from '../../../types/models'
 
 async function processAcceptActivity (options: APProcessorOptions<ActivityAccept>) {
   const { byActor: targetActor, inboxActor } = options

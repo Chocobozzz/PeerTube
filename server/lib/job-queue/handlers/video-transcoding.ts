@@ -15,7 +15,7 @@ import { computeResolutionsToTranscode } from '../../../helpers/ffmpeg-utils'
 import { generateHlsPlaylist, mergeAudioVideofile, optimizeOriginalVideofile, transcodeNewResolution } from '../../video-transcoding'
 import { Notifier } from '../../notifier'
 import { CONFIG } from '../../../initializers/config'
-import { MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/typings/models'
+import { MVideoFullLight, MVideoUUID, MVideoWithFile } from '@server/types/models'
 
 async function processVideoTranscoding (job: Bull.Job) {
   const payload = job.data as VideoTranscodingPayload

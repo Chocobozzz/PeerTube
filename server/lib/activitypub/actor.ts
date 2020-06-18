@@ -33,7 +33,7 @@ import {
   MActorFullActor,
   MActorId,
   MChannel
-} from '../../typings/models'
+} from '../../types/models'
 import { extname } from 'path'
 import { getServerActor } from '@server/models/application/application'
 

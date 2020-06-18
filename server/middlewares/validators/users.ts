@@ -35,7 +35,7 @@ import { isThemeNameValid } from '../../helpers/custom-validators/plugins'
 import { isThemeRegistered } from '../../lib/plugins/theme-utils'
 import { doesVideoExist } from '../../helpers/middlewares'
 import { UserRole } from '../../../shared/models/users'
-import { MUserDefault } from '@server/typings/models'
+import { MUserDefault } from '@server/types/models'
 import { Hooks } from '@server/lib/plugins/hooks'
 
 const usersAddValidator = [

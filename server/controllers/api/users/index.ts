@@ -47,7 +47,7 @@ import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { UserAdminFlag } from '../../../../shared/models/users/user-flag.model'
 import { UserRegister } from '../../../../shared/models/users/user-register.model'
-import { MUser, MUserAccountDefault } from '@server/typings/models'
+import { MUser, MUserAccountDefault } from '@server/types/models'
 import { Hooks } from '@server/lib/plugins/hooks'
 import { tokensRouter } from '@server/controllers/api/users/token'
 

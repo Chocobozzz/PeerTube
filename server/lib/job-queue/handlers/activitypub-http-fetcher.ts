@@ -12,7 +12,7 @@ import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { VideoShareModel } from '../../../models/video/video-share'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { MAccountDefault, MVideoFullLight } from '../../../typings/models'
+import { MAccountDefault, MVideoFullLight } from '../../../types/models'
 import { ActivitypubHttpFetcherPayload, FetchType } from '@shared/models'
 
 async function processActivityPubHttpFetcher (job: Bull.Job) {

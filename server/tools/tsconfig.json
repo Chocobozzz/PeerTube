@@ -1,4 +1,5 @@
 {
   "extends": "../../tsconfig.json",
+  "include": [ ".", "../typings" ],
   "exclude": [ ] // Overwrite exclude property
 }

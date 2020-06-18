@@ -22,7 +22,7 @@ import {
   MVideoRedundancyStreamingPlaylistVideo,
   MVideoRedundancyVideo,
   MVideoWithAllFiles
-} from '@server/typings/models'
+} from '@server/types/models'
 import { getVideoFilename } from '../video-paths'
 import { VideoModel } from '@server/models/video/video'
 import { getServerActor } from '@server/models/application/application'

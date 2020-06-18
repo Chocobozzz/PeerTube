@@ -1,5 +1,5 @@
 import { ServerBlocklistModel } from '@server/models/server/server-blocklist'
-import { PickWith } from '@server/typings/utils'
+import { PickWith } from '@server/types/utils'
 import { MAccountDefault, MAccountFormattable } from '../account/account'
 import { MServer, MServerFormattable } from './server'
 

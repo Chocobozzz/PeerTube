@@ -5,7 +5,7 @@ import { getVideoLikeActivityPubUrl } from '../url'
 import { sendVideoRelatedActivity } from './utils'
 import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { MActorAudience, MVideoImmutable, MVideoUrl } from '@server/typings/models'
+import { MActorAudience, MVideoImmutable, MVideoUrl } from '@server/types/models'
 
 async function sendView (byActor: ActorModel, video: MVideoImmutable, t: Transaction) {
   logger.info('Creating job to send view of %s.', video.url)

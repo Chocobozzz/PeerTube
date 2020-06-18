@@ -26,7 +26,7 @@ import {
   MVideoAccountLight,
   MVideoRedundancyVideo,
   MVideoShare
-} from '../../../typings/models'
+} from '../../../types/models'
 
 function sendUndoFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower

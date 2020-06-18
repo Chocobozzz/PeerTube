@@ -29,7 +29,7 @@ import * as Bluebird from 'bluebird'
 import { col, FindOptions, fn, literal, Op, Transaction, WhereOptions } from 'sequelize'
 import { VideoStreamingPlaylistModel } from '../video/video-streaming-playlist'
 import { CONFIG } from '../../initializers/config'
-import { MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/typings/models'
+import { MVideoForRedundancyAPI, MVideoRedundancy, MVideoRedundancyAP, MVideoRedundancyVideo } from '@server/types/models'
 import { VideoRedundanciesTarget } from '@shared/models/redundancy/video-redundancies-filters.model'
 import {
   FileRedundancyInformation,

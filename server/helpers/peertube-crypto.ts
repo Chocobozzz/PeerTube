@@ -6,7 +6,7 @@ import { logger } from './logger'
 import { cloneDeep } from 'lodash'
 import { createSign, createVerify } from 'crypto'
 import * as bcrypt from 'bcrypt'
-import { MActor } from '../typings/models'
+import { MActor } from '../types/models'
 
 const bcryptComparePromise = promisify2<any, string, boolean>(bcrypt.compare)
 const bcryptGenSaltPromise = promisify1<number, string>(bcrypt.genSalt)

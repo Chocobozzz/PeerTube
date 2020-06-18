@@ -47,7 +47,7 @@ import {
   doesVideoExist,
   doesVideoFileOfVideoExist
 } from '../../../helpers/middlewares'
-import { MVideoFullLight } from '@server/typings/models'
+import { MVideoFullLight } from '@server/types/models'
 import { getVideoWithAttributes } from '../../../helpers/video'
 import { getServerActor } from '@server/models/application/application'
 

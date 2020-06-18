@@ -1,7 +1,7 @@
 import { VideoFilter, VideoPrivacy, VideoState } from '@shared/models'
 import { buildDirectionAndField, createSafeIn } from '@server/models/utils'
 import { Model } from 'sequelize-typescript'
-import { MUserAccountId, MUserId } from '@server/typings/models'
+import { MUserAccountId, MUserId } from '@server/types/models'
 import validator from 'validator'
 import { exists } from '@server/helpers/custom-validators/misc'
 

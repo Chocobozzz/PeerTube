@@ -17,7 +17,7 @@ import { UserModel } from './user'
 import { isUserNotificationSettingValid } from '../../helpers/custom-validators/user-notifications'
 import { UserNotificationSetting, UserNotificationSettingValue } from '../../../shared/models/users/user-notification-setting.model'
 import { clearCacheByUserId } from '../../lib/oauth-model'
-import { MNotificationSettingFormattable } from '@server/typings/models'
+import { MNotificationSettingFormattable } from '@server/types/models'
 
 @Table({
   tableName: 'userNotificationSetting',

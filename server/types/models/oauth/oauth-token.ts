@@ -1,5 +1,5 @@
 import { OAuthTokenModel } from '@server/models/oauth/oauth-token'
-import { PickWith } from '@server/typings/utils'
+import { PickWith } from '@server/types/utils'
 import { MUserAccountUrl } from '../user/user'
 
 type Use<K extends keyof OAuthTokenModel, M> = PickWith<OAuthTokenModel, K, M>

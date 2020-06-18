@@ -3,7 +3,7 @@ import { getActorFollowAcceptActivityPubUrl, getActorFollowActivityPubUrl } from
 import { unicastTo } from './utils'
 import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
-import { MActor, MActorFollowActors } from '../../../typings/models'
+import { MActor, MActorFollowActors } from '../../../types/models'
 
 function sendAccept (actorFollow: MActorFollowActors) {
   const follower = actorFollow.ActorFollower

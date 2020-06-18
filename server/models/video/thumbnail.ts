@@ -19,7 +19,7 @@ import { CONFIG } from '../../initializers/config'
 import { VideoModel } from './video'
 import { VideoPlaylistModel } from './video-playlist'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { MVideoAccountLight } from '@server/typings/models'
+import { MVideoAccountLight } from '@server/types/models'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 @Table({

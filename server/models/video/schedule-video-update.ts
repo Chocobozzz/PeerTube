@@ -2,7 +2,7 @@ import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Model, Ta
 import { ScopeNames as VideoScopeNames, VideoModel } from './video'
 import { VideoPrivacy } from '../../../shared/models/videos'
 import { Op, Transaction } from 'sequelize'
-import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@server/typings/models'
+import { MScheduleVideoUpdateFormattable, MScheduleVideoUpdateVideoAll } from '@server/types/models'
 
 @Table({
   tableName: 'scheduleVideoUpdate',

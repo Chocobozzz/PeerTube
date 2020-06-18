@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { VideoChangeOwnershipModel } from '../../models/video/video-change-ownership'
-import { MVideoChangeOwnershipFull } from '@server/typings/models/video/video-change-ownership'
-import { MUserId } from '@server/typings/models'
+import { MVideoChangeOwnershipFull } from '@server/types/models/video/video-change-ownership'
+import { MUserId } from '@server/types/models'
 
 export async function doesChangeVideoOwnershipExist (idArg: number | string, res: Response) {
   const id = parseInt(idArg + '', 10)

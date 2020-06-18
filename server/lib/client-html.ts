@@ -13,7 +13,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
-import { MAccountActor, MChannelActor, MVideo } from '../typings/models'
+import { MAccountActor, MChannelActor, MVideo } from '../types/models'
 
 export class ClientHtml {
 

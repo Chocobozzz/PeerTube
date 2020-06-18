@@ -19,7 +19,7 @@ import { AccountModel } from '../account/account'
 import { ActorModel } from '../activitypub/actor'
 import { clearCacheByToken } from '../../lib/oauth-model'
 import * as Bluebird from 'bluebird'
-import { MOAuthTokenUser } from '@server/typings/models/oauth/oauth-token'
+import { MOAuthTokenUser } from '@server/types/models/oauth/oauth-token'
 
 export type OAuthTokenInfo = {
   refreshToken: string

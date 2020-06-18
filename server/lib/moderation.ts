@@ -9,7 +9,7 @@ import { ActorModel } from '../models/activitypub/actor'
 import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { PathLike } from 'fs-extra'
-import { MUser } from '@server/typings/models'
+import { MUser } from '@server/types/models'
 
 export type AcceptResult = {
   accepted: boolean

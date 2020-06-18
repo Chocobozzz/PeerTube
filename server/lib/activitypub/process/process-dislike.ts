@@ -6,8 +6,8 @@ import { AccountVideoRateModel } from '../../../models/account/account-video-rat
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { getVideoDislikeActivityPubUrl } from '../url'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorSignature } from '../../../types/models'
 
 async function processDislikeActivity (options: APProcessorOptions<ActivityCreate | ActivityDislike>) {
   const { activity, byActor } = options

@@ -6,8 +6,8 @@ import { ActorModel } from '../activitypub/actor'
 import { buildLocalActorIdsIn, throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { literal, Op, Transaction } from 'sequelize'
-import { MVideoShareActor, MVideoShareFull } from '../../typings/models/video'
-import { MActorDefault } from '../../typings/models'
+import { MVideoShareActor, MVideoShareFull } from '../../types/models/video'
+import { MActorDefault } from '../../types/models'
 
 enum ScopeNames {
   FULL = 'FULL',

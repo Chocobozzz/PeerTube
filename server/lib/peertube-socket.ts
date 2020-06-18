@@ -2,7 +2,7 @@ import * as SocketIO from 'socket.io'
 import { authenticateSocket } from '../middlewares'
 import { logger } from '../helpers/logger'
 import { Server } from 'http'
-import { UserNotificationModelForApi } from '@server/typings/models/user'
+import { UserNotificationModelForApi } from '@server/types/models/user'
 
 class PeerTubeSocket {
 

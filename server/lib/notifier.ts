@@ -7,8 +7,8 @@ import {
   MUserNotifSettingAccount,
   MUserWithNotificationSetting,
   UserNotificationModelForApi
-} from '@server/typings/models/user'
-import { MVideoImportVideo } from '@server/typings/models/video/video-import'
+} from '@server/types/models/user'
+import { MVideoImportVideo } from '@server/types/models/video/video-import'
 import { UserNotificationSettingValue, UserNotificationType, UserRight } from '../../shared/models/users'
 import { VideoAbuse, VideoPrivacy, VideoState } from '../../shared/models/videos'
 import { logger } from '../helpers/logger'
@@ -16,7 +16,7 @@ import { CONFIG } from '../initializers/config'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { UserModel } from '../models/account/user'
 import { UserNotificationModel } from '../models/account/user-notification'
-import { MAccountServer, MActorFollowFull } from '../typings/models'
+import { MAccountServer, MActorFollowFull } from '../types/models'
 import {
   MCommentOwnerVideo,
   MVideoAbuseVideo,
@@ -24,7 +24,7 @@ import {
   MVideoBlacklistLightVideo,
   MVideoBlacklistVideo,
   MVideoFullLight
-} from '../typings/models/video'
+} from '../types/models/video'
 import { isBlockedByServerOrAccount } from './blocklist'
 import { Emailer } from './emailer'
 import { PeerTubeSocket } from './peertube-socket'

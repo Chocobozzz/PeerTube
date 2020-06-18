@@ -8,8 +8,8 @@ import { VideoCommentModel } from '../../../models/video/video-comment'
 import { markCommentAsDeleted } from '../../video-comment'
 import { forwardVideoRelatedActivity } from '../send/utils'
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MAccountActor, MActor, MActorSignature, MChannelActor, MChannelActorAccountActor } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MAccountActor, MActor, MActorSignature, MChannelActor, MChannelActorAccountActor } from '../../../types/models'
 
 async function processDeleteActivity (options: APProcessorOptions<ActivityDelete>) {
   const { activity, byActor } = options

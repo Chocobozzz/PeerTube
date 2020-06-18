@@ -1,8 +1,8 @@
 import { ActivityReject } from '../../../../shared/models/activitypub/activity'
 import { sequelizeTypescript } from '../../../initializers/database'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActor } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActor } from '../../../types/models'
 
 async function processRejectActivity (options: APProcessorOptions<ActivityReject>) {
   const { byActor: targetActor, inboxActor } = options

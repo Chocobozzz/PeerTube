@@ -117,9 +117,9 @@ import {
   MVideoWithAllFiles,
   MVideoWithFile,
   MVideoWithRights
-} from '../../typings/models'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../typings/models/video/video-file'
-import { MThumbnail } from '../../typings/models/video/thumbnail'
+} from '../../types/models'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
+import { MThumbnail } from '../../types/models/video/thumbnail'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
 import { ModelCache } from '@server/models/model-cache'

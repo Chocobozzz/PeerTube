@@ -1,5 +1,5 @@
 import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership'
-import { PickWith } from '@server/typings/utils'
+import { PickWith } from '@server/types/utils'
 import { MAccountDefault, MAccountFormattable } from '../account/account'
 import { MVideo, MVideoWithAllFiles } from './video'
 

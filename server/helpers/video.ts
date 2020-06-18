@@ -11,7 +11,7 @@ import {
   MVideoImmutable,
   MVideoThumbnail,
   MVideoWithRights
-} from '@server/typings/models'
+} from '@server/types/models'
 import { Response } from 'express'
 import { DEFAULT_AUDIO_RESOLUTION } from '@server/initializers/constants'
 import { JobQueue } from '@server/lib/job-queue'

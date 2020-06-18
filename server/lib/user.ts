@@ -12,8 +12,8 @@ import { sequelizeTypescript } from '../initializers/database'
 import { Transaction } from 'sequelize/types'
 import { Redis } from './redis'
 import { Emailer } from './emailer'
-import { MAccountDefault, MActorDefault, MChannelActor } from '../typings/models'
-import { MUser, MUserDefault, MUserId } from '../typings/models/user'
+import { MAccountDefault, MActorDefault, MChannelActor } from '../types/models'
+import { MUser, MUserDefault, MUserId } from '../types/models/user'
 import { getAccountActivityPubUrl } from './activitypub/url'
 
 type ChannelNames = { name: string, displayName: string }

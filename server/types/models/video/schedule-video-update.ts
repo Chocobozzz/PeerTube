@@ -1,5 +1,5 @@
 import { ScheduleVideoUpdateModel } from '../../../models/video/schedule-video-update'
-import { PickWith } from '@server/typings/utils'
+import { PickWith } from '@server/types/utils'
 import { MVideoAPWithoutCaption, MVideoWithBlacklistLight } from './video'
 
 type Use<K extends keyof ScheduleVideoUpdateModel, M> = PickWith<ScheduleVideoUpdateModel, K, M>

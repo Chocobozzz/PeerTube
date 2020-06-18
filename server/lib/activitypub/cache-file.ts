@@ -2,7 +2,7 @@ import { CacheFileObject } from '../../../shared/index'
 import { VideoRedundancyModel } from '../../models/redundancy/video-redundancy'
 import { Transaction } from 'sequelize'
 import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
-import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/typings/models'
+import { MActorId, MVideoRedundancy, MVideoWithAllFiles } from '@server/types/models'
 
 function cacheFileActivityObjectToDBAttributes (cacheFileObject: CacheFileObject, video: MVideoWithAllFiles, byActor: MActorId) {
 

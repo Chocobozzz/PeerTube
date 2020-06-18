@@ -6,8 +6,8 @@ import { forwardVideoRelatedActivity } from '../send/utils'
 import { getOrCreateVideoAndAccountAndChannel } from '../videos'
 import { Notifier } from '../../notifier'
 import { logger } from '../../../helpers/logger'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorSignature, MVideoAccountLightBlacklistAllFiles } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorSignature, MVideoAccountLightBlacklistAllFiles } from '../../../types/models'
 
 async function processAnnounceActivity (options: APProcessorOptions<ActivityAnnounce>) {
   const { activity, byActor: actorAnnouncer } = options

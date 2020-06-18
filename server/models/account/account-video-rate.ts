@@ -16,7 +16,7 @@ import {
   MAccountVideoRateAccountUrl,
   MAccountVideoRateAccountVideo,
   MAccountVideoRateFormattable
-} from '@server/typings/models/video/video-rate'
+} from '@server/types/models/video/video-rate'
 
 /*
   Account rates per video.

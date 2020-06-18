@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { MChannelAccountDefault } from '@server/typings/models'
+import { MChannelAccountDefault } from '@server/types/models'
 
 async function doesLocalVideoChannelNameExist (name: string, res: express.Response) {
   const videoChannel = await VideoChannelModel.loadLocalByNameAndPopulateAccount(name)

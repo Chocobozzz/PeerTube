@@ -9,10 +9,10 @@ import {
   MVideoId,
   MVideoUrl,
   MVideoUUID
-} from '../../typings/models'
-import { MVideoPlaylist, MVideoPlaylistUUID } from '../../typings/models/video/video-playlist'
-import { MVideoFileVideoUUID } from '../../typings/models/video/video-file'
-import { MStreamingPlaylist } from '../../typings/models/video/video-streaming-playlist'
+} from '../../types/models'
+import { MVideoPlaylist, MVideoPlaylistUUID } from '../../types/models/video/video-playlist'
+import { MVideoFileVideoUUID } from '../../types/models/video/video-file'
+import { MStreamingPlaylist } from '../../types/models/video/video-streaming-playlist'
 
 function getVideoActivityPubUrl (video: MVideoUUID) {
   return WEBSERVER.URL + '/videos/watch/' + video.uuid

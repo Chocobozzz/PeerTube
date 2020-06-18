@@ -3,7 +3,7 @@ import { getActorFollowActivityPubUrl, getActorFollowRejectActivityPubUrl } from
 import { unicastTo } from './utils'
 import { buildFollowActivity } from './send-follow'
 import { logger } from '../../../helpers/logger'
-import { MActor } from '../../../typings/models'
+import { MActor } from '../../../types/models'
 
 function sendReject (follower: MActor, following: MActor) {
   if (!follower.serverId) { // This should never happen

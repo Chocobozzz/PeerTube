@@ -6,9 +6,9 @@ import { ThumbnailType } from '../../shared/models/videos/thumbnail.type'
 import { processImage } from '../helpers/image-utils'
 import { join } from 'path'
 import { downloadImage } from '../helpers/requests'
-import { MVideoPlaylistThumbnail } from '../typings/models/video/video-playlist'
-import { MVideoFile, MVideoThumbnail } from '../typings/models'
-import { MThumbnail } from '../typings/models/video/thumbnail'
+import { MVideoPlaylistThumbnail } from '../types/models/video/video-playlist'
+import { MVideoFile, MVideoThumbnail } from '../types/models'
+import { MThumbnail } from '../types/models/video/thumbnail'
 import { getVideoFilePath } from './video-paths'
 
 type ImageSize = { height: number, width: number }

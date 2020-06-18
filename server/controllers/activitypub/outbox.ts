@@ -8,7 +8,7 @@ import { buildAudience } from '../../lib/activitypub/audience'
 import { asyncMiddleware, localAccountValidator, localVideoChannelValidator } from '../../middlewares'
 import { VideoModel } from '../../models/video/video'
 import { activityPubResponse } from './utils'
-import { MActorLight } from '@server/typings/models'
+import { MActorLight } from '@server/types/models'
 import { apPaginationValidator } from '../../middlewares/validators/activitypub'
 
 const outboxRouter = express.Router()

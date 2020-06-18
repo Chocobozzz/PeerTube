@@ -32,7 +32,7 @@ import { FindOptions, IncludeOptions, Op, Transaction, WhereOptions } from 'sequ
 import { AccountBlocklistModel } from './account-blocklist'
 import { ServerBlocklistModel } from '../server/server-blocklist'
 import { ActorFollowModel } from '../activitypub/actor-follow'
-import { MAccountActor, MAccountAP, MAccountDefault, MAccountFormattable, MAccountSummaryFormattable, MAccount } from '../../typings/models'
+import { MAccountActor, MAccountAP, MAccountDefault, MAccountFormattable, MAccountSummaryFormattable, MAccount } from '../../types/models'
 import * as Bluebird from 'bluebird'
 import { ModelCache } from '@server/models/model-cache'
 import { VideoModel } from '../video/video'

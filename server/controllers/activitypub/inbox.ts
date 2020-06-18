@@ -6,7 +6,7 @@ import { processActivities } from '../../lib/activitypub/process/process'
 import { asyncMiddleware, checkSignature, localAccountValidator, localVideoChannelValidator, signatureValidator } from '../../middlewares'
 import { activityPubValidator } from '../../middlewares/validators/activitypub/activity'
 import { queue } from 'async'
-import { MActorDefault, MActorSignature } from '../../typings/models'
+import { MActorDefault, MActorSignature } from '../../types/models'
 
 const inboxRouter = express.Router()
 

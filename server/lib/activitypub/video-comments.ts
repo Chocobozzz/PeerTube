@@ -7,7 +7,7 @@ import { getOrCreateActorAndServerAndModel } from './actor'
 import { getOrCreateVideoAndAccountAndChannel } from './videos'
 import * as Bluebird from 'bluebird'
 import { checkUrlsSameHost } from '../../helpers/activitypub'
-import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../typings/models/video'
+import { MCommentOwner, MCommentOwnerVideo, MVideoAccountLightBlacklistAllFiles } from '../../types/models/video'
 
 type ResolveThreadParams = {
   url: string

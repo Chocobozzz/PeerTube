@@ -21,7 +21,7 @@ import { VideoImport, VideoImportState } from '../../../shared'
 import { isVideoMagnetUriValid } from '../../helpers/custom-validators/videos'
 import { UserModel } from '../account/user'
 import * as Bluebird from 'bluebird'
-import { MVideoImportDefault, MVideoImportFormattable } from '@server/typings/models/video/video-import'
+import { MVideoImportDefault, MVideoImportFormattable } from '@server/types/models/video/video-import'
 
 @DefaultScope(() => ({
   include: [

@@ -1,7 +1,7 @@
 import { Response } from 'express'
 import { AccountModel } from '../../models/account/account'
 import * as Bluebird from 'bluebird'
-import { MAccountDefault } from '../../typings/models'
+import { MAccountDefault } from '../../types/models'
 
 function doesAccountIdExist (id: number, res: Response, sendNotFound = true) {
   const promise = AccountModel.load(id)

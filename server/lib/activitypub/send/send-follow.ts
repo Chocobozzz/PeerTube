@@ -3,7 +3,7 @@ import { getActorFollowActivityPubUrl } from '../url'
 import { unicastTo } from './utils'
 import { logger } from '../../../helpers/logger'
 import { Transaction } from 'sequelize'
-import { MActor, MActorFollowActors } from '../../../typings/models'
+import { MActor, MActorFollowActors } from '../../../types/models'
 
 function sendFollow (actorFollow: MActorFollowActors, t: Transaction) {
   const me = actorFollow.ActorFollower

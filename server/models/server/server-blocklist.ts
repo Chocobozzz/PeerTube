@@ -4,7 +4,7 @@ import { ServerModel } from './server'
 import { ServerBlock } from '../../../shared/models/blocklist'
 import { getSort, searchAttribute } from '../utils'
 import * as Bluebird from 'bluebird'
-import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/typings/models'
+import { MServerBlocklist, MServerBlocklistAccountServer, MServerBlocklistFormattable } from '@server/types/models'
 import { Op } from 'sequelize'
 
 enum ScopeNames {

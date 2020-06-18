@@ -10,7 +10,7 @@ import { doRequest } from '../../helpers/requests'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
 import { getVideoDislikeActivityPubUrl, getVideoLikeActivityPubUrl } from './url'
 import { sendDislike } from './send/send-dislike'
-import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../typings/models'
+import { MAccountActor, MActorUrl, MVideo, MVideoAccountLight, MVideoId } from '../../types/models'
 
 async function createRates (ratesUrl: string[], video: MVideo, rate: VideoRateType) {
   let rateCounts = 0

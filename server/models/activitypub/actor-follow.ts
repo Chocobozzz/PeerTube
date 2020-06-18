@@ -33,7 +33,7 @@ import {
   MActorFollowFollowingHost,
   MActorFollowFormattable,
   MActorFollowSubscriptions
-} from '@server/typings/models'
+} from '@server/types/models'
 import { ActivityPubActorType } from '@shared/models'
 import { VideoModel } from '@server/models/video/video'
 import { getServerActor } from '@server/models/application/application'

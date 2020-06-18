@@ -4,7 +4,7 @@ import { getVideoLikeActivityPubUrl } from '../url'
 import { sendVideoRelatedActivity } from './utils'
 import { audiencify, getAudience } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../typings/models'
+import { MActor, MActorAudience, MVideoAccountLight, MVideoUrl } from '../../../types/models'
 
 function sendLike (byActor: MActor, video: MVideoAccountLight, t: Transaction) {
   logger.info('Creating job to like %s.', video.url)

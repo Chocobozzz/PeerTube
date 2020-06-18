@@ -1,7 +1,7 @@
 import * as express from 'express'
 import { body, param, query } from 'express-validator'
 import { VIDEO_CHANNELS } from '@server/initializers/constants'
-import { MChannelAccountDefault, MUser } from '@server/typings/models'
+import { MChannelAccountDefault, MUser } from '@server/types/models'
 import { UserRight } from '../../../../shared'
 import { isActorPreferredUsernameValid } from '../../../helpers/custom-validators/activitypub/actor'
 import { isBooleanValid, toBooleanOrNull } from '../../../helpers/custom-validators/misc'

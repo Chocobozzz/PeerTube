@@ -1,5 +1,5 @@
 import { VideoImportModel } from '@server/models/video/video-import'
-import { PickWith, PickWithOpt } from '@server/typings/utils'
+import { PickWith, PickWithOpt } from '@server/types/utils'
 import { MVideo, MVideoAccountLight, MVideoFormattable, MVideoTag, MVideoThumbnail, MVideoWithFile } from './video'
 import { MUser } from '../user/user'
 

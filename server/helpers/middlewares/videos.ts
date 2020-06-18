@@ -11,7 +11,7 @@ import {
   MVideoImmutable,
   MVideoThumbnail,
   MVideoWithRights
-} from '@server/typings/models'
+} from '@server/types/models'
 import { VideoFileModel } from '@server/models/video/video-file'
 
 async function doesVideoExist (id: number | string, res: Response, fetchType: VideoFetchType = 'all') {

@@ -1,6 +1,6 @@
 import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 import { CustomConfig } from '../../models/server/custom-config.model'
-import { DeepPartial } from '@server/typings/utils'
+import { DeepPartial } from '@server/types/utils'
 import { merge } from 'lodash'
 
 function getConfig (url: string) {

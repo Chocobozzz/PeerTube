@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { body, param } from 'express-validator'
-import { MUserAccountUrl } from '@server/typings/models'
+import { MUserAccountUrl } from '@server/types/models'
 import { UserRight } from '../../../../shared'
 import { isIdOrUUIDValid, isIdValid } from '../../../helpers/custom-validators/misc'
 import { isValidVideoCommentText } from '../../../helpers/custom-validators/video-comments'
@@ -9,7 +9,7 @@ import { doesVideoExist } from '../../../helpers/middlewares'
 import { AcceptResult, isLocalVideoCommentReplyAccepted, isLocalVideoThreadAccepted } from '../../../lib/moderation'
 import { Hooks } from '../../../lib/plugins/hooks'
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { MCommentOwnerVideoReply, MVideo, MVideoFullLight, MVideoId } from '../../../typings/models/video'
+import { MCommentOwnerVideoReply, MVideo, MVideoFullLight, MVideoId } from '../../../types/models/video'
 import { areValidationErrors } from '../utils'
 
 const listVideoCommentThreadsValidator = [

@@ -17,7 +17,7 @@ import { PluginVideoLanguageManager } from '../../../shared/models/plugins/plugi
 import { PluginVideoLicenceManager } from '../../../shared/models/plugins/plugin-video-licence-manager.model'
 import { RegisterServerHookOptions } from '../../../shared/models/plugins/register-server-hook.model'
 import { RegisterServerSettingOptions } from '../../../shared/models/plugins/register-server-setting.model'
-import { MVideoThumbnail } from '../models'
+import { MVideoThumbnail } from '../../types/models'
 
 export type PeerTubeHelpers = {
   logger: Logger

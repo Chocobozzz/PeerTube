@@ -18,7 +18,7 @@ import {
   MVideoAPWithoutCaption,
   MVideoPlaylistFull,
   MVideoRedundancyVideo
-} from '../../../typings/models'
+} from '../../../types/models'
 import { getServerActor } from '@server/models/application/application'
 
 async function sendUpdateVideo (videoArg: MVideoAPWithoutCaption, t: Transaction, overrodeByActor?: MActor) {

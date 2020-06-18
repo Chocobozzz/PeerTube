@@ -1,6 +1,6 @@
 import { ActorModel } from '../models/activitypub/actor'
 import * as Bluebird from 'bluebird'
-import { MActorFull, MActorAccountChannelId } from '../typings/models'
+import { MActorFull, MActorAccountChannelId } from '../types/models'
 
 type ActorFetchByUrlType = 'all' | 'association-ids'
 

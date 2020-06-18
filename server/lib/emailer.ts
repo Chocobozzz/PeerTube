@@ -12,9 +12,9 @@ import {
   MVideoAccountLight,
   MVideoBlacklistLightVideo,
   MVideoBlacklistVideo
-} from '../typings/models/video'
-import { MActorFollowActors, MActorFollowFull, MUser } from '../typings/models'
-import { MVideoImport, MVideoImportVideo } from '@server/typings/models/video/video-import'
+} from '../types/models/video'
+import { MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
 import { EmailPayload } from '@shared/models'
 import { join } from 'path'
 import { VideoAbuse } from '../../shared/models/videos'

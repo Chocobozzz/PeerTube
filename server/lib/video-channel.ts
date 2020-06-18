@@ -4,7 +4,7 @@ import { VideoChannelCreate } from '../../shared/models'
 import { VideoChannelModel } from '../models/video/video-channel'
 import { buildActorInstance } from './activitypub/actor'
 import { VideoModel } from '../models/video/video'
-import { MAccountId, MChannelDefault, MChannelId } from '../typings/models'
+import { MAccountId, MChannelDefault, MChannelId } from '../types/models'
 import { getVideoChannelActivityPubUrl } from './activitypub/url'
 import { federateVideoIfNeeded } from './activitypub/videos'
 

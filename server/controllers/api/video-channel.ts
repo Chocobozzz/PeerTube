@@ -35,7 +35,7 @@ import { VideoPlaylistModel } from '../../models/video/video-playlist'
 import { commonVideoPlaylistFiltersValidator } from '../../middlewares/validators/videos/video-playlists'
 import { CONFIG } from '../../initializers/config'
 import { sequelizeTypescript } from '../../initializers/database'
-import { MChannelAccountDefault } from '@server/typings/models'
+import { MChannelAccountDefault } from '@server/types/models'
 import { getServerActor } from '@server/models/application/application'
 
 const auditLogger = auditLoggerFactory('channels')

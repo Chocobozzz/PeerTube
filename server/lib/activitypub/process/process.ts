@@ -14,8 +14,8 @@ import { getOrCreateActorAndServerAndModel } from '../actor'
 import { processDislikeActivity } from './process-dislike'
 import { processFlagActivity } from './process-flag'
 import { processViewActivity } from './process-view'
-import { APProcessorOptions } from '../../../typings/activitypub-processor.model'
-import { MActorDefault, MActorSignature } from '../../../typings/models'
+import { APProcessorOptions } from '../../../types/activitypub-processor.model'
+import { MActorDefault, MActorSignature } from '../../../types/models'
 
 const processActivity: { [ P in ActivityType ]: (options: APProcessorOptions<Activity>) => Promise<any> } = {
   Create: processCreateActivity,

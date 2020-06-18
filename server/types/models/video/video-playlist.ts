@@ -3,7 +3,7 @@ import { PickWith } from '../../utils'
 import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account'
 import { MThumbnail } from './thumbnail'
 import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channels'
-import { MVideoPlaylistElementLight } from '@server/typings/models/video/video-playlist-element'
+import { MVideoPlaylistElementLight } from '@server/types/models/video/video-playlist-element'
 
 type Use<K extends keyof VideoPlaylistModel, M> = PickWith<VideoPlaylistModel, K, M>
 

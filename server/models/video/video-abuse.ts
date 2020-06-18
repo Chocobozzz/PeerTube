@@ -24,7 +24,7 @@ import {
   isVideoAbuseStateValid
 } from '../../helpers/custom-validators/video-abuses'
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
-import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../typings/models'
+import { MUserAccountId, MVideoAbuse, MVideoAbuseFormattable, MVideoAbuseVideo } from '../../types/models'
 import { AccountModel } from '../account/account'
 import { buildBlockedAccountSQL, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from './thumbnail'

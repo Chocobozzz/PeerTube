@@ -4,7 +4,7 @@ import { getSort, searchAttribute } from '../utils'
 import { AccountBlock } from '../../../shared/models/blocklist'
 import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
-import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/typings/models'
+import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/types/models'
 import { ActorModel } from '../activitypub/actor'
 import { ServerModel } from '../server/server'
 

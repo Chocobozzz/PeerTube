@@ -8,7 +8,7 @@ import { CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { FindOptions } from 'sequelize'
 import { ThumbnailModel } from './thumbnail'
 import * as Bluebird from 'bluebird'
-import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/typings/models'
+import { MVideoBlacklist, MVideoBlacklistFormattable } from '@server/types/models'
 
 @Table({
   tableName: 'videoBlacklist',

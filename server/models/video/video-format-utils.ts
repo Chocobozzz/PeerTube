@@ -19,8 +19,8 @@ import {
   MVideoFile,
   MVideoFormattable,
   MVideoFormattableDetails
-} from '../../typings/models'
-import { MVideoFileRedundanciesOpt } from '../../typings/models/video/video-file'
+} from '../../types/models'
+import { MVideoFileRedundanciesOpt } from '../../types/models/video/video-file'
 import { VideoFile } from '@shared/models/videos/video-file.model'
 import { generateMagnetUri } from '@server/helpers/webtorrent'
 import { extractVideo } from '@server/helpers/video'

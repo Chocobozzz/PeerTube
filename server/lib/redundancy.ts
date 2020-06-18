@@ -1,7 +1,7 @@
 import { VideoRedundancyModel } from '../models/redundancy/video-redundancy'
 import { sendUndoCacheFile } from './activitypub/send'
 import { Transaction } from 'sequelize'
-import { MActorSignature, MVideoRedundancyVideo } from '@server/typings/models'
+import { MActorSignature, MVideoRedundancyVideo } from '@server/types/models'
 import { CONFIG } from '@server/initializers/config'
 import { logger } from '@server/helpers/logger'
 import { ActorFollowModel } from '@server/models/activitypub/actor-follow'

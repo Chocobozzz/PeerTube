@@ -16,7 +16,7 @@ import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/typings/models/user'
+import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'

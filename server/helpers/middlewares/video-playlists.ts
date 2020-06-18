@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { VideoPlaylistModel } from '../../models/video/video-playlist'
-import { MVideoPlaylist } from '../../typings/models/video/video-playlist'
+import { MVideoPlaylist } from '../../types/models/video/video-playlist'
 
 export type VideoPlaylistFetchType = 'summary' | 'all'
 async function doesVideoPlaylistExist (id: number | string, res: express.Response, fetchType: VideoPlaylistFetchType = 'summary') {

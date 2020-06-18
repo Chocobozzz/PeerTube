@@ -4,7 +4,7 @@ import { ActorModel } from '../models/activitypub/actor'
 import { isTestInstance } from './core-utils'
 import { isActivityPubUrlValid } from './custom-validators/activitypub/misc'
 import { WEBSERVER } from '../initializers/constants'
-import { MActorFull } from '../typings/models'
+import { MActorFull } from '../types/models'
 
 const webfinger = new WebFinger({
   webfist_fallback: false,

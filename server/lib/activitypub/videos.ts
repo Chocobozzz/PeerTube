@@ -52,7 +52,7 @@ import { sequelizeTypescript } from '../../initializers/database'
 import { createPlaceholderThumbnail, createVideoMiniatureFromUrl } from '../thumbnail'
 import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { join } from 'path'
-import { FilteredModelAttributes } from '../../typings/sequelize'
+import { FilteredModelAttributes } from '../../types/sequelize'
 import { autoBlacklistVideoIfNeeded } from '../video-blacklist'
 import { ActorFollowScoreCache } from '../files-cache'
 import {
@@ -71,8 +71,8 @@ import {
   MVideoId,
   MVideoImmutable,
   MVideoThumbnail
-} from '../../typings/models'
-import { MThumbnail } from '../../typings/models/video/thumbnail'
+} from '../../types/models'
+import { MThumbnail } from '../../types/models/video/thumbnail'
 import { maxBy, minBy } from 'lodash'
 
 async function federateVideoIfNeeded (videoArg: MVideoAPWithoutCaption, isNewVideo: boolean, transaction?: sequelize.Transaction) {

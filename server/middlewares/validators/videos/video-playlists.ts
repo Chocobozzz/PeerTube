@@ -27,8 +27,8 @@ import { authenticatePromiseIfNeeded } from '../../oauth'
 import { VideoPlaylistPrivacy } from '../../../../shared/models/videos/playlist/video-playlist-privacy.model'
 import { VideoPlaylistType } from '../../../../shared/models/videos/playlist/video-playlist-type.model'
 import { doesVideoChannelIdExist, doesVideoExist, doesVideoPlaylistExist, VideoPlaylistFetchType } from '../../../helpers/middlewares'
-import { MVideoPlaylist } from '../../../typings/models/video/video-playlist'
-import { MUserAccountId } from '@server/typings/models'
+import { MVideoPlaylist } from '../../../types/models/video/video-playlist'
+import { MUserAccountId } from '@server/types/models'
 
 const videoPlaylistsAddValidator = getCommonPlaylistEditAttributes().concat([
   body('displayName')

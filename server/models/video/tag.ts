@@ -6,7 +6,7 @@ import { throwIfNotValid } from '../utils'
 import { VideoModel } from './video'
 import { VideoTagModel } from './video-tag'
 import { VideoPrivacy, VideoState } from '../../../shared/models/videos'
-import { MTag } from '@server/typings/models'
+import { MTag } from '@server/types/models'
 
 @Table({
   tableName: 'tag',

@@ -23,7 +23,7 @@ import { logger } from '../../helpers/logger'
 import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
 import * as Bluebird from 'bluebird'
-import { MVideoAccountLight, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/typings/models'
+import { MVideoAccountLight, MVideoCaptionFormattable, MVideoCaptionVideo } from '@server/types/models'
 import { buildRemoteVideoBaseUrl } from '@server/helpers/activitypub'
 
 export enum ScopeNames {

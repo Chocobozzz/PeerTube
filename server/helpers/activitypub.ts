@@ -6,7 +6,7 @@ import { ACTIVITY_PUB, REMOTE_SCHEME } from '../initializers/constants'
 import { signJsonLDObject } from './peertube-crypto'
 import { pageToStartAndCount } from './core-utils'
 import { URL } from 'url'
-import { MActor, MVideoAccountLight } from '../typings/models'
+import { MActor, MVideoAccountLight } from '../types/models'
 import { ContextType } from '@shared/models/activitypub/context'
 
 function getContextData (type: ContextType) {

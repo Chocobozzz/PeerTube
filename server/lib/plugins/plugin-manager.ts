@@ -21,7 +21,7 @@ import { ClientHtml } from '../client-html'
 import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
 import { RegisterHelpersStore } from './register-helpers-store'
 import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
-import { MOAuthTokenUser, MUser } from '@server/typings/models'
+import { MOAuthTokenUser, MUser } from '@server/types/models'
 import { RegisterServerAuthPassOptions, RegisterServerAuthExternalOptions } from '@shared/models/plugins/register-server-auth.model'
 
 export interface RegisteredPlugin {

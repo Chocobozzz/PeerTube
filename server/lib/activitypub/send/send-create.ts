@@ -14,7 +14,7 @@ import {
   MVideoPlaylistFull,
   MVideoRedundancyFileVideo,
   MVideoRedundancyStreamingPlaylistVideo
-} from '../../../typings/models'
+} from '../../../types/models'
 import { getServerActor } from '@server/models/application/application'
 import { ContextType } from '@shared/models/activitypub/context'
 

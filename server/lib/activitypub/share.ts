@@ -8,7 +8,7 @@ import { getOrCreateActorAndServerAndModel } from './actor'
 import { logger } from '../../helpers/logger'
 import { CRAWL_REQUEST_CONCURRENCY } from '../../initializers/constants'
 import { checkUrlsSameHost, getAPId } from '../../helpers/activitypub'
-import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../typings/models/video'
+import { MChannelActorLight, MVideo, MVideoAccountLight, MVideoId } from '../../types/models/video'
 import { getServerActor } from '@server/models/application/application'
 
 async function shareVideoByServerAndChannel (video: MVideoAccountLight, t: Transaction) {

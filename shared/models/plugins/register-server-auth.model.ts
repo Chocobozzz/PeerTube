@@ -1,5 +1,5 @@
 import { UserRole } from '@shared/models'
-import { MOAuthToken, MUser } from '@server/typings/models'
+import { MOAuthToken, MUser } from '@server/types/models'
 import * as express from 'express'
 
 export type RegisterServerAuthOptions = RegisterServerAuthPassOptions | RegisterServerAuthExternalOptions

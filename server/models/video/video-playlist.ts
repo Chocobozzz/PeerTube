@@ -51,9 +51,9 @@ import {
   MVideoPlaylistFull,
   MVideoPlaylistFullSummary,
   MVideoPlaylistIdWithElements
-} from '../../typings/models/video/video-playlist'
-import { MThumbnail } from '../../typings/models/video/thumbnail'
-import { MAccountId, MChannelId } from '@server/typings/models'
+} from '../../types/models/video/video-playlist'
+import { MThumbnail } from '../../types/models/video/thumbnail'
+import { MAccountId, MChannelId } from '@server/types/models'
 
 enum ScopeNames {
   AVAILABLE_FOR_LIST = 'AVAILABLE_FOR_LIST',

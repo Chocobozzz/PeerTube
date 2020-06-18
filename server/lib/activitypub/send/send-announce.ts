@@ -3,8 +3,8 @@ import { ActivityAnnounce, ActivityAudience } from '../../../../shared/models/ac
 import { broadcastToFollowers } from './utils'
 import { audiencify, getActorsInvolvedInVideo, getAudience, getAudienceFromFollowersOf } from '../audience'
 import { logger } from '../../../helpers/logger'
-import { MActorLight, MVideo } from '../../../typings/models'
-import { MVideoShare } from '../../../typings/models/video'
+import { MActorLight, MVideo } from '../../../types/models'
+import { MVideoShare } from '../../../types/models/video'
 
 async function buildAnnounceWithVideoAudience (
   byActor: MActorLight,

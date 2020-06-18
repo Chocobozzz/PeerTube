@@ -1,6 +1,6 @@
 import { sequelizeTypescript } from '@server/initializers/database'
 import { getServerActor } from '@server/models/application/application'
-import { MAccountBlocklist, MAccountId, MAccountServer, MServerBlocklist } from '@server/typings/models'
+import { MAccountBlocklist, MAccountId, MAccountServer, MServerBlocklist } from '@server/types/models'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { ServerBlocklistModel } from '../models/server/server-blocklist'
 

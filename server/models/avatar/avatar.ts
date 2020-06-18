@@ -7,7 +7,7 @@ import { remove } from 'fs-extra'
 import { CONFIG } from '../../initializers/config'
 import { throwIfNotValid } from '../utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
-import { MAvatarFormattable } from '@server/typings/models'
+import { MAvatarFormattable } from '@server/types/models'
 
 @Table({
   tableName: 'avatar',

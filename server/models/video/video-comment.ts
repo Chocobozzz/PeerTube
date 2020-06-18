@@ -3,7 +3,7 @@ import { uniq } from 'lodash'
 import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, DataType, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { getServerActor } from '@server/models/application/application'
-import { MAccount, MAccountId, MUserAccountId } from '@server/typings/models'
+import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
 import { VideoPrivacy } from '@shared/models'
 import { ActivityTagObject, ActivityTombstoneObject } from '../../../shared/models/activitypub/objects/common-objects'
 import { VideoCommentObject } from '../../../shared/models/activitypub/objects/video-comment-object'
@@ -23,7 +23,7 @@ import {
   MCommentOwnerVideoFeed,
   MCommentOwnerVideoReply,
   MVideoImmutable
-} from '../../typings/models/video'
+} from '../../types/models/video'
 import { AccountModel } from '../account/account'
 import { ActorModel, unusedActorAttributesForAPI } from '../activitypub/actor'
 import { buildBlockedAccountSQL, buildLocalAccountIdsIn, getCommentSort, throwIfNotValid } from '../utils'

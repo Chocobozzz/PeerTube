@@ -22,9 +22,9 @@ import { VideoAbuseModel } from '../../../models/video/video-abuse'
 import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
 import { Notifier } from '../../../lib/notifier'
 import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
-import { MVideoAbuseAccountVideo } from '../../../typings/models/video'
+import { MVideoAbuseAccountVideo } from '../../../types/models/video'
 import { getServerActor } from '@server/models/application/application'
-import { MAccountDefault } from '@server/typings/models'
+import { MAccountDefault } from '@server/types/models'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()

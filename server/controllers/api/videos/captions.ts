@@ -10,7 +10,7 @@ import { federateVideoIfNeeded } from '../../../lib/activitypub/videos'
 import { moveAndProcessCaptionFile } from '../../../helpers/captions-utils'
 import { CONFIG } from '../../../initializers/config'
 import { sequelizeTypescript } from '../../../initializers/database'
-import { MVideoCaptionVideo } from '@server/typings/models'
+import { MVideoCaptionVideo } from '@server/types/models'
 
 const reqVideoCaptionAdd = createReqFiles(
   [ 'captionfile' ],

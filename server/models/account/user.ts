@@ -68,7 +68,7 @@ import {
   MUserNotifSettingChannelDefault,
   MUserWithNotificationSetting,
   MVideoFullLight
-} from '@server/typings/models'
+} from '@server/types/models'
 
 enum ScopeNames {
   FOR_ME_API = 'FOR_ME_API',

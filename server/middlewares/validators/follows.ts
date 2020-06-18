@@ -9,7 +9,7 @@ import { areValidationErrors } from './utils'
 import { ActorModel } from '../../models/activitypub/actor'
 import { loadActorUrlOrGetFromWebfinger } from '../../helpers/webfinger'
 import { isActorTypeValid, isValidActorHandle } from '../../helpers/custom-validators/activitypub/actor'
-import { MActorFollowActorsDefault } from '@server/typings/models'
+import { MActorFollowActorsDefault } from '@server/types/models'
 import { isFollowStateValid } from '@server/helpers/custom-validators/follows'
 import { getServerActor } from '@server/models/application/application'
 
