@@ -126,7 +126,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
   const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
     reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
-    const predefinedReasons = keys(pickBy(body.predefinedReasons)).map(r => VideoAbusePredefinedReasonsIn[r])
+    const predefinedReasons = body.predefinedReasons.map(r => VideoAbusePredefinedReasonsIn[r])
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,

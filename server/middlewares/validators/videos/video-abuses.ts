@@ -6,8 +6,7 @@ import {
   isVideoAbuseModerationCommentValid,
   isVideoAbuseReasonValid,
   isVideoAbuseStateValid,
-  isVideoAbusePredefinedReasonsValid,
-  isVideoAbuseTimestampValid
+  isVideoAbusePredefinedReasonsValid
 } from '../../../helpers/custom-validators/video-abuses'
 import { logger } from '../../../helpers/logger'
 import { doesVideoAbuseExist, doesVideoExist } from '../../../helpers/middlewares'

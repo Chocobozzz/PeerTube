@@ -1,6 +1,8 @@
+import { VideoAbusePredefinedReasonsIn } from './video-abuse-reason.model'
+
 export interface VideoAbuseCreate {
   reason: string
-  predefinedReasons?: {[key: string]: boolean} // see VideoAbusePredefinedReasonsIn
+  predefinedReasons?: VideoAbusePredefinedReasonsIn[]
   startAt?: number
   endAt?: number
 }

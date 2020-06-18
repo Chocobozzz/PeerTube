@@ -9,18 +9,17 @@ export enum VideoAbusePredefinedReasons {
   CAPTIONS
 }
 
-export interface VideoAbusePredefinedReasonsIn {
-  violentOrRepulsive: VideoAbusePredefinedReasons
-  hatefulOrAbusive: VideoAbusePredefinedReasons
-  spamOrMisleading: VideoAbusePredefinedReasons
-  privacy: VideoAbusePredefinedReasons
-  rights: VideoAbusePredefinedReasons
-  serverRules: VideoAbusePredefinedReasons
-  thumbnails: VideoAbusePredefinedReasons
-  captions: VideoAbusePredefinedReasons
-}
+export type VideoAbusePredefinedReasonsIn =
+  'violentOrRepulsive' |
+  'hatefulOrAbusive' |
+  'spamOrMisleading' |
+  'privacy' |
+  'rights' |
+  'serverRules' |
+  'thumbnails' |
+  'captions'
 
-export const VideoAbusePredefinedReasonsIn: VideoAbusePredefinedReasonsIn = {
+export const VideoAbusePredefinedReasonsIn = {
   violentOrRepulsive: VideoAbusePredefinedReasons.VIOLENT_OR_REPULSIVE,
   hatefulOrAbusive: VideoAbusePredefinedReasons.HATEFUL_OR_ABUSIVE,
   spamOrMisleading: VideoAbusePredefinedReasons.SPAM_OR_MISLEADING,

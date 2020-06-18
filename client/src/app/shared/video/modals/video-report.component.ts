@@ -24,7 +24,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
-  predefinedReasons: { id: keyof VideoAbusePredefinedReasonsIn, label: string, description?: string, help?: string }[] = []
+  predefinedReasons: { id: VideoAbusePredefinedReasonsIn, label: string, description?: string, help?: string }[] = []
   embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
@@ -138,7 +138,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   report () {
     const reason = this.form.get('reason').value
-    const predefinedReasons = pickBy(this.form.get('predefinedReasons').value)
+    const predefinedReasons = keys(pickBy(this.form.get('predefinedReasons').value)) as VideoAbusePredefinedReasonsIn[]
     const { hasStart, startAt, hasEnd, endAt } = this.form.get('timestamp').value
 
     this.videoAbuseService.reportVideo({
