@@ -10,8 +10,8 @@ import { VideoAbuseService } from '@app/shared/video-abuse'
 import { Video } from '@app/shared/video/video.model'
 import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { VideoAbusePredefinedReasonsIn } from '@shared/models/videos/abuse/video-abuse-reason.model'
-import { mapValues, pickBy, keys } from 'lodash-es'
+import { VideoAbusePredefinedReasonsString, VideoAbusePredefinedReasonsMap } from '@shared/models/videos/abuse/video-abuse-reason.model'
+import { mapValues, pickBy } from 'lodash-es'
 
 @Component({
   selector: 'my-video-report',
@@ -24,7 +24,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
-  predefinedReasons: { id: VideoAbusePredefinedReasonsIn, label: string, description?: string, help?: string }[] = []
+  predefinedReasons: { id: VideoAbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
   embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
@@ -72,7 +72,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({
       reason: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON,
-      predefinedReasons: mapValues(VideoAbusePredefinedReasonsIn, r => null),
+      predefinedReasons: mapValues(VideoAbusePredefinedReasonsMap, r => null),
       timestamp: {
         hasStart: null,
         startAt: null,
@@ -138,7 +138,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   report () {
     const reason = this.form.get('reason').value
-    const predefinedReasons = keys(pickBy(this.form.get('predefinedReasons').value)) as VideoAbusePredefinedReasonsIn[]
+    const predefinedReasons = Object.keys(pickBy(this.form.get('predefinedReasons').value)) as VideoAbusePredefinedReasonsString[]
     const { hasStart, startAt, hasEnd, endAt } = this.form.get('timestamp').value
 
     this.videoAbuseService.reportVideo({

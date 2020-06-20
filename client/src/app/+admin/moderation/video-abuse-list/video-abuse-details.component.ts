@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { Actor } from '@app/shared/actor/actor.model'
-import { VideoAbusePredefinedReasons } from '../../../../../../shared/models/videos/abuse/video-abuse-reason.model'
+import { VideoAbusePredefinedReasonsString } from '../../../../../../shared/models/videos/abuse/video-abuse-reason.model'
 import { ProcessedVideoAbuse } from './video-abuse-list.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { durationToString } from '@app/shared/misc/utils'
@@ -13,20 +13,20 @@ import { durationToString } from '@app/shared/misc/utils'
 export class VideoAbuseDetailsComponent {
   @Input() videoAbuse: ProcessedVideoAbuse
 
-  private predefinedReasonsTranslations: { [key: number]: string }
+  private predefinedReasonsTranslations: { [key in VideoAbusePredefinedReasonsString]: string }
 
   constructor (
     private i18n: I18n
   ) {
     this.predefinedReasonsTranslations = {
-      [VideoAbusePredefinedReasons.VIOLENT_OR_REPULSIVE]: this.i18n('Violent or Repulsive'),
-      [VideoAbusePredefinedReasons.HATEFUL_OR_ABUSIVE]: this.i18n('Hateful or Abusive'),
-      [VideoAbusePredefinedReasons.SPAM_OR_MISLEADING]: this.i18n('Spam or Misleading'),
-      [VideoAbusePredefinedReasons.PRIVACY]: this.i18n('Privacy'),
-      [VideoAbusePredefinedReasons.RIGHTS]: this.i18n('Rights'),
-      [VideoAbusePredefinedReasons.SERVER_RULES]: this.i18n('Server rules'),
-      [VideoAbusePredefinedReasons.THUMBNAILS]: this.i18n('Thumbnails'),
-      [VideoAbusePredefinedReasons.CAPTIONS]: this.i18n('Captions')
+      violentOrRepulsive: this.i18n('Violent or Repulsive'),
+      hatefulOrAbusive: this.i18n('Hateful or Abusive'),
+      spamOrMisleading: this.i18n('Spam or Misleading'),
+      privacy: this.i18n('Privacy'),
+      rights: this.i18n('Rights'),
+      serverRules: this.i18n('Server rules'),
+      thumbnails: this.i18n('Thumbnails'),
+      captions: this.i18n('Captions')
     }
   }
 

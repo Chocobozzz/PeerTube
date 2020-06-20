@@ -15,7 +15,13 @@ import {
   UpdatedAt
 } from 'sequelize-typescript'
 import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
-import { VideoAbuseState, VideoDetails } from '../../../shared'
+import {
+  VideoAbuseState,
+  VideoDetails,
+  VideoAbusePredefinedReasons,
+  VideoAbusePredefinedReasonsString,
+  VideoAbusePredefinedReasonsMap
+} from '../../../shared'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { VideoAbuse } from '../../../shared/models/videos'
 import {
@@ -31,6 +37,7 @@ import { ThumbnailModel } from './thumbnail'
 import { VideoModel } from './video'
 import { VideoBlacklistModel } from './video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
+import { invert } from 'lodash'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API'
@@ -270,7 +277,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   @AllowNull(true)
   @Default(null)
   @Column(DataType.ARRAY(DataType.INTEGER))
-  predefinedReasons: number[]
+  predefinedReasons: VideoAbusePredefinedReasons[]
 
   @AllowNull(true)
   @Default(null)
@@ -335,7 +342,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     user?: MUserAccountId
 
     id?: number
-    predefinedReasonId?: number
+    predefinedReason?: VideoAbusePredefinedReasonsString
     state?: VideoAbuseState
     videoIs?: VideoAbuseVideoIs
 
@@ -354,7 +361,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       serverAccountId,
       state,
       videoIs,
-      predefinedReasonId,
+      predefinedReason,
       searchReportee,
       searchVideo,
       searchVideoChannel,
@@ -363,6 +370,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     } = parameters
 
     const userAccountId = user ? user.Account.id : undefined
+    const predefinedReasonId = predefinedReason ? VideoAbusePredefinedReasonsMap[predefinedReason] : undefined
 
     const query = {
       offset: start,
@@ -397,6 +405,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
+    const predefinedReasons = VideoAbuseModel.getPredefinedReasonsStrings(this.predefinedReasons || [])
     const countReportsForVideo = this.get('countReportsForVideo') as number
     const nthReportForVideo = this.get('nthReportForVideo') as number
     const countReportsForReporterVideo = this.get('countReportsForReporter__video') as number
@@ -411,7 +420,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     return {
       id: this.id,
       reason: this.reason,
-      predefinedReasons: this.predefinedReasons,
+      predefinedReasons,
       reporterAccount: this.Account.toFormattedJSON(),
       state: {
         id: this.state,
@@ -440,6 +449,8 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toActivityPubObject (this: MVideoAbuseVideo): VideoAbuseObject {
+    const predefinedReasons = VideoAbuseModel.getPredefinedReasonsStrings(this.predefinedReasons || [])
+
     const startAt = this.startAt
     const endAt = this.endAt
 
@@ -447,9 +458,9 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
       type: 'Flag' as 'Flag',
       content: this.reason,
       object: this.Video.url,
-      tag: this.predefinedReasons.map(r => ({
+      tag: predefinedReasons.map(r => ({
         type: 'Hashtag' as 'Hashtag',
-        name: r.toString()
+        name: r
       })),
       startAt,
       endAt
@@ -458,5 +469,11 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
 
   private static getStateLabel (id: number) {
     return VIDEO_ABUSE_STATES[id] || 'Unknown'
+  }
+
+  private static getPredefinedReasonsStrings (predefinedReasons: VideoAbusePredefinedReasons[]): VideoAbusePredefinedReasonsString[] {
+    return predefinedReasons
+      .filter(r => r in VideoAbusePredefinedReasons)
+      .map(r => invert(VideoAbusePredefinedReasonsMap)[r] as VideoAbusePredefinedReasonsString)
   }
 }

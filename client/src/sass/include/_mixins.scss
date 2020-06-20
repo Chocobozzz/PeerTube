@@ -804,10 +804,12 @@
 }
 
 @mixin chip {
+  --chip-radius: 5rem;
+  --chip-padding: .2rem .4rem;
   $avatar-height: 1.2rem;
 
   align-items: center;
-  border-radius: 5rem;
+  border-radius: var(--chip-radius);
   display: inline-flex;
   font-size: 90%;
   color: pvar(--mainForegroundColor);
@@ -816,11 +818,16 @@
   margin: .1rem;
   max-width: 320px;
   overflow: hidden;
-  padding: .2rem .4rem;
+  padding: var(--chip-padding);
   text-decoration: none;
   text-overflow: ellipsis;
   vertical-align: middle;
   white-space: nowrap;
+
+  &.rectangular {
+    --chip-radius: .2rem;
+    --chip-padding: .2rem .3rem;
+  }
 
   .avatar {
     margin-left: -.4rem;

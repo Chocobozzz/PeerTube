@@ -1,10 +1,9 @@
 import validator from 'validator'
-import { keys } from 'lodash'
 
 import { CONSTRAINTS_FIELDS, VIDEO_ABUSE_STATES } from '../../initializers/constants'
-import { exists } from './misc'
+import { exists, isArray } from './misc'
 import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
-import { VideoAbusePredefinedReasonsIn } from '@shared/models/videos/abuse/video-abuse-reason.model'
+import { VideoAbusePredefinedReasonsString, VideoAbusePredefinedReasonsMap } from '@shared/models/videos/abuse/video-abuse-reason.model'
 
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.VIDEO_ABUSES
 
@@ -12,8 +11,16 @@ function isVideoAbuseReasonValid (value: string) {
   return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
 }
 
-function isVideoAbusePredefinedReasonsValid (value: VideoAbusePredefinedReasonsIn[]) {
-  return exists(value) && value.every(element => keys(VideoAbusePredefinedReasonsIn).includes(element))
+function isVideoAbusePredefinedReasonValid (value: VideoAbusePredefinedReasonsString) {
+  return exists(value) && value in VideoAbusePredefinedReasonsMap
+}
+
+function isVideoAbusePredefinedReasonsValid (value: VideoAbusePredefinedReasonsString[]) {
+  return exists(value) && isArray(value) && value.every(v => v in VideoAbusePredefinedReasonsMap)
+}
+
+function isVideoAbuseTimestampValid (value: number) {
+  return value === null || (exists(value) && validator.isInt('' + value, { min: 0 }))
 }
 
 function isVideoAbuseModerationCommentValid (value: string) {
@@ -35,7 +42,9 @@ function isAbuseVideoIsValid (value: VideoAbuseVideoIs) {
 
 export {
   isVideoAbuseReasonValid,
+  isVideoAbusePredefinedReasonValid,
   isVideoAbusePredefinedReasonsValid,
+  isVideoAbuseTimestampValid,
   isVideoAbuseModerationCommentValid,
   isVideoAbuseStateValid,
   isAbuseVideoIsValid

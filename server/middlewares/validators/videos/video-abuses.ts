@@ -6,7 +6,9 @@ import {
   isVideoAbuseModerationCommentValid,
   isVideoAbuseReasonValid,
   isVideoAbuseStateValid,
-  isVideoAbusePredefinedReasonsValid
+  isVideoAbusePredefinedReasonsValid,
+  isVideoAbusePredefinedReasonValid,
+  isVideoAbuseTimestampValid
 } from '../../../helpers/custom-validators/video-abuses'
 import { logger } from '../../../helpers/logger'
 import { doesVideoAbuseExist, doesVideoExist } from '../../../helpers/middlewares'
@@ -27,11 +29,13 @@ const videoAbuseReportValidator = [
     .withMessage('Should have a valid list of predefined reasons'),
   body('startAt')
     .optional()
-    .custom(toIntOrNull)
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoAbuseTimestampValid)
     .withMessage('Should have valid starting time value'),
   body('endAt')
     .optional()
-    .custom(toIntOrNull)
+    .customSanitizer(toIntOrNull)
+    .custom(isVideoAbuseTimestampValid)
     .withMessage('Should have valid ending time value'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -82,9 +86,10 @@ const videoAbuseListValidator = [
   query('id')
     .optional()
     .custom(isIdValid).withMessage('Should have a valid id'),
-  query('predefinedReasonId')
+  query('predefinedReason')
     .optional()
-    .custom(isIdValid).withMessage('Should have a valid predefinedReasonId'),
+    .custom(isVideoAbusePredefinedReasonValid)
+    .withMessage('Should have a valid predefinedReason'),
   query('search')
     .optional()
     .custom(exists).withMessage('Should have a valid search'),

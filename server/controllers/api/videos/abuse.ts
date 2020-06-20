@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { UserRight, VideoAbuseCreate, VideoAbuseState, VideoAbuse } from '../../../../shared'
+import { UserRight, VideoAbuseCreate, VideoAbuseState, VideoAbuse, VideoAbusePredefinedReasonsMap } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -25,8 +25,6 @@ import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
 import { MVideoAbuseAccountVideo } from '../../../types/models/video'
 import { getServerActor } from '@server/models/application/application'
 import { MAccountDefault } from '@server/types/models'
-import { keys, pickBy } from 'lodash'
-import { VideoAbusePredefinedReasonsIn } from '@shared/models/videos/abuse/video-abuse-reason.model'
 
 const auditLogger = auditLoggerFactory('abuse')
 const abuseVideoRouter = express.Router()
@@ -76,7 +74,7 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     id: req.query.id,
-    predefinedReasonId: req.query.predefinedReasonId,
+    predefinedReason: req.query.predefinedReason,
     search: req.query.search,
     state: req.query.state,
     videoIs: req.query.videoIs,
@@ -126,7 +124,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
   const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
     reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
-    const predefinedReasons = body.predefinedReasons.map(r => VideoAbusePredefinedReasonsIn[r])
+    const predefinedReasons = body.predefinedReasons?.map(r => VideoAbusePredefinedReasonsMap[r])
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,

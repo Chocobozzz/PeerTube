@@ -1,5 +1,5 @@
 export enum VideoAbusePredefinedReasons {
-  VIOLENT_OR_REPULSIVE,
+  VIOLENT_OR_REPULSIVE = 1,
   HATEFUL_OR_ABUSIVE,
   SPAM_OR_MISLEADING,
   PRIVACY,
@@ -9,7 +9,7 @@ export enum VideoAbusePredefinedReasons {
   CAPTIONS
 }
 
-export type VideoAbusePredefinedReasonsIn =
+export type VideoAbusePredefinedReasonsString =
   'violentOrRepulsive' |
   'hatefulOrAbusive' |
   'spamOrMisleading' |
@@ -19,7 +19,9 @@ export type VideoAbusePredefinedReasonsIn =
   'thumbnails' |
   'captions'
 
-export const VideoAbusePredefinedReasonsIn = {
+export const VideoAbusePredefinedReasonsMap: {
+  [key in VideoAbusePredefinedReasonsString]: VideoAbusePredefinedReasons
+} = {
   violentOrRepulsive: VideoAbusePredefinedReasons.VIOLENT_OR_REPULSIVE,
   hatefulOrAbusive: VideoAbusePredefinedReasons.HATEFUL_OR_ABUSIVE,
   spamOrMisleading: VideoAbusePredefinedReasons.SPAM_OR_MISLEADING,

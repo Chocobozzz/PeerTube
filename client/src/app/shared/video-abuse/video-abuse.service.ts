@@ -53,18 +53,7 @@ export class VideoAbuseService {
         },
         searchReporter: { prefix: 'reporter:' },
         searchReportee: { prefix: 'reportee:' },
-        predefinedReasonId: {
-          prefix: 'tag:',
-          handler: v => {
-            try {
-              const id = parseInt(v, 10)
-              return id
-            } catch (e) {
-              console.error('Cannot parse predefinedReasonId in search.', e)
-              return undefined
-            }
-          }
-        }
+        predefinedReason: { prefix: 'tag:' }
       })
 
       params = this.restService.addObjectParams(params, filters)

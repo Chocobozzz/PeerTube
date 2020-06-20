@@ -2,11 +2,12 @@ import { Account } from '../../actors/index'
 import { VideoConstant } from '../video-constant.model'
 import { VideoAbuseState } from './video-abuse-state.model'
 import { VideoChannel } from '../channel/video-channel.model'
+import { VideoAbusePredefinedReasonsString } from './video-abuse-reason.model'
 
 export interface VideoAbuse {
   id: number
   reason: string
-  predefinedReasons?: number[]
+  predefinedReasons?: VideoAbusePredefinedReasonsString[]
   reporterAccount: Account
 
   state: VideoConstant<VideoAbuseState>

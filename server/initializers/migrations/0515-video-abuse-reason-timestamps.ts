@@ -5,6 +5,11 @@ async function up (utils: {
   queryInterface: Sequelize.QueryInterface
   sequelize: Sequelize.Sequelize
 }): Promise<void> {
+  await utils.queryInterface.addColumn('videoAbuse', 'predefinedReasons', {
+    type: Sequelize.ARRAY(Sequelize.INTEGER),
+    allowNull: true
+  })
+
   await utils.queryInterface.addColumn('videoAbuse', 'startAt', {
     type: Sequelize.INTEGER,
     allowNull: true

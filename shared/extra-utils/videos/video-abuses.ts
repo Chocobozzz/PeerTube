@@ -1,17 +1,26 @@
 import * as request from 'supertest'
 import { VideoAbuseUpdate } from '../../models/videos/abuse/video-abuse-update.model'
 import { makeDeleteRequest, makePutBodyRequest, makeGetRequest } from '../requests/requests'
-import { VideoAbuseState } from '@shared/models'
+import { VideoAbuseState, VideoAbusePredefinedReasonsString } from '@shared/models'
 import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
 
-function reportVideoAbuse (url: string, token: string, videoId: number | string, reason: string, specialStatus = 200) {
+function reportVideoAbuse (
+  url: string,
+  token: string,
+  videoId: number | string,
+  reason: string,
+  predefinedReasons?: VideoAbusePredefinedReasonsString[],
+  startAt?: number,
+  endAt?: number,
+  specialStatus = 200
+) {
   const path = '/api/v1/videos/' + videoId + '/abuse'
 
   return request(url)
           .post(path)
           .set('Accept', 'application/json')
           .set('Authorization', 'Bearer ' + token)
-          .send({ reason })
+          .send({ reason, predefinedReasons, startAt, endAt })
           .expect(specialStatus)
 }
 
@@ -19,6 +28,7 @@ function getVideoAbusesList (options: {
   url: string
   token: string
   id?: number
+  predefinedReason?: VideoAbusePredefinedReasonsString
   search?: string
   state?: VideoAbuseState
   videoIs?: VideoAbuseVideoIs
@@ -31,6 +41,7 @@ function getVideoAbusesList (options: {
     url,
     token,
     id,
+    predefinedReason,
     search,
     state,
     videoIs,
@@ -44,6 +55,7 @@ function getVideoAbusesList (options: {
   const query = {
     sort: 'createdAt',
     id,
+    predefinedReason,
     search,
     state,
     videoIs,
