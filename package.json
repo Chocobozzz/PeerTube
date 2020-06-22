@@ -5,7 +5,8 @@
   "private": true,
   "licence": "AGPL-3.0",
   "engines": {
-    "node": ">=10.x"
+    "node": ">=10.x <13",
+    "yarn": ">=1.x"
   },
   "bin": {
     "peertube": "dist/server/tools/peertube.js"
