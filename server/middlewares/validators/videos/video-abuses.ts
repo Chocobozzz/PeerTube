@@ -8,7 +8,8 @@ import {
   isVideoAbuseStateValid,
   isVideoAbusePredefinedReasonsValid,
   isVideoAbusePredefinedReasonValid,
-  isVideoAbuseTimestampValid
+  isVideoAbuseTimestampValid,
+  isVideoAbuseTimestampCoherent
 } from '../../../helpers/custom-validators/video-abuses'
 import { logger } from '../../../helpers/logger'
 import { doesVideoAbuseExist, doesVideoExist } from '../../../helpers/middlewares'
@@ -36,7 +37,10 @@ const videoAbuseReportValidator = [
     .optional()
     .customSanitizer(toIntOrNull)
     .custom(isVideoAbuseTimestampValid)
-    .withMessage('Should have valid ending time value'),
+    .withMessage('Should have valid ending time value')
+    .bail()
+    .custom(isVideoAbuseTimestampCoherent)
+    .withMessage('Should have a startAt timestamp beginning before endAt'),
 
   async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking videoAbuseReport parameters', { parameters: req.body })

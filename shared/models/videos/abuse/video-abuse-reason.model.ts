@@ -19,7 +19,7 @@ export type VideoAbusePredefinedReasonsString =
   'thumbnails' |
   'captions'
 
-export const VideoAbusePredefinedReasonsMap: {
+export const videoAbusePredefinedReasonsMap: {
   [key in VideoAbusePredefinedReasonsString]: VideoAbusePredefinedReasons
 } = {
   violentOrRepulsive: VideoAbusePredefinedReasons.VIOLENT_OR_REPULSIVE,

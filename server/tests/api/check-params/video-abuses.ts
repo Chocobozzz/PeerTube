@@ -20,7 +20,7 @@ import {
   checkBadSortPagination,
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
-import { VideoAbuseState } from '../../../../shared/models/videos'
+import { VideoAbuseState, VideoAbuseCreate } from '../../../../shared/models/videos'
 
 describe('Test video abuses API validators', function () {
   let server: ServerInfo
@@ -132,11 +132,35 @@ describe('Test video abuses API validators', function () {
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
-    it('Should succeed with the correct parameters', async function () {
-      const fields = { reason: 'super reason' }
+    it('Should succeed with the correct parameters (basic)', async function () {
+      const fields = { reason: 'my super reason' }
 
       const res = await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 200 })
       videoAbuseId = res.body.videoAbuse.id
+    })
+
+    it('Should fail with a wrong predefined reason', async function () {
+      const fields = { reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with negative timestamps', async function () {
+      const fields = { reason: 'my super reason', startAt: -1 }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail mith misordered startAt/endAt', async function () {
+      const fields = { reason: 'my super reason', startAt: 5, endAt: 1 }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should succeed with the corret parameters (advanced)', async function () {
+      const fields: VideoAbuseCreate = { reason: 'my super reason', predefinedReasons: [ 'serverRules' ], startAt: 1, endAt: 5 }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 200 })
     })
   })
 

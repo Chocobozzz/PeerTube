@@ -1268,6 +1268,12 @@ paths:
                     - serverRules
                     - thumbnails
                     - captions
+                startAt:
+                  type: number
+                  description: Timestamp in the video that marks the beginning of the report
+                endAt:
+                  type: number
+                  description: Timestamp in the video that marks the ending of the report
               required:
                 - reason
       responses:

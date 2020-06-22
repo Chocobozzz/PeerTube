@@ -10,7 +10,7 @@ import { VideoAbuseService } from '@app/shared/video-abuse'
 import { Video } from '@app/shared/video/video.model'
 import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
-import { VideoAbusePredefinedReasonsString, VideoAbusePredefinedReasonsMap } from '@shared/models/videos/abuse/video-abuse-reason.model'
+import { VideoAbusePredefinedReasonsString, videoAbusePredefinedReasonsMap } from '@shared/models/videos/abuse/video-abuse-reason.model'
 import { mapValues, pickBy } from 'lodash-es'
 
 @Component({
@@ -72,7 +72,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   ngOnInit () {
     this.buildForm({
       reason: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON,
-      predefinedReasons: mapValues(VideoAbusePredefinedReasonsMap, r => null),
+      predefinedReasons: mapValues(videoAbusePredefinedReasonsMap, r => null),
       timestamp: {
         hasStart: null,
         startAt: null,

@@ -20,7 +20,7 @@ import {
   VideoDetails,
   VideoAbusePredefinedReasons,
   VideoAbusePredefinedReasonsString,
-  VideoAbusePredefinedReasonsMap
+  videoAbusePredefinedReasonsMap
 } from '../../../shared'
 import { VideoAbuseObject } from '../../../shared/models/activitypub/objects'
 import { VideoAbuse } from '../../../shared/models/videos'
@@ -370,7 +370,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
     } = parameters
 
     const userAccountId = user ? user.Account.id : undefined
-    const predefinedReasonId = predefinedReason ? VideoAbusePredefinedReasonsMap[predefinedReason] : undefined
+    const predefinedReasonId = predefinedReason ? videoAbusePredefinedReasonsMap[predefinedReason] : undefined
 
     const query = {
       offset: start,
@@ -405,7 +405,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toFormattedJSON (this: MVideoAbuseFormattable): VideoAbuse {
-    const predefinedReasons = VideoAbuseModel.getPredefinedReasonsStrings(this.predefinedReasons || [])
+    const predefinedReasons = VideoAbuseModel.getPredefinedReasonsStrings(this.predefinedReasons)
     const countReportsForVideo = this.get('countReportsForVideo') as number
     const nthReportForVideo = this.get('nthReportForVideo') as number
     const countReportsForReporterVideo = this.get('countReportsForReporter__video') as number
@@ -449,7 +449,7 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   toActivityPubObject (this: MVideoAbuseVideo): VideoAbuseObject {
-    const predefinedReasons = VideoAbuseModel.getPredefinedReasonsStrings(this.predefinedReasons || [])
+    const predefinedReasons = VideoAbuseModel.getPredefinedReasonsStrings(this.predefinedReasons)
 
     const startAt = this.startAt
     const endAt = this.endAt
@@ -472,8 +472,8 @@ export class VideoAbuseModel extends Model<VideoAbuseModel> {
   }
 
   private static getPredefinedReasonsStrings (predefinedReasons: VideoAbusePredefinedReasons[]): VideoAbusePredefinedReasonsString[] {
-    return predefinedReasons
+    return (predefinedReasons || [])
       .filter(r => r in VideoAbusePredefinedReasons)
-      .map(r => invert(VideoAbusePredefinedReasonsMap)[r] as VideoAbusePredefinedReasonsString)
+      .map(r => invert(videoAbusePredefinedReasonsMap)[r] as VideoAbusePredefinedReasonsString)
   }
 }

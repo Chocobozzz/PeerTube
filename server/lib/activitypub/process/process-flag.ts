@@ -2,7 +2,7 @@ import {
   ActivityCreate,
   ActivityFlag,
   VideoAbuseState,
-  VideoAbusePredefinedReasonsMap
+  videoAbusePredefinedReasonsMap
 } from '../../../../shared'
 import { VideoAbuseObject } from '../../../../shared/models/activitypub/objects'
 import { retryTransactionWrapper } from '../../../helpers/database-utils'
@@ -44,7 +44,7 @@ async function processCreateVideoAbuse (activity: ActivityCreate | ActivityFlag,
       const { video } = await getOrCreateVideoAndAccountAndChannel({ videoObject: object })
       const reporterAccount = await sequelizeTypescript.transaction(async t => AccountModel.load(account.id, t))
       const tags = Array.isArray(flag.tag) ? flag.tag : []
-      const predefinedReasons = tags.map(tag => VideoAbusePredefinedReasonsMap[tag.name])
+      const predefinedReasons = tags.map(tag => videoAbusePredefinedReasonsMap[tag.name])
                                     .filter(v => !isNaN(v))
       const startAt = flag.startAt
       const endAt = flag.endAt

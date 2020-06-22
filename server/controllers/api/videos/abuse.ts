@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { UserRight, VideoAbuseCreate, VideoAbuseState, VideoAbuse, VideoAbusePredefinedReasonsMap } from '../../../../shared'
+import { UserRight, VideoAbuseCreate, VideoAbuseState, VideoAbuse, videoAbusePredefinedReasonsMap } from '../../../../shared'
 import { logger } from '../../../helpers/logger'
 import { getFormattedObjects } from '../../../helpers/utils'
 import { sequelizeTypescript } from '../../../initializers/database'
@@ -124,7 +124,7 @@ async function reportVideoAbuse (req: express.Request, res: express.Response) {
 
   const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
     reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
-    const predefinedReasons = body.predefinedReasons?.map(r => VideoAbusePredefinedReasonsMap[r])
+    const predefinedReasons = body.predefinedReasons?.map(r => videoAbusePredefinedReasonsMap[r])
 
     const abuseToCreate = {
       reporterAccountId: reporterAccount.id,

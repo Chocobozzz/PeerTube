@@ -304,17 +304,16 @@ describe('Test video abuses', function () {
       predefinedReasons5,
       1,
       5
-    )).body as VideoAbuse
+    )).body.videoAbuse as VideoAbuse
 
     const res = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
-    for (const abuse of res.body.data as VideoAbuse[]) {
-      if (abuse.id === createdAbuse.id) {
-        expect(abuse.reason).to.equals(reason5)
-        expect(abuse.predefinedReasons).to.equals(predefinedReasons5, "predefined reasons do not match the one reported")
-        expect(abuse.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
-        expect(abuse.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
-      }
+    {
+      const abuse = (res.body.data as VideoAbuse[]).find(a => a.id === createdAbuse.id)
+      expect(abuse.reason).to.equals(reason5)
+      expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, "predefined reasons do not match the one reported")
+      expect(abuse.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
+      expect(abuse.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
     }
   })
 
