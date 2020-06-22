@@ -654,7 +654,7 @@
       </trans-unit>
       <trans-unit id="a3550f6ce98d90d2947fe062530629dc2d3923b4">
         <source>Updated <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></source>
-        <target>Uppdaterades för <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
+        <target>Uppdaterades <x id="INTERPOLATION" equiv-text="{{ playlist.updatedAt | myFromNow }}"/></target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -3102,7 +3102,7 @@
       </trans-unit>
       <trans-unit id="a8db53a47543132da1a68066f0a9cba0551a8933" datatype="html">
         <source>1 Comment</source>
-        <target state="translated">En kommntar</target>
+        <target state="translated">1 kommentar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/videos/+video-watch/comment/video-comments.component.html</context>
           <context context-type="linenumber">6</context>
@@ -8667,7 +8667,7 @@
       </trans-unit>
       <trans-unit id="0b2054a863319d2cf59867addd125b6717cae41d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> years ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> år sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> år sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8675,7 +8675,7 @@
       </trans-unit>
       <trans-unit id="68f47e5ec9c7efd3c2a5cd317634ace12c3717ee" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> year ago</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{interval}}"/> år sedan</target>
+        <target state="translated">för <x id="INTERPOLATION" equiv-text="{{interval}}"/> år sedan</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/angular/from-now.pipe.ts</context>
           <context context-type="linenumber">1</context>
@@ -8683,7 +8683,7 @@
       </trans-unit>
       <trans-unit id="e622d3813449fe36371ea258281059306819199d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> months ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> månader sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> månader sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8691,7 +8691,7 @@
       </trans-unit>
       <trans-unit id="2f8a5a5f7efb521d7d89dc659ff65dd13cb7b17b">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> month ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> månad sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> månad sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8699,7 +8699,7 @@
       </trans-unit>
       <trans-unit id="1d1a46543a29096d3c6676be2d561380a0bc94e1">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> weeks ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> veckor sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> veckor sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8707,7 +8707,7 @@
       </trans-unit>
       <trans-unit id="e1db0b98b6cdf817508195f3649c48475c32ae7e">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> week ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> vecka sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> vecka sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8715,7 +8715,7 @@
       </trans-unit>
       <trans-unit id="a7654c3ece96e777527606f1c2870d6ee0b180f7">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> days ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> dagar sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> dagar sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8723,7 +8723,7 @@
       </trans-unit>
       <trans-unit id="5b465235ae55091d32535e23dd180c407f1352d1">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> day ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> dag sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> dag sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8731,7 +8731,7 @@
       </trans-unit>
       <trans-unit id="dc7addf53bd6405a9c746db6dfca665c33679a84">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hours ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> timmar sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> timmar sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8739,7 +8739,7 @@
       </trans-unit>
       <trans-unit id="d54a610250ed38efccf0e3afdd0004f6ad83ea8d">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> hour ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> timme sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> timme sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8747,7 +8747,7 @@
       </trans-unit>
       <trans-unit id="9704e5e3adce178c127ead05f7057d3fb827308a">
         <source><x id="INTERPOLATION" equiv-text="{{interval}}"/> min ago</source>
-        <target><x id="INTERPOLATION" equiv-text="{{interval}}"/> min sedan</target>
+        <target>för <x id="INTERPOLATION" equiv-text="{{interval}}"/> minuter sedan</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
