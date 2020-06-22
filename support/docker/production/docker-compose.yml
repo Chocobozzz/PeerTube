@@ -2,27 +2,9 @@ version: "3.3"
 
 services:
 
-  # The reverse-proxy only does SSL termination and automatic certificate generation. You can
-  # replace it with any other reverse-proxy, in which case you can remove 'traefik.*' labels.
-  reverse-proxy:
-    image: traefik:v1.7
-    network_mode: "host"
-    command:
-      - "--docker"                                # Tells Træfik to listen to docker
-      - "--acme.email=${TRAEFIK_ACME_EMAIL}"      # Let's Encrypt ACME email
-      - "--acme.domains=${TRAEFIK_ACME_DOMAINS}"  # Let's Encrypt ACME domain list
-    ports:
-      - "80:80"    # The HTTP port
-      - "443:443"  # The HTTPS port
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # So that Træfik can listen to the Docker events
-      - ./docker-volume/traefik/acme.json:/etc/acme.json
-      - ./docker-volume/traefik/traefik.toml:/traefik.toml
-    restart: "always"
-
   # The webserver is not required, but recommended since a lot of optimizations went to its
   # nginx configuration file. It runs the default nginx configuration without HTTPS nor SSL,
-  # so use it in production in tandem with an SSL-terminating reverse-proxy like above.
+  # so use it in production in tandem with an SSL-terminating reverse-proxy.
   webserver:
     build:
       context: .
@@ -31,7 +13,7 @@ services:
       - .env
     # If you provide your own reverse-proxy, otherwise not suitable for production:
     #ports:
-    #  - "80:80"
+    #  - "9000:80" # serving HTTP
     volumes:
       - type: bind
         # Switch sources if you downloaded the nginx configuration without the whole repository
@@ -43,10 +25,6 @@ services:
     depends_on:
       - peertube
     restart: "always"
-    labels:
-      traefik.enable: "true"
-      traefik.frontend.rule: "Host:${PEERTUBE_WEBSERVER_HOSTNAME}"
-      traefik.port: "80"
 
   peertube:
     # If you don't want to use the official image and build one from sources:
@@ -58,7 +36,7 @@ services:
       - .env
     # If you provide your own webserver and reverse-proxy, otherwise not suitable for production:
     #ports:
-    #  - "80:9000"
+    #  - "80:9000" # serving HTTP
     volumes:
       - assets:/app/client/dist
       - ./docker-volume/data:/data
@@ -70,7 +48,7 @@ services:
     restart: "always"
 
   postgres:
-    image: postgres:12-alpine
+    image: postgres:10-alpine
     env_file:
       - .env
     volumes:
@@ -96,7 +74,7 @@ networks:
     ipam:
       driver: default
       config:
-      - subnet:  172.18.0.0/16
+      - subnet: 172.18.0.0/16
 
 volumes:
   assets:
