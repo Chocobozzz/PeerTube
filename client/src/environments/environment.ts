@@ -11,5 +11,6 @@ import 'core-js/features/reflect'
 export const environment = {
   production: false,
   hmr: false,
-  apiUrl: 'http://localhost:9000'
+  apiUrl: 'http://localhost:9000',
+  embedUrl: 'http://localhost:9000/videos/embed'
 }

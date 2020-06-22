@@ -42,6 +42,20 @@
   }
 }
 
+p-calendar {
+  display: block;
+
+  ::ng-deep {
+    .ui-widget-content {
+      min-width: 400px;
+    }
+
+    input {
+      @include peertube-input-text(100%);
+    }
+  }
+}
+
 .screenratio {
   div {
     @include miniature-thumbnail;

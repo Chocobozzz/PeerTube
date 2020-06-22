@@ -1,5 +1,6 @@
 export const environment = {
   production: false,
   hmr: true,
-  apiUrl: ''
+  apiUrl: '',
+  embedUrl: 'http://localhost:9000/videos/embed'
 }

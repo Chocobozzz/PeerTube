@@ -3,9 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { SortMeta } from 'primeng/api'
 import { Observable } from 'rxjs'
-import { ResultList, VideoAbuse, VideoAbuseUpdate, VideoAbuseState } from '../../../../../shared'
+import { ResultList, VideoAbuse, VideoAbuseCreate, VideoAbuseState, VideoAbuseUpdate } from '../../../../../shared'
 import { environment } from '../../../environments/environment'
 import { RestExtractor, RestPagination, RestService } from '../rest'
+import { omit } from 'lodash-es'
 
 @Injectable()
 export class VideoAbuseService {
@@ -51,7 +52,8 @@ export class VideoAbuseService {
           }
         },
         searchReporter: { prefix: 'reporter:' },
-        searchReportee: { prefix: 'reportee:' }
+        searchReportee: { prefix: 'reportee:' },
+        predefinedReason: { prefix: 'tag:' }
       })
 
       params = this.restService.addObjectParams(params, filters)
@@ -63,9 +65,10 @@ export class VideoAbuseService {
                )
   }
 
-  reportVideo (id: number, reason: string) {
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + id + '/abuse'
-    const body = { reason }
+  reportVideo (parameters: { id: number } & VideoAbuseCreate) {
+    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + parameters.id + '/abuse'
+
+    const body = omit(parameters, [ 'id' ])
 
     return this.authHttp.post(url, body)
                .pipe(

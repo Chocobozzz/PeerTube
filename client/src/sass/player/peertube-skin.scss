@@ -86,7 +86,7 @@ body {
     }
 
     &.focus-visible, &:hover {
-      background-color: var(--mainColor);
+      background-color: var(--mainColor, dimgray);
     }
 
   }

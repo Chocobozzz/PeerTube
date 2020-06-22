@@ -1,38 +1,97 @@
 <ng-template #modal>
   <div class="modal-header">
-    <h4 i18n class="modal-title">Report video</h4>
+    <h4 i18n class="modal-title">Report video "{{ video.name }}"</h4>
     <my-global-icon iconName="cross" aria-label="Close" role="button" (click)="hide()"></my-global-icon>
   </div>
 
   <div class="modal-body">
-
-    <div i18n class="information">
-      Your report will be sent to moderators of {{ currentHost }}<ng-container *ngIf="isRemoteVideo()"> and will be forwarded to the video origin ({{ originHost }}) too</ng-container>.
-    </div>
-
     <form novalidate [formGroup]="form" (ngSubmit)="report()">
-      <div class="form-group">
-        <textarea 
-          i18n-placeholder placeholder="Reason..." formControlName="reason"
-          [ngClass]="{ 'input-error': formErrors['reason'] }" class="form-control"
-        ></textarea>
-        <div *ngIf="formErrors.reason" class="form-error">
-          {{ formErrors.reason }}
+
+    <div class="row">
+      <div class="col-5 form-group">
+
+          <label i18n for="reportPredefinedReasons">What is the issue?</label>
+
+          <div class="ml-2 mt-2 d-flex flex-column">
+            <ng-container formGroupName="predefinedReasons">
+              <div class="form-group" *ngFor="let reason of predefinedReasons">
+                <my-peertube-checkbox formControlName="{{reason.id}}" labelText="{{reason.label}}">
+                  <ng-template *ngIf="reason.help" ptTemplate="help">
+                    <div [innerHTML]="reason.help"></div>
+                  </ng-template>
+                  <ng-container *ngIf="reason.description" ngProjectAs="description">
+                    <div [innerHTML]="reason.description"></div>
+                  </ng-container>
+                </my-peertube-checkbox>
+              </div>
+            </ng-container>
+          </div>
+
+      </div>
+
+      <div class="col-7">
+        <div class="row justify-content-center">
+          <div class="col-12 col-lg-9 mb-2">
+            <div class="screenratio">
+              <div [innerHTML]="embedHtml"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-1 start-at" formGroupName="timestamp">
+          <my-peertube-checkbox
+            formControlName="hasStart"
+            i18n-labelText labelText="Start at"
+          ></my-peertube-checkbox>
+
+          <my-timestamp-input
+            [timestamp]="timestamp.startAt"
+            [maxTimestamp]="video.duration"
+            formControlName="startAt"
+            inputName="startAt"
+          >
+          </my-timestamp-input>
+        </div>
+
+        <div class="mb-3 stop-at"  formGroupName="timestamp" *ngIf="timestamp.hasStart">
+          <my-peertube-checkbox
+            formControlName="hasEnd"
+            i18n-labelText labelText="Stop at"
+          ></my-peertube-checkbox>
+
+          <my-timestamp-input
+            [timestamp]="timestamp.endAt"
+            [maxTimestamp]="video.duration"
+            formControlName="endAt"
+            inputName="endAt"
+          >
+          </my-timestamp-input>
+        </div>
+
+        <div i18n class="information">
+          Your report will be sent to moderators of {{ currentHost }}<ng-container *ngIf="isRemoteVideo()"> and will be forwarded to the video origin ({{ originHost }}) too</ng-container>.
+        </div>
+
+        <div class="form-group">
+          <textarea 
+            i18n-placeholder placeholder="Please describe the issue..." formControlName="reason" ngbAutofocus
+            [ngClass]="{ 'input-error': formErrors['reason'] }" class="form-control"
+          ></textarea>
+          <div *ngIf="formErrors.reason" class="form-error">
+            {{ formErrors.reason }}
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="form-group inputs">
-        <input
-          type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
-          (click)="hide()" (key.enter)="hide()"
-        >
+    <div class="form-group inputs">
+      <input
+        type="button" role="button" i18n-value value="Cancel" class="action-button action-button-cancel"
+        (click)="hide()" (key.enter)="hide()"
+      >
+      <input type="submit" i18n-value value="Submit" class="action-button-submit" [disabled]="!form.valid">
+    </div>
 
-        <input
-          type="submit" i18n-value value="Submit" class="action-button-submit"
-          [disabled]="!form.valid"
-        >
-      </div>
     </form>
-
   </div>
 </ng-template>

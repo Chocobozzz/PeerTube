@@ -1,6 +1,6 @@
 import { ActivityPubActor } from './activitypub-actor'
 import { ActivityPubSignature } from './activitypub-signature'
-import { CacheFileObject, VideoTorrentObject } from './objects'
+import { CacheFileObject, VideoTorrentObject, ActivityFlagReasonObject } from './objects'
 import { DislikeObject } from './objects/dislike-object'
 import { VideoAbuseObject } from './objects/video-abuse-object'
 import { VideoCommentObject } from './objects/video-comment-object'
@@ -113,4 +113,7 @@ export interface ActivityFlag extends BaseActivity {
   type: 'Flag'
   content: string
   object: APObject | APObject[]
+  tag?: ActivityFlagReasonObject[]
+  startAt?: number
+  endAt?: number
 }

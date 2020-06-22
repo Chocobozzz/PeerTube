@@ -120,7 +120,7 @@ x-tagGroups:
   - name: Moderation
     tags:
       - Video Abuses
-      - Video Blacklist
+      - Video Blocks
   - name: Instance Configuration
     tags:
       - Config
@@ -1245,6 +1245,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -1253,6 +1254,28 @@ paths:
                 reason:
                   description: Reason why the user reports this video
                   type: string
+                predefinedReasons:
+                  description: Reason categories that help triage reports
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - violentOrAbusive
+                    - hatefulOrAbusive
+                    - spamOrMisleading
+                    - privacy
+                    - rights
+                    - serverRules
+                    - thumbnails
+                    - captions
+                startAt:
+                  type: number
+                  description: Timestamp in the video that marks the beginning of the report
+                endAt:
+                  type: number
+                  description: Timestamp in the video that marks the ending of the report
+              required:
+                - reason
       responses:
         '204':
           description: successful operation
@@ -2488,6 +2511,19 @@ components:
           $ref: '#/components/schemas/VideoAbuseStateSet'
         label:
           type: string
+    VideoAbusePredefinedReasons:
+      type: array
+      items:
+        type: string
+        enum:
+        - violentOrAbusive
+        - hatefulOrAbusive
+        - spamOrMisleading
+        - privacy
+        - rights
+        - serverRules
+        - thumbnails
+        - captions
 
     VideoResolutionConstant:
       properties:
@@ -2739,6 +2775,8 @@ components:
           type: number
         reason:
           type: string
+        predefinedReasons:
+          $ref: '#/components/schemas/VideoAbusePredefinedReasons'
         reporterAccount:
           $ref: '#/components/schemas/Account'
         state:

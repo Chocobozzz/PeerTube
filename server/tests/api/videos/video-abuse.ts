@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { VideoAbuse, VideoAbuseState } from '../../../../shared/models/videos'
+import { VideoAbuse, VideoAbuseState, VideoAbusePredefinedReasonsString } from '../../../../shared/models/videos'
 import {
   cleanupTests,
   deleteVideoAbuse,
@@ -291,6 +291,32 @@ describe('Test video abuses', function () {
     }
   })
 
+  it('Should list predefined reasons as well as timestamps for the reported video', async function () {
+    this.timeout(10000)
+
+    const reason5 = 'my super bad reason 5'
+    const predefinedReasons5: VideoAbusePredefinedReasonsString[] = [ 'violentOrRepulsive', 'captions' ]
+    const createdAbuse = (await reportVideoAbuse(
+      servers[0].url,
+      servers[0].accessToken,
+      servers[0].video.id,
+      reason5,
+      predefinedReasons5,
+      1,
+      5
+    )).body.videoAbuse as VideoAbuse
+
+    const res = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
+
+    {
+      const abuse = (res.body.data as VideoAbuse[]).find(a => a.id === createdAbuse.id)
+      expect(abuse.reason).to.equals(reason5)
+      expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, "predefined reasons do not match the one reported")
+      expect(abuse.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
+      expect(abuse.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
+    }
+  })
+
   it('Should delete the video abuse', async function () {
     this.timeout(10000)
 
@@ -307,7 +333,7 @@ describe('Test video abuses', function () {
 
     {
       const res = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
-      expect(res.body.total).to.equal(5)
+      expect(res.body.total).to.equal(6)
     }
   })
 
@@ -328,25 +354,28 @@ describe('Test video abuses', function () {
     expect(await list({ id: 56 })).to.have.lengthOf(0)
     expect(await list({ id: 1 })).to.have.lengthOf(1)
 
-    expect(await list({ search: 'my super name for server 1' })).to.have.lengthOf(3)
+    expect(await list({ search: 'my super name for server 1' })).to.have.lengthOf(4)
     expect(await list({ search: 'aaaaaaaaaaaaaaaaaaaaaaaaaa' })).to.have.lengthOf(0)
 
     expect(await list({ searchVideo: 'my second super name for server 1' })).to.have.lengthOf(1)
 
-    expect(await list({ searchVideoChannel: 'root' })).to.have.lengthOf(3)
+    expect(await list({ searchVideoChannel: 'root' })).to.have.lengthOf(4)
     expect(await list({ searchVideoChannel: 'aaaa' })).to.have.lengthOf(0)
 
     expect(await list({ searchReporter: 'user2' })).to.have.lengthOf(1)
-    expect(await list({ searchReporter: 'root' })).to.have.lengthOf(4)
+    expect(await list({ searchReporter: 'root' })).to.have.lengthOf(5)
 
-    expect(await list({ searchReportee: 'root' })).to.have.lengthOf(3)
+    expect(await list({ searchReportee: 'root' })).to.have.lengthOf(4)
     expect(await list({ searchReportee: 'aaaa' })).to.have.lengthOf(0)
 
     expect(await list({ videoIs: 'deleted' })).to.have.lengthOf(1)
     expect(await list({ videoIs: 'blacklisted' })).to.have.lengthOf(0)
 
     expect(await list({ state: VideoAbuseState.ACCEPTED })).to.have.lengthOf(0)
-    expect(await list({ state: VideoAbuseState.PENDING })).to.have.lengthOf(5)
+    expect(await list({ state: VideoAbuseState.PENDING })).to.have.lengthOf(6)
+
+    expect(await list({ predefinedReason: 'violentOrRepulsive' })).to.have.lengthOf(1)
+    expect(await list({ predefinedReason: 'serverRules' })).to.have.lengthOf(0)
   })
 
   after(async function () {

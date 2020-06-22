@@ -7,6 +7,7 @@ import { peertubeTranslate, ServerConfig } from '../../../../../shared/models'
 import { Actor } from '@app/shared/actor/actor.model'
 import { VideoScheduleUpdate } from '../../../../../shared/models/videos/video-schedule-update.model'
 import { AuthUser } from '@app/core'
+import { environment } from '../../../environments/environment'
 
 export class Video implements VideoServerModel {
   byVideoChannel: string
@@ -111,7 +112,7 @@ export class Video implements VideoServerModel {
     this.previewUrl = hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (absoluteAPIUrl + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (environment.embedUrl + hash.embedPath)
 
     this.url = hash.url
 
