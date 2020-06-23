@@ -1,16 +1,13 @@
+import { Observable } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
-import { Notifier } from '@app/core'
-import { Observable } from 'rxjs'
-import { VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
-import { FormReactive } from '../../../shared'
-import { User } from '../../../shared/users'
-import { Video } from '../../../shared/video/video.model'
+import { Notifier, User } from '@app/core'
+import { FormReactive, FormValidatorService, VideoCommentValidatorsService } from '@app/shared/shared-forms'
+import { Video } from '@app/shared/shared-main'
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
+import { VideoCommentCreate } from '@shared/models'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { VideoCommentValidatorsService } from '@app/shared/forms/form-validators/video-comment-validators.service'
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-video-comment-add',

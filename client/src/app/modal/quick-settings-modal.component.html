@@ -7,7 +7,7 @@
   <div class="modal-body">
     <div i18n class="mb-4 quick-settings-title">Display settings</div>
 
-    <my-account-video-settings
+    <my-user-video-settings
       *ngIf="!isUserLoggedIn()"
       [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"
     >
@@ -15,13 +15,13 @@
       <ng-container ngProjectAs="inner-title">
         <div i18n class="mb-4 mt-4 quick-settings-title">Video settings</div>
       </ng-container>
-    </my-account-video-settings>
+    </my-user-video-settings>
 
     <div i18n class="mb-4 mt-4 quick-settings-title">Interface settings</div>
 
-    <my-account-interface-settings
+    <my-user-interface-settings
       *ngIf="!isUserLoggedIn()"
       [user]="user" [userInformationLoaded]="userInformationLoaded" [reactiveUpdate]="true" [notifyOnUpdate]="true"
-    ></my-account-interface-settings>
+    ></my-user-interface-settings>
   </div>
 </ng-template>

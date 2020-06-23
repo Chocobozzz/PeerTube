@@ -1,16 +1,21 @@
-import { NgModule } from '@angular/core'
 import { InputSwitchModule } from 'primeng/inputswitch'
-import { RecommendedVideosComponent } from '@app/videos/recommendations/recommended-videos.component'
-import { RecommendedVideosStore } from '@app/videos/recommendations/recommended-videos.store'
 import { CommonModule } from '@angular/common'
-import { SharedModule } from '@app/shared'
-import { RecentVideosRecommendationService } from '@app/videos/recommendations/recent-videos-recommendation.service'
+import { NgModule } from '@angular/core'
+import { SharedMainModule } from '@app/shared/shared-main'
+import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
+import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist'
+import { RecentVideosRecommendationService } from './recent-videos-recommendation.service'
+import { RecommendedVideosComponent } from './recommended-videos.component'
+import { RecommendedVideosStore } from './recommended-videos.store'
 
 @NgModule({
   imports: [
+    CommonModule,
     InputSwitchModule,
-    SharedModule,
-    CommonModule
+
+    SharedMainModule,
+    SharedVideoPlaylistModule,
+    SharedVideoMiniatureModule
   ],
   declarations: [
     RecommendedVideosComponent

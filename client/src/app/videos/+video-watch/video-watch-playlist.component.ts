@@ -1,15 +1,10 @@
 import { Component, Input } from '@angular/core'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
 import { Router } from '@angular/router'
-import { UserService } from '@app/shared'
-import { AuthService, Notifier } from '@app/core'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
-import { peertubeLocalStorage, peertubeSessionStorage } from '@app/shared/misc/peertube-web-storage'
+import { AuthService, ComponentPagination, LocalStorageService, Notifier, SessionStorageService, UserService } from '@app/core'
+import { peertubeLocalStorage, peertubeSessionStorage } from '@app/helpers/peertube-web-storage'
+import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { SessionStorageService, LocalStorageService } from '@app/shared/misc/storage.service'
+import { VideoDetails, VideoPlaylistPrivacy } from '@shared/models'
 
 @Component({
   selector: 'my-video-watch-playlist',

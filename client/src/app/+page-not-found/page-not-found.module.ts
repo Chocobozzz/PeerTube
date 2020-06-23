@@ -1,12 +1,13 @@
+import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { SharedModule } from '../shared'
-import { PageNotFoundComponent } from '@app/+page-not-found/page-not-found.component'
-import { PageNotFoundRoutingModule } from '@app/+page-not-found/page-not-found-routing.module'
+import { PageNotFoundRoutingModule } from './page-not-found-routing.module'
+import { PageNotFoundComponent } from './page-not-found.component'
 
 @NgModule({
   imports: [
-    PageNotFoundRoutingModule,
-    SharedModule
+    CommonModule,
+
+    PageNotFoundRoutingModule
   ],
 
   declarations: [

@@ -1,4 +1,4 @@
-import { LogLevel } from '@shared/models/server/log-level.type'
+import { LogLevel } from '@shared/models'
 import omit from 'lodash-es/omit'
 
 export class LogRow {

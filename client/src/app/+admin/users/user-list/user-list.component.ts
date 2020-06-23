@@ -1,13 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
-import { ConfirmService, ServerService } from '../../../core'
-import { RestPagination, RestTable, UserService } from '../../../shared'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, ServerService, UserService } from '@app/core'
+import { Actor, DropdownAction } from '@app/shared/shared-main'
+import { UserBanModalComponent } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ServerConfig, User } from '../../../../../../shared'
-import { UserBanModalComponent } from '@app/shared/moderation'
-import { DropdownAction } from '@app/shared/buttons/action-dropdown.component'
-import { Actor } from '@app/shared/actor/actor.model'
+import { ServerConfig, User } from '@shared/models'
 
 @Component({
   selector: 'my-user-list',

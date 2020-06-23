@@ -1,17 +1,11 @@
+import { Subscription } from 'rxjs'
+import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { AccountService } from '@app/shared/account/account.service'
-import { Account } from '@app/shared/account/account.model'
-import { RestExtractor, UserService } from '@app/shared'
-import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
-import { Subscription } from 'rxjs'
-import { AuthService, Notifier, RedirectService } from '@app/core'
-import { User, UserRight } from '../../../../shared'
+import { AuthService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
+import { Account, AccountService, ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { ListOverflowItem } from '@app/shared/misc/list-overflow.component'
-import { ScreenService } from '@app/shared/misc/screen.service'
+import { User, UserRight } from '@shared/models'
 
 @Component({
   templateUrl: './accounts.component.html',

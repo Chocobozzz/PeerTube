@@ -1,15 +1,11 @@
-import { EventEmitter, OnInit } from '@angular/core'
-import { LoadingBarService } from '@ngx-loading-bar/core'
-import { AuthService, Notifier, ServerService } from '@app/core'
 import { catchError, switchMap, tap } from 'rxjs/operators'
-import { FormReactive } from '@app/shared'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '../../../../../../shared'
-import { VideoService } from '@app/shared/video/video.service'
-import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
-import { VideoCaptionService } from '@app/shared/video-caption'
-import { VideoEdit } from '@app/shared/video/video-edit.model'
-import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
-import { CanComponentDeactivateResult } from '@app/shared/guards/can-deactivate-guard.service'
+import { EventEmitter, OnInit } from '@angular/core'
+import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
+import { populateAsyncUserVideoChannels } from '@app/helpers'
+import { FormReactive } from '@app/shared/shared-forms'
+import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { LoadingBarService } from '@ngx-loading-bar/core'
+import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
 export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []

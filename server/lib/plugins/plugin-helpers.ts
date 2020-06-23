@@ -1,4 +1,4 @@
-import { PeerTubeHelpers } from '@server/typings/plugins'
+import { PeerTubeHelpers } from '@server/types/plugins'
 import { sequelizeTypescript } from '@server/initializers/database'
 import { buildLogger } from '@server/helpers/logger'
 import { VideoModel } from '@server/models/video/video'

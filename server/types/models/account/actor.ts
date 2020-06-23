@@ -1,5 +1,5 @@
 import { ActorModel } from '../../../models/activitypub/actor'
-import { FunctionProperties, PickWith, PickWithOpt } from '../../utils'
+import { FunctionProperties, PickWith, PickWithOpt } from '@shared/core-utils'
 import { MAccount, MAccountDefault, MAccountId, MAccountIdActor } from './account'
 import { MServer, MServerHost, MServerHostBlocks, MServerRedundancyAllowed } from '../server'
 import { MAvatar, MAvatarFormattable } from './avatar'

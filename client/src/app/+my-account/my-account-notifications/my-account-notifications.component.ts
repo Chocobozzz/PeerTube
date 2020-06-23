@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core'
-import { UserNotificationsComponent } from '@app/shared'
+import { UserNotificationsComponent } from '@app/shared/shared-main'
 
 @Component({
   templateUrl: './my-account-notifications.component.html',

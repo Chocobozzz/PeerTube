@@ -1,7 +1,6 @@
-import { Account as AccountInterface } from '../../../../../../shared/models/actors'
-import { VideoComment as VideoCommentServerModel, VideoCommentCreate } from '../../../../../../shared/models/videos/video-comment.model'
-import { Actor } from '@app/shared/actor/actor.model'
-import { getAbsoluteAPIUrl } from '@app/shared/misc/utils'
+import { getAbsoluteAPIUrl } from '@app/helpers'
+import { Actor } from '@app/shared/shared-main'
+import { Account as AccountInterface, VideoComment as VideoCommentServerModel } from '@shared/models'
 
 export class VideoComment implements VideoCommentServerModel {
   id: number

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core'
-import { ScreenService } from '@app/shared/misc/screen.service'
 import { fromEvent } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
+import { Injectable } from '@angular/core'
+import { ScreenService } from '../wrappers'
 
 @Injectable()
 export class MenuService {

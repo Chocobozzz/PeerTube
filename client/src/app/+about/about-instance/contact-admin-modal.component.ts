@@ -1,11 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, ServerService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
+import { FormReactive, FormValidatorService, InstanceValidatorsService } from '@app/shared/shared-forms'
+import { InstanceService } from '@app/shared/shared-instance'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { FormReactive, InstanceValidatorsService } from '@app/shared'
-import { InstanceService } from '@app/shared/instance/instance.service'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 
 @Component({

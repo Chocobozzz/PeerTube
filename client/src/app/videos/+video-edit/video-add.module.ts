@@ -1,20 +1,20 @@
 import { NgModule } from '@angular/core'
-import { SharedModule } from '../../shared'
+import { CanDeactivateGuard } from '@app/core'
 import { VideoEditModule } from './shared/video-edit.module'
+import { DragDropDirective } from './video-add-components/drag-drop.directive'
+import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'
+import { VideoImportUrlComponent } from './video-add-components/video-import-url.component'
+import { VideoUploadComponent } from './video-add-components/video-upload.component'
 import { VideoAddRoutingModule } from './video-add-routing.module'
 import { VideoAddComponent } from './video-add.component'
-import { DragDropDirective } from './video-add-components/drag-drop.directive'
-import { CanDeactivateGuard } from '../../shared/guards/can-deactivate-guard.service'
-import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
-import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
-import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-components/video-import-torrent.component'
 
 @NgModule({
   imports: [
     VideoAddRoutingModule,
-    VideoEditModule,
-    SharedModule
+
+    VideoEditModule
   ],
+
   declarations: [
     VideoAddComponent,
     VideoUploadComponent,
@@ -22,10 +22,9 @@ import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-c
     VideoImportTorrentComponent,
     DragDropDirective
   ],
-  exports: [
-    VideoAddComponent,
-    DragDropDirective
-  ],
+
+  exports: [ ],
+
   providers: [
     CanDeactivateGuard
   ]

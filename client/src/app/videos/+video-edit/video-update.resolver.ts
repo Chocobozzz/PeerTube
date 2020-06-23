@@ -1,10 +1,8 @@
-import { Injectable } from '@angular/core'
-import { VideoService } from '@app/shared/video/video.service'
-import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
-import { map, switchMap } from 'rxjs/operators'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { VideoCaptionService } from '@app/shared/video-caption'
 import { forkJoin } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
+import { Injectable } from '@angular/core'
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
+import { VideoCaptionService, VideoChannelService, VideoService } from '@app/shared/shared-main'
 
 @Injectable()
 export class VideoUpdateResolver implements Resolve<any> {

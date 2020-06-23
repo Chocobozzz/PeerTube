@@ -1,21 +1,24 @@
-import { NgModule } from '@angular/core'
-import { RegisterRoutingModule } from './register-routing.module'
-import { RegisterComponent } from './register.component'
-import { SharedModule } from '@app/shared'
 import { CdkStepperModule } from '@angular/cdk/stepper'
+import { NgModule } from '@angular/core'
+import { SignupSharedModule } from '@app/+signup/shared/signup-shared.module'
+import { SharedInstanceModule } from '@app/shared/shared-instance'
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap'
+import { CustomStepperComponent } from './custom-stepper.component'
+import { RegisterRoutingModule } from './register-routing.module'
 import { RegisterStepChannelComponent } from './register-step-channel.component'
 import { RegisterStepUserComponent } from './register-step-user.component'
-import { CustomStepperComponent } from './custom-stepper.component'
-import { SignupSharedModule } from '@app/+signup/shared/signup-shared.module'
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap'
+import { RegisterComponent } from './register.component'
 
 @NgModule({
   imports: [
     RegisterRoutingModule,
-    SharedModule,
+
     CdkStepperModule,
+    NgbAccordionModule,
+
     SignupSharedModule,
-    NgbAccordionModule
+
+    SharedInstanceModule
   ],
 
   declarations: [

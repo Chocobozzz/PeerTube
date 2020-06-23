@@ -1,7 +1,7 @@
-import { Injectable, NgZone } from '@angular/core'
-import { environment } from '../../../environments/environment'
-import { UserNotification as UserNotificationServer } from '../../../../../shared'
 import { Subject } from 'rxjs'
+import { Injectable, NgZone } from '@angular/core'
+import { UserNotification as UserNotificationServer } from '@shared/models'
+import { environment } from '../../../environments/environment'
 import { AuthService } from '../auth'
 
 export type NotificationEvent = 'new' | 'read' | 'read-all'

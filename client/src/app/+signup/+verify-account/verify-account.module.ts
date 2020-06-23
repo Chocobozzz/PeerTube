@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core'
-import { VerifyAccountRoutingModule } from './verify-account-routing.module'
-import { VerifyAccountEmailComponent } from './verify-account-email/verify-account-email.component'
+import { SignupSharedModule } from '../shared/signup-shared.module'
 import { VerifyAccountAskSendEmailComponent } from './verify-account-ask-send-email/verify-account-ask-send-email.component'
-import { SharedModule } from '@app/shared'
-import { SignupSharedModule } from '@app/+signup/shared/signup-shared.module'
+import { VerifyAccountEmailComponent } from './verify-account-email/verify-account-email.component'
+import { VerifyAccountRoutingModule } from './verify-account-routing.module'
 
 @NgModule({
   imports: [
     VerifyAccountRoutingModule,
-    SharedModule,
+
     SignupSharedModule
   ],
 

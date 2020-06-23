@@ -1,19 +1,13 @@
+import { map } from 'rxjs/operators'
 import { Component, Input, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms'
-import { ActivatedRoute, Router } from '@angular/router'
-import { FormReactiveValidationMessages, VideoValidatorsService } from '@app/shared'
-import { Notifier } from '@app/core'
-import { ServerService } from '../../../core/server'
-import { VideoEdit } from '../../../shared/video/video-edit.model'
-import { map } from 'rxjs/operators'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { I18nPrimengCalendarService } from '@app/shared/i18n/i18n-primeng-calendar'
-import { VideoCaptionService } from '@app/shared/video-caption'
-import { VideoCaptionAddModalComponent } from '@app/videos/+video-edit/shared/video-caption-add-modal.component'
-import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
-import { removeElementFromArray } from '@app/shared/misc/utils'
-import { ServerConfig, VideoConstant, VideoPrivacy } from '../../../../../../shared'
-import { VideoService } from '@app/shared/video/video.service'
+import { ServerService } from '@app/core'
+import { removeElementFromArray } from '@app/helpers'
+import { FormReactiveValidationMessages, FormValidatorService, VideoValidatorsService } from '@app/shared/shared-forms'
+import { VideoCaptionEdit, VideoEdit, VideoService } from '@app/shared/shared-main'
+import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
+import { I18nPrimengCalendarService } from './i18n-primeng-calendar.service'
+import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
 
 @Component({
   selector: 'my-video-edit',
@@ -60,11 +54,7 @@ export class VideoEditComponent implements OnInit, OnDestroy {
   constructor (
     private formValidatorService: FormValidatorService,
     private videoValidatorsService: VideoValidatorsService,
-    private videoCaptionService: VideoCaptionService,
     private videoService: VideoService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private notifier: Notifier,
     private serverService: ServerService,
     private i18nPrimengCalendarService: I18nPrimengCalendarService,
     private ngZone: NgZone

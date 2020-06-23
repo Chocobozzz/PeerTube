@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router'
 import { EditCustomConfigComponent } from '@app/+admin/config/edit-custom-config'
 import { UserRightGuard } from '@app/core'
-import { UserRight } from '../../../../../shared/models/users'
+import { UserRight } from '@shared/models'
 import { ConfigComponent } from './config.component'
 
 export const ConfigRoutes: Routes = [

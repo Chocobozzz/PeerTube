@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router'
-import { UserRight } from '../../../../../shared'
-import { UserRightGuard } from '@app/core'
+import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
+import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
 import { VideoAbuseListComponent } from '@app/+admin/moderation/video-abuse-list'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
-import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
-import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
+import { UserRightGuard } from '@app/core'
+import { UserRight } from '@shared/models'
 
 export const ModerationRoutes: Routes = [
   {

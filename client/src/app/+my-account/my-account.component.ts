@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { ServerService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { TopMenuDropdownParam } from '@app/shared/menu/top-menu-dropdown.component'
 import { ServerConfig } from '@shared/models'
+import { TopMenuDropdownParam } from './top-menu-dropdown.component'
 
 @Component({
   selector: 'my-my-account',

@@ -1,14 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { UserRight } from '../../../../shared/models/users/user-right.enum'
-import { AuthService, AuthStatus, RedirectService, ServerService } from '../core'
-import { User } from '@app/shared/users/user.model'
-import { UserService } from '@app/shared/users/user.service'
-import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { HotkeysService } from 'angular2-hotkeys'
-import { ServerConfig, VideoConstant } from '@shared/models'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { AuthService, AuthStatus, RedirectService, ScreenService, ServerService, User, UserService } from '@app/core'
+import { LanguageChooserComponent } from '@app/menu/language-chooser.component'
 import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ScreenService } from '@app/shared/misc/screen.service'
+import { ServerConfig, UserRight, VideoConstant } from '@shared/models'
 
 @Component({
   selector: 'my-menu',

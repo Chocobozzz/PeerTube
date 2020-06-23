@@ -1,5 +1,5 @@
 import { VideoPlaylistElementModel } from '@server/models/video/video-playlist-element'
-import { PickWith } from '@server/types/utils'
+import { PickWith } from '@shared/core-utils'
 import { MVideoFormattable, MVideoThumbnail, MVideoUrl } from './video'
 import { MVideoPlaylistPrivacy } from './video-playlist'
 

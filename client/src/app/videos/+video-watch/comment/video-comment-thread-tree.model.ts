@@ -1,5 +1,5 @@
-import { VideoCommentThreadTree as VideoCommentThreadTreeServerModel } from '../../../../../../shared/models/videos/video-comment.model'
-import { VideoComment } from '@app/videos/+video-watch/comment/video-comment.model'
+import { VideoCommentThreadTree as VideoCommentThreadTreeServerModel } from '@shared/models'
+import { VideoComment } from './video-comment.model'
 
 export class VideoCommentThreadTree implements VideoCommentThreadTreeServerModel {
   comment: VideoComment

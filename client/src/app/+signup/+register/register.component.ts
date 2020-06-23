@@ -1,14 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core'
-import { AuthService, Notifier, RedirectService, ServerService } from '@app/core'
-import { UserService, UserValidatorsService } from '@app/shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { UserRegister } from '@shared/models/users/user-register.model'
 import { FormGroup } from '@angular/forms'
-import { About, ServerConfig } from '@shared/models/server'
-import { InstanceService } from '@app/shared/instance/instance.service'
-import { HooksService } from '@app/core/plugins/hooks.service'
-import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
 import { ActivatedRoute } from '@angular/router'
+import { AuthService, Notifier, UserService } from '@app/core'
+import { HooksService } from '@app/core/plugins/hooks.service'
+import { InstanceService } from '@app/shared/shared-instance'
+import { NgbAccordion } from '@ng-bootstrap/ng-bootstrap'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { UserRegister } from '@shared/models'
+import { About, ServerConfig } from '@shared/models/server'
 
 @Component({
   selector: 'my-register',
@@ -40,11 +39,8 @@ export class RegisterComponent implements OnInit {
   constructor (
     private route: ActivatedRoute,
     private authService: AuthService,
-    private userValidatorsService: UserValidatorsService,
     private notifier: Notifier,
     private userService: UserService,
-    private serverService: ServerService,
-    private redirectService: RedirectService,
     private instanceService: InstanceService,
     private hooks: HooksService,
     private i18n: I18n

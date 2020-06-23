@@ -1,9 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { LogsService } from '@app/+admin/system/logs/logs.service'
 import { Notifier } from '@app/core'
-import { LogRow } from '@app/+admin/system/logs/log-row.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { LogLevel } from '@shared/models/server/log-level.type'
+import { LogLevel } from '@shared/models'
+import { LogRow } from './log-row.model'
+import { LogsService } from './logs.service'
 
 @Component({
   templateUrl: './logs.component.html',

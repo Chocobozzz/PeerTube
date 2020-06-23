@@ -1,5 +1,5 @@
 import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { PickWith } from '../../utils'
+import { PickWith } from '@shared/core-utils'
 import { MVideoAccountLightBlacklistAllFiles, MVideo } from './video'
 import { MAccountDefault, MAccountFormattable } from '../account'
 

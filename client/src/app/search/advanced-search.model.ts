@@ -1,5 +1,4 @@
-import { SearchTargetType } from '@shared/models/search/search-target-query.model'
-import { NSFWQuery } from '../../../../shared/models/search'
+import { NSFWQuery, SearchTargetType } from '@shared/models'
 
 export class AdvancedSearch {
   startDate: string // ISO 8601

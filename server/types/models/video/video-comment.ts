@@ -1,5 +1,5 @@
 import { VideoCommentModel } from '../../../models/video/video-comment'
-import { PickWith, PickWithOpt } from '../../utils'
+import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { MAccountDefault, MAccountFormattable, MAccountUrl } from '../account'
 import { MVideoAccountLight, MVideoFeed, MVideoIdUrl, MVideoUrl } from './video'
 

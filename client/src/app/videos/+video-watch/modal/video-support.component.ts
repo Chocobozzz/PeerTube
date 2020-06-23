@@ -1,7 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core'
-import { VideoDetails } from '../../../shared/video/video-details.model'
+import { MarkdownService } from '@app/core'
+import { VideoDetails } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { MarkdownService } from '@app/shared/renderer'
 
 @Component({
   selector: 'my-video-support',

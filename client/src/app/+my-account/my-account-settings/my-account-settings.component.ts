@@ -1,11 +1,8 @@
-import { Component, OnInit, AfterViewChecked } from '@angular/core'
-import { Notifier } from '@app/core'
 import { BytesPipe } from 'ngx-pipes'
-import { AuthService } from '../../core'
-import { User } from '../../shared'
-import { UserService } from '../../shared/users'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ViewportScroller } from '@angular/common'
+import { AfterViewChecked, Component, OnInit } from '@angular/core'
+import { AuthService, Notifier, User, UserService } from '@app/core'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-settings',

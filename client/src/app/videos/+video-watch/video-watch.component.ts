@@ -1,41 +1,33 @@
+import { Hotkey, HotkeysService } from 'angular2-hotkeys'
+import { forkJoin, Observable, Subscription } from 'rxjs'
 import { catchError } from 'rxjs/operators'
+import { PlatformLocation } from '@angular/common'
 import { ChangeDetectorRef, Component, ElementRef, Inject, LOCALE_ID, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
+import { AuthService, AuthUser, ConfirmService, MarkdownService, Notifier, RestExtractor, ServerService, UserService } from '@app/core'
+import { HooksService } from '@app/core/plugins/hooks.service'
 import { RedirectService } from '@app/core/routing/redirect.service'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
-import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
+import { isXPercentInViewport, peertubeLocalStorage, scrollToTop } from '@app/helpers'
+import { Video, VideoCaptionService, VideoDetails, VideoService } from '@app/shared/shared-main'
+import { SubscribeButtonComponent } from '@app/shared/shared-user-subscription'
+import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { MetaService } from '@ngx-meta/core'
-import { AuthUser, Notifier, ServerService } from '@app/core'
-import { forkJoin, Observable, Subscription } from 'rxjs'
-import { Hotkey, HotkeysService } from 'angular2-hotkeys'
-import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '../../../../../shared'
-import { AuthService, ConfirmService } from '../../core'
-import { RestExtractor, UserService } from '../../shared'
-import { VideoDetails } from '../../shared/video/video-details.model'
-import { VideoService } from '../../shared/video/video.service'
-import { VideoShareComponent } from './modal/video-share.component'
-import { SubscribeButtonComponent } from '@app/shared/user-subscription/subscribe-button.component'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { environment } from '../../../environments/environment'
-import { VideoCaptionService } from '@app/shared/video-caption'
-import { MarkdownService } from '@app/shared/renderer'
+import { ServerConfig, UserVideoRateType, VideoCaption, VideoPrivacy, VideoState } from '@shared/models'
+import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
 import {
-  videojs,
   CustomizationOptions,
   P2PMediaLoaderOptions,
   PeertubePlayerManager,
   PeertubePlayerManagerOptions,
-  PlayerMode
+  PlayerMode,
+  videojs
 } from '../../../assets/player/peertube-player-manager'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { Video } from '@app/shared/video/video.model'
 import { isWebRTCDisabled, timeToInt } from '../../../assets/player/utils'
-import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
-import { getStoredP2PEnabled, getStoredTheater } from '../../../assets/player/peertube-player-local-storage'
-import { HooksService } from '@app/core/plugins/hooks.service'
-import { PlatformLocation } from '@angular/common'
-import { scrollToTop, isXPercentInViewport } from '@app/shared/misc/utils'
+import { environment } from '../../../environments/environment'
+import { VideoShareComponent } from './modal/video-share.component'
+import { VideoSupportComponent } from './modal/video-support.component'
+import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 
 @Component({
   selector: 'my-video-watch',

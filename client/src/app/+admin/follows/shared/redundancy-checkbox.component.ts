@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core'
 import { Notifier } from '@app/core'
+import { RedundancyService } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { RedundancyService } from '@app/shared/video/redundancy.service'
 
 @Component({
   selector: 'my-redundancy-checkbox',

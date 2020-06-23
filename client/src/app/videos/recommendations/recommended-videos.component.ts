@@ -1,15 +1,12 @@
 import { Observable } from 'rxjs'
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
-import { User } from '@app/shared'
-import { SessionStorageService } from '@app/shared/misc/storage.service'
-import { UserService } from '@app/shared/users/user.service'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
-import { MiniatureDisplayOptions } from '@app/shared/video/video-miniature.component'
-import { Video } from '@app/shared/video/video.model'
-import { RecommendedVideosStore } from '@app/videos/recommendations/recommended-videos.store'
+import { AuthService, Notifier, SessionStorageService, User, UserService } from '@app/core'
+import { Video } from '@app/shared/shared-main'
+import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
+import { VideoPlaylist } from '@app/shared/shared-video-playlist'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { RecommendationInfo } from './recommendation-info.model'
+import { RecommendedVideosStore } from './recommended-videos.store'
 
 @Component({
   selector: 'my-recommended-videos',

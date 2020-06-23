@@ -1,12 +1,9 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
-
+import { CanDeactivateGuard, LoginGuard } from '@app/core'
 import { MetaGuard } from '@ngx-meta/core'
-
-import { LoginGuard } from '../../core'
 import { VideoUpdateComponent } from './video-update.component'
-import { VideoUpdateResolver } from '@app/videos/+video-edit/video-update.resolver'
-import { CanDeactivateGuard } from '@app/shared/guards/can-deactivate-guard.service'
+import { VideoUpdateResolver } from './video-update.resolver'
 
 const videoUpdateRoutes: Routes = [
   {

@@ -1,11 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { User } from '@app/shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Subject } from 'rxjs'
-import { UserNotificationSetting, UserNotificationSettingValue, UserRight } from '../../../../../../shared'
-import { Notifier, ServerService } from '@app/core'
 import { debounce } from 'lodash-es'
-import { UserNotificationService } from '@app/shared/users/user-notification.service'
+import { Subject } from 'rxjs'
+import { Component, Input, OnInit } from '@angular/core'
+import { Notifier, ServerService, User } from '@app/core'
+import { UserNotificationService } from '@app/shared/shared-main'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { UserNotificationSetting, UserNotificationSettingValue, UserRight } from '@shared/models'
 
 @Component({
   selector: 'my-account-notification-preferences',

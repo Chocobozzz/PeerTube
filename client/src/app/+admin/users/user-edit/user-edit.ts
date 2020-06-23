@@ -1,11 +1,8 @@
-import { AuthService, ServerService } from '../../../core'
-import { FormReactive } from '../../../shared'
-import { ServerConfig, USER_ROLE_LABELS, UserRole, VideoResolution } from '../../../../../../shared'
-import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { UserAdminFlag } from '@shared/models/users/user-flag.model'
 import { OnInit } from '@angular/core'
-import { User } from '@app/shared/users/user.model'
-import { ScreenService } from '@app/shared/misc/screen.service'
+import { ConfigService } from '@app/+admin/config/shared/config.service'
+import { AuthService, ScreenService, ServerService, User } from '@app/core'
+import { FormReactive } from '@app/shared/shared-forms'
+import { ServerConfig, USER_ROLE_LABELS, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
 
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: { value: string, label: string, disabled?: boolean }[] = []

@@ -1,10 +1,10 @@
-import { Inject, Injectable } from '@angular/core'
 import { Observable, ReplaySubject } from 'rxjs'
-import { Video } from '@app/shared/video/video.model'
-import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
-import { RecentVideosRecommendationService } from '@app/videos/recommendations/recent-videos-recommendation.service'
-import { RecommendationService } from '@app/videos/recommendations/recommendations.service'
 import { map, shareReplay, switchMap, take } from 'rxjs/operators'
+import { Inject, Injectable } from '@angular/core'
+import { Video } from '@app/shared/shared-main'
+import { RecentVideosRecommendationService } from './recent-videos-recommendation.service'
+import { RecommendationInfo } from './recommendation-info.model'
+import { RecommendationService } from './recommendations.service'
 
 /**
  * This store is intended to provide data for the RecommendedVideosComponent.
@@ -20,7 +20,7 @@ export class RecommendedVideosStore {
   ) {
     this.recommendations$ = this.requestsForLoad$$.pipe(
       switchMap(requestedRecommendation => {
-        return recommendations.getRecommendations(requestedRecommendation)
+        return this.recommendations.getRecommendations(requestedRecommendation)
                               .pipe(take(1))
       }),
       shareReplay()

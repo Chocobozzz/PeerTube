@@ -1,26 +1,40 @@
+import { QRCodeModule } from 'angularx-qrcode'
 import { NgModule } from '@angular/core'
-import { VideoSupportComponent } from '@app/videos/+video-watch/modal/video-support.component'
-import { SharedModule } from '../../shared'
+import { SharedFormModule } from '@app/shared/shared-forms'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
+import { SharedMainModule } from '@app/shared/shared-main'
+import { SharedModerationModule } from '@app/shared/shared-moderation'
+import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription'
+import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
+import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist'
+import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
+import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentAddComponent } from './comment/video-comment-add.component'
 import { VideoCommentComponent } from './comment/video-comment.component'
 import { VideoCommentService } from './comment/video-comment.service'
 import { VideoCommentsComponent } from './comment/video-comments.component'
 import { VideoShareComponent } from './modal/video-share.component'
+import { VideoSupportComponent } from './modal/video-support.component'
+import { TimestampRouteTransformerDirective } from './timestamp-route-transformer.directive'
+import { VideoDurationPipe } from './video-duration-formatter.pipe'
+import { VideoWatchPlaylistComponent } from './video-watch-playlist.component'
 import { VideoWatchRoutingModule } from './video-watch-routing.module'
 import { VideoWatchComponent } from './video-watch.component'
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap'
-import { RecommendationsModule } from '@app/videos/recommendations/recommendations.module'
-import { VideoWatchPlaylistComponent } from '@app/videos/+video-watch/video-watch-playlist.component'
-import { QRCodeModule } from 'angularx-qrcode'
-import { TimestampRouteTransformerDirective } from '@app/shared/angular/timestamp-route-transformer.directive'
 
 @NgModule({
   imports: [
     VideoWatchRoutingModule,
-    SharedModule,
     NgbTooltipModule,
     QRCodeModule,
-    RecommendationsModule
+    RecommendationsModule,
+
+    SharedMainModule,
+    SharedFormModule,
+    SharedVideoMiniatureModule,
+    SharedVideoPlaylistModule,
+    SharedUserSubscriptionModule,
+    SharedModerationModule,
+    SharedGlobalIconModule
   ],
 
   declarations: [
@@ -33,6 +47,8 @@ import { TimestampRouteTransformerDirective } from '@app/shared/angular/timestam
     VideoCommentAddComponent,
     VideoCommentComponent,
 
+    TimestampRouteTransformerDirective,
+    VideoDurationPipe,
     TimestampRouteTransformerDirective
   ],
 

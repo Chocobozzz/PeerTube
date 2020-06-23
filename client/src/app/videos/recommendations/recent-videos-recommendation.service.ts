@@ -1,15 +1,13 @@
 import { Observable, of } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
-import { ServerService } from '@app/core'
+import { ServerService, UserService } from '@app/core'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { SearchService } from '@app/search/search.service'
-import { UserService } from '@app/shared'
-import { RecommendationInfo } from '@app/shared/video/recommendation-info.model'
-import { Video } from '@app/shared/video/video.model'
-import { VideoService } from '@app/shared/video/video.service'
-import { RecommendationService } from '@app/videos/recommendations/recommendations.service'
+import { Video, VideoService } from '@app/shared/shared-main'
 import { ServerConfig } from '@shared/models'
+import { RecommendationInfo } from './recommendation-info.model'
+import { RecommendationService } from './recommendations.service'
 
 /**
  * Provides "recommendations" by providing the most recently uploaded videos.

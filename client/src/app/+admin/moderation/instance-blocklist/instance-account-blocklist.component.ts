@@ -1,10 +1,10 @@
 import { Component } from '@angular/core'
-import { GenericAccountBlocklistComponent, BlocklistComponentType } from '@app/shared/blocklist'
+import { BlocklistComponentType, GenericAccountBlocklistComponent } from '@app/shared/shared-moderation'
 
 @Component({
   selector: 'my-instance-account-blocklist',
-  styleUrls: [ '../moderation.component.scss', '../../../shared/blocklist/account-blocklist.component.scss' ],
-  templateUrl: '../../../shared/blocklist/account-blocklist.component.html'
+  styleUrls: [ '../moderation.component.scss', '../../../shared/shared-moderation/account-blocklist.component.scss' ],
+  templateUrl: '../../../shared/shared-moderation/account-blocklist.component.html'
 })
 export class InstanceAccountBlocklistComponent extends GenericAccountBlocklistComponent {
   mode = BlocklistComponentType.Instance

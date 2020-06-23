@@ -2,8 +2,7 @@ import { from, Observable } from 'rxjs'
 import { mergeMap, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { ClientActionHookName, ClientFilterHookName } from '@shared/models/plugins/client-hook.model'
-import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
+import { ClientActionHookName, ClientFilterHookName, PluginClientScope } from '@shared/models'
 
 type RawFunction<U, T> = (params: U) => T
 type ObservableFunction<U, T> = RawFunction<U, Observable<T>>

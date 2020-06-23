@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { MarkdownService } from '@app/shared/renderer'
+import { MarkdownService } from '@app/core'
 
 @Component({
   selector: 'my-about-peertube-contributors',

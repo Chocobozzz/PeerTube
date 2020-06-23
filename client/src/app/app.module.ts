@@ -1,31 +1,36 @@
+import 'focus-visible'
+import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
 import { LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
+import localeOc from '@app/helpers/locales/oc'
 import { ResetPasswordModule } from '@app/reset-password'
+import { SearchModule } from '@app/search'
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
-import 'focus-visible'
-
+import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/models'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CoreModule } from './core'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { LoginModule } from './login'
 import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
-import { SharedModule } from './shared'
+import { ConfirmComponent } from './modal/confirm.component'
+import { CustomModalComponent } from './modal/custom-modal.component'
+import { InstanceConfigWarningModalComponent } from './modal/instance-config-warning-modal.component'
+import { QuickSettingsModalComponent } from './modal/quick-settings-modal.component'
+import { WelcomeModalComponent } from './modal/welcome-modal.component'
+import { SharedFormModule } from './shared/shared-forms'
+import { SharedGlobalIconModule } from './shared/shared-icons'
+import { SharedInstanceModule } from './shared/shared-instance'
+import { SharedMainModule } from './shared/shared-main'
+import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
 import { VideosModule } from './videos'
-import { SearchModule } from '@app/search'
-import { WelcomeModalComponent } from '@app/modal/welcome-modal.component'
-import { InstanceConfigWarningModalComponent } from '@app/modal/instance-config-warning-modal.component'
-import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/models'
-import { APP_BASE_HREF, registerLocaleData } from '@angular/common'
-import { QuickSettingsModalComponent } from '@app/modal/quick-settings-modal.component'
-import { CustomModalComponent } from '@app/modal/custom-modal.component'
-import localeOc from '@app/shared/locale/oc'
 
 registerLocaleData(localeOc, 'oc')
 
 @NgModule({
   bootstrap: [ AppComponent ],
+
   declarations: [
     AppComponent,
 
@@ -39,19 +44,24 @@ registerLocaleData(localeOc, 'oc')
 
     CustomModalComponent,
     WelcomeModalComponent,
-    InstanceConfigWarningModalComponent
+    InstanceConfigWarningModalComponent,
+    ConfirmComponent
   ],
+
   imports: [
     BrowserModule,
 
     CoreModule,
-    SharedModule,
+    SharedMainModule,
+    SharedFormModule,
+    SharedUserInterfaceSettingsModule,
+    SharedGlobalIconModule,
+    SharedInstanceModule,
 
-    CoreModule,
     LoginModule,
     ResetPasswordModule,
     SearchModule,
-    SharedModule,
+
     VideosModule,
 
     MetaModule.forRoot({

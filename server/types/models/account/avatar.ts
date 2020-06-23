@@ -1,5 +1,5 @@
 import { AvatarModel } from '../../../models/avatar/avatar'
-import { FunctionProperties } from '@server/types/utils'
+import { FunctionProperties } from '@shared/core-utils'
 
 export type MAvatar = AvatarModel
 

@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
-import { MarkdownService } from '@app/shared/renderer'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { MarkdownService } from '@app/core'
+import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-video-channel-about',

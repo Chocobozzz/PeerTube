@@ -1,14 +1,12 @@
-import { Component, OnInit } from '@angular/core'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
-import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
-import { Job, JobType } from '../../../../../../shared/index'
-import { JobState } from '../../../../../../shared/models'
-import { RestPagination, RestTable } from '../../../shared'
-import { JobService } from './job.service'
+import { Component, OnInit } from '@angular/core'
+import { Notifier, RestPagination, RestTable } from '@app/core'
+import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Job, JobState, JobType } from '@shared/models'
 import { JobStateClient } from '../../../../types/job-state-client.type'
 import { JobTypeClient } from '../../../../types/job-type-client.type'
+import { JobService } from './job.service'
 
 @Component({
   selector: 'my-jobs',

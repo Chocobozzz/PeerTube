@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core'
-import { UserRight } from '../../../../shared'
-import { AuthService } from '../core/auth/auth.service'
-import { ListOverflowItem } from '@app/shared/misc/list-overflow.component'
+import { AuthService } from '@app/core'
+import { ListOverflowItem } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { UserRight } from '@shared/models'
 
 @Component({
   templateUrl: './admin.component.html'

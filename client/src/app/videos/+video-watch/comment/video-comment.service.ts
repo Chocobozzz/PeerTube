@@ -1,20 +1,19 @@
+import { Observable } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { objectLineFeedToHtml } from '@app/shared/misc/utils'
-import { Observable } from 'rxjs'
-import { FeedFormat, ResultList } from '../../../../../../shared/models'
+import { ComponentPaginationLight, RestExtractor, RestService } from '@app/core'
+import { objectLineFeedToHtml } from '@app/helpers'
 import {
+  FeedFormat,
+  ResultList,
   VideoComment as VideoCommentServerModel,
   VideoCommentCreate,
   VideoCommentThreadTree as VideoCommentThreadTreeServerModel
-} from '../../../../../../shared/models/videos/video-comment.model'
+} from '@shared/models'
 import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestService } from '../../../shared/rest'
-import { ComponentPaginationLight } from '../../../shared/rest/component-pagination.model'
-import { CommentSortField } from '../../../shared/video/sort-field.type'
+import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
-import { VideoCommentThreadTree } from '@app/videos/+video-watch/comment/video-comment-thread-tree.model'
 
 @Injectable()
 export class VideoCommentService {
@@ -52,7 +51,7 @@ export class VideoCommentService {
   getVideoCommentThreads (parameters: {
     videoId: number | string,
     componentPagination: ComponentPaginationLight,
-    sort: CommentSortField
+    sort: string
   }): Observable<ResultList<VideoComment>> {
     const { videoId, componentPagination, sort } = parameters
 

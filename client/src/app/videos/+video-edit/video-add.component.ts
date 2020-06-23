@@ -1,10 +1,9 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core'
-import { CanComponentDeactivate } from '@app/shared/guards/can-deactivate-guard.service'
-import { VideoImportUrlComponent } from '@app/videos/+video-edit/video-add-components/video-import-url.component'
-import { VideoUploadComponent } from '@app/videos/+video-edit/video-add-components/video-upload.component'
-import { AuthService, ServerService } from '@app/core'
-import { VideoImportTorrentComponent } from '@app/videos/+video-edit/video-add-components/video-import-torrent.component'
+import { AuthService, CanComponentDeactivate, ServerService } from '@app/core'
 import { ServerConfig } from '@shared/models'
+import { VideoImportTorrentComponent } from './video-add-components/video-import-torrent.component'
+import { VideoImportUrlComponent } from './video-add-components/video-import-url.component'
+import { VideoUploadComponent } from './video-add-components/video-upload.component'
 
 @Component({
   selector: 'my-videos-add',

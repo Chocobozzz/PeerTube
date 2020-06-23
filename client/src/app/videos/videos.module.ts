@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core'
-import { VideoLocalComponent } from '@app/videos/video-list/video-local.component'
-import { SharedModule } from '../shared'
+import { SharedFormModule } from '@app/shared/shared-forms'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
+import { SharedMainModule } from '@app/shared/shared-main'
+import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription'
+import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
+import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
+import { VideoLocalComponent } from './video-list/video-local.component'
+import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
 import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.component'
 import { VideoTrendingComponent } from './video-list/video-trending.component'
-import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
+import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
 import { VideosRoutingModule } from './videos-routing.module'
 import { VideosComponent } from './videos.component'
-import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
-import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
 
 @NgModule({
   imports: [
     VideosRoutingModule,
-    SharedModule
+
+    SharedMainModule,
+    SharedFormModule,
+    SharedVideoMiniatureModule,
+    SharedUserSubscriptionModule,
+    SharedGlobalIconModule
   ],
 
   declarations: [

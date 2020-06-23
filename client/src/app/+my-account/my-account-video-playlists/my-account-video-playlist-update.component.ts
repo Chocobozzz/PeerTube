@@ -1,16 +1,14 @@
+import { forkJoin, Subscription } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, Notifier, ServerService } from '@app/core'
-import { forkJoin, Subscription } from 'rxjs'
+import { populateAsyncUserVideoChannels } from '@app/helpers'
+import { FormValidatorService, VideoPlaylistValidatorsService } from '@app/shared/shared-forms'
+import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { MyAccountVideoPlaylistEdit } from '@app/+my-account/my-account-video-playlists/my-account-video-playlist-edit'
-import { populateAsyncUserVideoChannels } from '@app/shared/misc/utils'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { VideoPlaylistValidatorsService } from '@app/shared'
-import { VideoPlaylistUpdate } from '@shared/models/videos/playlist/video-playlist-update.model'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { delayWhen, map, switchMap } from 'rxjs/operators'
+import { VideoPlaylistUpdate } from '@shared/models'
+import { MyAccountVideoPlaylistEdit } from './my-account-video-playlist-edit'
 
 @Component({
   selector: 'my-account-video-playlist-update',

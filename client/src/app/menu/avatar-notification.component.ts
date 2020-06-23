@@ -1,11 +1,10 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
-import { User } from '../shared/users/user.model'
-import { UserNotificationService } from '@app/shared/users/user-notification.service'
 import { Subject, Subscription } from 'rxjs'
-import { Notifier, UserNotificationSocket } from '@app/core'
-import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
-import { NavigationEnd, Router } from '@angular/router'
 import { filter } from 'rxjs/operators'
+import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core'
+import { NavigationEnd, Router } from '@angular/router'
+import { Notifier, User, UserNotificationSocket } from '@app/core'
+import { UserNotificationService } from '@app/shared/shared-main'
+import { NgbPopover } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'my-avatar-notification',

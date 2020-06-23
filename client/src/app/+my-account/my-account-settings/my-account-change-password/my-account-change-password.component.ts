@@ -1,11 +1,9 @@
-import { Component, OnInit } from '@angular/core'
-import { AuthService, Notifier } from '@app/core'
-import { FormReactive, UserService } from '../../../shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { filter } from 'rxjs/operators'
-import { User } from '../../../../../../shared'
+import { Component, OnInit } from '@angular/core'
+import { AuthService, Notifier, UserService } from '@app/core'
+import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { User } from '@shared/models'
 
 @Component({
   selector: 'my-account-change-password',

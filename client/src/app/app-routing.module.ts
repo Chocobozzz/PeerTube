@@ -1,10 +1,9 @@
 import { NgModule } from '@angular/core'
 import { RouteReuseStrategy, RouterModule, Routes } from '@angular/router'
-
-import { PreloadSelectedModulesList } from './core'
 import { AppComponent } from '@app/app.component'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
+import { PreloadSelectedModulesList } from './core'
 
 const routes: Routes = [
   {

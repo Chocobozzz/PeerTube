@@ -1,16 +1,12 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core'
 import { SortMeta } from 'primeng/api'
-import { Notifier, ServerService } from '@app/core'
-import { ConfirmService } from '../../../core'
-import { RestPagination, RestTable, VideoBlockService } from '../../../shared'
-import { VideoBlacklist, VideoBlacklistType } from '../../../../../../shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { DropdownAction } from '../../../shared/buttons/action-dropdown.component'
-import { Video } from '../../../shared/video/video.model'
-import { MarkdownService } from '@app/shared/renderer'
-import { Params, ActivatedRoute, Router } from '@angular/router'
 import { filter, switchMap } from 'rxjs/operators'
-import { VideoService } from '@app/shared/video/video.service'
+import { AfterViewInit, Component, OnInit } from '@angular/core'
+import { ActivatedRoute, Params, Router } from '@angular/router'
+import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
+import { VideoBlockService } from '@app/shared/shared-moderation'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
 
 @Component({
   selector: 'my-video-block-list',

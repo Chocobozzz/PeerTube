@@ -13,7 +13,7 @@ import {
   MActorSummaryFormattable,
   MActorUrl
 } from './actor'
-import { FunctionProperties, PickWith } from '../../utils'
+import { FunctionProperties, PickWith } from '@shared/core-utils'
 import { MAccountBlocklistId } from './account-blocklist'
 import { MChannelDefault } from '../video/video-channels'
 

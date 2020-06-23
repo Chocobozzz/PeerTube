@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { UserService, UserValidatorsService, FormReactive } from '@app/shared'
-import { Notifier } from '@app/core'
+import { Notifier, UserService } from '@app/core'
+import { FormReactive, FormValidatorService, ResetPasswordValidatorsService, UserValidatorsService } from '@app/shared/shared-forms'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { ResetPasswordValidatorsService } from '@app/shared/forms/form-validators/reset-password-validators.service'
 
 @Component({
   selector: 'my-login',

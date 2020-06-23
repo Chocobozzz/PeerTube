@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core'
 import { Resolve } from '@angular/router'
-import { ServerService } from '@app/core/server'
+import { ServerService } from '../server'
 import { ServerConfig } from '@shared/models'
 
 @Injectable()

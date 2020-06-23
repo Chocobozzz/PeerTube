@@ -1,5 +1,5 @@
 import { VideoRedundancyModel } from '../../../models/redundancy/video-redundancy'
-import { PickWith, PickWithOpt } from '@server/types/utils'
+import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { VideoStreamingPlaylistModel } from '@server/models/video/video-streaming-playlist'
 import { VideoFileModel } from '@server/models/video/video-file'
 import { MVideoFile, MVideoFileVideo } from './video-file'

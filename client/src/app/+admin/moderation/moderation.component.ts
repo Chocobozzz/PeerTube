@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
-import { UserRight } from '../../../../../shared'
 import { AuthService, ServerService } from '@app/core'
+import { UserRight } from '@shared/models'
 
 @Component({
   templateUrl: './moderation.component.html',

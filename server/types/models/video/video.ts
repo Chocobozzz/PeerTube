@@ -1,5 +1,5 @@
 import { VideoModel } from '../../../models/video/video'
-import { PickWith, PickWithOpt } from '../../utils'
+import { PickWith, PickWithOpt } from '@shared/core-utils'
 import {
   MChannelAccountDefault,
   MChannelAccountLight,

@@ -1,9 +1,6 @@
 import { Component, Input } from '@angular/core'
-import { Notifier } from '@app/core'
-import { AuthService, ConfirmService, RedirectService } from '../../../core'
-import { UserService } from '../../../shared'
+import { AuthService, ConfirmService, Notifier, RedirectService, User, UserService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { User } from '@app/shared'
 
 @Component({
   selector: 'my-account-danger-zone',

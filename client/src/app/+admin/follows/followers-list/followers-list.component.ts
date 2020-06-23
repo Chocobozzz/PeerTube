@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core'
-import { ConfirmService, Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
-import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
-import { RestPagination, RestTable } from '../../../shared'
-import { FollowService } from '@app/shared/instance/follow.service'
+import { Component, OnInit } from '@angular/core'
+import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { InstanceFollowService } from '@app/shared/shared-instance'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ActorFollow } from '@shared/models'
 
 @Component({
   selector: 'my-followers-list',
@@ -21,7 +20,7 @@ export class FollowersListComponent extends RestTable implements OnInit {
     private confirmService: ConfirmService,
     private notifier: Notifier,
     private i18n: I18n,
-    private followService: FollowService
+    private followService: InstanceFollowService
   ) {
     super()
   }

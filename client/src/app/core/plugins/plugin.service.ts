@@ -1,28 +1,33 @@
-import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
-import { Router } from '@angular/router'
-import { getCompleteLocale, isDefaultLocale, peertubeTranslate, ServerConfigPlugin } from '@shared/models'
-import { ServerService } from '@app/core/server/server.service'
-import { ClientScript } from '@shared/models/plugins/plugin-package-json.model'
-import { ClientScript as ClientScriptModule } from '../../../types/client-script.model'
-import { environment } from '../../../environments/environment'
 import { Observable, of, ReplaySubject } from 'rxjs'
 import { catchError, first, map, shareReplay } from 'rxjs/operators'
-import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
-import { ClientHook, ClientHookName, clientHookObject } from '@shared/models/plugins/client-hook.model'
-import { PluginClientScope } from '@shared/models/plugins/plugin-client-scope.type'
-import { RegisterClientHookOptions } from '@shared/models/plugins/register-client-hook.model'
 import { HttpClient } from '@angular/common/http'
+import { Inject, Injectable, LOCALE_ID, NgZone } from '@angular/core'
 import { AuthService } from '@app/core/auth'
 import { Notifier } from '@app/core/notification'
-import { RestExtractor } from '@app/shared/rest'
-import { MarkdownService } from '@app/shared/renderer'
-import { PluginType } from '@shared/models/plugins/plugin.type'
-import { PublicServerSetting } from '@shared/models/plugins/public-server.setting'
-import { getDevLocale, isOnDevLocale } from '@app/shared/i18n/i18n-utils'
-import { RegisterClientHelpers } from '../../../types/register-client-option.model'
-import { PluginTranslation } from '@shared/models/plugins/plugin-translation.model'
-import { importModule } from '@app/shared/misc/utils'
+import { MarkdownService } from '@app/core/renderer'
+import { RestExtractor } from '@app/core/rest'
+import { ServerService } from '@app/core/server/server.service'
+import { getDevLocale, importModule, isOnDevLocale } from '@app/helpers'
 import { CustomModalComponent } from '@app/modal/custom-modal.component'
+import { getHookType, internalRunHook } from '@shared/core-utils/plugins/hooks'
+import {
+  ClientHook,
+  ClientHookName,
+  clientHookObject,
+  ClientScript,
+  getCompleteLocale,
+  isDefaultLocale,
+  peertubeTranslate,
+  PluginClientScope,
+  PluginTranslation,
+  PluginType,
+  PublicServerSetting,
+  RegisterClientHookOptions,
+  ServerConfigPlugin
+} from '@shared/models'
+import { environment } from '../../../environments/environment'
+import { ClientScript as ClientScriptModule } from '../../../types/client-script.model'
+import { RegisterClientHelpers } from '../../../types/register-client-option.model'
 
 interface HookStructValue extends RegisterClientHookOptions {
   plugin: ServerConfigPlugin
@@ -64,7 +69,6 @@ export class PluginService implements ClientHook {
   private hooks: { [ name: string ]: HookStructValue[] } = {}
 
   constructor (
-    private router: Router,
     private authService: AuthService,
     private notifier: Notifier,
     private markdownRenderer: MarkdownService,

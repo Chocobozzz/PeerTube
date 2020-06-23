@@ -1,9 +1,8 @@
 import { Component, Input } from '@angular/core'
-import { Actor } from '@app/shared/actor/actor.model'
+import { Actor } from '@app/shared/shared-main'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoAbusePredefinedReasonsString } from '../../../../../../shared/models/videos/abuse/video-abuse-reason.model'
 import { ProcessedVideoAbuse } from './video-abuse-list.component'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { durationToString } from '@app/shared/misc/utils'
 
 @Component({
   selector: 'my-video-abuse-details',

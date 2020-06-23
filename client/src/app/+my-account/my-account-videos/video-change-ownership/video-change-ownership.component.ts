@@ -1,11 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Notifier, UserService } from '@app/core'
+import { FormReactive, FormValidatorService, VideoChangeOwnershipValidatorsService } from '@app/shared/shared-forms'
+import { Video, VideoOwnershipService } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
-import { FormReactive, UserService } from '../../../shared/index'
-import { Video } from '@app/shared/video/video.model'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService, VideoChangeOwnershipValidatorsService } from '@app/shared'
-import { VideoOwnershipService } from '@app/shared/video-ownership'
 
 @Component({
   selector: 'my-video-change-ownership',

@@ -1,15 +1,10 @@
-import { Component, OnInit } from '@angular/core'
-import { Notifier } from '@app/core'
-import { AuthService } from '../../core/auth'
-import { ConfirmService } from '../../core/confirm'
-import { User } from '@app/shared'
-import { flatMap, debounceTime } from 'rxjs/operators'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { VideoPlaylistType } from '@shared/models'
 import { Subject } from 'rxjs'
+import { debounceTime, flatMap } from 'rxjs/operators'
+import { Component, OnInit } from '@angular/core'
+import { AuthService, ComponentPagination, ConfirmService, Notifier, User } from '@app/core'
+import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoPlaylistType } from '@shared/models'
 
 @Component({
   selector: 'my-account-video-playlists',

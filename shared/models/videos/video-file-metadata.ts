@@ -1,5 +1,5 @@
-import { FfprobeData } from "fluent-ffmpeg"
-import { DeepOmit } from "@server/models/utils"
+import { FfprobeData } from 'fluent-ffmpeg'
+import { DeepOmit } from '../../core-utils'
 
 export type VideoFileMetadataModel = DeepOmit<FfprobeData, 'filename'>
 
