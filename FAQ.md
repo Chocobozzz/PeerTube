@@ -127,7 +127,7 @@ To check if your BitTorrent client supports WebTorrent you can see this issue: h
 
 ## Why host on GitHub and Framagit?
 
-The project has initially been hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/chocobozzz/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
+The project has initially been hosted on GitHub by Chocobozzz. A full migration to [Framagit](https://framagit.org/framasoft/peertube/PeerTube) would be ideal now that Framasoft supports PeerTube, but it would take a lot of time and is an ongoing effort.
 
 
 ## Are you going to use the Steem blockchain?
