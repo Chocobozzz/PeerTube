@@ -1,4 +1,5 @@
 export * from './video-abuse-create.model'
+export * from './video-abuse-reason.model'
 export * from './video-abuse-state.model'
 export * from './video-abuse-update.model'
 export * from './video-abuse-video-is.type'

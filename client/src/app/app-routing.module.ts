@@ -4,6 +4,7 @@ import { AppComponent } from '@app/app.component'
 import { CustomReuseStrategy } from '@app/core/routing/custom-reuse-strategy'
 import { MenuGuards } from '@app/core/routing/menu-guard.service'
 import { PreloadSelectedModulesList } from './core'
+import { EmptyComponent } from './empty.component'
 
 const routes: Routes = [
   {
@@ -37,8 +38,24 @@ const routes: Routes = [
     loadChildren: () => import('./+signup/+register/register.module').then(m => m.RegisterModule)
   },
   {
+    path: 'reset-password',
+    loadChildren: () => import('./+reset-password/reset-password.module').then(m => m.ResetPasswordModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./+login/login.module').then(m => m.LoginModule)
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./+search/search.module').then(m => m.SearchModule)
+  },
+  {
+    path: 'videos',
+    loadChildren: () => import('./+videos/videos.module').then(m => m.VideosModule)
+  },
+  {
     path: '',
-    component: AppComponent // Avoid 404, app component will redirect dynamically
+    component: EmptyComponent // Avoid 404, app component will redirect dynamically
   },
   {
     path: '**',

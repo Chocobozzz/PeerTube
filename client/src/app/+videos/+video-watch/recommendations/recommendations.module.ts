@@ -2,6 +2,7 @@ import { InputSwitchModule } from 'primeng/inputswitch'
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { SharedMainModule } from '@app/shared/shared-main'
+import { SharedSearchModule } from '@app/shared/shared-search'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
 import { SharedVideoPlaylistModule } from '@app/shared/shared-video-playlist'
 import { RecentVideosRecommendationService } from './recent-videos-recommendation.service'
@@ -14,6 +15,7 @@ import { RecommendedVideosStore } from './recommended-videos.store'
     InputSwitchModule,
 
     SharedMainModule,
+    SharedSearchModule,
     SharedVideoPlaylistModule,
     SharedVideoMiniatureModule
   ],

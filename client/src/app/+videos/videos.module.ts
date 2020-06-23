@@ -4,6 +4,7 @@ import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedUserSubscriptionModule } from '@app/shared/shared-user-subscription'
 import { SharedVideoMiniatureModule } from '@app/shared/shared-video-miniature'
+import { OverviewService } from './video-list'
 import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 import { VideoLocalComponent } from './video-list/video-local.component'
 import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
@@ -39,6 +40,8 @@ import { VideosComponent } from './videos.component'
     VideosComponent
   ],
 
-  providers: []
+  providers: [
+    OverviewService
+  ]
 })
 export class VideosModule { }

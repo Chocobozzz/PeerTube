@@ -4,12 +4,11 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { AuthService, ComponentPagination, HooksService, Notifier, ServerService, User, UserService } from '@app/core'
 import { immutableAssign } from '@app/helpers'
 import { Video, VideoChannel } from '@app/shared/shared-main'
+import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
 import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
 import { MetaService } from '@ngx-meta/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SearchTargetType, ServerConfig } from '@shared/models'
-import { AdvancedSearch } from './advanced-search.model'
-import { SearchService } from './search.service'
 
 @Component({
   selector: 'my-search',
