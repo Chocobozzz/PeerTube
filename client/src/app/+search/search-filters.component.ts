@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ValidatorFn } from '@angular/forms'
 import { ServerService } from '@app/core'
-import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { VideoValidatorsService } from '@app/shared/shared-forms'
+import { AdvancedSearch } from '@app/shared/shared-search'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, VideoConstant } from '@shared/models'
 

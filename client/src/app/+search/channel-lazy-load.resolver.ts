@@ -1,7 +1,7 @@
 import { map } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve, Router } from '@angular/router'
-import { SearchService } from './search.service'
+import { SearchService } from '@app/shared/shared-search'
 
 @Injectable()
 export class ChannelLazyLoadResolver implements Resolve<any> {

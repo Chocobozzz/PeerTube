@@ -4,7 +4,7 @@ import { AuthService, CanComponentDeactivate, Notifier, ServerService } from '@a
 import { scrollToTop } from '@app/helpers'
 import { FormValidatorService } from '@app/shared/shared-forms'
 import { VideoCaptionService, VideoEdit, VideoImportService, VideoService } from '@app/shared/shared-main'
-import { VideoSend } from '@app/videos/+video-edit/video-add-components/video-send'
+import { VideoSend } from './video-send'
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoPrivacy, VideoUpdate } from '@shared/models'

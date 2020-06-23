@@ -4,11 +4,10 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { ComponentPaginationLight, RestExtractor, RestPagination, RestService } from '@app/core'
 import { peertubeLocalStorage } from '@app/helpers'
-import { AdvancedSearch } from '@app/search/advanced-search.model'
 import { Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
-import { ResultList, Video as VideoServerModel, VideoChannel as VideoChannelServerModel } from '@shared/models'
-import { SearchTargetType } from '@shared/models/search/search-target-query.model'
-import { environment } from '../../environments/environment'
+import { ResultList, SearchTargetType, Video as VideoServerModel, VideoChannel as VideoChannelServerModel } from '@shared/models'
+import { environment } from '../../../environments/environment'
+import { AdvancedSearch } from './advanced-search.model'
 
 @Injectable()
 export class SearchService {

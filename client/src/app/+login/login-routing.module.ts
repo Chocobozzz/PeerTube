@@ -6,7 +6,7 @@ import { ServerConfigResolver } from '@app/core/routing/server-config-resolver.s
 
 const loginRoutes: Routes = [
   {
-    path: 'login',
+    path: '',
     component: LoginComponent,
     canActivate: [ MetaGuard ],
     data: {

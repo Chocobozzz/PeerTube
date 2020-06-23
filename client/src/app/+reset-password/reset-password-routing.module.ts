@@ -5,7 +5,7 @@ import { ResetPasswordComponent } from './reset-password.component'
 
 const resetPasswordRoutes: Routes = [
   {
-    path: 'reset-password',
+    path: '',
     component: ResetPasswordComponent,
     canActivate: [ MetaGuard ],
     data: {

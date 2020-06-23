@@ -4,15 +4,13 @@ import { LOCALE_ID, NgModule, TRANSLATIONS, TRANSLATIONS_FORMAT } from '@angular
 import { BrowserModule } from '@angular/platform-browser'
 import { ServerService } from '@app/core'
 import localeOc from '@app/helpers/locales/oc'
-import { ResetPasswordModule } from '@app/reset-password'
-import { SearchModule } from '@app/search'
 import { MetaLoader, MetaModule, MetaStaticLoader, PageTitlePositioning } from '@ngx-meta/core'
 import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/models'
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CoreModule } from './core'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
-import { LoginModule } from './login'
+import { HighlightPipe } from './header/highlight.pipe'
 import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
 import { ConfirmComponent } from './modal/confirm.component'
 import { CustomModalComponent } from './modal/custom-modal.component'
@@ -24,7 +22,6 @@ import { SharedGlobalIconModule } from './shared/shared-icons'
 import { SharedInstanceModule } from './shared/shared-instance'
 import { SharedMainModule } from './shared/shared-main'
 import { SharedUserInterfaceSettingsModule } from './shared/shared-user-settings'
-import { VideosModule } from './videos'
 
 registerLocaleData(localeOc, 'oc')
 
@@ -41,6 +38,7 @@ registerLocaleData(localeOc, 'oc')
     HeaderComponent,
     SearchTypeaheadComponent,
     SuggestionComponent,
+    HighlightPipe,
 
     CustomModalComponent,
     WelcomeModalComponent,
@@ -57,12 +55,6 @@ registerLocaleData(localeOc, 'oc')
     SharedUserInterfaceSettingsModule,
     SharedGlobalIconModule,
     SharedInstanceModule,
-
-    LoginModule,
-    ResetPasswordModule,
-    SearchModule,
-
-    VideosModule,
 
     MetaModule.forRoot({
       provide: MetaLoader,
