@@ -1,17 +1,16 @@
+import { forkJoin } from 'rxjs'
+import { map, switchMap } from 'rxjs/operators'
 import { Injectable } from '@angular/core'
 import { ActivatedRouteSnapshot, Resolve } from '@angular/router'
-import { map, switchMap } from 'rxjs/operators'
-import { forkJoin } from 'rxjs'
-import { InstanceService } from '@app/shared/instance/instance.service'
+import { InstanceService } from '@app/shared/shared-instance'
 import { About } from '@shared/models/server'
 
 export type ResolverData = { about: About, languages: string[], categories: string[] }
 
 @Injectable()
 export class AboutInstanceResolver implements Resolve<any> {
-  constructor (
-    private instanceService: InstanceService
-  ) {}
+
+  constructor (private instanceService: InstanceService) {}
 
   resolve (route: ActivatedRouteSnapshot) {
     return this.instanceService.getAbout()

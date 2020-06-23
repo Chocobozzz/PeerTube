@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { Account } from '@app/shared/account/account.model'
-import { AccountService } from '@app/shared/account/account.service'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Subscription } from 'rxjs'
-import { MarkdownService } from '@app/shared/renderer'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { MarkdownService } from '@app/core'
+import { Account, AccountService } from '@app/shared/shared-main'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-about',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Notifier } from '@app/core'
-import { Debug } from '@shared/models/server'
-import { DebugService } from '@app/+admin/system/debug/debug.service'
+import { Debug } from '@shared/models'
+import { DebugService } from './debug.service'
 
 @Component({
   templateUrl: './debug.component.html',

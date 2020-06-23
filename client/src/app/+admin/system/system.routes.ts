@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router'
-import { UserRightGuard } from '../../core'
-import { UserRight } from '../../../../../shared'
-import { JobsComponent } from '@app/+admin/system/jobs/jobs.component'
-import { LogsComponent } from '@app/+admin/system/logs'
-import { SystemComponent } from '@app/+admin/system/system.component'
-import { DebugComponent } from '@app/+admin/system/debug'
+import { UserRightGuard } from '@app/core'
+import { UserRight } from '@shared/models'
+import { DebugComponent } from './debug'
+import { JobsComponent } from './jobs/jobs.component'
+import { LogsComponent } from './logs'
+import { SystemComponent } from './system.component'
 
 export const SystemRoutes: Routes = [
   {

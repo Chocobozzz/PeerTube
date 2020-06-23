@@ -1,5 +1,5 @@
 import { ServerModel } from '../../../models/server/server'
-import { FunctionProperties, PickWith } from '../../utils'
+import { FunctionProperties, PickWith } from '@shared/core-utils'
 import { MAccountBlocklistId } from '../account'
 
 type Use<K extends keyof ServerModel, M> = PickWith<ServerModel, K, M>

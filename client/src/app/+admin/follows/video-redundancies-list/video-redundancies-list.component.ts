@@ -1,14 +1,12 @@
-import { Component, OnInit } from '@angular/core'
-import { Notifier, ServerService } from '@app/core'
+import { BytesPipe } from 'ngx-pipes'
 import { SortMeta } from 'primeng/api'
-import { ConfirmService } from '../../../core/confirm/confirm.service'
-import { RestPagination, RestTable } from '../../../shared'
+import { Component, OnInit } from '@angular/core'
+import { ConfirmService, Notifier, RestPagination, RestTable, ServerService } from '@app/core'
+import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import { RedundancyService } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoRedundanciesTarget, VideoRedundancy } from '@shared/models'
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
 import { VideosRedundancyStats } from '@shared/models/server'
-import { BytesPipe } from 'ngx-pipes'
-import { RedundancyService } from '@app/shared/video/redundancy.service'
 
 @Component({
   selector: 'my-video-redundancies-list',

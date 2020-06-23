@@ -1,11 +1,11 @@
+import { Observable } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { RestExtractor } from '@app/core'
+import { LogLevel } from '@shared/models'
 import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestService } from '../../../shared'
-import { LogRow } from '@app/+admin/system/logs/log-row.model'
-import { LogLevel } from '@shared/models/server/log-level.type'
+import { LogRow } from './log-row.model'
 
 @Injectable()
 export class LogsService {
@@ -14,7 +14,6 @@ export class LogsService {
 
   constructor (
     private authHttp: HttpClient,
-    private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 

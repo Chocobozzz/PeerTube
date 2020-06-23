@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core'
-import { Notifier } from '@app/core'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { UserSubscriptionService } from '@app/shared/user-subscription'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Subject } from 'rxjs'
+import { Component, OnInit } from '@angular/core'
+import { ComponentPagination, Notifier } from '@app/core'
+import { VideoChannel } from '@app/shared/shared-main'
+import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
 
 @Component({
   selector: 'my-account-subscriptions',

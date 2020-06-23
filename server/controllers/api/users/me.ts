@@ -1,9 +1,15 @@
-import * as express from 'express'
 import 'multer'
-import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate } from '../../../../shared'
+import * as express from 'express'
+import { UserUpdateMe, UserVideoRate as FormattedUserVideoRate, VideoSortField } from '../../../../shared'
+import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
+import { createReqFiles } from '../../../helpers/express-utils'
 import { getFormattedObjects } from '../../../helpers/utils'
+import { CONFIG } from '../../../initializers/config'
 import { MIMETYPES } from '../../../initializers/constants'
+import { sequelizeTypescript } from '../../../initializers/database'
 import { sendUpdateActor } from '../../../lib/activitypub/send'
+import { updateActorAvatarFile } from '../../../lib/avatar'
+import { sendVerifyUserEmail } from '../../../lib/user'
 import {
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
@@ -15,19 +21,12 @@ import {
   usersVideoRatingValidator
 } from '../../../middlewares'
 import { deleteMeValidator, videoImportsSortValidator, videosSortValidator } from '../../../middlewares/validators'
+import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
+import { AccountModel } from '../../../models/account/account'
 import { AccountVideoRateModel } from '../../../models/account/account-video-rate'
 import { UserModel } from '../../../models/account/user'
 import { VideoModel } from '../../../models/video/video'
-import { VideoSortField } from '../../../../client/src/app/shared/video/sort-field.type'
-import { createReqFiles } from '../../../helpers/express-utils'
-import { UserVideoQuota } from '../../../../shared/models/users/user-video-quota.model'
-import { updateAvatarValidator } from '../../../middlewares/validators/avatar'
-import { updateActorAvatarFile } from '../../../lib/avatar'
 import { VideoImportModel } from '../../../models/video/video-import'
-import { AccountModel } from '../../../models/account/account'
-import { CONFIG } from '../../../initializers/config'
-import { sequelizeTypescript } from '../../../initializers/database'
-import { sendVerifyUserEmail } from '../../../lib/user'
 
 const reqAvatarFile = createReqFiles([ 'avatarfile' ], MIMETYPES.IMAGE.MIMETYPE_EXT, { avatarfile: CONFIG.STORAGE.TMP_DIR })
 

@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { ConfigRoutes } from '@app/+admin/config'
-
+import { ModerationRoutes } from '@app/+admin/moderation/moderation.routes'
+import { PluginsRoutes } from '@app/+admin/plugins/plugins.routes'
+import { SystemRoutes } from '@app/+admin/system'
 import { MetaGuard } from '@ngx-meta/core'
-
 import { AdminComponent } from './admin.component'
 import { FollowsRoutes } from './follows'
 import { UsersRoutes } from './users'
-import { ModerationRoutes } from '@app/+admin/moderation/moderation.routes'
-import { SystemRoutes } from '@app/+admin/system'
-import { PluginsRoutes } from '@app/+admin/plugins/plugins.routes'
 
 const adminRoutes: Routes = [
   {

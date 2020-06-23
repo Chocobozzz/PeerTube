@@ -10,7 +10,7 @@ import {
   RegisterServerAuthenticatedResult,
   RegisterServerAuthPassOptions,
   RegisterServerExternalAuthenticatedResult
-} from '@shared/models/plugins/register-server-auth.model'
+} from '@server/types/plugins/register-server-auth.model'
 import * as express from 'express'
 import * as OAuthServer from 'express-oauth-server'
 

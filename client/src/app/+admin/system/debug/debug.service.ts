@@ -1,10 +1,10 @@
+import { Observable } from 'rxjs'
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
+import { RestExtractor } from '@app/core'
+import { Debug } from '@shared/models'
 import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestService } from '../../../shared'
-import { Debug } from '@shared/models/server'
 
 @Injectable()
 export class DebugService {
@@ -12,7 +12,6 @@ export class DebugService {
 
   constructor (
     private authHttp: HttpClient,
-    private restService: RestService,
     private restExtractor: RestExtractor
   ) {}
 

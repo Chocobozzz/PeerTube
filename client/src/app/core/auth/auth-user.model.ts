@@ -1,10 +1,14 @@
-import { peertubeLocalStorage } from '@app/shared/misc/peertube-web-storage'
-import { UserRight } from '../../../../../shared/models/users/user-right.enum'
-import { MyUser as ServerMyUserModel, User as ServerUserModel, MyUserSpecialPlaylist } from '../../../../../shared/models/users/user.model'
-// Do not use the barrel (dependency loop)
-import { hasUserRight, UserRole } from '../../../../../shared/models/users/user-role'
-import { User } from '../../shared/users/user.model'
-import { NSFWPolicyType } from '../../../../../shared/models/videos/nsfw-policy.type'
+import { User } from '@app/core/users/user.model'
+import { peertubeLocalStorage } from '@app/helpers/peertube-web-storage'
+import {
+  hasUserRight,
+  MyUser as ServerMyUserModel,
+  MyUserSpecialPlaylist,
+  NSFWPolicyType,
+  User as ServerUserModel,
+  UserRight,
+  UserRole
+} from '@shared/models'
 
 export type TokenOptions = {
   accessToken: string

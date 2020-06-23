@@ -1,25 +1,18 @@
+import { Subscription } from 'rxjs'
+import { first, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { immutableAssign } from '@app/shared/misc/utils'
-import { AuthService } from '../../core/auth'
-import { ConfirmService } from '../../core/confirm'
-import { AbstractVideoList } from '../../shared/video/abstract-video-list'
-import { VideoService } from '../../shared/video/video.service'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { first, tap } from 'rxjs/operators'
+import { AuthService, ConfirmService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
+import { immutableAssign } from '@app/helpers'
+import { VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
+import { AbstractVideoList } from '@app/shared/shared-video-miniature'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Subscription } from 'rxjs'
-import { ScreenService } from '@app/shared/misc/screen.service'
-import { Notifier, ServerService } from '@app/core'
-import { UserService } from '@app/shared'
-import { LocalStorageService } from '@app/shared/misc/storage.service'
 
 @Component({
   selector: 'my-video-channel-videos',
-  templateUrl: '../../shared/video/abstract-video-list.html',
+  templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html',
   styleUrls: [
-    '../../shared/video/abstract-video-list.scss',
+    '../../shared/shared-video-miniature/abstract-video-list.scss',
     './video-channel-videos.component.scss'
   ]
 })

@@ -1,13 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { PluginApiService } from '@app/+admin/plugins/shared/plugin-api.service'
-import { Notifier } from '@app/core'
-import { ActivatedRoute } from '@angular/router'
 import { Subscription } from 'rxjs'
 import { map, switchMap } from 'rxjs/operators'
-import { BuildFormArgument, FormReactive, FormValidatorService } from '@app/shared'
-import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { Notifier } from '@app/core'
+import { BuildFormArgument, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { PeerTubePlugin, RegisterServerSettingOptions } from '@shared/models'
+import { PluginApiService } from '../shared/plugin-api.service'
 
 @Component({
   selector: 'my-plugin-show-installed',

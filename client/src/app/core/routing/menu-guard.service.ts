@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { CanActivate, CanDeactivate } from '@angular/router'
-import { MenuService } from '@app/core/menu'
-import { ScreenService } from '@app/shared/misc/screen.service'
+import { MenuService } from '../menu'
+import { ScreenService } from '../wrappers'
 
 abstract class MenuGuard implements CanActivate, CanDeactivate<any> {
   display = true

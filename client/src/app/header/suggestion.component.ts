@@ -1,6 +1,6 @@
-import { Input, Component, Output, EventEmitter, OnInit, ChangeDetectionStrategy, OnChanges } from '@angular/core'
-import { RouterLink } from '@angular/router'
 import { ListKeyManagerOption } from '@angular/cdk/a11y'
+import { Component, Input, OnInit } from '@angular/core'
+import { RouterLink } from '@angular/router'
 
 export type SuggestionPayload = {
   text: string

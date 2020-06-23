@@ -1,4 +1,4 @@
-import { VideoPlaylistPrivacy } from '@shared/models'
+import { VideoPlaylistPrivacy } from '../videos/playlist/video-playlist-privacy.model'
 
 export interface PluginPlaylistPrivacyManager {
   // PUBLIC = 1,

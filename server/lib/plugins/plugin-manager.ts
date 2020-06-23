@@ -1,28 +1,26 @@
-import { PluginModel } from '../../models/server/plugin'
-import { logger } from '../../helpers/logger'
+import { createReadStream, createWriteStream } from 'fs'
+import { outputFile, readJSON } from 'fs-extra'
 import { basename, join } from 'path'
-import { CONFIG } from '../../initializers/config'
-import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
+import { MOAuthTokenUser, MUser } from '@server/types/models'
+import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
+import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
 import {
   ClientScript,
   PluginPackageJson,
   PluginTranslationPaths as PackagePluginTranslations
 } from '../../../shared/models/plugins/plugin-package-json.model'
-import { createReadStream, createWriteStream } from 'fs'
-import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
-import { PluginType } from '../../../shared/models/plugins/plugin.type'
-import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
-import { outputFile, readJSON } from 'fs-extra'
-import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
-import { getHookType, internalRunHook } from '../../../shared/core-utils/plugins/hooks'
-import { RegisterServerOptions } from '../../typings/plugins/register-server-option.model'
-import { PluginLibrary } from '../../typings/plugins'
-import { ClientHtml } from '../client-html'
 import { PluginTranslation } from '../../../shared/models/plugins/plugin-translation.model'
+import { PluginType } from '../../../shared/models/plugins/plugin.type'
+import { ServerHook, ServerHookName } from '../../../shared/models/plugins/server-hook.model'
+import { isLibraryCodeValid, isPackageJSONValid } from '../../helpers/custom-validators/plugins'
+import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
+import { PLUGIN_GLOBAL_CSS_PATH } from '../../initializers/constants'
+import { PluginModel } from '../../models/server/plugin'
+import { PluginLibrary, RegisterServerAuthExternalOptions, RegisterServerAuthPassOptions, RegisterServerOptions } from '../../types/plugins'
+import { ClientHtml } from '../client-html'
 import { RegisterHelpersStore } from './register-helpers-store'
-import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
-import { MOAuthTokenUser, MUser } from '@server/types/models'
-import { RegisterServerAuthPassOptions, RegisterServerAuthExternalOptions } from '@shared/models/plugins/register-server-auth.model'
+import { installNpmPlugin, installNpmPluginFromDisk, removeNpmPlugin } from './yarn'
 
 export interface RegisteredPlugin {
   npmName: string

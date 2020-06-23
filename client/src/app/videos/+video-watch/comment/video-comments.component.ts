@@ -1,18 +1,13 @@
+import { Subject, Subscription } from 'rxjs'
 import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { ConfirmService, Notifier } from '@app/core'
-import { Subject, Subscription } from 'rxjs'
-import { AuthService } from '../../../core/auth'
-import { ComponentPagination, hasMoreItems } from '../../../shared/rest/component-pagination.model'
-import { User } from '../../../shared/users'
-import { CommentSortField } from '../../../shared/video/sort-field.type'
-import { VideoDetails } from '../../../shared/video/video-details.model'
+import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, User } from '@app/core'
+import { HooksService } from '@app/core/plugins/hooks.service'
+import { Syndication, VideoDetails } from '@app/shared/shared-main'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
 import { VideoCommentService } from './video-comment.service'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Syndication } from '@app/shared/video/syndication.model'
-import { HooksService } from '@app/core/plugins/hooks.service'
-import { VideoCommentThreadTree } from '@app/videos/+video-watch/comment/video-comment-thread-tree.model'
 
 @Component({
   selector: 'my-video-comments',
@@ -28,7 +23,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
 
   comments: VideoComment[] = []
   highlightedThread: VideoComment
-  sort: CommentSortField = '-createdAt'
+  sort = '-createdAt'
   componentPagination: ComponentPagination = {
     currentPage: 1,
     itemsPerPage: 10,
@@ -154,7 +149,7 @@ export class VideoCommentsComponent implements OnInit, OnChanges, OnDestroy {
     this.viewReplies(commentTree.comment.id)
   }
 
-  handleSortChange (sort: CommentSortField) {
+  handleSortChange (sort: string) {
     if (this.sort === sort) return
 
     this.sort = sort

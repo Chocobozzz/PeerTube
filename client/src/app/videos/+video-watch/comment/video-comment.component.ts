@@ -1,15 +1,10 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { User, UserRight } from '../../../../../../shared/models/users'
+import { MarkdownService, Notifier, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
-import { AccountService } from '@app/shared/account/account.service'
-import { Video } from '@app/shared/video/video.model'
+import { Account, Actor, Video } from '@app/shared/shared-main'
+import { User, UserRight } from '@shared/models'
+import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
-import { MarkdownService } from '@app/shared/renderer'
-import { Account } from '@app/shared/account/account.model'
-import { Notifier } from '@app/core'
-import { UserService } from '@app/shared'
-import { Actor } from '@app/shared/actor/actor.model'
-import { VideoCommentThreadTree } from '@app/videos/+video-watch/comment/video-comment-thread-tree.model'
 
 @Component({
   selector: 'my-video-comment',
@@ -40,7 +35,6 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   constructor (
     private markdownService: MarkdownService,
     private authService: AuthService,
-    private accountService: AccountService,
     private userService: UserService,
     private notifier: Notifier
   ) {}

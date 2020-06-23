@@ -1,10 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
-import { AuthService } from '@app/core'
-import { FormReactive, UserService, VideoChannelValidatorsService } from '@app/shared'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { FormGroup } from '@angular/forms'
-import { pairwise } from 'rxjs/operators'
 import { concat, of } from 'rxjs'
+import { pairwise } from 'rxjs/operators'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { FormGroup } from '@angular/forms'
+import { UserService } from '@app/core'
+import { FormReactive, FormValidatorService, VideoChannelValidatorsService } from '@app/shared/shared-forms'
 
 @Component({
   selector: 'my-register-step-channel',
@@ -17,7 +16,6 @@ export class RegisterStepChannelComponent extends FormReactive implements OnInit
 
   constructor (
     protected formValidatorService: FormValidatorService,
-    private authService: AuthService,
     private userService: UserService,
     private videoChannelValidatorsService: VideoChannelValidatorsService
   ) {

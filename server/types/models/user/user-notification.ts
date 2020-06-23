@@ -1,5 +1,5 @@
 import { UserNotificationModel } from '../../../models/account/user-notification'
-import { PickWith, PickWithOpt } from '../../utils'
+import { PickWith, PickWithOpt } from '@shared/core-utils'
 import { VideoModel } from '../../../models/video/video'
 import { ActorModel } from '../../../models/activitypub/actor'
 import { ServerModel } from '../../../models/server/server'

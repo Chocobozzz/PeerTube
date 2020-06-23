@@ -1,11 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core'
-import { FormReactive } from '@app/shared'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { VideoCaptionsValidatorsService } from '@app/shared/forms/form-validators/video-captions-validators.service'
 import { ServerService } from '@app/core'
-import { VideoCaptionEdit } from '@app/shared/video-caption/video-caption-edit.model'
+import { FormReactive, FormValidatorService, VideoCaptionsValidatorsService } from '@app/shared/shared-forms'
+import { VideoCaptionEdit } from '@app/shared/shared-main'
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { ServerConfig, VideoConstant } from '../../../../../../shared'
+import { ServerConfig, VideoConstant } from '@shared/models'
 
 @Component({
   selector: 'my-video-caption-add-modal',

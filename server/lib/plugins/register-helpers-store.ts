@@ -9,22 +9,24 @@ import {
 } from '@server/initializers/constants'
 import { onExternalUserAuthenticated } from '@server/lib/auth'
 import { PluginModel } from '@server/models/server/plugin'
-import { RegisterServerOptions } from '@server/typings/plugins'
-import { PluginPlaylistPrivacyManager } from '@shared/models/plugins/plugin-playlist-privacy-manager.model'
-import { PluginSettingsManager } from '@shared/models/plugins/plugin-settings-manager.model'
-import { PluginStorageManager } from '@shared/models/plugins/plugin-storage-manager.model'
-import { PluginVideoCategoryManager } from '@shared/models/plugins/plugin-video-category-manager.model'
-import { PluginVideoLanguageManager } from '@shared/models/plugins/plugin-video-language-manager.model'
-import { PluginVideoLicenceManager } from '@shared/models/plugins/plugin-video-licence-manager.model'
-import { PluginVideoPrivacyManager } from '@shared/models/plugins/plugin-video-privacy-manager.model'
 import {
   RegisterServerAuthExternalOptions,
   RegisterServerAuthExternalResult,
   RegisterServerAuthPassOptions,
-  RegisterServerExternalAuthenticatedResult
-} from '@shared/models/plugins/register-server-auth.model'
-import { RegisterServerHookOptions } from '@shared/models/plugins/register-server-hook.model'
-import { RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
+  RegisterServerExternalAuthenticatedResult,
+  RegisterServerOptions
+} from '@server/types/plugins'
+import {
+  PluginPlaylistPrivacyManager,
+  PluginSettingsManager,
+  PluginStorageManager,
+  PluginVideoCategoryManager,
+  PluginVideoLanguageManager,
+  PluginVideoLicenceManager,
+  PluginVideoPrivacyManager,
+  RegisterServerHookOptions,
+  RegisterServerSettingOptions
+} from '@shared/models'
 import { serverHookObject } from '@shared/models/plugins/server-hook.model'
 import { buildPluginHelpers } from './plugin-helpers'
 

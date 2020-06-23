@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { ValidatorFn } from '@angular/forms'
-import { VideoValidatorsService } from '@app/shared'
 import { ServerService } from '@app/core'
-import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AdvancedSearch } from '@app/search/advanced-search.model'
-import { ServerConfig, VideoConstant } from '../../../../shared'
+import { VideoValidatorsService } from '@app/shared/shared-forms'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { ServerConfig, VideoConstant } from '@shared/models'
 
 @Component({
   selector: 'my-search-filters',

@@ -1,10 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { Notifier } from '@app/core'
-import { RestPagination, RestTable } from '@app/shared'
 import { SortMeta } from 'primeng/api'
-import { VideoChangeOwnership } from '../../../../../shared'
-import { VideoOwnershipService } from '@app/shared/video-ownership'
-import { Account } from '@app/shared/account/account.model'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { Notifier, RestPagination, RestTable } from '@app/core'
+import { Account, VideoOwnershipService } from '@app/shared/shared-main'
+import { VideoChangeOwnership } from '@shared/models'
 import { MyAccountAcceptOwnershipComponent } from './my-account-accept-ownership/my-account-accept-ownership.component'
 
 @Component({

@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core'
-import { FollowService } from '@app/shared/instance/follow.service'
-import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
-import { Notifier } from '@app/core'
-import { RestService } from '@app/shared'
 import { SortMeta } from 'primeng/api'
 import { Subject } from 'rxjs'
+import { Component, OnInit } from '@angular/core'
+import { ComponentPagination, hasMoreItems, Notifier, RestService } from '@app/core'
+import { InstanceFollowService } from '@app/shared/shared-instance'
 
 @Component({
   selector: 'my-about-follows',
@@ -38,7 +36,7 @@ export class AboutFollowsComponent implements OnInit {
   constructor (
     private restService: RestService,
     private notifier: Notifier,
-    private followService: FollowService
+    private followService: InstanceFollowService
   ) { }
 
   ngOnInit () {

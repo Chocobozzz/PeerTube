@@ -1,10 +1,10 @@
 import { catchError } from 'rxjs/operators'
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { CustomConfig } from '../../../../../../shared/models/server/custom-config.model'
-import { environment } from '../../../../environments/environment'
-import { RestExtractor } from '../../../shared'
+import { RestExtractor } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { CustomConfig } from '@shared/models'
+import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class ConfigService {

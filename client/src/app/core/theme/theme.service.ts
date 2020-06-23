@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core'
-import { AuthService } from '@app/core/auth'
-import { ServerService } from '@app/core/server'
-import { environment } from '../../../environments/environment'
-import { PluginService } from '@app/core/plugins/plugin.service'
-import { ServerConfig, ServerConfigTheme } from '@shared/models'
 import { first } from 'rxjs/operators'
-import { User } from '@app/shared/users/user.model'
-import { UserService } from '@app/shared/users/user.service'
-import { LocalStorageService } from '@app/shared/misc/storage.service'
+import { Injectable } from '@angular/core'
+import { AuthService } from '../auth'
+import { PluginService } from '../plugins/plugin.service'
+import { ServerService } from '../server'
+import { LocalStorageService } from '../wrappers/storage.service'
+import { User } from '../users/user.model'
+import { UserService } from '../users/user.service'
+import { ServerConfig, ServerConfigTheme } from '@shared/models'
+import { environment } from '../../../environments/environment'
 
 @Injectable()
 export class ThemeService {

@@ -1,5 +1,5 @@
 import { VideoPlaylistModel } from '../../../models/video/video-playlist'
-import { PickWith } from '../../utils'
+import { PickWith } from '@shared/core-utils'
 import { MAccount, MAccountDefault, MAccountSummary, MAccountSummaryFormattable } from '../account'
 import { MThumbnail } from './thumbnail'
 import { MChannelDefault, MChannelSummary, MChannelSummaryFormattable, MChannelUrl } from './video-channels'

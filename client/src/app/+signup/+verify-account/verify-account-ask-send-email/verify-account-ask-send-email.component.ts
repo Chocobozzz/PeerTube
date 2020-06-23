@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core'
+import { Notifier, RedirectService, ServerService, UserService } from '@app/core'
+import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Notifier, RedirectService } from '@app/core'
-import { ServerService } from '@app/core/server'
-import { FormReactive, UserService } from '@app/shared'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
 import { ServerConfig } from '@shared/models'
 
 @Component({

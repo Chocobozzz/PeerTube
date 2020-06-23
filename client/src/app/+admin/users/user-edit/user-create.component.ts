@@ -1,14 +1,11 @@
 import { Component, OnInit } from '@angular/core'
-import { Router, ActivatedRoute } from '@angular/router'
-import { AuthService, Notifier, ServerService } from '@app/core'
-import { UserCreate, UserRole } from '../../../../../../shared'
-import { UserEdit } from './user-edit'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
+import { ActivatedRoute, Router } from '@angular/router'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
-import { UserService } from '@app/shared'
-import { ScreenService } from '@app/shared/misc/screen.service'
+import { AuthService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
+import { FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { UserCreate, UserRole } from '@shared/models'
+import { UserEdit } from './user-edit'
 
 @Component({
   selector: 'my-user-create',

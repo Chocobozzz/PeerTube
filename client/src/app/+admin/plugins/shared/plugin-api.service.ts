@@ -1,19 +1,21 @@
+import { Observable } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
-import { environment } from '../../../../environments/environment'
-import { RestExtractor, RestService } from '../../../shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { PluginType } from '@shared/models/plugins/plugin.type'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
-import { peertubeTranslate, ResultList } from '@shared/models'
-import { PeerTubePlugin } from '@shared/models/plugins/peertube-plugin.model'
-import { ManagePlugin } from '@shared/models/plugins/manage-plugin.model'
-import { InstallOrUpdatePlugin } from '@shared/models/plugins/install-plugin.model'
-import { PeerTubePluginIndex } from '@shared/models/plugins/peertube-plugin-index.model'
-import { RegisteredServerSettings, RegisterServerSettingOptions } from '@shared/models/plugins/register-server-setting.model'
+import { ComponentPagination, RestExtractor, RestService } from '@app/core'
 import { PluginService } from '@app/core/plugins/plugin.service'
-import { Observable } from 'rxjs'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import {
+  InstallOrUpdatePlugin,
+  ManagePlugin,
+  PeerTubePlugin,
+  PeerTubePluginIndex,
+  peertubeTranslate,
+  PluginType,
+  RegisteredServerSettings,
+  ResultList
+} from '@shared/models'
+import { environment } from '../../../../environments/environment'
 
 @Injectable()
 export class PluginApiService {

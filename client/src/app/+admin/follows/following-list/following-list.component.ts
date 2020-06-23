@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core'
-import { Notifier } from '@app/core'
 import { SortMeta } from 'primeng/api'
-import { ActorFollow } from '../../../../../../shared/models/actors/follow.model'
-import { ConfirmService } from '../../../core/confirm/confirm.service'
-import { RestPagination, RestTable } from '../../../shared'
-import { FollowService } from '@app/shared/instance/follow.service'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { ConfirmService, Notifier, RestPagination, RestTable } from '@app/core'
+import { InstanceFollowService } from '@app/shared/shared-instance'
+import { BatchDomainsModalComponent } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { BatchDomainsModalComponent } from '@app/+admin/config/shared/batch-domains-modal.component'
+import { ActorFollow } from '@shared/models'
 
 @Component({
   selector: 'my-followers-list',
@@ -24,7 +22,7 @@ export class FollowingListComponent extends RestTable implements OnInit {
   constructor (
     private notifier: Notifier,
     private confirmService: ConfirmService,
-    private followService: FollowService,
+    private followService: InstanceFollowService,
     private i18n: I18n
   ) {
     super()

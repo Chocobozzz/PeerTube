@@ -1,4 +1,4 @@
-import { VideoPrivacy } from '@shared/models'
+import { VideoPrivacy } from '@shared/models/videos/video-privacy.enum'
 
 export interface PluginVideoPrivacyManager {
   // PUBLIC = 1

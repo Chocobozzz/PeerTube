@@ -1,22 +1,18 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { immutableAssign } from '@app/shared/misc/utils'
-import { AuthService } from '../../core/auth'
-import { AbstractVideoList } from '../../shared/video/abstract-video-list'
-import { VideoSortField } from '../../shared/video/sort-field.type'
-import { VideoService } from '../../shared/video/video.service'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ScreenService } from '@app/shared/misc/screen.service'
-import { OwnerDisplayType } from '@app/shared/video/video-miniature.component'
-import { Notifier, ServerService } from '@app/core'
+import { AuthService, LocalStorageService, Notifier, ScreenService, ServerService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
-import { UserService } from '@app/shared'
-import { LocalStorageService } from '@app/shared/misc/storage.service'
+import { immutableAssign } from '@app/helpers'
+import { VideoService } from '@app/shared/shared-main'
+import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
+import { AbstractVideoList, OwnerDisplayType } from '@app/shared/shared-video-miniature'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-videos-user-subscriptions',
-  styleUrls: [ '../../shared/video/abstract-video-list.scss' ],
-  templateUrl: '../../shared/video/abstract-video-list.html'
+  styleUrls: [ '../../shared/shared-video-miniature/abstract-video-list.scss' ],
+  templateUrl: '../../shared/shared-video-miniature/abstract-video-list.html'
 })
 export class VideoUserSubscriptionsComponent extends AbstractVideoList implements OnInit, OnDestroy {
   titlePage: string
@@ -34,6 +30,7 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     protected userService: UserService,
     protected screenService: ScreenService,
     protected storageService: LocalStorageService,
+    private userSubscription: UserSubscriptionService,
     private videoService: VideoService,
     private hooks: HooksService
   ) {
@@ -64,7 +61,7 @@ export class VideoUserSubscriptionsComponent extends AbstractVideoList implement
     }
 
     return this.hooks.wrapObsFun(
-      this.videoService.getUserSubscriptionVideos.bind(this.videoService),
+      this.userSubscription.getUserSubscriptionVideos.bind(this.userSubscription),
       params,
       'common',
       'filter:api.user-subscriptions-videos.videos.list.params',

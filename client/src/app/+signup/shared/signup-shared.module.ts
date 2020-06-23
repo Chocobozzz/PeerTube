@@ -1,10 +1,14 @@
 import { NgModule } from '@angular/core'
-import { SignupSuccessComponent } from '../shared/signup-success.component'
-import { SharedModule } from '@app/shared'
+import { SharedMainModule } from '@app/shared/shared-main'
+import { SignupSuccessComponent } from './signup-success.component'
+import { SharedFormModule } from '@app/shared/shared-forms'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 
 @NgModule({
   imports: [
-    SharedModule
+    SharedMainModule,
+    SharedFormModule,
+    SharedGlobalIconModule
   ],
 
   declarations: [
@@ -12,6 +16,10 @@ import { SharedModule } from '@app/shared'
   ],
 
   exports: [
+    SharedMainModule,
+    SharedFormModule,
+    SharedGlobalIconModule,
+
     SignupSuccessComponent
   ],
 

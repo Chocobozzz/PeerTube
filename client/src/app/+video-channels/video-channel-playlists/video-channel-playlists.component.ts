@@ -1,12 +1,8 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { ConfirmService } from '../../core/confirm'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
 import { Subject, Subscription } from 'rxjs'
-import { Notifier } from '@app/core'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ComponentPagination, hasMoreItems } from '@app/core'
+import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { VideoPlaylist, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 
 @Component({
   selector: 'my-video-channel-playlists',
@@ -28,8 +24,6 @@ export class VideoChannelPlaylistsComponent implements OnInit, OnDestroy {
   private videoChannel: VideoChannel
 
   constructor (
-    private notifier: Notifier,
-    private confirmService: ConfirmService,
     private videoPlaylistService: VideoPlaylistService,
     private videoChannelService: VideoChannelService
   ) {}

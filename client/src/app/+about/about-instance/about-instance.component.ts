@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core'
-import { Notifier, ServerService } from '@app/core'
-import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
-import { InstanceService } from '@app/shared/instance/instance.service'
-import { ServerConfig } from '@shared/models'
-import { ActivatedRoute } from '@angular/router'
-import { ResolverData } from './about-instance.resolver'
 import { ViewportScroller } from '@angular/common'
+import { AfterViewChecked, Component, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { ContactAdminModalComponent } from '@app/+about/about-instance/contact-admin-modal.component'
+import { ServerService } from '@app/core'
+import { InstanceService } from '@app/shared/shared-instance'
+import { ServerConfig } from '@shared/models'
+import { ResolverData } from './about-instance.resolver'
 
 @Component({
   selector: 'my-about-instance',

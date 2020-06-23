@@ -8,7 +8,7 @@ import {
   MActorHost,
   MActorUsername
 } from './actor'
-import { PickWith } from '../../utils'
+import { PickWith } from '@shared/core-utils'
 import { ActorModel } from '@server/models/activitypub/actor'
 import { MChannelDefault } from '../video/video-channels'
 

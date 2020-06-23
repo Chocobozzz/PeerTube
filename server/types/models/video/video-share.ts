@@ -1,5 +1,5 @@
 import { VideoShareModel } from '../../../models/video/video-share'
-import { PickWith } from '../../utils'
+import { PickWith } from '@shared/core-utils'
 import { MActorDefault } from '../account'
 import { MVideo } from './video'
 

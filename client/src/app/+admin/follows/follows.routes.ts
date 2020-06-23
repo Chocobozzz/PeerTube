@@ -1,11 +1,10 @@
 import { Routes } from '@angular/router'
-
-import { UserRightGuard } from '../../core'
-import { FollowsComponent } from './follows.component'
-import { FollowersListComponent } from './followers-list'
-import { UserRight } from '../../../../../shared'
-import { FollowingListComponent } from './following-list/following-list.component'
 import { VideoRedundanciesListComponent } from '@app/+admin/follows/video-redundancies-list'
+import { UserRightGuard } from '@app/core'
+import { UserRight } from '@shared/models'
+import { FollowersListComponent } from './followers-list'
+import { FollowingListComponent } from './following-list/following-list.component'
+import { FollowsComponent } from './follows.component'
 
 export const FollowsRoutes: Routes = [
   {

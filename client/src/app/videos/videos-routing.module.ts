@@ -6,8 +6,8 @@ import { VideoRecentlyAddedComponent } from './video-list/video-recently-added.c
 import { VideoTrendingComponent } from './video-list/video-trending.component'
 import { VideoMostLikedComponent } from './video-list/video-most-liked.component'
 import { VideosComponent } from './videos.component'
-import { VideoUserSubscriptionsComponent } from '@app/videos/video-list/video-user-subscriptions.component'
-import { VideoOverviewComponent } from '@app/videos/video-list/video-overview.component'
+import { VideoUserSubscriptionsComponent } from './video-list/video-user-subscriptions.component'
+import { VideoOverviewComponent } from './video-list/overview/video-overview.component'
 
 const videosRoutes: Routes = [
   {

@@ -1,11 +1,10 @@
-import { Component, ViewChild, OnInit } from '@angular/core'
-import { AuthService, AuthStatus } from '@app/core'
-import { FormReactive, FormValidatorService, UserService, User } from '@app/shared'
+import { ReplaySubject } from 'rxjs'
+import { filter } from 'rxjs/operators'
+import { Component, OnInit, ViewChild } from '@angular/core'
+import { AuthService, AuthStatus, LocalStorageService, User, UserService } from '@app/core'
+import { FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
-import { ReplaySubject } from 'rxjs'
-import { LocalStorageService } from '@app/shared/misc/storage.service'
-import { filter } from 'rxjs/operators'
 
 @Component({
   selector: 'my-quick-settings',

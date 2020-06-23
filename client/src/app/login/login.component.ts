@@ -1,16 +1,12 @@
-import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core'
-import { Notifier, RedirectService } from '@app/core'
-import { UserService } from '@app/shared'
-import { AuthService } from '../core'
-import { FormReactive } from '../shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
-import { LoginValidatorsService } from '@app/shared/forms/form-validators/login-validators.service'
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
-import { ActivatedRoute } from '@angular/router'
-import { ServerConfig, RegisteredExternalAuthConfig } from '@shared/models/server/server-config.model'
 import { environment } from 'src/environments/environment'
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { AuthService, Notifier, RedirectService, UserService } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
+import { FormReactive, FormValidatorService, LoginValidatorsService } from '@app/shared/shared-forms'
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
+import { I18n } from '@ngx-translate/i18n-polyfill'
+import { RegisteredExternalAuthConfig, ServerConfig } from '@shared/models'
 
 @Component({
   selector: 'my-login',

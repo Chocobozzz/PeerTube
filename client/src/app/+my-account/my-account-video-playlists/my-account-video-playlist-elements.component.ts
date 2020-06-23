@@ -1,16 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
-import { Notifier, ServerService } from '@app/core'
-import { AuthService } from '../../core/auth'
-import { ConfirmService } from '../../core/confirm'
-import { ComponentPagination } from '@app/shared/rest/component-pagination.model'
 import { Subject, Subscription } from 'rxjs'
-import { ActivatedRoute } from '@angular/router'
-import { VideoPlaylistService } from '@app/shared/video-playlist/video-playlist.service'
-import { VideoPlaylist } from '@app/shared/video-playlist/video-playlist.model'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ScreenService } from '@app/shared/misc/screen.service'
 import { CdkDragDrop } from '@angular/cdk/drag-drop'
-import { VideoPlaylistElement } from '@app/shared/video-playlist/video-playlist-element.model'
+import { Component, OnDestroy, OnInit } from '@angular/core'
+import { ActivatedRoute } from '@angular/router'
+import { ComponentPagination, Notifier, ScreenService } from '@app/core'
+import { VideoPlaylist, VideoPlaylistElement, VideoPlaylistService } from '@app/shared/shared-video-playlist'
 
 @Component({
   selector: 'my-account-video-playlist-elements',
@@ -33,12 +26,8 @@ export class MyAccountVideoPlaylistElementsComponent implements OnInit, OnDestro
   private paramsSub: Subscription
 
   constructor (
-    private authService: AuthService,
-    private serverService: ServerService,
     private notifier: Notifier,
-    private confirmService: ConfirmService,
     private route: ActivatedRoute,
-    private i18n: I18n,
     private screenService: ScreenService,
     private videoPlaylistService: VideoPlaylistService
   ) {}

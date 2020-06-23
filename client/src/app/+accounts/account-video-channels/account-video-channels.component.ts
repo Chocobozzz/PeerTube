@@ -1,16 +1,9 @@
 import { from, Subject, Subscription } from 'rxjs'
 import { concatMap, map, switchMap, tap } from 'rxjs/operators'
 import { Component, OnDestroy, OnInit } from '@angular/core'
-import { User, UserService } from '@app/shared'
-import { Account } from '@app/shared/account/account.model'
-import { AccountService } from '@app/shared/account/account.service'
-import { ScreenService } from '@app/shared/misc/screen.service'
-import { ComponentPagination, hasMoreItems } from '@app/shared/rest/component-pagination.model'
-import { VideoChannel } from '@app/shared/video-channel/video-channel.model'
-import { VideoChannelService } from '@app/shared/video-channel/video-channel.service'
-import { VideoSortField } from '@app/shared/video/sort-field.type'
-import { Video } from '@app/shared/video/video.model'
-import { VideoService } from '@app/shared/video/video.service'
+import { ComponentPagination, hasMoreItems, ScreenService, User, UserService } from '@app/core'
+import { Account, AccountService, Video, VideoChannel, VideoChannelService, VideoService } from '@app/shared/shared-main'
+import { VideoSortField } from '@shared/models'
 
 @Component({
   selector: 'my-account-video-channels',

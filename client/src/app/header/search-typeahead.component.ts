@@ -1,11 +1,10 @@
 import { of } from 'rxjs'
-import { first, tap, delay } from 'rxjs/operators'
+import { first, tap } from 'rxjs/operators'
 import { ListKeyManager } from '@angular/cdk/a11y'
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, AfterViewChecked } from '@angular/core'
+import { AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { AuthService, ServerService } from '@app/core'
-import { ServerConfig } from '@shared/models'
-import { SearchTargetType } from '@shared/models/search/search-target-query.model'
+import { SearchTargetType, ServerConfig } from '@shared/models'
 import { SuggestionComponent, SuggestionPayload, SuggestionPayloadType } from './suggestion.component'
 
 @Component({

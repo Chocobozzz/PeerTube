@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core'
-import { ActivatedRoute, Router } from '@angular/router'
+import { ActivatedRoute } from '@angular/router'
+import { AuthService, Notifier, UserService } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { AuthService, Notifier } from '@app/core'
-import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-verify-account-email',
@@ -21,7 +20,6 @@ export class VerifyAccountEmailComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService,
     private notifier: Notifier,
-    private router: Router,
     private route: ActivatedRoute,
     private i18n: I18n
   ) {

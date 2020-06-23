@@ -1,16 +1,20 @@
-import { NgModule } from '@angular/core'
 import { TagInputModule } from 'ngx-chips'
-import { SharedModule } from '../../../shared/'
-import { VideoEditComponent } from './video-edit.component'
 import { CalendarModule } from 'primeng/calendar'
+import { NgModule } from '@angular/core'
+import { SharedFormModule } from '@app/shared/shared-forms'
+import { SharedGlobalIconModule } from '@app/shared/shared-icons'
+import { SharedMainModule } from '@app/shared/shared-main'
 import { VideoCaptionAddModalComponent } from './video-caption-add-modal.component'
+import { VideoEditComponent } from './video-edit.component'
 
 @NgModule({
   imports: [
     TagInputModule,
     CalendarModule,
 
-    SharedModule
+    SharedMainModule,
+    SharedFormModule,
+    SharedGlobalIconModule
   ],
 
   declarations: [
@@ -21,6 +25,10 @@ import { VideoCaptionAddModalComponent } from './video-caption-add-modal.compone
   exports: [
     TagInputModule,
     CalendarModule,
+
+    SharedMainModule,
+    SharedFormModule,
+    SharedGlobalIconModule,
 
     VideoEditComponent
   ],

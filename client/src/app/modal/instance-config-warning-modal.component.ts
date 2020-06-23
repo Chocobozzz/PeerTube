@@ -1,8 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core'
-import { Notifier } from '@app/core'
+import { Notifier, UserService } from '@app/core'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { About } from '@shared/models/server'
-import { UserService } from '@app/shared'
 
 @Component({
   selector: 'my-instance-config-warning-modal',

@@ -1,11 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core'
-import { Notifier } from '@app/core'
-import { FormReactive, UserService } from '../../../shared'
-import { User } from '@app/shared'
-import { I18n } from '@ngx-translate/i18n-polyfill'
-import { FormValidatorService } from '@app/shared/forms/form-validators/form-validator.service'
 import { Subject } from 'rxjs'
-import { UserValidatorsService } from '@app/shared/forms/form-validators/user-validators.service'
+import { Component, Input, OnInit } from '@angular/core'
+import { Notifier, User, UserService } from '@app/core'
+import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/shared/shared-forms'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 
 @Component({
   selector: 'my-account-profile',
