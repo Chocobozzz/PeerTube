@@ -127,7 +127,7 @@
     "videojs-contextmenu-ui": "^5.0.0",
     "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-dock": "^2.0.2",
-    "videojs-hotkeys": "^0.2.21",
+    "videojs-hotkeys": "^0.2.26",
     "videostream": "~3.2.1",
     "webpack-bundle-analyzer": "^3.0.2",
     "webpack-cli": "^3.0.8",

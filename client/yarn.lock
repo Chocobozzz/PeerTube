@@ -11734,10 +11734,10 @@ videojs-font@3.2.0:
   resolved "https://registry.yarnpkg.com/videojs-font/-/videojs-font-3.2.0.tgz#212c9d3f4e4ec3fa7345167d64316add35e92232"
   integrity sha512-g8vHMKK2/JGorSfqAZQUmYYNnXmfec4MLhwtEFS+mMs2IDY398GLysy6BH6K+aS1KMNu/xWZ8Sue/X/mdQPliA==
 
-videojs-hotkeys@^0.2.21:
-  version "0.2.25"
-  resolved "https://registry.yarnpkg.com/videojs-hotkeys/-/videojs-hotkeys-0.2.25.tgz#b34b5816db1af747e41a90a3be268d51449b4cb0"
-  integrity sha512-XgMjWiqGlmAjuHtpP529A2voVh++z46FSD0XeSy+65yeuTZOd+w2CJmfrL4jPpGm+MME5l9lOLfVpoEeDaBa1Q==
+videojs-hotkeys@^0.2.26:
+  version "0.2.26"
+  resolved "https://registry.yarnpkg.com/videojs-hotkeys/-/videojs-hotkeys-0.2.26.tgz#e877986231ec200ef68c5c53fe0403fcfb94477d"
+  integrity sha512-/QSjdpzF8aoC4idtQeGDbyeoOgMmmJWlzKZSTtCkNKinT09QMxrczys35q9EiCQXJApIsHGZ5i28mGVCe1gLQw==
 
 videojs-vtt.js@^0.15.2:
   version "0.15.2"
