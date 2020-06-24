@@ -362,45 +362,49 @@ class WebTorrentPlugin extends Plugin {
   }
 
   private getAppropriateFile (averageDownloadSpeed?: number): VideoFile {
-    if (this.videoFiles === undefined || this.videoFiles.length === 0) return undefined
-    if (this.videoFiles.length === 1) return this.videoFiles[0]
+    if (this.videoFiles === undefined) return undefined
+
+    const files = this.videoFiles.filter(f => f.resolution.id !== 0)
+
+    if (files.length === 0) return undefined
+    if (files.length === 1) return files[0]
 
     // Don't change the torrent is the play was ended
     if (this.torrent && this.torrent.progress === 1 && this.player.ended()) return this.currentVideoFile
 
     if (!averageDownloadSpeed) averageDownloadSpeed = this.getAndSaveActualDownloadSpeed()
+    averageDownloadSpeed = 0
 
     // Limit resolution according to player height
     const playerHeight = this.playerElement.offsetHeight
 
     // We take the first resolution just above the player height
     // Example: player height is 530px, we want the 720p file instead of 480p
-    let maxResolution = this.videoFiles[0].resolution.id
-    for (let i = this.videoFiles.length - 1; i >= 0; i--) {
-      const resolutionId = this.videoFiles[i].resolution.id
-      if (resolutionId >= playerHeight) {
+    let maxResolution = files[0].resolution.id
+    for (let i = files.length - 1; i >= 0; i--) {
+      const resolutionId = files[i].resolution.id
+      if (resolutionId !== 0 && resolutionId >= playerHeight) {
         maxResolution = resolutionId
         break
       }
     }
 
     // Filter videos we can play according to our screen resolution and bandwidth
-    const filteredFiles = this.videoFiles
-                              .filter(f => f.resolution.id <= maxResolution)
-                              .filter(f => {
-                                const fileBitrate = (f.size / this.videoDuration)
-                                let threshold = fileBitrate
+    const filteredFiles = files.filter(f => f.resolution.id <= maxResolution)
+                               .filter(f => {
+                                 const fileBitrate = (f.size / this.videoDuration)
+                                 let threshold = fileBitrate
 
-                                // If this is for a higher resolution or an initial load: add a margin
-                                if (!this.currentVideoFile || f.resolution.id > this.currentVideoFile.resolution.id) {
-                                  threshold += ((fileBitrate * this.CONSTANTS.AUTO_QUALITY_THRESHOLD_PERCENT) / 100)
-                                }
+                                 // If this is for a higher resolution or an initial load: add a margin
+                                 if (!this.currentVideoFile || f.resolution.id > this.currentVideoFile.resolution.id) {
+                                   threshold += ((fileBitrate * this.CONSTANTS.AUTO_QUALITY_THRESHOLD_PERCENT) / 100)
+                                 }
 
-                                return averageDownloadSpeed > threshold
-                              })
+                                 return averageDownloadSpeed > threshold
+                               })
 
     // If the download speed is too bad, return the lowest resolution we have
-    if (filteredFiles.length === 0) return videoFileMinByResolution(this.videoFiles)
+    if (filteredFiles.length === 0) return videoFileMinByResolution(files)
 
     return videoFileMaxByResolution(filteredFiles)
   }
