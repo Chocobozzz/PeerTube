@@ -15,10 +15,13 @@ info:
     # Introduction
 
     The PeerTube API is built on HTTP(S) and is RESTful. You can use your favorite
-    HTTP/REST library for your programming language to use PeerTube. No official
-    SDK is currently provided, but the spec API is fully compatible with
+    HTTP/REST library for your programming language to use PeerTube. The spec API is fully compatible with
     [openapi-generator](https://github.com/OpenAPITools/openapi-generator/wiki/API-client-generator-HOWTO)
-    which generates a client SDK in the language of your choice.
+    which generates a client SDK in the language of your choice - we generate some client SDKs automatically:
+
+    - [Python](https://framagit.org/framasoft/peertube/clients/python)
+    - [Go](https://framagit.org/framasoft/peertube/clients/go)
+    - [Kotlin](https://framagit.org/framasoft/peertube/clients/kotlin)
 
     See the [Quick Start guide](https://docs.joinpeertube.org/#/api-rest-getting-started) so you can play with the PeerTube API.
 
@@ -90,13 +93,16 @@ tags:
     description: >
       Operations dealing with creation, modification and video listing of a
       user's channels.
-  - name: Video Blacklist
+  - name: Video Blocks
     description: >
       Operations dealing with blacklisting videos (removing them from view and
       preventing interactions).
   - name: Video Rates
     description: >
       Like/dislike a video.
+  - name: Feeds
+    description: >
+      Server syndication feeds
 x-tagGroups:
   - name: Accounts
     tags:
@@ -114,6 +120,7 @@ x-tagGroups:
       - Video Rates
       - Video Playlists
       - Video Ownership Change
+      - Feeds
   - name: Search
     tags:
       - Search
@@ -121,6 +128,8 @@ x-tagGroups:
     tags:
       - Video Abuses
       - Video Blocks
+      - Account Blocks
+      - Server Blocks
   - name: Instance Configuration
     tags:
       - Config
@@ -143,6 +152,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Account'
+        '404':
+          description: account not found
   '/accounts/{name}/videos':
     get:
       tags:
@@ -317,7 +328,7 @@ paths:
     delete:
       security:
         - OAuth2:
-            - admin
+          - admin
       tags:
         - Instance Follows
       summary: Unfollow a server
@@ -740,6 +751,10 @@ paths:
       responses:
         '204':
           description: successful operation
+        '403':
+          description: cannot terminate an ownership change of another user
+        '404':
+          description: video owneship change not found
   '/videos/ownership/{id}/refuse':
     post:
       summary: Refuse ownership change request
@@ -752,6 +767,10 @@ paths:
       responses:
         '204':
           description: successful operation
+        '403':
+          description: cannot terminate an ownership change of another user
+        '404':
+          description: video owneship change not found
   '/videos/{id}/give-ownership':
     post:
       summary: Request ownership change
@@ -776,7 +795,9 @@ paths:
         '204':
           description: successful operation
         '400':
-          description: 'Changing video ownership to a remote account is not supported yet'
+          description: changing video ownership to a remote account is not supported yet
+        '404':
+          description: video not found
   /videos:
     get:
       summary: List videos
@@ -1030,7 +1051,7 @@ paths:
                   format: binary
                 channelId:
                   description: Channel id that will contain this video
-                  type: number
+                  type: integer
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
@@ -1070,6 +1091,7 @@ paths:
                   type: array
                   minItems: 1
                   maxItems: 5
+                  uniqueItems: true
                   items:
                     type: string
                     minLength: 2
@@ -1128,13 +1150,6 @@ paths:
         - OAuth2: []
       tags:
         - Video
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/VideoUploadResponse'
       requestBody:
         content:
           multipart/form-data:
@@ -1153,7 +1168,7 @@ paths:
                   type: string
                 channelId:
                   description: Channel id that will contain this video
-                  type: number
+                  type: integer
                 thumbnailfile:
                   description: Video thumbnail file
                   type: string
@@ -1212,13 +1227,24 @@ paths:
                 contentType: image/jpeg
               previewfile:
                 contentType: image/jpeg
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoUploadResponse'
+        '409':
+          description: HTTP or Torrent/magnetURI import not enabled
+        '400':
+          description: '`magnetUri` or `targetUrl` or a torrent file missing'
   /videos/abuse:
     get:
       summary: List video abuses
       security:
         - OAuth2:
-            - admin
-            - moderator
+          - admin
+          - moderator
       tags:
         - Video Abuses
       parameters:
@@ -1269,10 +1295,10 @@ paths:
                     - thumbnails
                     - captions
                 startAt:
-                  type: number
+                  type: integer
                   description: Timestamp in the video that marks the beginning of the report
                 endAt:
-                  type: number
+                  type: integer
                   description: Timestamp in the video that marks the ending of the report
               required:
                 - reason
@@ -1291,6 +1317,8 @@ paths:
       responses:
         '204':
           description: successful operation
+        '404':
+          description: video abuse not found
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/abuseId'
@@ -1316,46 +1344,50 @@ paths:
       responses:
         '204':
           description: successful operation
+        '404':
+          description: block not found
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/abuseId'
 
   '/videos/{id}/blacklist':
     post:
-      summary: Blacklist a video
+      summary: Block a video
       security:
         - OAuth2:
             - admin
             - moderator
       tags:
-        - Video Blacklist
+        - Video Blocks
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           description: successful operation
     delete:
-      summary: Delete an entry of the blacklist of a video by its id
+      summary: Unblock a video by its id
       security:
         - OAuth2:
             - admin
             - moderator
       tags:
-        - Video Blacklist
+        - Video Blocks
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
         '204':
           description: successful operation
+        '404':
+          description: block not found
   /videos/blacklist:
     get:
-      summary: List blacklisted videos
+      tags:
+        - Video Blocks
+      summary: List blocked videos
       security:
         - OAuth2:
             - admin
             - moderator
-      tags:
-        - Video Blacklist
       parameters:
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
@@ -1414,6 +1446,8 @@ paths:
       responses:
         '204':
           description: successful operation
+        '404':
+          description: video or language not found
     delete:
       summary: Delete a video caption
       tags:
@@ -1424,6 +1458,8 @@ paths:
       responses:
         '204':
           description: successful operation
+        '404':
+          description: video or language or caption for that language not found
   /video-channels:
     get:
       summary: List video channels
@@ -1576,7 +1612,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
                       uuid:
                         type: string
       requestBody:
@@ -1599,7 +1635,7 @@ paths:
                   type: string
                 videoChannelId:
                   description: Video channel in which the playlist will be published
-                  type: number
+                  type: integer
               required:
                 - displayName
 
@@ -1649,7 +1685,7 @@ paths:
                   type: string
                 videoChannelId:
                   description: Video channel in which the playlist will be published
-                  type: number
+                  type: integer
     delete:
       summary: Delete a video playlist
       security:
@@ -1698,7 +1734,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: number
+                        type: integer
       requestBody:
         content:
           application/json:
@@ -1706,13 +1742,13 @@ paths:
               type: object
               properties:
                 videoId:
-                  type: number
+                  type: integer
                   description: 'Video to add in the playlist'
                 startTimestamp:
-                  type: number
+                  type: integer
                   description: 'Start the video at this specific timestamp (in seconds)'
                 stopTimestamp:
-                  type: number
+                  type: integer
                   description: 'Stop the video at this specific timestamp (in seconds)'
               required:
                 - videoId
@@ -1736,14 +1772,17 @@ paths:
               type: object
               properties:
                 startPosition:
-                  type: number
-                  description: 'Start position of the element to reorder (starts from 1)'
+                  type: integer
+                  description: 'Start position of the element to reorder'
+                  minimum: 1
                 insertAfterPosition:
-                  type: number
-                  description: 'New position for the block to reorder (starts from 0, to add the block before the first element)'
+                  type: integer
+                  description: 'New position for the block to reorder, to add the block before the first element'
+                  minimum: 0
                 reorderLength:
-                  type: number
-                  description: 'How many element from startPosition to reorder (minimum length is 1)'
+                  type: integer
+                  description: 'How many element from `startPosition` to reorder'
+                  minimum: 1
               required:
                 - startPosition
                 - insertAfterPosition
@@ -1768,10 +1807,10 @@ paths:
               type: object
               properties:
                 startTimestamp:
-                  type: number
+                  type: integer
                   description: 'Start the video at this specific timestamp (in seconds)'
                 stopTimestamp:
-                  type: number
+                  type: integer
                   description: 'Stop the video at this specific timestamp (in seconds)'
     delete:
       summary: 'Delete an element from a playlist'
@@ -1801,7 +1840,7 @@ paths:
           schema:
             type: array
             items:
-              type: number
+              type: integer
       responses:
         '200':
           description: successful operation
@@ -1816,13 +1855,13 @@ paths:
                       type: object
                       properties:
                         playlistElementId:
-                          type: number
+                          type: integer
                         playlistId:
-                          type: number
+                          type: integer
                         startTimestamp:
-                          type: number
+                          type: integer
                         stopTimestamp:
-                          type: number
+                          type: integer
 
   '/accounts/{name}/video-channels':
     get:
@@ -2043,13 +2082,13 @@ paths:
           required: true
           description: Get videos that have this minimum duration
           schema:
-            type: number
+            type: integer
         - name: durationMax
           in: query
           required: true
           description: Get videos that have this maximum duration
           schema:
-            type: number
+            type: integer
       responses:
         '200':
           description: successful operation
@@ -2085,6 +2124,239 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoChannel'
+  /blocklist/accounts:
+    get:
+      tags:
+        - Account Blocks
+      summary: List account blocks
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+    post:
+      tags:
+        - Account Blocks
+      summary: Block an account
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountName:
+                  type: string
+                  description: account to block, in the form `username@domain`
+              required:
+                - accountName
+      responses:
+        '200':
+          description: successful operation
+        '409':
+          description: self-blocking forbidden
+  '/blocklist/accounts/{accountName}':
+    delete:
+      tags:
+        - Account Blocks
+      summary: Unblock an account by its handle
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: accountName
+          in: path
+          required: true
+          description: account to unblock, in the form `username@domain`
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+        '404':
+          description: account or account block does not exist
+  /blocklist/servers:
+    get:
+      tags:
+        - Server Blocks
+      summary: List server blocks
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+    post:
+      tags:
+        - Server Blocks
+      summary: Block a server
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accountName:
+                  type: string
+                  description: server domain to block
+              required:
+                - accountName
+      responses:
+        '200':
+          description: successful operation
+        '409':
+          description: self-blocking forbidden
+  '/blocklist/servers/{host}':
+    delete:
+      tags:
+        - Server Blocks
+      summary: Unblock a server by its domain
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: host
+          in: path
+          required: true
+          description: server domain to unblock
+          schema:
+            type: string
+      responses:
+        '201':
+          description: successful operation
+        '404':
+          description: account block does not exist
+  '/feeds/video-comments.{format}':
+    get:
+      tags:
+        - Feeds
+      summary: List comments on videos
+      parameters:
+        - name: format
+          in: path
+          required: true
+          description: 'format expected (we focus on making `rss` the most featureful ; it serves Media RSS)'
+          schema:
+            type: string
+            enum:
+              - xml
+              - rss
+              - rss2
+              - atom
+              - atom1
+              - json
+              - json1
+        - name: videoId
+          in: path
+          description: 'limit listing to a specific video'
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: 'max-age=900' # 15 min cache
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/VideoCommentsForXML'
+            application/rss+xml:
+              schema:
+                $ref: '#/components/schemas/VideoCommentsForXML'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/VideoCommentsForXML'
+            application/atom+xml:
+              schema:
+                $ref: '#/components/schemas/VideoCommentsForXML'
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: accept header unsupported
+  '/feeds/videos.{format}':
+    get:
+      tags:
+        - Feeds
+      summary: List videos
+      parameters:
+        - name: format
+          in: path
+          required: true
+          description: 'format expected (we focus on making `rss` the most featureful ; it serves Media RSS)'
+          schema:
+            type: string
+            enum:
+              - xml
+              - rss
+              - rss2
+              - atom
+              - atom1
+              - json
+              - json1
+        - name: accountId
+          in: path
+          description: 'limit listing to a specific account'
+          schema:
+            type: string
+        - name: accountName
+          in: path
+          description: 'limit listing to a specific account'
+          schema:
+            type: string
+        - name: videoChannelId
+          in: path
+          description: 'limit listing to a specific video channel'
+          schema:
+            type: string
+        - name: videoChannelName
+          in: path
+          description: 'limit listing to a specific video channel'
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+                default: 'max-age=900' # 15 min cache
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+            application/rss+xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+            application/atom+xml:
+              schema:
+                $ref: '#/components/schemas/VideosForXML'
+            application/json:
+              schema:
+                type: object
+        '406':
+          description: accept header unsupported
 servers:
   - url: 'https://peertube.cpy.re/api/v1'
     description: Live Test Server (live data - stable version)
@@ -2098,21 +2370,23 @@ components:
       name: start
       in: query
       required: false
-      description: Offset
+      description: Offset used to paginate results
       schema:
-        type: number
+        type: integer
     count:
       name: count
       in: query
       required: false
-      description: "Number of items (max: 100)"
+      description: "Number of items to return"
       schema:
-        type: number
+        type: integer
+        maximum: 100
+        minimum: 1
     sort:
       name: sort
       in: query
       required: false
-      description: Sort column (-createdAt for example)
+      description: Sort column (`-createdAt` for example)
       schema:
         type: string
     searchTarget:
@@ -2218,7 +2492,7 @@ components:
       in: path
       required: true
       description: >-
-        The name of the account (chocobozzz or chocobozzz@peertube.cpy.re for
+        The name of the account (`chocobozzz` or `chocobozzz@example.org` for
         example)
       schema:
         type: string
@@ -2228,7 +2502,7 @@ components:
       required: true
       description: The user id
       schema:
-        type: number
+        type: integer
     idOrUUID:
       name: id
       in: path
@@ -2242,14 +2516,14 @@ components:
       required: true
       description: Playlist element id
       schema:
-        type: number
+        type: integer
     abuseId:
       name: abuseId
       in: path
       required: true
       description: Video abuse id
       schema:
-        type: number
+        type: integer
     captionLanguage:
       name: captionLanguage
       in: path
@@ -2277,14 +2551,14 @@ components:
       required: true
       description: The thread id (root comment id)
       schema:
-        type: number
+        type: integer
     commentId:
       name: commentId
       in: path
       required: true
       description: The comment id
       schema:
-        type: number
+        type: integer
     categoryOneOf:
       name: categoryOneOf
       in: query
@@ -2292,10 +2566,10 @@ components:
       description: category id of the video (see /videos/categories)
       schema:
         oneOf:
-        - type: number
+        - type: integer
         - type: array
           items:
-            type: number
+            type: integer
       style: form
       explode: false
     tagsOneOf:
@@ -2328,7 +2602,7 @@ components:
       name: languageOneOf
       in: query
       required: false
-      description: language id of the video (see /videos/languages). Use _unknown to filter on videos that don't have a video language
+      description: language id of the video (see /videos/languages). Use `_unknown` to filter on videos that don't have a video language
       schema:
         oneOf:
         - type: string
@@ -2344,10 +2618,10 @@ components:
       description: licence id of the video (see /videos/licences)
       schema:
         oneOf:
-        - type: number
+        - type: integer
         - type: array
           items:
-            type: number
+            type: integer
       style: form
       explode: false
     skipCount:
@@ -2360,6 +2634,7 @@ components:
         enum:
           - 'true'
           - 'false'
+        default: 'false'
     nsfw:
       name: nsfw
       in: query
@@ -2419,7 +2694,7 @@ components:
     VideoConstantNumber:
       properties:
         id:
-          type: number
+          type: integer
         label:
           type: string
     VideoConstantString:
@@ -2435,7 +2710,7 @@ components:
         - 1
         - 2
         - 3
-      description: 'The video playlist privacy (Public = 1, Unlisted = 2, Private = 3)'
+      description: 'The video playlist privacy (Public = `1`, Unlisted = `2`, Private = `3`)'
     VideoPlaylistPrivacyConstant:
       properties:
         id:
@@ -2448,7 +2723,7 @@ components:
       enum:
         - 1
         - 2
-      description: 'The video playlist type (Regular = 1, Watch Later = 2)'
+      description: 'The video playlist type (Regular = `1`, Watch Later = `2`)'
     VideoPlaylistTypeConstant:
       properties:
         id:
@@ -2463,7 +2738,7 @@ components:
         - 2
         - 3
         - 4
-      description: 'The video privacy (Public = 1, Unlisted = 2, Private = 3, Internal = 4)'
+      description: 'The video privacy (Public = `1`, Unlisted = `2`, Private = `3`, Internal = `4`)'
     VideoPrivacyConstant:
       properties:
         id:
@@ -2479,12 +2754,12 @@ components:
         - do_not_list
 
     UserRole:
-      type: number
+      type: integer
       enum:
         - 0
         - 1
         - 2
-      description: 'The user role (Admin = 0, Moderator = 1, User = 2)'
+      description: 'The user role (Admin = `0`, Moderator = `1`, User = `2`)'
 
     VideoStateConstant:
       properties:
@@ -2494,7 +2769,7 @@ components:
             - 1
             - 2
             - 3
-          description: 'The video state (Published = 1, to transcode = 2, to import = 3)'
+          description: 'The video state (Published = `1`, to transcode = `2`, to import = `3`)'
         label:
           type: string
 
@@ -2504,7 +2779,7 @@ components:
         - 1
         - 2
         - 3
-      description: 'The video playlist privacy (Pending = 1, Rejected = 2, Accepted = 3)'
+      description: 'The video playlist privacy (Pending = `1`, Rejected = `2`, Accepted = `3`)'
     VideoAbuseStateConstant:
       properties:
         id:
@@ -2545,7 +2820,7 @@ components:
     AccountSummary:
       properties:
         id:
-          type: number
+          type: integer
         name:
           type: string
         displayName:
@@ -2561,7 +2836,7 @@ components:
     VideoChannelSummary:
       properties:
         id:
-          type: number
+          type: integer
         name:
           type: string
         displayName:
@@ -2577,11 +2852,11 @@ components:
     PlaylistElement:
       properties:
         position:
-          type: number
+          type: integer
         startTimestamp:
-          type: number
+          type: integer
         stopTimestamp:
-          type: number
+          type: integer
         video:
           nullable: true
           allOf:
@@ -2593,7 +2868,7 @@ components:
         resolution:
           $ref: '#/components/schemas/VideoResolutionConstant'
         size:
-          type: number
+          type: integer
           description: 'Video file size in bytes'
         torrentUrl:
           type: string
@@ -2610,12 +2885,12 @@ components:
     VideoStreamingPlaylists:
       properties:
         id:
-          type: number
+          type: integer
         type:
-          type: number
+          type: integer
           enum:
             - 1
-          description: 'Playlist type (HLS = 1)'
+          description: 'Playlist type (HLS = `1`)'
         playlistUrl:
           type: string
         segmentsSha256Url:
@@ -2634,7 +2909,7 @@ components:
     Video:
       properties:
         id:
-          type: number
+          type: integer
         uuid:
           type: string
         createdAt:
@@ -2656,7 +2931,7 @@ components:
         description:
           type: string
         duration:
-          type: number
+          type: integer
         isLocal:
           type: boolean
         name:
@@ -2668,11 +2943,11 @@ components:
         embedPath:
           type: string
         views:
-          type: number
+          type: integer
         likes:
-          type: number
+          type: integer
         dislikes:
-          type: number
+          type: integer
         nsfw:
           type: boolean
         waitTranscoding:
@@ -2699,7 +2974,7 @@ components:
           type: object
           properties:
             currentTime:
-              type: number
+              type: integer
     VideoDetails:
       allOf:
         - $ref: '#/components/schemas/Video'
@@ -2741,13 +3016,13 @@ components:
             - 1
             - 2
             - 3
-          description: 'The video import state (Pending = 1, Success = 2, Failed = 3)'
+          description: 'The video import state (Pending = `1`, Success = `2`, Failed = `3`)'
         label:
           type: string
     VideoImport:
       properties:
         id:
-          type: number
+          type: integer
         targetUrl:
           type: string
         magnetUri:
@@ -2772,7 +3047,7 @@ components:
     VideoAbuse:
       properties:
         id:
-          type: number
+          type: integer
         reason:
           type: string
         predefinedReasons:
@@ -2787,7 +3062,7 @@ components:
           type: object
           properties:
             id:
-              type: number
+              type: integer
             name:
               type: string
             uuid:
@@ -2797,9 +3072,9 @@ components:
     VideoBlacklist:
       properties:
         id:
-          type: number
+          type: integer
         videoId:
-          type: number
+          type: integer
         createdAt:
           type: string
         updatedAt:
@@ -2811,13 +3086,13 @@ components:
         description:
           type: string
         duration:
-          type: number
+          type: integer
         views:
-          type: number
+          type: integer
         likes:
-          type: number
+          type: integer
         dislikes:
-          type: number
+          type: integer
         nsfw:
           type: boolean
     VideoChannel:
@@ -2832,13 +3107,13 @@ components:
           type: object
           properties:
             id:
-              type: number
+              type: integer
             uuid:
               type: string
     VideoPlaylist:
       properties:
         id:
-          type: number
+          type: integer
         createdAt:
           type: string
         updatedAt:
@@ -2852,7 +3127,7 @@ components:
         isLocal:
           type: boolean
         videoLength:
-          type: number
+          type: integer
         thumbnailPath:
           type: string
         privacy:
@@ -2866,25 +3141,25 @@ components:
     VideoComment:
       properties:
         id:
-          type: number
+          type: integer
         url:
           type: string
         text:
           type: string
         threadId:
-          type: number
+          type: integer
         inReplyToCommentId:
-          type: number
+          type: integer
         videoId:
-          type: number
+          type: integer
         createdAt:
           type: string
         updatedAt:
           type: string
         totalRepliesFromVideoAuthor:
-          type: number
+          type: integer
         totalReplies:
-          type: number
+          type: integer
         account:
           $ref: '#/components/schemas/Account'
     VideoCommentThreadTree:
@@ -2912,7 +3187,7 @@ components:
     Actor:
       properties:
         id:
-          type: number
+          type: integer
         url:
           type: string
         name:
@@ -2920,9 +3195,9 @@ components:
         host:
           type: string
         followingCount:
-          type: number
+          type: integer
         followersCount:
-          type: number
+          type: integer
         createdAt:
           type: string
         updatedAt:
@@ -2942,7 +3217,7 @@ components:
     User:
       properties:
         id:
-          type: number
+          type: integer
         username:
           type: string
         email:
@@ -2952,13 +3227,14 @@ components:
           description: 'Theme enabled by this user'
         emailVerified:
           type: boolean
-          description: 'Is email verified?'
+          description: 'Has the user confirmed their email address?'
         nsfwPolicy:
           $ref: '#/components/schemas/NSFWPolicy'
         webtorrentEnabled:
           type: boolean
         autoPlayVideo:
           type: boolean
+          description: 'Automatically start playing the video on the watch page'
         role:
           $ref: '#/components/schemas/UserRole'
         roleLabel:
@@ -2968,19 +3244,19 @@ components:
             - Moderator
             - Administrator
         videoQuota:
-          type: number
+          type: integer
         videoQuotaDaily:
-          type: number
+          type: integer
         videosCount:
-          type: number
+          type: integer
         videoAbusesCount:
-          type: number
+          type: integer
         videoAbusesAcceptedCount:
-          type: number
+          type: integer
         videoAbusesCreatedCount:
-          type: number
+          type: integer
         videoCommentsCount:
-          type: number
+          type: integer
         noInstanceConfigWarningModal:
           type: boolean
         noWelcomeModal:
@@ -3000,7 +3276,7 @@ components:
     UserWatchingVideo:
       properties:
         currentTime:
-          type: number
+          type: integer
     ServerConfig:
       properties:
         instance:
@@ -3086,7 +3362,7 @@ components:
             enabledResolutions:
               type: array
               items:
-                type: number
+                type: integer
         import:
           type: object
           properties:
@@ -3124,7 +3400,7 @@ components:
                   type: object
                   properties:
                     max:
-                      type: number
+                      type: integer
             extensions:
               type: array
               items:
@@ -3143,7 +3419,7 @@ components:
                   type: object
                   properties:
                     max:
-                      type: number
+                      type: integer
             file:
               type: object
               properties:
@@ -3161,7 +3437,7 @@ components:
                   type: object
                   properties:
                     max:
-                      type: number
+                      type: integer
                 extensions:
                   type: array
                   items:
@@ -3170,9 +3446,9 @@ components:
           type: object
           properties:
             videoQuota:
-              type: number
+              type: integer
             videoQuotaDaily:
-              type: number
+              type: integer
         trending:
           type: object
           properties:
@@ -3180,7 +3456,7 @@ components:
               type: object
               properties:
                 intervalDays:
-                  type: number
+                  type: integer
         tracker:
           type: object
           properties:
@@ -3258,19 +3534,19 @@ components:
               type: object
               properties:
                 size:
-                  type: number
+                  type: integer
             captions:
               type: object
               properties:
                 size:
-                  type: number
+                  type: integer
         signup:
           type: object
           properties:
             enabled:
               type: boolean
             limit:
-              type: number
+              type: integer
             requiresEmailVerification:
               type: boolean
         admin:
@@ -3287,9 +3563,9 @@ components:
           type: object
           properties:
             videoQuota:
-              type: number
+              type: integer
             videoQuotaDaily:
-              type: number
+              type: integer
         transcoding:
           type: object
           properties:
@@ -3300,7 +3576,7 @@ components:
             allowAudioFiles:
               type: boolean
             threads:
-              type: number
+              type: integer
             resolutions:
               type: object
               properties:
@@ -3361,7 +3637,7 @@ components:
     Follow:
       properties:
         id:
-          type: number
+          type: integer
         follower:
           $ref: '#/components/schemas/Actor'
         following:
@@ -3380,7 +3656,7 @@ components:
     Job:
       properties:
         id:
-          type: number
+          type: integer
         state:
           type: string
           enum:
@@ -3404,7 +3680,7 @@ components:
     AddUserResponse:
       properties:
         id:
-          type: number
+          type: integer
         uuid:
           type: string
     VideoUploadResponse:
@@ -3413,13 +3689,13 @@ components:
           type: object
           properties:
             id:
-              type: number
+              type: integer
             uuid:
               type: string
     CommentThreadResponse:
       properties:
         total:
-          type: number
+          type: integer
         data:
           type: array
           items:
@@ -3431,7 +3707,7 @@ components:
     VideoListResponse:
       properties:
         total:
-          type: number
+          type: integer
         data:
           type: array
           items:
@@ -3440,19 +3716,23 @@ components:
       properties:
         username:
           type: string
-          description: 'The user username '
+          description: 'The user username'
+          minLength: 1
+          maxLength: 50
         password:
           type: string
-          description: 'The user password. If the smtp server is configured, you can leave empty and an email will be sent '
+          description: 'The user password. If the smtp server is configured, you can leave empty and an email will be sent'
+          minLength: 6
+          maxLength: 255
         email:
           type: string
-          description: 'The user email '
+          description: 'The user email. MUST be in the format of an email address.'
         videoQuota:
           type: string
-          description: 'The user videoQuota '
+          description: 'The user video quota'
         videoQuotaDaily:
           type: string
-          description: 'The user daily video quota '
+          description: 'The user daily video quota'
         role:
           $ref: '#/components/schemas/UserRole'
       required:
@@ -3466,16 +3746,16 @@ components:
       properties:
         id:
           type: string
-          description: 'The user id '
+          description: 'The user id'
         email:
           type: string
-          description: 'The updated email of the user '
+          description: 'The updated email of the user'
         videoQuota:
           type: string
-          description: 'The updated videoQuota of the user '
+          description: 'The updated video quota of the user'
         videoQuotaDaily:
           type: string
-          description: 'The updated daily video quota of the user '
+          description: 'The updated daily video quota of the user'
         role:
           $ref: '#/components/schemas/UserRole'
       required:
@@ -3488,16 +3768,16 @@ components:
       properties:
         password:
           type: string
-          description: 'Your new password '
+          description: 'Your new password'
         email:
           type: string
-          description: 'Your new email '
+          description: 'Your new email'
         displayNSFW:
           type: string
-          description: 'Your new displayNSFW '
+          description: 'Your new displayNSFW'
         autoPlayVideo:
           type: string
-          description: 'Your new autoPlayVideo '
+          description: 'Your new autoPlayVideo'
       required:
         - password
         - email
@@ -3507,10 +3787,10 @@ components:
       properties:
         id:
           type: string
-          description: 'Id of the video '
+          description: 'Id of the video'
         rating:
           type: number
-          description: 'Rating of the video '
+          description: 'Rating of the video'
       required:
         - id
         - rating
@@ -3528,13 +3808,13 @@ components:
       properties:
         username:
           type: string
-          description: 'The username of the user '
+          description: 'The username of the user'
         password:
           type: string
-          description: 'The password of the user '
+          description: 'The password of the user'
         email:
           type: string
-          description: 'The email of the user '
+          description: 'The email of the user'
         displayName:
           type: string
           description: 'The user display name'
@@ -3543,10 +3823,10 @@ components:
           properties:
             name:
               type: string
-              description: 'The default channel name'
+              description: 'The name for the default channel'
             displayName:
               type: string
-              description: 'The default channel display name'
+              description: 'The display name for the default channel'
 
       required:
         - username
@@ -3562,6 +3842,7 @@ components:
           type: string
         support:
           type: string
+          description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
       required:
         - name
         - displayName
@@ -3573,7 +3854,187 @@ components:
           type: string
         support:
           type: string
+          description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
         bulkVideosSupportUpdate:
           type: boolean
-          description: 'Update all videos support field of this channel'
+          description: 'Update the support field for all videos of this channel'
 
+    MRSSPeerLink:
+      type: object
+      xml:
+        name: 'media:peerLink'
+      properties:
+        href:
+          type: string
+          xml:
+            attribute: true
+        type:
+          type: string
+          enum:
+            - application/x-bittorrent
+          xml:
+            attribute: true
+    MRSSGroupContent:
+      type: object
+      xml:
+        name: 'media:content'
+      properties:
+        url:
+          type: string
+          xml:
+            attribute: true
+        fileSize:
+          type: integer
+          xml:
+            attribute: true
+        type:
+          type: string
+          xml:
+            attribute: true
+        framerate:
+          type: integer
+          xml:
+            attribute: true
+        duration:
+          type: integer
+          xml:
+            attribute: true
+        height:
+          type: integer
+          xml:
+            attribute: true
+        lang:
+          type: string
+          xml:
+            attribute: true
+    VideoCommentsForXML:
+      type: array
+      xml:
+        wrapped: true
+        name: 'channel'
+      items:
+        type: object
+        xml:
+          name: 'item'
+        properties:
+          link:
+            type: string
+          guid:
+            type: string
+          pubDate:
+            type: string
+            format: date-time
+          'content:encoded':
+            type: string
+          'dc:creator':
+            type: string
+    VideosForXML:
+      type: array
+      xml:
+        wrapped: true
+        name: 'channel'
+      items:
+        type: object
+        xml:
+          name: 'item'
+        properties:
+          link:
+            type: string
+            description: video watch page URL
+          guid:
+            type: string
+            description: video canonical URL
+          pubDate:
+            type: string
+            format: date-time
+            description: video publication date
+          description:
+            type: string
+            description: video description
+          'content:encoded':
+            type: string
+            description: video description
+          'dc:creator':
+            type: string
+            description: publisher user name
+          'media:category':
+            type: integer
+            description: video category (MRSS)
+          'media:community':
+            type: object
+            description: see [media:community](https://www.rssboard.org/media-rss#media-community) (MRSS)
+            properties:
+              'media:statistics':
+                type: object
+                properties:
+                  views:
+                    type: integer
+                    xml:
+                      attribute: true
+          'media:embed':
+            type: object
+            properties:
+              url:
+                type: string
+                description: video embed path, relative to the canonical URL domain (MRSS)
+                xml:
+                  attribute: true
+          'media:player':
+            type: object
+            properties:
+              url:
+                type: string
+                description: video watch path, relative to the canonical URL domain (MRSS)
+                xml:
+                  attribute: true
+          'media:thumbnail':
+            type: object
+            properties:
+              url:
+                type: string
+                xml:
+                  attribute: true
+              height:
+                type: integer
+                xml:
+                  attribute: true
+              width:
+                type: integer
+                xml:
+                  attribute: true
+          'media:title':
+            type: string
+            description: see [media:title](https://www.rssboard.org/media-rss#media-title) (MRSS). We only use `plain` titles.
+          'media:description':
+            type: string
+          'media:rating':
+            type: string
+            enum:
+              - nonadult
+              - adult
+            description: see [media:rating](https://www.rssboard.org/media-rss#media-rating) (MRSS)
+          'enclosure':
+            type: object
+            description: main streamable file for the video
+            properties:
+              url:
+                type: string
+                xml:
+                  attribute: true
+              type:
+                type: string
+                enum:
+                  - application/x-bittorrent
+                xml:
+                  attribute: true
+              length:
+                type: integer
+                xml:
+                  attribute: true
+          'media:group':
+            type: array
+            description: list of streamable files for the video. see [media:peerLink](https://www.rssboard.org/media-rss#media-peerlink) and [media:content](https://www.rssboard.org/media-rss#media-content) or  (MRSS)
+            items:
+              anyOf:
+                - $ref: '#/components/schemas/MRSSPeerLink'
+                - $ref: '#/components/schemas/MRSSGroupContent'
