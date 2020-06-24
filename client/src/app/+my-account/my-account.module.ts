@@ -3,6 +3,7 @@ import { InputSwitchModule } from 'primeng/inputswitch'
 import { TableModule } from 'primeng/table'
 import { DragDropModule } from '@angular/cdk/drag-drop'
 import { NgModule } from '@angular/core'
+import { SharedFormModule } from '@app/shared/shared-forms'
 import { SharedGlobalIconModule } from '@app/shared/shared-icons'
 import { SharedMainModule } from '@app/shared/shared-main'
 import { SharedModerationModule } from '@app/shared/shared-moderation'
@@ -44,6 +45,7 @@ import { TopMenuDropdownComponent } from './top-menu-dropdown.component'
     DragDropModule,
 
     SharedMainModule,
+    SharedFormModule,
     SharedModerationModule,
     SharedVideoMiniatureModule,
     SharedUserSubscriptionModule,
