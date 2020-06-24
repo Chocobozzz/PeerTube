@@ -91,11 +91,10 @@ tags:
       and/or channels.
   - name: Video Channels
     description: >
-      Operations dealing with creation, modification and video listing of a
-      user's channels.
+      Operations dealing with the creation, modification and listing of videos within a channel.
   - name: Video Blocks
     description: >
-      Operations dealing with blacklisting videos (removing them from view and
+      Operations dealing with blocking videos (removing them from view and
       preventing interactions).
   - name: Video Rates
     description: >
@@ -116,7 +115,6 @@ x-tagGroups:
       - Video Caption
       - Video Channels
       - Video Comments
-      - Video Following
       - Video Rates
       - Video Playlists
       - Video Ownership Change
@@ -2245,6 +2243,13 @@ paths:
       tags:
         - Feeds
       summary: List comments on videos
+      servers:
+        - url: 'https://peertube.cpy.re'
+          description: Live Test Server (live data - stable version)
+        - url: 'https://peertube2.cpy.re'
+          description: Live Test Server (live data - latest nighlty version)
+        - url: 'https://peertube3.cpy.re'
+          description: Live Test Server (live data - latest RC version)
       parameters:
         - name: format
           in: path
@@ -2261,7 +2266,7 @@ paths:
               - json
               - json1
         - name: videoId
-          in: path
+          in: query
           description: 'limit listing to a specific video'
           schema:
             type: string
@@ -2296,6 +2301,13 @@ paths:
       tags:
         - Feeds
       summary: List videos
+      servers:
+        - url: 'https://peertube.cpy.re'
+          description: Live Test Server (live data - stable version)
+        - url: 'https://peertube2.cpy.re'
+          description: Live Test Server (live data - latest nighlty version)
+        - url: 'https://peertube3.cpy.re'
+          description: Live Test Server (live data - latest RC version)
       parameters:
         - name: format
           in: path
@@ -2312,22 +2324,22 @@ paths:
               - json
               - json1
         - name: accountId
-          in: path
+          in: query
           description: 'limit listing to a specific account'
           schema:
             type: string
         - name: accountName
-          in: path
+          in: query
           description: 'limit listing to a specific account'
           schema:
             type: string
         - name: videoChannelId
-          in: path
+          in: query
           description: 'limit listing to a specific video channel'
           schema:
             type: string
         - name: videoChannelName
-          in: path
+          in: query
           description: 'limit listing to a specific video channel'
           schema:
             type: string
