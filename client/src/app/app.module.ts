@@ -9,6 +9,7 @@ import { buildFileLocale, getCompleteLocale, isDefaultLocale } from '@shared/mod
 import { AppRoutingModule } from './app-routing.module'
 import { AppComponent } from './app.component'
 import { CoreModule } from './core'
+import { EmptyComponent } from './empty.component'
 import { HeaderComponent, SearchTypeaheadComponent, SuggestionComponent } from './header'
 import { HighlightPipe } from './header/highlight.pipe'
 import { AvatarNotificationComponent, LanguageChooserComponent, MenuComponent } from './menu'
@@ -30,6 +31,7 @@ registerLocaleData(localeOc, 'oc')
 
   declarations: [
     AppComponent,
+    EmptyComponent,
 
     MenuComponent,
     LanguageChooserComponent,
