@@ -109,6 +109,7 @@ x-tagGroups:
       - Users
       - My User
       - My Subscriptions
+      - My Notifications
   - name: Videos
     tags:
       - Video
@@ -362,8 +363,25 @@ paths:
     get:
       tags:
         - Instance Follows
-      summary: List instance followings
+      summary: List instances followed by the server
       parameters:
+        - name: state
+          in: query
+          schema:
+            type: string
+            enum:
+              - pending
+              - accepted
+        - name: actorType
+          in: query
+          schema:
+            type: string
+            enum:
+              - Person
+              - Application
+              - Group
+              - Service
+              - Organization
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/sort'
@@ -386,11 +404,19 @@ paths:
       responses:
         '204':
           description: successful operation
+        '500':
+          description: cannot follow a non-HTTPS server
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Follow'
+              type: object
+              properties:
+                hosts:
+                  type: array
+                  items:
+                    type: string
+                  uniqueItems: true
   /users:
     post:
       summary: Create a user
@@ -699,6 +725,102 @@ paths:
         - $ref: '#/components/parameters/subscriptionHandle'
       responses:
         '200':
+          description: successful operation
+  /users/me/notifications:
+    get:
+      summary: List my notifications
+      security:
+        - OAuth2: []
+      tags:
+        - My Notifications
+      parameters:
+        - name: unread
+          in: query
+          description: only list unread notifications
+          schema:
+            type: boolean
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationListResponse'
+  /users/me/notifications/read:
+    post:
+      summary: Mark notifications as read by their id
+      security:
+        - OAuth2: []
+      tags:
+        - My Notifications
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                ids:
+                  type: array
+                  description: ids of the notifications to mark as read
+                  items:
+                    type: integer
+              required:
+                - ids
+      responses:
+        '204':
+          description: successful operation
+  /users/me/notifications/read-all:
+    post:
+      summary: Mark all my notification as read
+      security:
+        - OAuth2: []
+      tags:
+        - My Notifications
+      responses:
+        '204':
+          description: successful operation
+  /users/me/notification-settings:
+    put:
+      summary: Update my notification settings
+      security:
+        - OAuth2: []
+      tags:
+        - My Notifications
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                newVideoFromSubscription:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newCommentOnMyVideo:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                videoAbuseAsModerator:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                videoAutoBlacklistAsModerator:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                blacklistOnMyVideo:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                myVideoPublished:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                myVideoImportFinished:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newFollow:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newUserRegistration:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                commentMention:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                newInstanceFollower:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+                autoInstanceFollowing:
+                  $ref: '#/components/schemas/NotificationSettingValue'
+      responses:
+        '204':
           description: successful operation
   /users/me/avatar/pick:
     post:
@@ -1381,7 +1503,7 @@ paths:
     get:
       tags:
         - Video Blocks
-      summary: List blocked videos
+      summary: List video blocks
       security:
         - OAuth2:
             - admin
@@ -2244,12 +2366,12 @@ paths:
         - Feeds
       summary: List comments on videos
       servers:
-        - url: 'https://peertube.cpy.re'
-          description: Live Test Server (live data - stable version)
         - url: 'https://peertube2.cpy.re'
-          description: Live Test Server (live data - latest nighlty version)
+          description: Live Test Server (live data - latest nightly version)
         - url: 'https://peertube3.cpy.re'
           description: Live Test Server (live data - latest RC version)
+        - url: 'https://peertube.cpy.re'
+          description: Live Test Server (live data - stable version)
       parameters:
         - name: format
           in: path
@@ -2302,12 +2424,12 @@ paths:
         - Feeds
       summary: List videos
       servers:
-        - url: 'https://peertube.cpy.re'
-          description: Live Test Server (live data - stable version)
         - url: 'https://peertube2.cpy.re'
-          description: Live Test Server (live data - latest nighlty version)
+          description: Live Test Server (live data - latest nightly version)
         - url: 'https://peertube3.cpy.re'
           description: Live Test Server (live data - latest RC version)
+        - url: 'https://peertube.cpy.re'
+          description: Live Test Server (live data - stable version)
       parameters:
         - name: format
           in: path
@@ -2370,12 +2492,12 @@ paths:
         '406':
           description: accept header unsupported
 servers:
-  - url: 'https://peertube.cpy.re/api/v1'
-    description: Live Test Server (live data - stable version)
   - url: 'https://peertube2.cpy.re/api/v1'
-    description: Live Test Server (live data - latest nighlty version)
+    description: Live Test Server (live data - latest nightly version)
   - url: 'https://peertube3.cpy.re/api/v1'
     description: Live Test Server (live data - latest RC version)
+  - url: 'https://peertube.cpy.re/api/v1'
+    description: Live Test Server (live data - stable version)
 components:
   parameters:
     start:
@@ -2918,6 +3040,14 @@ components:
             properties:
               baseUrl:
                 type: string
+    VideoInfo:
+      properties:
+        id:
+          type: integer
+        uuid:
+          type: string
+        name:
+          type: string
     Video:
       properties:
         id:
@@ -3196,6 +3326,22 @@ components:
           type: string
         updatedAt:
           type: string
+    ActorInfo:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        displayName:
+          type: string
+        host:
+          type: string
+        avatar:
+          nullable: true
+          type: object
+          properties:
+            path:
+              type: string
     Actor:
       properties:
         id:
@@ -4050,3 +4196,140 @@ components:
               anyOf:
                 - $ref: '#/components/schemas/MRSSPeerLink'
                 - $ref: '#/components/schemas/MRSSGroupContent'
+    NotificationSettingValue:
+      type: integer
+      description: >
+        Notification type
+        - `0` NONE
+        - `1` WEB
+        - `2` EMAIL
+      enum:
+        - 0
+        - 1
+        - 3
+    Notification:
+      properties:
+        id:
+          type: integer
+        type:
+          type: integer
+          description: >
+            Notification type, following the `UserNotificationType` enum:
+            - `1` NEW_VIDEO_FROM_SUBSCRIPTION
+            - `2` NEW_COMMENT_ON_MY_VIDEO
+            - `3` NEW_VIDEO_ABUSE_FOR_MODERATORS
+            - `4` BLACKLIST_ON_MY_VIDEO
+            - `5` UNBLACKLIST_ON_MY_VIDEO
+            - `6` MY_VIDEO_PUBLISHED
+            - `7` MY_VIDEO_IMPORT_SUCCESS
+            - `8` MY_VIDEO_IMPORT_ERROR
+            - `9` NEW_USER_REGISTRATION
+            - `10` NEW_FOLLOW
+            - `11` COMMENT_MENTION
+            - `12` VIDEO_AUTO_BLACKLIST_FOR_MODERATORS
+            - `13` NEW_INSTANCE_FOLLOWER
+            - `14` AUTO_INSTANCE_FOLLOWING
+        read:
+          type: boolean
+        video:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/VideoInfo'
+            - type: object
+              properties:
+                channel:
+                  $ref: '#/components/schemas/ActorInfo'
+        videoImport:
+          nullable: true
+          type: object
+          properties:
+            id:
+              type: integer
+            video:
+              nullable: true
+              $ref: '#/components/schemas/VideoInfo'
+            torrentName:
+              type: string
+              nullable: true
+            magnetUri:
+              type: string
+              nullable: true
+            targetUri:
+              type: string
+              nullable: true
+        comment:
+          nullable: true
+          type: object
+          properties:
+            id:
+              type: integer
+            threadId:
+              type: integer
+            video:
+              $ref: '#/components/schemas/VideoInfo'
+            account:
+              $ref: '#/components/schemas/ActorInfo'
+        videoAbuse:
+          nullable: true
+          type: object
+          properties:
+            id:
+              type: integer
+            video:
+              allOf:
+                - $ref: '#/components/schemas/VideoInfo'
+        videoBlacklist:
+          nullable: true
+          type: object
+          properties:
+            id:
+              type: integer
+            video:
+              allOf:
+                - $ref: '#/components/schemas/VideoInfo'
+        account:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/ActorInfo'
+        actorFollow:
+          type: object
+          nullable: true
+          properties:
+            id:
+              type: integer
+            follower:
+              $ref: '#/components/schemas/ActorInfo'
+            state:
+              type: string
+              enum:
+                - pending
+                - accepted
+            following:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - account
+                    - channel
+                    - instance
+                name:
+                  type: string
+                displayName:
+                  type: string
+                host:
+                  type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    NotificationListResponse:
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
