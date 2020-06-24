@@ -32,7 +32,7 @@ rates_limit:
 trust_proxy:
   - 'loopback'
 
-# Your database name will be "peertube"+database.suffix
+# Your database name will be database.name OR "peertube"+database.suffix
 database:
   hostname: 'localhost'
   port: 5432
