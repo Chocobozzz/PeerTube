@@ -22,6 +22,7 @@ storage:
   captions: 'test5/captions/'
   cache: 'test5/cache/'
   plugins: 'test5/plugins/'
+  client_overrides: 'test5/client-overrides/'
 
 admin:
   email: 'admin5@example.com'

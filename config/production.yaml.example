@@ -86,6 +86,11 @@ storage:
   captions: '/var/www/peertube/storage/captions/'
   cache: '/var/www/peertube/storage/cache/'
   plugins: '/var/www/peertube/storage/plugins/'
+  # Overridable client files : logo.svg, favicon.png and icons/*.png (PWA) in client/dist/assets/images
+  # Could contain for example assets/images/favicon.png
+  # If the file exists, peertube will serve it
+  # If not, peertube will fallback to the default fil
+  client_overrides: '/var/www/peertube/storage/client-overrides/'
 
 log:
   level: 'info' # debug/info/warning/error
