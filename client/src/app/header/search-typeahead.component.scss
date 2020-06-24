@@ -41,6 +41,7 @@ li.suggestion {
   background: pvar(--mainBackgroundColor);
   transition: .3s ease;
   transition-property: box-shadow;
+  cursor: pointer;
 
   // soft border-radius for the last suggestion and the link inside
   &:last-of-type {
