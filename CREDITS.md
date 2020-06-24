@@ -5,42 +5,52 @@
  * Filip Bengtsson
  * Felix Ableitner
  * Gérald Niel
+ * Kim
+ * Phongpanot
  * Julien Maulny
  * Jorropo
  * Josh Morel
- * Kim
  * BO41
  * Francesc
- * Phongpanot
  * Frank Sträter
- * Tirifto
  * John Livingston
+ * Tirifto
+ * ButterflyOfFire
+ * Jeff Huang
  * Xabi
  * buoyantair
- * Jeff Huang
+ * josé m
+ * Vodoyo Kamal
  * kimsible
  * Attila F
  * Balázs Úr
+ * Caroline Chuong
+ * Quentin PAGÈS
  * Benjamin Bouvier
+ * Berto Te
  * Jan Keromnes
  * Lucas Declercq
+ * Slimane Selyan AMIRI
  * knuxify
  * matograine
  * Александр
+ * Daniel Santos
  * David Libeau
  * Florent F
  * Luc Didry
  * Nassim Bounouas
- * josé m
+ * Viorel-Cătălin Răpițeanu
  * Anne-Gaelle Moulun
  * BRAINS YUM
- * Berto Te
+ * Belkacem Mohammed
+ * Besnik Bleta
  * Côme 744
+ * David Soh
  * Dimitri Gilbert
  * Florent Poinsaut
  * Green-Star
  * Micah Elizabeth Scott
- * Quentin PAGÈS
+ * Racida S
  * SVNET Libre
  * Thomas Kuntz
  * William Lahti
@@ -57,10 +67,12 @@
  * Thomas Citharel
  * clementbrizard
  * kaiyou
+ * Ahmed ABERWAG
  * Alberto Teira
  * Andréas Livet
  * Andrés Maldonado
  * Aurélien Bertron
+ * Ch
  * Hans Meiser
  * Jefferson Hernandez
  * Kemal Oktay Aktoğan
@@ -68,6 +80,8 @@
  * LecygneNoir
  * Leopere
  * Manuela Silva
+ * Rafael Fontenelle
+ * Ugaitz
  * Yohan Boniface
  * am97
  * anotheranonymoususer
@@ -82,8 +96,6 @@
  * Axel Viala
  * Balázs Meskó
  * BitTube
- * ButterflyOfFire
- * Ch
  * Dashie
  * Dirk Kelly
  * EndoGai
@@ -107,6 +119,7 @@
  * SerCom_KC
  * Valvin
  * ahmadsharifian
+ * bopol
  * framail
  * les
  * libertas
@@ -121,6 +134,7 @@
  * Adam Magnier
  * Adnane Belmadiaf
  * Alexander F. Rødseth
+ * Ali Alim
  * Antoine Millet
  * Anton Latukha
  * Armando Lüscher
@@ -149,6 +163,7 @@
  * Fernandez, ReK2
  * Florian CUNY
  * Glandos
+ * Gérald CHATAGNON
  * Haelwenn (lanodan) Monnier
  * HesioZ
  * ICabaleiro
@@ -168,6 +183,7 @@
  * Kyâne Pichou
  * Leo Mouyna
  * Lesterpig
+ * Levi Bard
  * LiPeK
  * Lint
  * LoveIsGrief
@@ -201,6 +217,7 @@
  * ROPEDE
  * Raphael
  * Raphaël Droz
+ * Rebecca
  * Rech
  * Robin
  * Sankar
@@ -210,6 +227,7 @@
  * Stefan Schüller
  * Tomás Sebastián Romero
  * TrashMacNugget
+ * Vagelis F
  * Vincent Stakenburg
  * Yann Sionneau
  * Yorwba
@@ -235,6 +253,7 @@
  * numéro6
  * osauzet
  * potedeo
+ * roberto marcolin
  * spf
  * tilllt
  * tomamplius
