@@ -1,3 +1,4 @@
+import { constants, promises as fs } from 'fs'
 import * as express from 'express'
 import { join } from 'path'
 import { root } from '../helpers/core-utils'
@@ -39,18 +40,36 @@ clientsRouter.use(
 )
 
 // Static HTML/CSS/JS client files
-
 const staticClientFiles = [
   'manifest.webmanifest',
   'ngsw-worker.js',
   'ngsw.json'
 ]
+
 for (const staticClientFile of staticClientFiles) {
   const path = join(root(), 'client', 'dist', staticClientFile)
 
-  clientsRouter.get('/' + staticClientFile, (req: express.Request, res: express.Response) => {
+  clientsRouter.get(`/${staticClientFile}`, (req: express.Request, res: express.Response) => {
     res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   })
+}
+
+// Static client overrides
+const staticClientOverrides = [
+  'assets/images/logo.svg',
+  'assets/images/favicon.png',
+  'assets/images/icons/icon-36x36.png',
+  'assets/images/icons/icon-48x48.png',
+  'assets/images/icons/icon-72x72.png',
+  'assets/images/icons/icon-96x96.png',
+  'assets/images/icons/icon-144x144.png',
+  'assets/images/icons/icon-192x192.png',
+  'assets/images/icons/icon-512x512.png'
+]
+
+for (const staticClientOverride of staticClientOverrides) {
+  const overridePhysicalPath = join(CONFIG.STORAGE.CLIENT_OVERRIDES_DIR, staticClientOverride)
+  clientsRouter.use(`/client/${staticClientOverride}`, asyncMiddleware(serveClientOverride(overridePhysicalPath)))
 }
 
 clientsRouter.use('/client/locales/:locale/:file.json', serveServerTranslations)
@@ -129,4 +148,17 @@ function sendHTML (html: string, res: express.Response) {
   res.set('Content-Type', 'text/html; charset=UTF-8')
 
   return res.send(html)
+}
+
+function serveClientOverride (path: string) {
+  return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
+      await fs.access(path, constants.F_OK)
+      // Serve override client
+      res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
+    } catch {
+      // Serve dist client
+      next()
+    }
+  }
 }

@@ -68,7 +68,8 @@ const CONFIG = {
     CAPTIONS_DIR: buildPath(config.get<string>('storage.captions')),
     TORRENTS_DIR: buildPath(config.get<string>('storage.torrents')),
     CACHE_DIR: buildPath(config.get<string>('storage.cache')),
-    PLUGINS_DIR: buildPath(config.get<string>('storage.plugins'))
+    PLUGINS_DIR: buildPath(config.get<string>('storage.plugins')),
+    CLIENT_OVERRIDES_DIR: buildPath(config.get<string>('storage.client_overrides'))
   },
   WEBSERVER: {
     SCHEME: config.get<boolean>('webserver.https') === true ? 'https' : 'http',
