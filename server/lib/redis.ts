@@ -8,7 +8,8 @@ import {
   USER_PASSWORD_RESET_LIFETIME,
   USER_PASSWORD_CREATE_LIFETIME,
   VIDEO_VIEW_LIFETIME,
-  WEBSERVER
+  WEBSERVER,
+  TRACKER_RATE_LIMITS
 } from '../initializers/constants'
 import { CONFIG } from '../initializers/config'
 
@@ -121,6 +122,16 @@ class Redis {
     return this.exists(this.generateViewKey(ip, videoUUID))
   }
 
+  /* ************ Tracker IP block ************ */
+
+  setTrackerBlockIP (ip: string) {
+    return this.setValue(this.generateTrackerBlockIPKey(ip), '1', TRACKER_RATE_LIMITS.BLOCK_IP_LIFETIME)
+  }
+
+  async doesTrackerBlockIPExist (ip: string) {
+    return this.exists(this.generateTrackerBlockIPKey(ip))
+  }
+
   /* ************ API cache ************ */
 
   async getCachedRoute (req: express.Request) {
@@ -211,6 +222,10 @@ class Redis {
 
   private generateViewKey (ip: string, videoUUID: string) {
     return `views-${videoUUID}-${ip}`
+  }
+
+  private generateTrackerBlockIPKey (ip: string) {
+    return `tracker-block-ip-${ip}`
   }
 
   private generateContactFormKey (ip: string) {
