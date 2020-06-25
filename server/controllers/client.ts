@@ -41,7 +41,6 @@ clientsRouter.use(
 
 // Static HTML/CSS/JS client files
 const staticClientFiles = [
-  'manifest.webmanifest',
   'ngsw-worker.js',
   'ngsw.json'
 ]
@@ -53,6 +52,9 @@ for (const staticClientFile of staticClientFiles) {
     res.sendFile(path, { maxAge: STATIC_MAX_AGE.SERVER })
   })
 }
+
+// Dynamic PWA manifest
+clientsRouter.get('/manifest.webmanifest', asyncMiddleware(generateManifest))
 
 // Static client overrides
 const staticClientOverrides = [
@@ -148,6 +150,18 @@ function sendHTML (html: string, res: express.Response) {
   res.set('Content-Type', 'text/html; charset=UTF-8')
 
   return res.send(html)
+}
+
+async function generateManifest (req: express.Request, res: express.Response) {
+  const manifestPhysicalPath = join(root(), 'client', 'dist', 'manifest.webmanifest')
+  const manifestJson = await fs.readFile(manifestPhysicalPath, 'utf8')
+  const manifest = JSON.parse(manifestJson)
+
+  manifest.name = CONFIG.INSTANCE.NAME
+  manifest.short_name = CONFIG.INSTANCE.NAME
+  manifest.description = CONFIG.INSTANCE.SHORT_DESCRIPTION
+
+  res.json(manifest)
 }
 
 function serveClientOverride (path: string) {
