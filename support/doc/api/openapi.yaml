@@ -72,6 +72,9 @@ tags:
       Manage the list of instances you wish to help by seeding their videos according
       to the policy of video selection of your choice. Note that you have a similar functionality
       to mirror individual videos, see `Video Mirroring`.
+  - name: Plugins
+    description: >
+      Managign plugins installed from a local path or from NPM.
   - name: Video Abuses
     description: |
       Video abuses deal with reports of local or remote videos alike.
@@ -141,6 +144,7 @@ x-tagGroups:
       - Config
       - Instance Follows
       - Instance Redundancy
+      - Plugins
   - name: Jobs
     tags:
       - Job
@@ -2606,6 +2610,253 @@ paths:
                 type: object
         '406':
           description: accept header unsupported
+  /plugins:
+    get:
+      tags:
+        - Plugins
+      summary: List plugins
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: pluginType
+          in: query
+          schema:
+            type: integer
+        - name: uninstalled
+          in: query
+          schema:
+            type: boolean
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginResponse'
+  /plugins/available:
+    get:
+      tags:
+        - Plugins
+      summary: List available plugins
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: pluginType
+          in: query
+          schema:
+            type: integer
+        - name: currentPeerTubeEngine
+          in: query
+          schema:
+            type: string
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PluginResponse'
+        '503':
+          description: plugin index unavailable
+  /plugins/install:
+    post:
+      tags:
+        - Plugins
+      summary: Install a plugin
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    npmName:
+                      type: string
+                  required:
+                    - npmName
+                  additionalProperties: false
+                - type: object
+                  properties:
+                    path:
+                      type: string
+                  required:
+                    - path
+                  additionalProperties: false
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: should have either `npmName` or `path` set
+  /plugins/update:
+    post:
+      tags:
+        - Plugins
+      summary: Update a plugin
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  properties:
+                    npmName:
+                      type: string
+                  required:
+                    - npmName
+                  additionalProperties: false
+                - type: object
+                  properties:
+                    path:
+                      type: string
+                  required:
+                    - path
+                  additionalProperties: false
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: should have either `npmName` or `path` set
+        '404':
+          description: existing plugin not found
+  /plugins/uninstall:
+    post:
+      tags:
+        - Plugins
+      summary: Uninstall a plugin
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                npmName:
+                  type: string
+              required:
+                - npmName
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: existing plugin not found
+  /plugins/{npmName}:
+    get:
+      tags:
+        - Plugins
+      summary: Get a plugin
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: npmName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Plugin'
+        '404':
+          description: plugin not found
+  /plugins/{npmName}/settings:
+    put:
+      tags:
+        - Plugins
+      summary: Set a plugin's settings
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: npmName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                settings:
+                  type: object
+                  additionalProperties: true
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: plugin not found
+  /plugins/{npmName}/public-settings:
+    get:
+      tags:
+        - Plugins
+      summary: Get a plugin's public settings
+      security:
+        - OAuth2: []
+      parameters:
+        - name: npmName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          description: plugin not found
+  /plugins/{npmName}/registered-settings:
+    get:
+      tags:
+        - Plugins
+      summary: Get a plugin's registered settings
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: npmName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        '404':
+          description: plugin not found
 servers:
   - url: 'https://peertube2.cpy.re/api/v1'
     description: Live Test Server (live data - latest nightly version)
@@ -4498,3 +4749,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
+    Plugin:
+      properties:
+        name:
+          type: string
+        type:
+          type: integer
+          enum:
+            - 1
+            - 2
+        latestVersion:
+          type: string
+        version:
+          type: string
+        enabled:
+          type: boolean
+        uninstalled:
+          type: boolean
+        peertubeEngine:
+          type: string
+        description:
+          type: string
+        homepage:
+          type: string
+        settings:
+          type: object
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    PluginResponse:
+      properties:
+        total:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Plugin'
