@@ -1,4 +1,5 @@
 import { join } from 'path'
+import { randomBytes } from 'crypto'
 import { JobType, VideoRateType, VideoResolution, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
@@ -709,6 +710,14 @@ registerConfigChangedHandler(() => {
 
 // ---------------------------------------------------------------------------
 
+const FILES_CONTENT_HASH = {
+  MANIFEST: generateContentHash(),
+  FAVICON: generateContentHash(),
+  LOGO: generateContentHash()
+}
+
+// ---------------------------------------------------------------------------
+
 export {
   WEBSERVER,
   API_VERSION,
@@ -791,8 +800,10 @@ export {
   VIDEO_PLAYLIST_PRIVACIES,
   PLUGIN_EXTERNAL_AUTH_TOKEN_LIFETIME,
   ASSETS_PATH,
+  FILES_CONTENT_HASH,
   loadLanguages,
-  buildLanguages
+  buildLanguages,
+  generateContentHash
 }
 
 // ---------------------------------------------------------------------------
@@ -893,4 +904,8 @@ function buildLanguages () {
   languages['el'] = 'Greek'
 
   return languages
+}
+
+function generateContentHash () {
+  return randomBytes(20).toString('hex')
 }

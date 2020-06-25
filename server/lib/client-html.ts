@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER } from '../initializers/constants'
+import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER, FILES_CONTENT_HASH } from '../initializers/constants'
 import { join } from 'path'
 import { escapeHTML, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
@@ -101,6 +101,9 @@ export class ClientHtml {
     let html = buffer.toString()
 
     if (paramLang) html = ClientHtml.addHtmlLang(html, paramLang)
+    html = ClientHtml.addManifestContentHash(html)
+    html = ClientHtml.addFaviconContentHash(html)
+    html = ClientHtml.addLogoContentHash(html)
     html = ClientHtml.addCustomCSS(html)
     html = await ClientHtml.addAsyncPluginCSS(html)
 
@@ -134,6 +137,18 @@ export class ClientHtml {
 
   private static addHtmlLang (htmlStringPage: string, paramLang: string) {
     return htmlStringPage.replace('<html>', `<html lang="${paramLang}">`)
+  }
+
+  private static addManifestContentHash (htmlStringPage: string) {
+    return htmlStringPage.replace('[manifestContentHash]', FILES_CONTENT_HASH.MANIFEST)
+  }
+
+  private static addFaviconContentHash(htmlStringPage: string) {
+    return htmlStringPage.replace('[faviconContentHash]', FILES_CONTENT_HASH.FAVICON)
+  }
+
+  private static addLogoContentHash(htmlStringPage: string) {
+    return htmlStringPage.replace('[logoContentHash]', FILES_CONTENT_HASH.LOGO)
   }
 
   private static addTitleTag (htmlStringPage: string, title?: string) {
