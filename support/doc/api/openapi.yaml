@@ -66,6 +66,12 @@ tags:
       server then deals with inter-server ActivityPub operations and propagates
       information across its social graph by posting activities to actors' inbox
       endpoints.
+  - name: Instance Redundancy
+    description: >
+      Redundancy is part of the inter-server solidarity that PeerTube fosters.
+      Manage the list of instances you wish to help by seeding their videos according
+      to the policy of video selection of your choice. Note that you have a similar functionality
+      to mirror individual videos, see `Video Mirroring`.
   - name: Video Abuses
     description: |
       Video abuses deal with reports of local or remote videos alike.
@@ -113,12 +119,13 @@ x-tagGroups:
   - name: Videos
     tags:
       - Video
-      - Video Caption
+      - Video Captions
       - Video Channels
       - Video Comments
       - Video Rates
       - Video Playlists
       - Video Ownership Change
+      - Video Mirroring
       - Feeds
   - name: Search
     tags:
@@ -133,6 +140,7 @@ x-tagGroups:
     tags:
       - Config
       - Instance Follows
+      - Instance Redundancy
   - name: Jobs
     tags:
       - Job
@@ -1525,7 +1533,7 @@ paths:
     get:
       summary: List captions of a video
       tags:
-        - Video Caption
+        - Video Captions
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
       responses:
@@ -1546,7 +1554,7 @@ paths:
     put:
       summary: Add or replace a video caption
       tags:
-        - Video Caption
+        - Video Captions
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/captionLanguage'
@@ -1571,7 +1579,7 @@ paths:
     delete:
       summary: Delete a video caption
       tags:
-        - Video Caption
+        - Video Captions
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/captionLanguage'
@@ -2360,6 +2368,113 @@ paths:
           description: successful operation
         '404':
           description: account block does not exist
+  /redundancy/{host}:
+    put:
+      tags:
+        - Instance Redundancy
+      summary: Update a server redundancy policy
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: host
+          in: path
+          required: true
+          description: server domain to mirror
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                redundancyAllowed:
+                  type: boolean
+                  description: allow mirroring of the host's local videos
+              required:
+                - redundancyAllowed
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: server is not already known
+  /redundancy/videos:
+    get:
+      tags:
+        - Video Mirroring
+      summary: List videos being mirrored
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: target
+          in: query
+          required: true
+          description: direction of the mirror
+          schema:
+            type: string
+            enum:
+              - my-videos
+              - remote-videos
+        - $ref: '#/components/parameters/start'
+        - $ref: '#/components/parameters/count'
+        - $ref: '#/components/parameters/videoRedundanciesSort'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VideoRedundancy'
+    post:
+      tags:
+        - Video Mirroring
+      summary: Mirror a video
+      security:
+        - OAuth2:
+          - admin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                videoId:
+                  type: string
+              required:
+                - videoId
+      responses:
+        '204':
+          description: successful operation
+        '400':
+          description: cannot mirror a local video
+        '404':
+          description: video does not exist
+        '409':
+          description: video is already mirrored
+  /redundancy/videos/{redundancyId}:
+    delete:
+      tags:
+        - Video Mirroring
+      summary: Delete a mirror done on a video
+      security:
+        - OAuth2:
+          - admin
+      parameters:
+        - name: redundancyId
+          in: path
+          required: true
+          description: id of an existing redundancy on a video
+          schema:
+            type: string
+      responses:
+        '204':
+          description: successful operation
+        '404':
+          description: video redundancy not found
   '/feeds/video-comments.{format}':
     get:
       tags:
@@ -2551,7 +2666,7 @@ components:
       schema:
         type: string
         enum:
-        - -name
+        - name
         - -duration
         - -createdAt
         - -publishedAt
@@ -2566,7 +2681,7 @@ components:
       schema:
         type: string
         enum:
-        - -name
+        - name
         - -duration
         - -createdAt
         - -publishedAt
@@ -2592,7 +2707,7 @@ components:
         type: string
         enum:
         - -id
-        - -name
+        - name
         - -duration
         - -views
         - -likes
@@ -2621,6 +2736,15 @@ components:
         - -id
         - -createdAt
         - -state
+    videoRedundanciesSort:
+      name: sort
+      in: query
+      required: false
+      description: Sort abuses by criteria
+      schema:
+        type: string
+        enum:
+        - name
     name:
       name: name
       in: path
@@ -3150,6 +3274,46 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/VideoStreamingPlaylists'
+    FileRedundancyInformation:
+      properties:
+        id:
+          type: integer
+        fileUrl:
+          type: string
+        strategy:
+          type: string
+        size:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        expiresOn:
+          type: string
+          format: date-time
+    VideoRedundancy:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        url:
+          type: string
+        uuid:
+          type: string
+        redundancies:
+          type: object
+          properties:
+            files:
+              type: array
+              items:
+                $ref: '#/components/schemas/FileRedundancyInformation' 
+            streamingPlaylists:
+              type: array
+              items:
+                $ref: '#/components/schemas/FileRedundancyInformation' 
     VideoImportStateConstant:
       properties:
         id:
@@ -3802,6 +3966,7 @@ components:
           $ref: '#/components/schemas/Actor'
         score:
           type: number
+          description: score reflecting the reachability of the actor, with steps of `10` and a base score of `1000`.
         state:
           type: string
           enum:
