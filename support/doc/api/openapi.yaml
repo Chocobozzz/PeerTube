@@ -2815,8 +2815,6 @@ paths:
       tags:
         - Plugins
       summary: Get a plugin's public settings
-      security:
-        - OAuth2: []
       parameters:
         - name: npmName
           in: path
