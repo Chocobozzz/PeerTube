@@ -41,8 +41,6 @@ declare module 'video.js' {
       tracks_: (TextTrack & { id: string, label: string, src: string })[]
     }
 
-    audioTracks (): AudioTrackList
-
     dock (options: { title: string, description: string }): void
   }
 }

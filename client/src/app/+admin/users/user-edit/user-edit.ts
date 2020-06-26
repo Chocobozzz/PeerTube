@@ -1,9 +1,10 @@
-import { OnInit } from '@angular/core'
+import { OnInit, Directive } from '@angular/core'
 import { ConfigService } from '@app/+admin/config/shared/config.service'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { FormReactive } from '@app/shared/shared-forms'
 import { ServerConfig, USER_ROLE_LABELS, UserAdminFlag, UserRole, VideoResolution } from '@shared/models'
 
+@Directive()
 export abstract class UserEdit extends FormReactive implements OnInit {
   videoQuotaOptions: { value: string, label: string, disabled?: boolean }[] = []
   videoQuotaDailyOptions: { value: string, label: string, disabled?: boolean }[] = []

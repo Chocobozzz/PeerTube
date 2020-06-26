@@ -1,11 +1,12 @@
 import { SortMeta } from 'primeng/api'
-import { OnInit } from '@angular/core'
+import { OnInit, Directive } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { Actor } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { AccountBlock } from './account-block.model'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
+@Directive()
 export class GenericAccountBlocklistComponent extends RestTable implements OnInit {
   // @ts-ignore: "Abstract methods can only appear within an abstract class"
   abstract mode: BlocklistComponentType

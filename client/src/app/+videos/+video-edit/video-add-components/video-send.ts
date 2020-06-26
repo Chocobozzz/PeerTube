@@ -1,5 +1,5 @@
 import { catchError, switchMap, tap } from 'rxjs/operators'
-import { EventEmitter, OnInit } from '@angular/core'
+import { EventEmitter, OnInit, Directive } from '@angular/core'
 import { AuthService, CanComponentDeactivateResult, Notifier, ServerService } from '@app/core'
 import { populateAsyncUserVideoChannels } from '@app/helpers'
 import { FormReactive } from '@app/shared/shared-forms'
@@ -7,6 +7,7 @@ import { VideoCaptionEdit, VideoCaptionService, VideoEdit, VideoService } from '
 import { LoadingBarService } from '@ngx-loading-bar/core'
 import { ServerConfig, VideoConstant, VideoPrivacy } from '@shared/models'
 
+@Directive()
 export abstract class VideoSend extends FormReactive implements OnInit {
   userVideoChannels: { id: number, label: string, support: string }[] = []
   videoPrivacies: VideoConstant<VideoPrivacy>[] = []

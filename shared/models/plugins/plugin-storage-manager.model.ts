@@ -1,7 +1,5 @@
-import * as Bluebird from 'bluebird'
-
 export interface PluginStorageManager {
-  getData: (key: string) => Bluebird<string>
+  getData: (key: string) => Promise<string>
 
-  storeData: (key: string, data: any) => Bluebird<any>
+  storeData: (key: string, data: any) => Promise<any>
 }

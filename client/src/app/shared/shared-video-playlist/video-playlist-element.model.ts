@@ -1,5 +1,5 @@
-import { VideoPlaylistElement as ServerVideoPlaylistElement, VideoPlaylistElementType } from '../../../../../shared/models/videos'
 import { Video } from '@app/shared/shared-main'
+import { VideoPlaylistElement as ServerVideoPlaylistElement, VideoPlaylistElementType } from '@shared/models'
 
 export class VideoPlaylistElement implements ServerVideoPlaylistElement {
   id: number

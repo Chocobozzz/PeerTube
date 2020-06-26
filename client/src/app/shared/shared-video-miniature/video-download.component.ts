@@ -1,4 +1,3 @@
-import { FfprobeFormat, FfprobeStream } from 'fluent-ffmpeg'
 import { mapValues, pick } from 'lodash-es'
 import { BytesPipe } from 'ngx-pipes'
 import { Component, ElementRef, ViewChild } from '@angular/core'
@@ -144,7 +143,7 @@ export class VideoDownloadComponent {
     this.type = type
   }
 
-  getMetadataFormat (format: FfprobeFormat) {
+  getMetadataFormat (format: any) {
     const keyToTranslateFunction = {
       'encoder': (value: string) => ({ label: this.i18n('Encoder'), value }),
       'format_long_name': (value: string) => ({ label: this.i18n('Format name'), value }),
@@ -165,7 +164,7 @@ export class VideoDownloadComponent {
     )
   }
 
-  getMetadataStream (streams: FfprobeStream[], type: 'video' | 'audio') {
+  getMetadataStream (streams: any[], type: 'video' | 'audio') {
     const stream = streams.find(s => s.codec_type === type)
     if (!stream) return undefined
 
@@ -201,6 +200,7 @@ export class VideoDownloadComponent {
   private hydrateMetadataFromMetadataUrl (file: VideoFile) {
     const observable = this.videoService.getVideoFileMetadata(file.metadataUrl)
     observable.subscribe(res => file.metadata = res)
+
     return observable.toPromise()
   }
 }

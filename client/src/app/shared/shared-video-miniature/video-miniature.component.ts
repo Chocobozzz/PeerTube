@@ -12,7 +12,7 @@ import {
 } from '@angular/core'
 import { AuthService, ScreenService, ServerService, User } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '../../../../../shared'
+import { ServerConfig, VideoPlaylistType, VideoPrivacy, VideoState } from '@shared/models'
 import { Video } from '../shared-main'
 import { VideoPlaylistService } from '../shared-video-playlist'
 import { VideoActionsDisplayType } from './video-actions-dropdown.component'

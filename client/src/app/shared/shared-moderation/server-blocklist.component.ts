@@ -1,11 +1,12 @@
 import { SortMeta } from 'primeng/api'
-import { OnInit, ViewChild } from '@angular/core'
+import { OnInit, ViewChild, Directive } from '@angular/core'
 import { BatchDomainsModalComponent } from '@app/shared/shared-moderation/batch-domains-modal.component'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerBlock } from '@shared/models'
 import { BlocklistComponentType, BlocklistService } from './blocklist.service'
 
+@Directive()
 export class GenericServerBlocklistComponent extends RestTable implements OnInit {
   @ViewChild('batchDomainsModal') batchDomainsModal: BatchDomainsModalComponent
 

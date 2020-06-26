@@ -8,7 +8,7 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 @import '~video.js/dist/video-js.css';
 
-$assets-path: '../assets/';
+$assets-path: '../../assets/';
 @import './player/index';
 @import './loading-bar';
 

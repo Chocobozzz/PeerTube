@@ -1,24 +1,19 @@
 import './embed.scss'
-
+import videojs from 'video.js'
+import { objectToUrlEncoded, peertubeLocalStorage, PureAuthUser } from '@root-helpers/index'
 import {
   peertubeTranslate,
   ResultList,
   ServerConfig,
+  UserRefreshToken,
+  VideoCaption,
   VideoDetails,
-  UserRefreshToken
-} from '../../../../shared'
-import { VideoCaption } from '../../../../shared/models/videos/caption/video-caption.model'
-import {
-  P2PMediaLoaderOptions,
-  PeertubePlayerManagerOptions,
-  PlayerMode
-} from '../../assets/player/peertube-player-manager'
-import { VideoStreamingPlaylistType } from '../../../../shared/models/videos/video-streaming-playlist.type'
-import { PeerTubeEmbedApi } from './embed-api'
-import { TranslationsManager } from '../../assets/player/translations-manager'
-import videojs from 'video.js'
+  VideoStreamingPlaylistType
+} from '../../../../shared/models'
+import { P2PMediaLoaderOptions, PeertubePlayerManagerOptions, PlayerMode } from '../../assets/player/peertube-player-manager'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
-import { PureAuthUser, objectToUrlEncoded, peertubeLocalStorage } from '@root-helpers/index'
+import { TranslationsManager } from '../../assets/player/translations-manager'
+import { PeerTubeEmbedApi } from './embed-api'
 
 type Translations = { [ id: string ]: string }
 

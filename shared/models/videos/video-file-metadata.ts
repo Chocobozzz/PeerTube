@@ -1,14 +1,9 @@
-import { FfprobeData } from 'fluent-ffmpeg'
-import { DeepOmit } from '../../core-utils'
-
-export type VideoFileMetadataModel = DeepOmit<FfprobeData, 'filename'>
-
-export class VideoFileMetadata implements VideoFileMetadataModel {
+export class VideoFileMetadata {
   streams: { [x: string]: any, [x: number]: any }[]
   format: { [x: string]: any, [x: number]: any }
   chapters: any[]
 
-  constructor (hash: Partial<VideoFileMetadataModel>) {
+  constructor (hash: { chapters: any[], format: any, streams: any[] }) {
     this.chapters = hash.chapters
     this.format = hash.format
     this.streams = hash.streams
