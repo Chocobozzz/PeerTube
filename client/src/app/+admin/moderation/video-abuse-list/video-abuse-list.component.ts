@@ -196,10 +196,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     this.initialize()
 
     this.route.queryParams
-      .pipe(filter(params => params.search !== undefined && params.search !== null))
       .subscribe(params => {
-        this.search = params.search
-        this.setTableFilter(params.search)
+        this.search = params.search || ''
+
+        this.setTableFilter(this.search)
         this.loadData()
       })
   }
@@ -229,6 +229,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   setQueryParams (search: string) {
     const queryParams: Params = {}
     if (search) Object.assign(queryParams, { search })
+
     this.router.navigate([ '/admin/moderation/video-abuses/list' ], { queryParams })
   }
 
