@@ -238,6 +238,8 @@ describe('Official plugin auto-mute', function () {
   })
 
   after(async function () {
+    await blocklistServer.terminate()
+
     await cleanupTests(servers)
   })
 })

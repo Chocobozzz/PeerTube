@@ -185,6 +185,8 @@ describe('Official plugin auto-block videos', function () {
   })
 
   after(async function () {
+    await blocklistServer.terminate()
+
     await cleanupTests(servers)
   })
 })

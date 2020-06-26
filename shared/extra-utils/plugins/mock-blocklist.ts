@@ -1,4 +1,5 @@
 import * as express from 'express'
+import { Server } from 'http'
 
 type BlocklistResponse = {
   data: {
@@ -10,6 +11,7 @@ type BlocklistResponse = {
 
 export class MockBlocklist {
   private body: BlocklistResponse
+  private server: Server
 
   initialize () {
     return new Promise(res => {
@@ -19,11 +21,15 @@ export class MockBlocklist {
         return res.json(this.body)
       })
 
-      app.listen(42100, () => res())
+      this.server = app.listen(42100, () => res())
     })
   }
 
   replace (body: BlocklistResponse) {
     this.body = body
+  }
+
+  terminate () {
+    if (this.server) this.server.close()
   }
 }
