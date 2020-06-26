@@ -82,7 +82,7 @@ sudo systemctl start redis postgresql
 * Install - [https://linoxide.com/linux-how-to/install-ffmpeg-centos-7/](https://linoxide.com/linux-how-to/install-ffmpeg-centos-7/)
 * Compile - [https://gist.github.com/mustafaturan/7053900#file-latest-ffmpeg-centos6-sh](https://gist.github.com/mustafaturan/7053900#file-latest-ffmpeg-centos6-sh)
 
-4. Run:    
+4. Install Packages:    
 
 ```
 sudo yum update
@@ -103,7 +103,7 @@ Later when you invoke any node command, please prefix them with `CC=/opt/rh/devt
 sudo -H -u peertube CC=/opt/rh/devtoolset-7/root/usr/bin/gcc CXX=/opt/rh/devtoolset-7/root/usr/bin/g++ yarn install --production --pure-lockfile
 ```
 
-Initialize the PostgreSQL database:   
+6. Initialize the PostgreSQL database:   
 
 ```
 sudo postgresql-setup initdb
@@ -112,11 +112,50 @@ sudo postgresql-setup initdb
 Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:    
 
 ```
-sudo systemctl enable redis
-sudo systemctl enable postgresql
-sudo systemctl start redis
-sudo systemctl start postgresql
+sudo systemctl enable --now redis
+sudo systemctl enable --now postgresql
 ```
+
+## Centos 8
+
+1. Install NodeJS 10.x:    
+[https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora](https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora)
+
+2. Install yarn:    
+[https://yarnpkg.com/en/docs/install](https://yarnpkg.com/en/docs/install)
+
+3. Install or compile ffmpeg:
+
+* Install - [https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/](https://linuxize.com/post/how-to-install-ffmpeg-on-centos-8/)
+
+4. Install packages:    
+
+```
+sudo dnf update
+sudo dnf install epel-release 
+sudo dnf update
+sudo dnf install nginx postgresql postgresql-server postgresql-contrib openssl gcc-c++ make wget redis git
+```
+
+5. You'll need a symlink for python3 to python for youtube-dl to work
+
+```
+sudo ln -s /usr/bin/python3 /usr/bin/python
+```
+
+6. Initialize the PostgreSQL database:   
+
+```
+sudo postgresql-setup initdb
+```
+
+Now that dependencies are installed, before running PeerTube you should enable and start PostgreSQL and Redis:    
+
+```
+sudo systemctl enable --now redis
+sudo systemctl enable --now postgresql
+```
+
 
 ## Fedora
 
