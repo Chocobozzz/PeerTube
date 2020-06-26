@@ -1,11 +1,13 @@
 {
   "extends": [ "tslint-angular", "tslint-config-standard" ],
   "rules": {
+    "deprecation": {
+      "severity": "warning"
+    },
     "no-inferrable-types": true,
     "eofline": true,
     "max-line-length": [true, 140],
-    "no-floating-promises": false,
-    "no-unused-variable": false, // Memory issues
+    "no-floating-promises": false, // Memory issues
     "await-promise": [true, "PromiseLike"],
     "member-ordering": [true, {
       "order": [

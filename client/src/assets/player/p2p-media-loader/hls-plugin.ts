@@ -13,7 +13,7 @@ type Metadata = {
   levels: Hlsjs.Level[]
 }
 
-type CustomAudioTrack = AudioTrack & { name?: string, lang?: string }
+type CustomAudioTrack = Hlsjs.AudioTrack & { name?: string, lang?: string }
 
 const registerSourceHandler = function (vjs: typeof videojs) {
   if (!Hlsjs.isSupported()) {
@@ -179,8 +179,6 @@ class Html5Hlsjs {
 
     this.player.textTracks().removeEventListener('change', this.handlers.textTracksChange)
     this.uiTextTrackHandled = false
-
-    this.player.audioTracks().removeEventListener('change', this.handlers.audioTracksChange)
 
     this.hls.destroy()
   }

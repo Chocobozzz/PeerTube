@@ -1,4 +1,4 @@
-import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '../../../../shared/models'
+import { getCompleteLocale, getShortLocale, is18nLocale, isDefaultLocale } from '@shared/models'
 
 export class TranslationsManager {
   private static videojsLocaleCache: { [ path: string ]: any } = {}

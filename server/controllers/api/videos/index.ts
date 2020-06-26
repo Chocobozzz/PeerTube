@@ -482,6 +482,7 @@ async function getVideoDescription (req: express.Request, res: express.Response)
 
 async function getVideoFileMetadata (req: express.Request, res: express.Response) {
   const videoFile = await VideoFileModel.loadWithMetadata(toInt(req.params.videoFileId))
+
   return res.json(videoFile.metadata)
 }
 

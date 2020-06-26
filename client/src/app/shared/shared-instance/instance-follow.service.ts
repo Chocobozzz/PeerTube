@@ -4,7 +4,7 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ActivityPubActorType, ActorFollow, FollowState, ResultList } from '@shared/index'
+import { ActivityPubActorType, ActorFollow, FollowState, ResultList } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()

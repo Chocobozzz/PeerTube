@@ -1,5 +1,5 @@
-import { VideoConstant, VideoResolution } from '@shared/models'
-import { FfprobeData } from 'fluent-ffmpeg'
+
+import { VideoConstant, VideoFileMetadata, VideoResolution } from '@shared/models'
 
 export interface VideoFile {
   magnetUri: string
@@ -10,6 +10,6 @@ export interface VideoFile {
   fileUrl: string
   fileDownloadUrl: string
   fps: number
-  metadata?: FfprobeData
+  metadata?: VideoFileMetadata
   metadataUrl?: string
 }

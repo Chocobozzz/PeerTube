@@ -1,4 +1,3 @@
-import { FfprobeData } from 'fluent-ffmpeg'
 import { Observable } from 'rxjs'
 import { catchError, map, switchMap } from 'rxjs/operators'
 import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http'
@@ -19,7 +18,8 @@ import {
   VideoFilter,
   VideoPrivacy,
   VideoSortField,
-  VideoUpdate
+  VideoUpdate,
+  VideoFileMetadata
 } from '@shared/models'
 import { environment } from '../../../../environments/environment'
 import { Account, AccountService } from '../account'
@@ -275,7 +275,7 @@ export class VideoService implements VideosProvider {
 
   getVideoFileMetadata (metadataUrl: string) {
     return this.authHttp
-               .get<FfprobeData>(metadataUrl)
+               .get<VideoFileMetadata>(metadataUrl)
                .pipe(
                  catchError(err => this.restExtractor.handleError(err))
                )

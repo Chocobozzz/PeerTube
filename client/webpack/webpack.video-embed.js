@@ -1,7 +1,6 @@
 const helpers = require('./helpers')
 const path = require('path')
 
-const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const TerserPlugin = require('terser-webpack-plugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
@@ -29,7 +28,7 @@ module.exports = function () {
       alias: {
         'video.js$': path.resolve('node_modules/video.js/core.js'),
         '@root-helpers': path.resolve('src/root-helpers'),
-        '@shared': path.resolve('../shared')
+        '@shared/models': path.resolve('../shared/models'),
       }
     },
 
@@ -54,13 +53,12 @@ module.exports = function () {
           test: /\.ts$/,
           use: [
             {
-              loader: 'awesome-typescript-loader',
+              loader: 'ts-loader',
               options: {
-                configFileName: 'tsconfig.json'
+                configFile: 'tsconfig.base.json'
               }
             }
-          ],
-          exclude: [/\.(spec|e2e)\.ts$/]
+          ]
         },
 
         {
@@ -75,12 +73,6 @@ module.exports = function () {
                   importLoaders: 1
                 }
               },
-              // {
-              //   loader: 'resolve-url-loader',
-              //   options: {
-              //     debug: true
-              //   }
-              // },
               {
                 loader: 'sass-loader',
                 options: {
@@ -134,8 +126,6 @@ module.exports = function () {
           whitelist: [ '*vjs*', '*video-js*' ]
         }
       }),
-
-      new CheckerPlugin(),
 
       new HtmlWebpackPlugin({
         template: 'src/standalone/videos/embed.html',

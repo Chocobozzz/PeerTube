@@ -1,0 +1,48 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "downlevelIteration": true,
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "module": "esnext",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors":true,
+    "alwaysStrict": true,
+    "importHelpers": true,
+    "strictBindCallApply": true,
+    "target": "es2015",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "video.js": [ "node_modules/video.js/core" ],
+      "@app/*": [ "src/app/*" ],
+      "@shared/models/*": [ "../shared/models/*" ],
+      "@shared/models": [ "../shared/models" ],
+      "@shared/core-utils": [ "../shared/core-utils" ],
+      "@shared/core-utils/*": [ "../shared/core-utils/*" ],
+      "@root-helpers/*": [ "src/root-helpers/*" ],
+      "fs": [ "src/shims/noop.ts" ],
+      "http": [ "src/shims/http.ts" ],
+      "https": [ "src/shims/https.ts" ],
+      "path": [ "src/shims/path.ts" ],
+      "stream": [ "src/shims/noop.ts" ],
+      "crypto": [ "src/shims/noop.ts" ]
+    }
+  },
+  "angularCompilerOptions": {
+    "strictInjectionParameters": true,
+    "fullTemplateTypeCheck": true,
+    "strictTemplates": true
+  }
+}
