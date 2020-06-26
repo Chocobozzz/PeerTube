@@ -17,7 +17,7 @@
             <span class="text-muted">{{ videoAbuse.reporterAccount.nameWithHost }}</span>
           </div>
         </a>
-        <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + videoAbuse.reporterAccount.displayName + '&quot;' }" class="ml-auto text-muted video-details-links" i18n>
+        <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + videoAbuse.reporterAccount.displayName + '&quot;' }" class="ml-auto text-muted video-details-links" i18n>
           {videoAbuse.countReportsForReporter, plural, =1 {1 report} other {{{ videoAbuse.countReportsForReporter }} reports}}<span class="ml-1 glyphicon glyphicon-flag"></span>
         </a>
       </span>

@@ -68,8 +68,9 @@ export class RestService {
   parseQueryStringFilter (q: string, prefixes: QueryStringFilterPrefixes): ParseQueryStringFilterResult {
     if (!q) return {}
 
-    // Tokenize the strings using spaces
-    const tokens = q.split(' ').filter(token => !!token)
+    // Tokenize the strings using spaces that are not in quotes
+    const tokens = q.match(/(?:[^\s"]+|"[^"]*")+/g)
+                    .filter(token => !!token)
 
     // Build prefix array
     const prefixeStrings = Object.values(prefixes)
@@ -88,6 +89,7 @@ export class RestService {
 
       const matchedTokens = tokens.filter(t => t.startsWith(prefix))
                                   .map(t => t.slice(prefix.length)) // Keep the value filter
+                                  .map(t => t.replace(/^"|"$/g, ''))
                                   .map(t => {
                                     if (prefixObj.handler) return prefixObj.handler(t)
 
