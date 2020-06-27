@@ -205,7 +205,7 @@ async function createUser (req: express.Request, res: express.Response) {
 
   Hooks.runAction('action:api.user.created', { body, user, account, videoChannel })
 
-  return res.json({
+  return res.status(201).json({
     user: {
       id: user.id,
       account: {

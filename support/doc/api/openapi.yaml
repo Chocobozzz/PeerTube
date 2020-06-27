@@ -484,12 +484,30 @@ paths:
       tags:
         - Users
       responses:
-        '200':
-          description: successful operation
+        '201':
+          description: user created
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AddUserResponse'
+          links:
+            # GET /users/{id}
+            GetUserId:
+              operationId: getUserId
+              parameters:
+                id: '$response.body#/user/id'
+            # PUT /users/{id}
+            PutUserId:
+              operationId: putUserId
+              parameters:
+                id: '$response.body#/user/id'
+            # DELETE /users/{id}
+            DelUserId:
+              operationId: delUserId
+              parameters:
+                id: '$response.body#/user/id'
+        '403':
+          description: insufficient authority to create an admin or moderator
       requestBody:
         content:
           application/json:
@@ -517,6 +535,8 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
   '/users/{id}':
+    parameters:
+      - $ref: '#/components/parameters/id'
     delete:
       summary: Delete a user
       security:
@@ -524,8 +544,7 @@ paths:
             - admin
       tags:
         - Users
-      parameters:
-        - $ref: '#/components/parameters/id'
+      operationId: delUserId
       responses:
         '204':
           description: successful operation
@@ -535,8 +554,7 @@ paths:
         - OAuth2: []
       tags:
         - Users
-      parameters:
-        - $ref: '#/components/parameters/id'
+      operationId: getUserId
       responses:
         '200':
           description: successful operation
@@ -550,8 +568,7 @@ paths:
         - OAuth2: []
       tags:
         - Users
-      parameters:
-        - $ref: '#/components/parameters/id'
+      operationId: putUserId
       responses:
         '204':
           description: successful operation
@@ -701,12 +718,28 @@ paths:
         '200':
           description: successful operation
     post:
+      tags:
+        - My Subscriptions
       summary: Add subscription to my user
       security:
         - OAuth2:
             - user
-      tags:
-        - My Subscriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uri:
+                  type: string
+                  format: uri
+                  description: uri of the video channels to subscribe to
+              required:
+                - uri
+            examples:
+              default:
+                value:
+                  uri: 008a0e54-375d-49d0-8379-143202e24152@video.lqdn.fr
       responses:
         '200':
           description: successful operation
@@ -816,7 +849,7 @@ paths:
         - My Notifications
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
@@ -849,7 +882,7 @@ paths:
         - My Notifications
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               type: object
               properties:
@@ -1930,6 +1963,9 @@ paths:
                   type: integer
               required:
                 - displayName
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
 
   /video-playlists/{id}:
     get:
@@ -1978,6 +2014,9 @@ paths:
                 videoChannelId:
                   description: Video channel in which the playlist will be published
                   type: integer
+            encoding:
+              thumbnailfile:
+                contentType: image/jpeg
     delete:
       summary: Delete a video playlist
       security:
@@ -2242,6 +2281,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
+        '404':
+          description: video does not exist
       requestBody:
         content:
           application/json:
@@ -2286,6 +2327,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CommentThreadPostResponse'
+        '404':
+          description: thread or video does not exist
       requestBody:
         content:
           application/json:
@@ -2328,6 +2371,8 @@ paths:
       responses:
         '204':
           description: successful operation
+        '404':
+          description: video does not exist
   /search/videos:
     get:
       tags:
@@ -2390,6 +2435,9 @@ paths:
           description: Get videos that have this maximum duration
           schema:
             type: integer
+      callbacks:
+        'searchTarget === search-index':
+          $ref: '#/components/callbacks/searchIndex'
       responses:
         '200':
           description: successful operation
@@ -2397,6 +2445,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VideoListResponse'
+        '500':
+          description: search index unavailable
   /search/video-channels:
     get:
       tags:
@@ -2416,6 +2466,9 @@ paths:
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/searchTarget'
         - $ref: '#/components/parameters/sort'
+      callbacks:
+        'searchTarget === search-index':
+          $ref: '#/components/callbacks/searchIndex'
       responses:
         '200':
           description: successful operation
@@ -2425,6 +2478,8 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoChannel'
+        '500':
+          description: search index unavailable
   /blocklist/accounts:
     get:
       tags:
@@ -3455,6 +3510,7 @@ components:
         - 1
         - 2
       description: 'The user role (Admin = `0`, Moderator = `1`, User = `2`)'
+      example: 2
 
     VideoStateConstant:
       properties:
@@ -4481,12 +4537,18 @@ components:
           format: date-time
     AddUserResponse:
       properties:
-        id:
-          type: integer
-        uuid:
-          type: string
-          format: uuid
-          example: 9c9de5e8-0a1e-484a-b099-e80766180a6d
+        user:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 8
+            account:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 37
     VideoUploadResponse:
       properties:
         video:
@@ -5157,3 +5219,15 @@ components:
           maxItems: 100
           items:
             $ref: '#/components/schemas/Plugin'
+  callbacks:
+    searchIndex:
+      '{%CONFIG.SEARCH.SEARCH_INDEX.URL%}/api/v1/search/videos/':
+        post:
+          summary: third-party search index MAY be used instead of the local index, if enabled by the instance admin. see `searchTarget`
+          responses:
+            '200':
+              description: successful operation
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/VideoListResponse'
