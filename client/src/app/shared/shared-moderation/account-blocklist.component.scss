@@ -10,6 +10,10 @@
   }
 }
 
+.chip {
+  @include chip;
+}
+
 .unblock-button {
   @include peertube-button;
   @include grey-button;
