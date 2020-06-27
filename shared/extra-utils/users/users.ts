@@ -29,7 +29,7 @@ function createUser (parameters: CreateUserArgs) {
     videoQuota = 1000000,
     videoQuotaDaily = -1,
     role = UserRole.USER,
-    specialStatus = 200
+    specialStatus = 201
   } = parameters
 
   const path = '/api/v1/users'

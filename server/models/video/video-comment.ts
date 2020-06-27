@@ -427,8 +427,31 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     return VideoCommentModel.findAndCountAll<MComment>(query)
   }
 
-  static async listForFeed (start: number, count: number, videoId?: number): Promise<MCommentOwnerVideoFeed[]> {
+  static async listForFeed (parameters: {
+    start: number
+    count: number
+    videoId?: number
+    accountId?: number
+    videoChannelId?: number
+  }): Promise<MCommentOwnerVideoFeed[]> {
     const serverActor = await getServerActor()
+    const { start, count, videoId, accountId, videoChannelId } = parameters
+
+    const accountExclusion = {
+      [Op.notIn]: Sequelize.literal(
+        '(' + buildBlockedAccountSQL([ serverActor.Account.id, '"Video->VideoChannel"."accountId"' ]) + ')'
+      )
+    }
+    const accountWhere = accountId
+      ? {
+          [Op.and]: {
+            ...accountExclusion,
+            [Op.eq]: accountId
+          }
+        }
+      : accountExclusion
+
+    const videoChannelWhere = videoChannelId ? { id: videoChannelId } : undefined
 
     const query = {
       order: [ [ 'createdAt', 'DESC' ] ] as Order,
@@ -436,11 +459,7 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
       limit: count,
       where: {
         deletedAt: null,
-        accountId: {
-          [Op.notIn]: Sequelize.literal(
-            '(' + buildBlockedAccountSQL([ serverActor.Account.id, '"Video->VideoChannel"."accountId"' ]) + ')'
-          )
-        }
+        accountId: accountWhere
       },
       include: [
         {
@@ -454,7 +473,8 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
             {
               attributes: [ 'accountId' ],
               model: VideoChannelModel.unscoped(),
-              required: true
+              required: true,
+              where: videoChannelWhere
             }
           ]
         }

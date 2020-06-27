@@ -1147,7 +1147,8 @@ paths:
                   description: Whether or not we wait transcoding before publish the video
                   type: string
                 support:
-                  description: Text describing how to support the video uploader
+                  description: A text tell the audience how to support the video creator
+                  example: Please support my work on <insert crowdfunding plateform>! <3
                   type: string
                 nsfw:
                   description: Whether or not this video contains sensitive content
@@ -1305,7 +1306,8 @@ paths:
                   description: Whether or not we wait transcoding before publish the video
                   type: string
                 support:
-                  description: Text describing how to support the video uploader
+                  description: A text tell the audience how to support the video creator
+                  example: Please support my work on <insert crowdfunding plateform>! <3
                   type: string
                 nsfw:
                   description: Whether or not this video contains sensitive content
@@ -1422,7 +1424,8 @@ paths:
                   description: Whether or not we wait transcoding before publish the video
                   type: string
                 support:
-                  description: Text describing how to support the video uploader
+                  description: A text tell the audience how to support the video creator
+                  example: Please support my work on <insert crowdfunding plateform>! <3
                   type: string
                 nsfw:
                   description: Whether or not this video contains sensitive content
@@ -2723,7 +2726,7 @@ paths:
         - name: format
           in: path
           required: true
-          description: 'format expected (we focus on making `rss` the most featureful ; it serves Media RSS)'
+          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
           schema:
             type: string
             enum:
@@ -2737,6 +2740,26 @@ paths:
         - name: videoId
           in: query
           description: 'limit listing to a specific video'
+          schema:
+            type: string
+        - name: accountId
+          in: query
+          description: 'limit listing to a specific account'
+          schema:
+            type: string
+        - name: accountName
+          in: query
+          description: 'limit listing to a specific account'
+          schema:
+            type: string
+        - name: videoChannelId
+          in: query
+          description: 'limit listing to a specific video channel'
+          schema:
+            type: string
+        - name: videoChannelName
+          in: query
+          description: 'limit listing to a specific video channel'
           schema:
             type: string
       responses:
@@ -2763,6 +2786,13 @@ paths:
             application/json:
               schema:
                 type: object
+        '400':
+          x-summary: field inconsistencies
+          description: >
+            Arises when:
+              - videoId filter is mixed with a channel filter
+        '404':
+          description: video, video channel or account not found
         '406':
           description: accept header unsupported
   '/feeds/videos.{format}':
@@ -2781,7 +2811,7 @@ paths:
         - name: format
           in: path
           required: true
-          description: 'format expected (we focus on making `rss` the most featureful ; it serves Media RSS)'
+          description: 'format expected (we focus on making `rss` the most featureful ; it serves [Media RSS](https://www.rssboard.org/media-rss))'
           schema:
             type: string
             enum:
@@ -2842,6 +2872,8 @@ paths:
             application/json:
               schema:
                 type: object
+        '404':
+          description: video channel or account not found
         '406':
           description: accept header unsupported
   /plugins:
@@ -3775,6 +3807,7 @@ components:
               type: string
             support:
               type: string
+              description: A text tell the audience how to support the video creator
               example: Please support my work on <insert crowdfunding plateform>! <3
             channel:
               $ref: '#/components/schemas/VideoChannel'
@@ -4806,6 +4839,7 @@ components:
         support:
           type: string
           description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
+          example: Please support my work on <insert crowdfunding plateform>! <3
       required:
         - name
         - displayName
@@ -4818,6 +4852,7 @@ components:
         support:
           type: string
           description: 'A text shown by default on all videos of this channel, to tell the audience how to support it'
+          example: Please support my work on <insert crowdfunding plateform>! <3
         bulkVideosSupportUpdate:
           type: boolean
           description: 'Update the support field for all videos of this channel'

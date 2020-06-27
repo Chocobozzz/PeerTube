@@ -70,6 +70,12 @@ const videoCommentsFeedsValidator = [
 
     if (areValidationErrors(req, res)) return
 
+    if (req.query.videoId && (req.query.videoChannelId || req.query.videoChannelName)) {
+      return res.status(400).send({
+        message: 'videoId cannot be mixed with a channel filter'
+      }).end()
+    }
+
     if (req.query.videoId && !await doesVideoExist(req.query.videoId, res)) return
 
     return next()
