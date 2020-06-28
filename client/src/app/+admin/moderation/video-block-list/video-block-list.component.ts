@@ -39,7 +39,8 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
       [
         {
           label: this.i18n('Internal actions'),
-          isHeader: true
+          isHeader: true,
+          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
         },
         {
           label: this.i18n('Switch video block to manual'),
@@ -54,7 +55,8 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
 
               err => this.notifier.error(err.message)
             )
-          }
+          },
+          isDisplayed: videoBlock => videoBlock.type === VideoBlacklistType.AUTO_BEFORE_PUBLISHED
         }
       ],
       [
@@ -63,12 +65,12 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
           isHeader: true
         },
         {
-          label: this.i18n('Unblock video'),
+          label: this.i18n('Unblock'),
           handler: videoBlock => this.unblockVideo(videoBlock)
         },
 
         {
-          label: this.i18n('Delete video'),
+          label: this.i18n('Delete'),
           handler: async videoBlock => {
             const res = await this.confirmService.confirm(
               this.i18n('Do you really want to delete this video?'),
