@@ -141,7 +141,7 @@ export class LoginComponent extends FormReactive implements OnInit, AfterViewIni
 
   private handleError (err: any) {
     if (err.message.indexOf('credentials are invalid') !== -1) this.error = this.i18n('Incorrect username or password.')
-    else if (err.message.indexOf('blocked') !== -1) this.error = this.i18n('You account is blocked.')
+    else if (err.message.indexOf('blocked') !== -1) this.error = this.i18n('Your account is blocked.')
     else this.error = err.message
   }
 }
