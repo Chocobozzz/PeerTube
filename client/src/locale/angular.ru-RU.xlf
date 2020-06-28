@@ -787,7 +787,7 @@
       </trans-unit>
       <trans-unit id="98ae65ebba6c43c5cda8bdbd6f03e1daa0595af1" datatype="html">
         <source>Recommended</source>
-        <target state="new">Recommended</target>
+        <target state="translated">Рекомендуется</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-forms/peertube-checkbox.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="9b3287f52c239cad05ec98391553e5052ba1aa66">
@@ -4272,7 +4272,7 @@
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
         <source>Help share videos being played</source>
-        <target state="new">Help share videos being played</target>
+        <target state="translated">Помочь поделиться видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
@@ -4282,7 +4282,7 @@
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
         <source>Automatically play videos</source>
-        <target state="new">Automatically play videos</target>
+        <target state="translated">Автоматически воспроизводить видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
@@ -4292,7 +4292,7 @@
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
         <source>Automatically start playing the next video</source>
-        <target state="new">Automatically start playing the next video</target>
+        <target state="translated">Автоматически начать воспроизведение следующего видео</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629" datatype="html">
@@ -5150,37 +5150,37 @@
       </trans-unit>
       <trans-unit id="824c2b28d0d9e771e3caf1d02021b740ac97076d" datatype="html">
         <source>PROFILE</source>
-        <target state="new">PROFILE</target>
+        <target state="translated">ПРОФИЛЬ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="e09928fe11389fd1ea310890ba5dc9df05d53509" datatype="html">
         <source>VIDEO SETTINGS</source>
-        <target state="new">VIDEO SETTINGS</target>
+        <target state="translated">НАСТРОЙКИ ВИДЕО</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">33</context></context-group>
       </trans-unit>
       <trans-unit id="f70dbe547767b3a0f0006d44688beee60c884417" datatype="html">
         <source>NOTIFICATIONS</source>
-        <target state="new">NOTIFICATIONS</target>
+        <target state="translated">УВЕДОМЛЕНИЯ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="8e4cafda991c13b5103e45195f7f2488974a913e" datatype="html">
         <source>INTERFACE</source>
-        <target state="new">INTERFACE</target>
+        <target state="translated">ИНТЕРФЕЙС</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">54</context></context-group>
       </trans-unit>
       <trans-unit id="ce43cc343ed3bd908e593db994ca3f6dbff079df" datatype="html">
         <source>PASSWORD</source>
-        <target state="new">PASSWORD</target>
+        <target state="translated">ПАРОЛЬ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">64</context></context-group>
       </trans-unit>
       <trans-unit id="d5e31741c591719630b5bba1ba38f8c1a04c10e3" datatype="html">
         <source>EMAIL</source>
-        <target state="new">EMAIL</target>
+        <target state="translated">ЭЛЕКТРОННАЯ ПОЧТА</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">74</context></context-group>
       </trans-unit>
       <trans-unit id="e6c299a11dadb59bf789ecc5d85eb1a1ebff4613" datatype="html">
         <source>DANGER ZONE</source>
-        <target state="new">DANGER ZONE</target>
+        <target state="translated">ОПАСНАЯ ЗОНА</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">186</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context><context context-type="linenumber">186</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">84</context></context-group>
@@ -5874,13 +5874,13 @@
       </trans-unit>
       <trans-unit id="d5f0913d08d01648d7e6165c168a99ccd06d1f4c" datatype="html">
         <source>My Channels</source>
-        <target state="new">My Channels</target>
+        <target state="translated">Мои Каналы</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">4</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="dff0536e48bacc3a4b568f32f9ed8ffc14767cbb" datatype="html">
         <source>NEW CHANNEL</source>
-        <target state="new">NEW CHANNEL</target>
+        <target state="translated">НОВЫЙ КАНАЛ</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">25</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channel-edit.component.html</context><context context-type="linenumber">25</context></context-group>
       </trans-unit>
