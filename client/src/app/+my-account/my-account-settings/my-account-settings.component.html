@@ -1,11 +1,18 @@
 <h1 class="sr-only" i18n>Settings</h1>
-<div class="form-row"> <!-- profile grid -->
-  <div class="form-group col-12 col-lg-4 col-xl-3">
-    <h2 i18n class="account-title">PROFILE</h2>
-  </div>
+<div class="form-row"> <!-- preview -->
+  <div class="form-group col-12 col-lg-4 col-xl-3"></div>
 
   <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
     <my-actor-avatar-info [actor]="user.account" (avatarChange)="onAvatarChange($event)"></my-actor-avatar-info>
+  </div>
+</div>
+
+<div class="form-row"> <!-- profile settings grid -->
+  <div class="form-group col-12 col-lg-4 col-xl-3">
+    <h2 i18n class="account-title">PROFILE SETTINGS</h2>
+  </div>
+
+  <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
     <div class="user-quota mb-3">
       <div>

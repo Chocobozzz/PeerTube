@@ -39,14 +39,14 @@ export class BlocklistService {
                )
   }
 
-  blockAccountByUser (account: Account) {
+  blockAccountByUser (account: Pick<Account, 'nameWithHost'>) {
     const body = { accountName: account.nameWithHost }
 
     return this.authHttp.post(BlocklistService.BASE_USER_BLOCKLIST_URL + '/accounts', body)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  unblockAccountByUser (account: Account) {
+  unblockAccountByUser (account: Pick<Account, 'nameWithHost'>) {
     const path = BlocklistService.BASE_USER_BLOCKLIST_URL + '/accounts/' + account.nameWithHost
 
     return this.authHttp.delete(path)
@@ -102,14 +102,14 @@ export class BlocklistService {
                )
   }
 
-  blockAccountByInstance (account: Account) {
+  blockAccountByInstance (account: Pick<Account, 'nameWithHost'>) {
     const body = { accountName: account.nameWithHost }
 
     return this.authHttp.post(BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts', body)
                .pipe(catchError(err => this.restExtractor.handleError(err)))
   }
 
-  unblockAccountByInstance (account: Account) {
+  unblockAccountByInstance (account: Pick<Account, 'nameWithHost'>) {
     const path = BlocklistService.BASE_SERVER_BLOCKLIST_URL + '/accounts/' + account.nameWithHost
 
     return this.authHttp.delete(path)

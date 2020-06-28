@@ -15,7 +15,7 @@
     <ng-container *ngFor="let video of (videos$ | async); let i = index; let length = count">
       <my-video-miniature
         [displayOptions]="displayOptions" [video]="video" [user]="userMiniature"
-        (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()">
+        (videoBlocked)="onVideoRemoved()" (videoRemoved)="onVideoRemoved()" (videoAccountMuted)="onVideoRemoved()">
       </my-video-miniature>
 
       <hr *ngIf="!playlist && i == 0 && length > 1" />

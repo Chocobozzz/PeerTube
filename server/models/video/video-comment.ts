@@ -444,11 +444,11 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
     }
     const accountWhere = accountId
       ? {
-          [Op.and]: {
-            ...accountExclusion,
-            [Op.eq]: accountId
-          }
+        [Op.and]: {
+          ...accountExclusion,
+          [Op.eq]: accountId
         }
+      }
       : accountExclusion
 
     const videoChannelWhere = videoChannelId ? { id: videoChannelId } : undefined

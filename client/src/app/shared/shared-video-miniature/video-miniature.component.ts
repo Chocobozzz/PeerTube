@@ -60,6 +60,7 @@ export class VideoMiniatureComponent implements OnInit {
   @Output() videoBlocked = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
   @Output() videoRemoved = new EventEmitter()
+  @Output() videoAccountMuted = new EventEmitter()
 
   videoActionsDisplayOptions: VideoActionsDisplayType = {
     playlist: true,
@@ -68,7 +69,8 @@ export class VideoMiniatureComponent implements OnInit {
     blacklist: true,
     delete: true,
     report: true,
-    duplicate: true
+    duplicate: true,
+    mute: true
   }
   showActions = false
   serverConfig: ServerConfig
@@ -204,6 +206,10 @@ export class VideoMiniatureComponent implements OnInit {
 
   onVideoRemoved () {
     this.videoRemoved.emit()
+  }
+
+  onVideoAccountMuted () {
+    this.videoAccountMuted.emit()
   }
 
   isUserLoggedIn () {
