@@ -79,7 +79,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('Ownership changes'),
           routerLink: '/my-account/ownership',
-          iconName: 'im-with-her'
+          iconName: 'forward'
         }
       ]
     }

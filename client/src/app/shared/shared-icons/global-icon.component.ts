@@ -21,7 +21,7 @@ const icons = {
   'download': require('!!raw-loader?!../../../assets/images/global/download.svg').default,
   'go': require('!!raw-loader?!../../../assets/images/menu/go.svg').default,
   'edit': require('!!raw-loader?!../../../assets/images/global/edit.svg').default,
-  'im-with-her': require('!!raw-loader?!../../../assets/images/global/im-with-her.svg').default,
+  'forward': require('!!raw-loader?!../../../assets/images/global/forward.svg').default,
   'delete': require('!!raw-loader?!../../../assets/images/global/delete.svg').default,
   'server': require('!!raw-loader?!../../../assets/images/global/server.svg').default,
   'cross': require('!!raw-loader?!../../../assets/images/global/cross.svg').default,
