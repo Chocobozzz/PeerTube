@@ -1,7 +1,7 @@
 import { VideoChangeOwnershipModel } from '@server/models/video/video-change-ownership'
 import { PickWith } from '@shared/core-utils'
 import { MAccountDefault, MAccountFormattable } from '../account/account'
-import { MVideo, MVideoWithAllFiles } from './video'
+import { MVideoWithAllFiles, MVideoFormattable } from './video'
 
 type Use<K extends keyof VideoChangeOwnershipModel, M> = PickWith<VideoChangeOwnershipModel, K, M>
 
@@ -23,4 +23,4 @@ export type MVideoChangeOwnershipFormattable =
   Pick<MVideoChangeOwnership, 'id' | 'status' | 'createdAt'> &
   Use<'Initiator', MAccountFormattable> &
   Use<'NextOwner', MAccountFormattable> &
-  Use<'Video', Pick<MVideo, 'id' | 'uuid' | 'url' | 'name'>>
+  Use<'Video', MVideoFormattable>
