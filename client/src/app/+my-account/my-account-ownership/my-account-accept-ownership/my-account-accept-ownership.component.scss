@@ -5,6 +5,10 @@ select {
   display: block;
 }
 
+.peertube-select-container {
+  @include peertube-select-container(350px);
+}
+
 .form-group {
   margin: 20px 0;
 }

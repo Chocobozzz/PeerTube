@@ -46,7 +46,8 @@ enum ScopeNames {
         model: VideoModel.scope([
           VideoScopeNames.WITH_THUMBNAILS,
           VideoScopeNames.WITH_WEBTORRENT_FILES,
-          VideoScopeNames.WITH_STREAMING_PLAYLISTS
+          VideoScopeNames.WITH_STREAMING_PLAYLISTS,
+          VideoScopeNames.WITH_ACCOUNT_DETAILS
         ]),
         required: true
       }
@@ -129,12 +130,7 @@ export class VideoChangeOwnershipModel extends Model<VideoChangeOwnershipModel> 
       status: this.status,
       initiatorAccount: this.Initiator.toFormattedJSON(),
       nextOwnerAccount: this.NextOwner.toFormattedJSON(),
-      video: {
-        id: this.Video.id,
-        uuid: this.Video.uuid,
-        url: this.Video.url,
-        name: this.Video.name
-      },
+      video: this.Video.toFormattedJSON(),
       createdAt: this.createdAt
     }
   }
