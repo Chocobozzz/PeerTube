@@ -3054,7 +3054,7 @@
       </trans-unit>
       <trans-unit id="fee25862814afd08fca2abe1452e6841e8b57b1e" datatype="html">
         <source>Follows &amp; redundancies</source>
-        <target state="translated">Следует &amp; избыточность</target>
+        <target state="translated">Подписка &amp; подписчики</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/follows.component.html</context>
           <context context-type="linenumber">2</context>
@@ -5989,7 +5989,7 @@
       </trans-unit>
       <trans-unit id="fc978c97e261ee6494db916622339aedb633da3a" datatype="html">
         <source>Follows</source>
-        <target state="new">Follows</target>
+        <target state="translated">Подписка</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about.component.html</context><context context-type="linenumber">9</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
@@ -6150,7 +6150,7 @@
       </trans-unit>
       <trans-unit id="92538de0e2f6e64f1d05291132b93c32bed81237" datatype="html">
         <source>STATISTICS</source>
-        <target state="new">STATISTICS</target>
+        <target state="translated">СТАТИСТИКА</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context>
           <context context-type="linenumber">100</context>
@@ -6398,7 +6398,7 @@
       </trans-unit>
       <trans-unit id="eebbc9b6d037b9c08225b769a5f3f333b2789500" datatype="html">
         <source>Followers instances</source>
-        <target state="new">Followers instances</target>
+        <target state="translated">Подписчики экземпляра</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="39dabfebe4a70cc00aa454f790b81cf453d38304" datatype="html">
@@ -6408,12 +6408,12 @@
       </trans-unit>
       <trans-unit id="d4f8e8ce89a1f258702ba0341d7321f972f60b32" datatype="html">
         <source>Followings instances</source>
-        <target state="new">Followings instances</target>
+        <target state="translated">Экземпляр подписан</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">14</context></context-group>
       </trans-unit>
       <trans-unit id="d0f0a0a5da1553964ae4891aaebd2b2c3e5ddae4" datatype="html">
         <source>This instance does not have instances followings.</source>
-        <target state="new">This instance does not have instances followings.</target>
+        <target state="translated">Этот экземпляр не является подписчиком других экземпляров.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-follows/about-follows.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="3d2fb0ff92d3dd1e6040cd79b2a60edac6dea2da" datatype="html">
