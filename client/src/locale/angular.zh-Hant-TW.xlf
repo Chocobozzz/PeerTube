@@ -4904,7 +4904,7 @@
       </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="new">⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</target>
+        <target state="translated">⚠️ 此功能相當依賴於站臺的審核程度與您所選取的搜尋索引。</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">490</context>
@@ -4912,9 +4912,7 @@
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-                        You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-                      </target>
+        <target state="translated">您在生產環境中應該只用審核過的搜尋索引，或<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>自行架站<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>。 </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">492</context>
@@ -4922,7 +4920,7 @@
       </trans-unit>
       <trans-unit id="e5cd21a49e6eefd0610106b6afcd4ed56baab566" datatype="html">
         <source>Search index URL</source>
-        <target state="new">Search index URL</target>
+        <target state="translated">搜尋索引 URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">499</context>
@@ -4930,7 +4928,7 @@
       </trans-unit>
       <trans-unit id="8c720eb4f32907db445c969a451e59a28a15e89c" datatype="html">
         <source>Disable local search in search bar</source>
-        <target state="new">Disable local search in search bar</target>
+        <target state="translated">在搜尋列停用本地搜尋</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">510</context>
@@ -4938,7 +4936,7 @@
       </trans-unit>
       <trans-unit id="3b2b04802c47e4af0057651b972f52dffc92e8e1" datatype="html">
         <source>Otherwise the local search stays used by default</source>
-        <target state="new">Otherwise the local search stays used by default</target>
+        <target state="translated">否則仍預設使用本地搜尋</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">520</context>
