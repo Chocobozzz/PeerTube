@@ -48,6 +48,11 @@
 }
 
 @mixin apply-svg-color ($color) {
+  ::ng-deep .feather,
+  ::ng-deep .material {
+    color: $color;
+  }
+
   ::ng-deep svg {
     path[fill="#000"],
     g[fill="#000"],

@@ -43,7 +43,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS">
-        <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
+        <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           <a (click)="markAsRead(notification)" [routerLink]="notification.videoAbuseUrl">A new video abuse</a> has been created on video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoAbuse.video.name }}</a>
@@ -81,7 +81,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="UserNotificationType.MY_VIDEO_PUBLISHED">
-        <my-global-icon iconName="sparkle" aria-hidden="true"></my-global-icon>
+        <my-global-icon iconName="film" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
           Your video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.video.name }}</a> has been published

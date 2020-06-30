@@ -387,7 +387,8 @@
 
 # Icons
 
- * [Robbie Pearce](https://robbiepearce.com/softies/)
- * [Fork-Awesome](https://github.com/ForkAwesome/Fork-Awesome)
- * `playlist add` by Material UI
- * `language` by Aaron Jin
+ * [Feather Icons](feathericons.com/) (MIT)
+ * `playlist add`, `history`, `subscriptions`, `miscellaneous_services` by Material UI (Apache 2.0)
+ * `support` by Chocobozzz (CC-BY)
+ * `language` by Aaron Jin (CC-BY)
+ * `video-language` by Rigel Kent (CC-BY)

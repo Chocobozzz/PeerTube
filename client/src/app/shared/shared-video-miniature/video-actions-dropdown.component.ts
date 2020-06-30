@@ -283,7 +283,7 @@ export class VideoActionsDropdownComponent implements OnChanges {
           label: this.i18n('Report'),
           handler: () => this.showReportModal(),
           isDisplayed: () => this.authService.isLoggedIn() && this.displayOptions.report,
-          iconName: 'alert'
+          iconName: 'flag'
         }
       ],
       [ // actions regarding the account/its server
