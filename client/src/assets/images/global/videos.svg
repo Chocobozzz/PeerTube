@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-  <defs/>
-  <g fill="none" fill-rule="evenodd">
-    <rect width="18" height="16" x="3" y="6" stroke="#000" stroke-width="2" rx="1"/>
-    <path fill="#000" d="M10 17.5v-7.1l5.5 3.5z"/>
-    <rect width="16" height="1" x="4" y="3" fill="#000" rx=".5"/>
-    <rect width="14" height="1" x="5" y="1" fill="#000" rx=".5"/>
-  </g>
-</svg>

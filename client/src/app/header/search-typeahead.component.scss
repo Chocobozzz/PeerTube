@@ -16,15 +16,13 @@
 
 .icon.icon-search {
   @include icon(25px);
-  height: 21px;
-
-  background-color: pvar(--mainForegroundColor);
-  mask: url('../../assets/images/header/search.svg') no-repeat 50% 50%;
+  height: 18px;
 
   // yolo
   position: absolute;
   margin-left: -35px;
-  margin-top: 5px;
+  margin-top: 3.5px;
+  right: 10px;
 }
 
 .jump-to-suggestions {

@@ -10,6 +10,10 @@ my-small-loader ::ng-deep .root {
 .action-button {
   @include peertube-button-link;
   @include button-with-icon(21px, 0, -2px);
+
+  > :nth-child(2) {
+    margin-left: 5px;
+  }
 }
 
 .orange-button {

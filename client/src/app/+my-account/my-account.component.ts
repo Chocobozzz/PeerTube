@@ -30,7 +30,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('My channels'),
           routerLink: '/my-account/video-channels',
-          iconName: 'folder'
+          iconName: 'channel'
         },
         {
           label: this.i18n('My videos'),
@@ -45,7 +45,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('My subscriptions'),
           routerLink: '/my-account/subscriptions',
-          iconName: 'subscriptions'
+          iconName: 'inbox-full'
         },
         {
           label: this.i18n('My history'),
@@ -79,7 +79,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('Ownership changes'),
           routerLink: '/my-account/ownership',
-          iconName: 'forward'
+          iconName: 'ownership-change'
         }
       ]
     }
