@@ -1,26 +1,20 @@
+import { readFileSync } from 'fs-extra'
+import { merge } from 'lodash'
 import { createTransport, Transporter } from 'nodemailer'
+import { join } from 'path'
+import { VideoChannelModel } from '@server/models/video/video-channel'
+import { MVideoBlacklistLightVideo, MVideoBlacklistVideo } from '@server/types/models/video/video-blacklist'
+import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
+import { Abuse, EmailPayload } from '@shared/models'
+import { SendEmailOptions } from '../../shared/models/server/emailer.model'
 import { isTestInstance, root } from '../helpers/core-utils'
 import { bunyanLogger, logger } from '../helpers/logger'
 import { CONFIG, isEmailEnabled } from '../initializers/config'
-import { JobQueue } from './job-queue'
-import { readFileSync } from 'fs-extra'
 import { WEBSERVER } from '../initializers/constants'
-import {
-  MCommentOwnerVideo,
-  MVideo,
-  MVideoAbuseVideo,
-  MVideoAccountLight,
-  MVideoBlacklistLightVideo,
-  MVideoBlacklistVideo
-} from '../types/models/video'
-import { MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
-import { MVideoImport, MVideoImportVideo } from '@server/types/models/video/video-import'
-import { EmailPayload } from '@shared/models'
-import { join } from 'path'
-import { VideoAbuse } from '../../shared/models/videos'
-import { SendEmailOptions } from '../../shared/models/server/emailer.model'
-import { merge } from 'lodash'
-import { VideoChannelModel } from '@server/models/video/video-channel'
+import { MAbuseFull, MActorFollowActors, MActorFollowFull, MUser } from '../types/models'
+import { MCommentOwnerVideo, MVideo, MVideoAccountLight } from '../types/models/video'
+import { JobQueue } from './job-queue'
+
 const Email = require('email-templates')
 
 class Emailer {
@@ -288,28 +282,70 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVideoAbuseModeratorsNotification (to: string[], parameters: {
-    videoAbuse: VideoAbuse
-    videoAbuseInstance: MVideoAbuseVideo
+  addAbuseModeratorsNotification (to: string[], parameters: {
+    abuse: Abuse
+    abuseInstance: MAbuseFull
     reporter: string
   }) {
-    const videoAbuseUrl = WEBSERVER.URL + '/admin/moderation/video-abuses/list?search=%23' + parameters.videoAbuse.id
-    const videoUrl = WEBSERVER.URL + parameters.videoAbuseInstance.Video.getWatchStaticPath()
+    const { abuse, abuseInstance, reporter } = parameters
 
-    const emailPayload: EmailPayload = {
-      template: 'video-abuse-new',
-      to,
-      subject: `New video abuse report from ${parameters.reporter}`,
-      locals: {
-        videoUrl,
-        videoAbuseUrl,
-        videoCreatedAt: new Date(parameters.videoAbuseInstance.Video.createdAt).toLocaleString(),
-        videoPublishedAt: new Date(parameters.videoAbuseInstance.Video.publishedAt).toLocaleString(),
-        videoAbuse: parameters.videoAbuse,
-        reporter: parameters.reporter,
-        action: {
-          text: 'View report #' + parameters.videoAbuse.id,
-          url: videoAbuseUrl
+    const action = {
+      text: 'View report #' + abuse.id,
+      url: WEBSERVER.URL + '/admin/moderation/abuses/list?search=%23' + abuse.id
+    }
+
+    let emailPayload: EmailPayload
+
+    if (abuseInstance.VideoAbuse) {
+      const video = abuseInstance.VideoAbuse.Video
+      const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
+
+      emailPayload = {
+        template: 'video-abuse-new',
+        to,
+        subject: `New video abuse report from ${reporter}`,
+        locals: {
+          videoUrl,
+          isLocal: video.remote === false,
+          videoCreatedAt: new Date(video.createdAt).toLocaleString(),
+          videoPublishedAt: new Date(video.publishedAt).toLocaleString(),
+          videoName: video.name,
+          reason: abuse.reason,
+          videoChannel: video.VideoChannel,
+          action
+        }
+      }
+    } else if (abuseInstance.VideoCommentAbuse) {
+      const comment = abuseInstance.VideoCommentAbuse.VideoComment
+      const commentUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath() + ';threadId=' + comment.getThreadId()
+
+      emailPayload = {
+        template: 'comment-abuse-new',
+        to,
+        subject: `New comment abuse report from ${reporter}`,
+        locals: {
+          commentUrl,
+          isLocal: comment.isOwned(),
+          commentCreatedAt: new Date(comment.createdAt).toLocaleString(),
+          reason: abuse.reason,
+          flaggedAccount: abuseInstance.FlaggedAccount.getDisplayName(),
+          action
+        }
+      }
+    } else {
+      const account = abuseInstance.FlaggedAccount
+      const accountUrl = account.getClientUrl()
+
+      emailPayload = {
+        template: 'account-abuse-new',
+        to,
+        subject: `New account abuse report from ${reporter}`,
+        locals: {
+          accountUrl,
+          accountDisplayName: account.getDisplayName(),
+          isLocal: account.isOwned(),
+          reason: abuse.reason,
+          action
         }
       }
     }

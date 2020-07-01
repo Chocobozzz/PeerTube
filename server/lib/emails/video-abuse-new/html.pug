@@ -6,13 +6,13 @@ block title
 
 block content
   p
-    | #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] received an abuse report for the #{videoAbuse.video.channel.isLocal ? '' : 'remote '}video "
-    a(href=videoUrl) #{videoAbuse.video.name}
-    | " by #[+channel(videoAbuse.video.channel)]
+    | #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] received an abuse report for the #{isLocal ? '' : 'remote '}video "
+    a(href=videoUrl) #{videoName}
+    | " by #[+channel(videoChannel)]
     if videoPublishedAt
       | , published the #{videoPublishedAt}.
     else
       | , uploaded the #{videoCreatedAt} but not yet published.
   p The reporter, #{reporter}, cited the following reason(s):
-  blockquote #{videoAbuse.reason}
+  blockquote #{reason}
   br(style="display: none;")

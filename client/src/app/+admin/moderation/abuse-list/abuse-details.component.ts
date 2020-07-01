@@ -1,19 +1,19 @@
 import { Component, Input } from '@angular/core'
 import { Actor } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoAbusePredefinedReasonsString } from '../../../../../../shared/models/videos/abuse/video-abuse-reason.model'
-import { ProcessedVideoAbuse } from './video-abuse-list.component'
+import { AbusePredefinedReasonsString } from '@shared/models'
+import { ProcessedAbuse } from './abuse-list.component'
 import { durationToString } from '@app/helpers'
 
 @Component({
-  selector: 'my-video-abuse-details',
-  templateUrl: './video-abuse-details.component.html',
+  selector: 'my-abuse-details',
+  templateUrl: './abuse-details.component.html',
   styleUrls: [ '../moderation.component.scss' ]
 })
-export class VideoAbuseDetailsComponent {
-  @Input() videoAbuse: ProcessedVideoAbuse
+export class AbuseDetailsComponent {
+  @Input() abuse: ProcessedAbuse
 
-  private predefinedReasonsTranslations: { [key in VideoAbusePredefinedReasonsString]: string }
+  private predefinedReasonsTranslations: { [key in AbusePredefinedReasonsString]: string }
 
   constructor (
     private i18n: I18n
@@ -31,16 +31,16 @@ export class VideoAbuseDetailsComponent {
   }
 
   get startAt () {
-    return durationToString(this.videoAbuse.startAt)
+    return durationToString(this.abuse.startAt)
   }
 
   get endAt () {
-    return durationToString(this.videoAbuse.endAt)
+    return durationToString(this.abuse.endAt)
   }
 
   getPredefinedReasons () {
-    if (!this.videoAbuse.predefinedReasons) return []
-    return this.videoAbuse.predefinedReasons.map(r => ({
+    if (!this.abuse.predefinedReasons) return []
+    return this.abuse.predefinedReasons.map(r => ({
       id: r,
       label: this.predefinedReasonsTranslations[r]
     }))

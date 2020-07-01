@@ -5,10 +5,10 @@ import {
   MActorId,
   MActorUrl,
   MCommentId,
-  MVideoAbuseId,
   MVideoId,
   MVideoUrl,
-  MVideoUUID
+  MVideoUUID,
+  MAbuseId
 } from '../../types/models'
 import { MVideoPlaylist, MVideoPlaylistUUID } from '../../types/models/video/video-playlist'
 import { MVideoFileVideoUUID } from '../../types/models/video/video-file'
@@ -48,8 +48,8 @@ function getAccountActivityPubUrl (accountName: string) {
   return WEBSERVER.URL + '/accounts/' + accountName
 }
 
-function getVideoAbuseActivityPubUrl (videoAbuse: MVideoAbuseId) {
-  return WEBSERVER.URL + '/admin/video-abuses/' + videoAbuse.id
+function getAbuseActivityPubUrl (abuse: MAbuseId) {
+  return WEBSERVER.URL + '/admin/abuses/' + abuse.id
 }
 
 function getVideoViewActivityPubUrl (byActor: MActorUrl, video: MVideoId) {
@@ -118,7 +118,7 @@ export {
   getVideoCacheStreamingPlaylistActivityPubUrl,
   getVideoChannelActivityPubUrl,
   getAccountActivityPubUrl,
-  getVideoAbuseActivityPubUrl,
+  getAbuseActivityPubUrl,
   getActorFollowActivityPubUrl,
   getActorFollowAcceptActivityPubUrl,
   getVideoAnnounceActivityPubUrl,

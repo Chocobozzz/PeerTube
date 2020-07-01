@@ -1,4 +1,5 @@
 import * as Bluebird from 'bluebird'
+import { remove } from 'fs-extra'
 import { maxBy, minBy, pick } from 'lodash'
 import { join } from 'path'
 import { FindOptions, IncludeOptions, Op, QueryTypes, ScopeOptions, Sequelize, Transaction, WhereOptions } from 'sequelize'
@@ -23,10 +24,18 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { UserRight, VideoPrivacy, VideoState, ResultList } from '../../../shared'
+import { buildNSFWFilter } from '@server/helpers/express-utils'
+import { getPrivaciesForFederation, isPrivacyForFederation } from '@server/helpers/video'
+import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
+import { getServerActor } from '@server/models/application/application'
+import { ModelCache } from '@server/models/model-cache'
+import { VideoFile } from '@shared/models/videos/video-file.model'
+import { ResultList, UserRight, VideoPrivacy, VideoState } from '../../../shared'
 import { VideoTorrentObject } from '../../../shared/models/activitypub/objects'
 import { Video, VideoDetails } from '../../../shared/models/videos'
+import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
 import { VideoFilter } from '../../../shared/models/videos/video-query.type'
+import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import { peertubeTruncate } from '../../helpers/core-utils'
 import { isActivityPubUrlValid } from '../../helpers/custom-validators/activitypub/misc'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
@@ -43,6 +52,7 @@ import {
 } from '../../helpers/custom-validators/videos'
 import { getVideoFileResolution } from '../../helpers/ffmpeg-utils'
 import { logger } from '../../helpers/logger'
+import { CONFIG } from '../../initializers/config'
 import {
   ACTIVITY_PUB,
   API_VERSION,
@@ -59,40 +69,6 @@ import {
   WEBSERVER
 } from '../../initializers/constants'
 import { sendDeleteVideo } from '../../lib/activitypub/send'
-import { AccountModel } from '../account/account'
-import { AccountVideoRateModel } from '../account/account-video-rate'
-import { ActorModel } from '../activitypub/actor'
-import { AvatarModel } from '../avatar/avatar'
-import { ServerModel } from '../server/server'
-import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
-import { TagModel } from './tag'
-import { VideoAbuseModel } from './video-abuse'
-import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
-import { VideoCommentModel } from './video-comment'
-import { VideoFileModel } from './video-file'
-import { VideoShareModel } from './video-share'
-import { VideoTagModel } from './video-tag'
-import { ScheduleVideoUpdateModel } from './schedule-video-update'
-import { VideoCaptionModel } from './video-caption'
-import { VideoBlacklistModel } from './video-blacklist'
-import { remove } from 'fs-extra'
-import { VideoViewModel } from './video-view'
-import { VideoRedundancyModel } from '../redundancy/video-redundancy'
-import {
-  videoFilesModelToFormattedJSON,
-  VideoFormattingJSONOptions,
-  videoModelToActivityPubObject,
-  videoModelToFormattedDetailsJSON,
-  videoModelToFormattedJSON
-} from './video-format-utils'
-import { UserVideoHistoryModel } from '../account/user-video-history'
-import { VideoImportModel } from './video-import'
-import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
-import { VideoPlaylistElementModel } from './video-playlist-element'
-import { CONFIG } from '../../initializers/config'
-import { ThumbnailModel } from './thumbnail'
-import { ThumbnailType } from '../../../shared/models/videos/thumbnail.type'
-import { VideoStreamingPlaylistType } from '../../../shared/models/videos/video-streaming-playlist.type'
 import {
   MChannel,
   MChannelAccountDefault,
@@ -118,15 +94,39 @@ import {
   MVideoWithFile,
   MVideoWithRights
 } from '../../types/models'
-import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
 import { MThumbnail } from '../../types/models/video/thumbnail'
-import { VideoFile } from '@shared/models/videos/video-file.model'
-import { getHLSDirectory, getTorrentFileName, getTorrentFilePath, getVideoFilename, getVideoFilePath } from '@server/lib/video-paths'
-import { ModelCache } from '@server/models/model-cache'
+import { MVideoFile, MVideoFileStreamingPlaylistVideo } from '../../types/models/video/video-file'
+import { VideoAbuseModel } from '../abuse/video-abuse'
+import { AccountModel } from '../account/account'
+import { AccountVideoRateModel } from '../account/account-video-rate'
+import { UserVideoHistoryModel } from '../account/user-video-history'
+import { ActorModel } from '../activitypub/actor'
+import { AvatarModel } from '../avatar/avatar'
+import { VideoRedundancyModel } from '../redundancy/video-redundancy'
+import { ServerModel } from '../server/server'
+import { buildTrigramSearchIndex, buildWhereIdOrUUID, getVideoSort, isOutdated, throwIfNotValid } from '../utils'
+import { ScheduleVideoUpdateModel } from './schedule-video-update'
+import { TagModel } from './tag'
+import { ThumbnailModel } from './thumbnail'
+import { VideoBlacklistModel } from './video-blacklist'
+import { VideoCaptionModel } from './video-caption'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from './video-channel'
+import { VideoCommentModel } from './video-comment'
+import { VideoFileModel } from './video-file'
+import {
+  videoFilesModelToFormattedJSON,
+  VideoFormattingJSONOptions,
+  videoModelToActivityPubObject,
+  videoModelToFormattedDetailsJSON,
+  videoModelToFormattedJSON
+} from './video-format-utils'
+import { VideoImportModel } from './video-import'
+import { VideoPlaylistElementModel } from './video-playlist-element'
 import { buildListQuery, BuildVideosQueryOptions, wrapForAPIResults } from './video-query-builder'
-import { buildNSFWFilter } from '@server/helpers/express-utils'
-import { getServerActor } from '@server/models/application/application'
-import { getPrivaciesForFederation, isPrivacyForFederation } from "@server/helpers/video"
+import { VideoShareModel } from './video-share'
+import { VideoStreamingPlaylistModel } from './video-streaming-playlist'
+import { VideoTagModel } from './video-tag'
+import { VideoViewModel } from './video-view'
 
 export enum ScopeNames {
   AVAILABLE_FOR_LIST_IDS = 'AVAILABLE_FOR_LIST_IDS',

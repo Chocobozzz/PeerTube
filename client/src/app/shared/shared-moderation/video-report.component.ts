@@ -3,13 +3,13 @@ import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Notifier } from '@app/core'
-import { FormReactive, FormValidatorService, VideoAbuseValidatorsService } from '@app/shared/shared-forms'
+import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { videoAbusePredefinedReasonsMap, VideoAbusePredefinedReasonsString } from '@shared/models/videos/abuse/video-abuse-reason.model'
+import { abusePredefinedReasonsMap, AbusePredefinedReasonsString } from '@shared/models'
 import { Video } from '../shared-main'
-import { VideoAbuseService } from './video-abuse.service'
+import { AbuseService } from './abuse.service'
 
 @Component({
   selector: 'my-video-report',
@@ -22,7 +22,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
-  predefinedReasons: { id: VideoAbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
+  predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
   embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
@@ -30,8 +30,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
-    private videoAbuseValidatorsService: VideoAbuseValidatorsService,
-    private videoAbuseService: VideoAbuseService,
+    private abuseValidatorsService: AbuseValidatorsService,
+    private abuseService: AbuseService,
     private notifier: Notifier,
     private sanitizer: DomSanitizer,
     private i18n: I18n
@@ -69,8 +69,8 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   ngOnInit () {
     this.buildForm({
-      reason: this.videoAbuseValidatorsService.VIDEO_ABUSE_REASON,
-      predefinedReasons: mapValues(videoAbusePredefinedReasonsMap, r => null),
+      reason: this.abuseValidatorsService.ABUSE_REASON,
+      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null),
       timestamp: {
         hasStart: null,
         startAt: null,
@@ -136,15 +136,18 @@ export class VideoReportComponent extends FormReactive implements OnInit {
 
   report () {
     const reason = this.form.get('reason').value
-    const predefinedReasons = Object.keys(pickBy(this.form.get('predefinedReasons').value)) as VideoAbusePredefinedReasonsString[]
+    const predefinedReasons = Object.keys(pickBy(this.form.get('predefinedReasons').value)) as AbusePredefinedReasonsString[]
     const { hasStart, startAt, hasEnd, endAt } = this.form.get('timestamp').value
 
-    this.videoAbuseService.reportVideo({
-      id: this.video.id,
+    this.abuseService.reportVideo({
+      accountId: this.video.account.id,
       reason,
       predefinedReasons,
-      startAt: hasStart && startAt ? startAt : undefined,
-      endAt: hasEnd && endAt ? endAt : undefined
+      video: {
+        id: this.video.id,
+        startAt: hasStart && startAt ? startAt : undefined,
+        endAt: hasEnd && endAt ? endAt : undefined
+      }
     }).subscribe(
       () => {
         this.notifier.success(this.i18n('Video reported.'))

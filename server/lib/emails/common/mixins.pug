@@ -1,3 +1,7 @@
 mixin channel(channel)
   - var handle = `${channel.name}@${channel.host}`
   | #[a(href=`${WEBSERVER.URL}/video-channels/${handle}` title=handle) #{channel.displayName}]
+
+mixin account(account)
+  - var handle = `${account.name}@${account.host}`
+  | #[a(href=`${WEBSERVER.URL}/accounts/${handle}` title=handle) #{account.displayName}]

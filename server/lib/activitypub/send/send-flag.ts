@@ -1,32 +1,31 @@
-import { getVideoAbuseActivityPubUrl } from '../url'
-import { unicastTo } from './utils'
-import { logger } from '../../../helpers/logger'
-import { ActivityAudience, ActivityFlag } from '../../../../shared/models/activitypub'
-import { audiencify, getAudience } from '../audience'
 import { Transaction } from 'sequelize'
-import { MActor, MVideoFullLight } from '../../../types/models'
-import { MVideoAbuseVideo } from '../../../types/models/video'
+import { ActivityAudience, ActivityFlag } from '../../../../shared/models/activitypub'
+import { logger } from '../../../helpers/logger'
+import { MAbuseAP, MAccountLight, MActor } from '../../../types/models'
+import { audiencify, getAudience } from '../audience'
+import { getAbuseActivityPubUrl } from '../url'
+import { unicastTo } from './utils'
 
-function sendVideoAbuse (byActor: MActor, videoAbuse: MVideoAbuseVideo, video: MVideoFullLight, t: Transaction) {
-  if (!video.VideoChannel.Account.Actor.serverId) return // Local user
+function sendAbuse (byActor: MActor, abuse: MAbuseAP, flaggedAccount: MAccountLight, t: Transaction) {
+  if (!flaggedAccount.Actor.serverId) return // Local user
 
-  const url = getVideoAbuseActivityPubUrl(videoAbuse)
+  const url = getAbuseActivityPubUrl(abuse)
 
-  logger.info('Creating job to send video abuse %s.', url)
+  logger.info('Creating job to send abuse %s.', url)
 
   // Custom audience, we only send the abuse to the origin instance
-  const audience = { to: [ video.VideoChannel.Account.Actor.url ], cc: [] }
-  const flagActivity = buildFlagActivity(url, byActor, videoAbuse, audience)
+  const audience = { to: [ flaggedAccount.Actor.url ], cc: [] }
+  const flagActivity = buildFlagActivity(url, byActor, abuse, audience)
 
-  t.afterCommit(() => unicastTo(flagActivity, byActor, video.VideoChannel.Account.Actor.getSharedInbox()))
+  t.afterCommit(() => unicastTo(flagActivity, byActor, flaggedAccount.Actor.getSharedInbox()))
 }
 
-function buildFlagActivity (url: string, byActor: MActor, videoAbuse: MVideoAbuseVideo, audience: ActivityAudience): ActivityFlag {
+function buildFlagActivity (url: string, byActor: MActor, abuse: MAbuseAP, audience: ActivityAudience): ActivityFlag {
   if (!audience) audience = getAudience(byActor)
 
   const activity = Object.assign(
     { id: url, actor: byActor.url },
-    videoAbuse.toActivityPubObject()
+    abuse.toActivityPubObject()
   )
 
   return audiencify(activity, audience)
@@ -35,5 +34,5 @@ function buildFlagActivity (url: string, byActor: MActor, videoAbuse: MVideoAbus
 // ---------------------------------------------------------------------------
 
 export {
-  sendVideoAbuse
+  sendAbuse
 }

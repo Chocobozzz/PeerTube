@@ -1,15 +1,15 @@
 import * as request from 'supertest'
-import { VideoAbuseUpdate } from '../../models/videos/abuse/video-abuse-update.model'
-import { makeDeleteRequest, makePutBodyRequest, makeGetRequest } from '../requests/requests'
-import { VideoAbuseState, VideoAbusePredefinedReasonsString } from '@shared/models'
-import { VideoAbuseVideoIs } from '@shared/models/videos/abuse/video-abuse-video-is.type'
+import { AbusePredefinedReasonsString, AbuseState, AbuseUpdate, AbuseVideoIs } from '@shared/models'
+import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
+
+// FIXME: deprecated in 2.3. Remove this file
 
 function reportVideoAbuse (
   url: string,
   token: string,
   videoId: number | string,
   reason: string,
-  predefinedReasons?: VideoAbusePredefinedReasonsString[],
+  predefinedReasons?: AbusePredefinedReasonsString[],
   startAt?: number,
   endAt?: number,
   specialStatus = 200
@@ -28,10 +28,10 @@ function getVideoAbusesList (options: {
   url: string
   token: string
   id?: number
-  predefinedReason?: VideoAbusePredefinedReasonsString
+  predefinedReason?: AbusePredefinedReasonsString
   search?: string
-  state?: VideoAbuseState
-  videoIs?: VideoAbuseVideoIs
+  state?: AbuseState
+  videoIs?: AbuseVideoIs
   searchReporter?: string
   searchReportee?: string
   searchVideo?: string
@@ -79,7 +79,7 @@ function updateVideoAbuse (
   token: string,
   videoId: string | number,
   videoAbuseId: number,
-  body: VideoAbuseUpdate,
+  body: AbuseUpdate,
   statusCodeExpected = 204
 ) {
   const path = '/api/v1/videos/' + videoId + '/abuse/' + videoAbuseId

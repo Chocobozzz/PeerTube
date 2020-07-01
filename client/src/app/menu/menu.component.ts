@@ -28,7 +28,7 @@ export class MenuComponent implements OnInit {
   private routesPerRight: { [ role in UserRight ]?: string } = {
     [UserRight.MANAGE_USERS]: '/admin/users',
     [UserRight.MANAGE_SERVER_FOLLOW]: '/admin/friends',
-    [UserRight.MANAGE_VIDEO_ABUSES]: '/admin/moderation/video-abuses',
+    [UserRight.MANAGE_ABUSES]: '/admin/moderation/abuses',
     [UserRight.MANAGE_VIDEO_BLACKLIST]: '/admin/moderation/video-blocks',
     [UserRight.MANAGE_JOBS]: '/admin/jobs',
     [UserRight.MANAGE_CONFIGURATION]: '/admin/config'
@@ -126,7 +126,7 @@ export class MenuComponent implements OnInit {
     const adminRights = [
       UserRight.MANAGE_USERS,
       UserRight.MANAGE_SERVER_FOLLOW,
-      UserRight.MANAGE_VIDEO_ABUSES,
+      UserRight.MANAGE_ABUSES,
       UserRight.MANAGE_VIDEO_BLACKLIST,
       UserRight.MANAGE_JOBS,
       UserRight.MANAGE_CONFIGURATION

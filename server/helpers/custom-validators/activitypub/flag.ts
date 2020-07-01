@@ -1,9 +1,9 @@
 import { isActivityPubUrlValid } from './misc'
-import { isVideoAbuseReasonValid } from '../video-abuses'
+import { isAbuseReasonValid } from '../abuses'
 
 function isFlagActivityValid (activity: any) {
   return activity.type === 'Flag' &&
-    isVideoAbuseReasonValid(activity.content) &&
+    isAbuseReasonValid(activity.content) &&
     isActivityPubUrlValid(activity.object)
 }
 

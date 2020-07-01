@@ -1,9 +1,17 @@
 import { join } from 'path'
 import { randomBytes } from 'crypto'
-import { JobType, VideoRateType, VideoResolution, VideoState } from '../../shared/models'
 import { ActivityPubActorType } from '../../shared/models/activitypub'
 import { FollowState } from '../../shared/models/actors'
-import { VideoAbuseState, VideoImportState, VideoPrivacy, VideoTranscodingFPS } from '../../shared/models/videos'
+import {
+  AbuseState,
+  VideoImportState,
+  VideoPrivacy,
+  VideoTranscodingFPS,
+  JobType,
+  VideoRateType,
+  VideoResolution,
+  VideoState
+} from '../../shared/models'
 // Do not use barrels, remain constants as independent as possible
 import { isTestInstance, sanitizeHost, sanitizeUrl, root } from '../helpers/core-utils'
 import { NSFWPolicyType } from '../../shared/models/videos/nsfw-policy.type'
@@ -51,7 +59,6 @@ const SORTABLE_COLUMNS = {
   USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
-  VIDEO_ABUSES: [ 'id', 'createdAt', 'state' ],
   VIDEO_CHANNELS: [ 'id', 'name', 'updatedAt', 'createdAt' ],
   VIDEO_IMPORTS: [ 'createdAt' ],
   VIDEO_COMMENT_THREADS: [ 'createdAt', 'totalReplies' ],
@@ -65,6 +72,8 @@ const SORTABLE_COLUMNS = {
   // Don't forget to update peertube-search-index with the same values
   VIDEOS_SEARCH: [ 'name', 'duration', 'createdAt', 'publishedAt', 'originallyPublishedAt', 'views', 'likes', 'match' ],
   VIDEO_CHANNELS_SEARCH: [ 'match', 'displayName', 'createdAt' ],
+
+  ABUSES: [ 'id', 'createdAt', 'state' ],
 
   ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
   SERVERS_BLOCKLIST: [ 'createdAt' ],
@@ -193,7 +202,7 @@ const CONSTRAINTS_FIELDS = {
     VIDEO_LANGUAGES: { max: 500 }, // Array length
     BLOCKED_REASON: { min: 3, max: 250 } // Length
   },
-  VIDEO_ABUSES: {
+  ABUSES: {
     REASON: { min: 2, max: 3000 }, // Length
     MODERATION_COMMENT: { min: 2, max: 3000 } // Length
   },
@@ -378,10 +387,10 @@ const VIDEO_IMPORT_STATES = {
   [VideoImportState.REJECTED]: 'Rejected'
 }
 
-const VIDEO_ABUSE_STATES = {
-  [VideoAbuseState.PENDING]: 'Pending',
-  [VideoAbuseState.REJECTED]: 'Rejected',
-  [VideoAbuseState.ACCEPTED]: 'Accepted'
+const ABUSE_STATES = {
+  [AbuseState.PENDING]: 'Pending',
+  [AbuseState.REJECTED]: 'Rejected',
+  [AbuseState.ACCEPTED]: 'Accepted'
 }
 
 const VIDEO_PLAYLIST_PRIVACIES = {
@@ -778,7 +787,7 @@ export {
   VIDEO_RATE_TYPES,
   VIDEO_TRANSCODING_FPS,
   FFMPEG_NICE,
-  VIDEO_ABUSE_STATES,
+  ABUSE_STATES,
   VIDEO_CHANNELS,
   LRU_CACHE,
   JOB_REQUEST_TIMEOUT,

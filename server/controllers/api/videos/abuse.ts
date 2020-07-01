@@ -1,9 +1,10 @@
 import * as express from 'express'
-import { UserRight, VideoAbuseCreate, VideoAbuseState, VideoAbuse, videoAbusePredefinedReasonsMap } from '../../../../shared'
-import { logger } from '../../../helpers/logger'
+import { AbuseModel } from '@server/models/abuse/abuse'
+import { getServerActor } from '@server/models/application/application'
+import { AbuseCreate, UserRight, VideoAbuseCreate } from '../../../../shared'
 import { getFormattedObjects } from '../../../helpers/utils'
-import { sequelizeTypescript } from '../../../initializers/database'
 import {
+  abusesSortValidator,
   asyncMiddleware,
   asyncRetryTransactionMiddleware,
   authenticate,
@@ -12,28 +13,21 @@ import {
   setDefaultPagination,
   setDefaultSort,
   videoAbuseGetValidator,
+  videoAbuseListValidator,
   videoAbuseReportValidator,
-  videoAbusesSortValidator,
-  videoAbuseUpdateValidator,
-  videoAbuseListValidator
+  videoAbuseUpdateValidator
 } from '../../../middlewares'
-import { AccountModel } from '../../../models/account/account'
-import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { auditLoggerFactory, VideoAbuseAuditView } from '../../../helpers/audit-logger'
-import { Notifier } from '../../../lib/notifier'
-import { sendVideoAbuse } from '../../../lib/activitypub/send/send-flag'
-import { MVideoAbuseAccountVideo } from '../../../types/models/video'
-import { getServerActor } from '@server/models/application/application'
-import { MAccountDefault } from '@server/types/models'
+import { deleteAbuse, reportAbuse, updateAbuse } from '../abuse'
 
-const auditLogger = auditLoggerFactory('abuse')
+// FIXME: deprecated in 2.3. Remove this controller
+
 const abuseVideoRouter = express.Router()
 
 abuseVideoRouter.get('/abuse',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_ABUSES),
+  ensureUserHasRight(UserRight.MANAGE_ABUSES),
   paginationValidator,
-  videoAbusesSortValidator,
+  abusesSortValidator,
   setDefaultSort,
   setDefaultPagination,
   videoAbuseListValidator,
@@ -41,7 +35,7 @@ abuseVideoRouter.get('/abuse',
 )
 abuseVideoRouter.put('/:videoId/abuse/:id',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_ABUSES),
+  ensureUserHasRight(UserRight.MANAGE_ABUSES),
   asyncMiddleware(videoAbuseUpdateValidator),
   asyncRetryTransactionMiddleware(updateVideoAbuse)
 )
@@ -52,7 +46,7 @@ abuseVideoRouter.post('/:videoId/abuse',
 )
 abuseVideoRouter.delete('/:videoId/abuse/:id',
   authenticate,
-  ensureUserHasRight(UserRight.MANAGE_VIDEO_ABUSES),
+  ensureUserHasRight(UserRight.MANAGE_ABUSES),
   asyncMiddleware(videoAbuseGetValidator),
   asyncRetryTransactionMiddleware(deleteVideoAbuse)
 )
@@ -69,11 +63,12 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
   const user = res.locals.oauth.token.user
   const serverActor = await getServerActor()
 
-  const resultList = await VideoAbuseModel.listForApi({
+  const resultList = await AbuseModel.listForApi({
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
     id: req.query.id,
+    filter: 'video',
     predefinedReason: req.query.predefinedReason,
     search: req.query.search,
     state: req.query.state,
@@ -90,74 +85,28 @@ async function listVideoAbuses (req: express.Request, res: express.Response) {
 }
 
 async function updateVideoAbuse (req: express.Request, res: express.Response) {
-  const videoAbuse = res.locals.videoAbuse
-
-  if (req.body.moderationComment !== undefined) videoAbuse.moderationComment = req.body.moderationComment
-  if (req.body.state !== undefined) videoAbuse.state = req.body.state
-
-  await sequelizeTypescript.transaction(t => {
-    return videoAbuse.save({ transaction: t })
-  })
-
-  // Do not send the delete to other instances, we updated OUR copy of this video abuse
-
-  return res.type('json').status(204).end()
+  return updateAbuse(req, res)
 }
 
 async function deleteVideoAbuse (req: express.Request, res: express.Response) {
-  const videoAbuse = res.locals.videoAbuse
-
-  await sequelizeTypescript.transaction(t => {
-    return videoAbuse.destroy({ transaction: t })
-  })
-
-  // Do not send the delete to other instances, we delete OUR copy of this video abuse
-
-  return res.type('json').status(204).end()
+  return deleteAbuse(req, res)
 }
 
 async function reportVideoAbuse (req: express.Request, res: express.Response) {
-  const videoInstance = res.locals.videoAll
-  const body: VideoAbuseCreate = req.body
-  let reporterAccount: MAccountDefault
-  let videoAbuseJSON: VideoAbuse
+  const oldBody = req.body as VideoAbuseCreate
 
-  const videoAbuseInstance = await sequelizeTypescript.transaction(async t => {
-    reporterAccount = await AccountModel.load(res.locals.oauth.token.User.Account.id, t)
-    const predefinedReasons = body.predefinedReasons?.map(r => videoAbusePredefinedReasonsMap[r])
+  req.body = {
+    accountId: res.locals.videoAll.VideoChannel.accountId,
 
-    const abuseToCreate = {
-      reporterAccountId: reporterAccount.id,
-      reason: body.reason,
-      videoId: videoInstance.id,
-      state: VideoAbuseState.PENDING,
-      predefinedReasons,
-      startAt: body.startAt,
-      endAt: body.endAt
+    reason: oldBody.reason,
+    predefinedReasons: oldBody.predefinedReasons,
+
+    video: {
+      id: res.locals.videoAll.id,
+      startAt: oldBody.startAt,
+      endAt: oldBody.endAt
     }
+  } as AbuseCreate
 
-    const videoAbuseInstance: MVideoAbuseAccountVideo = await VideoAbuseModel.create(abuseToCreate, { transaction: t })
-    videoAbuseInstance.Video = videoInstance
-    videoAbuseInstance.Account = reporterAccount
-
-    // We send the video abuse to the origin server
-    if (videoInstance.isOwned() === false) {
-      await sendVideoAbuse(reporterAccount.Actor, videoAbuseInstance, videoInstance, t)
-    }
-
-    videoAbuseJSON = videoAbuseInstance.toFormattedJSON()
-    auditLogger.create(reporterAccount.Actor.getIdentifier(), new VideoAbuseAuditView(videoAbuseJSON))
-
-    return videoAbuseInstance
-  })
-
-  Notifier.Instance.notifyOnNewVideoAbuse({
-    videoAbuse: videoAbuseJSON,
-    videoAbuseInstance,
-    reporter: reporterAccount.Actor.getIdentifier()
-  })
-
-  logger.info('Abuse report for video "%s" created.', videoInstance.name)
-
-  return res.json({ videoAbuse: videoAbuseJSON }).end()
+  return reportAbuse(req, res)
 }

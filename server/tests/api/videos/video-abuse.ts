@@ -1,21 +1,21 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
-import { VideoAbuse, VideoAbuseState, VideoAbusePredefinedReasonsString } from '../../../../shared/models/videos'
+import * as chai from 'chai'
+import { Abuse, AbusePredefinedReasonsString, AbuseState } from '@shared/models'
 import {
   cleanupTests,
+  createUser,
   deleteVideoAbuse,
   flushAndRunMultipleServers,
   getVideoAbusesList,
   getVideosList,
+  removeVideo,
   reportVideoAbuse,
   ServerInfo,
   setAccessTokensToServers,
   updateVideoAbuse,
   uploadVideo,
-  removeVideo,
-  createUser,
   userLogin
 } from '../../../../shared/extra-utils/index'
 import { doubleFollow } from '../../../../shared/extra-utils/server/follows'
@@ -29,9 +29,11 @@ import {
 
 const expect = chai.expect
 
+// FIXME: deprecated in 2.3. Remove this controller
+
 describe('Test video abuses', function () {
   let servers: ServerInfo[] = []
-  let abuseServer2: VideoAbuse
+  let abuseServer2: Abuse
 
   before(async function () {
     this.timeout(50000)
@@ -95,7 +97,7 @@ describe('Test video abuses', function () {
     expect(res1.body.data).to.be.an('array')
     expect(res1.body.data.length).to.equal(1)
 
-    const abuse: VideoAbuse = res1.body.data[0]
+    const abuse: Abuse = res1.body.data[0]
     expect(abuse.reason).to.equal('my super bad reason')
     expect(abuse.reporterAccount.name).to.equal('root')
     expect(abuse.reporterAccount.host).to.equal('localhost:' + servers[0].port)
@@ -128,23 +130,23 @@ describe('Test video abuses', function () {
     expect(res1.body.data).to.be.an('array')
     expect(res1.body.data.length).to.equal(2)
 
-    const abuse1: VideoAbuse = res1.body.data[0]
+    const abuse1: Abuse = res1.body.data[0]
     expect(abuse1.reason).to.equal('my super bad reason')
     expect(abuse1.reporterAccount.name).to.equal('root')
     expect(abuse1.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse1.video.id).to.equal(servers[0].video.id)
-    expect(abuse1.state.id).to.equal(VideoAbuseState.PENDING)
+    expect(abuse1.state.id).to.equal(AbuseState.PENDING)
     expect(abuse1.state.label).to.equal('Pending')
     expect(abuse1.moderationComment).to.be.null
     expect(abuse1.count).to.equal(1)
     expect(abuse1.nth).to.equal(1)
 
-    const abuse2: VideoAbuse = res1.body.data[1]
+    const abuse2: Abuse = res1.body.data[1]
     expect(abuse2.reason).to.equal('my super bad reason 2')
     expect(abuse2.reporterAccount.name).to.equal('root')
     expect(abuse2.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse2.video.id).to.equal(servers[1].video.id)
-    expect(abuse2.state.id).to.equal(VideoAbuseState.PENDING)
+    expect(abuse2.state.id).to.equal(AbuseState.PENDING)
     expect(abuse2.state.label).to.equal('Pending')
     expect(abuse2.moderationComment).to.be.null
 
@@ -157,25 +159,25 @@ describe('Test video abuses', function () {
     expect(abuseServer2.reason).to.equal('my super bad reason 2')
     expect(abuseServer2.reporterAccount.name).to.equal('root')
     expect(abuseServer2.reporterAccount.host).to.equal('localhost:' + servers[0].port)
-    expect(abuseServer2.state.id).to.equal(VideoAbuseState.PENDING)
+    expect(abuseServer2.state.id).to.equal(AbuseState.PENDING)
     expect(abuseServer2.state.label).to.equal('Pending')
     expect(abuseServer2.moderationComment).to.be.null
   })
 
   it('Should update the state of a video abuse', async function () {
-    const body = { state: VideoAbuseState.REJECTED }
+    const body = { state: AbuseState.REJECTED }
     await updateVideoAbuse(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid, abuseServer2.id, body)
 
     const res = await getVideoAbusesList({ url: servers[1].url, token: servers[1].accessToken })
-    expect(res.body.data[0].state.id).to.equal(VideoAbuseState.REJECTED)
+    expect(res.body.data[0].state.id).to.equal(AbuseState.REJECTED)
   })
 
   it('Should add a moderation comment', async function () {
-    const body = { state: VideoAbuseState.ACCEPTED, moderationComment: 'It is valid' }
+    const body = { state: AbuseState.ACCEPTED, moderationComment: 'It is valid' }
     await updateVideoAbuse(servers[1].url, servers[1].accessToken, abuseServer2.video.uuid, abuseServer2.id, body)
 
     const res = await getVideoAbusesList({ url: servers[1].url, token: servers[1].accessToken })
-    expect(res.body.data[0].state.id).to.equal(VideoAbuseState.ACCEPTED)
+    expect(res.body.data[0].state.id).to.equal(AbuseState.ACCEPTED)
     expect(res.body.data[0].moderationComment).to.equal('It is valid')
   })
 
@@ -243,7 +245,7 @@ describe('Test video abuses', function () {
     expect(res.body.data.length).to.equal(2, "wrong number of videos returned")
     expect(res.body.data[0].id).to.equal(abuseServer2.id, "wrong origin server id for first video")
 
-    const abuse: VideoAbuse = res.body.data[0]
+    const abuse: Abuse = res.body.data[0]
     expect(abuse.video.id).to.equal(abuseServer2.video.id, "wrong video id")
     expect(abuse.video.channel).to.exist
     expect(abuse.video.deleted).to.be.true
@@ -277,7 +279,7 @@ describe('Test video abuses', function () {
     const res2 = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
     {
-      for (const abuse of res2.body.data as VideoAbuse[]) {
+      for (const abuse of res2.body.data as Abuse[]) {
         if (abuse.video.id === video3.id) {
           expect(abuse.count).to.equal(1, "wrong reports count for video 3")
           expect(abuse.nth).to.equal(1, "wrong report position in report list for video 3")
@@ -295,7 +297,7 @@ describe('Test video abuses', function () {
     this.timeout(10000)
 
     const reason5 = 'my super bad reason 5'
-    const predefinedReasons5: VideoAbusePredefinedReasonsString[] = [ 'violentOrRepulsive', 'captions' ]
+    const predefinedReasons5: AbusePredefinedReasonsString[] = [ 'violentOrRepulsive', 'captions' ]
     const createdAbuse = (await reportVideoAbuse(
       servers[0].url,
       servers[0].accessToken,
@@ -304,16 +306,16 @@ describe('Test video abuses', function () {
       predefinedReasons5,
       1,
       5
-    )).body.videoAbuse as VideoAbuse
+    )).body.abuse
 
     const res = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
     {
-      const abuse = (res.body.data as VideoAbuse[]).find(a => a.id === createdAbuse.id)
+      const abuse = (res.body.data as Abuse[]).find(a => a.id === createdAbuse.id)
       expect(abuse.reason).to.equals(reason5)
       expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, "predefined reasons do not match the one reported")
-      expect(abuse.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
-      expect(abuse.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
+      expect(abuse.video.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
+      expect(abuse.video.endAt).to.equal(5, "ending timestamp doesn't match the one reported")
     }
   })
 
@@ -348,7 +350,7 @@ describe('Test video abuses', function () {
 
       const res = await getVideoAbusesList(options)
 
-      return res.body.data as VideoAbuse[]
+      return res.body.data as Abuse[]
     }
 
     expect(await list({ id: 56 })).to.have.lengthOf(0)
@@ -365,14 +367,14 @@ describe('Test video abuses', function () {
     expect(await list({ searchReporter: 'user2' })).to.have.lengthOf(1)
     expect(await list({ searchReporter: 'root' })).to.have.lengthOf(5)
 
-    expect(await list({ searchReportee: 'root' })).to.have.lengthOf(4)
+    expect(await list({ searchReportee: 'root' })).to.have.lengthOf(5)
     expect(await list({ searchReportee: 'aaaa' })).to.have.lengthOf(0)
 
     expect(await list({ videoIs: 'deleted' })).to.have.lengthOf(1)
     expect(await list({ videoIs: 'blacklisted' })).to.have.lengthOf(0)
 
-    expect(await list({ state: VideoAbuseState.ACCEPTED })).to.have.lengthOf(0)
-    expect(await list({ state: VideoAbuseState.PENDING })).to.have.lengthOf(6)
+    expect(await list({ state: AbuseState.ACCEPTED })).to.have.lengthOf(0)
+    expect(await list({ state: AbuseState.PENDING })).to.have.lengthOf(6)
 
     expect(await list({ predefinedReason: 'violentOrRepulsive' })).to.have.lengthOf(1)
     expect(await list({ predefinedReason: 'serverRules' })).to.have.lengthOf(0)

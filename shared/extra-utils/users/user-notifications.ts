@@ -443,11 +443,11 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
       expect(notification).to.not.be.undefined
       expect(notification.type).to.equal(notificationType)
 
-      expect(notification.videoAbuse.id).to.be.a('number')
-      checkVideo(notification.videoAbuse.video, videoName, videoUUID)
+      expect(notification.abuse.id).to.be.a('number')
+      checkVideo(notification.abuse.video, videoName, videoUUID)
     } else {
       expect(notification).to.satisfy((n: UserNotification) => {
-        return n === undefined || n.videoAbuse === undefined || n.videoAbuse.video.uuid !== videoUUID
+        return n === undefined || n.abuse === undefined || n.abuse.video.uuid !== videoUUID
       })
     }
   }

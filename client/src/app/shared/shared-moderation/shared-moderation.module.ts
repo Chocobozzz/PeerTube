@@ -8,7 +8,7 @@ import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
 import { UserBanModalComponent } from './user-ban-modal.component'
 import { UserModerationDropdownComponent } from './user-moderation-dropdown.component'
-import { VideoAbuseService } from './video-abuse.service'
+import { AbuseService } from './abuse.service'
 import { VideoBlockComponent } from './video-block.component'
 import { VideoBlockService } from './video-block.service'
 import { VideoReportComponent } from './video-report.component'
@@ -39,7 +39,7 @@ import { VideoReportComponent } from './video-report.component'
   providers: [
     BlocklistService,
     BulkService,
-    VideoAbuseService,
+    AbuseService,
     VideoBlockService
   ]
 })

@@ -1,22 +1,24 @@
+import { FindOptions, ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
 import { AllowNull, BelongsTo, Column, CreatedAt, Default, ForeignKey, Is, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
+import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
 import { UserNotification, UserNotificationType } from '../../../shared'
-import { getSort, throwIfNotValid } from '../utils'
 import { isBooleanValid } from '../../helpers/custom-validators/misc'
 import { isUserNotificationTypeValid } from '../../helpers/custom-validators/user-notifications'
-import { UserModel } from './user'
-import { VideoModel } from '../video/video'
-import { VideoCommentModel } from '../video/video-comment'
-import { FindOptions, ModelIndexesOptions, Op, WhereOptions } from 'sequelize'
-import { VideoChannelModel } from '../video/video-channel'
-import { AccountModel } from './account'
-import { VideoAbuseModel } from '../video/video-abuse'
-import { VideoBlacklistModel } from '../video/video-blacklist'
-import { VideoImportModel } from '../video/video-import'
+import { AbuseModel } from '../abuse/abuse'
+import { VideoAbuseModel } from '../abuse/video-abuse'
+import { VideoCommentAbuseModel } from '../abuse/video-comment-abuse'
 import { ActorModel } from '../activitypub/actor'
 import { ActorFollowModel } from '../activitypub/actor-follow'
 import { AvatarModel } from '../avatar/avatar'
 import { ServerModel } from '../server/server'
-import { UserNotificationIncludes, UserNotificationModelForApi } from '@server/types/models/user'
+import { getSort, throwIfNotValid } from '../utils'
+import { VideoModel } from '../video/video'
+import { VideoBlacklistModel } from '../video/video-blacklist'
+import { VideoChannelModel } from '../video/video-channel'
+import { VideoCommentModel } from '../video/video-comment'
+import { VideoImportModel } from '../video/video-import'
+import { AccountModel } from './account'
+import { UserModel } from './user'
 
 enum ScopeNames {
   WITH_ALL = 'WITH_ALL'
@@ -87,9 +89,41 @@ function buildAccountInclude (required: boolean, withActor = false) {
 
       {
         attributes: [ 'id' ],
-        model: VideoAbuseModel.unscoped(),
+        model: AbuseModel.unscoped(),
         required: false,
-        include: [ buildVideoInclude(true) ]
+        include: [
+          {
+            attributes: [ 'id' ],
+            model: VideoAbuseModel.unscoped(),
+            required: false,
+            include: [ buildVideoInclude(true) ]
+          },
+          {
+            attributes: [ 'id' ],
+            model: VideoCommentAbuseModel.unscoped(),
+            required: false,
+            include: [
+              {
+                attributes: [ 'id', 'originCommentId' ],
+                model: VideoCommentModel,
+                required: true,
+                include: [
+                  {
+                    attributes: [ 'uuid' ],
+                    model: VideoModel.unscoped(),
+                    required: true
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            model: AccountModel,
+            as: 'FlaggedAccount',
+            required: true,
+            include: [ buildActorWithAvatarInclude() ]
+          }
+        ]
       },
 
       {
@@ -179,9 +213,9 @@ function buildAccountInclude (required: boolean, withActor = false) {
       }
     },
     {
-      fields: [ 'videoAbuseId' ],
+      fields: [ 'abuseId' ],
       where: {
-        videoAbuseId: {
+        abuseId: {
           [Op.ne]: null
         }
       }
@@ -276,17 +310,17 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
   })
   Comment: VideoCommentModel
 
-  @ForeignKey(() => VideoAbuseModel)
+  @ForeignKey(() => AbuseModel)
   @Column
-  videoAbuseId: number
+  abuseId: number
 
-  @BelongsTo(() => VideoAbuseModel, {
+  @BelongsTo(() => AbuseModel, {
     foreignKey: {
       allowNull: true
     },
     onDelete: 'cascade'
   })
-  VideoAbuse: VideoAbuseModel
+  Abuse: AbuseModel
 
   @ForeignKey(() => VideoBlacklistModel)
   @Column
@@ -397,10 +431,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       video: this.formatVideo(this.Comment.Video)
     } : undefined
 
-    const videoAbuse = this.VideoAbuse ? {
-      id: this.VideoAbuse.id,
-      video: this.formatVideo(this.VideoAbuse.Video)
-    } : undefined
+    const abuse = this.Abuse ? this.formatAbuse(this.Abuse) : undefined
 
     const videoBlacklist = this.VideoBlacklist ? {
       id: this.VideoBlacklist.id,
@@ -439,7 +470,7 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       video,
       videoImport,
       comment,
-      videoAbuse,
+      abuse,
       videoBlacklist,
       account,
       actorFollow,
@@ -453,6 +484,27 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       id: video.id,
       uuid: video.uuid,
       name: video.name
+    }
+  }
+
+  formatAbuse (this: UserNotificationModelForApi, abuse: UserNotificationIncludes.AbuseInclude) {
+    const commentAbuse = abuse.VideoCommentAbuse?.VideoComment ? {
+      threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
+
+      video: {
+        uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
+      }
+    } : undefined
+
+    const videoAbuse = abuse.VideoAbuse?.Video ? this.formatVideo(abuse.VideoAbuse.Video) : undefined
+
+    const accountAbuse = (!commentAbuse && !videoAbuse) ? this.formatActor(abuse.FlaggedAccount) : undefined
+
+    return {
+      id: abuse.id,
+      video: videoAbuse,
+      comment: commentAbuse,
+      account: accountAbuse
     }
   }
 
