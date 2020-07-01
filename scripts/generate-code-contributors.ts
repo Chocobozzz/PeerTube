@@ -31,10 +31,11 @@ async function run () {
     console.log(' * [Olivier Massain](https://dribbble.com/omassain)')
 
     console.log('\n\n# Icons\n')
-    console.log(' * [Robbie Pearce](https://robbiepearce.com/softies/)')
-    console.log(' * [Fork-Awesome](https://github.com/ForkAwesome/Fork-Awesome)')
-    console.log(' * `playlist add` by Material UI')
-    console.log(' * `language` by Aaron Jin')
+    console.log(' * [Feather Icons](feathericons.com/) (MIT)')
+    console.log(' * `playlist add`, `history`, `subscriptions`, `miscellaneous_services` by Material UI (Apache 2.0)')
+    console.log(' * `support` by Chocobozzz (CC-BY)')
+    console.log(' * `language` by Aaron Jin (CC-BY)')
+    console.log(' * `video-language` by Rigel Kent (CC-BY)')
   }
 }
 
