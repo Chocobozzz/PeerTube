@@ -14,6 +14,7 @@
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} users"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
+  [rowStyleClass]="getRowClasses"
 >
   <ng-template pTemplate="caption">
     <div class="caption">
@@ -48,7 +49,7 @@
       <th style="width: 120px;" i18n>Role</th>
       <th style="width: 140px;" pResizableColumn i18n>Auth plugin</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 50px;"></th>
+      <th style="width: 60px;"></th>
     </tr>
   </ng-template>
 
@@ -75,11 +76,13 @@
               alt="Avatar"
             >
             <div>
-              {{ user.account.displayName }}
+              <span>
+                <span *ngIf="user.blocked" i18n-title title="The user was banned" class="glyphicon glyphicon-ban-circle"></span>
+                {{ user.account.displayName }}
+              </span>
               <span class="text-muted">{{ user.username }}</span>
             </div>
           </div>
-          <span i18n *ngIf="user.blocked" class="banned-info">(banned)</span>
         </a>
       </td>
 

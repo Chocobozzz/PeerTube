@@ -5,8 +5,8 @@
   @include create-button;
 }
 
-tr.banned {
-  color: red;
+tr.banned > td {
+  background-color: lighten($color: $red, $amount: 40) !important;
 }
 
 .banned-info {
