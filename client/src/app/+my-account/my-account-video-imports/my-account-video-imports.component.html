@@ -1,7 +1,9 @@
 <h1 class="sr-only" i18n>Imports</h1>
 <p-table
-  [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage"
+  [value]="videoImports" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id"
+  [showCurrentPageReport]="true" i18n-currentPageReportTemplate
+  currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} imports"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
 >
   <ng-template pTemplate="header">
@@ -11,7 +13,7 @@
       <th style="width: 55%" i18n>Video</th>
       <th style="width: 150px" i18n>State</th>
       <th style="width: 150px" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 60px"></th>
+      <th style="width: 70px"></th>
     </tr>
   </ng-template>
 

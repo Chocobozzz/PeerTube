@@ -12,6 +12,10 @@
 
 .account-title {
   @include settings-big-title;
+
+  &.account-title-danger {
+    color: lighten($color: #c54130, $amount: 10);
+  }
 }
 
 .progress {

@@ -37,13 +37,13 @@
       </a>
     </div>
     <div>
-      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:' + user?.account.displayName }">
+      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + user?.account.displayName + '&quot;' }">
         <div class="dashboard-num">{{ user.videoAbusesCount }}</div>
         <div class="dashboard-label" i18n>Incriminated in reports</div>
       </a>
     </div>
     <div>
-      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reporter:' + user?.account.displayName + ' state:accepted' }">
+      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + user?.account.displayName + '&quot; state:accepted' }">
         <div class="dashboard-num">{{ user.videoAbusesAcceptedCount }} / {{ user.videoAbusesCreatedCount }}</div>
         <div class="dashboard-label" i18n>Authored reports accepted</div>
       </a>
@@ -183,7 +183,7 @@
 <div *ngIf="!isCreation() && user" class="form-row mt-4"> <!-- danger zone grid -->
   <div class="form-group col-12 col-lg-4 col-xl-3">
     <div class="anchor" id="danger"></div> <!-- danger zone anchor -->
-    <div i18n class="account-title">DANGER ZONE</div>
+    <div i18n class="account-title account-title-danger">DANGER ZONE</div>
   </div>
 
   <div class="form-group form-group-right col-12 col-lg-8 col-xl-9" [ngClass]="{ 'form-row': isInBigView() }">

@@ -6,7 +6,7 @@
 
   button {
     @include peertube-button;
-    @include grey-button;
+    @include danger-button;
     @include disable-outline;
   }
 }
