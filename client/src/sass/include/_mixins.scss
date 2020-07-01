@@ -258,7 +258,6 @@
   min-height: 30px;
 
   @include peertube-button;
-  @include orange-button;
 
   input[type=file] {
     position: absolute;
