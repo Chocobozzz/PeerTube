@@ -42,5 +42,6 @@ $width-size: 190px;
 
   .button-file {
     @include peertube-button-file(max-content);
+    @include orange-button;
   }
 }
