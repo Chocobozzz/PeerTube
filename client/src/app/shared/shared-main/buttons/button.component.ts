@@ -13,8 +13,16 @@ export class ButtonComponent {
   @Input() icon: GlobalIconName = undefined
   @Input() title: string = undefined
   @Input() loading = false
+  @Input() disabled = false
 
   getTitle () {
     return this.title || this.label
+  }
+
+  getClasses () {
+    return {
+      [this.className]: true,
+      disabled: this.disabled
+    }
   }
 }
