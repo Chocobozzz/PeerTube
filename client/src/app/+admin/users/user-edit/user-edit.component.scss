@@ -40,6 +40,10 @@ input[type=submit], button {
     margin-bottom: 30px;
 
     button {
+      @include peertube-button;
+      @include danger-button;
+      @include disable-outline;
+
       display: block;
       margin-top: 0;
     }
