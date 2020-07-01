@@ -1,5 +1,5 @@
 <p-table
-  [value]="videoAbuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
+  [value]="abuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
@@ -16,11 +16,11 @@
 
             <div role="menu" ngbDropdownMenu>
               <h6 class="dropdown-header" i18n>Advanced report filters</h6>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blocked videos</a>
-              <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'videoIs:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'state:pending' }" class="dropdown-item" i18n>Unsolved reports</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'state:accepted' }" class="dropdown-item" i18n>Accepted reports</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'state:rejected' }" class="dropdown-item" i18n>Refused reports</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'videoIs:blacklisted' }" class="dropdown-item" i18n>Reports with blocked videos</a>
+              <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'videoIs:deleted' }" class="dropdown-item" i18n>Reports with deleted videos</a>
             </div>
           </div>
           <input
@@ -45,91 +45,91 @@
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="body" let-expanded="expanded" let-videoAbuse>
+  <ng-template pTemplate="body" let-expanded="expanded" let-abuse>
     <tr>
-      <td class="c-hand" [pRowToggler]="videoAbuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
+      <td class="c-hand" [pRowToggler]="abuse" i18n-ngbTooltip ngbTooltip="More information" placement="top-left" container="body">
         <span class="expander">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
       </td>
 
       <td>
-        <a [href]="videoAbuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
+        <a [href]="abuse.reporterAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
             <img
               class="avatar"
-              [src]="videoAbuse.reporterAccount.avatar?.path"
+              [src]="abuse.reporterAccount.avatar?.path"
               (error)="switchToDefaultAvatar($event)"
               alt="Avatar"
             >
             <div>
-              {{ videoAbuse.reporterAccount.displayName }}
-              <span class="text-muted">{{ videoAbuse.reporterAccount.nameWithHost }}</span>
+              {{ abuse.reporterAccount.displayName }}
+              <span class="text-muted">{{ abuse.reporterAccount.nameWithHost }}</span>
             </div>
           </div>
         </a>
       </td>
 
-      <td *ngIf="!videoAbuse.video.deleted">
-        <a [href]="getVideoUrl(videoAbuse)" class="video-table-video-link" [title]="videoAbuse.video.name" target="_blank" rel="noopener noreferrer">
+      <td *ngIf="!abuse.video.deleted">
+        <a [href]="getVideoUrl(abuse)" class="video-table-video-link" [title]="abuse.video.name" target="_blank" rel="noopener noreferrer">
           <div class="video-table-video">
             <div class="video-table-video-image">
-              <img [src]="videoAbuse.video.thumbnailPath">
+              <img [src]="abuse.video.thumbnailPath">
               <span
-                class="video-table-video-image-label" *ngIf="videoAbuse.count > 1"
+                class="video-table-video-image-label" *ngIf="abuse.count > 1"
                 i18n-title title="This video has been reported multiple times."
               >
-                {{ videoAbuse.nth }}/{{ videoAbuse.count }}
+                {{ abuse.nth }}/{{ abuse.count }}
               </span>
             </div>
             <div class="video-table-video-text">
               <div>
-                <span *ngIf="!videoAbuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
-                <span *ngIf="videoAbuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
-                {{ videoAbuse.video.name }}
+                <span *ngIf="!abuse.video.blacklisted" class="glyphicon glyphicon-new-window"></span>
+                <span *ngIf="abuse.video.blacklisted" i18n-title title="The video was blocked" class="glyphicon glyphicon-ban-circle"></span>
+                {{ abuse.video.name }}
               </div>
-              <div class="text-muted" i18n>by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
+              <div class="text-muted" i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
             </div>
           </div>
         </a>
       </td>
 
-      <td *ngIf="videoAbuse.video.deleted" class="c-hand" [pRowToggler]="videoAbuse">
+      <td *ngIf="abuse.video.deleted" class="c-hand" [pRowToggler]="abuse">
         <div class="video-table-video" i18n-title title="Video was deleted">
           <div class="video-table-video-image">
             <span i18n>Deleted</span>
           </div>
           <div class="video-table-video-text">
             <div>
-              {{ videoAbuse.video.name }}
+              {{ abuse.video.name }}
               <span class="glyphicon glyphicon-trash"></span>
             </div>
-            <div class="text-muted" i18n>by {{ videoAbuse.video.channel?.displayName }} on {{ videoAbuse.video.channel?.host }} </div>
+            <div class="text-muted" i18n>by {{ abuse.video.channel?.displayName }} on {{ abuse.video.channel?.host }} </div>
           </div>
         </div>
       </td>
 
-      <td class="c-hand" [pRowToggler]="videoAbuse">{{ videoAbuse.createdAt | date: 'short'  }}</td>
+      <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
 
-      <td class="c-hand video-abuse-states" [pRowToggler]="videoAbuse">
-        <span *ngIf="isVideoAbuseAccepted(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-ok"></span>
-        <span *ngIf="isVideoAbuseRejected(videoAbuse)" [title]="videoAbuse.state.label" class="glyphicon glyphicon-remove"></span>
-        <span *ngIf="videoAbuse.moderationComment" container="body" placement="left auto" [ngbTooltip]="videoAbuse.moderationComment" class="glyphicon glyphicon-comment"></span>
+      <td class="c-hand video-abuse-states" [pRowToggler]="abuse">
+        <span *ngIf="isAbuseAccepted(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-ok"></span>
+        <span *ngIf="isAbuseRejected(abuse)" [title]="abuse.state.label" class="glyphicon glyphicon-remove"></span>
+        <span *ngIf="abuse.moderationComment" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment" class="glyphicon glyphicon-comment"></span>
       </td>
 
       <td class="action-cell">
         <my-action-dropdown
           [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
-          i18n-label label="Actions" [actions]="videoAbuseActions" [entry]="videoAbuse"
+          i18n-label label="Actions" [actions]="abuseActions" [entry]="abuse"
         ></my-action-dropdown>
       </td>
     </tr>
   </ng-template>
 
-  <ng-template pTemplate="rowexpansion" let-videoAbuse>
+  <ng-template pTemplate="rowexpansion" let-abuse>
       <tr>
         <td class="expand-cell" colspan="6">
-          <my-video-abuse-details [videoAbuse]="videoAbuse"></my-video-abuse-details>
+          <my-abuse-details [abuse]="abuse"></my-abuse-details>
         </td>
       </tr>
   </ng-template>

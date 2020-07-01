@@ -1,11 +1,11 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Notifier } from '@app/core'
-import { FormReactive, FormValidatorService, VideoAbuseValidatorsService } from '@app/shared/shared-forms'
-import { VideoAbuseService } from '@app/shared/shared-moderation'
+import { FormReactive, FormValidatorService, AbuseValidatorsService } from '@app/shared/shared-forms'
+import { AbuseService } from '@app/shared/shared-moderation'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoAbuse } from '@shared/models'
+import { Abuse } from '@shared/models'
 
 @Component({
   selector: 'my-moderation-comment-modal',
@@ -16,15 +16,15 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
   @ViewChild('modal', { static: true }) modal: NgbModal
   @Output() commentUpdated = new EventEmitter<string>()
 
-  private abuseToComment: VideoAbuse
+  private abuseToComment: Abuse
   private openedModal: NgbModalRef
 
   constructor (
     protected formValidatorService: FormValidatorService,
     private modalService: NgbModal,
     private notifier: Notifier,
-    private videoAbuseService: VideoAbuseService,
-    private videoAbuseValidatorsService: VideoAbuseValidatorsService,
+    private abuseService: AbuseService,
+    private abuseValidatorsService: AbuseValidatorsService,
     private i18n: I18n
   ) {
     super()
@@ -32,11 +32,11 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
 
   ngOnInit () {
     this.buildForm({
-      moderationComment: this.videoAbuseValidatorsService.VIDEO_ABUSE_MODERATION_COMMENT
+      moderationComment: this.abuseValidatorsService.ABUSE_MODERATION_COMMENT
     })
   }
 
-  openModal (abuseToComment: VideoAbuse) {
+  openModal (abuseToComment: Abuse) {
     this.abuseToComment = abuseToComment
     this.openedModal = this.modalService.open(this.modal, { centered: true })
 
@@ -54,7 +54,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
   async banUser () {
     const moderationComment: string = this.form.value[ 'moderationComment' ]
 
-    this.videoAbuseService.updateVideoAbuse(this.abuseToComment, { moderationComment })
+    this.abuseService.updateAbuse(this.abuseToComment, { moderationComment })
         .subscribe(
           () => {
             this.notifier.success(this.i18n('Comment updated.'))

@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router'
 import { InstanceAccountBlocklistComponent, InstanceServerBlocklistComponent } from '@app/+admin/moderation/instance-blocklist'
 import { ModerationComponent } from '@app/+admin/moderation/moderation.component'
-import { VideoAbuseListComponent } from '@app/+admin/moderation/video-abuse-list'
+import { AbuseListComponent } from '@app/+admin/moderation/abuse-list'
 import { VideoBlockListComponent } from '@app/+admin/moderation/video-block-list'
 import { UserRightGuard } from '@app/core'
 import { UserRight } from '@shared/models'
@@ -13,20 +13,25 @@ export const ModerationRoutes: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'video-abuses/list',
+        redirectTo: 'abuses/list',
         pathMatch: 'full'
       },
       {
         path: 'video-abuses',
-        redirectTo: 'video-abuses/list',
+        redirectTo: 'abuses/list',
         pathMatch: 'full'
       },
       {
         path: 'video-abuses/list',
-        component: VideoAbuseListComponent,
+        redirectTo: 'abuses/list',
+        pathMatch: 'full'
+      },
+      {
+        path: 'abuses/list',
+        component: AbuseListComponent,
         canActivate: [ UserRightGuard ],
         data: {
-          userRight: UserRight.MANAGE_VIDEO_ABUSES,
+          userRight: UserRight.MANAGE_ABUSES,
           meta: {
             title: 'Video reports'
           }

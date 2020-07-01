@@ -3,6 +3,7 @@ import * as express from 'express'
 import * as RateLimit from 'express-rate-limit'
 import { badRequest } from '../../helpers/express-utils'
 import { CONFIG } from '../../initializers/config'
+import { abuseRouter } from './abuse'
 import { accountsRouter } from './accounts'
 import { bulkRouter } from './bulk'
 import { configRouter } from './config'
@@ -32,6 +33,7 @@ const apiRateLimiter = RateLimit({
 apiRouter.use(apiRateLimiter)
 
 apiRouter.use('/server', serverRouter)
+apiRouter.use('/abuses', abuseRouter)
 apiRouter.use('/bulk', bulkRouter)
 apiRouter.use('/oauth-clients', oauthClientsRouter)
 apiRouter.use('/config', configRouter)

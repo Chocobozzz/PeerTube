@@ -64,9 +64,20 @@ export interface UserNotification {
     video: VideoInfo
   }
 
-  videoAbuse?: {
+  abuse?: {
     id: number
-    video: VideoInfo
+
+    video?: VideoInfo
+
+    comment?: {
+      threadId: number
+
+      video: {
+        uuid: string
+      }
+    }
+
+    account?: ActorInfo
   }
 
   videoBlacklist?: {

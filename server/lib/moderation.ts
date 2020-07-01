@@ -1,15 +1,33 @@
+import { PathLike } from 'fs-extra'
+import { Transaction } from 'sequelize/types'
+import { AbuseAuditView, auditLoggerFactory } from '@server/helpers/audit-logger'
+import { logger } from '@server/helpers/logger'
+import { AbuseModel } from '@server/models/abuse/abuse'
+import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
+import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
+import { VideoFileModel } from '@server/models/video/video-file'
+import { FilteredModelAttributes } from '@server/types'
+import {
+  MAbuseFull,
+  MAccountDefault,
+  MAccountLight,
+  MCommentAbuseAccountVideo,
+  MCommentOwnerVideo,
+  MUser,
+  MVideoAbuseVideoFull,
+  MVideoAccountLightBlacklistAllFiles
+} from '@server/types/models'
+import { ActivityCreate } from '../../shared/models/activitypub'
+import { VideoTorrentObject } from '../../shared/models/activitypub/objects'
+import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
+import { VideoCreate, VideoImportCreate } from '../../shared/models/videos'
+import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
+import { UserModel } from '../models/account/user'
+import { ActorModel } from '../models/activitypub/actor'
 import { VideoModel } from '../models/video/video'
 import { VideoCommentModel } from '../models/video/video-comment'
-import { VideoCommentCreate } from '../../shared/models/videos/video-comment.model'
-import { VideoCreate, VideoImportCreate } from '../../shared/models/videos'
-import { UserModel } from '../models/account/user'
-import { VideoTorrentObject } from '../../shared/models/activitypub/objects'
-import { ActivityCreate } from '../../shared/models/activitypub'
-import { ActorModel } from '../models/activitypub/actor'
-import { VideoCommentObject } from '../../shared/models/activitypub/objects/video-comment-object'
-import { VideoFileModel } from '@server/models/video/video-file'
-import { PathLike } from 'fs-extra'
-import { MUser } from '@server/types/models'
+import { sendAbuse } from './activitypub/send/send-flag'
+import { Notifier } from './notifier'
 
 export type AcceptResult = {
   accepted: boolean
@@ -73,6 +91,89 @@ function isPostImportVideoAccepted (object: {
   return { accepted: true }
 }
 
+async function createVideoAbuse (options: {
+  baseAbuse: FilteredModelAttributes<AbuseModel>
+  videoInstance: MVideoAccountLightBlacklistAllFiles
+  startAt: number
+  endAt: number
+  transaction: Transaction
+  reporterAccount: MAccountDefault
+}) {
+  const { baseAbuse, videoInstance, startAt, endAt, transaction, reporterAccount } = options
+
+  const associateFun = async (abuseInstance: MAbuseFull) => {
+    const videoAbuseInstance: MVideoAbuseVideoFull = await VideoAbuseModel.create({
+      abuseId: abuseInstance.id,
+      videoId: videoInstance.id,
+      startAt: startAt,
+      endAt: endAt
+    }, { transaction })
+
+    videoAbuseInstance.Video = videoInstance
+    abuseInstance.VideoAbuse = videoAbuseInstance
+
+    return { isOwned: videoInstance.isOwned() }
+  }
+
+  return createAbuse({
+    base: baseAbuse,
+    reporterAccount,
+    flaggedAccount: videoInstance.VideoChannel.Account,
+    transaction,
+    associateFun
+  })
+}
+
+function createVideoCommentAbuse (options: {
+  baseAbuse: FilteredModelAttributes<AbuseModel>
+  commentInstance: MCommentOwnerVideo
+  transaction: Transaction
+  reporterAccount: MAccountDefault
+}) {
+  const { baseAbuse, commentInstance, transaction, reporterAccount } = options
+
+  const associateFun = async (abuseInstance: MAbuseFull) => {
+    const commentAbuseInstance: MCommentAbuseAccountVideo = await VideoCommentAbuseModel.create({
+      abuseId: abuseInstance.id,
+      videoCommentId: commentInstance.id
+    }, { transaction })
+
+    commentAbuseInstance.VideoComment = commentInstance
+    abuseInstance.VideoCommentAbuse = commentAbuseInstance
+
+    return { isOwned: commentInstance.isOwned() }
+  }
+
+  return createAbuse({
+    base: baseAbuse,
+    reporterAccount,
+    flaggedAccount: commentInstance.Account,
+    transaction,
+    associateFun
+  })
+}
+
+function createAccountAbuse (options: {
+  baseAbuse: FilteredModelAttributes<AbuseModel>
+  accountInstance: MAccountDefault
+  transaction: Transaction
+  reporterAccount: MAccountDefault
+}) {
+  const { baseAbuse, accountInstance, transaction, reporterAccount } = options
+
+  const associateFun = async () => {
+    return { isOwned: accountInstance.isOwned() }
+  }
+
+  return createAbuse({
+    base: baseAbuse,
+    reporterAccount,
+    flaggedAccount: accountInstance,
+    transaction,
+    associateFun
+  })
+}
+
 export {
   isLocalVideoAccepted,
   isLocalVideoThreadAccepted,
@@ -80,5 +181,48 @@ export {
   isRemoteVideoCommentAccepted,
   isLocalVideoCommentReplyAccepted,
   isPreImportVideoAccepted,
-  isPostImportVideoAccepted
+  isPostImportVideoAccepted,
+
+  createAbuse,
+  createVideoAbuse,
+  createVideoCommentAbuse,
+  createAccountAbuse
+}
+
+// ---------------------------------------------------------------------------
+
+async function createAbuse (options: {
+  base: FilteredModelAttributes<AbuseModel>
+  reporterAccount: MAccountDefault
+  flaggedAccount: MAccountLight
+  associateFun: (abuseInstance: MAbuseFull) => Promise<{ isOwned: boolean} >
+  transaction: Transaction
+}) {
+  const { base, reporterAccount, flaggedAccount, associateFun, transaction } = options
+  const auditLogger = auditLoggerFactory('abuse')
+
+  const abuseAttributes = Object.assign({}, base, { flaggedAccountId: flaggedAccount.id })
+  const abuseInstance: MAbuseFull = await AbuseModel.create(abuseAttributes, { transaction })
+
+  abuseInstance.ReporterAccount = reporterAccount
+  abuseInstance.FlaggedAccount = flaggedAccount
+
+  const { isOwned } = await associateFun(abuseInstance)
+
+  if (isOwned === false) {
+    await sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
+  }
+
+  const abuseJSON = abuseInstance.toFormattedJSON()
+  auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
+
+  Notifier.Instance.notifyOnNewAbuse({
+    abuse: abuseJSON,
+    abuseInstance,
+    reporter: reporterAccount.Actor.getIdentifier()
+  })
+
+  logger.info('Abuse report %d created.', abuseInstance.id)
+
+  return abuseJSON
 }

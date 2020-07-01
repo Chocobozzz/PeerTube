@@ -91,7 +91,7 @@ export class AdminComponent implements OnInit {
   }
 
   hasVideoAbusesRight () {
-    return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_ABUSES)
+    return this.auth.getUser().hasRight(UserRight.MANAGE_ABUSES)
   }
 
   hasVideoBlocklistRight () {

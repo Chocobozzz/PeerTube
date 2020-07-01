@@ -19,7 +19,7 @@
 
         <ng-template #noVideo>
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
-  
+
           <div class="message" i18n>
             The notification concerns a video now unavailable
           </div>
@@ -46,7 +46,7 @@
         <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
         <div class="message" i18n>
-          <a (click)="markAsRead(notification)" [routerLink]="notification.videoAbuseUrl">A new video abuse</a> has been created on video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.videoAbuse.video.name }}</a>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl">A new video abuse</a> has been created on video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.abuse.video.name }}</a>
         </div>
       </ng-container>
 
@@ -65,7 +65,7 @@
           <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">
             <img alt="" aria-labelledby="avatar" class="avatar" [src]="notification.comment.account.avatarUrl" />
           </a>
-  
+
           <div class="message" i18n>
             <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.comment.account.displayName }}</a> commented your video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.comment.video.name }}</a>
           </div>
@@ -73,7 +73,7 @@
 
         <ng-template #noComment>
           <my-global-icon iconName="alert" aria-hidden="true"></my-global-icon>
-  
+
           <div class="message" i18n>
             The notification concerns a comment now unavailable
           </div>

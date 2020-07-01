@@ -1,15 +1,15 @@
-import * as path from 'path'
-import * as express from 'express'
 import { diff } from 'deep-object-diff'
-import { chain } from 'lodash'
+import * as express from 'express'
 import * as flatten from 'flat'
+import { chain } from 'lodash'
+import * as path from 'path'
 import * as winston from 'winston'
-import { jsonLoggerFormat, labelFormatter } from './logger'
-import { User, VideoAbuse, VideoChannel, VideoDetails, VideoImport } from '../../shared'
-import { VideoComment } from '../../shared/models/videos/video-comment.model'
-import { CustomConfig } from '../../shared/models/server/custom-config.model'
-import { CONFIG } from '../initializers/config'
 import { AUDIT_LOG_FILENAME } from '@server/initializers/constants'
+import { Abuse, User, VideoChannel, VideoDetails, VideoImport } from '../../shared'
+import { CustomConfig } from '../../shared/models/server/custom-config.model'
+import { VideoComment } from '../../shared/models/videos/video-comment.model'
+import { CONFIG } from '../initializers/config'
+import { jsonLoggerFormat, labelFormatter } from './logger'
 
 function getAuditIdFromRes (res: express.Response) {
   return res.locals.oauth.token.User.username
@@ -212,18 +212,15 @@ class VideoChannelAuditView extends EntityAuditView {
   }
 }
 
-const videoAbuseKeysToKeep = [
+const abuseKeysToKeep = [
   'id',
   'reason',
   'reporterAccount',
-  'video-id',
-  'video-name',
-  'video-uuid',
   'createdAt'
 ]
-class VideoAbuseAuditView extends EntityAuditView {
-  constructor (private readonly videoAbuse: VideoAbuse) {
-    super(videoAbuseKeysToKeep, 'abuse', videoAbuse)
+class AbuseAuditView extends EntityAuditView {
+  constructor (private readonly abuse: Abuse) {
+    super(abuseKeysToKeep, 'abuse', abuse)
   }
 }
 
@@ -274,6 +271,6 @@ export {
   CommentAuditView,
   UserAuditView,
   VideoAuditView,
-  VideoAbuseAuditView,
+  AbuseAuditView,
   CustomConfigAuditView
 }

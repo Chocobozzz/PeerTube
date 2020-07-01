@@ -388,6 +388,10 @@ export class AccountModel extends Model<AccountModel> {
       .findAll(query)
   }
 
+  getClientUrl () {
+    return WEBSERVER.URL + '/accounts/' + this.Actor.getIdentifier()
+  }
+
   toFormattedJSON (this: MAccountFormattable): Account {
     const actor = this.Actor.toFormattedJSON()
     const account = {

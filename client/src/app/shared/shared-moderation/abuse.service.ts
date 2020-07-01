@@ -5,12 +5,12 @@ import { catchError, map } from 'rxjs/operators'
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { RestExtractor, RestPagination, RestService } from '@app/core'
-import { ResultList, VideoAbuse, VideoAbuseCreate, VideoAbuseState, VideoAbuseUpdate } from '@shared/models'
+import { AbuseUpdate, ResultList, Abuse, AbuseCreate, AbuseState } from '@shared/models'
 import { environment } from '../../../environments/environment'
 
 @Injectable()
-export class VideoAbuseService {
-  private static BASE_VIDEO_ABUSE_URL = environment.apiUrl + '/api/v1/videos/'
+export class AbuseService {
+  private static BASE_ABUSE_URL = environment.apiUrl + '/api/v1/abuses'
 
   constructor (
     private authHttp: HttpClient,
@@ -18,13 +18,13 @@ export class VideoAbuseService {
     private restExtractor: RestExtractor
   ) {}
 
-  getVideoAbuses (options: {
+  getAbuses (options: {
     pagination: RestPagination,
     sort: SortMeta,
     search?: string
-  }): Observable<ResultList<VideoAbuse>> {
+  }): Observable<ResultList<Abuse>> {
     const { pagination, sort, search } = options
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + 'abuse'
+    const url = AbuseService.BASE_ABUSE_URL + 'abuse'
 
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
@@ -35,9 +35,9 @@ export class VideoAbuseService {
         state: {
           prefix: 'state:',
           handler: v => {
-            if (v === 'accepted') return VideoAbuseState.ACCEPTED
-            if (v === 'pending') return VideoAbuseState.PENDING
-            if (v === 'rejected') return VideoAbuseState.REJECTED
+            if (v === 'accepted') return AbuseState.ACCEPTED
+            if (v === 'pending') return AbuseState.PENDING
+            if (v === 'rejected') return AbuseState.REJECTED
 
             return undefined
           }
@@ -59,14 +59,14 @@ export class VideoAbuseService {
       params = this.restService.addObjectParams(params, filters)
     }
 
-    return this.authHttp.get<ResultList<VideoAbuse>>(url, { params })
+    return this.authHttp.get<ResultList<Abuse>>(url, { params })
                .pipe(
                  catchError(res => this.restExtractor.handleError(res))
                )
   }
 
-  reportVideo (parameters: { id: number } & VideoAbuseCreate) {
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + parameters.id + '/abuse'
+  reportVideo (parameters: AbuseCreate) {
+    const url = AbuseService.BASE_ABUSE_URL
 
     const body = omit(parameters, [ 'id' ])
 
@@ -77,8 +77,8 @@ export class VideoAbuseService {
                )
   }
 
-  updateVideoAbuse (videoAbuse: VideoAbuse, abuseUpdate: VideoAbuseUpdate) {
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + videoAbuse.video.uuid + '/abuse/' + videoAbuse.id
+  updateAbuse (abuse: Abuse, abuseUpdate: AbuseUpdate) {
+    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
 
     return this.authHttp.put(url, abuseUpdate)
                .pipe(
@@ -87,8 +87,8 @@ export class VideoAbuseService {
                )
   }
 
-  removeVideoAbuse (videoAbuse: VideoAbuse) {
-    const url = VideoAbuseService.BASE_VIDEO_ABUSE_URL + videoAbuse.video.uuid + '/abuse/' + videoAbuse.id
+  removeAbuse (abuse: Abuse) {
+    const url = AbuseService.BASE_ABUSE_URL + '/' + abuse.id
 
     return this.authHttp.delete(url)
                .pipe(

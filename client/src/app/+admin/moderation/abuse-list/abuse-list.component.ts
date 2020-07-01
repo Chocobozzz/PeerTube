@@ -1,5 +1,4 @@
 import { SortMeta } from 'primeng/api'
-import { filter } from 'rxjs/operators'
 import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
@@ -7,43 +6,45 @@ import { DomSanitizer } from '@angular/platform-browser'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
-import { BlocklistService, VideoAbuseService, VideoBlockService } from '@app/shared/shared-moderation'
+import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoAbuse, VideoAbuseState } from '@shared/models'
+import { Abuse, AbuseState } from '@shared/models'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
 
-export type ProcessedVideoAbuse = VideoAbuse & {
+export type ProcessedAbuse = Abuse & {
   moderationCommentHtml?: string,
   reasonHtml?: string
   embedHtml?: string
   updatedAt?: Date
+
   // override bare server-side definitions with rich client-side definitions
   reporterAccount: Account
-  video: VideoAbuse['video'] & {
-    channel: VideoAbuse['video']['channel'] & {
+
+  video: Abuse['video'] & {
+    channel: Abuse['video']['channel'] & {
       ownerAccount: Account
     }
   }
 }
 
 @Component({
-  selector: 'my-video-abuse-list',
-  templateUrl: './video-abuse-list.component.html',
-  styleUrls: [ '../moderation.component.scss', './video-abuse-list.component.scss' ]
+  selector: 'my-abuse-list',
+  templateUrl: './abuse-list.component.html',
+  styleUrls: [ '../moderation.component.scss', './abuse-list.component.scss' ]
 })
-export class VideoAbuseListComponent extends RestTable implements OnInit, AfterViewInit {
+export class AbuseListComponent extends RestTable implements OnInit, AfterViewInit {
   @ViewChild('moderationCommentModal', { static: true }) moderationCommentModal: ModerationCommentModalComponent
 
-  videoAbuses: ProcessedVideoAbuse[] = []
+  abuses: ProcessedAbuse[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
-  videoAbuseActions: DropdownAction<VideoAbuse>[][] = []
+  abuseActions: DropdownAction<Abuse>[][] = []
 
   constructor (
     private notifier: Notifier,
-    private videoAbuseService: VideoAbuseService,
+    private abuseService: AbuseService,
     private blocklistService: BlocklistService,
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
@@ -56,7 +57,7 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   ) {
     super()
 
-    this.videoAbuseActions = [
+    this.abuseActions = [
       [
         {
           label: this.i18n('Internal actions'),
@@ -64,45 +65,45 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
         },
         {
           label: this.i18n('Delete report'),
-          handler: videoAbuse => this.removeVideoAbuse(videoAbuse)
+          handler: abuse => this.removeAbuse(abuse)
         },
         {
           label: this.i18n('Add note'),
-          handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
-          isDisplayed: videoAbuse => !videoAbuse.moderationComment
+          handler: abuse => this.openModerationCommentModal(abuse),
+          isDisplayed: abuse => !abuse.moderationComment
         },
         {
           label: this.i18n('Update note'),
-          handler: videoAbuse => this.openModerationCommentModal(videoAbuse),
-          isDisplayed: videoAbuse => !!videoAbuse.moderationComment
+          handler: abuse => this.openModerationCommentModal(abuse),
+          isDisplayed: abuse => !!abuse.moderationComment
         },
         {
           label: this.i18n('Mark as accepted'),
-          handler: videoAbuse => this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED),
-          isDisplayed: videoAbuse => !this.isVideoAbuseAccepted(videoAbuse)
+          handler: abuse => this.updateAbuseState(abuse, AbuseState.ACCEPTED),
+          isDisplayed: abuse => !this.isAbuseAccepted(abuse)
         },
         {
           label: this.i18n('Mark as rejected'),
-          handler: videoAbuse => this.updateVideoAbuseState(videoAbuse, VideoAbuseState.REJECTED),
-          isDisplayed: videoAbuse => !this.isVideoAbuseRejected(videoAbuse)
+          handler: abuse => this.updateAbuseState(abuse, AbuseState.REJECTED),
+          isDisplayed: abuse => !this.isAbuseRejected(abuse)
         }
       ],
       [
         {
           label: this.i18n('Actions for the video'),
           isHeader: true,
-          isDisplayed: videoAbuse => !videoAbuse.video.deleted
+          isDisplayed: abuse => !abuse.video.deleted
         },
         {
           label: this.i18n('Block video'),
-          isDisplayed: videoAbuse => !videoAbuse.video.deleted && !videoAbuse.video.blacklisted,
-          handler: videoAbuse => {
-            this.videoBlocklistService.blockVideo(videoAbuse.video.id, undefined, true)
+          isDisplayed: abuse => !abuse.video.deleted && !abuse.video.blacklisted,
+          handler: abuse => {
+            this.videoBlocklistService.blockVideo(abuse.video.id, undefined, true)
               .subscribe(
                 () => {
                   this.notifier.success(this.i18n('Video blocked.'))
 
-                  this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                  this.updateAbuseState(abuse, AbuseState.ACCEPTED)
                 },
 
                 err => this.notifier.error(err.message)
@@ -111,14 +112,14 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
         },
         {
           label: this.i18n('Unblock video'),
-          isDisplayed: videoAbuse => !videoAbuse.video.deleted && videoAbuse.video.blacklisted,
-          handler: videoAbuse => {
-            this.videoBlocklistService.unblockVideo(videoAbuse.video.id)
+          isDisplayed: abuse => !abuse.video.deleted && abuse.video.blacklisted,
+          handler: abuse => {
+            this.videoBlocklistService.unblockVideo(abuse.video.id)
               .subscribe(
                 () => {
                   this.notifier.success(this.i18n('Video unblocked.'))
 
-                  this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                  this.updateAbuseState(abuse, AbuseState.ACCEPTED)
                 },
 
                 err => this.notifier.error(err.message)
@@ -127,20 +128,20 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
         },
         {
           label: this.i18n('Delete video'),
-          isDisplayed: videoAbuse => !videoAbuse.video.deleted,
-          handler: async videoAbuse => {
+          isDisplayed: abuse => !abuse.video.deleted,
+          handler: async abuse => {
             const res = await this.confirmService.confirm(
               this.i18n('Do you really want to delete this video?'),
               this.i18n('Delete')
             )
             if (res === false) return
 
-            this.videoService.removeVideo(videoAbuse.video.id)
+            this.videoService.removeVideo(abuse.video.id)
               .subscribe(
                 () => {
                   this.notifier.success(this.i18n('Video deleted.'))
 
-                  this.updateVideoAbuseState(videoAbuse, VideoAbuseState.ACCEPTED)
+                  this.updateAbuseState(abuse, AbuseState.ACCEPTED)
                 },
 
                 err => this.notifier.error(err.message)
@@ -155,8 +156,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
         },
         {
           label: this.i18n('Mute reporter'),
-          handler: async videoAbuse => {
-            const account = videoAbuse.reporterAccount as Account
+          handler: async abuse => {
+            const account = abuse.reporterAccount as Account
 
             this.blocklistService.blockAccountByInstance(account)
               .subscribe(
@@ -174,13 +175,13 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
         },
         {
           label: this.i18n('Mute server'),
-          isDisplayed: videoAbuse => !videoAbuse.reporterAccount.userId,
-          handler: async videoAbuse => {
-            this.blocklistService.blockServerByInstance(videoAbuse.reporterAccount.host)
+          isDisplayed: abuse => !abuse.reporterAccount.userId,
+          handler: async abuse => {
+            this.blocklistService.blockServerByInstance(abuse.reporterAccount.host)
               .subscribe(
                 () => {
                   this.notifier.success(
-                    this.i18n('Server {{host}} muted by the instance.', { host: videoAbuse.reporterAccount.host })
+                    this.i18n('Server {{host}} muted by the instance.', { host: abuse.reporterAccount.host })
                   )
                 },
 
@@ -209,11 +210,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   }
 
   getIdentifier () {
-    return 'VideoAbuseListComponent'
+    return 'AbuseListComponent'
   }
 
-  openModerationCommentModal (videoAbuse: VideoAbuse) {
-    this.moderationCommentModal.openModal(videoAbuse)
+  openModerationCommentModal (abuse: Abuse) {
+    this.moderationCommentModal.openModal(abuse)
   }
 
   onModerationCommentUpdated () {
@@ -240,26 +241,26 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   }
   /* END Table filter functions */
 
-  isVideoAbuseAccepted (videoAbuse: VideoAbuse) {
-    return videoAbuse.state.id === VideoAbuseState.ACCEPTED
+  isAbuseAccepted (abuse: Abuse) {
+    return abuse.state.id === AbuseState.ACCEPTED
   }
 
-  isVideoAbuseRejected (videoAbuse: VideoAbuse) {
-    return videoAbuse.state.id === VideoAbuseState.REJECTED
+  isAbuseRejected (abuse: Abuse) {
+    return abuse.state.id === AbuseState.REJECTED
   }
 
-  getVideoUrl (videoAbuse: VideoAbuse) {
-    return Video.buildClientUrl(videoAbuse.video.uuid)
+  getVideoUrl (abuse: Abuse) {
+    return Video.buildClientUrl(abuse.video.uuid)
   }
 
-  getVideoEmbed (videoAbuse: VideoAbuse) {
+  getVideoEmbed (abuse: Abuse) {
     return buildVideoEmbed(
       buildVideoLink({
-        baseUrl: `${environment.embedUrl}/videos/embed/${videoAbuse.video.uuid}`,
+        baseUrl: `${environment.embedUrl}/videos/embed/${abuse.video.uuid}`,
         title: false,
         warningTitle: false,
-        startTime: videoAbuse.startAt,
-        stopTime: videoAbuse.endAt
+        startTime: abuse.startAt,
+        stopTime: abuse.endAt
       })
     )
   }
@@ -268,11 +269,11 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
   }
 
-  async removeVideoAbuse (videoAbuse: VideoAbuse) {
+  async removeAbuse (abuse: Abuse) {
     const res = await this.confirmService.confirm(this.i18n('Do you really want to delete this abuse report?'), this.i18n('Delete'))
     if (res === false) return
 
-    this.videoAbuseService.removeVideoAbuse(videoAbuse).subscribe(
+    this.abuseService.removeAbuse(abuse).subscribe(
       () => {
         this.notifier.success(this.i18n('Abuse deleted.'))
         this.loadData()
@@ -282,8 +283,8 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
     )
   }
 
-  updateVideoAbuseState (videoAbuse: VideoAbuse, state: VideoAbuseState) {
-    this.videoAbuseService.updateVideoAbuse(videoAbuse, { state })
+  updateAbuseState (abuse: Abuse, state: AbuseState) {
+    this.abuseService.updateAbuse(abuse, { state })
       .subscribe(
         () => this.loadData(),
 
@@ -292,14 +293,14 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
   }
 
   protected loadData () {
-    return this.videoAbuseService.getVideoAbuses({
+    return this.abuseService.getAbuses({
       pagination: this.pagination,
       sort: this.sort,
       search: this.search
     }).subscribe(
         async resultList => {
           this.totalRecords = resultList.total
-          const videoAbuses = []
+          const abuses = []
 
           for (const abuse of resultList.data) {
             Object.assign(abuse, {
@@ -312,10 +313,10 @@ export class VideoAbuseListComponent extends RestTable implements OnInit, AfterV
             if (abuse.video.channel?.ownerAccount) abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
             if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
 
-            videoAbuses.push(abuse as ProcessedVideoAbuse)
+            abuses.push(abuse as ProcessedAbuse)
           }
 
-          this.videoAbuses = videoAbuses
+          this.abuses = abuses
         },
 
         err => this.notifier.error(err.message)

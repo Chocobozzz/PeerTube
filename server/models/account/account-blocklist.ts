@@ -1,12 +1,12 @@
-import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
-import { AccountModel } from './account'
-import { getSort, searchAttribute } from '../utils'
-import { AccountBlock } from '../../../shared/models/blocklist'
-import { Op } from 'sequelize'
 import * as Bluebird from 'bluebird'
+import { Op } from 'sequelize'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Scopes, Table, UpdatedAt } from 'sequelize-typescript'
 import { MAccountBlocklist, MAccountBlocklistAccounts, MAccountBlocklistFormattable } from '@server/types/models'
+import { AccountBlock } from '../../../shared/models'
 import { ActorModel } from '../activitypub/actor'
 import { ServerModel } from '../server/server'
+import { getSort, searchAttribute } from '../utils'
+import { AccountModel } from './account'
 
 enum ScopeNames {
   WITH_ACCOUNTS = 'WITH_ACCOUNTS'

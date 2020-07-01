@@ -1,5 +1,5 @@
 import * as Sequelize from 'sequelize'
-import { VideoAbuseState } from '../../../shared/models/videos'
+import { AbuseState } from '../../../shared/models'
 
 async function up (utils: {
   transaction: Sequelize.Transaction
@@ -16,7 +16,7 @@ async function up (utils: {
   }
 
   {
-    const query = 'UPDATE "videoAbuse" SET "state" = ' + VideoAbuseState.PENDING
+    const query = 'UPDATE "videoAbuse" SET "state" = ' + AbuseState.PENDING
     await utils.sequelize.query(query)
   }
 

@@ -1,4 +1,4 @@
-import { VideoAbusePredefinedReasonsString } from '@shared/models/videos'
+import { AbusePredefinedReasonsString } from '@shared/models'
 
 export interface ActivityIdentifierObject {
   identifier: string
@@ -85,7 +85,7 @@ export interface ActivityMentionObject {
 
 export interface ActivityFlagReasonObject {
   type: 'Hashtag'
-  name: VideoAbusePredefinedReasonsString
+  name: AbusePredefinedReasonsString
 }
 
 export type ActivityTagObject =

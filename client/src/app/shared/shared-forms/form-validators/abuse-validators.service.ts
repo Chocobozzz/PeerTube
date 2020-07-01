@@ -4,12 +4,12 @@ import { Injectable } from '@angular/core'
 import { BuildFormValidator } from './form-validator.service'
 
 @Injectable()
-export class VideoAbuseValidatorsService {
-  readonly VIDEO_ABUSE_REASON: BuildFormValidator
-  readonly VIDEO_ABUSE_MODERATION_COMMENT: BuildFormValidator
+export class AbuseValidatorsService {
+  readonly ABUSE_REASON: BuildFormValidator
+  readonly ABUSE_MODERATION_COMMENT: BuildFormValidator
 
   constructor (private i18n: I18n) {
-    this.VIDEO_ABUSE_REASON = {
+    this.ABUSE_REASON = {
       VALIDATORS: [ Validators.required, Validators.minLength(2), Validators.maxLength(3000) ],
       MESSAGES: {
         'required': this.i18n('Report reason is required.'),
@@ -18,7 +18,7 @@ export class VideoAbuseValidatorsService {
       }
     }
 
-    this.VIDEO_ABUSE_MODERATION_COMMENT = {
+    this.ABUSE_MODERATION_COMMENT = {
       VALIDATORS: [ Validators.required, Validators.minLength(2), Validators.maxLength(3000) ],
       MESSAGES: {
         'required': this.i18n('Moderation comment is required.'),

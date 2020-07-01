@@ -1,12 +1,12 @@
 import { ActivityPubActor } from './activitypub-actor'
 import { ActivityPubSignature } from './activitypub-signature'
-import { CacheFileObject, VideoTorrentObject, ActivityFlagReasonObject } from './objects'
+import { ActivityFlagReasonObject, CacheFileObject, VideoTorrentObject } from './objects'
+import { AbuseObject } from './objects/abuse-object'
 import { DislikeObject } from './objects/dislike-object'
-import { VideoAbuseObject } from './objects/video-abuse-object'
-import { VideoCommentObject } from './objects/video-comment-object'
-import { ViewObject } from './objects/view-object'
 import { APObject } from './objects/object.model'
 import { PlaylistObject } from './objects/playlist-object'
+import { VideoCommentObject } from './objects/video-comment-object'
+import { ViewObject } from './objects/view-object'
 
 export type Activity =
   ActivityCreate |
@@ -53,7 +53,7 @@ export interface BaseActivity {
 
 export interface ActivityCreate extends BaseActivity {
   type: 'Create'
-  object: VideoTorrentObject | VideoAbuseObject | ViewObject | DislikeObject | VideoCommentObject | CacheFileObject | PlaylistObject
+  object: VideoTorrentObject | AbuseObject | ViewObject | DislikeObject | VideoCommentObject | CacheFileObject | PlaylistObject
 }
 
 export interface ActivityUpdate extends BaseActivity {

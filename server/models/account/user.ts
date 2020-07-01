@@ -19,7 +19,7 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, VideoAbuseState, VideoPlaylistType, VideoPrivacy } from '../../../shared'
+import { hasUserRight, MyUser, USER_ROLE_LABELS, UserRight, AbuseState, VideoPlaylistType, VideoPrivacy } from '../../../shared'
 import { User, UserRole } from '../../../shared/models/users'
 import {
   isNoInstanceConfigWarningModal,
@@ -169,7 +169,7 @@ enum ScopeNames {
               `SELECT concat_ws(':', "abuses", "acceptedAbuses") ` +
               'FROM (' +
                 'SELECT COUNT("videoAbuse"."id") AS "abuses", ' +
-                       `COUNT("videoAbuse"."id") FILTER (WHERE "videoAbuse"."state" = ${VideoAbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
+                       `COUNT("videoAbuse"."id") FILTER (WHERE "videoAbuse"."state" = ${AbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
                 'FROM "videoAbuse" ' +
                 'INNER JOIN "video" ON "videoAbuse"."videoId" = "video"."id" ' +
                 'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +

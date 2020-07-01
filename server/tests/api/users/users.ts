@@ -2,7 +2,7 @@
 
 import * as chai from 'chai'
 import 'mocha'
-import { MyUser, User, UserRole, Video, VideoAbuseState, VideoAbuseUpdate, VideoPlaylistType } from '../../../../shared/index'
+import { MyUser, User, UserRole, Video, AbuseState, AbuseUpdate, VideoPlaylistType } from '@shared/models'
 import {
   addVideoCommentThread,
   blockUser,
@@ -937,7 +937,7 @@ describe('Test users', function () {
       expect(user2.videoAbusesCount).to.equal(1) // number of incriminations
       expect(user2.videoAbusesCreatedCount).to.equal(1) // number of reports created
 
-      const body: VideoAbuseUpdate = { state: VideoAbuseState.ACCEPTED }
+      const body: AbuseUpdate = { state: AbuseState.ACCEPTED }
       await updateVideoAbuse(server.url, server.accessToken, videoId, abuseId, body)
 
       const res3 = await getUserInformation(server.url, server.accessToken, user17Id, true)

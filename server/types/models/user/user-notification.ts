@@ -1,16 +1,18 @@
-import { UserNotificationModel } from '../../../models/account/user-notification'
+import { VideoAbuseModel } from '@server/models/abuse/video-abuse'
+import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse'
 import { PickWith, PickWithOpt } from '@shared/core-utils'
-import { VideoModel } from '../../../models/video/video'
-import { ActorModel } from '../../../models/activitypub/actor'
-import { ServerModel } from '../../../models/server/server'
-import { AvatarModel } from '../../../models/avatar/avatar'
-import { VideoChannelModel } from '../../../models/video/video-channel'
+import { AbuseModel } from '../../../models/abuse/abuse'
 import { AccountModel } from '../../../models/account/account'
-import { VideoCommentModel } from '../../../models/video/video-comment'
-import { VideoAbuseModel } from '../../../models/video/video-abuse'
-import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
-import { VideoImportModel } from '../../../models/video/video-import'
+import { UserNotificationModel } from '../../../models/account/user-notification'
+import { ActorModel } from '../../../models/activitypub/actor'
 import { ActorFollowModel } from '../../../models/activitypub/actor-follow'
+import { AvatarModel } from '../../../models/avatar/avatar'
+import { ServerModel } from '../../../models/server/server'
+import { VideoModel } from '../../../models/video/video'
+import { VideoBlacklistModel } from '../../../models/video/video-blacklist'
+import { VideoChannelModel } from '../../../models/video/video-channel'
+import { VideoCommentModel } from '../../../models/video/video-comment'
+import { VideoImportModel } from '../../../models/video/video-import'
 
 type Use<K extends keyof UserNotificationModel, M> = PickWith<UserNotificationModel, K, M>
 
@@ -47,6 +49,18 @@ export module UserNotificationIncludes {
     Pick<VideoAbuseModel, 'id'> &
     PickWith<VideoAbuseModel, 'Video', VideoInclude>
 
+  export type VideoCommentAbuseInclude =
+    Pick<VideoCommentAbuseModel, 'id'> &
+    PickWith<VideoCommentAbuseModel, 'VideoComment',
+    Pick<VideoCommentModel, 'id' | 'originCommentId' | 'getThreadId'> &
+    PickWith<VideoCommentModel, 'Video', Pick<VideoModel, 'uuid'>>>
+
+  export type AbuseInclude =
+    Pick<AbuseModel, 'id'> &
+    PickWith<AbuseModel, 'VideoAbuse', VideoAbuseInclude> &
+    PickWith<AbuseModel, 'VideoCommentAbuse', VideoCommentAbuseInclude> &
+    PickWith<AbuseModel, 'FlaggedAccount', AccountIncludeActor>
+
   export type VideoBlacklistInclude =
     Pick<VideoBlacklistModel, 'id'> &
     PickWith<VideoAbuseModel, 'Video', VideoInclude>
@@ -76,7 +90,7 @@ export module UserNotificationIncludes {
 // ############################################################################
 
 export type MUserNotification =
-  Omit<UserNotificationModel, 'User' | 'Video' | 'Comment' | 'VideoAbuse' | 'VideoBlacklist' |
+  Omit<UserNotificationModel, 'User' | 'Video' | 'Comment' | 'Abuse' | 'VideoBlacklist' |
   'VideoImport' | 'Account' | 'ActorFollow'>
 
 // ############################################################################
@@ -85,7 +99,7 @@ export type UserNotificationModelForApi =
   MUserNotification &
   Use<'Video', UserNotificationIncludes.VideoIncludeChannel> &
   Use<'Comment', UserNotificationIncludes.VideoCommentInclude> &
-  Use<'VideoAbuse', UserNotificationIncludes.VideoAbuseInclude> &
+  Use<'Abuse', UserNotificationIncludes.AbuseInclude> &
   Use<'VideoBlacklist', UserNotificationIncludes.VideoBlacklistInclude> &
   Use<'VideoImport', UserNotificationIncludes.VideoImportInclude> &
   Use<'ActorFollow', UserNotificationIncludes.ActorFollowInclude> &

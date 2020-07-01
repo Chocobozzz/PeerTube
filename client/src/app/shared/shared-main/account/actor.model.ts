@@ -14,7 +14,7 @@ export abstract class Actor implements ActorServer {
 
   avatarUrl: string
 
-  static GET_ACTOR_AVATAR_URL (actor: { avatar?: Avatar }) {
+  static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
     if (actor?.avatar?.url) return actor.avatar.url
 
     if (actor && actor.avatar) {
