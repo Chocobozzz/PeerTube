@@ -87,8 +87,8 @@ import:
     http:
       enabled: true
       proxy:
-        enabled: true
-        url: "http://188.165.225.149:7899"
+        enabled: false
+        url: ""
     torrent:
       enabled: true
 

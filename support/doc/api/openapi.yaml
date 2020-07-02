@@ -53,7 +53,7 @@ externalDocs:
 tags:
   - name: Accounts
     description: >
-      Accounts encompass remote accounts discovered across the federation, 
+      Accounts encompass remote accounts discovered across the federation,
       and correspond to the main Actor, along with video channels a user can create, which
       are also Actors.
 
@@ -484,7 +484,7 @@ paths:
       tags:
         - Users
       responses:
-        '201':
+        '200':
           description: user created
           content:
             application/json:
@@ -3879,11 +3879,11 @@ components:
             files:
               type: array
               items:
-                $ref: '#/components/schemas/FileRedundancyInformation' 
+                $ref: '#/components/schemas/FileRedundancyInformation'
             streamingPlaylists:
               type: array
               items:
-                $ref: '#/components/schemas/FileRedundancyInformation' 
+                $ref: '#/components/schemas/FileRedundancyInformation'
     VideoImportStateConstant:
       properties:
         id:
