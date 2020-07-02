@@ -1470,6 +1470,7 @@ paths:
           description: '`magnetUri` or `targetUrl` or a torrent file missing'
   /videos/abuse:
     get:
+      deprecated: true
       summary: List video abuses
       security:
         - OAuth2:
@@ -1545,6 +1546,7 @@ paths:
                   $ref: '#/components/schemas/VideoAbuse'
   '/videos/{id}/abuse':
     post:
+      deprecated: true
       summary: Report an abuse
       security:
         - OAuth2: []
@@ -1595,6 +1597,7 @@ paths:
           description: incorrect request parameters
   '/videos/{id}/abuse/{abuseId}':
     put:
+      deprecated: true
       summary: Update an abuse
       security:
         - OAuth2:
@@ -1622,6 +1625,7 @@ paths:
         '404':
           description: video abuse not found
     delete:
+      deprecated: true
       tags:
         - Video Abuses
       summary: Delete an abuse
