@@ -1,15 +1,1 @@
-<div class="admin-sub-header">
-  <h1 i18n class="form-sub-title">Moderation</h1>
-
-  <div class="admin-sub-nav">
-    <a *ngIf="hasVideoAbusesRight()" i18n routerLink="video-abuses/list" routerLinkActive="active">Video reports</a>
-
-    <a *ngIf="hasVideoBlocklistRight()" i18n routerLink="video-blocks/list" routerLinkActive="active">Video blocks</a>
-
-    <a *ngIf="hasAccountsBlocklistRight()" i18n routerLink="blocklist/accounts" routerLinkActive="active">Muted accounts</a>
-
-    <a *ngIf="hasServersBlocklistRight()" i18n routerLink="blocklist/servers" routerLinkActive="active">Muted servers</a>
-  </div>
-</div>
-
 <router-outlet></router-outlet>

@@ -3,12 +3,15 @@ import { AuthService } from '@app/core'
 import { ListOverflowItem } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { UserRight } from '@shared/models'
+import { TopMenuDropdownParam } from '@app/shared/shared-main/misc/top-menu-dropdown.component'
 
 @Component({
-  templateUrl: './admin.component.html'
+  templateUrl: './admin.component.html',
+  styleUrls: [ './admin.component.scss' ]
 })
 export class AdminComponent implements OnInit {
   items: ListOverflowItem[] = []
+  menuEntries: TopMenuDropdownParam[] = []
 
   constructor (
     private auth: AuthService,
@@ -16,12 +19,58 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    if (this.hasUsersRight()) this.items.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
-    if (this.hasServerFollowRight()) this.items.push({ label: this.i18n('Follows & redundancies'), routerLink: '/admin/follows' })
-    if (this.hasVideoAbusesRight() || this.hasVideoBlocklistRight()) this.items.push({ label: this.i18n('Moderation'), routerLink: '/admin/moderation' })
-    if (this.hasConfigRight()) this.items.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
-    if (this.hasPluginsRight()) this.items.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
-    if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) this.items.push({ label: this.i18n('System'), routerLink: '/admin/system' })
+    const federationItems: TopMenuDropdownParam = {
+      label: this.i18n('Federation'),
+      children: [
+        {
+          label: this.i18n('Instances you follow'),
+          routerLink: '/admin/follows/following-list',
+          iconName: 'sign-out'
+        },
+        {
+          label: this.i18n('Instances following you'),
+          routerLink: '/admin/follows/followers-list',
+          iconName: 'sign-in'
+        },
+        {
+          label: this.i18n('Video redundancies'),
+          routerLink: '/admin/follows/video-redundancies-list',
+          iconName: 'videos'
+        }
+      ]
+    }
+
+    const moderationItems: TopMenuDropdownParam = {
+      label: this.i18n('Moderation'),
+      children: []
+    }
+    if (this.hasVideoAbusesRight()) moderationItems.children.push({
+      label: this.i18n('Video reports'),
+      routerLink: '/admin/moderation/video-abuses/list',
+      iconName: 'flag'
+    })
+    if (this.hasVideoBlocklistRight()) moderationItems.children.push({
+      label: this.i18n('Video blocks'),
+      routerLink: '/admin/moderation/video-blocks/list',
+      iconName: 'cross'
+    })
+    if (this.hasAccountsBlocklistRight()) moderationItems.children.push({
+      label: this.i18n('Muted accounts'),
+      routerLink: '/admin/moderation/blocklist/accounts',
+      iconName: 'user'
+    })
+    if (this.hasServersBlocklistRight()) moderationItems.children.push({
+      label: this.i18n('Muted servers'),
+      routerLink: '/admin/moderation/blocklist/servers',
+      iconName: 'server'
+    })
+
+    if (this.hasUsersRight()) this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
+    if (this.hasServerFollowRight()) this.menuEntries.push(federationItems)
+    if (this.hasVideoAbusesRight() || this.hasVideoBlocklistRight()) this.menuEntries.push(moderationItems)
+    if (this.hasConfigRight()) this.menuEntries.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
+    if (this.hasPluginsRight()) this.menuEntries.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
+    if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) this.menuEntries.push({ label: this.i18n('System'), routerLink: '/admin/system' })
   }
 
   hasUsersRight () {
@@ -38,6 +87,14 @@ export class AdminComponent implements OnInit {
 
   hasVideoBlocklistRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_VIDEO_BLACKLIST)
+  }
+
+  hasAccountsBlocklistRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_ACCOUNTS_BLOCKLIST)
+  }
+
+  hasServersBlocklistRight () {
+    return this.auth.getUser().hasRight(UserRight.MANAGE_SERVERS_BLOCKLIST)
   }
 
   hasConfigRight () {

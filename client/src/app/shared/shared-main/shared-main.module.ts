@@ -25,7 +25,7 @@ import { ActionDropdownComponent, ButtonComponent, DeleteButtonComponent, EditBu
 import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
-import { HelpComponent, ListOverflowComponent } from './misc'
+import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
 import { UserHistoryService, UserNotificationsComponent, UserNotificationService } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
@@ -81,10 +81,9 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 
     HelpComponent,
     ListOverflowComponent,
+    TopMenuDropdownComponent,
 
     UserNotificationsComponent,
-
-    FeedComponent
   ],
 
   exports: [
@@ -131,10 +130,9 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
 
     HelpComponent,
     ListOverflowComponent,
+    TopMenuDropdownComponent,
 
-    UserNotificationsComponent,
-
-    FeedComponent
+    UserNotificationsComponent
   ],
 
   providers: [
