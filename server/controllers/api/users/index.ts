@@ -18,6 +18,7 @@ import {
   setDefaultPagination,
   setDefaultSort,
   userAutocompleteValidator,
+  usersListValidator,
   usersAddValidator,
   usersGetValidator,
   usersRegisterValidator,
@@ -85,6 +86,7 @@ usersRouter.get('/',
   usersSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  asyncMiddleware(usersListValidator),
   asyncMiddleware(listUsers)
 )
 
@@ -282,7 +284,13 @@ async function autocompleteUsers (req: express.Request, res: express.Response) {
 }
 
 async function listUsers (req: express.Request, res: express.Response) {
-  const resultList = await UserModel.listForApi(req.query.start, req.query.count, req.query.sort, req.query.search)
+  const resultList = await UserModel.listForApi({
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search,
+    blocked: req.query.blocked
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total, { withAdminFlags: true }))
 }

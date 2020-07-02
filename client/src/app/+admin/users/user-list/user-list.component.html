@@ -16,14 +16,27 @@
         </my-action-dropdown>
       </div>
 
-      <div class="ml-auto has-feedback has-clear">
-        <input
-          type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
-          (keyup)="onSearch($event)"
-        >
-        <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
-        <span class="sr-only" i18n>Clear filters</span>
+      <div class="ml-auto">
+        <div class="input-group has-feedback has-clear">
+          <div class="input-group-prepend c-hand" ngbDropdown placement="bottom-left auto" container="body">
+            <div class="input-group-text" ngbDropdownToggle>
+              <span class="caret" aria-haspopup="menu" role="button"></span>
+            </div>
+
+            <div role="menu" ngbDropdownMenu>
+              <h6 class="dropdown-header" i18n>Advanced user filters</h6>
+              <a [routerLink]="[ '/admin/users/list' ]" [queryParams]="{ 'search': 'banned:true' }" class="dropdown-item" i18n>Banned users</a>
+            </div>
+          </div>
+          <input
+            type="text" name="table-filter" id="table-filter" i18n-placeholder placeholder="Filter..."
+            (keyup)="onUserSearch($event)"
+          >
+          <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetTableFilter()"></a>
+          <span class="sr-only" i18n>Clear filters</span>
+        </div>
       </div>
+
       <a class="ml-2 add-button" routerLink="/admin/users/create">
         <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
         <ng-container i18n>Create user</ng-container>
@@ -70,7 +83,7 @@
               alt="Avatar"
             >
             <div>
-              <span>
+              <span class="user-table-primary-text">
                 <span *ngIf="user.blocked" i18n-title title="The user was banned" class="glyphicon glyphicon-ban-circle"></span>
                 {{ user.account.displayName }}
               </span>

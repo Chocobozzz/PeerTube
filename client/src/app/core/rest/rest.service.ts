@@ -9,11 +9,12 @@ interface QueryStringFilterPrefixes {
     prefix: string
     handler?: (v: string) => string | number
     multiple?: boolean
+    isBoolean?: boolean
   }
 }
 
 type ParseQueryStringFilterResult = {
-  [key: string]: string | number | (string | number)[]
+  [key: string]: string | number | boolean | (string | number | boolean)[]
 }
 
 @Injectable()
@@ -96,6 +97,7 @@ export class RestService {
                                     return t
                                   })
                                   .filter(t => !!t || t === 0)
+                                  .map(t => prefixObj.isBoolean ? t === 'true' : t)
 
       if (matchedTokens.length === 0) continue
 

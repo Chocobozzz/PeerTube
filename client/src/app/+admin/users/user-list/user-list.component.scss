@@ -17,6 +17,12 @@ tr.banned > td {
   font-weight: $font-semibold;
 }
 
+.user-table-primary-text .glyphicon {
+  font-size: 80%;
+  color: gray;
+  margin-left: 0.1rem;
+}
+
 .caption {
   justify-content: space-between;
 
@@ -32,4 +38,15 @@ p-tableCheckbox {
 
 .chip {
   @include chip;
+}
+
+.input-group {
+  @include peertube-input-group(300px);
+  input {
+    flex: 1;
+  }
+
+  .dropdown-toggle::after {
+    margin-left: 0;
+  }
 }

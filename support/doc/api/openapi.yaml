@@ -518,10 +518,13 @@ paths:
     get:
       summary: List users
       security:
-        - OAuth2: []
+        - OAuth2:
+          - admin
       tags:
         - Users
       parameters:
+        - $ref: '#/components/parameters/usersSearch'
+        - $ref: '#/components/parameters/usersBlocked'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/usersSort'
@@ -3148,6 +3151,13 @@ components:
       schema:
         type: string
         example: -createdAt
+    search:
+      name: search
+      in: query
+      required: false
+      description: Plain text search, applied to various parts of the model depending on endpoint
+      schema:
+        type: string
     searchTarget:
       name: searchTarget
       in: query
@@ -3224,6 +3234,20 @@ components:
         - -dislikes
         - -uuid
         - -createdAt
+    usersSearch:
+      name: search
+      in: query
+      required: false
+      description: Plain text search that will match with user usernames or emails
+      schema:
+        type: string
+    usersBlocked:
+      name: blocked
+      in: query
+      required: false
+      description: Filter results down to (un)banned users
+      schema:
+        type: boolean
     usersSort:
       name: sort
       in: query

@@ -5,6 +5,7 @@ import { Actor, DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, User } from '@shared/models'
+import { Params, Router, ActivatedRoute } from '@angular/router'
 
 @Component({
   selector: 'my-user-list',
@@ -30,6 +31,8 @@ export class UserListComponent extends RestTable implements OnInit {
     private serverService: ServerService,
     private userService: UserService,
     private auth: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
     private i18n: I18n
   ) {
     super()
@@ -49,6 +52,14 @@ export class UserListComponent extends RestTable implements OnInit {
         .subscribe(config => this.serverConfig = config)
 
     this.initialize()
+
+    this.route.queryParams
+      .subscribe(params => {
+        this.search = params.search || ''
+
+        this.setTableFilter(this.search)
+        this.loadData()
+      })
 
     this.bulkUserActions = [
       [
@@ -101,6 +112,26 @@ export class UserListComponent extends RestTable implements OnInit {
   onUserChanged () {
     this.loadData()
   }
+
+  /* Table filter functions */
+  onUserSearch (event: Event) {
+    this.onSearch(event)
+    this.setQueryParams((event.target as HTMLInputElement).value)
+  }
+
+  setQueryParams (search: string) {
+    const queryParams: Params = {}
+    if (search) Object.assign(queryParams, { search })
+
+    this.router.navigate([ '/admin/users/list' ], { queryParams })
+  }
+
+  resetTableFilter () {
+    this.setTableFilter('')
+    this.setQueryParams('')
+    this.resetSearch()
+  }
+  /* END Table filter functions */
 
   switchToDefaultAvatar ($event: Event) {
     ($event.target as HTMLImageElement).src = Actor.GET_DEFAULT_AVATAR_URL()
@@ -165,14 +196,17 @@ export class UserListComponent extends RestTable implements OnInit {
   protected loadData () {
     this.selectedUsers = []
 
-    this.userService.getUsers(this.pagination, this.sort, this.search)
-        .subscribe(
-          resultList => {
-            this.users = resultList.data
-            this.totalRecords = resultList.total
-          },
+    this.userService.getUsers({
+      pagination: this.pagination,
+      sort: this.sort,
+      search: this.search
+    }).subscribe(
+      resultList => {
+        this.users = resultList.data
+        this.totalRecords = resultList.total
+      },
 
-          err => this.notifier.error(err.message)
-        )
+      err => this.notifier.error(err.message)
+    )
   }
 }

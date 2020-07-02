@@ -290,11 +290,32 @@ export class UserService {
     })
   }
 
-  getUsers (pagination: RestPagination, sort: SortMeta, search?: string): Observable<ResultList<UserServerModel>> {
+  getUsers (parameters: {
+    pagination: RestPagination
+    sort: SortMeta
+    search?: string
+  }): Observable<ResultList<UserServerModel>> {
+    const { pagination, sort, search } = parameters
+
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination, sort)
 
-    if (search) params = params.append('search', search)
+    if (search) {
+      const filters = this.restService.parseQueryStringFilter(search, {
+        blocked: {
+          prefix: 'banned:',
+          isBoolean: true,
+          handler: v => {
+            if (v === 'true') return v
+            if (v === 'false') return v
+
+            return undefined
+          }
+        }
+      })
+
+      params = this.restService.addObjectParams(params, filters)
+    }
 
     return this.authHttp.get<ResultList<UserServerModel>>(UserService.BASE_USERS_URL, { params })
                .pipe(

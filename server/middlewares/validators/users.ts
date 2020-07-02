@@ -38,6 +38,21 @@ import { UserRole } from '../../../shared/models/users'
 import { MUserDefault } from '@server/types/models'
 import { Hooks } from '@server/lib/plugins/hooks'
 
+const usersListValidator = [
+  query('blocked')
+    .optional()
+    .customSanitizer(toBooleanOrNull)
+    .isBoolean().withMessage('Should be a valid boolean banned state'),
+
+  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    logger.debug('Checking usersList parameters', { parameters: req.query })
+
+    if (areValidationErrors(req, res)) return
+
+    return next()
+  }
+]
+
 const usersAddValidator = [
   body('username').custom(isUserUsernameValid).withMessage('Should have a valid username (lowercase alphanumeric characters)'),
   body('password').custom(isUserPasswordValidOrEmpty).withMessage('Should have a valid password'),
@@ -444,6 +459,7 @@ const ensureCanManageUser = [
 // ---------------------------------------------------------------------------
 
 export {
+  usersListValidator,
   usersAddValidator,
   deleteMeValidator,
   usersRegisterValidator,
