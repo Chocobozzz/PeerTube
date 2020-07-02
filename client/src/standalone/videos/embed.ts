@@ -17,6 +17,7 @@ import { PeerTubeEmbedApi } from './embed-api'
 import { TranslationsManager } from '../../assets/player/translations-manager'
 import videojs from 'video.js'
 import { VideoJSCaption } from '../../assets/player/peertube-videojs-typings'
+import { AuthUser } from '@app/core/auth/auth-user.model'
 
 type Translations = { [ id: string ]: string }
 
@@ -42,6 +43,9 @@ export class PeerTubeEmbed {
   mode: PlayerMode
   scope = 'peertube'
 
+  user: AuthUser
+  headers = new Headers()
+
   static async main () {
     const videoContainerId = 'video-container'
     const embed = new PeerTubeEmbed(videoContainerId)
@@ -57,11 +61,11 @@ export class PeerTubeEmbed {
   }
 
   loadVideoInfo (videoId: string): Promise<Response> {
-    return fetch(this.getVideoUrl(videoId))
+    return fetch(this.getVideoUrl(videoId), { headers: this.headers })
   }
 
   loadVideoCaptions (videoId: string): Promise<Response> {
-    return fetch(this.getVideoUrl(videoId) + '/captions')
+    return fetch(this.getVideoUrl(videoId) + '/captions', { headers: this.headers })
   }
 
   loadConfig (): Promise<Response> {
@@ -111,6 +115,7 @@ export class PeerTubeEmbed {
 
   async init () {
     try {
+      this.user = AuthUser.load()
       await this.initCore()
     } catch (e) {
       console.error(e)
@@ -162,6 +167,10 @@ export class PeerTubeEmbed {
   private async initCore () {
     const urlParts = window.location.pathname.split('/')
     const videoId = urlParts[ urlParts.length - 1 ]
+
+    if (this.user) {
+      this.headers.set('Authorization', `${this.user.getTokenType()} ${this.user.getAccessToken()}`)
+    }
 
     const videoPromise = this.loadVideoInfo(videoId)
     const captionsPromise = this.loadVideoCaptions(videoId)

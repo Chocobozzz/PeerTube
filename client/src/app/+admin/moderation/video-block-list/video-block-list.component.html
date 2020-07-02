@@ -57,12 +57,12 @@
       </td>
 
       <td>
-        <a [href]="getVideoUrl(videoBlock)" class="video-table-video-link" [title]="videoBlock.video.name" target="_blank" rel="noopener noreferrer">
-          <div class="video-table-video">
-            <div class="video-table-video-image">
+        <a [href]="getVideoUrl(videoBlock)" class="table-video-link" [title]="videoBlock.video.name" target="_blank" rel="noopener noreferrer">
+          <div class="table-video">
+            <div class="table-video-image">
               <img [src]="videoBlock.video.thumbnailPath">
             </div>
-            <div class="video-table-video-text">
+            <div class="table-video-text">
               <div>
                 <my-global-icon i18n-title title="The video was blocked due to automatic blocking of new videos" *ngIf="videoBlock.type == 2" iconName="robot"></my-global-icon>
                 {{ videoBlock.video.name }}
@@ -97,8 +97,20 @@
     <tr>
       <td class="expand-cell" colspan="6">
         <div class="d-flex moderation-expanded">
-          <span class="col-2 moderation-expanded-label" i18n>Block reason:</span>
-          <span class="col-9 moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+
+          <!-- block right part (block details) -->
+          <div class="col-8">
+            <span class="col-3 moderation-expanded-label" i18n>Block reason:</span>
+            <span class="col-9 moderation-expanded-text" [innerHTML]="videoBlock.reasonHtml"></span>
+          </div>
+
+          <!-- block right part (video embed) -->
+          <div class="col-4">
+            <div class="screenratio">
+              <div [innerHTML]="videoBlock.embedHtml"></div>
+            </div>
+          </div>
+
         </div>
       </td>
     </tr>
