@@ -1192,7 +1192,7 @@
       </trans-unit>
       <trans-unit id="908ccbd854d79d50723e7a651b2a0f4dd0557c60" datatype="html">
         <source>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
-        <target>Official PeerTube website (news, support, contribute...): <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
+        <target>موقع PeerTube الرسمي (الأخبار ، الدعم ، المساهمة ...):<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1200,7 +1200,7 @@
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6" datatype="html">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
+        <target>ضع المثيل الخاص بك في فهرس PeerTube العام: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">45</context>
@@ -1360,7 +1360,7 @@
       </trans-unit>
       <trans-unit id="cc37c9e1ceff31dc1227cc8c2f4bdadb2f239173" datatype="html">
         <source>Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></source>
-        <target>Sensitive: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
+        <target>حساس: <x id="INTERPOLATION" equiv-text="{{ nsfwPolicy }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">49</context>
@@ -1680,7 +1680,7 @@
       </trans-unit>
       <trans-unit id="2fb6c7364664174a205180f7173c4128b350c5ec" datatype="html">
         <source>In this instance</source>
-        <target>In this instance</target>
+        <target>فس هذه المنصة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/suggestion.component.html</context>
           <context context-type="linenumber">14</context>
@@ -1712,7 +1712,7 @@
       </trans-unit>
       <trans-unit id="b2f3e08a790518414d240fbe2c3c116c6f83c275" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></source>
-        <target>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></target>
+        <target>يإستخدام<x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">25</context>
