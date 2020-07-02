@@ -83,7 +83,7 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     ListOverflowComponent,
     TopMenuDropdownComponent,
 
-    UserNotificationsComponent,
+    UserNotificationsComponent
   ],
 
   exports: [

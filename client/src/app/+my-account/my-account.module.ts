@@ -77,7 +77,7 @@ import { MyAccountComponent } from './my-account.component'
     MyAccountVideoPlaylistCreateComponent,
     MyAccountVideoPlaylistUpdateComponent,
     MyAccountVideoPlaylistsComponent,
-    MyAccountVideoPlaylistElementsComponent,
+    MyAccountVideoPlaylistElementsComponent
   ],
 
   exports: [

@@ -19,22 +19,22 @@ export class AdminComponent implements OnInit {
   ) {}
 
   ngOnInit () {
-    const federationItems: TopMenuDropdownParam = {
-      label: this.i18n('Federation'),
+    const federationItems: TopMenuDropdownParam = {
+      label: this.i18n('Federation'),
       children: [
         {
           label: this.i18n('Instances you follow'),
-          routerLink: '/admin/follows/following-list',
+          routerLink: '/admin/follows/following-list',
           iconName: 'sign-out'
         },
         {
           label: this.i18n('Instances following you'),
-          routerLink: '/admin/follows/followers-list',
+          routerLink: '/admin/follows/followers-list',
           iconName: 'sign-in'
         },
         {
           label: this.i18n('Video redundancies'),
-          routerLink: '/admin/follows/video-redundancies-list',
+          routerLink: '/admin/follows/video-redundancies-list',
           iconName: 'videos'
         }
       ]
@@ -44,26 +44,35 @@ export class AdminComponent implements OnInit {
       label: this.i18n('Moderation'),
       children: []
     }
-    if (this.hasVideoAbusesRight()) moderationItems.children.push({
-      label: this.i18n('Video reports'),
-      routerLink: '/admin/moderation/video-abuses/list',
-      iconName: 'flag'
-    })
-    if (this.hasVideoBlocklistRight()) moderationItems.children.push({
-      label: this.i18n('Video blocks'),
-      routerLink: '/admin/moderation/video-blocks/list',
-      iconName: 'cross'
-    })
-    if (this.hasAccountsBlocklistRight()) moderationItems.children.push({
-      label: this.i18n('Muted accounts'),
-      routerLink: '/admin/moderation/blocklist/accounts',
-      iconName: 'user'
-    })
-    if (this.hasServersBlocklistRight()) moderationItems.children.push({
-      label: this.i18n('Muted servers'),
-      routerLink: '/admin/moderation/blocklist/servers',
-      iconName: 'server'
-    })
+
+    if (this.hasVideoAbusesRight()) {
+      moderationItems.children.push({
+        label: this.i18n('Video reports'),
+        routerLink: '/admin/moderation/video-abuses/list',
+        iconName: 'flag'
+      })
+    }
+    if (this.hasVideoBlocklistRight()) {
+      moderationItems.children.push({
+        label: this.i18n('Video blocks'),
+        routerLink: '/admin/moderation/video-blocks/list',
+        iconName: 'cross'
+      })
+    }
+    if (this.hasAccountsBlocklistRight()) {
+      moderationItems.children.push({
+        label: this.i18n('Muted accounts'),
+        routerLink: '/admin/moderation/blocklist/accounts',
+        iconName: 'user'
+      })
+    }
+    if (this.hasServersBlocklistRight()) {
+      moderationItems.children.push({
+        label: this.i18n('Muted servers'),
+        routerLink: '/admin/moderation/blocklist/servers',
+        iconName: 'server'
+      })
+    }
 
     if (this.hasUsersRight()) this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
     if (this.hasServerFollowRight()) this.menuEntries.push(federationItems)
