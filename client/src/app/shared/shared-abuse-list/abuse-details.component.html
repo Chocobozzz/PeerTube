@@ -96,12 +96,8 @@
   <!-- report right part (video/comment details) -->
   <div class="col-4">
     <div *ngIf="abuse.video" class="screenratio">
-      <div>
-        <span i18n *ngIf="abuse.video.deleted">The video was deleted</span>
-        <span i18n *ngIf="!abuse.video.deleted">The video was blocked</span>
-      </div>
-
-      <div *ngIf="!abuse.video.deleted && !abuse.video.blacklisted" [innerHTML]="abuse.embedHtml"></div>
+      <div *ngIf="abuse.video.deleted" i18n>The video was deleted</div>
+      <div *ngIf="!abuse.video.deleted" [innerHTML]="abuse.embedHtml"></div>
     </div>
 
     <div *ngIf="abuse.comment" class="comment-html">

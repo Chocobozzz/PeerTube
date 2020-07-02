@@ -7,14 +7,17 @@ import { DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { VideoBlockService } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { VideoBlacklist, VideoBlacklistType } from '@shared/models'
+import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
+import { environment } from 'src/environments/environment'
+import { DomSanitizer } from '@angular/platform-browser'
 
 @Component({
   selector: 'my-video-block-list',
   templateUrl: './video-block-list.component.html',
-  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', './video-block-list.component.scss' ]
+  styleUrls: [ '../../../shared/shared-moderation/moderation.scss', '../../../shared/shared-abuse-list/abuse-list-table.component.scss', './video-block-list.component.scss' ]
 })
 export class VideoBlockListComponent extends RestTable implements OnInit, AfterViewInit {
-  blocklist: (VideoBlacklist & { reasonHtml?: string })[] = []
+  blocklist: (VideoBlacklist & { reasonHtml?: string, embedHtml?: string })[] = []
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: -1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
@@ -28,6 +31,7 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
     private confirmService: ConfirmService,
     private videoBlocklistService: VideoBlockService,
     private markdownRenderer: MarkdownService,
+    private sanitizer: DomSanitizer,
     private videoService: VideoService,
     private route: ActivatedRoute,
     private router: Router,
@@ -171,6 +175,16 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
     )
   }
 
+  getVideoEmbed (entry: VideoBlacklist) {
+    return buildVideoEmbed(
+      buildVideoLink({
+        baseUrl: `${environment.embedUrl}/videos/embed/${entry.video.uuid}`,
+        title: false,
+        warningTitle: false
+      })
+    )
+  }
+
   protected loadData () {
     this.videoBlocklistService.listBlocks({
       pagination: this.pagination,
@@ -184,7 +198,10 @@ export class VideoBlockListComponent extends RestTable implements OnInit, AfterV
           this.blocklist = resultList.data
 
           for (const element of this.blocklist) {
-            Object.assign(element, { reasonHtml: await this.toHtml(element.reason) })
+            Object.assign(element, {
+              reasonHtml: await this.toHtml(element.reason),
+              embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(element))
+            })
           }
         },
 

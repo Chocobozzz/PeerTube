@@ -2,23 +2,6 @@
 @import 'mixins';
 @import 'miniature';
 
-.screenratio {
-  div {
-    @include miniature-thumbnail;
-
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: pvar(--inputPlaceholderColor);
-  }
-
-  @include large-screen-ratio($selector: 'div, ::ng-deep iframe') {
-    width: 100% !important;
-    height: 100% !important;
-    left: 0;
-  };
-}
-
 .comment-html {
   background-color: #ececec;
   padding: 10px;
