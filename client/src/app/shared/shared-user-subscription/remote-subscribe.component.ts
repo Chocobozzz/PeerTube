@@ -39,8 +39,6 @@ export class RemoteSubscribeComponent extends FormReactive implements OnInit {
     fetch(`https://${hostname}/.well-known/webfinger?resource=acct:${username}@${hostname}`)
       .then(response => response.json())
       .then(data => new Promise((resolve, reject) => {
-        console.log(data)
-
         if (data && Array.isArray(data.links)) {
           const link: { template: string } = data.links.find((link: any) => {
             return link && typeof link.template === 'string' && link.rel === 'http://ostatus.org/schema/1.0/subscribe'

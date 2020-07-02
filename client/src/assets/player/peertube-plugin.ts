@@ -233,12 +233,20 @@ class PeerTubePlugin extends Plugin {
   }
 
   private alterInactivity () {
-    if (this.menuOpened || this.mouseInControlBar) {
+    if (this.menuOpened) {
       this.player.options_.inactivityTimeout = this.savedInactivityTimeout
       return
     }
 
-    this.player.options_.inactivityTimeout = 1
+    if (!this.mouseInControlBar && !this.isTouchEnabled()) {
+      this.player.options_.inactivityTimeout = 1
+    }
+  }
+
+  private isTouchEnabled () {
+    return ('ontouchstart' in window) ||
+      navigator.maxTouchPoints > 0 ||
+      navigator.msMaxTouchPoints > 0
   }
 
   private initCaptions () {
