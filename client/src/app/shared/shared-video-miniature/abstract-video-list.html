@@ -4,10 +4,10 @@
       <div placement="bottom" [ngbTooltip]="titleTooltip" container="body">
         {{ titlePage }}
       </div>
-      <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
     </h1>
 
-    <div class="action-block" *ngIf="actions.length > 0">
+    <div class="action-block">
+      <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
       <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
         <button class="btn">
           <my-global-icon [iconName]="action.iconName" aria-hidden="true"></my-global-icon>

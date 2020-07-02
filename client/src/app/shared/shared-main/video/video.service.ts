@@ -221,7 +221,7 @@ export class VideoService implements VideosProvider {
     const feeds = [
       {
         format: FeedFormat.RSS,
-        label: 'rss 2.0',
+        label: 'media rss 2.0',
         url: VideoService.BASE_FEEDS_URL + FeedFormat.RSS.toLowerCase()
       },
       {
