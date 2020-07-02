@@ -34,6 +34,7 @@ const icons = {
   'delete': require('!!raw-loader?!../../../assets/images/feather/delete.svg').default,
   'inbox-full': require('!!raw-loader?!../../../assets/images/feather/inbox-full.svg').default,
   'sign-out': require('!!raw-loader?!../../../assets/images/feather/log-out.svg').default,
+  'sign-in': require('!!raw-loader?!../../../assets/images/feather/log-in.svg').default,
   'download': require('!!raw-loader?!../../../assets/images/feather/download.svg').default,
   'ownership-change': require('!!raw-loader?!../../../assets/images/feather/share.svg').default,
   'share': require('!!raw-loader?!../../../assets/images/feather/share-2.svg').default,

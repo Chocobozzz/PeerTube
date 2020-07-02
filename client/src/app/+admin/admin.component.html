@@ -1,11 +1,5 @@
 <div class="row">
-  <div class="sub-menu">
-    <ng-template #linkTemplate let-item="item">
-      <a [routerLink]="item.routerLink" routerLinkActive="active" class="title-page title-page-settings">{{ item.label }}</a>
-    </ng-template>
-
-    <list-overflow [items]="items" [itemTemplate]="linkTemplate"></list-overflow>
-  </div>
+  <my-top-menu-dropdown [menuEntries]="menuEntries"></my-top-menu-dropdown>
 
   <div class="margin-content">
     <router-outlet></router-outlet>
