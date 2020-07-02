@@ -14,8 +14,8 @@
         },
         "locales": {
           "ar": {
-            "translation": "src/locale/angular.ar-001.xlf",
-            "baseHref": "/client/ar-001/"
+            "translation": "src/locale/angular.ar.xlf",
+            "baseHref": "/client/ar/"
           },
           "hu": {
             "translation": "src/locale/angular.hu-HU.xlf",
@@ -203,7 +203,7 @@
                 }
               ]
             },
-            "ar-001": {
+            "ar": {
               "localize": [ "ar" ]
             },
             "hu-HU": {
@@ -348,7 +348,7 @@
               "i18nBaseFile": "angular",
               "defaultLanguage": "en-US",
               "languages": [
-                "ar-001",
+                "ar",
                 "ca-ES",
                 "cs-CZ",
                 "da-DK",
