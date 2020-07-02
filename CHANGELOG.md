@@ -4,7 +4,8 @@
 
 ### IMPORTANT NOTES
 
- * Deprecate `/videos/abuse` endpoint. A new endpoint will be created in PeerTube 2.4 to also report accounts and comments (`/videos/abuse` will be removed in 3.0)
+ * Deprecate `/videos/abuse` endpoint.
+A new endpoint to report videos will be created in PeerTube 2.4 and will also allow to report accounts and comments (`/videos/abuse` will be removed in 3.0)
  * Renamed videos blacklist feature to videos blocks/blocklist
 
 
