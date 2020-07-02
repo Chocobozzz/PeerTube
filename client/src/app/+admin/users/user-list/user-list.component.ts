@@ -87,12 +87,6 @@ export class UserListComponent extends RestTable implements OnInit {
     return 'UserListComponent'
   }
 
-  getRowClasses (rowData: User) {
-    return {
-      banned: rowData.blocked
-    }
-  }
-
   openBanUserModal (users: User[]) {
     for (const user of users) {
       if (user.username === 'root') {
