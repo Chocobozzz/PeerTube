@@ -3,32 +3,39 @@
 @import '_mixins';
 @import '_miniature';
 
+$iconSize: 16px;
+
 .videos-header {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
 
   .title-page.title-page-single {
     display: flex;
-
-    my-feed {
-      display: inline-block;
-      top: 1px;
-      width: max-content;
-    }
+    flex-grow: 1;
   }
 
   .action-block {
+    ::ng-deep my-feed {
+      my-global-icon {
+        width: calc(#{$iconSize} - 2px);
+      }
+    }
+
     a button {
       @include peertube-button;
       @include grey-button;
-      @include button-with-icon(18px, 3px, -1px);
+      @include button-with-icon($iconSize, 3px, -1px);
     }
   }
 
   .moderation-block {
+    div {
+      @include button-with-icon($iconSize, 3px, -1px);
+    }
+
+    margin-left: .2rem;
     display: flex;
-    flex-grow: 1;
     justify-content: flex-end;
     align-items: center;
   }

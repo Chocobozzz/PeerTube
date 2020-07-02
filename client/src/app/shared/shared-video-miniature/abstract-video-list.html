@@ -9,19 +9,23 @@
     <div class="action-block">
       <my-feed *ngIf="titlePage" [syndicationItems]="syndicationItems"></my-feed>
       <a [routerLink]="action.routerLink" routerLinkActive="active" *ngFor="let action of actions">
-        <button class="btn">
-          <my-global-icon [iconName]="action.iconName" aria-hidden="true"></my-global-icon>
-          <span>{{ action.label }}</span>
-        </button>
+        <my-button [icon]="action.iconName" [label]="action.label"></my-button>
       </a>
     </div>
 
     <div class="moderation-block" *ngIf="displayModerationBlock">
-      <my-peertube-checkbox
-        (change)="toggleModerationDisplay()"
-        inputName="display-unlisted-private" i18n-labelText labelText="Display unlisted and private videos"
-      >
-      </my-peertube-checkbox>
+      <div class="c-hand" ngbDropdown container="body" placement="bottom-right auto">
+        <my-global-icon iconName="cog" ngbDropdownToggle></my-global-icon>
+
+        <div role="menu" class="dropdown-menu" ngbDropdownMenu>
+          <div class="dropdown-item">
+            <my-peertube-checkbox
+              (change)="toggleModerationDisplay()"
+              inputName="display-unlisted-private" i18n-labelText labelText="Display unlisted and private videos"
+            ></my-peertube-checkbox>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
