@@ -86,7 +86,7 @@ usersRouter.get('/',
   usersSortValidator,
   setDefaultSort,
   setDefaultPagination,
-  asyncMiddleware(usersListValidator),
+  usersListValidator,
   asyncMiddleware(listUsers)
 )
 

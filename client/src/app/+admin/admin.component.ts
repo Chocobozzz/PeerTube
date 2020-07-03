@@ -25,12 +25,12 @@ export class AdminComponent implements OnInit {
         {
           label: this.i18n('Instances you follow'),
           routerLink: '/admin/follows/following-list',
-          iconName: 'sign-out'
+          iconName: 'following'
         },
         {
           label: this.i18n('Instances following you'),
           routerLink: '/admin/follows/followers-list',
-          iconName: 'sign-in'
+          iconName: 'follower'
         },
         {
           label: this.i18n('Video redundancies'),

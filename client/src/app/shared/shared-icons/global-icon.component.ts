@@ -12,6 +12,8 @@ const icons = {
   'history': require('!!raw-loader?!../../../assets/images/misc/history.svg').default, // material ui
   'subscriptions': require('!!raw-loader?!../../../assets/images/misc/subscriptions.svg').default, // material ui
   'playlist-add': require('!!raw-loader?!../../../assets/images/misc/playlist-add.svg').default, // material ui
+  'follower': require('!!raw-loader?!../../../assets/images/misc/account-arrow-left.svg').default, // material ui
+  'following': require('!!raw-loader?!../../../assets/images/misc/account-arrow-right.svg').default, // material ui
 
   // feather icons
   'flag': require('!!raw-loader?!../../../assets/images/feather/flag.svg').default,

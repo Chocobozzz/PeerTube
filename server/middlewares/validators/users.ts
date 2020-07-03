@@ -41,10 +41,9 @@ import { Hooks } from '@server/lib/plugins/hooks'
 const usersListValidator = [
   query('blocked')
     .optional()
-    .customSanitizer(toBooleanOrNull)
     .isBoolean().withMessage('Should be a valid boolean banned state'),
 
-  async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  (req: express.Request, res: express.Response, next: express.NextFunction) => {
     logger.debug('Checking usersList parameters', { parameters: req.query })
 
     if (areValidationErrors(req, res)) return
