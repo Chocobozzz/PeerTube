@@ -7,6 +7,7 @@ my-small-loader ::ng-deep .root {
   width: 20px;
 }
 
+a[class$=-button],
 span[class$=-button] {
   > span {
     margin-left: 5px;
