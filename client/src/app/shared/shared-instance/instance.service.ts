@@ -41,7 +41,7 @@ export class InstanceService {
     const html = {
       description: '',
       terms: '',
-      codeOfConduct: '',
+      DMCA: '',
       moderationInformation: '',
       administrator: '',
       hardwareInformation: ''
