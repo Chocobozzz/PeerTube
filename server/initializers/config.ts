@@ -230,7 +230,7 @@ const CONFIG = {
     get SHORT_DESCRIPTION () { return config.get<string>('instance.short_description') },
     get DESCRIPTION () { return config.get<string>('instance.description') },
     get TERMS () { return config.get<string>('instance.terms') },
-    get CODE_OF_CONDUCT () { return config.get<string>('instance.code_of_conduct') },
+    get DMCA () { return config.get<string>('instance.DMCA') },
 
     get CREATION_REASON () { return config.get<string>('instance.creation_reason') },
 
