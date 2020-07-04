@@ -7,7 +7,7 @@ export interface CustomConfig {
     shortDescription: string
     description: string
     terms: string
-    codeOfConduct: string
+    DMCA: string
 
     creationReason: string
     moderationInformation: string
