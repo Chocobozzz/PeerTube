@@ -53,7 +53,7 @@ function updateCustomSubConfig (url: string, token: string, newConfig: DeepParti
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
-      codeOfConduct: 'my super coc',
+      DMCA: 'DMCA',
 
       creationReason: 'my super creation reason',
       moderationInformation: 'my super moderation information',
