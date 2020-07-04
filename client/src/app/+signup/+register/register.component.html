@@ -12,8 +12,8 @@
       <my-custom-stepper linear *ngIf="!signupDone">
         <cdk-step [stepControl]="formStepUser" i18n-label label="User">
           <my-register-step-user
-            [hasCodeOfConduct]="!!aboutHtml.codeOfConduct"
-            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick()" (codeOfConductClick)="onCodeOfConductClick()"
+            [hasDMCA]="!!aboutHtml.DMCA"
+            (formBuilt)="onUserFormBuilt($event)" (termsClick)="onTermsClick()" (DMCAClick)="onDMCAClick()"
           >
           </my-register-step-user>
 
@@ -79,9 +79,9 @@
             </ng-template>
           </ngb-panel>
 
-          <ngb-panel *ngIf="aboutHtml.codeOfConduct" id="code-of-conduct" i18n-title title="Code of conduct">
+          <ngb-panel *ngIf="aboutHtml.DMCA" id="DMCA" i18n-title title="DMCA">
             <ng-template ngbPanelContent>
-              <div class="block" [innerHTML]="aboutHtml.codeOfConduct"></div>
+              <div class="block" [innerHTML]="aboutHtml.DMCA"></div>
             </ng-template>
           </ngb-panel>
 
