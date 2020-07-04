@@ -33,7 +33,7 @@ function checkInitialConfig (server: ServerInfo, data: CustomConfig) {
 
   expect(data.instance.terms).to.equal('No terms for now.')
   expect(data.instance.creationReason).to.be.empty
-  expect(data.instance.codeOfConduct).to.be.empty
+  expect(data.instance.DMCA).to.be.empty
   expect(data.instance.moderationInformation).to.be.empty
   expect(data.instance.administrator).to.be.empty
   expect(data.instance.maintenanceLifetime).to.be.empty
@@ -101,7 +101,7 @@ function checkUpdatedConfig (data: CustomConfig) {
 
   expect(data.instance.terms).to.equal('my super terms')
   expect(data.instance.creationReason).to.equal('my super creation reason')
-  expect(data.instance.codeOfConduct).to.equal('my super coc')
+  expect(data.instance.DMCA).to.equal('my super coc')
   expect(data.instance.moderationInformation).to.equal('my super moderation information')
   expect(data.instance.administrator).to.equal('Kuja')
   expect(data.instance.maintenanceLifetime).to.equal('forever')
@@ -228,7 +228,7 @@ describe('Test config', function () {
         shortDescription: 'my short description',
         description: 'my super description',
         terms: 'my super terms',
-        codeOfConduct: 'my super coc',
+        DMCA: 'DMCA',
 
         creationReason: 'my super creation reason',
         moderationInformation: 'my super moderation information',
@@ -401,7 +401,7 @@ describe('Test config', function () {
     expect(data.instance.shortDescription).to.equal('my short description')
     expect(data.instance.description).to.equal('my super description')
     expect(data.instance.terms).to.equal('my super terms')
-    expect(data.instance.codeOfConduct).to.equal('my super coc')
+    expect(data.instance.DMCA).to.equal('DMCA')
 
     expect(data.instance.creationReason).to.equal('my super creation reason')
     expect(data.instance.moderationInformation).to.equal('my super moderation information')
