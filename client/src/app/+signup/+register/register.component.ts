@@ -97,7 +97,7 @@ export class RegisterComponent implements OnInit {
   }
 
   onDMCAClick () {
-    if (this.accordion) this.accordion.toggle('DMCA')
+    if (this.accordion) this.accordion.toggle('dmca-policy')
   }
 
   async signup () {
