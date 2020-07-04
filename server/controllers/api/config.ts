@@ -198,7 +198,7 @@ function getAbout (req: express.Request, res: express.Response) {
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
-      DMCA: CONFIG.INSTANCE.DMCA,
+      DMCA: CONFIG.INSTANCE.DMCA_POLICY,
 
       hardwareInformation: CONFIG.INSTANCE.HARDWARE_INFORMATION,
 
@@ -338,7 +338,7 @@ function customConfig (): CustomConfig {
       shortDescription: CONFIG.INSTANCE.SHORT_DESCRIPTION,
       description: CONFIG.INSTANCE.DESCRIPTION,
       terms: CONFIG.INSTANCE.TERMS,
-      DMCA: CONFIG.INSTANCE.DMCA,
+      DMCA: CONFIG.INSTANCE.DMCA_POLICY,
 
       creationReason: CONFIG.INSTANCE.CREATION_REASON,
       moderationInformation: CONFIG.INSTANCE.MODERATION_INFORMATION,
