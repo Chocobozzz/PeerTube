@@ -7040,7 +7040,7 @@
       </trans-unit>
       <trans-unit id="9eef7dd291945247d4aefb3994b617d73a0c96e2" datatype="html">
         <source>Remove redundancy</source>
-        <target state="translated">Удалить избыточность</target>
+        <target state="translated">Удалить подписчиков</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7048,7 +7048,7 @@
       </trans-unit>
       <trans-unit id="1009a5a3eab4ef49f45fe10392d8685c1ff03df9" datatype="html">
         <source>Video redundancies removed!</source>
-        <target state="translated">Видео-избыточность удалена!</target>
+        <target state="translated">Подписчик удален!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.ts</context>
           <context context-type="linenumber">1</context>
