@@ -11,11 +11,11 @@ import { FormReactive, FormValidatorService, UserValidatorsService } from '@app/
   styleUrls: [ './register.component.scss' ]
 })
 export class RegisterStepUserComponent extends FormReactive implements OnInit {
-  @Input() hasCodeOfConduct = false
+  @Input() hasDMCA = false
 
   @Output() formBuilt = new EventEmitter<FormGroup>()
   @Output() termsClick = new EventEmitter<void>()
-  @Output() codeOfConductClick = new EventEmitter<void>()
+  @Output() DMCAClick = new EventEmitter<void>()
 
   constructor (
     protected formValidatorService: FormValidatorService,
@@ -52,9 +52,9 @@ export class RegisterStepUserComponent extends FormReactive implements OnInit {
     this.termsClick.emit()
   }
 
-  onCodeOfConductClick (event: Event) {
+  onDMCAClick (event: Event) {
     event.preventDefault()
-    this.codeOfConductClick.emit()
+    this.DMCAClick.emit()
   }
 
   private onDisplayNameChange (oldDisplayName: string, newDisplayName: string) {
