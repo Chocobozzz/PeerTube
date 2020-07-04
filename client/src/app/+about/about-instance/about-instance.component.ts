@@ -20,7 +20,7 @@ export class AboutInstanceComponent implements OnInit, AfterViewChecked {
   html = {
     description: '',
     terms: '',
-    codeOfConduct: '',
+    DMCA: '',
     moderationInformation: '',
     administrator: '',
     hardwareInformation: ''
