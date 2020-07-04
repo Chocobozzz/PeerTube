@@ -5,7 +5,7 @@ export interface About {
     description: string
     terms: string
 
-    codeOfConduct: string
+    DMCA: string
     hardwareInformation: string
 
     creationReason: string
