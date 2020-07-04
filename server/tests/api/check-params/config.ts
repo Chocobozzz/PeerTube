@@ -27,7 +27,7 @@ describe('Test config API validators', function () {
       shortDescription: 'my short description',
       description: 'my super description',
       terms: 'my super terms',
-      codeOfConduct: 'my super coc',
+      DMCA: 'DMCA',
 
       creationReason: 'my super reason',
       moderationInformation: 'my super moderation information',
