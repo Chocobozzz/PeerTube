@@ -57,7 +57,7 @@
       <div [innerHTML]="html.description"></div>
     </div>
 
-    <h2 i18n class="middle-title" *ngIf="html.moderationInformation || html.codeOfConduct || html.terms">
+    <h2 i18n class="middle-title" *ngIf="html.moderationInformation || html.DMCA || html.terms">
       MODERATION
     </h2>
 
@@ -67,10 +67,10 @@
       <div [innerHTML]="html.moderationInformation"></div>
     </div>
 
-    <div class="block code-of-conduct" *ngIf="html.codeOfConduct">
-      <h3 i18n class="section-title">Code of conduct</h3>
+    <div class="block DMCA" *ngIf="html.DMCA">
+      <h3 i18n class="section-title">DMCA</h3>
 
-      <div [innerHTML]="html.codeOfConduct"></div>
+      <div [innerHTML]="html.DMCA"></div>
     </div>
 
     <div class="block terms">
