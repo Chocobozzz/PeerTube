@@ -26,7 +26,7 @@ export class RegisterComponent implements OnInit {
   aboutHtml = {
     description: '',
     terms: '',
-    codeOfConduct: '',
+    DMCA: '',
     moderationInformation: '',
     administrator: ''
   }
@@ -96,8 +96,8 @@ export class RegisterComponent implements OnInit {
     if (this.accordion) this.accordion.toggle('terms')
   }
 
-  onCodeOfConductClick () {
-    if (this.accordion) this.accordion.toggle('code-of-conduct')
+  onDMCAClick () {
+    if (this.accordion) this.accordion.toggle('DMCA')
   }
 
   async signup () {
