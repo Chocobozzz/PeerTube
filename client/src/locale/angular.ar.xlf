@@ -2488,7 +2488,7 @@
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target>{VAR_PLURAL, plural, =1 {فيديو} other {مقاطع فيديو}}</target>
+        <target>{VAR_PLURAL, plural, =1 {فيديو} other {مقاطع فيديو} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -2500,7 +2500,7 @@
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target>{VAR_PLURAL, plural, =1 {قناة} other {قنوات}}</target>
+        <target>{VAR_PLURAL, plural, =1 {قناة} other {قنوات} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -2512,7 +2512,7 @@
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target>{VAR_PLURAL, plural, =1 {مشترك} آخر {مشتركون}}</target>
+        <target>{VAR_PLURAL, plural, =1 {مشترك} other {مشتركون} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -2548,7 +2548,7 @@
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target>{VAR_PLURAL , plural, =1 {تعليق} آخر {تعليقات}}</target>
+        <target>{VAR_PLURAL , plural, =1 {تعليق} other {تعليقات} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -3572,7 +3572,7 @@
       </trans-unit>
       <trans-unit id="8fc026bb4b317bf3a6159c364818202f5bb95a4e" datatype="html">
         <source>Popular</source>
-        <target>جمع</target>
+        <target>شائع</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">16</context>
@@ -3588,7 +3588,7 @@
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target>{VAR_PLURAL , plural, =1 {نتيجة} other {نتائج}}</target>
+        <target>{VAR_PLURAL , plural, =1 {نتيجة} other {نتائج} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">23</context>
@@ -5084,7 +5084,7 @@
       </trans-unit>
       <trans-unit id="e01bfa3629e2133dbf307975446bde047eb8bd1f" datatype="html">
         <source>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</source>
-        <target>{VAR_SELECT ، حدد ، غير محدد {Unsubscribe} other {Unsubscribe from all channels}}</target>
+        <target>{VAR_SELECT, select, undefined {Unsubscribe} other {Unsubscribe from all channels} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context>
           <context context-type="linenumber">31</context>
@@ -8352,7 +8352,7 @@
       </trans-unit>
       <trans-unit id="baa5048f978a6fed563ab1d30a6bb965ea687ba8" datatype="html">
         <source>{{'{0} languages selected</source>
-        <target>تم اختيار {{'{0} لغة</target>
+        <target>{{'{0} لغة مختارة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -11910,7 +11910,7 @@
       </trans-unit>
       <trans-unit id="cf9ddbb55b25178660e09346209aedc10108aa24" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {minute} other {minutes} }</source>
-        <target>{VAR_PLURAL, plural, =1 {دقيقة} other {دقائق}}</target>
+        <target>{VAR_PLURAL, plural, =1 {دقيقة} other {دقائق} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.ts</context>
           <context context-type="linenumber">1</context>
