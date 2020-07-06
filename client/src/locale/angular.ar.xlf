@@ -8352,7 +8352,7 @@
       </trans-unit>
       <trans-unit id="baa5048f978a6fed563ab1d30a6bb965ea687ba8" datatype="html">
         <source>{{'{0} languages selected</source>
-        <target>{{'{0} لغة مختارة</target>
+        <target>{0}'}} لغة مختارة</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.ts</context>
           <context context-type="linenumber">1</context>
