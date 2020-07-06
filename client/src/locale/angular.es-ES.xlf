@@ -4447,7 +4447,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Video} otros {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
@@ -5653,7 +5653,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Ningún videos} =1 {1 video} otros{<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ningún videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context>
           <context context-type="linenumber">23</context>
@@ -7912,7 +7912,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="897e90115ad2bc3d07469e0d80bc6f390961723d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Published 1 video} otros{Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">1</context>
