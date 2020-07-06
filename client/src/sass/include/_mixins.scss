@@ -107,6 +107,10 @@
     color: pvar(--inputPlaceholderColor);
   }
 
+  &[readonly] {
+    opacity: 0.7;
+  }
+
   @media screen and (max-width: $width) {
     width: 100%;
   }
