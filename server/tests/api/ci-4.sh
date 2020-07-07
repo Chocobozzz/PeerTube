@@ -2,6 +2,7 @@
 
 set -eu
 
+activitypubFiles=$(find server/tests/api/moderation -type f | grep -v index.ts | xargs echo)
 redundancyFiles=$(find server/tests/api/redundancy -type f | grep -v index.ts | xargs echo)
 activitypubFiles=$(find server/tests/api/activitypub -type f | grep -v index.ts | xargs echo)
 

@@ -7,7 +7,7 @@ export enum UserNotificationSettingValue {
 export interface UserNotificationSetting {
   newVideoFromSubscription: UserNotificationSettingValue
   newCommentOnMyVideo: UserNotificationSettingValue
-  videoAbuseAsModerator: UserNotificationSettingValue
+  abuseAsModerator: UserNotificationSettingValue
   videoAutoBlacklistAsModerator: UserNotificationSettingValue
   blacklistOnMyVideo: UserNotificationSettingValue
   myVideoPublished: UserNotificationSettingValue

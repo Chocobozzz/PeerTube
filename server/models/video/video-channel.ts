@@ -61,6 +61,7 @@ type AvailableWithStatsOptions = {
 }
 
 export type SummaryOptions = {
+  actorRequired?: boolean // Default: true
   withAccount?: boolean // Default: false
   withAccountBlockerIds?: number[]
 }
@@ -121,7 +122,7 @@ export type SummaryOptions = {
         {
           attributes: [ 'id', 'preferredUsername', 'url', 'serverId', 'avatarId' ],
           model: ActorModel.unscoped(),
-          required: true,
+          required: options.actorRequired ?? true,
           include: [
             {
               attributes: [ 'host' ],

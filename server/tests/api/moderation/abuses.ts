@@ -29,9 +29,7 @@ import {
 
 const expect = chai.expect
 
-// FIXME: deprecated in 2.3. Remove this controller
-
-describe('Test video abuses', function () {
+describe('Test abuses', function () {
   let servers: ServerInfo[] = []
   let abuseServer2: Abuse
 
@@ -103,8 +101,8 @@ describe('Test video abuses', function () {
     expect(abuse.reporterAccount.host).to.equal('localhost:' + servers[0].port)
     expect(abuse.video.id).to.equal(servers[0].video.id)
     expect(abuse.video.channel).to.exist
-    expect(abuse.video.countReports).to.equal(1)
-    expect(abuse.video.nthReport).to.equal(1)
+    expect(abuse.count).to.equal(1)
+    expect(abuse.nth).to.equal(1)
     expect(abuse.countReportsForReporter).to.equal(1)
     expect(abuse.countReportsForReportee).to.equal(1)
 
@@ -138,8 +136,8 @@ describe('Test video abuses', function () {
     expect(abuse1.state.id).to.equal(AbuseState.PENDING)
     expect(abuse1.state.label).to.equal('Pending')
     expect(abuse1.moderationComment).to.be.null
-    expect(abuse1.video.countReports).to.equal(1)
-    expect(abuse1.video.nthReport).to.equal(1)
+    expect(abuse1.count).to.equal(1)
+    expect(abuse1.nth).to.equal(1)
 
     const abuse2: Abuse = res1.body.data[1]
     expect(abuse2.reason).to.equal('my super bad reason 2')
@@ -281,8 +279,8 @@ describe('Test video abuses', function () {
     {
       for (const abuse of res2.body.data as Abuse[]) {
         if (abuse.video.id === video3.id) {
-          expect(abuse.video.countReports).to.equal(1, "wrong reports count for video 3")
-          expect(abuse.video.nthReport).to.equal(1, "wrong report position in report list for video 3")
+          expect(abuse.count).to.equal(1, "wrong reports count for video 3")
+          expect(abuse.nth).to.equal(1, "wrong report position in report list for video 3")
           expect(abuse.countReportsForReportee).to.equal(1, "wrong reports count for reporter on video 3 abuse")
           expect(abuse.countReportsForReporter).to.equal(3, "wrong reports count for reportee on video 3 abuse")
         }

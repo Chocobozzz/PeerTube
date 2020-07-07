@@ -320,7 +320,7 @@ class Emailer {
       const commentUrl = WEBSERVER.URL + comment.Video.getWatchStaticPath() + ';threadId=' + comment.getThreadId()
 
       emailPayload = {
-        template: 'comment-abuse-new',
+        template: 'video-comment-abuse-new',
         to,
         subject: `New comment abuse report from ${reporter}`,
         locals: {

@@ -98,5 +98,6 @@ export type MAbuseFull =
 export type MAbuseFormattable =
   MAbuse &
   Use<'ReporterAccount', MAccountFormattable> &
+  Use<'FlaggedAccount', MAccountFormattable> &
   Use<'VideoAbuse', MVideoAbuseFormattable> &
   Use<'VideoCommentAbuse', MCommentAbuseFormattable>

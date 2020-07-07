@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
-import * as chai from 'chai'
 import 'mocha'
+import * as chai from 'chai'
 import {
   addVideoToBlacklist,
   askResetPassword,
@@ -11,7 +11,7 @@ import {
   createUser,
   flushAndRunServer,
   removeVideoFromBlacklist,
-  reportVideoAbuse,
+  reportAbuse,
   resetPassword,
   ServerInfo,
   setAccessTokensToServers,
@@ -30,10 +30,15 @@ describe('Test emails', function () {
   let userId: number
   let userId2: number
   let userAccessToken: string
+
   let videoUUID: string
+  let videoId: number
+
   let videoUserUUID: string
+
   let verificationString: string
   let verificationString2: string
+
   const emails: object[] = []
   const user = {
     username: 'user_1',
@@ -76,6 +81,7 @@ describe('Test emails', function () {
       }
       const res = await uploadVideo(server.url, server.accessToken, attributes)
       videoUUID = res.body.video.uuid
+      videoId = res.body.video.id
     }
   })
 
@@ -179,7 +185,7 @@ describe('Test emails', function () {
       this.timeout(10000)
 
       const reason = 'my super bad reason'
-      await reportVideoAbuse(server.url, server.accessToken, videoUUID, reason)
+      await reportAbuse({ url: server.url, token: server.accessToken, videoId, reason })
 
       await waitJobs(server)
       expect(emails).to.have.lengthOf(3)

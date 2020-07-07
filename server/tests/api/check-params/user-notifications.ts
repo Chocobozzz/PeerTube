@@ -164,7 +164,7 @@ describe('Test user notifications API validators', function () {
     const correctFields: UserNotificationSetting = {
       newVideoFromSubscription: UserNotificationSettingValue.WEB,
       newCommentOnMyVideo: UserNotificationSettingValue.WEB,
-      videoAbuseAsModerator: UserNotificationSettingValue.WEB,
+      abuseAsModerator: UserNotificationSettingValue.WEB,
       videoAutoBlacklistAsModerator: UserNotificationSettingValue.WEB,
       blacklistOnMyVideo: UserNotificationSettingValue.WEB,
       myVideoImportFinished: UserNotificationSettingValue.WEB,

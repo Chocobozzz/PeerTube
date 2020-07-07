@@ -11,7 +11,7 @@ import {
   MockInstancesIndex,
   registerUser,
   removeVideoFromBlacklist,
-  reportVideoAbuse,
+  reportAbuse,
   unfollow,
   updateCustomConfig,
   updateCustomSubConfig,
@@ -74,12 +74,12 @@ describe('Test moderation notifications', function () {
 
       const name = 'video for abuse ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const uuid = resVideo.body.video.uuid
+      const video = resVideo.body.video
 
-      await reportVideoAbuse(servers[0].url, servers[0].accessToken, uuid, 'super reason')
+      await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, videoId: video.id, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewVideoAbuseForModerators(baseParams, uuid, name, 'presence')
+      await checkNewVideoAbuseForModerators(baseParams, video.uuid, name, 'presence')
     })
 
     it('Should send a notification to moderators on remote video abuse', async function () {
@@ -87,14 +87,14 @@ describe('Test moderation notifications', function () {
 
       const name = 'video for abuse ' + uuidv4()
       const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
-      const uuid = resVideo.body.video.uuid
+      const video = resVideo.body.video
 
       await waitJobs(servers)
 
-      await reportVideoAbuse(servers[1].url, servers[1].accessToken, uuid, 'super reason')
+      await reportAbuse({ url: servers[1].url, token: servers[1].accessToken, videoId: video.id, reason: 'super reason' })
 
       await waitJobs(servers)
-      await checkNewVideoAbuseForModerators(baseParams, uuid, name, 'presence')
+      await checkNewVideoAbuseForModerators(baseParams, video.uuid, name, 'presence')
     })
   })
 

@@ -25,8 +25,8 @@ const updateNotificationSettingsValidator = [
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid new video from subscription notification setting'),
   body('newCommentOnMyVideo')
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid new comment on my video notification setting'),
-  body('videoAbuseAsModerator')
-    .custom(isUserNotificationSettingValid).withMessage('Should have a valid new video abuse as moderator notification setting'),
+  body('abuseAsModerator')
+    .custom(isUserNotificationSettingValid).withMessage('Should have a valid abuse as moderator notification setting'),
   body('videoAutoBlacklistAsModerator')
     .custom(isUserNotificationSettingValid).withMessage('Should have a valid video auto blacklist notification setting'),
   body('blacklistOnMyVideo')
