@@ -4459,7 +4459,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="bcf8ce898a641416913d16b5dc39385e83ca069c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Channel} other {Channels} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Channel} otros {Channels} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Canal} otros {Canales} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">30</context>
@@ -4471,7 +4471,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Subscriber} otros {Subscribers} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Abonado} otros {Suscriptores} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -5653,7 +5653,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Ningún videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Ningún video} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context>
           <context context-type="linenumber">23</context>
@@ -7912,7 +7912,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="897e90115ad2bc3d07469e0d80bc6f390961723d" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Published 1 video} other {Published <x id="INTERPOLATION" equiv-text="{{total}}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 video publicado} other {<x id="INTERPOLATION" equiv-text="{{total}}"/> videos publicados} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-videos/video-channel-videos.component.ts</context>
           <context context-type="linenumber">1</context>
