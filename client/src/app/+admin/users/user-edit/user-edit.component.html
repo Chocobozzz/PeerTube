@@ -37,14 +37,14 @@
       </a>
     </div>
     <div>
-      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + user?.account.displayName + '&quot;' }">
-        <div class="dashboard-num">{{ user.videoAbusesCount }}</div>
+      <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reportee:&quot;' + user?.account.displayName + '&quot;' }">
+        <div class="dashboard-num">{{ user.abusesCount }}</div>
         <div class="dashboard-label" i18n>Incriminated in reports</div>
       </a>
     </div>
     <div>
-      <a [routerLink]="[ '/admin/moderation/video-abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + user?.account.displayName + '&quot; state:accepted' }">
-        <div class="dashboard-num">{{ user.videoAbusesAcceptedCount }} / {{ user.videoAbusesCreatedCount }}</div>
+      <a [routerLink]="[ '/admin/moderation/abuses/list' ]" [queryParams]="{ 'search': 'reporter:&quot;' + user?.account.displayName + '&quot; state:accepted' }">
+        <div class="dashboard-num">{{ user.abusesAcceptedCount }} / {{ user.abusesCreatedCount }}</div>
         <div class="dashboard-label" i18n>Authored reports accepted</div>
       </a>
     </div>

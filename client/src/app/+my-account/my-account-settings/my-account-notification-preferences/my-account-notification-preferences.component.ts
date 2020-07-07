@@ -33,7 +33,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     this.labelNotifications = {
       newVideoFromSubscription: this.i18n('New video from your subscriptions'),
       newCommentOnMyVideo: this.i18n('New comment on your video'),
-      videoAbuseAsModerator: this.i18n('New video abuse'),
+      abuseAsModerator: this.i18n('New abuse'),
       videoAutoBlacklistAsModerator: this.i18n('Video blocked automatically waiting review'),
       blacklistOnMyVideo: this.i18n('One of your video is blocked/unblocked'),
       myVideoPublished: this.i18n('Video published (after transcoding/scheduled update)'),
@@ -47,7 +47,7 @@ export class MyAccountNotificationPreferencesComponent implements OnInit {
     this.notificationSettingKeys = Object.keys(this.labelNotifications) as (keyof UserNotificationSetting)[]
 
     this.rightNotifications = {
-      videoAbuseAsModerator: UserRight.MANAGE_ABUSES,
+      abuseAsModerator: UserRight.MANAGE_ABUSES,
       videoAutoBlacklistAsModerator: UserRight.MANAGE_VIDEO_BLACKLIST,
       newUserRegistration: UserRight.MANAGE_USERS,
       newInstanceFollower: UserRight.MANAGE_SERVER_FOLLOW,

@@ -1,6 +1,7 @@
 // Order of the tests we want to execute
 import './activitypub'
 import './check-params'
+import './moderation'
 import './notifications'
 import './redundancy'
 import './search'

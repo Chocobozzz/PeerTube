@@ -18,6 +18,9 @@ export interface VideoAbuse {
 
   thumbnailPath?: string
   channel?: VideoChannel
+
+  countReports: number
+  nthReport: number
 }
 
 export interface VideoCommentAbuse {
@@ -36,9 +39,12 @@ export interface VideoCommentAbuse {
 
 export interface Abuse {
   id: number
+
   reason: string
   predefinedReasons?: AbusePredefinedReasonsString[]
+
   reporterAccount: Account
+  flaggedAccount: Account
 
   state: VideoConstant<AbuseState>
   moderationComment?: string
@@ -49,13 +55,18 @@ export interface Abuse {
   createdAt: Date
   updatedAt: Date
 
-  // FIXME: deprecated in 2.3, remove this
-  startAt: null
-  endAt: null
-
-  count?: number
-  nth?: number
-
   countReportsForReporter?: number
   countReportsForReportee?: number
+
+  // FIXME: deprecated in 2.3, remove the following properties
+
+  // // @deprecated
+  // startAt: null
+  // // @deprecated
+  // endAt: null
+
+  // // @deprecated
+  // count?: number
+  // // @deprecated
+  // nth?: number
 }

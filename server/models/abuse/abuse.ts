@@ -31,15 +31,15 @@ import {
 } from '@shared/models'
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MAbuse, MAbuseAP, MAbuseFormattable, MUserAccountId } from '../../types/models'
-import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
+import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
 import { buildBlockedAccountSQL, getSort, searchAttribute, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from '../video/thumbnail'
 import { VideoModel } from '../video/video'
 import { VideoBlacklistModel } from '../video/video-blacklist'
-import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
+import { ScopeNames as VideoChannelScopeNames, SummaryOptions as ChannelSummaryOptions, VideoChannelModel } from '../video/video-channel'
+import { VideoCommentModel } from '../video/video-comment'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoCommentAbuseModel } from './video-comment-abuse'
-import { VideoCommentModel } from '../video/video-comment'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API'
@@ -149,7 +149,7 @@ export enum ScopeNames {
               '(' +
                 'SELECT count(*) ' +
                 'FROM "videoAbuse" ' +
-                'WHERE "videoId" = "VideoAbuse"."videoId" ' +
+                'WHERE "videoId" = "VideoAbuse"."videoId" AND "videoId" IS NOT NULL' +
               ')'
             ),
             'countReportsForVideo'
@@ -164,7 +164,7 @@ export enum ScopeNames {
                          'row_number() OVER (PARTITION BY "videoId" ORDER BY "createdAt") AS nth ' +
                   'FROM "videoAbuse" ' +
                 ') t ' +
-                'WHERE t.id = "VideoAbuse".id' +
+                'WHERE t.id = "VideoAbuse".id AND t.id IS NOT NULL' +
               ')'
             ),
             'nthReportForVideo'
@@ -172,51 +172,22 @@ export enum ScopeNames {
           [
             literal(
               '(' +
-                'SELECT count("videoAbuse"."id") ' +
-                'FROM "videoAbuse" ' +
-                'INNER JOIN "video" ON "video"."id" = "videoAbuse"."videoId" ' +
-                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'INNER JOIN "account" ON "videoChannel"."accountId" = "account"."id" ' +
-                'WHERE "account"."id" = "AbuseModel"."reporterAccountId" ' +
+                'SELECT count("abuse"."id") ' +
+                'FROM "abuse" ' +
+                'WHERE "abuse"."reporterAccountId" = "AbuseModel"."reporterAccountId"' +
               ')'
             ),
-            'countReportsForReporter__video'
+            'countReportsForReporter'
           ],
           [
             literal(
               '(' +
-                'SELECT count(DISTINCT "videoAbuse"."id") ' +
-                'FROM "videoAbuse" ' +
-                `WHERE CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = "AbuseModel"."reporterAccountId" ` +
+                'SELECT count("abuse"."id") ' +
+                'FROM "abuse" ' +
+                'WHERE "abuse"."flaggedAccountId" = "AbuseModel"."flaggedAccountId"' +
               ')'
             ),
-            'countReportsForReporter__deletedVideo'
-          ],
-          [
-            literal(
-              '(' +
-                'SELECT count(DISTINCT "videoAbuse"."id") ' +
-                'FROM "videoAbuse" ' +
-                'INNER JOIN "video" ON "video"."id" = "videoAbuse"."videoId" ' +
-                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'INNER JOIN "account" ON ' +
-                      '"videoChannel"."accountId" = "VideoAbuse->Video->VideoChannel"."accountId" ' +
-                   `OR "videoChannel"."accountId" = CAST("VideoAbuse"."deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) ` +
-              ')'
-            ),
-            'countReportsForReportee__video'
-          ],
-          [
-            literal(
-              '(' +
-                'SELECT count(DISTINCT "videoAbuse"."id") ' +
-                'FROM "videoAbuse" ' +
-                `WHERE CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = "VideoAbuse->Video->VideoChannel"."accountId" ` +
-                   `OR CAST("deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) = ` +
-                      `CAST("VideoAbuse"."deletedVideo"->'channel'->'ownerAccount'->>'id' AS INTEGER) ` +
-              ')'
-            ),
-            'countReportsForReportee__deletedVideo'
+            'countReportsForReportee'
           ]
         ]
       },
@@ -224,13 +195,18 @@ export enum ScopeNames {
         {
           model: AccountModel.scope(AccountScopeNames.SUMMARY),
           as: 'ReporterAccount',
-          required: true,
+          required: !!options.searchReporter,
           where: searchAttribute(options.searchReporter, 'name')
         },
         {
-          model: AccountModel.scope(AccountScopeNames.SUMMARY),
+          model: AccountModel.scope({
+            method: [
+              AccountScopeNames.SUMMARY,
+              { actorRequired: false } as AccountSummaryOptions
+            ]
+          }),
           as: 'FlaggedAccount',
-          required: true,
+          required: !!options.searchReportee,
           where: searchAttribute(options.searchReportee, 'name')
         },
         {
@@ -243,35 +219,36 @@ export enum ScopeNames {
               include: [
                 {
                   model: VideoModel.unscoped(),
-                  attributes: [ 'name', 'id', 'uuid' ],
-                  required: true
+                  attributes: [ 'name', 'id', 'uuid' ]
                 }
               ]
             }
           ]
         },
         {
-          model: VideoAbuseModel,
+          model: VideoAbuseModel.unscoped(),
           required: options.filter === 'video' || !!options.videoIs || videoRequired,
           include: [
             {
-              model: VideoModel,
+              attributes: [ 'id', 'uuid', 'name', 'nsfw' ],
+              model: VideoModel.unscoped(),
               required: videoRequired,
               where: searchAttribute(options.searchVideo, 'name'),
               include: [
                 {
+                  attributes: [ 'filename', 'fileUrl' ],
                   model: ThumbnailModel
                 },
                 {
-                  model: VideoChannelModel.scope({ method: [ VideoChannelScopeNames.SUMMARY, { withAccount: false } as SummaryOptions ] }),
+                  model: VideoChannelModel.scope({
+                    method: [
+                      VideoChannelScopeNames.SUMMARY,
+                      { withAccount: false, actorRequired: false } as ChannelSummaryOptions
+                    ]
+                  }),
+
                   where: searchAttribute(options.searchVideoChannel, 'name'),
-                  required: true,
-                  include: [
-                    {
-                      model: AccountModel.scope(AccountScopeNames.SUMMARY),
-                      required: true
-                    }
-                  ]
+                  required: !!options.searchVideoChannel
                 },
                 {
                   attributes: [ 'id', 'reason', 'unfederated' ],
@@ -304,19 +281,19 @@ export class AbuseModel extends Model<AbuseModel> {
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoAbuseReason', value => throwIfNotValid(value, isAbuseReasonValid, 'reason'))
+  @Is('AbuseReason', value => throwIfNotValid(value, isAbuseReasonValid, 'reason'))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ABUSES.REASON.max))
   reason: string
 
   @AllowNull(false)
   @Default(null)
-  @Is('VideoAbuseState', value => throwIfNotValid(value, isAbuseStateValid, 'state'))
+  @Is('AbuseState', value => throwIfNotValid(value, isAbuseStateValid, 'state'))
   @Column
   state: AbuseState
 
   @AllowNull(true)
   @Default(null)
-  @Is('VideoAbuseModerationComment', value => throwIfNotValid(value, isAbuseModerationCommentValid, 'moderationComment', true))
+  @Is('AbuseModerationComment', value => throwIfNotValid(value, isAbuseModerationCommentValid, 'moderationComment', true))
   @Column(DataType.STRING(CONSTRAINTS_FIELDS.ABUSES.MODERATION_COMMENT.max))
   moderationComment: string
 
@@ -486,12 +463,12 @@ export class AbuseModel extends Model<AbuseModel> {
 
   toFormattedJSON (this: MAbuseFormattable): Abuse {
     const predefinedReasons = AbuseModel.getPredefinedReasonsStrings(this.predefinedReasons)
+
     const countReportsForVideo = this.get('countReportsForVideo') as number
     const nthReportForVideo = this.get('nthReportForVideo') as number
-    const countReportsForReporterVideo = this.get('countReportsForReporter__video') as number
-    const countReportsForReporterDeletedVideo = this.get('countReportsForReporter__deletedVideo') as number
-    const countReportsForReporteeVideo = this.get('countReportsForReportee__video') as number
-    const countReportsForReporteeDeletedVideo = this.get('countReportsForReportee__deletedVideo') as number
+
+    const countReportsForReporter = this.get('countReportsForReporter') as number
+    const countReportsForReportee = this.get('countReportsForReportee') as number
 
     let video: VideoAbuse
     let comment: VideoCommentAbuse
@@ -512,7 +489,11 @@ export class AbuseModel extends Model<AbuseModel> {
         deleted: !abuseModel.Video,
         blacklisted: abuseModel.Video?.isBlacklisted() || false,
         thumbnailPath: abuseModel.Video?.getMiniatureStaticPath(),
-        channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel
+
+        channel: abuseModel.Video?.VideoChannel.toFormattedJSON() || abuseModel.deletedVideo?.channel,
+
+        countReports: countReportsForVideo,
+        nthReport: nthReportForVideo
       }
     }
 
@@ -539,7 +520,13 @@ export class AbuseModel extends Model<AbuseModel> {
       reason: this.reason,
       predefinedReasons,
 
-      reporterAccount: this.ReporterAccount.toFormattedJSON(),
+      reporterAccount: this.ReporterAccount
+        ? this.ReporterAccount.toFormattedJSON()
+        : null,
+
+      flaggedAccount: this.FlaggedAccount
+        ? this.FlaggedAccount.toFormattedJSON()
+        : null,
 
       state: {
         id: this.state,
@@ -553,14 +540,15 @@ export class AbuseModel extends Model<AbuseModel> {
 
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
-      count: countReportsForVideo || 0,
-      nth: nthReportForVideo || 0,
-      countReportsForReporter: (countReportsForReporterVideo || 0) + (countReportsForReporterDeletedVideo || 0),
-      countReportsForReportee: (countReportsForReporteeVideo || 0) + (countReportsForReporteeDeletedVideo || 0),
+
+      countReportsForReporter: (countReportsForReporter || 0),
+      countReportsForReportee: (countReportsForReportee || 0),
 
       // FIXME: deprecated in 2.3, remove this
       startAt: null,
-      endAt: null
+      endAt: null,
+      count: countReportsForVideo || 0,
+      nth: nthReportForVideo || 0
     }
   }
 

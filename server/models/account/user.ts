@@ -168,28 +168,26 @@ enum ScopeNames {
             '(' +
               `SELECT concat_ws(':', "abuses", "acceptedAbuses") ` +
               'FROM (' +
-                'SELECT COUNT("videoAbuse"."id") AS "abuses", ' +
-                       `COUNT("videoAbuse"."id") FILTER (WHERE "videoAbuse"."state" = ${AbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
-                'FROM "videoAbuse" ' +
-                'INNER JOIN "video" ON "videoAbuse"."videoId" = "video"."id" ' +
-                'INNER JOIN "videoChannel" ON "videoChannel"."id" = "video"."channelId" ' +
-                'INNER JOIN "account" ON "account"."id" = "videoChannel"."accountId" ' +
+                'SELECT COUNT("abuse"."id") AS "abuses", ' +
+                       `COUNT("abuse"."id") FILTER (WHERE "abuse"."state" = ${AbuseState.ACCEPTED}) AS "acceptedAbuses" ` +
+                'FROM "abuse" ' +
+                'INNER JOIN "account" ON "account"."id" = "abuse"."flaggedAccountId" ' +
                 'WHERE "account"."userId" = "UserModel"."id"' +
               ') t' +
             ')'
           ),
-          'videoAbusesCount'
+          'abusesCount'
         ],
         [
           literal(
             '(' +
-              'SELECT COUNT("videoAbuse"."id") ' +
-              'FROM "videoAbuse" ' +
-              'INNER JOIN "account" ON "account"."id" = "videoAbuse"."reporterAccountId" ' +
+              'SELECT COUNT("abuse"."id") ' +
+              'FROM "abuse" ' +
+              'INNER JOIN "account" ON "account"."id" = "abuse"."reporterAccountId" ' +
               'WHERE "account"."userId" = "UserModel"."id"' +
             ')'
           ),
-          'videoAbusesCreatedCount'
+          'abusesCreatedCount'
         ],
         [
           literal(
@@ -780,8 +778,8 @@ export class UserModel extends Model<UserModel> {
     const videoQuotaUsed = this.get('videoQuotaUsed')
     const videoQuotaUsedDaily = this.get('videoQuotaUsedDaily')
     const videosCount = this.get('videosCount')
-    const [ videoAbusesCount, videoAbusesAcceptedCount ] = (this.get('videoAbusesCount') as string || ':').split(':')
-    const videoAbusesCreatedCount = this.get('videoAbusesCreatedCount')
+    const [ abusesCount, abusesAcceptedCount ] = (this.get('abusesCount') as string || ':').split(':')
+    const abusesCreatedCount = this.get('abusesCreatedCount')
     const videoCommentsCount = this.get('videoCommentsCount')
 
     const json: User = {
@@ -815,14 +813,14 @@ export class UserModel extends Model<UserModel> {
       videosCount: videosCount !== undefined
         ? parseInt(videosCount + '', 10)
         : undefined,
-      videoAbusesCount: videoAbusesCount
-        ? parseInt(videoAbusesCount, 10)
+      abusesCount: abusesCount
+        ? parseInt(abusesCount, 10)
         : undefined,
-      videoAbusesAcceptedCount: videoAbusesAcceptedCount
-        ? parseInt(videoAbusesAcceptedCount, 10)
+      abusesAcceptedCount: abusesAcceptedCount
+        ? parseInt(abusesAcceptedCount, 10)
         : undefined,
-      videoAbusesCreatedCount: videoAbusesCreatedCount !== undefined
-        ? parseInt(videoAbusesCreatedCount + '', 10)
+      abusesCreatedCount: abusesCreatedCount !== undefined
+        ? parseInt(abusesCreatedCount + '', 10)
         : undefined,
       videoCommentsCount: videoCommentsCount !== undefined
         ? parseInt(videoCommentsCount + '', 10)

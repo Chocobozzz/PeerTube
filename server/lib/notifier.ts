@@ -18,7 +18,7 @@ import { CONFIG } from '../initializers/config'
 import { AccountBlocklistModel } from '../models/account/account-blocklist'
 import { UserModel } from '../models/account/user'
 import { UserNotificationModel } from '../models/account/user-notification'
-import { MAbuseFull, MAbuseVideo, MAccountServer, MActorFollowFull } from '../types/models'
+import { MAbuseFull, MAccountServer, MActorFollowFull } from '../types/models'
 import { MCommentOwnerVideo, MVideoAccountLight, MVideoFullLight } from '../types/models/video'
 import { isBlockedByServerOrAccount } from './blocklist'
 import { Emailer } from './emailer'
@@ -359,12 +359,14 @@ class Notifier {
     const moderators = await UserModel.listWithRight(UserRight.MANAGE_ABUSES)
     if (moderators.length === 0) return
 
-    const url = abuseInstance.VideoAbuse?.Video?.url || abuseInstance.VideoCommentAbuse?.VideoComment?.url
+    const url = abuseInstance.VideoAbuse?.Video?.url ||
+                abuseInstance.VideoCommentAbuse?.VideoComment?.url ||
+                abuseInstance.FlaggedAccount.Actor.url
 
     logger.info('Notifying %s user/moderators of new abuse %s.', moderators.length, url)
 
     function settingGetter (user: MUserWithNotificationSetting) {
-      return user.NotificationSetting.videoAbuseAsModerator
+      return user.NotificationSetting.abuseAsModerator
     }
 
     async function notificationCreator (user: MUserWithNotificationSetting) {

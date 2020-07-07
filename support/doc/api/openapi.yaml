@@ -893,7 +893,7 @@ paths:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 newCommentOnMyVideo:
                   $ref: '#/components/schemas/NotificationSettingValue'
-                videoAbuseAsModerator:
+                abuseAsModerator:
                   $ref: '#/components/schemas/NotificationSettingValue'
                 videoAutoBlacklistAsModerator:
                   $ref: '#/components/schemas/NotificationSettingValue'
@@ -1618,7 +1618,7 @@ paths:
               type: object
               properties:
                 state:
-                  $ref: '#/components/schemas/VideoAbuseStateSet'
+                  $ref: '#/components/schemas/AbuseStateSet'
                 moderationComment:
                   type: string
                   description: Update the report comment visible only to the moderation team
@@ -3584,20 +3584,20 @@ components:
         label:
           type: string
 
-    VideoAbuseStateSet:
+    AbuseStateSet:
       type: integer
       enum:
         - 1
         - 2
         - 3
       description: 'The video playlist privacy (Pending = `1`, Rejected = `2`, Accepted = `3`)'
-    VideoAbuseStateConstant:
+    AbuseStateConstant:
       properties:
         id:
-          $ref: '#/components/schemas/VideoAbuseStateSet'
+          $ref: '#/components/schemas/AbuseStateSet'
         label:
           type: string
-    VideoAbusePredefinedReasons:
+    AbusePredefinedReasons:
       type: array
       items:
         type: string
@@ -3960,11 +3960,11 @@ components:
           type: string
           example: The video is a spam
         predefinedReasons:
-          $ref: '#/components/schemas/VideoAbusePredefinedReasons'
+          $ref: '#/components/schemas/AbusePredefinedReasons'
         reporterAccount:
           $ref: '#/components/schemas/Account'
         state:
-          $ref: '#/components/schemas/VideoAbuseStateConstant'
+          $ref: '#/components/schemas/AbuseStateConstant'
         moderationComment:
           type: string
           example: Decided to ban the server since it spams us regularly
@@ -4690,11 +4690,11 @@ components:
           description: The user daily video quota
         videosCount:
           type: integer
-        videoAbusesCount:
+        abusesCount:
           type: integer
-        videoAbusesAcceptedCount:
+        abusesAcceptedCount:
           type: integer
-        videoAbusesCreatedCount:
+        abusesCreatedCount:
           type: integer
         videoCommentsCount:
           type: integer

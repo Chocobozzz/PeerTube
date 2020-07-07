@@ -45,7 +45,7 @@ export class AdminComponent implements OnInit {
       children: []
     }
 
-    if (this.hasVideoAbusesRight()) {
+    if (this.hasAbusesRight()) {
       moderationItems.children.push({
         label: this.i18n('Video reports'),
         routerLink: '/admin/moderation/video-abuses/list',
@@ -76,7 +76,7 @@ export class AdminComponent implements OnInit {
 
     if (this.hasUsersRight()) this.menuEntries.push({ label: this.i18n('Users'), routerLink: '/admin/users' })
     if (this.hasServerFollowRight()) this.menuEntries.push(federationItems)
-    if (this.hasVideoAbusesRight() || this.hasVideoBlocklistRight()) this.menuEntries.push(moderationItems)
+    if (this.hasAbusesRight() || this.hasVideoBlocklistRight()) this.menuEntries.push(moderationItems)
     if (this.hasConfigRight()) this.menuEntries.push({ label: this.i18n('Configuration'), routerLink: '/admin/config' })
     if (this.hasPluginsRight()) this.menuEntries.push({ label: this.i18n('Plugins/Themes'), routerLink: '/admin/plugins' })
     if (this.hasJobsRight() || this.hasLogsRight() || this.hasDebugRight()) this.menuEntries.push({ label: this.i18n('System'), routerLink: '/admin/system' })
@@ -90,7 +90,7 @@ export class AdminComponent implements OnInit {
     return this.auth.getUser().hasRight(UserRight.MANAGE_SERVER_FOLLOW)
   }
 
-  hasVideoAbusesRight () {
+  hasAbusesRight () {
     return this.auth.getUser().hasRight(UserRight.MANAGE_ABUSES)
   }
 

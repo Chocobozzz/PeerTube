@@ -51,11 +51,13 @@ export class User implements UserServerModel {
   videoQuotaDaily: number
   videoQuotaUsed?: number
   videoQuotaUsedDaily?: number
+
   videosCount?: number
-  videoAbusesCount?: number
-  videoAbusesAcceptedCount?: number
-  videoAbusesCreatedCount?: number
   videoCommentsCount?: number
+
+  abusesCount?: number
+  abusesAcceptedCount?: number
+  abusesCreatedCount?: number
 
   theme: string
 
@@ -89,9 +91,9 @@ export class User implements UserServerModel {
     this.videoQuotaUsed = hash.videoQuotaUsed
     this.videoQuotaUsedDaily = hash.videoQuotaUsedDaily
     this.videosCount = hash.videosCount
-    this.videoAbusesCount = hash.videoAbusesCount
-    this.videoAbusesAcceptedCount = hash.videoAbusesAcceptedCount
-    this.videoAbusesCreatedCount = hash.videoAbusesCreatedCount
+    this.abusesCount = hash.abusesCount
+    this.abusesAcceptedCount = hash.abusesAcceptedCount
+    this.abusesCreatedCount = hash.abusesCreatedCount
     this.videoCommentsCount = hash.videoCommentsCount
 
     this.nsfwPolicy = hash.nsfwPolicy
