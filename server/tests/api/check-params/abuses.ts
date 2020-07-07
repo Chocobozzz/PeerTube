@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions,@typescript-eslint/require-await */
 
 import 'mocha'
-import { AbuseState, VideoAbuseCreate } from '@shared/models'
+import { AbuseCreate, AbuseState } from '@shared/models'
 import {
   cleanupTests,
   createUser,
-  deleteVideoAbuse,
+  deleteAbuse,
   flushAndRunServer,
   makeGetRequest,
   makePostBodyRequest,
   ServerInfo,
   setAccessTokensToServers,
-  updateVideoAbuse,
+  updateAbuse,
   uploadVideo,
   userLogin
 } from '../../../../shared/extra-utils'
@@ -24,9 +24,11 @@ import {
 // FIXME: deprecated in 2.3. Remove this controller
 
 describe('Test video abuses API validators', function () {
+  const basePath = '/api/v1/abuses/'
+
   let server: ServerInfo
   let userAccessToken = ''
-  let videoAbuseId: number
+  let abuseId: number
 
   // ---------------------------------------------------------------
 
@@ -46,8 +48,8 @@ describe('Test video abuses API validators', function () {
     server.video = res.body.video
   })
 
-  describe('When listing video abuses', function () {
-    const path = '/api/v1/videos/abuse'
+  describe('When listing abuses', function () {
+    const path = basePath
 
     it('Should fail with a bad start pagination', async function () {
       await checkBadStartPagination(server.url, path, server.accessToken)
@@ -82,8 +84,18 @@ describe('Test video abuses API validators', function () {
       await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { id: 'toto' } })
     })
 
+    it('Should fail with a bad filter', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { filter: 'toto' } })
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { filter: 'videos' } })
+    })
+
+    it('Should fail with bad predefined reason', async function () {
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { predefinedReason: 'violentOrRepulsives' } })
+    })
+
     it('Should fail with a bad state filter', async function () {
       await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { state: 'toto' } })
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { state: 0 } })
     })
 
     it('Should fail with a bad videoIs filter', async function () {
@@ -91,17 +103,20 @@ describe('Test video abuses API validators', function () {
     })
 
     it('Should succeed with the correct params', async function () {
-      await makeGetRequest({ url: server.url, path, token: server.accessToken, query: { id: 13 }, statusCodeExpected: 200 })
+      const query = {
+        id: 13,
+        predefinedReason: 'violentOrRepulsive',
+        filter: 'comment',
+        state: 2,
+        videoIs: 'deleted'
+      }
+
+      await makeGetRequest({ url: server.url, path, token: server.accessToken, query, statusCodeExpected: 200 })
     })
   })
 
-  describe('When reporting a video abuse', function () {
-    const basePath = '/api/v1/videos/'
-    let path: string
-
-    before(() => {
-      path = basePath + server.video.id + '/abuse'
-    })
+  describe('When reporting an abuse', function () {
+    const path = basePath
 
     it('Should fail with nothing', async function () {
       const fields = {}
@@ -109,104 +124,144 @@ describe('Test video abuses API validators', function () {
     })
 
     it('Should fail with a wrong video', async function () {
-      const wrongPath = '/api/v1/videos/blabla/abuse'
-      const fields = { reason: 'my super reason' }
+      const fields = { video: { id: 'blabla' }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields })
+    })
 
-      await makePostBodyRequest({ url: server.url, path: wrongPath, token: server.accessToken, fields })
+    it('Should fail with an unknown video', async function () {
+      const fields = { video: { id: 42 }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 404 })
+    })
+
+    it('Should fail with a wrong comment', async function () {
+      const fields = { comment: { id: 'blabla' }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an unknown comment', async function () {
+      const fields = { comment: { id: 42 }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 404 })
+    })
+
+    it('Should fail with a wrong account', async function () {
+      const fields = { account: { id: 'blabla' }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields })
+    })
+
+    it('Should fail with an unknown account', async function () {
+      const fields = { account: { id: 42 }, reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 404 })
+    })
+
+    it('Should fail with not account, comment or video', async function () {
+      const fields = { reason: 'my super reason' }
+      await makePostBodyRequest({ url: server.url, path: path, token: server.accessToken, fields, statusCodeExpected: 400 })
     })
 
     it('Should fail with a non authenticated user', async function () {
-      const fields = { reason: 'my super reason' }
+      const fields = { video: { id: server.video.id }, reason: 'my super reason' }
 
       await makePostBodyRequest({ url: server.url, path, token: 'hello', fields, statusCodeExpected: 401 })
     })
 
     it('Should fail with a reason too short', async function () {
-      const fields = { reason: 'h' }
+      const fields = { video: { id: server.video.id }, reason: 'h' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with a too big reason', async function () {
-      const fields = { reason: 'super'.repeat(605) }
+      const fields = { video: { id: server.video.id }, reason: 'super'.repeat(605) }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the correct parameters (basic)', async function () {
-      const fields = { reason: 'my super reason' }
+      const fields: AbuseCreate = { video: { id: server.video.id }, reason: 'my super reason' }
 
       const res = await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 200 })
-      videoAbuseId = res.body.abuse.id
+      abuseId = res.body.abuse.id
     })
 
     it('Should fail with a wrong predefined reason', async function () {
-      const fields = { reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
+      const fields = { video: { id: server.video.id }, reason: 'my super reason', predefinedReasons: [ 'wrongPredefinedReason' ] }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should fail with negative timestamps', async function () {
-      const fields = { reason: 'my super reason', startAt: -1 }
+      const fields = { video: { id: server.video.id, startAt: -1 }, reason: 'my super reason' }
+
+      await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
+    })
+
+    it('Should fail mith misordered startAt/endAt', async function () {
+      const fields = { video: { id: server.video.id, startAt: 5, endAt: 1 }, reason: 'my super reason' }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields })
     })
 
     it('Should succeed with the corret parameters (advanced)', async function () {
-      const fields: VideoAbuseCreate = { reason: 'my super reason', predefinedReasons: [ 'serverRules' ], startAt: 1, endAt: 5 }
+      const fields: AbuseCreate = {
+        video: {
+          id: server.video.id,
+          startAt: 1,
+          endAt: 5
+        },
+        reason: 'my super reason',
+        predefinedReasons: [ 'serverRules' ]
+      }
 
       await makePostBodyRequest({ url: server.url, path, token: server.accessToken, fields, statusCodeExpected: 200 })
     })
   })
 
-  describe('When updating a video abuse', function () {
+  describe('When updating an abuse', function () {
 
     it('Should fail with a non authenticated user', async function () {
-      await updateVideoAbuse(server.url, 'blabla', server.video.uuid, videoAbuseId, {}, 401)
+      await updateAbuse(server.url, 'blabla', abuseId, {}, 401)
     })
 
     it('Should fail with a non admin user', async function () {
-      await updateVideoAbuse(server.url, userAccessToken, server.video.uuid, videoAbuseId, {}, 403)
+      await updateAbuse(server.url, userAccessToken, abuseId, {}, 403)
     })
 
-    it('Should fail with a bad video id or bad video abuse id', async function () {
-      await updateVideoAbuse(server.url, server.accessToken, server.video.uuid, 45, {}, 404)
-      await updateVideoAbuse(server.url, server.accessToken, 52, videoAbuseId, {}, 404)
+    it('Should fail with a bad abuse id', async function () {
+      await updateAbuse(server.url, server.accessToken, 45, {}, 404)
     })
 
     it('Should fail with a bad state', async function () {
       const body = { state: 5 }
-      await updateVideoAbuse(server.url, server.accessToken, server.video.uuid, videoAbuseId, body, 400)
+      await updateAbuse(server.url, server.accessToken, abuseId, body, 400)
     })
 
     it('Should fail with a bad moderation comment', async function () {
       const body = { moderationComment: 'b'.repeat(3001) }
-      await updateVideoAbuse(server.url, server.accessToken, server.video.uuid, videoAbuseId, body, 400)
+      await updateAbuse(server.url, server.accessToken, abuseId, body, 400)
     })
 
     it('Should succeed with the correct params', async function () {
       const body = { state: AbuseState.ACCEPTED }
-      await updateVideoAbuse(server.url, server.accessToken, server.video.uuid, videoAbuseId, body)
+      await updateAbuse(server.url, server.accessToken, abuseId, body)
     })
   })
 
   describe('When deleting a video abuse', function () {
 
     it('Should fail with a non authenticated user', async function () {
-      await deleteVideoAbuse(server.url, 'blabla', server.video.uuid, videoAbuseId, 401)
+      await deleteAbuse(server.url, 'blabla', abuseId, 401)
     })
 
     it('Should fail with a non admin user', async function () {
-      await deleteVideoAbuse(server.url, userAccessToken, server.video.uuid, videoAbuseId, 403)
+      await deleteAbuse(server.url, userAccessToken, abuseId, 403)
     })
 
-    it('Should fail with a bad video id or bad video abuse id', async function () {
-      await deleteVideoAbuse(server.url, server.accessToken, server.video.uuid, 45, 404)
-      await deleteVideoAbuse(server.url, server.accessToken, 52, videoAbuseId, 404)
+    it('Should fail with a bad abuse id', async function () {
+      await deleteAbuse(server.url, server.accessToken, 45, 404)
     })
 
     it('Should succeed with the correct params', async function () {
-      await deleteVideoAbuse(server.url, server.accessToken, server.video.uuid, videoAbuseId)
+      await deleteAbuse(server.url, server.accessToken, abuseId)
     })
   })
 

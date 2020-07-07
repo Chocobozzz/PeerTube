@@ -91,6 +91,7 @@ declare module 'express' {
 
       accountVideoRate?: MAccountVideoRateAccountVideo
 
+      videoComment?: MComment
       videoCommentFull?: MCommentOwnerVideoReply
       videoCommentThread?: MComment
 

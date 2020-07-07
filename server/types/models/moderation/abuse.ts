@@ -3,7 +3,7 @@ import { VideoCommentAbuseModel } from '@server/models/abuse/video-comment-abuse
 import { PickWith } from '@shared/core-utils'
 import { AbuseModel } from '../../../models/abuse/abuse'
 import { MAccountDefault, MAccountFormattable, MAccountLight, MAccountUrl } from '../account'
-import { MCommentOwner, MCommentUrl, MVideoUrl, MCommentOwnerVideo } from '../video'
+import { MCommentOwner, MCommentUrl, MVideoUrl, MCommentOwnerVideo, MComment, MCommentVideo } from '../video'
 import { MVideo, MVideoAccountLightBlacklistAllFiles } from '../video/video'
 
 type Use<K extends keyof AbuseModel, M> = PickWith<AbuseModel, K, M>
@@ -51,6 +51,10 @@ export type MCommentAbuseUrl =
   MCommentAbuse &
   UseCommentAbuse<'VideoComment', MCommentUrl>
 
+export type MCommentAbuseFormattable =
+  MCommentAbuse &
+  UseCommentAbuse<'VideoComment', MComment & PickWith<MCommentVideo, 'Video', Pick<MVideo, 'id' | 'uuid' | 'name'>>>
+
 // ############################################################################
 
 export type MAbuseId = Pick<AbuseModel, 'id'>
@@ -94,4 +98,5 @@ export type MAbuseFull =
 export type MAbuseFormattable =
   MAbuse &
   Use<'ReporterAccount', MAccountFormattable> &
-  Use<'VideoAbuse', MVideoAbuseFormattable>
+  Use<'VideoAbuse', MVideoAbuseFormattable> &
+  Use<'VideoCommentAbuse', MCommentAbuseFormattable>

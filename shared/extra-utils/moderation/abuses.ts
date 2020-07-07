@@ -1,25 +1,57 @@
-import * as request from 'supertest'
-import { AbusePredefinedReasonsString, AbuseState, AbuseUpdate, AbuseVideoIs } from '@shared/models'
-import { makeDeleteRequest, makeGetRequest, makePutBodyRequest } from '../requests/requests'
 
-function reportAbuse (
-  url: string,
-  token: string,
-  videoId: number | string,
-  reason: string,
-  predefinedReasons?: AbusePredefinedReasonsString[],
-  startAt?: number,
-  endAt?: number,
-  specialStatus = 200
-) {
-  const path = '/api/v1/videos/' + videoId + '/abuse'
+import { AbuseFilter, AbusePredefinedReasonsString, AbuseState, AbuseUpdate, AbuseVideoIs } from '@shared/models'
+import { makeDeleteRequest, makeGetRequest, makePostBodyRequest, makePutBodyRequest } from '../requests/requests'
 
-  return request(url)
-          .post(path)
-          .set('Accept', 'application/json')
-          .set('Authorization', 'Bearer ' + token)
-          .send({ reason, predefinedReasons, startAt, endAt })
-          .expect(specialStatus)
+function reportAbuse (options: {
+  url: string
+  token: string
+
+  reason: string
+
+  accountId?: number
+  videoId?: number
+  commentId?: number
+
+  predefinedReasons?: AbusePredefinedReasonsString[]
+
+  startAt?: number
+  endAt?: number
+
+  statusCodeExpected?: number
+}) {
+  const path = '/api/v1/abuses'
+
+  const video = options.videoId ? {
+    id: options.videoId,
+    startAt: options.startAt,
+    endAt: options.endAt
+  } : undefined
+
+  const comment = options.commentId ? {
+    id: options.commentId
+  } : undefined
+
+  const account = options.accountId ? {
+    id: options.accountId
+  } : undefined
+
+  const body = {
+    account,
+    video,
+    comment,
+
+    reason: options.reason,
+    predefinedReasons: options.predefinedReasons
+  }
+
+  return makePostBodyRequest({
+    url: options.url,
+    path,
+    token: options.token,
+
+    fields: body,
+    statusCodeExpected: options.statusCodeExpected || 200
+  })
 }
 
 function getAbusesList (options: {
@@ -28,6 +60,7 @@ function getAbusesList (options: {
   id?: number
   predefinedReason?: AbusePredefinedReasonsString
   search?: string
+  filter?: AbuseFilter,
   state?: AbuseState
   videoIs?: AbuseVideoIs
   searchReporter?: string
@@ -41,6 +74,7 @@ function getAbusesList (options: {
     id,
     predefinedReason,
     search,
+    filter,
     state,
     videoIs,
     searchReporter,
@@ -48,7 +82,7 @@ function getAbusesList (options: {
     searchVideo,
     searchVideoChannel
   } = options
-  const path = '/api/v1/videos/abuse'
+  const path = '/api/v1/abuses'
 
   const query = {
     sort: 'createdAt',
@@ -56,6 +90,7 @@ function getAbusesList (options: {
     predefinedReason,
     search,
     state,
+    filter,
     videoIs,
     searchReporter,
     searchReportee,
@@ -75,12 +110,11 @@ function getAbusesList (options: {
 function updateAbuse (
   url: string,
   token: string,
-  videoId: string | number,
-  videoAbuseId: number,
+  abuseId: number,
   body: AbuseUpdate,
   statusCodeExpected = 204
 ) {
-  const path = '/api/v1/videos/' + videoId + '/abuse/' + videoAbuseId
+  const path = '/api/v1/abuses/' + abuseId
 
   return makePutBodyRequest({
     url,
@@ -91,8 +125,8 @@ function updateAbuse (
   })
 }
 
-function deleteAbuse (url: string, token: string, videoId: string | number, videoAbuseId: number, statusCodeExpected = 204) {
-  const path = '/api/v1/videos/' + videoId + '/abuse/' + videoAbuseId
+function deleteAbuse (url: string, token: string, abuseId: number, statusCodeExpected = 204) {
+  const path = '/api/v1/abuses/' + abuseId
 
   return makeDeleteRequest({
     url,

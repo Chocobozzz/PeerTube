@@ -23,7 +23,7 @@ import { AccountModel } from '../../models/account/account'
 
 const abuseRouter = express.Router()
 
-abuseRouter.get('/abuse',
+abuseRouter.get('/',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
   paginationValidator,
@@ -33,18 +33,18 @@ abuseRouter.get('/abuse',
   abuseListValidator,
   asyncMiddleware(listAbuses)
 )
-abuseRouter.put('/:videoId/abuse/:id',
+abuseRouter.put('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
   asyncMiddleware(abuseUpdateValidator),
   asyncRetryTransactionMiddleware(updateAbuse)
 )
-abuseRouter.post('/:videoId/abuse',
+abuseRouter.post('/',
   authenticate,
   asyncMiddleware(abuseReportValidator),
   asyncRetryTransactionMiddleware(reportAbuse)
 )
-abuseRouter.delete('/:videoId/abuse/:id',
+abuseRouter.delete('/:id',
   authenticate,
   ensureUserHasRight(UserRight.MANAGE_ABUSES),
   asyncMiddleware(abuseGetValidator),
@@ -74,7 +74,7 @@ async function listAbuses (req: express.Request, res: express.Response) {
     count: req.query.count,
     sort: req.query.sort,
     id: req.query.id,
-    filter: 'video',
+    filter: req.query.filter,
     predefinedReason: req.query.predefinedReason,
     search: req.query.search,
     state: req.query.state,

@@ -9,6 +9,7 @@ export interface VideoAbuse {
   name: string
   uuid: string
   nsfw: boolean
+
   deleted: boolean
   blacklisted: boolean
 
@@ -21,8 +22,15 @@ export interface VideoAbuse {
 
 export interface VideoCommentAbuse {
   id: number
-  account?: Account
+
+  video: {
+    id: number
+    name: string
+    uuid: string
+  }
+
   text: string
+
   deleted: boolean
 }
 

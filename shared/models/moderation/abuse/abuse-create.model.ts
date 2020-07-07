@@ -1,10 +1,13 @@
 import { AbusePredefinedReasonsString } from './abuse-reason.model'
 
 export interface AbuseCreate {
-  accountId: number
-
   reason: string
+
   predefinedReasons?: AbusePredefinedReasonsString[]
+
+  account?: {
+    id: number
+  }
 
   video?: {
     id: number

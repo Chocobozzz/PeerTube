@@ -19,16 +19,17 @@ import {
 import { isAbuseModerationCommentValid, isAbuseReasonValid, isAbuseStateValid } from '@server/helpers/custom-validators/abuses'
 import {
   Abuse,
+  AbuseFilter,
   AbuseObject,
   AbusePredefinedReasons,
   abusePredefinedReasonsMap,
   AbusePredefinedReasonsString,
   AbuseState,
   AbuseVideoIs,
-  VideoAbuse
+  VideoAbuse,
+  VideoCommentAbuse
 } from '@shared/models'
-import { AbuseFilter } from '@shared/models/moderation/abuse/abuse-filter'
-import { CONSTRAINTS_FIELDS, ABUSE_STATES } from '../../initializers/constants'
+import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MAbuse, MAbuseAP, MAbuseFormattable, MUserAccountId } from '../../types/models'
 import { AccountModel, ScopeNames as AccountScopeNames } from '../account/account'
 import { buildBlockedAccountSQL, getSort, searchAttribute, throwIfNotValid } from '../utils'
@@ -38,6 +39,7 @@ import { VideoBlacklistModel } from '../video/video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions, VideoChannelModel } from '../video/video-channel'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoCommentAbuseModel } from './video-comment-abuse'
+import { VideoCommentModel } from '../video/video-comment'
 
 export enum ScopeNames {
   FOR_API = 'FOR_API'
@@ -66,19 +68,18 @@ export enum ScopeNames {
     serverAccountId: number
     userAccountId: number
   }) => {
-    const onlyBlacklisted = options.videoIs === 'blacklisted'
-    const videoRequired = !!(onlyBlacklisted || options.searchVideo || options.searchVideoChannel)
+    const whereAnd: WhereOptions[] = []
 
-    const where = {
+    whereAnd.push({
       reporterAccountId: {
         [Op.notIn]: literal('(' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
       }
-    }
+    })
 
     if (options.search) {
       const escapedSearch = AbuseModel.sequelize.escape('%' + options.search + '%')
 
-      Object.assign(where, {
+      whereAnd.push({
         [Op.or]: [
           {
             [Op.and]: [
@@ -110,11 +111,11 @@ export enum ScopeNames {
       })
     }
 
-    if (options.id) Object.assign(where, { id: options.id })
-    if (options.state) Object.assign(where, { state: options.state })
+    if (options.id) whereAnd.push({ id: options.id })
+    if (options.state) whereAnd.push({ state: options.state })
 
     if (options.videoIs === 'deleted') {
-      Object.assign(where, {
+      whereAnd.push({
         '$VideoAbuse.deletedVideo$': {
           [Op.not]: null
         }
@@ -122,12 +123,22 @@ export enum ScopeNames {
     }
 
     if (options.predefinedReasonId) {
-      Object.assign(where, {
+      whereAnd.push({
         predefinedReasons: {
           [Op.contains]: [ options.predefinedReasonId ]
         }
       })
     }
+
+    if (options.filter === 'account') {
+      whereAnd.push({
+        videoId: null,
+        commentId: null
+      })
+    }
+
+    const onlyBlacklisted = options.videoIs === 'blacklisted'
+    const videoRequired = !!(onlyBlacklisted || options.searchVideo || options.searchVideoChannel)
 
     return {
       attributes: {
@@ -223,6 +234,23 @@ export enum ScopeNames {
           where: searchAttribute(options.searchReportee, 'name')
         },
         {
+          model: VideoCommentAbuseModel.unscoped(),
+          required: options.filter === 'comment',
+          include: [
+            {
+              model: VideoCommentModel.unscoped(),
+              required: false,
+              include: [
+                {
+                  model: VideoModel.unscoped(),
+                  attributes: [ 'name', 'id', 'uuid' ],
+                  required: true
+                }
+              ]
+            }
+          ]
+        },
+        {
           model: VideoAbuseModel,
           required: options.filter === 'video' || !!options.videoIs || videoRequired,
           include: [
@@ -241,8 +269,7 @@ export enum ScopeNames {
                   include: [
                     {
                       model: AccountModel.scope(AccountScopeNames.SUMMARY),
-                      required: true,
-                      where: searchAttribute(options.searchReportee, 'name')
+                      required: true
                     }
                   ]
                 },
@@ -256,7 +283,9 @@ export enum ScopeNames {
           ]
         }
       ],
-      where
+      where: {
+        [Op.and]: whereAnd
+      }
     }
   }
 }))
@@ -348,6 +377,7 @@ export class AbuseModel extends Model<AbuseModel> {
   })
   VideoAbuse: VideoAbuseModel
 
+  // FIXME: deprecated in 2.3. Remove these validators
   static loadByIdAndVideoId (id: number, videoId?: number, uuid?: string): Bluebird<MAbuse> {
     const videoWhere: WhereOptions = {}
 
@@ -366,6 +396,16 @@ export class AbuseModel extends Model<AbuseModel> {
         id
       }
     }
+    return AbuseModel.findOne(query)
+  }
+
+  static loadById (id: number): Bluebird<MAbuse> {
+    const query = {
+      where: {
+        id
+      }
+    }
+
     return AbuseModel.findOne(query)
   }
 
@@ -454,6 +494,7 @@ export class AbuseModel extends Model<AbuseModel> {
     const countReportsForReporteeDeletedVideo = this.get('countReportsForReportee__deletedVideo') as number
 
     let video: VideoAbuse
+    let comment: VideoCommentAbuse
 
     if (this.VideoAbuse) {
       const abuseModel = this.VideoAbuse
@@ -475,6 +516,24 @@ export class AbuseModel extends Model<AbuseModel> {
       }
     }
 
+    if (this.VideoCommentAbuse) {
+      const abuseModel = this.VideoCommentAbuse
+      const entity = abuseModel.VideoComment || abuseModel.deletedComment
+
+      comment = {
+        id: entity.id,
+        text: entity.text,
+
+        deleted: !abuseModel.VideoComment,
+
+        video: {
+          id: entity.Video.id,
+          name: entity.Video.name,
+          uuid: entity.Video.uuid
+        }
+      }
+    }
+
     return {
       id: this.id,
       reason: this.reason,
@@ -490,7 +549,7 @@ export class AbuseModel extends Model<AbuseModel> {
       moderationComment: this.moderationComment,
 
       video,
-      comment: null,
+      comment,
 
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,

@@ -17,7 +17,6 @@ async function doesVideoAbuseExist (abuseIdArg: number | string, videoUUID: stri
   if (abuse === null) {
     res.status(404)
        .json({ error: 'Video abuse not found' })
-       .end()
 
     return false
   }
@@ -26,8 +25,18 @@ async function doesVideoAbuseExist (abuseIdArg: number | string, videoUUID: stri
   return true
 }
 
-async function doesAbuseExist (abuseIdArg: number | string, videoUUID: string, res: Response) {
+async function doesAbuseExist (abuseId: number | string, res: Response) {
+  const abuse = await AbuseModel.loadById(parseInt(abuseId + '', 10))
 
+  if (!abuse) {
+    res.status(404)
+       .json({ error: 'Video abuse not found' })
+
+    return false
+  }
+
+  res.locals.abuse = abuse
+  return true
 }
 
 // ---------------------------------------------------------------------------

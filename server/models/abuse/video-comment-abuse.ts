@@ -25,7 +25,7 @@ export class VideoCommentAbuseModel extends Model<VideoCommentAbuseModel> {
   @AllowNull(true)
   @Default(null)
   @Column(DataType.JSONB)
-  deletedComment: VideoComment
+  deletedComment: VideoComment & { Video: { name: string, id: number, uuid: string }}
 
   @ForeignKey(() => AbuseModel)
   @Column
