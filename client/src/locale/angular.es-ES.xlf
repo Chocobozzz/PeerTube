@@ -29,7 +29,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.previous-month">
         <source>Previous month</source>
-        <target>Último mes</target>
+        <target>Anterior mes</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -38,7 +38,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.next-month">
         <source>Next month</source>
-        <target>Próximo mes</target>
+        <target>Siguiente mes</target>
         <context-group name="null">
           <context context-type="linenumber">27</context>
         </context-group>
@@ -47,7 +47,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-month">
         <source>Select month</source>
-        <target>Seleccionar un mes</target>
+        <target>Selecciona un mes</target>
         <context-group name="null">
           <context context-type="linenumber">7</context>
         </context-group>
@@ -56,7 +56,7 @@
       </trans-unit>
       <trans-unit id="ngb.datepicker.select-year">
         <source>Select year</source>
-        <target>Seleccionar año</target>
+        <target>Selecciona un año</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
@@ -500,12 +500,12 @@
       </trans-unit>
       <trans-unit id="01504bc3847894e0816ec486648854d3835f91b0" datatype="html">
         <source>Video stream</source>
-        <target state="translated">Video stream</target>
+        <target state="translated">Flujo de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">57</context></context-group>
       </trans-unit>
       <trans-unit id="697b93fd14fd3c85be79056c6d7f459da204eff1" datatype="html">
         <source>Audio stream</source>
-        <target state="translated">Audio stream</target>
+        <target state="translated">Flujo de audio</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-video-miniature/video-download.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="8d6a41c2703bed3edfc76e1df0b1ca203404c17c">
@@ -582,7 +582,7 @@
       </trans-unit>
       <trans-unit id="97916f2928694b8d574b6f052b93e54565ed9823" datatype="html">
         <source>What is the issue?</source>
-        <target state="translated">¿Cual es el problema?</target>
+        <target state="translated">¿Cuál es el problema?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.html</context>
           <context context-type="linenumber">13</context>
@@ -590,7 +590,7 @@
       </trans-unit>
       <trans-unit id="297603f796b0d287ac02b80d5aca6156c91a8fea" datatype="html">
         <source>This will ask remote instances to delete it</source>
-        <target state="translated">Esto pedirá instancias remotas para eliminarla</target>
+        <target state="translated">Esto pedirá a la instancias remotas eliminarlo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context><context context-type="linenumber">26</context></context-group>
       </trans-unit>
       <trans-unit id="0cd0f27936731dabfd8d89277b781d5dd664bc89" datatype="html">
@@ -600,7 +600,7 @@
       </trans-unit>
       <trans-unit id="4b3963c6d0863118fe9e9e33447d12be3c2db081">
         <source>Unlisted</source>
-        <target>No listado</target>
+        <target>Sin listar</target>
         <context-group name="null">
           <context context-type="linenumber">6</context>
         </context-group>
@@ -860,7 +860,7 @@
       </trans-unit>
       <trans-unit id="62c8c98c3957946709b49d0a5e309e53e660b9e2" datatype="html">
         <source>Video uploads</source>
-        <target state="translated">Subidas de video</target>
+        <target state="translated">Subidas de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">28</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">39</context></context-group>
       </trans-unit>
@@ -876,12 +876,12 @@
       </trans-unit>
       <trans-unit id="f1155367f44b4e3d2286db687d324a9b0cc1a7cb" datatype="html">
         <source>Automatically published</source>
-        <target state="translated">Publicado automáticamente</target>
+        <target state="translated">Publicación automática</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="15f046007e4fca2e8477966745e2ec4e3e81bc3b">
         <source>Video quota</source>
-        <target>Cuota de vídeo</target>
+        <target>Cupo de vídeos</target>
         <context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
@@ -911,7 +911,7 @@
       </trans-unit>
       <trans-unit id="590fc27fcbd7dd680da2bb2da644a183338f6bd1">
         <source>HTTP import (YouTube, Vimeo, direct URL...)</source>
-        <target>Importación HTTP (YouTube, Vimeo, URL directo...)</target>
+        <target>Importación HTTP (YouTube, Vimeo, URL directa...)</target>
         <context-group name="null">
           <context context-type="linenumber">64</context>
         </context-group>
@@ -932,7 +932,7 @@
       </trans-unit>
       <trans-unit id="af80f4182e09341958e8706bd2b47ece61233eb5" datatype="html">
         <source>P2P enabled</source>
-        <target state="translated">P2P habilitado</target>
+        <target state="translated">P2P activado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-features-table.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="b8b6a001cca6fa2ba15600ca3a78dfeebf685d60" datatype="html">
@@ -962,18 +962,18 @@
       </trans-unit>
       <trans-unit id="bd21b1e6b5674003187e5cbec0e7e2854f9d8388" datatype="html">
         <source>video views</source>
-        <target state="translated">vistas del video</target>
+        <target state="translated">visualizaciones del vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="d11fe88f08e43bfe4dec7d16fe469aa65d1e3d84" datatype="html">
         <source>video comments</source>
-        <target state="translated">comentarios del video</target>
+        <target state="translated">comentarios del vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">41</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">75</context></context-group>
       </trans-unit>
       <trans-unit id="0bedca44bfc0ef579be6053ffe0e8cdee9aba07d" datatype="html">
         <source>of hosted video</source>
-        <target state="translated">de video hospedado</target>
+        <target state="translated">de vídeo hospedado</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-instance/instance-statistics.component.html</context><context context-type="linenumber">51</context></context-group>
       </trans-unit>
       <trans-unit id="de7d61497b3dc7df0f83c57f333458a7064ac4e7" datatype="html">
@@ -1039,7 +1039,7 @@
       </trans-unit>
       <trans-unit id="dbabcb47dc77c29275d0f836280ef1dcd924fdb9" datatype="html">
         <source>Block video "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</source>
-        <target state="translated">Bloquear video "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
+        <target state="translated">Bloquear vídeo "<x id="INTERPOLATION" equiv-text="{{ video.name }}"/>"</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1047,7 +1047,7 @@
       </trans-unit>
       <trans-unit id="dc3bdad5421d0ee7ddd76ae62b699d72dd9f61b4" datatype="html">
         <source>Please describe the reason...</source>
-        <target state="translated">Por favor describa la razón ...</target>
+        <target state="translated">Por favor, escribe la razón...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-block.component.html</context>
           <context context-type="linenumber">12</context>
@@ -1073,17 +1073,17 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="6b6240483bee515c1e20c0c21fc6096e8cdd08e9" datatype="html">
         <source>Sorry but there was an issue with the external login process. Please <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contact an administrator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Lo sentimos, pero hubo un problema con el proceso de inicio de sesión externo. Por favor <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contacte a un administrador<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Lo sentimos, ha habido un problema con el proceso de inicio de sesión externo. Por favor <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>contacta con un administrador<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="17f43ee2fb343f8b60568527d105777b99ae8414" datatype="html">
         <source>If you are looking for an account…</source>
-        <target state="translated">Si buscas una cuenta …</target>
+        <target state="translated">Si buscas una cuenta…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">12</context></context-group>
       </trans-unit>
       <trans-unit id="8b339f3b4ba60cd2f880c7c19e8b375e7892f4c1" datatype="html">
         <source>Currently this instance doesn't allow for user registration, but you can find an instance that gives you the possibility to sign up for an account and upload your videos there. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Find yours among multiple instances at <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Actualmente, esta instancia no permite el registro de usuarios, pero puede encontrar una instancia que le brinde la posibilidad de registrarse para obtener una cuenta y cargar sus videos allí.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Encuentra el tuyo entre varias instancias en <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Actualmente, esta instancia no permite el registro de usuarios, pero puedes encontrar una instancia que ofrezca la posibilidad de registrarse y obtener una cuenta y subir tus videos allí.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Encuentra el tuyo entre varias instancias en <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">16</context></context-group>
       </trans-unit>
       <trans-unit id="ae3cb52bf2dee3101ee654812b5d16e8665a9453">
@@ -1106,7 +1106,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="51ef29329faccb28d94369897068897d1b3d0478">
         <source>Username or email address</source>
-        <target>Usuario o correo electrónico</target>
+        <target>Nombre de usuario o correo electrónico</target>
         <context-group name="null">
           <context context-type="linenumber">15</context>
         </context-group>
@@ -1139,7 +1139,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="6765b4c916060f6bc42d9bb69e80377dbcb5e4e9">
         <source>Login</source>
-        <target>Identificarse</target>
+        <target>Iniciar sesión</target>
         <context-group name="null">
           <context context-type="linenumber">32</context>
         </context-group>
@@ -1153,7 +1153,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="d2eb6c5d41f70d4b8c0937e7e19e196143b47681">
         <source>Forgot your password</source>
-        <target>Olvidaste tu contraseña</target>
+        <target>Contraseña olvidada</target>
         <context-group name="null">
           <context context-type="linenumber">58</context>
         </context-group>
@@ -1161,7 +1161,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8f7dd0009f7dc9e4e3f1d9f43f944a3aa7cf737a" datatype="html">
         <source>We are sorry, you cannot recover your password because your instance administrator did not configure the PeerTube email system.</source>
-        <target state="translated">Lo sentimos, no puede recuperar su contraseña porque el administrador de su instancia no configuró el sistema de corre electrónico de PeerTube.</target>
+        <target state="translated">Lo sentimos, no es posible recuperar la contraseña porque el administrador de la instancia no ha configurado el sistema de correo electrónico de PeerTube.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+login/login.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="244aae9346da82b0922506c2d2581373a15641cc">
@@ -1343,7 +1343,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="e1410009f484a2b44b6f15346df65f13f5e77444" datatype="html">
         <source>Setup your account, managing video playlists, discover third-party applications...</source>
-        <target state="translated">Configurar su cuenta, manejo de listas de video, descubrir programas de terceros...</target>
+        <target state="translated">Configurar tu cuenta, gestionar de listas de vídeos, descubrir aplicaciones de terceros...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context>
           <context context-type="linenumber">29</context>
@@ -1366,7 +1366,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="351af1021b0298109bfb72c7aa9a27999d110859" datatype="html">
         <source>It's time to configure your instance!</source>
-        <target state="translated">¡Es momento de configurar su instancia!</target>
+        <target state="translated">¡Es momento de configurar tu instancia!</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/modal/welcome-modal.component.html</context><context context-type="linenumber">55</context></context-group>
       </trans-unit>
       <trans-unit id="cde76f438c580e464940e141584e44ab21809cb6" datatype="html">
@@ -1391,7 +1391,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a9af18b4f210f5a19bb2503407923d3f25c57f98" datatype="html">
         <source>Configuration warning!</source>
-        <target state="translated">Advertencia de configuración!</target>
+        <target state="translated">¡Advertencia de configuración!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">3</context>
@@ -1423,7 +1423,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="801cb5b4cc93a5c0a4d89a46b96487d3638f0bc5" datatype="html">
         <source>Who you are</source>
-        <target state="translated">Quiénes son ustedes</target>
+        <target state="translated">Quién o quiénes sois</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">16</context>
@@ -1431,7 +1431,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="de688f72fc745cc8481a5e9cc70b8ca9e6f41e2a" datatype="html">
         <source>How long you plan to maintain your instance</source>
-        <target state="translated">¿Cuánto tiempo planea mantener su instancia</target>
+        <target state="translated">Cuánto tiempo planeas mantener la instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">17</context>
@@ -1439,7 +1439,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="af60a062ecc7c70b278bdb3ba7ad0147abfecf0a" datatype="html">
         <source>How you plan to pay your instance</source>
-        <target state="translated">Cómo planea pagar su instancia</target>
+        <target state="translated">Cómo planea pagar la instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">18</context>
@@ -1447,7 +1447,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="c69c1bd027bae555557a48123a26d770a93ee473" datatype="html">
         <source>How you will moderate your instance</source>
-        <target state="translated">Cómo moderará su instancia</target>
+        <target state="translated">Cómo moderarás la instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">20</context>
@@ -1455,7 +1455,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="92ddf3c3a348adc059da6c17c808fa27c315d91c" datatype="html">
         <source>Instance terms</source>
-        <target state="translated">Términos de la instancia</target>
+        <target state="translated">Términos y condiciones de la instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/modal/instance-config-warning-modal.component.html</context>
           <context context-type="linenumber">21</context>
@@ -1500,9 +1500,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="1c98d728375e7bd5b166d1aeb29485ef8b5d6e28">
         <source>Help to translate PeerTube!</source>
-        <target>
-    ¡Ayude a traducir PeerTube!
-  </target>
+        <target>¡Ayuda a traducir PeerTube!</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -1540,7 +1538,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="e472a6eaa2a51bd4a8ac19a1cf5567add4a04ff8" datatype="html">
         <source>Videos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></source>
-        <target state="translated">Videos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></target>
+        <target state="translated">Vídeos: <x id="INTERPOLATION" equiv-text="{{ videoLanguages.join(', ') }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">42</context>
@@ -1556,7 +1554,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="ee5ad4d7fed0e8fc44fa9c2d7be9265295108411" datatype="html">
         <source>Help share videos</source>
-        <target state="translated">Ayuda a compartir videos</target>
+        <target state="translated">Ayuda a compartir vídeos</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">55</context>
@@ -1595,7 +1593,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="f8e6eaa974acec3b80e5c77ec0dc4ff80939964d" datatype="html">
         <source>powered by PeerTube</source>
-        <target state="translated">desarrollado por PeerTube</target>
+        <target state="translated">funciona con PeerTube</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/menu/menu.component.html</context>
           <context context-type="linenumber">171</context>
@@ -1603,7 +1601,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="900ca8b77fca5b6232cf1d526830ccc29569a984" datatype="html">
         <source>powered by PeerTube - CopyLeft 2015-2020</source>
-        <target state="translated">desarrollado por PeerTube - CopyLeft 2015-2020</target>
+        <target state="translated">funciona con PeerTube - CopyLeft 2015-2020</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">170</context></context-group>
       </trans-unit>
       <trans-unit id="3fdc751b264ca9998e1542fcf5794e274cd56344" datatype="html">
@@ -1645,7 +1643,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="47546e45bbb476baaaad38244db444c427ddc502" datatype="html">
         <source>Playlists</source>
-        <target state="translated">Lista de reproducción</target>
+        <target state="translated">Listas de reproducción</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">91</context></context-group>
       </trans-unit>
       <trans-unit id="357064ca9d9ac859eb618e28e8126fa32be049e2">
@@ -1665,7 +1663,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="165035acb08983753bcecc3e8b6b18c7caf26d35" datatype="html">
         <source>VIDEOS</source>
-        <target state="translated">VIDEOS</target>
+        <target state="translated">VÍDEOS</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">107</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">402</context></context-group>
       </trans-unit>
@@ -1685,7 +1683,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="9d9983bd6d0817a5b1bb7650034a2f9a5f4b7bac" datatype="html">
         <source>Most liked</source>
-        <target state="translated">Recomendadas</target>
+        <target state="translated">Recomendados</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">121</context></context-group>
       </trans-unit>
       <trans-unit id="8d20c5f5dd30acbe71316544dab774393fd9c3c1">
@@ -1720,7 +1718,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="2dc8a0a3763cd5c456c84630fc335398c9b86771">
         <source>View your notifications</source>
-        <target>Ver sus notificaciones</target>
+        <target>Ver tus notificaciones</target>
         <context-group name="null">
           <context context-type="linenumber">3</context>
         </context-group>
@@ -1743,7 +1741,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="341e026e3f317aa3164916cc63a059c961a78b81">
         <source>Update your notification preferences</source>
-        <target>Actualizar sus preferencias de notificación</target>
+        <target>Actualizar preferencias de notificación</target>
         <context-group name="null">
           <context context-type="linenumber">16</context>
         </context-group>
@@ -1751,7 +1749,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3d1b5c9cd76948c04fdb7bb3fe51b6c1242c1bd5">
         <source>See all your notifications</source>
-        <target>Ver todas sus notificaciones</target>
+        <target>Ver todas las notificaciones</target>
         <context-group name="null">
           <context context-type="linenumber">30</context>
         </context-group>
@@ -1759,7 +1757,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="73216504c8903e04fdb415d876eb8969dd3afa60" datatype="html">
         <source>Search videos, channels…</source>
-        <target state="translated">Buscar videos, canales…</target>
+        <target state="translated">Buscar vídeos, canales…</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">3</context></context-group>
       </trans-unit>
       <trans-unit id="90ce30ddedd5892740bb41e9ead736cd2c0f9b53" datatype="html">
@@ -1769,7 +1767,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="b2f3e08a790518414d240fbe2c3c116c6f83c275" datatype="html">
         <source>using <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></source>
-        <target state="translated">utilizando<x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></target>
+        <target state="translated">usando <x id="INTERPOLATION" equiv-text="{{ serverConfig.search.searchIndex.url }}"/></target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/header/search-typeahead.component.html</context>
           <context context-type="linenumber">25</context>
@@ -1854,7 +1852,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="9848e55d7c95eddc1c4a044a63ed0e88e8cb6f5c" datatype="html">
         <source>In the vidiverse</source>
-        <target state="translated">En el vidiverse</target>
+        <target state="translated">En el vidiverso</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/suggestion.component.html</context><context context-type="linenumber">15</context></context-group>
       </trans-unit>
       <trans-unit id="5d43539fc358c3a548b9d487be821db73e2702ff">
@@ -1867,7 +1865,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a57adbb9bc3ecbc397157af25f96fc2123c9c383" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reiniciar</target>
+        <target state="translated">Restablecer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">8</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">22</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">41</context></context-group>
@@ -1889,12 +1887,12 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="e9866754251f6f45c42710a3de01da5d79c6ae91" datatype="html">
         <source>After...</source>
-        <target state="translated">Después...</target>
+        <target state="translated">Después de...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">66</context></context-group>
       </trans-unit>
       <trans-unit id="46c36269a23f9105124bbdd58f8c91833b92e565" datatype="html">
         <source>Before...</source>
-        <target state="translated">Antes...</target>
+        <target state="translated">Antes de...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="a02ea1d4e7424ca989929da5e598f379940fdbf2">
@@ -1942,7 +1940,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="265ee68edfe57e510270da31ec99f67d94346009" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reiniciar</target>
+        <target state="translated">Restablecer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">103</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">116</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">129</context></context-group>
@@ -1982,7 +1980,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="dcc3173a99661496cd1f836283993cc3e6576b26" datatype="html">
         <source>Display all languages</source>
-        <target state="translated">Mostrar todos los lenguajes</target>
+        <target state="translated">Mostrar todos los idiomas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">134</context></context-group>
       </trans-unit>
       <trans-unit id="c8d58c4fbe23e51af3dc8f58cb4a81eac20739e8">
@@ -2019,7 +2017,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="ca72d574353a355b8fadbc1ceda174a0bd1bf7cd" datatype="html">
         <source>Reset</source>
-        <target state="translated">Reiniciar</target>
+        <target state="translated">Restablecer</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search-filters.component.html</context><context context-type="linenumber">187</context></context-group>
       </trans-unit>
       <trans-unit id="5ca707824ab93066c7d9b44e1b8bf216725c2c22">
@@ -2046,7 +2044,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="6f5a458f827503ac7b8697688ecf3e0490818ee8" datatype="html">
         <source>Video channels</source>
-        <target state="translated">Canales de video</target>
+        <target state="translated">Canales de vídeo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+accounts/account-video-channels/account-video-channels.component.html</context>
           <context context-type="linenumber">1</context>
@@ -2054,7 +2052,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="40fa23fe45af4ee2e72cdd3cc6bf6013f180aab0">
         <source>Add caption</source>
-        <target>Añadir subtítulo</target>
+        <target>Añadir subtítulos</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -2062,7 +2060,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="6bad752cfcac8f3572bdf2c619daec683d56d1a8">
         <source>Select the caption file</source>
-        <target>Elige el archivo de subtítulo</target>
+        <target>Elige el archivo de subtítulos</target>
         <context-group name="null">
           <context context-type="linenumber">24</context>
         </context-group>
@@ -2070,9 +2068,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="c34c61401151c29fb3679638a7d0b95258145ec3">
         <source>This will replace an existing caption!</source>
-        <target>
-        Eso remplazará el texto existente!
-      </target>
+        <target>¡Eso remplazará el texto existente!</target>
         <context-group name="null">
           <context context-type="linenumber">29</context>
         </context-group>
@@ -2105,7 +2101,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="19f59c3f026a162a78af887faff8d9b2b11a4e27" datatype="html">
         <source>Tags could be used to suggest relevant recommendations. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> There is a maximum of 5 tags. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Press Enter to add a new tag. </source>
-        <target state="translated">Podrían usarse etiquetas para sugerir recomendaciones relevantes<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Hay un máximo de 5 etiquetas. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Presiona Enter para añadir una etiqueta nueva. </target>
+        <target state="translated">Podrían usarse etiquetas para sugerir recomendaciones relevantes. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>Hay un máximo de 5 etiquetas. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Pulsa intro para añadir una etiqueta nueva. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="9bdd535a2817bf0b843a124bf65e4992625e7ecf">
@@ -2126,7 +2122,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8389e9cde2928cc27aaecbdee818a255bf7984b0">
         <source>Enter a new tag</source>
-        <target>Ingresar una nueva etiqueta</target>
+        <target>Introduce una nueva etiqueta</target>
         <context-group name="null">
           <context context-type="linenumber">30</context>
         </context-group>
@@ -2149,7 +2145,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="3b86a740c713742c3f7538c60b890fccdd0a5caf" datatype="html">
         <source>Video descriptions are truncated by default and require manual action to expand them.</source>
-        <target state="translated">Las descripciones de video se truncan de manera predeterminada y requieren una acción manual para expandirlas.</target>
+        <target state="translated">Las descripciones de los vídeos se recortan por defecto y deben ser expandidas manualmente.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">43</context></context-group>
       </trans-unit>
       <trans-unit id="0cc554f4d7bb6a87515d2d95438e183b50702071">
@@ -2194,7 +2190,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="4b6dbf2d92858e82bcf6ae5dbc8dfb4b29d82ad0" datatype="html">
         <source>FAQ</source>
-        <target state="translated">FAQ</target>
+        <target state="translated">Preguntas frecuentes</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="a2892dc0bd40629b160c490cdd4aff82204bbec6" datatype="html">
@@ -2209,7 +2205,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="fd91a5f2ef27c48b6908d9016fb6de2a224e8559" datatype="html">
         <source>API documentation</source>
-        <target state="translated">Documentación del API</target>
+        <target state="translated">Documentación de la API</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/menu/menu.component.html</context><context context-type="linenumber">164</context></context-group>
       </trans-unit>
       <trans-unit id="d69f4fafc780cc7dbafb063ca5f11e6f7c91b0c5">
@@ -2254,7 +2250,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="c7742322b1d3dbc921362058d1747c7ec2adbec7">
         <source>Basic info</source>
-        <target>Info básica</target>
+        <target>Información básica</target>
         <context-group name="null">
           <context context-type="linenumber">4</context>
         </context-group>
@@ -2262,7 +2258,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="92bcfd1d237a2bfe48dc9f46d074ed26abc8df22">
         <source>Add another caption</source>
-        <target>Añadir otro subtítulo</target>
+        <target>Añadir otros subtítulos</target>
         <context-group name="null">
           <context context-type="linenumber">166</context>
         </context-group>
@@ -2270,7 +2266,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a46a7503167b77b3ec4e28274a3d1dda637617ed">
         <source>See the subtitle file</source>
-        <target>Ver el archivo de subtítulo</target>
+        <target>Ver el archivo de subtítulos</target>
         <context-group name="null">
           <context context-type="linenumber">175</context>
         </context-group>
@@ -2336,7 +2332,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="fc7600ad500918cb091064cb7129a5d13657a430" datatype="html">
         <source>Video preview</source>
-        <target state="translated">Previsualización</target>
+        <target state="translated">Vista previa</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">223</context></context-group>
       </trans-unit>
       <trans-unit id="b5629d298ff1a69b8db19a4ba2995c76b52da604">
@@ -2349,7 +2345,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="f61f989de6fc12f99369a90800e4b5462d3f10a0">
         <source>Short text to tell people how they can support you (membership platform...).</source>
-        <target>Breve texto para explicar a la gente cómo pueden apoyarte (plataforma de miembros...).</target>
+        <target>Breve texto para explicar a la gente cómo pueden apoyarte (plataforma de miembros, etc.).</target>
         <context-group name="null">
           <context context-type="linenumber">226</context>
         </context-group>
@@ -2362,12 +2358,12 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="4f6ce709bf09f9f24c161840ae983971a09fb12c" datatype="html">
         <source>This is the date when the content was originally published (e.g. the release date for a film)</source>
-        <target state="translated">Esta es la fecha original de publicación del contenido (es decir, la fecha de lanzamiento de una película)</target>
+        <target state="translated">Esta es la fecha original de publicación del contenido (ej.: la fecha de lanzamiento de una película)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">247</context></context-group>
       </trans-unit>
       <trans-unit id="3549ee96125a43181f80712ed744ee223a0e645a">
         <source>Enable video comments</source>
-        <target>Permitir comentarios del vídeo</target>
+        <target>Permitir comentarios en el vídeo</target>
         <context-group name="null">
           <context context-type="linenumber">254</context>
         </context-group>
@@ -2375,7 +2371,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="0b365218ce1ae736f9066fd3d47278cc8f3ed1d0" datatype="html">
         <source>Enable download</source>
-        <target state="translated">Permite descarga</target>
+        <target state="translated">Permitir la descarga</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/shared/video-edit.component.html</context><context context-type="linenumber">266</context></context-group>
       </trans-unit>
       <trans-unit id="d91da0abc638c05e52adea253d0813f3584da4b1">
@@ -2397,12 +2393,12 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="d49ca01a7d3c689add2eb58a469a3919c7ee9af7" datatype="html">
         <source>You can import any URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>supported by youtube-dl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> or URL that points to a raw MP4 file. You should make sure you have diffusion rights over the content it points to, otherwise it could cause legal trouble to yourself and your instance. </source>
-        <target state="translated">Puedes importar cualquier URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>suportada en youtube-dl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o una URL que apunte a un archivo MP4 sin procesar. Debes asegurarte de tener derechos de difusión sobre el contenido al que señala, de lo contrario podría problemas legales. </target>
+        <target state="translated">Puedes importar cualquier URL <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>suportada en youtube-dl<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> o una URL que apunte a un archivo MP4 sin procesar. Debes asegurarte de tener derechos de difusión sobre el contenido al que apunta, de lo contrario podría haber problemas legales. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-import-url.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="385811ab5a5c3e96e0db46c9ce1fc3147d8cd4c7">
         <source>Sorry, but something went wrong</source>
-        <target>Disculpas, algo salió mal</target>
+        <target>Lo sentimos, algo ha salido mal</target>
         <context-group name="null">
           <context context-type="linenumber">53</context>
         </context-group>
@@ -2412,9 +2408,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="63d6bf87c9f30441175648dfd3ef6a19292287c2">
         <source>Congratulations, the video behind <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> will be imported! You can already add information about this video. </source>
-        <target>
-  Enhorabuena, el vídeo en <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> sera importado! Ya puedes añadir información sobre este vídeo.
-</target>
+        <target>Enhorabuena, ¡el vídeo en <x id="INTERPOLATION" equiv-text="{{ targetUrl }}"/> será importado! Ya puedes añadir información acerca del mismo. </target>
         <context-group name="null">
           <context context-type="linenumber">52</context>
         </context-group>
@@ -2449,7 +2443,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="5d6a58637313a6b2375e3af59534f788c8f8657d" datatype="html">
         <source>Video background image</source>
-        <target state="translated">Imagen de fondo de video</target>
+        <target state="translated">Imagen de fondo de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">31</context></context-group>
       </trans-unit>
       <trans-unit id="1860b3f71e0b82e9c10e1eaf0ff073216ed896cc" datatype="html">
@@ -2464,18 +2458,18 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a81bfce50be151484f8e59b34829ab07ef97982b" datatype="html">
         <source>Total video quota</source>
-        <target state="translated">Cuota total de video</target>
+        <target state="translated">Cuota total de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-settings.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">53</context></context-group>
       </trans-unit>
       <trans-unit id="6357683911e256c566259880de43ea9403de00d3" datatype="html">
         <source>Congratulations! Your video is now available in your private library.</source>
-        <target state="translated">¡Felicidades! Tu video ahora está disponible en tu biblioteca privada.</target>
+        <target state="translated">¡Bien! Tu video ahora está disponible en tu biblioteca privada.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add-components/video-upload.component.html</context><context context-type="linenumber">67</context></context-group>
       </trans-unit>
       <trans-unit id="f7ac2376749c7985f94f0fc89ba75ea624de1215">
         <source>Publish will be available when upload is finished</source>
-        <target>La publicación estará disponible cuando finalice la subida</target>
+        <target>La publicación estará disponible cuando termine de subirse</target>
         <context-group name="null">
           <context context-type="linenumber">79</context>
         </context-group>
@@ -2504,7 +2498,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="0d6558176587662e9bb3b79cca57d42591cf82f9">
         <source>Paste magnet URI</source>
-        <target>Pegar el enlace magnético</target>
+        <target>Pegar la URI magnet</target>
         <context-group name="null">
           <context context-type="linenumber">14</context>
         </context-group>
@@ -2517,9 +2511,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="7cb3731472edd9edf6a6d036498c2c8388157266">
         <source>Congratulations, the video will be imported with BitTorrent! You can already add information about this video.</source>
-        <target>
-Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir información sobre este vídeo.
-</target>
+        <target>Enhorabuena, ¡el vídeo sera importado con BitTorrent! Ya puedes añadir información sobre este vídeo.</target>
         <context-group name="null">
           <context context-type="linenumber">57</context>
         </context-group>
@@ -2527,7 +2519,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="ebe5234338205e30a59cf703e2a2b6ef49fb75f8" datatype="html">
         <source>We recommend you to not use the <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> user to publish your videos, since it's the super-admin account of your instance. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>create a dedicated account<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to upload your videos. </source>
-        <target state="translated">Te recomendamos que no use el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>usuario para publicar sus videos, ya que es la cuenta de superadministrador de tu instancia. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>crear una cuenta dedicada<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para subir tus videos. </target>
+        <target state="translated">Te recomendamos que no uses el <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>root<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>usuario para publicar sus videos, ya que es la cuenta de superadministrador de tu instancia. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Instead, <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>crear una cuenta dedicada<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para subir tus videos. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-edit/video-add.component.html</context><context context-type="linenumber">2</context></context-group>
       </trans-unit>
       <trans-unit id="0b60d939cf0f1af9fe513f31164d198abf671860">
@@ -2572,12 +2564,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="7ce8b0d7cc34d4c1ef4a21e990b0a001337bedd1" datatype="html">
         <source>Other videos</source>
-        <target state="translated">Otros videos</target>
+        <target state="translated">Otros vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/recommendations/recommended-videos.component.html</context><context context-type="linenumber">4</context></context-group>
       </trans-unit>
       <trans-unit id="70155053814b6999f8abce4f89bab85afc76e538" datatype="html">
         <source>AUTOPLAY</source>
-        <target state="translated">AUTOPLAY</target>
+        <target state="translated">AUTO-REPRODUCCIÓN</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/recommendations/recommended-videos.component.html</context><context context-type="linenumber">10</context></context-group>
       </trans-unit>
       <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9">
@@ -2595,12 +2587,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="dfc8701a2a6898d6784db0ebf9d3191552d81d89" datatype="html">
         <source>Share the playlist at this video position</source>
-        <target state="translated">Comparte la lista de reproducción en esta posición de video</target>
+        <target state="translated">Comparte la lista de reproducción en esta posición de vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="51f7d84d38a304f7f056d2dcaf6d733c3ade35f9" datatype="html">
         <source>Share the video</source>
-        <target state="translated">Comparte el video</target>
+        <target state="translated">Comparte el vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">28</context></context-group>
       </trans-unit>
       <trans-unit id="e0cfbc8ea680e4527ebf094c035f3342e9146d9f">
@@ -2613,7 +2605,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="08c1bbb22df74b12c362fd114d0aa5a230ee4656" datatype="html">
         <source>The url is not secured (no HTTPS), so the embed video won't work on HTTPS websites (web browsers block non secured HTTP requests on HTTPS websites).</source>
-        <target state="translated">La URL no es segura (no HTTPS), por lo que el video incrustado no funcionará en los sitios web HTTPS (los navegadores web bloquean las solicitudes HTTP no seguras en los sitios web HTTPS).</target>
+        <target state="translated">La URL no es segura (no es HTTPS), por lo que el vídeo incrustado no funcionará en los sitios web HTTPS (los navegadores web bloquean las solicitudes HTTP no seguras en los sitios web HTTPS).</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="d3b15c3bf4a7ea38d6002d2d2c4781642d30e79c">
@@ -2626,7 +2618,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9adb13e2ba5160c8b0b100dc3f4cbe6051b5af9b" datatype="html">
         <source>Auto select subtitle</source>
-        <target state="translated">Auto-selecciona el subtituulo</target>
+        <target state="translated">Seleccionar subtítulos automáticamente</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">90</context></context-group>
       </trans-unit>
       <trans-unit id="f0e9c70583e8264cda79a8151de51cbb1ecb02ef" datatype="html">
@@ -2651,7 +2643,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="cb66498f1a530d9b29ee5bc6605628add658dd87" datatype="html">
         <source>Maybe later</source>
-        <target state="translated">Quizas mas tarde</target>
+        <target state="translated">Igual en otro momento</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-support.component.html</context><context context-type="linenumber">11</context></context-group>
       </trans-unit>
       <trans-unit id="62a557fcfdbd25a31d1a0332294f94a466fee809">
@@ -2675,12 +2667,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="cd0fb32d9b50b615bdce413ca955283df7ab0b74" datatype="html">
         <source>Display privacy warning</source>
-        <target state="translated">Muestra advertencia de privacidad</target>
+        <target state="translated">Mostrar advertencia de privacidad</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">151</context></context-group>
       </trans-unit>
       <trans-unit id="3e10c53d0372db827bf38571e56d166f1df963bf" datatype="html">
         <source>Display player controls</source>
-        <target state="translated">Muestra controles del reproductor</target>
+        <target state="translated">Mostrar controles del reproductor</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/modal/video-share.component.html</context><context context-type="linenumber">158</context></context-group>
       </trans-unit>
       <trans-unit id="3c4c080864b313cfdff5fdea6aae5da276246d99" datatype="html">
@@ -2713,17 +2705,17 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="82bf4d36722689b7c0058ed18e50d7b550d6d8b6" datatype="html">
         <source>Published <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/><x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="translated">Published <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/><x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> vistas<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
+        <target state="translated">Publicado <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/><x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizaciones<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">45</context></context-group>
       </trans-unit>
       <trans-unit id="04aabb1507157d38b070f1a7ed5271bcea041404" datatype="html">
         <source>Published <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/><x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="translated">Publicado<x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/><x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> views<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
+        <target state="translated">Publicado <x id="START_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;my-date-toggle&gt;"/><x id="CLOSE_TAG_MY-DATE-TOGGLE" ctype="x-my-date-toggle" equiv-text="&lt;/my-date-toggle&gt;"/> <x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/> • <x id="INTERPOLATION" equiv-text="{{ video.views | myNumberFormatter }}"/> visualizaciones<x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">56</context></context-group>
       </trans-unit>
       <trans-unit id="74059c5dce671d464259e3ce37a5d408c3fd7720" datatype="html">
         <source>SUPPORT</source>
-        <target state="translated">APOYO</target>
+        <target state="translated">APOYAR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="83ea0f7a6f84393af198d48193e01a96f3fcbc9a" datatype="html">
@@ -2767,12 +2759,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="d0336848b0c375a1c25ba369b3481ee383217a4f" datatype="html">
         <source>Subscribe</source>
-        <target state="translated">Suscribir</target>
+        <target state="translated">Suscribirse</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="6e215e23505768151b501b7e11dd5b864e604fd9" datatype="html">
         <source>Subscribe to all channels</source>
-        <target state="translated">Suscríbase a todos los canales</target>
+        <target state="translated">Suscribirse a todos los canales</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-subscription/subscribe-button.component.html</context><context context-type="linenumber">9</context></context-group>
       </trans-unit>
       <trans-unit id="c33a843e309de9d67771aa5e666f61e92f4c6216" datatype="html">
@@ -2818,7 +2810,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="89707647cc7c304e499ae46a5a0c5b508c3c80a0" datatype="html">
         <source>the sharing system used for this video implies that some technical information about your system (such as a public IP address) can be sent to other peers.</source>
-        <target state="translated">el sistema de uso compartido utilizado para este video implica que cierta información técnica sobre su sistema (como una dirección IP pública) se puede enviar a otros pares.</target>
+        <target state="translated">el sistema de uso compartido utilizado para este video implica que cierta información técnica sobre su sistema (como una dirección IP pública) se puede enviar a otros usuarios que estén viendo el vídeo.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">261</context></context-group>
       </trans-unit>
       <trans-unit id="e60c11e1b1dfbbeda577364b8de39ded2d796c5e">
@@ -2850,17 +2842,17 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="20fc98888baf65b5ba9fe9622dc036fa8dec6a5f" datatype="html">
         <source>OK</source>
-        <target state="translated">OK</target>
+        <target state="translated">ACEPTAR</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="a8db53a47543132da1a68066f0a9cba0551a8933" datatype="html">
         <source>1 Comment</source>
-        <target state="translated">1 Comentario</target>
+        <target state="translated">1 comentario</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="8164af7bbe7fb9a3d2064ddf2627a7a4d5446575" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{ componentPagination.totalItems }}"/> Comments</source>
-        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ componentPagination.totalItems }}"/> Comentarios</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{ componentPagination.totalItems }}"/> comentarios</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">7</context></context-group>
       </trans-unit>
       <trans-unit id="c5bb9f8936cb33db2ca351a1b87a984fdf11917c" datatype="html">
@@ -2880,7 +2872,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="df2d2cca87a54e75abb4196d10358579dd0321b4" datatype="html">
         <source>Most replies first</source>
-        <target state="translated">Mayoría de las respuestas primero</target>
+        <target state="translated">Más respuestas primero</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">20</context></context-group>
       </trans-unit>
       <trans-unit id="17810e68b0ba21e62e61eecfaf0a93b2c91033b4">
@@ -2893,24 +2885,22 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="ce6445567d33993fced14aae3456db909121d12e" datatype="html">
         <source>View <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> and others </source>
-        <target state="translated">Ver<x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/>respuestas<x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> y otros </target>
+        <target state="translated">Ver <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> respuestas de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'autor' }}"/> y otros </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">78</context></context-group>
       </trans-unit>
       <trans-unit id="8487d97def3c5336b1cde21c7da14e61a9633061" datatype="html">
         <source>View <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies from <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </source>
-        <target state="translated">Ver<x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> respuestas de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'the author' }}"/> </target>
+        <target state="translated">Ver <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> respuestas de <x id="INTERPOLATION_1" equiv-text="{{ video?.account?.displayName || 'autor' }}"/> </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">81</context></context-group>
       </trans-unit>
       <trans-unit id="dce85627dad907cb2013d06f97f82ad7bf87b0a6" datatype="html">
         <source>View <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> replies</source>
-        <target state="translated">Ver<x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> respuestas</target>
+        <target state="translated">Ver <x id="INTERPOLATION" equiv-text="{{ comment.totalReplies }}"/> respuestas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comments.component.html</context><context context-type="linenumber">85</context></context-group>
       </trans-unit>
       <trans-unit id="b7fccd922d6473725247ed85a9fdf96fe6794828">
         <source>Comments are disabled.</source>
-        <target>
-    Los comentarios están inhabilitados.
-  </target>
+        <target>Los comentarios están desactivados.</target>
         <context-group name="null">
           <context context-type="linenumber">64</context>
         </context-group>
@@ -2926,12 +2916,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8956c0f4c6974289fc63f1ab6b54f5b32ed65eeb" datatype="html">
         <source>Reply</source>
-        <target state="translated">Respuesta</target>
+        <target state="translated">Publicar</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">23</context></context-group>
       </trans-unit>
       <trans-unit id="8b2bb53dfb5f059f2b68cc4ac00661a865909135">
         <source>You are one step away from commenting</source>
-        <target>Está a un paso de poder comentar</target>
+        <target>Estás a un paso de poder comentar</target>
         <context-group name="null">
           <context context-type="linenumber">28</context>
         </context-group>
@@ -2939,14 +2929,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="2c6453cc150c9f652a7f1238d2f172e625f0f117" datatype="html">
         <source>You can comment using an account on any ActivityPub-compatible instance. On most platforms, you can find the video by typing its URL in the search bar and then comment it from within the software's interface.</source>
-        <target state="translated">Puede comentar utilizando una cuenta en cualquier instancia compatible con ActivityPub. En la mayoría de las plataformas, puede encontrar el video escribiendo su URL en la barra de búsqueda y luego comentarlo desde la interfaz del software.</target>
+        <target state="translated">Puedes comentar utilizando una cuenta en cualquier instancia compatible con ActivityPub. En la mayoría de las plataformas, puede encontrar el video escribiendo su URL en la barra de búsqueda y luego comentarlo desde la interfaz del software.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/comment/video-comment-add.component.html</context><context context-type="linenumber">35</context></context-group>
       </trans-unit>
       <trans-unit id="968b02fbc645be799727de0d1ec3c6f9b11b20eb">
         <source>If you have an account on Mastodon or Pleroma, you can open it directly in their interface:</source>
-        <target>
-      Si tiene una cuenta en Mastodon o Pleroma, puede abrirlo directamente en su interfaz:
-    </target>
+        <target>Si tienes una cuenta en Mastodon o Pleroma, puedes abrirlo directamente en su interfaz:</target>
         <context-group name="null">
           <context context-type="linenumber">41</context>
         </context-group>
@@ -2959,7 +2947,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a607fab03e11b0e07c1640e11a1b02d7af06b285">
         <source>Highlighted comment</source>
-        <target>Comentario resaltado</target>
+        <target>Comentario destacado</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -2980,12 +2968,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="31e902955ed9501f124814901a0031c37a070f1f" datatype="html">
         <source>Video redundancies</source>
-        <target state="translated">Redundancias de video</target>
+        <target state="translated">Redundancias del vídeo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="4e8635c108375983b42229df44bda8c0af84f396">
         <source>1 host (without "http://") per line</source>
-        <target>1 host (without "http://") por línea</target>
+        <target>1 host (sin "http://") por línea</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -3062,7 +3050,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="0198c6af8421c8f69a90c3e9a4a12cf923cbb84b" datatype="html">
         <source>Running...</source>
-        <target state="translated">Corriendo...</target>
+        <target state="translated">Funcionando...</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/system/jobs/jobs.component.html</context><context context-type="linenumber">49</context></context-group>
       </trans-unit>
       <trans-unit id="edcc19a49c950289ffe5d38be4843cdf194e5622" datatype="html">
@@ -3132,7 +3120,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="ff772a40114c96a96d8f2bfe0394658eda5a51ca" datatype="html">
         <source>No follower found matching current filters.</source>
-        <target state="translated">No se encontraron seguidores que coincidan con los filtros actuales.</target>
+        <target state="translated">No se han encontrado seguidores que coincidan con los filtros actuales.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="2bea79363bdef3300bdcad9ef20a680c05e9f781" datatype="html">
@@ -3142,7 +3130,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="57295ef79276c604cc86f130c0046469e150f7cd" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> followers</source>
-        <target state="translated">Mostrando<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> seguidores</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> seguidores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3191,7 +3179,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="b2ddee45fe4c3ebc20f39ed10ef70505c9eb65ce" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</source>
-        <target state="translated">Mostrando<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> hosts</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3204,7 +3192,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8a3b2dec938ae1c71320e653fb1fdb810e614f76" datatype="html">
         <source>My videos duplicated by remote instances</source>
-        <target state="translated">Mis videos duplicados por instancias remotas</target>
+        <target state="translated">Mis vídeos duplicados por instancias remotas</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">7</context>
@@ -3212,7 +3200,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="cb2281bf5c9f420429bbd5c5473ee7aacc879e1e" datatype="html">
         <source>Remote videos duplicated by my instance</source>
-        <target state="translated">Videos remotos duplicados por mi instancia</target>
+        <target state="translated">Vídeos remotos duplicados por mi instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context>
           <context context-type="linenumber">8</context>
@@ -3228,7 +3216,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="08c74dc9762957593b91f6eb5d65efdfc975bf48">
         <source>Username</source>
-        <target>Usuario</target>
+        <target>Nombre de usuario</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
@@ -3238,7 +3226,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="1bd571d8f3981f6043b0df3402cc3d97e0d7ad2a">
         <source>john</source>
-        <target>john</target>
+        <target>juan</target>
         <context-group name="null">
           <context context-type="linenumber">10</context>
         </context-group>
@@ -3247,7 +3235,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="bb3542ff8e5defa6d0c773799e5c8fe399605d05">
         <source>mail@example.com</source>
-        <target>mail@example.com</target>
+        <target>correo@example.com</target>
         <context-group name="null">
           <context context-type="linenumber">21</context>
         </context-group>
@@ -3256,7 +3244,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8861667a66c0000e6ae144520026d55123cea117" datatype="html">
         <source>If you leave the password empty, an email will be sent to the user.</source>
-        <target state="translated">Si deja la contraseña vacía, se enviará un correo electrónico al usuario.</target>
+        <target state="translated">Si dejas la contraseña vacía, se enviará un correo electrónico al usuario.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">109</context>
@@ -3278,7 +3266,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="2768c5a04ffea51e600e3b1e14ed676afb355f23" datatype="html">
         <source>Transcoding is enabled. The video quota only takes into account <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> video size. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> At most, this user could upload ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </source>
-        <target state="translated">La transcodificación está habilitada. La cuota de video solo tiene en cuenta<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> tamaño de vídeo. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Como máximo, este usuario podría subir ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
+        <target state="translated">La transcodificación está habilitada. La cuota de video solo tiene en cuenta el peso <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>original<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> del vídeo. <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Como máximo, este usuario podría subir ~ <x id="INTERPOLATION" equiv-text="{{ computeQuotaWithTranscoding() | bytes: 0 }}"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">148</context>
@@ -3300,7 +3288,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a0f69dcdccf2174aa7fa17708ac63c3a3104456c" datatype="html">
         <source>Doesn't need review before a video goes public</source>
-        <target state="translated">No necesita revisión antes de que un video se haga público</target>
+        <target state="translated">No necesita revisión antes de que un vídeo se haga público</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">168</context>
@@ -3338,7 +3326,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="1eede69e18c5ac9c0b0295b72cabb7e64e029e74" datatype="html">
         <source>Hide</source>
-        <target state="translated">Esconder</target>
+        <target state="translated">Ocultar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-password.component.html</context>
           <context context-type="linenumber">11</context>
@@ -3346,7 +3334,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="ea762ca1d74c96d8568ac68482778f52ca531cc4">
         <source>Batch actions</source>
-        <target>Acciones másivas</target>
+        <target>Acciones masivas</target>
         <context-group name="null">
           <context context-type="linenumber">19</context>
         </context-group>
@@ -3362,7 +3350,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="df84781eeb873f037ee688789bde034be9b49074" datatype="html">
         <source>Video quota <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">Quota de video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Cupo de vídeo <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">42</context></context-group>
       </trans-unit>
       <trans-unit id="c38a6a10b47b82463eda45f856348b51daa96b97" datatype="html">
@@ -3372,7 +3360,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="7d88bb14f4ef7eaea7ca41c1832c66451410047a" datatype="html">
         <source>The user was banned</source>
-        <target state="translated">El usuario fue baneado</target>
+        <target state="translated">El usuario ha sido expulsado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context>
           <context context-type="linenumber">74</context>
@@ -3389,7 +3377,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="02ba1a65db92d1d0ab4ba380086e9be61891aaa5">
         <source>User's email must be verified to login</source>
-        <target>Se requiere validar la dirección de correo electrónico del usuario antes de conectarse</target>
+        <target>Los usuarios deben validar su dirección de correo electrónico del usuario antes de conectarse</target>
         <context-group name="null">
           <context context-type="linenumber">72</context>
         </context-group>
@@ -3413,7 +3401,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="0fcb785bae83bfd5c1b1bbeb57cda21eec98ae1a" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> users</source>
-        <target state="translated">Mostrando<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> usuarios</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> usuarios</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/users/user-list/user-list.component.html</context><context context-type="linenumber">6</context></context-group>
       </trans-unit>
       <trans-unit id="90868353e7e6f5994109ee1011131cefa992116c">
@@ -3478,7 +3466,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="91bd2d52b840951d3b1f5830b023bee8bca91293" datatype="html">
         <source>Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">Video <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Vídeo <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context><context context-type="linenumber">37</context></context-group>
       </trans-unit>
@@ -3574,7 +3562,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9f5c75bd513580d630817cd39179fd41e5ec36f6" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> blocked videos</source>
-        <target state="translated">Mostrando<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> videos bloqueados</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> vídeos bloqueados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3590,9 +3578,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="5731e5d5ac989bf08848b5a57a5586cf84d80964">
         <source>This comment can only be seen by you or the other moderators.</source>
-        <target>
-        Este comentario puede ser visto solo por usted y los otros moderadores.
-      </target>
+        <target>Este comentario puede ser visto solo por ti y los demás moderadores.</target>
         <context-group name="null">
           <context context-type="linenumber">18</context>
         </context-group>
@@ -3624,7 +3610,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="dee7eb63010b67c2464dd7987307e85369f24b9d" datatype="html">
         <source>Accepted reports</source>
-        <target state="translated">Informes aceptados</target>
+        <target state="translated">Reportes aceptados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">20</context>
@@ -3632,7 +3618,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8140a31650a8a974acaf9f7e88cfb246ed6c9314" datatype="html">
         <source>Refused reports</source>
-        <target state="translated">Informes rechazados</target>
+        <target state="translated">Reportes rechazados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3640,7 +3626,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="1f5ed7018178a08c8eb17305833874a976fa428c" datatype="html">
         <source>Reports with blocked videos</source>
-        <target state="translated">Informes con videos bloqueados</target>
+        <target state="translated">Reportes con vídeos bloqueados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">22</context>
@@ -3648,7 +3634,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="2f536bc37b142c0376631cefb992151fb733ce48" datatype="html">
         <source>Reports with deleted videos</source>
-        <target state="translated">Informes con videos eliminados</target>
+        <target state="translated">Reportes con vídeos eliminados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">23</context>
@@ -3656,7 +3642,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="2bf5a31043ff476ca081a4080f3f3f17518dc6f2">
         <source>Reporter</source>
-        <target>Reportador</target>
+        <target>Notificador</target>
         <context-group name="null">
           <context context-type="linenumber">8</context>
         </context-group>
@@ -3683,7 +3669,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="e9a289d014e33a5a45e1cf47131074f50abb7c18" datatype="html">
         <source>The video was blocked</source>
-        <target state="translated">El video fue bloqueado</target>
+        <target state="translated">El vídeo ha sido bloqueado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">88</context>
@@ -3695,7 +3681,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="70bedf516507a286eb030398795bdaef40500929" datatype="html">
         <source>by <x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> on <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </source>
-        <target state="translated">por<x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> en<x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </target>
+        <target state="translated">por <x id="INTERPOLATION" equiv-text="{{ videoAbuse.video.channel?.displayName }}"/> en <x id="INTERPOLATION_1" equiv-text="{{ videoAbuse.video.channel?.host }}"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">91</context>
@@ -3707,7 +3693,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="b0a337363ec610cf41744167b12f020e141a4617" datatype="html">
         <source>Video was deleted</source>
-        <target state="translated">El video fue eliminado</target>
+        <target state="translated">El vídeo ha sido eliminado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">98</context>
@@ -3715,7 +3701,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="7c6eca36ec5dfbab2049ec1c58f8b6fe9d71c23b" datatype="html">
         <source>No video abuses found matching current filters.</source>
-        <target state="translated">No se encontraron abusos de video que coincidan con los filtros actuales.</target>
+        <target state="translated">No se han encontrado abusos de vídeo que coincidan con los filtros actuales.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">141</context>
@@ -3723,7 +3709,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="b2134df91de00d33d8440610b13abb2595df00f4" datatype="html">
         <source>No video abuses found.</source>
-        <target state="translated">No se encontraron abusos de video.</target>
+        <target state="translated">No se han encontrado abusos de vídeo.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">142</context>
@@ -3731,7 +3717,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="c1074e8c49b3cdfaeb7fcaf8cb27e44139389e29" datatype="html">
         <source>Open video in a new tab</source>
-        <target state="translated">Abrir video en una pestaña nueva</target>
+        <target state="translated">Abrir vídeo en una pestaña nueva</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/video-redundancies-list/video-redundancies-list.component.html</context><context context-type="linenumber">41</context></context-group>
       </trans-unit>
       <trans-unit id="7e7ad19f1bcc2c33cdba4c1ad25e2b398ad453d9">
@@ -3746,12 +3732,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9a7b523cbbebabeb9b10482291b58c52825a4b05" datatype="html">
         <source>Score <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></source>
-        <target state="translated">Puntuación<x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
+        <target state="translated">Puntuación <x id="START_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;p-sortIcon&gt;"/><x id="CLOSE_TAG_P-SORTICON" ctype="x-p-sortIcon" equiv-text="&lt;/p-sortIcon&gt;"/></target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/followers-list/followers-list.component.html</context><context context-type="linenumber">24</context></context-group>
       </trans-unit>
       <trans-unit id="8d1011bd5b502c857858a97d074118377d8fe714" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reports</source>
-        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> informes</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> reportes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.html</context>
           <context context-type="linenumber">5</context>
@@ -3767,7 +3753,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="730ae657d91e79c45d0685a7060cfea40ea8ea85" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} otro{<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reports} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 reporte} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReporter }}"/> reportes} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">21</context>
@@ -3775,7 +3761,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="4dbabcc6e79125d4b798ba8139a40202db712475" datatype="html">
         <source>Reportee</source>
-        <target state="translated">Informado</target>
+        <target state="translated">Reportado</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">27</context>
@@ -3783,7 +3769,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="28b2bd6301b8655f46a26faf4db7f11e06be1747" datatype="html">
         <source><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </source>
-        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} otro{...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
+        <target state="translated"><x id="ICU" equiv-text="{videoAbuse.countReportsForReportee, plural, =1 {...} other {...}}"/><x id="START_TAG_SPAN" ctype="x-span" equiv-text="&lt;span&gt;"/><x id="CLOSE_TAG_SPAN" ctype="x-span" equiv-text="&lt;/span&gt;"/> </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">40</context>
@@ -3791,7 +3777,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9f8e4923506fc6890efb71d403fc048f22dd616c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {1 report} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reports} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {1 report} otro{<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reports} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {1 reporte} other {<x id="INTERPOLATION" equiv-text="{{ videoAbuse.countReportsForReportee }}"/> reportes} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">41</context>
@@ -3807,13 +3793,13 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a3ae5c724857d00c006273db314041ab0664c269" datatype="html">
         <source>Mute domain</source>
-        <target state="translated">Dominio mudo</target>
+        <target state="translated">Silenciar dominio</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">19</context></context-group>
       </trans-unit>
       <trans-unit id="ff78f059449d44322f627d0f66df07abe476962b">
         <source>Instance</source>
-        <target>Nodo</target>
+        <target>Instancia</target>
         <context-group name="null">
           <context context-type="linenumber">5</context>
         </context-group>
@@ -3858,18 +3844,18 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="60cdb933d2c7051f3b5b23f9e5f8c83fa861b220" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted instances</source>
-        <target state="translated">Mostrando<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> instancias silenciadas</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> instancias silenciadas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="2aebea85561b74dd33ae2481bb942b8c4beb5524" datatype="html">
         <source>It seems that you are not on a HTTPS server. Your webserver needs to have TLS activated in order to follow servers.</source>
-        <target state="translated">Parece que no estás en un servidor HTTPS. Su servidor web necesita tener TLS activado para seguir a los servidores.</target>
+        <target state="translated">Parece que no estás en un servidor HTTPS. Su servidor web necesita tener TLS activado para seguir otros servidores.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/follows/following-list/following-list.component.html</context><context context-type="linenumber">72</context></context-group>
       </trans-unit>
       <trans-unit id="c7b73cded84adfa978aae675417f4bb688631a71" datatype="html">
         <source>Mute domains</source>
-        <target state="translated">Dominios mudos</target>
+        <target state="translated">Dominios silenciados</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
@@ -3890,13 +3876,13 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="5d3b267bc054bb6b5743dd3d46ee58cff5141697" datatype="html">
         <source>No account found.</source>
-        <target state="translated">No se encontró ninguna cuenta.</target>
+        <target state="translated">No se ha encontrado ninguna cuenta.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">59</context></context-group>
       </trans-unit>
       <trans-unit id="6c3f125145d398f0cbc07c5161b41f08116dbf01" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> muted accounts</source>
-        <target state="translated">Mostrando<x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> cuentas silenciadas</target>
+        <target state="translated">Mostrando <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> a<x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de<x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> cuentas silenciadas</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">5</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-moderation/account-blocklist.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
@@ -3998,13 +3984,13 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="16e81be2315b29492395d99ba53a83e770430494" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {result} other {results} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {result} other {results} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {resultado} other {resultados} }</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context><context context-type="linenumber">23</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+search/search.component.html</context><context context-type="linenumber">5</context></context-group>
       </trans-unit>
       <trans-unit id="b1363973a9482c7b0a7c4a1d066fd64625d40207" datatype="html">
         <source>No results.</source>
-        <target state="translated">Sin resultados.</target>
+        <target state="translated">Ningún resultado.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">28</context>
@@ -4020,7 +4006,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="ba504ef7da4384f035fc148de2d121322aaa7407" datatype="html">
         <source>This <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> does not have settings. </source>
-        <target state="translated">Este<x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/>no tiene configuraciones. </target>
+        <target state="translated">Este <x id="INTERPOLATION" equiv-text="{{ pluginTypeLabel }}"/> no tiene configuraciones. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/plugins/plugin-show-installed/plugin-show-installed.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="8011e20c5bbe51602d459a860fbf29b599b55edd" datatype="html">
@@ -4131,17 +4117,17 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="a8544bac210fd102d71c5aaf1bef79c1fc48c079" datatype="html">
         <source>The <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sharing system<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implies that some technical information about your system (such as a public IP address) can be sent to other peers, but greatly helps to reduce server load.</source>
-        <target state="translated">El<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sistema de intercambio<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implica que cierta información técnica sobre su sistema (como una dirección IP pública) puede enviarse a otros pares, pero ayuda en gran medida a reducir la carga del servidor.</target>
+        <target state="translated">El <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>sistema de intercambio<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> implica que cierta información técnica sobre tu sistema (como una dirección IP pública) puede enviarse a otros usuarios que estén viendo el vídeo, pero ayuda en gran medida a reducir la carga del servidor.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">47</context></context-group>
       </trans-unit>
       <trans-unit id="0f9a16c167ea4f043577304b13046c143692cb99" datatype="html">
         <source>Help share videos being played</source>
-        <target state="translated">Ayuda a compartir videos que se están reproduciendo</target>
+        <target state="translated">Ayuda a compartir videos que se estén reproduciendo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">44</context></context-group>
       </trans-unit>
       <trans-unit id="8002f4cecaf491c2fa08a13cb18c8fda1996d92f" datatype="html">
         <source>When on a video page, directly start playing the video.</source>
-        <target state="translated">Cuando esté en una página de video, comience a reproducir el video directamente.</target>
+        <target state="translated">En la página de un vídeo, empezar a reproducir automáticamente.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">58</context></context-group>
       </trans-unit>
       <trans-unit id="cd607ede7ce410c98c681f5ba435642fe25f5f9c" datatype="html">
@@ -4151,7 +4137,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="6319d0030e9d382e5beb2baa5a399c0af3a27015" datatype="html">
         <source>When a video ends, follow up with the next suggested video.</source>
-        <target state="translated">Cuando termina un video, siga con el siguiente video sugerido.</target>
+        <target state="translated">Cuando termine un vídeo, reproducir el siguiente vídeo sugerido.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/shared/shared-user-settings/user-video-settings.component.html</context><context context-type="linenumber">69</context></context-group>
       </trans-unit>
       <trans-unit id="056097a75d29b732ec5ad97c2e90d6c9be6528e4" datatype="html">
@@ -4161,12 +4147,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="ccb0ae7ba7f7a83045f1ad78d0c0044b5ed80629" datatype="html">
         <source>Main languages you/your moderators speak</source>
-        <target state="translated">Principales idiomas que usted/sus moderadores hablan</target>
+        <target state="translated">Principales idiomas que tú/los moderadores hablan</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">60</context></context-group>
       </trans-unit>
       <trans-unit id="f27b192f4d3153db7dc7044bea37e71655bfb3ea" datatype="html">
         <source>MODERATION &amp; NSFW</source>
-        <target state="translated">MODERACIÓN &amp; NSFW</target>
+        <target state="translated">MODERACIÓN &amp; EXPLÍCITA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">76</context></context-group>
       </trans-unit>
       <trans-unit id="f0716b4964f9dc6437aaed3ae0c78e94fd259fb9" datatype="html">
@@ -4176,7 +4162,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="aad49456e42847e2ea95fbaeb2f49387199e5634" datatype="html">
         <source>This instance is dedicated to sensitive or NSFW content</source>
-        <target state="translated">Esta instancia está dedicada a contenido sensible o NSFW</target>
+        <target state="translated">Esta instancia está dedicada a contenido sensible o explícito</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">87</context></context-group>
       </trans-unit>
       <trans-unit id="55c4d3cc288701854147f69ccf3d86d316589968" datatype="html">
@@ -4194,7 +4180,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="8dccab3d8cadb847889ff89644d3f08ffee0d76e" datatype="html">
         <source>With <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Do not list<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> or <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Blur thumbnails<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, a confirmation will be requested to watch the video. </source>
-        <target state="translated">Con<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>No enumerar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>Difuminar miniaturas<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, se solicitará una confirmación para ver el video. </target>
+        <target state="translated">Con <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>no listar<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> o <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>difuminar las miniaturas<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/>, se solicitará una confirmación para ver el vídeo. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">104</context></context-group>
       </trans-unit>
       <trans-unit id="5e155c34fb3ed8159bf0a486a366cfbc6874f9fe">
@@ -4232,7 +4218,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="69580f2c2dbf4edf7096820ba8c393367352d774">
         <source>Terms</source>
-        <target>Términos de uso</target>
+        <target>Términos y condiciones</target>
         <context-group name="null">
           <context context-type="linenumber">88</context>
         </context-group>
@@ -4242,7 +4228,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="2c88654dd44fe8477ce6f85c1081cd24a590701b" datatype="html">
         <source>Code of conduct</source>
-        <target state="translated">Código de Conducta</target>
+        <target state="translated">Código de conducta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">131</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+about/about-instance/about-instance.component.html</context><context context-type="linenumber">71</context></context-group>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+signup/+register/register.component.html</context><context context-type="linenumber">82</context></context-group>
@@ -4256,47 +4242,47 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="d635f94dd3214d8e5fb83a2af04e7b96c861e91f" datatype="html">
         <source>Who moderates the instance? What is the policy regarding NSFW videos? Political videos? etc</source>
-        <target state="translated">¿Quién modera la instancia? ¿Cuál es la política con respecto a los videos NSFW? Videos políticos? etc</target>
+        <target state="translated">¿Quién modera la instancia? ¿Cuál es la política con respecto a los vídeos explícitos/sensibles? ¿Videos políticos? etc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">141</context></context-group>
       </trans-unit>
       <trans-unit id="b222d95cb22ff8c295920ca10c188c5d94cb0aa9" datatype="html">
         <source>YOU AND YOUR INSTANCE</source>
-        <target state="translated">TU Y SU INSTANCIA</target>
+        <target state="translated">TÚ Y TU INSTANCIA</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">155</context></context-group>
       </trans-unit>
       <trans-unit id="fdbabe6f967747b657518384b54bcc58d3913063" datatype="html">
         <source>Who is behind the instance?</source>
-        <target state="translated">¿Quién está detrás de la instancia?</target>
+        <target state="translated">¿Quién está detrás de esta instancia?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">161</context></context-group>
       </trans-unit>
       <trans-unit id="963707d11903100147b40788e4f67cc93a234308" datatype="html">
         <source>A single person? A non-profit? A company?</source>
-        <target state="translated">¿Una persona soltera? Una sin fines de lucro? ¿Una compañía?</target>
+        <target state="translated">¿Una sola persona? ¿Una ONG? ¿Una empresa?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">162</context></context-group>
       </trans-unit>
       <trans-unit id="fef7c7a74c5646fe219d94db60e0652d6b878af5" datatype="html">
         <source>Why did you create this instance?</source>
-        <target state="translated">¿Por qué creaste esta instancia?</target>
+        <target state="translated">¿Por qué has creado esta instancia?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">173</context></context-group>
       </trans-unit>
       <trans-unit id="53fe4c724dc3f942c4d1eac4206a9686cbbf968e" datatype="html">
         <source>To share your personal videos? To open registrations and allow people to upload what they want?</source>
-        <target state="translated">¿Para compartir tus videos personales? ¿Para abrir registros y permitir que las personas carguen lo que quieren?</target>
+        <target state="translated">¿Para compartir tus vídeos personales? ¿Para abrir los registros y permitir que las personas carguen lo que quieran?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">174</context></context-group>
       </trans-unit>
       <trans-unit id="ac6b554b2f923239f6d7c5fcef8a7cce7d6b43b6" datatype="html">
         <source>How long do you plan to maintain this instance?</source>
-        <target state="translated">¿Cuánto tiempo planea mantener esta instancia?</target>
+        <target state="translated">¿Cuánto tiempo planeas mantener esta instancia operativa?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">184</context></context-group>
       </trans-unit>
       <trans-unit id="09d61fa0397899a1b26d09123aef7e7bf5bd78e1" datatype="html">
         <source>It's important to know for users who want to register on your instance</source>
-        <target state="translated">Es importante saber para los usuarios que desean registrarse en su instancia</target>
+        <target state="translated">Es importante saber para los usuarios que desean registrarse en la instancia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">185</context></context-group>
       </trans-unit>
       <trans-unit id="1c0452d6bc62aace993630b59a085af1708a2f2d" datatype="html">
         <source>How will you finance the PeerTube server?</source>
-        <target state="translated">¿Cómo va a financiar el servidor PeerTube?</target>
+        <target state="translated">¿Cómo se va a financiar el servidor de PeerTube?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">195</context></context-group>
       </trans-unit>
       <trans-unit id="1bb1ca2264b1ab8be73deee74852a4e6d40101c5" datatype="html">
@@ -4311,12 +4297,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="7dfc119f06b80d9324703c471b0c00118fa5849d" datatype="html">
         <source>What server/hardware does the instance run on?</source>
-        <target state="translated">¿En qué servidor / hardware se ejecuta la instancia?</target>
+        <target state="translated">¿En qué servidor/hardware se ejecuta la instancia?</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">216</context></context-group>
       </trans-unit>
       <trans-unit id="4a58b1d4aff414350b701aa587aeb39a1276307a" datatype="html">
         <source>i.e. 2vCore 2GB RAM, a direct the link to the server you rent, etc.</source>
-        <target state="translated">es decir, 2vCore 2GB RAM, un enlace directo al servidor que alquila, etc.</target>
+        <target state="translated">ej.: 2vCore 2GB RAM, un enlace directo al servidor que alquila, etc.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">217</context></context-group>
       </trans-unit>
       <trans-unit id="3070ae34708ac4b19ac0a2fdc2c0b82871754c7a" datatype="html">
@@ -4331,7 +4317,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="0aa2ad4efb780f946dd9a821fe7471dde20014c3" datatype="html">
         <source>Use <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins &amp; themes<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> for more involved changes, or <x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>add slight customizations<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Utilizar<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins &amp; temas<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>para cambios más involucrados, o<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>agregar ligeras personalizaciones<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Utilizar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>plugins y temas<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para cambios más complejos, o<x id="START_LINK_1" ctype="x-a" equiv-text="&lt;a&gt;"/>añadir ligeras personalizaciones<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">242</context></context-group>
       </trans-unit>
       <trans-unit id="deca31fc7adad40d00bd63881d0c17124cd05beb" datatype="html">
@@ -4346,12 +4332,12 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="28aca3fd95c8d941f643c617058636715b6f87d9" datatype="html">
         <source>Discover videos</source>
-        <target state="translated">Descubre videos</target>
+        <target state="translated">Descubrir vídeos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">267</context></context-group>
       </trans-unit>
       <trans-unit id="9091b36f8890eabbd2305789eb826d16e8f4641d" datatype="html">
         <source>Trending videos</source>
-        <target state="translated">Videos de tendencia</target>
+        <target state="translated">Videos tendencia</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">268</context></context-group>
       </trans-unit>
       <trans-unit id="4c65fb9a424be158237157c16778273550a38c70" datatype="html">
@@ -4361,7 +4347,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="93d74eb49a5e5c2af5f815178909adf425000af8" datatype="html">
         <source>Recently added videos</source>
-        <target state="translated">Videos agregados recientemente</target>
+        <target state="translated">Videos añadidos recientemente</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">270</context></context-group>
       </trans-unit>
       <trans-unit id="b6307f83d9f43bff8d5129a7888e89964ddc3f7f">
@@ -4409,7 +4395,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="eb55f6a974ace4bade90b976dba651c9545c979d" datatype="html">
         <source>Manage <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>users<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to set their quota individually. </source>
-        <target state="translated">Gestionar<x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>usuarios<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>para establecer su cuota individualmente. </target>
+        <target state="translated">Gestionar <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>usuarios<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> para establecer su cuota individualmente. </target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">335</context></context-group>
       </trans-unit>
       <trans-unit id="90f449b1f4787e6c9731198a96d35399c1b340a7">
@@ -4447,7 +4433,7 @@ Enhorabuena, el vídeo sera importado con BitTorrent! Ya puedes añadir informac
       </trans-unit>
       <trans-unit id="9a298b5ee14cc04a1cbef88cd1cc54fbb8176bc2" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Video} other {Videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Video} other {Videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Vídeo} other {Vídeos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">24</context>
