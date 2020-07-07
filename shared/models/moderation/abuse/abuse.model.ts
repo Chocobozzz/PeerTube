@@ -60,13 +60,13 @@ export interface Abuse {
 
   // FIXME: deprecated in 2.3, remove the following properties
 
-  // // @deprecated
-  // startAt: null
-  // // @deprecated
-  // endAt: null
+  // @deprecated
+  startAt: null
+  // @deprecated
+  endAt: null
 
-  // // @deprecated
-  // count?: number
-  // // @deprecated
-  // nth?: number
+  // @deprecated
+  count?: number
+  // @deprecated
+  nth?: number
 }

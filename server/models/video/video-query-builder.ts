@@ -327,7 +327,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
         attributes.push('COALESCE("video"."originallyPublishedAt", "video"."publishedAt") AS "publishedAtForOrder"')
       }
 
-      order = buildOrder(model, options.sort)
+      order = buildOrder(options.sort)
       suffix += `${order} `
     }
 
@@ -357,7 +357,7 @@ function buildListQuery (model: typeof Model, options: BuildVideosQueryOptions) 
   return { query, replacements, order }
 }
 
-function buildOrder (model: typeof Model, value: string) {
+function buildOrder (value: string) {
   const { direction, field } = buildDirectionAndField(value)
   if (field.match(/^[a-zA-Z."]+$/) === null) throw new Error('Invalid sort column ' + field)
 
