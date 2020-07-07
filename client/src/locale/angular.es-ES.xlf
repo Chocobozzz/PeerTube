@@ -4457,7 +4457,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8b3b364967f953009a4b83c53ed5cf0b5ff3902a" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Subscriber} other {Subscribers} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Abonado} otros {Suscriptores} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Suscriptor} otros {Suscriptores} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">36</context>
@@ -4469,7 +4469,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="89f26f7ae43839fb1c983c6dc82d7bb9f559ac98" datatype="html">
         <source>Incriminated in reports</source>
-        <target state="translated">Incriminado en informes</target>
+        <target state="translated">Incriminado en reportes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">42</context>
@@ -4481,7 +4481,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="374b01a6d0311b4e675834b47db9e34d3fb833e7" datatype="html">
         <source>Authored reports accepted</source>
-        <target state="translated">Informes creados aceptados</target>
+        <target state="translated">Reportes aceptados</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">48</context>
@@ -4493,7 +4493,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="8e29da1e7e8def288e5cf788c6f5ac6e5824259c" datatype="html">
         <source>{VAR_PLURAL, plural, =1 {Comment} other {Comments} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =1 {Comment} otros {Comments} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =1 {Comentario} otros {Comentarios} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/users/user-edit/user-edit.component.html</context>
           <context context-type="linenumber">54</context>
@@ -4522,7 +4522,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="ec47d80e9b5608ecd396c32a46ca6b87601e7b20" datatype="html">
         <source>Default video quota per user</source>
-        <target state="translated">Cuota de video predeterminada por usuario</target>
+        <target state="translated">Cupo de vídeo predeterminada por usuario</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">373</context></context-group>
       </trans-unit>
       <trans-unit id="493c65a11deddda45b42a39f503fc4bb3f876cf2" datatype="html">
@@ -4532,12 +4532,12 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="6c65014c4ccf5a3ca7b0f4bdb17ff00578004420" datatype="html">
         <source>Allow import with HTTP URL (i.e. YouTube)</source>
-        <target state="translated">Permitir importación con URL HTTP (es decir, YouTube)</target>
+        <target state="translated">Permitir importación con URL HTTP (ej.: YouTube)</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">413</context></context-group>
       </trans-unit>
       <trans-unit id="ec3d83c2ae784e843fbe96eb368f9e6e0f26cc2e" datatype="html">
         <source>Allow import with a torrent file or a magnet URI</source>
-        <target state="translated">Permitir importación con un archivo torrent o un URI de imán</target>
+        <target state="translated">Permitir importación con un archivo torrent o una URI magnet</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">420</context></context-group>
       </trans-unit>
       <trans-unit id="c590ac6eba10ab6269e068156a910c7c58328cc5" datatype="html">
@@ -4563,7 +4563,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="translated">Permitir<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a tus usuarios<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> para buscar videos / actores remotos por su URI, que pueden no estar federados con su instancia</target>
+        <target state="translated">Permitir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a tus usuarios<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> buscar vídeos / actores remotos por su URI, que pueden no estar federados con esta instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">465</context>
@@ -4571,7 +4571,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="translated">Permitir a los usuarios hacer búsquedas remotas de URI / manejar</target>
+        <target state="translated">Permitir a los usuarios hacer búsquedas remotas de URI/identificador</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">462</context>
@@ -4579,7 +4579,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="ffe92ff41a38a4407b1e1da41a015292497324c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="translated">Permitir<x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a usuarios anónimos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> buscar videos / actores remotos por su URI, que pueden no estar federados con su instancia</target>
+        <target state="translated">Permitir <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>a usuarios anónimos<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> buscar vídeos / actores remotos por su URI, que pueden no estar federados con su instancia</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">476</context>
@@ -4595,7 +4595,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="translated">⚠️Esta funcionalidad depende en gran medida de la moderación de las instancias seguida del índice de búsqueda que seleccione.</target>
+        <target state="translated">⚠️ Esta funcionalidad depende en gran medida de la moderación de las instancias seguida del índice de búsqueda que seleccione.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">490</context>
@@ -4671,7 +4671,7 @@ Iniciar sesión</target>
       </trans-unit>
       <trans-unit id="9a3dd9c65ee3381ae3b78b9c56cc4e0d2e41f0e8" datatype="html">
         <source>Automatically follow back instances</source>
-        <target state="translated">Siga automáticamente las instancias posteriores</target>
+        <target state="translated">Seguir automáticamente de vuelta instancias que sigan esta</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">572</context></context-group>
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
