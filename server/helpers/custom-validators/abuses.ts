@@ -1,6 +1,6 @@
 import validator from 'validator'
-import { abusePredefinedReasonsMap, AbusePredefinedReasonsString, AbuseVideoIs } from '@shared/models'
-import { CONSTRAINTS_FIELDS, ABUSE_STATES } from '../../initializers/constants'
+import { AbuseFilter, abusePredefinedReasonsMap, AbusePredefinedReasonsString, AbuseVideoIs, AbuseCreate } from '@shared/models'
+import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { exists, isArray } from './misc'
 
 const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.ABUSES
@@ -13,7 +13,11 @@ function isAbusePredefinedReasonValid (value: AbusePredefinedReasonsString) {
   return exists(value) && value in abusePredefinedReasonsMap
 }
 
-function isAbusePredefinedReasonsValid (value: AbusePredefinedReasonsString[]) {
+function isAbuseFilterValid (value: AbuseFilter) {
+  return value === 'video' || value === 'comment' || value === 'account'
+}
+
+function areAbusePredefinedReasonsValid (value: AbusePredefinedReasonsString[]) {
   return exists(value) && isArray(value) && value.every(v => v in abusePredefinedReasonsMap)
 }
 
@@ -22,7 +26,9 @@ function isAbuseTimestampValid (value: number) {
 }
 
 function isAbuseTimestampCoherent (endAt: number, { req }) {
-  return exists(req.body.startAt) && endAt > req.body.startAt
+  const startAt = (req.body as AbuseCreate).video.startAt
+
+  return exists(startAt) && endAt > startAt
 }
 
 function isAbuseModerationCommentValid (value: string) {
@@ -44,8 +50,9 @@ function isAbuseVideoIsValid (value: AbuseVideoIs) {
 
 export {
   isAbuseReasonValid,
+  isAbuseFilterValid,
   isAbusePredefinedReasonValid,
-  isAbusePredefinedReasonsValid,
+  areAbusePredefinedReasonsValid as isAbusePredefinedReasonsValid,
   isAbuseTimestampValid,
   isAbuseTimestampCoherent,
   isAbuseModerationCommentValid,

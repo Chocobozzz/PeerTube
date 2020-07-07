@@ -803,13 +803,13 @@ export class VideoModel extends Model<VideoModel> {
   static async saveEssentialDataToAbuses (instance: VideoModel, options) {
     const tasks: Promise<any>[] = []
 
-    logger.info('Saving video abuses details of video %s.', instance.url)
-
     if (!Array.isArray(instance.VideoAbuses)) {
       instance.VideoAbuses = await instance.$get('VideoAbuses')
 
       if (instance.VideoAbuses.length === 0) return undefined
     }
+
+    logger.info('Saving video abuses details of video %s.', instance.url)
 
     const details = instance.toFormattedDetailsJSON()
 

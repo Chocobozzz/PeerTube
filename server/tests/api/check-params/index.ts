@@ -1,3 +1,4 @@
+import './abuses'
 import './accounts'
 import './blocklist'
 import './bulk'
