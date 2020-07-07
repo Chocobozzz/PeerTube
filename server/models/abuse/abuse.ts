@@ -1,6 +1,6 @@
 import * as Bluebird from 'bluebird'
 import { invert } from 'lodash'
-import { literal, Op, WhereOptions } from 'sequelize'
+import { literal, Op, QueryTypes, WhereOptions } from 'sequelize'
 import {
   AllowNull,
   BelongsTo,
@@ -32,12 +32,13 @@ import {
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { MAbuse, MAbuseAP, MAbuseFormattable, MUserAccountId } from '../../types/models'
 import { AccountModel, ScopeNames as AccountScopeNames, SummaryOptions as AccountSummaryOptions } from '../account/account'
-import { buildBlockedAccountSQL, getSort, searchAttribute, throwIfNotValid } from '../utils'
+import { getSort, throwIfNotValid } from '../utils'
 import { ThumbnailModel } from '../video/thumbnail'
 import { VideoModel } from '../video/video'
 import { VideoBlacklistModel } from '../video/video-blacklist'
 import { ScopeNames as VideoChannelScopeNames, SummaryOptions as ChannelSummaryOptions, VideoChannelModel } from '../video/video-channel'
 import { VideoCommentModel } from '../video/video-comment'
+import { buildAbuseListQuery, BuildAbusesQueryOptions } from './abuse-query-builder'
 import { VideoAbuseModel } from './video-abuse'
 import { VideoCommentAbuseModel } from './video-comment-abuse'
 
@@ -46,100 +47,7 @@ export enum ScopeNames {
 }
 
 @Scopes(() => ({
-  [ScopeNames.FOR_API]: (options: {
-    // search
-    search?: string
-    searchReporter?: string
-    searchReportee?: string
-
-    // video releated
-    searchVideo?: string
-    searchVideoChannel?: string
-    videoIs?: AbuseVideoIs
-
-    // filters
-    id?: number
-    predefinedReasonId?: number
-    filter?: AbuseFilter
-
-    state?: AbuseState
-
-    // accountIds
-    serverAccountId: number
-    userAccountId: number
-  }) => {
-    const whereAnd: WhereOptions[] = []
-
-    whereAnd.push({
-      reporterAccountId: {
-        [Op.notIn]: literal('(' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
-      }
-    })
-
-    if (options.search) {
-      const escapedSearch = AbuseModel.sequelize.escape('%' + options.search + '%')
-
-      whereAnd.push({
-        [Op.or]: [
-          {
-            [Op.and]: [
-              { '$VideoAbuse.videoId$': { [Op.not]: null } },
-              searchAttribute(options.search, '$VideoAbuse.Video.name$')
-            ]
-          },
-          {
-            [Op.and]: [
-              { '$VideoAbuse.videoId$': { [Op.not]: null } },
-              searchAttribute(options.search, '$VideoAbuse.Video.VideoChannel.name$')
-            ]
-          },
-          {
-            [Op.and]: [
-              { '$VideoAbuse.deletedVideo$': { [Op.not]: null } },
-              literal(`"VideoAbuse"."deletedVideo"->>'name' ILIKE ${escapedSearch}`)
-            ]
-          },
-          {
-            [Op.and]: [
-              { '$VideoAbuse.deletedVideo$': { [Op.not]: null } },
-              literal(`"VideoAbuse"."deletedVideo"->'channel'->>'displayName' ILIKE ${escapedSearch}`)
-            ]
-          },
-          searchAttribute(options.search, '$ReporterAccount.name$'),
-          searchAttribute(options.search, '$FlaggedAccount.name$')
-        ]
-      })
-    }
-
-    if (options.id) whereAnd.push({ id: options.id })
-    if (options.state) whereAnd.push({ state: options.state })
-
-    if (options.videoIs === 'deleted') {
-      whereAnd.push({
-        '$VideoAbuse.deletedVideo$': {
-          [Op.not]: null
-        }
-      })
-    }
-
-    if (options.predefinedReasonId) {
-      whereAnd.push({
-        predefinedReasons: {
-          [Op.contains]: [ options.predefinedReasonId ]
-        }
-      })
-    }
-
-    if (options.filter === 'account') {
-      whereAnd.push({
-        videoId: null,
-        commentId: null
-      })
-    }
-
-    const onlyBlacklisted = options.videoIs === 'blacklisted'
-    const videoRequired = !!(onlyBlacklisted || options.searchVideo || options.searchVideoChannel)
-
+  [ScopeNames.FOR_API]: () => {
     return {
       attributes: {
         include: [
@@ -193,10 +101,13 @@ export enum ScopeNames {
       },
       include: [
         {
-          model: AccountModel.scope(AccountScopeNames.SUMMARY),
-          as: 'ReporterAccount',
-          required: !!options.searchReporter,
-          where: searchAttribute(options.searchReporter, 'name')
+          model: AccountModel.scope({
+            method: [
+              AccountScopeNames.SUMMARY,
+              { actorRequired: false } as AccountSummaryOptions
+            ]
+          }),
+          as: 'ReporterAccount'
         },
         {
           model: AccountModel.scope({
@@ -205,17 +116,13 @@ export enum ScopeNames {
               { actorRequired: false } as AccountSummaryOptions
             ]
           }),
-          as: 'FlaggedAccount',
-          required: !!options.searchReportee,
-          where: searchAttribute(options.searchReportee, 'name')
+          as: 'FlaggedAccount'
         },
         {
           model: VideoCommentAbuseModel.unscoped(),
-          required: options.filter === 'comment',
           include: [
             {
               model: VideoCommentModel.unscoped(),
-              required: false,
               include: [
                 {
                   model: VideoModel.unscoped(),
@@ -227,13 +134,10 @@ export enum ScopeNames {
         },
         {
           model: VideoAbuseModel.unscoped(),
-          required: options.filter === 'video' || !!options.videoIs || videoRequired,
           include: [
             {
               attributes: [ 'id', 'uuid', 'name', 'nsfw' ],
               model: VideoModel.unscoped(),
-              required: videoRequired,
-              where: searchAttribute(options.searchVideo, 'name'),
               include: [
                 {
                   attributes: [ 'filename', 'fileUrl' ],
@@ -246,23 +150,18 @@ export enum ScopeNames {
                       { withAccount: false, actorRequired: false } as ChannelSummaryOptions
                     ]
                   }),
-
-                  where: searchAttribute(options.searchVideoChannel, 'name'),
-                  required: !!options.searchVideoChannel
+                  required: false
                 },
                 {
                   attributes: [ 'id', 'reason', 'unfederated' ],
-                  model: VideoBlacklistModel,
-                  required: onlyBlacklisted
+                  required: false,
+                  model: VideoBlacklistModel
                 }
               ]
             }
           ]
         }
-      ],
-      where: {
-        [Op.and]: whereAnd
-      }
+      ]
     }
   }
 }))
@@ -386,7 +285,7 @@ export class AbuseModel extends Model<AbuseModel> {
     return AbuseModel.findOne(query)
   }
 
-  static listForApi (parameters: {
+  static async listForApi (parameters: {
     start: number
     count: number
     sort: string
@@ -428,15 +327,10 @@ export class AbuseModel extends Model<AbuseModel> {
     const userAccountId = user ? user.Account.id : undefined
     const predefinedReasonId = predefinedReason ? abusePredefinedReasonsMap[predefinedReason] : undefined
 
-    const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort),
-      col: 'AbuseModel.id',
-      distinct: true
-    }
-
-    const filters = {
+    const queryOptions: BuildAbusesQueryOptions = {
+      start,
+      count,
+      sort,
       id,
       filter,
       predefinedReasonId,
@@ -451,14 +345,12 @@ export class AbuseModel extends Model<AbuseModel> {
       userAccountId
     }
 
-    return AbuseModel
-      .scope([
-        { method: [ ScopeNames.FOR_API, filters ] }
-      ])
-      .findAndCountAll(query)
-      .then(({ rows, count }) => {
-        return { total: count, data: rows }
-      })
+    const [ total, data ] = await Promise.all([
+      AbuseModel.internalCountForApi(queryOptions),
+      AbuseModel.internalListForApi(queryOptions)
+    ])
+
+    return { total, data }
   }
 
   toFormattedJSON (this: MAbuseFormattable): Abuse {
@@ -571,6 +463,42 @@ export class AbuseModel extends Model<AbuseModel> {
       startAt,
       endAt
     }
+  }
+
+  private static async internalCountForApi (parameters: BuildAbusesQueryOptions) {
+    const { query, replacements } = buildAbuseListQuery(parameters, 'count')
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements
+    }
+
+    const [ { total } ] = await AbuseModel.sequelize.query<{ total: string }>(query, options)
+    if (total === null) return 0
+
+    return parseInt(total, 10)
+  }
+
+  private static async internalListForApi (parameters: BuildAbusesQueryOptions) {
+    const { query, replacements } = buildAbuseListQuery(parameters, 'id')
+    const options = {
+      type: QueryTypes.SELECT as QueryTypes.SELECT,
+      replacements
+    }
+
+    const rows = await AbuseModel.sequelize.query<{ id: string }>(query, options)
+    const ids = rows.map(r => r.id)
+
+    if (ids.length === 0) return []
+
+    return AbuseModel.scope(ScopeNames.FOR_API)
+                     .findAll({
+                       order: getSort(parameters.sort),
+                       where: {
+                         id: {
+                           [Op.in]: ids
+                         }
+                       }
+                     })
   }
 
   private static getStateLabel (id: number) {
