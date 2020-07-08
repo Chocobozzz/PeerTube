@@ -362,8 +362,8 @@ export class AbuseModel extends Model<AbuseModel> {
     const countReportsForReporter = this.get('countReportsForReporter') as number
     const countReportsForReportee = this.get('countReportsForReportee') as number
 
-    let video: VideoAbuse
-    let comment: VideoCommentAbuse
+    let video: VideoAbuse = null
+    let comment: VideoCommentAbuse = null
 
     if (this.VideoAbuse) {
       const abuseModel = this.VideoAbuse
@@ -391,13 +391,13 @@ export class AbuseModel extends Model<AbuseModel> {
 
     if (this.VideoCommentAbuse) {
       const abuseModel = this.VideoCommentAbuse
-      const entity = abuseModel.VideoComment || abuseModel.deletedComment
+      const entity = abuseModel.VideoComment
 
       comment = {
         id: entity.id,
-        text: entity.text,
+        text: entity.text ?? '',
 
-        deleted: !abuseModel.VideoComment,
+        deleted: entity.isDeleted(),
 
         video: {
           id: entity.Video.id,

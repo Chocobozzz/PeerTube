@@ -30,7 +30,7 @@ async function doesAbuseExist (abuseId: number | string, res: Response) {
 
   if (!abuse) {
     res.status(404)
-       .json({ error: 'Video abuse not found' })
+       .json({ error: 'Abuse not found' })
 
     return false
   }

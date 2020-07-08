@@ -21,9 +21,7 @@ import {
   checkBadStartPagination
 } from '../../../../shared/extra-utils/requests/check-api-params'
 
-// FIXME: deprecated in 2.3. Remove this controller
-
-describe('Test video abuses API validators', function () {
+describe('Test abuses API validators', function () {
   const basePath = '/api/v1/abuses/'
 
   let server: ServerInfo

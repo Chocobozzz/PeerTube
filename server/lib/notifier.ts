@@ -371,7 +371,7 @@ class Notifier {
 
     async function notificationCreator (user: MUserWithNotificationSetting) {
       const notification = await UserNotificationModel.create<UserNotificationModelForApi>({
-        type: UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS,
+        type: UserNotificationType.NEW_ABUSE_FOR_MODERATORS,
         userId: user.id,
         abuseId: abuse.id
       })

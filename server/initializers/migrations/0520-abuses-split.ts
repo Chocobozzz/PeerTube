@@ -43,12 +43,10 @@ async function up (utils: {
   await utils.sequelize.query(`
     CREATE TABLE IF NOT EXISTS "commentAbuse" (
       "id" serial,
-      "deletedComment" jsonb DEFAULT NULL,
       "abuseId" integer NOT NULL REFERENCES "abuse" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
       "videoCommentId" integer REFERENCES "videoComment" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
       "createdAt" timestamp WITH time zone NOT NULL,
       "updatedAt" timestamp WITH time zone NOT NULL,
-      "commentId" integer REFERENCES "videoComment" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
       PRIMARY KEY ("id")
     );
   `)

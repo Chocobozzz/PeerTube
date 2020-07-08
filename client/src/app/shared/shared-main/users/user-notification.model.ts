@@ -118,7 +118,7 @@ export class UserNotification implements UserNotificationServer {
           this.commentUrl = [ this.buildVideoUrl(this.comment.video), { threadId: this.comment.threadId } ]
           break
 
-        case UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS:
+        case UserNotificationType.NEW_ABUSE_FOR_MODERATORS:
           this.abuseUrl = '/admin/moderation/abuses/list'
 
           if (this.abuse.video) this.videoUrl = this.buildVideoUrl(this.abuse.video)

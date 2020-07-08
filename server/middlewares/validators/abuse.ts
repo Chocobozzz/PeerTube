@@ -128,7 +128,7 @@ const abuseListValidator = [
     .custom(exists).withMessage('Should have a valid search'),
   query('state')
     .optional()
-    .custom(isAbuseStateValid).withMessage('Should have a valid video abuse state'),
+    .custom(isAbuseStateValid).withMessage('Should have a valid abuse state'),
   query('videoIs')
     .optional()
     .custom(isAbuseVideoIsValid).withMessage('Should have a valid "video is" attribute'),

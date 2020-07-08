@@ -100,7 +100,7 @@ async function updateAbuse (req: express.Request, res: express.Response) {
     return abuse.save({ transaction: t })
   })
 
-  // Do not send the delete to other instances, we updated OUR copy of this video abuse
+  // Do not send the delete to other instances, we updated OUR copy of this abuse
 
   return res.type('json').status(204).end()
 }
@@ -112,7 +112,7 @@ async function deleteAbuse (req: express.Request, res: express.Response) {
     return abuse.destroy({ transaction: t })
   })
 
-  // Do not send the delete to other instances, we delete OUR copy of this video abuse
+  // Do not send the delete to other instances, we delete OUR copy of this abuse
 
   return res.type('json').status(204).end()
 }

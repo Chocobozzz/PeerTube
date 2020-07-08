@@ -37,8 +37,8 @@ interface ServerInfo {
   video?: {
     id: number
     uuid: string
-    name: string
-    account: {
+    name?: string
+    account?: {
       name: string
     }
   }

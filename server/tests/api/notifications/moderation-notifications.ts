@@ -3,10 +3,16 @@
 import 'mocha'
 import { v4 as uuidv4 } from 'uuid'
 import {
+  addVideoCommentThread,
   addVideoToBlacklist,
   cleanupTests,
+  createUser,
   follow,
+  generateUserAccessToken,
+  getAccount,
   getCustomConfig,
+  getVideoCommentThreads,
+  getVideoIdFromUUID,
   immutableAssign,
   MockInstancesIndex,
   registerUser,
@@ -23,7 +29,9 @@ import { waitJobs } from '../../../../shared/extra-utils/server/jobs'
 import {
   checkAutoInstanceFollowing,
   CheckerBaseParams,
+  checkNewAccountAbuseForModerators,
   checkNewBlacklistOnMyVideo,
+  checkNewCommentAbuseForModerators,
   checkNewInstanceFollower,
   checkNewVideoAbuseForModerators,
   checkNewVideoFromSubscription,
@@ -91,10 +99,73 @@ describe('Test moderation notifications', function () {
 
       await waitJobs(servers)
 
-      await reportAbuse({ url: servers[1].url, token: servers[1].accessToken, videoId: video.id, reason: 'super reason' })
+      const videoId = await getVideoIdFromUUID(servers[1].url, video.uuid)
+      await reportAbuse({ url: servers[1].url, token: servers[1].accessToken, videoId, reason: 'super reason' })
 
       await waitJobs(servers)
       await checkNewVideoAbuseForModerators(baseParams, video.uuid, name, 'presence')
+    })
+
+    it('Should send a notification to moderators on local comment abuse', async function () {
+      this.timeout(10000)
+
+      const name = 'video for abuse ' + uuidv4()
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
+      const video = resVideo.body.video
+      const resComment = await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
+      const comment = resComment.body.comment
+
+      await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, commentId: comment.id, reason: 'super reason' })
+
+      await waitJobs(servers)
+      await checkNewCommentAbuseForModerators(baseParams, video.uuid, name, 'presence')
+    })
+
+    it('Should send a notification to moderators on remote comment abuse', async function () {
+      this.timeout(10000)
+
+      const name = 'video for abuse ' + uuidv4()
+      const resVideo = await uploadVideo(servers[0].url, userAccessToken, { name })
+      const video = resVideo.body.video
+      await addVideoCommentThread(servers[0].url, userAccessToken, video.id, 'comment abuse ' + uuidv4())
+
+      await waitJobs(servers)
+
+      const resComments = await getVideoCommentThreads(servers[1].url, video.uuid, 0, 5)
+      const commentId = resComments.body.data[0].id
+      await reportAbuse({ url: servers[1].url, token: servers[1].accessToken, commentId, reason: 'super reason' })
+
+      await waitJobs(servers)
+      await checkNewCommentAbuseForModerators(baseParams, video.uuid, name, 'presence')
+    })
+
+    it('Should send a notification to moderators on local account abuse', async function () {
+      this.timeout(10000)
+
+      const username = 'user' + new Date().getTime()
+      const resUser = await createUser({ url: servers[0].url, accessToken: servers[0].accessToken, username, password: 'donald' })
+      const accountId = resUser.body.user.account.id
+
+      await reportAbuse({ url: servers[0].url, token: servers[0].accessToken, accountId, reason: 'super reason' })
+
+      await waitJobs(servers)
+      await checkNewAccountAbuseForModerators(baseParams, username, 'presence')
+    })
+
+    it('Should send a notification to moderators on remote account abuse', async function () {
+      this.timeout(10000)
+
+      const username = 'user' + new Date().getTime()
+      const tmpToken = await generateUserAccessToken(servers[0], username)
+      await uploadVideo(servers[0].url, tmpToken, { name: 'super video' })
+
+      await waitJobs(servers)
+
+      const resAccount = await getAccount(servers[1].url, username + '@' + servers[0].host)
+      await reportAbuse({ url: servers[1].url, token: servers[1].accessToken, accountId: resAccount.body.id, reason: 'super reason' })
+
+      await waitJobs(servers)
+      await checkNewAccountAbuseForModerators(baseParams, username, 'presence')
     })
   })
 

@@ -106,9 +106,9 @@ tags:
       Managing plugins installed from a local path or from NPM, or search for new ones.
     externalDocs:
       url: https://docs.joinpeertube.org/#/api-plugins
-  - name: Video Abuses
+  - name: Abuses
     description: |
-      Video abuses deal with reports of local or remote videos alike.
+      Abuses deal with reports of local or remote videos/comments/accounts alike.
   - name: Video
     description: |
       Operations dealing with listing, uploading, fetching or modifying videos.
@@ -166,7 +166,7 @@ x-tagGroups:
       - Search
   - name: Moderation
     tags:
-      - Video Abuses
+      - Abuses
       - Video Blocks
       - Account Blocks
       - Server Blocks
@@ -1474,13 +1474,13 @@ paths:
   /videos/abuse:
     get:
       deprecated: true
-      summary: List video abuses
+      summary: List abuses
       security:
         - OAuth2:
           - admin
           - moderator
       tags:
-        - Video Abuses
+        - Abuses
       parameters:
         - name: id
           in: query
@@ -1508,7 +1508,7 @@ paths:
             type: string
         - name: state
           in: query
-          description: 'The video playlist privacy (Pending = `1`, Rejected = `2`, Accepted = `3`)'
+          description: 'The abuse state (Pending = `1`, Rejected = `2`, Accepted = `3`)'
           schema:
             type: integer
             enum:
@@ -1554,7 +1554,7 @@ paths:
       security:
         - OAuth2: []
       tags:
-        - Video Abuses
+        - Abuses
         - Videos
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
@@ -1607,7 +1607,7 @@ paths:
           - admin
           - moderator
       tags:
-        - Video Abuses
+        - Abuses
       parameters:
         - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/abuseId'
@@ -1626,11 +1626,11 @@ paths:
         '204':
           description: successful operation
         '404':
-          description: video abuse not found
+          description: abuse not found
     delete:
       deprecated: true
       tags:
-        - Video Abuses
+        - Abuses
       summary: Delete an abuse
       security:
         - OAuth2:
@@ -3320,7 +3320,7 @@ components:
       name: abuseId
       in: path
       required: true
-      description: Video abuse id
+      description: Abuse id
       schema:
         type: integer
     captionLanguage:
@@ -5098,7 +5098,7 @@ components:
 
             - `2` NEW_COMMENT_ON_MY_VIDEO
 
-            - `3` NEW_VIDEO_ABUSE_FOR_MODERATORS
+            - `3` NEW_ABUSE_FOR_MODERATORS
 
             - `4` BLACKLIST_ON_MY_VIDEO
 

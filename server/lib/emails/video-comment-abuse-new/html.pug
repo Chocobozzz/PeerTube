@@ -7,7 +7,8 @@ block title
 block content
   p
     | #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] received an abuse report for the #{isLocal ? '' : 'remote '}comment "
-    a(href=commentUrl) of #{flaggedAccount}
+    a(href=commentUrl) on video #{videoName}
+    | of #{flaggedAccount}
     | created on #{commentCreatedAt}
 
   p The reporter, #{reporter}, cited the following reason(s):
