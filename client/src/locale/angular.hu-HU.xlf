@@ -9775,7 +9775,7 @@
       </trans-unit>
       <trans-unit id="43ee7c4bd1ed4766ec0c13974a1e08881071c927" datatype="html">
         <source>Up Next</source>
-        <target state="translated">Legközelebb</target>
+        <target state="translated">Következik</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+videos/+video-watch/video-watch.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="3a592fe9ee94c99deb20352edd7e994debf5c4c8" datatype="html">
