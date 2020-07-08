@@ -180,7 +180,7 @@ describe('Test emails', function () {
     })
   })
 
-  describe('When creating a video abuse', function () {
+  describe('When creating an abuse', function () {
     it('Should send the notification email', async function () {
       this.timeout(10000)
 

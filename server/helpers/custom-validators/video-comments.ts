@@ -68,7 +68,7 @@ async function doesVideoCommentExist (idArg: number | string, video: MVideoId, r
 
 async function doesCommentIdExist (idArg: number | string, res: express.Response) {
   const id = parseInt(idArg + '', 10)
-  const videoComment = await VideoCommentModel.loadById(id)
+  const videoComment = await VideoCommentModel.loadByIdAndPopulateVideoAndAccountAndReply(id)
 
   if (!videoComment) {
     res.status(404)
@@ -77,7 +77,7 @@ async function doesCommentIdExist (idArg: number | string, res: express.Response
     return false
   }
 
-  res.locals.videoComment = videoComment
+  res.locals.videoCommentFull = videoComment
 
   return true
 }

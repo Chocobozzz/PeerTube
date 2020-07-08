@@ -109,7 +109,7 @@ function buildAccountInclude (required: boolean, withActor = false) {
                 required: true,
                 include: [
                   {
-                    attributes: [ 'uuid' ],
+                    attributes: [ 'id', 'name', 'uuid' ],
                     model: VideoModel.unscoped(),
                     required: true
                   }
@@ -492,6 +492,8 @@ export class UserNotificationModel extends Model<UserNotificationModel> {
       threadId: abuse.VideoCommentAbuse.VideoComment.getThreadId(),
 
       video: {
+        id: abuse.VideoCommentAbuse.VideoComment.Video.id,
+        name: abuse.VideoCommentAbuse.VideoComment.Video.name,
         uuid: abuse.VideoCommentAbuse.VideoComment.Video.uuid
       }
     } : undefined

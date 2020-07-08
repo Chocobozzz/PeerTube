@@ -1,5 +1,4 @@
-import { AllowNull, BelongsTo, Column, CreatedAt, DataType, Default, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
-import { VideoComment } from '@shared/models'
+import { BelongsTo, Column, CreatedAt, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import { VideoCommentModel } from '../video/video-comment'
 import { AbuseModel } from './abuse'
 
@@ -21,11 +20,6 @@ export class VideoCommentAbuseModel extends Model<VideoCommentAbuseModel> {
 
   @UpdatedAt
   updatedAt: Date
-
-  @AllowNull(true)
-  @Default(null)
-  @Column(DataType.JSONB)
-  deletedComment: VideoComment & { Video: { name: string, id: number, uuid: string }}
 
   @ForeignKey(() => AbuseModel)
   @Column

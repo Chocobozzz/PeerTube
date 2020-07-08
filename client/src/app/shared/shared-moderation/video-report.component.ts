@@ -140,7 +140,6 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     const { hasStart, startAt, hasEnd, endAt } = this.form.get('timestamp').value
 
     this.abuseService.reportVideo({
-      accountId: this.video.account.id,
       reason,
       predefinedReasons,
       video: {

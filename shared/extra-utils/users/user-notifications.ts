@@ -139,13 +139,17 @@ async function checkNotification (
 }
 
 function checkVideo (video: any, videoName?: string, videoUUID?: string) {
-  expect(video.name).to.be.a('string')
-  expect(video.name).to.not.be.empty
-  if (videoName) expect(video.name).to.equal(videoName)
+  if (videoName) {
+    expect(video.name).to.be.a('string')
+    expect(video.name).to.not.be.empty
+    expect(video.name).to.equal(videoName)
+  }
 
-  expect(video.uuid).to.be.a('string')
-  expect(video.uuid).to.not.be.empty
-  if (videoUUID) expect(video.uuid).to.equal(videoUUID)
+  if (videoUUID) {
+    expect(video.uuid).to.be.a('string')
+    expect(video.uuid).to.not.be.empty
+    expect(video.uuid).to.equal(videoUUID)
+  }
 
   expect(video.id).to.be.a('number')
 }
@@ -436,7 +440,7 @@ async function checkNewCommentOnMyVideo (base: CheckerBaseParams, uuid: string, 
 }
 
 async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
-  const notificationType = UserNotificationType.NEW_VIDEO_ABUSE_FOR_MODERATORS
+  const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
 
   function notificationChecker (notification: UserNotification, type: CheckerType) {
     if (type === 'presence') {
@@ -455,6 +459,56 @@ async function checkNewVideoAbuseForModerators (base: CheckerBaseParams, videoUU
   function emailNotificationFinder (email: object) {
     const text = email['text']
     return text.indexOf(videoUUID) !== -1 && text.indexOf('abuse') !== -1
+  }
+
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
+}
+
+async function checkNewCommentAbuseForModerators (base: CheckerBaseParams, videoUUID: string, videoName: string, type: CheckerType) {
+  const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.abuse.id).to.be.a('number')
+      checkVideo(notification.abuse.comment.video, videoName, videoUUID)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.abuse === undefined || n.abuse.comment.video.uuid !== videoUUID
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+    return text.indexOf(videoUUID) !== -1 && text.indexOf('abuse') !== -1
+  }
+
+  await checkNotification(base, notificationChecker, emailNotificationFinder, type)
+}
+
+async function checkNewAccountAbuseForModerators (base: CheckerBaseParams, displayName: string, type: CheckerType) {
+  const notificationType = UserNotificationType.NEW_ABUSE_FOR_MODERATORS
+
+  function notificationChecker (notification: UserNotification, type: CheckerType) {
+    if (type === 'presence') {
+      expect(notification).to.not.be.undefined
+      expect(notification.type).to.equal(notificationType)
+
+      expect(notification.abuse.id).to.be.a('number')
+      expect(notification.abuse.account.displayName).to.equal(displayName)
+    } else {
+      expect(notification).to.satisfy((n: UserNotification) => {
+        return n === undefined || n.abuse === undefined || n.abuse.account.displayName !== displayName
+      })
+    }
+  }
+
+  function emailNotificationFinder (email: object) {
+    const text = email['text']
+    return text.indexOf(displayName) !== -1 && text.indexOf('abuse') !== -1
   }
 
   await checkNotification(base, notificationChecker, emailNotificationFinder, type)
@@ -541,6 +595,9 @@ async function prepareNotificationsTest (serversCount = 3) {
     smtp: {
       hostname: 'localhost',
       port
+    },
+    signup: {
+      limit: 20
     }
   }
   const servers = await flushAndRunMultipleServers(serversCount, overrideConfig)
@@ -623,5 +680,7 @@ export {
   markAsReadNotifications,
   getLastNotification,
   checkNewInstanceFollower,
-  prepareNotificationsTest
+  prepareNotificationsTest,
+  checkNewCommentAbuseForModerators,
+  checkNewAccountAbuseForModerators
 }

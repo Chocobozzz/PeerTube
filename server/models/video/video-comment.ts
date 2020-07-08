@@ -3,7 +3,6 @@ import { uniq } from 'lodash'
 import { FindOptions, Op, Order, ScopeOptions, Sequelize, Transaction } from 'sequelize'
 import {
   AllowNull,
-  BeforeDestroy,
   BelongsTo,
   Column,
   CreatedAt,
@@ -16,7 +15,6 @@ import {
   Table,
   UpdatedAt
 } from 'sequelize-typescript'
-import { logger } from '@server/helpers/logger'
 import { getServerActor } from '@server/models/application/application'
 import { MAccount, MAccountId, MUserAccountId } from '@server/types/models'
 import { VideoPrivacy } from '@shared/models'
@@ -242,50 +240,12 @@ export class VideoCommentModel extends Model<VideoCommentModel> {
 
   @HasMany(() => VideoCommentAbuseModel, {
     foreignKey: {
-      name: 'commentId',
+      name: 'videoCommentId',
       allowNull: true
     },
     onDelete: 'set null'
   })
   CommentAbuses: VideoCommentAbuseModel[]
-
-  @BeforeDestroy
-  static async saveEssentialDataToAbuses (instance: VideoCommentModel, options) {
-    const tasks: Promise<any>[] = []
-
-    if (!Array.isArray(instance.CommentAbuses)) {
-      instance.CommentAbuses = await instance.$get('CommentAbuses')
-
-      if (instance.CommentAbuses.length === 0) return undefined
-    }
-
-    if (!instance.Video) {
-      instance.Video = await instance.$get('Video')
-    }
-
-    logger.info('Saving video comment %s for abuse.', instance.url)
-
-    const details = Object.assign(instance.toFormattedJSON(), {
-      Video: {
-        id: instance.Video.id,
-        name: instance.Video.name,
-        uuid: instance.Video.uuid
-      }
-    })
-
-    for (const abuse of instance.CommentAbuses) {
-      abuse.deletedComment = details
-
-      tasks.push(abuse.save({ transaction: options.transaction }))
-    }
-
-    Promise.all(tasks)
-           .catch(err => {
-             logger.error('Some errors when saving details of comment %s in its abuses before destroy hook.', instance.url, { err })
-           })
-
-    return undefined
-  }
 
   static loadById (id: number, t?: Transaction): Bluebird<MComment> {
     const query: FindOptions = {

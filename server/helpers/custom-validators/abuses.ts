@@ -3,10 +3,10 @@ import { AbuseFilter, abusePredefinedReasonsMap, AbusePredefinedReasonsString, A
 import { ABUSE_STATES, CONSTRAINTS_FIELDS } from '../../initializers/constants'
 import { exists, isArray } from './misc'
 
-const VIDEO_ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.ABUSES
+const ABUSES_CONSTRAINTS_FIELDS = CONSTRAINTS_FIELDS.ABUSES
 
 function isAbuseReasonValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.REASON)
+  return exists(value) && validator.isLength(value, ABUSES_CONSTRAINTS_FIELDS.REASON)
 }
 
 function isAbusePredefinedReasonValid (value: AbusePredefinedReasonsString) {
@@ -32,7 +32,7 @@ function isAbuseTimestampCoherent (endAt: number, { req }) {
 }
 
 function isAbuseModerationCommentValid (value: string) {
-  return exists(value) && validator.isLength(value, VIDEO_ABUSES_CONSTRAINTS_FIELDS.MODERATION_COMMENT)
+  return exists(value) && validator.isLength(value, ABUSES_CONSTRAINTS_FIELDS.MODERATION_COMMENT)
 }
 
 function isAbuseStateValid (value: string) {

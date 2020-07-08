@@ -325,6 +325,7 @@ class Emailer {
         subject: `New comment abuse report from ${reporter}`,
         locals: {
           commentUrl,
+          videoName: comment.Video.name,
           isLocal: comment.isOwned(),
           commentCreatedAt: new Date(comment.createdAt).toLocaleString(),
           reason: abuse.reason,

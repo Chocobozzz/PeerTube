@@ -50,7 +50,5 @@ async function removeUserHistory (req: express.Request, res: express.Response) {
     return UserVideoHistoryModel.removeUserHistoryBefore(user, beforeDate, t)
   })
 
-  // Do not send the delete to other instances, we delete OUR copy of this video abuse
-
   return res.type('json').status(204).end()
 }

@@ -57,10 +57,15 @@ function reportAbuse (options: {
 function getAbusesList (options: {
   url: string
   token: string
+
+  start?: number
+  count?: number
+  sort?: string
+
   id?: number
   predefinedReason?: AbusePredefinedReasonsString
   search?: string
-  filter?: AbuseFilter,
+  filter?: AbuseFilter
   state?: AbuseState
   videoIs?: AbuseVideoIs
   searchReporter?: string
@@ -71,6 +76,9 @@ function getAbusesList (options: {
   const {
     url,
     token,
+    start,
+    count,
+    sort,
     id,
     predefinedReason,
     search,
@@ -85,13 +93,15 @@ function getAbusesList (options: {
   const path = '/api/v1/abuses'
 
   const query = {
-    sort: 'createdAt',
     id,
     predefinedReason,
     search,
     state,
     filter,
     videoIs,
+    start,
+    count,
+    sort: sort || 'createdAt',
     searchReporter,
     searchReportee,
     searchVideo,
