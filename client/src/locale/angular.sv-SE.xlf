@@ -7455,7 +7455,7 @@
       </trans-unit>
       <trans-unit id="0f39df26589693fe43b6bd5c4602bc4fc6ac1226" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> unblocked.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{name}}"/> unblocked.</target>
+        <target state="translated">Videon <x id="INTERPOLATION" equiv-text="{{name}}"/> är inte längre blockerad.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">1</context>
