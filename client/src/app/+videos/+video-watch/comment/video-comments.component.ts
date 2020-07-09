@@ -4,10 +4,8 @@ import { ActivatedRoute } from '@angular/router'
 import { AuthService, ComponentPagination, ConfirmService, hasMoreItems, Notifier, User } from '@app/core'
 import { HooksService } from '@app/core/plugins/hooks.service'
 import { Syndication, VideoDetails } from '@app/shared/shared-main'
+import { VideoComment, VideoCommentService, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
-import { VideoComment } from './video-comment.model'
-import { VideoCommentService } from './video-comment.service'
 
 @Component({
   selector: 'my-video-comments',

@@ -1,3 +1,5 @@
+export * from './report-modals'
+
 export * from './abuse.service'
 export * from './account-block.model'
 export * from './account-blocklist.component'
@@ -9,5 +11,4 @@ export * from './user-ban-modal.component'
 export * from './user-moderation-dropdown.component'
 export * from './video-block.component'
 export * from './video-block.service'
-export * from './video-report.component'
 export * from './shared-moderation.module'

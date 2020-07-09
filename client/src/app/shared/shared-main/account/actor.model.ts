@@ -14,6 +14,8 @@ export abstract class Actor implements ActorServer {
 
   avatarUrl: string
 
+  isLocal: boolean
+
   static GET_ACTOR_AVATAR_URL (actor: { avatar?: { url?: string, path: string } }) {
     if (actor?.avatar?.url) return actor.avatar.url
 
@@ -51,6 +53,10 @@ export abstract class Actor implements ActorServer {
     if (hash.updatedAt) this.updatedAt = new Date(hash.updatedAt.toString())
 
     this.avatar = hash.avatar
+
+    const absoluteAPIUrl = getAbsoluteAPIUrl()
+    const thisHost = new URL(absoluteAPIUrl).host
+    this.isLocal = this.host.trim() === thisHost
 
     this.updateComputedAttributes()
   }

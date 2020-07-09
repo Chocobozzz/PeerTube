@@ -3,11 +3,10 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } 
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
 import { Account, Actor, DropdownAction, Video } from '@app/shared/shared-main'
-import { CommentReportComponent } from '@app/shared/shared-moderation/comment-report.component'
+import { CommentReportComponent } from '@app/shared/shared-moderation/report-modals/comment-report.component'
+import { VideoComment, VideoCommentThreadTree } from '@app/shared/shared-video-comment'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User, UserRight } from '@shared/models'
-import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
-import { VideoComment } from './video-comment.model'
 
 @Component({
   selector: 'my-video-comment',
@@ -136,7 +135,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
       this.comment.account = null
     }
 
-    if (this.isUserLoggedIn()) {
+    if (this.isUserLoggedIn() && this.authService.getUser().account.id !== this.comment.account.id) {
       this.prependModerationActions = [
         {
           label: this.i18n('Report comment'),

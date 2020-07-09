@@ -34,7 +34,9 @@ export class UserNotification implements UserNotificationServer {
       threadId: number
 
       video: {
+        id: number
         uuid: string
+        name: string
       }
     }
 
@@ -115,13 +117,15 @@ export class UserNotification implements UserNotificationServer {
         case UserNotificationType.COMMENT_MENTION:
           if (!this.comment) break
           this.accountUrl = this.buildAccountUrl(this.comment.account)
-          this.commentUrl = [ this.buildVideoUrl(this.comment.video), { threadId: this.comment.threadId } ]
+          this.commentUrl = this.buildCommentUrl(this.comment)
           break
 
         case UserNotificationType.NEW_ABUSE_FOR_MODERATORS:
           this.abuseUrl = '/admin/moderation/abuses/list'
 
           if (this.abuse.video) this.videoUrl = this.buildVideoUrl(this.abuse.video)
+          else if (this.abuse.comment) this.commentUrl = this.buildCommentUrl(this.abuse.comment)
+          else if (this.abuse.account) this.accountUrl = this.buildAccountUrl(this.abuse.account)
           break
 
         case UserNotificationType.VIDEO_AUTO_BLACKLIST_FOR_MODERATORS:
@@ -188,6 +192,10 @@ export class UserNotification implements UserNotificationServer {
 
   private buildVideoImportIdentifier (videoImport: { targetUrl?: string, magnetUri?: string, torrentName?: string }) {
     return videoImport.targetUrl || videoImport.magnetUri || videoImport.torrentName
+  }
+
+  private buildCommentUrl (comment: { video: { uuid: string }, threadId: number }) {
+    return [ this.buildVideoUrl(comment.video), { threadId: comment.threadId } ]
   }
 
   private setAvatarUrl (actor: { avatarUrl?: string, avatar?: { url?: string, path: string } }) {

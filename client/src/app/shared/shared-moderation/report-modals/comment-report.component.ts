@@ -1,29 +1,27 @@
 import { mapValues, pickBy } from 'lodash-es'
-import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { Notifier } from '@app/core'
 import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { VideoComment } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { abusePredefinedReasonsMap, AbusePredefinedReasonsString } from '@shared/models'
-import { Video } from '../shared-main'
-import { AbuseService } from './abuse.service'
+import { AbuseService } from '../abuse.service'
 
 @Component({
-  selector: 'my-video-report',
-  templateUrl: './video-report.component.html',
-  styleUrls: [ './video-report.component.scss' ]
+  selector: 'my-comment-report',
+  templateUrl: './report.component.html',
+  styleUrls: [ './report.component.scss' ]
 })
-export class VideoReportComponent extends FormReactive implements OnInit {
-  @Input() video: Video = null
+export class CommentReportComponent extends FormReactive implements OnInit {
+  @Input() comment: VideoComment = null
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 
+  modalTitle: string
   error: string = null
   predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
-  embedHtml: SafeHtml
 
   private openedModal: NgbModalRef
 
@@ -33,7 +31,6 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     private abuseValidatorsService: AbuseValidatorsService,
     private abuseService: AbuseService,
     private notifier: Notifier,
-    private sanitizer: DomSanitizer,
     private i18n: I18n
   ) {
     super()
@@ -44,44 +41,22 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   }
 
   get originHost () {
-    if (this.isRemoteVideo()) {
-      return this.video.account.host
+    if (this.isRemote()) {
+      return this.comment.account.host
     }
 
     return ''
   }
 
-  get timestamp () {
-    return this.form.get('timestamp').value
-  }
-
-  getVideoEmbed () {
-    return this.sanitizer.bypassSecurityTrustHtml(
-      buildVideoEmbed(
-        buildVideoLink({
-          baseUrl: this.video.embedUrl,
-          title: false,
-          warningTitle: false
-        })
-      )
-    )
-  }
-
   ngOnInit () {
+    this.modalTitle = this.i18n('Report comment')
+
     this.buildForm({
       reason: this.abuseValidatorsService.ABUSE_REASON,
-      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null),
-      timestamp: {
-        hasStart: null,
-        startAt: null,
-        hasEnd: null,
-        endAt: null
-      }
+      predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null)
     })
 
-    this.predefinedReasons = this.abuseService.getPrefefinedReasons('video')
-
-    this.embedHtml = this.getVideoEmbed()
+    this.predefinedReasons = this.abuseService.getPrefefinedReasons('comment')
   }
 
   show () {
@@ -96,19 +71,16 @@ export class VideoReportComponent extends FormReactive implements OnInit {
   report () {
     const reason = this.form.get('reason').value
     const predefinedReasons = Object.keys(pickBy(this.form.get('predefinedReasons').value)) as AbusePredefinedReasonsString[]
-    const { hasStart, startAt, hasEnd, endAt } = this.form.get('timestamp').value
 
     this.abuseService.reportVideo({
       reason,
       predefinedReasons,
-      video: {
-        id: this.video.id,
-        startAt: hasStart && startAt ? startAt : undefined,
-        endAt: hasEnd && endAt ? endAt : undefined
+      comment: {
+        id: this.comment.id
       }
     }).subscribe(
       () => {
-        this.notifier.success(this.i18n('Video reported.'))
+        this.notifier.success(this.i18n('Comment reported.'))
         this.hide()
       },
 
@@ -116,7 +88,7 @@ export class VideoReportComponent extends FormReactive implements OnInit {
     )
   }
 
-  isRemoteVideo () {
-    return !this.video.isLocal
+  isRemote () {
+    return !this.comment.isLocal
   }
 }

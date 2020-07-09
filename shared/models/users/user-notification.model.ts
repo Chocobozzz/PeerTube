@@ -73,7 +73,9 @@ export interface UserNotification {
       threadId: number
 
       video: {
+        id: number
         uuid: string
+        name: string
       }
     }
 
