@@ -1,7 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
+
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild } from '@angular/core'
 import { MarkdownService, Notifier, UserService } from '@app/core'
 import { AuthService } from '@app/core/auth'
-import { Account, Actor, Video } from '@app/shared/shared-main'
+import { Account, Actor, DropdownAction, Video } from '@app/shared/shared-main'
+import { CommentReportComponent } from '@app/shared/shared-moderation/comment-report.component'
+import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User, UserRight } from '@shared/models'
 import { VideoCommentThreadTree } from './video-comment-thread-tree.model'
 import { VideoComment } from './video-comment.model'
@@ -12,6 +15,8 @@ import { VideoComment } from './video-comment.model'
   styleUrls: ['./video-comment.component.scss']
 })
 export class VideoCommentComponent implements OnInit, OnChanges {
+  @ViewChild('commentReportModal') commentReportModal: CommentReportComponent
+
   @Input() video: Video
   @Input() comment: VideoComment
   @Input() parentComments: VideoComment[] = []
@@ -26,6 +31,8 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   @Output() resetReply = new EventEmitter()
   @Output() timestampClicked = new EventEmitter<number>()
 
+  prependModerationActions: DropdownAction<any>[]
+
   sanitizedCommentHTML = ''
   newParentComments: VideoComment[] = []
 
@@ -33,6 +40,7 @@ export class VideoCommentComponent implements OnInit, OnChanges {
   commentUser: User
 
   constructor (
+    private i18n: I18n,
     private markdownService: MarkdownService,
     private authService: AuthService,
     private userService: UserService,
@@ -127,5 +135,20 @@ export class VideoCommentComponent implements OnInit, OnChanges {
     } else {
       this.comment.account = null
     }
+
+    if (this.isUserLoggedIn()) {
+      this.prependModerationActions = [
+        {
+          label: this.i18n('Report comment'),
+          handler: () => this.showReportModal()
+        }
+      ]
+    } else {
+      this.prependModerationActions = undefined
+    }
+  }
+
+  private showReportModal () {
+    this.commentReportModal.show()
   }
 }

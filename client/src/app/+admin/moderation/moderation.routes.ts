@@ -33,7 +33,7 @@ export const ModerationRoutes: Routes = [
         data: {
           userRight: UserRight.MANAGE_ABUSES,
           meta: {
-            title: 'Video reports'
+            title: 'Reports'
           }
         }
       },

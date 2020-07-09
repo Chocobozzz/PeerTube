@@ -12,6 +12,7 @@ import { AbuseService } from './abuse.service'
 import { VideoBlockComponent } from './video-block.component'
 import { VideoBlockService } from './video-block.service'
 import { VideoReportComponent } from './video-report.component'
+import { CommentReportComponent } from './comment-report.component'
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { VideoReportComponent } from './video-report.component'
     UserModerationDropdownComponent,
     VideoBlockComponent,
     VideoReportComponent,
-    BatchDomainsModalComponent
+    BatchDomainsModalComponent,
+    CommentReportComponent
   ],
 
   exports: [
@@ -33,7 +35,8 @@ import { VideoReportComponent } from './video-report.component'
     UserModerationDropdownComponent,
     VideoBlockComponent,
     VideoReportComponent,
-    BatchDomainsModalComponent
+    BatchDomainsModalComponent,
+    CommentReportComponent
   ],
 
   providers: [

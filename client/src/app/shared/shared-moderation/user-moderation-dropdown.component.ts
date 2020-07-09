@@ -16,6 +16,7 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
 
   @Input() user: User
   @Input() account: Account
+  @Input() prependActions: DropdownAction<{ user: User, account: Account }>[]
 
   @Input() buttonSize: 'normal' | 'small' = 'normal'
   @Input() placement = 'left-top left-bottom auto'
@@ -249,6 +250,12 @@ export class UserModerationDropdownComponent implements OnInit, OnChanges {
 
   private buildActions () {
     this.userActions = []
+
+    if (this.prependActions) {
+      this.userActions = [
+        this.prependActions
+      ]
+    }
 
     if (this.authService.isLoggedIn()) {
       const authUser = this.authService.getUser()
