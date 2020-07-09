@@ -4,10 +4,9 @@ import { Router } from '@angular/router'
 import { Notifier, User } from '@app/core'
 import { FormReactive, FormValidatorService, VideoCommentValidatorsService } from '@app/shared/shared-forms'
 import { Video } from '@app/shared/shared-main'
+import { VideoComment, VideoCommentService } from '@app/shared/shared-video-comment'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { VideoCommentCreate } from '@shared/models'
-import { VideoComment } from './video-comment.model'
-import { VideoCommentService } from './video-comment.service'
 
 @Component({
   selector: 'my-video-comment-add',

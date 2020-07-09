@@ -1,9 +1,10 @@
 import { Subscription } from 'rxjs'
 import { catchError, distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators'
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
 import { AuthService, Notifier, RedirectService, RestExtractor, ScreenService, UserService } from '@app/core'
-import { Account, AccountService, ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { Account, AccountService, DropdownAction, ListOverflowItem, VideoChannel, VideoChannelService } from '@app/shared/shared-main'
+import { AccountReportComponent } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { User, UserRight } from '@shared/models'
 
@@ -12,6 +13,8 @@ import { User, UserRight } from '@shared/models'
   styleUrls: [ './accounts.component.scss' ]
 })
 export class AccountsComponent implements OnInit, OnDestroy {
+  @ViewChild('accountReportModal') accountReportModal: AccountReportComponent
+
   account: Account
   accountUser: User
   videoChannels: VideoChannel[] = []
@@ -19,6 +22,8 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   isAccountManageable = false
   accountFollowerTitle = ''
+
+  prependModerationActions: DropdownAction<any>[]
 
   private routeSub: Subscription
 
@@ -42,24 +47,7 @@ export class AccountsComponent implements OnInit, OnDestroy {
                           map(params => params[ 'accountId' ]),
                           distinctUntilChanged(),
                           switchMap(accountId => this.accountService.getAccount(accountId)),
-                          tap(account => {
-                            this.account = account
-
-                            if (this.authService.isLoggedIn()) {
-                              this.authService.userInformationLoaded.subscribe(
-                                () => {
-                                  this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
-
-                                  this.accountFollowerTitle = this.i18n(
-                                    '{{followers}} direct account followers',
-                                    { followers: this.subscribersDisplayFor(account.followersCount) }
-                                  )
-                                }
-                              )
-                            }
-
-                            this.getUserIfNeeded(account)
-                          }),
+                          tap(account => this.onAccount(account)),
                           switchMap(account => this.videoChannelService.listAccountVideoChannels(account)),
                           catchError(err => this.restExtractor.redirectTo404IfNotFound(err, [ 400, 404 ]))
                         )
@@ -105,6 +93,41 @@ export class AccountsComponent implements OnInit, OnDestroy {
 
   subscribersDisplayFor (count: number) {
     return this.i18n('{count, plural, =1 {1 subscriber} other {{{count}} subscribers}}', { count })
+  }
+
+  private onAccount (account: Account) {
+    this.prependModerationActions = undefined
+
+    this.account = account
+
+    if (this.authService.isLoggedIn()) {
+      this.authService.userInformationLoaded.subscribe(
+        () => {
+          this.isAccountManageable = this.account.userId && this.account.userId === this.authService.getUser().id
+
+          this.accountFollowerTitle = this.i18n(
+            '{{followers}} direct account followers',
+            { followers: this.subscribersDisplayFor(account.followersCount) }
+          )
+
+          // It's not our account, we can report it
+          if (!this.isAccountManageable) {
+            this.prependModerationActions = [
+              {
+                label: this.i18n('Report account'),
+                handler: () => this.showReportModal()
+              }
+            ]
+          }
+        }
+      )
+    }
+
+    this.getUserIfNeeded(account)
+  }
+
+  private showReportModal () {
+    this.accountReportModal.show()
   }
 
   private getUserIfNeeded (account: Account) {

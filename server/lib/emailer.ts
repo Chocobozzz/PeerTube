@@ -311,7 +311,8 @@ class Emailer {
           videoPublishedAt: new Date(video.publishedAt).toLocaleString(),
           videoName: video.name,
           reason: abuse.reason,
-          videoChannel: video.VideoChannel,
+          videoChannel: abuse.video.channel,
+          reporter,
           action
         }
       }
@@ -330,6 +331,7 @@ class Emailer {
           commentCreatedAt: new Date(comment.createdAt).toLocaleString(),
           reason: abuse.reason,
           flaggedAccount: abuseInstance.FlaggedAccount.getDisplayName(),
+          reporter,
           action
         }
       }
@@ -346,6 +348,7 @@ class Emailer {
           accountDisplayName: account.getDisplayName(),
           isLocal: account.isOwned(),
           reason: abuse.reason,
+          reporter,
           action
         }
       }

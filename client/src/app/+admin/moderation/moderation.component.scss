@@ -96,7 +96,8 @@ my-action-dropdown.show {
   top: 3px;
 }
 
-.table-comment-link {
+.table-comment-link,
+.table-account-link {
   @include disable-outline;
 
   color: var(--mainForegroundColor);
@@ -106,7 +107,13 @@ my-action-dropdown.show {
   }
 }
 
-.comment-flagged-account {
+.table-account-link {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-flagged-account,
+.account-flagged-handle {
   font-size: 11px;
   color: var(--greyForegroundColor);
 }

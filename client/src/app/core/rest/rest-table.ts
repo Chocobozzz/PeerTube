@@ -3,6 +3,9 @@ import { LazyLoadEvent, SortMeta } from 'primeng/api'
 import { RestPagination } from './rest-pagination'
 import { Subject } from 'rxjs'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import * as debug from 'debug'
+
+const logger = debug('peertube:tables:RestTable')
 
 export abstract class RestTable {
 
@@ -15,7 +18,7 @@ export abstract class RestTable {
   rowsPerPage = this.rowsPerPageOptions[0]
   expandedRows = {}
 
-  private searchStream: Subject<string>
+  protected searchStream: Subject<string>
 
   abstract getIdentifier (): string
 
@@ -37,6 +40,8 @@ export abstract class RestTable {
   }
 
   loadLazy (event: LazyLoadEvent) {
+    logger('Load lazy %o.', event)
+
     this.sort = {
       order: event.sortOrder,
       field: event.sortField
@@ -65,6 +70,9 @@ export abstract class RestTable {
       )
       .subscribe(search => {
         this.search = search
+
+        logger('On search %s.', this.search)
+
         this.loadData()
       })
   }
@@ -75,14 +83,18 @@ export abstract class RestTable {
   }
 
   onPage (event: { first: number, rows: number }) {
+    logger('On page %o.', event)
+
     if (this.rowsPerPage !== event.rows) {
       this.rowsPerPage = event.rows
       this.pagination = {
         start: event.first,
         count: this.rowsPerPage
       }
+
       this.loadData()
     }
+
     this.expandedRows = {}
   }
 

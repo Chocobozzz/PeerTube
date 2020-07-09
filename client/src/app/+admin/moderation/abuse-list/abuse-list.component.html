@@ -1,6 +1,6 @@
 <p-table
   [value]="abuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
-  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true"
+  [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true" [lazyLoadOnInit]="false"
   [showCurrentPageReport]="true" i18n-currentPageReportTemplate
   currentPageReportTemplate="Showing {{'{first}'}} to {{'{last}'}} of {{'{totalRecords}'}} reports"
   (onPage)="onPage($event)" [expandedRowKeys]="expandedRows"
@@ -127,6 +127,22 @@
           <div class="comment-flagged-account" *ngIf="abuse.flaggedAccount">by {{ abuse.flaggedAccount.displayName }}</div>
         </td>
       </ng-container>
+
+      <ng-container *ngIf="!abuse.comment && !abuse.video">
+        <td *ngIf="abuse.flaggedAccount">
+          <a [href]="getAccountUrl(abuse)"  class="table-account-link" target="_blank" rel="noopener noreferrer">
+            <span>{{ abuse.flaggedAccount.displayName }}</span>
+
+            <span class="account-flagged-handle">{{ abuse.flaggedAccount.nameWithHostForced }}</span>
+          </a>
+        </td>
+
+        <td i18n *ngIf="!abuse.flaggedAccount">
+          Account deleted
+        </td>
+
+      </ng-container>
+
 
       <td class="c-hand" [pRowToggler]="abuse">{{ abuse.createdAt | date: 'short'  }}</td>
 

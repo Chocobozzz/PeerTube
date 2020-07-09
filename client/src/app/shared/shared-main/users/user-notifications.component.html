@@ -45,8 +45,21 @@
       <ng-container *ngSwitchCase="UserNotificationType.NEW_ABUSE_FOR_MODERATORS">
         <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
 
-        <div class="message" i18n>
+        <div class="message" *ngIf="notification.videoUrl" i18n>
           <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl">A new video abuse</a> has been created on video <a (click)="markAsRead(notification)" [routerLink]="notification.videoUrl">{{ notification.abuse.video.name }}</a>
+        </div>
+
+        <div class="message" *ngIf="notification.commentUrl" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl">A new comment abuse</a> has been created on video <a (click)="markAsRead(notification)" [routerLink]="notification.commentUrl">{{ notification.abuse.comment.video.name }}</a>
+        </div>
+
+        <div class="message" *ngIf="notification.accountUrl" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl">A new account abuse</a> has been created on account <a (click)="markAsRead(notification)" [routerLink]="notification.accountUrl">{{ notification.abuse.account.displayName }}</a>
+        </div>
+
+        <!-- Deleted entity associated to the abuse -->
+        <div class="message" *ngIf="!notification.videoUrl && !notification.commentUrl && !notification.accountUrl" i18n>
+          <a (click)="markAsRead(notification)" [routerLink]="notification.abuseUrl">A new abuse</a> has been created
         </div>
       </ng-container>
 

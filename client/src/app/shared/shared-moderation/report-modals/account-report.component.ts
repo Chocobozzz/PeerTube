@@ -1,28 +1,27 @@
 import { mapValues, pickBy } from 'lodash-es'
 import { Component, Input, OnInit, ViewChild } from '@angular/core'
-import { SafeHtml } from '@angular/platform-browser'
-import { VideoComment } from '@app/+videos/+video-watch/comment/video-comment.model'
 import { Notifier } from '@app/core'
 import { AbuseValidatorsService, FormReactive, FormValidatorService } from '@app/shared/shared-forms'
+import { Account } from '@app/shared/shared-main'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { abusePredefinedReasonsMap, AbusePredefinedReasonsString } from '@shared/models'
-import { AbuseService } from './abuse.service'
+import { AbuseService } from '../abuse.service'
 
 @Component({
-  selector: 'my-comment-report',
-  templateUrl: './comment-report.component.html',
-  styleUrls: [ './comment-report.component.scss' ]
+  selector: 'my-account-report',
+  templateUrl: './report.component.html',
+  styleUrls: [ './report.component.scss' ]
 })
-export class CommentReportComponent extends FormReactive implements OnInit {
-  @Input() comment: VideoComment = null
+export class AccountReportComponent extends FormReactive implements OnInit {
+  @Input() account: Account = null
 
   @ViewChild('modal', { static: true }) modal: NgbModal
 
   error: string = null
   predefinedReasons: { id: AbusePredefinedReasonsString, label: string, description?: string, help?: string }[] = []
-  embedHtml: SafeHtml
+  modalTitle: string
 
   private openedModal: NgbModalRef
 
@@ -42,20 +41,22 @@ export class CommentReportComponent extends FormReactive implements OnInit {
   }
 
   get originHost () {
-    if (this.isRemoteComment()) {
-      return this.comment.account.host
+    if (this.isRemote()) {
+      return this.account.host
     }
 
     return ''
   }
 
   ngOnInit () {
+    this.modalTitle = this.i18n('Report {{displayName}}', { displayName: this.account.displayName })
+
     this.buildForm({
       reason: this.abuseValidatorsService.ABUSE_REASON,
       predefinedReasons: mapValues(abusePredefinedReasonsMap, r => null)
     })
 
-    this.predefinedReasons = this.abuseService.getPrefefinedReasons('comment')
+    this.predefinedReasons = this.abuseService.getPrefefinedReasons('account')
   }
 
   show () {
@@ -74,12 +75,12 @@ export class CommentReportComponent extends FormReactive implements OnInit {
     this.abuseService.reportVideo({
       reason,
       predefinedReasons,
-      comment: {
-        id: this.comment.id
+      account: {
+        id: this.account.id
       }
     }).subscribe(
       () => {
-        this.notifier.success(this.i18n('Comment reported.'))
+        this.notifier.success(this.i18n('Account reported.'))
         this.hide()
       },
 
@@ -87,7 +88,7 @@ export class CommentReportComponent extends FormReactive implements OnInit {
     )
   }
 
-  isRemoteComment () {
-    return !this.comment.isLocal
+  isRemote () {
+    return !this.account.isLocal
   }
 }

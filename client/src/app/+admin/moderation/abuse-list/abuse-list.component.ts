@@ -1,3 +1,5 @@
+import * as debug from 'debug'
+import truncate from 'lodash-es/truncate'
 import { SortMeta } from 'primeng/api'
 import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
@@ -7,11 +9,15 @@ import { ActivatedRoute, Params, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
 import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/shared-moderation'
+import { VideoCommentService } from '@app/shared/shared-video-comment'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Abuse, AbuseState } from '@shared/models'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
-import truncate from 'lodash-es/truncate'
 
+const logger = debug('peertube:moderation:AbuseListComponent')
+
+// Don't use an abuse model because we need external services to compute some properties
+// And this model is only used in this component
 export type ProcessedAbuse = Abuse & {
   moderationCommentHtml?: string,
   reasonHtml?: string
@@ -45,12 +51,13 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
 
-  abuseActions: DropdownAction<Abuse>[][] = []
+  abuseActions: DropdownAction<ProcessedAbuse>[][] = []
 
   constructor (
     private notifier: Notifier,
     private abuseService: AbuseService,
     private blocklistService: BlocklistService,
+    private commentService: VideoCommentService,
     private videoService: VideoService,
     private videoBlocklistService: VideoBlockService,
     private confirmService: ConfirmService,
@@ -63,140 +70,15 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     super()
 
     this.abuseActions = [
-      [
-        {
-          label: this.i18n('Internal actions'),
-          isHeader: true
-        },
-        {
-          label: this.i18n('Delete report'),
-          handler: abuse => this.removeAbuse(abuse)
-        },
-        {
-          label: this.i18n('Add note'),
-          handler: abuse => this.openModerationCommentModal(abuse),
-          isDisplayed: abuse => !abuse.moderationComment
-        },
-        {
-          label: this.i18n('Update note'),
-          handler: abuse => this.openModerationCommentModal(abuse),
-          isDisplayed: abuse => !!abuse.moderationComment
-        },
-        {
-          label: this.i18n('Mark as accepted'),
-          handler: abuse => this.updateAbuseState(abuse, AbuseState.ACCEPTED),
-          isDisplayed: abuse => !this.isAbuseAccepted(abuse)
-        },
-        {
-          label: this.i18n('Mark as rejected'),
-          handler: abuse => this.updateAbuseState(abuse, AbuseState.REJECTED),
-          isDisplayed: abuse => !this.isAbuseRejected(abuse)
-        }
-      ],
-      [
-        {
-          label: this.i18n('Actions for the video'),
-          isHeader: true,
-          isDisplayed: abuse => abuse.video && !abuse.video.deleted
-        },
-        {
-          label: this.i18n('Block video'),
-          isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
-          handler: abuse => {
-            this.videoBlocklistService.blockVideo(abuse.video.id, undefined, true)
-              .subscribe(
-                () => {
-                  this.notifier.success(this.i18n('Video blocked.'))
+      this.buildInternalActions(),
 
-                  this.updateAbuseState(abuse, AbuseState.ACCEPTED)
-                },
+      this.buildFlaggedAccountActions(),
 
-                err => this.notifier.error(err.message)
-              )
-          }
-        },
-        {
-          label: this.i18n('Unblock video'),
-          isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
-          handler: abuse => {
-            this.videoBlocklistService.unblockVideo(abuse.video.id)
-              .subscribe(
-                () => {
-                  this.notifier.success(this.i18n('Video unblocked.'))
+      this.buildCommentActions(),
 
-                  this.updateAbuseState(abuse, AbuseState.ACCEPTED)
-                },
+      this.buildVideoActions(),
 
-                err => this.notifier.error(err.message)
-              )
-          }
-        },
-        {
-          label: this.i18n('Delete video'),
-          isDisplayed: abuse => abuse.video && !abuse.video.deleted,
-          handler: async abuse => {
-            const res = await this.confirmService.confirm(
-              this.i18n('Do you really want to delete this video?'),
-              this.i18n('Delete')
-            )
-            if (res === false) return
-
-            this.videoService.removeVideo(abuse.video.id)
-              .subscribe(
-                () => {
-                  this.notifier.success(this.i18n('Video deleted.'))
-
-                  this.updateAbuseState(abuse, AbuseState.ACCEPTED)
-                },
-
-                err => this.notifier.error(err.message)
-              )
-          }
-        }
-      ],
-      [
-        {
-          label: this.i18n('Actions for the reporter'),
-          isHeader: true,
-          isDisplayed: abuse => !!abuse.reporterAccount
-        },
-        {
-          label: this.i18n('Mute reporter'),
-          isDisplayed: abuse => !!abuse.reporterAccount,
-          handler: async abuse => {
-            const account = abuse.reporterAccount as Account
-
-            this.blocklistService.blockAccountByInstance(account)
-              .subscribe(
-                () => {
-                  this.notifier.success(
-                    this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost })
-                  )
-
-                  account.mutedByInstance = true
-                },
-
-                err => this.notifier.error(err.message)
-              )
-          }
-        },
-        {
-          label: this.i18n('Mute server'),
-          isDisplayed: abuse => abuse.reporterAccount && !abuse.reporterAccount.userId,
-          handler: async abuse => {
-            this.blocklistService.blockServerByInstance(abuse.reporterAccount.host)
-              .subscribe(
-                () => {
-                  this.notifier.success(
-                    this.i18n('Server {{host}} muted by the instance.', { host: abuse.reporterAccount.host })
-                  )
-                },
-
-                err => this.notifier.error(err.message)
-              )
-          }
-        }
-      ]
+      this.buildAccountActions()
     ]
   }
 
@@ -206,6 +88,8 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     this.route.queryParams
       .subscribe(params => {
         this.search = params.search || ''
+
+        logger('On URL change (search: %s).', this.search)
 
         this.setTableFilter(this.search)
         this.loadData()
@@ -264,6 +148,10 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     return Video.buildClientUrl(abuse.comment.video.uuid) + ';threadId=' + abuse.comment.threadId
   }
 
+  getAccountUrl (abuse: ProcessedAbuse) {
+    return '/accounts/' + abuse.flaggedAccount.nameWithHost
+  }
+
   getVideoEmbed (abuse: Abuse) {
     return buildVideoEmbed(
       buildVideoLink({
@@ -304,6 +192,8 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
   }
 
   protected loadData () {
+    logger('Load data.')
+
     return this.abuseService.getAbuses({
       pagination: this.pagination,
       sort: this.sort,
@@ -350,6 +240,208 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
 
             this.abuses.push(abuse)
           }
+        },
+
+        err => this.notifier.error(err.message)
+      )
+  }
+
+  private buildInternalActions (): DropdownAction<ProcessedAbuse>[] {
+    return [
+      {
+        label: this.i18n('Internal actions'),
+        isHeader: true
+      },
+      {
+        label: this.i18n('Delete report'),
+        handler: abuse => this.removeAbuse(abuse)
+      },
+      {
+        label: this.i18n('Add note'),
+        handler: abuse => this.openModerationCommentModal(abuse),
+        isDisplayed: abuse => !abuse.moderationComment
+      },
+      {
+        label: this.i18n('Update note'),
+        handler: abuse => this.openModerationCommentModal(abuse),
+        isDisplayed: abuse => !!abuse.moderationComment
+      },
+      {
+        label: this.i18n('Mark as accepted'),
+        handler: abuse => this.updateAbuseState(abuse, AbuseState.ACCEPTED),
+        isDisplayed: abuse => !this.isAbuseAccepted(abuse)
+      },
+      {
+        label: this.i18n('Mark as rejected'),
+        handler: abuse => this.updateAbuseState(abuse, AbuseState.REJECTED),
+        isDisplayed: abuse => !this.isAbuseRejected(abuse)
+      }
+    ]
+  }
+
+  private buildFlaggedAccountActions (): DropdownAction<ProcessedAbuse>[] {
+    return [
+      {
+        label: this.i18n('Actions for the flagged account'),
+        isHeader: true,
+        isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video
+      },
+
+      {
+        label: this.i18n('Mute account'),
+        isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
+        handler: abuse => this.muteAccountHelper(abuse.flaggedAccount)
+      },
+
+      {
+        label: this.i18n('Mute server account'),
+        isDisplayed: abuse => abuse.flaggedAccount && !abuse.comment && !abuse.video,
+        handler: abuse => this.muteServerHelper(abuse.flaggedAccount.host)
+      }
+    ]
+  }
+
+  private buildAccountActions (): DropdownAction<ProcessedAbuse>[] {
+    return [
+      {
+        label: this.i18n('Actions for the reporter'),
+        isHeader: true,
+        isDisplayed: abuse => !!abuse.reporterAccount
+      },
+
+      {
+        label: this.i18n('Mute reporter'),
+        isDisplayed: abuse => !!abuse.reporterAccount,
+        handler: abuse => this.muteAccountHelper(abuse.reporterAccount)
+      },
+
+      {
+        label: this.i18n('Mute server'),
+        isDisplayed: abuse => abuse.reporterAccount && !abuse.reporterAccount.userId,
+        handler: abuse => this.muteServerHelper(abuse.reporterAccount.host)
+      }
+    ]
+  }
+
+  private buildVideoActions (): DropdownAction<ProcessedAbuse>[] {
+    return [
+      {
+        label: this.i18n('Actions for the video'),
+        isHeader: true,
+        isDisplayed: abuse => abuse.video && !abuse.video.deleted
+      },
+      {
+        label: this.i18n('Block video'),
+        isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
+        handler: abuse => {
+          this.videoBlocklistService.blockVideo(abuse.video.id, undefined, true)
+            .subscribe(
+              () => {
+                this.notifier.success(this.i18n('Video blocked.'))
+
+                this.updateAbuseState(abuse, AbuseState.ACCEPTED)
+              },
+
+              err => this.notifier.error(err.message)
+            )
+        }
+      },
+      {
+        label: this.i18n('Unblock video'),
+        isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
+        handler: abuse => {
+          this.videoBlocklistService.unblockVideo(abuse.video.id)
+            .subscribe(
+              () => {
+                this.notifier.success(this.i18n('Video unblocked.'))
+
+                this.updateAbuseState(abuse, AbuseState.ACCEPTED)
+              },
+
+              err => this.notifier.error(err.message)
+            )
+        }
+      },
+      {
+        label: this.i18n('Delete video'),
+        isDisplayed: abuse => abuse.video && !abuse.video.deleted,
+        handler: async abuse => {
+          const res = await this.confirmService.confirm(
+            this.i18n('Do you really want to delete this video?'),
+            this.i18n('Delete')
+          )
+          if (res === false) return
+
+          this.videoService.removeVideo(abuse.video.id)
+            .subscribe(
+              () => {
+                this.notifier.success(this.i18n('Video deleted.'))
+
+                this.updateAbuseState(abuse, AbuseState.ACCEPTED)
+              },
+
+              err => this.notifier.error(err.message)
+            )
+        }
+      }
+    ]
+  }
+
+  private buildCommentActions (): DropdownAction<ProcessedAbuse>[] {
+    return [
+      {
+        label: this.i18n('Actions for the comment'),
+        isHeader: true,
+        isDisplayed: abuse => abuse.comment && !abuse.comment.deleted
+      },
+
+      {
+        label: this.i18n('Delete comment'),
+        isDisplayed: abuse => abuse.comment && !abuse.comment.deleted,
+        handler: async abuse => {
+          const res = await this.confirmService.confirm(
+            this.i18n('Do you really want to delete this comment?'),
+            this.i18n('Delete')
+          )
+          if (res === false) return
+
+          this.commentService.deleteVideoComment(abuse.comment.video.id, abuse.comment.id)
+            .subscribe(
+              () => {
+                this.notifier.success(this.i18n('Comment deleted.'))
+
+                this.updateAbuseState(abuse, AbuseState.ACCEPTED)
+              },
+
+              err => this.notifier.error(err.message)
+            )
+        }
+      }
+    ]
+  }
+
+  private muteAccountHelper (account: Account) {
+    this.blocklistService.blockAccountByInstance(account)
+      .subscribe(
+        () => {
+          this.notifier.success(
+            this.i18n('Account {{nameWithHost}} muted by the instance.', { nameWithHost: account.nameWithHost })
+          )
+
+          account.mutedByInstance = true
+        },
+
+        err => this.notifier.error(err.message)
+      )
+  }
+
+  private muteServerHelper (host: string) {
+    this.blocklistService.blockServerByInstance(host)
+      .subscribe(
+        () => {
+          this.notifier.success(
+            this.i18n('Server {{host}} muted by the instance.', { host: host })
+          )
         },
 
         err => this.notifier.error(err.message)

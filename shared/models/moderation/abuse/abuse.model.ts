@@ -62,9 +62,9 @@ export interface Abuse {
   // FIXME: deprecated in 2.3, remove the following properties
 
   // @deprecated
-  startAt: null
+  startAt?: null
   // @deprecated
-  endAt: null
+  endAt?: null
 
   // @deprecated
   count?: number

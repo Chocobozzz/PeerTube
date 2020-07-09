@@ -6,8 +6,8 @@ block title
 
 block content
   p
-    | #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] received an abuse report for the #{isLocal ? '' : 'remote '}account "
-    a(href=accountUrl) #{accountDisplayName}
+    | #[a(href=WEBSERVER.URL) #{WEBSERVER.HOST}] received an abuse report for the #{isLocal ? '' : 'remote '}account
+    a(href=accountUrl)  #{accountDisplayName}
 
   p The reporter, #{reporter}, cited the following reason(s):
   blockquote #{reason}
