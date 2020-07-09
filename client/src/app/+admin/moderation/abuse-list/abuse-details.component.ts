@@ -31,15 +31,16 @@ export class AbuseDetailsComponent {
   }
 
   get startAt () {
-    return durationToString(this.abuse.startAt)
+    return durationToString(this.abuse.video.startAt)
   }
 
   get endAt () {
-    return durationToString(this.abuse.endAt)
+    return durationToString(this.abuse.video.endAt)
   }
 
   getPredefinedReasons () {
     if (!this.abuse.predefinedReasons) return []
+
     return this.abuse.predefinedReasons.map(r => ({
       id: r,
       label: this.predefinedReasonsTranslations[r]

@@ -47,8 +47,8 @@ export class AdminComponent implements OnInit {
 
     if (this.hasAbusesRight()) {
       moderationItems.children.push({
-        label: this.i18n('Video reports'),
-        routerLink: '/admin/moderation/video-abuses/list',
+        label: this.i18n('Reports'),
+        routerLink: '/admin/moderation/abuses/list',
         iconName: 'flag'
       })
     }

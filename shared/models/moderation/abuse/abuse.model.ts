@@ -25,6 +25,7 @@ export interface VideoAbuse {
 
 export interface VideoCommentAbuse {
   id: number
+  threadId: number
 
   video: {
     id: number

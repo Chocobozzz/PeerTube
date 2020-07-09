@@ -46,8 +46,10 @@ export abstract class Actor implements ActorServer {
     this.host = hash.host
     this.followingCount = hash.followingCount
     this.followersCount = hash.followersCount
-    this.createdAt = new Date(hash.createdAt.toString())
-    this.updatedAt = new Date(hash.updatedAt.toString())
+
+    if (hash.createdAt) this.createdAt = new Date(hash.createdAt.toString())
+    if (hash.updatedAt) this.updatedAt = new Date(hash.updatedAt.toString())
+
     this.avatar = hash.avatar
 
     this.updateComputedAttributes()

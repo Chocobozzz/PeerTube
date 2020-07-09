@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { buildVideoEmbed, buildVideoLink } from 'src/assets/player/utils'
 import { environment } from 'src/environments/environment'
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core'
-import { DomSanitizer } from '@angular/platform-browser'
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
 import { ActivatedRoute, Params, Router } from '@angular/router'
 import { ConfirmService, MarkdownService, Notifier, RestPagination, RestTable } from '@app/core'
 import { Account, Actor, DropdownAction, Video, VideoService } from '@app/shared/shared-main'
@@ -10,15 +10,20 @@ import { AbuseService, BlocklistService, VideoBlockService } from '@app/shared/s
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { Abuse, AbuseState } from '@shared/models'
 import { ModerationCommentModalComponent } from './moderation-comment-modal.component'
+import truncate from 'lodash-es/truncate'
 
 export type ProcessedAbuse = Abuse & {
   moderationCommentHtml?: string,
   reasonHtml?: string
-  embedHtml?: string
+  embedHtml?: SafeHtml
   updatedAt?: Date
 
   // override bare server-side definitions with rich client-side definitions
-  reporterAccount: Account
+  reporterAccount?: Account
+  flaggedAccount?: Account
+
+  truncatedCommentHtml?: string
+  commentHtml?: string
 
   video: Abuse['video'] & {
     channel: Abuse['video']['channel'] & {
@@ -92,11 +97,11 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
         {
           label: this.i18n('Actions for the video'),
           isHeader: true,
-          isDisplayed: abuse => !abuse.video.deleted
+          isDisplayed: abuse => abuse.video && !abuse.video.deleted
         },
         {
           label: this.i18n('Block video'),
-          isDisplayed: abuse => !abuse.video.deleted && !abuse.video.blacklisted,
+          isDisplayed: abuse => abuse.video && !abuse.video.deleted && !abuse.video.blacklisted,
           handler: abuse => {
             this.videoBlocklistService.blockVideo(abuse.video.id, undefined, true)
               .subscribe(
@@ -112,7 +117,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
         },
         {
           label: this.i18n('Unblock video'),
-          isDisplayed: abuse => !abuse.video.deleted && abuse.video.blacklisted,
+          isDisplayed: abuse => abuse.video && !abuse.video.deleted && abuse.video.blacklisted,
           handler: abuse => {
             this.videoBlocklistService.unblockVideo(abuse.video.id)
               .subscribe(
@@ -128,7 +133,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
         },
         {
           label: this.i18n('Delete video'),
-          isDisplayed: abuse => !abuse.video.deleted,
+          isDisplayed: abuse => abuse.video && !abuse.video.deleted,
           handler: async abuse => {
             const res = await this.confirmService.confirm(
               this.i18n('Do you really want to delete this video?'),
@@ -152,10 +157,12 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
       [
         {
           label: this.i18n('Actions for the reporter'),
-          isHeader: true
+          isHeader: true,
+          isDisplayed: abuse => !!abuse.reporterAccount
         },
         {
           label: this.i18n('Mute reporter'),
+          isDisplayed: abuse => !!abuse.reporterAccount,
           handler: async abuse => {
             const account = abuse.reporterAccount as Account
 
@@ -175,7 +182,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
         },
         {
           label: this.i18n('Mute server'),
-          isDisplayed: abuse => !abuse.reporterAccount.userId,
+          isDisplayed: abuse => abuse.reporterAccount && !abuse.reporterAccount.userId,
           handler: async abuse => {
             this.blocklistService.blockServerByInstance(abuse.reporterAccount.host)
               .subscribe(
@@ -231,7 +238,7 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     const queryParams: Params = {}
     if (search) Object.assign(queryParams, { search })
 
-    this.router.navigate([ '/admin/moderation/video-abuses/list' ], { queryParams })
+    this.router.navigate([ '/admin/moderation/abuses/list' ], { queryParams })
   }
 
   resetTableFilter () {
@@ -251,6 +258,10 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
 
   getVideoUrl (abuse: Abuse) {
     return Video.buildClientUrl(abuse.video.uuid)
+  }
+
+  getCommentUrl (abuse: Abuse) {
+    return Video.buildClientUrl(abuse.comment.video.uuid) + ';threadId=' + abuse.comment.threadId
   }
 
   getVideoEmbed (abuse: Abuse) {
@@ -300,23 +311,45 @@ export class AbuseListComponent extends RestTable implements OnInit, AfterViewIn
     }).subscribe(
         async resultList => {
           this.totalRecords = resultList.total
-          const abuses = []
 
-          for (const abuse of resultList.data) {
-            Object.assign(abuse, {
-              reasonHtml: await this.toHtml(abuse.reason),
-              moderationCommentHtml: await this.toHtml(abuse.moderationComment),
-              embedHtml: this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse)),
-              reporterAccount: new Account(abuse.reporterAccount)
-            })
+          this.abuses = []
 
-            if (abuse.video.channel?.ownerAccount) abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
+          for (const a of resultList.data) {
+            const abuse = a as ProcessedAbuse
+
+            abuse.reasonHtml = await this.toHtml(abuse.reason)
+            abuse.moderationCommentHtml = await this.toHtml(abuse.moderationComment)
+
+            if (abuse.video) {
+              abuse.embedHtml = this.sanitizer.bypassSecurityTrustHtml(this.getVideoEmbed(abuse))
+
+              if (abuse.video.channel?.ownerAccount) {
+                abuse.video.channel.ownerAccount = new Account(abuse.video.channel.ownerAccount)
+              }
+            }
+
+            if (abuse.comment) {
+              if (abuse.comment.deleted) {
+                abuse.truncatedCommentHtml = abuse.commentHtml = this.i18n('Deleted comment')
+              } else {
+                const truncated = truncate(abuse.comment.text, { length: 100 })
+                abuse.truncatedCommentHtml = await this.markdownRenderer.textMarkdownToHTML(truncated, true)
+                abuse.commentHtml = await this.markdownRenderer.textMarkdownToHTML(abuse.comment.text, true)
+              }
+            }
+
+            if (abuse.reporterAccount) {
+              abuse.reporterAccount = new Account(abuse.reporterAccount)
+            }
+
+            if (abuse.flaggedAccount) {
+              abuse.flaggedAccount = new Account(abuse.flaggedAccount)
+            }
+
             if (abuse.updatedAt === abuse.createdAt) delete abuse.updatedAt
 
-            abuses.push(abuse as ProcessedAbuse)
+            this.abuses.push(abuse)
           }
-
-          this.abuses = abuses
         },
 
         err => this.notifier.error(err.message)

@@ -140,7 +140,7 @@ export enum ScopeNames {
               model: VideoModel.unscoped(),
               include: [
                 {
-                  attributes: [ 'filename', 'fileUrl' ],
+                  attributes: [ 'filename', 'fileUrl', 'type' ],
                   model: ThumbnailModel
                 },
                 {
@@ -395,6 +395,8 @@ export class AbuseModel extends Model<AbuseModel> {
 
       comment = {
         id: entity.id,
+        threadId: entity.getThreadId(),
+
         text: entity.text ?? '',
 
         deleted: entity.isDeleted(),

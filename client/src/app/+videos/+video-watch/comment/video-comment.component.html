@@ -45,6 +45,7 @@
           <div *ngIf="isRemovableByUser()" (click)="onWantToDelete()" class="comment-action-delete" i18n>Delete</div>
 
           <my-user-moderation-dropdown
+            [prependActions]="prependModerationActions"
             buttonSize="small" [account]="commentAccount" [user]="commentUser" i18n-label label="Options" placement="bottom-left auto"
           ></my-user-moderation-dropdown>
         </div>
@@ -93,3 +94,7 @@
     </div>
   </div>
 </div>
+
+<ng-container *ngIf="prependModerationActions">
+  <my-comment-report #commentReportModal [comment]="comment"></my-comment-report>
+</ng-container>
