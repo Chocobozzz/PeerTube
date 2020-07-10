@@ -7,9 +7,16 @@
     <meta name="theme-color" content="#fff" />
     <meta property="og:platform" content="PeerTube" />
     <!-- Web Manifest file -->
-    <link rel="manifest" href="/manifest.webmanifest">
+    <link rel="manifest" href="/manifest.webmanifest?[manifestContentHash]">
 
-    <link rel="icon" type="image/png" href="/client/assets/images/favicon.png" />
+    <link rel="icon" type="image/png" href="/client/assets/images/favicon.png?[faviconContentHash]" />
+
+    <!-- logo background-image -->
+    <style type="text/css">
+      .icon-logo {
+        background-image: url(/client/assets/images/logo.svg?[logoContentHash]);
+      }
+    </style>
 
     <!-- base url -->
     <base href="/">
