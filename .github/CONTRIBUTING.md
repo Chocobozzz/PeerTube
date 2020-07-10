@@ -4,12 +4,26 @@ Interested in contributing? Awesome!
 
 **This guide will present you the following contribution topics:**
 
-  * [Translate](#translate)
-  * [Give your feedback](#give-your-feedback)
-  * [Write documentation](#write-documentation)
-  * [Improve the website](#improve-the-website)
-  * [Develop](#develop)
-  * [Write a plugin or a theme](#plugins--themes)
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Translate](#translate)
+- [Give your feedback](#give-your-feedback)
+- [Write documentation](#write-documentation)
+- [Improve the website](#improve-the-website)
+- [Develop](#develop)
+  - [Prerequisites](#prerequisites)
+  - [Online development](#online-development)
+  - [Server side](#server-side)
+  - [Client side](#client-side)
+  - [Client and server side](#client-and-server-side)
+  - [Testing the federation of PeerTube servers](#testing-the-federation-of-peertube-servers)
+  - [Unit tests](#unit-tests)
+  - [Emails](#emails)
+- [Plugins & Themes](#plugins--themes)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Translate
 
@@ -30,7 +44,7 @@ You can help to write the documentation of the REST API, code, architecture,
 demonstrations.
 
 For the REST API you can see the documentation in [/support/doc/api](https://github.com/Chocobozzz/PeerTube/tree/develop/support/doc/api) directory.
-Then, you can just open the `openapi.yaml` file in a special editor like [http://editor.swagger.io/](http://editor.swagger.io/) to easily see and edit the documentation.
+Then, you can just open the `openapi.yaml` file in a special editor like [http://editor.swagger.io/](http://editor.swagger.io/) to easily see and edit the documentation. You can also use [redoc-cli](https://github.com/Redocly/redoc/blob/master/cli/README.md) and run `redoc-cli serve --watch support/doc/api/openapi.yaml` to see the final result.
 
 Some hints:
  * Routes are defined in [/server/controllers/](https://github.com/Chocobozzz/PeerTube/tree/develop/server/controllers) directory
@@ -200,6 +214,13 @@ $ npm run mocha -- --exit -r ts-node/register -r tsconfig-paths/register --bail 
 
 Instance configurations are in `config/test-{1,2,3,4,5,6}.yaml`.
 Note that only instance 2 has transcoding enabled.
+
+### Emails
+
+To test emails with PeerTube:
+
+ * Run [mailslurper](http://mailslurper.com/)
+ * Run PeerTube using mailslurper SMTP port: `NODE_CONFIG='{ "smtp": { "hostname": "localhost", "port": 2500, "tls": false } }' NODE_ENV=test npm start`
 
 ## Plugins & Themes
 

@@ -1535,6 +1535,23 @@ paths:
           description: only list reports of a specific video channel
           schema:
             type: string
+        - name: videoIs
+          in: query
+          description: only list blacklisted or deleted videos
+          schema:
+            type: string
+            enum:
+            - 'deleted'
+            - 'blacklisted'
+        - name: filter
+          in: query
+          description: only list account, comment or video reports
+          schema:
+            type: string
+            enum:
+            - 'video'
+            - 'comment'
+            - 'account'
         - $ref: '#/components/parameters/start'
         - $ref: '#/components/parameters/count'
         - $ref: '#/components/parameters/abusesSort'
