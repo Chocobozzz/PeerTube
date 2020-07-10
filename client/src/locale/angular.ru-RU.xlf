@@ -5852,7 +5852,7 @@
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {Нет видео} =1 {1 видео} другие {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> видео} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {Нет видео} =1 {1 видео} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> видео} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context>
           <context context-type="linenumber">23</context>
