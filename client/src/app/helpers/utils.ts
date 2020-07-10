@@ -45,6 +45,16 @@ function getAbsoluteAPIUrl () {
   return absoluteAPIUrl
 }
 
+function getAbsoluteEmbedUrl () {
+  let absoluteEmbedUrl = environment.embedUrl
+  if (!absoluteEmbedUrl) {
+    // The Embed is on the same domain
+    absoluteEmbedUrl = window.location.origin
+  }
+
+  return absoluteEmbedUrl
+}
+
 const datePipe = new DatePipe('en')
 function dateToHuman (date: string) {
   return datePipe.transform(date, 'medium')
@@ -201,6 +211,7 @@ export {
   dateToHuman,
   immutableAssign,
   objectToFormData,
+  getAbsoluteEmbedUrl,
   objectLineFeedToHtml,
   removeElementFromArray,
   importModule,

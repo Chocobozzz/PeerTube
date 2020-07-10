@@ -1,6 +1,6 @@
 import { AuthUser } from '@app/core'
 import { User } from '@app/core/users/user.model'
-import { durationToString, getAbsoluteAPIUrl } from '@app/helpers'
+import { durationToString, getAbsoluteAPIUrl, getAbsoluteEmbedUrl } from '@app/helpers'
 import {
   Avatar,
   peertubeTranslate,
@@ -12,7 +12,6 @@ import {
   VideoScheduleUpdate,
   VideoState
 } from '@shared/models'
-import { environment } from '../../../../environments/environment'
 import { Actor } from '../account/actor.model'
 
 export class Video implements VideoServerModel {
@@ -118,7 +117,7 @@ export class Video implements VideoServerModel {
     this.previewUrl = hash.previewUrl || (absoluteAPIUrl + hash.previewPath)
 
     this.embedPath = hash.embedPath
-    this.embedUrl = hash.embedUrl || (environment.embedUrl + hash.embedPath)
+    this.embedUrl = hash.embedUrl || (getAbsoluteEmbedUrl() + hash.embedPath)
 
     this.url = hash.url
 
