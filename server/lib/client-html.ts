@@ -143,11 +143,11 @@ export class ClientHtml {
     return htmlStringPage.replace('[manifestContentHash]', FILES_CONTENT_HASH.MANIFEST)
   }
 
-  private static addFaviconContentHash(htmlStringPage: string) {
+  private static addFaviconContentHash (htmlStringPage: string) {
     return htmlStringPage.replace('[faviconContentHash]', FILES_CONTENT_HASH.FAVICON)
   }
 
-  private static addLogoContentHash(htmlStringPage: string) {
+  private static addLogoContentHash (htmlStringPage: string) {
     return htmlStringPage.replace('[logoContentHash]', FILES_CONTENT_HASH.LOGO)
   }
 
