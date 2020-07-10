@@ -1471,9 +1471,8 @@ paths:
           description: HTTP or Torrent/magnetURI import not enabled
         '400':
           description: '`magnetUri` or `targetUrl` or a torrent file missing'
-  /videos/abuse:
+  /abuses:
     get:
-      deprecated: true
       summary: List abuses
       security:
         - OAuth2:
@@ -1491,16 +1490,7 @@ paths:
           in: query
           description: predefined reason the listed reports should contain
           schema:
-            type: string
-            enum:
-              - violentOrAbusive
-              - hatefulOrAbusive
-              - spamOrMisleading
-              - privacy
-              - rights
-              - serverRules
-              - thumbnails
-              - captions
+            $ref: '#/components/schemas/PredefinedAbuseReasons'
         - name: search
           in: query
           description: plain search that will match with video titles, reporter names and more
@@ -1564,17 +1554,13 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/VideoAbuse'
-  '/videos/{id}/abuse':
+
     post:
-      deprecated: true
       summary: Report an abuse
       security:
         - OAuth2: []
       tags:
         - Abuses
-        - Videos
-      parameters:
-        - $ref: '#/components/parameters/idOrUUID'
       requestBody:
         required: true
         content:
@@ -1587,27 +1573,34 @@ paths:
                   type: string
                   minLength: 4
                 predefinedReasons:
-                  description: Reason categories that help triage reports
-                  type: array
-                  items:
-                    type: string
-                    enum:
-                    - violentOrAbusive
-                    - hatefulOrAbusive
-                    - spamOrMisleading
-                    - privacy
-                    - rights
-                    - serverRules
-                    - thumbnails
-                    - captions
-                startAt:
-                  type: integer
-                  description: Timestamp in the video that marks the beginning of the report
-                  minimum: 0
-                endAt:
-                  type: integer
-                  description: Timestamp in the video that marks the ending of the report
-                  minimum: 0
+                  $ref: '#/components/schemas/PredefinedAbuseReasons'
+
+                video:
+                  type: object
+                  properties:
+                    id:
+                      description: Video id to report
+                      type: number
+                    startAt:
+                      type: integer
+                      description: Timestamp in the video that marks the beginning of the report
+                      minimum: 0
+                    endAt:
+                      type: integer
+                      description: Timestamp in the video that marks the ending of the report
+                      minimum: 0
+                comment:
+                  type: object
+                  properties:
+                    id:
+                      description: Comment id to report
+                      type: number
+                account:
+                  type: object
+                  properties:
+                    id:
+                      description: Account id to report
+                      type: number
               required:
                 - reason
       responses:
@@ -1615,9 +1608,8 @@ paths:
           description: successful operation
         '400':
           description: incorrect request parameters
-  '/videos/{id}/abuse/{abuseId}':
+  '/abuses/{abuseId}':
     put:
-      deprecated: true
       summary: Update an abuse
       security:
         - OAuth2:
@@ -1626,7 +1618,6 @@ paths:
       tags:
         - Abuses
       parameters:
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/abuseId'
       requestBody:
         content:
@@ -1645,7 +1636,6 @@ paths:
         '404':
           description: abuse not found
     delete:
-      deprecated: true
       tags:
         - Abuses
       summary: Delete an abuse
@@ -1654,7 +1644,6 @@ paths:
             - admin
             - moderator
       parameters:
-        - $ref: '#/components/parameters/idOrUUID'
         - $ref: '#/components/parameters/abuseId'
       responses:
         '204':
@@ -4570,6 +4559,22 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    PredefinedAbuseReasons:
+      description: Reason categories that help triage reports
+      type: array
+      items:
+        type: string
+        enum:
+        - violentOrAbusive
+        - hatefulOrAbusive
+        - spamOrMisleading
+        - privacy
+        - rights
+        - serverRules
+        - thumbnails
+        - captions
+
     Job:
       properties:
         id:
