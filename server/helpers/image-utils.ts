@@ -1,6 +1,7 @@
-import 'multer'
-import { readFile, remove } from 'fs-extra'
+import { remove, rename } from 'fs-extra'
+import { convertWebPToJPG } from './ffmpeg-utils'
 import { logger } from './logger'
+
 const Jimp = require('jimp')
 
 async function processImage (
@@ -15,9 +16,19 @@ async function processImage (
 
   logger.debug('Processing image %s to %s.', path, destination)
 
-  // Avoid sharp cache
-  const buf = await readFile(path)
-  const jimpInstance = await Jimp.read(buf)
+  let jimpInstance: any
+
+  try {
+    jimpInstance = await Jimp.read(path)
+  } catch (err) {
+    logger.debug('Cannot read %s with jimp. Try to convert the image using ffmpeg first.', { err })
+
+    const newName = path + '.jpg'
+    await convertWebPToJPG(path, newName)
+    await rename(newName, path)
+
+    jimpInstance = await Jimp.read(path)
+  }
 
   await remove(destination)
 

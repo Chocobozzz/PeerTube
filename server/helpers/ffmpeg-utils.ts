@@ -338,11 +338,29 @@ function getClosestFramerateStandard (fps: number, type: 'HD_STANDARD' | 'STANDA
                                     .sort((a, b) => fps % a - fps % b)[0]
 }
 
+function convertWebPToJPG (path: string, destination: string): Promise<void> {
+  return new Promise<void>(async (res, rej) => {
+    try {
+      const command = ffmpeg(path).output(destination)
+
+      command.on('error', (err, stdout, stderr) => {
+        logger.error('Error in ffmpeg webp convert process.', { stdout, stderr })
+        return rej(err)
+      })
+      .on('end', () => res())
+      .run()
+    } catch (err) {
+      return rej(err)
+    }
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   getVideoStreamCodec,
   getAudioStreamCodec,
+  convertWebPToJPG,
   getVideoStreamSize,
   getVideoFileResolution,
   getMetadataFromFile,
