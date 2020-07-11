@@ -65,13 +65,6 @@ async function up (utils: {
 
   await utils.sequelize.query('DROP INDEX IF EXISTS user_notification_video_abuse_id')
   await utils.queryInterface.renameColumn('userNotification', 'videoAbuseId', 'abuseId')
-  await utils.sequelize.query(
-    'ALTER TABLE "userNotification" RENAME CONSTRAINT "userNotification_videoAbuseId_fkey" TO "userNotification_abuseId_fkey"'
-  )
-
-  await utils.sequelize.query(
-    'ALTER TABLE "abuse" RENAME CONSTRAINT "videoAbuse_reporterAccountId_fkey" TO "abuse_reporterAccountId_fkey"'
-  )
 
   await utils.sequelize.query(
     'ALTER INDEX IF EXISTS "videoAbuse_pkey" RENAME TO "abuse_pkey"'
