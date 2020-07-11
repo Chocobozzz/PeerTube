@@ -5071,13 +5071,7 @@
       </trans-unit>
       <trans-unit id="f0d14f556321dbae66c765d6a3b0062f3a150931" datatype="html">
         <source>If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> If the instance is not, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> to see if you instance is allowed. </source>
-        <target state="new">
-                        If your instance is explicitly allowed by Twitter, a video player will be embedded in the Twitter feed on PeerTube video share.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                        If the instance is not, we use an image link card that will redirect on your PeerTube instance.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-                        Check this checkbox, save the configuration and test with a video URL of your instance (https://example.com/videos/watch/blabla) on
-                        <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-                        to see if you instance is allowed.
-                      </target>
+        <target state="translated">Si votre instance est explicitement autorisée par Twitter, un lecteur vidéo sera intégré au flux Twitter sur le partage vidéo PeerTube.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Si l'instance ne l'est pas, nous utilisons une carte de lien d'image qui redirigera sur votre instance PeerTube.<x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/><x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/> Cochez cette case, enregistrez la configuration et testez avec une URL vidéo de votre instance (https://example.com/videos/watch/blabla) sur <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://cards-dev.twitter.com/validator<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> pour voir si votre instance est autorisée. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">679</context>
@@ -5667,7 +5661,7 @@
       </trans-unit>
       <trans-unit id="a86239658c3cf042e7c987bb0df7473a53d7517e" datatype="html">
         <source>Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> imports</source>
-        <target state="new">Showing <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> of <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> imports</target>
+        <target state="translated">Montrant <x id="INTERPOLATION" equiv-text="{{'{first}'}}"/> to <x id="INTERPOLATION_1" equiv-text="{{'{last}'}}"/> de <x id="INTERPOLATION_2" equiv-text="{{'{totalRecords}'}}"/> importations</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-video-imports/my-account-video-imports.component.html</context>
           <context context-type="linenumber">6</context>
@@ -6090,9 +6084,7 @@
       </trans-unit>
       <trans-unit id="5ebd76e736e1c58a1850234d1d26f1ab8c9ad11f" datatype="html">
         <source>Created <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> playlists </source>
-        <target state="new">
-    Created <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> playlists
-  </target>
+        <target state="translated">Créé <x id="INTERPOLATION" equiv-text="{{ pagination.totalItems }}"/> listes de lecture </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+video-channels/video-channel-playlists/video-channel-playlists.component.html</context>
           <context context-type="linenumber">2</context>
@@ -7192,7 +7184,7 @@
       </trans-unit>
       <trans-unit id="366c51268cf18a834e6207b2efe20b679f3796ef" datatype="html">
         <source>Instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> muted.</source>
-        <target state="new">Instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> muted.</target>
+        <target state="translated">Instance <x id="INTERPOLATION" equiv-text="{{domain}}"/> silencé.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/server-blocklist.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7213,7 +7205,7 @@
       </trans-unit>
       <trans-unit id="79b1fff8643eb798e40e0884336e0a6097b9aae6" datatype="html">
         <source>Violent or Repulsive</source>
-        <target state="new">Violent or Repulsive</target>
+        <target state="translated">VIolent ou répugnant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7317,7 +7309,7 @@
       </trans-unit>
       <trans-unit id="58dc553e7a763631cf2d1229fb1ed9d04b6bc59a" datatype="html">
         <source>Block video</source>
-        <target state="new">Block video</target>
+        <target state="translated">Bloquer la vidéo</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7366,7 +7358,7 @@
       </trans-unit>
       <trans-unit id="5801b59834422f97fa2a5c930f079611ea040ccb" datatype="html">
         <source>Switch video block to manual</source>
-        <target state="new">Switch video block to manual</target>
+        <target state="translated">Passage du blocage vidéo au mode manuel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7374,7 +7366,7 @@
       </trans-unit>
       <trans-unit id="47297c5c574f8d6fec71af7f24818b52761f9b21" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> switched to manual block.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{name}}"/> switched to manual block.</target>
+        <target state="translated">La vidéo <x id="INTERPOLATION" equiv-text="{{name}}"/> est passé en blocage manuel.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7394,7 +7386,7 @@
       </trans-unit>
       <trans-unit id="350850e095bb1b8d7dcc99b520d5ec8132c710fb" datatype="html">
         <source>Unblock</source>
-        <target state="new">Unblock</target>
+        <target state="translated">Débloquer</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7410,7 +7402,7 @@
       </trans-unit>
       <trans-unit id="0f39df26589693fe43b6bd5c4602bc4fc6ac1226" datatype="html">
         <source>Video <x id="INTERPOLATION" equiv-text="{{name}}"/> unblocked.</source>
-        <target state="new">Video <x id="INTERPOLATION" equiv-text="{{name}}"/> unblocked.</target>
+        <target state="translated">Vidéo <x id="INTERPOLATION" equiv-text="{{name}}"/> débloquée.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-block-list/video-block-list.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8874,7 +8866,7 @@
       </trans-unit>
       <trans-unit id="db7b7efed1c793079b2bf74cdfba73fed05f63ec" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">L'URL de l'index de recherche doit être une URL</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9217,7 +9209,7 @@
       </trans-unit>
       <trans-unit id="b19eeb7380a6bbb6dd791afdb262107749d8b990" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">Le motif de blocage doit comporter au moins 2 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/form-validators/video-block-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9225,7 +9217,7 @@
       </trans-unit>
       <trans-unit id="5ac23ab9399b1bf51cd2c71b033a3beec5b6d9f7" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">Le motif de blocage ne peut pas comporter plus de 300 caractères.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/form-validators/video-block-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9940,7 +9932,7 @@
       </trans-unit>
       <trans-unit id="b465014f22a020c312b0eb26be64008e368ff618" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{name}}"/> (channel page)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{name}}"/> (channel page)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{name}}"/> (page de la chaîne)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/avatar.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9952,7 +9944,7 @@
       </trans-unit>
       <trans-unit id="2ae54a1b18fc8315f431aecc74f58fb12f066231" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{name}}"/> (account page)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{name}}"/> (account page)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{name}}"/> (page du compte)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/avatar.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10294,7 +10286,7 @@
       </trans-unit>
       <trans-unit id="75f9d13b8aa48da40b53265afe4826b7c590fede" datatype="html">
         <source>Violent or repulsive</source>
-        <target state="new">Violent or repulsive</target>
+        <target state="translated">Violent ou répugnant</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10302,7 +10294,7 @@
       </trans-unit>
       <trans-unit id="4c78954b2e1a4c2a457fd10f87ac398a86db88f3" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="new">Contains offensive, violent, or coarse language or iconography.</target>
+        <target state="translated">Contient un langage ou une iconographie offensant, violent ou grossier.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10310,7 +10302,7 @@
       </trans-unit>
       <trans-unit id="da98842df682acde758f4b18f4d67c43c8f2885b" datatype="html">
         <source>Hateful or abusive</source>
-        <target state="new">Hateful or abusive</target>
+        <target state="translated">Haineux ou abusif</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10318,7 +10310,7 @@
       </trans-unit>
       <trans-unit id="338b2cbcea511d70613c96bbe942b9e2c4714cf1" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="new">Contains abusive, racist or sexist language or iconography.</target>
+        <target state="translated">Contient un langage ou une iconographie abusif, raciste ou sexiste.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10326,7 +10318,7 @@
       </trans-unit>
       <trans-unit id="d540707e326c991a0b2eb05fe78ae5431c7b5f61" datatype="html">
         <source>Spam, ad or false news</source>
-        <target state="new">Spam, ad or false news</target>
+        <target state="translated">Spam, publicité ou fausses nouvelles</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10334,7 +10326,7 @@
       </trans-unit>
       <trans-unit id="9674483c674382618788ffabbc7c09c043f1db12" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="new">Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</target>
+        <target state="translated">Contient du marketing, du spam, des informations délibérément trompeuses ou des vignettes/textes/balises trompeuses. Veuillez indiquer des sources fiables pour signaler les canulars.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10342,7 +10334,7 @@
       </trans-unit>
       <trans-unit id="697e6f711173360c87a384af631fc8f13cd3d827" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="new">Privacy breach or doxxing</target>
+        <target state="translated">Violation de la vie privée ou doxxing</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10350,7 +10342,7 @@
       </trans-unit>
       <trans-unit id="a66c468cd15cd1c28f5116cf84371e5bbbd2a1ed" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">Contient des informations personnelles qui pourraient être utilisées pour suivre, identifier, contacter ou se faire passer pour quelqu'un (par exemple, le nom, l'adresse, le numéro de téléphone, le courriel ou les détails de la carte de crédit).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10358,7 +10350,7 @@
       </trans-unit>
       <trans-unit id="39820eec05bfb636e49daf19c3180d8951a8f4db" datatype="html">
         <source>Intellectual property violation</source>
-        <target state="new">Intellectual property violation</target>
+        <target state="translated">Violation de la propriété intellectuelle</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10366,7 +10358,7 @@
       </trans-unit>
       <trans-unit id="90c817d59a020301296c13bc7b5afbc499f38861" datatype="html">
         <source>Infringes my intellectual property or copyright, wrt. the regional rules with which the server must comply.</source>
-        <target state="new">Infringes my intellectual property or copyright, wrt. the regional rules with which the server must comply.</target>
+        <target state="translated">Violation de ma propriété intellectuelle ou de mes droits d'auteur, ou des règles régionales auxquelles le serveur doit se conformer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10374,7 +10366,7 @@
       </trans-unit>
       <trans-unit id="3732f37956e36cea2271d2333b8b04a6ad417274" datatype="html">
         <source>Breaks server rules</source>
-        <target state="new">Breaks server rules</target>
+        <target state="translated">Brise les règles du serveur</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10382,7 +10374,7 @@
       </trans-unit>
       <trans-unit id="32bf825b15b1d2888142514301b91454f23e82a5" datatype="html">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
-        <target state="new">Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</target>
+        <target state="translated">Tout ce qui n'est pas inclus dans ce qui précède et qui enfreint les conditions de service, le code de conduite ou les règles générales en vigueur sur le serveur.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10390,7 +10382,7 @@
       </trans-unit>
       <trans-unit id="027a3589ca1b92b000b183e249d9d7bea1dce727" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="new">The above can only be seen in thumbnails.</target>
+        <target state="translated">Ce qui précède ne peut être vu que sous forme de vignettes.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10398,7 +10390,7 @@
       </trans-unit>
       <trans-unit id="148c963c0ecee2b9e6c8ce11e70ae62e36efaa36" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="new">The above can only be seen in captions (please describe which).</target>
+        <target state="translated">Ce qui précède ne peut être vu que dans les légendes (veuillez décrire lesquelles).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10628,7 +10620,7 @@
       </trans-unit>
       <trans-unit id="7f5d0c10614e8a34f0e2dad33a0568277c50cf69" datatype="html">
         <source>Block</source>
-        <target state="new">Block</target>
+        <target state="translated">Bloque</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10650,7 +10642,7 @@
       </trans-unit>
       <trans-unit id="3797009a642d28abfc76cd0aec0c2ec899686807" datatype="html">
         <source>Mute account</source>
-        <target state="new">Mute account</target>
+        <target state="translated">Rendre muet le compte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10666,7 +10658,7 @@
       </trans-unit>
       <trans-unit id="08a52c67462389568cf14a021ddecc0aedaa9613" datatype="html">
         <source>Reported part</source>
-        <target state="new">Reported part</target>
+        <target state="translated">Partie signalée</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">70</context>
