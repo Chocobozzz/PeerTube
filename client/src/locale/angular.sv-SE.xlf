@@ -1447,8 +1447,7 @@
       </trans-unit>
       <trans-unit id="53f7ce6aef94fd128d0058de1cd63da90d062ee6">
         <source>Put your instance on the public PeerTube index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </source>
-        <target>Lägg till din instans i PeerTubes offentliga index: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-          </target>
+        <target>Lägg till din instans i PeerTubes offentliga register: <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>https://instances.joinpeertube.org/instances<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/> </target>
         <context-group name="null">
           <context context-type="linenumber">47</context>
         </context-group>
@@ -1903,7 +1902,7 @@
       </trans-unit>
       <trans-unit id="44f26a1c56d73d4763225ba2e6d5091e0cad1b7c" datatype="html">
         <source>Results will be augmented with those of a third-party index. Only data necessary to make the query will be sent.</source>
-        <target state="translated">Resultaten kommer kompletteras med en indexering från en utomstående tjänst. Endast data som är nödvändig för sökningen kommer skickas.</target>
+        <target state="translated">Resultaten kommer kompletteras med träffar från ett fristående register. Endast data som är nödvändig för sökningen kommer skickas.</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/header/search-typeahead.component.html</context><context context-type="linenumber">29</context></context-group>
       </trans-unit>
       <trans-unit id="ee697ded3eb6909ca0e619ab5cc9647cbd849da5" datatype="html">
@@ -2138,7 +2137,7 @@
       </trans-unit>
       <trans-unit id="118bedbb308a28f06d1c0c84645a35c9bf93cbf3" datatype="html">
         <source>Search target</source>
-        <target state="new">Search target</target>
+        <target state="translated">Sök på</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search-filters.component.html</context>
           <context context-type="linenumber">170</context>
@@ -4897,7 +4896,7 @@
       </trans-unit>
       <trans-unit id="a97062f0bfb585b28058981d53fb047a2f2288c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="new">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>your users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</target>
+        <target state="translated">Låt <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>dina användare<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> använda en länk för att söka efter videor eller användare, även om fjärrinstansen inte är federerad med din instans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">465</context>
@@ -4905,7 +4904,7 @@
       </trans-unit>
       <trans-unit id="273341057700e25fb8a19896b5039dcf3f14b9ba" datatype="html">
         <source>Allow users to do remote URI/handle search</source>
-        <target state="new">Allow users to do remote URI/handle search</target>
+        <target state="translated">Låt användare använda en länk för att göra fjärrsökningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">462</context>
@@ -4913,7 +4912,7 @@
       </trans-unit>
       <trans-unit id="ffe92ff41a38a4407b1e1da41a015292497324c4" datatype="html">
         <source>Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</source>
-        <target state="new">Allow <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonymous users<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> to look up remote videos/actors by their URI, that may not be federated with your instance</target>
+        <target state="translated">Låt <x id="START_TAG_STRONG" ctype="x-strong" equiv-text="&lt;strong&gt;"/>anonyma användare<x id="CLOSE_TAG_STRONG" ctype="x-strong" equiv-text="&lt;/strong&gt;"/> använda en länk för att söka efter videor eller användare, även om fjärrinstansen inte är federerad med din instans</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">476</context>
@@ -4921,7 +4920,7 @@
       </trans-unit>
       <trans-unit id="1a1dd78b1169f98fb2120c6af13e136aec2daf69" datatype="html">
         <source>Allow anonymous to do remote URI/handle search</source>
-        <target state="new">Allow anonymous to do remote URI/handle search</target>
+        <target state="translated">Låt anonyma användare använda en länk för att göra fjärrsökningar</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">473</context>
@@ -4929,7 +4928,7 @@
       </trans-unit>
       <trans-unit id="f3af9d2cf9a341ce634210908597e491e77e7376" datatype="html">
         <source>⚠️ This functionality depends heavily on the moderation of instances followed by the search index you select.</source>
-        <target state="translated">⚠️ Den här funktionen beror på hur väl den instanserna modereras i det sökindex du väljer.</target>
+        <target state="translated">⚠️ Den här funktionen beror på hur väl den instanserna modereras i det sökregister du väljer.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">490</context>
@@ -4937,7 +4936,7 @@
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Du bör endast använda modererade sökindex i produktionsmiljön, alternativt <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>starta ett eget index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Du bör endast använda modererade sökregister i produktionsmiljön, alternativt <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>starta ett eget register<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">492</context>
@@ -4945,7 +4944,7 @@
       </trans-unit>
       <trans-unit id="e5cd21a49e6eefd0610106b6afcd4ed56baab566" datatype="html">
         <source>Search index URL</source>
-        <target state="translated">Sökindexets webbadress</target>
+        <target state="translated">Sökregistrets webbadress</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">499</context>
@@ -4969,7 +4968,7 @@
       </trans-unit>
       <trans-unit id="be8b7fa8a3193d5015561140328a1240190842c1" datatype="html">
         <source>Search bar uses the global search index by default</source>
-        <target state="translated">Sökrutan använder det globala sökindexet som standard</target>
+        <target state="translated">Sökrutan använder det globala sökregistret som standard</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">517</context>
@@ -5010,7 +5009,7 @@
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
         <source>You should only follow moderated indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="translated">Du bör endast använda modererade index i produktionsmiljön, alternativt <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>starta ett eget index<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
+        <target state="translated">Du bör endast använda modererade register i produktionsmiljön, alternativt <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>starta ett eget register<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">590</context>
@@ -5025,7 +5024,7 @@
       </trans-unit>
       <trans-unit id="764910b42b08b8342f7ba5907b258341ec044fa0">
         <source>Index URL</source>
-        <target>Index-URL</target>
+        <target>Register-URL</target>
         <context-group name="null">
           <context context-type="linenumber">371</context>
         </context-group>
@@ -5033,7 +5032,7 @@
       </trans-unit>
       <trans-unit id="62f023a56fd29518ab030384702362e6bf6a83e4" datatype="html">
         <source>Automatically follow instances of a public index</source>
-        <target state="translated">Följ instanser i ett offentligt index automatiskt</target>
+        <target state="translated">Följ instanser i ett offentligt register automatiskt</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">585</context></context-group>
       </trans-unit>
       <trans-unit id="5805ff22d19f43016e2b1a0f7eff12185c78e89d" datatype="html">
@@ -5755,7 +5754,7 @@
       </trans-unit>
       <trans-unit id="cd2d9bfd5a5f7bdc1d4f1242e8a35d74830b6ffe" datatype="html">
         <source>Owner account page</source>
-        <target state="new">Owner account page</target>
+        <target state="translated">Ägarens kontosida</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-subscriptions/my-account-subscriptions.component.html</context>
           <context context-type="linenumber">18</context>
@@ -7980,7 +7979,7 @@
       </trans-unit>
       <trans-unit id="f4f29b22904c1ee350555ce58c2380ad58a39e06" datatype="html">
         <source>Video blocked automatically waiting review</source>
-        <target state="new">Video blocked automatically waiting review</target>
+        <target state="translated">En automatiskt blockerad video inväntar granskning</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -7988,7 +7987,7 @@
       </trans-unit>
       <trans-unit id="47f529a2dcb30ef1533d978ac01dbd361b0b6be7" datatype="html">
         <source>One of your video is blocked/unblocked</source>
-        <target state="new">One of your video is blocked/unblocked</target>
+        <target state="translated">En av dina videor ändrat blockeringsstatus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/my-account-settings/my-account-notification-preferences/my-account-notification-preferences.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8077,7 +8076,7 @@
       </trans-unit>
       <trans-unit id="9f4cdde6106d0d5ed669264f5a8777f079623eb0" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete <x id="INTERPOLATION_1" equiv-text="{{videosCount}}"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_2" equiv-text="{{channelName}}"/>)!</source>
-        <target state="new">Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete <x id="INTERPOLATION_1" equiv-text="{{videosCount}}"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_2" equiv-text="{{channelName}}"/>)!</target>
+        <target state="translated">Vill du verkligen radera <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? Om du gör det, kommer <x id="INTERPOLATION_1" equiv-text="{{videosCount}}"/> videor som har laddats upp till den här kanalen raderas och du kommer inte kunna skapa en ny kanal med samma namn (<x id="INTERPOLATION_2" equiv-text="{{channelName}}"/>)!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8506,7 +8505,7 @@
       </trans-unit>
       <trans-unit id="4e6f8ebb0c0d4c19e4bf60bd907fcaa9740607af" datatype="html">
         <source>Your account is blocked.</source>
-        <target state="new">Your account is blocked.</target>
+        <target state="translated">Ditt konto har blockerats.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+login/login.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8654,7 +8653,7 @@
       </trans-unit>
       <trans-unit id="f039113a417e475dcbfcf399ad290417d5f08090" datatype="html">
         <source>Search index is unavailable. Retrying with instance results instead.</source>
-        <target state="new">Search index is unavailable. Retrying with instance results instead.</target>
+        <target state="translated">Sökregistret kan inte nås. Försöker igen med resultat från den här instansen istället.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8662,7 +8661,7 @@
       </trans-unit>
       <trans-unit id="0d2f91ea86a6d3ff1f6c69ae1928f74f483e36bb" datatype="html">
         <source>Search error</source>
-        <target state="new">Search error</target>
+        <target state="translated">Sökfel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+search/search.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8911,7 +8910,7 @@
       </trans-unit>
       <trans-unit id="febc4795f39d34b901907a2718b0c5c21165eb36">
         <source>Index URL should be a URL</source>
-        <target>Index-URL måste vara en URL</target>
+        <target>Registerlänken måste vara en giltig webbadress</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
@@ -8919,7 +8918,7 @@
       </trans-unit>
       <trans-unit id="db7b7efed1c793079b2bf74cdfba73fed05f63ec" datatype="html">
         <source>Search index URL should be a URL</source>
-        <target state="new">Search index URL should be a URL</target>
+        <target state="translated">Sökregistrets länk måste vara en giltig webbadress</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/form-validators/custom-config-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9262,7 +9261,7 @@
       </trans-unit>
       <trans-unit id="b19eeb7380a6bbb6dd791afdb262107749d8b990" datatype="html">
         <source>Block reason must be at least 2 characters long.</source>
-        <target state="new">Block reason must be at least 2 characters long.</target>
+        <target state="translated">Blockeringsorsaken måste innehålla minst två tecken.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/form-validators/video-block-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9270,7 +9269,7 @@
       </trans-unit>
       <trans-unit id="5ac23ab9399b1bf51cd2c71b033a3beec5b6d9f7" datatype="html">
         <source>Block reason cannot be more than 300 characters long.</source>
-        <target state="new">Block reason cannot be more than 300 characters long.</target>
+        <target state="translated">Blockeringsorsaken får inte vara mer än 300 tecken lång.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-forms/form-validators/video-block-validators.service.ts</context>
           <context context-type="linenumber">1</context>
@@ -9985,7 +9984,7 @@
       </trans-unit>
       <trans-unit id="b465014f22a020c312b0eb26be64008e368ff618" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{name}}"/> (channel page)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{name}}"/> (channel page)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{name}}"/> (kanalsida)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/avatar.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -9997,7 +9996,7 @@
       </trans-unit>
       <trans-unit id="2ae54a1b18fc8315f431aecc74f58fb12f066231" datatype="html">
         <source><x id="INTERPOLATION" equiv-text="{{name}}"/> (account page)</source>
-        <target state="new"><x id="INTERPOLATION" equiv-text="{{name}}"/> (account page)</target>
+        <target state="translated"><x id="INTERPOLATION" equiv-text="{{name}}"/> (kontosida)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-main/account/avatar.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10339,7 +10338,7 @@
       </trans-unit>
       <trans-unit id="75f9d13b8aa48da40b53265afe4826b7c590fede" datatype="html">
         <source>Violent or repulsive</source>
-        <target state="new">Violent or repulsive</target>
+        <target state="translated">Våldsamt eller motbjudande</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10347,7 +10346,7 @@
       </trans-unit>
       <trans-unit id="4c78954b2e1a4c2a457fd10f87ac398a86db88f3" datatype="html">
         <source>Contains offensive, violent, or coarse language or iconography.</source>
-        <target state="new">Contains offensive, violent, or coarse language or iconography.</target>
+        <target state="translated">Innehåller språk eller bildspråk som upplevs stötande, våldsamt eller grovt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10355,7 +10354,7 @@
       </trans-unit>
       <trans-unit id="da98842df682acde758f4b18f4d67c43c8f2885b" datatype="html">
         <source>Hateful or abusive</source>
-        <target state="new">Hateful or abusive</target>
+        <target state="translated">Hatiskt eller nedsättande</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10363,7 +10362,7 @@
       </trans-unit>
       <trans-unit id="338b2cbcea511d70613c96bbe942b9e2c4714cf1" datatype="html">
         <source>Contains abusive, racist or sexist language or iconography.</source>
-        <target state="new">Contains abusive, racist or sexist language or iconography.</target>
+        <target state="translated">Innehåller språk eller bildspråk som upplevs nedsättande, rasistiskt eller sexistiskt.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10371,7 +10370,7 @@
       </trans-unit>
       <trans-unit id="d540707e326c991a0b2eb05fe78ae5431c7b5f61" datatype="html">
         <source>Spam, ad or false news</source>
-        <target state="new">Spam, ad or false news</target>
+        <target state="translated">Spam, reklam eller vilseledande information</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10379,7 +10378,7 @@
       </trans-unit>
       <trans-unit id="9674483c674382618788ffabbc7c09c043f1db12" datatype="html">
         <source>Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</source>
-        <target state="new">Contains marketing, spam, purposefully deceitful news, or otherwise misleading thumbnail/text/tags. Please provide reputable sources to report hoaxes.</target>
+        <target state="translated">Innehåller reklam, spam, medvetet vilseledande information eller på annat sätt missvisande miniatyrbild, text eller taggar. Uppge gärna trovärdiga källor för att anmäla bluffar.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10387,7 +10386,7 @@
       </trans-unit>
       <trans-unit id="697e6f711173360c87a384af631fc8f13cd3d827" datatype="html">
         <source>Privacy breach or doxxing</source>
-        <target state="new">Privacy breach or doxxing</target>
+        <target state="translated">Publicering av personuppgifter eller personliga dokument</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10395,7 +10394,7 @@
       </trans-unit>
       <trans-unit id="a66c468cd15cd1c28f5116cf84371e5bbbd2a1ed" datatype="html">
         <source>Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</source>
-        <target state="new">Contains personal information that could be used to track, identify, contact or impersonate someone (e.g. name, address, phone number, email, or credit card details).</target>
+        <target state="translated">Innehåller personuppgifter som skulle kunna användas för att spåra, identifiera, kontakta eller stjäla någons identitet (t.ex. namn, adress, telefonnummer, e-postadress eller bankuppgifter).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10403,7 +10402,7 @@
       </trans-unit>
       <trans-unit id="39820eec05bfb636e49daf19c3180d8951a8f4db" datatype="html">
         <source>Intellectual property violation</source>
-        <target state="new">Intellectual property violation</target>
+        <target state="translated">Brott mot immaterialrätten</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10411,7 +10410,7 @@
       </trans-unit>
       <trans-unit id="90c817d59a020301296c13bc7b5afbc499f38861" datatype="html">
         <source>Infringes my intellectual property or copyright, wrt. the regional rules with which the server must comply.</source>
-        <target state="new">Infringes my intellectual property or copyright, wrt. the regional rules with which the server must comply.</target>
+        <target state="translated">Överträder min immaterialrätt eller upphovsrätt, enligt de lagar som råder där servern finns.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10419,7 +10418,7 @@
       </trans-unit>
       <trans-unit id="3732f37956e36cea2271d2333b8b04a6ad417274" datatype="html">
         <source>Breaks server rules</source>
-        <target state="new">Breaks server rules</target>
+        <target state="translated">Brott mot serverregler</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10427,7 +10426,7 @@
       </trans-unit>
       <trans-unit id="32bf825b15b1d2888142514301b91454f23e82a5" datatype="html">
         <source>Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</source>
-        <target state="new">Anything not included in the above that breaks the terms of service, code of conduct, or general rules in place on the server.</target>
+        <target state="translated">Någonting som inte nämns ovan och innebär ett brott mot användaravtalet, uppförandekoden eller de allmänna serverreglerna.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10435,7 +10434,7 @@
       </trans-unit>
       <trans-unit id="027a3589ca1b92b000b183e249d9d7bea1dce727" datatype="html">
         <source>The above can only be seen in thumbnails.</source>
-        <target state="new">The above can only be seen in thumbnails.</target>
+        <target state="translated">Ovanstående kan endast ses i miniatyrbilden.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10443,7 +10442,7 @@
       </trans-unit>
       <trans-unit id="148c963c0ecee2b9e6c8ce11e70ae62e36efaa36" datatype="html">
         <source>The above can only be seen in captions (please describe which).</source>
-        <target state="new">The above can only be seen in captions (please describe which).</target>
+        <target state="translated">Ovanstående förekommer endast i textningen (ange vilken).</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-moderation/video-report.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10673,7 +10672,7 @@
       </trans-unit>
       <trans-unit id="7f5d0c10614e8a34f0e2dad33a0568277c50cf69" datatype="html">
         <source>Block</source>
-        <target state="new">Block</target>
+        <target state="translated">Blockera</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10695,7 +10694,7 @@
       </trans-unit>
       <trans-unit id="3797009a642d28abfc76cd0aec0c2ec899686807" datatype="html">
         <source>Mute account</source>
-        <target state="new">Mute account</target>
+        <target state="translated">Ignorera konto</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/shared-video-miniature/video-actions-dropdown.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -10711,7 +10710,7 @@
       </trans-unit>
       <trans-unit id="08a52c67462389568cf14a021ddecc0aedaa9613" datatype="html">
         <source>Reported part</source>
-        <target state="new">Reported part</target>
+        <target state="translated">Anmält avsnitt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/moderation/video-abuse-list/video-abuse-details.component.html</context>
           <context context-type="linenumber">70</context>
