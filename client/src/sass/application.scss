@@ -57,6 +57,10 @@ body {
   color: pvar(--mainForegroundColor);
   background-color: pvar(--mainBackgroundColor);
   font-size: 14px;
+  // On desktop browsers, make sure vertical scroll bar is always visible
+  // Allow to disable the scrollbar instead of hide it when the content fit the body
+  // And not move the content and header horizontally sticked to right when the content is updating
+  overflow-y: scroll;
 }
 
 ::selection {

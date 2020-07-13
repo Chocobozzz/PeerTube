@@ -143,6 +143,14 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
+
+// On desktop browsers, make the content and header horizontally sticked to right not move when modal open and close
+.modal-open {
+  overflow-y: scroll !important; // Make sure vertical scroll bar is always visible on desktop browsers to get disabled scrollbar effect
+  position: fixed; // Fix the body position to disable any scroll content
+  width: 100vw; // Make sure the content fits all the available width when position: fixed
+}
+
 // Nav customizations
 .nav .nav-link {
   display: flex !important;
