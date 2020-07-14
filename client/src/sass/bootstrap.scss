@@ -153,9 +153,10 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
 
 .nav.nav-pills {
   font-size: 16px !important;
+  font-weight: $font-semibold !important;
 
   .nav-link.active {
-    font-weight: $font-semibold !important;
+    color: pvar(--mainColor)
   }
 
   a {
@@ -165,29 +166,23 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   }
 }
 
-.nav-tabs {
-
-  .nav-link {
-    @include disable-default-a-behaviour;
-
-    color: pvar(--mainForegroundColor) !important;
-  }
-}
-
 .nav-tabs .nav-link {
-  &:not(.active) {
-    border-bottom: 3px solid transparent;
-  }
+  @include disable-default-a-behaviour;
+
+  color: pvar(--mainForegroundColor);
+  font-weight: $font-semibold;
+  border: none;
+  border-bottom: 2px solid transparent;
+
   &.active {
-    font-weight: $font-semibold;
+    color: pvar(--mainColor) !important;
     background-color: pvar(--mainBackgroundColor) !important;
-    border: none;
-    border-bottom: 2px solid pvar(--mainColor);
+    border-bottom-color: pvar(--mainColor);
   }
-  &:hover {
-    border-top-color: transparent;
-    border-left-color: transparent;
-    border-right-color: transparent;
+
+  &:hover:not(.active) {
+    color: pvar(--mainColor) !important;
+    border-bottom-color: transparent;
   }
 }
 

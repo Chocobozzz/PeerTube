@@ -30,15 +30,24 @@ $nav-link-height: 40px;
     padding: 0 30px !important;
     font-size: 15px;
 
+    border: $border-width $border-type transparent;
+
+    span {
+      border-bottom: 2px solid transparent;
+    }
+
     &.active {
-      border: $border-width $border-type $border-color;
-      border-bottom: none;
+      border-color: $border-color;
+      border-bottom-color: transparent;
       background-color: pvar(--submenuColor) !important;
 
       span {
-        border-bottom: 2px solid pvar(--mainColor);
-        font-weight: $font-bold;
+        border-bottom-color: pvar(--mainColor);
       }
+    }
+
+    &:hover:not(.active) {
+      border-color: transparent;
     }
   }
 }
@@ -71,7 +80,7 @@ $nav-link-height: 40px;
 
     /* Hide active tab style to not have a moving tab effect */
     a.nav-link.active {
-      border: none;
+      border-color: transparent;
       background-color: pvar(--mainBackgroundColor) !important;
     }
   }

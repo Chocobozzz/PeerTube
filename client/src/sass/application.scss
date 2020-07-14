@@ -178,14 +178,16 @@ label {
   font-weight: $font-semibold;
   @include disable-default-a-behaviour;
 
+  border-bottom: 2px solid transparent;
+
   &.active, &.title-page-single {
     margin-top: 30px;
     margin-bottom: 25px;
   }
 
   &.active {
-    font-weight: $font-bold;
-    border-bottom: 2px solid pvar(--mainColor);
+    color: pvar(--mainColor) !important;
+    border-bottom-color: pvar(--mainColor);
   }
 
   &.title-page-single {
@@ -194,6 +196,10 @@ label {
 
   &:hover, &:active, &:focus {
     color: pvar(--mainForegroundColor);
+  }
+
+  &:hover:not(.active) {
+    border-bottom-color: pvar(--mainForegroundColor);
   }
 
   @media screen and (max-width: $mobile-view) {
@@ -205,10 +211,10 @@ label {
 .title-page-settings {
   white-space: nowrap;
   font-size: 115%;
-  font-weight: $font-regular;
+  font-weight: $font-semibold;
 
   &.active {
-    font-weight: $font-semibold;
+    color: pvar(--mainColor);
   }
 }
 
@@ -228,9 +234,9 @@ label {
     color: pvar(--mainForegroundColor);
     padding: 5px 15px;
     border-radius: 0.25rem;
+    font-weight: $font-semibold;
 
     &.active {
-      font-weight: $font-semibold;
       background-color: #f0f0f0;
       color: #000;
     }
