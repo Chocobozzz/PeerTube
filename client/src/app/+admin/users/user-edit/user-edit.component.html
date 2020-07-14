@@ -90,6 +90,17 @@
         </div>
       </div>
 
+      <div class="form-group" *ngIf="isCreation()">
+        <label i18n for="channelName">Channel name</label>
+        <input
+          type="text" id="channelName" i18n-placeholder placeholder="john_channel" class="form-control"
+          formControlName="channelName" [ngClass]="{ 'input-error': formErrors['channelName'] }"
+        >
+        <div *ngIf="formErrors.channelName" class="form-error">
+          {{ formErrors.channelName }}
+        </div>
+      </div>
+
       <div class="form-group">
         <label i18n for="email">Email</label>
         <input
