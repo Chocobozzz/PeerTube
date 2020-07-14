@@ -44,6 +44,7 @@ export class UserCreateComponent extends UserEdit implements OnInit {
 
     this.buildForm({
       username: this.userValidatorsService.USER_USERNAME,
+      channelName: this.userValidatorsService.USER_USERNAME,
       email: this.userValidatorsService.USER_EMAIL,
       password: this.isPasswordOptional() ? this.userValidatorsService.USER_PASSWORD_OPTIONAL : this.userValidatorsService.USER_PASSWORD,
       role: this.userValidatorsService.USER_ROLE,
