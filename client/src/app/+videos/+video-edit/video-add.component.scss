@@ -6,6 +6,26 @@ $border-type: solid;
 $border-color: #EAEAEA;
 $nav-link-height: 40px;
 
+.no-upload {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+
+  img {
+    margin-top: 10px;
+    margin-bottom: 75px;
+    width: 220px;
+    height: auto;
+  }
+
+  @media screen and (max-height: 600px) {
+    img {
+      margin-top: 5px;
+      width: 160px;
+    }
+  }
+}
+
 .margin-content {
   padding-top: 20px;
 }

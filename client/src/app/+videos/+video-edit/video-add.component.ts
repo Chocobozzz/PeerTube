@@ -67,6 +67,12 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
     return { canDeactivate: true }
   }
 
+  canUpload () {
+    const { videoQuota, videoQuotaDaily } = this.auth.getUser()
+
+    return (videoQuota > 0 || videoQuota === -1) && (videoQuotaDaily > 0 || videoQuotaDaily === -1)
+  }
+
   isVideoImportHttpEnabled () {
     return this.serverConfig.import.videos.http.enabled
   }

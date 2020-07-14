@@ -1,4 +1,11 @@
-<div class="margin-content">
+<div *ngIf="!canUpload()" class="no-upload">
+  <div class="alert alert-warning" i18n>
+    Sorry, the upload feature is disabled for your account.
+  </div>
+  <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
+</div>
+
+<div *ngIf="canUpload()" class="margin-content">
   <div class="alert alert-warning" *ngIf="isRootUser()" i18n>
     We recommend you to not use the <strong>root</strong> user to publish your videos, since it's the super-admin account of your instance.
     <br />
