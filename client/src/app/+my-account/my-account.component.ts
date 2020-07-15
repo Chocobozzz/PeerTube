@@ -43,6 +43,10 @@ export class MyAccountComponent implements OnInit {
         routerLink: '/my-account/notifications'
       },
       {
+        label: this.i18n('My subscriptions'),
+        routerLink: '/my-account/subscriptions',
+      },
+      {
         label: this.i18n('My ownership changes'),
         routerLink: '/my-account/ownership',
       },
