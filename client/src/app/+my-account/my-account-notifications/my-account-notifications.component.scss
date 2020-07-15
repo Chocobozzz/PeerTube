@@ -3,7 +3,6 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
   font-size: 15px;
   margin-bottom: 20px;
 
@@ -18,7 +17,12 @@
     @include grey-button;
     @include button-with-icon(20px, 3px, -1px);
   }
+
+  .peertube-select-container {
+    @include peertube-select-container(auto);
+  }
 }
+
 
 my-user-notifications {
   font-size: 15px;
