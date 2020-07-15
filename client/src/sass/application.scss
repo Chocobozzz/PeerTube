@@ -171,6 +171,7 @@ label {
 }
 
 .title-page {
+  opacity: 0.6;
   color: pvar(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
@@ -186,7 +187,6 @@ label {
   }
 
   &.active {
-    color: pvar(--mainColor) !important;
     border-bottom-color: pvar(--mainColor);
   }
 
@@ -198,8 +198,8 @@ label {
     color: pvar(--mainForegroundColor);
   }
 
-  &:hover:not(.active) {
-    border-bottom-color: pvar(--mainForegroundColor);
+  &.active, &:hover,  &:active, &:focus, &.title-page-single {
+    opacity: 1;
   }
 
   @media screen and (max-width: $mobile-view) {
@@ -211,11 +211,6 @@ label {
 .title-page-settings {
   white-space: nowrap;
   font-size: 115%;
-  font-weight: $font-semibold;
-
-  &.active {
-    color: pvar(--mainColor);
-  }
 }
 
 .admin-sub-header {
@@ -235,10 +230,14 @@ label {
     padding: 5px 15px;
     border-radius: 0.25rem;
     font-weight: $font-semibold;
+    opacity: 0.6;
 
     &.active {
       background-color: #f0f0f0;
-      color: #000;
+    }
+
+    &.active, &:hover, &:active, &:focus {
+      opacity: 1;
     }
   }
 }

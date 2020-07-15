@@ -155,8 +155,12 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   font-size: 16px !important;
   font-weight: $font-semibold !important;
 
-  .nav-link.active {
-    color: pvar(--mainColor)
+  .nav-link {
+    opacity: 0.6 !important;
+
+    &.active, &:hover, &:active, &:focus {
+      opacity: 1 !important;
+    }
   }
 
   a {
@@ -173,16 +177,16 @@ $icon-font-path: '~@neos21/bootstrap3-glyphicons/assets/fonts/';
   font-weight: $font-semibold;
   border: none;
   border-bottom: 2px solid transparent;
+  opacity: 0.6;
 
   &.active {
-    color: pvar(--mainColor) !important;
+    color: pvar(--mainForegroundColor);
     background-color: pvar(--mainBackgroundColor) !important;
     border-bottom-color: pvar(--mainColor);
   }
 
-  &:hover:not(.active) {
-    color: pvar(--mainColor) !important;
-    border-bottom-color: transparent;
+  &.active, &:hover, &:active, &:focus {
+    opacity: 1;
   }
 }
 
