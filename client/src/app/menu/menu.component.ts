@@ -181,6 +181,12 @@ export class MenuComponent implements OnInit {
     return this.languages.find(lang => lang.id === localeId).label
   }
 
+  isVideoImportEnabled () {
+    const importConfig = this.serverConfig.import.videos
+
+    return importConfig.http.enabled || importConfig.torrent.enabled
+  }
+
   private buildUserLanguages () {
     if (!this.user) {
       this.videoLanguages = []
