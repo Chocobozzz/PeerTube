@@ -17,6 +17,4 @@ export class MyAccountNotificationsComponent {
   hasUnreadNotifications () {
     return this.userNotification.notifications.filter(n => n.read === false).length !== 0
   }
-
-  onNotificationSortTypeChanged () {}
 }

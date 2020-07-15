@@ -50,19 +50,41 @@
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th style="width: 40px"></th>
-      <th pResizableColumn i18n pSortableColumn="username">Username <p-sortIcon field="username"></p-sortIcon></th>
-      <th i18n>Email</th>
-      <th style="width: 140px;" i18n pSortableColumn="videoQuotaUsed">Video quota <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
-      <th style="width: 120px;" i18n>Role</th>
-      <th style="width: 140px;" pResizableColumn i18n>Auth plugin</th>
-      <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 60px;"></th>
+      <th *ngIf="getColumn('username')" pResizableColumn i18n pSortableColumn="username">{{ getColumn('username').label }} <p-sortIcon field="username"></p-sortIcon></th>
+      <th *ngIf="getColumn('email')" i18n>{{ getColumn('email').label }}</th>
+      <th *ngIf="getColumn('quota')" style="width: 160px;" i18n pSortableColumn="videoQuotaUsed">{{ getColumn('quota').label }} <p-sortIcon field="videoQuotaUsed"></p-sortIcon></th>
+      <th *ngIf="getColumn('quotaDaily')" style="width: 160px;" i18n>{{ getColumn('quotaDaily').label }}</th>
+      <th *ngIf="getColumn('role')" style="width: 120px;" i18n pSortableColumn="role">{{ getColumn('role').label }} <p-sortIcon field="role"></p-sortIcon></th>
+      <th *ngIf="getColumn('pluginAuth')" style="width: 140px;" pResizableColumn i18n>{{ getColumn('pluginAuth').label }}</th>
+      <th *ngIf="getColumn('createdAt')" style="width: 150px;" i18n pSortableColumn="createdAt">{{ getColumn('createdAt').label }} <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th *ngIf="getColumn('lastLoginDate')" style="width: 150px;" i18n pSortableColumn="lastLoginDate">{{ getColumn('lastLoginDate').label }} <p-sortIcon field="lastLoginDate"></p-sortIcon></th>
+      <th style="width: 60px;">
+        <div class="c-hand" ngbDropdown placement="bottom-right auto" container="body" autoClose="outside">
+          <my-global-icon iconName="columns" ngbDropdownToggle></my-global-icon>
+  
+          <div role="menu" class="dropdown-menu" ngbDropdownMenu>
+            <div class="dropdown-header" i18n>Table parameters</div>
+            <div ngbDropdownItem class="dropdown-item">
+              <p-multiSelect
+                [options]="columns" [showToggleAll]="true" [(ngModel)]="selectedColumns" optionLabel="label"
+                emptyFilterMessage="No matching column found" i18n-emptyFilterMessage [filter]="false"
+                selectedItemsLabel="{0} columns displayed" i18n-emptyFilterMessage [showHeader]="false"
+                [maxSelectedLabels]="4"
+              ></p-multiSelect>
+            </div>
+            <div ngbDropdownItem class="dropdown-item">
+              <my-peertube-checkbox inputName="highlightBannedUsers" [(ngModel)]="highlightBannedUsers"
+                i18n-labelText labelText="Highlight banned users"></my-peertube-checkbox>
+            </div>
+          </div>
+        </div>
+      </th>
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-expanded="expanded" let-user>
 
-    <tr [pSelectableRow]="user" [ngClass]="{ banned: user.blocked }">
+    <tr [pSelectableRow]="user" [ngClass]="{ banned: highlightBannedUsers && user.blocked }">
       <td>
         <p-tableCheckbox [value]="user"></p-tableCheckbox>
       </td>
@@ -73,7 +95,7 @@
         </span>
       </td>
 
-      <td>
+      <td *ngIf="getColumn('username')">
         <a i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer" [routerLink]="[ '/accounts/' + user.username ]">
           <div class="chip two-lines">
             <img
@@ -83,17 +105,16 @@
               alt="Avatar"
             >
             <div>
-              <span class="user-table-primary-text">
-                <span *ngIf="user.blocked" i18n-title title="The user was banned" class="glyphicon glyphicon-ban-circle"></span>
-                {{ user.account.displayName }}
-              </span>
+              <span class="user-table-primary-text">{{ user.account.displayName }}</span>
               <span class="text-muted">{{ user.username }}</span>
             </div>
           </div>
         </a>
       </td>
 
-      <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus" [title]="user.email">{{ user.email }}</td>
+      <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus" [title]="user.email">
+        <a class="table-email" [href]="'mailto:' + user.email">{{ user.email }}</a>
+      </td>
 
       <ng-template #emailWithVerificationStatus>
         <td *ngIf="user.emailVerified === false; else emailVerifiedNotFalse" i18n-title title="User's email must be verified to login">
@@ -106,14 +127,38 @@
         </ng-template>
       </ng-template>
 
-      <td>{{ user.videoQuotaUsed }} / {{ user.videoQuota }}</td>
-      <td>{{ user.roleLabel }}</td>
+      <td *ngIf="getColumn('quota')">
+        <div class="progress" i18n-title title="Total video quota">
+          <div class="progress-bar" role="progressbar" [style]="{ width: getUserVideoQuotaPercentage(user) + '%' }"
+               [attr.aria-valuenow]="user.rawVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuota">
+          </div>
+          <span>{{ user.videoQuotaUsed }}</span>
+          <span>{{ user.videoQuota }}</span>
+        </div>
+      </td>
 
-      <td>
+      <td *ngIf="getColumn('quotaDaily')">
+        <div class="progress" i18n-title title="Total daily video quota">
+          <div class="progress-bar secondary" role="progressbar" [style]="{ width: getUserVideoQuotaDailyPercentage(user) + '%' }"
+               [attr.aria-valuenow]="user.rawVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.rawVideoQuotaDaily">
+          </div>
+          <span>{{ user.videoQuotaUsedDaily }}</span>
+          <span>{{ user.videoQuotaDaily }}</span>
+        </div>
+      </td>
+
+      <td *ngIf="getColumn('role')">
+        <span *ngIf="user.blocked" class="badge badge-banned" i18n-title title="The user was banned">{{ user.roleLabel }}</span>
+        <span *ngIf="!user.blocked" class="badge" [ngClass]="getRoleClass(user.role)">{{ user.roleLabel }}</span>
+      </td>
+
+      <td *ngIf="getColumn('pluginAuth')">
         <ng-container *ngIf="user.pluginAuth">{{ user.pluginAuth }}</ng-container>
       </td>
 
-      <td [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
+      <td *ngIf="getColumn('createdAt')" [title]="user.createdAt">{{ user.createdAt | date: 'short' }}</td>
+
+      <td *ngIf="getColumn('lastLoginDate')" [title]="user.lastLoginDate">{{ user.lastLoginDate | date: 'short' }}</td>
 
       <td class="action-cell">
         <my-user-moderation-dropdown
