@@ -45,8 +45,12 @@
         </a>
       </td>
 
-      <td *ngIf="follow.state === 'accepted'" i18n>Accepted</td>
-      <td *ngIf="follow.state === 'pending'" i18n>Pending</td>
+      <td *ngIf="follow.state === 'accepted'">
+        <span class="badge badge-green" i18n>Accepted</span>
+      </td>
+      <td *ngIf="follow.state === 'pending'">
+        <span class="badge badge-yellow" i18n>Pending</span>
+      </td>
 
       <td>{{ follow.createdAt | date: 'short' }}</td>
       <td>

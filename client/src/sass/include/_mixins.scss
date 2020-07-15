@@ -332,9 +332,7 @@
 
   select {
     padding: 0 35px 0 12px;
-    width: calc(100% + 2px);
     position: relative;
-    left: 1px;
     border: 1px solid #C6C6C6;
     background: transparent none;
     appearance: none;
@@ -692,7 +690,21 @@
   overflow: hidden;
   font-size: 0.75rem;
   border-radius: 0.25rem;
-  color: gray;
+  isolation: isolate;
+  position: relative;
+
+  span {
+    position: absolute;
+    color: rgb(92, 92, 92);
+    top: -1px;
+
+    &:nth-of-type(1) {
+      left: .2rem;
+    }
+    &:nth-of-type(2) {
+      right: .2rem;
+    }
+  }
 
   .progress-bar {
     color: pvar(--mainBackgroundColor);
@@ -703,24 +715,10 @@
     text-align: center;
     white-space: nowrap;
     transition: width 0.6s ease;
-    isolation: isolate;
-
-    &:after {
-      content: attr(valuenow-formatted);
-      position: absolute;
-      margin-left: .2rem;
-      mix-blend-mode: screen;
-      color: gray;
-    }
 
     &.secondary {
       background-color: pvar(--secondaryColor);
     }
-  }
-
-  .progress-bar + span {
-    position: relative;
-    top: -1px;
   }
 }
 

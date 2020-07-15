@@ -54,6 +54,7 @@ export enum ScopeNames {
 
 type AvailableForListOptions = {
   actorId: number
+  search?: string
 }
 
 type AvailableWithStatsOptions = {
@@ -309,15 +310,23 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     return VideoChannelModel.count(query)
   }
 
-  static listForApi (actorId: number, start: number, count: number, sort: string) {
+  static listForApi (parameters: {
+    actorId: number
+    start: number
+    count: number
+    sort: string
+    search?: string
+  }) {
+    const { actorId, search } = parameters
+
     const query = {
-      offset: start,
-      limit: count,
-      order: getSort(sort)
+      offset: parameters.start,
+      limit: parameters.count,
+      order: getSort(parameters.sort)
     }
 
     const scopes = {
-      method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
+      method: [ ScopeNames.FOR_API, { actorId, search } as AvailableForListOptions ]
     }
     return VideoChannelModel
       .scope(scopes)

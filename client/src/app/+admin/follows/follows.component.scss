@@ -4,3 +4,7 @@
   flex-grow: 0;
   margin-right: 30px;
 }
+
+.badge {
+  @include table-badge;
+}

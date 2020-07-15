@@ -4,7 +4,7 @@ import { AuthService, ConfirmService, Notifier, RestPagination, RestTable, Serve
 import { Actor, DropdownAction } from '@app/shared/shared-main'
 import { UserBanModalComponent } from '@app/shared/shared-moderation'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { ServerConfig, User } from '@shared/models'
+import { ServerConfig, User, UserRole } from '@shared/models'
 import { Params, Router, ActivatedRoute } from '@angular/router'
 
 @Component({
@@ -19,9 +19,12 @@ export class UserListComponent extends RestTable implements OnInit {
   totalRecords = 0
   sort: SortMeta = { field: 'createdAt', order: 1 }
   pagination: RestPagination = { count: this.rowsPerPage, start: 0 }
+  highlightBannedUsers = false
 
   selectedUsers: User[] = []
   bulkUserActions: DropdownAction<User[]>[][] = []
+  columns: { key: string, label: string }[]
+  _selectedColumns: { key: string, label: string }[]
 
   private serverConfig: ServerConfig
 
@@ -44,6 +47,14 @@ export class UserListComponent extends RestTable implements OnInit {
 
   get requiresEmailVerification () {
     return this.serverConfig.signup.requiresEmailVerification
+  }
+
+  get selectedColumns () {
+    return this._selectedColumns
+  }
+
+  set selectedColumns (val) {
+    this._selectedColumns = val
   }
 
   ngOnInit () {
@@ -92,10 +103,45 @@ export class UserListComponent extends RestTable implements OnInit {
         }
       ]
     ]
+
+    this.columns = [
+      { key: 'username', label: 'Username' },
+      { key: 'email', label: 'Email' },
+      { key: 'quota', label: 'Video quota' },
+      { key: 'role', label: 'Role' },
+      { key: 'createdAt', label: 'Created' }
+    ]
+    this.selectedColumns = [...this.columns]
+    this.columns.push({ key: 'quotaDaily', label: 'Daily quota' })
+    this.columns.push({ key: 'pluginAuth', label: 'Auth plugin' })
+    this.columns.push({ key: 'lastLoginDate', label: 'Last login' })
   }
 
   getIdentifier () {
     return 'UserListComponent'
+  }
+
+  getRoleClass (role: UserRole) {
+    switch (role) {
+      case UserRole.ADMINISTRATOR:
+        return 'badge-purple'
+      case UserRole.MODERATOR:
+        return 'badge-blue'
+      default:
+        return 'badge-yellow'
+    }
+  }
+
+  getColumn (key: string) {
+    return this.selectedColumns.find((col: any) => col.key === key)
+  }
+
+  getUserVideoQuotaPercentage (user: User & { rawVideoQuota: number, rawVideoQuotaUsed: number}) {
+    return user.rawVideoQuotaUsed * 100 / user.rawVideoQuota
+  }
+
+  getUserVideoQuotaDailyPercentage (user: User & { rawVideoQuotaDaily: number, rawVideoQuotaUsedDaily: number}) {
+    return user.rawVideoQuotaUsedDaily * 100 / user.rawVideoQuotaDaily
   }
 
   openBanUserModal (users: User[]) {

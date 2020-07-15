@@ -374,12 +374,22 @@ export class UserService {
   private formatUser (user: UserServerModel) {
     let videoQuota
     if (user.videoQuota === -1) {
-      videoQuota = this.i18n('Unlimited')
+      videoQuota = '∞'
     } else {
       videoQuota = this.bytesPipe.transform(user.videoQuota, 0)
     }
 
     const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
+
+    let videoQuotaDaily
+    let videoQuotaUsedDaily
+    if (user.videoQuotaDaily === -1) {
+      videoQuotaDaily = '∞'
+      videoQuotaUsedDaily = this.bytesPipe.transform(0, 0)
+    } else {
+      videoQuotaDaily = this.bytesPipe.transform(user.videoQuotaDaily, 0)
+      videoQuotaUsedDaily = this.bytesPipe.transform(user.videoQuotaUsedDaily || 0, 0)
+    }
 
     const roleLabels: { [ id in UserRole ]: string } = {
       [UserRole.USER]: this.i18n('User'),
@@ -390,7 +400,13 @@ export class UserService {
     return Object.assign(user, {
       roleLabel: roleLabels[user.role],
       videoQuota,
-      videoQuotaUsed
+      videoQuotaUsed,
+      rawVideoQuota: user.videoQuota,
+      rawVideoQuotaUsed: user.videoQuotaUsed,
+      videoQuotaDaily,
+      videoQuotaUsedDaily,
+      rawVideoQuotaDaily: user.videoQuotaDaily,
+      rawVideoQuotaUsedDaily: user.videoQuotaUsedDaily
     })
   }
 }

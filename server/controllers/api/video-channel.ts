@@ -16,7 +16,7 @@ import {
   videoPlaylistsSortValidator
 } from '../../middlewares'
 import { VideoChannelModel } from '../../models/video/video-channel'
-import { videoChannelsNameWithHostValidator, videosSortValidator } from '../../middlewares/validators'
+import { videoChannelsNameWithHostValidator, videosSortValidator, videoChannelsOwnSearchValidator } from '../../middlewares/validators'
 import { sendUpdateActor } from '../../lib/activitypub/send'
 import { VideoChannelCreate, VideoChannelUpdate } from '../../../shared'
 import { createLocalVideoChannel, federateAllVideosOfChannel } from '../../lib/video-channel'
@@ -48,6 +48,7 @@ videoChannelRouter.get('/',
   videoChannelsSortValidator,
   setDefaultSort,
   setDefaultPagination,
+  videoChannelsOwnSearchValidator,
   asyncMiddleware(listVideoChannels)
 )
 
@@ -114,7 +115,13 @@ export {
 
 async function listVideoChannels (req: express.Request, res: express.Response) {
   const serverActor = await getServerActor()
-  const resultList = await VideoChannelModel.listForApi(serverActor.id, req.query.start, req.query.count, req.query.sort)
+  const resultList = await VideoChannelModel.listForApi({
+    actorId: serverActor.id,
+    start: req.query.start,
+    count: req.query.count,
+    sort: req.query.sort,
+    search: req.query.search
+  })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
 }

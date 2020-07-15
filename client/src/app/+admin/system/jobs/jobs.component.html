@@ -26,10 +26,10 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px"></th>
-      <th class="job-id" i18n>ID</th>
-      <th class="job-type" i18n>Type</th>
-      <th class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th class="job-state" i18n>State</th>
+      <th style="width: 100%" class="job-id" i18n>ID</th>
+      <th style="width: 200px" class="job-type" i18n>Type</th>
+      <th style="width: 150px" class="job-date" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
+      <th style="width: 150px" class="job-state" i18n>State</th>
     </tr>
   </ng-template>
 
@@ -43,7 +43,7 @@
 
       <td class="job-id" [title]="job.id">{{ job.id }}</td>
       <td class="job-type">{{ job.type }}</td>
-      <td class="job-date">{{ job.createdAt }}</td>
+      <td class="job-date">{{ job.createdAt | date: 'short' }}</td>
       <td class="job-state" *ngIf="job.state === 'delayed'" class="text-muted"><span class="glyphicon glyphicon-repeat"></span> <span i18n>Delayed</span></td>
       <td class="job-state" *ngIf="job.state === 'waiting'" class="text-warning"><span class="glyphicon glyphicon-hourglass"></span> <span i18n>Will start soon...</span></td>
       <td class="job-state" *ngIf="job.state === 'active'" class="text-warning"><span class="glyphicon glyphicon-cog"></span> <span i18n>Running...</span></td>

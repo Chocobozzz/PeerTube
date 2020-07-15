@@ -43,7 +43,8 @@ export class VideoChannelService {
   listAccountVideoChannels (
     account: Account,
     componentPagination?: ComponentPaginationLight,
-    withStats = false
+    withStats = false,
+    search?: string
   ): Observable<ResultList<VideoChannel>> {
     const pagination = componentPagination
       ? this.restService.componentPaginationToRestPagination(componentPagination)
@@ -52,6 +53,10 @@ export class VideoChannelService {
     let params = new HttpParams()
     params = this.restService.addRestGetParams(params, pagination)
     params = params.set('withStats', withStats + '')
+
+    if (search) {
+      params = params.set('search', search)
+    }
 
     const url = AccountService.BASE_ACCOUNT_URL + account.nameWithHost + '/video-channels'
     return this.authHttp.get<ResultList<VideoChannelServer>>(url, { params })
