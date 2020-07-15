@@ -3673,7 +3673,7 @@
       </trans-unit>
       <trans-unit id="90868353e7e6f5994109ee1011131cefa992116c">
         <source>Moderation</source>
-        <target>Reguligo</target>
+        <target>Reguligado</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -4282,7 +4282,7 @@
       </trans-unit>
       <trans-unit id="fc06c11db79db253b0d0f1b070cf48e039e8a3a8" datatype="html">
         <source>Plugin npm package (new window)</source>
-        <target state="new">Plugin npm package (new window)</target>
+        <target state="translated">npm-pakaĵo de kromprogramo (nova fenestro)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/plugins/plugin-search/plugin-search.component.html</context>
           <context context-type="linenumber">44</context>
@@ -4542,7 +4542,7 @@
       </trans-unit>
       <trans-unit id="06119c0230042048f8a3fd6aa9260934b6fa5878">
         <source>Moderation information</source>
-        <target>Reguligaj informoj</target>
+        <target>Informoj pri reguligado</target>
         <context-group name="null">
           <context context-type="linenumber">76</context>
         </context-group>
@@ -4703,7 +4703,7 @@
       </trans-unit>
       <trans-unit id="c5d4e7a320b88bdcf7fb2b670b81173048af3956" datatype="html">
         <source>BROADCAST MESSAGE</source>
-        <target state="new">BROADCAST MESSAGE</target>
+        <target state="translated">DISSENDA MESAĜO</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">282</context></context-group>
       </trans-unit>
       <trans-unit id="3a10a32f96683addb9e1335cdba7d6685587fe6e" datatype="html">
@@ -4713,17 +4713,17 @@
       </trans-unit>
       <trans-unit id="58be3e0a0ef272fbd6e715b44059c3d89b332d9b" datatype="html">
         <source>Enable broadcast message</source>
-        <target state="new">Enable broadcast message</target>
+        <target state="translated">Ŝalti dissendan mesaĝon</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">295</context></context-group>
       </trans-unit>
       <trans-unit id="6938c4a91284a1bc8b61b0d8085d9985e46c9f5b" datatype="html">
         <source>Allow users to dismiss the broadcast message</source>
-        <target state="new">Allow users to dismiss the broadcast message </target>
+        <target state="translated">Permesi al uzantoj forkaŝi la dissendan mesaĝon</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">302</context></context-group>
       </trans-unit>
       <trans-unit id="dd24d21f2898608f623ae2513e1eb0a08a442f7a" datatype="html">
         <source>Broadcast message level</source>
-        <target state="new">Broadcast message level</target>
+        <target state="translated">Nivelo de dissenda mesaĝo</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context><context context-type="linenumber">307</context></context-group>
       </trans-unit>
       <trans-unit id="ccac601bf473fa28c9ac46794f1cd40542f74347" datatype="html">
@@ -4952,9 +4952,7 @@
       </trans-unit>
       <trans-unit id="0c43b766533e99e88f65a9f1c8d63fb1926ab5cc" datatype="html">
         <source>You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-                        You should only use moderated search indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-                      </target>
+        <target state="translated">Dum serioza uzado vi devus uzi nur reguligatajn serĉindeksojn, aŭ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>gastigi vian propran<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">492</context>
@@ -5027,9 +5025,7 @@
       </trans-unit>
       <trans-unit id="f183764323fcffd1b3ba4d13cdc21ec8971472cc" datatype="html">
         <source>You should only follow moderated indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </source>
-        <target state="new">
-                          You should only follow moderated indexes in production, or <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>host your own<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>.
-                        </target>
+        <target state="translated">Dum serioza uzado vi devus nur aboni reguligatajn indeksojn, aŭ <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>gastigi vian propran<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>. </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+admin/config/edit-custom-config/edit-custom-config.component.html</context>
           <context context-type="linenumber">590</context>
@@ -10541,7 +10537,7 @@
       </trans-unit>
       <trans-unit id="38c877fb0a5fdcadc379256953ad2d1eb8233fdf">
         <source>Moderator</source>
-        <target>Reguliganto</target>
+        <target>Reguligisto</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
