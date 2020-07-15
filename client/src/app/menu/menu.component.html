@@ -21,13 +21,6 @@
 
             <div class="dropdown-divider"></div>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
-              <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>My account</ng-container>
-            </a>
-
-            <div class="dropdown-divider"></div>
-
             <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
               <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
               <ng-container i18n>Interface: {{ language }}</ng-container>
@@ -68,7 +61,7 @@
       </div>
 
       <div *ngIf="isLoggedIn" class="panel-block">
-        <div i18n class="block-title">MY LIBRARY</div>
+        <div i18n class="block-title">MY ACCOUNT</div>
 
         <a routerLink="/my-account/video-channels" routerLinkActive="active">
           <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
@@ -93,6 +86,11 @@
         <a *ngIf="isVideoImportEnabled()" routerLink="/my-account/video-imports" routerLinkActive="active">
           <my-global-icon iconName="cloud-download" aria-hidden="true"></my-global-icon>
           <ng-container i18n>Imports</ng-container>
+        </a>
+
+        <a routerLink="/my-account" routerLinkActive="active">
+          <my-global-icon iconName="more-horizontal" aria-hidden="true"></my-global-icon>
+          <ng-container i18n>More settings</ng-container>
         </a>
       </div>
 
