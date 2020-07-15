@@ -22,11 +22,8 @@
             <div class="dropdown-divider"></div>
 
             <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
-              <my-global-icon iconName="user" aria-hidden="true"></my-global-icon> <ng-container i18n>Account settings</ng-container>
-            </a>
-
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/video-channels">
-              <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon> <ng-container i18n>Channels settings</ng-container>
+              <my-global-icon iconName="user" aria-hidden="true"></my-global-icon>
+              <ng-container i18n>My account</ng-container>
             </a>
 
             <div class="dropdown-divider"></div>
@@ -56,15 +53,7 @@
               <input type="checkbox" [checked]="user.webTorrentEnabled"/><label class="ml-auto" for="switch">Toggle p2p</label>
             </a>
 
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account">
-              <my-global-icon iconName="more-horizontal" aria-hidden="true"></my-global-icon> <ng-container i18n>More account settings</ng-container>
-            </a>
-
             <div class="dropdown-divider"></div>
-
-            <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openHotkeysCheatSheet()">
-              <i class="icon icon-shortcuts" aria-hidden="true"></i> <ng-container i18n>Keyboard shortcuts</ng-container>
-            </a>
 
             <a ngbDropdownItem ngbDropdownToggle (click)="logout($event)" class="dropdown-item" href="#">
               <my-global-icon iconName="sign-out" aria-hidden="true"></my-global-icon> <ng-container i18n>Log out</ng-container>
