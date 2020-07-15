@@ -356,6 +356,17 @@
       color: #000;
     }
   }
+
+  &.peertube-select-button {
+    @include grey-button;
+
+    select,
+    option {
+      font-weight: $font-semibold;
+      color: pvar(--greyForegroundColor);
+      border: none;
+    }
+  }
 }
 
 // Thanks: https://codepen.io/triss90/pen/XNEdRe/
@@ -454,6 +465,49 @@
   }
 }
 
+@mixin table-badge {
+  border-radius: 2px;
+  padding: 1/4em 1/2em;
+  text-transform: uppercase;
+  font-weight: $font-bold;
+  font-size: 12px;
+  letter-spacing: 1/3px;
+
+  &.badge-banned,
+  &.badge-red {
+    background-color: #ffcdd2;
+    color: #c63737;
+  }
+
+  &.badge-banned {
+    text-decoration: line-through;
+  }
+
+  &.badge-yellow {
+    background-color: #feedaf;
+    color: #8a5340;
+  }
+
+  &.badge-brown {
+    background-color: #ffd8b2;
+    color: #805b36;
+  }
+
+  &.badge-green {
+    background-color: #c8e6c9;
+    color: #256029;
+  }
+
+  &.badge-blue {
+    background-color: #b3e5fc;
+    color: #23547b;
+  }
+
+  &.badge-purple {
+    background-color: #eccfff;
+    color: #694382;
+  }
+}
 
 @mixin avatar ($size) {
   object-fit: cover;
@@ -638,6 +692,7 @@
   overflow: hidden;
   font-size: 0.75rem;
   border-radius: 0.25rem;
+  color: gray;
 
   .progress-bar {
     color: pvar(--mainBackgroundColor);
@@ -648,10 +703,24 @@
     text-align: center;
     white-space: nowrap;
     transition: width 0.6s ease;
+    isolation: isolate;
+
+    &:after {
+      content: attr(valuenow-formatted);
+      position: absolute;
+      margin-left: .2rem;
+      mix-blend-mode: screen;
+      color: gray;
+    }
 
     &.secondary {
       background-color: pvar(--secondaryColor);
     }
+  }
+
+  .progress-bar + span {
+    position: relative;
+    top: -1px;
   }
 }
 

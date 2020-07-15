@@ -5,7 +5,15 @@
     Notification preferences
   </a>
 
-  <button class="btn" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
+  <div class="peertube-select-container peertube-select-button ml-2">
+    <select [(ngModel)]="notificationSortType" (ngModelChange)="onNotificationSortTypeChanged()" class="form-control">
+      <option value="undefined" disabled>Sort by</option>
+      <option value="created" i18n>Newest first</option>
+      <option value="unread-created" i18n>Unread first</option>
+    </select>
+  </div>
+
+  <button class="btn ml-auto" [disabled]="!hasUnreadNotifications()" (click)="markAllAsRead()">
     <ng-container *ngIf="hasUnreadNotifications()">
       <my-global-icon iconName="inbox-full" aria-hidden="true"></my-global-icon>
 

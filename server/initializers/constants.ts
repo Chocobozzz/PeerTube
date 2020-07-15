@@ -55,7 +55,7 @@ const WEBSERVER = {
 
 // Sortable columns per schema
 const SORTABLE_COLUMNS = {
-  USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt' ],
+  USERS: [ 'id', 'username', 'videoQuotaUsed', 'createdAt', 'lastLoginDate', 'role' ],
   USER_SUBSCRIPTIONS: [ 'id', 'createdAt' ],
   ACCOUNTS: [ 'createdAt' ],
   JOBS: [ 'createdAt' ],
@@ -78,7 +78,7 @@ const SORTABLE_COLUMNS = {
   ACCOUNTS_BLOCKLIST: [ 'createdAt' ],
   SERVERS_BLOCKLIST: [ 'createdAt' ],
 
-  USER_NOTIFICATIONS: [ 'createdAt' ],
+  USER_NOTIFICATIONS: [ 'createdAt', 'read' ],
 
   VIDEO_PLAYLISTS: [ 'displayName', 'createdAt', 'updatedAt' ],
 

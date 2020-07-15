@@ -8,6 +8,8 @@ import { UserNotificationsComponent } from '@app/shared/shared-main'
 export class MyAccountNotificationsComponent {
   @ViewChild('userNotification', { static: true }) userNotification: UserNotificationsComponent
 
+  notificationSortType = 'created'
+
   markAllAsRead () {
     this.userNotification.markAllAsRead()
   }
@@ -15,4 +17,6 @@ export class MyAccountNotificationsComponent {
   hasUnreadNotifications () {
     return this.userNotification.notifications.filter(n => n.read === false).length !== 0
   }
+
+  onNotificationSortTypeChanged () {}
 }

@@ -92,6 +92,11 @@ p-table {
       &:last-child td {
         border-bottom: none !important;
       }
+
+      &:focus + tr > td,
+      &:focus > td {
+        box-shadow: none !important;
+      }
     }
 
     .expander {
