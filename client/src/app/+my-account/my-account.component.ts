@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { Router } from '@angular/router'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
 
@@ -10,7 +11,8 @@ import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdo
 export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
 
-  constructor (
+  constructor(
+    private router: Router,
     private i18n: I18n
   ) { }
 
@@ -46,5 +48,25 @@ export class MyAccountComponent implements OnInit {
       },
       blocklistEntries
     ]
+  }
+
+  get menuEntriesRouterLinks (): string[] {
+    let routerLinks: string[] = []
+
+    for (const menuEntry of this.menuEntries) {
+      if (menuEntry.routerLink) {
+        routerLinks = [...routerLinks, menuEntry.routerLink]
+      }
+
+      if (menuEntry.children) {
+        routerLinks = [...routerLinks, ...menuEntry.children.map(child => child.routerLink)]
+      }
+    }
+
+    return routerLinks
+  }
+
+  routeExistsInMenuEntries () {
+    return this.menuEntriesRouterLinks.includes(this.router.url)
   }
 }

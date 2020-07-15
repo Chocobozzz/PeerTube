@@ -1,5 +1,5 @@
 <div class="row">
-  <my-top-menu-dropdown [menuEntries]="menuEntries"></my-top-menu-dropdown>
+  <my-top-menu-dropdown *ngIf="routeExistsInMenuEntries()" [menuEntries]="menuEntries"></my-top-menu-dropdown>
 
   <div class="margin-content pb-5">
     <router-outlet></router-outlet>

@@ -47,9 +47,15 @@
   }
 }
 
-@media screen and (max-width: $small-view) {
+@media screen and (max-width: #{breakpoint(lg)}) {
   .video-playlists-header {
     text-align: center;
+    align-items: center;
+    flex-direction: column;
+
+    input[type=text] {
+      margin-bottom: 12px;
+    }
   }
 
   .video-playlist {
@@ -72,9 +78,9 @@
   }
 }
 
-@media only screen and (min-width: $mobile-view) and (max-width: $small-view) {
+@media only screen and (min-width: $mobile-view) and (max-width: #{breakpoint(lg)}) {
   .video-playlists-header {
-    input[type=text] {
+    input[type=text], a {
       width: 42% !important;
     }
   }
@@ -82,11 +88,8 @@
 
 @media screen and (max-width: $mobile-view) {
   .video-playlists-header {
-    flex-direction: column;
-
-    input[type=text] {
+    input[type=text], a {
       width: 100% !important;
-      margin-bottom: 12px;
     }
   }
 }

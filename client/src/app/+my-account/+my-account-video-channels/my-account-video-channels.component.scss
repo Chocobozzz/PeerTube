@@ -56,8 +56,15 @@
 }
 
 .video-channels-header {
-  text-align: right;
   margin: 20px 0 50px;
+  display: flex;
+  justify-content: space-between;
+
+  h1 {
+    flex: 1;
+    font-size: 1.5rem;
+    text-align: left;
+  }
 }
 
 ::ng-deep .chartjs-render-monitor {
@@ -111,5 +118,11 @@
     .video-channel-buttons {
       float: right;
     }
+  }
+}
+
+@media screen and (max-width: $mobile-view) {
+  .video-channels-header {
+    flex-direction: column;
   }
 }

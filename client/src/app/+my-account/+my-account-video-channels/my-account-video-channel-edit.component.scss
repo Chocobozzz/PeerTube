@@ -54,6 +54,8 @@ textarea {
 
 .breadcrumb {
   @include breadcrumb;
+
+  margin-top: 20px;
 }
 
 @media screen and (max-width: $small-view) {

@@ -1,6 +1,12 @@
 @import '_variables';
 @import '_mixins';
 
+h1 {
+  font-size: 1.5rem;
+  text-align: left;
+  margin: 20px 0 50px;
+}
+
 pre {
   font-size: 11px;
 }
