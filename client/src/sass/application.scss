@@ -135,12 +135,13 @@ label {
   .sub-menu {
     background-color: pvar(--submenuColor);
     width: 100%;
-    height: 81px;
-    margin-bottom: $sub-menu-margin-bottom;
+    height: $sub-menu-height;
     display: flex;
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
     padding-right: $not-expanded-horizontal-margins;
+    position: fixed;
+    z-index: 1;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
