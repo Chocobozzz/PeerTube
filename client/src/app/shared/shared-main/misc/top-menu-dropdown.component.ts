@@ -33,7 +33,6 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
   isModalOpened = false
   currentMenuEntryIndex: number
 
-  private openedOnHover = false
   private routeSub: Subscription
 
   constructor (
@@ -68,30 +67,8 @@ export class TopMenuDropdownComponent implements OnInit, OnDestroy {
     if (this.routeSub) this.routeSub.unsubscribe()
   }
 
-  openDropdownOnHover (dropdown: NgbDropdown) {
-    this.openedOnHover = true
-    dropdown.open()
-
-    // Menu was closed
-    dropdown.openChange
-            .pipe(take(1))
-            .subscribe(() => this.openedOnHover = false)
-  }
-
   dropdownAnchorClicked (dropdown: NgbDropdown) {
-    if (this.openedOnHover) {
-      this.openedOnHover = false
-      return
-    }
-
     return dropdown.toggle()
-  }
-
-  closeDropdownIfHovered (dropdown: NgbDropdown) {
-    if (this.openedOnHover === false) return
-
-    dropdown.close()
-    this.openedOnHover = false
   }
 
   openModal (index: number) {
