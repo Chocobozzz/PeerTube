@@ -1,4 +1,7 @@
-<h1 i18n>Reports</h1>
+<h1>
+  <my-global-icon iconName="flag" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Reports</ng-container>
+</h1>
 
 <p-table
   [value]="abuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"

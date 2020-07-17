@@ -1,4 +1,7 @@
-<h1 i18n>Muted servers</h1>
+<h1>
+  <my-global-icon iconName="server" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>Muted servers</ng-container>
+</h1>
 
 <p-table
   [value]="blockedServers" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
