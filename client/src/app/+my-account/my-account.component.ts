@@ -45,7 +45,7 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('My subscriptions'),
           routerLink: '/my-account/subscriptions',
-          iconName: 'inbox-full'
+          iconName: 'subscriptions'
         },
         {
           label: this.i18n('My history'),
@@ -69,17 +69,17 @@ export class MyAccountComponent implements OnInit {
         {
           label: this.i18n('Muted accounts'),
           routerLink: '/my-account/blocklist/accounts',
-          iconName: 'user'
+          iconName: 'user-x'
         },
         {
           label: this.i18n('Muted servers'),
           routerLink: '/my-account/blocklist/servers',
-          iconName: 'server'
+          iconName: 'peertube-x'
         },
         {
           label: this.i18n('Ownership changes'),
           routerLink: '/my-account/ownership',
-          iconName: 'ownership-change'
+          iconName: 'download'
         }
       ]
     }
