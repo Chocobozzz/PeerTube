@@ -63,14 +63,14 @@ export class AdminComponent implements OnInit {
       moderationItems.children.push({
         label: this.i18n('Muted accounts'),
         routerLink: '/admin/moderation/blocklist/accounts',
-        iconName: 'user'
+        iconName: 'user-x'
       })
     }
     if (this.hasServersBlocklistRight()) {
       moderationItems.children.push({
         label: this.i18n('Muted servers'),
         routerLink: '/admin/moderation/blocklist/servers',
-        iconName: 'server'
+        iconName: 'peertube-x'
       })
     }
 
