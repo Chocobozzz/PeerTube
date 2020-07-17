@@ -36,6 +36,7 @@ async function run () {
     console.log(' * `support` by Chocobozzz (CC-BY)')
     console.log(' * `language` by Aaron Jin (CC-BY)')
     console.log(' * `video-language` by Rigel Kent (CC-BY)')
+    console.log(' * `peertube-x` by Solen DP (CC-BY)')
   }
 }
 
