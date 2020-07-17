@@ -1,4 +1,5 @@
 @import '_variables';
+@import '_mixins';
 
 .row {
   flex-direction: column;
@@ -8,10 +9,5 @@
     flex-grow: 1;
   }
 
-  ::ng-deep h1 {
-    font-size: 1.5rem;
-    border-bottom: 2px solid $grey-background-color;
-    padding-bottom: 15px;
-    margin-bottom: $sub-menu-margin-bottom;
-  }
+  @include sub-menu-h1;
 }
