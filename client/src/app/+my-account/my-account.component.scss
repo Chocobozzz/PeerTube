@@ -1,8 +1,17 @@
+@import '_variables';
+
 .row {
   flex-direction: column;
   width: 100%;
 
   & > my-top-menu-dropdown:nth-child(1) {
     flex-grow: 1;
+  }
+
+  ::ng-deep h1 {
+    font-size: 1.5rem;
+    border-bottom: 2px solid $grey-background-color;
+    padding-bottom: 15px;
+    margin-bottom: $sub-menu-margin-bottom;
   }
 }

@@ -1,3 +1,5 @@
+<h1 i18n>Reports</h1>
+
 <p-table
   [value]="abuses" [lazy]="true" [paginator]="totalRecords > 0" [totalRecords]="totalRecords" [rows]="rowsPerPage" [rowsPerPageOptions]="rowsPerPageOptions"
   [sortField]="sort.field" [sortOrder]="sort.order" (onLazyLoad)="loadLazy($event)" dataKey="id" [resizableColumns]="true" [lazyLoadOnInit]="false"

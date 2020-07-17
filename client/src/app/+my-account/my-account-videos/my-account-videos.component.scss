@@ -6,12 +6,6 @@
   justify-content: space-between;
   margin: 20px 0 50px;
 
-  h1,
-  .fake-element {
-    flex: 1;
-    font-size: 1.5rem;
-  }
-
   input[type=text] {
     @include peertube-input-text(300px);
   }
