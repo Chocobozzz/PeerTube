@@ -201,6 +201,7 @@ label {
 
   &.active, &:hover,  &:active, &:focus, &.title-page-single {
     opacity: 1;
+    outline: 0px hidden !important;
   }
 
   @media screen and (max-width: $mobile-view) {
