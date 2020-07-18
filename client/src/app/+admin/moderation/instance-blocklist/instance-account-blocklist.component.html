@@ -19,14 +19,18 @@
 
   <ng-template pTemplate="header">
     <tr>
+      <th style="width: 150px;">Action</th> <!-- column for action buttons -->
       <th style="width: 100%;" i18n>Account</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Muted at <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 150px;"></th> <!-- column for action buttons -->
     </tr>
   </ng-template>
 
   <ng-template pTemplate="body" let-accountBlock>
     <tr>
+      <td class="action-cell">
+        <button class="unblock-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
+      </td>
+
       <td>
         <a [href]="accountBlock.blockedAccount.url" i18n-title title="Open account in a new tab" target="_blank" rel="noopener noreferrer">
           <div class="chip two-lines">
@@ -45,9 +49,6 @@
       </td>
 
       <td>{{ accountBlock.createdAt | date: 'short' }}</td>
-      <td class="action-cell">
-        <button class="unblock-button" (click)="unblockAccount(accountBlock)" i18n>Unmute</button>
-      </td>
     </tr>
   </ng-template>
 

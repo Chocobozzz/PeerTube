@@ -31,9 +31,9 @@
 
   <ng-template ptTemplate="rowButtons" let-video>
     <div class="action-button">
-      <my-delete-button (click)="deleteVideo(video)"></my-delete-button>
+      <my-delete-button label (click)="deleteVideo(video)"></my-delete-button>
 
-      <my-edit-button [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
+      <my-edit-button label [routerLink]="[ '/videos', 'update', video.uuid ]"></my-edit-button>
 
       <my-button i18n-label label="Change ownership"
                  className="action-button-change-ownership grey-button"

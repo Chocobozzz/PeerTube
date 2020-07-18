@@ -13,11 +13,11 @@
   <ng-template pTemplate="header">
     <tr>
       <th style="width: 40px;"></th>
+      <th style="width: 70px">Action</th>
       <th style="width: 45%" i18n>Target</th>
       <th style="width: 55%" i18n>Video</th>
       <th style="width: 150px" i18n>State</th>
       <th style="width: 150px" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
-      <th style="width: 70px"></th>
     </tr>
   </ng-template>
 
@@ -27,6 +27,11 @@
         <span *ngIf="videoImport.error" class="expander" [pRowToggler]="videoImport" i18n-ngbTooltip ngbTooltip="See the error">
           <i [ngClass]="expanded ? 'glyphicon glyphicon-menu-down' : 'glyphicon glyphicon-menu-right'"></i>
         </span>
+      </td>
+
+      <td class="action-cell">
+        <my-edit-button *ngIf="isVideoImportSuccess(videoImport) && videoImport.video"
+          [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
       </td>
 
       <td>
@@ -52,10 +57,6 @@
       </td>
 
       <td>{{ videoImport.createdAt | date: 'short' }}</td>
-
-      <td class="action-cell">
-        <my-edit-button label=" " *ngIf="isVideoImportSuccess(videoImport) && videoImport.video" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
-      </td>
     </tr>
   </ng-template>
 

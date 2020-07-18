@@ -24,9 +24,9 @@
     </div>
 
     <div *ngIf="isRegularPlaylist(playlist)" class="video-playlist-buttons">
-      <my-delete-button (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
+      <my-delete-button label (click)="deleteVideoPlaylist(playlist)"></my-delete-button>
 
-      <my-edit-button [routerLink]="[ 'update', playlist.uuid ]"></my-edit-button>
+      <my-edit-button label [routerLink]="[ 'update', playlist.uuid ]"></my-edit-button>
     </div>
   </div>
 </div>

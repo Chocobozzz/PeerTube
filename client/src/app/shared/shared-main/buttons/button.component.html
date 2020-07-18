@@ -1,8 +1,8 @@
-<span class="action-button" [ngClass]="getClasses()" [title]="getTitle()" tabindex="0">
+<span class="action-button" [ngClass]="getClasses()" [ngbTooltip]="getTitle()" tabindex="0">
   <my-global-icon *ngIf="!loading" [iconName]="icon"></my-global-icon>
   <my-small-loader [loading]="loading"></my-small-loader>
 
-  <span class="button-label">{{ label }}</span>
+  <span *ngIf="label" class="button-label">{{ label }}</span>
 
   <ng-content></ng-content>
 </span>
