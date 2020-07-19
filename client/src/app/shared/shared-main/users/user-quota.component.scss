@@ -15,6 +15,12 @@
 
   .progress {
     @include progressbar;
+
+    height: 2rem;
+
+    span {
+      align-self: center;
+    }
   }
 }
 
