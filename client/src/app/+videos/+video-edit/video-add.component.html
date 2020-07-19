@@ -1,6 +1,7 @@
 <div *ngIf="!canUpload()" class="no-upload">
-  <div class="alert alert-warning" i18n>
-    Sorry, the upload feature is disabled for your account.
+  <div class="alert alert-warning">
+    <div i18n>Sorry, the upload feature is disabled for your account. If you want to add videos, an admin must unlock your quota.</div>
+    <a i18n routerLink="/about/instance" class="about-link">Read instance rules for help</a>
   </div>
   <img src="/client/assets/images/mascot/defeated.svg" alt="defeated mascot">
 </div>

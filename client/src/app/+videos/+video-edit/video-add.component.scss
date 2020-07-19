@@ -11,6 +11,14 @@ $nav-link-height: 40px;
   width: 100%;
   text-align: center;
 
+  .about-link {
+    @include peertube-button-link;
+    @include orange-button;
+
+    height: fit-content;
+    margin-top: 10px;
+  }
+
   img {
     margin-top: 10px;
     margin-bottom: 75px;
