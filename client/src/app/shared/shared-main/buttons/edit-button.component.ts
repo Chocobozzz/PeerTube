@@ -14,10 +14,10 @@ export class EditButtonComponent implements OnInit {
 
   constructor (private i18n: I18n) { }
 
-  ngOnInit() {
+  ngOnInit () {
     // <my-edit-button /> No label
     if (this.label === undefined && !this.title) {
-      this.title  = this.i18n('Update')
+      this.title = this.i18n('Update')
     }
 
     // <my-edit-button label /> Use default label
