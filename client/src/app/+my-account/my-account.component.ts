@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { ServerService } from '@app/core'
+import { AuthService, ServerService, User } from '@app/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig } from '@shared/models'
 import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdown.component'
@@ -11,11 +11,13 @@ import { TopMenuDropdownParam } from '../shared/shared-main/misc/top-menu-dropdo
 })
 export class MyAccountComponent implements OnInit {
   menuEntries: TopMenuDropdownParam[] = []
+  user: User
 
   private serverConfig: ServerConfig
 
   constructor (
     private serverService: ServerService,
+    private authService: AuthService,
     private i18n: I18n
   ) { }
 
@@ -63,6 +65,21 @@ export class MyAccountComponent implements OnInit {
       })
     }
 
+    this.user = this.authService.getUser()
+
+    this.authService.userInformationLoaded.subscribe(
+      () => {
+        // Cannot see videos links, hide my videos and my imports
+        if (!this.canSeeVideosLink()) {
+          libraryEntries.children.splice(1, 1)
+
+          if (this.isVideoImportEnabled()) {
+            libraryEntries.children.splice(4, 1)
+          }
+        }
+      }
+    )
+
     const miscEntries: TopMenuDropdownParam = {
       label: this.i18n('Misc'),
       children: [
@@ -104,4 +121,17 @@ export class MyAccountComponent implements OnInit {
     return importConfig.http.enabled || importConfig.torrent.enabled
   }
 
+  canSeeVideosLink () {
+    const { videoQuota, videoQuotaDaily, videosCount } = this.user
+
+    // can upload
+    if ((videoQuota > 0 || videoQuota === -1) && (videoQuotaDaily > 0 || videoQuotaDaily === -1)) {
+      return true
+    }
+
+    // cannot upload but has already some videos
+    if (videosCount > 0) {
+      return true
+    }
+  }
 }

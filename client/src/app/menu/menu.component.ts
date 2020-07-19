@@ -114,6 +114,20 @@ export class MenuComponent implements OnInit {
     }
   }
 
+  canSeeVideosLink () {
+    const { videoQuota, videoQuotaDaily, videosCount} = this.user
+
+    // can upload
+    if ((videoQuota > 0 || videoQuota === -1) && (videoQuotaDaily > 0 || videoQuotaDaily === -1)) {
+      return true
+    }
+
+    // cannot upload but has already some videos
+    if (videosCount > 0) {
+      return true
+    }
+  }
+
   isRegistrationAllowed () {
     return this.serverConfig.signup.allowed &&
            this.serverConfig.signup.allowedForCurrentIP
