@@ -26,7 +26,7 @@ export class VideoAddComponent implements OnInit, CanComponentDeactivate {
     private serverService: ServerService
   ) {}
 
-  get userInformationLoaded() {
+  get userInformationLoaded () {
     return this.auth.userInformationLoaded
   }
 

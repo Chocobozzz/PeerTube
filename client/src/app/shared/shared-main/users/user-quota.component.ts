@@ -44,7 +44,7 @@ export class UserQuotaComponent implements OnInit {
       }
     )
 
-    this.userService.getMyVideoQuotaUsed ()
+    this.userService.getMyVideoQuotaUsed()
       .subscribe(data => {
         this.userVideoQuotaUsed = data.videoQuotaUsed
         this.userVideoQuotaPercentage = this.userVideoQuotaUsed * 100 / this.user.videoQuota
