@@ -8,16 +8,13 @@
   label {
     margin-right: 5px;
   }
-}
 
-.progress {
-  @include progressbar;
-  width: 500px;
-  max-width: 100%;
-}
+  &, .progress {
+    width: 100% !important;
+  }
 
-@media screen and (max-width: $small-view) {
   .progress {
-    width: 100%;
+    @include progressbar;
   }
 }
+

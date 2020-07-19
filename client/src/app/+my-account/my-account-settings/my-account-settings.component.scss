@@ -8,3 +8,7 @@
     color: lighten($color: #c54130, $amount: 10);
   }
 }
+
+.form-group {
+  max-width: 500px;
+}

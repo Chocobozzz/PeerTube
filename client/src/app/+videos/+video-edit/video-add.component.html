@@ -5,6 +5,8 @@
     Instead, <a routerLink="/admin/users">create a dedicated account</a> to upload your videos.
   </div>
 
+  <my-user-quota [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
+
   <div class="title-page title-page-single" *ngIf="isInSecondStep()">
     <ng-container *ngIf="secondStepType === 'import-url' || secondStepType === 'import-torrent'" i18n>Import {{ videoName }}</ng-container>
     <ng-container *ngIf="secondStepType === 'upload'" i18n>Upload {{ videoName }}</ng-container>
