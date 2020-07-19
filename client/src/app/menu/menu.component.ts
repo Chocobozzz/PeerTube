@@ -115,7 +115,7 @@ export class MenuComponent implements OnInit {
   }
 
   canSeeVideosLink () {
-    const { videoQuota, videoQuotaDaily, videosCount} = this.user
+    const { videoQuota, videoQuotaDaily, videosCount } = this.user
 
     // can upload
     if ((videoQuota > 0 || videoQuota === -1) && (videoQuotaDaily > 0 || videoQuotaDaily === -1)) {
