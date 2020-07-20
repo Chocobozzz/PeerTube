@@ -111,8 +111,9 @@ async function sendVerifyUserEmail (user: MUser, isPendingEmail = false) {
   if (isPendingEmail) url += '&isPendingEmail=true'
 
   const email = isPendingEmail ? user.pendingEmail : user.email
+  const username = user.username
 
-  await Emailer.Instance.addVerifyEmailJob(email, url)
+  await Emailer.Instance.addVerifyEmailJob(username, email, url)
 }
 
 // ---------------------------------------------------------------------------

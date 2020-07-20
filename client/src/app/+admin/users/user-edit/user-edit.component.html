@@ -95,7 +95,7 @@
         <input
           type="text" id="email" i18n-placeholder placeholder="mail@example.com" class="form-control"
           formControlName="email" [ngClass]="{ 'input-error': formErrors['email'] }"
-          autocomplete="off" [readonly]="user.pluginAuth !== null"
+          autocomplete="off" [readonly]="user && user.pluginAuth !== null"
         >
         <div *ngIf="formErrors.email" class="form-error">
           {{ formErrors.email }}

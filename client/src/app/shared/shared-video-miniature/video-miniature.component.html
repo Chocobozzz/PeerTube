@@ -1,6 +1,6 @@
 <div class="video-miniature" [ngClass]="{ 'display-as-row': displayAsRow, 'fit-width': fitWidth }" (mouseenter)="loadActions()">
   <my-video-thumbnail
-    [video]="video" [nsfw]="isVideoBlur" [routerLink]="videoLink"
+    [video]="video" [nsfw]="isVideoBlur" [videoRouterLink]="videoRouterLink" [videoHref]="videoHref" [videoTarget]="videoTarget"
     [displayWatchLaterPlaylist]="isWatchLaterPlaylistDisplayed()" [inWatchLaterPlaylist]="inWatchLaterPlaylist" (watchLaterClick)="onWatchLaterClick($event)"
   >
     <ng-container ngProjectAs="label-warning" *ngIf="displayOptions.privacyLabel && isUnlistedVideo()" i18n>Unlisted</ng-container>
@@ -15,10 +15,12 @@
         </a>
 
         <div class="w-100 d-flex flex-column">
-          <a
-            tabindex="-1"
-            class="video-miniature-name"
-            [routerLink]="videoLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
+          <a *ngIf="!videoHref" tabindex="-1" class="video-miniature-name"
+            [routerLink]="videoRouterLink" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
+          >{{ video.name }}</a>
+
+          <a *ngIf="videoHref" tabindex="-1" class="video-miniature-name"
+            [href]="videoHref" [target]="videoTarget" [attr.title]="video.name" [ngClass]="{ 'blur-filter': isVideoBlur }"
           >{{ video.name }}</a>
 
           <span class="video-miniature-created-at-views">

@@ -44,8 +44,8 @@
 
       <td class="action-cell">
         <ng-container *ngIf="follow.state === 'pending'">
-          <my-button i18n-label label="Accept" icon="tick" (click)="acceptFollower(follow)"></my-button>
-          <my-button i18n-label label="Refuse" icon="cross" (click)="rejectFollower(follow)"></my-button>
+          <my-button i18n-title title="Accept" icon="tick" (click)="acceptFollower(follow)"></my-button>
+          <my-button i18n-title title="Refuse" icon="cross" (click)="rejectFollower(follow)"></my-button>
         </ng-container>
 
         <my-delete-button *ngIf="follow.state === 'accepted'" (click)="deleteFollower(follow)"></my-delete-button>

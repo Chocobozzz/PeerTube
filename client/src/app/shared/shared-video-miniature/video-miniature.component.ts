@@ -29,6 +29,7 @@ export type MiniatureDisplayOptions = {
   blacklistInfo?: boolean
   nsfw?: boolean
 }
+export type VideoLinkType = 'internal' | 'lazy-load' | 'external'
 
 @Component({
   selector: 'my-video-miniature',
@@ -55,7 +56,7 @@ export class VideoMiniatureComponent implements OnInit {
   @Input() displayVideoActions = true
   @Input() fitWidth = false
 
-  @Input() useLazyLoadUrl = false
+  @Input() videoLinkType: VideoLinkType = 'internal'
 
   @Output() videoBlocked = new EventEmitter()
   @Output() videoUnblocked = new EventEmitter()
@@ -85,7 +86,9 @@ export class VideoMiniatureComponent implements OnInit {
     playlistElementId?: number
   }
 
-  videoLink: any[] = []
+  videoRouterLink: any[] = []
+  videoHref: string
+  videoTarget: string
 
   private ownerDisplayTypeChosen: 'account' | 'videoChannel'
 
@@ -125,18 +128,20 @@ export class VideoMiniatureComponent implements OnInit {
   }
 
   buildVideoLink () {
-    if (this.useLazyLoadUrl && this.video.url) {
-      const remoteUriConfig = this.serverConfig.search.remoteUri
-
-      // Redirect on the external instance if not allowed to fetch remote data
-      const externalRedirect = (!this.authService.isLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users
-      const fromPath = window.location.pathname + window.location.search
-
-      this.videoLink = [ '/search/lazy-load-video', { url: this.video.url, externalRedirect, fromPath } ]
+    if (this.videoLinkType === 'internal' || !this.video.url) {
+      this.videoRouterLink = [ '/videos/watch', this.video.uuid ]
       return
     }
 
-    this.videoLink = [ '/videos/watch', this.video.uuid ]
+    if (this.videoLinkType === 'external') {
+      this.videoRouterLink = null
+      this.videoHref = this.video.url
+      this.videoTarget = '_blank'
+      return
+    }
+
+    // Lazy load
+    this.videoRouterLink = [ '/search/lazy-load-video', { url: this.video.url } ]
   }
 
   displayOwnerAccount () {

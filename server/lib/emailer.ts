@@ -427,12 +427,13 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addPasswordResetEmailJob (to: string, resetPasswordUrl: string) {
+  addPasswordResetEmailJob (username: string, to: string, resetPasswordUrl: string) {
     const emailPayload: EmailPayload = {
       template: 'password-reset',
       to: [ to ],
       subject: 'Reset your account password',
       locals: {
+        username,
         resetPasswordUrl
       }
     }
@@ -454,12 +455,13 @@ class Emailer {
     return JobQueue.Instance.createJob({ type: 'email', payload: emailPayload })
   }
 
-  addVerifyEmailJob (to: string, verifyEmailUrl: string) {
+  addVerifyEmailJob (username: string, to: string, verifyEmailUrl: string) {
     const emailPayload: EmailPayload = {
       template: 'verify-email',
       to: [ to ],
       subject: `Verify your email on ${WEBSERVER.HOST}`,
       locals: {
+        username,
         verifyEmailUrl
       }
     }
