@@ -45,7 +45,7 @@
       <td>{{ videoImport.createdAt | date: 'short' }}</td>
 
       <td class="action-cell">
-        <my-edit-button *ngIf="isVideoImportSuccess(videoImport) && videoImport.video" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
+        <my-edit-button label=" " *ngIf="isVideoImportSuccess(videoImport) && videoImport.video" [routerLink]="getEditVideoUrl(videoImport.video)"></my-edit-button>
       </td>
     </tr>
   </ng-template>
