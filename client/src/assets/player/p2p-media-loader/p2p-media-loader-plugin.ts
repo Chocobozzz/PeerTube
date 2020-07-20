@@ -43,19 +43,23 @@ class P2pMediaLoaderPlugin extends Plugin {
 
     // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
     if (!(videojs as any).Html5Hlsjs) {
-      const message = 'HLS.js does not seem to be supported.'
-      console.warn(message)
+      console.warn('HLS.js does not seem to be supported. Try to fallback to built in HLS.')
 
-      player.ready(() => player.trigger('error', new Error(message)))
-      return
+      if (!player.canPlayType('application/vnd.apple.mpegurl')) {
+        const message = 'Cannot fallback to built-in HLS'
+        console.warn(message)
+
+        player.ready(() => player.trigger('error', new Error(message)))
+        return
+      }
+    } else {
+      // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
+      (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
+        this.hlsjs = hlsjs
+      })
+
+      initVideoJsContribHlsJsPlayer(player)
     }
-
-    // FIXME: typings https://github.com/Microsoft/TypeScript/issues/14080
-    (videojs as any).Html5Hlsjs.addHook('beforeinitialize', (videojsPlayer: any, hlsjs: any) => {
-      this.hlsjs = hlsjs
-    })
-
-    initVideoJsContribHlsJsPlayer(player)
 
     this.startTime = timeToInt(options.startTime)
 
@@ -64,11 +68,13 @@ class P2pMediaLoaderPlugin extends Plugin {
       src: options.src
     })
 
-    player.one('play', () => {
-      player.addClass('vjs-has-big-play-button-clicked')
-    })
+    player.ready(() => {
+      this.initializeCore()
 
-    player.ready(() => this.initialize())
+      if ((videojs as any).Html5Hlsjs) {
+        this.initializePlugin()
+      }
+    })
   }
 
   dispose () {
@@ -82,7 +88,19 @@ class P2pMediaLoaderPlugin extends Plugin {
     return this.hlsjs
   }
 
-  private initialize () {
+  private initializeCore () {
+    this.player.one('play', () => {
+      this.player.addClass('vjs-has-big-play-button-clicked')
+    })
+
+    this.player.one('canplay', () => {
+      if (this.startTime) {
+        this.player.currentTime(this.startTime)
+      }
+    })
+  }
+
+  private initializePlugin () {
     initHlsJsPlayer(this.hlsjs)
 
     // FIXME: typings
@@ -102,12 +120,6 @@ class P2pMediaLoaderPlugin extends Plugin {
     this.statsP2PBytes.numPeers = 1 + this.options.redundancyUrlManager.countBaseUrls()
 
     this.runStats()
-
-    this.player.one('canplay', () => {
-      if (this.startTime) {
-        this.player.currentTime(this.startTime)
-      }
-    })
   }
 
   private runStats () {
