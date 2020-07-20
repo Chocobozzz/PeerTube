@@ -25,7 +25,7 @@ const playerKeys = {
   'peer': 'peer',
   'Go to the video page': 'Go to the video page',
   'Settings': 'Settings',
-  'Uses P2P, others may know you are watching this video.': 'Uses P2P, others may know you are watching this video.',
+  'Watching this video may reveal your IP address to others.': 'Watching this video may reveal your IP address to others.',
   'Copy the video URL': 'Copy the video URL',
   'Copy the video URL at the current time': 'Copy the video URL at the current time',
   'Copy embed code': 'Copy embed code',
