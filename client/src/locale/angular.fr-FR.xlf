@@ -4129,7 +4129,7 @@
       </trans-unit>
       <trans-unit id="d204665b42241ca94ecad49df699cc60df43a7b5">
         <source>Plugins/Themes</source>
-        <target>Plugins/Thèmes</target>
+        <target>Plugins / Thèmes</target>
         <context-group name="null">
           <context context-type="linenumber">2</context>
         </context-group>
@@ -5989,7 +5989,7 @@
       </trans-unit>
       <trans-unit id="21dc89cfca84c2af7fdeb584b34e2529d842b72a" datatype="html">
         <source>{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</source>
-        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> videos} }</target>
+        <target state="translated">{VAR_PLURAL, plural, =0 {No videos} =1 {1 video} other {<x id="INTERPOLATION" equiv-text="{{ videoChannel.videosCount }}"/> vidéos} }</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channels.component.html</context>
           <context context-type="linenumber">23</context>
@@ -8024,7 +8024,7 @@
       </trans-unit>
       <trans-unit id="9f4cdde6106d0d5ed669264f5a8777f079623eb0" datatype="html">
         <source>Do you really want to delete <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? It will delete <x id="INTERPOLATION_1" equiv-text="{{videosCount}}"/> videos uploaded in this channel, and you will not be able to create another channel with the same name (<x id="INTERPOLATION_2" equiv-text="{{channelName}}"/>)!</source>
-        <target state="translated">Voulez-vous réellement supprimer <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/>? Cela supprimera <x id="INTERPOLATION_1" equiv-text="{{videosCount}}"/> les vidéos téléversées dans cette chaîne, et vous ne pourrez pas créer une autre chaîne avec le même nom (<x id="INTERPOLATION_2" equiv-text="{{channelName}}"/>)!</target>
+        <target state="translated">Voulez-vous réellement supprimer <x id="INTERPOLATION" equiv-text="{{channelDisplayName}}"/> ? Cela supprimera <x id="INTERPOLATION_1" equiv-text="{{videosCount}}"/> les vidéos téléversées dans cette chaîne, et vous ne pourrez pas créer une autre chaîne avec le même nom (<x id="INTERPOLATION_2" equiv-text="{{channelName}}"/>) !</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/+my-account/+my-account-video-channels/my-account-video-channels.component.ts</context>
           <context context-type="linenumber">1</context>
@@ -8850,7 +8850,7 @@
       </trans-unit>
       <trans-unit id="4166cc066b963a23829b48a09e394f73b453fabd">
         <source>Transcoding threads must be greater or equal to 0.</source>
-        <target>Le nombre de tâches allouées au transcodage doit être supérieur ou égal à 0.</target>
+        <target>Le nombre de tâches allouées pour le transcodage doit être supérieur ou égal à 0.</target>
         <context-group name="null">
           <context context-type="linenumber">1</context>
         </context-group>
