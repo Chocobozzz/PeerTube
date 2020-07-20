@@ -10,14 +10,13 @@
     position: fixed;
 
     .action-button {
-      display: inline-block;
+      display: block;
+      margin-left: 55px;
     }
 
     .action-button-cancel-selection {
       @include peertube-button;
       @include grey-button;
-
-      margin-right: 10px;
     }
   }
 }
@@ -53,5 +52,9 @@
     my-button {
       margin-top: 10px;
     }
+  }
+
+  .action-selection-mode {
+    display: none; // disable for small screens
   }
 }
