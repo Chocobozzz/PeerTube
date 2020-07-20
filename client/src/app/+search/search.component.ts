@@ -5,7 +5,7 @@ import { AuthService, ComponentPagination, HooksService, Notifier, ServerService
 import { immutableAssign } from '@app/helpers'
 import { Video, VideoChannel } from '@app/shared/shared-main'
 import { AdvancedSearch, SearchService } from '@app/shared/shared-search'
-import { MiniatureDisplayOptions } from '@app/shared/shared-video-miniature'
+import { MiniatureDisplayOptions, VideoLinkType } from '@app/shared/shared-video-miniature'
 import { MetaService } from '@ngx-meta/core'
 import { I18n } from '@ngx-translate/i18n-polyfill'
 import { SearchTargetType, ServerConfig } from '@shared/models'
@@ -119,6 +119,25 @@ export class SearchComponent implements OnInit, OnDestroy {
     return this.authService.isLoggedIn()
   }
 
+  getVideoLinkType (): VideoLinkType {
+    if (this.advancedSearch.searchTarget === 'search-index') {
+      const remoteUriConfig = this.serverConfig.search.remoteUri
+
+      // Redirect on the external instance if not allowed to fetch remote data
+      if ((!this.isUserLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users) {
+        return 'external'
+      }
+
+      return 'lazy-load'
+    }
+
+    return 'internal'
+  }
+
+  isExternalChannelUrl () {
+    return this.getVideoLinkType() === 'external'
+  }
+
   search () {
     forkJoin([
       this.getVideosObs(),
@@ -184,17 +203,16 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   getChannelUrl (channel: VideoChannel) {
-    if (this.advancedSearch.searchTarget === 'search-index' && channel.url) {
-      const remoteUriConfig = this.serverConfig.search.remoteUri
-
-      // Redirect on the external instance if not allowed to fetch remote data
-      const externalRedirect = (!this.authService.isLoggedIn() && !remoteUriConfig.anonymous) || !remoteUriConfig.users
-      const fromPath = window.location.pathname + window.location.search
-
-      return [ '/search/lazy-load-channel', { url: channel.url, externalRedirect, fromPath } ]
+    // Same algorithm than videos
+    if (this.getVideoLinkType() === 'external') {
+      return channel.url
     }
 
-    return [ '/video-channels', channel.nameWithHost ]
+    if (this.getVideoLinkType() === 'internal') {
+      return [ '/video-channels', channel.nameWithHost ]
+    }
+
+    return [ '/search/lazy-load-channel', { url: channel.url } ]
   }
 
   hideActions () {

@@ -12,18 +12,10 @@ export class ChannelLazyLoadResolver implements Resolve<any> {
 
   resolve (route: ActivatedRouteSnapshot) {
     const url = route.params.url
-    const externalRedirect = route.params.externalRedirect
-    const fromPath = route.params.fromPath
 
     if (!url) {
       console.error('Could not find url param.', { params: route.params })
       return this.router.navigateByUrl('/404')
-    }
-
-    if (externalRedirect === 'true') {
-      window.open(url)
-      this.router.navigateByUrl(fromPath)
-      return
     }
 
     return this.searchService.searchVideoChannels({ search: url })

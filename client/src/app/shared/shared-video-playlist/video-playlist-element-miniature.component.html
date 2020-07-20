@@ -8,7 +8,7 @@
     <my-video-thumbnail
       *ngIf="playlistElement.video"
       [video]="playlistElement.video" [nsfw]="isVideoBlur(playlistElement.video)"
-      [routerLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
+      [videoRouterLink]="buildRouterLink()" [queryParams]="buildRouterQuery()"
     ></my-video-thumbnail>
 
     <div class="fake-thumbnail" *ngIf="!playlistElement.video"></div>

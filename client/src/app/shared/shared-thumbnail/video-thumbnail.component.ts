@@ -11,8 +11,11 @@ import { Video } from '../shared-main'
 export class VideoThumbnailComponent {
   @Input() video: Video
   @Input() nsfw = false
-  @Input() routerLink: any[]
+
+  @Input() videoRouterLink: any[]
   @Input() queryParams: { [ p: string ]: any }
+  @Input() videoHref: string
+  @Input() videoTarget: string
 
   @Input() displayWatchLaterPlaylist: boolean
   @Input() inWatchLaterPlaylist: boolean
@@ -49,7 +52,7 @@ export class VideoThumbnailComponent {
   }
 
   getVideoRouterLink () {
-    if (this.routerLink) return this.routerLink
+    if (this.videoRouterLink) return this.videoRouterLink
 
     return [ '/videos/watch', this.video.uuid ]
   }

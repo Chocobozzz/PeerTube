@@ -1,7 +1,12 @@
-<a
-  [routerLink]="getVideoRouterLink()" [queryParams]="queryParams"
-  class="video-thumbnail"
->
+<a *ngIf="!videoHref" [routerLink]="getVideoRouterLink()" [queryParams]="queryParams" class="video-thumbnail">
+  <ng-container *ngTemplateOutlet="aContent"></ng-container>
+</a>
+
+<a *ngIf="videoHref" [href]="videoHref" [target]="videoTarget" class="video-thumbnail">
+  <ng-container *ngTemplateOutlet="aContent"></ng-container>
+</a>
+
+<ng-template #aContent>
   <img alt="" [attr.aria-label]="video.name" [attr.src]="getImageUrl()" [ngClass]="{ 'blur-filter': nsfw }" />
 
   <div *ngIf="displayWatchLaterPlaylist" class="video-thumbnail-actions-overlay">
@@ -30,4 +35,4 @@
   <div class="progress-bar" *ngIf="video.userHistory?.currentTime">
     <div [ngStyle]="{ 'width.%': getProgressPercent() }"></div>
   </div>
-</a>
+</ng-template>
