@@ -79,15 +79,6 @@ p-table {
     tr {
       &:hover {
         background-color: pvar(--submenuColor) !important;
-
-        .action-cell {
-          .dropdown-root,
-          my-edit-button,
-          my-delete-button,
-          my-button {
-            display: inline-block !important;
-          }
-        }
       }
 
       td {
@@ -164,17 +155,8 @@ p-table {
     my-edit-button,
     my-delete-button,
     my-button {
-      display: none !important;
+      display: inline-block !important;
       margin-left: 5px;
-
-      &.show {
-        display: inline-block !important;
-      }
-
-      // keep displaying on touchscreen
-      @media not all and (hover: hover) and (pointer: fine) {
-        display: inline-block !important;
-      }
 
       :first-child {
         margin-left: 0
