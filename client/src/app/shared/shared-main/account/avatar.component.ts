@@ -10,6 +10,7 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 export class AvatarComponent implements OnInit {
   @Input() video: Video
   @Input() size: 'md' | 'sm' = 'md'
+  @Input() genericChannel: boolean
 
   channelLinkTitle = ''
   accountLinkTitle = ''
@@ -27,5 +28,9 @@ export class AvatarComponent implements OnInit {
       '{{name}} (account page)',
       { name: this.video.account.name, handle: this.video.byAccount }
     )
+  }
+
+  isChannelAvatarNull () {
+    return this.video.channel.avatar === null
   }
 }
