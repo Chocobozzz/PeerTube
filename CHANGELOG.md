@@ -1,6 +1,8 @@
 # Changelog
 
-## v2.3.0-rc.1
+## v2.3.0
+
+**Since v2.2.0**
 
 ### IMPORTANT NOTES
 
@@ -75,20 +77,39 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
 ### Bug fixes
 
- * Fix default anonymous theme that should use instance default
- * Fix configuration form issue when auto follow index URL is empty
- * Fix URL import of some videos
- * Fix quota representation in profile settings **@rigelk**
- * Exclude 0p from auto webtorrent quality
- * Fix scroll on some pages with hash in URL
- * Fix search filter in video reports
- * Fix anonymous user nsfw policy
- * Don't cache embed HTML page resulting in broken embed after a PeerTube upgrade
- * Accessibility:
+  * Fix default anonymous theme that should use instance default
+  * Fix configuration form issue when auto follow index URL is empty
+  * Fix URL import of some videos
+  * Fix quota representation in profile settings  **@rigelk**
+  * Exclude 0p from auto webtorrent quality
+  * Fix scroll on some pages with hash in URL
+  * Fix search filter in video reports
+  * Fix anonymous user nsfw policy
+  * Don't cache embed HTML page resulting in broken embed after a PeerTube upgrade
+  * Accessibility:
     * Add lang in document to match current locale [@rigelk in #2822](https://github.com/Chocobozzz/PeerTube/pull/2822)
     * Prevent duplicate id attributes for `.svg` [@rigelk in #2822](https://github.com/Chocobozzz/PeerTube/pull/2822)
     * Fix headings order or add missing ones [@Pandoraaa in #2871](https://github.com/Chocobozzz/PeerTube/pull/2871)
     * Remove uneccessary details to link titles  [@Pandoraaa in #2879](https://github.com/Chocobozzz/PeerTube/pull/2879)
+    * Fix accessibility action buttons and display on imports and followers list [@kimsible in #2986](https://github.com/Chocobozzz/PeerTube/pull/2986)
+ * Fix iOS player with HLS-only videos
+ * Fix action buttons selection mode styles [@kimsible in #2983](https://github.com/Chocobozzz/PeerTube/pull/2983)
+
+
+**Since v2.3.0-rc.1**
+
+### Bug fixes
+
+  * Fix broken locales
+  * Fix embed URL in share modal
+  * Handle webp images from youtube-dl
+  * Fix iOS player with HLS-only videos
+  * Fix popup issues on video miniature click when searching on the global index
+  * Fix username in password-reset email [@kimsible in #2960](https://github.com/Chocobozzz/PeerTube/pull/2960)
+  * Fix maximized icon padding in markdown textarea [@kimsible in #2963](https://github.com/Chocobozzz/PeerTube/pull/2963)
+  * Fix action buttons selection mode styles [@kimsible in #2983](https://github.com/Chocobozzz/PeerTube/pull/2983)
+  * Fix user creation in admin [@kimsible in #2985](https://github.com/Chocobozzz/PeerTube/pull/2985)
+  * Fix accessibility action buttons and display on imports and followers list [@kimsible in #2986](https://github.com/Chocobozzz/PeerTube/pull/2986)
 
 
 ## v2.2.0
