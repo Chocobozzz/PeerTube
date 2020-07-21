@@ -6,6 +6,7 @@
 
 ### IMPORTANT NOTES
 
+ * Add `client_overrides` directory in configuration file. **You must configure it in your production.yaml**
  * Deprecate `/videos/abuse` endpoint.
 A new endpoint to report videos will be created in PeerTube 2.4 and will also allow to report accounts and comments (`/videos/abuse` will be removed in 3.0)
  * Renamed videos blacklist feature to videos blocks/blocklist
@@ -37,6 +38,10 @@ A new endpoint to report videos will be created in PeerTube 2.4 and will also al
 
  * [Auto block videos (alpha)](https://framagit.org/framasoft/peertube/official-plugins/-/tree/master/peertube-plugin-auto-block-videos)
 
+
+### Plugins/Themes/Embed API
+
+  * Add ability to override client assets: logo - favicon - PWA icons - PWA manifest name and description [@kimsible in #2897](https://github.com/Chocobozzz/PeerTube/pull/2897)
 
 ### Features
 
