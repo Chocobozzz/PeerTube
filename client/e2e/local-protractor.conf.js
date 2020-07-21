@@ -12,7 +12,7 @@ exports.config = {
   capabilities: {
     'browserName': 'firefox',
     'moz:firefoxOptions': {
-      binary: '/usr/bin/firefox-esr',
+      binary: '/usr/bin/firefox-developer-edition',
       // args: ["-headless"],
       log: {
         "level": "info" // default is "info"
