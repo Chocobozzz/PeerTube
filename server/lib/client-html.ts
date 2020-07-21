@@ -1,6 +1,6 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER, FILES_CONTENT_HASH } from '../initializers/constants'
+import { AVATARS_SIZE, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER, FILES_CONTENT_HASH } from '../initializers/constants'
 import { join } from 'path'
 import { escapeHTML, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
@@ -87,7 +87,7 @@ export class ClientHtml {
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
-    customHtml = ClientHtml.addAccountOrChannelMetaTags(customHtml, entity)
+    customHtml = ClientHtml.addAccountOrChannelOpenGraphAndMetaTags(customHtml, entity)
 
     return customHtml
   }
@@ -262,9 +262,58 @@ export class ClientHtml {
     return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
   }
 
-  private static addAccountOrChannelMetaTags (htmlStringPage: string, entity: MAccountActor | MChannelActor) {
+  private static addAccountOrChannelOpenGraphAndMetaTags (htmlStringPage: string, entity: MAccountActor | MChannelActor) {
+    const entityDisplayNameEscaped = escapeHTML(entity.getDisplayName())
+    const entityDescriptionEscaped = escapeHTML(entity.description)
+    const entityAvatarUrl = entity.Actor.getAvatarUrl()
+    const entityUrl = entity.Actor.url
+
+    const openGraphMetaTags = {
+      'og:type': 'website',
+      'og:title': entityDisplayNameEscaped,
+      'og:image': entityAvatarUrl,
+      'og:image:width': AVATARS_SIZE.width,
+      'og:image:height': AVATARS_SIZE.height,
+      'og:url': entityUrl,
+      'og:description': entityDescriptionEscaped,
+
+      'name': entityDisplayNameEscaped,
+      'description': entityDescriptionEscaped,
+      'image': entityAvatarUrl,
+
+      'twitter:card': 'summary',
+      'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
+      'twitter:title': entityDisplayNameEscaped,
+      'twitter:description': entityDescriptionEscaped,
+      'twitter:image': entityAvatarUrl,
+      'twitter:image:width': AVATARS_SIZE.width,
+      'twitter:image:height': AVATARS_SIZE.height,
+    }
+
+    const schemaTags = {
+      '@context': 'http://schema.org',
+      '@type': 'ProfilePage',
+      'name': entityDisplayNameEscaped,
+      'description': entityDescriptionEscaped,
+      'thumbnailUrl': entityAvatarUrl,
+      'image': entityAvatarUrl,
+      'url': entityUrl
+    }
+
+    let metaTags = ''
+
+    // Opengraph
+    Object.keys(openGraphMetaTags).forEach(tagName => {
+      const tagValue = openGraphMetaTags[tagName]
+
+      metaTags += `<meta property="${tagName}" content="${tagValue}" />`
+    })
+
+    // Schema.org
+    metaTags += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+
     // SEO, use origin account or channel URL
-    const metaTags = `<link rel="canonical" href="${entity.Actor.url}" />`
+    metaTags += `<link rel="canonical" href="${entityUrl}" />`
 
     return this.addOpenGraphAndOEmbedTags(htmlStringPage, metaTags)
   }
