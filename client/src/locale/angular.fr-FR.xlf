@@ -3650,7 +3650,7 @@
       </trans-unit>
       <trans-unit id="8c516f7e68f4bb2020f6a9bd7df1ee5749c9d038" datatype="html">
         <source>Video reports</source>
-        <target state="translated">Reportages vidéo</target>
+        <target state="translated">Signalements de vidéos</target>
         <context-group purpose="location"><context context-type="sourcefile">src/app/+admin/admin.component.ts</context><context context-type="linenumber">1</context></context-group>
       </trans-unit>
       <trans-unit id="d2e7333704502d1720b353742634630b71ea8bd7" datatype="html">
