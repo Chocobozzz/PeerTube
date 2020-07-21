@@ -15,6 +15,6 @@ export class VideoUpdatePage {
   }
 
   private getSubmitButton () {
-    return element(by.css('.submit-button:not(.disabled) input'))
+    return element(by.css('.submit-container .action-button'))
   }
 }
