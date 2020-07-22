@@ -1,11 +1,19 @@
 import * as express from 'express'
 import { buildFileLocale, getDefaultLocale, is18nLocale, POSSIBLE_LOCALES } from '../../shared/models/i18n/i18n'
-import { AVATARS_SIZE, CUSTOM_HTML_TAG_COMMENTS, EMBED_SIZE, PLUGIN_GLOBAL_CSS_PATH, WEBSERVER, FILES_CONTENT_HASH } from '../initializers/constants'
+import {
+  AVATARS_SIZE,
+  CUSTOM_HTML_TAG_COMMENTS,
+  EMBED_SIZE,
+  PLUGIN_GLOBAL_CSS_PATH,
+  WEBSERVER,
+  FILES_CONTENT_HASH
+} from '../initializers/constants'
 import { join } from 'path'
 import { escapeHTML, sha256 } from '../helpers/core-utils'
 import { VideoModel } from '../models/video/video'
+import { VideoPlaylistModel } from '../models/video/video-playlist'
 import validator from 'validator'
-import { VideoPrivacy } from '../../shared/models/videos'
+import { VideoPrivacy, VideoPlaylistPrivacy } from '../../shared/models/videos'
 import { readFile } from 'fs-extra'
 import { getActivityStreamDuration } from '../models/video/video-format-utils'
 import { AccountModel } from '../models/account/account'
@@ -13,7 +21,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
-import { MAccountActor, MChannelActor, MVideo } from '../types/models'
+import { MAccountActor, MChannelActor, MVideo, MVideoPlaylist } from '../types/models'
 
 export class ClientHtml {
 
@@ -57,6 +65,31 @@ export class ClientHtml {
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
     customHtml = ClientHtml.addVideoOpenGraphAndOEmbedTags(customHtml, video)
+
+    return customHtml
+  }
+
+  static async getWatchPlaylistHTMLPage (videoPlaylistId: string, req: express.Request, res: express.Response) {
+    // Let Angular application handle errors
+    if (!validator.isInt(videoPlaylistId) && !validator.isUUID(videoPlaylistId, 4)) {
+      res.status(404)
+      return ClientHtml.getIndexHTML(req, res)
+    }
+
+    const [ html, videoPlaylist ] = await Promise.all([
+      ClientHtml.getIndexHTML(req, res),
+      VideoPlaylistModel.loadWithAccountAndChannel(videoPlaylistId, null)
+    ])
+
+    // Let Angular application handle errors
+    if (!videoPlaylist || videoPlaylist.privacy === VideoPlaylistPrivacy.PRIVATE) {
+      res.status(404)
+      return html
+    }
+
+    let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
+    customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(videoPlaylist.description))
+    customHtml = ClientHtml.addVideoPlaylistOpenGraphAndMetaTags(customHtml, videoPlaylist)
 
     return customHtml
   }
@@ -262,6 +295,57 @@ export class ClientHtml {
     return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
   }
 
+  private static addVideoPlaylistOpenGraphAndMetaTags (htmlStringPage: string, videoPlaylist: MVideoPlaylist) {
+    const videoPlaylistThumbnailUrl = videoPlaylist.getThumbnailUrl()
+    const videoPlaylistUrl = videoPlaylist.getWatchUrl()
+
+    const videoPlaylistNameEscaped = escapeHTML(videoPlaylist.name)
+    const videoPlaylistDescriptionEscaped = escapeHTML(videoPlaylist.description)
+
+    const openGraphMetaTags = {
+      'og:title': videoPlaylistNameEscaped,
+      'og:image': videoPlaylistThumbnailUrl,
+      'og:url': videoPlaylistUrl,
+      'og:description': videoPlaylistDescriptionEscaped,
+
+      'name': videoPlaylistNameEscaped,
+      'description': videoPlaylistDescriptionEscaped,
+      'image': videoPlaylistThumbnailUrl,
+
+      'twitter:card': 'summary_large_image',
+      'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
+      'twitter:title': videoPlaylistNameEscaped,
+      'twitter:description': videoPlaylistDescriptionEscaped,
+      'twitter:image': videoPlaylistThumbnailUrl
+    }
+
+    const schemaTags = {
+      '@context': 'http://schema.org',
+      '@type': 'ItemList',
+      'name': videoPlaylistNameEscaped,
+      'description': videoPlaylistDescriptionEscaped,
+      'image': videoPlaylistThumbnailUrl,
+      'numberOfItems': videoPlaylist.get('videosLength')
+    }
+
+    let tagsString = ''
+
+    // Opengraph
+    Object.keys(openGraphMetaTags).forEach(tagName => {
+      const tagValue = openGraphMetaTags[tagName]
+
+      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
+    })
+
+    // Schema.org
+    tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
+
+    // SEO, use origin videoPlaylist url so Google does not index remote videos
+    tagsString += `<link rel="canonical" href="${videoPlaylistUrl}" />`
+
+    return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
+  }
+
   private static addAccountOrChannelOpenGraphAndMetaTags (htmlStringPage: string, entity: MAccountActor | MChannelActor) {
     const entityDisplayNameEscaped = escapeHTML(entity.getDisplayName())
     const entityDescriptionEscaped = escapeHTML(entity.description)
@@ -287,7 +371,7 @@ export class ClientHtml {
       'twitter:description': entityDescriptionEscaped,
       'twitter:image': entityAvatarUrl,
       'twitter:image:width': AVATARS_SIZE.width,
-      'twitter:image:height': AVATARS_SIZE.height,
+      'twitter:image:height': AVATARS_SIZE.height
     }
 
     const schemaTags = {
