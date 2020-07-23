@@ -13,6 +13,11 @@
     width: 100% !important;
   }
 
+  .user-quota-title, .progress {
+    @include disable-outline;
+    @include button-focus(pvar(--mainColorLightest));
+  }
+
   .progress {
     @include progressbar;
 
