@@ -139,12 +139,13 @@ label {
   .sub-menu {
     background-color: pvar(--submenuColor);
     width: 100%;
-    height: 81px;
-    margin-bottom: $sub-menu-margin-bottom;
+    height: $sub-menu-height;
     display: flex;
     align-items: center;
     padding-left: $not-expanded-horizontal-margins;
     padding-right: $not-expanded-horizontal-margins;
+    position: fixed;
+    z-index: 1;
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
@@ -175,6 +176,7 @@ label {
 }
 
 .title-page {
+  opacity: 0.6;
   color: pvar(--mainForegroundColor);
   font-size: 16px;
   display: inline-block;
@@ -182,14 +184,15 @@ label {
   font-weight: $font-semibold;
   @include disable-default-a-behaviour;
 
-  &.active, &.title-page-single {
+  border-bottom: 2px solid transparent;
+
+  &.title-page-single {
     margin-top: 30px;
     margin-bottom: 25px;
   }
 
   &.active {
-    font-weight: $font-bold;
-    border-bottom: 2px solid pvar(--mainColor);
+    border-bottom-color: pvar(--mainColor);
   }
 
   &.title-page-single {
@@ -198,6 +201,11 @@ label {
 
   &:hover, &:active, &:focus {
     color: pvar(--mainForegroundColor);
+  }
+
+  &.active, &:hover,  &:active, &:focus, &.title-page-single {
+    opacity: 1;
+    outline: 0px hidden !important;
   }
 
   @media screen and (max-width: $mobile-view) {
@@ -209,11 +217,6 @@ label {
 .title-page-settings {
   white-space: nowrap;
   font-size: 115%;
-  font-weight: $font-regular;
-
-  &.active {
-    font-weight: $font-semibold;
-  }
 }
 
 .admin-sub-header {
@@ -232,11 +235,15 @@ label {
     color: pvar(--mainForegroundColor);
     padding: 5px 15px;
     border-radius: 0.25rem;
+    font-weight: $font-semibold;
+    opacity: 0.6;
 
     &.active {
-      font-weight: $font-semibold;
       background-color: #f0f0f0;
-      color: #000;
+    }
+
+    &.active, &:hover, &:active, &:focus {
+      opacity: 1;
     }
   }
 }

@@ -1,4 +1,8 @@
-<h1 class="sr-only" i18n>History</h1>
+<h1>
+  <my-global-icon iconName="history" aria-hidden="true"></my-global-icon>
+  <ng-container i18n>My history</ng-container>
+</h1>
+
 <div class="top-buttons">
   <div class="history-switch">
     <p-inputSwitch [(ngModel)]="videosHistoryEnabled" (ngModelChange)="onVideosHistoryChange()"></p-inputSwitch>

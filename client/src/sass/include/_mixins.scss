@@ -929,3 +929,23 @@
     @content;
   }
 }
+
+@mixin sub-menu-h1 {
+  ::ng-deep h1 {
+    font-size: 1.3rem;
+    border-bottom: 2px solid $grey-background-color;
+    padding-bottom: 15px;
+    margin-bottom: $sub-menu-margin-bottom;
+
+    my-global-icon {
+      margin-right: 10px;
+      vertical-align: bottom;
+      width: 24px;
+      height: 24px;
+    }
+
+    .badge {
+      margin-left: 7px;
+    }
+  }
+}

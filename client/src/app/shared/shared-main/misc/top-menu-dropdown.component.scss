@@ -1,6 +1,12 @@
 @import '_variables';
 @import '_mixins';
 
+:host {
+  display: block;
+  height: $sub-menu-height;
+  margin-bottom: $sub-menu-margin-bottom;
+}
+
 .parent-entry {
   span[role=button] {
     cursor: pointer;
