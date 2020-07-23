@@ -7,6 +7,13 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
 import { ServerConfig, User, UserRole } from '@shared/models'
 import { Params, Router, ActivatedRoute } from '@angular/router'
 
+type UserForList = User & {
+  rawVideoQuota: number
+  rawVideoQuotaUsed: number
+  rawVideoQuotaDaily: number
+  rawVideoQuotaUsedDaily: number
+}
+
 @Component({
   selector: 'my-user-list',
   templateUrl: './user-list.component.html',
@@ -24,8 +31,8 @@ export class UserListComponent extends RestTable implements OnInit {
   selectedUsers: User[] = []
   bulkUserActions: DropdownAction<User[]>[][] = []
   columns: { key: string, label: string }[]
-  _selectedColumns: { key: string, label: string }[]
 
+  private _selectedColumns: { key: string, label: string }[]
   private serverConfig: ServerConfig
 
   constructor (
@@ -111,7 +118,7 @@ export class UserListComponent extends RestTable implements OnInit {
       { key: 'role', label: 'Role' },
       { key: 'createdAt', label: 'Created' }
     ]
-    this.selectedColumns = [...this.columns]
+    this.selectedColumns = [ ...this.columns ] // make a full copy of the array
     this.columns.push({ key: 'quotaDaily', label: 'Daily quota' })
     this.columns.push({ key: 'pluginAuth', label: 'Auth plugin' })
     this.columns.push({ key: 'lastLoginDate', label: 'Last login' })
@@ -133,14 +140,14 @@ export class UserListComponent extends RestTable implements OnInit {
   }
 
   getColumn (key: string) {
-    return this.selectedColumns.find((col: any) => col.key === key)
+    return this.selectedColumns.find((col: { key: string }) => col.key === key)
   }
 
-  getUserVideoQuotaPercentage (user: User & { rawVideoQuota: number, rawVideoQuotaUsed: number}) {
+  getUserVideoQuotaPercentage (user: UserForList) {
     return user.rawVideoQuotaUsed * 100 / user.rawVideoQuota
   }
 
-  getUserVideoQuotaDailyPercentage (user: User & { rawVideoQuotaDaily: number, rawVideoQuotaUsedDaily: number}) {
+  getUserVideoQuotaDailyPercentage (user: UserForList) {
     return user.rawVideoQuotaUsedDaily * 100 / user.rawVideoQuotaDaily
   }
 

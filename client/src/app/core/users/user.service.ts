@@ -381,14 +381,14 @@ export class UserService {
 
     const videoQuotaUsed = this.bytesPipe.transform(user.videoQuotaUsed, 0)
 
-    let videoQuotaDaily
-    let videoQuotaUsedDaily
+    let videoQuotaDaily: string
+    let videoQuotaUsedDaily: string
     if (user.videoQuotaDaily === -1) {
       videoQuotaDaily = '∞'
-      videoQuotaUsedDaily = this.bytesPipe.transform(0, 0)
+      videoQuotaUsedDaily = this.bytesPipe.transform(0, 0) + ''
     } else {
-      videoQuotaDaily = this.bytesPipe.transform(user.videoQuotaDaily, 0)
-      videoQuotaUsedDaily = this.bytesPipe.transform(user.videoQuotaUsedDaily || 0, 0)
+      videoQuotaDaily = this.bytesPipe.transform(user.videoQuotaDaily, 0) + ''
+      videoQuotaUsedDaily = this.bytesPipe.transform(user.videoQuotaUsedDaily || 0, 0) + ''
     }
 
     const roleLabels: { [ id in UserRole ]: string } = {

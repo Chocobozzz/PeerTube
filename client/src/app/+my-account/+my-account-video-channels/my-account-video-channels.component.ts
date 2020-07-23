@@ -1,10 +1,11 @@
 import { ChartData } from 'chart.js'
 import { max, maxBy, min, minBy } from 'lodash-es'
-import { flatMap } from 'rxjs/operators'
+import { flatMap, debounceTime } from 'rxjs/operators'
 import { Component, OnInit } from '@angular/core'
 import { AuthService, ConfirmService, Notifier, ScreenService, User } from '@app/core'
 import { VideoChannel, VideoChannelService } from '@app/shared/shared-main'
 import { I18n } from '@ngx-translate/i18n-polyfill'
+import { Subject } from 'rxjs'
 
 @Component({
   selector: 'my-account-video-channels',
@@ -12,10 +13,15 @@ import { I18n } from '@ngx-translate/i18n-polyfill'
   styleUrls: [ './my-account-video-channels.component.scss' ]
 })
 export class MyAccountVideoChannelsComponent implements OnInit {
+  totalItems: number
+
   videoChannels: VideoChannel[] = []
   videoChannelsChartData: ChartData[]
   videoChannelsMinimumDailyViews = 0
   videoChannelsMaximumDailyViews: number
+
+  channelsSearch: string
+  channelsSearchChanged = new Subject<string>()
 
   private user: User
 
@@ -32,6 +38,12 @@ export class MyAccountVideoChannelsComponent implements OnInit {
     this.user = this.authService.getUser()
 
     this.loadVideoChannels()
+
+    this.channelsSearchChanged
+      .pipe(debounceTime(500))
+      .subscribe(() => {
+        this.loadVideoChannels()
+      })
   }
 
   get isInSmallView () {
@@ -87,6 +99,15 @@ export class MyAccountVideoChannelsComponent implements OnInit {
     }
   }
 
+  resetSearch() {
+    this.channelsSearch = ''
+    this.onChannelsSearchChanged()
+  }
+
+  onChannelsSearchChanged () {
+    this.channelsSearchChanged.next()
+  }
+
   async deleteVideoChannel (videoChannel: VideoChannel) {
     const res = await this.confirmService.confirmWithInput(
       this.i18n(
@@ -118,9 +139,10 @@ export class MyAccountVideoChannelsComponent implements OnInit {
 
   private loadVideoChannels () {
     this.authService.userInformationLoaded
-        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account, null, true)))
+        .pipe(flatMap(() => this.videoChannelService.listAccountVideoChannels(this.user.account, null, true, this.channelsSearch)))
         .subscribe(res => {
           this.videoChannels = res.data
+          this.totalItems = res.total
 
           // chart data
           this.videoChannelsChartData = this.videoChannels.map(v => ({

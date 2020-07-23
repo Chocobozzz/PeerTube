@@ -1,14 +1,8 @@
 @import '_variables';
 @import '_mixins';
 
-.videos-header {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0 50px;
-
-  input[type=text] {
-    @include peertube-input-text(300px);
-  }
+input[type=text] {
+  @include peertube-input-text(300px);
 }
 
 .action-button-delete-selection {

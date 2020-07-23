@@ -84,6 +84,11 @@ export class MyAccountVideoPlaylistsComponent implements OnInit {
     this.loadVideoPlaylists()
   }
 
+  resetSearch () {
+    this.videoPlaylistsSearch = ''
+    this.onVideoPlaylistSearchChanged()
+  }
+
   onVideoPlaylistSearchChanged () {
     this.videoPlaylistSearchChanged.next()
   }

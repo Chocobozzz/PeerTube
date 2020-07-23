@@ -5,6 +5,10 @@
   @include create-button;
 }
 
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
 ::ng-deep .action-button {
   &.action-button-edit {
     margin-right: 10px;
@@ -53,11 +57,6 @@
     margin-top: 10px;
     min-width: 190px;
   }
-}
-
-.video-channels-header {
-  text-align: right;
-  margin: 20px 0 50px;
 }
 
 ::ng-deep .chartjs-render-monitor {

@@ -30,6 +30,19 @@ export class MyAccountVideoImportsComponent extends RestTable implements OnInit 
     return 'MyAccountVideoImportsComponent'
   }
 
+  getVideoImportStateClass (state: VideoImportState) {
+    switch (state) {
+      case VideoImportState.FAILED:
+        return 'badge-red'
+      case VideoImportState.REJECTED:
+        return 'badge-banned'
+      case VideoImportState.PENDING:
+        return 'badge-yellow'
+      default:
+        return 'badge-green'
+    }
+  }
+
   isVideoImportSuccess (videoImport: VideoImport) {
     return videoImport.state.id === VideoImportState.SUCCESS
   }

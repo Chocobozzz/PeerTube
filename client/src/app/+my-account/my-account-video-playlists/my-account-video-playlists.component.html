@@ -1,17 +1,20 @@
-<h1>
-  <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My playlists</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
-</h1>
+<h1 class="d-flex justify-content-between">
+  <span>
+    <my-global-icon iconName="playlists" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My playlists</ng-container> <span class="badge badge-secondary">{{ pagination.totalItems }}</span>
+  </span>
 
-
-<div class="video-playlists-header">
-  <input type="text" placeholder="Search your playlists" i18n-placeholder [(ngModel)]="videoPlaylistsSearch" (ngModelChange)="onVideoPlaylistSearchChanged()" />
+  <div class="has-feedback has-clear">
+    <input type="text" placeholder="Search your playlists" i18n-placeholder [(ngModel)]="videoPlaylistsSearch" (ngModelChange)="onVideoPlaylistSearchChanged()" />
+    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+    <span class="sr-only" i18n>Clear filters</span>
+  </div>
 
   <a class="create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
     <ng-container i18n>Create playlist</ng-container>
   </a>
-</div>
+</h1>
 
 <div class="video-playlists" myInfiniteScroller [autoInit]="true" (nearOfBottom)="onNearOfBottom()" [dataObservable]="onDataSubject.asObservable()">
   <div *ngFor="let playlist of videoPlaylists" class="video-playlist">

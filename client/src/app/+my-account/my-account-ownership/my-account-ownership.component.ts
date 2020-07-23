@@ -2,7 +2,7 @@ import { SortMeta } from 'primeng/api'
 import { Component, OnInit, ViewChild } from '@angular/core'
 import { Notifier, RestPagination, RestTable } from '@app/core'
 import { VideoOwnershipService, Actor, Video, Account } from '@app/shared/shared-main'
-import { VideoChangeOwnership } from '@shared/models'
+import { VideoChangeOwnership, VideoChangeOwnershipStatus } from '@shared/models'
 import { MyAccountAcceptOwnershipComponent } from './my-account-accept-ownership/my-account-accept-ownership.component'
 import { getAbsoluteAPIUrl } from '@app/helpers'
 
@@ -32,6 +32,17 @@ export class MyAccountOwnershipComponent extends RestTable implements OnInit {
 
   getIdentifier () {
     return 'MyAccountOwnershipComponent'
+  }
+
+  getStatusClass (status: VideoChangeOwnershipStatus) {
+    switch (status) {
+      case VideoChangeOwnershipStatus.ACCEPTED:
+        return 'badge-green'
+      case VideoChangeOwnershipStatus.REFUSED:
+        return 'badge-red'
+      default:
+        return 'badge-yellow'
+    }
   }
 
   switchToDefaultAvatar ($event: Event) {

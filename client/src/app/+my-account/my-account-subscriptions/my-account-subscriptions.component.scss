@@ -1,6 +1,10 @@
 @import '_variables';
 @import '_mixins';
 
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
 .video-channel {
   @include row-blocks;
 

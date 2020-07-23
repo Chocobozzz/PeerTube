@@ -105,13 +105,18 @@ export class UserSubscriptionService {
                )
   }
 
-  listSubscriptions (componentPagination: ComponentPaginationLight): Observable<ResultList<VideoChannel>> {
+  listSubscriptions (parameters: {
+    pagination: ComponentPaginationLight
+    search: string
+  }): Observable<ResultList<VideoChannel>> {
+    const { pagination, search } = parameters
     const url = UserSubscriptionService.BASE_USER_SUBSCRIPTIONS_URL
 
-    const pagination = this.restService.componentPaginationToRestPagination(componentPagination)
+    const restPagination = this.restService.componentPaginationToRestPagination(pagination)
 
     let params = new HttpParams()
-    params = this.restService.addRestGetParams(params, pagination)
+    params = this.restService.addRestGetParams(params, restPagination)
+    if (search) params = params.append('search', search)
 
     return this.authHttp.get<ResultList<VideoChannelServer>>(url, { params })
                .pipe(

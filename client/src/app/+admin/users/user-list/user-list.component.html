@@ -112,8 +112,10 @@
         </a>
       </td>
 
-      <td *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus" [title]="user.email">
-        <a class="table-email" [href]="'mailto:' + user.email">{{ user.email }}</a>
+      <td *ngIf="getColumn('email')" [title]="user.email">
+        <ng-container *ngIf="!requiresEmailVerification || user.blocked; else emailWithVerificationStatus">
+          <a class="table-email" [href]="'mailto:' + user.email">{{ user.email }}</a>
+        </ng-container>
       </td>
 
       <ng-template #emailWithVerificationStatus>

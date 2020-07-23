@@ -6,10 +6,10 @@
   </a>
 
   <div class="peertube-select-container peertube-select-button ml-2">
-    <select [(ngModel)]="notificationSortType" class="form-control">
+    <select [(ngModel)]="notificationSortType" (ngModelChange)="onChangeSortColumn()" class="form-control">
       <option value="undefined" disabled>Sort by</option>
-      <option value="created" i18n>Newest first</option>
-      <option value="unread-created" i18n>Unread first</option>
+      <option value="createdAt" i18n>Newest first</option>
+      <option value="read" [disabled]="!hasUnreadNotifications()" i18n>Unread first</option>
     </select>
   </div>
 

@@ -315,9 +315,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     start: number
     count: number
     sort: string
-    search?: string
   }) {
-    const { actorId, search } = parameters
+    const { actorId } = parameters
 
     const query = {
       offset: parameters.start,
@@ -326,7 +325,7 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     }
 
     const scopes = {
-      method: [ ScopeNames.FOR_API, { actorId, search } as AvailableForListOptions ]
+      method: [ ScopeNames.FOR_API, { actorId } as AvailableForListOptions ]
     }
     return VideoChannelModel
       .scope(scopes)
@@ -405,7 +404,23 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
     count: number
     sort: string
     withStats?: boolean
+    search?: string
   }) {
+    const escapedSearch = VideoModel.sequelize.escape(options.search)
+    const escapedLikeSearch = VideoModel.sequelize.escape('%' + options.search + '%')
+    const where = options.search
+      ? {
+        [Op.or]: [
+          Sequelize.literal(
+            'lower(immutable_unaccent("VideoChannelModel"."name")) % lower(immutable_unaccent(' + escapedSearch + '))'
+          ),
+          Sequelize.literal(
+            'lower(immutable_unaccent("VideoChannelModel"."name")) LIKE lower(immutable_unaccent(' + escapedLikeSearch + '))'
+          )
+        ]
+      }
+      : null
+
     const query = {
       offset: options.start,
       limit: options.count,
@@ -418,7 +433,8 @@ export class VideoChannelModel extends Model<VideoChannelModel> {
           },
           required: true
         }
-      ]
+      ],
+      where
     }
 
     const scopes: string | ScopeOptions | (string | ScopeOptions)[] = [ ScopeNames.WITH_ACTOR ]

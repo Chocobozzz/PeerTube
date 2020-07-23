@@ -1,11 +1,16 @@
-<h1>
-  <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My videos</ng-container><span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
-</h1>
+<h1 class="d-flex justify-content-between">
+  <span>
+    <my-global-icon iconName="videos" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My videos</ng-container>
+    <span class="badge badge-secondary"> {{ pagination.totalItems }}</span>
+  </span>
 
-<div class="videos-header">
-  <input type="text" placeholder="Search your videos" i18n-placeholder [(ngModel)]="videosSearch" (ngModelChange)="onVideosSearchChanged()" />
-</div>
+  <div class="has-feedback has-clear">
+    <input type="text" placeholder="Search your videos" i18n-placeholder [(ngModel)]="videosSearch" (ngModelChange)="onVideosSearchChanged()" />
+    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+    <span class="sr-only" i18n>Clear filters</span>
+  </div>
+</h1>
 
 <my-videos-selection
   [pagination]="pagination"

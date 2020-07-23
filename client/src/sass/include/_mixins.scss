@@ -690,12 +690,11 @@
   overflow: hidden;
   font-size: 0.75rem;
   border-radius: 0.25rem;
-  isolation: isolate;
   position: relative;
 
   span {
     position: absolute;
-    color: rgb(92, 92, 92);
+    color: $grey-foreground-color;
     top: -1px;
 
     &:nth-of-type(1) {
