@@ -45,7 +45,12 @@
         <ng-container *ngIf="isVideoImportFailed(videoImport)"></ng-container>
       </td>
 
-      <td>{{ videoImport.state.label }}</td>
+      <td>
+        <span class="badge" [ngClass]="getVideoImportStateClass(videoImport.state)">
+          {{ videoImport.state.label }}
+        </span>
+      </td>
+
       <td>{{ videoImport.createdAt | date: 'short' }}</td>
 
       <td class="action-cell">

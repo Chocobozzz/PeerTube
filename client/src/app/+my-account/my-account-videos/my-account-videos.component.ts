@@ -59,11 +59,15 @@ export class MyAccountVideosComponent implements OnInit, DisableForReuseHook {
 
   ngOnInit () {
     this.videosSearchChanged
-      .pipe(
-        debounceTime(500))
+      .pipe(debounceTime(500))
       .subscribe(() => {
         this.videosSelection.reloadVideos()
       })
+  }
+
+  resetSearch () {
+    this.videosSearch = ''
+    this.onVideosSearchChanged()
   }
 
   onVideosSearchChanged () {

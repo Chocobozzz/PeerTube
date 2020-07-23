@@ -8,3 +8,7 @@ pre {
 .video-import-error {
   color: red;
 }
+
+.badge {
+  @include table-badge;
+}

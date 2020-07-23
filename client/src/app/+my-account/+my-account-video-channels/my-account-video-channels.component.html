@@ -1,14 +1,21 @@
-<h1>
-  <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
-  <ng-container i18n>My channels</ng-container>
-</h1>
+<h1 class="d-flex justify-content-between">
+  <span>
+    <my-global-icon iconName="channel" aria-hidden="true"></my-global-icon>
+    <ng-container i18n>My channels</ng-container>
+    <span class="badge badge-secondary">{{ totalItems }}</span>
+  </span>
 
-<div class="video-channels-header">
+  <div class="has-feedback has-clear">
+    <input type="text" placeholder="Search your channels" i18n-placeholder [(ngModel)]="channelsSearch" (ngModelChange)="onChannelsSearchChanged()" />
+    <a class="glyphicon glyphicon-remove-sign form-control-feedback form-control-clear" (click)="resetSearch()"></a>
+    <span class="sr-only" i18n>Clear filters</span>
+  </div>
+
   <a class="create-button" routerLink="create">
     <my-global-icon iconName="add" aria-hidden="true"></my-global-icon>
     <ng-container i18n>Create video channel</ng-container>
   </a>
-</div>
+</h1>
 
 <div class="video-channels">
   <div *ngFor="let videoChannel of videoChannels; let i = index" class="video-channel">

@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core'
 import { ComponentPagination, Notifier } from '@app/core'
 import { VideoChannel } from '@app/shared/shared-main'
 import { UserSubscriptionService } from '@app/shared/shared-user-subscription'
+import { debounceTime } from 'rxjs/operators'
 
 @Component({
   selector: 'my-account-subscriptions',
@@ -20,6 +21,9 @@ export class MyAccountSubscriptionsComponent implements OnInit {
 
   onDataSubject = new Subject<any[]>()
 
+  subscriptionsSearch: string
+  subscriptionsSearchChanged = new Subject<string>()
+
   constructor (
     private userSubscriptionService: UserSubscriptionService,
     private notifier: Notifier
@@ -27,20 +31,22 @@ export class MyAccountSubscriptionsComponent implements OnInit {
 
   ngOnInit () {
     this.loadSubscriptions()
+
+    this.subscriptionsSearchChanged
+      .pipe(debounceTime(500))
+      .subscribe(() => {
+        this.pagination.currentPage = 1
+        this.loadSubscriptions(false)
+      })
   }
 
-  loadSubscriptions () {
-    this.userSubscriptionService.listSubscriptions(this.pagination)
-        .subscribe(
-          res => {
-            this.videoChannels = this.videoChannels.concat(res.data)
-            this.pagination.totalItems = res.total
+  resetSearch () {
+    this.subscriptionsSearch = ''
+    this.onSubscriptionsSearchChanged()
+  }
 
-            this.onDataSubject.next(res.data)
-          },
-
-          error => this.notifier.error(error.message)
-        )
+  onSubscriptionsSearchChanged () {
+    this.subscriptionsSearchChanged.next()
   }
 
   onNearOfBottom () {
@@ -51,4 +57,19 @@ export class MyAccountSubscriptionsComponent implements OnInit {
     this.loadSubscriptions()
   }
 
+  private loadSubscriptions (more = true) {
+    this.userSubscriptionService.listSubscriptions({ pagination: this.pagination, search: this.subscriptionsSearch })
+        .subscribe(
+          res => {
+            this.videoChannels = more
+              ? this.videoChannels.concat(res.data)
+              : res.data
+            this.pagination.totalItems = res.total
+
+            this.onDataSubject.next(res.data)
+          },
+
+          error => this.notifier.error(error.message)
+        )
+  }
 }

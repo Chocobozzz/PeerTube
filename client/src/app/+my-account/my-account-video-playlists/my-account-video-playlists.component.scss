@@ -5,6 +5,10 @@
   @include create-button;
 }
 
+input[type=text] {
+  @include peertube-input-text(300px);
+}
+
 ::ng-deep .action-button {
   &.action-button-delete {
     margin-right: 10px;
@@ -30,16 +34,6 @@
   .video-playlist-buttons {
     min-width: 190px;
     height: max-content;
-  }
-}
-
-.video-playlists-header {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px 0 50px;
-
-  input[type=text] {
-    @include peertube-input-text(300px);
   }
 }
 

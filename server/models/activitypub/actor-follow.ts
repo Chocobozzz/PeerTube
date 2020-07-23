@@ -15,14 +15,15 @@ import {
   Max,
   Model,
   Table,
-  UpdatedAt
+  UpdatedAt,
+  Sequelize
 } from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
 import { logger } from '../../helpers/logger'
 import { ACTOR_FOLLOW_SCORE, FOLLOW_STATES, SERVER_ACTOR_NAME } from '../../initializers/constants'
 import { ServerModel } from '../server/server'
-import { createSafeIn, getFollowsSort, getSort } from '../utils'
+import { createSafeIn, getFollowsSort, getSort, searchAttribute } from '../utils'
 import { ActorModel, unusedActorAttributesForAPI } from './actor'
 import { VideoChannelModel } from '../video/video-channel'
 import { AccountModel } from '../account/account'
@@ -440,16 +441,34 @@ export class ActorFollowModel extends Model<ActorFollowModel> {
                            })
   }
 
-  static listSubscriptionsForApi (actorId: number, start: number, count: number, sort: string) {
+  static listSubscriptionsForApi (options: {
+    actorId: number
+    start: number
+    count: number
+    sort: string
+    search?: string
+  }) {
+    const { actorId, start, count, sort } = options
+    const where = {
+      actorId: actorId
+    }
+
+    if (options.search) {
+      Object.assign(where, {
+        [Op.or]: [
+          searchAttribute(options.search, '$ActorFollowing.preferredUsername$'),
+          searchAttribute(options.search, '$ActorFollowing.VideoChannel.name$')
+        ]
+      })
+    }
+
     const query = {
       attributes: [],
       distinct: true,
       offset: start,
       limit: count,
       order: getSort(sort),
-      where: {
-        actorId: actorId
-      },
+      where,
       include: [
         {
           attributes: [ 'id' ],

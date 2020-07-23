@@ -120,7 +120,8 @@ async function listAccountChannels (req: express.Request, res: express.Response)
     start: req.query.start,
     count: req.query.count,
     sort: req.query.sort,
-    withStats: req.query.withStats
+    withStats: req.query.withStats,
+    search: req.query.search
   }
 
   const resultList = await VideoChannelModel.listByAccount(options)

@@ -62,7 +62,11 @@
       </td>
 
       <td>{{ videoChangeOwnership.createdAt | date: 'short' }}</td>
-      <td i18n>{{ videoChangeOwnership.status }}</td>
+
+      <td>
+        <span class="badge" [ngClass]="getStatusClass(videoChangeOwnership.status)">{{ videoChangeOwnership.status }}</span>
+      </td>
+
       <td class="action-cell">
         <ng-container *ngIf="videoChangeOwnership.status === 'WAITING'">
           <my-button i18n-label label="Accept" icon="tick" (click)="openAcceptModal(videoChangeOwnership)"></my-button>

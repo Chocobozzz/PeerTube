@@ -119,8 +119,7 @@ async function listVideoChannels (req: express.Request, res: express.Response) {
     actorId: serverActor.id,
     start: req.query.start,
     count: req.query.count,
-    sort: req.query.sort,
-    search: req.query.search
+    sort: req.query.sort
   })
 
   return res.json(getFormattedObjects(resultList.data, resultList.total))
