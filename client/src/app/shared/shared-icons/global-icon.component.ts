@@ -7,6 +7,7 @@ const icons = {
   'language': require('!!raw-loader?!../../../assets/images/misc/language.svg').default,
   'video-lang': require('!!raw-loader?!../../../assets/images/misc/video-lang.svg').default,
   'support': require('!!raw-loader?!../../../assets/images/misc/support.svg').default,
+  'peertube-x': require('!!raw-loader?!../../../assets/images/misc/peertube-x.svg').default,
   'robot': require('!!raw-loader?!../../../assets/images/misc/miscellaneous_services.svg').default, // material ui
   'videos': require('!!raw-loader?!../../../assets/images/misc/video_library.svg').default, // material ui
   'history': require('!!raw-loader?!../../../assets/images/misc/history.svg').default, // material ui
@@ -42,9 +43,9 @@ const icons = {
   'share': require('!!raw-loader?!../../../assets/images/feather/share-2.svg').default,
   'channel': require('!!raw-loader?!../../../assets/images/feather/tv.svg').default,
   'user': require('!!raw-loader?!../../../assets/images/feather/user.svg').default,
+  'user-x': require('!!raw-loader?!../../../assets/images/feather/user-x.svg').default,
   'users': require('!!raw-loader?!../../../assets/images/feather/users.svg').default,
   'user-add': require('!!raw-loader?!../../../assets/images/feather/user-plus.svg').default,
-  'server': require('!!raw-loader?!../../../assets/images/feather/server.svg').default,
   'add': require('!!raw-loader?!../../../assets/images/feather/plus-circle.svg').default,
   'cloud-error': require('!!raw-loader?!../../../assets/images/feather/cloud-off.svg').default,
   'undo': require('!!raw-loader?!../../../assets/images/feather/corner-up-left.svg').default,
