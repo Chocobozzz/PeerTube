@@ -149,4 +149,23 @@ export class User implements UserServerModel {
   updateAccountAvatar (newAccountAvatar: Avatar) {
     this.account.updateAvatar(newAccountAvatar)
   }
+
+  canUpload (): boolean {
+    if (this.videoQuota === 0 || this.videoQuotaDaily === 0) return false
+
+    return true
+  }
+
+  canSeeVideosLink (): boolean {
+    if (this.canUpload()) {
+      return true
+    }
+
+    // cannot upload but has already some videos
+    if (this.videosCount > 0) {
+      return true
+    }
+
+    return false
+  }
 }
