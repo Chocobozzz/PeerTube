@@ -57,4 +57,12 @@ export class UserQuotaComponent implements OnInit {
   hasDailyQuota () {
     return this.user.videoQuotaDaily !== -1
   }
+
+  titleVideoQuota () {
+    return `${new BytesPipe().transform(this.userVideoQuotaUsed, 0).toString()} / ${this.userVideoQuota}`
+  }
+
+  titleVideoQuotaDaily () {
+    return `${new BytesPipe().transform(this.userVideoQuotaUsedDaily, 0).toString()} / ${this.userVideoQuotaDaily}`
+  }
 }
