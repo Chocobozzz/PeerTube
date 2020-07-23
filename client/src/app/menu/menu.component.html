@@ -33,21 +33,21 @@
 
             <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" (click)="openLanguageChooser()">
               <my-global-icon iconName="language" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>Interface: {{ language }}</ng-container>
-              <i class="ml-auto glyphicon glyphicon-menu-right"></i>
+              <span i18n>Interface:</span>
+              <span class="ml-auto text-muted">{{ language }}</span>
             </a>
 
             <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-settings">
               <my-global-icon iconName="video-lang" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>Videos: {{ videoLanguages.join(', ') }}</ng-container>
-              <i class="ml-auto glyphicon glyphicon-menu-right"></i>
+              <span i18n>Videos:</span>
+              <span class="ml-auto text-muted">{{ videoLanguages.join(', ') }}</span>
             </a>
 
             <a ngbDropdownItem ngbDropdownToggle class="dropdown-item" routerLink="/my-account/settings" fragment="video-settings">
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy === 'display' }" iconName="sensitive" aria-hidden="true"></my-global-icon>
               <my-global-icon class="hover-display-toggle" [ngClass]="{ 'not-displayed': user.nsfwPolicy !== 'display' }" iconName="unsensitive" aria-hidden="true"></my-global-icon>
-              <ng-container i18n>Sensitive: {{ nsfwPolicy }}</ng-container>
-              <i class="ml-auto glyphicon glyphicon-menu-right"></i>
+              <span i18n>Sensitive:</span>
+              <span class="ml-auto text-muted">{{ nsfwPolicy }}</span>
             </a>
 
             <a ngbDropdownItem class="dropdown-item" (click)="toggleUseP2P()">
