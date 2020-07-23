@@ -524,6 +524,8 @@
 }
 
 @mixin sub-menu-with-actor {
+  position: initial;
+  z-index: unset;
   height: max-content;
   display: flex;
   flex-direction: column;
