@@ -137,7 +137,7 @@ label {
   }
 
   my-top-menu-dropdown + .margin-content {
-    margin-top: $sub-menu-height + $sub-menu-margin-bottom;
+    padding-top: $sub-menu-height + $sub-menu-margin-bottom;
   }
 
   .sub-menu {
@@ -149,7 +149,7 @@ label {
     padding-left: $not-expanded-horizontal-margins;
     padding-right: $not-expanded-horizontal-margins;
     position: fixed;
-    z-index: 200;
+    z-index: #{z('header') - 1};
 
     & + .margin-content {
       margin-top: $sub-menu-margin-bottom;
