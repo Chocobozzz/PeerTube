@@ -144,15 +144,23 @@
 
           <div class="pt-3 border-top video-info-channel d-flex">
             <div class="video-info-channel-left d-flex">
-              <avatar-channel [video]="video"></avatar-channel>
+              <avatar-channel [video]="video" [genericChannel]="isChannelDisplayNameGeneric()"></avatar-channel>
 
               <div class="video-info-channel-left-links ml-1">
-                <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Channel page">
-                  {{ video.channel.displayName }}
-                </a>
-                <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Account page">
-                  <span i18n>By {{ video.byAccount }}</span>
-                </a>
+                <ng-container *ngIf="!isChannelDisplayNameGeneric()">
+                  <a [routerLink]="[ '/video-channels', video.byVideoChannel ]" i18n-title title="Channel page">
+                    {{ video.channel.displayName }}
+                  </a>
+                  <a [routerLink]="[ '/accounts', video.byAccount ]" i18n-title title="Account page">
+                    <span i18n>By {{ video.byAccount }}</span>
+                  </a>
+                </ng-container>
+
+                <ng-container *ngIf="isChannelDisplayNameGeneric()">
+                  <a [routerLink]="[ '/accounts', video.byAccount ]" class="single-link" i18n-title title="Account page">
+                    <span i18n>{{ video.byAccount }}</span>
+                  </a>
+                </ng-container>
               </div>
             </div>
 

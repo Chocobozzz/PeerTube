@@ -307,6 +307,15 @@ export class VideoWatchComponent implements OnInit, OnDestroy {
     )
   }
 
+  isChannelDisplayNameGeneric () {
+    const genericChannelDisplayName = [
+      `Main ${this.video.channel.ownerAccount.name} channel`,
+      `Default ${this.video.channel.ownerAccount.name} channel`
+    ]
+
+    return genericChannelDisplayName.includes(this.video.channel.displayName)
+  }
+
   private loadVideo (videoId: string) {
     // Video did not change
     if (this.video && this.video.uuid === videoId) return
