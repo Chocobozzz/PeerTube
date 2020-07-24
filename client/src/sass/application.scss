@@ -371,7 +371,7 @@ table {
       input[type=email],
       textarea,
       .peertube-select-container {
-        width: 100% !important;
+        flex-grow: 1;
       }
 
       .caption input[type=text] {

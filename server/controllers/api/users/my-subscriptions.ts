@@ -13,7 +13,12 @@ import {
   userSubscriptionAddValidator,
   userSubscriptionGetValidator
 } from '../../../middlewares'
-import { areSubscriptionsExistValidator, userSubscriptionsSortValidator, videosSortValidator, userSubscriptionListValidator } from '../../../middlewares/validators'
+import {
+  areSubscriptionsExistValidator,
+  userSubscriptionsSortValidator,
+  videosSortValidator,
+  userSubscriptionListValidator
+} from '../../../middlewares/validators'
 import { VideoModel } from '../../../models/video/video'
 import { buildNSFWFilter, getCountVideos } from '../../../helpers/express-utils'
 import { VideoFilter } from '../../../../shared/models/videos/video-query.type'

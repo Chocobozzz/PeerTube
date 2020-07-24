@@ -15,8 +15,7 @@ import {
   Max,
   Model,
   Table,
-  UpdatedAt,
-  Sequelize
+  UpdatedAt
 } from 'sequelize-typescript'
 import { FollowState } from '../../../shared/models/actors'
 import { ActorFollow } from '../../../shared/models/actors/follow.model'
