@@ -21,7 +21,7 @@ import { VideoChannelModel } from '../models/video/video-channel'
 import * as Bluebird from 'bluebird'
 import { CONFIG } from '../initializers/config'
 import { logger } from '../helpers/logger'
-import { MAccountActor, MChannelActor, MVideo, MVideoPlaylist } from '../types/models'
+import { MAccountActor, MChannelActor } from '../types/models'
 
 export class ClientHtml {
 
@@ -64,7 +64,27 @@ export class ClientHtml {
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(video.name))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(video.description))
-    customHtml = ClientHtml.addVideoOpenGraphAndOEmbedTags(customHtml, video)
+
+    const url = WEBSERVER.URL + video.getWatchStaticPath()
+    const title = escapeHTML(video.name)
+    const description = escapeHTML(video.description)
+
+    const image = {
+      url: WEBSERVER.URL + video.getPreviewStaticPath()
+    }
+
+    const embed = {
+      url: WEBSERVER.URL + video.getEmbedStaticPath(),
+      createdAt: video.createdAt.toISOString(),
+      duration: getActivityStreamDuration(video.duration),
+      views: video.views
+    }
+
+    const ogType = 'video'
+    const twitterCard = CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image'
+    const schemaType = 'VideoObject'
+
+    customHtml = ClientHtml.addTags(customHtml, { url, title, description, image, embed, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -89,7 +109,24 @@ export class ClientHtml {
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(videoPlaylist.name))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(videoPlaylist.description))
-    customHtml = ClientHtml.addVideoPlaylistOpenGraphAndMetaTags(customHtml, videoPlaylist)
+
+    const url = videoPlaylist.getWatchUrl()
+    const title = escapeHTML(videoPlaylist.name)
+    const description = escapeHTML(videoPlaylist.description)
+
+    const image = {
+      url: videoPlaylist.getThumbnailUrl()
+    }
+
+    const list = {
+      'numberOfItems': videoPlaylist.get('videosLength')
+    }
+
+    const ogType = 'video'
+    const twitterCard = 'summary'
+    const schemaType = 'ItemList'
+
+    customHtml = ClientHtml.addTags(customHtml, { url, title, description, image, list, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -120,7 +157,22 @@ export class ClientHtml {
 
     let customHtml = ClientHtml.addTitleTag(html, escapeHTML(entity.getDisplayName()))
     customHtml = ClientHtml.addDescriptionTag(customHtml, escapeHTML(entity.description))
-    customHtml = ClientHtml.addAccountOrChannelOpenGraphAndMetaTags(customHtml, entity)
+
+    const url = entity.Actor.url
+    const title = escapeHTML(entity.getDisplayName())
+    const description = escapeHTML(entity.description)
+
+    const image = {
+      url: entity.Actor.getAvatarUrl(),
+      width: AVATARS_SIZE.width,
+      height: AVATARS_SIZE.height
+    }
+
+    const ogType = 'website'
+    const twitterCard = 'summary'
+    const schemaType = 'ProfilePage'
+
+    customHtml = ClientHtml.addTags(customHtml, { url, title, description, image, ogType, twitterCard, schemaType })
 
     return customHtml
   }
@@ -216,60 +268,100 @@ export class ClientHtml {
     return htmlStringPage.replace('</head>', linkTag + '</head>')
   }
 
-  private static addVideoOpenGraphAndOEmbedTags (htmlStringPage: string, video: MVideo) {
-    const previewUrl = WEBSERVER.URL + video.getPreviewStaticPath()
-    const videoUrl = WEBSERVER.URL + video.getWatchStaticPath()
-
-    const videoNameEscaped = escapeHTML(video.name)
-    const videoDescriptionEscaped = escapeHTML(video.description)
-    const embedUrl = WEBSERVER.URL + video.getEmbedStaticPath()
-
-    const openGraphMetaTags = {
-      'og:type': 'video',
-      'og:title': videoNameEscaped,
-      'og:image': previewUrl,
-      'og:url': videoUrl,
-      'og:description': videoDescriptionEscaped,
-
-      'og:video:url': embedUrl,
-      'og:video:secure_url': embedUrl,
-      'og:video:type': 'text/html',
-      'og:video:width': EMBED_SIZE.width,
-      'og:video:height': EMBED_SIZE.height,
-
-      'name': videoNameEscaped,
-      'description': videoDescriptionEscaped,
-      'image': previewUrl,
-
-      'twitter:card': CONFIG.SERVICES.TWITTER.WHITELISTED ? 'player' : 'summary_large_image',
-      'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
-      'twitter:title': videoNameEscaped,
-      'twitter:description': videoDescriptionEscaped,
-      'twitter:image': previewUrl,
-      'twitter:player': embedUrl,
-      'twitter:player:width': EMBED_SIZE.width,
-      'twitter:player:height': EMBED_SIZE.height
+  private static generateOpenGraphMetaTags (tags) {
+    const metaTags = {
+      'og:type': tags.ogType,
+      'og:title': tags.title,
+      'og:image': tags.image.url
     }
 
-    const oembedLinkTags = [
-      {
-        type: 'application/json+oembed',
-        href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(videoUrl),
-        title: videoNameEscaped
-      }
-    ]
+    if (tags.image.width && tags.image.height) {
+      metaTags['og:image:width'] = tags.image.width
+      metaTags['og:image:height'] = tags.image.height
+    }
 
-    const schemaTags = {
+    metaTags['og:url'] = tags.url
+    metaTags['og:description'] = tags.description
+
+    if (tags.embed) {
+      metaTags['og:video:url'] = tags.embed.url,
+      metaTags['og:video:secure_url'] = tags.embed.url,
+      metaTags['og:video:type'] = 'text/html',
+      metaTags['og:video:width'] = EMBED_SIZE.width,
+      metaTags['og:video:height'] = EMBED_SIZE.height
+    }
+
+    return metaTags
+  }
+
+  private static generateStandardMetaTags (tags) {
+    return {
+      'name': tags.title,
+      'description': tags.description,
+      'image': tags.image.url
+    }
+  }
+
+  private static generateTwitterCardMetaTags (tags) {
+    const metaTags = {
+      'twitter:card': tags.twitterCard,
+      'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
+      'twitter:title': tags.title,
+      'twitter:description': tags.description,
+      'twitter:image': tags.image.url
+    }
+
+    if (tags.image.width && tags.image.height) {
+      metaTags['twitter:image:width'] = tags.image.width
+      metaTags['twitter:image:height'] = tags.image.height
+    }
+
+    return metaTags
+  }
+
+  private static generateSchemaTags (tags) {
+    const schema = {
       '@context': 'http://schema.org',
-      '@type': 'VideoObject',
-      'name': videoNameEscaped,
-      'description': videoDescriptionEscaped,
-      'thumbnailUrl': previewUrl,
-      'uploadDate': video.createdAt.toISOString(),
-      'duration': getActivityStreamDuration(video.duration),
-      'contentUrl': videoUrl,
-      'embedUrl': embedUrl,
-      'interactionCount': video.views
+      '@type': tags.schemaType,
+      'name': tags.title,
+      'description': tags.description,
+      'image': tags.image.url,
+      'url': tags.url
+    }
+
+    if (tags.list) {
+      schema['numberOfItems'] = tags.list.numberOfItems
+      schema['thumbnailUrl'] = tags.image.url
+    }
+
+    if (tags.embed) {
+      schema['embedUrl'] = tags.embed.url
+      schema['uploadDate'] = tags.embed.createdAt
+      schema['duration'] = tags.embed.duration
+      schema['iterationCount'] = tags.embed.views
+      schema['thumbnailUrl'] = tags.image.url
+      schema['contentUrl'] = tags.url
+    }
+
+    return schema
+  }
+
+  private static addTags (htmlStringPage: string, tagsValues: any) {
+    const openGraphMetaTags = this.generateOpenGraphMetaTags(tagsValues)
+    const standardMetaTags = this.generateStandardMetaTags(tagsValues)
+    const twitterCardMetaTags = this.generateTwitterCardMetaTags(tagsValues)
+    const schemaTags = this.generateSchemaTags(tagsValues)
+
+    const { url, title, embed } = tagsValues
+
+    const oembedLinkTags = []
+
+    if (embed) {
+      oembedLinkTags.push({
+        type: 'application/json+oembed',
+        href: WEBSERVER.URL + '/services/oembed?url=' + encodeURIComponent(url),
+        title
+      })
     }
 
     let tagsString = ''
@@ -277,6 +369,20 @@ export class ClientHtml {
     // Opengraph
     Object.keys(openGraphMetaTags).forEach(tagName => {
       const tagValue = openGraphMetaTags[tagName]
+
+      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
+    })
+
+    // Standard
+    Object.keys(standardMetaTags).forEach(tagName => {
+      const tagValue = standardMetaTags[tagName]
+
+      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
+    })
+
+    // Twitter card
+    Object.keys(twitterCardMetaTags).forEach(tagName => {
+      const tagValue = twitterCardMetaTags[tagName]
 
       tagsString += `<meta property="${tagName}" content="${tagValue}" />`
     })
@@ -287,122 +393,13 @@ export class ClientHtml {
     }
 
     // Schema.org
-    tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
-
-    // SEO, use origin video url so Google does not index remote videos
-    tagsString += `<link rel="canonical" href="${video.url}" />`
-
-    return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
-  }
-
-  private static addVideoPlaylistOpenGraphAndMetaTags (htmlStringPage: string, videoPlaylist: MVideoPlaylist) {
-    const videoPlaylistThumbnailUrl = videoPlaylist.getThumbnailUrl()
-    const videoPlaylistUrl = videoPlaylist.getWatchUrl()
-
-    const videoPlaylistNameEscaped = escapeHTML(videoPlaylist.name)
-    const videoPlaylistDescriptionEscaped = escapeHTML(videoPlaylist.description)
-
-    const openGraphMetaTags = {
-      'og:title': videoPlaylistNameEscaped,
-      'og:image': videoPlaylistThumbnailUrl,
-      'og:url': videoPlaylistUrl,
-      'og:description': videoPlaylistDescriptionEscaped,
-
-      'name': videoPlaylistNameEscaped,
-      'description': videoPlaylistDescriptionEscaped,
-      'image': videoPlaylistThumbnailUrl,
-
-      'twitter:card': 'summary_large_image',
-      'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
-      'twitter:title': videoPlaylistNameEscaped,
-      'twitter:description': videoPlaylistDescriptionEscaped,
-      'twitter:image': videoPlaylistThumbnailUrl
+    if (schemaTags) {
+      tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
     }
 
-    const schemaTags = {
-      '@context': 'http://schema.org',
-      '@type': 'ItemList',
-      'name': videoPlaylistNameEscaped,
-      'description': videoPlaylistDescriptionEscaped,
-      'image': videoPlaylistThumbnailUrl,
-      'numberOfItems': videoPlaylist.get('videosLength')
-    }
+    // SEO, use origin URL
+    tagsString += `<link rel="canonical" href="${url}" />`
 
-    let tagsString = ''
-
-    // Opengraph
-    Object.keys(openGraphMetaTags).forEach(tagName => {
-      const tagValue = openGraphMetaTags[tagName]
-
-      tagsString += `<meta property="${tagName}" content="${tagValue}" />`
-    })
-
-    // Schema.org
-    tagsString += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
-
-    // SEO, use origin videoPlaylist url so Google does not index remote videos
-    tagsString += `<link rel="canonical" href="${videoPlaylistUrl}" />`
-
-    return this.addOpenGraphAndOEmbedTags(htmlStringPage, tagsString)
-  }
-
-  private static addAccountOrChannelOpenGraphAndMetaTags (htmlStringPage: string, entity: MAccountActor | MChannelActor) {
-    const entityDisplayNameEscaped = escapeHTML(entity.getDisplayName())
-    const entityDescriptionEscaped = escapeHTML(entity.description)
-    const entityAvatarUrl = entity.Actor.getAvatarUrl()
-    const entityUrl = entity.Actor.url
-
-    const openGraphMetaTags = {
-      'og:type': 'website',
-      'og:title': entityDisplayNameEscaped,
-      'og:image': entityAvatarUrl,
-      'og:image:width': AVATARS_SIZE.width,
-      'og:image:height': AVATARS_SIZE.height,
-      'og:url': entityUrl,
-      'og:description': entityDescriptionEscaped,
-
-      'name': entityDisplayNameEscaped,
-      'description': entityDescriptionEscaped,
-      'image': entityAvatarUrl,
-
-      'twitter:card': 'summary',
-      'twitter:site': CONFIG.SERVICES.TWITTER.USERNAME,
-      'twitter:title': entityDisplayNameEscaped,
-      'twitter:description': entityDescriptionEscaped,
-      'twitter:image': entityAvatarUrl,
-      'twitter:image:width': AVATARS_SIZE.width,
-      'twitter:image:height': AVATARS_SIZE.height
-    }
-
-    const schemaTags = {
-      '@context': 'http://schema.org',
-      '@type': 'ProfilePage',
-      'name': entityDisplayNameEscaped,
-      'description': entityDescriptionEscaped,
-      'thumbnailUrl': entityAvatarUrl,
-      'image': entityAvatarUrl,
-      'url': entityUrl
-    }
-
-    let metaTags = ''
-
-    // Opengraph
-    Object.keys(openGraphMetaTags).forEach(tagName => {
-      const tagValue = openGraphMetaTags[tagName]
-
-      metaTags += `<meta property="${tagName}" content="${tagValue}" />`
-    })
-
-    // Schema.org
-    metaTags += `<script type="application/ld+json">${JSON.stringify(schemaTags)}</script>`
-
-    // SEO, use origin account or channel URL
-    metaTags += `<link rel="canonical" href="${entityUrl}" />`
-
-    return this.addOpenGraphAndOEmbedTags(htmlStringPage, metaTags)
-  }
-
-  private static addOpenGraphAndOEmbedTags (htmlStringPage: string, metaTags: string) {
-    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, metaTags)
+    return htmlStringPage.replace(CUSTOM_HTML_TAG_COMMENTS.META_TAGS, tagsString)
   }
 }
