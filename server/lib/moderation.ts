@@ -213,7 +213,7 @@ async function createAbuse (options: {
     await sendAbuse(reporterAccount.Actor, abuseInstance, abuseInstance.FlaggedAccount, transaction)
   }
 
-  const abuseJSON = abuseInstance.toFormattedJSON()
+  const abuseJSON = abuseInstance.toFormattedAdminJSON()
   auditLogger.create(reporterAccount.Actor.getIdentifier(), new AbuseAuditView(abuseJSON))
 
   Notifier.Instance.notifyOnNewAbuse({

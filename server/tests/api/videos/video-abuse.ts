@@ -2,7 +2,7 @@
 
 import 'mocha'
 import * as chai from 'chai'
-import { Abuse, AbusePredefinedReasonsString, AbuseState } from '@shared/models'
+import { AbusePredefinedReasonsString, AbuseState, AdminAbuse } from '@shared/models'
 import {
   cleanupTests,
   createUser,
@@ -33,7 +33,7 @@ const expect = chai.expect
 
 describe('Test video abuses', function () {
   let servers: ServerInfo[] = []
-  let abuseServer2: Abuse
+  let abuseServer2: AdminAbuse
 
   before(async function () {
     this.timeout(50000)
@@ -97,7 +97,7 @@ describe('Test video abuses', function () {
     expect(res1.body.data).to.be.an('array')
     expect(res1.body.data.length).to.equal(1)
 
-    const abuse: Abuse = res1.body.data[0]
+    const abuse: AdminAbuse = res1.body.data[0]
     expect(abuse.reason).to.equal('my super bad reason')
     expect(abuse.reporterAccount.name).to.equal('root')
     expect(abuse.reporterAccount.host).to.equal('localhost:' + servers[0].port)
@@ -130,7 +130,7 @@ describe('Test video abuses', function () {
     expect(res1.body.data).to.be.an('array')
     expect(res1.body.data.length).to.equal(2)
 
-    const abuse1: Abuse = res1.body.data[0]
+    const abuse1: AdminAbuse = res1.body.data[0]
     expect(abuse1.reason).to.equal('my super bad reason')
     expect(abuse1.reporterAccount.name).to.equal('root')
     expect(abuse1.reporterAccount.host).to.equal('localhost:' + servers[0].port)
@@ -141,7 +141,7 @@ describe('Test video abuses', function () {
     expect(abuse1.video.countReports).to.equal(1)
     expect(abuse1.video.nthReport).to.equal(1)
 
-    const abuse2: Abuse = res1.body.data[1]
+    const abuse2: AdminAbuse = res1.body.data[1]
     expect(abuse2.reason).to.equal('my super bad reason 2')
     expect(abuse2.reporterAccount.name).to.equal('root')
     expect(abuse2.reporterAccount.host).to.equal('localhost:' + servers[0].port)
@@ -245,7 +245,7 @@ describe('Test video abuses', function () {
     expect(res.body.data.length).to.equal(2, "wrong number of videos returned")
     expect(res.body.data[0].id).to.equal(abuseServer2.id, "wrong origin server id for first video")
 
-    const abuse: Abuse = res.body.data[0]
+    const abuse: AdminAbuse = res.body.data[0]
     expect(abuse.video.id).to.equal(abuseServer2.video.id, "wrong video id")
     expect(abuse.video.channel).to.exist
     expect(abuse.video.deleted).to.be.true
@@ -279,7 +279,7 @@ describe('Test video abuses', function () {
     const res2 = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
     {
-      for (const abuse of res2.body.data as Abuse[]) {
+      for (const abuse of res2.body.data as AdminAbuse[]) {
         if (abuse.video.id === video3.id) {
           expect(abuse.video.countReports).to.equal(1, "wrong reports count for video 3")
           expect(abuse.video.nthReport).to.equal(1, "wrong report position in report list for video 3")
@@ -311,7 +311,7 @@ describe('Test video abuses', function () {
     const res = await getVideoAbusesList({ url: servers[0].url, token: servers[0].accessToken })
 
     {
-      const abuse = (res.body.data as Abuse[]).find(a => a.id === createdAbuse.id)
+      const abuse = (res.body.data as AdminAbuse[]).find(a => a.id === createdAbuse.id)
       expect(abuse.reason).to.equals(reason5)
       expect(abuse.predefinedReasons).to.deep.equals(predefinedReasons5, "predefined reasons do not match the one reported")
       expect(abuse.video.startAt).to.equal(1, "starting timestamp doesn't match the one reported")
@@ -350,7 +350,7 @@ describe('Test video abuses', function () {
 
       const res = await getVideoAbusesList(options)
 
-      return res.body.data as Abuse[]
+      return res.body.data as AdminAbuse[]
     }
 
     expect(await list({ id: 56 })).to.have.lengthOf(0)

@@ -206,6 +206,9 @@ const CONSTRAINTS_FIELDS = {
     REASON: { min: 2, max: 3000 }, // Length
     MODERATION_COMMENT: { min: 2, max: 3000 } // Length
   },
+  ABUSE_MESSAGES: {
+    MESSAGE: { min: 2, max: 3000 } // Length
+  },
   VIDEO_BLACKLIST: {
     REASON: { min: 2, max: 300 } // Length
   },

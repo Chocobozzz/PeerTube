@@ -9,11 +9,7 @@ function ensureUserHasRight (userRight: UserRight) {
       const message = `User ${user.username} does not have right ${UserRight[userRight]} to access to ${req.path}.`
       logger.info(message)
 
-      return res.status(403)
-        .json({
-          error: message
-        })
-        .end()
+      return res.status(403).json({ error: message })
     }
 
     return next()

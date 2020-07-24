@@ -26,8 +26,10 @@ export type BuildAbusesQueryOptions = {
   state?: AbuseState
 
   // accountIds
-  serverAccountId: number
-  userAccountId: number
+  serverAccountId?: number
+  userAccountId?: number
+
+  reporterAccountId?: number
 }
 
 function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 'id') {
@@ -45,7 +47,14 @@ function buildAbuseListQuery (options: BuildAbusesQueryOptions, type: 'count' | 
     'LEFT JOIN "videoComment" ON "commentAbuse"."videoCommentId" = "videoComment"."id"'
   ]
 
-  whereAnd.push('"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
+  if (options.serverAccountId || options.userAccountId) {
+    whereAnd.push('"abuse"."reporterAccountId" NOT IN (' + buildBlockedAccountSQL([ options.serverAccountId, options.userAccountId ]) + ')')
+  }
+
+  if (options.reporterAccountId) {
+    whereAnd.push('"abuse"."reporterAccountId" = :reporterAccountId')
+    replacements.reporterAccountId = options.reporterAccountId
+  }
 
   if (options.search) {
     const searchWhereOr = [

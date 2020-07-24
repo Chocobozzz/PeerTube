@@ -54,7 +54,7 @@ function reportAbuse (options: {
   })
 }
 
-function getAbusesList (options: {
+function getAdminAbusesList (options: {
   url: string
   token: string
 
@@ -117,6 +117,48 @@ function getAbusesList (options: {
   })
 }
 
+function getUserAbusesList (options: {
+  url: string
+  token: string
+
+  start?: number
+  count?: number
+  sort?: string
+
+  id?: number
+  search?: string
+  state?: AbuseState
+}) {
+  const {
+    url,
+    token,
+    start,
+    count,
+    sort,
+    id,
+    search,
+    state
+  } = options
+  const path = '/api/v1/users/me/abuses'
+
+  const query = {
+    id,
+    search,
+    state,
+    start,
+    count,
+    sort: sort || 'createdAt'
+  }
+
+  return makeGetRequest({
+    url,
+    path,
+    token,
+    query,
+    statusCodeExpected: 200
+  })
+}
+
 function updateAbuse (
   url: string,
   token: string,
@@ -146,11 +188,49 @@ function deleteAbuse (url: string, token: string, abuseId: number, statusCodeExp
   })
 }
 
+function listAbuseMessages (url: string, token: string, abuseId: number, statusCodeExpected = 200) {
+  const path = '/api/v1/abuses/' + abuseId + '/messages'
+
+  return makeGetRequest({
+    url,
+    token,
+    path,
+    statusCodeExpected
+  })
+}
+
+function deleteAbuseMessage (url: string, token: string, abuseId: number, messageId: number, statusCodeExpected = 204) {
+  const path = '/api/v1/abuses/' + abuseId + '/messages/' + messageId
+
+  return makeDeleteRequest({
+    url,
+    token,
+    path,
+    statusCodeExpected
+  })
+}
+
+function addAbuseMessage (url: string, token: string, abuseId: number, message: string, statusCodeExpected = 200) {
+  const path = '/api/v1/abuses/' + abuseId + '/messages'
+
+  return makePostBodyRequest({
+    url,
+    token,
+    path,
+    fields: { message },
+    statusCodeExpected
+  })
+}
+
 // ---------------------------------------------------------------------------
 
 export {
   reportAbuse,
-  getAbusesList,
+  getAdminAbusesList,
   updateAbuse,
-  deleteAbuse
+  deleteAbuse,
+  getUserAbusesList,
+  listAbuseMessages,
+  deleteAbuseMessage,
+  addAbuseMessage
 }

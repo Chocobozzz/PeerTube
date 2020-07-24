@@ -95,9 +95,15 @@ export type MAbuseFull =
 
 // Format for API or AP object
 
-export type MAbuseFormattable =
+export type MAbuseAdminFormattable =
   MAbuse &
   Use<'ReporterAccount', MAccountFormattable> &
+  Use<'FlaggedAccount', MAccountFormattable> &
+  Use<'VideoAbuse', MVideoAbuseFormattable> &
+  Use<'VideoCommentAbuse', MCommentAbuseFormattable>
+
+export type MAbuseUserFormattable =
+  MAbuse &
   Use<'FlaggedAccount', MAccountFormattable> &
   Use<'VideoAbuse', MVideoAbuseFormattable> &
   Use<'VideoCommentAbuse', MCommentAbuseFormattable>
