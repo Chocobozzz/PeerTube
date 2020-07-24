@@ -1,10 +1,12 @@
 @import '_variables';
 @import '_mixins';
 
-.user-quota {
-  font-size: 15px;
-  margin-top: 20px;
+label {
+  font-weight: $font-regular;
+  font-size: 100%;
+}
 
+.user-quota {
   label {
     margin-right: 5px;
   }
@@ -13,12 +15,9 @@
     width: 100% !important;
   }
 
-  .user-quota-title, .progress {
+  .progress {
     @include disable-outline;
     @include button-focus(pvar(--mainColorLightest));
-  }
-
-  .progress {
     @include progressbar;
 
     height: 2rem;
