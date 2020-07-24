@@ -1,0 +1,57 @@
+@import 'variables';
+@import 'mixins';
+
+form {
+  margin: 20px 20px 0 0;
+}
+
+textarea {
+  @include peertube-textarea(100%, 70px);
+
+  margin-top: 20px;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  margin-right: 5px;
+}
+
+.message-block {
+  margin-bottom: 10px;
+  max-width: 60%;
+
+  .author {
+    color: var(--greyForegroundColor);
+    font-size: 14px;
+  }
+
+  .bubble {
+    color: var(--mainForegroundColor);
+    background-color: var(--greyBackgroundColor);
+    border-radius: 10px;
+    padding: 5px 10px;
+
+    &.by-me {
+      color: var(--mainForegroundColor);
+      background-color: var(--secondaryColor);
+    }
+
+    &.by-moderator {
+      color: #fff;
+      background-color: var(--mainColor);
+
+      align-self: flex-end;
+    }
+
+    .content {
+      font-size: 15px;
+    }
+
+    .date {
+      font-size: 13px;
+      color: var(--greyForegroundColor);
+    }
+  }
+}

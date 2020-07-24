@@ -46,6 +46,7 @@
       <th i18n>Video/Comment/Account</th>
       <th style="width: 150px;" i18n pSortableColumn="createdAt">Created <p-sortIcon field="createdAt"></p-sortIcon></th>
       <th i18n pSortableColumn="state" style="width: 80px;">State <p-sortIcon field="state"></p-sortIcon></th>
+      <th i18n style="width: 80px;">Messages</th>
       <th style="width: 150px;"></th>
     </tr>
   </ng-template>
@@ -157,6 +158,12 @@
         <span *ngIf="abuse.moderationComment" container="body" placement="left auto" [ngbTooltip]="abuse.moderationComment" class="glyphicon glyphicon-comment"></span>
       </td>
 
+      <td class="c-hand abuse-messages" (click)="openAbuseMessagesModal(abuse)">
+        {{ abuse.countMessages }}
+
+        <my-global-icon iconName="message-circle"></my-global-icon>
+      </td>
+
       <td class="action-cell">
         <my-action-dropdown
           [ngClass]="{ 'show': expanded }" placement="bottom-right top-right left auto" container="body"
@@ -187,3 +194,4 @@
 </p-table>
 
 <my-moderation-comment-modal #moderationCommentModal (commentUpdated)="onModerationCommentUpdated()"></my-moderation-comment-modal>
+<my-abuse-message-modal #abuseMessagesModal (countMessagesUpdated)="onCountMessagesUpdated($event)"></my-abuse-message-modal>

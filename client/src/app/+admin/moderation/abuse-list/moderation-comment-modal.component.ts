@@ -5,7 +5,7 @@ import { AbuseService } from '@app/shared/shared-moderation'
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap'
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap/modal/modal-ref'
 import { I18n } from '@ngx-translate/i18n-polyfill'
-import { Abuse } from '@shared/models'
+import { AdminAbuse } from '@shared/models'
 
 @Component({
   selector: 'my-moderation-comment-modal',
@@ -16,7 +16,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
   @ViewChild('modal', { static: true }) modal: NgbModal
   @Output() commentUpdated = new EventEmitter<string>()
 
-  private abuseToComment: Abuse
+  private abuseToComment: AdminAbuse
   private openedModal: NgbModalRef
 
   constructor (
@@ -36,7 +36,7 @@ export class ModerationCommentModalComponent extends FormReactive implements OnI
     })
   }
 
-  openModal (abuseToComment: Abuse) {
+  openModal (abuseToComment: AdminAbuse) {
     this.abuseToComment = abuseToComment
     this.openedModal = this.modalService.open(this.modal, { centered: true })
 

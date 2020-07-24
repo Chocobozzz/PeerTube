@@ -4,15 +4,16 @@ import { SharedFormModule } from '../shared-forms/shared-form.module'
 import { SharedGlobalIconModule } from '../shared-icons'
 import { SharedMainModule } from '../shared-main/shared-main.module'
 import { SharedVideoCommentModule } from '../shared-video-comment'
+import { AbuseMessageModalComponent } from './abuse-message-modal.component'
 import { AbuseService } from './abuse.service'
 import { BatchDomainsModalComponent } from './batch-domains-modal.component'
 import { BlocklistService } from './blocklist.service'
 import { BulkService } from './bulk.service'
+import { AccountReportComponent, CommentReportComponent, VideoReportComponent } from './report-modals'
 import { UserBanModalComponent } from './user-ban-modal.component'
 import { UserModerationDropdownComponent } from './user-moderation-dropdown.component'
 import { VideoBlockComponent } from './video-block.component'
 import { VideoBlockService } from './video-block.service'
-import { VideoReportComponent, AccountReportComponent, CommentReportComponent } from './report-modals'
 
 @NgModule({
   imports: [
@@ -29,7 +30,8 @@ import { VideoReportComponent, AccountReportComponent, CommentReportComponent } 
     VideoReportComponent,
     BatchDomainsModalComponent,
     CommentReportComponent,
-    AccountReportComponent
+    AccountReportComponent,
+    AbuseMessageModalComponent
   ],
 
   exports: [
@@ -39,7 +41,8 @@ import { VideoReportComponent, AccountReportComponent, CommentReportComponent } 
     VideoReportComponent,
     BatchDomainsModalComponent,
     CommentReportComponent,
-    AccountReportComponent
+    AccountReportComponent,
+    AbuseMessageModalComponent
   ],
 
   providers: [
