@@ -683,7 +683,7 @@
   }
 }
 
-@mixin progressbar {
+@mixin progressbar($small: false) {
   background-color: $grey-background-color;
   display: flex;
   height: 1rem;
@@ -695,7 +695,9 @@
   span {
     position: absolute;
     color: $grey-foreground-color;
-    top: -1px;
+    @if $small {
+      top: -1px;
+    }
 
     &:nth-of-type(1) {
       left: .2rem;

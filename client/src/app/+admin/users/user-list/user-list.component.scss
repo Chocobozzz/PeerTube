@@ -54,7 +54,7 @@ my-global-icon {
 }
 
 .progress {
-  @include progressbar;
+  @include progressbar($small: true);
   width: auto;
   max-width: 100%;
 }
