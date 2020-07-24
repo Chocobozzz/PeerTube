@@ -99,7 +99,7 @@ export class MyAccountVideoChannelsComponent implements OnInit {
     }
   }
 
-  resetSearch() {
+  resetSearch () {
     this.channelsSearch = ''
     this.onChannelsSearchChanged()
   }
