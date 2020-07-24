@@ -119,7 +119,7 @@ export class ClientHtml {
     }
 
     const list = {
-      'numberOfItems': videoPlaylist.get('videosLength')
+      numberOfItems: videoPlaylist.get('videosLength')
     }
 
     const ogType = 'video'
@@ -284,10 +284,10 @@ export class ClientHtml {
     metaTags['og:description'] = tags.description
 
     if (tags.embed) {
-      metaTags['og:video:url'] = tags.embed.url,
-      metaTags['og:video:secure_url'] = tags.embed.url,
-      metaTags['og:video:type'] = 'text/html',
-      metaTags['og:video:width'] = EMBED_SIZE.width,
+      metaTags['og:video:url'] = tags.embed.url
+      metaTags['og:video:secure_url'] = tags.embed.url
+      metaTags['og:video:type'] = 'text/html'
+      metaTags['og:video:width'] = EMBED_SIZE.width
       metaTags['og:video:height'] = EMBED_SIZE.height
     }
 
@@ -296,9 +296,9 @@ export class ClientHtml {
 
   private static generateStandardMetaTags (tags) {
     return {
-      'name': tags.title,
-      'description': tags.description,
-      'image': tags.image.url
+      name: tags.title,
+      description: tags.description,
+      image: tags.image.url
     }
   }
 
