@@ -136,6 +136,10 @@ label {
     flex-grow: 1;
   }
 
+  my-top-menu-dropdown + .margin-content {
+    margin-top: $sub-menu-height + $sub-menu-margin-bottom;
+  }
+
   .sub-menu {
     background-color: pvar(--submenuColor);
     width: 100%;
@@ -145,7 +149,11 @@ label {
     padding-left: $not-expanded-horizontal-margins;
     padding-right: $not-expanded-horizontal-margins;
     position: fixed;
-    z-index: 1;
+    z-index: 200;
+
+    & + .margin-content {
+      margin-top: $sub-menu-margin-bottom;
+    }
   }
 
   // Override some properties if the main content is expanded (no menu on the left)
