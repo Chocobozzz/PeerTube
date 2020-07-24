@@ -26,7 +26,7 @@ import { DateToggleComponent } from './date'
 import { FeedComponent } from './feeds'
 import { LoaderComponent, SmallLoaderComponent } from './loaders'
 import { HelpComponent, ListOverflowComponent, TopMenuDropdownComponent } from './misc'
-import { UserHistoryService, UserNotificationsComponent, UserNotificationService } from './users'
+import { UserHistoryService, UserNotificationsComponent, UserNotificationService, UserQuotaComponent } from './users'
 import { RedundancyService, VideoImportService, VideoOwnershipService, VideoService } from './video'
 import { VideoCaptionService } from './video-caption'
 import { VideoChannelService } from './video-channel'
@@ -83,6 +83,7 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     ListOverflowComponent,
     TopMenuDropdownComponent,
 
+    UserQuotaComponent,
     UserNotificationsComponent
   ],
 
@@ -132,6 +133,7 @@ import { AUTH_INTERCEPTOR_PROVIDER } from './auth'
     ListOverflowComponent,
     TopMenuDropdownComponent,
 
+    UserQuotaComponent,
     UserNotificationsComponent
   ],
 

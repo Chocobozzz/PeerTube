@@ -1,15 +1,6 @@
 @import '_variables';
 @import '_mixins';
 
-.user-quota {
-  font-size: 15px;
-  margin-top: 20px;
-
-  label {
-    margin-right: 5px;
-  }
-}
-
 .account-title {
   @include settings-big-title;
 
@@ -18,14 +9,6 @@
   }
 }
 
-.progress {
-  @include progressbar;
-  width: 500px;
-  max-width: 100%;
-}
-
-@media screen and (max-width: $small-view) {
-  .progress {
-    width: 100%;
-  }
+.form-group {
+  max-width: 500px;
 }

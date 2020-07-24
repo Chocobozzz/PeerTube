@@ -14,21 +14,7 @@
 
   <div class="form-group form-group-right col-12 col-lg-8 col-xl-9">
 
-    <div class="user-quota mb-3">
-      <div>
-        <div class="progress" i18n-title title="Total video quota">
-          <div class="progress-bar" role="progressbar" [style]="{ width: userVideoQuotaPercentage + '%' }" [attr.aria-valuenow]="userVideoQuotaUsed" aria-valuemin="0" [attr.aria-valuemax]="user.videoQuota">{{ userVideoQuotaUsed | bytes: 0 }}</div>
-          <span class="ml-auto mr-2">{{ userVideoQuota }}</span>
-        </div>
-      </div>
-
-      <div *ngIf="hasDailyQuota()" class="mt-3">
-        <div class="progress" i18n-title title="Daily video quota">
-          <div class="progress-bar secondary" role="progressbar" [style]="{ width: userVideoQuotaDailyPercentage + '%' }" [attr.aria-valuenow]="userVideoQuotaUsedDaily" aria-valuemin="0" [attr.aria-valuemax]="user.videoQuotaDaily">{{ userVideoQuotaUsedDaily | bytes: 0 }}</div>
-          <span class="ml-auto mr-2">{{ userVideoQuotaDaily }}</span>
-        </div>
-      </div>
-    </div>
+    <my-user-quota [user]="user" [userInformationLoaded]="userInformationLoaded"></my-user-quota>
 
     <my-account-profile [user]="user" [userInformationLoaded]="userInformationLoaded"></my-account-profile>
   </div>
